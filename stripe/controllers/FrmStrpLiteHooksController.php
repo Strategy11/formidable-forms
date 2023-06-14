@@ -21,8 +21,6 @@ class FrmStrpLiteHooksController {
 
 		// Filters.
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
-		add_filter( 'frm_setup_edit_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
-		add_filter( 'frm_setup_new_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
 
 		// This filter flags the Pro credit card field that Stripe is enabled.
 		add_filter(

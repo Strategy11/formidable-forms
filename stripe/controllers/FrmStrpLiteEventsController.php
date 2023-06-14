@@ -154,7 +154,11 @@ class FrmStrpLiteEventsController {
 			return;
 		}
 		$wpdb->query(
-			$wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_value = %s AND meta_key LIKE %s", $customer_id, '_frmstrp_customer_id%' )
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->usermeta WHERE meta_value = %s AND meta_key LIKE %s",
+				$customer_id,
+				'_frmstrp_customer_id%'
+			)
 		);
 	}
 
@@ -285,9 +289,8 @@ class FrmStrpLiteEventsController {
 
 		$payment_values['receipt_id']  = $this->charge ? $this->charge : __( 'None', 'formidable' );
 		$payment_values['status']      = $this->status;
-
-		$payment_values['meta_value'] = array();
-		$payment_values['created_at'] = current_time( 'mysql', 1 );
+		$payment_values['meta_value']  = array();
+		$payment_values['created_at']  = current_time( 'mysql', 1 );
 
 		FrmTransLiteAppHelper::add_note_to_payment( $payment_values );
 	}
@@ -377,10 +380,11 @@ class FrmStrpLiteEventsController {
 			return true;
 		}
 
-		$option      = get_option( self::$events_to_skip_option_name );
+		$option = get_option( self::$events_to_skip_option_name );
 		if ( ! is_array( $option ) ) {
 			return false;
 		}
+
 		return in_array( $event_id, $option, true );
 	}
 
@@ -457,7 +461,6 @@ class FrmStrpLiteEventsController {
 			'invoice.payment_succeeded'     => 'complete',
 			'invoice.payment_failed'        => 'failed',
 			'charge.refunded'               => 'refunded',
-			// 'charge.captured'            => 'complete', // TODO only handle this if the Stripe add on is active.
 		);
 
 		if ( isset( $events[ $this->event->type ] ) ) {
