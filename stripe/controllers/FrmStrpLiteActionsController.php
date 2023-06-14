@@ -391,9 +391,13 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$settings                = FrmStrpLiteAppHelper::get_settings();
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
-		$publishable             = $settings->get_active_publishable_key();
+		if ( ! $stripe_connect_is_setup ) {
+			return;
+		}
+
+		$settings    = FrmStrpLiteAppHelper::get_settings();
+		$publishable = $settings->get_active_publishable_key();
 
 		wp_register_script(
 			'stripe',
@@ -418,20 +422,17 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$stripe_vars = array(
-			'publishable_key'  => $publishable,
-			'form_id'          => $params['form_id'],
-			'nonce'            => wp_create_nonce( 'frm_strp_ajax' ),
-			'root'             => esc_url_raw( rest_url() ),
-			'ajax'             => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'api_nonce'        => wp_create_nonce( 'wp_rest' ),
-			'settings'         => $action_settings,
-			'locale'           => self::get_locale(),
-			'style'            => self::prepare_styling( $params['form_id'] ),
-			'appearanceRules'  => self::get_appearance_rules( $params['form_id'] ),
+			'publishable_key' => $publishable,
+			'form_id'         => $params['form_id'],
+			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
+			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'        => $action_settings,
+			'locale'          => self::get_locale(),
+			'style'           => self::prepare_styling( $params['form_id'] ),
+			'appearanceRules' => self::get_appearance_rules( $params['form_id'] ),
+			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
 		);
-		if ( $stripe_connect_is_setup ) {
-			$stripe_vars['account_id'] = FrmStrpLiteConnectHelper::get_account_id();
-		}
+
 		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
 	}
 

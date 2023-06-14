@@ -24,7 +24,6 @@ class FrmCronController {
 	private static function get_events() {
 		return array(
 			'formidable_send_usage' => 'weekly',
-			// TODO Nothing starts this cron at the moment.
 			'frm_payment_cron'      => 'daily',
 		);
 	}
