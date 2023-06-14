@@ -32,7 +32,13 @@ class FrmTransLiteListsController {
 			)
 		);
 
-		$type = isset( $_REQUEST['trans_type'] ) ? $_REQUEST['trans_type'] : 'payments';
+		$type = FrmAppHelper::get_simple_request(
+			array(
+				'param'   => 'trans_type',
+				'type'    => 'request',
+				'default' => 'payments',
+			)
+		);
 
 		$columns['cb']      = '<input type="checkbox" />';
 		$columns['user_id'] = __( 'Customer', 'formidable' );

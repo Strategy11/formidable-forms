@@ -86,8 +86,6 @@
 		<!-- Temporary exclusion for Stripe Lite -->
 		<exclude-pattern>stripe/models/FrmStrpLiteAuth.ph</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmStrpLiteActionsController.php</exclude-pattern>
-		<exclude-pattern>stripe/controllers/FrmTransLiteListsController.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- These rules likely won't see any changes for compatibility -->

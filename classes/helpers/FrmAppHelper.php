@@ -538,12 +538,12 @@ class FrmAppHelper {
 		$args     = wp_parse_args( $args, $defaults );
 
 		$value = $args['default'];
-		if ( $args['type'] == 'get' ) {
+		if ( $args['type'] === 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
-		} elseif ( $args['type'] == 'post' ) {
+		} elseif ( $args['type'] === 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_POST[ $args['param'] ] );
