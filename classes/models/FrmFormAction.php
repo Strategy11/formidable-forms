@@ -649,7 +649,7 @@ class FrmFormAction {
 
 		foreach ( $default_values as $k => $vals ) {
 			if ( is_array( $vals ) && ! empty( $vals ) ) {
-				if ( 'event' == $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
 				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
