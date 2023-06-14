@@ -853,11 +853,10 @@
 		return {
 			init: function() {
 				var stripeParams = {
-					locale: frm_stripe_vars.locale
+					locale: frm_stripe_vars.locale,
+					stripeAccount: frm_stripe_vars.account_id
 				};
-				if ( 'undefined' !== typeof frm_stripe_vars.account_id ) {
-					stripeParams.stripeAccount = frm_stripe_vars.account_id;
-				}
+
 				frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
 				loadElements();
 				jQuery( document ).on( 'frmPageChanged', loadElements ); // TODO Move this to Pro.
