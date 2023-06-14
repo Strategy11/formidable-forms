@@ -848,13 +848,13 @@ class FrmFieldsHelper {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
 		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
-		} elseif ( $clean_tag == 'user_agent' ) {
+		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;
 			$replace_with = FrmEntriesHelper::get_browser( $description['browser'] );
-		} elseif ( $clean_tag == 'created_at' || $clean_tag == 'updated_at' ) {
+		} elseif ( $clean_tag === 'created_at' || $clean_tag === 'updated_at' ) {
 			$atts['tag']  = $clean_tag;
 			$replace_with = self::get_entry_timestamp( $atts );
-		} elseif ( $clean_tag == 'created_by' || $clean_tag == 'updated_by' ) {
+		} elseif ( $clean_tag === 'created_by' || $clean_tag === 'updated_by' ) {
 			$replace_with = self::get_display_value( $atts['entry']->{$clean_tag}, (object) array( 'type' => 'user_id' ), $atts );
 		} else {
 			$replace_with = self::get_field_shortcode_value( $atts );
