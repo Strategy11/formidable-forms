@@ -208,13 +208,17 @@ class FrmTransLiteAppHelper {
 	}
 
 	public static function formatted_amount( $payment ) {
-		$currency = 'usd';
+		$currency = '';
 		$amount   = $payment;
 
 		if ( is_object( $payment ) || is_array( $payment ) ) {
 			$payment  = (array) $payment;
 			$amount   = $payment['amount'];
 			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
 		}
 
 		$currency = FrmCurrencyHelper::get_currency( $currency );
