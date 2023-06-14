@@ -225,7 +225,7 @@ class FrmStrpLiteAuth {
 		if ( ! isset( $_POST[ $name ] ) ) {
 			return array();
 		}
-		$intents = $_POST[ $name ];
+		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -239,7 +239,16 @@ class FrmStrpLiteAuth {
 	 */
 	public static function update_intent_ajax() {
 		check_ajax_referer( 'frm_strp_ajax', 'nonce' );
-		$form = json_decode( stripslashes( $_POST['form'] ), true );
+
+		if ( empty( $_POST['form'] ) ) {
+			wp_die();
+		}
+
+		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! is_array( $form ) ) {
+			wp_die();
+		}
+
 		self::format_form_data( $form );
 
 		$form_id = absint( $form['form_id'] );

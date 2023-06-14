@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<form id="posts-filter" method="get">
-		<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_title( $_GET['page'] ) ); ?>" />
+		<input type="hidden" name="page" value="formidable-payments" />
 		<input type="hidden" name="frm_action" value="list" />
 		<?php $wp_list_table->display(); ?>
 	</form>
