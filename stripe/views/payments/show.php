@@ -101,7 +101,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<td><?php echo esc_html( FrmTransLiteAppHelper::formatted_amount( $payment ) ); ?></td>
 							</tr>
 
-							<?php if ( $payment->expire_date && $payment->expire_date != '0000-00-00' ) { ?>
+							<?php if ( $payment->expire_date && $payment->expire_date !== '0000-00-00' ) { ?>
 							<tr valign="top">
 								<th scope="row"><?php esc_html_e( 'Payment Dates', 'formidable' ); ?>:</th>
 								<td>
@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								<?php
 								foreach ( $payment->meta_value as $k => $metas ) {
-									if ( empty( $metas ) ) {
+									if ( ! $metas ) {
 										continue;
 									}
 									?>
