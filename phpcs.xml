@@ -109,9 +109,6 @@
 	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
 		<exclude-pattern>stripe/*</exclude-pattern>
 	</rule>
-	<rule ref="Squiz.Operators.IncrementDecrementUsage.NotAllowed">
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
-	</rule>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElseif">
 		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
