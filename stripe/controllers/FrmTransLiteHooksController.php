@@ -26,6 +26,8 @@ class FrmTransLiteHooksController {
 		add_filter( 'frm_twilio_action_options', 'FrmTransLiteActionsController::add_trigger_to_action' );
 		add_filter( 'frm_mailchimp_action_options', 'FrmTransLiteActionsController::add_trigger_to_action' );
 		add_filter( 'frm_api_action_options', 'FrmTransLiteActionsController::add_trigger_to_action' );
+		add_filter( 'frm_setup_new_fields_vars', 'FrmTransLiteActionsController::hide_gateway_field_on_front_end', 20, 2 );
+		add_filter( 'frm_setup_edit_fields_vars', 'FrmTransLiteActionsController::hide_gateway_field_on_front_end', 20, 2 );
 	}
 
 	/**

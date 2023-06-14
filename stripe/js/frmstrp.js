@@ -479,7 +479,8 @@
 				variables: {
 					fontSizeBase: frm_stripe_vars.style.base.fontSize,
 					colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].color ),
-					colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].backgroundColor )
+					colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].backgroundColor ),
+					fontSmooth: 'auto'
 				},
 				rules: frm_stripe_vars.appearanceRules
 			};

@@ -513,7 +513,9 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color_active'],
 			),
 			'.Label' => array(
-				'color' => $settings['label_color'],
+				'color'      => $settings['label_color'],
+				'fontSize'   => $settings['font_size'],
+				'fontWeight' => $settings['weight'],
 			),
 			'.Error' => array(
 				'color' => $settings['border_color_error'],

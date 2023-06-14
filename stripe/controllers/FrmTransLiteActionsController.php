@@ -340,4 +340,20 @@ class FrmTransLiteActionsController {
 		}
 		return $payment_actions;
 	}
+
+	/**
+	 * Make sure a gateway field is hidden on the front end.
+	 *
+	 * @param array    $values
+	 * @param stdClass $field
+	 * @return array
+	 */
+	public static function hide_gateway_field_on_front_end( $values, $field ) {
+		if ( $field->type !== 'gateway' ) {
+			return $values;
+		}
+
+		$values['type'] = 'hidden';	
+		return $values;
+	}
 }
