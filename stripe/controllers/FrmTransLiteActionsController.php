@@ -353,7 +353,14 @@ class FrmTransLiteActionsController {
 			return $values;
 		}
 
-		$values['type'] = 'hidden';	
+		// This is also called from the frm_enqueue_form_scripts hook.
+		// With this here, the value of frm_stripe_vars.settings[0].fields is -1
+		// This is because the amount value is processed and a shortcode is not found in '000'.
+		FrmStrpLiteActionsController::load_scripts(
+			array( 'form_id' => $field->form_id )
+		);
+
+		$values['type'] = 'hidden';
 		return $values;
 	}
 }
