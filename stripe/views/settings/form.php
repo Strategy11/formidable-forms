@@ -4,9 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <table class="form-table">
-
-	<?php // TODO Still support the before/after settings if the Payments submodule is active. ?>
-
 	<tr class="form-field" valign="top">
 		<td>
 			<label><?php esc_html_e( 'Test Mode', 'formidable' ); ?></label>

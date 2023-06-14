@@ -80,8 +80,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								<?php FrmTransLiteAppHelper::show_in_table( $subscription->fail_count, __( 'Fail Count', 'formidable' ) ); ?>
 
-								<?php // TODO We'd still want to show a Gateway here when the Payments plugin is active. ?> 
-
 								<?php
 								if ( $subscription->meta_value ) {
 									$subscription->meta_value = maybe_unserialize( $subscription->meta_value );
