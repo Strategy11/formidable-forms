@@ -171,7 +171,10 @@ class FrmTransLiteAction extends FrmFormAction {
 				$readable_fields = str_replace( '_', ' ', implode( ', ', (array) $field_atts['allowed_fields'] ) );
 				?>
 				<option value="">
-					<?php echo esc_html( sprintf( __( 'Oops! You need a %s field in your form.', 'formidable' ), $readable_fields ) ); ?>
+					<?php
+					// translators: %s: The comma separated field types expected in the form.
+					echo esc_html( sprintf( __( 'Oops! You need a %s field in your form.', 'formidable' ), $readable_fields ) );
+					?>
 				</option>
 				<?php
 			}

@@ -116,6 +116,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
+					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Count.
 					. sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts[ $status ] ) )
 					. '</a>';
 			}
@@ -424,6 +425,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			}
 		}
 
+		// translators: %1$s: Count, %2$s: Limit.
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
 	}
 

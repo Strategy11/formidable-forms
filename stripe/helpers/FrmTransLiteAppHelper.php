@@ -67,8 +67,12 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function add_note_to_payment( &$payment_values, $message = '' ) {
-		if ( empty( $message ) ) {
-			$message = sprintf( __( 'Payment %s', 'formidable' ), $payment_values['status'] );
+		if ( ! $message ) {
+			$message = sprintf(
+				// translators: %s: Payment status.
+				__( 'Payment %s', 'formidable' ),
+				$payment_values['status']
+			);
 		}
 		$payment_values['meta_value'] = isset( $payment_values['meta_value'] ) ? $payment_values['meta_value'] : array();
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );

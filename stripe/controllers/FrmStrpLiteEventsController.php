@@ -56,10 +56,12 @@ class FrmStrpLiteEventsController {
 			if ( $is_partial_refund ) {
 				$this->set_partial_refund( $payment_values );
 				$amount_refunded = number_format( $this->invoice->amount_refunded / 100, 2 );
+				// translators: %s: The amount of money that was refunded.
 				$note            = sprintf( __( 'Payment partially refunded %s', 'formidable' ), $amount_refunded );
 			} else {
 				$payment_values['status'] = $this->status;
 				$payment->status          = $this->status;
+				// translators: %s: The status of the payment.
 				$note                     = sprintf( __( 'Payment %s', 'formidable' ), $payment_values['status'] );
 			}
 

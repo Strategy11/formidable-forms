@@ -6,7 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="misc-publishing-actions">
 	<div class="misc-pub-section curtime misc-pub-curtime">
 		<span id="timestamp">
-			<?php printf( esc_html__( 'Created on: %1$s', 'formidable' ), '<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $subscription->created_at ) ) . '</b>' ); ?>
+			<?php
+			printf(
+				// translators: %s: Timestamp.
+				esc_html__( 'Created on: %1$s', 'formidable' ),
+				'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $subscription->created_at ) ) . '</b>'
+			);
+			?>
 		</span>
 	</div>
 
