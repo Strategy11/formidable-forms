@@ -166,7 +166,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" valign="middle" ';
 
-			if ( 0 === ( $alt++ % 2 ) ) {
+			$is_alternate = 0 === $alt % 2;
+			$alt++;
+
+			if ( $is_alternate ) {
 				echo 'class="alternate"';
 			}
 

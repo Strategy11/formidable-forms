@@ -36,12 +36,12 @@ class FrmStrpLiteHooksController {
 		add_filter(
 			'frm_fields_in_entries_list_table',
 			function( $form_cols ) {
-				return array_values( array_filter(
+				return array_filter(
 					$form_cols,
 					function( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}
-				) );
+				);
 			}
 		);
 
