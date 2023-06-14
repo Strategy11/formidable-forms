@@ -99,7 +99,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'payments'      => $frm_payment->get_count(),
 			'subscriptions' => $frm_sub->get_count(),
 		);
-		$type        = isset( $_REQUEST['trans_type'] ) ? sanitize_text_field( $_REQUEST['trans_type'] ) : 'payments';
+		$type        = FrmAppHelper::get_simple_request(
+			array(
+				'param'   => 'trans_type',
+				'type'    => 'request',
+				'default' => 'payments',
+			)
+		);
 
 		foreach ( $statuses as $status => $name ) {
 			if ( $status == $type ) {
@@ -109,7 +115,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			}
 
 			if ( $counts[ $status ] || 'published' === $status ) {
-				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts[ $status ] ) ) . '</a>';
+				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
+					. sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts[ $status ] ) )
+					. '</a>';
 			}
 
 			unset( $status, $name );
