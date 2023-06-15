@@ -1008,6 +1008,37 @@ class FrmAppController {
 		wp_die();
 	}
 
+	/**
+	 * This is triggered when Formidable is activated.
+	 *
+	 * @return void
+	 */
+	public static function handle_activation() {
+		self::maybe_activate_payment_cron();
+	}
+
+	/**
+	 * The payment cron is unscheduled when Formidable is deactivated.
+	 * We need to add it back again on activation if Stripe is configured.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_activate_payment_cron() {
+		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+			return;
+		}
+
+		// TODO Move this into a shared function so it can be re-used.
+		// This is duplicate code currently.
+		// I think it would be nice to make a model file for handling the payment cron.
+		// Right now I don't have an obvious place to put this function.
+		if ( ! wp_next_scheduled( 'frm_payment_cron' ) ) {
+			wp_schedule_event( time(), 'daily', 'frm_payment_cron' );
+		}
+	}
+
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
 			$text = '';

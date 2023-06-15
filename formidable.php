@@ -135,6 +135,8 @@ function frm_maybe_install() {
 	}
 }
 
+register_activation_hook( __FILE__, 'FrmAppController::handle_activation' );
+
 register_deactivation_hook(
 	__FILE__,
 	function() {
