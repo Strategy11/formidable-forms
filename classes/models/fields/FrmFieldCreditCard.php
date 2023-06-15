@@ -31,15 +31,8 @@ class FrmFieldCreditCard extends FrmFieldType {
 		return $settings;
 	}
 
-	public function show_on_form_builder( $name = '' ) {
-		// TODO Put these styles in frm_admin.css.
-		// TODO Possibly put this HTML into a view file.
-		echo '<div style="position: relative;">';
-		echo '<input type="text" placeholder="1234 1234 1234 1234" disabled />';
-		echo '<div style="position: absolute; top: calc( 50% - 1px); transform: translateY(-50%); right: 10px; color: #d0d4dd">';
-		FrmAppHelper::icon_by_class( 'frmfont frm_credit_card_icon' );
-		echo '</div>'; // Close icon wrapper.
-		echo '</div>'; // Close wrapper (that holds both input and icon).
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-credit-card.php';
 	}
 
 	/**
