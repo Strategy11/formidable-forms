@@ -142,6 +142,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string $action
 	 * @param array  $additional_body
+	 * @return object|string
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
 		$body    = array(
