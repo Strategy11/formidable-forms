@@ -49,7 +49,7 @@ function load_formidable_forms() {
 }
 
 // if __autoload is active, put it on the spl_autoload stack
-if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
+if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions(), true ) ) {
 	spl_autoload_register( '__autoload' );
 }
 
