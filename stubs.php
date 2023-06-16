@@ -72,6 +72,15 @@ namespace {
 	}
 	class FrmProEntriesHelper {
 	}
+	class FrmProFieldsHelper {
+		/**
+		 * @param array  $args
+		 * @param string $value
+		 * @return void
+		 */
+		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
+	}
 	class FrmViewsAppHelper {
 	}
 	class Akismet {

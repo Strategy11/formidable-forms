@@ -93,7 +93,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Initialize a Stripe Connect integration with the connect server
 	 *
-	 *  @return object|string|false
+	 *  @return object|string
 	 */
 	private static function initialize() {
 		$mode = self::get_mode_value_from_post();
