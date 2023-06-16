@@ -76,7 +76,7 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmEntryFormat', 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
+	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
 	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
 
@@ -103,19 +103,19 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		return;
 	}
 
+	if ( ! preg_match( '/^FrmStrpLite.+$/', $class_name ) && ! preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
+		// Exit early if the class does not match the Stripe Lite prefix.
+		return;
+	}
+
 	// Autoload for /stripe/ folder.
 	$filepath = $original_filepath . '/stripe/';
 	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 		$filepath .= 'helpers/';
 	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
 		$filepath .= 'controllers/';
-	} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
-		$filepath .= 'factories/';
 	} else {
 		$filepath .= 'models/';
-		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
-			$filepath .= 'fields/';
-		}
 	}
 
 	$filepath .= $class_name . '.php';
