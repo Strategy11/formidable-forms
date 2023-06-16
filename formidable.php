@@ -86,9 +86,9 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		$filepath .= '/classes/';
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
-		} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
 			$filepath .= 'controllers/';
-		} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
 			$filepath .= 'factories/';
 		} else {
 			$filepath .= 'models/';
@@ -112,7 +112,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	$filepath = $original_filepath . '/stripe/';
 	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 		$filepath .= 'helpers/';
-	} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
+	} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
 		$filepath .= 'controllers/';
 	} else {
 		$filepath .= 'models/';
@@ -126,16 +126,19 @@ function frm_class_autoloader( $class_name, $filepath ) {
 }
 
 add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'frm_maybe_install' );
+
 /**
+ * This function is triggered when Formidable is activated.
+ *
  * @return void
  */
 function frm_maybe_install() {
 	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
 		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
 	}
-}
 
-register_activation_hook( __FILE__, 'FrmAppController::handle_activation' );
+	FrmAppController::handle_activation();
+}
 
 register_deactivation_hook(
 	__FILE__,
