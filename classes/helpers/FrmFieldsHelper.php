@@ -747,7 +747,14 @@ class FrmFieldsHelper {
 
 			if ( $replace_with !== null ) {
 				$replace_with = self::trigger_shortcode_atts( $replace_with, $atts );
-				self::sanitize_embedded_shortcodes( array( 'entry' => $entry, 'tag' => $tag ), $replace_with );
+				self::sanitize_embedded_shortcodes(
+					array(
+						'entry' => $entry,
+						'tag' => $tag,
+					),
+					$replace_with
+				);
+
 				$content = str_replace( $shortcodes[0][ $short_key ], $replace_with, $content );
 			}
 
