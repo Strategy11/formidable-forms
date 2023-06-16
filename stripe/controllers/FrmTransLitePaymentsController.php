@@ -144,7 +144,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		// TODO Is this a number? Can we use absint?
 		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'sanitize_text_field' );
 		if ( ! $payment_id ) {
-			wp_die( esc_html( 'Oops! No payment was selected for refund.', 'formidable' ) );
+			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
 
 		$frm_payment = new FrmTransLitePayment();
