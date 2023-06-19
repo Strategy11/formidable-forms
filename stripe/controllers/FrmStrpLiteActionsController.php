@@ -373,16 +373,16 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		self::load_scripts( $params );
+		self::load_scripts( (int) $form->id );
 	}
 
 	/**
 	 * Load front end JavaScript for a Stripe form.
 	 *
-	 * @param mixed $form_id
+	 * @param int $form_id
 	 * @return void
 	 */
-	public static function load_scripts( $params ) {
+	public static function load_scripts( $form_id ) {
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			return;
 		}
@@ -393,6 +393,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
 		if ( ! $stripe_connect_is_setup ) {
+			return;
+		}
+
+		if ( ! $form_id || ! is_int( $form_id ) ) {
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
 			return;
 		}
 
@@ -414,44 +419,21 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		if ( ! empty( $params['form_id'] ) ) {
-			$action_settings = self::prepare_settings_for_js( $params['form_id'] );
-		} else {
-			$action_settings   = array();
-			$params['form_id'] = 0;
-		}
-
-		$stripe_vars = array(
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$style_settings  = self::get_style_settings_for_form( $form_id );
+		$stripe_vars     = array(
 			'publishable_key' => $publishable,
-			'form_id'         => $params['form_id'],
+			'form_id'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
 			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings'        => $action_settings,
 			'locale'          => self::get_locale(),
-			'style'           => self::prepare_styling( $params['form_id'] ),
-			'appearanceRules' => self::get_appearance_rules( $params['form_id'] ),
+			'style'           => self::prepare_styling( $style_settings ),
+			'appearanceRules' => self::get_appearance_rules( $style_settings ),
 			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
 		);
 
 		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
-	}
-
-	/**
-	 * Get the style rules for Stripe card elements.
-	 *
-	 * @since 2.0
-	 * @todo Remove this. I'm still using this for Stripe link though for a few rules.
-	 *
-	 * @param mixed $form_id
-	 * @return array
-	 */
-	private static function prepare_styling( $form_id ) {
-		$settings = self::get_style_settings_for_form( $form_id );
-		return array(
-			'base' => array(
-				'fontSize' => $settings['field_font_size'],
-			),
-		);
 	}
 
 	/**
@@ -484,6 +466,23 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Get the style rules for Stripe card elements.
+	 *
+	 * @since 2.0
+	 * @todo Remove this. I'm still using this for Stripe link though for a few rules.
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	private static function prepare_styling( $settings ) {
+		return array(
+			'base' => array(
+				'fontSize' => $settings['field_font_size'],
+			),
+		);
+	}
+
+	/**
 	 * Get the style rules for Stripe link Authentication and Payment elements.
 	 * These settings get set to frm_stripe_vars.appearanceRules.
 	 * They're in the format that Stripe accepts.
@@ -491,11 +490,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param mixed $form_id
+	 * @param array $settings
 	 * @return array
 	 */
-	private static function get_appearance_rules( $form_id ) {
-		$settings = self::get_style_settings_for_form( $form_id );
+	private static function get_appearance_rules( $settings ) {
 		return array(
 			'.Input' => array(
 				'color'           => $settings['text_color'],
