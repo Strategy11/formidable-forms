@@ -500,36 +500,38 @@ class FrmFieldFormHtml {
 		// Check if the field type is one of the following.
 		$is_valid_field_type = in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true );
 
-		if ( $is_valid_field_type ) {
-			$is_radio = 'radio' === $field_type || 'scale' === $field_type;
-			$is_needed_aria_required = true;
-
-			// Check if the field type is 'data' or 'product'.
-			$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
-			if ( $is_data_or_product ) {
-				$data_type = FrmField::get_option( $field, 'data_type' );
-				// Check if the data type isn't 'radio' or 'checkbox'.
-				if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
-					// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
-					$is_needed_aria_required = false;
-				}
-				// Check if data type is 'radio'
-				if ( 'radio' === $data_type ) {
-					$is_radio = true;
-				}
-			}
-
-			// Add 'role' attribute to the field.
-			$attributes['role'] = $is_radio ? 'role="radiogroup"' : 'role="group"';
-
-			// Add 'aria-required' attribute to the field if required.
-			if ( $is_needed_aria_required && '1' === $field['required'] ) {
-				$attributes['aria-required'] = 'aria-required="true"';
-			}
-
-			// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
-			$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
-			$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
+		if ( ! $is_valid_field_type ) {
+			return;
 		}
+
+		$is_radio = 'radio' === $field_type || 'scale' === $field_type;
+		$is_needed_aria_required = true;
+
+		// Check if the field type is 'data' or 'product'.
+		$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
+		if ( $is_data_or_product ) {
+			$data_type = FrmField::get_option( $field, 'data_type' );
+			// Check if the data type isn't 'radio' or 'checkbox'.
+			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
+				// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
+				$is_needed_aria_required = false;
+			}
+			// Check if data type is 'radio'
+			if ( 'radio' === $data_type ) {
+				$is_radio = true;
+			}
+		}
+
+		// Add 'role' attribute to the field.
+		$attributes['role'] = $is_radio ? 'role="radiogroup"' : 'role="group"';
+
+		// Add 'aria-required' attribute to the field if required.
+		if ( $is_needed_aria_required && '1' === $field['required'] ) {
+			$attributes['aria-required'] = 'aria-required="true"';
+		}
+
+		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
+		$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
+		$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }
