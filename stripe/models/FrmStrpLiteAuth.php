@@ -39,12 +39,18 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
-		$charge_id  = FrmAppHelper::simple_get( 'charge' );
-		$has_charge = (bool) $charge_id;
-
 		$atts = array( 'entry' => FrmEntry::getOne( $entry_id ) );
 		self::prepare_success_atts( $atts );
+
 		$is_stripe_link = false !== FrmStrpLiteActionsController::get_stripe_link_action( $atts['form']->id );
+		if ( ! $is_stripe_link ) {
+			// We only filter when Stripe link is active.
+			// Stripe Link is always active in Lite so this check may be redundant.
+			return $html;
+		}
+
+		$charge_id  = FrmAppHelper::simple_get( 'charge' );
+		$has_charge = (bool) $charge_id;
 
 		$frm_payment = new FrmTransLitePayment();
 
@@ -68,12 +74,6 @@ class FrmStrpLiteAuth {
 		$intent               = FrmStrpLiteAppHelper::call_stripe_helper_class( $intent_function_name, $intent_id );
 
 		if ( ! $intent || ! self::verify_client_secret( $intent, $is_setup_intent ) ) {
-			return $html;
-		}
-
-		if ( in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true ) ) {
-			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
-			self::insert_error_message( $message, $html );
 			return $html;
 		}
 
