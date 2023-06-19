@@ -501,7 +501,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
 				'padding'         => $settings['field_pad'],
-				'height'          => $settings['field_height'],
 				'lineHeight'      => 1.3,
 				'borderColor'     => $settings['border_color'],
 				'borderWidth'     => $settings['field_border_width'],
