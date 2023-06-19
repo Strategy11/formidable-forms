@@ -1,4 +1,9 @@
 == Changelog ==
+= 6.3.2 =
+* New: The cron for tracking plugin usage is now unscheduled automatically when disabling this plugin.
+* Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
+* Fix: AJAX-submitted forms would log a PHP Notice on submit with new versions of WooCommerce installed.
+
 = 6.3.1 =
 * Security: Additional validation has been added when installing plugins from the WordPress repository.
 * New: A new "Open in new tab" toggle has been added to confirmation actions with redirect rules.
