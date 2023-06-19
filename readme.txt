@@ -444,6 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.3.2 =
 * New: The cron for tracking plugin usage is now unscheduled automatically when disabling this plugin.
 * Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
+* Fix: The "Other" option in dropdown fields would not appear as selected when editing an entry.
 * Fix: AJAX-submitted forms would log a PHP Notice on submit with new versions of WooCommerce installed.
 
 = 6.3.1 =
