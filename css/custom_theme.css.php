@@ -914,10 +914,8 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:checked:before,
-.with_frm_style .frm_scale input[type=radio]:checked:before,
 .with_frm_style .frm_checkbox input[type=checkbox]:checked:before {
 	transform: scale(1);
-	box-shadow: inset 10px 10px var(--progress-active-bg-color);
 }
 
 .with_frm_style :invalid,
