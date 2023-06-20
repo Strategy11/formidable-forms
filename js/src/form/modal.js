@@ -33,7 +33,6 @@ registerBlockType( 'frm-modal/modal', {
 	],
 
 	edit: ( { setAttributes, attributes } ) => {
-		const hasAccess = -1 !== [ 'elite', 'business', 'personal', 'grandfathered' ].indexOf( formidable_form_selector.licenseType );
 		const blockName = __( 'Bootstrap modal popup', 'formidable' );
 		const imageStyles = {
 			maxWidth: '504px',
@@ -53,11 +52,11 @@ registerBlockType( 'frm-modal/modal', {
 					<FormidableIcon></FormidableIcon>
 					<div className="frm-block-title">{ blockName }</div>
 					<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
-						{ hasAccess ? (
+						{ formidable_form_selector.modalAddon.hasAccess ? (
 							<UpgradeNotice
 								text={ __( 'This site does not have popup modals active.', 'formidable' ) }
 								buttonText={ __( 'Install Formidable Modals', 'formidable' ) }
-								link="https://formidableforms.com/features/bootstrap-modal-forms/"
+								link={ formidable_form_selector.modalAddon.link }
 							/>
 						) : (
 							<UpgradeNotice

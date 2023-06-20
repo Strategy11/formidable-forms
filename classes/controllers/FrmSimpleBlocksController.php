@@ -33,13 +33,18 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
+		$modal_addon = self::get_modal_addon_info();
+
 		$script_vars = array(
 			'forms' => self::get_forms_options(),
 			'icon'  => $icon,
 			'name'  => $block_name,
 			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'   => FrmAppHelper::plugin_url(),
-			'licenseType' => FrmAddonsController::license_type(),
+			'modalAddon' => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'addons', $modal_addon['link'] ),
+				'hasAccess' => ! empty( $modal_addon['url'] ),
+			),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
@@ -53,6 +58,25 @@ class FrmSimpleBlocksController {
 			array( 'wp-edit-blocks' ),
 			$version
 		);
+	}
+
+	/**
+	 * Gets the modal addon info.
+	 *
+	 * @since x.x
+	 *
+	 * @return array|false
+	 */
+	private static function get_modal_addon_info() {
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
+		$addon_id = 185013;
+
+		if ( ! is_array( $addons ) || ! array_key_exists( $addon_id, $addons ) ) {
+			return false;
+		}
+
+		return $addons[ $addon_id ];
 	}
 
 	/**
