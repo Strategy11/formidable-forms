@@ -114,7 +114,6 @@ class FrmHooksController {
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', 'FrmAppController::menu', 1 );
 		add_filter( 'admin_body_class', 'FrmAppController::add_admin_class', 999 );
-		add_action( 'admin_enqueue_scripts', 'FrmAppController::load_wp_admin_style' );
 		add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_action( 'admin_enqueue_scripts', 'FrmAppController::admin_enqueue_scripts' );

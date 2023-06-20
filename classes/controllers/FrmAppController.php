@@ -160,7 +160,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function load_wp_admin_style() {
-		FrmAppHelper::load_font_style();
+		_deprecated_function( __METHOD__, '6.x', __CLASS__ . '::admin_enqueue_scripts' );
+		self::admin_enqueue_scripts();
 	}
 
 	/**
@@ -725,6 +726,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_enqueue_scripts() {
+		FrmAppHelper::load_font_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
 	}
 
