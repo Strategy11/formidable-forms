@@ -96,11 +96,35 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		self::maybe_update_intent( $intent, $action, $entry );
+
 		$frm_payment->update( $payment->id, $new_payment_values );
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 
 		$redirect_helper->handle_success( $entry, isset( $charge ) ? $charge->id : '' );
 		die();
+	}
+
+	/**
+	 * Try to add the description to a Stripe link payment after it was confirmed.
+	 *
+	 * @param object           $intent
+	 * @param WP_Post|stdClass $action
+	 * @param stdClass         $entry
+	 * @return void
+	 */
+	private static function maybe_update_intent( $intent, $action, $entry ) {
+		if ( empty( $action->post_content['description'] ) ) {
+			return;
+		}
+
+		$shortcode_atts = array(
+			'entry' => $entry,
+			'form'  => $entry->form_id,
+			'value' => $action->post_content['description'],
+		);
+		$new_values = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
+		FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent->id, $new_values );
 	}
 
 	/**
