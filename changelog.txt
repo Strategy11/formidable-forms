@@ -4,6 +4,7 @@
 * Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
 * Fix: The "Other" option in dropdown fields would not appear as selected when editing an entry.
 * Fix: AJAX-submitted forms would log a PHP Notice on submit with new versions of WooCommerce installed.
+* Fix: A PHP Warning should trigger on some servers in the Gutenberg editor when trying to embed a form in an existing page.
 
 = 6.3.1 =
 * Security: Additional validation has been added when installing plugins from the WordPress repository.
