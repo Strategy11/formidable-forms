@@ -94,6 +94,27 @@ class FrmOnSubmitHelper {
 				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
 			/>
 		</div>
+
+		<?php
+		$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
+		$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
+		?>
+		<div class="frm_form_field">
+			<?php
+			FrmHtmlHelper::toggle(
+				$id_attr,
+				$name_attr,
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
+					'echo'      => true,
+				)
+			);
+			?>
+			<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
+				<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
+			</label>
+		</div>
 		<?php
 	}
 
@@ -178,6 +199,17 @@ class FrmOnSubmitHelper {
 	}
 
 	/**
+	 * Gets the default open in new tab message.
+	 *
+	 * @since 6.x.x
+	 *
+	 * @return string
+	 */
+	public static function get_default_new_tab_msg() {
+		return FrmAppHelper::get_settings()->new_tab_msg;
+	}
+
+	/**
 	 * Adds the first On Submit action data to the form options to be saved.
 	 *
 	 * @param int $form_id Form ID.
@@ -229,7 +261,8 @@ class FrmOnSubmitHelper {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
 				break;
 
 			case 'page':
@@ -385,6 +418,22 @@ class FrmOnSubmitHelper {
 			'success_action' => 'message',
 			'success_msg'    => self::get_default_msg(),
 		);
+
+		return $action;
+	}
+
+	/**
+	 * Gets fallback action after opening the redirect URL in a new tab.
+	 *
+	 * @since 6.x.x
+	 *
+	 * @param string|array $event Uses 'create' or 'update'.
+	 * @return object
+	 */
+	public static function get_fallback_action_after_open_in_new_tab( $event ) {
+		$action = self::get_fallback_action( $event );
+
+		$action->post_content['success_msg'] = self::get_default_new_tab_msg();
 
 		return $action;
 	}

@@ -54,6 +54,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 
+		$this->factory        = new FrmUnitTestFactory();
 		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );

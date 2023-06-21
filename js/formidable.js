@@ -591,7 +591,7 @@ function frmFrontFormJS() {
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger;
+				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
 
 			defaultResponse = {
 				content: '',
@@ -617,8 +617,21 @@ function frmFrontFormJS() {
 				}
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-				window.location = response.redirect;
-			} else if ( response.content !== '' ) {
+
+				if ( ! response.openInNewTab ) {
+					// We return here because we're redirecting there is no need to update content.
+					window.location = response.redirect;
+					return;
+				}
+
+				// We don't return here because we're opening in a new tab, the old tab will still update.
+				newTab = window.open( response.redirect, '_blank' );
+				if ( ! newTab && response.fallbackMsg && response.content ) {
+					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				}
+			}
+
+			if ( response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -1348,6 +1361,64 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function shouldUpdateValidityMessage( target ) {
+		if ( 'INPUT' !== target.nodeName ) {
+			return false;
+		}
+
+		if ( ! target.dataset.invmsg ) {
+			return false;
+		}
+
+		if ( 'text' !== target.getAttribute( 'type' ) ) {
+			return false;
+		}
+
+		if ( target.classList.contains( 'frm_verify' ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function maybeClearCustomValidityMessage( event, field ) {
+		var key,
+			isInvalid = false;
+
+		if ( ! shouldUpdateValidityMessage( field ) ) {
+			return;
+		}
+
+		for ( key in field.validity ) {
+			if ( 'customError' === key ) {
+				continue;
+			}
+			if ( 'valid' !== key && field.validity[ key ] === true ) {
+				isInvalid = true;
+				break;
+			}
+		};
+
+		if ( ! isInvalid ) {
+			field.setCustomValidity( '' );
+		}
+	}
+
+	function maybeShowNewTabFallbackMessage() {
+		var messageEl;
+
+		if ( ! window.frmShowNewTabFallback ) {
+			return;
+		}
+
+		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		if ( ! messageEl ) {
+			return;
+		}
+
+		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
+	}
+
 	function setCustomValidityMessage() {
 		var forms, length, index;
 
@@ -1360,23 +1431,9 @@ function frmFrontFormJS() {
 				function( event ) {
 					var target = event.target;
 
-					if ( 'INPUT' !== target.nodeName ) {
-						return;
+					if ( shouldUpdateValidityMessage( target ) ) {
+						target.setCustomValidity( target.dataset.invmsg );
 					}
-
-					if ( ! target.dataset.invmsg ) {
-						return;
-					}
-
-					if ( 'text' !== target.getAttribute( 'type' ) ) {
-						return;
-					}
-
-					if ( target.classList.contains( 'frm_verify' ) ) {
-						return;
-					}
-
-					target.setCustomValidity( target.dataset.invmsg );
 				},
 				true
 			);
@@ -1420,9 +1477,11 @@ function frmFrontFormJS() {
 			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
+			maybeShowNewTabFallbackMessage();
 
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
+			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
 		},
 
 		getFieldId: function( field, fullID ) {

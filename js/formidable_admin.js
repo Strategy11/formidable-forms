@@ -5842,6 +5842,18 @@ function frmAdminBuildJS() {
 		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
 	}
 
+	function handleShowPasswordLiveUpdate() {
+		frmDom.util.documentOn( 'change', '.frm_show_password_setting_input', event => {
+			const fieldId = event.target.getAttribute( 'data-fid' );
+			const fieldEl = document.getElementById( 'frm_field_id_' + fieldId );
+			if ( ! fieldEl ) {
+				return;
+			}
+
+			fieldEl.classList.toggle( 'frm_disabled_show_password', ! event.target.checked );
+		});
+	}
+
 	function slideDown() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).data( 'slidedown' );
@@ -8896,6 +8908,14 @@ function frmAdminBuildJS() {
 				if ( firstLockedTemplate.length ) {
 					showFreeTemplatesForm( firstLockedTemplate );
 				}
+
+				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
+				$modalBackButton = $modal.find( '.frm-modal-back' );
+				$modalBackButton.hide();
+				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
+					$modalBackButton.show();
+					$modal.dialog( 'close' );
+				});
 			}
 		}
 
@@ -9949,6 +9969,7 @@ function frmAdminBuildJS() {
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
+			handleShowPasswordLiveUpdate();
 		},
 
 		settingsInit: function() {
