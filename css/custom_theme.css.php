@@ -879,9 +879,9 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio],
-<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
 .with_frm_style .frm_scale input[type=radio],	
-<?php } ?>
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
 	appearance: none;
