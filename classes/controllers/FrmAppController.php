@@ -720,7 +720,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.
+	 * @since 6.3.2
 	 *
 	 * @return void
 	 */

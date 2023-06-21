@@ -779,7 +779,7 @@ class FrmFieldsHelper {
 	/**
 	 * Converts all accent characters to ASCII characters.
 	 *
-	 * @since x.x
+	 * @since 6.3.1
 	 *
 	 * @param string $replace_with The text to remove accents from.
 	 *
@@ -1951,7 +1951,7 @@ class FrmFieldsHelper {
 	/**
 	 * Creates an array that contains variables used for display format options setting.
 	 *
-	 * @since x.x
+	 * @since 6.3.2
 	 *
 	 * @param array $field The field.
 	 *

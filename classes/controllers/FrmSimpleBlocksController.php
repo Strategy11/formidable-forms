@@ -63,7 +63,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Gets the modal addon info.
 	 *
-	 * @since x.x
+	 * @since 6.3.2
 	 *
 	 * @return array|false
 	 */
