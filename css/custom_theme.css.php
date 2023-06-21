@@ -866,7 +866,11 @@ a.frm_save_draft{
 	vertical-align:middle;
 }
 
-.with_frm_style .frm_radio input[type=radio], .with_frm_style .frm_scale input[type=radio]{
+.with_frm_style .frm_radio input[type=radio]
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+, .with_frm_style .frm_scale input[type=radio]
+<?php endif; ?>
+{
 	border-radius:50%;
 }
 
@@ -876,7 +880,7 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio],
 <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
-	.with_frm_style .frm_scale input[type=radio],	
+.with_frm_style .frm_scale input[type=radio],	
 <?php } ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
@@ -897,7 +901,9 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:before,
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
 .with_frm_style .frm_scale input[type=radio]:before,
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:before {
 	content: '';
 	width: 12px;
