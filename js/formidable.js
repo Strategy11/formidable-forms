@@ -389,8 +389,13 @@ function frmFrontFormJS() {
 	}
 
 	function shouldAddRequiredValidationError( fieldID, errors, field ) {
-		var options = field.querySelectorAll( 'option' );
-		if ( ! ( fieldID in errors ) && options.length ) {
+		var options;
+		if ( fieldID in errors ) {
+			return false;
+		}
+
+		options = field.querySelectorAll( 'option' );
+		if ( options.length ) {
 			if ( options.length === 1 && options[0].value === '' ) {
 				return false;
 			}
