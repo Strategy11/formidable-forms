@@ -639,15 +639,15 @@ class FrmAppController {
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		// Enqueue Floating Links.
-		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		$is_allowed_pages = strpos( $page, 'formidable' ) === 0 && $page !== 'formidable-styles' && ! $action;
-		self::enqueue_floating_links(
-			array(
-				'plugin_url'       => $plugin_url,
-				'version'          => $version,
-				'is_allowed_pages' => $is_allowed_pages,
-			)
-		);
+		$is_valid_page =
+			FrmAppHelper::is_formidable_admin() &&
+			! FrmAppHelper::is_style_editor_page() &&
+			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
+			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( $is_valid_page ) {
+			self::enqueue_floating_links( $plugin_url, $version );
+		}
+		unset( $is_valid_page );
 
 		if ( 'formidable-applications' === $page ) {
 			FrmApplicationsController::load_assets();
@@ -1070,36 +1070,32 @@ class FrmAppController {
 	}
 
 	/**
-	 * Enqueues the Floating Links script.
+	 * Handles Floating Links' scripts and styles enqueueing.
 	 *
 	 * @since x.x
 	 *
-	 * @param array $params Contains 'plugin_url', 'version', and 'is_allowed_pages'
+	 * @param string $plugin_url URL of the plugin.
+	 * @param string $version Current version of the plugin.
 	 * @return void
 	 */
-	public static function enqueue_floating_links( $args = array() ) {
-		if ( ! isset( $args['plugin_url'], $args['version'], $args['is_allowed_pages'] ) ) {
+	private static function enqueue_floating_links( $plugin_url, $version ) {
+		if ( ! $plugin_url || ! $version ) {
 			// If any required parameters are missing, exit early.
 			return;
 		}
 
-		$plugin_url       = $args['plugin_url'];
-		$version          = $args['version'];
-		$is_allowed_pages = $args['is_allowed_pages'];
+		// Enqueue the Floating Links styles.
+		wp_enqueue_style( 's11-floating-links', $plugin_url . '/css/packages/s11-floating-links.css', array(), $version );
 
-		if ( $is_allowed_pages ) {
-			// Enqueue the script.
-			wp_enqueue_script( 'formidable-floating-links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array( 'wp-i18n' ), $version, true );
+		// Enqueue the Floating Links script.
+		wp_enqueue_script( 's11-floating-links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array(), $version, true );
 
-			// Register the translation domain for the script.
-			wp_set_script_translations( 'formidable-floating-links', 'formidable' );
-
-			// Prepare data to be passed to the script.
-			$floating_links_data = array(
-				'proIsInstalled' => FrmAppHelper::pro_is_installed(),
-			);
-			// Localize the script, passing prepared data.
-			wp_localize_script( 'formidable-floating-links', 's11FloatingLinksData', $floating_links_data );
-		}
+		// Enqueue the config script.
+		wp_enqueue_script( 's11-floating-links-config', $plugin_url . '/js/packages/floating-links/config.js', array( 'wp-i18n' ), $version, true );
+		wp_set_script_translations( 's11-floating-links-config', 's11-' );
+		$floating_links_data = array(
+			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
+		);
+		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
 	}
 }
