@@ -1139,6 +1139,55 @@
 			input => input.addEventListener( 'change', () => trackUnsavedChange() )
 		);
 
+		function changeRepeaterAndCollapseSVGIcon() {
+			/**
+			 * Changes the SVG icon when changing icon setting from Styles page.
+			 *
+			 * @param {String} inputSelector  CSS selector of the setting input.
+			 * @param {String} useTagSelector CSS selector of the <use> tag of the SVG icon.
+			 * @param {String} iconNameFormat Icon name format, contains `{key}`, which is replaced by the setting value.
+			 */
+			function changeSVGIcon( inputSelector, useTagSelector, iconNameFormat ) {
+				const input = document.querySelector( inputSelector );
+				if ( ! input ) {
+					return;
+				}
+
+				const useTags = document.querySelectorAll( useTagSelector );
+				if ( ! useTags ) {
+					return;
+				}
+
+				const iconKey = input.value && parseInt( input.value ) ? input.value : '';
+
+				useTags.forEach( useTag => {
+					const href = iconNameFormat.replace( '{key}', iconKey );
+					useTag.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', href );
+				});
+			}
+
+			// Add row icon.
+			changeSVGIcon(
+				'input[name="frm_style_setting[post_content][repeat_icon]"]:checked',
+				'.frm_repeat_buttons .frm_add_form_row .frmsvg use',
+				'#frm_plus{key}_icon'
+			);
+
+			// Remove row icon.
+			changeSVGIcon(
+				'input[name="frm_style_setting[post_content][repeat_icon]"]:checked',
+				'.frm_repeat_buttons .frm_remove_form_row .frmsvg use',
+				'#frm_minus{key}_icon'
+			);
+
+			// Collapse icon.
+			changeSVGIcon(
+				'input[name="frm_style_setting[post_content][collapse_icon]"]:checked',
+				'.frm_section_heading .frm_trigger .frmsvg use',
+				'#frm_arrowdown{key}_icon'
+			);
+		}
+
 		/**
 		 * Sends an AJAX POST request for new CSS to use for the preview.
 		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
@@ -1161,6 +1210,8 @@
 				},
 				success: handleChangeStylingSuccess
 			});
+
+			changeRepeaterAndCollapseSVGIcon();
 		}
 
 		/**
