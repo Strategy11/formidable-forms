@@ -688,7 +688,9 @@ class FrmForm {
 
 		$query_key = is_numeric( $id ) ? 'id' : 'form_key';
 		$r         = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
-		$r         = stripslashes( $r );
+
+		// An empty form name can result in a null value.
+		$r = is_null( $r ) ? '' : stripslashes( $r );
 
 		return $r;
 	}

@@ -1735,7 +1735,14 @@ form .frm_primary_label input {
 }
 
 #frm_form_editor_container .divider_section_only .frm_primary_label {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
 	font-size: 20px;
+}
+
+#frm_form_editor_container .divider_section_only .frm_primary_label .frm-sub-label {
+	padding: 0;
 }
 
 form .form-field.frm_field_loading {
@@ -2072,7 +2079,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-addons .plugin-card-top {
-	height: 155px;
+	min-height: 155px;
 	padding-top: var(--gap-lg);
 	overflow: hidden;
 }
@@ -6330,6 +6337,7 @@ ul.start_divider {
 
 .frm-section-collapsed .divider_section_only:hover:after,
 li.selected.frm-section-collapsed .divider_section_only:before,
+li.selected.frm-section-collapsed .divider_section_only:after,
 .divider_section_only:hover:before,
 li.selected .divider_section_only:before {
 	border-color: transparent;
@@ -6502,9 +6510,21 @@ li.selected .divider_section_only:before {
 }
 
 .frm-collapsed i:before,
-.frm-section-collapsed .frm_arrowdown6_icon:before,
 .frm-page-collapsed .frm_arrowdown6_icon:before {
 	content: '\e913';
+}
+
+.frm-collapse-section svg {
+	fill: var(--primary-color);
+	transition: transform 0.2s ease-out, fill 0.2s ease-out;
+}
+
+.frm-collapse-section:hover svg {
+	fill: var(--primary-700);
+}
+
+.frm-section-collapsed .frm-collapse-section svg {
+	transform: rotate(-90deg);
 }
 
 .open .widget-top .frm_arrow_right_icon:before {
@@ -7536,6 +7556,12 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
+/* Standardize icon size for field buttons in the builder */
+.field_type_list li.frmbutton .frmsvg {
+	width: var(--text-xl);
+	font-size: var(--text-xl);
+}
+
 .frm_code_list i:before {
 	font-size: inherit;
 }
@@ -7560,6 +7586,11 @@ input[disabled],
 	border-radius: var(--border-radius) !important;
 	padding: var(--gap-xs) var(--gap-sm) !important;
 	color: var(--grey-900) !important;
+}
+
+/* Adjust field button size to full width in builder */
+#frm-insert-fields li a {
+	display: flex !important;
 }
 
 .frmbutton.ui-draggable-dragging a {
@@ -8359,6 +8390,11 @@ Responsive Design
 		display: inline-block;
 	}
 
+	/* Fix: Issue where the admin page content had extra white space to the left on small screens */
+	.auto-fold.frm-admin-page-styles:not(.frm-full-screen) .frm_page_container,
+	.auto-fold:not(.frm-full-screen) .frm_wrap .frm_page_container {
+		left: 36px;
+	}
 }
 
 @media only screen and (max-width: 850px) {

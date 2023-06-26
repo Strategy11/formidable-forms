@@ -52,6 +52,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'show_form'       => '',
 			'success_url'     => '',
 			'success_page_id' => '',
+			'open_in_new_tab' => '',
 		);
 	}
 
