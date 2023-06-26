@@ -1188,6 +1188,33 @@
 			);
 		}
 
+		function changeCollapseIconPosition() {
+			const input = document.getElementById( 'frm_collapse_pos' );
+			if ( ! input ) {
+				return;
+			}
+
+			const wrapperEls = document.querySelectorAll( '.frm_section_heading .frm_trigger' );
+			if ( ! wrapperEls ) {
+				return;
+			}
+
+			const position = input.value;
+
+			wrapperEls.forEach( wrapperEl => {
+				const svg = wrapperEl.querySelector( '.frmsvg' );
+				if ( ! svg ) {
+					return;
+				}
+
+				if ( 'before' === position ) {
+					wrapperEl.prepend( svg );
+				} else {
+					wrapperEl.append( svg );
+				}
+			});
+		}
+
 		/**
 		 * Sends an AJAX POST request for new CSS to use for the preview.
 		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
@@ -1212,6 +1239,7 @@
 			});
 
 			changeRepeaterAndCollapseSVGIcon();
+			changeCollapseIconPosition();
 		}
 
 		/**
