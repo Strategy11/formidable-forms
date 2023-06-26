@@ -717,6 +717,15 @@ class FrmAppController {
 			}
 		}
 
+	}
+
+	/**
+	 * @since 6.3.2
+	 *
+	 * @return void
+	 */
+	public static function admin_enqueue_scripts() {
+		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
 	}
 
