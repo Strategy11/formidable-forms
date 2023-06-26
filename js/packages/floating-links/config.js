@@ -73,7 +73,7 @@ const proVersionLinks = [
 	{
 		title: __( 'Support & Docs', 'formidable' ),
 		icon: supportIcon,
-		url: 'https://wordpress.org/support/plugin/formidable/',
+		url: 'https://formidableforms.com/knowledgebase/',
 		openInNewTab: true
 	}
 ];
