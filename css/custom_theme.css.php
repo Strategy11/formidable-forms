@@ -880,7 +880,7 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio],
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.with_frm_style .frm_scale input[type=radio],	
+.with_frm_style .frm_scale input[type=radio],
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
@@ -1571,7 +1571,7 @@ select.frm_loading_lookup{
 	display:block;
 }
 
-.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm_icon_font::before {
+.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frmsvg {
 	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
 	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
