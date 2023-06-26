@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.2
+Tested up to: 6.2.2
 Requires PHP: 5.6
-Stable tag: 6.3
+Stable tag: 6.3.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,24 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.3.2 =
+* New: The cron for tracking plugin usage is now unscheduled automatically when deactivating this plugin.
+* Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
+* Fix: The "Other" option in dropdown fields would not appear as selected when editing an entry.
+* Fix: AJAX-submitted forms would log a PHP Notice on submit with new versions of WooCommerce installed.
+* Fix: A PHP Warning should trigger on some servers in the Gutenberg editor when trying to embed a form in an existing page.
+
+= 6.3.1 =
+* Security: Additional validation has been added when installing plugins from the WordPress repository.
+* New: A new "Open in new tab" toggle has been added to confirmation actions with redirect rules.
+* New: Dropdown field options now use less whitespace, reducing the amount of required HTML downloaded to load the form.
+* New: Additional missing for attributes have been added to admin pages to improve accessibility.
+* New: Support for a new remove_accents option has been added for field shortcodes.
+* Fix: There was additional unexpected white space on some mobile widths when distraction free mode is not active.
+* Fix: Field button options were inconsistent widths. When clicking beside a field, it wouldn't get added to the form because of the small button size.
+* Fix: A fatal error would occur in PHP 8.2 when checking for form name shortcodes in array data.
+* Fix: A warning would occur for forms with no name when viewing the list of entries.
+
 = 6.3 =
 * New: Improved the readability of error messages when importing XML.
 * New: The custom validity message pop up that happens when trying to submit an entry with an invalid format will now use the custom invalid message defined in form settings.

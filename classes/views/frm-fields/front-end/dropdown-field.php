@@ -55,7 +55,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 			$option_params['class'] = 'frm_other_trigger';
 		}
 
-		FrmHtmlHelper::echo_dropdown_option( $opt, $selected, $option_params );
+		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params );
 		unset( $option_params );
 	}
 	?>

@@ -5397,13 +5397,13 @@ function frmAdminBuildJS() {
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-
-		id = 'field_' + fieldKey + '-' + opt.key;
+			id = 'field_' + fieldKey + '-' + opt.key,
+			inputType = type === 'scale' ? 'radio' : type;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
-			'"><input type="' + type +
+			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
@@ -5840,6 +5840,18 @@ function frmAdminBuildJS() {
 
 		noSectionFields = $section.parent().children( '.frm_no_section_fields' ).get( 0 );
 		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
+	}
+
+	function handleShowPasswordLiveUpdate() {
+		frmDom.util.documentOn( 'change', '.frm_show_password_setting_input', event => {
+			const fieldId = event.target.getAttribute( 'data-fid' );
+			const fieldEl = document.getElementById( 'frm_field_id_' + fieldId );
+			if ( ! fieldEl ) {
+				return;
+			}
+
+			fieldEl.classList.toggle( 'frm_disabled_show_password', ! event.target.checked );
+		});
 	}
 
 	function slideDown() {
@@ -8896,6 +8908,14 @@ function frmAdminBuildJS() {
 				if ( firstLockedTemplate.length ) {
 					showFreeTemplatesForm( firstLockedTemplate );
 				}
+
+				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
+				$modalBackButton = $modal.find( '.frm-modal-back' );
+				$modalBackButton.hide();
+				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
+					$modalBackButton.show();
+					$modal.dialog( 'close' );
+				});
 			}
 		}
 
@@ -9949,6 +9969,7 @@ function frmAdminBuildJS() {
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
+			handleShowPasswordLiveUpdate();
 		},
 
 		settingsInit: function() {
@@ -10449,7 +10470,8 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		infoModal: infoModal
+		infoModal: infoModal,
+		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};
 }
 
