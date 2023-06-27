@@ -74,11 +74,9 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 			// Assert html has the correct attributes
 			$this->assertStringContainsString( 'aria-required="true"', $html );
 
-			if ( 'radio' === $field_type['type'] || 'scale' === $field_type['type'] || ( isset( $data_type ) && 'radio' === $data_type ) ) {
-				$this->assertStringContainsString( 'role="radiogroup"', $html );
-			} else {
-				$this->assertStringContainsString( 'role="group"', $html );
-			}
+			$expect_radio_group = 'radio' === $field_type['type'] || 'scale' === $field_type['type'] || ( isset( $data_type ) && 'radio' === $data_type );
+			$expected_role = $expect_radio_group ? 'radiogroup' : 'group';
+			$this->assertStringContainsString( 'role="' . $expected_role . '"', $html );
 		}
 	}
 }

@@ -505,7 +505,7 @@ class FrmFieldFormHtml {
 		}
 
 		$is_radio = 'radio' === $field_type || 'scale' === $field_type;
-		$is_needed_aria_required = true;
+		$type_requires_aria_required = true;
 
 		// Check if the field type is 'data' or 'product'.
 		$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
@@ -514,7 +514,7 @@ class FrmFieldFormHtml {
 			// Check if the data type isn't 'radio' or 'checkbox'.
 			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
 				// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
-				$is_needed_aria_required = false;
+				$type_requires_aria_required = false;
 			}
 			// Check if data type is 'radio'
 			if ( 'radio' === $data_type ) {
@@ -523,15 +523,15 @@ class FrmFieldFormHtml {
 		}
 
 		// Add 'role' attribute to the field.
-		$attributes['role'] = $is_radio ? 'role="radiogroup"' : 'role="group"';
+		$attributes['role'] = $is_radio ? 'radiogroup' : 'group';
 
 		// Add 'aria-required' attribute to the field if required.
-		if ( $is_needed_aria_required && '1' === $field['required'] ) {
-			$attributes['aria-required'] = 'aria-required="true"';
+		if ( $type_requires_aria_required && '1' === $field['required'] ) {
+			$attributes['aria-required'] = 'true';
 		}
 
 		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
-		$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
+		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
 		$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }
