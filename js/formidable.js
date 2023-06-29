@@ -395,10 +395,8 @@ function frmFrontFormJS() {
 		}
 
 		options = field.querySelectorAll( 'option' );
-		if ( options.length ) {
-			if ( options.length === 1 && options[0].value === '' ) {
-				return false;
-			}
+		if ( options.length === 1 && options[0].value === '' ) {
+			return false;
 		}
 
 		return true;
