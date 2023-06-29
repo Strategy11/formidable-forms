@@ -5379,16 +5379,16 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldOptions( fieldId ) {
-		var index, input, li,
-			listItems,
-			options = [],
-			length;
-		listItems = document.getElementById( 'frm_field_' + fieldId + '_opts' );
-		if ( ! listItems ) {
+		var index, input, li, listItems, optsContainer, length,
+			options = [];
+		optsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+
+		if ( ! optsContainer ) {
 			return options;
 		}
-		listItems = listItems.querySelectorAll( '.frm_single_option' );
+		listItems = optsContainer.querySelectorAll( '.frm_single_option' );
 		length = listItems.length;
+
 		for ( index = 0; index < length; index++ ) {
 			li = listItems[ index ];
 
