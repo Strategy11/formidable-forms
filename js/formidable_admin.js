@@ -5338,41 +5338,13 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
-
-	function updateConditionalLogicsDependentOnThis( e ) {
-		setTimeout( function() {
-			let fieldId = e.target.closest( '.frm-single-settings' ).dataset.fid;
-
-			if ( ! fieldId ) {
-				return;
-			}
-
-			adjustConditionalLogicOptionOrders( fieldId, 'scale' );
-		}, 0 );
-	}
-
-	function getScaleFieldOptions( fieldId ) {
-		let opts = [];
-		const optVals = document.querySelectorAll( 'input[name^="item_meta[' + fieldId + ']"]' );
-
-		optVals.forEach( opt => {
-			opts.push( opt.value );
-		});
-
-		return opts;
-	}
-
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length;
 
-		if ( 'scale' === type ) {
-			fieldOptions = getScaleFieldOptions( fieldId );
-		} else {
-			fieldOptions = getFieldOptions( fieldId );
-		}
-
+		fieldOptions = getFieldOptions( fieldId );
+		fieldOptions = wp.hooks.applyFilters( 'frm_field_options', fieldOptions, { type, fieldId });
 		optionLength = fieldOptions.length;
 
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
@@ -5408,9 +5380,15 @@ function frmAdminBuildJS() {
 
 	function getFieldOptions( fieldId ) {
 		var index, input, li,
-			listItems = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelectorAll( '.frm_single_option' ),
+			listItems,
 			options = [],
-			length = listItems.length;
+			length;
+		listItems = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+		if ( ! listItems ) {
+			return options;
+		}
+		listItems = listItems.querySelectorAll( '.frm_single_option' );
+		length = listItems.length;
 		for ( index = 0; index < length; index++ ) {
 			li = listItems[ index ];
 
@@ -9943,7 +9921,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
-			$builderForm.on( 'change', '.frm_scale_opt', updateConditionalLogicsDependentOnThis );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 			$builderForm.on( 'focusin', '.frm_classes', showBuilderModal );
@@ -10480,7 +10457,8 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		infoModal: infoModal
+		infoModal: infoModal,
+		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders
 	};
 }
 
