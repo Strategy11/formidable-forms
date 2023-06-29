@@ -638,6 +638,17 @@ class FrmAppController {
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
+		// Enqueue Floating Links.
+		$is_valid_page =
+			FrmAppHelper::is_formidable_admin() &&
+			! FrmAppHelper::is_style_editor_page() &&
+			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
+			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( $is_valid_page ) {
+			self::enqueue_floating_links( $plugin_url, $version );
+		}
+		unset( $is_valid_page );
+
 		if ( 'formidable-applications' === $page ) {
 			FrmApplicationsController::load_assets();
 			return;
@@ -1065,5 +1076,35 @@ class FrmAppController {
 	public static function get_form_shortcode( $atts ) {
 		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
 		return FrmFormsController::get_form_shortcode( $atts );
+	}
+
+	/**
+	 * Handles Floating Links' scripts and styles enqueueing.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin_url URL of the plugin.
+	 * @param string $version Current version of the plugin.
+	 * @return void
+	 */
+	private static function enqueue_floating_links( $plugin_url, $version ) {
+		if ( ! $plugin_url || ! $version ) {
+			// If any required parameters are missing, exit early.
+			return;
+		}
+
+		// Enqueue the Floating Links styles.
+		wp_enqueue_style( 's11-floating-links', $plugin_url . '/css/packages/s11-floating-links.css', array(), $version );
+
+		// Enqueue the Floating Links script.
+		wp_enqueue_script( 's11-floating-links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array(), $version, true );
+
+		// Enqueue the config script.
+		wp_enqueue_script( 's11-floating-links-config', $plugin_url . '/js/packages/floating-links/config.js', array( 'wp-i18n' ), $version, true );
+		wp_set_script_translations( 's11-floating-links-config', 's11-' );
+		$floating_links_data = array(
+			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
+		);
+		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
 	}
 }
