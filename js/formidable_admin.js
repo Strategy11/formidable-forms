@@ -9218,6 +9218,9 @@ function frmAdminBuildJS() {
 
 		headingElements.forEach( heading => {
 			const fieldsListElement = heading.nextElementSibling;
+			if ( ! fieldsListElement ) {
+				return;
+			}
 			const listItemElements = fieldsListElement.querySelectorAll( ':scope > li.frmbutton' );
 			const allHidden = Array.from( listItemElements ).every( li => li.classList.contains( 'frm_hidden' ) );
 
