@@ -5343,7 +5343,7 @@ function frmAdminBuildJS() {
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length;
 
-		fieldOptions = wp.hooks.applyFilters( 'frm_field_options', getFieldOptions( fieldId ), { type, fieldId });
+		fieldOptions = wp.hooks.applyFilters( 'frm_conditional_logic_field_options', getFieldOptions( fieldId ), { type, fieldId });
 		optionLength = fieldOptions.length;
 
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
