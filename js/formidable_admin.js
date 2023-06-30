@@ -5987,6 +5987,11 @@ function frmAdminBuildJS() {
 
 			container.addClass( 'frm-open' );
 			box.classList.remove( 'frm_hidden' );
+
+			/**
+			 * @since x.x
+			 */
+			wp.hooks.doAction( 'frm_show_inline_modal', box, icon );
 		}
 	}
 
