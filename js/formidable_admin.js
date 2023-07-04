@@ -9199,7 +9199,34 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		// Updates the visibility of category headings based on search results.
+		updateCatHeadingVisibility();
+
 		jQuery( this ).trigger( 'frmAfterSearch' );
+	}
+
+	/**
+	 * Updates the visibility of category headings based on search results.
+	 * If all associated fields are hidden (indicating no search matches),
+	 * the heading is hidden.
+	 *
+	 * @since x.x
+	 */
+	function updateCatHeadingVisibility() {
+		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
+		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+
+		headingElements.forEach( heading => {
+			const fieldsListElement = heading.nextElementSibling;
+			if ( ! fieldsListElement ) {
+				return;
+			}
+			const listItemElements = fieldsListElement.querySelectorAll( ':scope > li.frmbutton' );
+			const allHidden = Array.from( listItemElements ).every( li => li.classList.contains( 'frm_hidden' ) );
+
+			// Add or remove class based on `allHidden` condition
+			heading.classList.toggle( 'frm_hidden', allHidden );
+		});
 	}
 
 	function stopPropagation( e ) {
