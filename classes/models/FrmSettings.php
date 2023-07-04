@@ -130,6 +130,8 @@ class FrmSettings {
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css' => false,
+
+			'repeater_row_delete_confirmation' => __( 'Are you sure you want to delete this row?', 'formidable' ),
 		);
 	}
 

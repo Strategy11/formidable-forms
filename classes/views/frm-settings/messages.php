@@ -57,6 +57,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			class="frm_with_left_label"
 			value="<?php echo esc_attr( $frm_settings->unique_msg ); ?>"/>
 	</p>
+	<p>
+		<label for="frm_repeater_row_delete_confirmation" class="frm_left_label"><?php esc_html_e( 'Repeater row delete confirmation', 'formidable' ); ?>
+			<span class="frm_help frm_icon_font frm_tooltip_icon"
+				title="<?php esc_attr_e( 'The confirmation message displayed when deleting a Repeater row.', 'formidable' ); ?>"></span>
+		</label>
+		<input type="text" id="frm_repeater_row_delete_confirmation" name="frm_repeater_row_delete_confirmation"
+			class="frm_with_left_label"
+			value="<?php echo esc_attr( $frm_settings->repeater_row_delete_confirmation ); ?>"/>
+	</p>
 <?php } else { ?>
 	<input type="hidden" id="frm_unique_msg" name="frm_unique_msg"
 		value="<?php echo esc_attr( $frm_settings->unique_msg ); ?>"/>
