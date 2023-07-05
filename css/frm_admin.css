@@ -7593,6 +7593,11 @@ input[disabled],
 	display: flex !important;
 }
 
+/* Prevents advanced fields from always appearing in search results */
+#frm-insert-fields li.frm_show_upgrade.frm_hidden {
+	display: none !important;
+}
+
 .frmbutton.ui-draggable-dragging a {
 	border: 1px solid var(--grey-300);
 	box-shadow: var(--box-shadow-md);

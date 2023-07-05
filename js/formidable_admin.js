@@ -5397,13 +5397,13 @@ function frmAdminBuildJS() {
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-
-		id = 'field_' + fieldKey + '-' + opt.key;
+			id = 'field_' + fieldKey + '-' + opt.key,
+			inputType = type === 'scale' ? 'radio' : type;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
-			'"><input type="' + type +
+			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
@@ -9199,7 +9199,34 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		// Updates the visibility of category headings based on search results.
+		updateCatHeadingVisibility();
+
 		jQuery( this ).trigger( 'frmAfterSearch' );
+	}
+
+	/**
+	 * Updates the visibility of category headings based on search results.
+	 * If all associated fields are hidden (indicating no search matches),
+	 * the heading is hidden.
+	 *
+	 * @since x.x
+	 */
+	function updateCatHeadingVisibility() {
+		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
+		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+
+		headingElements.forEach( heading => {
+			const fieldsListElement = heading.nextElementSibling;
+			if ( ! fieldsListElement ) {
+				return;
+			}
+			const listItemElements = fieldsListElement.querySelectorAll( ':scope > li.frmbutton' );
+			const allHidden = Array.from( listItemElements ).every( li => li.classList.contains( 'frm_hidden' ) );
+
+			// Add or remove class based on `allHidden` condition
+			heading.classList.toggle( 'frm_hidden', allHidden );
+		});
 	}
 
 	function stopPropagation( e ) {
@@ -10470,7 +10497,8 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		infoModal: infoModal
+		infoModal: infoModal,
+		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};
 }
 
@@ -10481,6 +10509,8 @@ jQuery( document ).ready(
 		frmAdminBuild.init();
 
 		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
+		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-toggle', 'dropdown' );
+
 		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
