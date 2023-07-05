@@ -120,6 +120,7 @@ class FrmSettings {
 			'submit_value'     => __( 'Submit', 'formidable' ),
 			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
 			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
 
 			'email_to'         => '[admin_email]',
 			'no_ips'           => 0,
@@ -340,9 +341,9 @@ class FrmSettings {
 	private function update_settings( $params ) {
 		$this->active_captcha   = $params['frm_active_captcha'];
 		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey = $params['frm_hcaptcha_privkey'];
+		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
 		$this->pubkey           = trim( $params['frm_pubkey'] );
-		$this->privkey          = $params['frm_privkey'];
+		$this->privkey          = trim( $params['frm_privkey'] );
 		$this->re_type          = $params['frm_re_type'];
 		$this->re_lang          = $params['frm_re_lang'];
 		$this->re_threshold     = floatval( $params['frm_re_threshold'] );

@@ -4036,7 +4036,7 @@ function frmAdminBuildJS() {
 		popup.innerHTML = '';
 
 		wrapper = div();
-		wrapper.style.padding = '24px';
+		wrapper.style.padding = '0 24px';
 
 		layoutClass = getEvenClassForSize( 5 === size ? 6 : size );
 
@@ -5404,13 +5404,13 @@ function frmAdminBuildJS() {
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-
-		id = 'field_' + fieldKey + '-' + opt.key;
+			id = 'field_' + fieldKey + '-' + opt.key,
+			inputType = type === 'scale' ? 'radio' : type;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
-			'"><input type="' + type +
+			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
@@ -5847,6 +5847,18 @@ function frmAdminBuildJS() {
 
 		noSectionFields = $section.parent().children( '.frm_no_section_fields' ).get( 0 );
 		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
+	}
+
+	function handleShowPasswordLiveUpdate() {
+		frmDom.util.documentOn( 'change', '.frm_show_password_setting_input', event => {
+			const fieldId = event.target.getAttribute( 'data-fid' );
+			const fieldEl = document.getElementById( 'frm_field_id_' + fieldId );
+			if ( ! fieldEl ) {
+				return;
+			}
+
+			fieldEl.classList.toggle( 'frm_disabled_show_password', ! event.target.checked );
+		});
 	}
 
 	function slideDown() {
@@ -8903,6 +8915,14 @@ function frmAdminBuildJS() {
 				if ( firstLockedTemplate.length ) {
 					showFreeTemplatesForm( firstLockedTemplate );
 				}
+
+				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
+				$modalBackButton = $modal.find( '.frm-modal-back' );
+				$modalBackButton.hide();
+				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
+					$modalBackButton.show();
+					$modal.dialog( 'close' );
+				});
 			}
 		}
 
@@ -9186,7 +9206,34 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		// Updates the visibility of category headings based on search results.
+		updateCatHeadingVisibility();
+
 		jQuery( this ).trigger( 'frmAfterSearch' );
+	}
+
+	/**
+	 * Updates the visibility of category headings based on search results.
+	 * If all associated fields are hidden (indicating no search matches),
+	 * the heading is hidden.
+	 *
+	 * @since x.x
+	 */
+	function updateCatHeadingVisibility() {
+		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
+		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+
+		headingElements.forEach( heading => {
+			const fieldsListElement = heading.nextElementSibling;
+			if ( ! fieldsListElement ) {
+				return;
+			}
+			const listItemElements = fieldsListElement.querySelectorAll( ':scope > li.frmbutton' );
+			const allHidden = Array.from( listItemElements ).every( li => li.classList.contains( 'frm_hidden' ) );
+
+			// Add or remove class based on `allHidden` condition
+			heading.classList.toggle( 'frm_hidden', allHidden );
+		});
 	}
 
 	function stopPropagation( e ) {
@@ -9956,6 +10003,7 @@ function frmAdminBuildJS() {
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
+			handleShowPasswordLiveUpdate();
 		},
 
 		settingsInit: function() {
@@ -10457,7 +10505,8 @@ function frmAdminBuildJS() {
 		},
 
 		infoModal: infoModal,
-		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders
+		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
+		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};
 }
 
@@ -10468,6 +10517,8 @@ jQuery( document ).ready(
 		frmAdminBuild.init();
 
 		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
+		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-toggle', 'dropdown' );
+
 		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
