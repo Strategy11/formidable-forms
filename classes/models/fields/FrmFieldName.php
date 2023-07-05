@@ -40,6 +40,13 @@ class FrmFieldName extends FrmFieldCombo {
 		);
 	}
 
+	protected function field_settings_for_type() {
+		$settings = parent::field_settings_for_type();
+		$settings['read_only'] = true;
+
+		return $settings;
+	}
+
 	/**
 	 * Gets processed sub fields.
 	 * This should return the list of sub fields after sorting or show/hide based of some options.
