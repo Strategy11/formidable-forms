@@ -1090,6 +1090,10 @@ class FrmFormsController {
 			wp_die( esc_html__( 'You are trying to edit a form that does not exist.', 'formidable' ) );
 		}
 
+		if ( $form->status === 'trash' ) {
+			wp_die( esc_html__( 'You cannot edit this item because it is in the Trash. Please restore it and try again.', 'formidable' ) );
+		}
+
 		if ( $form->parent_form_id ) {
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( FrmForm::get_edit_link( $form->parent_form_id ) ) . '">', '</a>' ) );
