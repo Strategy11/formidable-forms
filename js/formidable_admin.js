@@ -5338,12 +5338,13 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
-	function adjustConditionalLogicOptionOrders( fieldId ) {
-		var row, opts, logicId, valueSelect, rowOptions, expectedOrder, optionLength, optionIndex, expectedOption, optionMatch,
+	function adjustConditionalLogicOptionOrders( fieldId, type ) {
+		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
-			rowLength = rows.length,
-			fieldOptions = getFieldOptions( fieldId ),
-			optionLength = fieldOptions.length;
+			rowLength = rows.length;
+
+		fieldOptions = wp.hooks.applyFilters( 'frm_conditional_logic_field_options', getFieldOptions( fieldId ), { type, fieldId });
+		optionLength = fieldOptions.length;
 
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			row = rows[ rowIndex ];
@@ -5377,10 +5378,16 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldOptions( fieldId ) {
-		var index, input, li,
-			listItems = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelectorAll( '.frm_single_option' ),
-			options = [],
-			length = listItems.length;
+		var index, input, li, listItems, optsContainer, length,
+			options = [];
+		optsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+
+		if ( ! optsContainer ) {
+			return options;
+		}
+		listItems = optsContainer.querySelectorAll( '.frm_single_option' );
+		length = listItems.length;
+
 		for ( index = 0; index < length; index++ ) {
 			li = listItems[ index ];
 
@@ -10498,6 +10505,7 @@ function frmAdminBuildJS() {
 		},
 
 		infoModal: infoModal,
+		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};
 }
