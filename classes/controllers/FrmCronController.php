@@ -2,7 +2,7 @@
 /**
  * Cron controller
  *
- * @since x.x
+ * @since 6.3.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,7 +17,7 @@ class FrmCronController {
 	/**
 	 * Gets all cron events.
 	 *
-	 * @since x.x
+	 * @since 6.3.2
 	 *
 	 * @return string[]
 	 */
@@ -31,7 +31,7 @@ class FrmCronController {
 	/**
 	 * Removes all cron events.
 	 *
-	 * @since x.x
+	 * @since 6.3.2
 	 *
 	 * @return void
 	 */

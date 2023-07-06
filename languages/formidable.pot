@@ -2,116 +2,123 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.3.1\n"
+"Project-Id-Version: Formidable Forms 6.3.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-30T18:24:16+00:00\n"
+"POT-Creation-Date: 2023-06-21T15:07:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.8.0\n"
 "X-Domain: formidable\n"
 
 #: js/src/common/components/itemselect.js:26
-#: languages/formidable-js-strings.php:5
 msgid "Select a %s"
 msgstr ""
 
 #: js/src/common/components/itemselect.js:47
-#: languages/formidable-js-strings.php:8
 msgid "Currently, there are no %s"
 msgstr ""
 
 #: js/src/form/block.js:20
-#: languages/formidable-js-strings.php:11
 msgid "Display a Form"
 msgstr ""
 
 #: js/src/form/block.js:24
-#: languages/formidable-js-strings.php:14
 msgid "contact forms"
 msgstr ""
 
 #: js/src/form/block.js:36
 #: js/src/form/calculator.js:43
-#: languages/formidable-js-strings.php:18
 msgid "This site does not have any forms."
 msgstr ""
 
 #: js/src/form/calculator.js:27
-#: languages/formidable-js-strings.php:21
+#: js/src/form/modal.js:19
 msgid "Display a Calculator Form"
 msgstr ""
 
 #: js/src/form/calculator.js:55
-#: languages/formidable-js-strings.php:24
 msgid "This site does not have any calculator forms."
 msgstr ""
 
 #: js/src/form/calculator.js:58
-#: languages/formidable-js-strings.php:27
 msgid "Upgrade Formidable Forms."
 msgstr ""
 
 #: js/src/form/calculator.js:61
-#: languages/formidable-js-strings.php:30
 #: js/src/form/calculator.js:26
 #: js/src/form/calculator.js:52
 msgid "Calculator Form"
 msgstr ""
 
 #: js/src/form/formselect.js:23
-#: languages/formidable-js-strings.php:33
 #: js/admin/embed.js:345
 msgid "form"
 msgstr ""
 
 #: js/src/form/formselect.js:24
-#: languages/formidable-js-strings.php:36
 msgid "forms"
 msgstr ""
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
-#: languages/formidable-js-strings.php:39
 msgid "Select Form"
 msgstr ""
 
 #: js/src/form/inspector.js:57
-#: languages/formidable-js-strings.php:42
 msgid "Go to form"
 msgstr ""
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
 #: classes/widgets/FrmElementorWidget.php:48
-#: languages/formidable-js-strings.php:45
 msgid "Options"
 msgstr ""
 
 #: js/src/form/inspector.js:66
 #: classes/widgets/FrmElementorWidget.php:53
-#: languages/formidable-js-strings.php:48
 msgid "Show Form Title"
 msgstr ""
 
 #: js/src/form/inspector.js:73
 #: classes/widgets/FrmElementorWidget.php:54
-#: languages/formidable-js-strings.php:51
 msgid "Show Form Description"
 msgstr ""
 
 #: js/src/form/inspector.js:80
 #: classes/widgets/FrmElementorWidget.php:55
-#: languages/formidable-js-strings.php:54
 msgid "Minimize HTML"
 msgstr ""
 
 #: js/src/form/inspector.js:88
-#: languages/formidable-js-strings.php:57
 msgid "Shortcode"
+msgstr ""
+
+#: js/src/form/modal.js:18
+msgid "Formidable Modal"
+msgstr ""
+
+#: js/src/form/modal.js:36
+msgid "Bootstrap modal popup"
+msgstr ""
+
+#: js/src/form/modal.js:57
+msgid "This site does not have popup modals active."
+msgstr ""
+
+#: js/src/form/modal.js:58
+msgid "Install Formidable Modals"
+msgstr ""
+
+#: js/src/form/modal.js:63
+msgid "This site does not have popup modals."
+msgstr ""
+
+#: js/src/form/modal.js:64
+msgid "Upgrade Formidable Forms"
 msgstr ""
 
 #. Plugin Name of the plugin
@@ -512,7 +519,7 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1249
 #: classes/controllers/FrmStylesController.php:943
-#: classes/helpers/FrmFieldsHelper.php:1958
+#: classes/helpers/FrmFieldsHelper.php:1975
 #: classes/views/frm-forms/settings-buttons.php:16
 msgid "Buttons"
 msgstr ""
@@ -3118,32 +3125,32 @@ msgstr ""
 msgid "%s fields"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1946
+#: classes/helpers/FrmFieldsHelper.php:1963
 msgid "Simple"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1950
+#: classes/helpers/FrmFieldsHelper.php:1967
 msgid "Images"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1953
+#: classes/helpers/FrmFieldsHelper.php:1970
 msgid "Image Options"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1954
+#: classes/helpers/FrmFieldsHelper.php:1971
 msgid "Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1961
+#: classes/helpers/FrmFieldsHelper.php:1978
 msgid "Button Options"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1962
+#: classes/helpers/FrmFieldsHelper.php:1979
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
 msgstr ""
 
 #. translators: Add-on name.
-#: classes/helpers/FrmFieldsHelper.php:2044
+#: classes/helpers/FrmFieldsHelper.php:2060
 msgid "Formidable %s"
 msgstr ""
 
@@ -6862,6 +6869,6 @@ msgstr ""
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:9122
+#: js/formidable_admin.js:9130
 msgid "Unable to install template"
 msgstr ""

@@ -347,9 +347,9 @@ class FrmSettings {
 	private function update_settings( $params ) {
 		$this->active_captcha   = $params['frm_active_captcha'];
 		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey = $params['frm_hcaptcha_privkey'];
+		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
 		$this->pubkey           = trim( $params['frm_pubkey'] );
-		$this->privkey          = $params['frm_privkey'];
+		$this->privkey          = trim( $params['frm_privkey'] );
 		$this->re_type          = $params['frm_re_type'];
 		$this->re_lang          = $params['frm_re_lang'];
 		$this->re_threshold     = floatval( $params['frm_re_threshold'] );

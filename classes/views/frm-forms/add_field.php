@@ -78,7 +78,7 @@ if ( $display['conf_field'] ) {
 				/**
 				 * Filters the HTML of confirmation input in the backend.
 				 *
-				 * @since x.x
+				 * @since 6.3.1
 				 *
 				 * @param string $input_html Input HTML.
 				 * @param array  $args       Contains `field` array.

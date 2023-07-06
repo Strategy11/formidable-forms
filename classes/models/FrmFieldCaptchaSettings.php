@@ -8,11 +8,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmFieldCaptchaSettings {
 
+	/**
+	 * @var string
+	 */
 	public $secret;
 
+	/**
+	 * @var string
+	 */
 	public $token_field;
 
-	public $end_point;
+	/**
+	 * @var string
+	 */
+	public $endpoint;
 
 	public function __construct( $frm_settings ) {
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {

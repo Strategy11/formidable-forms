@@ -7610,6 +7610,11 @@ input[disabled],
 	display: flex !important;
 }
 
+/* Prevents advanced fields from always appearing in search results */
+#frm-insert-fields li.frm_show_upgrade.frm_hidden {
+	display: none !important;
+}
+
 .frmbutton.ui-draggable-dragging a {
 	border: 1px solid var(--grey-300);
 	box-shadow: var(--box-shadow-md);
@@ -8889,7 +8894,7 @@ Responsive Design
 	top: 0;
 	right: 0;
 	width: 366px;
-	height: 231px;
+	max-height: 231px;
 	border-radius: 8px;
 	background: #fff;
 	box-shadow: 0px 20px 48px rgba(40, 47, 54, 0.15);
@@ -8909,6 +8914,21 @@ Responsive Design
 	height: 196px;
 }
 
+#frm_field_group_popup > hr {
+	margin: 12px 0;
+}
+
+#frm_field_group_popup .frm-cancel-custom-field-group-layout,
+#frm_field_group_popup .frm-save-custom-field-group-layout {
+	padding: 4px 18px;
+}
+
+#frm_field_group_popup .frm-cancel-custom-field-group-layout:hover {
+	border-color: var(--primary-500) !important;
+    color: var(--primary-500);
+	background-color: transparent !important;
+}
+
 .frm-merge-fields-into-row #frm_field_group_popup .frm-break-field-group {
 	display: none;
 }
@@ -8925,14 +8945,14 @@ Responsive Design
 	line-height: 15px;
 	text-transform: uppercase;
 	color: rgba(40, 47, 54, 0.45);
-	margin-bottom: 40px;
+	margin-bottom: 27px;
 }
 
 .frm-row-layout-option {
 	background: #F6F7FB;
 	box-sizing: border-box;
 	border-radius: 2px;
-	padding: 18px 11px;
+	padding: 15px 10px;
 }
 
 #frm_field_group_popup .frm-row-layout-option .frm_grid_container {
@@ -8942,20 +8962,21 @@ Responsive Design
 
 #frm_field_group_popup .frm-row-layout-option {
 	cursor: pointer;
+	border: 2px solid transparent;
 }
 
 #frm_field_group_popup .frm-row-layout-option.frm-active-row-layout,
 #frm_field_group_popup .frm-row-layout-option:hover {
-	outline: 1px solid var(--primary-500);
+	border-color: var(--primary-500);
 }
 
 .frm-custom-field-group-layout,
 .frm-break-field-group {
-	padding: 5px 15px;
+	padding: 4px 24px;
 	cursor: pointer;
 	font-size: var(--text-sm);
 	line-height: 19px;
-	color: rgba(40, 47, 54, 0.85);
+	color: rgba(72, 78, 84, 1);
 }
 
 .frm-custom-field-group-layout:hover,
@@ -9002,16 +9023,26 @@ Responsive Design
 
 .frm-builder-popup-heading {
 	font-weight: 600;
-	font-size: 12px;
+	font-size: 11px;
 	line-height: 15px;
 	text-transform: uppercase;
 	color: rgba(40, 47, 54, 0.45);
+	margin-bottom: 7px;
 }
 
 .frm-builder-popup-subheading {
 	font-size: 12px;
 	line-height: 16px;
 	color: rgba(40, 47, 54, 0.45);
+}
+
+#frm_field_group_popup input[type="text"] {
+	height: 30px;
+	border-radius: 3px;
+	font-size: 14px;
+	padding: 8px;
+	color: rgba(84, 95, 110, 1);
+	border-color: rgba(40, 47, 54, 0.2);
 }
 
 .frm-multiselect-popup-separator {

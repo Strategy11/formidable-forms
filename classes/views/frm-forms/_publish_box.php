@@ -16,7 +16,7 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 			<div id="frm-preview-action">
 				<?php if ( ( ! isset( $hide_preview ) || ! $hide_preview ) && isset( $values['form_key'] ) ) { ?>
 					<div class="preview dropdown">
-						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" data-toggle="dropdown" role="button">
+						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" role="button">
 							<?php esc_html_e( 'Preview', 'formidable' ); ?>
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 						</a>
