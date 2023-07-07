@@ -850,4 +850,18 @@ class FrmStrpLiteConnectHelper {
 	public static function get_setup_intent( $setup_id ) {
 		return self::post_with_authenticated_body( 'get_setup_intent', compact( 'setup_id' ) );
 	}
+
+	/**
+	 * Verify a site identifier is a match.
+	 */
+	public static function verify() {
+		// TODO rate limit this.
+		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
+		$usage           = new FrmUsage();
+		$uuid            = $usage->uuid();
+		if ( $site_identifier === $uuid ) {
+			wp_send_json_success();
+		}
+		wp_send_json_error();
+	}
 }
