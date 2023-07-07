@@ -483,7 +483,7 @@ class FrmStrpLiteConnectHelper {
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();
 		if ( false === $password ) {
-			$password = self::get_uuid();
+			$password = 'lite_' . self::get_uuid();
 		}
 
 		$site_url = home_url();
