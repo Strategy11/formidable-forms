@@ -480,37 +480,63 @@ class FrmStrpLiteConnectHelper {
 	 * @return array|false
 	 */
 	private static function build_headers_for_post() {
+		$password = self::maybe_get_pro_license();
+		if ( false === $password ) {
+			$password = self::get_uuid();
+		}
+
+		$site_url = home_url();
+		$site_url = self::maybe_fix_wpml_url( $site_url );
+		$site_url = preg_replace( '#^https?://#', '', $site_url ); // remove protocol from url (our url cannot include the colon).
+		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );    // remove port from url (mostly helpful in development)
+		$site_url = self::strip_lang_from_url( $site_url );
+
+		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
+		return array(
+			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
+		);
+	}
+
+	/**
+	 * WPML alters the output of home_url.
+	 * If it is active, use the WPML "absolute home" URL which is not modified.
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	private static function maybe_fix_wpml_url( $url ) {
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+			global $wpml_url_converter;
+			$url = $wpml_url_converter->get_abs_home();
+		}
+		return $url;
+	}
+
+	/**
+	 * WPML might add a language to the url. Don't send that to the server.
+	 */
+	private static function strip_lang_from_url( $url ) {
+		$split_on_language = explode( '/?lang=', $url );
+		if ( 2 === count( $split_on_language ) ) {
+			$url = $split_on_language[0];
+		}
+		return $url;
+	}
+
+	/**
+	 * Get a Pro license when Pro is active.
+	 * Otherwise we'll use a uuid to support Lite.
+	 *
+	 * @return string|false
+	 */
+	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$pro_license = FrmAddonsController::get_pro_license();
 			if ( $pro_license ) {
 				$password = $pro_license;
 			}
 		}
-
-		if ( empty( $password ) ) {
-			$password = self::get_uuid();
-		}
-
-		$site_url = home_url();
-
-		if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
-			global $wpml_url_converter;
-			$site_url = $wpml_url_converter->get_abs_home();
-		}
-
-		$site_url = preg_replace( '#^https?://#', '', $site_url ); // remove protocol from url (our url cannot include the colon).
-		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );     // remove port from url (mostly helpful in development)
-
-		// wpml might add a language to the url. don't send that to the server.
-		$split_on_language = explode( '/?lang=', $site_url );
-		if ( 2 === count( $split_on_language ) ) {
-			$site_url = $split_on_language[0];
-		}
-
-		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
-		return array(
-			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
-		);
+		return ! empty( $password ) ? $password : false;
 	}
 
 	/**
