@@ -480,10 +480,15 @@ class FrmStrpLiteConnectHelper {
 	 * @return array|false
 	 */
 	private static function build_headers_for_post() {
-		$pro_license = is_callable( 'FrmAddonsController::get_pro_license' ) ? FrmAddonsController::get_pro_license() : false;
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$pro_license = FrmAddonsController::get_pro_license();
+			if ( $pro_license ) {
+				$password = $pro_license;
+			}
+		}
 
-		if ( ! $pro_license ) {
-			return false;
+		if ( empty( $password ) ) {
+			$password = self::get_uuid();
 		}
 
 		$site_url = home_url();
@@ -502,9 +507,20 @@ class FrmStrpLiteConnectHelper {
 			$site_url = $split_on_language[0];
 		}
 
+		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
 		return array(
-			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $pro_license ),
+			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
 		);
+	}
+
+	/**
+	 * Get a unique ID to use for connecting Lite users.
+	 *
+	 * @return string
+	 */
+	private static function get_uuid() {
+		$usage = new FrmUsage();
+		return $usage->uuid();
 	}
 
 	/**
