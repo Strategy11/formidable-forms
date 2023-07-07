@@ -77,3 +77,8 @@
 	/* Ensure consistent background color on focus for Add/Remove buttons */
 	background: var(--submit-bg-color) !important;
 }
+
+/* Disables all interactions with form fields */
+.editor-styles-wrapper .frm_form_fields * {
+	pointer-events: none;
+}
