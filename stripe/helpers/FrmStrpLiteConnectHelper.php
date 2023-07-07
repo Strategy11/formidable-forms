@@ -247,7 +247,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		return 'https://api.strategy11.com/';
+		return 'https://staging.formidableforms.com/';
+//		return 'https://api.strategy11.com/';
 	}
 
 	/**
