@@ -1981,7 +1981,7 @@ class FrmFormsController {
 			return __( 'Please select a valid form', 'formidable' );
 		}
 
-		if ( is_object( $form ) && $form->status === 'trash' ) {
+		if ( $form->status === 'trash' ) {
 			wp_die( esc_html__( 'You cannot preview this item because it is in the Trash. Please restore it and try again.', 'formidable' ) );
 		}
 
