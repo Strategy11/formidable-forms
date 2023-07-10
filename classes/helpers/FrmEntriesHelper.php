@@ -731,4 +731,36 @@ class FrmEntriesHelper {
 			}
 		}
 	}
+
+	/**
+	 * Return entry status based on is_draft column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $status is_draft column.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_status( $status ) {
+		switch ( $status ) {
+			case 0:
+				$val = esc_html__( 'Submitted', 'formidable-abandonment' );
+				break;
+			case 1:
+				$val = esc_html__( 'Draft', 'formidable-abandonment' );
+				break;
+			case 2:
+				$val = esc_html__( 'In Progress', 'formidable-abandonment' );
+				break;
+			case 3:
+				$val = esc_html__( 'Abandoned', 'formidable-abandonment' );
+				break;
+			default:
+				$val = esc_html__( 'Submitted', 'formidable-abandonment' ); // Normally we shouldn't reach here! Just making psalm satisfied.
+				break;
+		}
+
+		return $val;
+	}
+
 }
