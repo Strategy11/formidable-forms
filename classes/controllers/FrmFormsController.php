@@ -1977,12 +1977,12 @@ class FrmFormsController {
 	public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
 		$form = self::maybe_get_form_by_id_or_key( $id, $key );
 
-		if ( is_object( $form ) && $form->status === 'trash' ) {
-			wp_die( esc_html__( 'You cannot preview this item because it is in the Trash. Please restore it and try again.', 'formidable' ) );
-		}
-
 		if ( ! $form ) {
 			return __( 'Please select a valid form', 'formidable' );
+		}
+
+		if ( is_object( $form ) && $form->status === 'trash' ) {
+			wp_die( esc_html__( 'You cannot preview this item because it is in the Trash. Please restore it and try again.', 'formidable' ) );
 		}
 
 		if ( 'auto' === $title ) {
