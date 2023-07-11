@@ -103,6 +103,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" />
 	</p>
 
+	<?php
+	// TODO: Put this code in Pro.
+	/*
 	<p class="<?php echo esc_attr( $classes['billing_address'] ); ?> frm6">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
 			<?php esc_html_e( 'Address', 'formidable' ); ?>
@@ -117,6 +120,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</p>
+	*/
+	?>
 	<p class="<?php echo esc_attr( $classes['billing_first_name'] ); ?> frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
 			<?php esc_html_e( 'First Name', 'formidable' ); ?>
