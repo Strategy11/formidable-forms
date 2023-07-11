@@ -67,7 +67,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
 			'credit_card' => array(
-				'name'  => __( 'Credit Card', 'formidable' ),
+				'name'  => __( 'Payment', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
 		);

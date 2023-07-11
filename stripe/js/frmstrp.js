@@ -240,7 +240,7 @@
 					cardObject = addValToRequest( addressContainer, prefix + 'city', cardObject, 'address_city' );
 					cardObject = addValToRequest( addressContainer, prefix + 'state', cardObject, 'address_state' );
 					cardObject = addValToRequest( addressContainer, prefix + 'zip', cardObject, 'address_zip' );
-					// The two letter country code is needed here, so skip it for now.
+					// The two letter country code is needed here, so skip it. This is required for Afterpay, which is currently a limitation.
 				}
 			}
 

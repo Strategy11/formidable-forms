@@ -77,12 +77,28 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
+		$intent_is_processing = 'processing' === $intent->status;
+		if ( $intent_is_processing ) {
+			// Append an additional processing message to the end of the success message.
+			$filter = function( $message ) {
+				$stripe_settings = FrmStrpAppHelper::get_settings();
+				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
+				return $message;
+			};
+			add_filter( 'frm_content', $filter );
+		}
+
 		$atts['fields'] = FrmFieldsHelper::get_form_fields( $atts['form']->id );
 
 		ob_start();
 		FrmFormsController::run_success_action( $atts );
 		$message = ob_get_contents();
 		ob_end_clean();
+
+		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
+		if ( $intent_is_processing && isset( $filter ) ) {
+			remove_filter( 'frm_content', $filter );
+		}
 
 		return $message;
 	}
@@ -142,11 +158,10 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function prepare_success_atts( &$atts ) {
-		$atts['form']     = FrmForm::getOne( $atts['entry']->form_id );
-		$atts['entry_id'] = $atts['entry']->id;
-
-		$opt = 'success_action';
-		$atts['conf_method'] = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
+		$atts['form']        = FrmForm::getOne( $atts['entry']->form_id );
+		$atts['entry_id']    = $atts['entry']->id;
+		$opt                 = 'success_action';
+		$atts['conf_method'] = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 	}
 
 	/**
@@ -414,17 +429,22 @@ class FrmStrpLiteAuth {
 		self::add_amount_to_actions( $form_id, $actions );
 
 		foreach ( $actions as $action ) {
-			if ( ! self::requires_payment_intent_on_load( $action ) ) {
+			$intent = self::create_intent( $action );
+			if ( ! is_object( $intent ) ) {
+				// A non-object is a string error message.
+				// The error gets logged to results.log so we can just skip it.
+				// Reasons it could fail is because a payment method type was specified that will not work.
+				// A payment method type may not work because of a currency conflict, or because it isn't enabled.
+				// Or the payment method type could be an incorrect value.
+				// When using Stripe Connect, the error will just say "Unable to create intent".
+				// In this case, you can find the full error message in the Stripe dashboard.
 				continue;
 			}
 
-			$intent = self::create_intent( $action );
-			if ( is_object( $intent ) ) {
-				$intents[] = array(
-					'id'     => $intent->client_secret,
-					'action' => $action->ID,
-				);
-			}
+			$intents[] = array(
+				'id'     => $intent->client_secret,
+				'action' => $action->ID,
+			);
 		}
 
 		return $intents;
@@ -444,25 +464,22 @@ class FrmStrpLiteAuth {
 			$amount = 100; // Create the intent when the form loads.
 		}
 
-		$new_charge = array(
-			'amount'               => $amount,
-			'currency'             => $action->post_content['currency'],
-			'metadata'             => array( 'action' => $action->ID ),
-			'setup_future_usage'   => 'off_session',
-			'payment_method_types' => array( 'card' ),
-		);
-
-		$use_stripe_link = self::uses_stripe_link( $action );
-		if ( $use_stripe_link ) {
-			if ( 'recurring' === $action->post_content['type'] ) {
-				return self::create_setup_intent();
-			}
-			$new_charge['payment_method_types'][] = 'link';
+		if ( 'recurring' === $action->post_content['type'] ) {
+			$payment_method_types = FrmStrpLitePaymentTypeHandler::get_payment_method_types( $action );
+			return self::create_setup_intent( $payment_method_types );
 		}
 
-		$use_manual_capture = 'authorize' === $action->post_content['capture'] || ! $use_stripe_link;
-		if ( $use_manual_capture ) {
-			$new_charge['capture_method'] = 'manual'; // Authorize only and capture after submit.
+		$new_charge = array(
+			'amount'   => $amount,
+			'currency' => $action->post_content['currency'],
+			'metadata' => array( 'action' => $action->ID ),
+		);
+
+		if ( FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
+			$new_charge['automatic_payment_methods'] = array( 'enabled' => true );
+		} else {
+			$payment_method_types               = FrmStrpLitePaymentTypeHandler::get_payment_method_types( $action );
+			$new_charge['payment_method_types'] = $payment_method_types;
 		}
 
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_intent', $new_charge );
@@ -473,9 +490,10 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 3.0
 	 *
+	 * @param array $payment_method_types
 	 * @return object|false
 	 */
-	private static function create_setup_intent() {
+	private static function create_setup_intent( $payment_method_types ) {
 		$payment_info = array(
 			'user_id' => FrmTransLiteAppHelper::get_user_id_for_current_payment(),
 		);
@@ -486,7 +504,7 @@ class FrmStrpLiteAuth {
 			return false;
 		}
 
-		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_setup_intent', $customer->id );
+		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_setup_intent', $customer->id, $payment_method_types );
 	}
 
 	/**
@@ -517,32 +535,6 @@ class FrmStrpLiteAuth {
 	private static function get_amount_before_submit( $atts ) {
 		$amount = $atts['action']->post_content['amount'];
 		return FrmStrpLiteActionsController::prepare_amount( $atts['action']->post_content['amount'], $atts );
-	}
-
-	/**
-	 * Returns whether or not a specific action needs to create a payment intent when the form loads.
-	 * This is only true when using stripe link or when processing a one-time payment before the entry is created.
-	 *
-	 * @since 3.0
-	 * @todo Continue to handle the other case (process payment before and not recurring) in the Stripe add on.
-	 *
-	 * @param WP_Post $action
-	 * @return bool
-	 */
-	private static function requires_payment_intent_on_load( $action ) {
-		return self::uses_stripe_link( $action );
-	}
-
-	/**
-	 * Check if an action is set to use a Stripe link. This is based on the "Use previously saved card" toggle in Stripe payment actions.
-	 *
-	 * @since 3.0
-	 *
-	 * @param WP_Post $action
-	 * @return bool
-	 */
-	private static function uses_stripe_link( $action ) {
-		return ! empty( $action->post_content['stripe_link'] );
 	}
 
 	/**

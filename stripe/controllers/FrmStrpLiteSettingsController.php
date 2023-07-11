@@ -17,6 +17,19 @@ class FrmStrpLiteSettingsController {
 			'function' => 'route',
 			'icon'     => 'frm_icon_font frm_stripe_icon',
 		);
+
+		add_action(
+			'frm_messages_settings_form',
+			/**
+			 * @param object $frm_settings
+			 * @return void
+			 */
+			function( $frm_settings ) {
+				$stripe_settings = FrmStrpLiteAppHelper::get_settings()->settings;
+				require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/messages.php';
+			}
+		);
+
 		return $sections;
 	}
 
@@ -26,11 +39,6 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function route() {
-		$action = FrmAppHelper::get_param( 'action' );
-		if ( $action === 'process-form' ) {
-			self::process_form();
-			return;
-		}
 		self::global_settings_form();
 	}
 
@@ -74,13 +82,7 @@ class FrmStrpLiteSettingsController {
 
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		$settings->update( $_POST );
-
-		if ( empty( $atts['errors'] ) ) {
-			$settings->store();
-			$atts['message'] = __( 'Settings Saved', 'formidable' );
-		}
-
-		self::global_settings_form( $atts );
+		$settings->store();
 	}
 
 }

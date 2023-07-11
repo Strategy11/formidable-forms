@@ -48,6 +48,7 @@ class FrmTransLiteActionsController {
 	public static function add_payment_trigger( $triggers ) {
 		$triggers['payment-success']       = __( 'Successful Payment', 'formidable' );
 		$triggers['payment-failed']        = __( 'Failed Payment', 'formidable' );
+		$triggers['payment-processing']    = __( 'Processing Payment', 'formidable' );
 		$triggers['payment-future-cancel'] = __( 'Canceled Subscription', 'formidable' );
 		$triggers['payment-canceled']      = __( 'Subscription Canceled and Expired', 'formidable' );
 		return $triggers;
@@ -60,6 +61,7 @@ class FrmTransLiteActionsController {
 	public static function add_trigger_to_action( $options ) {
 		$options['event'][] = 'payment-success';
 		$options['event'][] = 'payment-failed';
+		$options['event'][] = 'payment-processing';
 		$options['event'][] = 'payment-future-cancel';
 		$options['event'][] = 'payment-canceled';
 		return $options;

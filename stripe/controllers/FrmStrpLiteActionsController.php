@@ -299,7 +299,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return int|false
 	 */
 	private static function add_a_credit_card_field( $form_id ) {
-		return self::add_a_field( $form_id, 'credit_card', __( 'Credit Card', 'formidable' ) );
+		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
 	}
 
 	/**

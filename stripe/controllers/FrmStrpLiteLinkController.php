@@ -20,7 +20,12 @@ class FrmStrpLiteLinkController {
 		$client_secret = FrmAppHelper::simple_get( 'payment_intent_client_secret' );
 		$status        = FrmAppHelper::simple_get( 'redirect_status' );
 
-		if ( $intent_id && $client_secret && 'succeeded' === $status ) {
+		/**
+		 * "succeeded" is used for cards and Link.
+		 * "pending" happens for bank redirect types (iDEAL, Bancontact, SOFORT).
+		 * No redirect status is valid as well (for Affirm payments).
+		 */
+		if ( $intent_id && $client_secret && in_array( $status, array( 'pending', 'succeeded', 'failed', '' ), true ) ) {
 			self::handle_one_time_stripe_link_return_url( $intent_id, $client_secret );
 			die();
 		}
@@ -28,7 +33,7 @@ class FrmStrpLiteLinkController {
 		$setup_id      = FrmAppHelper::simple_get( 'setup_intent' );
 		$client_secret = FrmAppHelper::simple_get( 'setup_intent_client_secret' );
 
-		if ( $setup_id && $client_secret && 'succeeded' === $status ) {
+		if ( $setup_id && $client_secret && in_array( $status, array( 'succeeded', 'failed' ), true ) ) {
 			self::handle_recurring_stripe_link_return_url( $setup_id, $client_secret );
 			die();
 		}
@@ -69,7 +74,7 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
-		if ( ! in_array( $intent->status, array( 'requires_capture', 'succeeded' ), true ) ) {
+		if ( ! in_array( $intent->status, array( 'succeeded' ), true ) ) {
 			$redirect_helper->handle_error( 'did_not_complete' );
 			die();
 		}
@@ -90,10 +95,36 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		$redirect_helper->set_entry_id( $entry->id );
+
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
 		if ( ! $action ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
+		}
+
+		if ( 'succeeded' !== $intent->status ) {
+			if ( 'processing' === $intent->status ) {
+				FrmTransLitePaymentsController::change_payment_status( $payment, 'processing' );
+				$redirect_helper->handle_success( $entry, '' );
+				die();
+			}
+
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
+
+			$payment_failed = 'requires_payment_method' === $intent->status && 'payment_intent_authentication_failure' === $intent->last_payment_error->code;
+			$error_type     = $payment_failed ? 'payment_failed' : 'did_not_complete';
+
+			$redirect_helper->handle_error( $error_type );
+			die();
+		}
+
+		$status             = 'succeeded' === $intent->status ? 'complete' : 'authorized';
+		$new_payment_values = compact( 'status' );
+
+		if ( 'complete' === $status ) {
+			$charge                           = reset( $intent->charges->data );
+			$new_payment_values['receipt_id'] = $charge->id;
 		}
 
 		self::maybe_update_intent( $intent, $action, $entry );
@@ -161,6 +192,15 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		// Verify the entry.
+		$entry = FrmEntry::getOne( $payment->item_id );
+		if ( ! is_object( $entry ) ) {
+			$redirect_helper->handle_error( 'no_entry_found' );
+			die();
+		}
+
+		$redirect_helper->set_entry_id( $entry->id );
+
 		// Verify the customer.
 		$customer          = FrmStrpLiteAppHelper::call_stripe_helper_class(
 			'get_customer',
@@ -171,13 +211,6 @@ class FrmStrpLiteLinkController {
 		$payment_method_id = self::get_link_payment_method( $setup_intent, $customer->id );
 		if ( ! $payment_method_id ) {
 			$redirect_helper->handle_error( 'did_not_complete' );
-			die();
-		}
-
-		// Verify the entry.
-		$entry = FrmEntry::getOne( $payment->item_id );
-		if ( ! is_object( $entry ) ) {
-			$redirect_helper->handle_error( 'no_entry_found' );
 			die();
 		}
 
@@ -192,9 +225,6 @@ class FrmStrpLiteLinkController {
 		$new_charge = array(
 			'customer'               => $customer->id,
 			'default_payment_method' => $payment_method_id,
-			'payment_settings'       => array(
-				'payment_method_types'   => array( 'card', 'link' ),
-			),
 			'plan' => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
 					'action' => $action,
@@ -204,6 +234,12 @@ class FrmStrpLiteLinkController {
 			'expand'           => array( 'latest_invoice.charge' ),
 		);
 
+		if ( ! FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
+			$new_charge['payment_settings'] = array(
+				'payment_method_types' => FrmStrpLitePaymentTypeHandler::get_payment_method_types( $action ),
+			);
+		}
+		
 		$atts = array(
 			'action' => $action,
 			'entry'  => $entry,
@@ -232,7 +268,7 @@ class FrmStrpLiteLinkController {
 		if ( $customer_has_been_charged ) {
 			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
-			$new_payment_values['status']     = 'complete';
+			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
 		} elseif ( $trial_end ) {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
@@ -309,8 +345,10 @@ class FrmStrpLiteLinkController {
 			FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'customer' => $customer->id ) );
 		}
 
+		self::add_temporary_referer_meta( (int) $entry->id );
+
 		$frm_payment = new FrmTransLitePayment();
-		$payment     = $frm_payment->create(
+		$frm_payment->create(
 			array(
 				'paysys'     => 'stripe',
 				'amount'     => number_format( ( $amount / 100 ), 2, '.', '' ),
@@ -351,6 +389,21 @@ class FrmStrpLiteLinkController {
 		}
 
 		return $intent_id;
+	}
+
+	/**
+	 * Set the referer URL as field ID 0 in entry meta.
+	 * This is required for iDEAL, sofort, and other payment methods that include an additional redirect step.
+	 * It is used for the redirect in FrmStrpLinkRedirectHelper.
+	 * It is deleted after the redirect happens.
+	 *
+	 * @param int $entry_id
+	 * @return void
+	 */
+	private static function add_temporary_referer_meta( $entry_id ) {
+		$referer    = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$meta_value = json_encode( compact( 'referer' ) );
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', $meta_value );
 	}
 
 	/**
