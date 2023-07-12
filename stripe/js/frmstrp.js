@@ -32,11 +32,7 @@
 			}
 		}
 
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( e, thisForm );
-		} else {
-			thisForm.submit();
-		}
+		frmFrontForm.submitFormManual( e, thisForm );
 
 		return false;
 	}
@@ -297,23 +293,16 @@
 		if ( running > 0 ) {
 			return;
 		}
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( event, thisForm );
-		} else {
-			jQuery( thisForm ).get( 0 ).submit();
-		}
+		frmFrontForm.submitFormManual( event, thisForm );
 	}
 
 	function enableSubmit() {
 		if ( running > 0 ) {
 			return;
 		}
-		if ( typeof frmFrontForm.removeSubmitLoading === 'function' ) {
-			thisForm.classList.add( 'frm_loading_form' );
-			frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
-		} else {
-			jQuery( thisForm ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).prop( 'disabled', false );
-		}
+
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
 		triggerCustomEvent( thisForm, 'frmStripeLiteEnableSubmit' );
 		// TODO Try to trigger maybeToggleConversationalButtonsOnFinalQuestion in the conversaitonal forms add on.
@@ -342,34 +331,6 @@
 
 		el.dispatchEvent( event );
 	}
-
-	/**
- * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
- *
- * @since 5.4
- *
- * @param {String}         event    Event name.
- * @param {String}         selector Selector.
- * @param {Function}       handler  Handler.
- * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
- */
-function documentOn( event, selector, handler, options ) {
-	if ( 'undefined' === typeof options ) {
-		options = false;
-	}
-
-	document.addEventListener( event, function( e ) {
-		var target;
-
-		// loop parent nodes from the target to the delegation node.
-		for ( target = e.target; target && target != this; target = target.parentNode ) {
-			if ( target && target.matches && target.matches( selector ) ) {
-				handler.call( target, e );
-				break;
-			}
-		}
-	}, options );
-}
 
 	function getPriceFields() {
 		var priceFields = [];
