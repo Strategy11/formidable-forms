@@ -5,6 +5,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesHelper {
 
+	/**
+	 * "Submitted" entry status.
+	 *
+	 * @since x.x
+	 * @var int
+	 */
+	const SUBMITTED_ENTRY_STATUS = 0;
+
+	/**
+	 * "Draft" entry status.
+	 *
+	 * @since x.x
+	 * @var int
+	 */
+	const DRAFT_ENTRY_STATUS = 1;
+
+	/**
+	 * "In Progress" entry status.
+	 *
+	 * @since x.x
+	 * @var int
+	 */
+	const IN_PROGRESS_ENTRY_STATUS = 2;
+
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -738,17 +762,18 @@ class FrmEntriesHelper {
 	 * @since x.x
 	 *
 	 * @param int $status is_draft column.
+	 * @param bool $include_label Return label.
 	 *
 	 * @return string
 	 */
-	public static function get_entry_status( $status ) {
+	public static function get_entry_status( $status, $include_label = true ) {
 		$statuses = self::get_entry_statuses();
 
 		if ( array_key_exists( $status, $statuses ) ) {
-			return $statuses[ $status ];
+			return $include_label ? $statuses[ $status ] : $status;
 		}
 
-		return esc_html__( 'In Progress', 'formidable' );
+		return $include_label ? esc_html__( 'In Progress', 'formidable' ) : self::IN_PROGRESS_ENTRY_STATUS;
 	}
 
 	/**
