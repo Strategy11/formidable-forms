@@ -3273,6 +3273,7 @@ function frmAdminBuildJS() {
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
+		fieldUpdated();
 	}
 
 	function getHighestOptKey( fieldId ) {
@@ -3500,6 +3501,7 @@ function frmAdminBuildJS() {
 				jQuery( '#other_button_' + fieldId ).fadeIn( 'slow' );
 			}
 		});
+		fieldUpdated();
 	}
 
 	/**
