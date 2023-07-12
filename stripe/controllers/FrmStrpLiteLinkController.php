@@ -74,11 +74,6 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
-		if ( ! in_array( $intent->status, array( 'succeeded' ), true ) ) {
-			$redirect_helper->handle_error( 'did_not_complete' );
-			die();
-		}
-
 		$status             = 'succeeded' === $intent->status ? 'complete' : 'authorized';
 		$new_payment_values = compact( 'status' );
 
