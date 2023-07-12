@@ -733,34 +733,36 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * Return entry status based on is_draft column value.
+	 * Get all entry statuses.
 	 *
 	 * @since x.x
 	 *
-	 * @param int $status is_draft column.
-	 *
-	 * @return string
+	 * @return array<string>
 	 */
-	public static function get_entry_status( $status ) {
-		switch ( $status ) {
-			case 0:
-				$val = esc_html__( 'Submitted', 'formidable-abandonment' );
-				break;
-			case 1:
-				$val = esc_html__( 'Draft', 'formidable-abandonment' );
-				break;
-			case 2:
-				$val = esc_html__( 'In Progress', 'formidable-abandonment' );
-				break;
-			case 3:
-				$val = esc_html__( 'Abandoned', 'formidable-abandonment' );
-				break;
-			default:
-				$val = esc_html__( 'Submitted', 'formidable-abandonment' ); // Normally we shouldn't reach here! Just making psalm satisfied.
-				break;
+	private static function get_entry_statuses() {
+
+		$default_entry_statuses = array(
+			0 => esc_html__( 'Submitted', 'formidable' ),
+			1 => esc_html__( 'Draft', 'formidable' ),
+			2 => esc_html__( 'In Progress', 'formidable' ),
+		);
+
+		/**
+		 * Register entry status.
+		 *
+		 * "3" is reserved for abandonment-addon.
+		 *
+		 * @since x.x
+		 *
+		 * @param array<string> $extended_entry_status Entry statuses.
+		 */
+		$extended_entry_status = apply_filters( 'frm_register_entry_statuses', array() );
+
+		if ( ! is_array( $extended_entry_status ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
 		}
 
-		return $val;
+		return array_merge( $default_entry_statuses, $extended_entry_status );
 	}
 
 }
