@@ -8,7 +8,7 @@
 		"lint": "./node_modules/.bin/eslint .; exit 0",
 		"package-plugin": "./bin/build-plugin.sh formidable",
 		"set-version": "./bin/set-version.sh formidable formidable classes/helpers/FrmAppHelper",
-		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE",
+		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE && npx google-closure-compiler --js=js/frmstrp.js --js_output_file=js/frmstrp.min.js --compilation_level=WHITESPACE",
 		"zip": "./bin/zip-plugin.sh formidable",
 		"git-release": "./bin/git-release.sh formidable formidable-forms",
 		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot"
