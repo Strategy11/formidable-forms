@@ -304,8 +304,7 @@
 		thisForm.classList.add( 'frm_loading_form' );
 		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
-		triggerCustomEvent( thisForm, 'frmStripeLiteEnableSubmit' );
-		// TODO Try to trigger maybeToggleConversationalButtonsOnFinalQuestion in the conversaitonal forms add on.
+		triggerCustomEvent( document, 'frmStripeLiteEnableSubmit' );
 	}
 
 	/**
@@ -465,7 +464,7 @@
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		// TODO: Try to call maybeToggleConversationalButtonsOnFinalQuestion from the Conversational forms add on.
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit' );
 	}
 
 	/**
@@ -498,15 +497,14 @@
 		elements     = frmstripe.elements({ clientSecret: clientSecret, appearance: appearance });
 		isStripeLink = true;
 
-		//isConversational = maybeAddConversationalSubmitListener( cardElement );
-
 		insertAuthenticationElement( cardElement );
 		insertPaymentElement( cardElement );
 
-		// TODO Call syncConversationalButtonsAfterContinueAction logic from the Conversational forms add on.
-		//if ( isConversational ) {
-		//	jQuery( document ).on( 'frmShowField', syncConversationalButtonsAfterContinueAction );
-		//}
+		triggerCustomEvent(
+			document,
+			'frmStripeLiteLoadElements',
+			{ cardElement: cardElement }
+		);
 	}
 
 	/**
@@ -563,8 +561,15 @@
 			cardFieldContainer = cardElement.closest( '.frm_form_field' );
 			cardFieldContainer.parentNode.insertBefore( authenticationMountTarget, cardFieldContainer );
 
-			// TODO toggle active/inactive chat fields in Conversational forms add on.
-			// TODO Trigger triggerQuestionCountChangeEvent( cardElement ) from the Conversational forms add on.
+			triggerCustomEvent(
+				document,
+				'frmStripeLiteAddAuthElementAboveCardElement',
+				{
+					cardElement: cardElement,
+					cardFieldContainer: cardFieldContainer,
+					authenticationMountTarget: authenticationMountTarget
+				}
+			);
 		}
 
 		defaultEmailValue     = false !== emailField ? getSettingFieldValue( emailField ) : '';
@@ -612,6 +617,7 @@
 			form = cardElement.closest( 'form' );
 
 			// TODO Trigger toggleConversationalButtons logic from Conversational forms add on.
+			// If it is a conversational form, we need to exit early here as well.
 
 			if ( readyToSubmitStripeLink( form ) ) {
 				thisForm = form;
@@ -692,6 +698,7 @@
 		var form = cardElement.closest( '.frm-show-form' );
 
 		// TODO Call toggleConversationalButtons logic from Conversational forms add on.
+		// A conversational form also needs to exit early here.
 
 		// Handle final question or non-conversational form.
 		if ( readyToSubmitStripeLink( form ) ) {
