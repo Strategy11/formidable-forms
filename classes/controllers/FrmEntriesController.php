@@ -31,6 +31,24 @@ class FrmEntriesController {
 			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
 			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
+
+			/**
+			 * Allows include entry status column to entries list.
+			 *
+			 * @since x.x
+			 *
+			 * @param bool $include_entries_status Excluded fields type.
+			 */
+			$include_entries_status = apply_filters( 'frm_entries_add_status_column', false );
+
+			if ( ! is_bool( $include_entries_status ) ) {
+				_doing_it_wrong( __METHOD__, esc_html__( 'You need to return bool to enable/disable entry status column.', 'formidable' ), 'x.x' );
+			}
+
+			if ( $include_entries_status ) {
+				add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::add_status_column', 99 );
+				add_filter( 'frm_entries_post_status_column', 'FrmEntriesController::status_column_value', 10, 2 );
+			}
 		} else {
 			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
 		}
@@ -105,6 +123,48 @@ class FrmEntriesController {
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Add "Entry status" column to entries table.
+	 *
+	 * @since 1.0
+	 *
+	 * @param array<string> $columns Entries table columns.
+	 *
+	 * @return array<string>
+	 */
+	public static function add_status_column( $columns ) {
+		global $frm_vars;
+		$form_id = FrmForm::get_current_form_id();
+
+		$columns[ $form_id . '_post_status' ] = __( 'Entry Status', 'formidable' );
+		// Change order of draft col, Since we added post status in line above it could be accessible by count -1.
+		$columns = array_merge(
+			array_splice( $columns, 0, 4 ),
+			array_splice( $columns, count( $columns ) - 1, 1 ),
+			$columns
+		);
+
+		$frm_vars['cols'] = $columns;
+
+		return $columns;
+	}
+
+	/**
+	 * Return entry status based on is_draft column.
+	 *
+	 * @since x.x
+	 *
+	 * @param string       $val Column value.
+	 * @param array<mixed> $args Column args.
+	 *
+	 * @return string
+	 */
+	public static function status_column_value( $val, $args ) {
+		$entry = $args['item'];
+
+		return FrmEntriesHelper::get_entry_status( $entry->is_draft );
 	}
 
 	private static function get_columns_for_form( $form_id, &$columns ) {
