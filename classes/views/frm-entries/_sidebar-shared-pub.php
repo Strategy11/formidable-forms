@@ -12,7 +12,7 @@ if ( ! isset( $entry ) ) {
 	<span id="timestamp">
 	<?php
 	$date_format = __( 'M j, Y @ G:i', 'formidable' );
-	$status = isset( $entry->is_draft ) ? FrmEntriesHelper::get_entry_status( $entry->is_draft ) : esc_html__( 'Submitted', 'formidable' );
+	$status = isset( $entry->is_draft ) ? FrmEntriesHelper::get_entry_status( $entry->is_draft ) : esc_html__( 'In Progress', 'formidable' );
 	printf(
 		/* translators: %1$s: Entry status %2$s: The date */
 		esc_html__( '%1$s: %2$s', 'formidable' ),
