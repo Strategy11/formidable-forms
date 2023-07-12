@@ -82,8 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 	<?php
-	do_action(
-		'frm_pay_show_stripe_options',
+	FrmStrpLiteActionsController::add_action_options(
 		array(
 			'form_action'    => $form_action,
 			'action_control' => $this,
@@ -104,24 +103,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 	<?php
-	// TODO: Put this code in Pro.
-	/*
-	<p class="<?php echo esc_attr( $classes['billing_address'] ); ?> frm6">
-		<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
-			<?php esc_html_e( 'Address', 'formidable' ); ?>
-		</label>
-		<?php
-		$action_control->show_fields_dropdown(
-			$field_dropdown_atts,
-			array(
-				'name'           => 'billing_address',
-				'allowed_fields' => 'address',
-			)
-		);
-		?>
-	</p>
-	*/
+	/**
+	 * Trigger an action so Pro can include an Address dropdown.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *     @type array         $classes
+	 *     @type FrmFormAction $action_control
+	 *     @type array         $field_dropdown_atts
+	 * }
+	 */
+	do_action(
+		'frm_stripe_lite_customer_info_after_email',
+		compact( 'classes', 'action_control', 'field_dropdown_atts' )
+	);
 	?>
+
 	<p class="<?php echo esc_attr( $classes['billing_first_name'] ); ?> frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
 			<?php esc_html_e( 'First Name', 'formidable' ); ?>

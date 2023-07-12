@@ -24,12 +24,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php } ?>
 
-	<?php
-	if ( 'stripe' === $payment->paysys ) {
-		/**
-		 * This is required in the Stripe add on to include the capture link.
-		 */
-		do_action( 'frm_pay_' . $payment->paysys . '_sidebar', $payment );
-	}
-	?>
 </div>
