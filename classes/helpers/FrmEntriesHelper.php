@@ -733,6 +733,25 @@ class FrmEntriesHelper {
 	}
 
 	/**
+	 * Return entry status based on is_draft column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $status is_draft column.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_status( $status ) {
+		$statuses = self::get_entry_statuses();
+
+		if ( array_key_exists( $status, $statuses ) ) {
+			return $statuses[ $status ];
+		}
+
+		return esc_html__( 'In Progress', 'formidable' );
+	}
+
+	/**
 	 * Get all entry statuses.
 	 *
 	 * @since x.x
