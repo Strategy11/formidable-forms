@@ -138,7 +138,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		if ( ! empty( $atts['action']->post_content['email'] ) ) {
 			$payment_info['email'] = apply_filters( 'frm_content', $atts['action']->post_content['email'], $atts['form'], $atts['entry'] );
-			// TODO Call Pro to process an [email] shortcode here.
+
+			/**
+			 * Filter the customer info email value.
+			 * This is required for Pro to replace an [email] shortcode with the current customer email.
+			 *
+			 * @since x.x
+			 */
+			$payment_info['email'] = apply_filters( 'frm_stripe_lite_customer_info_email', $payment_info['email'] );
 		}
 
 		self::add_customer_name( $atts, $payment_info );
