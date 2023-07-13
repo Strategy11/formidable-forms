@@ -10,31 +10,63 @@
 		stripeLinkElementIsComplete = false;
 
 	/**
-	 * @todo I removed draft saving/going back logic from here. We'll need to still support it (but in Pro).
+	 * @param {Event} e
 	 * @returns 
 	 */
 	function validateForm( e ) {
-		var action, ccField;
-
 		thisForm = this;
 		formID   = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
 
-		if ( formID == frm_stripe_vars.form_id ) {
-			action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
-			if ( 'create' === action ) {
-				ccField = jQuery( thisForm ).find( '.frm-card-element' );
-				if ( ccField.length && ! ccField.is( ':hidden' ) ) {
-					e.preventDefault();
-					event = e;
-					processForm();
-					return;
-				}
-			}
+		if ( shouldProcessForm() ) {
+			e.preventDefault();
+			event = e;
+			processForm();
+			return;
 		}
 
 		frmFrontForm.submitFormManual( e, thisForm );
 
 		return false;
+	}
+
+	/**
+	 * @returns {Boolean}
+	 */
+	function shouldProcessForm() {
+		var ccField;
+
+		if ( formID != frm_stripe_vars.form_id ) {
+			return false;
+		}
+
+		if ( ! currentActionTypeShouldBeProcessed() ) {
+			return false;
+		}
+
+		ccField = jQuery( thisForm ).find( '.frm-card-element' );
+		if ( ccField.length && ! ccField.is( ':hidden' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @returns {Boolean}
+	 */
+	function currentActionTypeShouldBeProcessed() {
+		var action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
+			return 'create' === action;
+		}
+
+		return window.frmProForm.currentActionTypeShouldBeProcessed(
+			action,
+			{
+				thisForm: thisForm
+			}
+		);
 	}
 
 	function processForm() {
@@ -50,7 +82,11 @@
 		}
 
 		frmFrontForm.showSubmitLoading( $form );
-		meta = addNameAndAddress( $form );
+		meta = addName( $form );
+
+		if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.addAddressMeta ) {
+			window.frmProForm.addAddressMeta( $form, meta );
+		}
 
 		if ( ! isStripeLink ) {
 			return;
@@ -170,17 +206,14 @@
 		return 0 === keys.length;
 	}
 
-	function addNameAndAddress( $form ) {
-		var addressContainer,
-			prefix,
-			i,
+	function addName( $form ) {
+		var i,
 			firstField,
 			lastField,
 			firstFieldContainer,
 			lastFieldContainer,
 			cardObject = {},
 			settings = frm_stripe_vars.settings,
-			addressID = '',
 			firstNameID = '',
 			lastNameID = '',
 			getNameFieldValue;
@@ -210,31 +243,8 @@
 		};
 
 		for ( i = 0; i < settings.length; i++ ) {
-			addressID   = settings[ i ].address;
 			firstNameID = settings[ i ].first_name;
 			lastNameID  = settings[ i ].last_name;
-		}
-
-		if ( addressID !== '' ) {
-			addressContainer = $form.find( '#frm_field_' + addressID + '_container' );
-			prefix           = '';
-
-			if ( addressContainer.length < 1 ) {
-				addressContainer = $form.find( 'input[name="item_meta[' + addressID + '][line1]"]' );
-				if ( addressContainer.length ) {
-					prefix = addressID + '][';
-					addressContainer = addressContainer.parent();
-				}
-			}
-
-			if ( addressContainer.length ) {
-				cardObject = addValToRequest( addressContainer, prefix + 'line1', cardObject, 'address_line1' );
-				cardObject = addValToRequest( addressContainer, prefix + 'line2', cardObject, 'address_line2' );
-				cardObject = addValToRequest( addressContainer, prefix + 'city', cardObject, 'address_city' );
-				cardObject = addValToRequest( addressContainer, prefix + 'state', cardObject, 'address_state' );
-				cardObject = addValToRequest( addressContainer, prefix + 'zip', cardObject, 'address_zip' );
-				// The two letter country code is needed here, so skip it. This is required for Afterpay, which is currently a limitation.
-			}
 		}
 
 		if ( firstNameID !== '' ) {
@@ -261,14 +271,6 @@
 			}
 		}
 
-		return cardObject;
-	}
-
-	function addValToRequest( container, inputName, cardObject, objectName ) {
-		var input = container.find( 'input[name$="[' + inputName + ']"]' );
-		if ( input.length && input.val() ) {
-			cardObject[ objectName ] = input.val();
-		}
 		return cardObject;
 	}
 
@@ -450,7 +452,15 @@
 
 		disableSubmit( stripeLinkForm );
 		loadStripeLinkElements( intentField.value );
-		// TODO Listen to submit button mutations in Pro.
+
+		triggerCustomEvent(
+			document,
+			'frmStripeLiteLoad',
+			{
+				form: stripeLinkForm
+			}
+		);
+
 		return true;
 	}
 
@@ -685,6 +695,13 @@
 		function handlePaymentElementChange( event ) {
 			stripeLinkElementIsComplete = event.complete;
 			toggleButtonsOnPaymentElementChange( cardElement );
+			triggerCustomEvent(
+				document,
+				'frmStripeLitePaymentElementChange',
+				{
+					complete: event.complete
+				}
+			);
 		}
 	}
 
@@ -719,8 +736,15 @@
 	 * @returns {bool}
 	 */
 	function readyToSubmitStripeLink( form ) {
-		// var formId = parseInt( form.querySelector( '[name="form_id"]' ).value );
-		return linkAuthenticationElementIsComplete && stripeLinkElementIsComplete; // TODO Check if submitButtonIsConditionallyDisabled( formId ) but hook into Pro.
+		if ( ! linkAuthenticationElementIsComplete || ! stripeLinkElementIsComplete ) {
+			return false;
+		}
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.submitButtonIsConditionallyDisabled ) {
+			return true;
+		}
+
+		return ! window.frmProForm.submitButtonIsConditionallyDisabled( form );
 	}
 
 	/**
@@ -877,7 +901,7 @@
 
 			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
 			loadElements();
-			jQuery( document ).on( 'frmPageChanged', loadElements ); // TODO Move this to Pro.
+			jQuery( document ).on( 'frmPageChanged', loadElements );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
