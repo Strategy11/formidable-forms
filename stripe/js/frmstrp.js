@@ -894,7 +894,7 @@
 
 			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
 			loadElements();
-			jQuery( document ).on( 'frmPageChanged', loadElements ); // TODO Move this to Pro.
+			jQuery( document ).on( 'frmPageChanged', loadElements );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
