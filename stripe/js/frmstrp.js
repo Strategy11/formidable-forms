@@ -82,7 +82,11 @@
 		}
 
 		frmFrontForm.showSubmitLoading( $form );
-		meta = addNameAndAddress( $form );
+		meta = addName( $form );
+
+		if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.addAddressMeta ) {
+			window.frmProForm.addAddressMeta( $form, meta );
+		}
 
 		if ( ! isStripeLink ) {
 			return;
@@ -202,17 +206,14 @@
 		return 0 === keys.length;
 	}
 
-	function addNameAndAddress( $form ) {
-		var addressContainer,
-			prefix,
-			i,
+	function addName( $form ) {
+		var i,
 			firstField,
 			lastField,
 			firstFieldContainer,
 			lastFieldContainer,
 			cardObject = {},
 			settings = frm_stripe_vars.settings,
-			addressID = '',
 			firstNameID = '',
 			lastNameID = '',
 			getNameFieldValue;
@@ -242,31 +243,8 @@
 		};
 
 		for ( i = 0; i < settings.length; i++ ) {
-			addressID   = settings[ i ].address;
 			firstNameID = settings[ i ].first_name;
 			lastNameID  = settings[ i ].last_name;
-		}
-
-		if ( addressID !== '' ) {
-			addressContainer = $form.find( '#frm_field_' + addressID + '_container' );
-			prefix           = '';
-
-			if ( addressContainer.length < 1 ) {
-				addressContainer = $form.find( 'input[name="item_meta[' + addressID + '][line1]"]' );
-				if ( addressContainer.length ) {
-					prefix = addressID + '][';
-					addressContainer = addressContainer.parent();
-				}
-			}
-
-			if ( addressContainer.length ) {
-				cardObject = addValToRequest( addressContainer, prefix + 'line1', cardObject, 'address_line1' );
-				cardObject = addValToRequest( addressContainer, prefix + 'line2', cardObject, 'address_line2' );
-				cardObject = addValToRequest( addressContainer, prefix + 'city', cardObject, 'address_city' );
-				cardObject = addValToRequest( addressContainer, prefix + 'state', cardObject, 'address_state' );
-				cardObject = addValToRequest( addressContainer, prefix + 'zip', cardObject, 'address_zip' );
-				// The two letter country code is needed here, so skip it. This is required for Afterpay, which is currently a limitation.
-			}
 		}
 
 		if ( firstNameID !== '' ) {
@@ -293,14 +271,6 @@
 			}
 		}
 
-		return cardObject;
-	}
-
-	function addValToRequest( container, inputName, cardObject, objectName ) {
-		var input = container.find( 'input[name$="[' + inputName + ']"]' );
-		if ( input.length && input.val() ) {
-			cardObject[ objectName ] = input.val();
-		}
 		return cardObject;
 	}
 

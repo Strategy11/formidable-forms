@@ -300,6 +300,7 @@ class FrmTransLiteActionsController {
 		foreach ( $payment_actions as $payment_action ) {
 			$action_settings[] = array(
 				'id'         => $payment_action->ID,
+				'address'    => $payment_action->post_content['billing_address'], // TODO Move this into Pro?
 				'first_name' => $payment_action->post_content['billing_first_name'],
 				'last_name'  => $payment_action->post_content['billing_last_name'],
 				'gateways'   => $payment_action->post_content['gateway'],
