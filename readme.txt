@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.2.2
 Requires PHP: 5.6
-Stable tag: 6.3.2
+Stable tag: 6.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,14 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.4 =
+* New: A floating button has been added to some admin pages with links for documentation and support.
+* New: When importing, if a matching trashed form is found based on a key match, it will be deleted before the import begins. This prevents conflicts that cause field shortcodes and conditional logic not to update as expected when imported.
+* New: The field search has been improved. Inactive fields will no longer appear when there is no match, and categories will no longer appear when no children fields are visible.
+* New: Captcha key settings will now be trimmed on save to avoid unecessary whitespace characters reported to cause issues in some cases.
+* New: Form previews inside of Gutenberg blocks are no longer interactive and can no longer be submitted when clicking the submit button in the preview.
+* Fix: Rapidly clicking the preview button before the page has loaded would cause a JavaScript error preventing the preview button from working.
+
 = 6.3.2 =
 * New: The cron for tracking plugin usage is now unscheduled automatically when deactivating this plugin.
 * Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
