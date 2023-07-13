@@ -714,8 +714,15 @@
 	 * @returns {bool}
 	 */
 	function readyToSubmitStripeLink( form ) {
-		// var formId = parseInt( form.querySelector( '[name="form_id"]' ).value );
-		return linkAuthenticationElementIsComplete && stripeLinkElementIsComplete; // TODO Check if submitButtonIsConditionallyDisabled( formId ) but hook into Pro.
+		if ( ! linkAuthenticationElementIsComplete || ! stripeLinkElementIsComplete ) {
+			return false;
+		}
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.submitButtonIsConditionallyDisabled ) {
+			return true;
+		}
+
+		return ! window.frmProForm.submitButtonIsConditionallyDisabled( form );
 	}
 
 	/**
