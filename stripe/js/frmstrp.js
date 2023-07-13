@@ -453,7 +453,15 @@
 
 		disableSubmit( stripeLinkForm );
 		loadStripeLinkElements( intentField.value );
-		// TODO Listen to submit button mutations in Pro.
+
+		triggerCustomEvent(
+			document,
+			'frmStripeLiteLoad',
+			{
+				form: stripeLinkForm
+			}
+		);
+
 		return true;
 	}
 
@@ -681,6 +689,13 @@
 		function handlePaymentElementChange( event ) {
 			stripeLinkElementIsComplete = event.complete;
 			toggleButtonsOnPaymentElementChange( cardElement );
+			triggerCustomEvent(
+				document,
+				'frmStripeLitePaymentElementChange',
+				{
+					complete: event.complete
+				}
+			);
 		}
 	}
 
