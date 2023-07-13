@@ -10,31 +10,63 @@
 		stripeLinkElementIsComplete = false;
 
 	/**
-	 * @todo I removed draft saving/going back logic from here. We'll need to still support it (but in Pro).
+	 * @param {Event} e
 	 * @returns 
 	 */
 	function validateForm( e ) {
-		var action, ccField;
-
 		thisForm = this;
 		formID   = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
 
-		if ( formID == frm_stripe_vars.form_id ) {
-			action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
-			if ( 'create' === action ) {
-				ccField = jQuery( thisForm ).find( '.frm-card-element' );
-				if ( ccField.length && ! ccField.is( ':hidden' ) ) {
-					e.preventDefault();
-					event = e;
-					processForm();
-					return;
-				}
-			}
+		if ( shouldProcessForm() ) {
+			e.preventDefault();
+			event = e;
+			processForm();
+			return;
 		}
 
 		frmFrontForm.submitFormManual( e, thisForm );
 
 		return false;
+	}
+
+	/**
+	 * @returns {Boolean}
+	 */
+	function shouldProcessForm() {
+		var ccField;
+
+		if ( formID != frm_stripe_vars.form_id ) {
+			return false;
+		}
+
+		if ( ! currentActionTypeShouldBeProcessed() ) {
+			return false;
+		}
+
+		ccField = jQuery( thisForm ).find( '.frm-card-element' );
+		if ( ccField.length && ! ccField.is( ':hidden' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @returns {Boolean}
+	 */
+	function currentActionTypeShouldBeProcessed() {
+		var action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
+			return 'create' === action;
+		}
+
+		return window.frmProForm.currentActionTypeShouldBeProcessed(
+			action,
+			{
+				thisForm: thisForm
+			}
+		);
 	}
 
 	function processForm() {
