@@ -1544,6 +1544,7 @@ function frmAdminBuildJS() {
 				copyHelper && copyHelper.remove();
 				var fieldId = ui.item.attr( 'id' ).replace( 'frm_delete_field_', '' ).replace( '-' + ui.item.data( 'optkey' ) + '_container', '' );
 				resetDisplayedOpts( fieldId );
+				fieldUpdated();
 			}
 		};
 		jQuery( sort ).sortable( opts );
@@ -3216,6 +3217,7 @@ function frmAdminBuildJS() {
 
 			this.classList.add( 'frm_loading_button' );
 			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
+			fieldUpdated();
 		});
 	}
 
@@ -3273,6 +3275,7 @@ function frmAdminBuildJS() {
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
+		fieldUpdated();
 	}
 
 	function getHighestOptKey( fieldId ) {
@@ -3500,6 +3503,7 @@ function frmAdminBuildJS() {
 				jQuery( '#other_button_' + fieldId ).fadeIn( 'slow' );
 			}
 		});
+		fieldUpdated();
 	}
 
 	/**
