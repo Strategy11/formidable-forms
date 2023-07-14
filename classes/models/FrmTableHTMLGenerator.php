@@ -83,6 +83,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_style_settings( $atts ) {
 		$style_settings       = array(
@@ -114,6 +115,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_use_inline_style( $atts ) {
 		if ( isset( $atts['inline_style'] ) && ! $atts['inline_style'] ) {
@@ -127,6 +129,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_direction( $atts ) {
 		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
@@ -138,6 +141,7 @@ class FrmTableHTMLGenerator {
 	 * Set the table_style property
 	 *
 	 * @since 2.04
+	 * @return void
 	 */
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
@@ -156,6 +160,7 @@ class FrmTableHTMLGenerator {
 	 * Set the td_style property
 	 *
 	 * @since 2.04
+	 * @return void
 	 */
 	private function init_td_style() {
 		if ( $this->use_inline_style === true ) {
@@ -238,6 +243,8 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
+	 *
+	 * @return void
 	 */
 	protected function switch_odd() {
 		if ( $this->type !== 'shortcode' ) {
@@ -325,7 +332,10 @@ class FrmTableHTMLGenerator {
 	 * Add classes to the tr.
 	 *
 	 * @since 5.4.2
+	 *
 	 * @param bool $empty If the value in the row is blank.
+	 *
+	 * @return string
 	 */
 	protected function add_row_class( $empty = false ) {
 		$class = '';

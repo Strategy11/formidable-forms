@@ -409,7 +409,7 @@ class FrmListHelper {
 			$verify = $this->confirm_bulk_delete();
 
 			if ( $verify ) {
-				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_attr( $verify ) . "'></a>";
+				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmverify='" . esc_attr( $verify ) . "' data-frmverify-btn='frm-button-red'></a>";
 			}
 		}
 
@@ -944,7 +944,7 @@ class FrmListHelper {
 				$class[] = 'num';
 			}
 
-			if ( $column_key === $primary ) {
+			if ( $column_key === $primary || $column_key === 'name' ) {
 				$class[] = 'column-primary';
 			}
 

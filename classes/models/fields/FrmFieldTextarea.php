@@ -14,6 +14,14 @@ class FrmFieldTextarea extends FrmFieldType {
 	 */
 	protected $type = 'textarea';
 
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -21,6 +29,9 @@ class FrmFieldTextarea extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array(
 			'max' => '5',
@@ -29,6 +40,8 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @param string $name
+	 *
+	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
 		$size = FrmField::get_option( $this->field, 'size' );
@@ -53,6 +66,19 @@ class FrmFieldTextarea extends FrmFieldType {
 		FrmFieldsHelper::run_wpautop( $atts, $value );
 
 		return $value;
+	}
+
+	/**
+	 * @since 6.0
+	 *
+	 * @param array  $field
+	 * @param string $default_name
+	 * @param mixed  $default_value
+	 *
+	 * @return void
+	 */
+	public function show_default_value_field( $field, $default_name, $default_value ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
 	}
 
 	/**

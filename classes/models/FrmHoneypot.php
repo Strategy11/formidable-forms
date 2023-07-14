@@ -53,6 +53,8 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id
+	 *
+	 * @return void
 	 */
 	public static function maybe_render_field( $form_id ) {
 		$honeypot = new self( $form_id );
@@ -68,6 +70,9 @@ class FrmHoneypot extends FrmValidate {
 		return $this->is_option_on() && $this->check_honeypot_filter();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function render_field() {
 		$honeypot = $this->check_honeypot_setting();
 		$form     = $this->get_form();

@@ -40,12 +40,72 @@ namespace {
 		}
 	}
 
+	class FrmProAppHelper {
+		public static function get_settings() {
+		}
+	}
+	class FrmProEntryMetaHelper {
+		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
+		}
+	}
+	class FrmProFormActionsController {
+	}
+	class FrmViewsLayout {
+	}
+	class FrmProDisplaysHelper {
+		public static function get_shortcodes( $content, $form_id ) {
+		}
+	}
+	class FrmProAddonsController {
+	}
+	class FrmProDb {
+		public static $plug_version;
+	}
+	class FrmProStylesController extends FrmStylesController {
+	}
+	class FrmProPost {
+	}
+	class FrmProEntriesController {
+		public static function show_entry_shortcode( $atts ) {
+		}
+	}
+	class FrmProFormsHelper {
+		public static function &post_type( $form ) {
+		}
+	}
+	class FrmProEntry {
+	}
+	class FrmProEntryFormatter extends FrmEntryFormatter {
+	}
+	class FrmProEntriesHelper {
+	}
+	class FrmViewsAppHelper {
+	}
+	class Akismet {
+	}
+	class PHPMailer {
+		public function __construct( $exceptions = null ) {
+		}
+	}
+	/**
+	 * @return void
+	 */
+	function load_formidable_pro() {
+	}
+	/**
+	* @return WPMailSMTP\Core
+	*/
+	function wp_mail_smtp() {
+	}
+	/**
+	 * @return bool
+	 */
+	function akismet_test_mode() {
+	}
 }
 
 namespace Elementor {
-
 	abstract class Widget_Base {
-
 		public function start_controls_section( $section_id, array $args = array() ) {
 		}
 		public function add_control( $id, array $args, $options = array() ) {
@@ -56,4 +116,39 @@ namespace Elementor {
 		}
 	}
 
+	class Plugin {
+	}
+}
+
+namespace WPMailSMTP {
+	class Options {
+	}
+	class Core {
+		/**
+		 * @return Providers\Loader
+		 */
+		public function get_providers() {
+		}
+	}
+}
+
+namespace WPMailSMTP\Providers {
+	interface MailerInterface {
+		/**
+		 * @return bool
+		 */
+		public function is_mailer_complete();
+	}
+	abstract class MailerAbstract implements MailerInterface {
+	}
+	class Loader {
+		/**
+		 * @param string               $provider  The provider name.
+		 * @param MailCatcherInterface $phpmailer The MailCatcher object.
+		 *
+		 * @return MailerAbstract|null
+		 */
+		public function get_mailer( $provider, $phpmailer ) {
+		}
+	}
 }

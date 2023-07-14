@@ -28,6 +28,11 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}
@@ -48,6 +53,9 @@ class FrmFieldRadio extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
 
@@ -56,6 +64,9 @@ class FrmFieldRadio extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	protected function new_field_settings() {
 		return array(
 			'options' => serialize(
@@ -69,15 +80,23 @@ class FrmFieldRadio extends FrmFieldType {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-images.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-images.php';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/radio-field.php';
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function show_readonly_hidden() {
 		return true;
 	}

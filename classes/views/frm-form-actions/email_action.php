@@ -19,6 +19,9 @@ class FrmEmailAction extends FrmFormAction {
 		parent::__construct( 'email', __( 'Send Email', 'formidable' ), $action_ops );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function form( $form_action, $args = array() ) {
 		extract( $args ); // phpcs:ignore WordPress.PHP.DontExtract
 
@@ -40,6 +43,9 @@ class FrmEmailAction extends FrmFormAction {
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function get_upgrade_text() {
 		return __( 'Conditional emails', 'formidable' );
 	}

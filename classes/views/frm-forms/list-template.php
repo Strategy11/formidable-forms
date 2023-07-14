@@ -15,7 +15,7 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_end  = '?return=html';
 }
 ?><li
-	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	class="frm-selectable frm6 <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
 	aria-label="<?php echo esc_attr( $stripped_template_name ); ?>"
 	<?php
 	if ( 'free' === $plan_required ) {
@@ -34,26 +34,31 @@ if ( ! empty( $template['custom'] ) ) {
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {
-			?><div class="frm-category-icon" role="button">
-				<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
-			</div><?php
+			FrmFormsHelper::template_icon(
+				$template['categories'],
+				array(
+					'html' => 'div',
+					'bg'   => true,
+				)
+			);
 		}
-		?><div>
+		?>
+		<div class="frm-template-details">
 			<h3 role="button">
 				<?php if ( $plan_required ) { ?>
 					<svg class="frmsvg">
-						<use xlink:href="#frm_lock_simple"></use>
+						<use xlink:href="#frm_lock_icon"></use>
 					</svg>
 				<?php } ?>
-				<?php echo esc_html( $stripped_template_name ); ?>
 				<?php
-				$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
-				if ( $template_is_new && empty( $template['custom'] ) ) {
+				echo esc_html( $stripped_template_name );
+
+				if ( empty( $template['custom'] ) && ! empty( $template['is_new'] ) ) {
 					FrmAppHelper::show_pill_text();
 				}
 				?>
 				<?php if ( $plan_required ) { ?>
-					<span class="frm-plan-required-tag">
+					<span class="frm-meta-tag frm-plan-required-tag">
 						<?php
 						echo esc_html( $plan_required );
 						if ( ! in_array( $plan_required, array( 'free', 'Elite' ), true ) ) {

@@ -879,10 +879,7 @@ class FrmFieldsController {
 	 * @deprecated 4.0 Moved to Pro for Other option only.
 	 */
 	public static function add_option() {
-		_deprecated_function( __METHOD__, '4.0', 'FrmProFormsController::add_other_option' );
-		if ( is_callable( 'FrmProFormsController::add_other_option' ) ) {
-			FrmProFormsController::add_other_option();
-		}
+		_deprecated_function( __METHOD__, '4.0', 'FrmProFieldsController::add_other_option' );
 	}
 
 	/**
@@ -912,21 +909,5 @@ class FrmFieldsController {
 	 */
 	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
 		return FrmDeprecated::include_single_field( $field_id, $values, $form_id );
-	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
-	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function delete_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
 	}
 }

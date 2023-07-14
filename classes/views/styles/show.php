@@ -2,82 +2,42 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+// This is the main view file used in the visual styler. It is used for both the "list" and "edit" view types.
+// It is accessed from /wp-admin/admin.php?page=formidable-styles&frm_action=edit&form=782
+
 ?>
-<div class="frm_wrap">
-	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
-	<div class="frm_page_container frm-fields">
+<div class="frm_page_container">
+	<?php // The embed button expects that the form ID is available as a #form_id field. ?>
+	<input type="hidden" id="form_id" value="<?php echo absint( $form->id ); ?>" />
+
 	<?php
-	FrmAppHelper::get_admin_header(
-		array(
-			'publish'     => array( 'FrmStylesHelper::styler_save_button', compact( 'style' ) ),
-			'nav'         => FrmStylesHelper::get_style_menu(),
-			'switcher'    => array( 'FrmStylesHelper::styler_switcher', compact( 'style', 'styles' ) ),
-		)
-	);
+	// Wrap the header in a .frm_wrap element so the h1 tag gets styled properly.
+	// We want to avoid putting .frm_wrap on the whole page container to avoid back end styling in the visual styler preview.
 	?>
-
-	<div class="columns-2">
-	<div class="frm-right-panel styling_settings">
-		<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
-		<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
-		<div class="frm-inner-content">
-			<p>
-				<label for="menu-name">
-					<?php esc_html_e( 'Style Name', 'formidable' ); ?>
-					<?php if ( $style->ID ) { ?>
-						<span class="howto alignright">
-							<span>.frm_style_<?php echo esc_attr( $style->post_name ); ?></span>
-						</span>
-					<?php } ?>
-				</label>
-				<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="text" class="frm_full" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
-			</p>
-
-			<p>
-				<label class="default-style-box" for="menu_order">
-					<?php if ( $style->menu_order ) { ?>
-						<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="1" />
-						<input id="menu_order" disabled="disabled" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
-					<?php } else { ?>
-						<input id="menu_order" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
-					<?php } ?>
-					<?php esc_html_e( 'Make this the default style', 'formidable' ); ?></span>
-				</label>
-			</p>
-
-			<?php
-			if ( ! class_exists( 'FrmProStylesController' ) ) {
-				require dirname( __FILE__ ) . '/_upsell-multiple-styles.php';
-			}
-
-			/**
-			 * @param WP_Post $style
-			 */
-			do_action( 'frm_style_settings_top', $style );
-			?>
-		</div>
-		<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+	<div class="frm_wrap">
+		<?php
+		FrmAppHelper::get_admin_header(
+			array(
+				'form'       => $form,
+				'hide_title' => true,
+				'publish'    => array(
+					'FrmFormsController::form_publish_button',
+					array(
+						'values' => array(
+							'form_key' => $form->form_key, // Pass this so that the Preview dropdown works.
+						),
+					),
+				),
+			)
+		);
+		?>
 	</div>
-	<div id="post-body-content">
-		<?php do_action( 'frm_style_switcher', $style, $styles ); ?>
+	<div id="frm_styler_wrapper" class="columns-2">
+		<?php
+		$view_file = 'list' === $view ? 'list' : 'edit';
+		include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
 
-		<div class="frm-inner-content">
-
-			<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
-			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
-			<input type="hidden" name="frm_action" value="save" />
-			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
-			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
-			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
-
-			<?php include( dirname( __FILE__ ) . '/_sample_form.php' ); ?>
-
-		</div>
+		include $style_views_path . '_style-preview-container.php'; // Render preview container.
+		?>
 	</div>
 </div>
-</div>
-</form>
-</div>
-
-<div id="this_css"></div>

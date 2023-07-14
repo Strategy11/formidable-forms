@@ -8,6 +8,7 @@ if ( ! isset( $saving ) ) {
 
 	if ( ! empty( $css ) ) {
 		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
 }
@@ -86,7 +87,7 @@ form input.frm_verify{
 }
 
 .with_frm_style .frm_form_fields > fieldset{
-<?php if ( ! empty( $defaults['fieldset'] ) ) { ?>
+<?php if ( isset( $defaults['fieldset'] ) && ( $defaults['fieldset'] || '0' === $defaults['fieldset'] ) ) { ?>
 	border-width:<?php echo esc_html( $defaults['fieldset'] . $important ); ?>;
 	border-width:var(--fieldset)<?php echo esc_html( $important ); ?>;
 <?php } ?>
@@ -328,6 +329,7 @@ legend.frm_hidden{
 
 .with_frm_style .wp-editor-container textarea{
 	border:none<?php echo esc_html( $important ); ?>;
+	box-shadow:none !important;
 }
 
 .with_frm_style .mceIframeContainer{
@@ -864,7 +866,11 @@ a.frm_save_draft{
 	vertical-align:middle;
 }
 
-.with_frm_style .frm_radio input[type=radio]{
+.with_frm_style .frm_radio input[type=radio]
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+, .with_frm_style .frm_scale input[type=radio]
+<?php endif; ?>
+{
 	border-radius:50%;
 }
 
@@ -873,6 +879,9 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio],
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio],	
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
 	appearance: none;
@@ -892,6 +901,9 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:before,
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio]:before,
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:before {
 	content: '';
 	width: 12px;
@@ -1638,4 +1650,4 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 }
 <?php
 
-echo strip_tags( $defaults['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

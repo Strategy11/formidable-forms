@@ -42,6 +42,8 @@ class FrmSolution {
 	 * Register all WP hooks.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return void
 	 */
 	public function load_hooks() {
 		// If user is in admin ajax or doing cron, return.
@@ -81,6 +83,8 @@ class FrmSolution {
 	 * not actually show. Sneaky, sneaky.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return void
 	 */
 	public function register() {
 
@@ -100,19 +104,32 @@ class FrmSolution {
 	 * This means the pages are still available to us, but hidden.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return void
 	 */
 	public function hide_menu() {
 		remove_submenu_page( 'index.php', $this->page );
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return ''
+	 */
 	protected function plugin_name() {
 		return '';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function page_title() {
 		return __( 'Welcome to Formidable Forms', 'formidable' );
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function page_description() {
 		return __( 'Follow the steps below to get started.', 'formidable' );
 	}
@@ -124,6 +141,8 @@ class FrmSolution {
 	 * then we redirect the user to the appropriate page.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return void
 	 */
 	public function redirect() {
 
@@ -150,6 +169,9 @@ class FrmSolution {
 		exit;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function settings_link() {
 		return admin_url( 'index.php?page=' . $this->page );
 	}
@@ -171,6 +193,9 @@ class FrmSolution {
 
 	/*
 	 * Output for global settings.
+	 */
+	/**
+	 * @return void
 	 */
 	public function settings_page() {
 		$steps = $this->get_steps_data();
@@ -209,6 +234,8 @@ class FrmSolution {
 
 	/**
 	 * Getting Started screen. Shows after first install.
+	 *
+	 * @return void
 	 */
 	public function output() {
 		FrmAppHelper::include_svg();
@@ -225,6 +252,8 @@ class FrmSolution {
 
 	/**
 	 * Heading section.
+	 *
+	 * @return void
 	 */
 	protected function header() {
 		$size = array(
@@ -262,6 +291,8 @@ class FrmSolution {
 	/**
 	 * This is the welcome page content.
 	 * Override me to insert different content.
+	 *
+	 * @return void
 	 */
 	protected function main_content() {
 		$steps = $this->get_steps_data();
@@ -337,6 +368,11 @@ class FrmSolution {
 		return $steps;
 	}
 
+	/**
+	 * @param array $steps
+	 *
+	 * @return void
+	 */
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
 		if ( empty( $plugins ) ) {
@@ -379,6 +415,9 @@ class FrmSolution {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function step_top( $step ) {
 		$section_class = ( ! isset( $step['current'] ) || ! $step['current'] ) ? 'frm_grey' : '';
 
@@ -414,6 +453,9 @@ class FrmSolution {
 		<?php
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function step_bottom( $step ) {
 		?>
 			</div>
@@ -423,6 +465,8 @@ class FrmSolution {
 
 	/**
 	 * Generate and output Connect step section HTML.
+	 *
+	 * @return void
 	 */
 	protected function license_box( $step ) {
 		$this->step_top( $step );
@@ -440,6 +484,9 @@ class FrmSolution {
 		$this->step_bottom( $step );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_plugin_install( $step ) {
 		$this->step_top( $step );
 
@@ -456,6 +503,9 @@ class FrmSolution {
 		$this->step_bottom( $step );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
 		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
@@ -530,14 +580,27 @@ class FrmSolution {
 		$this->step_bottom( $step );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_form_options( $xml ) {
 		$this->show_import_options( $this->form_options(), 'form', $xml );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_view_options() {
 		$this->show_import_options( $this->view_options(), 'view' );
 	}
 
+	/**
+	 * @param string $importing
+	 *
+	 * @psalm-param 'form'|'view' $importing
+	 *
+	 * @return void
+	 */
 	protected function show_import_options( $options, $importing, $xml = '' ) {
 		if ( empty( $options ) ) {
 			return;
@@ -559,6 +622,9 @@ class FrmSolution {
 		include( FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php' );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
 		if ( empty( $pages ) ) {
@@ -578,6 +644,9 @@ class FrmSolution {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function show_page_links( $step ) {
 		if ( $step['current'] ) {
 			return;
@@ -596,6 +665,8 @@ class FrmSolution {
 
 	/**
 	 * Only show the content for the correct plugin.
+	 *
+	 * @return bool
 	 */
 	protected function is_current_plugin() {
 		$to_redirect = get_transient( 'frm_activation_redirect' );
@@ -604,6 +675,12 @@ class FrmSolution {
 
 	/**
 	 * Override this function to indicate when install is complete.
+	 *
+	 * @param int|string $count
+	 *
+	 * @psalm-param 'all'|1 $count
+	 *
+	 * @return bool
 	 */
 	protected function is_complete( $count = 1 ) {
 		$imported = $this->previously_imported_forms();
@@ -633,6 +710,8 @@ class FrmSolution {
 
 	/**
 	 * In the new plugin has any dependencies, include them here.
+	 *
+	 * @return array
 	 */
 	protected function required_plugins() {
 		return array();
@@ -640,6 +719,8 @@ class FrmSolution {
 
 	/**
 	 * This needs to be overridden.
+	 *
+	 * @return int
 	 */
 	protected function download_id() {
 		return 0;
@@ -647,6 +728,8 @@ class FrmSolution {
 
 	/**
 	 * Give options for which forms to import.
+	 *
+	 * @return array
 	 */
 	protected function form_options() {
 		/**
@@ -664,6 +747,8 @@ class FrmSolution {
 
 	/**
 	 * Give options for which view to use.
+	 *
+	 * @return array
 	 */
 	protected function view_options() {
 		return array();
@@ -671,6 +756,8 @@ class FrmSolution {
 
 	/**
 	 * If the pages aren't imported automatically, set the page names.
+	 *
+	 * @return array
 	 */
 	protected function needed_pages() {
 		/**
@@ -687,6 +774,9 @@ class FrmSolution {
 		return array();
 	}
 
+	/**
+	 * @return void
+	 */
 	private function css() {
 		wp_enqueue_style( 'formidable-pro-fields' );
 		?>

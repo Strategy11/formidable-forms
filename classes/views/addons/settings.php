@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$icon_class = ( empty( $license ) ) ? 'frm_hidden' : '';
 		?>
 
-		<div class="edd_frm_license_row frm_grid_container">
+		<div class="edd_frm_license_row frm-inline-select frm_grid_container">
 			<label class="frm4 frm_form_field" for="edd_<?php echo esc_attr( $slug ); ?>_license_key"><?php echo esc_html( $plugin->plugin_name ); ?></label>
 			<div class="edd_frm_authorized frm8 frm_form_field <?php echo esc_attr( $activate == 'activate' ) ? 'frm_hidden' : ''; ?>">
 				<span class="edd_frm_license"><?php esc_html_e( 'Good to go!', 'formidable' ); ?></span>

@@ -14,6 +14,9 @@ class FrmStyle {
 		$this->id = $id;
 	}
 
+	/**
+	 * @return stdClass
+	 */
 	public function get_new() {
 		$this->id = 0;
 
@@ -34,18 +37,31 @@ class FrmStyle {
 		return (object) $style;
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save( $settings ) {
 		return FrmDb::save_settings( $settings, 'frm_styles' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function duplicate( $id ) {
-		// duplicating is a pro feature
+		// Duplicating is a pro feature. This is handled in FrmProStyle::duplicate instead.
 	}
 
+	/**
+	 * Handle save actions in the visual styler edit page.
+	 *
+	 * @param mixed $id
+	 * @return array<int|WP_Error>
+	 */
 	public function update( $id = 'default' ) {
 		$all_instances = $this->get_all();
 
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			$new_style       = (array) $this->get_new();
 			$all_instances[] = $new_style;
 		}
@@ -55,28 +71,31 @@ class FrmStyle {
 		foreach ( $all_instances as $number => $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
-				$all_instances[ $number ] = $new_instance;
 
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing
-				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) {
-					// this style was set to default, so remove default setting on previous default style
-					$new_instance['menu_order'] = 0;
-					$action_ids[]               = $this->save( $new_instance );
-				}
-
-				// don't continue if not saving this style
+			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				// Don't continue if not saving this style.
 				continue;
 			}
 
-			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( $this->unslash_post_content( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			// Custom CSS is no longer used from the default style, but it is still checked if the Global Setting is missing.
+			// Preserve the previous value in case Custom CSS has not been saved as a Global Setting yet.
+			$custom_css = isset( $new_instance['post_content']['custom_css'] ) ? $new_instance['post_content']['custom_css'] : '';
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! empty( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce check happens in FrmStylesController::save_style before this is called.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content']['custom_css'] = $custom_css;
+			unset( $custom_css );
+
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
-			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-			if ( empty( $id ) ) {
+			if ( ! $id ) {
 				$new_instance['post_name'] = $new_instance['post_title'];
 			}
 
@@ -89,24 +108,19 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && 0 === strpos( $color_val, 'rgb' ) ) {
-						// maybe sanitize if invalid rgba value is entered
+					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
+						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
-				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) )
-					&& ! isset( $new_instance['post_content'][ $setting ] )
-					) {
+				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ), true ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
 					$new_instance['post_content'][ $setting ] = 0;
-				} elseif ( $setting == 'font' ) {
+				} elseif ( $setting === 'font' ) {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
 
-			$all_instances[ $number ] = $new_instance;
-
 			$action_ids[] = $this->save( $new_instance );
-
 		}
 
 		$this->save_settings();
@@ -128,6 +142,7 @@ class FrmStyle {
 		}
 
 		$color_val = trim( $color_val );
+		$color_val = ltrim( $color_val, '(' ); // Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
@@ -135,11 +150,12 @@ class FrmStyle {
 			}
 		}
 
-		if ( substr( $color_val, -1 ) !== ')' ) {
-			$color_val .= ')';
-		}
+		// Remove all leading ')' braces, then add one back. This way there's always a single brace.
+		$color_val  = rtrim( $color_val, ')' );
+		$color_val .= ')';
 
 		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		$color_rgba            = trim( $color_rgba, '()' ); // Remove any excessive braces from the rgba like rgba((.
 		$length_of_color_codes = strpos( $color_val, '(' );
 		$new_color_values      = array();
 
@@ -149,20 +165,24 @@ class FrmStyle {
 			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
 			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
-				// insert a value for r, g, or b
+				// Insert a value for r, g, or b.
 				if ( $value < 0 ) {
 					$new_value = 0;
 				} elseif ( $value > 255 ) {
 					$new_value = 255;
 				} elseif ( $value_is_empty_string ) {
 					$new_value = 0;
+				} else {
+					$new_value = absint( $value );
 				}
 			} else {
-				// insert a value for alpha
+				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
+				} else {
+					$new_value = floatval( $value );
 				}
 			}
 
@@ -184,6 +204,7 @@ class FrmStyle {
 
 		$new_color = implode( ',', $new_color_values );
 		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
+		$prefix    = rtrim( $prefix, '(' ) . '('; // Limit the number of opening braces after rgb/rgba. There should only be one.
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
@@ -220,21 +241,124 @@ class FrmStyle {
 			} else {
 				$sanitized_settings[ $key ] = $defaults[ $key ];
 			}
+
+			if ( 'custom_css' !== $key ) {
+				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
+			}
 		}
 		return $sanitized_settings;
 	}
 
 	/**
-	 * @since 3.01.01
+	 * Remove any characters that should not be used in CSS.
+	 *
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @return string
 	 */
-	private function is_color( $setting ) {
-		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
+	private function strip_invalid_characters( $setting ) {
+		$characters_to_remove = array( '{', '}', ';', '[', ']' );
 
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors );
+		// RGB is handled instead in self::maybe_sanitize_rgba_value.
+		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
+		}
+
+		return str_replace( $characters_to_remove, '', $setting );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @param array  $characters_to_remove
+	 * @return string
+	 */
+	private function maybe_fix_braces( $setting, &$characters_to_remove ) {
+		$number_of_opening_braces = substr_count( $setting, '(' );
+		$number_of_closing_braces = substr_count( $setting, ')' );
+
+		if ( $number_of_opening_braces === $number_of_closing_braces ) {
+			return $this->trim_braces( $setting );
+		}
+
+		if ( $this->should_remove_every_brace( $setting ) ) {
+			// Add to $characters_to_remove to remove when str_replace is called.
+			array_push( $characters_to_remove, '(', ')' );
+			return $setting;
+		}
+
+		return $this->trim_braces( $setting );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	private function trim_braces( $input ) {
+		$output = $input;
+		// Remove any ( from the start of the string as no CSS values expect at the first character.
+		if ( $output ) {
+			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
+				$output = ltrim( $output, '()' );
+			}
+		}
+		// Remove extra braces from the end.
+		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
+			$output = rtrim( $output, '()' );
+			if ( false !== strpos( $output, '(' ) ) {
+				$output .= ')';
+			}
+		}
+		return $output;
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @return bool
+	 */
+	private function should_remove_every_brace( $setting ) {
+		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+			// Support calc() sizes. We do not want to remove all braces when calc is used.
+			return false;
+		}
+
+		// Matches hex values but also checks for unexpected ( and ).
+		$looks_like_a_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+		if ( $looks_like_a_hex_value ) {
+			return true;
+		}
+
+		// Matches size values but also checks for unexpected ( and ).
+		// This is case insensitive so it will catch PX, PT, etc, as well.
+		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
+		if ( $looks_like_a_size ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @param string $setting
+	 * @return bool
+	 */
+	private function is_color( $setting ) {
+		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
+		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
+	}
+
+	/**
+	 * @since 3.01.01
+	 *
+	 * @return array
 	 */
 	public function get_color_settings() {
 		$defaults = $this->get_defaults();
@@ -244,7 +368,9 @@ class FrmStyle {
 	}
 
 	/**
-	 * Create static css file
+	 * Create static CSS file and update the CSS transient alternative.
+	 *
+	 * @return void
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
@@ -256,8 +382,7 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css = $this->get_css_content( $filename );
-
+		$css         = $this->get_css_content( $filename );
 		$create_file = new FrmCreateFile(
 			array(
 				'file_name'     => FrmStylesController::get_file_name(),
@@ -270,6 +395,10 @@ class FrmStyle {
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 
+	/**
+	 * @param string $filename
+	 * @return string
+	 */
 	private function get_css_content( $filename ) {
 		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 
@@ -277,13 +406,16 @@ class FrmStyle {
 		$frm_style = $this;
 
 		ob_start();
-		include( $filename );
+		include $filename;
 		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
 		ob_end_clean();
 
 		return FrmStylesController::replace_relative_url( $css );
 	}
 
+	/**
+	 * @return void
+	 */
 	private function clear_cache() {
 		$default_post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -298,12 +430,24 @@ class FrmStyle {
 		FrmDb::delete_cache_and_transient( 'frmpro_css' );
 	}
 
+	/**
+	 * Delete a style by its post ID.
+	 *
+	 * @param int $id
+	 * @return WP_Post|false|null
+	 */
 	public function destroy( $id ) {
+		if ( $id === $this->get_default_style()->ID ) {
+			return false;
+		}
 		return wp_delete_post( $id );
 	}
 
+	/**
+	 * @return WP_Post|stdClass
+	 */
 	public function get_one() {
-		if ( 'default' == $this->id ) {
+		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
 			if ( $style ) {
 				$this->id = $style->ID;
@@ -331,6 +475,12 @@ class FrmStyle {
 		return $style;
 	}
 
+	/**
+	 * @param string $orderby
+	 * @param string $order
+	 * @param int    $limit
+	 * @return array
+	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
 		$post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -397,6 +547,9 @@ class FrmStyle {
 		return $styles;
 	}
 
+	/**
+	 * @param array|null $styles
+	 */
 	public function get_default_style( $styles = null ) {
 		if ( ! isset( $styles ) ) {
 			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
@@ -409,6 +562,10 @@ class FrmStyle {
 		}
 	}
 
+	/**
+	 * @param mixed $settings
+	 * @return mixed
+	 */
 	public function override_defaults( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			return $settings;
@@ -440,6 +597,9 @@ class FrmStyle {
 		return apply_filters( 'frm_override_default_styles', $settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		$defaults = array(
 			'theme_css'  => 'ui-lightness',
@@ -573,7 +733,7 @@ class FrmStyle {
 			'progress_color'           => '3f4b5b',
 			'progress_border_color'    => 'E5E5E5',
 			'progress_border_size'     => '2px',
-			'progress_size'            => '30px',
+			'progress_size'            => '24px',
 
 			'custom_css' => '',
 		);
@@ -581,10 +741,20 @@ class FrmStyle {
 		return apply_filters( 'frm_default_style_settings', $defaults );
 	}
 
+	/**
+	 * Get a name attribute value for a style setting input.
+	 *
+	 * @param string $field_name
+	 * @param string $post_field
+	 * @return string
+	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_bold_options() {
 		return array(
 			100      => 100,
@@ -600,18 +770,27 @@ class FrmStyle {
 	}
 
 	/**
-	 * Don't let imbalanced font families ruin the whole stylesheet
+	 * Don't let imbalanced font families ruin the whole stylesheet.
+	 *
+	 * @param string $value
+	 * @return string
 	 */
 	public function force_balanced_quotation( $value ) {
 		$balanced_characters = array( '"', "'" );
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
 			$is_balanced = $char_count % 2 == 0;
-			if ( ! $is_balanced ) {
+
+			if ( $is_balanced ) {
+				continue;
+			}
+
+			if ( $value && $char === $value[ strlen( $value ) - 1 ] ) {
+				$value = $char . $value;
+			} else {
 				$value .= $char;
 			}
 		}
-
 		return $value;
 	}
 }

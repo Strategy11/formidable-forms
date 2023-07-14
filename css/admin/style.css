@@ -1,0 +1,431 @@
+/*
+This file is added to the visual styler admin page, accessed from the style tab.
+*/
+
+#frm_styler_wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+#frm_style_sidebar .frm-inner-content {
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+}
+
+#frm_style_sidebar .control-section:hover .accordion-section-title {
+	/* Normally an accordion has a white background but this doesn't look great with the padding on the accordion. */
+	background-color: transparent !important;
+}
+
+#frm_style_sidebar .accordion-section-title::after {
+	right: 0;
+	color: var(--grey-400);
+}
+
+#frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form,
+.frm-style-card-info {
+	display: none;
+}
+
+#frm_active_style_form:not(.frm_hidden),
+#frm_sample_form {
+	/* Without this a small form with a max-width of 480px for example doesn't get centered in the preview space. */
+	display: flex;
+}
+
+#frm_active_style_form > .frm_forms,
+#frm_sample_form > .frm_forms {
+	/* This gives small form containers more space. */
+	flex: 1;
+	padding: 0 10px; /* Match the extra padding around fields on builder */
+}
+
+.frm-style-card {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 6px;
+	cursor: pointer;
+	box-sizing: border-box;
+	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
+	background-color: #fff;
+	margin-bottom: 15px;
+	width: 100%;
+	padding: 14px;
+	box-shadow: var(--box-shadow-sm);
+	position: relative;
+	background-color: var(--preview-background-color);
+}
+
+.frm-style-card .frm-dropdown-toggle svg,
+#frm_styling_form .frm-dropdown-toggle svg {
+	color: var(--grey-500);
+}
+
+.frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
+	/* The checkmark circle should be blue. */
+	color: var(--primary-500);
+}
+
+.frm-style-card.frm-dark-style .frm-style-card-title,
+.frm-style-card.frm-dark-style.frm-locked-style .frm-style-card-title-wrapper svg,
+.frm-style-card.frm-dark-style .frm-dropdown-toggle svg,
+.frm-style-card.frm-dark-style .frm-style-card-info {
+	color: #fff;
+}
+
+.frm-style-card > div:first-child {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: var(--gap-sm);
+}
+
+.frm-style-card.frm_hidden {
+	display: none;
+}
+
+.frm-style-card:hover {
+	box-shadow: var(--box-shadow-lg);
+}
+
+.frm-active-style-card {
+	box-shadow: none;
+	border: 1px solid var(--primary-500);
+}
+
+.frm-style-card-title-wrapper {
+	display: flex;
+	gap: var(--gap-2xs);
+	align-items: center;
+}
+
+#frm_style_sidebar .frm-style-card .dropdown {
+	overflow: visible;
+	padding-left: 0;
+	align-self: flex-start;
+}
+
+.frm-style-card-preview {
+	pointer-events: none;
+	border-radius: 6px 6px 0 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--gap-sm);
+}
+
+.frm-style-card-preview + div .dropdown {
+	/* Give it a z-index boost to avoid the border from the bottom of the card from overlapping the dropdown */
+	z-index: 1;
+}
+
+.frm-style-card-pagination {
+	text-align: center;
+	font-size: 14px;
+}
+
+.frm-style-card-title {
+	max-width: calc( 100% - 20px );
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: inline-block;
+	white-space: nowrap;
+	font-size: 14px;
+}
+
+.frm-currently-set-style-card .frm-style-card-info {
+	display: inline;
+	color: var(--grey-700);
+	opacity: 0.6;
+}
+
+.frm-locked-style .frm-style-card-title {
+	color: var(--grey);
+}
+
+.frm-style-card-title svg {
+	margin-right: 5px;
+}
+
+#frm_style_preview .frm_button_submit {
+	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
+}
+
+#frm_style_preview .frm_floating_style_button {
+	box-shadow: var(--box-shadow-xl);
+	position: fixed;
+	bottom: 20px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-weight: 400;
+
+	/*
+	When a background image is set the children in the fieldset have a z-index of 1.\
+	Set to 2 so the floating buttons get priority when clicking if they overlap a form element.
+	*/
+	z-index: 2;
+}
+
+#frm_style_preview .frm_floating_style_button.frm_hidden {
+	display: none;
+}
+
+#frm_edit_style {
+	transform: translateX(-20px);
+}
+
+#frm_toggle_sample_form {
+	right: 40px;
+}
+
+.frm_pro_form .frm_form_field.frm_lite_style,
+.frm_pro_form .frm_lite_style {
+	/*
+	Hide textarea, radio buttons, and checkboxes in the sample form in Pro.
+	Instead these elements are rendered again in Pro inside of a repeater.
+	*/
+	display: none !important;
+}
+
+#frm_style_sidebar .frm_form_field input[type="checkbox"],
+#frm_style_sidebar .frm_form_field input[type="radio"] {
+	vertical-align: middle;
+}
+
+.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
+}
+
+.ui-datepicker-inline.ui-datepicker {
+	max-width: 19em;
+}
+
+.frm-style-card-wrapper {
+	margin-top: 20px;
+}
+
+.frm-style-card-wrapper:not(.frm-styles-enabled) {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* When styles are disabled we don't want the active card to look like it is Applied. */
+.frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-title-wrapper svg,
+.frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-info {
+	display: none;
+}
+
+/* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
+.frm-style-options-menu {
+	/* The long "Reset to defaults" option name requires extra space. There's normally a 160px min-width. */
+	min-width: 200px;
+}
+
+/*
+Do not set this for frm_inside_container as it requires a custom line height value.
+Target .frm_primary_label so we avoid other labels like star rating stars.
+Time fields use a div instead of a label, so don't target by the primary label by tag type.
+*/
+#frm_style_preview .frm_form_field:not(.frm_inside_container) > .frm_primary_label {
+	line-height: var(--line-height);
+}
+
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
+	width: var(--auto-width);
+	max-width: 100%;
+}
+
+#frm_style_preview select {
+	appearance: none; /* Hide the default icon */
+}
+
+#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year) {
+	/*
+	The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
+	Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
+	The SVG is arrow-down-alt2 from Dashicons.
+	This needs to be important because of a background-image: none !important rule that gets applied in front end CSS.
+	*/
+	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55% !important;
+
+	padding-right: 24px; /* Add enough padding for the icon. */
+}
+
+/* Unset frm_admin checkbox styling in the preview. */
+#frm_style_preview input[type="checkbox"]:checked {
+	background-color: unset;
+}
+
+#frm_style_preview input[type="checkbox"]:checked:before {
+	content: "";
+	position: relative;
+	left: 1px;
+}
+
+/*
+Avoid a conflict with the .frm_form_field > label:first-child rule in frm_admin.css
+The label in the preview should use the label color setting.
+*/
+#frm_style_preview .frm_form_field > label:first-child {
+    color: var(--label-color);
+	font-size: var(--font-size);
+}
+
+.frm-color-blocks {
+	display: grid;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fit,  minmax(20px, max-content));
+	max-width: 60px;
+}
+
+.frm-color-blocks > div {
+	border: 1.5px solid var(--grey-100);
+	box-shadow: var(--box-shadow-sm);
+	border-radius: 22px;
+	height: 28px;
+	width: 28px;
+	box-sizing: border-box;
+	flex-shrink: 0;
+}
+
+/* Remove link styling from the back icon on the edit page. */
+#frm_styling_form h2 > a {
+	color: var(--grey-500);
+	margin-right: 10px;
+}
+
+#frm_styling_form p > a svg {
+	position: relative;
+	bottom: 2px;
+}
+
+.frm-style-card-separator {
+	background-color: var(--grey-300);
+	width: 2px;
+	height: 20px;
+	margin-left: 6px;
+}
+
+.frm-mini-form-style {
+	display: flex;
+	gap: var(--gap-xs);
+	width: 100%;
+}
+
+.frm-button-style-example {
+	background-color: var(--submit-bg-color);
+	border: 1px solid var(--grey-500);
+	border-color: var(--submit-border-color);
+	border-radius: var(--submit-border-radius);
+	width: 60px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm-button-style-example > div {
+	width: 32px;
+	height: 2px;
+	background-color: var(--submit-text-color);
+}
+
+.frm-input-style-example {
+	border-width: var(--field-border-width);
+	border-style: var(--field-border-style);
+	border-color: var(--border-color);
+	border-radius: var(--border-radius);
+	background-color: var(--bg-color);
+	max-width: 138px;
+	width: 100%;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+	flex: 1;
+}
+
+.frm-input-style-example > div {
+	max-width: 46px;
+	width: calc( 100% - 8px );
+	height: 2px;
+	background-color: var(--text-color);
+}
+
+#frm_loading_style_placeholder,
+#frm_style_preview.frm-loading-style-template .frm_forms,
+#frm_default_style_cards_wrapper .dropdown-item.frm-apply-style,
+.frm-currently-set-style-card .dropdown-item.frm-apply-style
+{
+	display: none;
+}
+
+#frm_style_preview.frm-loading-style-template #frm_loading_style_placeholder {
+	display: block;
+	text-align: center;
+	position: absolute;
+	top: calc( 50% - 35px );
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+#frm_loading_style_placeholder strong {
+	display: block;
+}
+
+#frm_style_template_modal .frm_warning_style {
+	display: flex;
+}
+
+#frm_style_template_modal .frm_warning_style span {
+  flex: 1;
+}
+
+#frm_style_template_modal .frm_warning_style a:focus {
+	box-shadow: none;
+}
+
+/* Break the new style trigger into a separate line on small screens to avoid overlapping with the Enable Formidable styling toggle. */
+#frm_style_sidebar > .frm-flex-justify {
+	gap: var(--gap-sm);
+	flex-wrap: wrap;
+}
+
+/* RTL Styling */
+body.rtl #frm_toggle_sample_form {
+	right: unset;
+	left: 40px;
+}
+
+body.rtl .frm-input-style-example {
+	padding-left: 0;
+	padding-right: 10px;
+}
+
+body.rtl .frm-style-card-separator {
+	margin: 0 6px 0 0;
+}
+/* End RTL Styling */
+
+.frm-styles-globally-disabled #frm_new_style_trigger,
+.frm-styles-globally-disabled .frm_toggle,
+.frm-styles-globally-disabled .frm_on_label,
+.frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
+	pointer-events: none;
+	opacity: 0.5;
+}
+
+@media only screen and (max-width: 782px) {
+	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
+	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {
+		width: 18px !important;
+	}
+}

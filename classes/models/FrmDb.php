@@ -232,7 +232,7 @@ class FrmDb {
 	 *
 	 * @return string
 	 */
-	private static function generate_cache_key( $where, $args, $field, $type ) {
+	public static function generate_cache_key( $where, $args, $field, $type ) {
 		$cache_key = '';
 		$where     = FrmAppHelper::array_flatten( $where );
 		foreach ( $where as $key => $value ) {
@@ -623,6 +623,9 @@ class FrmDb {
 	 * Used when saving form actions and styles
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param array $settings
+	 * @return int|WP_Error
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
@@ -737,29 +740,5 @@ class FrmDb {
 
 			wp_cache_delete( 'cached_keys', $group );
 		}
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function upgrade() {
-		FrmDeprecated::upgrade();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function collation() {
-		return FrmDeprecated::collation();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function uninstall() {
-		FrmDeprecated::uninstall();
 	}
 }

@@ -12,8 +12,15 @@ class FrmSettingsController {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
 	}
 
+	/**
+	 * Include license box template on demand.
+	 *
+	 * @return void
+	 */
 	public static function license_box() {
-		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
 	}
 
@@ -31,6 +38,11 @@ class FrmSettingsController {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
 	}
 
+	/**
+	 * Get sections to use for Global Settings.
+	 *
+	 * @return array<array>
+	 */
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general' => array(
@@ -51,10 +63,22 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
-			'recaptcha' => array(
+			'custom_css' => array(
+				'class'    => 'FrmStylesController',
+				'function' => 'custom_css',
+				'name'     => __( 'Custom CSS', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_code_icon',
+			),
+			'manage_styles' => array(
+				'class'    => 'FrmStylesController',
+				'function' => 'manage',
+				'name'     => __( 'Manage Styles', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_pallet_icon',
+			),
+			'captcha' => array(
 				'class'    => __CLASS__,
-				'function' => 'recaptcha_settings',
-				'name'     => __( 'reCAPTCHA', 'formidable' ),
+				'function' => 'captcha_settings',
+				'name'     => __( 'Captcha', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label' => array(
@@ -80,7 +104,7 @@ class FrmSettingsController {
 		);
 
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
-			// if no addons need a license, skip this page
+			// If no addons need a license, skip this page
 			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 			foreach ( $installed_addons as $installed_addon ) {
@@ -100,6 +124,10 @@ class FrmSettingsController {
 				);
 			}
 		}
+
+		/**
+		 * @param array<array> $sections
+		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
 		$sections['misc'] = array(
@@ -180,11 +208,11 @@ class FrmSettingsController {
 	/**
 	 * @since 4.0
 	 */
-	public static function recaptcha_settings() {
+	public static function captcha_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/recaptcha.php' );
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
 	}
 
 	/**
@@ -206,12 +234,19 @@ class FrmSettingsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
 	}
 
+	/**
+	 * Save form data submitted from the Global settings page.
+	 *
+	 * @param string|bool $stop_load
+	 *
+	 * @return void
+	 */
 	public static function process_form( $stop_load = false ) {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			wp_die( esc_html( $frm_settings->admin_permission ) );
 		}
@@ -219,12 +254,12 @@ class FrmSettingsController {
 		$errors  = array();
 		$message = '';
 
-		if ( ! isset( $frm_vars['settings_routed'] ) || ! $frm_vars['settings_routed'] ) {
+		if ( empty( $frm_vars['settings_routed'] ) ) {
 			$errors = $frm_settings->validate( $_POST, array() );
 
 			$frm_settings->update( wp_unslash( $_POST ) );
 
-			if ( empty( $errors ) ) {
+			if ( ! $errors ) {
 				$frm_settings->store();
 				$message = __( 'Settings Saved', 'formidable' );
 			}
@@ -232,9 +267,8 @@ class FrmSettingsController {
 			$message = __( 'Settings Saved', 'formidable' );
 		}
 
-		if ( $stop_load == 'stop_load' ) {
+		if ( $stop_load === 'stop_load' ) {
 			$frm_vars['settings_routed'] = true;
-
 			return;
 		}
 
@@ -344,5 +378,13 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
+	}
+
+	/**
+	 * @deprecated 6.0 use FrmSettingsController::captcha_settings().
+	 */
+	public static function recaptcha_settings() {
+		_deprecated_function( __FUNCTION__, '6.0', 'FrmSettingsController::captcha_settings()' );
+		self::captcha_settings();
 	}
 }

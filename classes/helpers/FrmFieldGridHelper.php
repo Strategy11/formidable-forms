@@ -63,6 +63,8 @@ class FrmFieldGridHelper {
 
 	/**
 	 * @param stdClass $field
+	 *
+	 * @return void
 	 */
 	public function set_field( $field ) {
 		$this->field = $field;
@@ -89,6 +91,9 @@ class FrmFieldGridHelper {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function maybe_close_section_helper() {
 		if ( empty( $this->section_helper ) ) {
 			return;
@@ -120,6 +125,9 @@ class FrmFieldGridHelper {
 		return '';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function maybe_begin_field_wrapper() {
 		if ( $this->should_first_close_the_active_field_wrapper() ) {
 			$this->close_field_wrapper();
@@ -147,6 +155,9 @@ class FrmFieldGridHelper {
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
+	/**
+	 * @return void
+	 */
 	private function begin_field_wrapper() {
 		echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li           = true;
@@ -185,6 +196,9 @@ class FrmFieldGridHelper {
 		return 12;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function sync_list_size() {
 		if ( ! isset( $this->field ) ) {
 			return;
@@ -214,6 +228,8 @@ class FrmFieldGridHelper {
 	/**
 	 * It is possible that there was still space for another field so the wrapper could still be open after looping the fields.
 	 * If it is, make sure it's closed now.
+	 *
+	 * @return void
 	 */
 	public function force_close_field_wrapper() {
 		if ( false !== $this->parent_li ) {
@@ -221,6 +237,9 @@ class FrmFieldGridHelper {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function close_field_wrapper() {
 		$this->maybe_close_section_helper();
 		echo '</ul></li>';
@@ -229,6 +248,9 @@ class FrmFieldGridHelper {
 		$this->current_field_count = 0;
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function can_support_current_layout() {
 		if ( 'end_divider' === $this->field->type ) {
 			return true;

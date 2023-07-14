@@ -306,7 +306,18 @@ class FrmEntriesController {
 		return apply_filters( 'frm_field_column_is_sortable', $is_sortable, $field );
 	}
 
+	/**
+	 * @param mixed $result Option value from database for hidden columns in entries table.
+	 * @return array
+	 */
 	public static function hidden_columns( $result ) {
+		if ( ! is_array( $result ) ) {
+			// Force an unexpected value to be an array.
+			// Since $result is a filtered option and gets saved to the database, it's possible it could be a string.
+			// Since this code expects an array it would break with a "Uncaught Error: [] operator not supported for strings" error.
+			$result = array();
+		}
+
 		$form_id = FrmForm::get_current_form_id();
 
 		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
@@ -462,8 +473,17 @@ class FrmEntriesController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
 	}
 
+	/**
+	 * Destroy an entry from the admin page.
+	 * This is triggered from the entries list from the "Delete" row action, and also from the "Delete Entry" trigger in the view/edit entry sidebar.
+	 *
+	 * @return void
+	 */
 	public static function destroy() {
-		FrmAppHelper::permission_check( 'frm_delete_entries' );
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
+		if ( false !== $permission_error ) {
+			wp_die( esc_html( $permission_error ) );
+		}
 
 		$params = FrmForm::get_admin_params();
 
@@ -684,21 +704,5 @@ class FrmEntriesController {
 	public static function contextual_help( $help, $screen_id, $screen ) {
 		_deprecated_function( __METHOD__, '4.0' );
 		return $help;
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
-		return FrmDeprecated::show_form( $id, $key, $title, $description );
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form( $filename, $form, $title, $description ) {
-		return FrmDeprecated::get_form( $filename, $form, $title, $description );
 	}
 }

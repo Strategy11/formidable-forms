@@ -21,6 +21,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me">
+		<?php
+		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
+			?>
+			<div class="frm_warning_style frm-with-icon">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
+			</div>
+		<?php } ?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -116,7 +129,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 	<h3 class="frm-collapsed">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<i class="frm_icon_font frm_arrowdown6_icon"></i>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 
@@ -138,46 +151,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<?php } ?>
 				</span>
 				<?php } ?>
-
-				<p class="frm-has-modal default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>" id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
-					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
-						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
-					</label>
-					<span class="frm-with-right-icon">
-						<?php
-						$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
-						FrmAppHelper::icon_by_class(
-							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-							array(
-								'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
-								'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
-							)
-						);
-						unset( $special_default );
-
-						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
-							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
-							$default_value = isset( $field['dyn_default_value'] ) ? $field['dyn_default_value'] : '';
-						} else {
-							$default_name  = 'default_value_' . $field['id'];
-							$default_value = $field['default_value'];
-						}
-						$field_obj->default_value_to_string( $default_value );
-
-						if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
-							?>
-							<textarea name="<?php echo esc_attr( $default_name ); ?>" class="default-value-field" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" rows="3" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>"><?php
-								echo FrmAppHelper::esc_textarea( $default_value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							?></textarea>
-							<?php
-						} else {
-							?>
-							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $field_obj->displayed_field_type( $field ) ? ',' : '' ); ?>" />
-							<?php
-						}
-						?>
-					</span>
-				</p>
+				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
 			</div>
 		<?php } ?>
@@ -226,7 +200,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
-		<?php if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) { ?>
+		<?php if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' && $frm_settings->active_captcha === 'recaptcha' ) { ?>
 			<p class="frm6 frm_first frm_form_field">
 				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
 					<?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?>
@@ -326,7 +300,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
 		<?php } ?>
 
-		<table class="form-table frm_no_top_margin">
+		<table class="form-table frm-mt-0">
 			<?php $field_obj->show_options( $field, $display, $values ); ?>
 			<?php do_action( 'frm_field_options_form', $field, $display, $values ); ?>
 		</table>
@@ -340,7 +314,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
-				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
 
 			<div class="frm_validation_box frm-collapse-me">

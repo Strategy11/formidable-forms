@@ -3,6 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+#[\AllowDynamicProperties]
 class FrmSettings {
 	public $option_name = 'frm_options';
 	public $menu;
@@ -27,6 +28,9 @@ class FrmSettings {
 	public $load_style;
 	public $custom_style;
 
+	public $active_captcha;
+	public $hcaptcha_pubkey;
+	public $hcaptcha_privkey;
 	public $pubkey;
 	public $privkey;
 	public $re_lang;
@@ -35,8 +39,16 @@ class FrmSettings {
 	public $re_multi;
 
 	public $no_ips;
+	public $custom_header_ip;
 	public $current_form = 0;
 	public $tracking;
+
+	/**
+	 * @since 6.0
+	 *
+	 * @var string|false|null
+	 */
+	public $custom_css;
 
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -108,15 +120,24 @@ class FrmSettings {
 			'submit_value'     => __( 'Submit', 'formidable' ),
 			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
 			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
 
-			'email_to' => '[admin_email]',
-			'no_ips'   => 0,
-			'tracking' => FrmAppHelper::pro_is_installed(),
+			'email_to'         => '[admin_email]',
+			'no_ips'           => 0,
+			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
+			'tracking'         => FrmAppHelper::pro_is_installed(),
+
+			// Normally custom CSS is a string. A false value is used when nothing has been set.
+			// When it is false, we try to use the old custom_key value from the default style's post_content array.
+			'custom_css' => false,
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	private function set_default_options() {
-		$this->fill_recaptcha_settings();
+		$this->fill_captcha_settings();
 
 		if ( ! isset( $this->load_style ) ) {
 			if ( ! isset( $this->custom_style ) ) {
@@ -146,6 +167,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 * @return void
 	 */
 	public function fill_with_defaults( $params = array() ) {
 		$settings    = $this->default_options();
@@ -171,17 +193,51 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-			if ( $filter_html && in_array( $setting, $filter_keys, true ) ) {
-				$this->{$setting} = FrmAppHelper::kses( $this->{$setting}, 'all' );
-			}
-
+			$this->{$setting} = $this->maybe_sanitize_global_setting( $this->{$setting}, $setting, $filter_keys );
 			unset( $setting, $default );
 		}
 	}
 
-	private function fill_recaptcha_settings() {
-		$privkey = '';
-		$re_lang = '';
+	/**
+	 * Handle sanitizing for a target global setting key.
+	 *
+	 * @since 6.0
+	 *
+	 * @param mixed  $value       The unsanitized global setting value.
+	 * @param string $key         The key of the global setting being saved.
+	 * @param array  $filter_keys These keys that are filtered with kses.
+	 * @return mixed
+	 */
+	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
+		if ( 'custom_css' === $key ) {
+			if ( false === $value ) {
+				// Avoid changing the false default value to an empty string.
+				return $value;
+			}
+			return sanitize_textarea_field( $value );
+		}
+
+		if ( in_array( $key, $filter_keys, true ) ) {
+			return FrmAppHelper::kses( $value, 'all' );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @return void
+	 */
+	private function fill_captcha_settings() {
+		if ( ! isset( $this->active_captcha ) ) {
+			$this->active_captcha = 'recaptcha';
+		}
+
+		$privkey          = '';
+		$re_lang          = '';
+
+		if ( ! isset( $this->hcaptcha_privkey ) ) {
+			$this->hcaptcha_privkey = '';
+		}
 
 		if ( ! isset( $this->pubkey ) ) {
 			// get the options from the database
@@ -192,7 +248,7 @@ class FrmSettings {
 		}
 
 		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
-			$this->re_msg = __( 'The reCAPTCHA was not entered correctly', 'formidable' );
+			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
 		if ( ! isset( $this->privkey ) ) {
@@ -216,6 +272,8 @@ class FrmSettings {
 	 * Get values that may be shown on the front-end without an override in the form settings.
 	 *
 	 * @since 3.06.01
+	 *
+	 * @return string[]
 	 */
 	public function translatable_strings() {
 		return array(
@@ -230,6 +288,8 @@ class FrmSettings {
 	 * Allow strings to be filtered when a specific form may be displaying them.
 	 *
 	 * @since 3.06.01
+	 *
+	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
 		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
@@ -241,10 +301,19 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * @param array $params
+	 * @param array $errors
+	 */
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );
 	}
 
+	/**
+	 * @param array $params
+	 *
+	 * @return void
+	 */
 	public function update( $params ) {
 		$this->fill_with_defaults( $params );
 		$this->update_settings( $params );
@@ -260,26 +329,36 @@ class FrmSettings {
 		do_action( 'frm_update_settings', $params );
 
 		if ( function_exists( 'get_filesystem_method' ) ) {
-			// save styling settings in case fallback setting changes
+			// Save styling settings in case fallback setting changes.
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function update_settings( $params ) {
-		$this->pubkey       = trim( $params['frm_pubkey'] );
-		$this->privkey      = $params['frm_privkey'];
-		$this->re_type      = $params['frm_re_type'];
-		$this->re_lang      = $params['frm_re_lang'];
-		$this->re_threshold = floatval( $params['frm_re_threshold'] );
-		$this->load_style   = $params['frm_load_style'];
+		$this->active_captcha   = $params['frm_active_captcha'];
+		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
+		$this->pubkey           = trim( $params['frm_pubkey'] );
+		$this->privkey          = trim( $params['frm_privkey'] );
+		$this->re_type          = $params['frm_re_type'];
+		$this->re_lang          = $params['frm_re_lang'];
+		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
+		$this->load_style       = $params['frm_load_style'];
+		$this->custom_css       = $params['frm_custom_css'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
-			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
+			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function update_roles( $params ) {
 		global $wp_roles;
 
@@ -303,6 +382,9 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function store() {
 		// Save the posted value in the database
 

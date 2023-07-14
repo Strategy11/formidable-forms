@@ -54,6 +54,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 
+		$this->factory        = new FrmUnitTestFactory();
 		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
@@ -86,6 +87,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( self::$installed ) {
 			self::import_xml();
 			return;
+		}
+
+		$allow_xml_mime_types_function = function( $mimes ) {
+			$mimes['xml'] = 'application/xml';
+			return $mimes;
+		};
+
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter( 'mime_types', $allow_xml_mime_types_function );
+
+		if ( is_multisite() ) {
+			// Mimes get changed because of add_filter( 'upload_mimes', 'check_upload_mimes' ); in ms-default-filters.php (A WordPress file).
+			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
 		}
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
@@ -612,7 +626,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	protected function run_private_method( $method, $args = array() ) {
-		$this->check_php_version( '5.3' );
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
 		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
@@ -626,7 +639,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return ReflectionProperty
 	 */
 	protected function get_accessible_property( $object, $property ) {
-		$this->check_php_version( '5.3' );
 		$rc = new ReflectionClass( $object );
 		$p = $rc->getProperty( $property );
 		$p->setAccessible( true );

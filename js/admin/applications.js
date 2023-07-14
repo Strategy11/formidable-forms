@@ -162,7 +162,7 @@
 					'h2',
 					{
 						text: __( 'Application Templates', 'formidable' ),
-						className: 'frm-h2'
+						className: 'frm-h2 frm-mb-md'
 					}
 				),
 				getCategoryOptions(),
@@ -178,7 +178,7 @@
 		}
 
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
-		const wrapper = div({ id: 'frm_application_category_filter' });
+		const wrapper = div({ id: 'frm_application_category_filter', className: 'subsubsub' });
 
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
@@ -187,18 +187,18 @@
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
-				anchor.classList.add( 'frm-active-application-category' );
+				anchor.classList.add( 'current' );
 				elements.activeCategoryAnchor = anchor;
 			}
 			onClickPreventDefault(
 				anchor,
 				() => {
 					if ( false !== elements.activeCategoryAnchor ) {
-						elements.activeCategoryAnchor.classList.remove( 'frm-active-application-category' );
+						elements.activeCategoryAnchor.classList.remove( 'current' );
 					}
 
 					handleCategorySelect( category );
-					anchor.classList.add( 'frm-active-application-category' );
+					anchor.classList.add( 'current' );
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
@@ -234,7 +234,7 @@
 
 	function getTemplateSearch() {
 		const id = 'frm-application-search';
-		const placeholder = __( 'Search templates', 'formidable' );
+		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
 		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
@@ -284,18 +284,25 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const titleWrapper = span({
-				children: [
-					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', { text: data.name })
-				]
-			});
+			const titleWrapper = tag(
+				'h4',
+				{
+					children: [
+						svg({ href: '#frm_lock_icon' }),
+						document.createTextNode( data.name )
+					]
+				}
+			);
 			const header = div({
 				children: [
 					titleWrapper,
 					getUseThisTemplateControl( data )
 				]
 			});
+
+			if ( data.isNew ) {
+				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
@@ -362,7 +369,7 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary',
+			className: 'button frm-button-secondary frm-button-sm',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
@@ -410,7 +417,11 @@
 				div({
 					className: 'frm_warning_style',
 					children: [
-						span( __( 'Access to this application requires a license upgrade.', 'formidable' ) ),
+						span(
+							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
+							__( 'Access to this application requires the %s plan.', 'formidable' )
+								.replace( '%s', data.requires )
+						),
 						a({
 							text: getUpgradeNowText(),
 							href: data.upgradeUrl

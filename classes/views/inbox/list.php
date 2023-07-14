@@ -4,7 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm_wrap" id="frm_inbox_page">
-	<div class="frm_page_container">
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
@@ -119,6 +118,5 @@ if ( $has_messages ) {
 	</form>
 </div>
 
-	</div>
 	</div>
 </div>

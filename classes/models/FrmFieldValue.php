@@ -77,6 +77,8 @@ class FrmFieldValue {
 	 * @since 2.04
 	 *
 	 * @param stdClass $entry
+	 *
+	 * @return void
 	 */
 	protected function init_saved_value( $entry ) {
 		if ( $this->field->type === 'html' ) {
@@ -96,6 +98,8 @@ class FrmFieldValue {
 	 * @since 2.05
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
@@ -108,6 +112,8 @@ class FrmFieldValue {
 	 * Get a value from the field settings
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param string $value
 	 */
 	public function get_field_option( $value ) {
 		return FrmField::get_option( $this->field, $value );
@@ -115,6 +121,8 @@ class FrmFieldValue {
 
 	/**
 	 * @since 4.03
+	 *
+	 * @param string $option
 	 */
 	public function get_field_attr( $option ) {
 		return is_object( $this->field ) ? $this->field->{$option} : '';
@@ -122,6 +130,8 @@ class FrmFieldValue {
 
 	/**
 	 * @since 4.03
+	 *
+	 * @return stdClass
 	 */
 	public function get_field() {
 		return $this->field;
@@ -208,6 +218,8 @@ class FrmFieldValue {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function filter_displayed_value( $atts ) {
 		if ( ! is_object( $this->entry ) || empty( $this->entry->metas ) ) {
@@ -255,14 +267,17 @@ class FrmFieldValue {
 	}
 
 	/**
-	 * Clean a field's saved value
+	 * Clean a field's saved value.
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
 			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
-				FrmAppHelper::unserialize_or_decode( $this->saved_value );
+				$field_type = FrmField::get_field_type( $this->field );
+				FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
 			}
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {

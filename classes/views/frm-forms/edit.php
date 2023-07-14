@@ -44,9 +44,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<use xlink:href="#frm_break_field_group_icon"></use>
 	</svg>
 	<svg id="frm_gear_svg" class="frmsvg">
-		<use xlink:href="#frm_gear_icon"></use>
+		<use xlink:href="#frm_settings_icon"></use>
 	</svg>
 	<svg id="frm_trash_svg" class="frmsvg">
-		<use xlink:href="#frm_trash_icon"></use>
+		<use xlink:href="#frm_delete_icon"></use>
 	</svg>
 </div>

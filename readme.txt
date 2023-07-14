@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.1
+Tested up to: 6.2.2
 Requires PHP: 5.6
-Stable tag: 5.5.3.1
+Stable tag: 6.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -53,7 +53,7 @@ When a user submits a web form, it's stored in your WordPress database so you wo
 
 Even though the entries are saved, it's still a **GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
-Need to import your leads to an external service like MailChimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
+Need to import your leads to an external service like Mailchimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
 
 You can also configure unlimited email notifications and autoresponders triggered by submissions.
 
@@ -179,6 +179,7 @@ Since Formidable is not your average form plugin, this feature list is going to 
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and custom post types from front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly display, edit, and delete entries. Let logged-in users can manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and more.
 * WordPress front-end editing. Allow users to edit their entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
+* Sync custom field values with Advanced Custom Fields (ACF). Now you can create ACF front-end forms to make managing your application faster.
 * Logged-in users can <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">save and continue partial submissions</a>. Whether it's a basic email form or a long multi-paged registration form, users can save progress and pick up where they left off.
 * <a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Graphs and charts for data visualization</a>. Display statistics from a survey, poll, and questionnaire. Or graph data in a variety of ways. Whatever you choose, it will update as new data is submitted (great for weight tracking over time).
 * Permissions. Lock visibility and access based on user role.
@@ -209,7 +210,7 @@ In addition to all the features listed above, add power ups with these integrati
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in donation and order forms. Stripe processes payments with simple PCI compliance.
 * <a href="https://formidableforms.com/features/authorize-net-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Authorize.net AIM</a>. Process one-time payments in order forms and price calculators with Authorize.net AIM. For recurring payments or easier security compliance, we recommend Stripe.
 * <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use calculations in your WooCommerce form for variable pricing and upload files with orders.
-* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Contact Forms</a>. Add and update leads in a MailChimp email marketing list from a lead form, online order, or email form.
+* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mailchimp Contact Forms</a>. Add and update leads in a Mailchimp email marketing list from a lead form, online order, or email form.
 * Constant Contact. Create leads automatically with a newsletter signup form.
 * AWeber Forms. Subscribe users to an AWeber mailing list when a signup form is submitted.
 * <a href="https://formidableforms.com/features/mailpoet-newsletters-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletters</a>. Fill your email marketing lists from newsletter signup forms. Then send WordPress newsletters from your own site using MailPoet.
@@ -255,7 +256,7 @@ Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> f
 
 == Frequently Asked Questions ==
 = How do I get started with the best forms for WordPress? =
-The fastest way to build a form is to use the contact form example we built for you. After you activate Formidable, insert [formidable id=contact-form] on the WordPress page of your choice.
+The fastest way to build a form is to use the example we built for you. After you activate Formidable, insert [formidable id=contact-form] on the WordPress page of your choice.
 
 Go to the Formidable page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
@@ -355,7 +356,7 @@ Our online form maker comes with all the powerful fields that you need to create
 * Hidden fields
 * User ID
 * HTML block - Great for custom HTML
-* Google reCAPTCHA (invisible V2 or checkbox V2)
+* Google reCAPTCHA (invisible V2 or checkbox V2) or hCaptcha
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -401,7 +402,7 @@ Yes! We know that marketing is the key to growing your business. That's why Form
 
 Here is a list of our popular marketing integrations:
 
-* MailChimp
+* Mailchimp
 * AWeber
 * Constant Contact
 * GetResponse
@@ -440,6 +441,155 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.4 =
+* New: A floating button has been added to some admin pages with links for documentation and support.
+* New: When importing, if a matching trashed form is found based on a key match, it will be deleted before the import begins. This prevents conflicts that cause field shortcodes and conditional logic not to update as expected when imported.
+* New: The field search has been improved. Inactive fields will no longer appear when there is no match, and categories will no longer appear when no children fields are visible.
+* New: Captcha key settings will now be trimmed on save to avoid unecessary whitespace characters reported to cause issues in some cases.
+* New: Form previews inside of Gutenberg blocks are no longer interactive and can no longer be submitted when clicking the submit button in the preview.
+* Fix: Rapidly clicking the preview button before the page has loaded would cause a JavaScript error preventing the preview button from working.
+
+= 6.3.2 =
+* New: The cron for tracking plugin usage is now unscheduled automatically when deactivating this plugin.
+* Fix: Invalid regex validation errors would not reset when corrected, preventing form submissions.
+* Fix: The "Other" option in dropdown fields would not appear as selected when editing an entry.
+* Fix: AJAX-submitted forms would log a PHP Notice on submit with new versions of WooCommerce installed.
+* Fix: A PHP Warning should trigger on some servers in the Gutenberg editor when trying to embed a form in an existing page.
+
+= 6.3.1 =
+* Security: Additional validation has been added when installing plugins from the WordPress repository.
+* New: A new "Open in new tab" toggle has been added to confirmation actions with redirect rules.
+* New: Dropdown field options now use less whitespace, reducing the amount of required HTML downloaded to load the form.
+* New: Additional missing for attributes have been added to admin pages to improve accessibility.
+* New: Support for a new remove_accents option has been added for field shortcodes.
+* Fix: There was additional unexpected white space on some mobile widths when distraction free mode is not active.
+* Fix: Field button options were inconsistent widths. When clicking beside a field, it wouldn't get added to the form because of the small button size.
+* Fix: A fatal error would occur in PHP 8.2 when checking for form name shortcodes in array data.
+* Fix: A warning would occur for forms with no name when viewing the list of entries.
+
+= 6.3 =
+* New: Improved the readability of error messages when importing XML.
+* New: The custom validity message pop up that happens when trying to submit an entry with an invalid format will now use the custom invalid message defined in form settings.
+* New: A "Select All" checkbox has been added to the Import/Export page to the top of the form selection table.
+* Fix: A 0 fieldset border value would not work, showing a border instead.
+* Fix: Confirmation action redirects were no longer enforcing the sanitize_url option in shortcodes.
+* Fix: Repeater icons would appear darker than expected in Gutenberg block previews.
+* Fix: Improper use of the frm_validate_entry filter will now throw a message. Previously when a null value was returned, no validation would error, and a warning (or fatal error in PHP8) would occur. Now unless an array is returned, the previous error messages will be preserved and a message will be triggered for improper use.
+* Fix: The autocomplete page dropdown would be cut off because of an overflow styling issue when embedding a form into an existing page in a modal.
+* Fix: Using "description" as a field key would trigger a fatal error on entries list pages.
+* Fix: Search wasn't working on the Import/Export page.
+* The form builder now applies more strict filtering and escaping when previewing real time updates.
+
+= 6.2.3 =
+* Fix: Forms submitted with AJAX would display an unexpected "We're sorry. It looks like you've already submitted that" message when WooCommerce v7.6.0 is active.
+* Fix: Added an extra check so invalid serialized data doesn't trigger any warning or errors when an unexpected array key type is found.
+* Fix: XML exports would fail to import because of an unexpected carriage return at the beginning of the file, or an unexpected meta tag added by the Equity WordPress theme. In these cases the XML string will now be corrected in order for the import to work.
+* Fix: Added a callable check to avoid a "Call to undefined function FrmProAddonsController::print_grace" error when upgrading.
+* Fix: The license warning banner would overflow on top of other page elements.
+* Fix: Added additional validation for style settings. Unexpected invalid characters will now be cleaned up automatically when a style is saved. A new warning will now also be displayed in the styler when a broken stylesheet is detected.
+* Fix: The utf8_encode function has been replaced as it is deprecated in PHP 8.2.
+* Input border radius is now included in styler card preview samples.
+
+= 6.2.2 =
+* Fix: Redirects to PayPal were not working, resulting in a white screen instead.
+
+= 6.2.1 =
+* Fix: Shortcodes were not getting replaced in redirect confirmation actions.
+
+= 6.2 =
+* Security: The way serialized array values are handled has been updated to use a safer method.
+* New: The setting to Submit this form with AJAX has been moved into Lite. Forms can now be submitted without reloading the whole page.
+* New: Multiselect dropdown items used in admin pages will now include the checkbox role and the aria-checked attribute for improved accessibility with screen readers.
+* Fix: When searching for templates with the word application, all ready made solutions would appear first, making it difficult to search for an application form template.
+* Fix: The User Flow add on would display a time difference of 0 seconds as 52 years.
+* Fix: When using some shortcode options, including sanitize_url=0 or sanitize=0, the option would be treated the same as 1. 0 values will now be treated as off.
+* Fix: The gravity forms importer would not successfully install when clicking the Get Started button. Styling issues when the importer add on is active have also been fixed.
+* Fix: A redirect confirmation action with an empty redirect URL would exit early and fallback to using a message without checking the frm_redirect_url filter first for redirects set in custom code.
+* Fix: Field type checks have been added in several points to avoid decoding when unnecessary. This would cause issues when trying to use a JSON string as input in a Paragraph field.
+* The delete option for a collapsed section is no longer faded out.
+* Duplicating a collapsed section is no longer disabled.
+* Several functions deprecated in version 2.x have been removed.
+
+= 6.1.2 =
+* New: The active filtered form type will be used when searching forms. Previously form searching would only check active forms.
+* Fix: It was not possible to scroll a Polylang translation page.
+* Fix: The page layout of the legacy views editor was broken.
+* Fix: The add new entry/import buttons would appear incorrectly when Pro wasn't installed.
+* Fix: Long button translations, like for German, would cause buttons in the header to overflow into multiple lines.
+* Fix: A CAPTCHA field in a form without any keys set would trigger an error when Pro wasn't installed.
+* Fix: Form blocks would break when using newer versions of the Gutenberg plugin.
+* Fix: Added additional validation to confirmation actions so empty redirect URLs and deleted page content will be handled more gracefully.
+* Fix: The submit button wouldn't properly reload as an Update button after submitting an entry, and following attempts to update the entry would result in an error message.
+
+= 6.1.1 =
+* Fix: Redirects weren't happening after submit in forms without the new Confirmation form actions.
+* Fix: The email message box was difficult to resize manually.
+* Fix: There was extra space showing on the edit style page.
+
+= 6.1 =
+* Security: Added a new global setting to use custom headers when retrieving IPs with submissions. This is disabled by default to avoid IP spoofing but required when using a reverse proxy as all IP addresses may appear identical. This setting is hidden when the GDPR IP option is enabled, but can still be enabled with a new frm_use_custom_header_ip filter using __return_true.
+* New: Full screen pages are now conditionally full screen based on the WordPress fullscreen mode user preference setting.
+* New: Success messages when updating an entry will now use the message from a confirmation action that triggers on entry updates.
+* Fix: Forms with redirect confirmation actions were redirecting when saving a draft entry.
+* Fix: An extra comma was causing the editor for views to break in PHP versions 7.2 and lower.
+* Fix: Formidable settings have been updated to avoid PHP 8.2 deprecation messages.
+* Fix: Label position styles were being applied to all fields in styler previews, not just fields with the default label position setting.
+* Fix: The sidebar has been moved back to below the entry details when printing an entry.
+* Fix: A 99 limit would always get applied when getting actions without a specified limit. Now the limit is based off of the action type. This fixes issues with Quiz outcomes not matching when beyond the 99 limit.
+
+= 6.0.1 =
+* Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
+
+= 6.0 =
+* New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update it.
+* New: Added additional logic to clean up invalid RGB color values in the styler.
+* New: Destructive actions, like deleting, now use red confirmation buttons on admin pages.
+* New: An exported form with no name will now export with key included in the file name instead of just exporting as -form.xml.
+* New: On submit behaviour including messages, redirect, and page content have been changed to a new Confirmation form action type, allowing them to work with conditional logic.
+* New: The styler will now show a pop up when exiting with unsaved changes.
+* New: Updated the UI to make it more modern and consistent between all the Formidable pages
+* Fix: Color pickers were not visibly resetting after a styler reset action.
+* Fix: Styler icon dropdowns were not visibly appearing as reset after resetting a style in older versions.
+* Fix: The success message would always show 1 form restored when undoing a delete action instead of the proper count.
+* Fix: A field dragged near the top or bottom of the field list wouldn't automatically cause the list to scroll.
+* Full screen pages no longer include the WordPress admin bar to prevent page scrolling issues when dragging.
+* Several style options have been reset and rename. These have no been added added to the dropdown for each style in the new list view of the visual styler. Custom CSS and Manage styles have been moved to Global Settings. The style name setting is now at the bottom of the General section in the edit page.
+* The frm_style_settings_top hook is no longer used.
+* Star rating fields are no longer blue in builder and entries list pages.
+* The Styling & Buttons category has been changed to a Buttons category.
+* Custom CSS is no longer merged on import.
+* The styler sample has been made more accessible.
+
+= 5.5.7 =
+* Security: Additional validation has been added when deleting entries on admin pages.
+* Fix: reCAPTCHA fields were including an additional = character in the HTML. This may have caused conflicts with other libraries.
+* Fix: Embed icons would not always prompt the embed modal when clicked in specific areas of the icon.
+* Fix: The document body would become scrollable unintentionally after some modals were closed.
+* Repeater forms have been added back to the list of export options when exporting in CSV format.
+
+= 5.5.6 =
+* Fix: Duplicating a form action without a rich text editor would trigger a JavaScript error after succeeding.
+* Fix: Submit button style rules were not applying when using the Twenty Twenty One theme.
+* Fix: The style would not always assign properly to a form after import when importing both a new form and the style.
+* Fix: It is no longer possible to select both radio buttons in the styler sample form.
+* Repeater forms are now hidden from the list of forms to export as XML.
+
+= 5.5.5 =
+* Security: Added validation to URLs when installing templates and add ons to make sure that the endpoint cannot be manipulated and used for unsafe requests.
+* Security: Added a nonce and permission check when running migrations and when loading data for applications.
+* Fix: The spinner was not visible at the top of the page when running migrations.
+* Updated the icon used for global Stripe settings.
+
+= 5.5.4 =
+* New: Added support for hCaptcha. Now in Global Settings, the reCAPTCHA tab has been changed to a CAPTCHA tab with a new CAPTCHA type setting so you can choose between using reCAPTCHA or hCaptcha.
+* Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
+* Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
+* Fix: The frm_form_object filter wouldn't get applied to a cached form result.
+* Fix: Prevent an undefined function get_editable_roles fatal error that triggers when trying to connect an account.
+* Fix: An incorrect section comparison was causing fields to keep old section data after being moved somewhere else. This would result in unexpected data exports and other side effects.
+* Fix: A "row is undefined" error would prevent merging multiple field groups together after the layout option was clicked.
+* Updated message styling on admin pages.
+
 = 5.5.3 =
 * New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
 * New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.

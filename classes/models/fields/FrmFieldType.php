@@ -74,6 +74,18 @@ abstract class FrmFieldType {
 	 */
 	protected $is_tall = false;
 
+	/**
+	 * Does this type support array values (like a checkbox or a name field).
+	 *
+	 * @var bool
+	 * @since 6.2
+	 */
+	protected $array_allowed = true;
+
+	/**
+	 * @param object|array|int $field
+	 * @param string           $type
+	 */
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
@@ -152,8 +164,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 *
-	 * @return object|array
+	 * @return array|int|object
 	 */
 	public function get_field() {
 		return $this->field;
@@ -398,6 +409,64 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Allows adding extra html attributes to field default value setting field.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $field
+	 *
+	 * @return void
+	 */
+	public function echo_field_default_setting_attributes( $field ) {}
+
+	/**
+	 * @param array $field
+	 * @param object $field_obj
+	 * @param array $default_value_types
+	 * @param array $display
+	 *
+	 * @return void
+	 */
+	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-setting.php';
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return void
+	 */
+	public function display_smart_values_modal_trigger_icon( $field ) {
+		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
+		FrmAppHelper::icon_by_class(
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			array(
+				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
+				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+			)
+		);
+	}
+
+	/**
+	 * @since 6.0
+	 *
+	 * @param array  $field
+	 * @param string $default_name
+	 * @param mixed  $default_value
+	 *
+	 * @return void
+	 */
+	public function show_default_value_field( $field, $default_name, $default_value ) {
+		if ( $field['type'] === 'rte' ) {
+			// This function is overwritten in Pro. This check is for backwards compatibility.
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
+	}
+
+	/**
 	 * @since 4.04
 	 */
 	protected function should_continue_to_field_options( $args ) {
@@ -471,8 +540,8 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
 			?>
-			<i class="frm_icon_font frm_arrowdown6_icon"></i>
 		</h3>
 		<?php
 	}
@@ -1350,5 +1419,22 @@ DEFAULT_HTML;
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_with_html( $value );
+	}
+
+	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (including checkbox, name, address, credit_card, select, file, lookup, data, product).
+	 * If a type does not require it, $this->array_allowed = false can be set to avoid the unserialize call.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function maybe_decode_value( $value ) {
+		if ( $this->has_input && $this->array_allowed ) {
+			FrmAppHelper::unserialize_or_decode( $value );
+		}
+		return $value;
 	}
 }

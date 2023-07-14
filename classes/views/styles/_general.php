@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p class="frm4 frm_first frm_form_field">
-	<label><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
+	<label for="frm_form_align"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'form_align' ) ); ?>" id="frm_form_align">
 		<option value="left" <?php selected( $style->post_content['form_align'], 'left' ); ?>>
 			<?php esc_html_e( 'left', 'formidable' ); ?>
@@ -33,12 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p class="frm4 frm_form_field">
-	<label><?php esc_html_e( 'Max Width', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_width' ) ); ?>" value="<?php echo esc_attr( $style->post_content['form_width'] ); ?>"/>
+	<label for="frm_form_width"><?php esc_html_e( 'Max Width', 'formidable' ); ?></label>
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_width' ) ); ?>" id="frm_form_width" value="<?php echo esc_attr( $style->post_content['form_width'] ); ?>" />
 </p>
 
 <p class="frm4 frm_form_field frm_end">
-	<label><?php esc_html_e( 'Background', 'formidable' ); ?></label>
+	<label for="frm_fieldset_bg_color"><?php esc_html_e( 'Background', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_bg_color' ); ?> />
 </p>
 
@@ -57,27 +57,27 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 ?>
 
 <p class="frm4 frm_first frm_form_field">
-	<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>
+	<label for="frm_fieldset"><?php esc_html_e( 'Border', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset' ) ); ?>" id="frm_fieldset" value="<?php echo esc_attr( $style->post_content['fieldset'] ); ?>" size="4" />
 </p>
 
 <p class="frm4 frm_form_field">
-	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
+	<label for="frm_fieldset_color"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_color' ) ); ?>" id="frm_fieldset_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
-	<label><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+	<label for="frm_fieldset_padding"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_padding' ) ); ?>" id="frm_fieldset_padding" value="<?php echo esc_attr( $style->post_content['fieldset_padding'] ); ?>" size="4" />
 </p>
 
 <p>
-	<label><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
+	<label for="frm_font"><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Leave blank to inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
 </p>
 
 <p class="frm6 frm_first frm_form_field">
-	<label><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
+	<label for="frm_direction"><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'direction' ) ); ?>" id="frm_direction">
 		<option value="ltr" <?php selected( $style->post_content['direction'], 'ltr' ); ?>>
 			<?php esc_html_e( 'Left to Right', 'formidable' ); ?>
@@ -86,4 +86,9 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 			<?php esc_html_e( 'Right to Left', 'formidable' ); ?>
 		</option>
 	</select>
+</p>
+
+<p>
+	<label><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
+	<span>.frm_style_<?php echo esc_html( $style->post_name ); ?></span>
 </p>

@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.5.3.1';
+	public static $plug_version = '6.4';
 
 	/**
 	 * @since 1.07.02
@@ -253,13 +253,13 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 		if ( $pagenow ) {
 			// allow this to be true during ajax load i.e. ajax form builder loading
-			$is_page = ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
+			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 			if ( $is_page ) {
 				return true;
 			}
 		}
 
-		return is_admin() && $get_page == $page;
+		return is_admin() && $get_page === $page;
 	}
 
 	/**
@@ -333,12 +333,16 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_admin() {
-		return is_admin() && ! wp_doing_ajax();
+		$is_admin = is_admin() && ! wp_doing_ajax();
+
+		/**
+		 * @since 6.0
+		 * @param bool $is_admin
+		 */
+		return apply_filters( 'frm_is_admin', $is_admin );
 	}
 
 	/**
@@ -373,13 +377,40 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for the IP address in several places
-	 * Used by [ip] shortcode
+	 * Check for the IP address in several places (when custom headers are enabled).
+	 * Used by [ip] shortcode.
 	 *
 	 * @return string The IP address of the current user
 	 */
 	public static function get_ip_address() {
-		$ip_options = array(
+		$ip_options = self::should_use_custom_header_ip() ? self::get_custom_header_keys_for_ip() : array( 'REMOTE_ADDR' );
+		$ip         = '';
+
+		foreach ( $ip_options as $key ) {
+			if ( ! isset( $_SERVER[ $key ] ) ) {
+				continue;
+			}
+
+			$key = self::get_server_value( $key );
+			foreach ( explode( ',', $key ) as $ip ) {
+				$ip = trim( $ip ); // Just to be safe.
+
+				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
+					return sanitize_text_field( $ip );
+				}
+			}
+		}
+
+		return sanitize_text_field( $ip );
+	}
+
+	/**
+	 * @since 6.1
+	 *
+	 * @return array
+	 */
+	public static function get_custom_header_keys_for_ip() {
+		return array(
 			'HTTP_CLIENT_IP',
 			'HTTP_CF_CONNECTING_IP',
 			'HTTP_X_FORWARDED_FOR',
@@ -390,23 +421,31 @@ class FrmAppHelper {
 			'HTTP_FORWARDED',
 			'REMOTE_ADDR',
 		);
-		$ip = '';
-		foreach ( $ip_options as $key ) {
-			if ( ! isset( $_SERVER[ $key ] ) ) {
-				continue;
-			}
+	}
 
-			$key = self::get_server_value( $key );
-			foreach ( explode( ',', $key ) as $ip ) {
-				$ip = trim( $ip ); // just to be safe.
+	/**
+	 * Check if we should check every HTTP header or just $_SERVER['REMOTE_ADDR'].
+	 * The other HTTP headers can be spoofed so this isn't recommended.
+	 * But in some cases (like reverse proxies), the IP may be empty if you use $_SERVER['REMOTE_ADDR'].
+	 *
+	 * @since 6.1
+	 *
+	 * @return bool
+	 */
+	private static function should_use_custom_header_ip() {
+		$settings                    = self::get_settings();
+		$should_use_custom_header_ip = ! $settings->no_ips && $settings->custom_header_ip;
 
-				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
-					return sanitize_text_field( $ip );
-				}
-			}
-		}
-
-		return sanitize_text_field( $ip );
+		/**
+		 * Filter whether to check spoofable HTTP headers.
+		 * This uses the custom_header_ip setting, but it is hidden if the GDPR option is also on.
+		 * As the IP is still checked for blacklist checks, someone with the GDPR option may still want to enable this when behind a reverse proxy.
+		 *
+		 * @since 6.1
+		 *
+		 * @param bool $should_use_custom_header_ip
+		 */
+		return apply_filters( 'frm_use_custom_header_ip', $should_use_custom_header_ip );
 	}
 
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
@@ -927,6 +966,16 @@ class FrmAppHelper {
 		$html_atts = self::array_to_html_params( $atts );
 
 		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+
+		// Replace icons that have been removed.
+		$deprecated = array(
+			'frm_clone_solid_icon' => 'frm_clone_icon',
+		);
+		if ( isset( $deprecated[ $icon ] ) ) {
+			$icon = $deprecated[ $icon ];
+			$class = str_replace( $icon, $deprecated[ $icon ], $class );
+		}
+
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
@@ -985,7 +1034,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function allow_vars_in_styles( $allowed_attr ) {
-		$allowed_attr[] = '--primary-hover';
+		$allowed_attr[] = '--primary-700';
 		return $allowed_attr;
 	}
 
@@ -996,7 +1045,7 @@ class FrmAppHelper {
 	 * @param string $css_string
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
-		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-hover:' ) ) {
+		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
 			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
 		}
@@ -1065,7 +1114,9 @@ class FrmAppHelper {
 			ob_start();
 		}
 
-		$echo_function();
+		if ( is_callable( $echo_function ) ) {
+			$echo_function();
+		}
 
 		if ( ! $echo ) {
 			$return = ob_get_contents();
@@ -1087,6 +1138,20 @@ class FrmAppHelper {
 		}
 
 		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
+	}
+
+	/**
+	 * @since 6.0
+	 *
+	 * @param string $type
+	 * @return void
+	 */
+	public static function import_link( $type = 'secondary' ) {
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
+			<?php esc_html_e( 'Import', 'formidable' ); ?>
+		</a>
+		<?php
 	}
 
 	/**
@@ -1149,7 +1214,7 @@ class FrmAppHelper {
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
-		$class = 'button button-primary frm-button-primary frm-with-plus';
+		$class = 'button button-primary frm-button-primary';
 
 		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
 			$class .= ' frm-trigger-new-form-modal';
@@ -1423,16 +1488,35 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if user is on the style editor, or the alternative URL.
+	 * Check if user is on the style editor or its alternative URL.
 	 * The first URL is a submenu "Styles" in the Formidable menu /wp-admin/admin.php?page=formidable-styles.
 	 * The alternative URL is linked as a submenu "Forms" item of the Appearance menu /wp-admin/themes.php?page=formidable-styles2.
 	 *
 	 * @since 5.5.3
+	 * @since 6.0 Added the $view parameter. Previously there was only a 'edit' view.
 	 *
+	 * @param string $view Supports 'edit', 'list', and ''. If '', both 'edit' and 'list' will match.
 	 * @return bool
 	 */
-	public static function is_style_editor_page() {
-		return self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
+	public static function is_style_editor_page( $view = '' ) {
+		if ( ! self::is_admin_page( 'formidable-styles' ) && ! self::is_admin_page( 'formidable-styles2' ) ) {
+			return false;
+		}
+
+		if ( ! in_array( $view, array( 'list', 'edit' ), true ) ) {
+			return true;
+		}
+
+		$action       = self::simple_get( 'frm_action' );
+		$is_edit_mode = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
+
+		if ( ! $is_edit_mode && class_exists( 'FrmProStylesController' ) && in_array( $action, array( 'new_style', 'duplicate' ), true ) ) {
+			$is_edit_mode = true;
+		}
+
+		$checking_for_edit_mode = 'edit' === $view;
+
+		return $is_edit_mode === $checking_for_edit_mode;
 	}
 
 	/**
@@ -2311,7 +2395,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) ) {
+		if ( empty( $to ) && 0 !== $to ) {
 			$now = new DateTime();
 		} else {
 			$now = new DateTime( '@' . $to );
@@ -2564,6 +2648,7 @@ class FrmAppHelper {
 			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
 			/* translators: %1$s: Form name, %2$s: Date */
 			'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
+			'new_tab'       => __( 'This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed.', 'formidable' ),
 		);
 
 		if ( ! isset( $tooltips[ $name ] ) ) {
@@ -2654,10 +2739,13 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for either json or serilized data. This is temporary while transitioning
+	 * Check for either json or serialized data. This is temporary while transitioning
 	 * all data to json.
 	 *
 	 * @since 4.02.03
+	 *
+	 * @param array|string $value
+	 * @return void
 	 */
 	public static function unserialize_or_decode( &$value ) {
 		if ( is_array( $value ) ) {
@@ -2665,10 +2753,37 @@ class FrmAppHelper {
 		}
 
 		if ( is_serialized( $value ) ) {
-			$value = maybe_unserialize( $value );
+			$value = self::maybe_unserialize_array( $value );
 		} else {
 			$value = self::maybe_json_decode( $value, false );
 		}
+	}
+
+	/**
+	 * Safely unserialize an array if necessary.
+	 * This function doesn't actually use unserialize. The string is parsed instead.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public static function maybe_unserialize_array( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
+		// Since we only expect an array, skip anything that doesn't start with a:.
+		if ( ! is_serialized( $value ) || 'a:' !== substr( $value, 0, 2 ) ) {
+			return $value;
+		}
+
+		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
+		if ( is_array( $parsed ) ) {
+			$value = $parsed;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -2697,6 +2812,34 @@ class FrmAppHelper {
 		}
 
 		return $string;
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function maybe_utf8_encode( $value ) {
+		$from_format = 'ISO-8859-1';
+		$to_format   = 'UTF-8';
+
+		if ( function_exists( 'mb_check_encoding' ) && function_exists( 'mb_convert_encoding' ) ) {
+			if ( mb_check_encoding( $value, $from_format ) ) {
+				return mb_convert_encoding( $value, $to_format, $from_format );
+			}
+			return $value;
+		}
+
+		if ( function_exists( 'iconv' ) ) {
+			$converted = iconv( $from_format, $to_format, $value );
+			// Value is false if $value is not ISO-8859-1.
+			if ( false !== $converted ) {
+				return $converted;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
@@ -2827,8 +2970,8 @@ class FrmAppHelper {
 				'desc'              => __( '(Click to add description)', 'formidable' ),
 				'blank'             => __( '(Blank)', 'formidable' ),
 				'no_label'          => __( '(no label)', 'formidable' ),
-				'saving'            => esc_attr( __( 'Saving', 'formidable' ) ),
-				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
+				'saving'            => '', // Deprecated in 6.0.
+				'saved'             => '', // Deprecated in 6.0.
 				'ok'                => __( 'OK', 'formidable' ),
 				'cancel'            => __( 'Cancel', 'formidable' ),
 				'default_label'     => __( 'Default', 'formidable' ),
@@ -2836,7 +2979,6 @@ class FrmAppHelper {
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
 				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
@@ -3614,6 +3756,38 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Make sure that the file we're trying to load is in fact the expected file type, and that it's coming from our S3 bucket.
+	 * This is to make sure that the URL can't be exploited for a SSRF attack.
+	 *
+	 * @since 5.5.5
+	 *
+	 * @param string $url
+	 * @param string $expected_extension
+	 * @return bool
+	 */
+	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
+		$file_is_in_expected_s3_bucket = 0 === strpos( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		if ( ! $file_is_in_expected_s3_bucket ) {
+			return false;
+		}
+
+		$parsed = parse_url( $url );
+		if ( ! is_array( $parsed ) ) {
+			// URL is malformed.
+			return false;
+		}
+
+		$path = $parsed['path'];
+		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
+		if ( $expected_extension !== $ext ) {
+			// The URL isn't to an XML file.
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * @since 4.08
 	 * @deprecated 4.09.01
 	 */
@@ -3644,172 +3818,11 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Used to filter shortcode in text widgets
-	 *
-	 * @deprecated 2.5.4
-	 * @codeCoverageIgnore
-	 */
-	public static function widget_text_filter_callback( $matches ) {
-		return FrmDeprecated::widget_text_filter_callback( $matches );
-	}
-
-	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
 	public static function sanitize_array( &$values ) {
 		FrmDeprecated::sanitize_array( $values );
-	}
-
-	/**
-	 * @param array $settings
-	 * @param string $group
-	 *
-	 * @since 2.0.6
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function save_settings( $settings, $group ) {
-		return FrmDeprecated::save_settings( $settings, $group );
-	}
-
-	/**
-	 * @since 2.0.4
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function save_json_post( $settings ) {
-		return FrmDeprecated::save_json_post( $settings );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $cache_key The unique name for this cache
-	 * @param string $group The name of the cache group
-	 * @param string $query If blank, don't run a db call
-	 * @param string $type The wpdb function to use with this query
-	 *
-	 * @return mixed $results The cache or query results
-	 */
-	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		return FrmDeprecated::check_cache( $cache_key, $group, $query, $type, $time );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		return FrmDeprecated::set_cache( $cache_key, $results, $group, $time );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function add_key_to_group_cache( $key, $group ) {
-		FrmDeprecated::add_key_to_group_cache( $key, $group );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function get_group_cached_keys( $group ) {
-		return FrmDeprecated::get_group_cached_keys( $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 * @return mixed The cached value or false
-	 */
-	public static function check_cache_and_transient( $cache_key ) {
-		return FrmDeprecated::check_cache( $cache_key );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $cache_key
-	 */
-	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		FrmDeprecated::delete_cache_and_transient( $cache_key, $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $group The name of the cache group
-	 */
-	public static function cache_delete_group( $group ) {
-		FrmDeprecated::cache_delete_group( $group );
-	}
-
-	/**
-	 * @since 1.07.10
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $term The value to escape
-	 *
-	 * @return string The escaped value
-	 */
-	public static function esc_like( $term ) {
-		return FrmDeprecated::esc_like( $term );
-	}
-
-	/**
-	 * @param string $order_query
-	 *
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_order( $order_query ) {
-		return FrmDeprecated::esc_order( $order_query );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_order_by( &$order_by ) {
-		FrmDeprecated::esc_order_by( $order_by );
-	}
-
-	/**
-	 * @param string $limit
-	 *
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_limit( $limit ) {
-		return FrmDeprecated::esc_limit( $limit );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function prepare_array_values( $array, $type = '%s' ) {
-		return FrmDeprecated::prepare_array_values( $array, $type );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		return FrmDeprecated::prepend_and_or_where( $starts_with, $where );
 	}
 
 	/**
@@ -3825,9 +3838,73 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.07
-	 * @deprecated x.x
+	 * @deprecated 6.0
 	 */
 	public static function renewal_message() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmProAddonsController::renewal_message' );
+		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
+	}
+
+	/**
+	 * Display a dismissable warning message and save its dismissal state.
+	 *
+	 * @since 6.3
+	 *
+	 * @param string $message The warning message to display.
+	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
+	 * @return void
+	 */
+	public static function add_dismissable_warning_message( $message = '', $option = '' ) {
+		if ( ! $message || ! $option ) {
+			return;
+		}
+
+		$ajax_callback = function() use ( $option ) {
+			self::dismiss_warning_message( $option );
+		};
+
+		// We're handling JS codes with `doJsonPost` and it adds 'frm_' to the beginning of the action.
+		// To prevent any issues, we add 'frm_' from the beginning of the action.
+		add_action( 'wp_ajax_frm_' . $option, $ajax_callback );
+
+		add_filter(
+			'frm_message_list',
+			function( $show_messages ) use ( $message, $option ) {
+				if ( get_option( $option, false ) ) {
+					return $show_messages;
+				}
+
+				$dismiss_icon = self::icon_by_class(
+					'frmfont frm_close_icon',
+					array(
+						'aria-label' => _x( 'Dismiss', 'warning message: close icon label', 'formidable' ),
+						'echo' => false,
+					)
+				);
+
+				$show_messages[] = $message;
+				$show_messages[] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
+
+				return $show_messages;
+			}
+		);
+	}
+
+	/**
+	 * Dismiss a warning message and update the dismissal state.
+	 *
+	 * @since 6.3
+	 *
+	 * @param string $option The unique identifier for the dismissal state of the message.
+	 * @return void
+	 */
+	public static function dismiss_warning_message( $option = '' ) {
+		self::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( $option ) {
+			update_option( $option, true, 'no' );
+		}
+
+		wp_send_json_success();
 	}
 }

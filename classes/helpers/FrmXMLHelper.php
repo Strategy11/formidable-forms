@@ -33,13 +33,23 @@ class FrmXMLHelper {
 		}
 
 		if ( ! class_exists( 'DOMDocument' ) ) {
-			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
+			$error_message = sprintf(
+				/* translators: 1: Documentation link */
+				__( 'In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled.', 'formidable' ),
+				'<a href="https://formidableforms.com/knowledgebase/import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled" target="_blank">Importing Forms, Entries, and Views</a>'
+			);
+
+			return new WP_Error( 'SimpleXML_parse_error', $error_message, libxml_get_errors() );
 		}
 
+		$xml_string = file_get_contents( $file );
+		self::maybe_fix_xml( $xml_string );
+
 		$dom = new DOMDocument();
+
 		// LIBXML_COMPACT activates small nodes allocation optimization.
 		// Use LIBXML_PARSEHUGE to avoid "parser error : internal error: Huge input lookup" for large (300MB) files.
-		$success = $dom->loadXML( file_get_contents( $file ), LIBXML_COMPACT | LIBXML_PARSEHUGE );
+		$success = $dom->loadXML( $xml_string, LIBXML_COMPACT | LIBXML_PARSEHUGE );
 		if ( ! $success ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
@@ -57,6 +67,33 @@ class FrmXMLHelper {
 		}
 
 		return self::import_xml_now( $xml );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $xml_string
+	 * @return void
+	 */
+	private static function maybe_fix_xml( &$xml_string ) {
+		if ( '<?xml' !== substr( $xml_string, 0, 5 ) ) {
+			// Some XML files have may have unexpected characters at the start.
+			$xml_string = substr( $xml_string, strpos( $xml_string, '<?xml' ) );
+		}
+
+		// The Equity theme adds a <meta name="generator" content="Equity 1.7.13" /> tag using the "the_generator" filter.
+		// Strip that out as it breaks the XML import.
+		$channel_start_position     = strpos( $xml_string, '<channel>' );
+		$content_before_channel_tag = substr( $xml_string, 0, $channel_start_position );
+		if ( 0 !== strpos( $content_before_channel_tag, '<meta name="generator" ' ) ) {
+			$content_before_channel_tag = preg_replace(
+				'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
+				'',
+				$content_before_channel_tag,
+				1
+			);
+			$xml_string = $content_before_channel_tag . substr( $xml_string, $channel_start_position );
+		}
 	}
 
 	/**
@@ -267,7 +304,13 @@ class FrmXMLHelper {
 
 		$edit_query = apply_filters( 'frm_match_xml_form', $edit_query, $form );
 
-		return FrmForm::getAll( $edit_query, '', 1 );
+		$form = FrmForm::getAll( $edit_query, '', 1 );
+		if ( is_object( $form ) && $form->status === 'trash' ) {
+			FrmForm::destroy( $form->id );
+			return false;
+		}
+
+		return $form;
 	}
 
 	private static function update_form( $this_form, $form, &$imported ) {
@@ -727,7 +770,7 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( is_numeric( $form['options']['custom_style'] ) ) {
+		if ( is_numeric( $form['options']['custom_style'] ) && 1 === intval( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
 		} else {
@@ -828,12 +871,10 @@ class FrmXMLHelper {
 			} elseif ( $post['post_type'] === 'frm_styles' ) {
 				// Properly encode post content before inserting the post
 				$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
-				$custom_css           = isset( $post['post_content']['custom_css'] ) ? $post['post_content']['custom_css'] : '';
 				$post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
 
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
-				self::maybe_update_custom_css( $custom_css );
 			} else {
 				if ( $post['post_type'] === 'frm_display' ) {
 					$post['post_content'] = self::maybe_prepare_json_view_content( $post['post_content'] );
@@ -882,11 +923,45 @@ class FrmXMLHelper {
 		}
 		unset( $posts_with_shortcodes, $view_ids );
 
+		if ( ! empty( $imported['forms'] ) ) {
+			// clear imported forms style cache to make sure the new styles are applied to the forms
+			self::clear_forms_style_caches( $imported['forms'] );
+		}
+
 		self::maybe_update_stylesheet( $imported );
 
 		flush_rewrite_rules();
 
 		return $imported;
+	}
+
+	/**
+	 * Clears styles from cache for imported forms
+	 *
+	 * @param array $imported_forms
+	 */
+	private static function clear_forms_style_caches( $imported_forms ) {
+		$where = array(
+			'id' => $imported_forms,
+			'options LIKE' => '"old_style"',
+		);
+		$forms = FrmDb::get_results( 'frm_forms', $where );
+
+		foreach ( $forms as $form ) {
+			FrmAppHelper::unserialize_or_decode( $form->options );
+			if ( ! $form->options ) {
+				continue;
+			}
+			$where = array(
+				'post_name' => $form->options['old_style'],
+				'post_type' => FrmStylesController::$post_type,
+			);
+
+			$select = 'ID';
+
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
+			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
+		}
 	}
 
 	/**
@@ -1196,23 +1271,6 @@ class FrmXMLHelper {
 		}
 	}
 
-	/**
-	 * If a template includes custom css, let's include it.
-	 * The custom css is included on the default style.
-	 *
-	 * @since 2.03
-	 */
-	private static function maybe_update_custom_css( $custom_css ) {
-		if ( empty( $custom_css ) ) {
-			return;
-		}
-
-		$frm_style                                 = new FrmStyle();
-		$default_style                             = $frm_style->get_default_style();
-		$default_style->post_content['custom_css'] .= "\r\n\r\n" . $custom_css;
-		$frm_style->save( $default_style );
-	}
-
 	private static function maybe_update_stylesheet( $imported ) {
 		$new_styles     = isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] );
 		$updated_styles = isset( $imported['updated']['styles'] ) && ! empty( $imported['updated']['styles'] );
@@ -1233,6 +1291,27 @@ class FrmXMLHelper {
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
 			$errors[] = $result->get_error_message();
+
+			// Remove the SimpleXML_parse_error from the WP_Error object to avoid
+			// displaying duplicate error messages from $result->get_error_message()
+			$error_codes = $result->get_error_codes();
+			$error_details = array();
+			foreach ( $error_codes as $error_code ) {
+				// Clone WP_Error data because WP_Error removes all error messages and data
+				// associated with the specified error code when an item is removed.
+				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
+				$error_details = $result->get_error_data( $error_code );
+				if ( $error_code === 'SimpleXML_parse_error' ) {
+					$result->remove( $error_code );
+					break;
+				}
+			}
+
+			if ( ! empty( $error_details ) ) {
+				$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
+			}
+
+			return;
 		} elseif ( ! $result ) {
 			return;
 		}
@@ -1528,7 +1607,7 @@ class FrmXMLHelper {
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
 		} elseif ( seems_utf8( $str ) === false ) {
-			$str = utf8_encode( $str );
+			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
 		if ( is_numeric( $str ) ) {

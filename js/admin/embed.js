@@ -45,7 +45,8 @@
 				break;
 
 			case 'svg':
-				clicked = element.parentNode.classList.contains( 'frm-embed-form' );
+			case 'use':
+				clicked = null !== element.closest( '.frm-embed-form' );
 				if ( clicked ) {
 					state.type = 'form';
 				}
@@ -134,7 +135,7 @@
 		const newPageDescription = __( 'Put your %s on a newly created page.', 'formidable' ).replace( '%s', typeDescription );
 
 		/* translators: %s type: ie form, view. */
-		const insertManuallyDescription = __( 'Use WP shortcodes or PHP code to put the %s in any place.', 'formidable' ).replace( '%s', typeDescription );
+		const insertManuallyDescription = __( 'Use shortcodes or PHP code to put the %s anywhere.', 'formidable' ).replace( '%s', typeDescription );
 
 		const options = [
 			{
@@ -207,6 +208,10 @@
 						}
 
 						frmDom.autocomplete.initAutocomplete( 'page', dropdownWrapper );
+
+						// Prevent cutoff issue with the autocomplete dropdown.
+						// This also adds visible overflow even if autocomplete is not activated, but that's fine for this page.
+						modal.querySelector( '.postbox' ).style.overflow = 'visible';
 
 						function redirectToExistingPageWithInjectedShortcode( event ) {
 							event.preventDefault();
@@ -353,6 +358,8 @@
 		textWrapper.appendChild( div( description ) );
 		output.appendChild( textWrapper );
 
+		output.appendChild( div({ className: 'caret' }) );
+
 		output.addEventListener(
 			'click',
 			function() {
@@ -365,7 +372,7 @@
 
 	function wrapModalOptionIcon( iconHref ) {
 		return div({
-			className: 'frm-embed-modal-icon-wrapper',
+			className: 'frm-icon-wrapper',
 			child: svg({ href: iconHref })
 		});
 	}

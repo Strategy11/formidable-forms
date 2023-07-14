@@ -3,12 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<ul class="frm-templates-list frm-featured-forms">
-	<li class="frm-add-blank-form frm-selectable">
+<ul class="frm-templates-list frm-featured-forms frm_grid_container">
+	<li class="frm-add-blank-form frm-selectable frm6">
 		<div class="frm-featured-form">
-			<div class="frm-category-icon" role="button" style="background-color: #F4AD3D;">
+			<div class="frm-category-icon frm-icon-wrapper" role="button" style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
-			</div><div>
+			</div>
+			<div class="frm-template-details">
 				<h3 role="button"><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
 				<p role="button"><?php esc_html_e( 'Create a new form from scratch', 'formidable' ); ?></p>
 			</div>
@@ -21,11 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			require $view_path . 'list-template.php';
 		}
 	}
-	?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
+	?><li class="frm-selectable frm6" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 		<div class="frm-featured-form">
-			<div class="frm-category-icon" role="button" style="background-color: #805EF6;">
+			<div class="frm-category-icon frm-icon-wrapper" role="button" style="background-color: #805EF6;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
-			</div><div>
+			</div>
+			<div class="frm-template-details">
 				<h3 role="button"><?php esc_html_e( 'Import', 'formidable' ); ?></h3>
 				<p role="button"><?php esc_html_e( 'Upload your Formidable XML or CSV file to import forms.', 'formidable' ); ?></p>
 			</div>
@@ -51,9 +53,8 @@ FrmAppHelper::show_search_box(
 			?>
 			<li class="control-section accordion-section">
 				<div class="frm-featured-form">
-					<div class="frm-category-icon" role="button" style="background-color: #805EF6;">
-						<?php FrmFormsHelper::template_icon( array( $category ) ); ?>
-					</div><div>
+					<?php FrmFormsHelper::template_icon( array( $category ), array( 'html' => 'div' ) ); ?>
+					<div class="frm-template-details">
 						<div role="button" class="accordion-section-title">
 							<h3><?php echo esc_attr( $category ); ?></h3>
 							<p><span class="frm-template-count"><?php echo esc_html( $count ); ?></span> <span class="frm-templates-plural <?php echo $count === 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'templates', 'formidable' ); ?></span><span class="frm-templates-singular <?php echo $count !== 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'template', 'formidable' ); ?></span><?php echo $available !== $count ? '&nbsp;&nbsp;|&nbsp;&nbsp;<span class="frm-available-templates-count">' . esc_html( $available ) . '</span> ' . esc_html__( 'available', 'formidable' ) : ''; ?></p>

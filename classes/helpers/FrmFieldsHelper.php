@@ -159,7 +159,7 @@ class FrmFieldsHelper {
 			$field_array['blank'] = $frm_settings->blank_msg;
 		}
 
-		if ( '' == $field_array['invalid'] ) {
+		if ( '' === $field_array['invalid'] ) {
 			if ( 'captcha' === $field->type ) {
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
@@ -760,15 +760,33 @@ class FrmFieldsHelper {
 	/**
 	 * @param string $replace_with
 	 * @param array  $atts
+	 * @return string
 	 */
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
-		$supported_atts = array( 'sanitize', 'sanitize_url' );
+		$supported_atts = array( 'remove_accents', 'sanitize', 'sanitize_url' );
 		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
 		foreach ( $included_atts as $included_att ) {
+			if ( '0' === $atts[ $included_att ] ) {
+				// Skip any option that uses 0 so sanitize_url=0 does not encode.
+				continue;
+			}
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with, $atts );
 		}
 		return $replace_with;
+	}
+
+	/**
+	 * Converts all accent characters to ASCII characters.
+	 *
+	 * @since 6.3.1
+	 *
+	 * @param string $replace_with The text to remove accents from.
+	 *
+	 * @return string
+	 */
+	public static function atts_remove_accents( $replace_with ) {
+		return remove_accents( $replace_with );
 	}
 
 	/**
@@ -1923,6 +1941,23 @@ class FrmFieldsHelper {
 	 * @param array $field Field data.
 	 */
 	public static function show_radio_display_format( $field ) {
+		$options = self::get_display_format_options( $field );
+
+		$args = self::get_display_format_args( $field, $options );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+	}
+
+	/**
+	 * Creates an array that contains variables used for display format options setting.
+	 *
+	 * @since 6.3.2
+	 *
+	 * @param array $field The field.
+	 *
+	 * @return array
+	 */
+	public static function get_display_format_options( $field ) {
 		$options = array(
 			'0'       => array(
 				'text'   => __( 'Simple', 'formidable' ),
@@ -1952,12 +1987,11 @@ class FrmFieldsHelper {
 		 * @since 5.0.04
 		 *
 		 * @param array $options Options.
+		 * @param array $field
 		 */
-		$options = apply_filters( 'frm_radio_display_format_options', $options );
+		$options = apply_filters( 'frm_' . $field['type'] . '_display_format_options', $options, $field );
 
-		$args = self::get_display_format_args( $field, $options );
-
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+		return $options;
 	}
 
 	/**
@@ -1969,7 +2003,7 @@ class FrmFieldsHelper {
 	 * @param array $options Options array.
 	 * @return array
 	 */
-	private static function get_display_format_args( $field, $options ) {
+	public static function get_display_format_args( $field, $options ) {
 		$args = array(
 			'selected'    => '0',
 			'options'     => array(),
@@ -1989,7 +2023,7 @@ class FrmFieldsHelper {
 		 * @param array $args        Arguments.
 		 * @param array $method_args The arguments from the method. Contains `field`, `options`.
 		 */
-		return apply_filters( 'frm_radio_display_format_args', $args, compact( 'field', 'options' ) );
+		return apply_filters( 'frm_' . $field['type'] . '_display_format_args', $args, compact( 'field', 'options' ) );
 	}
 
 	/**
@@ -2047,6 +2081,21 @@ class FrmFieldsHelper {
 		$custom_attrs['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 
 		return $custom_attrs;
+	}
+
+	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed  $value
+	 * @param string $field_type
+	 * @return void
+	 */
+	public static function prepare_field_value( &$value, $field_type ) {
+		$field_object = FrmFieldFactory::get_field_type( $field_type );
+		$value        = $field_object->maybe_decode_value( $value );
 	}
 
 	/**
@@ -2131,8 +2180,11 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @deprecated 2.02.07
+	 * @deprecated 2.02.07 This is still referenced in the Highrise add on as of v1.06.
 	 * @codeCoverageIgnore
+	 *
+	 * @param array $args
+	 * @return string
 	 */
 	public static function dropdown_categories( $args ) {
 		return FrmDeprecated::dropdown_categories( $args );

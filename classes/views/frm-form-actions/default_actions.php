@@ -27,7 +27,7 @@ class FrmDefRegAction extends FrmFormAction {
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_paypal_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-hover)';
+		$action_ops['color'] = 'var(--primary-700)';
 
 		parent::__construct( 'paypal', 'PayPal', $action_ops );
 	}
@@ -64,9 +64,9 @@ class FrmDefAweberAction extends FrmFormAction {
 class FrmDefMlcmpAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_mailchimp_icon frm_show_upgrade frm-inverse' );
-		$action_ops['color'] = 'var(--dark-grey)';
+		$action_ops['color'] = 'var(--grey-700)';
 
-		parent::__construct( 'mailchimp', 'MailChimp', $action_ops );
+		parent::__construct( 'mailchimp', 'Mailchimp', $action_ops );
 	}
 }
 
@@ -100,7 +100,7 @@ class FrmDefHrsAction extends FrmFormAction {
 class FrmDefActiveCampaignAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_activecampaign_icon frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-hover)';
+		$action_ops['color'] = 'var(--primary-700)';
 		parent::__construct( 'activecampaign', 'ActiveCampaign', $action_ops );
 	}
 }
@@ -108,7 +108,7 @@ class FrmDefActiveCampaignAction extends FrmFormAction {
 class FrmDefSalesforceAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_salesforce_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-color)';
+		$action_ops['color'] = 'var(--primary-500)';
 		parent::__construct( 'salesforce', 'Salesforce', $action_ops );
 	}
 }

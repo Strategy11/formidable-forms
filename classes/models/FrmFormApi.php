@@ -10,6 +10,13 @@ class FrmFormApi {
 	protected $cache_timeout = '+6 hours';
 
 	/**
+	 * The number of days an add-on is new.
+	 *
+	 * @var int $new_days
+	 */
+	protected $new_days = 90;
+
+	/**
 	 * @since 3.06
 	 */
 	public function __construct( $license = null ) {
@@ -19,6 +26,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	private function set_license( $license ) {
 		if ( $license === null ) {
@@ -40,6 +49,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	protected function set_cache_key() {
 		$this->cache_key = 'frm_addons_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
@@ -91,12 +102,20 @@ class FrmFormApi {
 		}
 
 		foreach ( $addons as $k => $addon ) {
-			if ( ! isset( $addon['categories'] ) ) {
+			if ( ! is_array( $addon ) ) {
 				continue;
 			}
-			$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-			if ( ! empty( $cats ) ) {
-				unset( $addons[ $k ] );
+
+			if ( isset( $addon['categories'] ) ) {
+				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+				if ( ! empty( $cats ) ) {
+					unset( $addons[ $k ] );
+					continue;
+				}
+			}
+
+			if ( ! array_key_exists( 'is_new', $addon ) && array_key_exists( 'released', $addon ) ) {
+				$addons[ $k ]['is_new'] = $this->is_new( $addon );
 			}
 		}
 
@@ -107,6 +126,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return string
 	 */
 	protected function api_url() {
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
@@ -114,6 +135,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return string[]
 	 */
 	protected function skip_categories() {
 		return array( 'WordPress Form Templates', 'WordPress Form Style Templates' );
@@ -123,6 +146,7 @@ class FrmFormApi {
 	 * @since 3.06
 	 *
 	 * @param object $license_plugin The FrmAddon object
+	 * @param array $addons
 	 *
 	 * @return array
 	 */
@@ -184,6 +208,10 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @param array $addons
+	 *
+	 * @return void
 	 */
 	protected function set_cached( $addons ) {
 		FrmAppHelper::filter_gmt_offset();
@@ -199,6 +227,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	public function reset_cached() {
 		delete_option( $this->cache_key );
@@ -232,5 +262,17 @@ class FrmFormApi {
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Check if a template is new.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $addon
+	 * @return bool
+	 */
+	protected function is_new( $addon ) {
+		return strtotime( $addon['released'] ) > strtotime( '-' . $this->new_days . ' days' );
 	}
 }
