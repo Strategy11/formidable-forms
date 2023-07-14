@@ -431,8 +431,8 @@ class FrmEntryValidate {
 					'title'   => __( 'Akismet:', 'formidable' ) . ' ' . __( 'Spam check', 'formidable' ),
 					'content' => $response[1],
 					'fields'  => array(
-						'form' => $values['form_id'],
-						'entry'   => '',
+						'form'    => $values['form_id'],
+						'entry'   => $values['item_meta'],
 						'code'    => $response[1],
 						'request' => wp_json_encode( $datas ),
 					),
