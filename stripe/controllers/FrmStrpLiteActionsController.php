@@ -161,7 +161,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		global $current_user;
-		return str_replace( '[email]', $current_user->user_email, $email );
+		return str_replace(
+			'[email]',
+			! empty( $current_user->user_email ) ? $current_user->user_email : '',
+			$email
+		);
 	}
 
 	/**
