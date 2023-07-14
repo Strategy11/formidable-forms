@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.4';
+	public static $plug_version = '6.4-date-calculation';
 
 	/**
 	 * @since 1.07.02
