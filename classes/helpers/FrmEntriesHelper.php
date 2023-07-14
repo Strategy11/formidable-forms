@@ -804,6 +804,7 @@ class FrmEntriesHelper {
 
 		if ( ! is_array( $extended_entry_status ) ) {
 			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
+			$extended_entry_status = array();
 		}
 
 		return array_merge( $default_entry_statuses, $extended_entry_status );
