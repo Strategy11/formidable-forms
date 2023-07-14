@@ -306,7 +306,7 @@
 		thisForm.classList.add( 'frm_loading_form' );
 		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
-		triggerCustomEvent( document, 'frmStripeLiteEnableSubmit' );
+		triggerCustomEvent( document, 'frmStripeLiteEnableSubmit', { form: thisForm } );
 	}
 
 	/**
@@ -474,7 +474,7 @@
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit' );
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
 	}
 
 	/**
@@ -626,8 +626,14 @@
 
 			form = cardElement.closest( 'form' );
 
-			// TODO Trigger toggleConversationalButtons logic from Conversational forms add on.
-			// If it is a conversational form, we need to exit early here as well.
+			if (
+				'object' === typeof window.frmChatForm &&
+				'function' === typeof frmChatForm.maybeHandleAuthenticationChange &&
+				frmChatForm.maybeHandleAuthenticationChange( form, event.complete )
+			) {
+				// Allow conversational forms to override behaviour and exit early.
+				return;
+			}
 
 			if ( readyToSubmitStripeLink( form ) ) {
 				thisForm = form;
@@ -714,8 +720,14 @@
 	function toggleButtonsOnPaymentElementChange( cardElement ) {
 		var form = cardElement.closest( '.frm-show-form' );
 
-		// TODO Call toggleConversationalButtons logic from Conversational forms add on.
-		// A conversational form also needs to exit early here.
+		if (
+			'object' === typeof window.frmChatForm &&
+			'function' === typeof frmChatForm.maybeHandlePaymentChange &&
+			frmChatForm.maybeHandlePaymentChange( form, stripeLinkElementIsComplete )
+		) {
+			// Allow conversational forms to override behaviour and exit early.
+			return;
+		}
 
 		// Handle final question or non-conversational form.
 		if ( readyToSubmitStripeLink( form ) ) {
@@ -907,4 +919,10 @@
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
 		}
 	);
-}() );
+
+	frm_stripe_vars.readyToSubmitStripeLink = readyToSubmitStripeLink;
+	frm_stripe_vars.processForm             = function( cardElement, e ) {
+		event = e;
+		processForm( cardElement );
+	};
+}() ); 
