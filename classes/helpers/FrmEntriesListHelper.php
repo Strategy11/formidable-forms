@@ -272,6 +272,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	private function column_value( $item ) {
 		$col_name = $this->column_name;
 
+		write_log($col_name);
+
 		switch ( $col_name ) {
 			case 'ip':
 			case 'id':
@@ -288,6 +290,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'is_draft':
 				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
+				break;
+			case 'entry_status':
+				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
+				$val = sprintf(
+					/* translators: %1$s: Status class name %2$s: Status name */
+					'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
+					sanitize_html_class( strtolower( str_replace(' ', '-',  $entry_status ) ) ),
+					esc_html( $entry_status )
+				);
 				break;
 			case 'form_id':
 				$form_id             = $item->form_id;
