@@ -86,7 +86,7 @@ class FrmEntriesController {
 			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
 		}
 
-		self::add_status_column( $form_id, $columns );
+		self::entry_status_column( $form_id, $columns );
 
 		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
@@ -118,7 +118,7 @@ class FrmEntriesController {
 	 *
 	 * @return array<string>
 	 */
-	public static function add_status_column( $form_id, &$columns ) {
+	public static function entry_status_column( $form_id, &$columns ) {
 		$columns[ $form_id . '_entry_status' ] = esc_html__( 'Entry Status', 'formidable' );
 	}
 
