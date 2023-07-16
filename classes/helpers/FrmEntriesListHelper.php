@@ -288,9 +288,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$date = FrmAppHelper::get_formatted_time( $item->{$col_name} );
 				$val  = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 				break;
-			case 'is_draft':
-				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
-				break;
 			case 'entry_status':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
 				$val = sprintf(
