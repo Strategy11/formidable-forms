@@ -46,8 +46,8 @@ class FrmEntriesController {
 			}
 
 			if ( $include_entries_status ) {
-				add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::add_status_column', 99 );
-				add_filter( 'frm_entries_post_status_column', 'FrmEntriesController::status_column_value', 10, 2 );
+				// add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::add_status_column', 99 );
+				// add_filter( 'frm_entries_post_status_column', 'FrmEntriesController::status_column_value', 10, 2 );
 			}
 		} else {
 			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
@@ -104,6 +104,8 @@ class FrmEntriesController {
 			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
 		}
 
+		self::add_status_column( $form_id, $columns );
+
 		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
@@ -128,27 +130,14 @@ class FrmEntriesController {
 	/**
 	 * Add "Entry status" column to entries table.
 	 *
-	 * @since 1.0
+	 * @since x.x
 	 *
 	 * @param array<string> $columns Entries table columns.
 	 *
 	 * @return array<string>
 	 */
-	public static function add_status_column( $columns ) {
-		global $frm_vars;
-		$form_id = FrmForm::get_current_form_id();
-
-		$columns[ $form_id . '_post_status' ] = __( 'Entry Status', 'formidable' );
-		// Change order of draft col, Since we added post status in line above it could be accessible by count -1.
-		$columns = array_merge(
-			array_splice( $columns, 0, 4 ),
-			array_splice( $columns, count( $columns ) - 1, 1 ),
-			$columns
-		);
-
-		$frm_vars['cols'] = $columns;
-
-		return $columns;
+	public static function add_status_column( $form_id, &$columns ) {
+		$columns[ $form_id . '_entry_status' ] = esc_html__( 'Entry Status', 'formidable' );
 	}
 
 	/**
@@ -164,7 +153,14 @@ class FrmEntriesController {
 	public static function status_column_value( $val, $args ) {
 		$entry = $args['item'];
 
-		return FrmEntriesHelper::get_entry_status( $entry->is_draft );
+		$entry_status_label = FrmEntriesHelper::get_entry_status( $entry->is_draft );
+
+		return sprintf(
+			/* translators: %1$s: Status class name %2$s: Status name */
+			'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
+			sanitize_html_class( strtolower( str_replace( ' ', '-', $entry_status_label ) ) ),
+			$entry_status_label
+		);
 	}
 
 	private static function get_columns_for_form( $form_id, &$columns ) {
