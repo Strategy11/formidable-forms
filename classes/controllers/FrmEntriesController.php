@@ -31,24 +31,6 @@ class FrmEntriesController {
 			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
 			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
-
-			/**
-			 * Allows include entry status column to entries list.
-			 *
-			 * @since x.x
-			 *
-			 * @param bool $include_entries_status Excluded fields type.
-			 */
-			$include_entries_status = apply_filters( 'frm_entries_add_status_column', false );
-
-			if ( ! is_bool( $include_entries_status ) ) {
-				_doing_it_wrong( __METHOD__, esc_html__( 'You need to return bool to enable/disable entry status column.', 'formidable' ), 'x.x' );
-			}
-
-			if ( $include_entries_status ) {
-				// add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::add_status_column', 99 );
-				// add_filter( 'frm_entries_post_status_column', 'FrmEntriesController::status_column_value', 10, 2 );
-			}
 		} else {
 			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
 		}
@@ -138,29 +120,6 @@ class FrmEntriesController {
 	 */
 	public static function add_status_column( $form_id, &$columns ) {
 		$columns[ $form_id . '_entry_status' ] = esc_html__( 'Entry Status', 'formidable' );
-	}
-
-	/**
-	 * Return entry status based on is_draft column.
-	 *
-	 * @since x.x
-	 *
-	 * @param string       $val Column value.
-	 * @param array<mixed> $args Column args.
-	 *
-	 * @return string
-	 */
-	public static function status_column_value( $val, $args ) {
-		$entry = $args['item'];
-
-		$entry_status_label = FrmEntriesHelper::get_entry_status( $entry->is_draft );
-
-		return sprintf(
-			/* translators: %1$s: Status class name %2$s: Status name */
-			'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
-			sanitize_html_class( strtolower( str_replace( ' ', '-', $entry_status_label ) ) ),
-			$entry_status_label
-		);
 	}
 
 	private static function get_columns_for_form( $form_id, &$columns ) {
