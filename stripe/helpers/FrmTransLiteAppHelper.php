@@ -270,8 +270,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * When a user is created at the same time payment is made,
-	 * they won't be logged in yet. The user ID is in $_POST['frm_user_id']
+	 * Set a user id for current payment if a user is logged in.
 	 *
 	 * @return int
 	 */
@@ -280,23 +279,6 @@ class FrmTransLiteAppHelper {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 		}
-
-		/**
-		 * Filter the user id for the current payment.
-		 * This way the registration add on can filter it and apply a new registered user's id.
-		 *
-		 * @since x.x
-		 *
-		 * @param int $user_id
-		 */
-		$filtered_user_id = apply_filters( 'frm_current_payment_user_id', $user_id );
-
-		if ( is_int( $filtered_user_id ) ) {
-			$user_id = $filtered_user_id;
-		} else {
-			_doing_it_wrong( __METHOD__, 'The filtered user ID value must be an integer', 'x.x' );
-		}
-
 		return $user_id;
 	}
 
