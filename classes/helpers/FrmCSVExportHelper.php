@@ -593,7 +593,7 @@ class FrmCSVExportHelper {
 		$row['updated_at'] = FrmAppHelper::get_formatted_time( self::$entry->updated_at, self::$wp_date_format, ' ' );
 		$row['user_id']    = self::$entry->user_id;
 		$row['updated_by'] = self::$entry->updated_by;
-		$row['is_draft']   = FrmEntriesHelper::get_entry_status( self::$entry->is_draft, false );
+		$row['is_draft']   = FrmEntriesHelper::get_entry_status( self::$entry->is_draft );
 		$row['ip']         = self::$entry->ip;
 		$row['id']         = self::$entry->id;
 		$row['item_key']   = self::$entry->item_key;
