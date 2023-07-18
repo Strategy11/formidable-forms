@@ -766,14 +766,29 @@ class FrmEntriesHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_entry_status( $status, $include_label = true ) {
+	public static function get_entry_status( $status ) {
 		$statuses = self::get_entry_statuses();
 
 		if ( array_key_exists( $status, $statuses ) ) {
-			return $include_label ? $statuses[ $status ] : $status;
+			return $statuses[ $status ];
 		}
 
-		return $include_label ? esc_html__( 'In Progress', 'formidable' ) : self::IN_PROGRESS_ENTRY_STATUS;
+		return $status;
+	}
+
+	/**
+	 * Return entry status label based on passed value.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $status is_draft column.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_status_label( $status ) {
+		$statuses = self::get_entry_statuses();
+
+		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $statuses[1];
 	}
 
 	/**
