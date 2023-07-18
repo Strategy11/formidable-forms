@@ -6724,6 +6724,10 @@ td.frm_left_label + td {
 	width: 100%;
 }
 
+#frm_reset_submit_html {
+	float: right;
+}
+
 ul.frm-category-tabs {
 	margin-top: 2px;
 }

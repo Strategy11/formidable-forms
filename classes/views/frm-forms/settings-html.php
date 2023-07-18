@@ -39,7 +39,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 	<p class="frm_has_shortcodes">
-		<label><?php esc_html_e( 'Submit Button', 'formidable' ); ?></label>
+		<span><?php esc_html_e( 'Submit Button', 'formidable' ); ?></span>
+		<a href="#" id="frm_reset_submit_html"><?php esc_html_e( 'Reset to default', 'formidable' ); ?></a>
 		<textarea name="options[submit_html]" rows="3" id="submit_html" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['submit_html'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 </div>
