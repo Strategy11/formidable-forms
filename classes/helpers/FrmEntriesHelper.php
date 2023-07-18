@@ -807,7 +807,6 @@ class FrmEntriesHelper {
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),
-			2 => esc_html__( 'In Progress', 'formidable' ),
 		);
 
 		/**
