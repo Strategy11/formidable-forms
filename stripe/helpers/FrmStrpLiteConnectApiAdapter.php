@@ -191,11 +191,12 @@ class FrmStrpLiteConnectApiAdapter {
 	 *
 	 * @since 3.0
 	 *
-	 * @param string $customer_id Customer ID beginning with cus_.
+	 * @param string      $customer_id Customer ID beginning with cus_.
+	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
 	 * @return object|string|false
 	 */
-	public static function create_setup_intent( $customer_id ) {
-		return FrmStrpLiteConnectHelper::create_setup_intent( $customer_id );
+	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
+		return FrmStrpLiteConnectHelper::create_setup_intent( $customer_id, $payment_method_types );
 	}
 
 	/**

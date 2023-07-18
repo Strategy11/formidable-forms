@@ -837,17 +837,17 @@ class FrmStrpLiteConnectHelper {
 	 * @return object|string|false
 	 */
 	public static function create_setup_intent(  $customer_id, $payment_method_types = false  ) {
-		$data = array( 'customer_id' => $customer_id );
+		$charge_data = array( 'customer' => $customer_id );
 
 		if ( $payment_method_types ) {
-			$data['payment_method_types'] = $payment_method_types;
+			$charge_data['payment_method_types'] = $payment_method_types;
 		} elseif ( false === $payment_method_types ) {
-			$data['payment_method_types'] = array( 'card', 'link' );
+			$charge_data['payment_method_types'] = array( 'card', 'link' );
 		} else {
-			$data['automatic_payment_methods'] = array( 'enabled' => true );
+			$charge_data['automatic_payment_methods'] = array( 'enabled' => true );
 		}
 
-		return self::post_with_authenticated_body( 'create_setup_intent', $data );
+		return self::post_with_authenticated_body( 'create_setup_intent', compact( 'charge_data' ) );
 	}
 
 	/**
