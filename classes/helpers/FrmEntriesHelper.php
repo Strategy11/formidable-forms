@@ -21,14 +21,6 @@ class FrmEntriesHelper {
 	 */
 	const DRAFT_ENTRY_STATUS = 1;
 
-	/**
-	 * "In Progress" entry status.
-	 *
-	 * @since x.x
-	 * @var int
-	 */
-	const IN_PROGRESS_ENTRY_STATUS = 2;
-
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
