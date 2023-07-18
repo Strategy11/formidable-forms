@@ -773,7 +773,11 @@ class FrmEntriesHelper {
 			return $statuses[ $status ];
 		}
 
-		return $status;
+		if ( empty( $status ) ) {
+			return self::SUBMITTED_ENTRY_STATUS; //If the status is empty, let's default to 0.
+		}
+
+		return self::DRAFT_ENTRY_STATUS; // If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
 	}
 
 	/**
@@ -801,8 +805,8 @@ class FrmEntriesHelper {
 	private static function get_entry_statuses() {
 
 		$default_entry_statuses = array(
-			0 => esc_html__( 'Submitted', 'formidable' ),
-			1 => esc_html__( 'Draft', 'formidable' ),
+			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
+			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),
 			2 => esc_html__( 'In Progress', 'formidable' ),
 		);
 
