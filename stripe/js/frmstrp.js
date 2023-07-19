@@ -920,9 +920,12 @@
 		}
 	);
 
-	frm_stripe_vars.readyToSubmitStripeLink = readyToSubmitStripeLink;
-	frm_stripe_vars.processForm             = function( cardElement, e ) {
-		event = e;
-		processForm( cardElement );
+	window.frmStripeLiteForm = {
+		readyToSubmitStripeLink: readyToSubmitStripeLink,
+		processForm: function( cardElement, e, form ) {
+			event = e;
+			thisForm = form;
+			processForm( cardElement );
+		}
 	};
 }() ); 
