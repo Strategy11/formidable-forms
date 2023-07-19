@@ -69,4 +69,27 @@ class FrmStrpLiteAppController {
 		$option = get_option( $db->db_opt_name );
 		return false !== $option;
 	}
+
+	/**
+	 * Add the gateway for compatibility with the Payments submodule.
+	 * This adds the Stripe checkbox option to the list of gateways.
+	 *
+	 * @param array $gateways
+	 * @return array
+	 */
+	public static function add_gateway( $gateways ) {
+		$gateways['stripe'] = array(
+			'label'      => 'Stripe',
+			'user_label' => __( 'Payment', 'formidable-stripe' ),
+			'class'      => 'StrpLite',
+			'recurring'  => true,
+			'include'    => array(
+				'billing_first_name',
+				'billing_last_name',
+				'credit_card',
+				'billing_address',
+			),
+		);
+		return $gateways;
+	}
 }

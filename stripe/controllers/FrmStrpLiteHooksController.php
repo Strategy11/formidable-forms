@@ -23,6 +23,8 @@ class FrmStrpLiteHooksController {
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
 
 		// This filter flags the Pro credit card field that Stripe is enabled.
+		// This line causes issues with Authorize.Net.
+		// We only want to set this for a form with Stripe Lite active.
 		add_filter(
 			'frm_pro_show_card_callback',
 			function() {
@@ -42,6 +44,8 @@ class FrmStrpLiteHooksController {
 				);
 			}
 		);
+
+		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
