@@ -538,32 +538,6 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * Triggered by the frm_redirect_url hook.
-	 *
-	 * @since 2.0
-	 *
-	 * @return string
-	 */
-	public static function set_redirect_url( $url ) {
-		global $frm_strp_redirect_url;
-		if ( $frm_strp_redirect_url ) {
-			$url = $frm_strp_redirect_url;
-		}
-		return $url;
-	}
-
-	/**
-	 * Triggered by the frm_success_filter hook.
-	 *
-	 * @since 2.0
-	 *
-	 * @return string
-	 */
-	public static function trigger_redirect() {
-		return 'redirect';
-	}
-
-	/**
 	 * Get the URL to return to after a payment is complete.
 	 * This may either use the success URL on redirect, or the message on success.
 	 * It shouldn't be confused for the Stripe link return URL. It isn't used for that. That uses the frmstrplinkreturn AJAX action instead.
