@@ -200,21 +200,25 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function get_trial_end_time( $atts ) {
 		$settings = $atts['action']->post_content;
-		if ( ! empty( $settings['trial_interval_count'] ) ) {
-			$trial = $settings['trial_interval_count'];
-			if ( ! is_numeric( $trial ) ) {
-				$trial = FrmTransLiteAppHelper::process_shortcodes(
-					array(
-						'value' => $trial,
-						'entry' => $atts['entry'],
-					)
-				);
-			}
-			if ( $trial ) {
-				return strtotime( '+' . absint( $trial ) . ' days' );
-			}
+		if ( empty( $settings['trial_interval_count'] ) ) {
+			return 0;
 		}
-		return 0;
+
+		$trial = $settings['trial_interval_count'];
+		if ( ! is_numeric( $trial ) ) {
+			$trial = FrmTransLiteAppHelper::process_shortcodes(
+				array(
+					'value' => $trial,
+					'entry' => $atts['entry'],
+				)
+			);
+		}
+
+		if ( ! $trial ) {
+			return 0;
+		}
+
+		return strtotime( '+' . absint( $trial ) . ' days' );
 	}
 
 	/**
