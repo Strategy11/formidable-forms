@@ -143,6 +143,9 @@ class FrmHooksController {
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 
+		// Forms Helper.
+		add_action( 'wp_ajax_frm_get_default_submit_html', 'FrmFormsHelper::get_default_submit_html' );
+
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
 

@@ -10188,13 +10188,20 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 
 			initOnSubmitAction();
+
 			document.getElementById( 'frm_reset_submit_html' ).addEventListener( 'click', ( e ) => {
-				const htmlContainer = e.target.parentElement.querySelector( 'textarea' );
-				htmlContainer.innerHTML = `<div class="frm_submit">
-	[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
-	<button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
-	[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
-</div>`;
+				jQuery.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'frm_get_default_submit_html',
+						nonce: frmGlobal.nonce
+					},
+					success: function( html ) {
+						const htmlContainer = e.target.parentElement.querySelector( 'textarea' );
+						htmlContainer.value = html;
+					}
+				});
 			});
 		},
 
