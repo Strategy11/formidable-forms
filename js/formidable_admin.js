@@ -10200,7 +10200,7 @@ function frmAdminBuildJS() {
 					success: function( html ) {
 						const htmlContainer = e.target.parentElement.querySelector( 'textarea' );
 						if ( htmlContainer ) {
-							htmlContainer.value = e.target.parentElement.querySelector( 'textarea' );
+							htmlContainer.value = html;
 						}
 					}
 				});
