@@ -21,6 +21,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function show_card( $field, $field_name, $atts ) {
+		$actions = self::get_actions_before_submit( $field['form_id'] );
+
+		// Use the Pro function when there are no Stripe actions.
+		// This is required for other gateways like Authorize.Net.
+		if ( ! $actions && is_callable( 'FrmProCreditCardsController::show_in_form' ) ) {
+			FrmProCreditCardsController::show_in_form( $field, $field_name, $atts );
+		}
+
 		$html_id = $atts['html_id'];
 		include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
 	}
