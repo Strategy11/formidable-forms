@@ -10198,8 +10198,7 @@ function frmAdminBuildJS() {
 						nonce: frmGlobal.nonce
 					},
 					success: function( html ) {
-						const htmlContainer = e.target.parentElement.querySelector( 'textarea' );
-						htmlContainer.value = html;
+						htmlContainer.value = e.target.parentElement.querySelector( 'textarea' );
 					}
 				});
 			});
