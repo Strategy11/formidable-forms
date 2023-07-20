@@ -110,6 +110,10 @@ form input.frm_verify{
 <?php } ?>
 }
 
+.frm-preview {
+	margin: 0 350px;
+}
+
 legend.frm_hidden{
 	display:none !important;
 }

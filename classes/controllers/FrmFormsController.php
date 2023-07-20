@@ -397,6 +397,7 @@ class FrmFormsController {
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
 
+		$p = get_query_template( 'page' );
 		if ( false === get_template_part( 'page' ) ) {
 			self::fallback_when_page_template_part_is_not_supported_by_theme();
 		}
@@ -413,7 +414,7 @@ class FrmFormsController {
 			// add some generic class names to the container to add some natural padding to the content.
 			// .entry-content catches the WordPress TwentyTwenty theme.
 			// .container catches Customizr content.
-			echo '<div class="container entry-content">';
+			echo '<div class="container entry-content frm-preview">';
 			the_content();
 			echo '</div>';
 			get_footer();
