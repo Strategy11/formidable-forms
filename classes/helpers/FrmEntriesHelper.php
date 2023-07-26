@@ -762,7 +762,7 @@ class FrmEntriesHelper {
 		$statuses = self::get_entry_statuses();
 
 		if ( array_key_exists( $status, $statuses ) ) {
-			return $statuses[ $status ];
+			return $status;
 		}
 
 		if ( empty( $status ) ) {
@@ -817,7 +817,21 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		return array_merge( $default_entry_statuses, $extended_entry_status );
+		// Check for registered statuses.
+		$registered_entry_statuses = get_option( 'frm_entry_statuses', array() );
+
+		// If extended statuses are not included on registered statuses.
+		if ( 0 !== count( array_diff( $extended_entry_status, $registered_entry_statuses ) ) ) {
+			// Prepare statuses including default,registered and newly extended.
+			$existing_entry_statuses = array_replace( $default_entry_statuses, $registered_entry_statuses, $extended_entry_status );
+			$updated_entry_statuses = array_replace( $registered_entry_statuses, $extended_entry_status );
+			update_option( 'frm_entry_statuses', $updated_entry_statuses, true );
+		} else {
+			// Extended statuses are already in registered data so we will prepare it to return.
+			$existing_entry_statuses = array_replace( $default_entry_statuses, $registered_entry_statuses );
+		}
+
+		return $existing_entry_statuses;
 	}
 
 }
