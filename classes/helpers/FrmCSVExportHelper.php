@@ -343,7 +343,7 @@ class FrmCSVExportHelper {
 		$headings['updated_at'] = __( 'Last Updated', 'formidable' );
 		$headings['user_id']    = __( 'Created By', 'formidable' );
 		$headings['updated_by'] = __( 'Updated By', 'formidable' );
-		$headings['is_draft']   = __( 'Draft', 'formidable' );
+		$headings['is_draft']   = __( 'Entry Status', 'formidable' );
 		$headings['ip']         = __( 'IP', 'formidable' );
 		$headings['id']         = __( 'ID', 'formidable' );
 		$headings['item_key']   = __( 'Key', 'formidable' );
