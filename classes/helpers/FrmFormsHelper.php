@@ -449,11 +449,12 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function get_default_submit_html() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$submit_html = self::get_default_html( 'submit' );
-		echo $submit_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		wp_die();
+		wp_send_json_success( $submit_html );
+		die();
 	}
 
 	public static function get_draft_link() {

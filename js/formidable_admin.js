@@ -10190,20 +10190,14 @@ function frmAdminBuildJS() {
 			initOnSubmitAction();
 
 			document.getElementById( 'frm_reset_submit_html' ).addEventListener( 'click', ( e ) => {
-				jQuery.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					data: {
-						action: 'frm_get_default_submit_html',
-						nonce: frmGlobal.nonce
-					},
-					success: function( html ) {
+				doJsonPost( 'get_default_submit_html', new FormData() ).then(
+					( html ) => {
 						const htmlContainer = e.target.parentElement.querySelector( 'textarea' );
 						if ( htmlContainer ) {
 							htmlContainer.value = html;
 						}
 					}
-				});
+				);
 			});
 		},
 
