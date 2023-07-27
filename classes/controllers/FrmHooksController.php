@@ -229,6 +229,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 		add_action( 'wp_ajax_frm_create_page_with_shortcode', 'FrmFormsController::create_page_with_shortcode' );
 		add_action( 'wp_ajax_get_page_dropdown', 'FrmFormsController::get_page_dropdown' );
+		add_action( 'wp_ajax_frm_get_default_submit_html', 'FrmFormsController::get_default_submit_html' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
 
@@ -258,9 +259,6 @@ class FrmHooksController {
 
 		// Submit with AJAX.
 		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 ); // Trigger before process_entry.
-
-		// Forms Helper.
-		add_action( 'wp_ajax_frm_get_default_submit_html', 'FrmFormsHelper::get_default_submit_html' );
 	}
 
 	/**

@@ -3078,6 +3078,23 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Get the default HTML for a submit button.
+	 * This is called when the reset action is triggered in the Customize HTML section.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function get_default_submit_html() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$submit_html = self::get_default_html( 'submit' );
+		wp_send_json_success( $submit_html );
+		die();
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function new_form( $values = array() ) {
