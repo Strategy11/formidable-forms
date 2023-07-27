@@ -110,7 +110,7 @@ class FrmSimpleBlocksController {
 	 */
 	private static function set_form_options( $form ) {
 		return array(
-			'label' => $form->name,
+			'label' => FrmFormsHelper::edit_form_link_label( $form ),
 			'value' => $form->id,
 		);
 	}
