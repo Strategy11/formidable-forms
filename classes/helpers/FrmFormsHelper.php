@@ -443,20 +443,6 @@ BEFORE_HTML;
 		return $default_html;
 	}
 
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function get_default_submit_html() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$submit_html = self::get_default_html( 'submit' );
-		wp_send_json_success( $submit_html );
-		die();
-	}
-
 	public static function get_draft_link() {
 		$link = '[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]';
 
