@@ -444,6 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
 * Fix: A global JavaScript variable conflict was causing a conflict with the Google Spreadsheets add on. This was causing issues with authorizing and deauthorizing Google Sheets.
+* Fix: The up arrow icon wasn't visible for one of the styling options for section icons.
 
 = 6.4 =
 * New: A floating button has been added to some admin pages with links for documentation and support.
