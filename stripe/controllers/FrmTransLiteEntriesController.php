@@ -12,6 +12,7 @@ class FrmTransLiteEntriesController {
 	 * @return void
 	 */
 	public static function sidebar_list( $entry ) {
+		// This line removes PayPal actions from the entries sidebar.
 		remove_action( 'frm_show_entry_sidebar', 'FrmPaymentsController::sidebar_list' );
 
 		$frm_payment = new FrmTransLitePayment();

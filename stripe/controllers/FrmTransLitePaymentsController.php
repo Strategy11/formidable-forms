@@ -11,7 +11,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	public static function menu() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 ); // Removes the PayPal submenu (PayPal payments will just appear in the regular Payments page).
+		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).
+		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 );
+
 		add_submenu_page( 'formidable', $frm_settings->menu . ' | Payments', 'Payments', 'frm_view_entries', 'formidable-payments', 'FrmTransLitePaymentsController::route' );
 	}
 
