@@ -30,7 +30,7 @@ registerBlockType( 'formidable/simple-form', {
 
 		const forms = formidable_form_selector.forms.map( form => ({
 			...form,
-			label: form.label.trim() === '' ? '(no title)' : form.label
+			label: form.label.trim() === '' ? __( '(no title)', 'formidable' ) : form.label
 		}) );
 
 		if ( forms.length === 0 ) {
