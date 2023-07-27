@@ -69,6 +69,11 @@ class FrmTransLiteListsController {
 		$columns['status']     = __( 'Status', 'formidable' );
 		$columns['created_at'] = __( 'Date', 'formidable' );
 
+		$paypal_is_active = class_exists( 'FrmPaymentsController', false );
+		if ( $paypal_is_active ) {
+			$columns['paysys'] = __( 'Processor', 'formidable' );
+		}
+
 		return $columns;
 	}
 

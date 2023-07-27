@@ -449,4 +449,19 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		return '<a href="' . esc_url( '?page=formidable-payments&action=show&type=subscriptions&id=' . $item->sub_id ) . '">' . $item->sub_id . '</a>';
 	}
+
+	/**
+	 * Convert the supported pay systems to their proper case.
+	 *
+	 * @param object $item
+	 * @param array  $atts
+	 * @return string
+	 */
+	private function get_paysys_column( $item, $atts ) {
+		switch ( $item->paysys ) {
+			case 'stripe': return 'Stripe';
+			case 'paypal': return 'PayPal';
+		}
+		return $item->paysys;
+	}
 }
