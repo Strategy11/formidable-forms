@@ -3089,7 +3089,7 @@ class FrmFormsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$submit_html = self::get_default_html( 'submit' );
+		$submit_html = FrmFormsHelper::get_default_html( 'submit' );
 		wp_send_json_success( $submit_html );
 		die();
 	}
