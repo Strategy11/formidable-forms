@@ -4039,6 +4039,35 @@ label input[type="checkbox"], label input[type="radio"] {
 	font-size: inherit;
 }
 
+/* Start entry statuses */
+.frm-entry-status {
+	padding: 4px 8px;
+	align-items: center;
+	border-radius: 4px;
+	text-transform: uppercase;
+}
+
+.frm-entry-status-submitted {
+	color: #1E561F;
+	background: #D5F2DC;
+}
+
+.frm-entry-status-draft {
+	color: #7A4D05;
+	background: #FFF2D2;
+}
+
+.frm-entry-status-in-progress {
+	color: #0E566C;
+	background: #BEDFE6;
+}
+
+.frm-entry-status-abandoned {
+	color: #973937;
+	background: #EBCCCC;
+}
+/* End entry statuses */
+
 #frm-options-panel {
 	padding: 0 var(--gap-sm);
 	color: var(--grey-900);
