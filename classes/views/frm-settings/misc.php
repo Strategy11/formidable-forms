@@ -12,9 +12,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p>
 	<label for="frm_summary_emails">
-		<input type="checkbox" name="frm_summary_emails" id="frm_summary_emails" value="1" <?php checked( $frm_settings->summary_emails, 1 ); ?> />
+		<input
+			type="checkbox"
+			name="frm_summary_emails"
+			id="frm_summary_emails"
+			value="1"
+			data-toggleclass="frm_summary_emails_recipients_wrapper"
+			<?php checked( $frm_settings->summary_emails, 1 ); ?>
+		/>
 		<?php esc_html_e( 'Allow Formidable Forms to send monthly and annual summary emails with your activity.', 'formidable' ); ?>
 	</label>
+</p>
+
+<p class="frm_summary_emails_recipients_wrapper <?php echo ! $frm_settings->summary_emails ? 'frm_hidden' : ''; ?>">
+	<label for="frm_summary_emails_recipients"><?php esc_html_e( 'Recipients', 'formidable' ); ?></label>
+	<input type="text" name="frm_summary_emails_recipients" id="frm_summary_emails_recipients" value="<?php echo esc_attr( $frm_settings->summary_emails_recipients ); ?>" />
 </p>
 
 <!-- Deprecated settings can only be switched away from the default -->

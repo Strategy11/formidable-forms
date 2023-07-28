@@ -43,6 +43,7 @@ class FrmSettings {
 	public $current_form = 0;
 	public $tracking;
 	public $summary_emails;
+	public $summary_emails_recipients;
 
 	/**
 	 * @since 6.0
@@ -128,6 +129,7 @@ class FrmSettings {
 			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
 			'tracking'         => FrmAppHelper::pro_is_installed(),
 			'summary_emails'   => 1,
+			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
