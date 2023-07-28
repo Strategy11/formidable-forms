@@ -10,6 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
+<p>
+	<label for="frm_summary_emails">
+		<input type="checkbox" name="frm_summary_emails" id="frm_summary_emails" value="1" <?php checked( $frm_settings->summary_emails, 1 ); ?> />
+		<?php esc_html_e( 'Allow Formidable Forms to send monthly and annual summary emails with your activity.', 'formidable' ); ?>
+	</label>
+</p>
+
 <!-- Deprecated settings can only be switched away from the default -->
 <input type="hidden" id="frm_use_html" name="frm_use_html" value="1" />
 

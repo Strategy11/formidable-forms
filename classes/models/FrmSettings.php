@@ -42,6 +42,7 @@ class FrmSettings {
 	public $custom_header_ip;
 	public $current_form = 0;
 	public $tracking;
+	public $summary_emails;
 
 	/**
 	 * @since 6.0
@@ -126,6 +127,7 @@ class FrmSettings {
 			'no_ips'           => 0,
 			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
 			'tracking'         => FrmAppHelper::pro_is_installed(),
+			'summary_emails'   => 1,
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
@@ -350,7 +352,7 @@ class FrmSettings {
 		$this->load_style       = $params['frm_load_style'];
 		$this->custom_css       = $params['frm_custom_css'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
