@@ -493,23 +493,20 @@ class FrmFieldFormHtml {
 	 * @since x.x
 	 */
 	private function add_multiple_input_attributes() {
-		$field      = (array) $this->field_obj->get_field();
 		$field_type = $this->field_obj->get_field_column( 'type' );
-		$attributes = array();
 
 		// Check if the field type is one of the following.
-		$is_valid_field_type = in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true );
-
-		if ( ! $is_valid_field_type ) {
+		if ( ! in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true ) ) {
 			return;
 		}
 
-		$is_radio = 'radio' === $field_type || 'scale' === $field_type;
+		$field                       = (array) $this->field_obj->get_field();
+		$attributes                  = array();
+		$is_radio                    = 'radio' === $field_type || 'scale' === $field_type;
 		$type_requires_aria_required = true;
 
 		// Check if the field type is 'data' or 'product'.
-		$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
-		if ( $is_data_or_product ) {
+		if ( in_array( $field_type, array( 'data', 'product' ), true ) ) {
 			$data_type = FrmField::get_option( $field, 'data_type' );
 			// Check if the data type isn't 'radio' or 'checkbox'.
 			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
@@ -532,6 +529,6 @@ class FrmFieldFormHtml {
 
 		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
 		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
-		$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
+		$this->html      = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }
