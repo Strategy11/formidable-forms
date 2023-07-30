@@ -19,6 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="columns-2">
 
 		<div id="post-body-content" class="frm-fields">
+			<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+				<?php FrmProEntriesHelper::get_entry_navigation( $id, $form->id, 'show' ); ?>
+			<?php endif; ?>
+
 			<div class="wrap frm-with-margin frm_form_fields">
 				<div class="postbox">
 					<a href="#" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable' ); ?>">
