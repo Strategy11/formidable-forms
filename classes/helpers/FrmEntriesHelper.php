@@ -810,7 +810,7 @@ class FrmEntriesHelper {
 		 *
 		 * @param array<string> $extended_entry_status Entry statuses.
 		 */
-		$extended_entry_status = apply_filters( 'frm_register_entry_statuses', array() );
+		$extended_entry_status = apply_filters( 'frm_entry_statuses', array() );
 
 		if ( ! is_array( $extended_entry_status ) ) {
 			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
@@ -827,7 +827,7 @@ class FrmEntriesHelper {
 			$updated_entry_statuses = array_replace( $registered_entry_statuses, $extended_entry_status );
 
 			/**
-			 * Introduce new option "frm_entry_statuses" for entry statuses which could be extended with the "frm_register_entry_statuses" hook.
+			 * Introduce new option "frm_entry_statuses" for entry statuses which could be extended with the "frm_entry_statuses" hook.
 			 *
 			 * @since x.x
 			 *
