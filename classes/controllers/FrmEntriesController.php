@@ -118,7 +118,7 @@ class FrmEntriesController {
 	 *
 	 * @return array<string>
 	 */
-	public static function entry_status_column( $form_id, &$columns ) {
+	private static function entry_status_column( $form_id, &$columns ) {
 		$columns[ $form_id . '_entry_status' ] = esc_html__( 'Entry Status', 'formidable' );
 	}
 
