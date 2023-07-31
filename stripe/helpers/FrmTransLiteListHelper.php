@@ -369,7 +369,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return mixed
 	 */
 	private function get_form_id_column( $item, $atts ) {
-		return isset( $atts['form_ids'][ $item->item_id ] ) ? $atts['form_ids'][ $item->item_id ]->name : '';
+		if ( isset( $atts['form_ids'][ $item->item_id ] ) ) {
+			$form_link = FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
+			return $form_link;
+		}
+
+		return '';
 	}
 
 	/**
