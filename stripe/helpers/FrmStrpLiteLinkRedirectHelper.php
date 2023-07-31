@@ -50,7 +50,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 */
 	public function handle_error( $error_code ) {
 		if ( ! empty( $this->entry_id ) ) {
-			$referer = $this->get_referer_url( $this->entry_id );
+			$referer = FrmStrpLiteAuth::get_referer_url( $this->entry_id );
 		}
 
 		if ( empty( $referer ) ) {
@@ -74,9 +74,10 @@ class FrmStrpLiteLinkRedirectHelper {
 
 		// Let a stripe link success message get handled the same as a 3D secure redirect.
 		// When it shows a message, it adds a &frmstrp= param to the URL.
-		$redirect = FrmStrpLiteAuth::return_url( compact( 'form', 'entry' ) );
+		$redirect            = FrmStrpLiteAuth::return_url( compact( 'form', 'entry' ) );
+		$is_message_redirect = false !== strpos( $redirect, 'frmstrp=' );
 
-		if ( $this->url_is_external( $redirect ) ) {
+		if ( $this->url_is_external( $redirect ) || ! $is_message_redirect ) {
 			wp_redirect( $redirect );
 			die();
 		}
@@ -84,8 +85,11 @@ class FrmStrpLiteLinkRedirectHelper {
 		// $redirect may not include the whole link to the form, breaking the redirect as iDEAL/Sofort have an additional redirect.
 		$referer_url = $this->get_referer_url( $entry->id );
 		if ( is_string( $referer_url ) ) {
-			$redirect = str_replace( '?', '&', $redirect );
-			$redirect = $referer_url . $redirect;
+			$parts = explode( '?', $redirect, 2 );
+			if ( 2 === count( $parts ) ) {
+				$redirect = $parts[1];
+			}
+			$redirect = $referer_url . '?' . $redirect;
 		}
 
 		if ( $charge_id ) {
@@ -169,6 +173,11 @@ class FrmStrpLiteLinkRedirectHelper {
 			$url = add_query_arg( 'setup_intent', $this->stripe_id, $url );
 			$url = add_query_arg( 'setup_intent_client_secret', $this->client_secret, $url );
 		}
+
+		// iDeal redirects URLs are incorrectly encoded.
+		// This str_replace reverts that encoding issue.
+		$url = str_replace( '%3Ffrmstrp%3D', '&frmstrp=', $url );
+
 		wp_redirect( $url );
 		die();
 	}

@@ -591,8 +591,53 @@ class FrmStrpLiteAuth {
 	 * @param array $atts
 	 */
 	private static function get_message_url( $atts ) {
-		$url  = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
-
+		$url = self::get_referer_url( $atts['entry_id'], false );
+		if ( false === $url ) {
+			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		}
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string|int $entry_id
+	 * @param bool       $delete_meta
+	 * @return string|false
+	 */
+	public static function get_referer_url( $entry_id, $delete_meta = true ) {
+		$row = FrmDb::get_row(
+			'frm_item_metas',
+			array(
+				'field_id'        => 0,
+				'item_id'         => $entry_id,
+				'meta_value LIKE' => '{"referer":',
+			),
+			'id, meta_value'
+		);
+		if ( ! $row ) {
+			return false;
+		}
+
+		$meta = $row->meta_value;
+		$meta = json_decode( $meta, true );
+
+		if ( ! is_array( $meta ) || empty( $meta['referer'] ) ) {
+			return false;
+		}
+
+		self::delete_temporary_referer_meta( (int) $row->id );
+		return $meta['referer'];
+	}
+
+	/**
+	 * Delete the referer meta as we'll no longer need it.
+	 *
+	 * @param int $row_id
+	 * @return void
+	 */
+	private static function delete_temporary_referer_meta( $row_id ) {
+		global $wpdb;
+		$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'id' => $row_id ) );
 	}
 }
