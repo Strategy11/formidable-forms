@@ -11,11 +11,11 @@ class S11FloatingLinks {
 	 * @constructor
 	 */
 	constructor() {
-		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ({ frmLinks, frmOptions }) => {
-			this.validateInputs( frmLinks, frmOptions );
+		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ({ links, options }) => {
+			this.validateInputs( links, options );
 
-			this.links = frmLinks;
-			this.options = frmOptions;
+			this.links = links;
+			this.options = options;
 
 			this.initComponent();
 		});
