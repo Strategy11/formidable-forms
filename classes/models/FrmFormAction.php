@@ -909,9 +909,25 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function render_conditional_logic_call_to_action() {
+		$anchor_params = array(
+			'href'         => 'javascript:void(0)',
+			'class'        => 'frm_show_upgrade frm_noallow',
+			'data-upgrade' => $this->get_upgrade_text(),
+			'data-medium'  => 'conditional-' . $this->id_base,
+		);
+
+		if ( 'payment' === $this->id_base ) {
+			$api          = new FrmFormApi();
+			$addons       = $api->get_api_info();
+			$stripe_index = '310430';
+			if ( array_key_exists( $stripe_index, $addons ) ) {
+				$anchor_params['data-requires'] = FrmFormsHelper::get_plan_required( $addons[ $stripe_index ] );
+				$anchor_params['data-upgrade']  = 'Conditional Stripe form actions';
+			}
+		}
 		?>
 			<h3>
-				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>">
+				<a <?php FrmAppHelper::array_to_html_params( $anchor_params, true ); ?>>
 					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
 				</a>
 			</h3>

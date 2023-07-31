@@ -61,20 +61,30 @@ $pass_args = array(
 	'action_key' => $action_key,
 	'values'     => $values,
 );
-do_action( 'frm_additional_action_settings', $form_action, $pass_args );
+
+$pro_is_installed              = FrmAppHelper::pro_is_installed();
+$conditional_logic_is_disabled = ! $pro_is_installed;
+
+if ( $pro_is_installed && 'payment' === $form_action->post_excerpt && ! class_exists( 'FrmStrpHooksController', false ) ) {
+	$conditional_logic_is_disabled = true;
+}
+
+if ( ! $conditional_logic_is_disabled ) {
+	do_action( 'frm_additional_action_settings', $form_action, $pass_args );
+}
 
 // Show Conditional logic indicator.
-if ( ! FrmAppHelper::pro_is_installed() ) {
-	if ( 'email' === $form_action->post_excerpt ) {
-		?>
-		<h3>
-			<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Email attachments', 'formidable' ); ?>" data-message="<?php esc_attr_e( 'Email a CSV or a PDF of each new entry, or attach a file of your choice.', 'formidable' ); ?>" data-medium="email-attachment">
-				<?php esc_html_e( 'Attachment', 'formidable' ); ?>
-			</a>
-		</h3>
-		<?php
-	}
+if ( ! $pro_is_installed && 'email' === $form_action->post_excerpt ) {
+	?>
+	<h3>
+		<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Email attachments', 'formidable' ); ?>" data-message="<?php esc_attr_e( 'Email a CSV or a PDF of each new entry, or attach a file of your choice.', 'formidable' ); ?>" data-medium="email-attachment">
+			<?php esc_html_e( 'Attachment', 'formidable' ); ?>
+		</a>
+	</h3>
+	<?php
+}
 
+if ( $conditional_logic_is_disabled ) {
 	$action_control->render_conditional_logic_call_to_action();
 }
 
