@@ -26,6 +26,8 @@ class FrmTransLiteEntriesController {
 		$entry_total   = 0;
 		$date_format   = get_option( 'date_format' );
 
+		FrmTransLiteActionsController::actions_js();
+
 		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/sidebar_list.php';
 	}
 }
