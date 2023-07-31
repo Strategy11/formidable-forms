@@ -1037,6 +1037,27 @@ class FrmAppController {
 	}
 
 	/**
+	 * Add admin footer links.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function add_admin_footer_links() {
+		$is_valid_page =
+			FrmAppHelper::is_formidable_admin() &&
+			! FrmAppHelper::is_style_editor_page() &&
+			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
+			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+
+		if ( ! $is_valid_page ) {
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
+	}
+
+	/**
 	 * @deprecated 3.0.04
 	 *
 	 * @codeCoverageIgnore
