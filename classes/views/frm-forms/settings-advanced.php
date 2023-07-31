@@ -65,20 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
 
-<?php
-// Show a temporary message. This can be removed after the date is passed.
-if ( time() < strtotime( '2023-03-07' ) ) {
-	FrmTipsHelper::show_tip(
-		array(
-			'tip'  => __( 'New: The form confirmation settings have moved.', 'formidable' ),
-			'call' => __( 'Go to the Form Actions', 'formidable' ),
-			'page' => add_query_arg( 't', 'email_settings' ),
-		),
-		'p'
-	);
-}
-?>
-
 <p class="frm8 frm_form_field">
 	<label for="no_save" class="frm_inline_block">
 		<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
