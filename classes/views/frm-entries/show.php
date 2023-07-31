@@ -19,9 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="columns-2">
 
 		<div id="post-body-content" class="frm-fields">
-			<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-				<?php FrmProEntriesHelper::get_entry_navigation( $id, $form->id, 'show' ); ?>
-			<?php endif; ?>
+			<?php do_action( 'frm_show_entry_start_content', compact( 'id', 'form' ) ); ?>
 
 			<div class="wrap frm-with-margin frm_form_fields">
 				<div class="postbox">
