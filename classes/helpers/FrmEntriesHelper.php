@@ -784,7 +784,7 @@ class FrmEntriesHelper {
 	public static function get_entry_status_label( $status ) {
 		$statuses = self::get_entry_statuses();
 
-		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $statuses[1];
+		return $statuses[ self::get_entry_status( $status ) ];
 	}
 
 	/**
