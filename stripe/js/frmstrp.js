@@ -127,7 +127,7 @@
 			params = {
 				elements: elements,
 				confirmParams: {
-					return_url: frm_stripe_vars.ajax + '?action=frmstrplinkreturn',
+					return_url: getReturnUrl(),
 					payment_method_data: {
 						billing_details: convertToAddressObject( meta )
 					}
@@ -136,6 +136,12 @@
 			confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
 
 			frmstripe[ confirmFunction ]( params ).then( handleConfirmPromise );
+		}
+
+		function getReturnUrl() {
+			var url = new URL( frm_stripe_vars.ajax );
+			url.searchParams.append( 'action', 'frmstrplinkreturn' );
+			return url.toString();
 		}
 
 		function handleConfirmPromise( result ) {
