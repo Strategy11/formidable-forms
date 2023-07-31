@@ -346,7 +346,7 @@ class FrmStrpLiteLinkController {
 		$frm_payment->create(
 			array(
 				'paysys'     => 'stripe',
-				'amount'     => number_format( ( $amount / 100 ), 2, '.', '' ),
+				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
 				'status'     => 'pending',
 				'item_id'    => $entry->id,
 				'action_id'  => $action->ID,

@@ -343,4 +343,27 @@ class FrmTransLiteAppHelper {
 		$allowed['a']['data-deleteconfirm'] = true;
 		return $allowed;
 	}
+
+	/**
+	 * Formats non zero-decimal currencies.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $amount
+	 * @param WP_Post    $action
+	 *
+	 * @return string
+	 */
+	public static function get_formatted_amount_for_currency( $amount, $action ) {
+		if ( ! isset( $action->post_content['currency'] ) ) {
+			return $amount;
+		}
+
+		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
+		if ( ! empty( $currency['decimals'] ) ) {
+			$amount = number_format( ( $amount / 100 ), 2, '.', '' );
+		}
+
+		return $amount;
+	}
 }

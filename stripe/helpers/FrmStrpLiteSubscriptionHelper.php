@@ -43,7 +43,7 @@ class FrmStrpLiteSubscriptionHelper {
 		$atts['charge'] = (object) $atts['charge'];
 
 		$new_values = array(
-			'amount'         => number_format( ( $atts['charge']->amount / 100 ), 2, '.', '' ),
+			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
 			'paysys'         => 'stripe',
 			'item_id'        => $atts['entry']->id,
 			'action_id'      => $atts['action']->ID,
