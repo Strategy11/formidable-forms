@@ -910,6 +910,32 @@
 		}
 	}
 
+	/**
+	 * Check for Price fields on load and possibly update the intent's price.
+	 * This is required when a Stripe action uses a shortcode amount when
+	 * the amount never changes after load.
+	 *
+	 * @returns {void}
+	 */
+	function checkPriceFieldsOnLoad() {
+		each(
+			getPriceFields(),
+			function( fieldId ) {
+				var fieldContainer, input;
+
+				fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+				if ( ! fieldContainer ) {
+					return;
+				}
+
+				input = fieldContainer.querySelector( 'input[name^=item_meta]' );
+				if ( input && '' !== input.value ) {
+					priceChanged( null, input, fieldId );
+				}
+			}
+		);
+	}
+
 	jQuery( document ).ready(
 		function() {
 			var stripeParams = {
@@ -923,6 +949,7 @@
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
+			checkPriceFieldsOnLoad();
 		}
 	);
 
