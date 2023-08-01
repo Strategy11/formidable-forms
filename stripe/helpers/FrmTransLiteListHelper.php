@@ -456,8 +456,32 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	private function get_status_column( $item ) {
-		$fallback = ! empty( $item->completed ) ? 'complete' : ''; // PayPal fallback
-		return $item->status ? FrmTransLiteAppHelper::show_status( $item->status ) : $fallback;
+		$status = esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $item ) ) );
+
+		if ( 'processing' === $item->status ) {
+			$status .= $this->get_processing_tooltip();
+		}
+
+		return $status;
+	}
+
+	/**
+	 * @since 2.04
+	 *
+	 * @return string
+	 */
+	private function get_processing_tooltip() {
+		return FrmAppHelper::clip(
+			function() {
+				$params = array(
+					'class' => 'frm_help frm_icon_font frm_tooltip_icon',
+					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable-payments' ),
+				);
+				?>
+				<span <?php FrmAppHelper::array_to_html_params( $params, true ); ?>></span>
+				<?php
+			}
+		);
 	}
 
 	/**
@@ -477,6 +501,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * Get the string for the "Processor" column.
 	 * Convert the supported pay systems to their proper case.
 	 *
 	 * @param object $item

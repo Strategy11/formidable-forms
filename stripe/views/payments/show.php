@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<tbody>
 							<tr valign="top">
 								<th scope="row"><?php esc_html_e( 'Status', 'formidable' ); ?>:</th>
-								<td><?php echo esc_html( FrmTransLiteAppHelper::show_status( $payment->status ) ); ?></td>
+								<td><?php echo esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $payment ) ) ); ?></td>
 							</tr>
 
 							<tr valign="top">

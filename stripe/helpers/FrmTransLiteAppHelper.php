@@ -26,9 +26,29 @@ class FrmTransLiteAppHelper {
 		return basename( self::plugin_path() );
 	}
 
+	/**
+	 * Get a payment status label.
+	 *
+	 * @param string $status The lowercase payment status value.
+	 * @return string
+	 */
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
 		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+	}
+
+	/**
+	 * Get Payment status from a payment with support for PayPal backward compatibility.
+	 *
+	 * @param stdClass $payment
+	 * @return string
+	 */
+	public static function get_payment_status( $payment ) {
+		if ( $payment->status ) {
+			return $payment->status;
+		}
+		// PayPal fallback.
+		return ! empty( $payment->completed ) ? 'complete' : 'pending';
 	}
 
 	/**
@@ -42,6 +62,7 @@ class FrmTransLiteAppHelper {
 			'failed'     => __( 'Failed', 'formidable' ),
 			'refunded'   => __( 'Refunded', 'formidable' ),
 			'canceled'   => __( 'Canceled', 'formidable' ),
+			'processing' => __( 'Processing', 'formidable-payments' )
 		);
 	}
 
