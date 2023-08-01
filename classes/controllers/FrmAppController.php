@@ -1044,13 +1044,9 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
-		$is_valid_page =
-			FrmAppHelper::is_formidable_admin() &&
-			! FrmAppHelper::is_style_editor_page() &&
-			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
-			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
-		if ( ! $is_valid_page ) {
+		if ( ( ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs' ) || FrmAppHelper::is_full_screen() ) {
 			return;
 		}
 
