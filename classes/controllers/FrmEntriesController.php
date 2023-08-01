@@ -86,8 +86,7 @@ class FrmEntriesController {
 			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
 		}
 
-		self::entry_status_column( $form_id, $columns );
-
+		$columns[ $form_id . '_is_draft' ] = esc_html__( 'Entry Status', 'formidable' );
 		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
@@ -107,19 +106,6 @@ class FrmEntriesController {
 		}
 
 		return $columns;
-	}
-
-	/**
-	 * Add "Entry status" column to entries table.
-	 *
-	 * @since x.x
-	 *
-	 * @param array<string> $columns Entries table columns.
-	 *
-	 * @return array<string>
-	 */
-	private static function entry_status_column( $form_id, &$columns ) {
-		$columns[ $form_id . '_entry_status' ] = esc_html__( 'Entry Status', 'formidable' );
 	}
 
 	private static function get_columns_for_form( $form_id, &$columns ) {
@@ -297,7 +283,7 @@ class FrmEntriesController {
 			$form_id . '_updated_at'    => 'updated_at',
 			$form_id . '_ip'            => 'ip',
 			$form_id . '_item_key'      => 'item_key',
-			$form_id . '_entry_status'  => 'is_draft',
+			$form_id . '_is_draft'      => 'is_draft',
 		);
 
 		foreach ( $fields as $field ) {
