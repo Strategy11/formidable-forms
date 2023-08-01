@@ -12,7 +12,19 @@ class FrmStrpLitePaymentsController {
 	 * @return string
 	 */
 	public static function get_receipt_link( $receipt ) {
-		$link  = '<a href="https://dashboard.stripe.com/payments/' . esc_attr( $receipt ) . '" target="_blank">';
+		$url = 'https://dashboard.stripe.com/';
+
+		if ( 0 === strpos( $receipt, 'sub_' ) ) {
+			$url .= 'subscriptions/';
+		} elseif ( 0 === strpos( $receipt, 'seti_' ) ) {
+			$url .= 'setup_intents/';
+		} else {
+			$url .= 'payments/';
+		}
+
+		$url .= $receipt;
+
+		$link  = '<a href="' . esc_attr( $url ) . '" target="_blank">';
 		$link .= esc_html( $receipt );
 		$link .= '</a>';
 		return $link;

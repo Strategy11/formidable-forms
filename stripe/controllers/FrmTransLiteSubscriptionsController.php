@@ -21,6 +21,29 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param object $subscription
+	 * @return void
+	 */
+	public static function show_receipt_link( $subscription ) {
+		$link = esc_html( $subscription->sub_id );
+		if ( $subscription->sub_id !== 'None' ) {
+			/**
+			 * Filter a receipt link for a specific gateway.
+			 * For example, Stripe uses frm_sub_stripe_receipt.
+			 *
+			 * @since x.x
+			 *
+			 * @param string $link
+			 */
+			$link = apply_filters( 'frm_sub_' . $subscription->paysys . '_receipt', $link );
+		}
+
+		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * @param object $sub
 	 * @return void
 	 */

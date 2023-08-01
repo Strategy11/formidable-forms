@@ -69,6 +69,7 @@ class FrmStrpLiteHooksController {
 		add_filter( 'frm_pay_action_defaults', 'FrmStrpLiteActionsController::add_action_defaults' );
 		add_filter( 'frm_before_save_payment_action', 'FrmStrpLiteActionsController::before_save_settings', 10, 2 );
 		add_filter( 'frm_pay_stripe_receipt', 'FrmStrpLitePaymentsController::get_receipt_link' );
+		add_filter( 'frm_sub_stripe_receipt', 'FrmStrpLitePaymentsController::get_receipt_link' );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();

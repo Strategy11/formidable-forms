@@ -62,7 +62,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</td>
 								</tr>
 
-								<?php FrmTransLiteAppHelper::show_in_table( $subscription->sub_id, __( 'Subscription', 'formidable' ) ); ?>
+								<?php if ( ! empty( $subscription->sub_id ) ) { ?>
+									<tr valign="top">
+										<th scope="row"><?php esc_html_e( 'Receipt', 'formidable' ); ?>:</th>
+										<td>
+											<?php FrmTransLiteSubscriptionsController::show_receipt_link( $subscription ); ?>
+										</td>
+									</tr>
+								<?php } ?>
 
 								<tr valign="top">
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
