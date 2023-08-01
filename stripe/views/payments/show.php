@@ -68,9 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<tr valign="top">
 								<th scope="row"><?php esc_html_e( 'Entry', 'formidable' ); ?>:</th>
 								<td>
-									<a href="?page=formidable-entries&amp;action=show&amp;frm_action=show&amp;id=<?php echo absint( $payment->item_id ); ?>">
-										<?php echo absint( $payment->item_id ); ?>
-									</a>
+									<?php FrmTransLitePaymentsController::show_entry_link( $payment ); ?>
 								</td>
 							</tr>
 

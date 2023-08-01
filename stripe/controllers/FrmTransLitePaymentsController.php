@@ -92,6 +92,27 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * Show a link to a payment entry (unless it is deleted).
+	 *
+	 * @param object $payment
+	 * @return void
+	 */
+	public static function show_entry_link( $payment ) {
+		$entry = FrmDb::get_col( 'frm_items', array( 'id' => $payment->item_id ) );
+
+		if ( ! $entry ) {
+			echo esc_html( sprintf( __( '%d (Deleted)', 'formidable-payments' ), $payment->item_id ) );
+			return;
+		}
+
+		?>
+		<a href="?page=formidable-entries&amp;action=show&amp;frm_action=show&amp;id=<?php echo absint( $payment->item_id ); ?>">
+			<?php echo absint( $payment->item_id ); ?>
+		</a>
+		<?php
+	}
+
+	/**
 	 * Get a refund link.
 	 *
 	 * @param object $payment

@@ -7,6 +7,16 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	private $table = '';
 
+	/**
+	 * An array of all valid entry ids.
+	 * This is retrieved all at once with a single database query.
+	 * This is used to determine if a specific entry is deleted.
+	 * When an entry is deleted, there is no link to the deleted entry.
+	 *
+	 * @var int[] $valid_entry_ids
+	 */
+	private $valid_entry_ids = array();
+
 	public function __construct( $args ) {
 		$this->table = FrmAppHelper::get_simple_request(
 			array(
@@ -175,8 +185,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$alt = 0;
 
-		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format' );
+		$form_ids              = $this->get_form_ids();
+		$args                  = compact( 'form_ids', 'date_format' );
+		$this->valid_entry_ids = array_keys( $form_ids ); // $form_ids is indexed by entry ID.
 
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" valign="middle" ';
@@ -357,11 +368,20 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param object $item
+	 * Get the column value for displaying an entry ID.
+	 *
+	 * @param object $item A payment or subscription object.
 	 * @return string
 	 */
 	private function get_item_id_column( $item ) {
-		return '<a href="' . esc_url( '?page=formidable-entries&frm_action=show&action=show&id=' . $item->item_id ) . '">' . $item->item_id . '</a>';
+		$entry_id         = (int) $item->item_id;
+		$entry_is_deleted = ! in_array( $entry_id, $this->valid_entry_ids );
+
+		if ( $entry_is_deleted ) {
+			return sprintf( __( '%d (Deleted)', 'formidable-payments' ), $entry_id );
+		}
+
+		return '<a href="' . esc_url( '?page=formidable-entries&frm_action=show&action=show&id=' . $entry_id ) . '">' . absint( $entry_id ) . '</a>';
 	}
 
 	/**
