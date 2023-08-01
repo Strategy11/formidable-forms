@@ -527,6 +527,10 @@ class FrmFieldFormHtml {
 			$attributes['aria-required'] = 'true';
 		}
 
+		if ( $is_radio ) {
+			$attributes['tabindex'] = 0;
+		}
+
 		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
 		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
 		$this->html      = str_replace( ' role="group"', $html_attributes, $this->html );
