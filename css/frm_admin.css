@@ -4041,9 +4041,9 @@ label input[type="checkbox"], label input[type="radio"] {
 
 /* Start entry statuses */
 .frm-entry-status {
-	padding: 4px 8px;
+    padding: var(--gap-2xs) var(--gap-xs);
 	align-items: center;
-	border-radius: 4px;
+    border-radius: var(--small-radius);
 	text-transform: uppercase;
 }
 
