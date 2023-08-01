@@ -527,6 +527,7 @@ class FrmFieldFormHtml {
 			$attributes['aria-required'] = 'true';
 		}
 
+		// Add 'tabindex = "0"' attribute to the radio field.
 		if ( $is_radio ) {
 			$attributes['tabindex'] = 0;
 		}
