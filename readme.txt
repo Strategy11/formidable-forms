@@ -444,6 +444,8 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
 * New: Forms without names will now appear as (no title) when displayed as options inside of a Gutenberg block.
+* New: Radio button fields are now grouped in a tabbable element with a radiogroup role for improved accessibility.
+* New: Required attributes are now defined on the radio and checkbox field groups instead of on each input for improved accessibility.
 * Fix: A global JavaScript variable conflict was causing a conflict with the Google Spreadsheets add on. This was causing issues with authorizing and deauthorizing Google Sheets.
 * Fix: The up arrow icon was either hidden or displayed as a down arrow for one of the styling options for section icons.
 
