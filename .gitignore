@@ -4,6 +4,7 @@ pro
 .phpintel
 frm.min.js
 formidableforms.css
+formidableforms1.css
 formidable.zip
 languages/formidable-js.pot
 languages/formidable-js-strings.php

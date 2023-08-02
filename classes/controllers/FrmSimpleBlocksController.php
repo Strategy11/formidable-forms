@@ -42,7 +42,7 @@ class FrmSimpleBlocksController {
 			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'   => FrmAppHelper::plugin_url(),
 			'modalAddon' => array(
-				'link'      => FrmAppHelper::admin_upgrade_link( 'addons', $modal_addon['link'] ),
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
 			),
 		);
@@ -110,7 +110,7 @@ class FrmSimpleBlocksController {
 	 */
 	private static function set_form_options( $form ) {
 		return array(
-			'label' => $form->name,
+			'label' => FrmFormsHelper::edit_form_link_label( $form ),
 			'value' => $form->id,
 		);
 	}

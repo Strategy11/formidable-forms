@@ -171,9 +171,9 @@
 <title>arrowup7</title>
 <path d="M0 10a10 10 0 1 1 20 0 10 10 0 1 1-20 0zm10 8a8 8 0 0 0 0-16 8 8 0 0 0 0 16zm.7-10.5l3.5 3.5-1.4 1.4L10 9.6l-2.8 2.8L5.8 11 10 6.8l.7.7z"/>
 </symbol>
-<symbol id="frm_arrowup6_icon" viewBox="0 0 20 20" transform="scale(1 -1)">
+<symbol id="frm_arrowup6_icon" viewBox="0 0 20 20">
 <title>arrowup6</title>
-<path d="M5 6l5 5 5-5 2 1-7 7-7-7 2-1z" />
+<path d="m15 14-5-5-5 5-2-1 7-7 7 7-2 1Z"/>
 </symbol>
 <symbol id="frm_arrowdown_icon" viewBox="0 0 20 20">
 <title>arrowdown</title>
@@ -189,7 +189,7 @@
 </symbol>
 <symbol id="frm_arrowdown3_icon" viewBox="0 0 20 20">
 <title>arrowdown3</title>
-<path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8zm0 16.4a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4zm1.8-11H8.2v4H6l4 3.9 4-3.9h-2.2v-4z"/>
+<path d="M10 0a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 17.8a7.8 7.8 0 1 1 0-15.6 7.8 7.8 0 0 1 0 15.6Zm2-12H8v4.5H5.6l4.4 4.1 4.4-4.1H12V5.8Z"/>
 </symbol>
 <symbol id="frm_arrowdown4_icon" viewBox="0 0 13 20">
 <title>arrowdown4</title>

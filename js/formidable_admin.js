@@ -5998,6 +5998,11 @@ function frmAdminBuildJS() {
 
 			container.addClass( 'frm-open' );
 			box.classList.remove( 'frm_hidden' );
+
+			/**
+			 * @since x.x
+			 */
+			wp.hooks.doAction( 'frm_show_inline_modal', box, icon );
 		}
 	}
 
@@ -9225,9 +9230,9 @@ function frmAdminBuildJS() {
 	 */
 	function updateCatHeadingVisibility() {
 		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
-		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+		const headingElements = insertFieldsElement?.querySelectorAll( ':scope > .frm-with-line' );
 
-		headingElements.forEach( heading => {
+		headingElements?.forEach( heading => {
 			const fieldsListElement = heading.nextElementSibling;
 			if ( ! fieldsListElement ) {
 				return;
