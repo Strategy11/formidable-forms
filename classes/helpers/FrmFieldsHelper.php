@@ -495,7 +495,7 @@ class FrmFieldsHelper {
 	 * Shows the inline modal.
 	 *
 	 * @since 4.0
-	 * @since x.x Added `inside_class` in the arguments.
+	 * @since 6.4.1 Added `inside_class` in the arguments.
 	 *
 	 * @param array $args The arguments.
 	 */

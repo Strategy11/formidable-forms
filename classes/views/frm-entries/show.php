@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * This action is used in Pro to display the pagination buttons. It allows developers
 			 * to add custom HTML content after the main post body content.
 			 *
-			 * @since x.x
+			 * @since 6.4.1
 			 *
 			 * @param array $args Associative array with 'id' for entry ID and 'form' for form object.
 			 *

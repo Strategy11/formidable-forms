@@ -201,7 +201,7 @@ class FrmOnSubmitHelper {
 	/**
 	 * Gets the default open in new tab message.
 	 *
-	 * @since 6.x.x
+	 * @since 6.3.1
 	 *
 	 * @return string
 	 */
@@ -425,7 +425,7 @@ class FrmOnSubmitHelper {
 	/**
 	 * Gets fallback action after opening the redirect URL in a new tab.
 	 *
-	 * @since 6.x.x
+	 * @since 6.3.1
 	 *
 	 * @param string|array $event Uses 'create' or 'update'.
 	 * @return object

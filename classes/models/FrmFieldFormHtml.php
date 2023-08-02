@@ -490,7 +490,8 @@ class FrmFieldFormHtml {
 	/**
 	 * Adds multiple input attributes.
 	 *
-	 * @since x.x
+	 * @since 6.4.1
+	 * @return void
 	 */
 	private function add_multiple_input_attributes() {
 		$field_type = $this->field_obj->get_field_column( 'type' );
