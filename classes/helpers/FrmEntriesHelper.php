@@ -817,27 +817,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		// Check for registered statuses.
-		$registered_entry_statuses = get_option( 'frm_entry_statuses', array() );
-
-		// If extended statuses are not included on registered statuses.
-		if ( 0 !== count( array_diff( $extended_entry_status, $registered_entry_statuses ) ) ) {
-			// Prepare statuses including default,registered and newly extended.
-			$existing_entry_statuses = array_replace( $default_entry_statuses, $registered_entry_statuses, $extended_entry_status );
-			$updated_entry_statuses = array_replace( $registered_entry_statuses, $extended_entry_status );
-
-			/**
-			 * Introduce new option "frm_entry_statuses" for entry statuses which could be extended with the "frm_entry_statuses" hook.
-			 *
-			 * @since x.x
-			 *
-			 * @param array<string> $updated_entry_statuses Entry statuses.
-			 */
-			update_option( 'frm_entry_statuses', $updated_entry_statuses, true );
-		} else {
-			// Extended statuses are already in registered data so we will prepare it to return.
-			$existing_entry_statuses = array_replace( $default_entry_statuses, $registered_entry_statuses );
-		}
+		$existing_entry_statuses = array_replace( $default_entry_statuses, $extended_entry_status );
 
 		return $existing_entry_statuses;
 	}
