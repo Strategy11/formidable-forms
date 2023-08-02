@@ -220,14 +220,15 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			$args['column_name'] = $column_name;
 			$val                 = $this->get_column_value( $item, $args );
 
-			if ( $column_name === 'cb' ) {
-				echo $val; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				continue;
-			}
-
 			echo '<td ' . $attributes . '>' . $val . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			unset( $val );
 		}
+	}
+
+	protected function get_column_info() {
+		$column_info = parent::get_column_info();
+		unset( $column_info[0]['cb'] ); // Remove the checkbox column.
+		return $column_info;
 	}
 
 	/**
@@ -304,13 +305,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @return string
-	 */
-	private function get_cb_column( $item ) {
-		return '<th scope="row" class="check-column"><input type="checkbox" name="item-action[]" value="' . esc_attr( $item->id ) . '" /></th>';
-	}
-
-	/**
 	 * @param object $item
 	 *
 	 * @return string
@@ -355,14 +349,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_row_actions( $item ) {
 		$base_link   = '?page=formidable-payments&action=';
 		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
-		$delete_link = $base_link . 'destroy&id=' . $item->id;
+		$delete_link = $base_link . 'destroy&id=' . $item->id . '&type=' . $this->table;
 
-		$actions         = array();
-		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
-
-		if ( $this->table !== 'subscriptions' ) {
-			$actions['delete'] = '<a href="' . esc_url( $delete_link ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
-		}
+		$actions           = array();
+		$actions['view']   = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
+		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete' ) . '</a>';
 
 		return $actions;
 	}

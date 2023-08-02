@@ -64,7 +64,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	public static function cancel_link( $sub ) {
 		if ( $sub->status === 'active' ) {
 			$link  = admin_url( 'admin-ajax.php?action=frm_trans_cancel&sub=' . $sub->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
-			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-deleteconfirm="' . esc_attr__( 'Are you sure you want to cancel that subscription?', 'formidable' ) . '">';
+			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr__( 'Are you sure you want to cancel that subscription?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">';
 			$link .= esc_html__( 'Cancel', 'formidable' );
 			$link .= '</a>';
 		} else {

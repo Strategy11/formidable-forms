@@ -362,6 +362,8 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function allow_deleteconfirm_data_attribute( $allowed ) {
 		$allowed['a']['data-deleteconfirm'] = true;
+		$allowed['a']['data-frmverify']     = true;
+		$allowed['a']['data-frmverify-btn'] = true;
 		return $allowed;
 	}
 

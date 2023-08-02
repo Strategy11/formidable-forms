@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 						<div id="major-publishing-actions">
 							<div id="delete-action">                	    
-								<a class="submitdelete deletion" href="<?php echo esc_url( add_query_arg( 'frm_action', 'destroy' ) ); ?>" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete that subscription?', 'formidable' ); ?>');" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete' ); ?>">
 									<?php esc_html_e( 'Delete', 'formidable' ); ?>
 								</a>
 							</div>

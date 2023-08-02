@@ -26,19 +26,17 @@
 		}
 
 		function runAjaxLink( e ) {
-			var $link, confirmText, href, loadingImage;
-
+			var $link, href, loadingImage, handleConfirmedClick;
+	
 			e.preventDefault();
-
-			$link       = jQuery( this );
-			confirmText = $link.data( 'deleteconfirm' );
-
-			if ( typeof confirmText === 'undefined' || confirm( confirmText ) ) {
+	
+			$link = jQuery( this );
+			handleConfirmedClick = ( e ) => {
+				e.preventDefault();
+	
 				href = $link.attr( 'href' );
-
 				loadingImage = document.createElement( 'span' );
 				loadingImage.className = 'frm-loading-img';
-
 				$link.replaceWith( loadingImage );
 				jQuery.ajax({
 					type: 'GET',
@@ -50,8 +48,20 @@
 						jQuery( loadingImage ).replaceWith( html );
 					}
 				});
-			}
-
+			};
+	
+			jQuery( '#frm-confirmed-click' ).one( 'click', handleConfirmedClick );
+	
+			// prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements
+			const unbindHandleConfirmedClick = ( e ) => {
+				if ( e.target.matches( '.ui-widget-overlay, .dismiss' ) ) {
+					jQuery( '#frm-confirmed-click' ).unbind( 'click', handleConfirmedClick );
+					document.removeEventListener( 'click', unbindHandleConfirmedClick );
+				}
+			};
+	
+			document.addEventListener( 'click', unbindHandleConfirmedClick );
+	
 			return false;
 		}
 

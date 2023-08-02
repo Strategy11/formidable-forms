@@ -66,11 +66,20 @@ class FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function destroy() {
+		$nonce = FrmAppHelper::simple_get( '_wpnonce' );
+
+		if ( ! wp_verify_nonce( $nonce ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			wp_die( esc_html( $frm_settings->admin_permission ) );
+		}
+
 		FrmAppHelper::permission_check( 'administrator' );
 
 		$message     = '';
 		$frm_payment = self::the_class();
-		if ( $frm_payment->destroy( FrmAppHelper::get_param( 'id' ) ) ) {
+		$id          = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
+
+		if ( $id && $frm_payment->destroy( $id ) ) {
 			$message = __( 'Payment was Successfully Deleted', 'formidable' );
 		}
 
