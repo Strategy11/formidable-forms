@@ -19,7 +19,7 @@ class FrmAddonsController {
 		}
 
 		$label = __( 'Add-Ons', 'formidable' );
-		$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+		$label = '<span style="color:#1da867">' . $label . '</span>';
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
