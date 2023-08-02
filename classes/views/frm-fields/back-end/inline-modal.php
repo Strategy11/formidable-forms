@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</a>
 		</li>
 	</ul>
-	<div class="inside">
+	<div class="<?php echo esc_attr( $args['inside_class'] ); ?>">
 		<?php call_user_func( $args['callback'], $args['args'] ); ?>
 	</div>
 </div>
