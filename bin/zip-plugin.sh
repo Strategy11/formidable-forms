@@ -64,6 +64,7 @@ zip -r $zipname $destination \
 	-x "*/README.md" \
 	-x "*/tests/*" \
 	-x "$source/vendor/*" \
+	-x "$source/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \

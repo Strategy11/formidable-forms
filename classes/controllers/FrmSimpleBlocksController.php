@@ -42,7 +42,7 @@ class FrmSimpleBlocksController {
 			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'   => FrmAppHelper::plugin_url(),
 			'modalAddon' => array(
-				'link'      => FrmAppHelper::admin_upgrade_link( 'addons', $modal_addon['link'] ),
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
 			),
 		);

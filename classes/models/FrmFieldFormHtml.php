@@ -137,6 +137,8 @@ class FrmFieldFormHtml {
 		$this->replace_form_shortcodes();
 		$this->process_wp_shortcodes();
 		$this->maybe_replace_description_shortcode( true );
+
+		$this->add_multiple_input_attributes();
 	}
 
 	/**
@@ -483,5 +485,56 @@ class FrmFieldFormHtml {
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$this->html = do_shortcode( $this->html );
 		}
+	}
+
+	/**
+	 * Adds multiple input attributes.
+	 *
+	 * @since 6.4.1
+	 * @return void
+	 */
+	private function add_multiple_input_attributes() {
+		$field_type = $this->field_obj->get_field_column( 'type' );
+
+		// Check if the field type is one of the following.
+		if ( ! in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true ) ) {
+			return;
+		}
+
+		$field                       = (array) $this->field_obj->get_field();
+		$attributes                  = array();
+		$is_radio                    = 'radio' === $field_type || 'scale' === $field_type;
+		$type_requires_aria_required = true;
+
+		// Check if the field type is 'data' or 'product'.
+		if ( in_array( $field_type, array( 'data', 'product' ), true ) ) {
+			$data_type = FrmField::get_option( $field, 'data_type' );
+			// Check if the data type isn't 'radio' or 'checkbox'.
+			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
+				// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
+				$type_requires_aria_required = false;
+			}
+			// Check if data type is 'radio'
+			if ( 'radio' === $data_type ) {
+				$is_radio = true;
+			}
+		}
+
+		// Add 'role' attribute to the field.
+		$attributes['role'] = $is_radio ? 'radiogroup' : 'group';
+
+		// Add 'aria-required' attribute to the field if required.
+		if ( $type_requires_aria_required && '1' === $field['required'] ) {
+			$attributes['aria-required'] = 'true';
+		}
+
+		// Add 'tabindex = "0"' attribute to the radio field.
+		if ( $is_radio ) {
+			$attributes['tabindex'] = 0;
+		}
+
+		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
+		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
+		$this->html      = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }

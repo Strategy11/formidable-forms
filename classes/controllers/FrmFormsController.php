@@ -2550,7 +2550,7 @@ class FrmFormsController {
 	/**
 	 * Prints open in new tab js with fallback handler.
 	 *
-	 * @since 6.x
+	 * @since 6.3.1
 	 *
 	 * @param string $success_url Success URL.
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
@@ -2571,7 +2571,7 @@ class FrmFormsController {
 	/**
 	 * Gets response data for redirect action when AJAX submitting.
 	 *
-	 * @since 6.x
+	 * @since 6.3.1
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 * @return array
@@ -2667,7 +2667,7 @@ class FrmFormsController {
 	/**
 	 * Gets fallback message when redirecting failed.
 	 *
-	 * @since 6.x
+	 * @since 6.3.1
 	 *
 	 * @param string $success_url Redirect URL.
 	 * @param array  $args        Contains `form` object.

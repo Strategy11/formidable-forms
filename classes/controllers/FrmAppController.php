@@ -1068,6 +1068,23 @@ class FrmAppController {
 	}
 
 	/**
+	 * Add admin footer links.
+	 *
+	 * @since 6.4.1
+	 *
+	 * @return void
+	 */
+	public static function add_admin_footer_links() {
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+
+		if ( ( ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs' ) || FrmAppHelper::is_full_screen() ) {
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
+	}
+
+	/**
 	 * @deprecated 3.0.04
 	 *
 	 * @codeCoverageIgnore
@@ -1112,7 +1129,7 @@ class FrmAppController {
 	/**
 	 * Handles Floating Links' scripts and styles enqueueing.
 	 *
-	 * @since x.x
+	 * @since 6.4
 	 *
 	 * @param string $plugin_url URL of the plugin.
 	 * @param string $version Current version of the plugin.
