@@ -695,7 +695,7 @@
 	/**
 	 * Build an element.
 	 *
-	 * @since x.x Accept a string as one of `children` to append a text node inside the element.
+	 * @since 6.4.1 Accept a string as one of `children` to append a text node inside the element.
 	 *
 	 * @param {String} type Element tag name.
 	 * @param {Object} args The args.

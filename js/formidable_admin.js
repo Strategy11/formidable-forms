@@ -6000,7 +6000,7 @@ function frmAdminBuildJS() {
 			box.classList.remove( 'frm_hidden' );
 
 			/**
-			 * @since x.x
+			 * @since 6.4.1
 			 */
 			wp.hooks.doAction( 'frm_show_inline_modal', box, icon );
 		}
@@ -9226,13 +9226,16 @@ function frmAdminBuildJS() {
 	 * If all associated fields are hidden (indicating no search matches),
 	 * the heading is hidden.
 	 *
-	 * @since x.x
+	 * @since 6.4.1
 	 */
 	function updateCatHeadingVisibility() {
 		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
-		const headingElements = insertFieldsElement?.querySelectorAll( ':scope > .frm-with-line' );
+		if ( ! insertFieldsElement ) {
+			return;
+		}
 
-		headingElements?.forEach( heading => {
+		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+		headingElements.forEach( heading => {
 			const fieldsListElement = heading.nextElementSibling;
 			if ( ! fieldsListElement ) {
 				return;

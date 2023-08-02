@@ -1039,7 +1039,7 @@ class FrmAppController {
 	/**
 	 * Add admin footer links.
 	 *
-	 * @since x.x
+	 * @since 6.4.1
 	 *
 	 * @return void
 	 */
@@ -1098,7 +1098,7 @@ class FrmAppController {
 	/**
 	 * Handles Floating Links' scripts and styles enqueueing.
 	 *
-	 * @since x.x
+	 * @since 6.4
 	 *
 	 * @param string $plugin_url URL of the plugin.
 	 * @param string $version Current version of the plugin.
