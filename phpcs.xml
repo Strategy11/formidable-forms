@@ -49,8 +49,6 @@
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
 	<rule ref="WordPress.Security.NonceVerification.Missing">
 		<exclude-pattern>tests/*</exclude-pattern>
-		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/controllers/FrmStrpLiteSettingsController.php</exclude-pattern>
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>

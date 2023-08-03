@@ -81,6 +81,7 @@ class FrmStrpLiteSettingsController {
 		);
 
 		$settings = FrmStrpLiteAppHelper::get_settings();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$settings->update( $_POST );
 		$settings->store();
 	}
