@@ -442,9 +442,16 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'3.0',
 			false
 		);
+
+		$suffix = FrmAppHelper::js_suffix();
+		if ( ! $suffix && ! is_readable( FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.js' ) ) {
+			// The unminified file is not included in releases so force the minified script.
+			$suffix = '.min';
+		}
+
 		wp_enqueue_script(
 			'formidable-stripe',
-			FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . FrmAppHelper::js_suffix() . '.js',
+			FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js',
 			array( 'stripe', 'formidable' ),
 			FrmAppHelper::plugin_version(),
 			false
