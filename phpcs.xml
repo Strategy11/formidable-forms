@@ -70,8 +70,6 @@
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
 		<exclude-pattern>tests/*</exclude-pattern>
-		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
 		<exclude-pattern>tests/*</exclude-pattern>
