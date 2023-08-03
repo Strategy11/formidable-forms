@@ -187,6 +187,12 @@ class FrmHooksController {
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 
+		// Cronjob.
+		add_action( 'init', 'FrmCronController::schedule_events' ); // TODO: Maybe move to migration function.
+
+		// Summary emails.
+		add_action( 'frm_daily_event', 'FrmSummaryEmailsController::maybe_send_emails' );
+
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();
