@@ -31,3 +31,4 @@ phpstan.neon export-ignore
 readme.md export-ignore
 tests export-ignore
 webpack.config.js export-ignore
+/stripe/js/frmstrp.js
