@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteAuth {
 
 	/**
+	 * Payment details are stored after checking the request params.
+	 * The details are then accessed later in self::maybe_show_message.
+	 * These details include entry, intent, and payment.
+	 *
+	 * @var array
+	 */
+	private static $details_by_form_id = array();
+
+	/**
 	 * If returning from Stripe to authorize a payment, show the message.
 	 * This is used for 3D secure and for Stripe link.
 	 *
@@ -15,18 +24,6 @@ class FrmStrpLiteAuth {
 	 * @return string
 	 */
 	public static function maybe_show_message( $html ) {
-		$intent_id       = FrmAppHelper::simple_get( 'payment_intent' );
-		$is_setup_intent = false;
-
-		if ( ! $intent_id ) {
-			$intent_id = FrmAppHelper::simple_get( 'setup_intent' );
-			if ( ! $intent_id ) {
-				return $html;
-			}
-
-			$is_setup_intent = true;
-		}
-
 		$link_error = FrmAppHelper::simple_get( 'frm_link_error' );
 		if ( $link_error ) {
 			$message = '<div class="frm_error_style">' . self::get_message_for_stripe_link_code( $link_error ) . '</div>';
@@ -34,46 +31,24 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
-		$entry_id = FrmAppHelper::simple_get( 'frmstrp', 'absint', 0 );
-		if ( ! $entry_id ) {
+		$form_id = self::check_html_for_form_id_match( $html );
+		if ( false === $form_id ) {
 			return $html;
 		}
 
-		$atts = array( 'entry' => FrmEntry::getOne( $entry_id ) );
+		$details = self::$details_by_form_id[ $form_id ];
+		$atts    = array(
+			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
+			'entry'  => $details['entry'],
+		);
 		self::prepare_success_atts( $atts );
 
-		$is_stripe_link = false !== FrmStrpLiteActionsController::get_stripe_link_action( $atts['form']->id );
-		if ( ! $is_stripe_link ) {
-			// We only filter when Stripe link is active.
-			// Stripe Link is always active in Lite so this check may be redundant.
-			return $html;
-		}
+		$intent  = $details['intent'];
+		$payment = $details['payment'];
 
-		$charge_id  = FrmAppHelper::simple_get( 'charge' );
-		$has_charge = (bool) $charge_id;
-
-		$frm_payment = new FrmTransLitePayment();
-
-		if ( $has_charge ) {
-			// Stripe link payments use charge id.
-			$payment = $frm_payment->get_one_by( $charge_id, 'receipt_id' );
-		} else {
-			// 3D secure payments use intent id.
-			$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
-		}
-
-		if ( ! $payment ) {
-			return $html;
-		}
-
-		if ( $entry_id !== (int) $payment->item_id || ! FrmStrpLiteAppHelper::stripe_is_configured() ) {
-			return $html;
-		}
-
-		$intent_function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
-		$intent               = FrmStrpLiteAppHelper::call_stripe_helper_class( $intent_function_name, $intent_id );
-
-		if ( ! $intent || ! self::verify_client_secret( $intent, $is_setup_intent ) ) {
+		if ( in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true ) ) {
+			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
+			self::insert_error_message( $message, $html );
 			return $html;
 		}
 
@@ -81,14 +56,12 @@ class FrmStrpLiteAuth {
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
 			$filter = function( $message ) {
-				$stripe_settings = FrmStrpAppHelper::get_settings();
+				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
 				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
 				return $message;
 			};
 			add_filter( 'frm_content', $filter );
 		}
-
-		$atts['fields'] = FrmFieldsHelper::get_form_fields( $atts['form']->id );
 
 		ob_start();
 		FrmFormsController::run_success_action( $atts );
@@ -101,6 +74,108 @@ class FrmStrpLiteAuth {
 		}
 
 		return $message;
+	}
+
+	/**
+	 * Check the URL params for Stripe intent details.
+	 * When these params are detected, the form is replaced with a success message.
+	 * These params are used in 3D secure as well as Stripe Link.
+	 *
+	 * The params include:
+	 * - The ID of the payment intent or setup intent.
+	 * - The ID of the entry.
+	 * - The client secret which is used to verify the intent.
+	 * - The charge ID (if applicable)
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $form_id
+	 * @return array|false
+	 */
+	private static function check_request_params( $form_id ) {
+		$form_id         = (int) $form_id;
+		$intent_id       = FrmAppHelper::simple_get( 'payment_intent' );
+		$is_setup_intent = false;
+
+		if ( ! $intent_id ) {
+			$intent_id = FrmAppHelper::simple_get( 'setup_intent' );
+			if ( ! $intent_id ) {
+				return false;
+			}
+
+			$is_setup_intent = true;
+		}
+
+		$entry_id = FrmAppHelper::simple_get( 'frmstrp', 'absint', 0 );
+		if ( ! $entry_id ) {
+			return false;
+		}
+
+		$entry = FrmEntry::getOne( $entry_id );
+		if ( ! $entry || (int) $entry->form_id !== $form_id ) {
+			return false;
+		}
+
+		$charge_id   = FrmAppHelper::simple_get( 'charge' );
+		$has_charge  = (bool) $charge_id;
+		$frm_payment = new FrmTransLitePayment();
+
+		if ( $has_charge ) {
+			// Stripe link payments use charge id.
+			$payment = $frm_payment->get_one_by( $charge_id, 'receipt_id' );
+		} else {
+			// 3D secure payments use intent id.
+			$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+		}
+
+		if ( ! $payment || (int) $payment->item_id !== (int) $entry->id ) {
+			return false;
+		}
+
+		if ( ! FrmStrpLiteAppHelper::stripe_is_configured() ) {
+			return false;
+		}
+
+		$intent_function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
+		$intent               = FrmStrpLiteAppHelper::call_stripe_helper_class( $intent_function_name, $intent_id );
+
+		if ( ! $intent || ! self::verify_client_secret( $intent, $is_setup_intent ) ) {
+			return false;
+		}
+
+		self::$details_by_form_id[ $form_id ] = array(
+			'entry'   => $entry,
+			'intent'  => $intent,
+			'payment' => $payment,
+		);
+
+		return self::$details_by_form_id[ $form_id ];
+	}
+
+	/**
+	 * The frm_filter_final_form filter only passes form HTML as a string.
+	 * To determine which form is being filtered, this function checks for the
+	 * hidden form_id input. If there is a match, it returns the matching form id.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @return int|false Matching form id or false if there is no match.
+	 */
+	private static function check_html_for_form_id_match( $html ) {
+		if ( empty( self::$details_by_form_id ) ) {
+			return false;
+		}
+
+		$form_ids = array_keys( self::$details_by_form_id );
+		foreach ( $form_ids as $form_id ) {
+			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
+			if ( strpos( $html, $substring ) ) {
+				return $form_id;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -419,6 +494,13 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
+
+		$details = self::check_request_params( $form_id );
+		if ( is_array( $details ) ) {
+			// Exit early if the request params are set.
+			// This way an extra payment intent isn't created for Stripe Link.
+			return $intents;
+		}
 
 		if ( ! FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' ) ) {
 			// Stripe is not configured, so don't create intents.
