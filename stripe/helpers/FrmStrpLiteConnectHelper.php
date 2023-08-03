@@ -866,10 +866,19 @@ class FrmStrpLiteConnectHelper {
 	 * Verify a site identifier is a match.
 	 */
 	public static function verify() {
-		// TODO rate limit this.
+		$option_name  = 'frm_stripe_lite_last_verify_attempt';
+		$last_request = get_option( $option_name );
+
+		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
+			wp_send_json_error( 'Too many requests' );
+		}
+
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
 		$uuid            = $usage->uuid();
+
+		update_option( $option_name, time() );
+
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
