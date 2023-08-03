@@ -1312,6 +1312,7 @@ class FrmAppHelper {
 		$files = apply_filters( 'frm_combined_js_files', $files );
 		$new_file->combine_files( $files );
 
+		// Create the minified Stripe Script.
 		$file_atts = apply_filters(
 			'frm_stripe_js_location',
 			array(
