@@ -754,9 +754,8 @@ class FrmEntriesHelper {
 	 * @since x.x
 	 *
 	 * @param int $status is_draft column.
-	 * @param bool $include_label Return label.
 	 *
-	 * @return string
+	 * @return int
 	 */
 	public static function get_entry_status( $status ) {
 		$statuses = self::get_entry_statuses();
@@ -766,7 +765,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( empty( $status ) ) {
-			return self::SUBMITTED_ENTRY_STATUS; //If the status is empty, let's default to 0.
+			return self::SUBMITTED_ENTRY_STATUS; // If the status is empty, let's default to 0.
 		}
 
 		return self::DRAFT_ENTRY_STATUS; // If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
