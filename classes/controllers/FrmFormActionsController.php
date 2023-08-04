@@ -505,7 +505,7 @@ class FrmFormActionsController {
 				$entry = FrmEntry::getOne( $entry, true );
 			}
 
-			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === $entry->is_draft && 'draft' != $event ) ) {
+			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' != $event ) ) {
 				continue;
 			}
 
