@@ -755,11 +755,11 @@ class FrmEntry {
 	 * @return int
 	 */
 	private static function get_is_draft_value( $values ) {
-		if ( isset( $values['frm_saving_draft'] ) ) {
-			return absint( $values['frm_saving_draft'] );
+		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
+			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
 
-		return absint( $values['is_draft'] );
+		return isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
 	}
 
 	/**
