@@ -443,10 +443,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$suffix            = FrmAppHelper::js_suffix();
-		$use_combined_file = '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' );
+		$suffix       = FrmAppHelper::js_suffix();
+		$dependencies = array( 'stripe', 'formidable' );
 
-		if ( $use_combined_file ) {
+		if ( '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' ) ) {
 			// Use the combined file if it is available.
 			$script_url = FrmAppHelper::plugin_url() . '/js/frmstrp.min.js';
 		} else {
@@ -457,8 +457,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$script_url = FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js';
 		}
 
-		$dependencies = array( 'stripe', 'formidable' );
-		if ( ! $use_combined_file && class_exists( 'FrmProStrpLiteController', false ) ) {
+		if ( '.min' !== $suffix || ! FrmFormsController::has_combo_js_file() ) {
 			$dependencies[] = 'formidablepro';
 		}
 
