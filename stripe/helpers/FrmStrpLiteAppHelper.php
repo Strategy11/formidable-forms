@@ -44,7 +44,6 @@ class FrmStrpLiteAppHelper {
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
-		// TODO: Maybe call the Stripe add on here.
 		if ( self::should_use_stripe_connect() ) {
 			if ( is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
 				return FrmStrpLiteConnectApiAdapter::$function( ...$params );

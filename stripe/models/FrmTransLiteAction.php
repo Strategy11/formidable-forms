@@ -67,12 +67,12 @@ class FrmTransLiteAction extends FrmFormAction {
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
 			'billing_company'      => '',
-			'billing_address'      => '',
-			'use_shipping'         => 0,
-			'shipping_first_name'  => '',
-			'shipping_last_name'   => '',
-			'shipping_company'     => '',
-			'shipping_address'     => '',
+			'billing_address'      => '', // TODO Move this into Pro.
+			'use_shipping'         => 0, // TODO Remove this?
+			'shipping_first_name'  => '', // TODO Remove this?
+			'shipping_last_name'   => '', // TODO Remove this?
+			'shipping_company'     => '', // TODO Remove this?
+			'shipping_address'     => '', // TODO Remove this?
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
