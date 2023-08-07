@@ -62,7 +62,7 @@ class FrmSummaryEmailsHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_renewal_date() {
+	public static function get_renewal_date() {
 		$options = self::get_options();
 		if ( ! empty( $options['renewal'] ) ) {
 			return $options['renewal'];
@@ -92,16 +92,39 @@ class FrmSummaryEmailsHelper {
 		return false;
 	}
 
-	public static function should_send_yearly_email() {
+	/**
+	 * Gets date object.
+	 *
+	 * @param string|DateTime $date Date string or object.
+	 * @return DateTime|false
+	 */
+	private static function get_date_obj( $date ) {
+		if ( $date instanceof DateTime ) {
+			return $date;
+		}
 
+		return date_create( $date );
 	}
 
-	public static function should_send_monthly_email() {
-		return false;
-	}
+	/**
+	 * Gets the days different between 2 dates.
+	 *
+	 * @param string|DateTime $date1 Date 1.
+	 * @param string|DateTime $date2 Date 2.
+	 * @return int|false
+	 */
+	public static function get_date_diff( $date1, $date2 ) {
+		$date1 = self::get_date_obj( $date1 );
+		if ( ! $date1 ) {
+			return false;
+		}
 
-	public static function should_send_license_expired_email() {
-		return false;
+		$date2 = self::get_date_obj( $date2 );
+		if ( ! $date2 ) {
+			return false;
+		}
+
+		return date_diff( $date1, $date2 )->days;
 	}
 
 	/**
