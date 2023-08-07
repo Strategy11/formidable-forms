@@ -185,6 +185,11 @@ class FrmHooksController {
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
+		// Form Templates Controller.
+		add_action( 'admin_menu', 'FrmFormTemplatesController::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
+		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets' );
+		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::dequeue_scripts', 15 );
+
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 

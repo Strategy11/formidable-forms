@@ -134,6 +134,7 @@ class FrmAppController {
 			'formidable-inbox',
 			'formidable-welcome',
 			'formidable-applications',
+			'formidable-form-templates',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -369,61 +370,6 @@ class FrmAppController {
 
 		include $shared_path . 'upgrade_overlay.php';
 		include $shared_path . 'confirm-overlay.php';
-
-		if ( FrmAppHelper::is_admin_page( 'formidable-welcome' ) || FrmAppHelper::on_form_listing_page() ) {
-			self::new_form_overlay_html();
-		}
-	}
-
-	/**
-	 * @return void
-	 */
-	private static function new_form_overlay_html() {
-		FrmFormsController::before_list_templates();
-
-		$plugin_path      = FrmAppHelper::plugin_path();
-		$path             = $plugin_path . '/classes/views/frm-forms/';
-		$expired          = FrmFormsController::expired();
-		$expiring         = FrmAddonsController::is_license_expiring();
-		$user             = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
-		$view_path        = $path . 'new-form-overlay/';
-		$modal_class      = '';
-		$upgrade_link     = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'new-template',
-				'content' => 'upgrade',
-			)
-		);
-		$renew_link       = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'new-template',
-				'content' => 'renew',
-			)
-		);
-		$blocks_to_render = array();
-
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			// avoid rendering the email and code blocks for users who have upgraded or have a free license already
-			$api = new FrmFormTemplateApi();
-			if ( ! $api->has_free_access() ) {
-				array_push( $blocks_to_render, 'email', 'code' );
-			}
-		}
-
-		// avoid rendering the upgrade block for users with elite
-		if ( 'elite' !== FrmAddonsController::license_type() ) {
-			$blocks_to_render[] = 'upgrade';
-		}
-
-		// avoid rendering the renew block for users who are not currently expired
-		if ( $expired ) {
-			$blocks_to_render[] = 'renew';
-			$modal_class        = 'frm-expired';
-		} elseif ( $expiring ) {
-			$modal_class = 'frm-expiring';
-		}
-
-		include $path . 'new-form-overlay.php';
 	}
 
 	/**
@@ -546,7 +492,7 @@ class FrmAppController {
 			$action = FrmAppHelper::get_param( 'frm_action' );
 
 			if ( in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=formidable&triggerNewFormModal=1' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=formidable-form-templates' ) );
 				exit;
 			}
 
@@ -1044,9 +990,14 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$post_type           = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$should_return_early = (
+			( ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs' ) ||
+			FrmAppHelper::is_full_screen() ||
+			FrmAppHelper::is_form_templates_page()
+		);
 
-		if ( ( ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs' ) || FrmAppHelper::is_full_screen() ) {
+		if ( $should_return_early ) {
 			return;
 		}
 
