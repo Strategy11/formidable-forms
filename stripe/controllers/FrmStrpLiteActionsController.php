@@ -443,11 +443,12 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		if ( is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' ) ) {
+		$suffix = FrmAppHelper::js_suffix();
+
+		if ( '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' ) ) {
 			// Use the combined file if it is available.
 			$script_url = FrmAppHelper::plugin_url() . '/js/frmstrp.min.js';
 		} else {
-			$suffix = FrmAppHelper::js_suffix();
 			if ( ! $suffix && ! is_readable( FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.js' ) ) {
 				// The unminified file is not included in releases so force the minified script.
 				$suffix = '.min';

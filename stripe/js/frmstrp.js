@@ -7,7 +7,12 @@
 		elements,
 		isStripeLink = false,
 		linkAuthenticationElementIsComplete = false,
-		stripeLinkElementIsComplete = false;
+		stripeLinkElementIsComplete = false,
+		triggerCustomEvent;
+
+	triggerCustomEvent = function( el, eventName, data ) {
+		frmFrontForm.triggerCustomEvent( el, eventName, data );
+	};
 
 	/**
 	 * @param {Event} e
@@ -313,30 +318,6 @@
 		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
 		triggerCustomEvent( document, 'frmStripeLiteEnableSubmit', { form: thisForm } );
-	}
-
-	/**
-	 * Triggers custom JS event.
-	 *
-	 * @param {HTMLElement} el        The HTML element.
-	 * @param {String}      eventName Event name.
-	 * @param {mixed}       data      The passed data.
-	 */
-	function triggerCustomEvent( el, eventName, data ) {
-		var event;
-
-		if ( typeof window.CustomEvent === 'function' ) {
-			event = new CustomEvent( eventName );
-		} else if ( document.createEvent ) {
-			event = document.createEvent( 'HTMLEvents' );
-			event.initEvent( eventName, false, true );
-		} else {
-			return;
-		}
-
-		event.frmData = data;
-
-		el.dispatchEvent( event );
 	}
 
 	function getPriceFields() {
