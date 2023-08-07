@@ -443,9 +443,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$suffix = FrmAppHelper::js_suffix();
+		$suffix            = FrmAppHelper::js_suffix();
+		$use_combined_file = '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' );
 
-		if ( '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' ) ) {
+		if ( $use_combined_file ) {
 			// Use the combined file if it is available.
 			$script_url = FrmAppHelper::plugin_url() . '/js/frmstrp.min.js';
 		} else {
@@ -457,7 +458,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$dependencies = array( 'stripe', 'formidable' );
-		if ( class_exists( 'FrmProStrpLiteController', false ) ) {
+		if ( ! $use_combined_file && class_exists( 'FrmProStrpLiteController', false ) ) {
 			$dependencies[] = 'formidablepro';
 		}
 
