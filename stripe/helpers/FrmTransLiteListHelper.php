@@ -352,8 +352,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$delete_link = $base_link . 'destroy&id=' . $item->id . '&type=' . $this->table;
 
 		$actions           = array();
-		$actions['view']   = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
-		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete' ) . '</a>';
+		$actions['view']   = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
+		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>';
 
 		return $actions;
 	}

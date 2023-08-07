@@ -234,7 +234,7 @@ class FrmStrpLiteLinkController {
 				'payment_method_types' => FrmStrpLitePaymentTypeHandler::get_payment_method_types( $action ),
 			);
 		}
-		
+
 		$atts = array(
 			'action' => $action,
 			'entry'  => $entry,

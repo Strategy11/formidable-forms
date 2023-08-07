@@ -101,6 +101,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$entry = FrmDb::get_col( 'frm_items', array( 'id' => $payment->item_id ) );
 
 		if ( ! $entry ) {
+			// translators: %d: Entry ID.
 			echo esc_html( sprintf( __( '%d (Deleted)', 'formidable-payments' ), $payment->item_id ) );
 			return;
 		}

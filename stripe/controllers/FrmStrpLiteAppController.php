@@ -80,7 +80,7 @@ class FrmStrpLiteAppController {
 	public static function add_gateway( $gateways ) {
 		$gateways['stripe'] = array(
 			'label'      => 'Stripe',
-			'user_label' => __( 'Payment', 'formidable-stripe' ),
+			'user_label' => __( 'Payment', 'formidable' ),
 			'class'      => 'StrpLite',
 			'recurring'  => true,
 			'include'    => array(
