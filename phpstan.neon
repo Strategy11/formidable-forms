@@ -63,3 +63,4 @@ parameters:
 		- '#Result of static method FrmTransLiteCRUDController::show#'
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
+		- '#callback of function spl_autoload_register expects#'

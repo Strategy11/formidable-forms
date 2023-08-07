@@ -83,6 +83,16 @@ namespace {
 	}
 	class FrmViewsAppHelper {
 	}
+	class FrmProCreditCardsController {
+		/**
+		 * @param array  $field
+		 * @param string $field_name
+		 * @param array  $atts
+		 * @return void
+		 */
+		public static function show_in_form( $field, $field_name, $atts ) {
+		}
+	}
 	class Akismet {
 	}
 	class PHPMailer {

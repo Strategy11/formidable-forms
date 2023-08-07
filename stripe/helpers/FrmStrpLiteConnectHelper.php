@@ -478,7 +478,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return array|false
+	 * @return array
 	 */
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();

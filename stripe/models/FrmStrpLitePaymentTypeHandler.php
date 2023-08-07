@@ -31,7 +31,7 @@ class FrmStrpLitePaymentTypeHandler {
 	 * @since 3.1
 	 *
 	 * @param WP_Post $action
-	 * @return string|string[] A string 'automatic' will be returned if payment types are not customized via a filter.
+	 * @return string[] An empty array is treated as automatic.
 	 */
 	public static function get_payment_method_types( $action ) {
 		if ( ! isset( self::$types_by_action_id[ $action->ID ] ) ) {
@@ -44,7 +44,7 @@ class FrmStrpLitePaymentTypeHandler {
 	 * @since 3.1
 	 *
 	 * @param WP_Post $action
-	 * @return string|string[]
+	 * @return string[]
 	 */
 	private static function get_filtered_payment_method_types( $action ) {
 		/**
