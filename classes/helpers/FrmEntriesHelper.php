@@ -727,7 +727,7 @@ class FrmEntriesHelper {
 		$data = array(
 			'oneclick' => '',
 			'requires' => '',
-			'upgrade'  => __( 'Forms to PDF', 'formidable-pro' ),
+			'upgrade'  => __( 'Forms to PDF', 'formidable' ),
 			'medium'   => 'pdfs',
 		);
 
