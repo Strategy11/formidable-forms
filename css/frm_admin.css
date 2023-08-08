@@ -56,6 +56,7 @@
 	--gap-lg: 32px;
 	--gap-xl: 40px;
 	--gap-2xl: 48px;
+	--box-shadow-xs: 0px 0.47074466943740845px 0.9414893388748169px 0px rgba(16, 24, 40, 0.05);
 	--box-shadow-sm: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);

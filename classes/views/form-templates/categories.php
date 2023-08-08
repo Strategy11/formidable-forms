@@ -5,11 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <ul class="frm-form-templates-categories">
-	<?php foreach ( $categories as $category ) { ?>
+	<?php foreach ( $categories as $category => $count ) { ?>
 		<?php
 		$classes       = '';
-		$templates     = isset( $categorized_templates[ $category ] ) ? $categorized_templates[ $category ] : $all_templates;
-		$count         = count( $templates );
 		$category_slug = sanitize_title( $category );
 
 		if ( 'all-templates' === $category_slug ) {

@@ -57,6 +57,16 @@ class FrmFormTemplatesController {
 	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
 	/**
+	 * The keys of the featured templates.
+	 *
+	 * Contains the unique keys for the templates that are considered "featured":
+	 * "Contact Us", "User Registration", "Create WordPress Post", "Credit Card Payment", "Survey", and "Quiz".
+	 *
+	 * @var array FEATURED_TEMPLATES_KEYS Unique keys for the featured templates.
+	 */
+	const FEATURED_TEMPLATES_KEYS = array( 20872734, 20874748, 20882522, 20874739, 20908981, 28109851 );
+
+	/**
 	 * Instance of the Form Template API handler.
 	 *
 	 * @var FrmFormTemplateApi $form_template_api Form Template API handler.
@@ -71,18 +81,25 @@ class FrmFormTemplatesController {
 	private static $templates = array();
 
 	/**
+	 * Featured templates.
+	 *
+	 * @var array $featured_templates Associative array with the featured templates' information.
+	 */
+	private static $featured_templates = array();
+
+	/**
+	 * Templates fetched from the published form by user.
+	 *
+	 * @var array $custom_templates Templates information from published form.
+	 */
+	private static $custom_templates = array();
+
+	/**
 	 * Categories for organizing templates.
 	 *
 	 * @var array $categories Categories for organizing templates.
 	 */
 	private static $categories = array();
-
-	/**
-	 * Templates organized by categories.
-	 *
-	 * @var array $categorized_templates Templates organized by category.
-	 */
-	private static $categorized_templates = array();
 
 	/**
 	 * Status of API request, true if expired.
@@ -119,58 +136,55 @@ class FrmFormTemplatesController {
 	}
 
 	/**
-	 * Renders the Form Templates page.
+	 * Renders the Form Templates page in the WordPress admin area.
 	 *
-	 * This method prepares the required data and includes the view for displaying
-	 * the Form Templates page in the WordPress admin area.
+	 * Sets up template data, fetches relevant information, determines which blocks to render,
+	 * and includes the view file for displaying the Form Templates page.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
 	public static function render() {
-		// Retrieve the form templates data.
-		self::get_form_templates_data();
+		// Initialize form templates data.
+		self::set_form_templates_data();
 
-		// Check license expiration status.
-		$expiring = FrmAddonsController::is_license_expiring();
-		$expired  = FrmFormsController::expired();
+		// Get current user.
+		$user = wp_get_current_user();
 
-		// Define paths and additional variables.
-		$categories            = self::get_categories();
-		$categorized_templates = self::get_categorized_templates();
-		$all_templates         = self::get_templates();
-		$blocks_to_render      = array();
-		$upgrade_link          = FrmAppHelper::admin_upgrade_link(
+		// Retrieve various template types and categories.
+		$templates          = self::get_templates();
+		$featured_templates = self::get_featured_templates();
+		$custom_templates   = self::get_custom_templates();
+		$categories         = self::get_categories();
+
+		// Define view path.
+		$view_path = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
+
+		// License information and upgrade/renewal links.
+		$expiring     = FrmAddonsController::is_license_expiring();
+		$expired      = FrmFormsController::expired();
+		$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
 				'medium'  => 'new-template',
 				'content' => 'upgrade',
 			)
 		);
-		$renew_link            = FrmAppHelper::admin_upgrade_link(
+		$renew_link   = FrmAppHelper::admin_upgrade_link(
 			array(
 				'medium'  => 'new-template',
 				'content' => 'renew',
 			)
 		);
-		$view_path             = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
 
-		// The following variable gets the current WP user to determine
-		// a default value for a field in `_leave-email.php`.
-		$user = wp_get_current_user();
-
-		// Check if the pro version is not installed and the user
-		// does not have free access, then render 'email' and 'code' blocks.
+		// Determine which blocks to render based on license status.
+		$blocks_to_render = array();
 		if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
 			array_push( $blocks_to_render, 'email', 'code' );
 		}
-
-		// If the license type is not 'elite', add 'upgrade' block to render.
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$blocks_to_render[] = 'upgrade';
 		}
-
-		// Check the license expiration status and add appropriate blocks to render.
 		if ( $expired ) {
 			$blocks_to_render[] = 'renew';
 			$modal_class        = 'frm-expired';
@@ -178,138 +192,142 @@ class FrmFormTemplatesController {
 			$modal_class = 'frm-expiring';
 		}
 
-		// Include svg images.
+		// Include SVG images for icons.
 		FrmAppHelper::include_svg();
 
-		// Include the view file for rendering the page.
+		// Render the view.
 		include $view_path . 'index.php';
 	}
 
 	/**
-	 * Fetches form template data from API.
-	 * Organizes the data and handles any API errors.
+	 * Initializes and organizes form template data by performing the following actions:
+	 * - Instantiates the Form Template API class
+	 * - Retrieves and sets templates, including featured ones
+	 * - Organizes and categorizes templates
+	 * - Formats custom templates
+	 * - Updates global variables to reflect the current state
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function get_form_templates_data() {
-		// Initialize form template API handler.
+	private static function set_form_templates_data() {
+		// Instantiate the Form Template API class.
 		self::$form_template_api = new FrmFormTemplateApi();
 
-		// Get templates from the API.
+		// Retrieve and set the templates.
+		self::retrieve_and_set_templates();
+
+		// Fetch and format custom templates.
+		self::fetch_and_format_custom_templates();
+
+		// Assign featured templates.
+		self::assign_featured_templates();
+
+		// Organize and set categories.
+		self::organize_and_set_categories();
+
+		// Update global variables to synchronize with the current class state.
+		self::update_global_variables();
+	}
+
+	/**
+	 * Retrieve and set templates.
+	 *
+	 * Gets the templates from the API and assigns them to the class property.
+	 * Also handles any errors returned from the API.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function retrieve_and_set_templates() {
 		self::$templates = self::$form_template_api->get_api_info();
 
 		// Handle any errors returned from the API.
-		if ( isset( self::$templates['error'] ) ) {
-			self::handle_api_errors();
+		self::handle_api_errors();
+	}
+
+	/**
+	 * Assign featured templates.
+	 *
+	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
+	 * the `featured_templates` class property.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function assign_featured_templates() {
+		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
+			if ( isset( self::$templates[ $key ] ) ) {
+				self::$featured_templates[] = self::$templates[ $key ];
+			}
 		}
-
-		// Organize the templates by category.
-		self::group_templates_by_category();
-
-		// Call synchronize global variables.
-		self::synchronize_global_variables();
 	}
 
 	/**
-	 * Handles any errors from the API request.
-	 * Sets the `$is_expired` and `$license_type` properties.
+	 * Organize and set categories.
+	 *
+	 * Iterates through templates to organize categories, performs filtering, sorting,
+	 * and adds special categories.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function handle_api_errors() {
-		// Extract error message and modify the `utm_medium`.
-		$error = self::$templates['error']['message'];
-		$error = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-
-		// Determine if request expired and set the license type.
-		self::$is_expired = 'expired' === self::$templates['error']['code'];
-		self::$license_type = isset( self::$templates['error']['type'] ) ? self::$templates['error']['type'] : '';
-
-		// Remove error from the templates.
-		unset( self::$templates['error'] );
-	}
-
-	/**
-	 * Organizes the templates by category.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function group_templates_by_category() {
-		// Extract custom templates.
-		$custom_templates = array();
-		self::add_user_templates( $custom_templates );
-
-		// Organize templates by their categories.
+	private static function organize_and_set_categories() {
+		// Iterate through templates to assign categories.
 		foreach ( self::$templates as $template ) {
 			// Skip the template if the categories are not set.
 			if ( ! isset( $template['categories'] ) ) {
 				continue;
 			}
 
-			// Iterate through each category and organize the templates accordingly.
+			// Increment the count for each category.
 			foreach ( $template['categories'] as $category ) {
-				if ( ! isset( self::$categorized_templates[ $category ] ) ) {
-					self::$categorized_templates[ $category ] = array();
+				if ( ! isset( self::$categories[ $category ] ) ) {
+					self::$categories[ $category ] = 0;
 				}
-
-				self::$categorized_templates[ $category ][] = $template;
+				self::$categories[ $category ]++;
 			}
-
-			// Unset the current template to release memory.
-			unset( $template );
 		}
 
-		// Get all category keys.
-		self::$categories = array_keys( self::$categorized_templates );
-		// Remove certain categories from the final list.
-		self::$categories = array_diff( self::$categories, FrmFormsHelper::ignore_template_categories() );
-		// Remove redundant categories.
-		$redundant_cats = array( 'PayPal', 'Stripe', 'Twilio' );
-		self::$categories = array_diff( self::$categories, $redundant_cats );
-		// Sort the categories.
-		sort( self::$categories );
+		// Filter out certain and redundant categories.
+		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
+		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::ignore_template_categories() );
+		foreach ( $redundant_cats as $redundant_cat ) {
+			unset( self::$categories[ $redundant_cat ] );
+		}
 
-		// Add 'All Templates' Category.
-		$all_templates_cat_text = __( 'All Templates', 'formidable' );
-		self::$categories       = array_merge( array( $all_templates_cat_text ), self::$categories );
+		// Sort the categories by keys alphabetically.
+		ksort( self::$categories );
 
-		// Add 'Custom' Category.
-		$custom_cat_text  = __( 'Custom', 'formidable' );
-		self::$categories = array_merge( array( $custom_cat_text ), self::$categories );
-		self::$categorized_templates[ $custom_cat_text ] = $custom_templates;
-
-		// Add 'Favorites' Category.
-		$favorites_cat_text = __( 'Favorites', 'formidable' );
-		self::$categories   = array_merge( array( $favorites_cat_text ), self::$categories );
-		self::$categorized_templates[ $favorites_cat_text ] = $custom_templates;
+		// Add special categories.
+		self::$categories = array_merge(
+			array(
+				__( 'Favorites', 'formidable' )     => 5,
+				__( 'Custom', 'formidable' )        => count( self::$custom_templates ),
+				__( 'All Templates', 'formidable' ) => count( self::$templates ),
+			),
+			self::$categories
+		);
 	}
 
 	/**
-	 * Adds user-defined templates.
+	 * Fetch and format custom templates.
+	 *
+	 * Retrieves the custom templates, formats them, and assigns them to the class property.
 	 *
 	 * @since x.x
 	 *
-	 * @param array &$templates The templates array to update.
 	 * @return void
 	 */
-	private static function add_user_templates( &$templates ) {
-		// Retrieve user-defined templates.
-		$user_templates = FrmForm::getAll(
-			array(
-				'is_template'      => 1,
-				'default_template' => 0,
-			),
-			'name'
-		);
+	private static function fetch_and_format_custom_templates() {
+		// Get all published forms.
+		self::$custom_templates = FrmForm::get_published_forms();
 
-		// Add user templates to the array.
-		foreach ( $user_templates as $template ) {
+		foreach ( self::$custom_templates as $template ) {
 			$template = array(
 				'id'          => $template->id,
 				'name'        => $template->name,
@@ -321,21 +339,44 @@ class FrmFormTemplatesController {
 				'custom'      => true,
 			);
 
-			// Add each template to the templates array.
-			array_unshift( $templates, $template );
-			unset( $template );
+			// Add the formatted custom template to the list.
+			self::$custom_templates[] = $template;
 		}
 	}
 
 	/**
-	 * Synchronizes global variables.
-	 * This method synchronizes global variables with the current state of the class.
+	 * Handles any errors from the API request.
+	 * Sets the `$is_expired` and `$license_type` properties.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function synchronize_global_variables() {
+	private static function handle_api_errors() {
+		if ( ! isset( self::$templates['error'] ) ) {
+			return;
+		}
+
+		// Extract error message and modify the `utm_medium`.
+		$error = self::$templates['error']['message'];
+		$error = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+
+		// Determine if request expired and set the license type.
+		self::$is_expired   = 'expired' === self::$templates['error']['code'];
+		self::$license_type = isset( self::$templates['error']['type'] ) ? self::$templates['error']['type'] : '';
+
+		// Remove error from the templates.
+		unset( self::$templates['error'] );
+	}
+
+	/**
+	 * Updates global variables with the current state of the class.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function update_global_variables() {
 		global $frm_templates;
 		global $frm_expired;
 		global $frm_license_type;
@@ -420,40 +461,51 @@ class FrmFormTemplatesController {
 	}
 
 	/**
-	 * Accessor for `$templates`.
+	 * Get the list of templates.
 	 *
 	 * @since x.x
 	 *
-	 * @return array The templates.
+	 * @return array A list of templates.
 	 */
 	public static function get_templates() {
 		return self::$templates;
 	}
 
 	/**
-	 * Accessor for `$categories`.
+	 * Get the list of featured templates.
 	 *
 	 * @since x.x
 	 *
-	 * @return array The categories.
+	 * @return array A list of featured templates.
+	 */
+	public static function get_featured_templates() {
+		return self::$featured_templates;
+	}
+
+	/**
+	 * Get the list of categories.
+	 *
+	 * @since x.x
+	 *
+	 * @return array A list of categories.
 	 */
 	public static function get_categories() {
 		return self::$categories;
 	}
 
 	/**
-	 * Accessor for `$categorized_templates`.
+	 * Get the list of custom templates.
 	 *
 	 * @since x.x
 	 *
-	 * @return array The templates, organized by category.
+	 * @return array A list of custom templates.
 	 */
-	public static function get_categorized_templates() {
-		return self::$categorized_templates;
+	public static function get_custom_templates() {
+		return self::$custom_templates;
 	}
 
 	/**
-	 * Accessor for `$license_type`.
+	 * Get the license type.
 	 *
 	 * @since x.x
 	 *
@@ -464,7 +516,7 @@ class FrmFormTemplatesController {
 	}
 
 	/**
-	 * Accessor for `$is_expired`.
+	 * Checks if the API request was expired.
 	 *
 	 * @since x.x
 	 *
@@ -473,4 +525,5 @@ class FrmFormTemplatesController {
 	public static function is_expired() {
 		return self::$is_expired;
 	}
+
 }
