@@ -44,6 +44,7 @@ class FrmSummaryEmailsHelper {
 
 	public static function send_monthly_email() {
 		error_log( 'Sending monthly email' );
+		self::set_last_send_date( 'monthly' );
 	}
 
 	public static function send_yearly_email() {
@@ -51,10 +52,13 @@ class FrmSummaryEmailsHelper {
 
 		$yearly_email = new FrmYearlySummaryEmail();
 		$yearly_email->send();
+
+		self::set_last_send_date( 'yearly' );
 	}
 
 	public static function send_license_expired_email() {
 		error_log( 'Sending license expired email' );
+		self::set_last_send_date( 'license' );
 	}
 
 	/**
@@ -76,12 +80,7 @@ class FrmSummaryEmailsHelper {
 			return $renewal_date;
 		}
 
-		$first_form_date = FrmDb::get_var(
-			'frm_forms',
-			array(),
-			'created_at',
-			array( 'order_by' => 'id ASC' )
-		);
+		$first_form_date = self::get_lowest_form_created_date();
 		if ( $first_form_date ) {
 			$renewal_date       = date( 'Y-m-d', strtotime( $first_form_date ) );
 			$options['renewal'] = $renewal_date;
@@ -142,11 +141,28 @@ class FrmSummaryEmailsHelper {
 		return $tracking[ 'last_' . $type ];
 	}
 
-	public static function set_last_send_date( $date = '' ) {
+	public static function set_last_send_date( $type ) {
 
 	}
 
 	private static function get_lowest_form_created_date() {
+		return FrmDb::get_var(
+			'frm_forms',
+			array(),
+			'created_at',
+			array( 'order_by' => 'id ASC' )
+		);
+	}
+
+	public static function get_summary_data( $from_date, $to_date ) {
+		$data = array(
+			'top_forms' => array(), // form_id => submission count.
+			'entries' => 0,
+			'payments' => 0,
+		);
+
 
 	}
+
+
 }
