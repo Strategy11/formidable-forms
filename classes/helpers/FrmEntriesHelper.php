@@ -735,7 +735,7 @@ class FrmEntriesHelper {
 		if ( isset( $upgrading['url'] ) ) {
 			$data['oneclick'] = json_encode( $upgrading );
 		} else {
-			$data['requires'] = FrmProAddonsController::get_addon_required_plan( 28136428 );
+			$data['requires'] = FrmAddonsController::get_addon_required_plan( 28136428 );
 		}
 
 		return $data;

@@ -1354,6 +1354,29 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Gets required plan for an addon.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Empty string if no plan is required for active license.
+	 */
+	public static function get_addon_required_plan( $addon_id ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
+
+		if ( is_array( $addons ) && array_key_exists( $addon_id, $addons ) ) {
+			$dates    = $addons[ $addon_id ];
+			$requires = FrmFormsHelper::get_plan_required( $dates );
+		}
+
+		if ( ! isset( $requires ) || ! is_string( $requires ) ) {
+			$requires = '';
+		}
+
+		return $requires;
+	}
+
+	/**
 	 * @since 4.06.02
 	 *
 	 * @deprecated 4.09.01
