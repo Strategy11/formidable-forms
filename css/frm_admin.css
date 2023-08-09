@@ -6409,8 +6409,8 @@ li.selected .divider_section_only:before {
 
 #frm_builder_page .frm_remove_form_row .frmsvg,
 #frm_builder_page .frm_remove_form_row i:before,
-.frm_wrap .frm_add_form_row .frmsvg,
-.frm_add_form_row i:before {
+#frm_builder_page .frm_add_form_row .frmsvg,
+#frm_builder_page .frm_add_form_row i:before {
 	color: var(--primary-700);
 }
 
