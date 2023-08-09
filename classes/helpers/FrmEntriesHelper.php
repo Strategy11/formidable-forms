@@ -803,7 +803,8 @@ class FrmEntriesHelper {
 		/**
 		 * Register entry status.
 		 *
-		 * "3" is reserved for abandonment-addon.
+		 * "2" is used in abandonment-addon and reserved for "In progress".
+		 * "3" is used in abandonment-addon and reserved for "Abandoned".
 		 *
 		 * @since x.x
 		 *
