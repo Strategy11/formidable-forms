@@ -278,12 +278,12 @@ class FrmEntriesController {
 		$fields  = FrmField::get_all_for_form( $form_id );
 
 		$columns = array(
-			$form_id . '_id'            => 'id',
-			$form_id . '_created_at'    => 'created_at',
-			$form_id . '_updated_at'    => 'updated_at',
-			$form_id . '_ip'            => 'ip',
-			$form_id . '_item_key'      => 'item_key',
-			$form_id . '_is_draft'      => 'is_draft',
+			$form_id . '_id'         => 'id',
+			$form_id . '_created_at' => 'created_at',
+			$form_id . '_updated_at' => 'updated_at',
+			$form_id . '_ip'         => 'ip',
+			$form_id . '_item_key'   => 'item_key',
+			$form_id . '_is_draft'   => 'is_draft',
 		);
 
 		foreach ( $fields as $field ) {
