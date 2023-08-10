@@ -469,7 +469,7 @@
 		appearance   = {
 			theme: 'stripe',
 			variables: {
-				fontSizeBase: frm_stripe_vars.style.base.fontSize,
+				fontSizeBase: frm_stripe_vars.baseFontSize,
 				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].color ),
 				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].backgroundColor ),
 				fontSmooth: 'auto'

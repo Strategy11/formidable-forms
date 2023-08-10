@@ -478,7 +478,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings'        => $action_settings,
 			'locale'          => self::get_locale(),
-			'style'           => self::prepare_styling( $style_settings ),
+			'baseFontSize'    => $style_settings['field_font_size'],
 			'appearanceRules' => self::get_appearance_rules( $style_settings ),
 			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
 		);
@@ -513,23 +513,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		return $settings;
-	}
-
-	/**
-	 * Get the style rules for Stripe card elements.
-	 *
-	 * @since 2.0
-	 * @todo Remove this. I'm still using this for Stripe link though for a few rules.
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private static function prepare_styling( $settings ) {
-		return array(
-			'base' => array(
-				'fontSize' => $settings['field_font_size'],
-			),
-		);
 	}
 
 	/**
