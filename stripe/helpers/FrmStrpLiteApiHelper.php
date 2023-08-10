@@ -18,4 +18,15 @@ class FrmStrpLiteApiHelper {
 		}
 		return FrmStrpLiteConnectApiAdapter::refund_payment( $payment_id );
 	}
+
+	/**
+	 * @param string $sub_id
+	 * @return bool
+	 */
+	public static function cancel_subscription( $sub_id ) {
+		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
+			require dirname( __FILE__ ) . '/FrmStrpLiteConnectApiAdapter.php';
+		}
+		return FrmStrpLiteConnectApiAdapter::cancel_subscription( $sub_id );
+	}
 }
