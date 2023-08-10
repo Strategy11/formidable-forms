@@ -15,7 +15,7 @@ if ( ! isset( $entry ) ) {
 	printf(
 		/* translators: %1$s: Entry status %2$s: The date */
 		esc_html__( '%1$s: %2$s', 'formidable' ),
-		FrmEntriesHelper::get_entry_status_label( $entry->is_draft ),
+		esc_html( FrmEntriesHelper::get_entry_status_label( $entry->is_draft ) ),
 		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>'
 	);
 	?>
