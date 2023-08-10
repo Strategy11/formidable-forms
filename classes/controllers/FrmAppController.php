@@ -287,7 +287,7 @@ class FrmAppController {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
+			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';

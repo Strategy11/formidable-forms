@@ -4075,6 +4075,25 @@ label input[type="checkbox"], label input[type="radio"] {
 	font-size: inherit;
 }
 
+/* Start entry statuses */
+.frm-entry-status {
+    padding: var(--gap-2xs) var(--gap-xs);
+	align-items: center;
+    border-radius: var(--small-radius);
+	text-transform: uppercase;
+}
+
+.frm-entry-status-0 {
+	color: #1E561F;
+	background: #D5F2DC;
+}
+
+.frm-entry-status-1 {
+	color: #7A4D05;
+	background: #FFF2D2;
+}
+/* End entry statuses */
+
 #frm-options-panel {
 	padding: 0 var(--gap-sm);
 	color: var(--grey-900);
@@ -6426,8 +6445,8 @@ li.selected .divider_section_only:before {
 
 #frm_builder_page .frm_remove_form_row .frmsvg,
 #frm_builder_page .frm_remove_form_row i:before,
-.frm_wrap .frm_add_form_row .frmsvg,
-.frm_add_form_row i:before {
+#frm_builder_page .frm_add_form_row .frmsvg,
+#frm_builder_page .frm_add_form_row i:before {
 	color: var(--primary-700);
 }
 
