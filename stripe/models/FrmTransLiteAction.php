@@ -57,7 +57,6 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
-			'billing_address'      => '', // TODO Move this into Pro.
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
