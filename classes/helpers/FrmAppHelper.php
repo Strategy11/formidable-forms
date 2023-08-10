@@ -377,6 +377,27 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Get the server OS
+	 *
+	 * @since 6.4.x
+	 *
+	 * @return string
+	 */
+	public static function get_server_os() {
+
+		if ( function_exists( 'php_uname' ) ) {
+			return php_uname( 's' );
+		}
+
+		if ( ! defined( 'PHP_OS' ) ) {
+			return '';
+		}
+
+		// match the same response for Windows server as php_uname('s')
+		return in_array( PHP_OS, array( 'WIN32', 'WINNT', 'Windows_NT' ), true ) ? 'Windows NT' : PHP_OS;
+	}
+
+	/**
 	 * Check for the IP address in several places (when custom headers are enabled).
 	 * Used by [ip] shortcode.
 	 *
