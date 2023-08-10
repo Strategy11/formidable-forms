@@ -57,13 +57,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
-			'billing_company'      => '',
 			'billing_address'      => '', // TODO Move this into Pro.
-			'use_shipping'         => 0, // TODO Remove this?
-			'shipping_first_name'  => '', // TODO Remove this?
-			'shipping_last_name'   => '', // TODO Remove this?
-			'shipping_company'     => '', // TODO Remove this?
-			'shipping_address'     => '', // TODO Remove this?
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
