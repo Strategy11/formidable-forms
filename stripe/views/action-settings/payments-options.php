@@ -109,24 +109,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * @since x.x
 	 *
 	 * @param array $args {
-	 *     @type array         $classes
 	 *     @type FrmFormAction $action_control
 	 *     @type array         $field_dropdown_atts
 	 * }
 	 */
 	do_action(
 		'frm_stripe_lite_customer_info_after_email',
-		compact( 'classes', 'action_control', 'field_dropdown_atts' )
+		compact( 'action_control', 'field_dropdown_atts' )
 	);
 	?>
 
-	<p class="<?php echo esc_attr( $classes['billing_first_name'] ); ?> frm6">
+	<p class="frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
 			<?php esc_html_e( 'First Name', 'formidable' ); ?>
 		</label>
 		<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_first_name' ) ); ?>
 	</p>
-	<p class="<?php echo esc_attr( $classes['billing_last_name'] ); ?> frm6">
+	<p class="frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_last_name' ) ); ?>">
 			<?php esc_html_e( 'Last Name', 'formidable' ); ?>
 		</label>

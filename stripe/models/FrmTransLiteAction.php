@@ -28,18 +28,9 @@ class FrmTransLiteAction extends FrmFormAction {
 
 		global $wpdb;
 
-		$list_fields    = self::get_defaults();
-		$action_control = $this;
-		$options        = $form_action->post_content;
-
-		// TODO Call get_classes_for_fields in the Payments submodule.
-		$classes = array(
-			'credit_card'        => '',
-			'billing_address'    => '',
-			'billing_first_name' => '',
-			'billing_last_name'  => '',
-		);
-
+		$list_fields         = self::get_defaults();
+		$action_control      = $this;
+		$options             = $form_action->post_content;
 		$form_fields         = $this->get_field_options( $args['form']->id );
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
 		$currencies          = FrmCurrencyHelper::get_currencies();
