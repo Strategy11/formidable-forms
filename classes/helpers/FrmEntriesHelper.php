@@ -698,7 +698,7 @@ class FrmEntriesHelper {
 				'url'   => '#',
 				'label' => __( 'Download as PDF', 'formidable' ),
 				'class' => 'frm_noallow',
-				'data'  => self::get_pdfs_upgrade_link_data(),
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
 				'icon'  => 'frm_icon_font frm_download_icon',
 			);
 		}
@@ -721,14 +721,15 @@ class FrmEntriesHelper {
 	/**
 	 * Gets data attributes for PDFs addon upgrade link.
 	 *
+	 * @param string $medium The source of the upgrade link used for analytics data.
 	 * @return array
 	 */
-	private static function get_pdfs_upgrade_link_data() {
+	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
 		$data = array(
 			'oneclick' => '',
 			'requires' => '',
 			'upgrade'  => __( 'Forms to PDF', 'formidable' ),
-			'medium'   => 'pdfs',
+			'medium'   => $medium,
 		);
 
 		$upgrading = FrmAddonsController::install_link( 'pdfs' );
