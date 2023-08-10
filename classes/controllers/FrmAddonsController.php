@@ -1078,8 +1078,10 @@ class FrmAddonsController {
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
 
+		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+
 		$response = array(
-			'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+			'message'       => $message,
 			'saveAndReload' => $activating_page,
 		);
 
