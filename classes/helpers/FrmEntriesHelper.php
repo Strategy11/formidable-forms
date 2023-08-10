@@ -693,6 +693,16 @@ class FrmEntriesHelper {
 			'icon'  => 'frm_icon_font frm_email_icon',
 		);
 
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) && FrmAppHelper::show_new_feature( 'pdfs' ) ) {
+			$actions['frm_download_pdf'] = array(
+				'url'   => '#',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'class' => 'frm_noallow',
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
+				'icon'  => 'frm_icon_font frm_download_icon',
+			);
+		}
+
 		$actions['frm_edit'] = array(
 			'url'   => '#',
 			'label' => __( 'Edit Entry', 'formidable' ),
@@ -706,6 +716,30 @@ class FrmEntriesHelper {
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
+	}
+
+	/**
+	 * Gets data attributes for PDFs addon upgrade link.
+	 *
+	 * @param string $medium The source of the upgrade link used for analytics data.
+	 * @return array
+	 */
+	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
+		$data = array(
+			'oneclick' => '',
+			'requires' => '',
+			'upgrade'  => __( 'Forms to PDF', 'formidable' ),
+			'medium'   => $medium,
+		);
+
+		$upgrading = FrmAddonsController::install_link( 'pdfs' );
+		if ( isset( $upgrading['url'] ) ) {
+			$data['oneclick'] = json_encode( $upgrading );
+		} else {
+			$data['requires'] = FrmAddonsController::get_addon_required_plan( 28136428 );
+		}
+
+		return $data;
 	}
 
 	/**
