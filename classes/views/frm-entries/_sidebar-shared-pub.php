@@ -13,8 +13,9 @@ if ( ! isset( $entry ) ) {
 	<?php
 	$date_format = __( 'M j, Y @ G:i', 'formidable' );
 	printf(
-		/* translators: %1$s: The date */
-		esc_html__( 'Submitted: %1$s', 'formidable' ),
+		/* translators: %1$s: Entry status %2$s: The date */
+		esc_html__( '%1$s: %2$s', 'formidable' ),
+		esc_html( FrmEntriesHelper::get_entry_status_label( $entry->is_draft ) ),
 		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>'
 	);
 	?>
