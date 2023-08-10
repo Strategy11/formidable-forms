@@ -165,8 +165,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
-		// TODO Is this a number? Can we use absint?
-		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'sanitize_text_field' );
+		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'absint' );
 		if ( ! $payment_id ) {
 			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
