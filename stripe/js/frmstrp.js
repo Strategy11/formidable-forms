@@ -132,12 +132,14 @@
 			params = {
 				elements: elements,
 				confirmParams: {
-					return_url: getReturnUrl(),
-					payment_method_data: {
-						billing_details: convertToAddressObject( meta )
-					}
+					return_url: getReturnUrl()
 				}
 			};
+
+			if ( 'object' === typeof window.frmProForm && 'function' === typeof frmProForm.beforeConfirmPayment ) {
+				params = frmProForm.beforeConfirmPayment( params, meta );
+			}
+
 			confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
 
 			frmstripe[ confirmFunction ]( params ).then( handleConfirmPromise );
@@ -283,23 +285,6 @@
 		}
 
 		return cardObject;
-	}
-
-	function convertToAddressObject( meta ) {
-		var newMeta, k;
-		newMeta = { address: {} };
-		for ( k in meta ) {
-			if ( meta.hasOwnProperty( k ) ) {
-				if ( k === 'address_zip' ) {
-					newMeta.address.postal_code = meta[ k ];
-				} else if ( k.indexOf( 'address_' ) === 0 ) {
-					newMeta.address[ k.replace( 'address_', '' ) ] = meta[ k ];
-				} else {
-					newMeta[k] = meta[ k ];
-				}
-			}
-		}
-		return newMeta;
 	}
 
 	function submitForm() {
