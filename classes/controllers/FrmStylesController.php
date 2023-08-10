@@ -533,7 +533,48 @@ class FrmStylesController {
 		wp_print_styles( 'formidable_style' );
 
 		wp_print_styles( 'formidable' );
+
+		self::preload_svgs_for_style_settings();
+
 		wp_enqueue_script( 'formidable_style' );
+	}
+
+	/**
+	 * Preloads SVG icons for live updating in style settings.
+	 *
+	 * @since x.x
+	 */
+	private static function preload_svgs_for_style_settings() {
+		if ( ! method_exists( 'FrmProAppHelper', 'get_svg_icon' ) ) {
+			return;
+		}
+
+		$svgs      = array();
+		$svg_names = array(
+			'frm_plus_icon',
+			'frm_plus1_icon',
+			'frm_plus2_icon',
+			'frm_plus3_icon',
+			'frm_plus4_icon',
+			'frm_minus_icon',
+			'frm_minus1_icon',
+			'frm_minus2_icon',
+			'frm_minus3_icon',
+			'frm_minus4_icon',
+			'frm_arrowdown_icon',
+			'frm_arrowdown1_icon',
+			'frm_arrowdown2_icon',
+			'frm_arrowdown3_icon',
+			'frm_arrowdown4_icon',
+			'frm_arrowdown5_icon',
+			'frm_arrowdown6_icon',
+		);
+
+		foreach ( $svg_names as $svg_name ) {
+			$svgs[ $svg_name ] = FrmProAppHelper::get_svg_icon( $svg_name, 'frmsvg' );
+		}
+
+		wp_localize_script( 'formidable_style', 'frmStyleSettingsSVGs', $svgs );
 	}
 
 	/**
