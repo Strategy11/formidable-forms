@@ -71,27 +71,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$link = esc_html__( 'Canceled', 'formidable' );
 		}
 
-		$paysys = $sub->paysys;
-		if ( self::should_filter_cancel_link( $paysys ) ) {
-			$link = apply_filters(
-				'frm_pay_' . $paysys . '_cancel_link',
-				$link,
-				$sub
-			);
-		}
-
 		return $link;
-	}
-
-	/**
-	 * @param string $paysys
-	 *
-	 * @return bool
-	 */
-	private static function should_filter_cancel_link( $paysys ) {
-		// TODO I don't know if any other gateways at the moment support canceling a subscription. Is that true?
-		$allowed_types = array( 'stripe' );
-		return in_array( $paysys, $allowed_types, true );
 	}
 
 	/**
