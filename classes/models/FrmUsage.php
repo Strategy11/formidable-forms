@@ -70,7 +70,7 @@ class FrmUsage {
 			'wp_version'     => $wp_version,
 			'php_version'    => phpversion(),
 			'mysql_version'  => $wpdb->db_version(),
-			'os'             => php_uname( 's' ),
+			'os'             => FrmAppHelper::get_server_os(),
 			'locale'         => get_locale(),
 
 			'active_license' => FrmAppHelper::pro_is_installed(),
