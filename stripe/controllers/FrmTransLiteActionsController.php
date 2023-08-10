@@ -298,9 +298,8 @@ class FrmTransLiteActionsController {
 		$payment_actions = self::get_actions_for_form( $form_id );
 		$action_settings = array();
 		foreach ( $payment_actions as $payment_action ) {
-			$action_settings[] = array(
+			$settings_for_action = array(
 				'id'         => $payment_action->ID,
-				'address'    => $payment_action->post_content['billing_address'], // TODO Move this into Pro?
 				'first_name' => $payment_action->post_content['billing_first_name'],
 				'last_name'  => $payment_action->post_content['billing_last_name'],
 				'gateways'   => $payment_action->post_content['gateway'],
@@ -308,6 +307,13 @@ class FrmTransLiteActionsController {
 				'one'        => $payment_action->post_content['type'],
 				'email'      => $payment_action->post_content['email'],
 			);
+
+			/**
+			 * @param array   $settings_for_action
+			 * @param WP_Post $payment_action
+			 */
+			$settings_for_action = apply_filters( 'frm_trans_settings_for_js', $settings_for_action, $payment_action );
+			$action_settings[] = $settings_for_action;
 		}
 
 		return $action_settings;
