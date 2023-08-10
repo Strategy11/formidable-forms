@@ -4047,24 +4047,14 @@ label input[type="checkbox"], label input[type="radio"] {
 	text-transform: uppercase;
 }
 
-.frm-entry-status-submitted {
+.frm-entry-status-0 {
 	color: #1E561F;
 	background: #D5F2DC;
 }
 
-.frm-entry-status-draft {
+.frm-entry-status-1 {
 	color: #7A4D05;
 	background: #FFF2D2;
-}
-
-.frm-entry-status-in-progress {
-	color: #0E566C;
-	background: #BEDFE6;
-}
-
-.frm-entry-status-abandoned {
-	color: #973937;
-	background: #EBCCCC;
 }
 /* End entry statuses */
 
