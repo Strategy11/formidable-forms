@@ -1,7 +1,37 @@
 ( function() {
+	function toggleSub() {
+		var val  = this.value;
+		var show = val === 'recurring';
+		slideOpts( this, show, '.frm_trans_sub_opts' );
+		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
+	}
+
+	function slideOpts( opt, show, c ) {
+		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		if ( show ) {
+			opts.slideDown( 'fast' );
+		} else {
+			opts.slideUp( 'fast' );
+		}
+	}
+
+	function toggleOpts( opt, show, c ) {
+		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		if ( show ) {
+			opts.show();
+		} else {
+			opts.hide();
+		}
+	}
+
 	function frmTransLiteAdminJS() {
 		return {
 			init: function() {
+				var actions = document.getElementById( 'frm_notification_settings' );
+				if ( actions !== null ) {
+					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
+				}
+
 				document.querySelectorAll( '.frm_trans_ajax_link' ).forEach(
 					link => link.addEventListener(
 						'click',
