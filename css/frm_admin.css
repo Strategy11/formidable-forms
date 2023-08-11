@@ -6184,11 +6184,13 @@ span.howto {
 	display: none;
 }
 
-#frm_builder_page .frm-lite-credit-card-element {
+#frm_builder_page .frm-lite-credit-card-element,
+body.frm-admin-page-styles .frm-lite-credit-card-element {
 	position: relative;
 }
 
-#frm_builder_page .frm-lite-credit-card-element > div {
+#frm_builder_page .frm-lite-credit-card-element > div,
+body.frm-admin-page-styles .frm-lite-credit-card-element > div {
 	position: absolute;
 	top: calc( 50% - 1px);
 	transform: translateY(-50%);

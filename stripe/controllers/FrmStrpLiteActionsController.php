@@ -457,7 +457,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$script_url = FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js';
 		}
 
-		if ( ! $suffix || ! FrmFormsController::has_combo_js_file() ) {
+		if ( class_exists( 'FrmProStrpLiteController' ) && ( ! $suffix || ! FrmFormsController::has_combo_js_file() ) ) {
 			$dependencies[] = 'formidablepro';
 		}
 

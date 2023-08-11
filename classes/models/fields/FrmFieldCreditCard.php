@@ -48,18 +48,18 @@ class FrmFieldCreditCard extends FrmFieldType {
 		);
 
 		ob_start();
+
+		if ( FrmAppHelper::is_style_editor_page() ) {
+			// The styler preview doesn't load the Stripe scripts.
+			// We need to use the form builder view instead.
+			include $this->include_form_builder_file();
+		} else {
 		FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
+		}
+
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
 		return $input_html;
 	}
-
-	/**
-	 * @since 4.0.04
-	 */
-	public function sanitize_value( &$value ) {
-		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
-	}
-
 }
