@@ -42,7 +42,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</select>
 	</p>
 
-	<p class="frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+	<?php $this->echo_capture_payment_upsell(); ?>
+
+	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Repeat Every', 'formidable' ); ?>
 		</label>
@@ -57,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</p>
 
-	<p class="frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Trial Period', 'formidable' ); ?>
 		</label>

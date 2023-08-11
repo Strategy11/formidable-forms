@@ -40,6 +40,28 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	/**
+	 * Capturing a payment later is only available in the Stripe add on.
+	 * This echos the HTML for a faded out capture payment dropdown.
+	 * When it is clicked, it should prompt to install Stripe.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function echo_capture_payment_upsell() {
+		// Add an upsell placeholder for the capture payment setting.
+		$upgrading      = FrmAddonsController::install_link( 'stripe' );
+		$upgrade_params = array();
+		if ( isset( $upgrading['url'] ) ) {
+			$upgrade_params['data-oneclick'] = json_encode( $upgrading );
+		} else {
+			$upgrade_params['data-requires'] = FrmAddonsController::get_addon_required_plan( 28136428 );
+		}
+		unset( $upgrading );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/action-settings/capture-payments-upsell.php';
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_defaults() {
