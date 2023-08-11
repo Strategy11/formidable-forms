@@ -8817,3 +8817,31 @@ Responsive Design
 	color: var(--primary-color);
 }
 /* End On Submit action */
+
+/* Start call-to-action */
+.frm-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: calc(3 * var(--gap-2xl) - 7px);
+    padding: var(--gap-md);
+    border-radius: var(--small-radius);
+    background: var(--primary-25);
+}
+
+.frm-cta .frm-cta-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+}
+
+.frm-cta .frm-cta-title {
+    font-weight: 600;
+    margin: 0;
+}
+
+.frm-cta .frm-cta-text {
+    color: var(--grey-500);
+    font-weight: 400;
+}
+/* End call-to-action */

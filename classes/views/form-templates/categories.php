@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
+<!-- Templates Categoreis List -->
 <ul class="frm-form-templates-categories">
 	<?php foreach ( $categories as $category => $count ) { ?>
 		<?php

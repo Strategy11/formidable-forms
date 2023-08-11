@@ -57,7 +57,7 @@
 }
 
 #frm-form-templates-page .frm-scrollbar-wrapper::-webkit-scrollbar {
-	width: 4px;
+	width: 3px;
 }
 
 #frm-form-templates-page .frm-scrollbar-wrapper::-webkit-scrollbar-track {
@@ -195,17 +195,22 @@
 
 #frm-form-templates-page .frm-form-templates-item {
 	display: flex;
-	padding: calc(var(--gap-sm) - 1px) var(--gap-sm);
 	gap: 10px;
-	border-radius: var(--small-radius);
 	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	padding: calc(var(--gap-sm) - 1px) var(--gap-sm);
 	box-shadow: var(--box-shadow-xs);
+}
+
+#frm-form-templates-page .frm-form-templates-item-icon {
+	flex-shrink: 0;
 }
 
 #frm-form-templates-page .frm-form-templates-item-details {
 	display: flex;
 	flex-direction: column;
 	gap: calc(var(--gap-xs) - 2px);
+	min-width: 0; /* Fix for truncated text within a flexbox layout */
 }
 
 #frm-form-templates-page .frm-form-templates-item-details > * {
@@ -218,9 +223,16 @@
 	align-items: center;
 }
 
+#frm-form-templates-page .frm-form-templates-item-title > span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 #frm-form-templates-page .frm-form-templates-item-title .frmsvg {
 	width: 16px;
 	height: 16px;
+	flex-shrink: 0;
 }
 
 #frm-form-templates-page .frm-form-templates-item-description {
@@ -281,11 +293,6 @@
 
 #frm-form-templates-page #frm-details-block {
 	padding: var(--gap-md) var(--gap-lg);
-}
-
-#frm-form-templates-page.frm-expired #frm-create-block,
-#frm-form-templates-page.frm-expiring #frm-create-block {
-	max-height: 450px;
 }
 
 #frm_code_from_email_options {

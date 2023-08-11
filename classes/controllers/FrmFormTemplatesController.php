@@ -162,7 +162,6 @@ class FrmFormTemplatesController {
 		$view_path = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
 
 		// License information and upgrade/renewal links.
-		$expiring     = FrmAddonsController::is_license_expiring();
 		$expired      = FrmFormsController::expired();
 		$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
@@ -187,9 +186,6 @@ class FrmFormTemplatesController {
 		}
 		if ( $expired ) {
 			$blocks_to_render[] = 'renew';
-			$modal_class        = 'frm-expired';
-		} elseif ( $expiring ) {
-			$modal_class = 'frm-expiring';
 		}
 
 		// Include SVG images for icons.
@@ -278,9 +274,11 @@ class FrmFormTemplatesController {
 	 */
 	private static function organize_and_set_categories() {
 		// Iterate through templates to assign categories.
-		foreach ( self::$templates as $template ) {
+		foreach ( self::$templates as $key => $template ) {
 			// Skip the template if the categories are not set.
 			if ( ! isset( $template['categories'] ) ) {
+				unset( self::$templates[ $key ] );
+
 				continue;
 			}
 
@@ -289,6 +287,7 @@ class FrmFormTemplatesController {
 				if ( ! isset( self::$categories[ $category ] ) ) {
 					self::$categories[ $category ] = 0;
 				}
+
 				self::$categories[ $category ]++;
 			}
 		}
@@ -340,7 +339,7 @@ class FrmFormTemplatesController {
 			);
 
 			// Add the formatted custom template to the list.
-			self::$custom_templates[] = $template;
+			array_unshift( self::$custom_templates, $template );
 		}
 	}
 

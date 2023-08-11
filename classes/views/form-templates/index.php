@@ -15,8 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 
-		<!-- Page Content -->
+		<!-- Page Body -->
 		<div class="columns-2">
+			<!-- Page Sidebar -->
 			<div class="frm-right-panel">
 				<div class="frm-scrollbar-wrapper">
 					<?php
@@ -35,6 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div><!-- .frm-right-panel -->
 
+			<!-- Page Content -->
 			<div id="post-body-content">
 				<!-- Create a blank form -->
 				<span id="frm-form-templates-create-form">
