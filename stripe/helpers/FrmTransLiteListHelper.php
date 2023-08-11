@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmTransLiteListHelper extends FrmListHelper {
 
+	/**
+	 * @var string
+	 */
 	private $table = '';
 
 	/**
@@ -369,7 +372,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$entry_is_deleted = ! in_array( $entry_id, $this->valid_entry_ids );
 
 		if ( $entry_is_deleted ) {
-			return sprintf( __( '%d (Deleted)', 'formidable-payments' ), $entry_id );
+			// translators: %d: ID of the deleted entry.
+			return sprintf( __( '%d (Deleted)', 'formidable' ), $entry_id );
 		}
 
 		return '<a href="' . esc_url( '?page=formidable-entries&frm_action=show&action=show&id=' . $entry_id ) . '">' . absint( $entry_id ) . '</a>';
@@ -466,7 +470,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			function() {
 				$params = array(
 					'class' => 'frm_help frm_icon_font frm_tooltip_icon',
-					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable-payments' ),
+					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable' ),
 				);
 				?>
 				<span <?php FrmAppHelper::array_to_html_params( $params, true ); ?>></span>
@@ -501,8 +505,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_paysys_column( $item, $atts ) {
 		switch ( $item->paysys ) {
-			case 'stripe': return 'Stripe';
-			case 'paypal': return 'PayPal';
+			case 'stripe':
+				return 'Stripe';
+			case 'paypal':
+				return 'PayPal';
 		}
 		return $item->paysys;
 	}

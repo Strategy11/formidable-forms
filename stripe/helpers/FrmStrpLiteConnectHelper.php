@@ -248,7 +248,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function get_url_to_connect_server() {
 		return 'https://staging.formidableforms.com/';
-//		return 'https://api.strategy11.com/';
+		// return 'https://api.strategy11.com/';
 	}
 
 	/**
@@ -836,7 +836,7 @@ class FrmStrpLiteConnectHelper {
 	 * @param array|false $payment_method_types
 	 * @return object|string|false
 	 */
-	public static function create_setup_intent(  $customer_id, $payment_method_types = false  ) {
+	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
 		$charge_data = array( 'customer' => $customer_id );
 
 		if ( $payment_method_types ) {

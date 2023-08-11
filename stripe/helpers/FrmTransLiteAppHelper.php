@@ -62,7 +62,7 @@ class FrmTransLiteAppHelper {
 			'failed'     => __( 'Failed', 'formidable' ),
 			'refunded'   => __( 'Refunded', 'formidable' ),
 			'canceled'   => __( 'Canceled', 'formidable' ),
-			'processing' => __( 'Processing', 'formidable' )
+			'processing' => __( 'Processing', 'formidable' ),
 		);
 	}
 

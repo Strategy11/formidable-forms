@@ -1343,7 +1343,7 @@ class FrmAppHelper {
 		);
 		$new_file  = new FrmCreateFile( $file_atts );
 		$files = array(
-			FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.min.js'
+			FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.min.js',
 		);
 		/**
 		 * @since x.x
