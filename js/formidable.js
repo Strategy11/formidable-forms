@@ -512,7 +512,7 @@ function frmFrontFormJS() {
 
 		// eslint-disable-next-line vars-on-top
 		var changeSelectColor = function( select ) {
-			if ( select.value === '' ) {
+			if ( select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.cssText += `; color: ${textColorDisabled} !important`;
 			} else {
 				select.style.color = '';

@@ -1378,7 +1378,7 @@
 		}
 
 		const changeSelectColor = ( select ) => {
-			if ( select.value === '' ) {
+			if ( select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.cssText += `; color: ${textColorDisabled} !important`;
 			} else {
 				select.style.color = '';
