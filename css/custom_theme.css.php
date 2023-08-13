@@ -265,6 +265,16 @@ legend.frm_hidden{
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
+.with_frm_style select option {
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style select option.frm-select-placeholder {
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
@@ -880,7 +890,7 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio],
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.with_frm_style .frm_scale input[type=radio],	
+.with_frm_style .frm_scale input[type=radio],
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
