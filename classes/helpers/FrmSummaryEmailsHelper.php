@@ -133,12 +133,12 @@ class FrmSummaryEmailsHelper {
 	 * @return string|false
 	 */
 	public static function get_last_sent_date( $type ) {
-		$tracking = self::get_tracking();
-		if ( empty( $tracking[ 'last_' . $type ] ) ) {
+		$options = self::get_options();
+		if ( empty( $options[ 'last_' . $type ] ) ) {
 			return false;
 		}
 
-		return $tracking[ 'last_' . $type ];
+		return $options[ 'last_' . $type ];
 	}
 
 	public static function set_last_send_date( $type ) {
@@ -156,13 +156,37 @@ class FrmSummaryEmailsHelper {
 
 	public static function get_summary_data( $from_date, $to_date ) {
 		$data = array(
-			'top_forms' => array(), // form_id => submission count.
-			'entries' => 0,
-			'payments' => 0,
+			'top_forms' => self::get_top_forms( $from_date, $to_date ),
+			'entries'   => self::get_entries_count( $from_date, $to_date ),
+			'payments'  => 0, // TODO: Remove this. This should be added with filter.
 		);
 
-
+		return apply_filters( 'frm_summary_data', $data, compact( 'from_date', 'to_date' ) );
 	}
 
+	private static function get_entries_count( $from_date, $to_date ) {
+		return FrmDb::get_count(
+			'frm_items',
+			array(
+				'created_at >' => $from_date, // The `=` is added after `>` in the query.
+				'created_at <' => $to_date,
+				'is_draft'     => 0,
+			)
+		);
+	}
 
+	private static function get_top_forms( $from_date, $to_date, $limit = 10 ) {
+		global $wpdb;
+
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT form_id, COUNT(*) as items_count FROM {$wpdb->prefix}frm_items
+						WHERE created_at >= %s AND created_at <= %s AND is_draft = 0
+						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
+				$from_date,
+				$to_date,
+				intval( $limit )
+			)
+		);
+	}
 }
