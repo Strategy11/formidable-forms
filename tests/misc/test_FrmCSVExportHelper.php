@@ -19,7 +19,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'updated_at' => 'Last Updated',
 			'user_id'    => 'Created By',
 			'updated_by' => 'Updated By',
-			'is_draft'   => 'Draft',
+			'is_draft'   => 'Entry Status',
 			'ip'         => 'IP',
 			'id'         => 'ID',
 			'item_key'   => 'Key',

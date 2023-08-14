@@ -5,6 +5,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesHelper {
 
+	/**
+	 * "Submitted" entry status.
+	 *
+	 * @since x.x
+	 * @var int
+	 */
+	const SUBMITTED_ENTRY_STATUS = 0;
+
+	/**
+	 * "Draft" entry status.
+	 *
+	 * @since x.x
+	 * @var int
+	 */
+	const DRAFT_ENTRY_STATUS = 1;
+
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -693,6 +709,16 @@ class FrmEntriesHelper {
 			'icon'  => 'frm_icon_font frm_email_icon',
 		);
 
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) && FrmAppHelper::show_new_feature( 'pdfs' ) ) {
+			$actions['frm_download_pdf'] = array(
+				'url'   => '#',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'class' => 'frm_noallow',
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
+				'icon'  => 'frm_icon_font frm_download_icon',
+			);
+		}
+
 		$actions['frm_edit'] = array(
 			'url'   => '#',
 			'label' => __( 'Edit Entry', 'formidable' ),
@@ -706,6 +732,30 @@ class FrmEntriesHelper {
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
+	}
+
+	/**
+	 * Gets data attributes for PDFs addon upgrade link.
+	 *
+	 * @param string $medium The source of the upgrade link used for analytics data.
+	 * @return array
+	 */
+	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
+		$data = array(
+			'oneclick' => '',
+			'requires' => '',
+			'upgrade'  => __( 'Forms to PDF', 'formidable' ),
+			'medium'   => $medium,
+		);
+
+		$upgrading = FrmAddonsController::install_link( 'pdfs' );
+		if ( isset( $upgrading['url'] ) ) {
+			$data['oneclick'] = json_encode( $upgrading );
+		} else {
+			$data['requires'] = FrmAddonsController::get_addon_required_plan( 28136428 );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -731,4 +781,79 @@ class FrmEntriesHelper {
 			}
 		}
 	}
+
+	/**
+	 * Return entry status based on is_draft column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $status is_draft column.
+	 *
+	 * @return int
+	 */
+	public static function get_entry_status( $status ) {
+		$statuses = self::get_entry_statuses();
+
+		if ( array_key_exists( $status, $statuses ) ) {
+			return $status;
+		}
+
+		if ( empty( $status ) ) {
+			return self::SUBMITTED_ENTRY_STATUS; // If the status is empty, let's default to 0.
+		}
+
+		return self::DRAFT_ENTRY_STATUS; // If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
+	}
+
+	/**
+	 * Return entry status label based on passed value.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $status is_draft column.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_status_label( $status ) {
+		$statuses = self::get_entry_statuses();
+
+		return $statuses[ self::get_entry_status( $status ) ];
+	}
+
+	/**
+	 * Get all entry statuses.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_entry_statuses() {
+
+		$default_entry_statuses = array(
+			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
+			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),
+		);
+
+		/**
+		 * Register entry status.
+		 *
+		 * "2" is used in abandonment-addon and reserved for "In progress".
+		 * "3" is used in abandonment-addon and reserved for "Abandoned".
+		 *
+		 * @since x.x
+		 *
+		 * @param array<string> $extended_entry_status Entry statuses.
+		 */
+		$extended_entry_status = apply_filters( 'frm_entry_statuses', array() );
+
+		if ( ! is_array( $extended_entry_status ) ) {
+			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
+			$extended_entry_status = array();
+		}
+
+		$existing_entry_statuses = array_replace( $default_entry_statuses, $extended_entry_status );
+
+		return $existing_entry_statuses;
+	}
+
 }

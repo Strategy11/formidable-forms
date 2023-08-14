@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.3.2';
+	public static $plug_version = '6.4.1';
 
 	/**
 	 * @since 1.07.02
@@ -374,6 +374,27 @@ class FrmAppHelper {
 	 */
 	public static function get_server_value( $value ) {
 		return isset( $_SERVER[ $value ] ) ? wp_strip_all_tags( wp_unslash( $_SERVER[ $value ] ) ) : '';
+	}
+
+	/**
+	 * Get the server OS
+	 *
+	 * @since 6.4.x
+	 *
+	 * @return string
+	 */
+	public static function get_server_os() {
+
+		if ( function_exists( 'php_uname' ) ) {
+			return php_uname( 's' );
+		}
+
+		if ( ! defined( 'PHP_OS' ) ) {
+			return '';
+		}
+
+		// match the same response for Windows server as php_uname('s')
+		return in_array( PHP_OS, array( 'WIN32', 'WINNT', 'Windows_NT' ), true ) ? 'Windows NT' : PHP_OS;
 	}
 
 	/**

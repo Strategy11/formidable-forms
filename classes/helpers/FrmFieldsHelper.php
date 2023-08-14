@@ -492,7 +492,12 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Shows the inline modal.
+	 *
 	 * @since 4.0
+	 * @since 6.4.1 Added `inside_class` in the arguments.
+	 *
+	 * @param array $args The arguments.
 	 */
 	public static function inline_modal( $args ) {
 		$defaults = array(
@@ -502,6 +507,7 @@ class FrmFieldsHelper {
 			'callback' => array(),
 			'args'     => array(),
 			'title'    => '',
+			'inside_class' => 'inside',
 		);
 		$args = array_merge( $defaults, $args );
 
