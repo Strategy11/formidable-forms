@@ -20,13 +20,17 @@ abstract class FrmSummaryEmail {
 	 * @return string
 	 */
 	protected function get_receptions() {
+		return 'truongwp@gmail.com';
 		$receptions = FrmAppHelper::get_settings()->summary_emails_recipients;
 		$receptions = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $receptions );
 		return $receptions;
 	}
 
 	protected function get_headers() {
-		return array();
+		return array(
+			'Content-Type: text/html; charset=UTF-8',
+			'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>',
+		);
 	}
 
 	protected function get_content() {
@@ -46,6 +50,10 @@ abstract class FrmSummaryEmail {
 		$content    = $this->get_content();
 		$subject    = $this->get_subject();
 		$headers    = $this->get_headers();
-		wp_mail( $receptions, $subject, $content, $headers );
+		error_log( 'Sending mail:' );
+		error_log( $receptions );
+		error_log( $subject );
+		$result = wp_mail( $receptions, $subject, $content, $headers );
+		error_log( $result );
 	}
 }

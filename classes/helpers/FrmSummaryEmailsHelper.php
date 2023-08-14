@@ -50,7 +50,7 @@ class FrmSummaryEmailsHelper {
 	public static function send_yearly_email() {
 		error_log( 'Sending yearly email' );
 
-		$yearly_email = new FrmYearlySummaryEmail();
+		$yearly_email = new FrmYearlyEmail();
 		$yearly_email->send();
 
 		self::set_last_send_date( 'yearly' );
