@@ -54,7 +54,7 @@ class FrmFieldCreditCard extends FrmFieldType {
 			// We need to use the form builder view instead.
 			include $this->include_form_builder_file();
 		} else {
-		FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
+			FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
 		}
 
 		$input_html = ob_get_contents();

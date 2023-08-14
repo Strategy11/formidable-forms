@@ -3082,6 +3082,8 @@ class FrmAppHelper {
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 
 		/**
+		 * @since 2.0.13
+		 *
 		 * @param string $ajax_url
 		 */
 		return apply_filters( 'frm_ajax_url', $ajax_url );

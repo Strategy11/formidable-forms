@@ -3,6 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * This file exists for backward compatibility with the Payments Submodule.
+ * Without these functions the Authorize.Net add on will trigger fatal errors.
+ */
 class FrmStrpLiteApiHelper {
 
 	/**
@@ -20,6 +24,9 @@ class FrmStrpLiteApiHelper {
 	}
 
 	/**
+	 * The payments submodule calls this function.
+	 * This function exists so subscriptions can be cancelled when Authorize.Net is active.
+	 *
 	 * @param string $sub_id
 	 * @return bool
 	 */
