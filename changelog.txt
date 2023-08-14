@@ -1,4 +1,8 @@
 == Changelog ==
+= 6.4.2 =
+* New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
+* Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
+
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
 * New: Forms without names will now appear as (no title) when displayed as options inside of a Gutenberg block.
