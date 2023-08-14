@@ -9,12 +9,21 @@ class FrmTransLiteAppController {
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
-		if ( ! wp_next_scheduled( 'frm_payment_cron' ) ) {
-			wp_schedule_event( time(), 'daily', 'frm_payment_cron' );
-		}
+		self::maybe_schedule_cron();
 
 		$db = new FrmTransLiteDb();
 		$db->upgrade( $old_db_version );
+	}
+
+	/**
+	 * Schedule the payment cron if it is not already scheduled.
+	 *
+	 * @return void
+	 */
+	public static function maybe_schedule_cron() {
+		if ( ! wp_next_scheduled( 'frm_payment_cron' ) ) {
+			wp_schedule_event( time(), 'daily', 'frm_payment_cron' );
+		}
 	}
 
 	/**

@@ -1050,13 +1050,7 @@ class FrmAppController {
 			return;
 		}
 
-		// TODO Move this into a shared function so it can be re-used.
-		// This is duplicate code currently.
-		// I think it would be nice to make a model file for handling the payment cron.
-		// Right now I don't have an obvious place to put this function.
-		if ( ! wp_next_scheduled( 'frm_payment_cron' ) ) {
-			wp_schedule_event( time(), 'daily', 'frm_payment_cron' );
-		}
+		FrmTransLiteAppController::maybe_schedule_cron();
 	}
 
 	public static function set_footer_text( $text ) {
