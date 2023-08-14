@@ -684,7 +684,7 @@ class FrmStrpLiteConnectHelper {
 		}
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_stripe_connect = $response;
-			FrmTransLiteLog::log_message( 'Unable to complete call to Stripe Connect service: ' . $response );
+			FrmTransLiteLog::log_message( 'Stripe Connect Error', $response );
 		} else {
 			self::$latest_error_from_stripe_connect = '';
 		}

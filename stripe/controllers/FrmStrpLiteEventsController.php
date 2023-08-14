@@ -25,12 +25,14 @@ class FrmStrpLiteEventsController {
 
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = false;
+
 		if ( $this->charge ) {
 			$payment = $frm_payment->get_one_by( $this->charge, 'receipt_id' );
 		}
-		if ( ! $payment && $this->status == 'refunded' ) {
-			// if the refunded payment doesn't exist, stop here
-			FrmTransLiteLog::log_message( 'No action taken. The refunded payment does not exist' );
+
+		if ( ! $payment && $this->status === 'refunded' ) {
+			// If the refunded payment doesn't exist, stop here.
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken. The refunded payment does not exist' );
 			echo json_encode(
 				array(
 					'response' => 'no payment exists',
@@ -50,19 +52,19 @@ class FrmStrpLiteEventsController {
 				return;
 			}
 
-			$payment_values = (array) $payment;
-
+			$payment_values    = (array) $payment;
 			$is_partial_refund = $this->is_partial_refund();
+
 			if ( $is_partial_refund ) {
 				$this->set_partial_refund( $payment_values );
 				$amount_refunded = number_format( $this->invoice->amount_refunded / 100, 2 );
 				// translators: %s: The amount of money that was refunded.
-				$note            = sprintf( __( 'Payment partially refunded %s', 'formidable' ), $amount_refunded );
+				$note = sprintf( __( 'Payment partially refunded %s', 'formidable' ), $amount_refunded );
 			} else {
 				$payment_values['status'] = $this->status;
 				$payment->status          = $this->status;
 				// translators: %s: The status of the payment.
-				$note                     = sprintf( __( 'Payment %s', 'formidable' ), $payment_values['status'] );
+				$note = sprintf( __( 'Payment %s', 'formidable' ), $payment_values['status'] );
 			}
 
 			FrmTransLiteAppHelper::add_note_to_payment( $payment_values, $note );
@@ -182,7 +184,7 @@ class FrmStrpLiteEventsController {
 		}
 
 		if ( $sub->status === $status ) {
-			FrmTransLiteLog::log_message( 'No action taken since the subscription is already canceled.' );
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since the subscription is already canceled.' );
 			echo json_encode(
 				array(
 					'response' => 'Already canceled',
@@ -203,8 +205,8 @@ class FrmStrpLiteEventsController {
 
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
-			// this isn't a subscription
-			FrmTransLiteLog::log_message( 'No action taken since this is not a subscription.' );
+			// This isn't a subscription.
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since this is not a subscription.' );
 			echo json_encode(
 				array(
 					'response' => 'Invoice missing',
@@ -219,19 +221,18 @@ class FrmStrpLiteEventsController {
 			return false;
 		}
 
-		$payment = $this->get_payment_for_sub( $sub->id );
-
+		$payment        = $this->get_payment_for_sub( $sub->id );
 		$payment_values = (array) $payment;
 		$this->set_payment_values( $payment_values );
 
 		$frm_payment = new FrmTransLitePayment();
 
 		if ( $this->is_first_payment( $payment ) ) {
-			// the first payment for the subscription needs to be updated with the receipt id
+			// The first payment for the subscription needs to be updated with the receipt id.
 			$frm_payment->update( $payment->id, $payment_values );
 			$payment_id = $payment->id;
 		} else {
-			// if this isn't the first, create a new payment
+			// If this isn't the first, create a new payment.
 			$payment_id = $frm_payment->create( $payment_values );
 		}
 
@@ -256,7 +257,7 @@ class FrmStrpLiteEventsController {
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
 		if ( ! $sub ) {
 			// If this isn't an existing subscription, it must be a charge for another site/plugin
-			FrmTransLiteLog::log_message( 'No action taken since there is not a matching subscription for ' . $sub_id );
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
 			echo json_encode(
 				array(
 					'response' => 'Invoice missing',

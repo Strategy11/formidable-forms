@@ -36,7 +36,7 @@ class FrmTransLiteAppController {
 		$frm_payment = new FrmTransLitePayment();
 
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
-		FrmTransLiteLog::log_message( count( $overdue_subscriptions ) . ' subscriptions found to be processed.' );
+		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.' );
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
@@ -50,12 +50,12 @@ class FrmTransLiteAppController {
 					)
 				);
 
-				$status = 'failed';
+				$status       = 'failed';
 				$log_message .= 'Failed triggers run on canceled subscription. ';
 			} else {
 				// Get the most recent payment after the gateway has a chance to create one.
 				$check_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
-				$new_payment   = ( $check_payment->id != $last_payment->id );
+				$new_payment   = $check_payment->id != $last_payment->id;
 				$last_payment  = $check_payment;
 				$status        = 'no';
 
@@ -80,7 +80,7 @@ class FrmTransLiteAppController {
 				}
 			}
 
-			FrmTransLiteLog::log_message( $log_message );
+			FrmTransLiteLog::log_message( 'Stripe Cron Message', $log_message );
 
 			self::maybe_trigger_changes(
 				array(

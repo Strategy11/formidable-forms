@@ -8,10 +8,22 @@ class FrmTransLiteLog {
 	/**
 	 * @todo
 	 *
+	 * @param string $title
 	 * @param string $text
 	 * @return void
 	 */
-	public static function log_message( $text ) {
-		error_log( $text );
+	public static function log_message( $title, $text ) {
+		if ( ! class_exists( 'FrmLog' ) ) {
+			error_log( $title . ': ' . $text );
+			return;
+		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => $title,
+				'content' => $text,
+			)
+		);
 	}
 }
