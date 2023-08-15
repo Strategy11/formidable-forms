@@ -16,4 +16,8 @@ class FrmYearlyEmail extends FrmStatsEmail {
 	protected function get_subject() {
 		return __( 'Your year with Formidable Forms', 'formidable' );
 	}
+
+	protected function get_top_forms_label() {
+		return __( 'Top forms this year', 'formidable' );
+	}
 }

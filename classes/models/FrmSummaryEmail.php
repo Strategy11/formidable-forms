@@ -20,7 +20,6 @@ abstract class FrmSummaryEmail {
 	 * @return string
 	 */
 	protected function get_receptions() {
-		return 'truongwp@gmail.com';
 		$receptions = FrmAppHelper::get_settings()->summary_emails_recipients;
 		$receptions = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $receptions );
 		return $receptions;
@@ -34,11 +33,24 @@ abstract class FrmSummaryEmail {
 	}
 
 	protected function get_content() {
-		return '<div style="background-color: cyan;">' . $this->get_inner_content() . '</div>' . $this->get_footer_content();
+		$args = $this->get_content_args();
+
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/base-email.php';
+		$content = ob_get_clean();
+
+		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
+
+		return $content;
 	}
 
-	protected function get_footer_content() {
-		return '<p>Unsubscribe this email</p>';
+	protected function get_content_args() {
+		return array(
+			'subject'         => $this->get_subject(),
+			'site_url'        => home_url( '/' ),
+			'unsubscribe_url' => home_url( '/' ), // TODO.
+			'line'            => '<hr style="background-color: #eaecf0; height: 1px; border: 0;" />',
+		);
 	}
 
 	protected function get_url_data() {
