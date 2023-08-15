@@ -37,12 +37,18 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 		$stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->from_date, $this->to_date );
 
-		$args['from_date'] = $this->from_date;
-		$args['to_date']   = $this->to_date;
-		$args['top_forms'] = $stats_data['top_forms'];
+		$args['from_date']       = $this->from_date;
+		$args['to_date']         = $this->to_date;
+		$args['top_forms']       = $stats_data['top_forms'];
 		$args['top_forms_label'] = $this->get_top_forms_label();
+		$args['stats']           = array(
+			'entries' => array(
+				'label' => __( 'Entries created', 'formidable' ),
+				'count' => $stats_data['entries'], // TODO: add compare.
+			),
+		);
 
-		return $args;
+		return $args; // TODO: add filter.
 	}
 
 	abstract protected function get_top_forms_label();

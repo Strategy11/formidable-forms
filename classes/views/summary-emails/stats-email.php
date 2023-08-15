@@ -27,18 +27,16 @@
 
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td>
-					Entries created<br />
-					<strong>189</strong>
-				</td>
-				<td>
-					Payment collected<br />
-					<strong>189</strong>
-				</td>
-				<td>
-					Entries created<br />
-					<strong>189</strong>
-				</td>
+				<?php
+				foreach ( $args['stats'] as $key => $stat ) {
+					?>
+					<td>
+						<?php echo esc_html( $stat['label'] ); ?><br />
+						<strong><?php echo intval( $stat['count'] ); ?></strong>
+					</td>
+					<?php
+				}
+				?>
 			</tr>
 		</table>
 	</div>
