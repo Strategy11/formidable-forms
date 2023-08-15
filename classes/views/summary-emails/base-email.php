@@ -23,13 +23,16 @@
 	<!--[if gte mso 9]> <style> sup { font-size: 100% !important; } </style> <![endif]-->
 	<!--[if gte mso 9]> <xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml> <![endif]-->
 	<!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 
-<body>
+<body style="background-color: #eee; color: #475467; font-family: 'Inter', Arial, sans-serif;">
 	<div style="background-color: #fff;">
 		%%INNER_CONTENT%%
 
-		<div>
+		<div style="padding-bottom: 70px;">
 			<a href="<?php echo esc_url( $args['unsubscribe_url'] ); ?>"><?php esc_html_e( 'Unsubscribe', 'formidable' ); ?></a>
 		</div>
 	</div>

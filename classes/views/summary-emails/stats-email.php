@@ -11,9 +11,9 @@
 
 <div>
 	<!-- Header section -->
-	<h1 style="font-size: 40px; line-height: 48px; margin-bottom: 32px;"><?php echo esc_html( $args['subject'] ); ?></h1>
+	<h1 style="font-size: 2.5em; line-height: 1.2em; margin-bottom: 32px; padding-top: 70px;"><?php echo esc_html( $args['subject'] ); ?></h1>
 
-	<div style="font-size: 16px; line-height: 24px; color: #475467; margin-bottom: 48px;">
+	<div style="line-height: 1.5; color: #475467; margin-bottom: 48px;">
 		<?php echo esc_html( $args['from_date'] ); ?> - <?php echo esc_html( $args['to_date'] ); ?> &middot; <?php echo esc_url( $args['site_url'] ); ?>
 	</div>
 
@@ -21,7 +21,7 @@
 
 	<!-- Overall section -->
 	<div>
-		<h2 style="font-size: 18px; line-height: 24px;">
+		<h2 style="font-size: 1.125em; line-height: 1.33em;">
 			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/chart.png' ); ?>" alt="chart" />
 			<?php esc_html_e( 'Statistics', 'formidable' ); ?>
 		</h2>
@@ -46,7 +46,7 @@
 
 	<!-- Top forms section -->
 	<div>
-		<h2 style="font-size: 18px; line-height: 24px;">
+		<h2 style="font-size: 1.125em; line-height: 1.33;">
 			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
 			<?php echo esc_html( $args['top_forms_label'] ); ?>
 		</h2>
