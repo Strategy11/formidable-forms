@@ -49,7 +49,7 @@ abstract class FrmSummaryEmail {
 			'subject'         => $this->get_subject(),
 			'site_url'        => home_url( '/' ),
 			'unsubscribe_url' => home_url( '/' ), // TODO.
-			'line'            => '<hr style="background-color: #eaecf0; height: 1px; border: 0;" />',
+			'line'            => '<hr style="background-color: #eaecf0; height: 1px; border: 0; margin-bottom: 48px;" />',
 		);
 	}
 
