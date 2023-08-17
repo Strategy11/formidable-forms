@@ -1882,3 +1882,10 @@ function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 		}
 	});
 }
+
+( function() {
+	// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
+	jQuery( document ).on( 'elementor/popup/show', () => {
+		frmRecaptcha();
+	});
+}() );
