@@ -41,6 +41,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args['to_date']         = $this->to_date;
 		$args['top_forms']       = $stats_data['top_forms'];
 		$args['top_forms_label'] = $this->get_top_forms_label();
+		$args['dashboard_url']   = home_url( '/' );
 		$args['stats']           = array(
 			'entries' => array(
 				'label' => __( 'Entries created', 'formidable' ),

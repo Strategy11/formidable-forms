@@ -60,6 +60,7 @@ abstract class FrmSummaryEmail {
 	public function send() {
 		$receptions = $this->get_receptions();
 		$content    = $this->get_content();
+		header( 'Content-Type: text/html' ); die( $content ); // TODO: Remove this.
 		$subject    = $this->get_subject();
 		$headers    = $this->get_headers();
 		error_log( 'Sending mail:' );

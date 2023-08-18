@@ -29,7 +29,7 @@
 </head>
 
 <body style="background-color: #eee; color: #475467; font-family: 'Inter', Arial, sans-serif;">
-	<div style="background-color: #fff;">
+	<div style="background-color: #fff; max-width: 42.5em; margin: auto;">
 		%%INNER_CONTENT%%
 
 		<div style="padding-bottom: 70px;">
