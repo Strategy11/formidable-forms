@@ -54,7 +54,11 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	<?php } ?>
 	vertical-align:middle;
 }
-
+.<?php echo esc_html( $style_class ); ?> .frm_repeat_buttons .frm-svg-icon {
+	<?php if ( ! empty( $submit_text_color ) ) { ?>
+		fill:<?php echo esc_html( $submit_text_color . $important ); ?>;
+	<?php } ?>
+}
 .<?php echo esc_html( $style_class ); ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
 	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['-'] : $arrow_icons[1]['-'] ); ?>";
 	<?php if ( ! empty( $section_color ) ) { ?>

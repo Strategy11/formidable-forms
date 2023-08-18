@@ -1575,7 +1575,10 @@ select.frm_loading_lookup{
 	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
 	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
-
+.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm-svg-icon {
+	fill:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
+	fill:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
+}
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-middle,
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-last {
