@@ -82,16 +82,16 @@ $heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;'
 
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr style="font-size: 0.75em; font-weight: 500; line-height: 2; text-transform: uppercase;">
-				<th align="left" style="padding: 0.67em 0;"><?php esc_html_e( 'Form name', 'formidable' ); ?></th>
-				<th align="right" style="padding: 0.67em 0;"><?php esc_html_e( 'Submissions', 'formidable' ); ?></th>
+				<th align="left" style=""><?php esc_html_e( 'Form name', 'formidable' ); ?></th>
+				<th align="right" style=""><?php esc_html_e( 'Submissions', 'formidable' ); ?></th>
 			</tr>
 
 			<?php
 			foreach ( $args['top_forms'] as $index => $top_form ) {
 				?>
 				<tr>
-					<td align="left" style="padding: 0.5em 0;"><?php echo intval( $index + 1 ); ?>. Form #<?php echo intval( $top_form->form_id ); // TODO ?></td>
-					<td align="right" style="padding: 0.5em 0;"><?php echo intval( $top_form->items_count ); ?></td>
+					<td align="left" style="padding: 1em 0.33em 0.28em"><?php echo intval( $index + 1 ); ?>. Form #<?php echo intval( $top_form->form_id ); // TODO ?></td>
+					<td align="right" style="padding: 1em 0 0.28em;"><?php echo intval( $top_form->items_count ); ?></td>
 				</tr>
 				<?php
 			}
