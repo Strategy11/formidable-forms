@@ -7,6 +7,8 @@
  *
  * @var array $args Content args.
  */
+
+$section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,8 +34,8 @@
 	<div style="background-color: #fff; max-width: 42.5em; margin: auto;">
 		%%INNER_CONTENT%%
 
-		<div style="padding-bottom: 70px;">
-			<a href="<?php echo esc_url( $args['unsubscribe_url'] ); ?>"><?php esc_html_e( 'Unsubscribe', 'formidable' ); ?></a>
+		<div style="<?php echo esc_attr( $section_style ); ?>">
+			<a href="<?php echo esc_url( $args['unsubscribe_url'] ); ?>" style="color: currentColor; font-size: 0.75em; line-height: 1.33; font-weight: 500;"><?php esc_html_e( 'Unsubscribe', 'formidable' ); ?></a>
 		</div>
 	</div>
 </body>

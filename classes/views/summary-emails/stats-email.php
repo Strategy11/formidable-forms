@@ -8,8 +8,7 @@
  * @var array $args Content args.
  */
 
-$border_color = '#eaecf0';
-$section_style = 'padding: 3em 4.375em; border-bottom: 1px solid ' . $border_color;
+$section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
 $heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;';
 ?>
 
