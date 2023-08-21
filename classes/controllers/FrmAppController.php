@@ -134,7 +134,7 @@ class FrmAppController {
 			'formidable-inbox',
 			'formidable-welcome',
 			'formidable-applications',
-			'formidable-form-templates',
+			FrmFormTemplatesController::PAGE_SLUG,
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -486,17 +486,6 @@ class FrmAppController {
 		if ( ! FrmAppHelper::doing_ajax() ) {
 			// don't continue during ajax calls
 			self::admin_js();
-		}
-
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			$action = FrmAppHelper::get_param( 'frm_action' );
-
-			if ( in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=formidable-form-templates' ) );
-				exit;
-			}
-
-			FrmInbox::maybe_disable_screen_options();
 		}
 
 		self::maybe_add_ip_warning();

@@ -2,16 +2,23 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$attributes          = array();
+$attributes['class'] = trim( 'frm-cta ' . $class );
+
+if ( $id ) {
+	$attributes['id'] = $id;
+}
 ?>
 
-<div class="frm-cta">
+<div <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
 	<div class="frm-cta-content">
 		<h4 class="frm-cta-title">
-			<?php echo self::kses( $title, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo FrmAppHelper::kses( $title, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</h4><!-- .frm-cta-title -->
 
 		<span class="frm-cta-text">
-			<?php echo self::kses( $description, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo FrmAppHelper::kses( $description, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span><!-- .frm-cta-text -->
 	</div><!-- .frm-cta-content -->
 

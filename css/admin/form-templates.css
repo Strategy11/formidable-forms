@@ -286,11 +286,6 @@
 	margin-left: 10px;
 }
 
-#frm-form-templates-page #frm-preview-block {
-	padding: var(--gap-md) var(--gap-lg);
-	overflow-x: hidden;
-}
-
 #frm-form-templates-page #frm-details-block {
 	padding: var(--gap-md) var(--gap-lg);
 }
@@ -310,23 +305,6 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	.frm-hover-icons
 	.frm-delete-form {
 	display: inline-flex;
-}
-
-#frm-form-templates-page[frm-page="create"] #frm-create-block,
-#frm-form-templates-page[frm-page="preview"] #frm-preview-block,
-#frm-form-templates-page[frm-page="details"] #frm-details-block,
-#frm-form-templates-page[frm-page="upgrade"] #frm-upgrade-block,
-#frm-form-templates-page[frm-page="email"] #frm-email-block,
-#frm-form-templates-page[frm-page="code"] #frm-code-block,
-#frm-form-templates-page[frm-page="renew"] #frm-renew-block,
-#frm-form-templates-page[frm-page="create"] #frm-create-footer,
-#frm-form-templates-page[frm-page="preview"] #frm-preview-footer,
-#frm-form-templates-page[frm-page="details"] #frm-details-footer,
-#frm-form-templates-page[frm-page="upgrade"] #frm-upgrade-footer,
-#frm-form-templates-page[frm-page="email"] #frm-email-footer,
-#frm-form-templates-page[frm-page="code"] #frm-code-footer,
-#frm-form-templates-page[frm-page="renew"] #frm-renew-footer {
-	display: block;
 }
 
 #frm-upgrade-body-list-wrapper > div {

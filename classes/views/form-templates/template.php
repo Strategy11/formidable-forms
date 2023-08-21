@@ -11,16 +11,15 @@ $plan_required = FrmFormsHelper::get_plan_required( $template );
 $is_free       = $plan_required === 'free';
 
 // Set Attributes.
-$attributes                  = array();
-$attributes['data-template'] = sanitize_title( $template_name );
-$attributes['class']         = 'frm-form-templates-item frm4';
-$attributes['aria-label']    = $template_name;
+$attributes               = array();
+$attributes['class']      = 'frm-form-templates-item frm4';
+$attributes['aria-label'] = $template_name;
 
 // [comment-here].
 if ( $is_free ) {
 	$attributes['data-key'] = $template['key'];
 } elseif ( ! $plan_required ) {
-	$link = FrmFormsHelper::get_template_install_link( $template, array( 'plan_required' => $plan_required ) );
+	$link = FrmFormTemplatesHelper::get_template_install_link( $template, array( 'plan_required' => $plan_required ) );
 	$attributes['data-rel'] = esc_url( $link['url'] );
 }
 
@@ -28,22 +27,19 @@ if ( $is_free ) {
 if ( ! empty( $template['custom'] ) ) {
 	$attributes['data-formid'] = absint( $template['id'] );
 	$attributes['data-custom'] = '1';
-	$attributes['data-href'] = esc_url( $template['url'] );
+	$attributes['data-href']   = esc_url( $template['url'] );
+}
+
+if ( $template['categories'] ) {
+	$category_slugs                = array_map( 'sanitize_title', $template['categories'] );
+	$attributes['data-categories'] = implode( ',', $category_slugs );
 }
 ?>
 
 <li <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
 	<?php if ( $render_icon ) : ?>
 		<div class="frm-form-templates-item-icon">
-			<?php
-			FrmFormsHelper::template_icon(
-				$template['categories'],
-				array(
-					'html' => 'div',
-					'bg' => true,
-				)
-			);
-			?>
+			<?php FrmFormTemplatesHelper::template_icon( $template['categories'] ); ?>
 		</div><!-- .frm-form-templates-item-icon -->
 	<?php endif; ?>
 

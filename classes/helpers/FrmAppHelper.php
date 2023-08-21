@@ -311,7 +311,7 @@ class FrmAppHelper {
 	 */
 	public static function is_form_templates_page() {
 		$page = self::simple_get( 'page', 'sanitize_title' );
-		return strpos( $page, 'formidable-form-templates' ) !== false;
+		return strpos( $page, FrmFormTemplatesController::PAGE_SLUG ) !== false;
 	}
 
 	/**
@@ -1222,15 +1222,19 @@ class FrmAppHelper {
 			'description' => '',
 			'link_text'   => '',
 			'link_url'    => '#',
+			'class'       => '',
+			'id'          => '',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
 		// Extract the remaining variables.
-		$title = $args['title'];
+		$title       = $args['title'];
 		$description = $args['description'];
-		$link_text = $args['link_text'];
-		$link_url = $args['link_url'];
+		$link_text   = $args['link_text'];
+		$link_url    = $args['link_url'];
+		$class       = $args['class'];
+		$id          = $args['id'];
 
 		require self::plugin_path() . '/classes/views/shared/admin-cta.php';
 	}
@@ -1262,17 +1266,13 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( empty( $atts['new_link'] ) && empty( $atts['trigger_new_form_modal'] ) && empty( $atts['class'] ) ) {
+		if ( empty( $atts['new_link'] ) && empty( $atts['create_form'] ) && empty( $atts['class'] ) ) {
 			// Do not render a button if none of these attributes are set.
 			return;
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
 		$class = 'button button-primary frm-button-primary';
-
-		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
-			$class .= ' frm-trigger-new-form-modal';
-		}
 
 		if ( ! empty( $atts['class'] ) ) {
 			$class .= ' ' . $atts['class'];

@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'publish'                => array(
 				'FrmAppHelper::add_new_item_link',
 				array(
-					'trigger_new_form_modal' => current_user_can( 'frm_edit_forms' ),
+					'create_form' => current_user_can( 'frm_edit_forms' ),
+					'new_link'    => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&return_page=forms' ),
+					'button_text' => esc_html__( 'Create form', 'formidable' ),
 				),
 			),
 		)
@@ -54,4 +56,3 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 <?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 </div>
 </div>
-

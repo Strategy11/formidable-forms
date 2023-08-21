@@ -55,20 +55,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div><!-- .columns-2 -->
 
 		<!--
-		<span id="frm-upgrade-title">
-			<?php esc_html_e( 'Upgrade your account', 'formidable' ); ?>
-		</span>
-		<span id="frm-preview-title"></span>
-		<span id="frm-email-title">
-			<?php esc_html_e( 'Leave your email address', 'formidable' ); ?>
-		</span>
-		<span id="frm-renew-title">
-			<?php esc_html_e( 'Renew your account', 'formidable' ); ?>
-		</span>
-
-
-		<div id="frm-preview-block"></div>
-
 		<div id="frm-details-block">
 			<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
 				<p>

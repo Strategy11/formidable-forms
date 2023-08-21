@@ -102,7 +102,7 @@ class FrmApplicationTemplate {
 		if ( false !== strpos( $category, '+Views' ) ) {
 			return true;
 		}
-		return in_array( $category, FrmFormsHelper::ignore_template_categories(), true );
+		return in_array( $category, FrmFormTemplatesHelper::ignore_template_categories(), true );
 	}
 
 	/**
@@ -194,7 +194,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
-		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
+		if ( ! FrmFormTemplatesHelper::plan_is_allowed( $args ) ) {
 			return false;
 		}
 

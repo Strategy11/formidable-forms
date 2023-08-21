@@ -162,7 +162,7 @@ class FrmFormTemplatesController {
 		$view_path = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
 
 		// License information and upgrade/renewal links.
-		$expired      = FrmFormsController::expired();
+		$expired      = self::is_expired();
 		$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
 				'medium'  => 'new-template',
@@ -294,7 +294,7 @@ class FrmFormTemplatesController {
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
-		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::ignore_template_categories() );
+		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormTemplatesHelper::ignore_template_categories() );
 		foreach ( $redundant_cats as $redundant_cat ) {
 			unset( self::$categories[ $redundant_cat ] );
 		}
@@ -377,11 +377,9 @@ class FrmFormTemplatesController {
 	 */
 	private static function update_global_variables() {
 		global $frm_templates;
-		global $frm_expired;
 		global $frm_license_type;
 
 		$frm_templates    = self::get_templates();
-		$frm_expired      = self::is_expired();
 		$frm_license_type = self::get_license_type();
 	}
 
@@ -410,9 +408,9 @@ class FrmFormTemplatesController {
 		wp_enqueue_style( self::SCRIPT_HANDLE );
 
 		// Register and enqueue "Form Templates" script.
-		// wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/admin/form-templates.js', $js_dependencies, $version, true );
-		// wp_localize_script( self::SCRIPT_HANDLE, 'frmFormTemplatesVars', self::get_js_variables() );
-		// wp_enqueue_script( self::SCRIPT_HANDLE );
+		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/admin/form-templates.js', $js_dependencies, $version, true );
+		wp_localize_script( self::SCRIPT_HANDLE, 'frmFormTemplatesVars', self::get_js_variables() );
+		wp_enqueue_script( self::SCRIPT_HANDLE );
 
 		/**
 		 * Fires after "Form Templates" enqueue assets.

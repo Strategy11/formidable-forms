@@ -6351,12 +6351,6 @@ li.frm_single_option:not(:last-child) {
 	display: none;
 }
 
-#frm-preview-block {
-	height: 400px;
-	overflow: scroll;
-	margin: 0;
-}
-
 .plugin-card-bottom .frm-trash {
 	color: #a00;
 }

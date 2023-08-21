@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <!-- Title -->
-<h2 class="frm-form-templates-title"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
+<h2 id="frm-form-templates-page-title" class="frm-form-templates-title"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
 
 <!-- Featured Templates List -->
 <ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm_grid_container">
@@ -26,6 +26,7 @@ FrmAppHelper::show_admin_cta(
 		'description' => esc_html__( 'Upgrade to PRO to get access to all of our templates and unlock the full potential of your forms.', 'formidable' ),
 		'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
 		'link_url'    => $upgrade_link,
+		'id'          => 'frm-form-templates-upsell-banner',
 	)
 );
 ?>

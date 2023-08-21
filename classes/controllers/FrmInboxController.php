@@ -127,7 +127,7 @@ class FrmInboxController {
 			return;
 		}
 
-		$link = admin_url( 'admin.php?page=formidable-form-templates&free-templates=1' );
+		$link = admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&free-templates=1' );
 
 		$message = new FrmInbox();
 		$message->add_message(
