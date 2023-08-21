@@ -217,4 +217,19 @@ class FrmSummaryEmailsHelper {
 			intval( $displayed_value ) . '%'
 		);
 	}
+
+	/**
+	 * Adds custom data to URL.
+	 *
+	 * @param string $url The URL.
+	 * @return string
+	 */
+	public static function add_url_data( $url ) {
+		$data = array(
+			'utm_medium' => 'summary-email',
+			'utm_content' => 'link',
+		);
+
+		return add_query_arg( $data, $url );
+	}
 }
