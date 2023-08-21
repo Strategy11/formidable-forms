@@ -48,8 +48,7 @@ abstract class FrmSummaryEmail {
 		return array(
 			'subject'         => $this->get_subject(),
 			'site_url'        => home_url( '/' ),
-			'unsubscribe_url' => home_url( '/' ), // TODO.
-			'line'            => '<hr style="background-color: #eaecf0; height: 1px; border: 0; margin-bottom: 48px;" />',
+			'unsubscribe_url' => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
 		);
 	}
 

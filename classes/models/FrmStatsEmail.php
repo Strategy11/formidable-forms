@@ -10,9 +10,15 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 	protected $has_inbox_notice = false;
 
+	protected $has_comparison = true;
+
 	protected $from_date;
 
 	protected $to_date;
+
+	protected $prev_from_date;
+
+	protected $prev_to_date;
 
 	/**
 	 * @return mixed
@@ -45,9 +51,15 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args['stats']           = array(
 			'entries' => array(
 				'label' => __( 'Entries created', 'formidable' ),
-				'count' => $stats_data['entries'], // TODO: add compare.
+				'count' => $stats_data['entries'],
+				'compare' => 0,
 			),
 		);
+
+		if ( $this->has_comparison ) {
+			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );
+			$args['stats']['entries']['compare'] = ( $stats_data['entries'] - $prev_stats_data['entries'] ) / $stats_data['entries'];
+		}
 
 		return $args; // TODO: add filter.
 	}

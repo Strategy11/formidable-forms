@@ -189,4 +189,32 @@ class FrmSummaryEmailsHelper {
 			)
 		);
 	}
+
+	public static function show_comparison( $diff ) {
+		if ( ! $diff ) {
+			return;
+		}
+
+		if ( $diff > 0 ) {
+			$image = 'arrow-up.png';
+			$color = '#12b76a';
+		} else {
+			$image = 'arrow-down.png';
+			$color = '#f04438';
+		}
+
+		$displayed_value = round( $diff * 100 );
+		if ( ! $displayed_value ) {
+			$displayed_value = $diff > 0 ? 1 : -1; // Do not show 0 value.
+		}
+
+		printf(
+			'<span style="color: %1$s; font-size: 0.75em; font-weight: 700;">
+					<img src="%2$s" alt="" style="vertical-align: text-bottom;" /><span style="display: inline-block; line-height: 1.33;">%3$s</span>
+				</span>',
+			esc_attr( $color ),
+			FrmAppHelper::plugin_url() . '/images/' . $image,
+			intval( $displayed_value ) . '%'
+		);
+	}
 }

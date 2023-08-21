@@ -36,27 +36,10 @@ $heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;'
 					?>
 					<td>
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
-						<strong style="font-size: 1.5em; line-height: 1;"><?php echo intval( $stat['count'] ); ?></strong>
-					</td>
-					<?php
-				}
-				?>
-				<?php
-				foreach ( $args['stats'] as $key => $stat ) {
-					?>
-					<td>
-						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
-						<strong style="font-size: 1.5em; line-height: 1;"><?php echo intval( $stat['count'] ); ?></strong>
-					</td>
-					<?php
-				}
-				?>
-				<?php
-				foreach ( $args['stats'] as $key => $stat ) {
-					?>
-					<td>
-						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
-						<strong style="font-size: 1.5em; line-height: 1;"><?php echo intval( $stat['count'] ); ?></strong>
+						<div>
+							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;"><?php echo intval( $stat['count'] ); ?></strong>
+							<?php FrmSummaryEmailsHelper::show_comparison( $stat['compare'] ); ?>
+						</div>
 					</td>
 					<?php
 				}
