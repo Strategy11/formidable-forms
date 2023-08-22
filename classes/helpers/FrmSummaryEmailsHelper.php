@@ -142,7 +142,7 @@ class FrmSummaryEmailsHelper {
 	}
 
 	public static function set_last_send_date( $type ) {
-
+		// TODO:
 	}
 
 	private static function get_lowest_form_created_date() {
