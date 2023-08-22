@@ -8,6 +8,8 @@
 
 abstract class FrmSummaryEmail {
 
+	protected $is_html = true;
+
 	abstract protected function get_subject();
 
 	abstract protected function get_inner_content();
@@ -27,7 +29,7 @@ abstract class FrmSummaryEmail {
 
 	protected function get_headers() {
 		return array(
-			'Content-Type: text/html; charset=UTF-8',
+			'Content-Type: ' . ( $this->is_html ? 'text/html; charset=UTF-8' : 'text/plain' ),
 			'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>',
 		);
 	}
@@ -35,8 +37,10 @@ abstract class FrmSummaryEmail {
 	protected function get_content() {
 		$args = $this->get_content_args();
 
+		$suffix = $this->is_html ? '' : '-plain';
+
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/base-email.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/base-email' . $suffix . '.php';
 		$content = ob_get_clean();
 
 		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
