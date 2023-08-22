@@ -56,7 +56,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			),
 		);
 
-		if ( $this->has_comparison ) {
+		if ( $this->has_comparison && $stats_data['entries'] ) {
 			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );
 			$args['stats']['entries']['compare'] = ( $stats_data['entries'] - $prev_stats_data['entries'] ) / $stats_data['entries'];
 		}

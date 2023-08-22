@@ -9,8 +9,8 @@
  */
 
 ?>
-<div>
-	<p><?php printf( esc_html__( 'Hello %s', 'formidable' ), esc_html( $args['admin_display_name'] ) ); ?></p>
+<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
+	<p><?php esc_html_e( 'Hello', 'formidable' ); ?></p>
 
 	<p><?php esc_html_e( 'Your license is expired. You can use the button below to renew.', 'formidable' ); ?></p>
 

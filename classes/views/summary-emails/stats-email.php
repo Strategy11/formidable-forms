@@ -8,13 +8,11 @@
  * @var array $args Content args.
  */
 
-$section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
-$heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;';
 ?>
 
 <div style="padding-top: 1.375em;">
 	<!-- Header section -->
-	<div style="<?php echo esc_attr( $section_style ); ?>">
+	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
 		<h1 style="font-size: 2.5em; line-height: 1.2em; margin: 0 0 32px;"><?php echo esc_html( $args['subject'] ); ?></h1>
 
 		<div style="line-height: 1.5; color: #475467;">
@@ -23,8 +21,8 @@ $heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;'
 	</div>
 
 	<!-- Overall section -->
-	<div style="<?php echo esc_attr( $section_style ); ?>">
-		<h2 style="<?php echo esc_attr( $heading2_style ); ?>">
+	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
+		<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
 			<img style="vertical-align: bottom; margin-right: 4px;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/chart.png' ); ?>" alt="chart" />
 			<?php esc_html_e( 'Statistics', 'formidable' ); ?>
 		</h2>
@@ -56,8 +54,8 @@ $heading2_style = 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;'
 	</div>
 
 	<!-- Top forms section -->
-	<div style="<?php echo esc_attr( $section_style ); ?>">
-		<h2 style="<?php echo esc_attr( $heading2_style ); ?>">
+	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
+		<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
 			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
 			<?php echo esc_html( $args['top_forms_label'] ); ?>
 		</h2>

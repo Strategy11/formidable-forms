@@ -44,6 +44,10 @@ class FrmSummaryEmailsHelper {
 
 	public static function send_monthly_email() {
 		error_log( 'Sending monthly email' );
+
+		$monthly_email = new FrmMonthlyEmail();
+		$monthly_email->send();
+
 		self::set_last_send_date( 'monthly' );
 	}
 
@@ -58,6 +62,10 @@ class FrmSummaryEmailsHelper {
 
 	public static function send_license_expired_email() {
 		error_log( 'Sending license expired email' );
+
+		$license_email = new FrmLicenseExpiredEmail();
+		$license_email->send();
+
 		self::set_last_send_date( 'license' );
 	}
 
@@ -216,6 +224,14 @@ class FrmSummaryEmailsHelper {
 			FrmAppHelper::plugin_url() . '/images/' . $image,
 			intval( $displayed_value ) . '%'
 		);
+	}
+
+	public static function get_section_style() {
+		return 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0;';
+	}
+
+	public static function get_heading2_style() {
+		return 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;';
 	}
 
 	/**
