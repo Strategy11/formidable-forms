@@ -9946,15 +9946,9 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
 				if ( event.key === 'Enter' || event.key === ' ' ) {
-					// Prevent the default action
 					event.preventDefault();
-				} else {
-					// If the key wasn't 'Enter' or 'Space', exit the function
-					return;
+					maybeCollapseSettings.call( this, event );
 				}
-
-				// Execute the function
-				maybeCollapseSettings.call( this, event );
 			});
 
 			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
