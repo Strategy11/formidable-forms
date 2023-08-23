@@ -6100,6 +6100,7 @@ function frmAdminBuildJS() {
 				$html.setAttribute( 'class', 'frm_updated_message' );
 				$html.innerHTML = msg;
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
+				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
 			error: function() {
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
@@ -7697,8 +7698,21 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function reloadIfAddonActivatedAjaxSubmitOnly() {
+		const submitButton = document.getElementById( 'frm_submit_side_top' );
+		if ( submitButton.hasAttribute( 'data-new-addon-installed' ) && 'true' === submitButton.getAttribute( 'data-new-addon-installed' ) ) {
+			submitButton.removeAttribute( 'data-new-addon-installed' );
+			window.location.reload();
+		}
+
+	}
+
 	function saveAndReloadFormBuilder() {
-		document.getElementById( 'frm_submit_side_top' ).click();
+		const submitButton = document.getElementById( 'frm_submit_side_top' );
+		if ( submitButton.classList.contains( 'frm_submit_ajax' ) ) {
+			submitButton.setAttribute( 'data-new-addon-installed', true );
+		}
+		submitButton.click();
 	}
 
 	function confirmExit( event ) {
