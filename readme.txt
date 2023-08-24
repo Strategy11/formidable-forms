@@ -446,6 +446,8 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
 * Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
 * Fix: The option to save and reload when activating an add on was not reloading the page when the setting to save the builder with AJAX was on.
+* Fix: An Automatic conversion of false to array deprecation message would get logged when saving styles in newer versions of PHP.
+* Admin footer links and the floating support button have been removed for websites that use a whitelabel setting.
 
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
@@ -454,7 +456,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Required attributes are now defined on the radio and checkbox field groups instead of on each input for improved accessibility.
 * Fix: A global JavaScript variable conflict was causing a conflict with the Google Spreadsheets add on. This was causing issues with authorizing and deauthorizing Google Sheets.
 * Fix: The up arrow icon was either hidden or displayed as a down arrow for one of the styling options for section icons.
-* Admin footer links and the floating support button have been removed for websites that use a whitelabel setting.
 
 = 6.4 =
 * New: A floating button has been added to some admin pages with links for documentation and support.
