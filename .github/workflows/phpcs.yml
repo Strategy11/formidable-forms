@@ -28,13 +28,13 @@ jobs:
       - name: Check PHP syntax
         run: find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: 5.6
       - name: Check PHP 5.6 syntax
         run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: 8.1
       - name: Check PHP 8.1 syntax
