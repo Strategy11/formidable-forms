@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 == Changelog ==
 = 6.4.2 =
 * New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
+* New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
 * Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
 * Fix: The option to save and reload when activating an add on was not reloading the page when the setting to save the builder with AJAX was on.
 
