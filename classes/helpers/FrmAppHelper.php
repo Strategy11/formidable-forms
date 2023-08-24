@@ -153,6 +153,22 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Determine if the current branding is set to 'formidable'.
+	 *
+	 * Checks the menu title, retrieved through get_menu_name,
+	 * and verifies if it matches the 'formidable' branding.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the menu title is 'formidable', false otherwise.
+	 */
+	public static function is_formidable_branding() {
+		$menu_title = self::get_menu_name();
+
+		return 'formidable' === strtolower( trim( $menu_title ) );
+	}
+
+	/**
 	 * @since 3.05
 	 */
 	public static function svg_logo( $atts = array() ) {
