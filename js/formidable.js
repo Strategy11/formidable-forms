@@ -498,30 +498,27 @@ function frmFrontFormJS() {
 	 */
 	function setSelectPlaceholderColor() {
 		var selects = document.querySelectorAll( '.form-field select' );
-
 		var styleElement = document.querySelector( '.with_frm_style' );
-		if ( ! styleElement ) {
+		var textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
+
+		// Exit if there are no select elements or the textColorDisabled property is missing
+		if ( ! selects.length || ! textColorDisabled ) {
 			return;
 		}
 
-		// eslint-disable-next-line vars-on-top
-		var textColorDisabled = getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim();
-		if ( ! textColorDisabled ) {
-			return;
-		}
-
+		// Function to change the color of a select element
 		// eslint-disable-next-line vars-on-top
 		var changeSelectColor = function( select ) {
-			if ( select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
-				select.style.cssText += `; color: ${textColorDisabled} !important`;
-			} else {
-				select.style.color = '';
-			}
+			var isSelectedPlaceholder = select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' );
+			select.style.color = isSelectedPlaceholder ? textColorDisabled + ' !important' : '';
 		};
 
-		selects.forEach( function( select ) {
+		// Use a loop to iterate through each select element
+		Array.prototype.forEach.call( selects, function( select ) {
+			// Apply the color change to each select element
 			changeSelectColor( select );
 
+			// Add an event listener for future changes
 			select.addEventListener( 'change', function() {
 				changeSelectColor( select );
 			});
