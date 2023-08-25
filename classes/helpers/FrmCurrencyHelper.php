@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * @since x.x Added with Stripe Lite.
+ */
 class FrmCurrencyHelper {
 
 	/**
