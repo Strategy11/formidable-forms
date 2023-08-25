@@ -16,7 +16,7 @@
 		<h1 style="font-size: 2.5em; line-height: 1.2em; margin: 0 0 32px;"><?php echo esc_html( $args['subject'] ); ?></h1>
 
 		<div style="line-height: 1.5; color: #475467;">
-			<?php echo esc_html( $args['from_date'] ); ?> - <?php echo esc_html( $args['to_date'] ); ?> &middot; <?php echo esc_url( $args['site_url'] ); ?>
+			<?php echo esc_html( $args['from_date'] ); ?> - <?php echo esc_html( $args['to_date'] ); ?> &middot; <a href="<?php echo esc_url( FrmSummaryEmailsHelper::add_url_data( $args['site_url'] ) ); ?>" title=""><?php echo esc_url( $args['site_url'] ); ?></a>
 		</div>
 	</div>
 
