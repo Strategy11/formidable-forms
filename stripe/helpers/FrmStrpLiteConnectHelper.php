@@ -356,9 +356,6 @@ class FrmStrpLiteConnectHelper {
 
 			if ( ! empty( $data->details_submitted ) ) {
 				self::set_stripe_details_as_submitted( $mode );
-				if ( 'live' === $mode ) {
-					self::dismiss_inbox_message_to_use_stripe_connect();
-				}
 			}
 
 			return true;
@@ -376,15 +373,6 @@ class FrmStrpLiteConnectHelper {
 	private static function set_stripe_details_as_submitted( $mode ) {
 		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, 'no' );
 		FrmTransLiteAppController::install();
-	}
-
-	/**
-	 * @return void
-	 */
-	private static function dismiss_inbox_message_to_use_stripe_connect() {
-		$key     = 'use_strp_connect';
-		$message = new FrmInbox();
-		$message->dismiss( $key );
 	}
 
 	/**
