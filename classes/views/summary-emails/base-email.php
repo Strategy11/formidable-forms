@@ -31,6 +31,23 @@ $section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
 </head>
 
 <body style="background-color: #eee; color: #475467; font-family: 'Inter', Arial, sans-serif;">
+	<style type="text/css">
+		.frm_inbox_dismiss { display: none; }
+
+		.frm-button-primary {
+			font-size: 0.875em;
+			display: inline-block;
+			line-height: 2.4;
+			padding-left: 1em;
+			padding-right: 1em;
+			border-radius: 1.2em;
+			border: 1px solid #d0d5dd;
+			font-weight: 600;
+			color: #fff;
+			background-color: #4199fd;
+			text-decoration: none;
+		}
+	</style>
 	<div style="background-color: #fff; max-width: 42.5em; margin: auto;">
 		%%INNER_CONTENT%%
 

@@ -79,6 +79,23 @@
 		</table>
 	</div>
 
-	<!-- Inbox notice section -->
-	<div></div>
+	<?php if ( ! empty( $args['inbox_msg'] ) ) : ?>
+		<!-- Inbox notice section -->
+		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
+			<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/speaker.png' ); ?>" alt="speaker" />
+				<?php echo esc_html( $args['inbox_msg']['subject'] ); ?>
+			</h2>
+
+			<div style="line-height: 1.5;">
+				<?php echo wp_kses_post( wpautop( $args['inbox_msg']['message'] ) ); ?>
+			</div>
+
+			<?php if ( ! empty( $args['inbox_msg']['cta'] ) ) : ?>
+				<p>
+					<?php echo wp_kses_post( $args['inbox_msg']['cta'] ); ?>
+				</p>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
 </div>

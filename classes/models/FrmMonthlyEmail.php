@@ -8,7 +8,7 @@
 
 class FrmMonthlyEmail extends FrmStatsEmail {
 
-	protected $has_inbox_notice = true;
+	protected $has_inbox_msg = true;
 
 	public function __construct() {
 		$this->to_date        = date( 'Y-m-d' );

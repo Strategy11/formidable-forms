@@ -8,7 +8,7 @@
 
 abstract class FrmStatsEmail extends FrmSummaryEmail {
 
-	protected $has_inbox_notice = false;
+	protected $has_inbox_msg = false;
 
 	protected $has_comparison = true;
 
@@ -43,6 +43,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 		$stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->from_date, $this->to_date );
 
+		$args['inbox_msg']       = $this->has_inbox_msg ? FrmSummaryEmailsHelper::get_latest_inbox_message() : false;
 		$args['from_date']       = $this->from_date;
 		$args['to_date']         = $this->to_date;
 		$args['top_forms']       = $stats_data['top_forms'];

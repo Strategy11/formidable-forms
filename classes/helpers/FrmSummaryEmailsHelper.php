@@ -248,4 +248,22 @@ class FrmSummaryEmailsHelper {
 
 		return add_query_arg( $data, $url );
 	}
+
+	public static function get_latest_inbox_message() {
+		$inbox    = new FrmInbox();
+		$messages = $inbox->get_messages( 'filter' );
+		if ( ! $messages || ! is_array( $messages ) ) {
+			return false;
+		}
+
+		foreach ( $messages as $message ) {
+			if ( 'news' !== $message['type'] ) {
+				continue;
+			}
+
+			return $message;
+		}
+
+		return false;
+	}
 }
