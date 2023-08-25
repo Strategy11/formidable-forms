@@ -199,7 +199,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since 1.16
+	 * @since x.x, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param int $number
 	 * @return array
@@ -214,7 +214,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since 1.16
+	 * @since x.x, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param string $value
 	 * @param int $number

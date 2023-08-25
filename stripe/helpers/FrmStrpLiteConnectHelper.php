@@ -8,7 +8,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Track the latest error when calling stripe connect.
 	 *
-	 * @since 2.06 This property is public.
+	 * @since x.x
 	 *
 	 * @var string
 	 */
@@ -825,7 +825,7 @@ class FrmStrpLiteConnectHelper {
 	 * Create a setup intent for a Stripe link recurring payment.
 	 * This is called when a form is loaded.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string      $customer_id
 	 * @param array|false $payment_method_types
@@ -848,7 +848,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Get a setup intent (used for Stripe link recurring payments).
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
 	 * @return object|string|false

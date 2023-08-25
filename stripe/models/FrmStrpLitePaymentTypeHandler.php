@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since 3.1
+ * @since x.x, introduced in v3.1 of the Stripe add on.
  */
 class FrmStrpLitePaymentTypeHandler {
 
@@ -16,7 +16,7 @@ class FrmStrpLitePaymentTypeHandler {
 	/**
 	 * When no payment method types are added, default to automatic.
 	 *
-	 * @since 3.1
+	 * @since x.x, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
 	 * @return bool
@@ -28,7 +28,7 @@ class FrmStrpLitePaymentTypeHandler {
 	/**
 	 * Get the payment method types for a target Stripe action.
 	 *
-	 * @since 3.1
+	 * @since x.x, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
 	 * @return string[] An empty array is treated as automatic.
@@ -41,7 +41,7 @@ class FrmStrpLitePaymentTypeHandler {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since x.x, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
 	 * @return string[]
@@ -51,7 +51,7 @@ class FrmStrpLitePaymentTypeHandler {
 		 * Allow users to filter payment method types to add possible other options like "us_bank_account".
 		 * An empty array is treated as automatic.
 		 *
-		 * @since 3.1
+		 * @since x.x, introduced in v3.1 of the Stripe add on.
 		 *
 		 * @param array<string> $payment_method_types
 		 * @param array $args {

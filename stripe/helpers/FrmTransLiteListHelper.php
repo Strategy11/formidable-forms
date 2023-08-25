@@ -461,7 +461,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since 2.04
+	 * @since x.x, introduced in v2.04 of the Payments submodule.
 	 *
 	 * @return string
 	 */

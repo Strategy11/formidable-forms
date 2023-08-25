@@ -112,7 +112,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since 1.12
+	 * @since x.x, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param array $atts
 	 * @return void

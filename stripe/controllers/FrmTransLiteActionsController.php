@@ -101,7 +101,7 @@ class FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since 1.12
+	 * @since x.x, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param object $sub
 	 * @return void
@@ -322,7 +322,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * Include the price field ids to pass to the javascript.
 	 *
-	 * @since 2.0
+	 * @since x.x, introduced in v2.0 of the Payments submodule.
 	 *
 	 * @param WP_Post $action
 	 * @return array|int

@@ -189,7 +189,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * Create a setup intent for a Stripe link recurring payment.
 	 * This is called when a form is loaded.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string      $customer_id Customer ID beginning with cus_.
 	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
@@ -202,7 +202,7 @@ class FrmStrpLiteConnectApiAdapter {
 	/**
 	 * Get a setup intent (used for Stripe link recurring payments).
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
 	 * @return object|string|false

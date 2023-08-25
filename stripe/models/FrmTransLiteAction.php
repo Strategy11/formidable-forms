@@ -84,7 +84,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	/**
-	 * @since 2.01
+	 * @since x.x, introduced in v2.01 of the Payments submodule.
 	 *
 	 * @return string
 	 */

@@ -96,7 +96,7 @@ class FrmStrpLiteEventsController {
 	 * Skip updating the payment object for the first recurring payment.
 	 * This is to prevent double notifications because the first recurring payment creates an invoice and that invoice triggers the payment events.
 	 *
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param stdClass $payment
 	 * @return bool
@@ -118,7 +118,7 @@ class FrmStrpLiteEventsController {
 	 * Tell Stripe Connect API that the request came through by flushing early before processing.
 	 * Flushing early allows the API to end the request earlier.
 	 *
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @return void
 	 */
@@ -146,7 +146,7 @@ class FrmStrpLiteEventsController {
 	/**
 	 * When a customer is deleted in Stripe, remove the link to a user.
 	 *
-	 * @since 2.01
+	 * @since x.x, introduced in v2.01 of the Stripe add on.
 	 * @return void
 	 */
 	private function reset_customer() {
@@ -243,7 +243,7 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param stdClass $payment
 	 * @return bool
@@ -346,7 +346,7 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param array<string> $event_ids
 	 * @return void
@@ -371,7 +371,7 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
 	 * @return bool True if the event should be skipped.
@@ -399,7 +399,7 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
 	 * @return void
@@ -425,7 +425,7 @@ class FrmStrpLiteEventsController {
 	 * Track an event to no longer process.
 	 * This is called for successful events, and also for failed events after a number of retries.
 	 *
-	 * @since 2.07
+	 * @since x.x, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
 	 * @return void

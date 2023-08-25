@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since 3.0
+ * @since x.x, introduced in v3.0 of the Stripe add on.
  */
 class FrmStrpLiteLinkController {
 
 	/**
 	 * Process the form input and call handle_one_time_stripe_link_return_url if all of the required data is being submitted.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @return void
 	 */
@@ -46,7 +46,7 @@ class FrmStrpLiteLinkController {
 	 * This will redirect and get handled by FrmStrpLiteAuth::maybe_show_message or possibly by redirected if there is a success URL set.
 	 * If the setup intent is completed, the payment will be changed from pending as well.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $intent_id
 	 * @param string $client_secret
@@ -158,7 +158,7 @@ class FrmStrpLiteLinkController {
 	 * This will redirect and get handled by FrmStrpLiteAuth::maybe_show_message or possibly by redirected if there is a success URL set.
 	 * If the setup intent is completed, the subscription will be created as well.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
 	 * @param string $client_secret
@@ -282,7 +282,7 @@ class FrmStrpLiteLinkController {
 	 * This gets created on Stripe's end after confirmSetup is called client-side in the Stripe add on.
 	 * This is required in order to associate a payment method with the subscription that gets created.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
 	 * @return string|false
@@ -299,7 +299,7 @@ class FrmStrpLiteLinkController {
 	 * Stripe link uses confirmPayment with a return URL which gets called after this.
 	 * The payment is then updated from pending status later in another request, either when the return URL is loaded or with a webhook.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
 	 *     @type stdClass $form
@@ -352,7 +352,7 @@ class FrmStrpLiteLinkController {
 	/**
 	 * Verify a payment intent or setup intent client secret is in the POST data and is valid.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string|int $form_id
 	 * @return string|false String intent id on success, False if intent is missing or cannot be verified.
@@ -397,7 +397,7 @@ class FrmStrpLiteLinkController {
 	/**
 	 * Flag a form with the frm_stripe_link_form class so it is identifiable when initializing in JavaScript.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param stdClass $form
 	 * @return void
@@ -413,7 +413,7 @@ class FrmStrpLiteLinkController {
 	/**
 	 * We need to force AJAX submit with Stripe link to avoid the page reloading before confirmPayment is called after entry creation.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form
 	 * @return mixed

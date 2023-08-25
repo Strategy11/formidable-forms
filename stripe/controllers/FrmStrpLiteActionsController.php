@@ -13,7 +13,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
-	 * @since 2.0
+	 * @since x.x, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array  $field
 	 * @param string $field_name
@@ -36,7 +36,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get all published payment actions with the Stripe gateway that have an amount set.
 	 *
-	 * @since 2.0
+	 * @since x.x, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string|int $form_id
 	 * @return array
@@ -56,7 +56,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Check the Stripe link action for a form. There should only be one.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string|int $form_id
 	 * @return WP_Post|false
@@ -179,7 +179,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Set the customer name based on the mapped first and last name fields in the Stripe action.
 	 *
-	 * @since 2.02
+	 * @since x.x, introduced in v2.02 of the Stripe add on.
 	 *
 	 * @param array $atts
 	 * @param array $payment_info
@@ -201,7 +201,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the trial period from the settings or from the connected entry.
 	 *
-	 * @since 1.16
+	 * @since x.x, introduced in v1.16 of the Stripe add on.
 	 *
 	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
 	 * @return int The timestamp when the trial should end. 0 for no trial
@@ -489,7 +489,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get and format the style settings for JavaScript to use with the get_appearance_rules function.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form_id
 	 * @return array
@@ -521,7 +521,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * They're in the format that Stripe accepts.
 	 * Documentation for Appearance rules can be found at https://stripe.com/docs/elements/appearance-api?platform=web#rules
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $settings
 	 * @return array
@@ -557,7 +557,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the language to use for Stripe elements.
 	 *
-	 * @since 2.0
+	 * @since x.x, introduced in v2.0 of the Stripe add on.
 	 * @return string
 	 */
 	private static function get_locale() {

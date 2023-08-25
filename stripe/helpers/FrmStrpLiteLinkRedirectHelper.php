@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since 3.0
+ * @since x.x, introduced in v3.0 of the Stripe add on.
  */
 class FrmStrpLiteLinkRedirectHelper {
 

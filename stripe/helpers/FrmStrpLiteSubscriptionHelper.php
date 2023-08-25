@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Handles shared Stripe subscription logic between FrmStrpLiteActionsController and FrmStrpLiteLinkController.
  *
- * @since 3.0
+ * @since x.x, introduced in v3.0 of the Stripe add on.
  */
 class FrmStrpLiteSubscriptionHelper {
 
 	/**
 	 * Prepare a charge object for a Stripe subscription.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
 	 *       Make sure that if/when we re-use this in Stripe that we still include that.
 	 *
@@ -34,7 +34,7 @@ class FrmStrpLiteSubscriptionHelper {
 	/**
 	 * Create a Formidable subscription object with the nested payments submodule.
 	 *
-	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
+	 * @since x.x
 	 *
 	 * @param array $atts
 	 * @return string|int $sub_id
@@ -62,7 +62,7 @@ class FrmStrpLiteSubscriptionHelper {
 	/**
 	 * Get a plan for Stripe subscription.
 	 *
-	 * @since 3.0
+	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
 	 *    @type WP_Post $action
@@ -77,7 +77,7 @@ class FrmStrpLiteSubscriptionHelper {
 	}
 
 	/**
-	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
+	 * @since x.x
 	 *
 	 * @param WP_Post $action
 	 * @return string|false
@@ -95,7 +95,7 @@ class FrmStrpLiteSubscriptionHelper {
 	}
 
 	/**
-	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
+	 * @since x.x
 	 *
 	 * @param array $settings
 	 * @return array
@@ -136,8 +136,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * when creating the plan. This is overridden when the subscription
 	 * is created.
 	 *
-	 * @since 1.16
-	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
+	 * @since x.x
 	 *
 	 * @param mixed $trial
 	 * @return int
