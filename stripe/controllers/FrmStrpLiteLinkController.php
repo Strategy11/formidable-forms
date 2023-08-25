@@ -196,19 +196,6 @@ class FrmStrpLiteLinkController {
 
 		$redirect_helper->set_entry_id( $entry->id );
 
-		// Verify the customer.
-		$customer          = FrmStrpLiteAppHelper::call_stripe_helper_class(
-			'get_customer',
-			array(
-				'user_id' => FrmTransLiteAppHelper::get_user_id_for_current_payment(),
-			)
-		);
-		$payment_method_id = self::get_link_payment_method( $setup_intent, $customer->id );
-		if ( ! $payment_method_id ) {
-			$redirect_helper->handle_error( 'did_not_complete' );
-			die();
-		}
-
 		// Verify it's an action with Stripe link enabled.
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
 		if ( ! is_object( $action ) ) {
@@ -216,9 +203,16 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		$customer_id       = $setup_intent->customer;
+		$payment_method_id = self::get_link_payment_method( $setup_intent );
+		if ( ! $payment_method_id ) {
+			$redirect_helper->handle_error( 'did_not_complete' );
+			die();
+		}
+
 		$amount     = $payment->amount * 100;
 		$new_charge = array(
-			'customer'               => $customer->id,
+			'customer'               => $customer_id,
 			'default_payment_method' => $payment_method_id,
 			'plan' => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
@@ -291,11 +285,10 @@ class FrmStrpLiteLinkController {
 	 * @since 3.0
 	 *
 	 * @param object $setup_intent
-	 * @param string $customer_id This takes a stripe customer ID (a string prefixed with cus_) as input to confirm identity with the setup intent.
 	 * @return string|false
 	 */
-	private static function get_link_payment_method( $setup_intent, $customer_id ) {
-		if ( ! empty( $setup_intent->payment_method ) && $customer_id === $setup_intent->customer ) {
+	private static function get_link_payment_method( $setup_intent ) {
+		if ( ! empty( $setup_intent->payment_method ) ) {
 			return $setup_intent->payment_method;
 		}
 		return false;
