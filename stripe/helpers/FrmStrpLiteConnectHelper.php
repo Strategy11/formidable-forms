@@ -257,6 +257,7 @@ class FrmStrpLiteConnectHelper {
 	private static function handle_disconnect() {
 		self::disconnect();
 		self::reset_stripe_connect_integration();
+		self::maybe_unschedule_crons();
 		wp_send_json_success();
 	}
 
@@ -281,6 +282,29 @@ class FrmStrpLiteConnectHelper {
 			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
 		);
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
+	}
+
+	/**
+	 * Stop the payment cron once all Stripe connections have been disconnected.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_unschedule_crons() {
+		$mode       = self::get_mode_value_from_post();
+		$other_mode = 'live' === $mode ? 'test' : 'live';
+
+		if ( self::stripe_connect_is_setup( $other_mode ) ) {
+			// Only unschedule if both modes are not setup.
+			return;
+		}
+
+		$event     = 'frm_payment_cron';
+		$timestamp = wp_next_scheduled( $event );
+		if ( false !== $timestamp ) {
+			wp_unschedule_event( $timestamp, $event );
+		}
 	}
 
 	/**
