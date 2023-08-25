@@ -15,26 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v3.5.3
       - name: Analyze code style
         run: |
           export PHPCS_DIR=/tmp/phpcs
           export SNIFFS_DIR=/tmp/sniffs
-          git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR
-          git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR
+          git clone -b 3.7.2 --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR
+          git clone -b 2.3.0 --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR
           git clone -b master --depth 1 https://github.com/wimg/PHPCompatibility.git $SNIFFS_DIR/PHPCompatibility
           $PHPCS_DIR/bin/phpcs --config-set installed_paths $SNIFFS_DIR
           $PHPCS_DIR/bin/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php
       - name: Check PHP syntax
         run: find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: 5.6
       - name: Check PHP 5.6 syntax
         run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: 8.1
       - name: Check PHP 8.1 syntax

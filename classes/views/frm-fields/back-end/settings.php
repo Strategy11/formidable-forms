@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-sub-label alignright">
 		(ID <?php echo esc_html( $field['id'] ); ?>)
 	</div>
-	<h3>
+	<h3 aria-expanded="true">
 		<?php
 		printf(
 			/* translators: %s: Field type */
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</h3>
 
-	<div class="frm_grid_container frm-collapse-me">
+	<div class="frm_grid_container frm-collapse-me" role="group">
 		<?php
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
@@ -126,12 +126,11 @@ if ( $display['clear_on_focus'] ) {
 do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 'values' ) );
 
 ?>
-
-	<h3 class="frm-collapsed">
+	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_html_e( 'Collapsible Advanced Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
-	<div class="frm_grid_container frm-collapse-me">
+	<div class="frm_grid_container frm-collapse-me" role="group">
 
 		<?php if ( $display['default'] ) { ?>
 			<div class="frm-has-modal">
@@ -239,17 +238,17 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php if ( $display['required'] ) { ?>
 			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
-				<label>
+				<label for="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Required Field Indicator', 'formidable' ); ?>
 				</label>
-				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
 			</p>
 		<?php } ?>
 
 		<?php if ( $display['label_position'] ) { ?>
 			<p class="frm6 frm_form_field">
-				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
-				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
+				<label for="field_options_label_<?php echo esc_attr( $field['id'] ); ?>"><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
+				<select id="field_options_label_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
 					<option value="" <?php selected( $field['label'], '' ); ?>>
 						<?php esc_html_e( 'Default', 'formidable' ); ?>
 					</option>
@@ -312,12 +311,12 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
-			<h3 class="frm-collapsed">
+			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_html_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
 
-			<div class="frm_validation_box frm-collapse-me">
+			<div class="frm_validation_box frm-collapse-me" role="group">
 				<?php if ( $display['required'] ) { ?>
 					<p class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
 						<label for="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>">

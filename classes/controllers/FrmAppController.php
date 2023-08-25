@@ -644,7 +644,7 @@ class FrmAppController {
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page ) {
+		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 		unset( $is_valid_page );
@@ -1071,7 +1071,13 @@ class FrmAppController {
 	public static function add_admin_footer_links() {
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
-		if ( ( ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs' ) || FrmAppHelper::is_full_screen() ) {
+		// Check admin privileges, screen mode, and branding
+		$is_not_admin = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
+		$is_full_screen = FrmAppHelper::is_full_screen();
+		$is_not_formidable_branding = ! FrmAppHelper::is_formidable_branding();
+
+		// Exit if any of the above conditions are met
+		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding ) {
 			return;
 		}
 
