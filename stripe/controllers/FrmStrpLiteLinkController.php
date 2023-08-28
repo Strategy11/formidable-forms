@@ -328,10 +328,14 @@ class FrmStrpLiteLinkController {
 		$amount          = $atts['amount'];
 		$customer        = $atts['customer'];
 
-		// No need to add customer to a setup intent because setup intents require a customer on creation.
-		if ( ! $is_setup_intent ) {
-			FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'customer' => $customer->id ) );
-		}
+		FrmStrpLiteAppHelper::call_stripe_helper_class(
+			'update_intent',
+			$intent_id,
+			array(
+				'amount'   => $amount,
+				'customer' => $customer->id,
+			)
+		);
 
 		self::add_temporary_referer_meta( (int) $entry->id );
 
