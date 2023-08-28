@@ -102,7 +102,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 		if ( ! $entry ) {
 			// translators: %d: Entry ID.
-			echo esc_html( sprintf( __( '%d (Deleted)', 'formidable-payments' ), $payment->item_id ) );
+			echo esc_html( sprintf( __( '%d (Deleted)', 'formidable' ), $payment->item_id ) );
 			return;
 		}
 
