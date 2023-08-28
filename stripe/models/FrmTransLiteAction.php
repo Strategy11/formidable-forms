@@ -118,26 +118,24 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	/**
+	 * Get the ID of the credit card field.
+	 * We assume there is only a single credit card field in Stripe Lite.
+	 * This is saved as part of the Stripe payment action.
+	 *
 	 * @param array $form_atts
-	 * @param array $field_atts
-	 * @return array
+	 * @return int
 	 */
-	public function maybe_show_fields_dropdown( $form_atts, $field_atts ) {
-		$field_count = 0;
-		$field_id    = 0;
+	public function get_credit_card_field_id( $form_atts ) {
+		$field_id = 0;
 
 		foreach ( $form_atts['form_fields'] as $field ) {
-			$type_is_allowed = empty( $field_atts['allowed_fields'] ) || in_array( $field->type, (array) $field_atts['allowed_fields'], true );
-
-			if ( ! $type_is_allowed ) {
-				continue;
+			if ( 'credit_card' === $field->type ) {
+				$field_id = (int) $field->id;
+				break;
 			}
-
-			$field_count++;
-			$field_id = $field->id;
 		}
 
-		return compact( 'field_count', 'field_id' );
+		return $field_id;
 	}
 
 	/**

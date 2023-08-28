@@ -21,16 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="text" value="<?php echo esc_attr( $form_action->post_content['amount'] ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'amount' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>" class="frm_not_email_subject large-text" />
 	</p>
 
-	<?php
-	$cc_field = $this->maybe_show_fields_dropdown(
-		$field_dropdown_atts,
-		array(
-			'name'           => 'credit_card',
-			'allowed_fields' => 'credit_card',
-		)
-	);
-	?>
-	<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field['field_id'] ); ?>" />
+	<?php $cc_field_id = $this->get_credit_card_field_id( $field_dropdown_atts ); ?>
+	<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field_id ); ?>" />
 
 	<p class="frm6">
 		<label>
