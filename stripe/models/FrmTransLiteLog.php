@@ -6,8 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteLog {
 
 	/**
-	 * @todo
-	 *
 	 * @param string $title
 	 * @param string $text
 	 * @return void
