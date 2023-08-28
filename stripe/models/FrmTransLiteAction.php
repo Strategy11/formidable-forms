@@ -141,7 +141,8 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	/**
-	 * Show the dropdown fields for custom form fields
+	 * Show the dropdown fields for custom form fields.
+	 * This is used for first and last name fields.
 	 *
 	 * @param  array $form_atts
 	 * @param  array $field_atts
