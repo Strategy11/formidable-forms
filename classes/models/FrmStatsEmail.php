@@ -12,6 +12,8 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 	protected $has_comparison = true;
 
+	protected $has_out_of_date_plugins = true;
+
 	protected $from_date;
 
 	protected $to_date;
@@ -56,6 +58,8 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 				'compare' => 0,
 			),
 		);
+
+		$args['out_of_date_plugins'] = $this->has_out_of_date_plugins ? FrmSummaryEmailsHelper::get_out_of_date_plugins() : array();
 
 		if ( $this->has_comparison && $stats_data['entries'] ) {
 			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );

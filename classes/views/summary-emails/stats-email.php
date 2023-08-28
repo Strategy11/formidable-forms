@@ -98,4 +98,18 @@
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+
+	<?php if ( ! empty( $args['out_of_date_plugins'] ) ) : ?>
+		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
+			<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/notice.png' ); ?>" alt="speaker" />
+				<?php esc_html_e( 'Out of date plugins', 'formidable' ); ?>
+			</h2>
+
+			<p>
+				<?php esc_html_e( 'Following plugins are out of date:', 'formidable' ); ?>
+				<?php echo esc_html( implode( ', ', $args['out_of_date_plugins'] ) ) ?>
+			</p>
+		</div>
+	<?php endif; ?>
 </div>

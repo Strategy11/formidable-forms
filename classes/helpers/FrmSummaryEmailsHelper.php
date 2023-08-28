@@ -266,4 +266,20 @@ class FrmSummaryEmailsHelper {
 
 		return false;
 	}
+
+	public static function get_out_of_date_plugins() {
+		$update_data = FrmAddonsController::check_update( '' );
+		if ( ! $update_data ) {
+			return array();
+		}
+
+		$plugins = array();
+		foreach ( $update_data->response as $plugin_data ) {
+			if ( version_compare( $plugin_data->new_version, $plugin_data->version, '>' ) ) {
+				$plugins[] = FrmAppHelper::get_menu_name() . ' ' . $plugin_data->display_name;
+			}
+		}
+
+		return $plugins;
+	}
 }
