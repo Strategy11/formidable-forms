@@ -890,12 +890,12 @@ class FrmFormsController {
 	 */
 	public static function get_columns( $columns ) {
 		$columns['cb']         = '<input type="checkbox" />';
-		$columns['name']       = __( 'Form Title', 'formidable' );
-		$columns['entries']    = __( 'Entries', 'formidable' );
+		$columns['name']       = esc_html__( 'Form Title', 'formidable' );
+		$columns['entries']    = esc_html__( 'Entries', 'formidable' );
 		$columns['id']         = 'ID';
-		$columns['form_key']   = __( 'Key', 'formidable' );
-		$columns['shortcode']  = __( 'Actions', 'formidable' );
-		$columns['created_at'] = __( 'Date', 'formidable' );
+		$columns['form_key']   = esc_html__( 'Key', 'formidable' );
+		$columns['shortcode']  = esc_html__( 'Actions', 'formidable' );
+		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		add_screen_option(
 			'per_page',
