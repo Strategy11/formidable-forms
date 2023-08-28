@@ -623,6 +623,7 @@ class FrmAppController {
 		$version    = FrmAppHelper::plugin_version();
 
 		FrmAppHelper::load_admin_wide_js();
+		FrmOverlayController::register_assets();
 
 		wp_register_style( 'formidable_admin_global', $plugin_url . '/css/admin/frm_admin_global.css', array(), $version );
 		wp_enqueue_style( 'formidable_admin_global' );
