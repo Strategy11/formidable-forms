@@ -175,9 +175,14 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		$form_id = isset( $_REQUEST['form'] ) ? absint( $_REQUEST['form'] ) : 0;
-		FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
+		FrmFormsHelper::forms_dropdown(
+			'form',
+			$form_id,
+			array( 'blank' => __( 'View all forms', 'formidable' ) )
+		);
+
 		echo '<input type="hidden" name="trans_type" value="' . esc_attr( FrmAppHelper::get_param( 'trans_type', 'payments', 'get', 'sanitize_text_field' ) ) . '">';
-		echo '<input id="post-query-submit" class="button" type="submit" value="Filter" name="filter_action">';
+		echo '<input id="post-query-submit" class="button" type="submit" value="Filter" name="filter_action" />';
 	}
 
 	/**
