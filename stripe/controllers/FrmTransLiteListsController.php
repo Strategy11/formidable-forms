@@ -26,7 +26,7 @@ class FrmTransLiteListsController {
 		add_screen_option(
 			'per_page',
 			array(
-				'label'   => __( 'Payments', 'formidable' ),
+				'label'   => esc_html__( 'Payments', 'formidable' ),
 				'default' => 20,
 				'option'  => 'formidable_page_formidable_payments_per_page',
 			)
@@ -41,37 +41,37 @@ class FrmTransLiteListsController {
 		);
 
 		$columns['cb']      = '<input type="checkbox" />';
-		$columns['user_id'] = __( 'Customer', 'formidable' );
+		$columns['user_id'] = esc_html__( 'Customer', 'formidable' );
 
 		if ( 'subscriptions' === $type ) {
 			$add_columns = array(
-				'sub_id'         => __( 'Profile ID', 'formidable' ),
-				'item_id'        => __( 'Entry', 'formidable' ),
-				'form_id'        => __( 'Form', 'formidable' ),
-				'amount'         => __( 'Billing Cycle', 'formidable' ),
-				'end_count'      => __( 'Payments Made', 'formidable' ),
-				'next_bill_date' => __( 'Next Bill Date', 'formidable' ),
+				'sub_id'         => esc_html__( 'Profile ID', 'formidable' ),
+				'item_id'        => esc_html__( 'Entry', 'formidable' ),
+				'form_id'        => esc_html__( 'Form', 'formidable' ),
+				'amount'         => esc_html__( 'Billing Cycle', 'formidable' ),
+				'end_count'      => esc_html__( 'Payments Made', 'formidable' ),
+				'next_bill_date' => esc_html__( 'Next Bill Date', 'formidable' ),
 			);
 		} else {
 			$add_columns = array(
-				'receipt_id'  => __( 'Receipt ID', 'formidable' ),
-				'item_id'     => __( 'Entry', 'formidable' ),
-				'form_id'     => __( 'Form', 'formidable' ),
-				'amount'      => __( 'Amount', 'formidable' ),
-				'sub_id'      => __( 'Subscription', 'formidable' ),
-				'begin_date'  => __( 'Begin Date', 'formidable' ),
-				'expire_date' => __( 'Expire Date', 'formidable' ),
+				'receipt_id'  => esc_html__( 'Receipt ID', 'formidable' ),
+				'item_id'     => esc_html__( 'Entry', 'formidable' ),
+				'form_id'     => esc_html__( 'Form', 'formidable' ),
+				'amount'      => esc_html__( 'Amount', 'formidable' ),
+				'sub_id'      => esc_html__( 'Subscription', 'formidable' ),
+				'begin_date'  => esc_html__( 'Begin Date', 'formidable' ),
+				'expire_date' => esc_html__( 'Expire Date', 'formidable' ),
 			);
 		}
 
 		$columns = $columns + $add_columns;
 
-		$columns['status']     = __( 'Status', 'formidable' );
-		$columns['created_at'] = __( 'Date', 'formidable' );
+		$columns['status']     = esc_html__( 'Status', 'formidable' );
+		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		$paypal_is_active = class_exists( 'FrmPaymentsController', false );
 		if ( $paypal_is_active ) {
-			$columns['paysys'] = __( 'Processor', 'formidable' );
+			$columns['paysys'] = esc_html__( 'Processor', 'formidable' );
 		}
 
 		return $columns;
