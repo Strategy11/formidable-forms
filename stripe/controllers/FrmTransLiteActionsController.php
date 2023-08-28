@@ -271,7 +271,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = ( count( $amount_parts ) == 2 && strlen( $amount_parts[1] ) == 2 );
+		$used_for_decimal = count( $amount_parts ) === 2 && strlen( $amount_parts[1] ) === 2;
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}
@@ -344,7 +344,7 @@ class FrmTransLiteActionsController {
 			'post_status' => 'publish',
 		);
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
-		if ( empty( $payment_actions ) ) {
+		if ( ! $payment_actions ) {
 			$payment_actions = array();
 		}
 		return $payment_actions;
