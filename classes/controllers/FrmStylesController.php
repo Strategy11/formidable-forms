@@ -917,7 +917,7 @@ class FrmStylesController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frm_style = new FrmStyle();
-		$defaults  = false; // Intentionally avoid defaults here so nothing gets removed from our style.
+		$defaults  = array(); // Intentionally avoid defaults here so nothing gets removed from our style.
 		$style     = '';
 
 		echo '<style type="text/css">';
