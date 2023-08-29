@@ -42,7 +42,7 @@ abstract class FrmSummaryEmail {
 		$suffix = $this->is_html ? '' : '-plain';
 
 		ob_start();
-		include $this->get_include_file( 'base-email' );
+		include $this->get_include_file( 'base' );
 		$content = ob_get_clean();
 
 		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
@@ -66,13 +66,9 @@ abstract class FrmSummaryEmail {
 	public function send() {
 		$receptions = $this->get_receptions();
 		$content    = $this->get_content();
-//		header( 'Content-Type: text/html' ); die( $content ); // TODO: Remove this.
 		$subject    = $this->get_subject();
 		$headers    = $this->get_headers();
-//		error_log( 'Sending mail:' );
-//		error_log( $receptions );
-//		error_log( $subject );
-		$result = wp_mail( $receptions, $subject, $content, $headers );
-//		error_log( $result );
+
+		return wp_mail( $receptions, $subject, $content, $headers );
 	}
 }

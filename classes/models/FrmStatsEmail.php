@@ -29,7 +29,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args = $this->get_content_args();
 
 		ob_start();
-		include $this->get_include_file( 'stats-email' );
+		include $this->get_include_file( 'stats' );
 		return ob_get_clean();
 	}
 

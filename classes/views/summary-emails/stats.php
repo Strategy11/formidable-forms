@@ -73,7 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			foreach ( $args['top_forms'] as $index => $top_form ) {
 				?>
 				<tr>
-					<td align="left" style="padding: 1em 0.33em 0.28em"><?php echo intval( $index + 1 ); ?>. Form #<?php echo intval( $top_form->form_id ); // TODO ?></td>
+					<td align="left" style="padding: 1em 0.33em 0.28em"><?php echo intval( $index + 1 ); ?>. <?php echo esc_html( $top_form->form_name ); ?></td>
 					<td align="right" style="padding: 1em 0 0.28em;"><?php echo intval( $top_form->items_count ); ?></td>
 				</tr>
 				<?php

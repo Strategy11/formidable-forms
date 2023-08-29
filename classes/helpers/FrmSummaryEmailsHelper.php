@@ -43,30 +43,27 @@ class FrmSummaryEmailsHelper {
 	}
 
 	public static function send_monthly_email() {
-		error_log( 'Sending monthly email' );
-
 		$monthly_email = new FrmMonthlyEmail();
-		$monthly_email->send();
 
-		self::set_last_send_date( 'monthly' );
+		if ( $monthly_email->send() ) {
+			self::set_last_send_date( 'monthly' );
+		}
 	}
 
 	public static function send_yearly_email() {
-		error_log( 'Sending yearly email' );
-
 		$yearly_email = new FrmYearlyEmail();
-		$yearly_email->send();
 
-		self::set_last_send_date( 'yearly' );
+		if ( $yearly_email->send() ) {
+			self::set_last_send_date( 'yearly' );
+		}
 	}
 
 	public static function send_license_expired_email() {
-		error_log( 'Sending license expired email' );
-
 		$license_email = new FrmLicenseExpiredEmail();
-		$license_email->send();
 
-		self::set_last_send_date( 'license' );
+		if ( $license_email->send() ) {
+			self::set_last_send_date( 'license' );
+		}
 	}
 
 	/**
@@ -150,7 +147,9 @@ class FrmSummaryEmailsHelper {
 	}
 
 	public static function set_last_send_date( $type ) {
-		// TODO:
+		$options = self::get_options();
+
+		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
 	}
 
 	private static function get_lowest_form_created_date() {
@@ -188,8 +187,9 @@ class FrmSummaryEmailsHelper {
 
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT form_id, COUNT(*) as items_count FROM {$wpdb->prefix}frm_items
-						WHERE created_at >= %s AND created_at <= %s AND is_draft = 0
+				"SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
+						FROM {$wpdb->prefix}frm_items AS it INNER JOIN {$wpdb->prefix}frm_forms AS fr ON it.form_id = fr.id
+						WHERE it.created_at >= %s AND it.created_at <= %s AND it.is_draft = 0
 						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
 				$from_date,
 				$to_date,
