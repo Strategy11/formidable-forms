@@ -984,10 +984,11 @@ class FrmAppController {
 		// Check admin privileges, screen mode, and branding
 		$is_not_admin = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
 		$is_full_screen = FrmAppHelper::is_full_screen();
+		$is_form_templates = FrmAppHelper::is_form_templates_page();
 		$is_not_formidable_branding = ! FrmAppHelper::is_formidable_branding();
 
 		// Exit if any of the above conditions are met
-		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding ) {
+		if ( $is_not_admin || $is_full_screen || $is_form_templates || $is_not_formidable_branding ) {
 			return;
 		}
 
