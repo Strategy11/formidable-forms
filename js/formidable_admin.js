@@ -9734,6 +9734,33 @@ function frmAdminBuildJS() {
 					window.print();
 					return false;
 				});
+
+				const checkFormStatus = ( e ) => {
+					e.preventDefault();
+					let formID = e.target.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]').value;
+					const formData  = new FormData();
+					formData.append( 'form_id', formID );
+					doJsonPost( 'get_form_status', formData ).then( ( formStatus ) => {
+						if ( formStatus === 'trash' ) {
+							e.target.setAttribute( 'data-frmverify', 'You can\'t edit a deleted form.' );
+							confirmModal( e.target );
+							const confirmButton = document.getElementById( 'frm-confirmed-click' );
+							confirmButton.innerText = 'Restore form';
+							console.log(confirmButton.getAttribute( 'href' ));
+							let url = new URL( confirmButton.getAttribute( 'href' ) );
+							url.searchParams.set( 'frm_action', 'untrash' );
+							url.searchParams.set( '_wpnonce', frmGlobal.nonce );
+							confirmButton.setAttribute( 'href', url.href );
+							// Revert 'Confirm' button text when modal is closed
+						} else {
+							window.location = e.target.href;
+						}
+					});
+				};
+
+				document.querySelectorAll( '.frm_edit a' ).forEach( ( el ) => {
+					el.addEventListener( 'click', checkFormStatus );
+				});
 			}
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );

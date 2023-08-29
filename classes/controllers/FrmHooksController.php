@@ -258,6 +258,8 @@ class FrmHooksController {
 
 		// Submit with AJAX.
 		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 ); // Trigger before process_entry.
+
+		add_action( 'wp_ajax_frm_get_form_status', 'FrmFormsController::get_form_status' );
 	}
 
 	/**

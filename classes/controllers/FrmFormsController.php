@@ -2040,6 +2040,13 @@ class FrmFormsController {
 		return $form;
 	}
 
+	public static function get_form_status() {
+		// check_ajax_referer( 'frm_ajax', 'nonce' );
+		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form    = FrmForm::getOne( $form_id );
+		wp_send_json_success( $form->status );
+	}
+
 	private static function is_viewable_draft_form( $form ) {
 		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
 	}
