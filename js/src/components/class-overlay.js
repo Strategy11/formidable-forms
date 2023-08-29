@@ -2,16 +2,16 @@ import DOMPurify from 'dompurify';
 export class FrmOverlay {
 
 	constructor() {
-		this.body = document.querySelector('body');
+		this.body = document.querySelector( 'body' );
 	}
 
 	open( overlayData ) {
 		this.overlayData = {
 			heroImage: null,
-			heading: null, 
+			heading: null,
 			copy: null,
 			buttons: []
-		}
+		};
 
 		this.overlayData = { ...this.overlayData, ...overlayData };
 		this.body.insertAdjacentHTML( 'afterbegin', this.buildOverlay() );
@@ -51,7 +51,7 @@ export class FrmOverlay {
 				return '';
 			};
 
-			const target = button.target ? `target=${DOMPurify.sanitize( button.target )}` : ''
+			const target = button.target ? `target=${DOMPurify.sanitize( button.target )}` : '';
 			return `<a href="${DOMPurify.sanitize( button.url ) }" ${target} >${DOMPurify.sanitize( button.label )}</a>`;
 		});
 
@@ -81,7 +81,7 @@ export class FrmOverlay {
 		if ( overlayWrapper ) {
 			setTimeout( () => {
 				overlayWrapper.classList.add( 'frm-active' );
-			}, delay )
+			}, delay );
 		}
 	}
 
