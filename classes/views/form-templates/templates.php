@@ -4,21 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<!-- Title -->
+<!-- Page Title -->
 <h2 id="frm-form-templates-page-title" class="frm-form-templates-title"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
 
 <!-- Featured Templates List -->
 <ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm_grid_container">
 	<?php
-	// Define additional variables.
-	$render_icon = true;
-
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
 	}
 	?>
 </ul><!-- #frm-form-templates-featured-list -->
 
+<!-- Upsell Banner -->
 <?php
 FrmAppHelper::show_admin_cta(
 	array(
@@ -32,13 +30,25 @@ FrmAppHelper::show_admin_cta(
 ?>
 
 <!-- Templates List -->
-<ul class="frm-form-templates-list frm_grid_container">
+<ul id="frm-form-templates-list" class="frm-form-templates-list frm_grid_container">
 	<?php
-	// Define additional variables.
-	$render_icon = false;
-
 	foreach ( $templates as $template ) {
 		require $view_path . 'template.php';
 	}
 	?>
 </ul><!-- .frm-form-templates-list -->
+
+<!-- Custom Templates Section -->
+<div id="frm-form-templates-custom-list-section">
+	<!-- Title for Custom List -->
+	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
+
+	<!-- Custom Templates List -->
+	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_grid_container frm-form-templates-hidden">
+		<?php
+		foreach ( $custom_templates as $template ) {
+			require $view_path . 'template.php';
+		}
+		?>
+	</ul><!-- .frm-form-templates-list -->
+</div><!-- .frm-form-templates-custom-list-section -->

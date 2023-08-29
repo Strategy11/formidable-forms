@@ -67,6 +67,13 @@ class FrmFormTemplatesController {
 	const FEATURED_TEMPLATES_KEYS = array( 20872734, 20874748, 20882522, 20874739, 20908981, 28109851 );
 
 	/**
+	 * Option name to store favorite templates.
+	 *
+	 * @var string FAVORITE_TEMPLATES_OPTION Unique identifier for storing favorite templates.
+	 */
+	const FAVORITE_TEMPLATES_OPTION = 'frm_favorite_templates';
+
+	/**
 	 * Instance of the Form Template API handler.
 	 *
 	 * @var FrmFormTemplateApi $form_template_api Form Template API handler.
@@ -86,6 +93,13 @@ class FrmFormTemplatesController {
 	 * @var array $featured_templates Associative array with the featured templates' information.
 	 */
 	private static $featured_templates = array();
+
+	/**
+	 * List of user favorite templates.
+	 *
+	 * @var array $favorite_templates List of templates that the user has marked as favorites.
+	 */
+	private static $favorite_templates = array();
 
 	/**
 	 * Templates fetched from the published form by user.
@@ -146,14 +160,12 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function render() {
-		// Initialize form templates data.
-		self::set_form_templates_data();
-
 		// Get current user.
 		$user = wp_get_current_user();
 
 		// Retrieve various template types and categories.
 		$templates          = self::get_templates();
+		$favorite_templates = self::get_favorite_templates();
 		$featured_templates = self::get_featured_templates();
 		$custom_templates   = self::get_custom_templates();
 		$categories         = self::get_categories();
@@ -207,21 +219,24 @@ class FrmFormTemplatesController {
 	 *
 	 * @return void
 	 */
-	private static function set_form_templates_data() {
+	public static function set_form_templates_data() {
 		// Instantiate the Form Template API class.
 		self::$form_template_api = new FrmFormTemplateApi();
 
 		// Retrieve and set the templates.
 		self::retrieve_and_set_templates();
 
+		// Initialize favorite templates.
+		self::init_favorite_templates();
+
 		// Fetch and format custom templates.
 		self::fetch_and_format_custom_templates();
 
-		// Assign featured templates.
-		self::assign_featured_templates();
-
 		// Organize and set categories.
 		self::organize_and_set_categories();
+
+		// Assign featured templates.
+		self::assign_featured_templates();
 
 		// Update global variables to synchronize with the current class state.
 		self::update_global_variables();
@@ -245,20 +260,82 @@ class FrmFormTemplatesController {
 	}
 
 	/**
-	 * Assign featured templates.
-	 *
-	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
-	 * the `featured_templates` class property.
+	 * Initialize favorite templates from WordPress options.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function assign_featured_templates() {
-		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
-			if ( isset( self::$templates[ $key ] ) ) {
-				self::$featured_templates[] = self::$templates[ $key ];
+	private static function init_favorite_templates() {
+		self::$favorite_templates = get_option( self::FAVORITE_TEMPLATES_OPTION, array() );
+	}
+
+	/**
+	 * Handle AJAX request to add or remove favorite templates.
+	 *
+	 * Manages the $favorite_templates by using WordPress options to
+	 * add or remove templates from the favorites list.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_add_or_remove_favorite() {
+		// Check permission and nonce
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data
+		$template_id = FrmAppHelper::get_post_param( 'template_id', '', 'absint' );
+		$operation   = FrmAppHelper::get_post_param( 'operation', '', 'sanitize_text_field' );
+
+		// Perform add or remove operation
+		if ( 'add' === $operation ) {
+			self::$favorite_templates[ $template_id ] = $template_id;
+		} elseif ( 'remove' === $operation ) {
+			if ( isset( self::$favorite_templates[ $template_id ] ) ) {
+				unset( self::$favorite_templates[ $template_id ] );
 			}
+		}
+
+		// Update the favorite templates option
+		update_option( self::FAVORITE_TEMPLATES_OPTION, self::$favorite_templates );
+
+		// Return the updated list of favorite templates
+		wp_send_json_success( self::$favorite_templates );
+	}
+
+	/**
+	 * Fetch and format custom templates.
+	 *
+	 * Retrieves the custom templates, formats them, and assigns them to the class property.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function fetch_and_format_custom_templates() {
+		// Get all published forms.
+		$published_forms = FrmForm::get_published_forms();
+
+		foreach ( $published_forms as $template ) {
+			$template = array(
+				'id'          => $template->id,
+				'name'        => $template->name,
+				'key'         => $template->form_key,
+				'description' => $template->description,
+				'link'        => FrmFormsHelper::get_direct_link( $template->form_key ),
+				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ) ),
+				'released'    => $template->created_at,
+				'installed'   => 1,
+				'is_custom'   => true,
+			);
+
+			// Add the 'is_favorite' key
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates );
+
+			// Add the formatted custom template to the list.
+			array_unshift( self::$custom_templates, $template );
 		}
 	}
 
@@ -274,29 +351,44 @@ class FrmFormTemplatesController {
 	 */
 	private static function organize_and_set_categories() {
 		// Iterate through templates to assign categories.
-		foreach ( self::$templates as $key => $template ) {
+		foreach ( self::$templates as $key => &$template ) {
 			// Skip the template if the categories are not set.
 			if ( ! isset( $template['categories'] ) ) {
 				unset( self::$templates[ $key ] );
-
 				continue;
 			}
 
+			// Add a new key for category slugs.
+			$template['category_slugs'] = array();
+
 			// Increment the count for each category.
 			foreach ( $template['categories'] as $category ) {
-				if ( ! isset( self::$categories[ $category ] ) ) {
-					self::$categories[ $category ] = 0;
+				$category_slug = sanitize_title( $category );
+
+				// Add the slug to the new array.
+				$template['category_slugs'][] = $category_slug;
+
+				if ( ! isset( self::$categories[ $category_slug ] ) ) {
+					self::$categories[ $category_slug ] = array(
+						'name'  => $category,
+						'count' => 0,
+					);
 				}
 
-				self::$categories[ $category ]++;
+				self::$categories[ $category_slug ]['count']++;
 			}
+
+			// Add the 'is_favorite' key
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates );
 		}
+		unset( $template ); // Unset the reference `$template` variable
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
 		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormTemplatesHelper::ignore_template_categories() );
 		foreach ( $redundant_cats as $redundant_cat ) {
-			unset( self::$categories[ $redundant_cat ] );
+			$category_slug = sanitize_title( $redundant_cat );
+			unset( self::$categories[ $category_slug ] );
 		}
 
 		// Sort the categories by keys alphabetically.
@@ -305,41 +397,42 @@ class FrmFormTemplatesController {
 		// Add special categories.
 		self::$categories = array_merge(
 			array(
-				__( 'Favorites', 'formidable' )     => 5,
-				__( 'Custom', 'formidable' )        => count( self::$custom_templates ),
-				__( 'All Templates', 'formidable' ) => count( self::$templates ),
+				'favorites' => array(
+					'name'  => __( 'Favorites', 'formidable' ),
+					'count' => count( self::$favorite_templates ),
+				),
+				'custom' => array(
+					'name'  => __( 'Custom', 'formidable' ),
+					'count' => count( self::$custom_templates ),
+				),
+				'all-templates' => array(
+					'name'  => __( 'All Templates', 'formidable' ),
+					'count' => count( self::$templates ),
+				),
 			),
 			self::$categories
 		);
 	}
 
 	/**
-	 * Fetch and format custom templates.
+	 * Assign featured templates.
 	 *
-	 * Retrieves the custom templates, formats them, and assigns them to the class property.
+	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
+	 * the `featured_templates` class property.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function fetch_and_format_custom_templates() {
-		// Get all published forms.
-		self::$custom_templates = FrmForm::get_published_forms();
+	private static function assign_featured_templates() {
+		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
+			if ( isset( self::$templates[ $key ] ) ) {
+				self::$templates[ $key ]['is_featured'] = true;
 
-		foreach ( self::$custom_templates as $template ) {
-			$template = array(
-				'id'          => $template->id,
-				'name'        => $template->name,
-				'key'         => $template->form_key,
-				'description' => $template->description,
-				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ) ),
-				'released'    => $template->created_at,
-				'installed'   => 1,
-				'custom'      => true,
-			);
-
-			// Add the formatted custom template to the list.
-			array_unshift( self::$custom_templates, $template );
+				$featured_template = self::$templates[ $key ];
+				unset( $featured_template['is_favorite'] );
+				self::$featured_templates[] = $featured_template;
+			}
 		}
 	}
 
@@ -391,6 +484,10 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
+		if ( ! FrmAppHelper::is_form_templates_page() ) {
+			return;
+		}
+
 		$plugin_url      = FrmAppHelper::plugin_url();
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array(
@@ -444,6 +541,7 @@ class FrmFormTemplatesController {
 
 	/**
 	 * Dequeue scripts and styles on "Form Templates".
+	 *
 	 * Avoid extra scripts loading on "Form Templates" page that aren't needed.
 	 *
 	 * @since x.x
@@ -451,10 +549,12 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function dequeue_scripts() {
-		if ( self::PAGE_SLUG === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
-			wp_dequeue_script( 'frm-surveys-admin' );
-			wp_dequeue_script( 'frm-quizzes-form-action' );
+		if ( ! FrmAppHelper::is_form_templates_page() ) {
+			return;
 		}
+
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
 
 	/**
@@ -488,6 +588,17 @@ class FrmFormTemplatesController {
 	 */
 	public static function get_categories() {
 		return self::$categories;
+	}
+
+	/**
+	 * Get the user's favorite form templates.
+	 *
+	 * @since x.x
+	 *
+	 * @return array The IDs of the user's favorite form templates.
+	 */
+	public static function get_favorite_templates() {
+		return self::$favorite_templates;
 	}
 
 	/**

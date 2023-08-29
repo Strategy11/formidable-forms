@@ -186,8 +186,9 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		// Form Templates Controller.
+		add_action( 'admin_init', 'FrmFormTemplatesController::set_form_templates_data' );
 		add_action( 'admin_menu', 'FrmFormTemplatesController::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
-		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets' );
+		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets', 15 );
 		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::dequeue_scripts', 15 );
 
 		// CAPTCHA
@@ -237,6 +238,9 @@ class FrmHooksController {
 		add_action( 'wp_ajax_get_page_dropdown', 'FrmFormsController::get_page_dropdown' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
+
+		// Form Templates Controller.
+		add_action( 'wp_ajax_frm_add_or_remove_favorite_template', 'FrmFormTemplatesController::ajax_add_or_remove_favorite' );
 
 		// Inbox.
 		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );

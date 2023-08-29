@@ -1,11 +1,38 @@
 ( ( wp ) => {
 
 	/**
+	 * Globals: ajaxurl, fromDom
+	 *
+	 * @since x.x
+	 */
+	const { doJsonPost } = frmDom.ajax;
+
+	/**
+	 * Represents the FrmFormTemplates.
+	 *
 	 * @since x.x
 	 *
 	 * @class FrmFormTemplates
 	 */
 	class FrmFormTemplates {
+
+		/**
+		 * Class that is added to an element to mark it as hidden.
+		 *
+		 * @since x.x
+		 *
+		 * @type {string}
+		 */
+		static HIDDEN_STATE_CLASS = 'frm-form-templates-hidden';
+
+		/**
+		 * All template items class.
+		 *
+		 * @since x.x
+		 *
+		 * @type {string}
+		 */
+		static TEMPLATE_CLASS = 'frm-form-templates-item';
 
 		/**
 		 * Initializes the FrmFormTemplates instance.
@@ -16,7 +43,7 @@
 		 */
 		constructor() {
 			/**
-			 * Action hook that fires before the `FrmFormTemplates` class initialization.
+			 * Action hook that fires before the FrmFormTemplates class initialization.
 			 *
 			 * @since x.x
 			 *
@@ -28,7 +55,7 @@
 			this.initialize();
 
 			/**
-			 * Action hook that fires after the `FrmFormTemplates` class initialization.
+			 * Action hook that fires after the FrmFormTemplates class initialization.
 			 *
 			 * @since x.x
 			 *
@@ -43,8 +70,185 @@
 		 * @since x.x
 		 */
 		initialize() {
+			// Initialize DOM elements and other properties needed for this class
+			this.initProperties();
+
+			// Create categorized templates to facilitate template selection
 			this.buildCategorizedTemplates();
+
+			// Attach relevant event listeners for user interactions
 			this.addEventListeners();
+		}
+
+		/**
+		 * Initializes properties for the FrmFormTemplates instance.
+		 *
+		 * @since x.x
+		 */
+		initProperties() {
+			/**
+			 * Create Form button element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.createFormButton = document.querySelector( '#frm-form-templates-create-form' );
+
+			/**
+			 * Page Title element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.pageTitle = document.querySelector( '#frm-form-templates-page-title' );
+
+			/**
+			 * Featured Templates List container.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.featuredTemplatesList = document.querySelector( '#frm-form-templates-featured-list' );
+
+			/**
+			 * Upsell Banner container.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.upsellBanner = document.querySelector( '#frm-form-templates-upsell-banner' );
+
+			/**
+			 * Templates List container.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.templatesList = document.querySelector( '#frm-form-templates-list' );
+
+			/**
+			 * All Template Items.
+			 *
+			 * @since x.x
+			 *
+			 * @type {NodeList}
+			 */
+			this.templateItems = this.templatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
+
+			/**
+			 * All Featured Template Items that are nested within the templatesList.
+			 *
+			 * @since x.x
+			 *
+			 * @type {NodeList}
+			 */
+			this.nestedFeaturedTemplateItems = this.templatesList?.querySelectorAll( '.frm-form-templates-featured-item' );
+
+			/**
+			 * Custom Templates List container.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.customTemplatesList = document.querySelector( '#frm-form-templates-custom-list' );
+
+			/**
+			 * All Custom Template Items.
+			 *
+			 * @since x.x
+			 *
+			 * @type {NodeList}
+			 */
+			this.customTemplateItems = this.customTemplatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
+
+			/**
+			 * Custom Templates List Section element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.customTemplatesSection = document.querySelector( '#frm-form-templates-custom-list-section' );
+
+			/**
+			 * Custom Templates List Title element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.customTemplatesTitle = document.querySelector( '#frm-form-templates-custom-list-title' );
+
+			/**
+			 * Body Content element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.bodyContent = document.querySelector( '#post-body-content' );
+
+			/**
+			 * Body Content Children.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.bodyContentChildren = Array.from( this.bodyContent?.children );
+
+			/**
+			 * Object to hold Categorized Templates.
+			 *
+			 * Keys will be category names and values will be arrays of corresponding templates.
+			 *
+			 * @since x.x
+			 *
+			 * @type {Object}
+			 */
+			this.categorizedTemplates = {};
+
+			/**
+			 * The currently Selected Category. Defaults to 'all-templates'.
+			 *
+			 * @since x.x
+			 *
+			 * @type {string}
+			 */
+			this.selectedCategory = 'all-templates';
+
+			/**
+			 * The currently Selected Category element. Defaults to 'All Templates' category element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.selectedCategoryEl = document.querySelector( '.frm-form-templates-cat-item[data-category="all-templates"]' );
+
+			/**
+			 * Favortes Category element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.favoritesCategory = document.querySelector( '.frm-form-templates-cat-item[data-category="favorites"]' );
+
+			/**
+			 * Favortes Category Count element.
+			 *
+			 * @since x.x
+			 *
+			 * @type {HTMLElement}
+			 */
+			this.favoritesCategoryCount = this.favoritesCategory?.querySelector( '.frm-form-templates-cat-count' );
 		}
 
 		/**
@@ -53,42 +257,16 @@
 		 * @since x.x
 		 */
 		buildCategorizedTemplates() {
-			this.categorizedTemplates = {};
+			this.templateItems.forEach( template => {
+				const categories = template.getAttribute( 'data-categories' ).split( ',' );
 
-			const templates = document.querySelectorAll( '.frm-form-templates-item' );
-			templates.forEach( template => {
-				const categories = this.extractCategoriesFromTemplate( template );
-				this.addTemplateToCategoryMap( categories, template );
+				categories.forEach( category => {
+					if ( ! this.categorizedTemplates[category]) {
+						this.categorizedTemplates[category] = [];
+					}
+					this.categorizedTemplates[category].push( template );
+				});
 			});
-		}
-
-		/**
-		 * Adds a template to the category map.
-		 *
-		 * @since x.x
-		 *
-		 * @param {string[]} categories
-		 * @param {HTMLElement} template
-		 */
-		addTemplateToCategoryMap( categories, template ) {
-			categories.forEach( category => {
-				if ( ! this.categorizedTemplates[category]) {
-					this.categorizedTemplates[category] = [];
-				}
-				this.categorizedTemplates[category].push( template );
-			});
-		}
-
-		/**
-		 * Extracts categories from a given template.
-		 *
-		 * @since x.x
-		 *
-		 * @param {HTMLElement} template
-		 * @return {string[]} categories
-		 */
-		extractCategoriesFromTemplate( template ) {
-			return template.getAttribute( 'data-category' ).split( ' ' );
 		}
 
 		/**
@@ -97,9 +275,16 @@
 		 * @since x.x
 		 */
 		addEventListeners() {
+			// Add click event listener for sidebar categories
 			const categoryItems = document.querySelectorAll( '.frm-form-templates-cat-item' );
-			categoryItems.forEach( item => {
-				item.addEventListener( 'click', this.handleCategoryClick );
+			categoryItems.forEach( category => {
+				category.addEventListener( 'click', this.onCategoryClick );
+			});
+
+			// Add click event listener for add to favorite button
+			const favoriteButtons = document.querySelectorAll( '.frm-form-templates-item-favorite-button' );
+			favoriteButtons.forEach( favoriteButton => {
+				favoriteButton.addEventListener( 'click', this.onFavoriteButtonClick );
 			});
 		}
 
@@ -108,35 +293,160 @@
 		 *
 		 * @since x.x
 		 *
-		 * @param {Event} event
+		 * @param {Event} event The click event object.
 		 */
-		handleCategoryClick( event ) {
-			const selectedCategory = event.currentTarget.getAttribute( 'data-category' );
-			this.showTemplates( selectedCategory );
-		}
+		onCategoryClick = ( event ) => {
+			const clickedCategory = event.currentTarget;
+			const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
 
-		/**
-		 * Displays templates corresponding to the selected category.
-		 *
-		 * @since x.x
-		 *
-		 * @param {string} selectedCategory
-		 */
-		showTemplates( selectedCategory ) {
+			// If the selected category hasn't changed, return early
+			if ( this.selectedCategory === newSelectedCategory ) {
+				return;
+			}
+
 			/**
 			 * Filter hook to modify the selected category.
 			 *
 			 * @since x.x
 			 *
-			 * @hook formTemplates.selectedCategory
+			 * @hook frmFormTemplates.selectedCategory
 			 * @param {string} selectedCategory The selected category.
 			 * @param {FormTemplates} instance The FormTemplates class instance.
 			 */
-			selectedCategory = wp.hooks.applyFilters( 'frmFormTemplates.selectedCategory', selectedCategory, this );
+			this.selectedCategory = wp.hooks.applyFilters( 'frmFormTemplates.selectedCategory', newSelectedCategory, this );
 
-			if ( this.categorizedTemplates[selectedCategory]) {
-				this.categorizedTemplates[selectedCategory].forEach( template => template.style.display = 'block' );
+			// Remove the 'frm-current' class from the previously selected category element
+			this.selectedCategoryEl.classList.remove( 'frm-current' );
+
+			// Update the selected category element and add the 'frm-current' class to it
+			this.selectedCategoryEl = clickedCategory;
+			this.selectedCategoryEl.classList.add( 'frm-current' );
+
+			// Update the main body content based on the clicked category
+			this.updateBodyContent();
+		}
+
+		/**
+		 * Modifies the content of the main body area based on the category selected by the user.
+		 *
+		 * @since x.x
+		 */
+		updateBodyContent() {
+			const {
+				selectedCategory,
+				selectedCategoryEl,
+				pageTitle,
+				templatesList,
+				templateItems,
+				nestedFeaturedTemplateItems,
+				customTemplatesList,
+				customTemplateItems,
+				customTemplatesSection,
+				customTemplatesTitle,
+				categorizedTemplates,
+				bodyContent
+			} = this;
+
+			// Change the page title text
+			const categoryText = selectedCategoryEl.querySelector( '.frm-form-templates-cat-text' ).textContent;
+			pageTitle.textContent = categoryText;
+
+			// Conditionally reveal or hide templates based on selected category
+			if ( this.isAllTemplatesCategory( selectedCategory ) ) {
+				this.showBodyContentChildren();
+				this.hide( customTemplatesSection );
+
+				this.showElements( templateItems );
+				this.hideElements( nestedFeaturedTemplateItems );
+			} else {
+				this.hideBodyContentChildren();
+				this.hideElements( templateItems );
+				this.show( pageTitle );
+
+				if ( 'favorites' === selectedCategory ) {
+					const favoriteItems = bodyContent.querySelectorAll( '.frm-form-templates-favorite-item' );
+
+					this.hideElements( customTemplateItems );
+					this.show( templatesList );
+					this.showElements( favoriteItems );
+
+					const hasCustomTemplates = Array.from( favoriteItems ).some( template => template.dataset.custom );
+					if ( hasCustomTemplates ) {
+						this.showElements([ customTemplatesSection, customTemplatesList ]);
+
+						const isTemplatesListVisisble = !! templatesList.offsetHeight;
+						if ( isTemplatesListVisisble ) {
+							this.show( customTemplatesTitle );
+						}
+					}
+				} else if ( 'custom' === selectedCategory ) {
+					this.showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
+				} else {
+					this.show( templatesList );
+					this.showElements( categorizedTemplates[selectedCategory] || []);
+				}
 			}
+
+			// Fade-in the body content
+			this.fadeIn( bodyContent );
+		}
+
+		/**
+		 * Handles the click event on the add to favorite button.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Event} event The click event object.
+		 */
+		onFavoriteButtonClick = ( event ) => {
+			event.preventDefault();
+
+			const favoriteButton = event.currentTarget;
+
+			// Check if the button is "disabled"
+			if ( favoriteButton.getAttribute( 'data-disabled' ) === 'true' ) {
+				return;
+			}
+
+			// "Disable" the button to prevent multiple clicks
+			favoriteButton.setAttribute( 'data-disabled', 'true' );
+
+			const template = favoriteButton.closest( `.${this.constructor.TEMPLATE_CLASS}` );
+			const templateId = template.dataset.id;
+			console.log( templateId );
+
+			// Determine if the item is currently favorited
+			const isFavorited = template.classList.contains( 'frm-form-templates-favorite-item' );
+			const operation = isFavorited ? 'remove' : 'add';
+
+			// Send request to server
+			const formData = new FormData();
+			formData.append( 'template_id', templateId );
+			formData.append( 'operation', operation );
+
+			doJsonPost( 'add_or_remove_favorite_template', formData )
+				.finally( () => {
+					// "Re-enable" the button
+					favoriteButton.setAttribute( 'data-disabled', 'false' );
+
+					// Toggle favorite status in UI
+					template.classList.toggle( 'frm-form-templates-favorite-item', ! isFavorited );
+
+					const favoriteItems = this.bodyContent.querySelectorAll( '.frm-form-templates-favorite-item' );
+					console.log( favoriteItems );
+					const favoriteItemsCount = favoriteItems.length;
+					console.log( favoriteItemsCount );
+					this.favoritesCategoryCount.textContent = favoriteItemsCount;
+
+					if ( 'favorites' === this.selectedCategory ) {
+						this.hide( template );
+
+						const hasCustomTemplates = Array.from( favoriteItems ).some( template => template.dataset.custom );
+						if ( ! hasCustomTemplates ) {
+							this.hide( this.customTemplatesTitle );
+						}
+					}
+				});
 		}
 
 		/**
@@ -150,529 +460,102 @@
 		isAllTemplatesCategory( category ) {
 			return 'all-templates' === category;
 		}
+
+		/**
+		 * Show all child elements of the Body Content element.
+		 *
+		 * @since x.x
+		 */
+		showBodyContentChildren() {
+			this.bodyContentChildren?.forEach( ( child ) => {
+				this.show( child );
+			});
+		}
+
+		/**
+		 * Hide all child elements of the Body Content element.
+		 *
+		 * @since x.x
+		 */
+		hideBodyContentChildren() {
+			const {
+				bodyContentChildren,
+				customTemplatesTitle,
+				customTemplatesList
+			} = this;
+
+			[ ...bodyContentChildren, customTemplatesTitle, customTemplatesList ]?.forEach( ( child ) => {
+				this.hide( child );
+			});
+		}
+
+		/**
+		 * Reveals specified elements by removing the hidden state class.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Array<Element>} elements - List of elements to be displayed.
+		 */
+		showElements( elements ) {
+			elements?.forEach( element => this.show( element ) );
+		}
+
+		/**
+		 * Conceals specified elements by adding the hidden state class.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Array<Element>} elements - List of elements to be hidden.
+		 */
+		hideElements( elements ) {
+			elements?.forEach( element => this.hide( element ) );
+		}
+
+		/**
+		 * Adds the class to show the element.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Element} element - The element to show.
+		 */
+		show( element ) {
+			element?.classList.remove( this.constructor.HIDDEN_STATE_CLASS );
+		}
+
+		/**
+		 * Adds the class to hide the element.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Element} element - The element to hide.
+		 */
+		hide( element ) {
+			element?.classList.add( this.constructor.HIDDEN_STATE_CLASS );
+		}
+
+		/**
+		 * Adds the fade-in animation class to the element.
+		 *
+		 * @since x.x
+		 *
+		 * @param {HTMLElement} element The element to which the fade-in class is added.
+		 * @param {string} [fadingClass='frm-form-templates-flex'] CSS class to apply during fading
+		 */
+		fadeIn( element, fadingClass = 'frm-form-templates-flex' ) {
+			if ( ! element ) {
+				return;
+			}
+
+			element.classList.add( 'frm-form-templates-fadein', fadingClass );
+
+			element.addEventListener( 'animationend', () => {
+				element.classList.remove( 'frm-form-templates-fadein', fadingClass );
+			}, { once: true });
+		}
 	}
 
 	// Initializing the class
-	new FrmFormTemplates();
-
-	jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent );
-
-	function triggerNewFormModal( event ) {
-		var $modal,
-			dismiss = document.getElementById( 'frm-form-templates-page' ).querySelector( 'a.dismiss' );
-
-		if ( typeof event !== 'undefined' ) {
-			event.preventDefault();
-		}
-
-		dismiss.setAttribute( 'tabindex', -1 );
-
-		$modal = initModal( '#frm-form-templates-page', '600px' );
-		offsetModalY( $modal, '50px' );
-		$modal.attr( 'frm-page', 'create' );
-		$modal.find( '#template-search-input' ).val( '' ).trigger( 'change' );
-		$modal.dialog( 'open' );
-
-		dismiss.removeAttribute( 'tabindex' );
-		bindClickForDialogClose( $modal );
-
-		addApplicationsToNewFormModal( $modal.get( 0 ) );
-	}
-
-	function initNewFormModal() {
-		var installFormTrigger,
-			activeHoverIcons,
-			$modal,
-			handleError,
-			handleEmailAddressError,
-			handleConfirmEmailAddressError,
-			showFreeTemplatesForm,
-			firstLockedTemplate,
-			isShowFreeTemplatesFormFirst,
-			url,
-			urlParams;
-
-		url       = new URL( window.location.href );
-		urlParams = url.searchParams;
-
-		isShowFreeTemplatesFormFirst = urlParams.get( 'free-templates' );
-
-
-		// Welcome page
-		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
-
-		$modal = initModal( '#frm-form-templates-page', '600px' );
-
-		if ( false === $modal ) {
-			return;
-		}
-
-		setTimeout(
-			function() {
-				$modal.get( 0 ).querySelector( '.postbox' ).style.display = 'block'; // Fixes pro issue #3508, prevent a conflict that hides the postbox in modal.
-			},
-			0
-		);
-
-		installFormTrigger = document.createElement( 'a' );
-		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
-		document.body.appendChild( installFormTrigger );
-
-		jQuery( '.frm-install-template' ).on( 'click', function( event ) {
-			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
-				nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' ),
-				oldName;
-
-			$h3Clone.find( 'svg, .frm-plan-required-tag' ).remove();
-			oldName = $h3Clone.html().trim();
-
-			event.preventDefault();
-
-			document.getElementById( 'frm_template_name' ).value = oldName;
-			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.textContent = nameLabel.getAttribute( 'data-form' );
-			descLabel.textContent = descLabel.getAttribute( 'data-form' );
-			$modal.dialog( 'open' );
-		});
-
-		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
-
-		jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-			var $li, link, iframe,
-				container = document.getElementById( 'frm-preview-block' );
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-			link = $li.attr( 'data-preview' );
-
-			if ( link.indexOf( ajaxurl ) > -1 ) {
-				iframe = document.createElement( 'iframe' );
-				iframe.src = link;
-				iframe.height = '400';
-				iframe.width = '100%';
-				container.innerHTML = '';
-				container.appendChild( iframe );
-			} else {
-				frmApiPreview( container, link );
-			}
-
-			jQuery( '#frm-preview-title' ).text( getStrippedTemplateName( $li ) );
-			$modal.attr( 'frm-page', 'preview' );
-			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
-		});
-
-		jQuery( document ).on( 'click', 'li.frm-ready-made-solution[data-href]', function() {
-			window.location = this.getAttribute( 'data-href' );
-		});
-
-		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
-			var $li, name, link, action;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-
-			if ( $li.is( '[data-href]' ) ) {
-				window.location = $li.attr( 'data-href' );
-				return;
-			}
-
-			if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-				name = link = '';
-				action = 'frm_install_form';
-			} else if ( $li.is( '[data-rel]' ) ) {
-				name = getStrippedTemplateName( $li );
-				link = $li.attr( 'data-rel' );
-				action = 'frm_install_template';
-			} else {
-				return;
-			}
-
-			transitionToAddDetails( $modal, name, link, action );
-		});
-
-		// Welcome page modals.
-		jQuery( document ).on( 'click', '.frm-create-blank-form', function( event ) {
-			event.preventDefault();
-			jQuery( '.frm-trigger-new-form-modal' ).trigger( 'click' );
-			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
-
-			// Close the modal with the cancel button.
-			jQuery( '.frm-modal-cancel.frm-back-to-all-templates' ).on( 'click', function() {
-				jQuery( '.ui-widget-overlay' ).trigger( 'click' );
-			});
-		});
-
-		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {
-			var $hoverIcons, $trigger,
-				$li = jQuery( this ).closest( 'li' ),
-				triggerClass = $li.hasClass( 'frm-locked-template' ) ? 'frm-unlock-form' : 'frm-create-form';
-
-			$hoverIcons = $li.find( '.frm-hover-icons' );
-			if ( ! $hoverIcons.length ) {
-				$li.trigger( 'mouseover' );
-				$hoverIcons = $li.find( '.frm-hover-icons' );
-				$hoverIcons.hide();
-			}
-
-			$trigger = $hoverIcons.find( '.' + triggerClass );
-			$trigger.trigger( 'click' );
-		});
-
-		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
-			var $li,
-				trigger;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-			$li.addClass( 'frm-deleting' );
-			trigger = document.createElement( 'a' );
-			trigger.setAttribute( 'href', '#' );
-			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
-			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
-			jQuery( trigger ).on( 'click', trashTemplate );
-			trigger.click();
-			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
-		});
-
-		showFreeTemplatesForm = function( $el ) {
-			var formContainer = document.getElementById( 'frmapi-email-form' );
-			jQuery.ajax({
-				dataType: 'json',
-				url: formContainer.getAttribute( 'data-url' ),
-				success: function( json ) {
-					var form = json.renderedHtml;
-					form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
-					formContainer.innerHTML = form;
-				}
-			});
-
-			$modal.attr( 'frm-page', 'email' );
-			$modal.attr( 'frm-this-form', $el.attr( 'data-key' ) );
-			$el.append( installFormTrigger );
-		};
-
-		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
-			var $li,
-				activePage;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( '.frm-locked-template' );
-
-			if ( $li.hasClass( 'frm-free-template' ) ) {
-				showFreeTemplatesForm( $li );
-				return;
-			}
-
-			if ( $modal.hasClass( 'frm-expired' ) ) {
-				activePage = 'renew';
-			} else {
-				activePage = 'upgrade';
-			}
-
-			$modal.attr( 'frm-page', activePage );
-		});
-
-		jQuery( document ).on( 'click', '#frm-form-templates-page #frm-template-drop', function() {
-			jQuery( this )
-				.closest( '.accordion-section-content' ).css( 'overflow', 'visible' )
-				.closest( '.accordion-section' ).css( 'z-index', 1 );
-		});
-
-		jQuery( document ).on( 'click', '#frm-form-templates-page #frm-template-drop + .frm-dropdown-menu .frm-build-template', function() {
-			var name = this.getAttribute( 'data-fullname' ),
-				link = this.getAttribute( 'data-formid' ),
-				action = 'frm_build_template';
-			transitionToAddDetails( $modal, name, link, action );
-		});
-
-		handleError = function( inputId, errorId, type, message ) {
-			var $error = jQuery( errorId );
-			$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
-
-			if ( typeof message !== 'undefined' ) {
-				$error.find( 'span[frm-error="' + type + '"]' ).text( message );
-			}
-
-			jQuery( inputId ).one( 'keyup', function() {
-				$error.addClass( 'frm_hidden' );
-			});
-		};
-
-		handleEmailAddressError = function( type ) {
-			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
-		};
-
-		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
-			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
-				regex,
-				$hiddenForm,
-				$hiddenEmailField;
-
-			event.preventDefault();
-
-			if ( '' === email ) {
-				handleEmailAddressError( 'empty' );
-				return;
-			}
-
-			regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-
-			if ( regex.test( email ) === false ) {
-				handleEmailAddressError( 'invalid' );
-				return;
-			}
-
-			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-			$hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
-			if ( ! $hiddenEmailField.length ) {
-				return;
-			}
-
-			$hiddenEmailField.val( email );
-			jQuery.ajax({
-				type: 'POST',
-				url: $hiddenForm.attr( 'action' ),
-				data: $hiddenForm.serialize() + '&action=frm_forms_preview'
-			}).done( function( data ) {
-				var message = jQuery( data ).find( '.frm_message' ).text().trim();
-				if ( message.indexOf( 'Thanks!' ) >= 0 ) {
-					$modal.attr( 'frm-page', 'code' );
-				} else {
-					handleEmailAddressError( 'invalid' );
-				}
-			});
-		});
-
-		handleConfirmEmailAddressError = function( type, message ) {
-			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
-		};
-
-		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
-			var code = document.getElementById( 'frm_code_from_email' ).value.trim();
-
-			event.preventDefault();
-
-			if ( '' === code ) {
-				handleConfirmEmailAddressError( 'empty' );
-				return;
-			}
-
-			jQuery.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				dataType: 'json',
-				data: {
-					action: 'template_api_signup',
-					nonce: frmGlobal.nonce,
-					code: code,
-					key: $modal.attr( 'frm-this-form' )
-				},
-				success: function( response ) {
-					if ( response.success ) {
-						if ( isShowFreeTemplatesFormFirst ) {
-							// Remove free-templates param from URL then reload page.
-							urlParams.delete( 'free-templates' );
-							url.search = urlParams.toString();
-							window.location.href = url.toString();
-
-							return;
-						}
-
-						if ( typeof response.data !== 'undefined' && typeof response.data.url !== 'undefined' ) {
-							installFormTrigger.setAttribute( 'rel', response.data.url );
-							installFormTrigger.click();
-							$modal.attr( 'frm-page', 'details' );
-
-							const hookName = 'frm-form-templates-page_form';
-							wp.hooks.doAction( hookName, $modal );
-
-							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-
-							if ( typeof response.data.urlByKey !== 'undefined' ) {
-								updateTemplateModalFreeUrls( response.data.urlByKey );
-							}
-						}
-					} else {
-						if ( Array.isArray( response.data ) && response.data.length ) {
-							handleConfirmEmailAddressError( 'custom', response.data[0].message );
-						} else {
-							handleConfirmEmailAddressError( 'wrong-code' );
-						}
-
-						jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
-					}
-				}
-			});
-		});
-
-		jQuery( document ).on( 'click', '#frm-change-email-address', function() {
-			$modal.attr( 'frm-page', 'email' );
-		});
-
-		jQuery( document ).on( 'click', '#frm-resend-code', function() {
-			document.getElementById( 'frm_code_from_email' ).value = '';
-			jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
-			document.getElementById( 'frm-add-my-email-address' ).click();
-		});
-
-		jQuery( document ).on( 'click', '#frm-form-templates-page .frm-modal-back, #frm-form-templates-page .frm_modal_footer .frm-modal-cancel, #frm-form-templates-page .frm-back-to-all-templates', function( event ) {
-			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
-			$modal.attr( 'frm-page', 'create' );
-		});
-
-		jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
-			var $trigger;
-
-			event.preventDefault();
-
-			$trigger = activeHoverIcons.find( '.frm-create-form' );
-			if ( $trigger.closest( '.frm-selectable' ).hasClass( 'frm-locked-template' ) ) {
-				$trigger = activeHoverIcons.find( '.frm-unlock-form' );
-			}
-
-			$trigger.trigger( 'click' );
-		});
-
-		jQuery( document ).on( 'click', '.frm-submit-new-template', function( event ) {
-			var button;
-			event.preventDefault();
-			button = document.getElementById( 'frm-new-template' ).querySelector( 'button' );
-			if ( null !== button ) {
-				button.click();
-			}
-		});
-
-
-		if ( urlParams.get( 'triggerNewFormModal' ) ) {
-			triggerNewFormModal();
-
-			if ( isShowFreeTemplatesFormFirst ) {
-				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template' ).eq( 0 );
-
-				if ( firstLockedTemplate.length ) {
-					showFreeTemplatesForm( firstLockedTemplate );
-				}
-
-				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
-				$modalBackButton = $modal.find( '.frm-modal-back' );
-				$modalBackButton.hide();
-				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
-					$modalBackButton.show();
-					$modal.dialog( 'close' );
-				});
-			}
-		}
-
-		initSearch( 'template-search-input', 'control-section accordion-section' );
-	}
-
-	function initSearch( inputID, itemClass ) {
-		const searchInput = document.getElementById( inputID );
-
-		if ( itemClass === 'control-section accordion-section' ) {
-			itemClass = 'frm-selectable frm-searchable-template';
-
-			const handleTemplateSearch = () => {
-				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
-					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' ) || ( searchInput.value === '' && category.querySelector( '#frm-template-drop' ) );
-					if ( found ) {
-						setTemplateCount( category );
-					}
-					category.classList.toggle( 'frm_hidden', ! found );
-				});
-			};
-
-			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
-
-		} else {
-			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
-				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
-					let innerText = '';
-					innerText = item.querySelector( 'h3' ).innerText;
-					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
-				});
-			}
-			frmDom.search.init( searchInput, itemClass );
-		}
-
-	}
-
-	function updateTemplateModalFreeUrls( urlByKey ) {
-		jQuery( '#frm-form-templates-page' ).find( '.frm-selectable[data-key]' ).each( function() {
-			var $template = jQuery( this ),
-				key = $template.attr( 'data-key' );
-			if ( 'undefined' !== typeof urlByKey[ key ]) {
-				$template.removeClass( 'frm-locked-template' );
-				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
-				$template.attr( 'data-rel', urlByKey[ key ]);
-			}
-		});
-	}
-
-	function transitionToAddDetails( $modal, name, link, action ) {
-		var nameLabel = document.getElementById( 'frm_new_name' ),
-			descLabel = document.getElementById( 'frm_new_desc' ),
-			type = [ 'frm_install_template', 'frm_install_form' ].indexOf( action ) >= 0 ? 'form' : 'template',
-			templateNameInput = document.getElementById( 'frm_template_name' );
-
-		templateNameInput.value = name;
-		document.getElementById( 'frm_link' ).value = link;
-		document.getElementById( 'frm_action_type' ).value = action;
-		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
-		if ( descLabel !== null ) {
-			descLabel.textContent = descLabel.getAttribute( 'data-' + type );
-		}
-
-		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
-
-		$modal.attr( 'frm-page', 'details' );
-
-		const hookName = 'frm-form-templates-page_form';
-		wp.hooks.doAction( hookName, $modal );
-
-		if ( '' === name ) {
-			templateNameInput.focus();
-		}
-	}
-
-	function getStrippedTemplateName( $li ) {
-		var $clone = $li.find( 'h3' ).clone();
-		$clone.find( 'svg, .frm-plan-required-tag, .frm-new-pill' ).remove();
-		return $clone.html().trim();
-	}
-
-	function setTemplateCount( category, searchableTemplates ) {
-		var count,
-			templateIndex,
-			availableCounter,
-			availableCount;
-
-		if ( typeof searchableTemplates === 'undefined' ) {
-			searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden):not(.frm-deleting)' );
-		}
-
-		count = searchableTemplates.length;
-		category.querySelector( '.frm-template-count' ).textContent = count;
-
-		jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-		jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
-
-		availableCounter = category.querySelector( '.frm-available-templates-count' );
-		if ( availableCounter !== null ) {
-			availableCount = 0;
-			for ( templateIndex in searchableTemplates ) {
-				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-					availableCount++;
-				}
-			}
-
-			availableCounter.textContent = availableCount;
-		}
-	}
+	document.addEventListener( 'DOMContentLoaded', () => {
+		new FrmFormTemplates();
+	});
 })( window.wp );

@@ -22,6 +22,10 @@
 	margin: 0;
 }
 
+#frm-form-templates-page h3.frm-form-templates-title {
+	font-size: var(--text-xs);
+}
+
 /**
  * Sidebar.
  *
@@ -193,6 +197,18 @@
 	margin-top: calc(-1 * var(--gap-xs));
 }
 
+#frm-form-templates-page #frm-form-templates-custom-list-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-sm);
+}
+
+#frm-form-templates-page #frm-form-templates-custom-list-title {
+	color: var(--grey-500);
+	margin-top: var(--gap-xs);
+}
+
+/* Templates item */
 #frm-form-templates-page .frm-form-templates-item {
 	display: flex;
 	gap: 10px;
@@ -206,46 +222,175 @@
 	flex-shrink: 0;
 }
 
-#frm-form-templates-page .frm-form-templates-item-details {
+#frm-form-templates-page
+	#frm-form-templates-list
+	.frm-form-templates-item-icon {
+	display: none;
+}
+
+#frm-form-templates-page .frm-form-templates-item-body {
 	display: flex;
 	flex-direction: column;
 	gap: calc(var(--gap-xs) - 2px);
 	min-width: 0; /* Fix for truncated text within a flexbox layout */
+	flex-grow: 1;
 }
 
-#frm-form-templates-page .frm-form-templates-item-details > * {
-	margin: 0;
-}
-
-#frm-form-templates-page .frm-form-templates-item-title {
+#frm-form-templates-page .frm-form-templates-item-title,
+#frm-form-templates-page .frm-form-templates-item-title-text {
 	display: flex;
 	gap: 6px;
 	align-items: center;
+	margin: 0;
+	width: 100%;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title > span {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+#frm-form-templates-page .frm-form-templates-item-title {
+	justify-content: space-between;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title .frmsvg {
+#frm-form-templates-page .frm-form-templates-item-lock-icon .frmsvg {
 	width: 16px;
 	height: 16px;
 	flex-shrink: 0;
 }
 
+#frm-form-templates-page .frm-form-templates-item-title-text > span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#frm-form-templates-page .frm-form-templates-item-favorite-button {
+	display: none;
+	cursor: pointer;
+	transition: color 200ms ease-out;
+	color: var(--grey-900);
+}
+
+#frm-form-templates-page .frm-form-templates-item-favorite-button:hover,
+#frm-form-templates-page
+	.frm-form-templates-favorite-item
+	.frm-form-templates-item-favorite-button {
+	color: #fe4742;
+}
+
+#frm-form-templates-page
+	.frm-form-templates-item-favorite-button[data-disabled="true"] {
+	color: var(--grey-300);
+}
+
+#frm-form-templates-page .frm-form-templates-item-content {
+	position: relative;
+}
+
+#frm-form-templates-page .frm-form-templates-item-buttons {
+	display: none;
+	position: absolute;
+	gap: 12px;
+	margin-top: calc(var(--gap-2xs) + 2px);
+	z-index: 2;
+}
+
+#frm-form-templates-page .frm-form-templates-item-buttons .button {
+	font-size: var(--text-xs);
+	padding: 4px 12px;
+}
+
 #frm-form-templates-page .frm-form-templates-item-description {
 	font-size: var(--text-xs);
+	margin: 0;
+	min-height: var(--h-md);
+}
+
+#frm-form-templates-page
+	.frm-form-templates-item:hover
+	.frm-form-templates-item-description {
+	visibility: hidden;
+	opacity: 0;
+}
+
+#frm-form-templates-page
+	.frm-form-templates-item:hover
+	.frm-form-templates-item-buttons {
+	display: flex;
+	animation: fadeInDownShort 250ms ease-out forwards;
+}
+
+#frm-form-templates-page
+	.frm-form-templates-item:hover
+	.frm-form-templates-item-favorite-button {
+	display: flex;
+	animation: fadeIn 400ms ease-in-out forwards;
 }
 
 /**
- * Helpers.
- *
- */
+	 * Helpers.
+	 *
+	 */
+#frm-form-templates-page .frm-form-templates-hidden {
+	display: none;
+}
+
+#frm-form-templates-page .frm-form-templates-flex {
+	display: flex;
+}
+
+#frm-form-templates-page .frm-form-templates-grid {
+	display: grid;
+}
+
 #frm-form-templates-page .frm-form-templates-divider {
 	border-top: 1px solid var(--grey-200);
 	margin: 0;
+}
+
+.frm-form-templates-fadein {
+	animation: fadeInUp 230ms ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInDownShort {
+	0% {
+		opacity: 0.7;
+		transform: translateY(-2px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Breakpoints */
+@media only screen and (max-width: 782px) {
+	.frm-form-templates-floating-links {
+		right: 20px;
+		bottom: 20px;
+	}
+
+	.frm-form-templates-floating-links-logo-icon {
+		width: 50px;
+		height: 50px;
+	}
 }
 
 /**
