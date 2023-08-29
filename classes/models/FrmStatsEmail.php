@@ -29,15 +29,8 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args = $this->get_content_args();
 
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/stats-email.php';
+		include $this->get_include_file( 'stats-email' );
 		return ob_get_clean();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	protected function get_plain_inner_content() {
-		// TODO: Implement get_plain_inner_content() method.
 	}
 
 	protected function get_content_args() {

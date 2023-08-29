@@ -8,6 +8,9 @@
  * @var array $args Content args.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 ?>
 <div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
 	<p><?php esc_html_e( 'Hello', 'formidable' ); ?></p>

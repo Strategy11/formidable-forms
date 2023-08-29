@@ -8,6 +8,10 @@
  * @var array $args Content args.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
 ?>
 

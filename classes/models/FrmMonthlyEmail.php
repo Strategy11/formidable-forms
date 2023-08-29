@@ -11,6 +11,8 @@ class FrmMonthlyEmail extends FrmStatsEmail {
 	protected $has_inbox_msg = true;
 
 	public function __construct() {
+		parent::__construct();
+
 		$this->to_date        = date( 'Y-m-d' );
 		$this->from_date      = date( 'Y-m-d', strtotime( '-29 days' ) );
 		$this->prev_to_date   = date( 'Y-m-d', strtotime( $this->from_date . '-1 day' ) );

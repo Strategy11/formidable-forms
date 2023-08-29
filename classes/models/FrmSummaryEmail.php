@@ -14,7 +14,9 @@ abstract class FrmSummaryEmail {
 
 	abstract protected function get_inner_content();
 
-	abstract protected function get_plain_inner_content();
+	public function __construct() {
+		$this->is_html = apply_filters( 'frm_html_summary_emails', true );
+	}
 
 	/**
 	 * Gets receptions.
@@ -40,12 +42,17 @@ abstract class FrmSummaryEmail {
 		$suffix = $this->is_html ? '' : '-plain';
 
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/base-email' . $suffix . '.php';
+		include $this->get_include_file( 'base-email' );
 		$content = ob_get_clean();
 
 		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
 
 		return $content;
+	}
+
+	protected function get_include_file( $file_name ) {
+		$suffix = $this->is_html ? '' : '-plain';
+		return FrmAppHelper::plugin_path() . '/classes/views/summary-emails/' . $file_name . $suffix . '.php';
 	}
 
 	protected function get_content_args() {

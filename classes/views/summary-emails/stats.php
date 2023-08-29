@@ -8,6 +8,9 @@
  * @var array $args Content args.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 ?>
 
 <div style="padding-top: 1.375em;">

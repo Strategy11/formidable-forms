@@ -16,12 +16,8 @@ class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 		$args = $this->get_content_args();
 
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/license-expired-email.php';
+		include $this->get_include_file( 'license-expired' );
 		return ob_get_clean();
-	}
-
-	protected function get_plain_inner_content() {
-		// TODO: Implement get_plain_inner_content() method.
 	}
 
 	protected function get_content_args() {

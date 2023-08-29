@@ -9,6 +9,8 @@
 class FrmYearlyEmail extends FrmStatsEmail {
 
 	public function __construct() {
+		parent::__construct();
+
 		$this->to_date        = date( 'Y-m-d' );
 		$this->from_date      = date( 'Y-m-d', strtotime( '-364 days' ) );
 		$this->prev_to_date   = date( 'Y-m-d', strtotime( $this->from_date . '-1 day' ) );
