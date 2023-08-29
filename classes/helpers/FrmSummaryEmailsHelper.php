@@ -165,7 +165,6 @@ class FrmSummaryEmailsHelper {
 		$data = array(
 			'top_forms' => self::get_top_forms( $from_date, $to_date ),
 			'entries'   => self::get_entries_count( $from_date, $to_date ),
-			'payments'  => 0, // TODO: Remove this. This should be added with filter.
 		);
 
 		return apply_filters( 'frm_summary_data', $data, compact( 'from_date', 'to_date' ) );

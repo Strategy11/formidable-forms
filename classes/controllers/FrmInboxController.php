@@ -55,7 +55,6 @@ class FrmInboxController {
 
 		$inbox    = new FrmInbox();
 		$messages = $inbox->get_messages( 'filter' );
-		error_log( print_r( $messages, true ) );
 		$messages = array_reverse( $messages );
 		$user     = wp_get_current_user();
 
