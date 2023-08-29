@@ -41,7 +41,7 @@ FrmAppHelper::show_admin_cta(
 <!-- Custom Templates Section -->
 <div id="frm-form-templates-custom-list-section">
 	<!-- Title for Custom List -->
-	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
+	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title frm-form-templates-hidden"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
 
 	<!-- Custom Templates List -->
 	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_grid_container frm-form-templates-hidden">
