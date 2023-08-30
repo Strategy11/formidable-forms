@@ -9739,7 +9739,11 @@ function frmAdminBuildJS() {
 					e.preventDefault();
 
 					const targetElement = e.currentTarget;
-					let formID     = targetElement.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]' ).value;
+					let formID = targetElement.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]' ).value;
+					if ( ! formID ) {
+						return;
+					}
+
 					const formData = new FormData();
 					formData.append( 'form_id', formID );
 

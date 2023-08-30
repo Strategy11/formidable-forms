@@ -2040,11 +2040,18 @@ class FrmFormsController {
 		return $form;
 	}
 
+	/**
+	 * Gets a form status and send it over to an ajax request.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	public static function get_form_status() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
-		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
-		$form    = FrmForm::getOne( $form_id );
-		wp_send_json_success( $form->status );
+		$form_id     = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form_status = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'status' );
+		wp_send_json_success( $form_status );
 	}
 
 	private static function is_viewable_draft_form( $form ) {
