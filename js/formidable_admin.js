@@ -9765,6 +9765,7 @@ function frmAdminBuildJS() {
 							let url = new URL( confirmButton.getAttribute( 'href' ) );
 							url.searchParams.set( 'frm_action', 'untrash' );
 							url.searchParams.set( '_wpnonce', targetElement.dataset.untrash_nonce );
+							url.searchParams.set( 'form_type', 'trash' );
 
 							confirmButton.setAttribute( 'href', url.href );
 						} else {
