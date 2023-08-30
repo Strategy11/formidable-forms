@@ -9747,19 +9747,9 @@ function frmAdminBuildJS() {
 					confirmButton.textContent = __( 'Restore form', 'formidable' );
 					confirmButton.classList.remove( 'frm-button-red' );
 
-					// Revert 'Confirm' button text when modal is closed or 'Delete' form button is clicked
-					const resetModalConfirmText = ( e ) => {
-						if ( e.target.matches( '.ui-widget-overlay, .dismiss, .frm-trash-link' ) ) {
-							confirmButton.innerText = __( 'Confirm', 'formidable' );
-							document.removeEventListener( 'click', resetModalConfirmText );
-						}
-					};
-
-					document.addEventListener( 'click', resetModalConfirmText );
-
 					doJsonPost( 'get_form_status', formData ).then( ( formStatus ) => {
 						if ( formStatus === 'trash' ) {
-							targetElement.setAttribute( 'data-frmverify', 'You can\'t edit a deleted form.' );
+							targetElement.setAttribute( 'data-frmverify', __( 'You can\'t edit a deleted form.', 'formidable' ) );
 
 							confirmModal( targetElement );
 
@@ -9773,6 +9763,16 @@ function frmAdminBuildJS() {
 							window.location = targetElement.href;
 						}
 					});
+
+					// Revert 'Confirm' button text when modal is closed or 'Delete' form button is clicked
+					const resetModalConfirmText = ( e ) => {
+						if ( e.target.matches( '.ui-widget-overlay, .dismiss, .frm-trash-link' ) ) {
+							confirmButton.innerText = __( 'Confirm', 'formidable' );
+							document.removeEventListener( 'click', resetModalConfirmText );
+						}
+					};
+
+					document.addEventListener( 'click', resetModalConfirmText );
 				};
 
 				document.querySelectorAll( '.frm_edit a' ).forEach( ( el ) => {
