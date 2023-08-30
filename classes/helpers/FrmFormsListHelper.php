@@ -374,7 +374,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
+			$actions['frm_edit']     = '<a data-untrash_nonce="' . wp_create_nonce( 'untrash_form_' . $item->id ) . '" href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
 			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
 		}
 

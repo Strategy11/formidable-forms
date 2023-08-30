@@ -9737,21 +9737,31 @@ function frmAdminBuildJS() {
 
 				const checkFormStatus = ( e ) => {
 					e.preventDefault();
-					let formID = e.target.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]').value;
+					let formID = e.target.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]' ).value;
 					const formData  = new FormData();
 					formData.append( 'form_id', formID );
+					const confirmButton = document.getElementById( 'frm-confirmed-click' );
+					confirmButton.textContent = __( 'Restore form', 'formidable' );
+
+					// Revert 'Confirm' button text when modal is closed
+					const unbindHandleConfirmedClick = ( e ) => {
+						if ( e.target.matches( '.ui-widget-overlay, .dismiss, .frm-trash-link' ) ) {
+							confirmButton.innerText = __( 'Confirm', 'formidable' );
+							document.removeEventListener( 'click', unbindHandleConfirmedClick );
+						}
+					};
+
+					document.addEventListener( 'click', unbindHandleConfirmedClick );
+
 					doJsonPost( 'get_form_status', formData ).then( ( formStatus ) => {
 						if ( formStatus === 'trash' ) {
 							e.target.setAttribute( 'data-frmverify', 'You can\'t edit a deleted form.' );
+
 							confirmModal( e.target );
-							const confirmButton = document.getElementById( 'frm-confirmed-click' );
-							confirmButton.innerText = 'Restore form';
-							console.log(confirmButton.getAttribute( 'href' ));
 							let url = new URL( confirmButton.getAttribute( 'href' ) );
 							url.searchParams.set( 'frm_action', 'untrash' );
-							url.searchParams.set( '_wpnonce', frmGlobal.nonce );
+							url.searchParams.set( '_wpnonce', e.target.dataset.untrash_nonce );
 							confirmButton.setAttribute( 'href', url.href );
-							// Revert 'Confirm' button text when modal is closed
 						} else {
 							window.location = e.target.href;
 						}
