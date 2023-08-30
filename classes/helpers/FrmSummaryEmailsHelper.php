@@ -15,8 +15,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmSummaryEmailsHelper {
 
+	const MONTHLY = 'monthly';
+
+	const YEARLY = 'yearly';
+
+	const LICENSE_EXPIRED = 'license';
+
+	/**
+	 * Summary emails option name.
+	 *
+	 * @var string
+	 */
 	public static $option_name = 'frm_summary_emails_options';
 
+	/**
+	 * Cache the summary emails options.
+	 *
+	 * @var array
+	 */
 	private static $options;
 
 	/**
@@ -29,12 +45,17 @@ class FrmSummaryEmailsHelper {
 		return ! empty( $frm_settings->summary_emails ) && ! empty( $frm_settings->summary_emails_recipients );
 	}
 
+	/**
+	 * Gets summary emails options.
+	 *
+	 * @return array
+	 */
 	private static function get_options() {
 		$default_options = array(
-			'last_monthly' => '',
-			'last_yearly'  => '',
-			'last_license' => '',
-			'renewal'      => '',
+			'last_' . self::MONTHLY         => '',
+			'last_' . self::YEARLY          => '',
+			'last_' . self::LICENSE_EXPIRED => '',
+			'renewal_date'                  => '',
 		);
 		if ( ! self::$options ) {
 			self::$options = get_option( self::$option_name, $default_options );
@@ -42,31 +63,98 @@ class FrmSummaryEmailsHelper {
 		return self::$options;
 	}
 
+	/**
+	 * Saves summary emails options.
+	 *
+	 * @param array $options Options data.
+	 */
 	private static function save_options( $options ) {
 		update_option( 'frm_summary_emails_options', $options );
 	}
 
-	public static function send_monthly_email() {
+	/**
+	 * Checks if should send summary emails.
+	 *
+	 * @return array|false Return array of emails should be sent, or `false` if not send any emails.
+	 */
+	public static function should_send_emails() {
+		if ( ! FrmSummaryEmailsHelper::is_enabled() ) {
+			return false;
+		}
+
+		$emails       = array();
+		$current_date = gmdate( 'Y-m-d' );
+
+		// Check for license expired email.
+		$last_expired = FrmSummaryEmailsHelper::get_last_sent_date( 'license' ); // TODO: clear this sent date after renewing.
+		if ( ! $last_expired ) {
+			// License expired email hasn't been sent. Check for the license.
+			if ( FrmAddonsController::is_license_expired() ) {
+				$emails[] = self::LICENSE_EXPIRED;
+			}
+		}
+
+		// Check for monthly or yearly email.
+		$last_monthly = FrmSummaryEmailsHelper::get_last_sent_date( 'monthly' );
+		$last_yearly  = FrmSummaryEmailsHelper::get_last_sent_date( 'yearly' );
+		$last_stats   = max( $last_monthly, $last_yearly );
+
+		// Do not send any email if it isn't enough 30 days from the last stats email.
+		if ( $last_stats && 30 > FrmSummaryEmailsHelper::get_date_diff( $current_date, $last_stats ) ) {
+			return $emails;
+		}
+
+		if ( $last_yearly ) {
+			// If this isn't the first yearly email, send the new one after 1 year.
+			if ( $last_yearly && 365 <= FrmSummaryEmailsHelper::get_date_diff( $current_date, $last_yearly ) ) {
+				$emails[] = self::YEARLY;
+				return $emails;
+			}
+		} else {
+			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
+			$renewal_date = FrmSummaryEmailsHelper::get_renewal_date();
+			if ( $renewal_date && 45 <= FrmSummaryEmailsHelper::get_date_diff( $current_date, $renewal_date ) ) {
+				$emails[] = self::YEARLY;
+				return $emails;
+			}
+		}
+
+		// If it isn't time for yearly email, it's time for monthly email.
+		$emails[] = self::MONTHLY;
+
+		return $emails;
+	}
+
+	/**
+	 * Sends monthly email.
+	 */
+	public static function send_monthly() {
 		$monthly_email = new FrmMonthlyEmail();
 
 		if ( $monthly_email->send() ) {
-			self::set_last_send_date( 'monthly' );
+			self::set_last_sent_date( self::MONTHLY );
 		}
 	}
 
-	public static function send_yearly_email() {
+	/**
+	 * Sends yearly email.
+	 */
+	public static function send_yearly() {
 		$yearly_email = new FrmYearlyEmail();
 
 		if ( $yearly_email->send() ) {
-			self::set_last_send_date( 'yearly' );
+			self::set_last_sent_date( self::YEARLY );
 		}
 	}
 
-	public static function send_license_expired_email() {
+	/**
+	 * Sends license expired email.
+	 */
+	public static function send_license_expired() {
 		$license_email = new FrmLicenseExpiredEmail();
 
 		if ( $license_email->send() ) {
-			self::set_last_send_date( 'license' );
+			self::set_last_sent_date( self::LICENSE_EXPIRED );
 		}
 	}
 
@@ -77,22 +165,24 @@ class FrmSummaryEmailsHelper {
 	 */
 	public static function get_renewal_date() {
 		$options = self::get_options();
-		if ( ! empty( $options['renewal'] ) ) {
-			return $options['renewal'];
+		if ( ! empty( $options['renewal_date'] ) ) {
+			return $options['renewal_date'];
 		}
 
 		$license_info = FrmAddonsController::get_primary_license_info();
 		if ( ! empty( $license_info['expires'] ) ) {
-			$renewal_date       = gmdate( 'Y-m-d', $license_info['expires'] );
-			$options['renewal'] = $renewal_date;
+			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
+
+			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
 		}
 
-		$first_form_date = self::get_lowest_form_created_date();
+		$first_form_date = self::get_earliest_form_created_date();
 		if ( $first_form_date ) {
-			$renewal_date       = gmdate( 'Y-m-d', strtotime( $first_form_date ) );
-			$options['renewal'] = $renewal_date;
+			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date ) );
+
+			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
 		}
@@ -150,13 +240,23 @@ class FrmSummaryEmailsHelper {
 		return $options[ 'last_' . $type ];
 	}
 
-	public static function set_last_send_date( $type ) {
+	/**
+	 * Sets the last sent date of an email type.
+	 *
+	 * @param string $type Email type.
+	 */
+	private static function set_last_sent_date( $type ) {
 		$options = self::get_options();
 
 		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
 	}
 
-	private static function get_lowest_form_created_date() {
+	/**
+	 * Gets the created date of earliest form.
+	 *
+	 * @return string
+	 */
+	private static function get_earliest_form_created_date() {
 		return FrmDb::get_var(
 			'frm_forms',
 			array(),
@@ -165,6 +265,13 @@ class FrmSummaryEmailsHelper {
 		);
 	}
 
+	/**
+	 * Gets summary data in a date range.
+	 *
+	 * @param string $from_date From date.
+	 * @param string $to_date   To date.
+	 * @return array
+	 */
 	public static function get_summary_data( $from_date, $to_date ) {
 		$data = array(
 			'top_forms' => self::get_top_forms( $from_date, $to_date ),
@@ -174,6 +281,13 @@ class FrmSummaryEmailsHelper {
 		return apply_filters( 'frm_summary_data', $data, compact( 'from_date', 'to_date' ) );
 	}
 
+	/**
+	 * Gets entries count in a date range.
+	 *
+	 * @param string $from_date From date.
+	 * @param string $to_date   To date.
+	 * @return int
+	 */
 	private static function get_entries_count( $from_date, $to_date ) {
 		return FrmDb::get_count(
 			'frm_items',
@@ -185,6 +299,14 @@ class FrmSummaryEmailsHelper {
 		);
 	}
 
+	/**
+	 * Gets top forms in a date range.
+	 *
+	 * @param string $from_date From date.
+	 * @param string $to_date   To date.
+	 * @param int    $limit     Limit the result. Default is 10.
+	 * @return array            Contains `form_id`, `form_name`, and `items_count`.
+	 */
 	private static function get_top_forms( $from_date, $to_date, $limit = 10 ) {
 		global $wpdb;
 
@@ -201,6 +323,11 @@ class FrmSummaryEmailsHelper {
 		);
 	}
 
+	/**
+	 * Shows the comparison HTML in the email.
+	 *
+	 * @param float $diff Percentage of difference.
+	 */
 	public static function show_comparison( $diff ) {
 		if ( ! $diff ) {
 			return;
@@ -229,10 +356,20 @@ class FrmSummaryEmailsHelper {
 		);
 	}
 
+	/**
+	 * Gets section CSS in the email.
+	 *
+	 * @return string
+	 */
 	public static function get_section_style() {
 		return 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0;';
 	}
 
+	/**
+	 * Gets h2 CSS in the email.
+	 *
+	 * @return string
+	 */
 	public static function get_heading2_style() {
 		return 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;';
 	}
@@ -252,6 +389,11 @@ class FrmSummaryEmailsHelper {
 		return add_query_arg( $data, $url );
 	}
 
+	/**
+	 * Gets the latest inbox message.
+	 *
+	 * @return array|false
+	 */
 	public static function get_latest_inbox_message() {
 		$inbox    = new FrmInbox();
 		$messages = $inbox->get_messages( 'filter' );
@@ -270,6 +412,11 @@ class FrmSummaryEmailsHelper {
 		return false;
 	}
 
+	/**
+	 * Gets out of date plugin names.
+	 *
+	 * @return array
+	 */
 	public static function get_out_of_date_plugins() {
 		$update_data = FrmAddonsController::check_update( '' );
 		if ( ! $update_data ) {
