@@ -16,7 +16,7 @@ export class FrmOverlay {
 		this.overlayData = { ...this.overlayData, ...overlayData };
 		this.body.insertAdjacentHTML( 'afterbegin', this.buildOverlay() );
 		this.initCloseButton();
-		this.initOverlayIntroAnimation( 400 );
+		this.initOverlayIntroAnimation( 200 );
 
 	}
 

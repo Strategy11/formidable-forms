@@ -3944,4 +3944,100 @@ class FrmAppHelper {
 
 		wp_send_json_success();
 	}
+
+	/**
+	 * @since 6.4.x
+	 *
+	 * @return void
+	 */
+	private static function show_warning_overlay_expired_license() {
+
+		$overlay_wrapper = new FrmOverlayController(
+			array(
+				'config-option-name'  => 'expired-license-warning',
+				'execution-frequency' => '1 year',
+			)
+		);
+
+		$overlay_wrapper->open_overlay(
+			array(
+				'heroImage' => self::plugin_url() . '/images/overlay/lock.svg',
+				'heading'   => __( 'Heads up! Your license has expired', 'formidable' ),
+				'copy'      => __( 'An active license is needed to access new features & addons, plugin updates, and our world class support!', 'formidable' ),
+				'buttons'   => array(
+					array(
+						'url'    => self::admin_upgrade_link( 'expired-full', 'knowledgebase/manage-licenses-and-sites/renewing-an-expired-license/' ),
+						'target' => '_blank',
+						'label'  => __( 'Learn More', 'formidable' ),
+					),
+					array(
+						'url'   => self::admin_upgrade_link( 'expired-full', 'account/downloads/' ),
+						'label' => __( 'Renew license now', 'formidable' ),
+					),
+				),
+			)
+		);
+
+	}
+
+	/**
+	 * @since 6.4.x
+	 *
+	 * @return void
+	 */
+	private static function show_warning_overlay_nulled_license( $error = array() ) {
+
+		$overlay_wrapper = new FrmOverlayController(
+			array(
+				'config-option-name'  => 'nulled-license-warning',
+				'execution-frequency' => '1 month',
+			)
+		);
+
+		$copy = __( 'Your version of Formidable Forms has been altered and may contain malware!<br/> <a href="https://formidableforms.com/pricing/?utm_source=WordPress&utm_medium=nulled-full&utm_campaign=liteplugin" target="_blank">Switch to the official version now for 50% off</a>', 'formidable' );
+		if ( isset( $error['message'] ) ) {
+			$copy = str_replace( 'utm_medium=nulled', 'utm_medium=nulled-full', $error['message'] );
+		};
+
+		$overlay_wrapper->open_overlay(
+			array(
+				'heroImage' => self::plugin_url() . '/images/overlay/lock.svg',
+				'heading'   => __( 'Heads up! Your plugin has been altered!', 'formidable' ),
+				'copy'      => $copy,
+				'buttons'   => array(
+					array(
+						'url'    => self::admin_upgrade_link( 'nulled-full', 'formidable-forms-pro-nulled/' ),
+						'target' => '_blank',
+						'label'  => __( 'Learn More', 'formidable' ),
+					),
+					array(
+						'url'    => self::admin_upgrade_link( 'nulled-full' ),
+						'target' => '_blank',
+						'label'  => __( 'Get 50% off!', 'formidable' ),
+					),
+				),
+			)
+		);
+
+	}
+
+	/**
+	 * @since 6.4.x
+	 *
+	 * @return void
+	 */
+	public static function show_warning_overlay_for_expired_or_null_license() {
+		$license_is_expired = FrmAddonsController::is_license_expired();
+
+		if ( empty( $license_is_expired ) ) {
+			return;
+		};
+
+		if ( isset( $license_is_expired['type'] ) && 'invalid' === $license_is_expired['type'] ) {
+			self::show_warning_overlay_nulled_license();
+			return;
+		};
+
+		self::show_warning_overlay_expired_license();
+	}
 }
