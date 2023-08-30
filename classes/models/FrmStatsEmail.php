@@ -6,6 +6,10 @@
  * @package Formidable
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 	protected $has_inbox_msg = false;

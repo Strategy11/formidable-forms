@@ -6,6 +6,9 @@
  * @package Formidable
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 class FrmMonthlyEmail extends FrmStatsEmail {
 
 	protected $has_inbox_msg = true;

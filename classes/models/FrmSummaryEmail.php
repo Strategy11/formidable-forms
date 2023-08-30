@@ -6,6 +6,10 @@
  * @package Formidable
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 abstract class FrmSummaryEmail {
 
 	protected $is_html = true;

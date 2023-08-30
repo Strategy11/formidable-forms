@@ -6,6 +6,10 @@
  * @package Formidable
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 class FrmYearlyEmail extends FrmStatsEmail {
 
 	public function __construct() {
