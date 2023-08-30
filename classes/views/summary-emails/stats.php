@@ -113,6 +113,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php esc_html_e( 'Following plugins are out of date:', 'formidable' ); ?>
 				<?php echo esc_html( implode( ', ', $args['out_of_date_plugins'] ) ); ?>
 			</p>
+
+			<a
+				href="<?php echo esc_url( $args['plugins_url'] ); ?>"
+				style="display: block; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none;"
+			><?php esc_html_e( 'Update', 'formidable' ); ?></a>
 		</div>
 	<?php endif; ?>
 </div>

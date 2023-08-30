@@ -56,7 +56,10 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			),
 		);
 
-		$args['out_of_date_plugins'] = $this->has_out_of_date_plugins ? FrmSummaryEmailsHelper::get_out_of_date_plugins() : array();
+		if ( $this->has_out_of_date_plugins ) {
+			$args['out_of_date_plugins'] = FrmSummaryEmailsHelper::get_out_of_date_plugins();
+			$args['plugins_url']         = FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/plugins.php' );
+		}
 
 		if ( $this->has_comparison && $stats_data['entries'] ) {
 			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );
