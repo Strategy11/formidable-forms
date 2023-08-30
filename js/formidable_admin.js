@@ -9737,33 +9737,38 @@ function frmAdminBuildJS() {
 
 				const checkFormStatus = ( e ) => {
 					e.preventDefault();
-					let formID = e.target.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]' ).value;
-					const formData  = new FormData();
+
+					const targetElement = e.currentTarget;
+					let formID     = targetElement.closest( 'tr' ).querySelector( '.check-column input[type=checkbox]' ).value;
+					const formData = new FormData();
 					formData.append( 'form_id', formID );
-					const confirmButton = document.getElementById( 'frm-confirmed-click' );
+
+					const confirmButton       = document.getElementById( 'frm-confirmed-click' );
 					confirmButton.textContent = __( 'Restore form', 'formidable' );
 
 					// Revert 'Confirm' button text when modal is closed or 'Delete' form button is clicked
-					const unbindHandleConfirmedClick = ( e ) => {
+					const resetModalConfirmText = ( e ) => {
 						if ( e.target.matches( '.ui-widget-overlay, .dismiss, .frm-trash-link' ) ) {
 							confirmButton.innerText = __( 'Confirm', 'formidable' );
-							document.removeEventListener( 'click', unbindHandleConfirmedClick );
+							document.removeEventListener( 'click', resetModalConfirmText );
 						}
 					};
 
-					document.addEventListener( 'click', unbindHandleConfirmedClick );
+					document.addEventListener( 'click', resetModalConfirmText );
 
 					doJsonPost( 'get_form_status', formData ).then( ( formStatus ) => {
 						if ( formStatus === 'trash' ) {
-							e.target.setAttribute( 'data-frmverify', 'You can\'t edit a deleted form.' );
+							targetElement.setAttribute( 'data-frmverify', 'You can\'t edit a deleted form.' );
 
-							confirmModal( e.target );
+							confirmModal( targetElement );
+
 							let url = new URL( confirmButton.getAttribute( 'href' ) );
 							url.searchParams.set( 'frm_action', 'untrash' );
-							url.searchParams.set( '_wpnonce', e.target.dataset.untrash_nonce );
+							url.searchParams.set( '_wpnonce', targetElement.dataset.untrash_nonce );
+
 							confirmButton.setAttribute( 'href', url.href );
 						} else {
-							window.location = e.target.href;
+							window.location = targetElement.href;
 						}
 					});
 				};
