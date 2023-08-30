@@ -9753,7 +9753,7 @@ function frmAdminBuildJS() {
 
 					doJsonPost( 'get_form_status', formData ).then( ( formStatus ) => {
 						if ( formStatus === 'trash' ) {
-							targetElement.setAttribute( 'data-frmverify', __( 'You can\'t edit a deleted form.', 'formidable' ) );
+							targetElement.setAttribute( 'data-frmverify', __( 'The form you\'re trying to edit is trash. Consider restoring it.', 'formidable' ) );
 
 							confirmModal( targetElement );
 
