@@ -83,7 +83,7 @@ class FrmSummaryEmailsHelper {
 
 		$license_info = FrmAddonsController::get_primary_license_info();
 		if ( ! empty( $license_info['expires'] ) ) {
-			$renewal_date       = date( 'Y-m-d', $license_info['expires'] );
+			$renewal_date       = gmdate( 'Y-m-d', $license_info['expires'] );
 			$options['renewal'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
@@ -91,7 +91,7 @@ class FrmSummaryEmailsHelper {
 
 		$first_form_date = self::get_lowest_form_created_date();
 		if ( $first_form_date ) {
-			$renewal_date       = date( 'Y-m-d', strtotime( $first_form_date ) );
+			$renewal_date       = gmdate( 'Y-m-d', strtotime( $first_form_date ) );
 			$options['renewal'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
@@ -224,7 +224,7 @@ class FrmSummaryEmailsHelper {
 					<img src="%2$s" alt="" style="vertical-align: text-bottom;" /><span style="display: inline-block; line-height: 1.33;">%3$s</span>
 				</span>',
 			esc_attr( $color ),
-			FrmAppHelper::plugin_url() . '/images/' . $image,
+			esc_url( FrmAppHelper::plugin_url() . '/images/' . $image ),
 			intval( $displayed_value ) . '%'
 		);
 	}

@@ -16,10 +16,10 @@ class FrmMonthlyEmail extends FrmStatsEmail {
 	public function __construct() {
 		parent::__construct();
 
-		$this->to_date        = date( 'Y-m-d' );
-		$this->from_date      = date( 'Y-m-d', strtotime( '-29 days' ) );
-		$this->prev_to_date   = date( 'Y-m-d', strtotime( $this->from_date . '-1 day' ) );
-		$this->prev_from_date = date( 'Y-m-d', strtotime( $this->prev_to_date . '-29 days' ) );
+		$this->to_date        = gmdate( 'Y-m-d' );
+		$this->from_date      = gmdate( 'Y-m-d', strtotime( '-29 days' ) );
+		$this->prev_to_date   = gmdate( 'Y-m-d', strtotime( $this->from_date . '-1 day' ) );
+		$this->prev_from_date = gmdate( 'Y-m-d', strtotime( $this->prev_to_date . '-29 days' ) );
 	}
 
 	protected function get_subject() {

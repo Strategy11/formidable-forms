@@ -40,7 +40,7 @@ echo "\r\n\r\n";
 
 foreach ( $args['top_forms'] as $index => $top_form ) {
 	echo esc_html( $top_form->form_name ) . ': ';
-	printf( esc_html( _n( 'submission', 'submissions', $top_form->items_count, 'formidable' ) ), number_format_i18n( $top_form->items_count ) );
+	printf( esc_html( _n( 'submission', 'submissions', $top_form->items_count, 'formidable' ) ), intval( number_format_i18n( $top_form->items_count ) ) );
 	echo "\r\n";
 }
 

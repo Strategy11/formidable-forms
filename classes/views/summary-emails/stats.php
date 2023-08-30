@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a
 				href="<?php echo esc_url( $args['dashboard_url'] ); ?>"
 				style="display: block; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none;"
-			><?php esc_html_e( 'Open Dashboard' ); ?></a>
+			><?php esc_html_e( 'Open Dashboard', 'formidable' ); ?></a>
 		<?php endif; ?>
 	</div>
 
@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<p>
 				<?php esc_html_e( 'Following plugins are out of date:', 'formidable' ); ?>
-				<?php echo esc_html( implode( ', ', $args['out_of_date_plugins'] ) ) ?>
+				<?php echo esc_html( implode( ', ', $args['out_of_date_plugins'] ) ); ?>
 			</p>
 		</div>
 	<?php endif; ?>

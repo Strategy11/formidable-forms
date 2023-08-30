@@ -23,7 +23,7 @@ class FrmSummaryEmailsController {
 			return;
 		}
 
-		$current_date = date( 'Y-m-d' );
+		$current_date = gmdate( 'Y-m-d' );
 
 		// Check for license expired email.
 		$last_expired = FrmSummaryEmailsHelper::get_last_sent_date( 'license' ); // TODO: clear this sent date after renewing.

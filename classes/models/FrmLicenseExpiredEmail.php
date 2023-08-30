@@ -6,6 +6,10 @@
  * @package Formidable
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 
 	protected function get_subject() {
