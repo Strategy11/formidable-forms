@@ -9743,7 +9743,7 @@ function frmAdminBuildJS() {
 					const confirmButton = document.getElementById( 'frm-confirmed-click' );
 					confirmButton.textContent = __( 'Restore form', 'formidable' );
 
-					// Revert 'Confirm' button text when modal is closed
+					// Revert 'Confirm' button text when modal is closed or 'Delete' form button is clicked
 					const unbindHandleConfirmedClick = ( e ) => {
 						if ( e.target.matches( '.ui-widget-overlay, .dismiss, .frm-trash-link' ) ) {
 							confirmButton.innerText = __( 'Confirm', 'formidable' );
