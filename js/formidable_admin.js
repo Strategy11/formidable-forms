@@ -9745,6 +9745,7 @@ function frmAdminBuildJS() {
 
 					const confirmButton       = document.getElementById( 'frm-confirmed-click' );
 					confirmButton.textContent = __( 'Restore form', 'formidable' );
+					confirmButton.classList.remove( 'frm-button-red' );
 
 					// Revert 'Confirm' button text when modal is closed or 'Delete' form button is clicked
 					const resetModalConfirmText = ( e ) => {
