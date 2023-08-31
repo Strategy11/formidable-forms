@@ -242,7 +242,6 @@ class FrmFormTemplatesController {
 		self::update_global_variables();
 	}
 
-
 	/**
 	 * Initialize favorite templates from WordPress options.
 	 *
@@ -309,6 +308,16 @@ class FrmFormTemplatesController {
 	private static function fetch_and_format_custom_templates() {
 		// Get all published forms.
 		$published_forms = FrmForm::get_published_forms();
+
+		// Get IDs from the published forms for matching.
+		$published_form_ids = array_map(
+			function( $form ) {
+				return $form->id;
+			},
+			$published_forms
+		);
+		// Update custom favorite templates to include only IDs that are also in the published forms.
+		self::$favorite_templates['custom'] = array_intersect( self::$favorite_templates['custom'], $published_form_ids );
 
 		foreach ( $published_forms as $template ) {
 			$template = array(
