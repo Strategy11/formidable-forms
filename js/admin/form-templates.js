@@ -10,7 +10,8 @@
 	const { onClickPreventDefault } = frmDom.util;
 
 	/**
-	 * Represents the FrmFormTemplates class.
+	 * FrmFormTemplates class.
+	 * Manages behaviors for the "Form Templates" page.
 	 *
 	 * @since x.x
 	 * @class FrmFormTemplates
@@ -90,20 +91,20 @@
 		static CURRENT_CLASS = 'frm-current';
 
 		/**
-		 * Class constant for the favorite heart icon.
+		 * Class constant for the favorite heart icon with background.
 		 *
 		 * @since x.x
 		 * @type {string}
 		 */
-		static FAVORITE_HEART_ICON = '#frm_heart_solid_icon';
+		static FILLED_HEART_ICON = '#frm_heart_solid_icon';
 
 		/**
-		 * Class constant for the default heart icon.
+		 * Class constant for the default linear heart icon.
 		 *
 		 * @since x.x
 		 * @type {string}
 		 */
-		static DEFAULT_HEART_ICON = '#frm_heart_icon';
+		static LINEAR_HEART_ICON = '#frm_heart_icon';
 
 		/**
 		 * Initializes the FrmFormTemplates instance.
@@ -140,6 +141,9 @@
 		initialize() {
 			/// Initialize DOM elements and other properties
 			this.initProperties();
+
+			// Set up the initial state, including any required DOM manipulations
+			this.setupInitialState();
 
 			// Create a categorized list of templates
 			this.buildCategorizedTemplates();
@@ -203,12 +207,12 @@
 			this.templateItems = this.templatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
 
 			/**
-			 * Nested Featured Template Items within the templatesList.
+			 * Twin Featured Template Items within the templatesList.
 			 *
 			 * @since x.x
 			 * @type {NodeList}
 			 */
-			this.nestedFeaturedTemplateItems = this.templatesList?.querySelectorAll( `.${this.constructor.FEATURED_TEMPLATE_CLASS}` );
+			this.twinFeaturedTemplateItems = this.templatesList?.querySelectorAll( `.${this.constructor.FEATURED_TEMPLATE_CLASS}` );
 
 			/**
 			 * Custom Templates List Section element.
@@ -298,6 +302,24 @@
 			 * @type {HTMLElement}
 			 */
 			this.bodyContentChildren = Array.from( this.bodyContent?.children );
+		}
+
+		/**
+		 * Sets up the initial state of the UI, including any DOM manipulations
+		 * required for the correct presentation of elements.
+		 *
+		 * @note This should run after initProperties and before any template rendering.
+		 *
+		 * @since x.x
+		 */
+		setupInitialState() {
+			// Hide the twin featured template items
+			this.hideElements( this.twinFeaturedTemplateItems );
+
+			// Show the main body content
+			this.show( this.bodyContent );
+			// Fade in the main body content for a smooth user experience
+			this.fadeIn( this.bodyContent );
 		}
 
 		/**
@@ -412,7 +434,7 @@
 		 */
 		displayAllTemplates() {
 			this.showElements([ ...this.bodyContentChildren, ...this.templateItems ]);
-			this.hideElements([ this.customTemplatesSection, ...this.nestedFeaturedTemplateItems ]);
+			this.hideElements([ this.customTemplatesSection, ...this.twinFeaturedTemplateItems ]);
 		}
 
 		/**
@@ -551,16 +573,16 @@
 				// Increment custom or default favorites count based on template type
 				isCustomTemplate ? ++favoritesCount.custom : ++favoritesCount.default;
 				// Update heart icon to filled (favorited state)
-				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.FAVORITE_HEART_ICON );
-				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.FAVORITE_HEART_ICON );
+				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.FILLED_HEART_ICON );
+				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.FILLED_HEART_ICON );
 			} else {
 				// Decrement the total favorite count
 				--favoritesCount.total;
 				// Decrement custom or default favorites count based on template type
 				isCustomTemplate ? --favoritesCount.custom : --favoritesCount.default;
 				// Update heart icon to outline (non-favorited state)
-				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.DEFAULT_HEART_ICON );
-				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.DEFAULT_HEART_ICON );
+				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.LINEAR_HEART_ICON );
+				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.LINEAR_HEART_ICON );
 			}
 
 			// Update total favorite count displayed in the "Favorites" sidebar category
