@@ -272,12 +272,7 @@
 #frm-form-templates-page
 	.frm-form-templates-favorite-item
 	.frm-form-templates-item-favorite-button {
-	color: #fe4742;
-}
-
-#frm-form-templates-page
-	.frm-form-templates-item-favorite-button[data-disabled="true"] {
-	color: var(--grey-300);
+	color: var(--error-500);
 }
 
 #frm-form-templates-page .frm-form-templates-item-content {
@@ -314,7 +309,7 @@
 	.frm-form-templates-item:hover
 	.frm-form-templates-item-buttons {
 	display: flex;
-	animation: fadeInDownShort 250ms ease-out forwards;
+	animation: fadeInDownShort 300ms ease-out forwards;
 }
 
 #frm-form-templates-page
@@ -329,7 +324,7 @@
 	 *
 	 */
 #frm-form-templates-page .frm-form-templates-hidden {
-	display: none;
+	display: none !important;
 }
 
 #frm-form-templates-page .frm-form-templates-flex {
@@ -362,7 +357,7 @@
 
 @keyframes fadeInDownShort {
 	0% {
-		opacity: 0.7;
+		opacity: 0.4;
 		transform: translateY(-2px);
 	}
 	100% {

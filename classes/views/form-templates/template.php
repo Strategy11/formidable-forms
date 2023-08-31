@@ -33,6 +33,7 @@ if ( $is_favorite_template ) {
 	$attributes['class'] .= ' frm-form-templates-favorite-item';
 }
 if ( $is_custom_template ) {
+	$attributes['class']       .= ' frm-form-templates-custom-item';
 	$attributes['data-formid'] = absint( $template['id'] );
 	$attributes['data-custom'] = '1';
 	$attributes['data-href']   = esc_url( $template['url'] );
@@ -67,7 +68,10 @@ if ( $plan_required ) {
 
 			<!-- Add to Favorite Button -->
 			<a href="#" class="frm-form-templates-item-favorite-button" role="button" aria-label="<?php esc_attr_e( 'Add to favorite button', 'formidable' ); ?>">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_heart_icon' ); ?>
+				<?php
+				$favorite_button_icon = $is_favorite_template ? 'frm_heart_solid_icon' : 'frm_heart_icon';
+				FrmAppHelper::icon_by_class( 'frmfont ' . $favorite_button_icon );
+				?>
 			</a><!-- .frm-form-templates-item-favorite-button -->
 		</h3><!-- .frm-form-templates-item-title -->
 

@@ -1,87 +1,155 @@
 ( ( wp ) => {
 
 	/**
-	 * Globals: ajaxurl, fromDom
+	 * Globals: frmFormTemplatesVars, frmDom
 	 *
 	 * @since x.x
 	 */
+	let { favoritesCount, FEATURED_TEMPLATES_KEYS } =  frmFormTemplatesVars;
 	const { doJsonPost } = frmDom.ajax;
+	const { onClickPreventDefault } = frmDom.util;
 
 	/**
-	 * Represents the FrmFormTemplates.
+	 * Represents the FrmFormTemplates class.
 	 *
 	 * @since x.x
-	 *
 	 * @class FrmFormTemplates
 	 */
 	class FrmFormTemplates {
 
 		/**
-		 * Class that is added to an element to mark it as hidden.
+		 * Class for category items.
 		 *
 		 * @since x.x
-		 *
 		 * @type {string}
 		 */
-		static HIDDEN_STATE_CLASS = 'frm-form-templates-hidden';
+		static CATEGORY_CLASS = 'frm-form-templates-cat-item';
 
 		/**
-		 * All template items class.
+		 * Class for templates featured list.
 		 *
 		 * @since x.x
+		 * @type {string}
+		 */
+		static FEATURED_TEMPLATES_LIST_CLASS = 'frm-form-templates-featured-list';
+
+		/**
+		 * Class for templates list.
 		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static TEMPLATES_LIST_CLASS = 'frm-form-templates-list';
+
+		/**
+		 * Class for template items.
+		 *
+		 * @since x.x
 		 * @type {string}
 		 */
 		static TEMPLATE_CLASS = 'frm-form-templates-item';
 
 		/**
+		 * Class for featured template items.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static FEATURED_TEMPLATE_CLASS = 'frm-form-templates-featured-item';
+
+		/**
+		 * Class for favorite template items.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static FAVORITE_TEMPLATE_CLASS = 'frm-form-templates-favorite-item';
+
+		/**
+		 * Class for favorite buttons.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static FAVORITE_BUTTON_CLASS = 'frm-form-templates-item-favorite-button';
+
+		/**
+		 * Class added to an element to mark it as hidden.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static HIDDEN_CLASS = 'frm-form-templates-hidden';
+
+		/**
+		 * Class added to an element to mark it as the current item.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static CURRENT_CLASS = 'frm-current';
+
+		/**
+		 * Class constant for the favorite heart icon.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static FAVORITE_HEART_ICON = '#frm_heart_solid_icon';
+
+		/**
+		 * Class constant for the default heart icon.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static DEFAULT_HEART_ICON = '#frm_heart_icon';
+
+		/**
 		 * Initializes the FrmFormTemplates instance.
 		 *
 		 * @since x.x
-		 *
 		 * @constructor
 		 */
 		constructor() {
 			/**
-			 * Action hook that fires before the FrmFormTemplates class initialization.
+			 * Action hook triggered before class initialization.
 			 *
 			 * @since x.x
-			 *
 			 * @hook frmFormTemplates.beforeInitialize
 			 */
 			wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', this );
 
-			// Call initialize method.
+			// Initialize the class properties and methods
 			this.initialize();
 
 			/**
-			 * Action hook that fires after the FrmFormTemplates class initialization.
+			 * Action hook triggered after class initialization.
 			 *
 			 * @since x.x
-			 *
 			 * @hook frmFormTemplates.afterInitialize
 			 */
 			wp.hooks.doAction( 'frmFormTemplates.afterInitialize', this );
 		}
 
 		/**
-		 * Main initialization method.
+		 * Main method for initializing the FrmFormTemplates instance.
 		 *
 		 * @since x.x
 		 */
 		initialize() {
-			// Initialize DOM elements and other properties needed for this class
+			/// Initialize DOM elements and other properties
 			this.initProperties();
 
-			// Create categorized templates to facilitate template selection
+			// Create a categorized list of templates
 			this.buildCategorizedTemplates();
 
-			// Attach relevant event listeners for user interactions
+			// Attach event listeners for user interactions
 			this.addEventListeners();
 		}
 
 		/**
-		 * Initializes properties for the FrmFormTemplates instance.
+		 * Initializes the properties for the FrmFormTemplates instance.
 		 *
 		 * @since x.x
 		 */
@@ -90,7 +158,6 @@
 			 * Create Form button element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
 			this.createFormButton = document.querySelector( '#frm-form-templates-create-form' );
@@ -99,7 +166,6 @@
 			 * Page Title element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
 			this.pageTitle = document.querySelector( '#frm-form-templates-page-title' );
@@ -108,16 +174,14 @@
 			 * Featured Templates List container.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.featuredTemplatesList = document.querySelector( '#frm-form-templates-featured-list' );
+			this.featuredTemplatesList = document.querySelector( `#${this.constructor.FEATURED_TEMPLATES_LIST_CLASS}` );
 
 			/**
 			 * Upsell Banner container.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
 			this.upsellBanner = document.querySelector( '#frm-form-templates-upsell-banner' );
@@ -126,52 +190,30 @@
 			 * Templates List container.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.templatesList = document.querySelector( '#frm-form-templates-list' );
+			this.templatesList = document.querySelector( `#${this.constructor.TEMPLATES_LIST_CLASS}` );
 
 			/**
-			 * All Template Items.
+			 * Template Items.
 			 *
 			 * @since x.x
-			 *
 			 * @type {NodeList}
 			 */
 			this.templateItems = this.templatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
 
 			/**
-			 * All Featured Template Items that are nested within the templatesList.
+			 * Nested Featured Template Items within the templatesList.
 			 *
 			 * @since x.x
-			 *
 			 * @type {NodeList}
 			 */
-			this.nestedFeaturedTemplateItems = this.templatesList?.querySelectorAll( '.frm-form-templates-featured-item' );
-
-			/**
-			 * Custom Templates List container.
-			 *
-			 * @since x.x
-			 *
-			 * @type {HTMLElement}
-			 */
-			this.customTemplatesList = document.querySelector( '#frm-form-templates-custom-list' );
-
-			/**
-			 * All Custom Template Items.
-			 *
-			 * @since x.x
-			 *
-			 * @type {NodeList}
-			 */
-			this.customTemplateItems = this.customTemplatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
+			this.nestedFeaturedTemplateItems = this.templatesList?.querySelectorAll( `.${this.constructor.FEATURED_TEMPLATE_CLASS}` );
 
 			/**
 			 * Custom Templates List Section element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
 			this.customTemplatesSection = document.querySelector( '#frm-form-templates-custom-list-section' );
@@ -180,36 +222,31 @@
 			 * Custom Templates List Title element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.customTemplatesTitle = document.querySelector( '#frm-form-templates-custom-list-title' );
+			this.customTemplatesTitle = this.customTemplatesSection?.querySelector( '#frm-form-templates-custom-list-title' );
 
 			/**
-			 * Body Content element.
+			 * Custom Templates List container.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.bodyContent = document.querySelector( '#post-body-content' );
+			this.customTemplatesList = this.customTemplatesSection?.querySelector( '#frm-form-templates-custom-list' );
 
 			/**
-			 * Body Content Children.
+			 * Custom Template Items.
 			 *
 			 * @since x.x
-			 *
-			 * @type {HTMLElement}
+			 * @type {NodeList}
 			 */
-			this.bodyContentChildren = Array.from( this.bodyContent?.children );
+			this.customTemplateItems = this.customTemplatesList?.querySelectorAll( `.${this.constructor.TEMPLATE_CLASS}` );
 
 			/**
 			 * Object to hold Categorized Templates.
-			 *
 			 * Keys will be category names and values will be arrays of corresponding templates.
 			 *
 			 * @since x.x
-			 *
 			 * @type {Object}
 			 */
 			this.categorizedTemplates = {};
@@ -218,7 +255,6 @@
 			 * The currently Selected Category. Defaults to 'all-templates'.
 			 *
 			 * @since x.x
-			 *
 			 * @type {string}
 			 */
 			this.selectedCategory = 'all-templates';
@@ -227,64 +263,81 @@
 			 * The currently Selected Category element. Defaults to 'All Templates' category element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.selectedCategoryEl = document.querySelector( '.frm-form-templates-cat-item[data-category="all-templates"]' );
+			this.selectedCategoryEl = document.querySelector( `.${this.constructor.CATEGORY_CLASS}[data-category="all-templates"]` );
 
 			/**
 			 * Favortes Category element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.favoritesCategory = document.querySelector( '.frm-form-templates-cat-item[data-category="favorites"]' );
+			this.favoritesCategory = document.querySelector( `.${this.constructor.CATEGORY_CLASS}[data-category="favorites"]` );
 
 			/**
 			 * Favortes Category Count element.
 			 *
 			 * @since x.x
-			 *
 			 * @type {HTMLElement}
 			 */
-			this.favoritesCategoryCount = this.favoritesCategory?.querySelector( '.frm-form-templates-cat-count' );
+			this.favoritesCategoryCountEl = this.favoritesCategory?.querySelector( '.frm-form-templates-cat-count' );
+
+			/**
+			 * Body Content element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.bodyContent = document.querySelector( '#post-body-content' );
+
+			/**
+			 * Body Content Children.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.bodyContentChildren = Array.from( this.bodyContent?.children );
 		}
 
 		/**
-		 * Builds a mapping between categories and corresponding templates.
+		 * Builds a categorized list of templates.
 		 *
 		 * @since x.x
 		 */
 		buildCategorizedTemplates() {
 			this.templateItems.forEach( template => {
+				// Extract and split the categories from data attribute
 				const categories = template.getAttribute( 'data-categories' ).split( ',' );
 
 				categories.forEach( category => {
+					// Initialize the category array if not already done
 					if ( ! this.categorizedTemplates[category]) {
 						this.categorizedTemplates[category] = [];
 					}
+
+					// Add the template to the appropriate category
 					this.categorizedTemplates[category].push( template );
 				});
 			});
 		}
 
 		/**
-		 * Adds click event listeners.
+		 * Attaches event listeners for handling user interactions.
 		 *
 		 * @since x.x
 		 */
 		addEventListeners() {
-			// Add click event listener for sidebar categories
-			const categoryItems = document.querySelectorAll( '.frm-form-templates-cat-item' );
+			// Attach click event listeners to each sidebar category
+			const categoryItems = document.querySelectorAll( `.${this.constructor.CATEGORY_CLASS}` );
 			categoryItems.forEach( category => {
 				category.addEventListener( 'click', this.onCategoryClick );
 			});
 
-			// Add click event listener for add to favorite button
-			const favoriteButtons = document.querySelectorAll( '.frm-form-templates-item-favorite-button' );
+			// Attach click event listeners to each favorite button
+			const favoriteButtons = document.querySelectorAll( `.${this.constructor.FAVORITE_BUTTON_CLASS}` );
 			favoriteButtons.forEach( favoriteButton => {
-				favoriteButton.addEventListener( 'click', this.onFavoriteButtonClick );
+				onClickPreventDefault( favoriteButton, this.onFavoriteButtonClick );
 			});
 		}
 
@@ -316,230 +369,365 @@
 			this.selectedCategory = wp.hooks.applyFilters( 'frmFormTemplates.selectedCategory', newSelectedCategory, this );
 
 			// Remove the 'frm-current' class from the previously selected category element
-			this.selectedCategoryEl.classList.remove( 'frm-current' );
+			this.selectedCategoryEl.classList.remove( this.constructor.CURRENT_CLASS );
 
 			// Update the selected category element and add the 'frm-current' class to it
 			this.selectedCategoryEl = clickedCategory;
-			this.selectedCategoryEl.classList.add( 'frm-current' );
+			this.selectedCategoryEl.classList.add( this.constructor.CURRENT_CLASS );
 
-			// Update the main body content based on the clicked category
+			// Updates the main body content based on the selected category
 			this.updateBodyContent();
 		}
 
 		/**
-		 * Modifies the content of the main body area based on the category selected by the user.
+		 * Updates the main body content based on the selected category.
 		 *
 		 * @since x.x
 		 */
 		updateBodyContent() {
-			const {
-				selectedCategory,
-				selectedCategoryEl,
-				pageTitle,
-				templatesList,
-				templateItems,
-				nestedFeaturedTemplateItems,
-				customTemplatesList,
-				customTemplateItems,
-				customTemplatesSection,
-				customTemplatesTitle,
-				categorizedTemplates,
-				bodyContent
-			} = this;
+			// Update the displayed category title.
+			this.updatePageTitle();
 
-			// Change the page title text
-			const categoryText = selectedCategoryEl.querySelector( '.frm-form-templates-cat-text' ).textContent;
-			pageTitle.textContent = categoryText;
+			// Display templates based on selected category.
+			this.isAllTemplatesCategory( this.selectedCategory ) ? this.displayAllTemplates() : this.displayCategoryTemplates();
 
-			// Conditionally reveal or hide templates based on selected category
-			if ( this.isAllTemplatesCategory( selectedCategory ) ) {
-				this.showBodyContentChildren();
-				this.hide( customTemplatesSection );
-
-				this.showElements( templateItems );
-				this.hideElements( nestedFeaturedTemplateItems );
-			} else {
-				this.hideBodyContentChildren();
-				this.hideElements( templateItems );
-				this.show( pageTitle );
-
-				if ( 'favorites' === selectedCategory ) {
-					const favoriteItems = bodyContent.querySelectorAll( '.frm-form-templates-favorite-item' );
-
-					this.hideElements( customTemplateItems );
-					this.show( templatesList );
-					this.showElements( favoriteItems );
-
-					const hasCustomTemplates = Array.from( favoriteItems ).some( template => template.dataset.custom );
-					if ( hasCustomTemplates ) {
-						this.showElements([ customTemplatesSection, customTemplatesList ]);
-
-						const isTemplatesListVisisble = !! templatesList.offsetHeight;
-						if ( isTemplatesListVisisble ) {
-							this.show( customTemplatesTitle );
-						}
-					}
-				} else if ( 'custom' === selectedCategory ) {
-					this.showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
-				} else {
-					this.show( templatesList );
-					this.showElements( categorizedTemplates[selectedCategory] || []);
-				}
-			}
-
-			// Fade-in the body content
-			this.fadeIn( bodyContent );
+			// Fade-in body content for a smooth visual transition.
+			this.fadeIn( this.bodyContent );
 		}
 
 		/**
-		 * Handles the click event on the add to favorite button.
+		 * Updates the page title based on the selected category.
 		 *
 		 * @since x.x
+		 */
+		updatePageTitle() {
+			const categoryText = this.selectedCategoryEl.querySelector( '.frm-form-templates-cat-text' ).textContent;
+			this.pageTitle.textContent = categoryText;
+		}
+
+		/**
+		 * Displays all templates when 'All Templates' is the selected category.
 		 *
+		 * @since x.x
+		 */
+		displayAllTemplates() {
+			this.showElements([ ...this.bodyContentChildren, ...this.templateItems ]);
+			this.hideElements([ this.customTemplatesSection, ...this.nestedFeaturedTemplateItems ]);
+		}
+
+		/**
+		 * Displays templates based on the currently selected category.
+		 *
+		 * @since x.x
+		 */
+		displayCategoryTemplates() {
+			// Hide existing elements and templates to prepare for the new display
+			this.hideElements([ ...this.bodyContentChildren, ...this.templateItems ]);
+
+			// Show the page title
+			this.show( this.pageTitle );
+
+			switch ( this.selectedCategory ) {
+				case 'favorites':
+					// Display favorite templates
+					this.displayFavorites();
+					break;
+				case 'custom':
+					// Display custom templates
+					this.displayCustomTemplates();
+					break;
+				default:
+					// Display templates according to their categories
+					this.displayCategorizedTemplates();
+					break;
+			}
+		}
+
+		/**
+		 * Displays favorite templates.
+		 *
+		 * @since x.x
+		 */
+		displayFavorites() {
+			const elementsToShow = [];
+
+			const favoriteItems = this.bodyContent.querySelectorAll( `.${this.constructor.FAVORITE_TEMPLATE_CLASS}` );
+			elementsToShow.push( ...favoriteItems );
+
+			if ( favoritesCount.default > 0 ) {
+				elementsToShow.push( this.templatesList );
+			}
+
+			// Logic for custom favorites
+			if ( 0 !== favoritesCount.custom ) {
+				const nonFavCustomTemplates = Array.from( this.customTemplateItems ).filter( template => ! this.isFavoriteTemplate( template ) );
+				this.hideElements( nonFavCustomTemplates );
+
+				elementsToShow.push( this.customTemplatesSection );
+				elementsToShow.push( this.customTemplatesList );
+
+				favoritesCount.default === 0 ? this.hide( this.customTemplatesTitle ) : elementsToShow.push( this.customTemplatesTitle );
+			}
+
+			this.showElements( elementsToShow );
+		}
+
+		/**
+		 * Displays custom templates.
+		 *
+		 * @since x.x
+		 */
+		displayCustomTemplates() {
+			this.showElements([ this.customTemplatesSection, this.customTemplatesList, ...this.customTemplateItems ]);
+		}
+
+		/**
+		 * Displays templates of a specific category.
+		 *
+		 * @since x.x
+		 */
+		displayCategorizedTemplates() {
+			this.showElements([ this.templatesList, ...this.categorizedTemplates[ this.selectedCategory ] ]);
+		}
+
+		/**
+		 * Handles the click event on the add to favorite button.f
+		 *
+		 * @since x.x
 		 * @param {Event} event The click event object.
 		 */
 		onFavoriteButtonClick = ( event ) => {
-			event.preventDefault();
-
+			/**
+			 * Initial Checks and Setup.
+			 *
+			 * Validate button state and gather template info.
+			 */
 			const favoriteButton = event.currentTarget;
 
 			// Check if the button is "disabled"
-			if ( favoriteButton.getAttribute( 'data-disabled' ) === 'true' ) {
+			if ( 'true' === favoriteButton.getAttribute( 'data-disabled' ) ) {
 				return;
 			}
 
-			// "Disable" the button to prevent multiple clicks
+			// Disable the button temporarily to prevent multiple clicks
 			favoriteButton.setAttribute( 'data-disabled', 'true' );
 
+			// Get Necessary Template Information
 			const template = favoriteButton.closest( `.${this.constructor.TEMPLATE_CLASS}` );
 			const templateId = template.dataset.id;
-			console.log( templateId );
+			const isFavorited = this.isFavoriteTemplate( template );
+			const isCustomTemplate = this.isCustomTemplate( template );
+			const isFeaturedTemplate = this.isFeaturedTemplate( template );
 
-			// Determine if the item is currently favorited
-			const isFavorited = template.classList.contains( 'frm-form-templates-favorite-item' );
+			/**
+			 * Toggle UI Elements.
+			*
+			* Update favorite status on UI.
+			*/
+			template.classList.toggle( this.constructor.FAVORITE_TEMPLATE_CLASS, ! isFavorited );
+
+			// Initialize a reference for the twin featured template in the other list, if applicable
+			let twinFeaturedTemplate = null;
+			// Check if the template is featured and find its twin version in the respective list
+			if ( isFeaturedTemplate ) {
+				const templateList = template.closest( `#${this.constructor.TEMPLATES_LIST_CLASS}` ) ? this.featuredTemplatesList : this.templatesList;
+				twinFeaturedTemplate = templateList?.querySelector( `.${this.constructor.TEMPLATE_CLASS}[data-id="${templateId}"]` );
+				// Toggle favorite status of the twin featured template, if found
+				twinFeaturedTemplate?.classList.toggle( this.constructor.FAVORITE_TEMPLATE_CLASS, ! isFavorited );
+			}
+
+			/**
+			 * Update Counters and Icons.
+			 *
+			 * Modify favorite counts and toggle heart icon.
+			 */
 			const operation = isFavorited ? 'remove' : 'add';
+			const heartSVGIcon = template.querySelector( `.${this.constructor.FAVORITE_BUTTON_CLASS} use` );
+			const twinTemplateHeartSVGIcon = twinFeaturedTemplate?.querySelector( `.${this.constructor.FAVORITE_BUTTON_CLASS} use` );
 
-			// Send request to server
+			if ( 'add' === operation ) {
+				// Increment the total favorite count
+				++favoritesCount.total;
+				// Increment custom or default favorites count based on template type
+				isCustomTemplate ? ++favoritesCount.custom : ++favoritesCount.default;
+				// Update heart icon to filled (favorited state)
+				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.FAVORITE_HEART_ICON );
+				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.FAVORITE_HEART_ICON );
+			} else {
+				// Decrement the total favorite count
+				--favoritesCount.total;
+				// Decrement custom or default favorites count based on template type
+				isCustomTemplate ? --favoritesCount.custom : --favoritesCount.default;
+				// Update heart icon to outline (non-favorited state)
+				heartSVGIcon.setAttribute( 'xlink:href', this.constructor.DEFAULT_HEART_ICON );
+				twinTemplateHeartSVGIcon?.setAttribute( 'xlink:href', this.constructor.DEFAULT_HEART_ICON );
+			}
+
+			// Update total favorite count displayed in the "Favorites" sidebar category
+			this.favoritesCategoryCountEl.textContent = favoritesCount.total;
+
+			/**
+			 * Adjust UI Based on Current Category.
+			 *
+			 * Hide or show elements based on selected category.
+			 */
+			if ( this.isFavoritesCategory( this.selectedCategory ) ) {
+				this.hide( template );
+
+				if ( 0 === favoritesCount.default ) {
+					this.hide( this.templatesList );
+				}
+
+				if ( 0 === favoritesCount.custom || 0 === favoritesCount.default ) {
+					this.hide( this.customTemplatesTitle );
+				}
+			}
+
+			/**
+			 * Update Server.
+			 *
+			 * Prepare and send a request to update the favorite status on the server
+			 */
 			const formData = new FormData();
-			formData.append( 'template_id', templateId );
+			formData.append( 'template_id', template.dataset.id );
 			formData.append( 'operation', operation );
+			formData.append( 'is_custom_template', isCustomTemplate );
 
 			doJsonPost( 'add_or_remove_favorite_template', formData )
 				.finally( () => {
-					// "Re-enable" the button
+					// Re-enable the button after the operation
 					favoriteButton.setAttribute( 'data-disabled', 'false' );
-
-					// Toggle favorite status in UI
-					template.classList.toggle( 'frm-form-templates-favorite-item', ! isFavorited );
-
-					const favoriteItems = this.bodyContent.querySelectorAll( '.frm-form-templates-favorite-item' );
-					console.log( favoriteItems );
-					const favoriteItemsCount = favoriteItems.length;
-					console.log( favoriteItemsCount );
-					this.favoritesCategoryCount.textContent = favoriteItemsCount;
-
-					if ( 'favorites' === this.selectedCategory ) {
-						this.hide( template );
-
-						const hasCustomTemplates = Array.from( favoriteItems ).some( template => template.dataset.custom );
-						if ( ! hasCustomTemplates ) {
-							this.hide( this.customTemplatesTitle );
-						}
-					}
 				});
 		}
 
 		/**
-		 * Check if the category is "All Templates".
+		 * Checks if the category is "All Templates".
 		 *
 		 * @since x.x
-		 *
-		 * @param {string} category
-		 * @returns {boolean}
+		 * @param {string} category The category slug.
+		 * @returns {boolean} True if the category is "All Templates", otherwise false.
 		 */
 		isAllTemplatesCategory( category ) {
 			return 'all-templates' === category;
 		}
 
 		/**
-		 * Show all child elements of the Body Content element.
+		 * Checks if the category is "Favorites".
 		 *
 		 * @since x.x
+		 * @param {string} category The category slug.
+		 * @returns {boolean} True if the category is "Favorites", otherwise false.
 		 */
-		showBodyContentChildren() {
-			this.bodyContentChildren?.forEach( ( child ) => {
-				this.show( child );
-			});
+		isFavoritesCategory( category ) {
+			return 'favorites' === category;
 		}
 
 		/**
-		 * Hide all child elements of the Body Content element.
+		 * Checks if a template is custom.
+		 *
+		 * @since x.x
+		 * @param {HTMLElement} template The template element.
+		 * @returns {boolean} True if the template is custom, otherwise false.
+		 */
+		isCustomTemplate( template ) {
+			return template?.classList.contains( 'frm-form-templates-custom-item' );
+		}
+
+		/**
+		 * Checks if a template is a favorite.
+		 *
+		 * @since x.x
+		 * @param {HTMLElement} template The template element.
+		 * @returns {boolean} True if the template is a favorite, otherwise false.
+		 */
+		isFavoriteTemplate( template ) {
+			return template?.classList.contains( this.constructor.FAVORITE_TEMPLATE_CLASS );
+		}
+
+		/**
+		 * Checks if a template is featured.
+		 *
+		 * @since x.x
+		 * @param {HTMLElement} template The template element.
+		 * @returns {boolean} True if the template is featured, otherwise false.
+		 */
+		isFeaturedTemplate( template ) {
+			return FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) );
+		}
+
+		/**
+		 * Shows all child elements of the Body Content element.
 		 *
 		 * @since x.x
 		 */
-		hideBodyContentChildren() {
+		showBodyContentElements() {
+			this.showElements([ ...this.bodyContentChildren, ...this.templateItems ]);
+		}
+
+		/**
+		 * Hides all child elements of the Body Content element.
+		 *
+		 * @since x.x
+		 */
+		hideBodyContentElements() {
 			const {
 				bodyContentChildren,
+				templateItems,
+				customTemplateItems,
 				customTemplatesTitle,
 				customTemplatesList
 			} = this;
 
-			[ ...bodyContentChildren, customTemplatesTitle, customTemplatesList ]?.forEach( ( child ) => {
-				this.hide( child );
-			});
+			this.hideElements([ ...bodyContentChildren, ...templateItems, ...customTemplateItems, customTemplatesTitle, customTemplatesList ]);
 		}
 
 		/**
-		 * Reveals specified elements by removing the hidden state class.
+		 * Shows specified elements by removing the hidden class.
 		 *
 		 * @since x.x
-		 *
-		 * @param {Array<Element>} elements - List of elements to be displayed.
+		 * @param {Array<Element>} elements An array of elements to show.
 		 */
 		showElements( elements ) {
 			elements?.forEach( element => this.show( element ) );
 		}
 
 		/**
-		 * Conceals specified elements by adding the hidden state class.
+		 * Hides specified elements by adding the hidden class.
 		 *
 		 * @since x.x
 		 *
-		 * @param {Array<Element>} elements - List of elements to be hidden.
+		 * @param {Array<Element>} elements An array of elements to hide.
 		 */
 		hideElements( elements ) {
 			elements?.forEach( element => this.hide( element ) );
 		}
 
 		/**
-		 * Adds the class to show the element.
+		 * Removes the hidden class to show the element.
 		 *
 		 * @since x.x
-		 *
-		 * @param {Element} element - The element to show.
+		 * @param {Element} element The element to show.
 		 */
 		show( element ) {
-			element?.classList.remove( this.constructor.HIDDEN_STATE_CLASS );
+			element?.classList.remove( this.constructor.HIDDEN_CLASS );
 		}
 
 		/**
-		 * Adds the class to hide the element.
+		 * Adds the hidden class to hide the element.
 		 *
 		 * @since x.x
-		 *
-		 * @param {Element} element - The element to hide.
+		 * @param {Element} element The element to hide.
 		 */
 		hide( element ) {
-			element?.classList.add( this.constructor.HIDDEN_STATE_CLASS );
+			element?.classList.add( this.constructor.HIDDEN_CLASS );
 		}
 
 		/**
-		 * Adds the fade-in animation class to the element.
+		 * Applies a fade-in animation to an element.
 		 *
 		 * @since x.x
-		 *
-		 * @param {HTMLElement} element The element to which the fade-in class is added.
-		 * @param {string} [fadingClass='frm-form-templates-flex'] CSS class to apply during fading
+		 * @param {HTMLElement} element The element to apply the fade-in to.
+		 * @param {string} [fadingClass='frm-form-templates-flex'] The CSS class to apply during the fading.
 		 */
 		fadeIn( element, fadingClass = 'frm-form-templates-flex' ) {
 			if ( ! element ) {
@@ -554,7 +742,7 @@
 		}
 	}
 
-	// Initializing the class
+	// Initialize the FrmFormTemplates class
 	document.addEventListener( 'DOMContentLoaded', () => {
 		new FrmFormTemplates();
 	});

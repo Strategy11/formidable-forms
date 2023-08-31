@@ -223,14 +223,14 @@ class FrmFormTemplatesController {
 		// Instantiate the Form Template API class.
 		self::$form_template_api = new FrmFormTemplateApi();
 
-		// Retrieve and set the templates.
-		self::retrieve_and_set_templates();
-
 		// Initialize favorite templates.
 		self::init_favorite_templates();
 
 		// Fetch and format custom templates.
 		self::fetch_and_format_custom_templates();
+
+		// Retrieve and set the templates.
+		self::retrieve_and_set_templates();
 
 		// Organize and set categories.
 		self::organize_and_set_categories();
@@ -242,22 +242,6 @@ class FrmFormTemplatesController {
 		self::update_global_variables();
 	}
 
-	/**
-	 * Retrieve and set templates.
-	 *
-	 * Gets the templates from the API and assigns them to the class property.
-	 * Also handles any errors returned from the API.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function retrieve_and_set_templates() {
-		self::$templates = self::$form_template_api->get_api_info();
-
-		// Handle any errors returned from the API.
-		self::handle_api_errors();
-	}
 
 	/**
 	 * Initialize favorite templates from WordPress options.
@@ -267,7 +251,11 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	private static function init_favorite_templates() {
-		self::$favorite_templates = get_option( self::FAVORITE_TEMPLATES_OPTION, array() );
+		$default_option_structure = array(
+			'default' => array(),
+			'custom'  => array(),
+		);
+		self::$favorite_templates = get_option( self::FAVORITE_TEMPLATES_OPTION, $default_option_structure );
 	}
 
 	/**
@@ -286,15 +274,19 @@ class FrmFormTemplatesController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data
-		$template_id = FrmAppHelper::get_post_param( 'template_id', '', 'absint' );
-		$operation   = FrmAppHelper::get_post_param( 'operation', '', 'sanitize_text_field' );
+		$template_id        = FrmAppHelper::get_post_param( 'template_id', '', 'absint' );
+		$operation          = FrmAppHelper::get_post_param( 'operation', '', 'sanitize_text_field' );
+		$is_custom_template = FrmAppHelper::get_post_param( 'is_custom_template', '', 'rest_sanitize_boolean' );
+
+		// Determine the key based on whether it's a custom template or not
+		$key = $is_custom_template ? 'custom' : 'default';
 
 		// Perform add or remove operation
 		if ( 'add' === $operation ) {
-			self::$favorite_templates[ $template_id ] = $template_id;
+			self::$favorite_templates[ $key ][ $template_id ] = $template_id;
 		} elseif ( 'remove' === $operation ) {
-			if ( isset( self::$favorite_templates[ $template_id ] ) ) {
-				unset( self::$favorite_templates[ $template_id ] );
+			if ( isset( self::$favorite_templates[ $key ][ $template_id ] ) ) {
+				unset( self::$favorite_templates[ $key ][ $template_id ] );
 			}
 		}
 
@@ -332,11 +324,28 @@ class FrmFormTemplatesController {
 			);
 
 			// Add the 'is_favorite' key
-			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates );
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['custom'] );
 
 			// Add the formatted custom template to the list.
 			array_unshift( self::$custom_templates, $template );
 		}
+	}
+
+	/**
+	 * Retrieve and set templates.
+	 *
+	 * Gets the templates from the API and assigns them to the class property.
+	 * Also handles any errors returned from the API.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function retrieve_and_set_templates() {
+		self::$templates = self::$form_template_api->get_api_info();
+
+		// Handle any errors returned from the API.
+		self::handle_api_errors();
 	}
 
 	/**
@@ -379,7 +388,7 @@ class FrmFormTemplatesController {
 			}
 
 			// Add the 'is_favorite' key
-			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates );
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'] );
 		}
 		unset( $template ); // Unset the reference `$template` variable
 
@@ -399,7 +408,7 @@ class FrmFormTemplatesController {
 			array(
 				'favorites' => array(
 					'name'  => __( 'Favorites', 'formidable' ),
-					'count' => count( self::$favorite_templates ),
+					'count' => self::get_favorite_templates_count(),
 				),
 				'custom' => array(
 					'name'  => __( 'Custom', 'formidable' ),
@@ -428,12 +437,23 @@ class FrmFormTemplatesController {
 		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
 			if ( isset( self::$templates[ $key ] ) ) {
 				self::$templates[ $key ]['is_featured'] = true;
-
-				$featured_template = self::$templates[ $key ];
-				unset( $featured_template['is_favorite'] );
-				self::$featured_templates[] = $featured_template;
+				self::$featured_templates[] = self::$templates[ $key ];
 			}
 		}
+	}
+
+	/**
+	 * Get the total count of favorite templates.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	public static function get_favorite_templates_count() {
+		$custom_count  = count( self::$favorite_templates['custom'] );
+		$default_count = count( self::$favorite_templates['default'] );
+
+		return $custom_count + $default_count;
 	}
 
 	/**
@@ -526,7 +546,13 @@ class FrmFormTemplatesController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
-			'proUpgradeUrl' => FrmAppHelper::admin_upgrade_link( 'form-templates' ),
+			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
+			'favoritesCount'          => array(
+				'total'   => self::get_favorite_templates_count(),
+				'default' => count( self::$favorite_templates['default'] ),
+				'custom'  => count( self::$favorite_templates['custom'] ),
+			),
+			'proUpgradeUrl'           => FrmAppHelper::admin_upgrade_link( 'form-templates' ),
 		);
 
 		/**
