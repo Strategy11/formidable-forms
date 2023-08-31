@@ -3961,7 +3961,7 @@ class FrmAppHelper {
 
 		$overlay_wrapper->open_overlay(
 			array(
-				'heroImage' => self::plugin_url() . '/images/overlay/lock.svg',
+				'hero_image' => self::plugin_url() . '/images/overlay/lock.svg',
 				'heading'   => __( 'Heads up! Your license has expired', 'formidable' ),
 				'copy'      => __( 'An active license is needed to access new features & addons, plugin updates, and our world class support!', 'formidable' ),
 				'buttons'   => array(
@@ -3996,15 +3996,15 @@ class FrmAppHelper {
 
 		$copy = __( 'Your version of Formidable Forms has been altered and may contain malware!<br/> <a href="https://formidableforms.com/pricing/?utm_source=WordPress&utm_medium=nulled-full&utm_campaign=liteplugin" target="_blank">Switch to the official version now for 50% off</a>', 'formidable' );
 		if ( isset( $error['message'] ) ) {
-			$copy = str_replace( 'utm_medium=nulled', 'utm_medium=nulled-full', $error['message'] );
+			$copy = html_entity_decode( str_replace( 'utm_medium=nulled', 'utm_medium=nulled-full', $error['message'] ) );
 		};
 
 		$overlay_wrapper->open_overlay(
 			array(
-				'heroImage' => self::plugin_url() . '/images/overlay/lock.svg',
-				'heading'   => __( 'Heads up! Your plugin has been altered!', 'formidable' ),
-				'copy'      => $copy,
-				'buttons'   => array(
+				'hero_image' => self::plugin_url() . '/images/overlay/lock.svg',
+				'heading'    => __( 'Heads up! Your plugin has been altered!', 'formidable' ),
+				'copy'       => $copy,
+				'buttons'    => array(
 					array(
 						'url'    => self::admin_upgrade_link( 'nulled-full', 'formidable-forms-pro-nulled/' ),
 						'target' => '_blank',
