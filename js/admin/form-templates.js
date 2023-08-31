@@ -678,32 +678,6 @@
 		}
 
 		/**
-		 * Shows all child elements of the Body Content element.
-		 *
-		 * @since x.x
-		 */
-		showBodyContentElements() {
-			this.showElements([ ...this.bodyContentChildren, ...this.templateItems ]);
-		}
-
-		/**
-		 * Hides all child elements of the Body Content element.
-		 *
-		 * @since x.x
-		 */
-		hideBodyContentElements() {
-			const {
-				bodyContentChildren,
-				templateItems,
-				customTemplateItems,
-				customTemplatesTitle,
-				customTemplatesList
-			} = this;
-
-			this.hideElements([ ...bodyContentChildren, ...templateItems, ...customTemplateItems, customTemplatesTitle, customTemplatesList ]);
-		}
-
-		/**
 		 * Shows specified elements by removing the hidden class.
 		 *
 		 * @since x.x
