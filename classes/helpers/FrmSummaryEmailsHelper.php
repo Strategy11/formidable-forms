@@ -163,7 +163,7 @@ class FrmSummaryEmailsHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_renewal_date() {
+	private static function get_renewal_date() {
 		$options = self::get_options();
 		if ( ! empty( $options['renewal_date'] ) ) {
 			return $options['renewal_date'];
@@ -211,7 +211,7 @@ class FrmSummaryEmailsHelper {
 	 * @param string|DateTime $date2 Date 2.
 	 * @return int|false
 	 */
-	public static function get_date_diff( $date1, $date2 ) {
+	private static function get_date_diff( $date1, $date2 ) {
 		$date1 = self::get_date_obj( $date1 );
 		if ( ! $date1 ) {
 			return false;
