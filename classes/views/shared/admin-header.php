@@ -65,7 +65,6 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	echo '</div>';
 
 	if ( FrmAppHelper::is_full_screen() ) {
-		FrmAppHelper::show_warning_overlay_for_expired_or_null_license();
 		?>
 		<div class="frm-full-close">
 			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
