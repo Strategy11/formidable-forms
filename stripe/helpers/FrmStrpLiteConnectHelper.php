@@ -292,11 +292,10 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function maybe_unschedule_crons() {
-		$mode       = self::get_mode_value_from_post();
-		$other_mode = 'live' === $mode ? 'test' : 'live';
+		$mode = self::get_mode_value_from_post();
 
-		if ( self::stripe_connect_is_setup( $other_mode ) ) {
-			// Only unschedule if both modes are not setup.
+		if ( self::at_least_one_mode_is_setup() ) {
+			// Don't unschedule if a mode is still on.
 			return;
 		}
 
@@ -305,6 +304,15 @@ class FrmStrpLiteConnectHelper {
 		if ( false !== $timestamp ) {
 			wp_unschedule_event( $timestamp, $event );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function at_least_one_mode_is_setup() {
+		return self::stripe_connect_is_setup( 'test' ) || self::stripe_connect_is_setup( 'live' );
 	}
 
 	/**

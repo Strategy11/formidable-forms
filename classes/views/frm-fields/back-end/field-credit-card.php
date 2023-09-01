@@ -2,6 +2,16 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+	?>
+	<span class="frm-with-icon frm-not-set frm_note_style">
+		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_report_problem_solid_icon' ); ?>
+		<?php esc_attr_e( 'This field is not set up yet.', 'formidable' ); ?>
+	</span>
+	<?php
+	return;
+}
 ?>
 <div class="frm-lite-credit-card-element">
 	<input type="text" placeholder="1234 1234 1234 1234" disabled />
