@@ -134,6 +134,7 @@ class FrmAppController {
 			'formidable-inbox',
 			'formidable-welcome',
 			'formidable-applications',
+			'formidable-payments',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );

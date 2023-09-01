@@ -174,7 +174,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			return;
 		}
 
-		$form_id = isset( $_REQUEST['form'] ) ? absint( $_REQUEST['form'] ) : 0;
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( $form_id ) {
+			// Don't show the switcher if it's already in the header.
+			return;
+		}
+
 		FrmFormsHelper::forms_dropdown(
 			'form',
 			$form_id,

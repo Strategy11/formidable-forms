@@ -9,13 +9,9 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
-		if ( ! class_exists( 'FrmAppHelper' ) ) {
-			return;
-		}
-
-		$frm_settings = FrmAppHelper::get_settings();
-
-		add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . '_page_formidable-payments_columns', 'FrmTransLiteListsController::payment_columns' );
+		$hook_name = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-payments_columns';
+		add_filter( $hook_name, __CLASS__ . '::payment_columns' );
+		add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
 	}
 
 	/**
@@ -78,6 +74,25 @@ class FrmTransLiteListsController {
 	}
 
 	/**
+	 * Prevent the "screen options" tab from showing when
+	 * viewing a payment or subscription
+	 *
+	 * @since x.x
+	 */
+	public static function remove_screen_options( $show_screen, $screen ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
+			return $show_screen;
+		}
+
+		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
+		if ( $screen->id === $menu_name . '_page_formidable-payments' ) {
+			$show_screen = false;
+		}
+
+		return $show_screen;
+	}
+
+	/**
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
@@ -113,6 +128,8 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
+		FrmAppHelper::include_svg();
+
 		$defaults = array(
 			'errors'  => array(),
 			'message' => '',

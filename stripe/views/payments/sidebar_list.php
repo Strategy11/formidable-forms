@@ -4,8 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="postbox frm_with_icons">
-	<div class="handlediv"><br/></div>
-	<h3 class="hndle"><span><?php esc_html_e( 'Payments', 'formidable' ); ?></span></h3>
+	<h3>
+		<span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span>
+	</h3>
 	<div class="inside">
 		<?php
 		foreach ( $payments as $payment ) {
@@ -19,18 +20,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			?>
 			<div class="misc-pub-section">
-				<span class="dashicons dashicons-calendar-alt wp-media-buttons-icon"></span>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon' ); ?>
 				<span>
 					<?php esc_html_e( 'Created:', 'formidable' ); ?>
 				</span>
 				<span>
-					<b><a href="?page=formidable-payments&amp;action=show&amp;id=<?php echo absint( $payment->id ); ?>" title="<?php esc_attr_e( 'Show Payment', 'formidable' ); ?>">
+					<b><a href="?page=formidable-payments&action=show&id=<?php echo absint( $payment->id ); ?>" title="<?php esc_attr_e( 'Show Payment', 'formidable' ); ?>">
 						<?php echo esc_html( FrmAppHelper::get_localized_date( $date_format, $payment->created_at ) ); ?>
 					</a></b>
 				</span>
 			</div>
 			<div class="misc-pub-section">
-				<span class="dashicons dashicons-money wp-media-buttons-icon"></span>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_total_icon' ); ?>
 				<span>
 					<?php esc_html_e( 'Amount:', 'formidable' ); ?>
 				</span>
@@ -40,7 +41,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php do_action( 'frm_pay_' . $payment->paysys . '_refund_link', $payment ); ?>
 			</div>
 			<div class="misc-pub-section">
-				<span class="dashicons-<?php echo esc_attr( $payment->status === 'complete' ? 'yes' : 'no-alt' ); ?> dashicons wp-media-buttons-icon"></span>
+				<?php
+				FrmAppHelper::icon_by_class( 'frm_icon_font ' . ( $payment->status === 'complete' ? 'frm_check1_icon' : 'frm_x_icon' ) );
+				?>
 				<span>
 					<?php esc_html_e( 'Status:', 'formidable' ); ?>
 				</span>
@@ -48,12 +51,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<b><?php echo esc_html( FrmTransLiteAppHelper::show_status( $payment->status ) ); ?></b>
 				</span>
 			</div>
-			<br/>
 		<?php } ?>
 
 		<?php foreach ( $subscriptions as $sub ) { ?>
 			<div class="misc-pub-section">
-				<span class="dashicons dashicons-update wp-media-buttons-icon"></span>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_repeater_icon' ); ?>
+				<span><?php esc_html_e( 'Subscription:', 'formidable' ); ?></span>
 				<a href="?page=formidable-payments&amp;action=show&amp;type=subscriptions&amp;id=<?php echo absint( $sub->id ); ?>">
 					<?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $sub ) ); ?>
 				</a>
@@ -70,7 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$total_payment->amount = $entry_total;
 			?>
 			<div class="misc-pub-section">
-				<span class="dashicons-cart dashicons wp-media-buttons-icon"></span>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_product_icon' ); ?>
 				<span>
 					<?php esc_html_e( 'Total Paid:', 'formidable' ); ?>
 				</span>

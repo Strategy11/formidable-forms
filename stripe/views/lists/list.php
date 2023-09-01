@@ -3,19 +3,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="wrap">
-	<div id="icon-options-general" class="icon32"><br></div>
-	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
 
+<div class="frm_wrap">
 	<?php
-	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
-	$wp_list_table->views();
+	FrmAppHelper::get_admin_header(
+		array(
+			'label' => __( 'Payments', 'formidable' ),
+			'form'  => FrmAppHelper::simple_get( 'form', 'absint', 0 ),
+		)
+	);
 	?>
 
-	<form id="posts-filter" method="get">
-		<input type="hidden" name="page" value="formidable-payments" />
-		<input type="hidden" name="frm_action" value="list" />
-		<?php $wp_list_table->display(); ?>
-	</form>
+	<div class="wrap">
 
+		<?php
+		$wp_list_table->views();
+		?>
+
+		<form id="posts-filter" method="get">
+			<input type="hidden" name="page" value="formidable-payments" />
+			<input type="hidden" name="frm_action" value="list" />
+			<?php $wp_list_table->display(); ?>
+		</form>
+
+	</div>
 </div>
