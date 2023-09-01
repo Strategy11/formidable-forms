@@ -55,6 +55,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * Check the Stripe link action for a form. There should only be one.
+	 * We want to ignore $action->post_content['stripe_link'].
+	 * This way any Stripe action will fall back to Stripe link when the Stripe add on is unavailable.
 	 *
 	 * @since x.x, introduced in v3.0 of the Stripe add on.
 	 *
@@ -63,12 +65,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function get_stripe_link_action( $form_id ) {
 		$actions = self::get_actions_before_submit( $form_id );
-		foreach ( $actions as $action ) {
-			if ( ! empty( $action->post_content['stripe_link'] ) ) {
-				return $action;
-			}
-		}
-		return false;
+		return reset( $actions );
 	}
 
 	/**
@@ -95,12 +92,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		$is_stripe_link = ! empty( $action->post_content['stripe_link'] );
-		if ( ! $is_stripe_link ) {
-			$response['error'] = __( 'This action is not configured as expected.', 'formidable' );
-			return $response;
-		}
-
 		if ( ! self::stripe_is_configured() ) {
 			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
 			return $response;
@@ -122,7 +113,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Check if either Stripe integration is enabled.
 	 *
-	 * @return bool true if either Stripe Connect or the legacy integration is set up.
+	 * @return bool true if Stripe Connect is set up.
 	 */
 	private static function stripe_is_configured() {
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
