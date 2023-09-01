@@ -28,12 +28,18 @@
 	}
 
 	function handleStripeDisconnectClick( trigger ) {
+		const testMode = isTriggerInTestMode( trigger );
+		const spinner  = frmDom.span({ className: 'frm-wait frm_visible_spinner' });
+
+		spinner.style.margin = 0; // The default 20px margin causes the spinner to look bad.
+		trigger.replaceWith( spinner );
+
 		strpSettingsAjaxRequest(
 			'frm_stripe_connect_disconnect',
 			function() {
 				renderStripeConnectSettingsButton();
 			},
-			isTriggerInTestMode( trigger )
+			testMode
 		);
 	}
 
