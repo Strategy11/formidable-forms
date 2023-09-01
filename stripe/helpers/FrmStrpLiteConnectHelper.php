@@ -426,6 +426,7 @@ class FrmStrpLiteConnectHelper {
 			'frm_strp_connect_mode' => $mode,
 		);
 
+		delete_option( 'frm_stripe_lite_last_verify_attempt' ); // Clear the transient so it doesn't fail.
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
