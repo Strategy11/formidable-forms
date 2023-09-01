@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Credit Cards will not be work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
 						?>
 					</span>
 				</div>
