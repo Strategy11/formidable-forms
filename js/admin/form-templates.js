@@ -1,11 +1,15 @@
 ( ( wp ) => {
 
 	/**
-	 * Globals: frmFormTemplatesVars, frmDom
+	 * Globals: frmFormTemplatesVars, frmDom, wp
 	 *
 	 * @since x.x
 	 */
+	// WordPress globals
+	const { __ } = wp.i18n;
+	// Internal globals
 	let { favoritesCount, FEATURED_TEMPLATES_KEYS } =  frmFormTemplatesVars;
+	const { search } = frmDom;
 	const { doJsonPost } = frmDom.ajax;
 	const { onClickPreventDefault } = frmDom.util;
 
@@ -80,7 +84,7 @@
 		 * @since x.x
 		 * @type {string}
 		 */
-		static HIDDEN_CLASS = 'frm-form-templates-hidden';
+		static HIDDEN_CLASS = 'frm_hidden';
 
 		/**
 		 * Class added to an element to mark it as the current item.
@@ -105,6 +109,14 @@
 		 * @type {string}
 		 */
 		static LINEAR_HEART_ICON = '#frm_heart_icon';
+
+		/**
+		 * All Templates category slug.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static ALL_TEMPLATES_CATEGORY_SLUG = 'all-templates';
 
 		/**
 		 * Initializes the FrmFormTemplates instance.
@@ -215,6 +227,22 @@
 			this.twinFeaturedTemplateItems = this.templatesList?.querySelectorAll( `.${this.constructor.FEATURED_TEMPLATE_CLASS}` );
 
 			/**
+			 * Search Input element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.searchInput = document.querySelector( '#template-search-input' );
+
+			/**
+			 * Indicates whether the search input element has text or not.
+			 *
+			 * @since x.x
+			 * @type {Boolean}
+			 */
+			this.searchInputNotEmpty = false;
+
+			/**
 			 * Custom Templates List Section element.
 			 *
 			 * @since x.x
@@ -256,12 +284,12 @@
 			this.categorizedTemplates = {};
 
 			/**
-			 * The currently Selected Category. Defaults to 'all-templates'.
+			 * The currently Selected Category. Defaults to ALL_TEMPLATES_CATEGORY_SLUG.
 			 *
 			 * @since x.x
 			 * @type {string}
 			 */
-			this.selectedCategory = 'all-templates';
+			this.selectedCategory = this.constructor.ALL_TEMPLATES_CATEGORY_SLUG;
 
 			/**
 			 * The currently Selected Category element. Defaults to 'All Templates' category element.
@@ -270,6 +298,14 @@
 			 * @type {HTMLElement}
 			 */
 			this.selectedCategoryEl = document.querySelector( `.${this.constructor.CATEGORY_CLASS}[data-category="all-templates"]` );
+
+			/**
+			 * All Templates Category element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.allTemplatesCategory = this.selectedCategoryEl;
 
 			/**
 			 * Favortes Category element.
@@ -313,12 +349,14 @@
 		 * @since x.x
 		 */
 		setupInitialState() {
+			// Clear the Search Input value
+			this.searchInput.value = '';
+
 			// Hide the twin featured template items
 			this.hideElements( this.twinFeaturedTemplateItems );
 
-			// Show the main body content
+			// Show the main body content and smoothly display the updated UI elements
 			this.show( this.bodyContent );
-			// Fade in the main body content for a smooth user experience
 			this.fadeIn( this.bodyContent );
 		}
 
@@ -361,6 +399,16 @@
 			favoriteButtons.forEach( favoriteButton => {
 				onClickPreventDefault( favoriteButton, this.onFavoriteButtonClick );
 			});
+
+			/**
+			 * Attach input, search, and change event listeners to the Search Input
+			 *
+			 * @see frmDom.search method
+			 *
+			 * @param {HTMLElement} input The search input element.
+			 * @param {string} targetClassName The CSS class that all target items has it for search.
+			 */
+			search.init( this.searchInput, this.constructor.TEMPLATE_CLASS, { handleSearchResult: this.handleSearchDisplay });
 		}
 
 		/**
@@ -399,6 +447,11 @@
 
 			// Updates the main body content based on the selected category
 			this.updateBodyContent();
+
+			// Clears the search input
+			if ( this.searchInputNotEmpty ) {
+				this.clearSearchInput( this.searchInput );
+			}
 		}
 
 		/**
@@ -407,24 +460,25 @@
 		 * @since x.x
 		 */
 		updateBodyContent() {
-			// Update the displayed category title.
+			// Update the displayed category title
 			this.updatePageTitle();
 
-			// Display templates based on selected category.
+			// Display templates based on selected category
 			this.isAllTemplatesCategory( this.selectedCategory ) ? this.displayAllTemplates() : this.displayCategoryTemplates();
 
-			// Fade-in body content for a smooth visual transition.
+			// Smoothly display the updated UI elements
 			this.fadeIn( this.bodyContent );
 		}
 
 		/**
-		 * Updates the page title based on the selected category.
+		 * Updates the page title based on the selected category or a provided title.
 		 *
 		 * @since x.x
+		 * @param {string} [title] Optional title to set. If not provided, the title will be set based on the selected category.
 		 */
-		updatePageTitle() {
-			const categoryText = this.selectedCategoryEl.querySelector( '.frm-form-templates-cat-text' ).textContent;
-			this.pageTitle.textContent = categoryText;
+		updatePageTitle( title ) {
+			const newTitle = title || this.selectedCategoryEl.querySelector( '.frm-form-templates-cat-text' ).textContent;
+			this.pageTitle.textContent = newTitle;
 		}
 
 		/**
@@ -513,7 +567,7 @@
 		}
 
 		/**
-		 * Handles the click event on the add to favorite button.f
+		 * Handles the click event on the add to favorite button.
 		 *
 		 * @since x.x
 		 * @param {Event} event The click event object.
@@ -623,6 +677,80 @@
 		}
 
 		/**
+		 * Updates UI based on search results and input value.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object} args The arguments object.
+		 * @param {boolean} args.foundSomething True if at least one item is found in the search.
+		 * @param {boolean} args.notEmptySearchText True if the search input has a value, otherwise false.
+		 */
+		handleSearchDisplay = ({ foundSomething, notEmptySearchText }) => {
+			// Update class property to manage the state of search input across the class.
+			this.searchInputNotEmpty = notEmptySearchText;
+
+			// If the search input and the selected category are empty, revert to default 'All Templates'
+			if ( ! this.searchInputNotEmpty && ! this.selectedCategory ) {
+				// Dispatch the input event manually
+				this.allTemplatesCategory.dispatchEvent( new Event( 'click', { 'bubbles': true }) );
+				return;
+			}
+
+			// If no templates are found, show the empty state
+			if ( ! foundSomething ) {
+				console.log( 'displayEmptyState' );
+				return;
+			}
+
+			// If a category is currently selected, transition to displaying search results
+			if ( this.selectedCategory ) {
+				// Transition the UI to show the search results
+				this.displaySearchResults();
+
+				/**
+				 * Clear the selectedCategory to signify we've transitioned to displaying search results.
+				 * This acts as a flag to determine that we are in a search result state,
+				 * thereby preventing re-running of displaySearchResults when the search text changes.
+				 */
+				this.selectedCategory = '';
+			}
+		}
+
+		/**
+		 * Updates the UI to display the search results.
+		 *
+		 * @since x.x
+		 */
+		displaySearchResults = () => {
+			// Remove highlighting from the currently selected category
+			this.selectedCategoryEl.classList.remove( this.constructor.CURRENT_CLASS );
+
+			// Hide non-relevant elements in the body content
+			this.hideElements( this.bodyContentChildren );
+
+			// Update the page title and display relevant elements
+			this.updatePageTitle( __( 'Search Result', 'formidable' ) );
+			this.showElements([ this.pageTitle, this.templatesList, ...this.templateItems ]);
+
+			// Smoothly display the updated UI elements
+			this.fadeIn( this.bodyContent );
+		}
+
+		/**
+		 * Clears the search input and triggers the input event manually.
+		 *
+		 * @since x.x
+		 * @param {HTMLInputElement} searchInput The input element to be cleared.
+		 */
+		clearSearchInput( searchInput ) {
+			// Clear the value
+			searchInput.value = '';
+
+			// Dispatch the input event manually
+			searchInput.dispatchEvent( new Event( 'input', { 'bubbles': true }) );
+		}
+
+		/**
 		 * Checks if the category is "All Templates".
 		 *
 		 * @since x.x
@@ -630,7 +758,7 @@
 		 * @returns {boolean} True if the category is "All Templates", otherwise false.
 		 */
 		isAllTemplatesCategory( category ) {
-			return 'all-templates' === category;
+			return this.constructor.ALL_TEMPLATES_CATEGORY_SLUG === category;
 		}
 
 		/**

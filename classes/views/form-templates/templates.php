@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <h2 id="frm-form-templates-page-title" class="frm-form-templates-title"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
 
 <!-- Featured Templates List -->
-<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm_grid_container">
+<ul id="frm-form-templates-featured-list" class="frm-form-templates-list">
 	<?php
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
@@ -30,7 +30,7 @@ FrmAppHelper::show_admin_cta(
 ?>
 
 <!-- Templates List -->
-<ul id="frm-form-templates-list" class="frm-form-templates-list frm_grid_container">
+<ul id="frm-form-templates-list" class="frm-form-templates-list">
 	<?php
 	foreach ( $templates as $template ) {
 		require $view_path . 'template.php';
@@ -41,10 +41,10 @@ FrmAppHelper::show_admin_cta(
 <!-- Custom Templates Section -->
 <div id="frm-form-templates-custom-list-section">
 	<!-- Title for Custom List -->
-	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title frm-form-templates-hidden"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
+	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title frm_hidden"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
 
 	<!-- Custom Templates List -->
-	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_grid_container frm-form-templates-hidden">
+	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_hidden">
 		<?php
 		foreach ( $custom_templates as $template ) {
 			require $view_path . 'template.php';

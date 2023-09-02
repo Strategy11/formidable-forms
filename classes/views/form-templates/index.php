@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div><!-- .frm-right-panel -->
 
 			<!-- Page Content -->
-			<div id="post-body-content" class="frm-form-templates-hidden">
+			<div id="post-body-content" class="frm_hidden">
 				<!-- Create a blank form -->
 				<span id="frm-form-templates-create-form">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>

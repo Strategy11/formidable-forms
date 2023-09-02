@@ -22,6 +22,84 @@ jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-te
 		addApplicationsToNewFormModal( $modal.get( 0 ) );
 	}
 
+	function offsetModalY( $modal, amount ) {
+		const position = {
+			my: 'top',
+			at: 'top+' + amount,
+			of: window
+		};
+		$modal.dialog( 'option', 'position', position );
+	}
+
+	function addApplicationsToNewFormModal( modal ) {
+		if ( modal.querySelector( '.frm-ready-made-solution' ) ) {
+			// Avoid adding duplicates if the modal is opened multiple times.
+			return;
+		}
+
+		if ( ! frmGlobal.canAccessApplicationDashboard ) {
+			// User does not have privileges to see Ready Made Solutions.
+			return;
+		}
+
+		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
+
+		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
+
+		function addTemplatesOnFetchSuccess( data ) {
+			data.templates.forEach( addTemplateToCategoryList );
+			initSearch( 'template-search-input', 'frm-searchable-template frm-ready-made-solution' );
+		}
+
+		function addTemplateToCategoryList( template ) {
+			categoryList.appendChild( getReadyMadeSolution( template ) );
+		}
+
+		function getReadyMadeSolution( template ) {
+			const image = tag( 'img' );
+			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
+			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
+			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
+
+			const imageWrapper = div({ child: image });
+			const href = frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key;
+
+			return tag(
+				'li',
+				{
+					className: 'frm-searchable-template frm-ready-made-solution frm-selectable',
+					data: {
+						href: href
+					},
+					children: [
+						imageWrapper,
+						div({
+							className: 'frm-solution-details',
+							children: [
+								span({
+									className: 'frm-meta-tag',
+									text: __( 'Ready Made Solution', 'formidable' )
+								}),
+								tag( 'h3', template.name ),
+								a({
+									text: __( 'See all applications', 'formidable' ),
+									href: frmGlobal.applicationsUrl
+								})
+							]
+						}),
+						div({
+							className: 'frm-hover-icons',
+							child: a({
+								child: svg({ href: '#frm_plus_icon' }),
+								href: href
+							})
+						})
+					]
+				}
+			);
+		}
+	}
+
 	function initNewFormModal() {
 		var installFormTrigger,
 			activeHoverIcons,

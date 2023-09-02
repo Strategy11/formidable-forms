@@ -15,10 +15,11 @@ $template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'
 /**
  * Set Attributes.
  */
-$attributes               = array();
-$attributes['class']      = 'frm-form-templates-item frm4';
-$attributes['data-id']    = $template['id'];
-$attributes['aria-label'] = $template_name;
+$attributes                    = array();
+$attributes['class']           = 'frm-form-templates-item frm4';
+$attributes['data-id']         = $template['id'];
+$attributes['aria-label']      = $template_name;
+$attributes['frm-search-text'] = strtolower( $template_name );
 
 // Set data categories attribute.
 if ( ! empty( $template['category_slugs'] ) ) {
