@@ -59,6 +59,44 @@ class test_FrmSummaryEmailsHelper extends FrmUnitTest {
 	}
 
 	public function test_should_send_email() {
+		// Nothing set yet.
+		$options = array(
+			'last_monthly' => '',
+			'last_yearly'  => '',
+			'last_license' => '',
+			'renewal_date' => '',
+		);
+		$this->save_options( $options );
 
+		$this->assertEquals( array( 'monthly' ), FrmSummaryEmailsHelper::should_send_emails() );
+
+		// Yearly was sent less than 1 month ago.
+		$options['last_yearly'] = date( 'Y-m-d', strtotime( '-29 days' ) );
+		$this->save_options( $options );
+
+		$this->assertEquals( array(), FrmSummaryEmailsHelper::should_send_emails() );
+
+		// Yearly was sent less than 1 month ago, and monthly was sent over 1 month ago.
+		$options['last_monthly'] = date( 'Y-m-d', strtotime( '-30 days' ) );
+		$this->save_options( $options );
+
+		$this->assertEquals( array(), FrmSummaryEmailsHelper::should_send_emails() );
+
+		// Both yearly and monthly were sent over 1 month ago.
+		$options['last_monthly'] = date( 'Y-m-d', strtotime( '-31 days' ) );
+		$options['last_yearly'] = date( 'Y-m-d', strtotime( '-31 days' ) );
+		$this->save_options( $options );
+
+		$this->assertEquals( array( 'monthly' ), FrmSummaryEmailsHelper::should_send_emails() );
+
+		// Monthly was sent over 1 month ago, yearly was sent over 1 year ago.
+		$options['last_yearly'] = date( 'Y-m-d', strtotime( '-365 days' ) );
+		$this->save_options( $options );
+
+		$this->assertEquals( array( 'yearly' ), FrmSummaryEmailsHelper::should_send_emails() );
+	}
+
+	private function save_options( $options ) {
+		$this->set_private_property( 'FrmSummaryEmailsHelper', 'options', $options );
 	}
 }
