@@ -113,7 +113,7 @@ class FrmSummaryEmailsHelper {
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
 			$renewal_date = FrmSummaryEmailsHelper::get_renewal_date();
-			if ( $renewal_date && 45 <= FrmSummaryEmailsHelper::get_date_diff( $current_date, $renewal_date ) ) {
+			if ( $renewal_date && 45 >= FrmSummaryEmailsHelper::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
 			}
@@ -180,7 +180,7 @@ class FrmSummaryEmailsHelper {
 
 		$first_form_date = self::get_earliest_form_created_date();
 		if ( $first_form_date ) {
-			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date ) );
+			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+365 days' ) );
 
 			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
