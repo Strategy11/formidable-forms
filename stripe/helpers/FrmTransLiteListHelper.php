@@ -203,7 +203,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$this->valid_entry_ids = array_keys( $form_ids ); // $form_ids is indexed by entry ID.
 
 		foreach ( $this->items as $item ) {
-			echo '<tr id="payment-' . esc_attr( $item->id ) . '" valign="middle" ';
+			echo '<tr id="payment-' . esc_attr( $item->id ) . '" ';
 
 			$is_alternate = 0 === $alt % 2;
 			$alt++;

@@ -41,7 +41,6 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	public static function load_sidebar_actions( $payment ) {
 		FrmTransLiteActionsController::actions_js();
 
-		$icon        = $payment->status === 'complete' ? 'yes' : 'no-alt';
 		$date_format = __( 'M j, Y @ G:i', 'formidable' );
 		$created_at  = FrmAppHelper::get_localized_date( $date_format, $payment->created_at );
 		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/sidebar_actions.php';

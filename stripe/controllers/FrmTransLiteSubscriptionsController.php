@@ -45,30 +45,39 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $sub
+	 * @param array  $atts
 	 * @return void
 	 */
-	public static function show_cancel_link( $sub ) {
+	public static function show_cancel_link( $sub, $atts = array() ) {
 		if ( ! isset( $sub->user_id ) ) {
 			global $wpdb;
 			$sub->user_id = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $sub->item_id ) );
 		}
 
-		$link = self::cancel_link( $sub );
+		$link = self::cancel_link( $sub, $atts );
 		FrmTransLiteAppHelper::echo_confirmation_link( $link );
 	}
 
 	/**
 	 * @param object $sub
+	 * @param array  $atts
 	 * @return string
 	 */
-	public static function cancel_link( $sub ) {
+	public static function cancel_link( $sub, $atts = array() ) {
+		$defaults = array(
+			'cancel'   => __( 'Cancel', 'formidable' ),
+			'canceled' => __( 'Canceled', 'formidable' ),
+			'confirm'  => __( 'Are you sure you want to cancel that subscription?', 'formidable' ),
+		);
+		$atts     = array_merge( $defaults, $atts );
+
 		if ( $sub->status === 'active' ) {
 			$link  = admin_url( 'admin-ajax.php?action=frm_trans_cancel&sub=' . $sub->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
-			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr__( 'Are you sure you want to cancel that subscription?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">';
-			$link .= esc_html__( 'Cancel', 'formidable' );
+			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $atts['confirm'] ) . '" data-frmverify-btn="frm-button-red">';
+			$link .= esc_html( $atts['cancel'] );
 			$link .= '</a>';
 		} else {
-			$link = esc_html__( 'Canceled', 'formidable' );
+			$link = esc_html( $atts['canceled'] );
 		}
 
 		return $link;

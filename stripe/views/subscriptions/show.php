@@ -3,59 +3,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="wrap">
-	<div id="icon-options-general" class="icon32"><br></div>
-	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
+<div class="frm_wrap">
+	<div>
+		<?php
+		FrmAppHelper::get_admin_header(
+			array(
+				'label'      => __( 'View Subscription', 'formidable' ),
+				'form'       => $form_id,
+				'hide_title' => true,
+			)
+		);
+		?>
 
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+		<div class="columns-2">
 
-	<div id="poststuff" class="metabox-holder has-right-sidebar">
-		<div class="inner-sidebar">
-			<div id="submitdiv" class="postbox ">
-				<h3 class="hndle"><span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span></h3>
-				<div class="inside">
-					<div class="submitbox">
-						<div id="minor-publishing" style="border:none;">
-							<div class="misc-pub-section">
-								<?php FrmTransLiteSubscriptionsController::load_sidebar_actions( $subscription ); ?>
-								<div class="clear"></div>
-							</div>
-						</div>
+			<div id="post-body-content" class="frm-fields">
 
-						<div id="major-publishing-actions">
-							<div id="delete-action">                	    
-								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-									<?php esc_html_e( 'Delete', 'formidable' ); ?>
-								</a>
-							</div>
-							<div class="clear"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+				<div class="wrap frm-with-margin frm_form_fields">
+					<div class="postbox">
 
-		<div id="post-body">
-			<div id="post-body-content">
-				<div class="postbox">
-					<div class="handlediv"><br/></div>
-					<h3 class="hndle"><span><?php esc_html_e( 'Subscription', 'formidable' ); ?></span></h3>
-					<div class="inside">
-						<table class="form-table">
+						<h3 class="hndle">
+							<span><?php esc_html_e( 'Subscription', 'formidable' ); ?></span>
+						</h3>
+
+						<table class="frm-alt-table">
 							<tbody>
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Status', 'formidable' ); ?>:</th>
 									<td><?php echo esc_html( FrmTransLiteAppHelper::show_status( $subscription->status ) ); ?></td>
 								</tr>
 
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'User', 'formidable' ); ?>:</th>
 									<td>
 										<?php echo wp_kses_post( $user_name ); ?>
 									</td>
 								</tr>
 
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Entry', 'formidable' ); ?>:</th>
 									<td>
 										<?php FrmTransLitePaymentsController::show_entry_link( $payment ); ?>
@@ -63,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</tr>
 
 								<?php if ( ! empty( $subscription->sub_id ) ) { ?>
-									<tr valign="top">
+									<tr>
 										<th scope="row"><?php esc_html_e( 'Receipt', 'formidable' ); ?>:</th>
 										<td>
 											<?php FrmTransLiteSubscriptionsController::show_receipt_link( $subscription ); ?>
@@ -71,12 +56,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</tr>
 								<?php } ?>
 
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
 									<td><?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $subscription ) ); ?></td>
 								</tr>
 
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Next Payment Date', 'formidable' ); ?>:</th>
 									<td>
 										<?php echo esc_html( FrmTransLiteAppHelper::format_the_date( $subscription->next_bill_date, $date_format ) ); ?>
@@ -89,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								if ( $subscription->meta_value ) {
 									$subscription->meta_value = maybe_unserialize( $subscription->meta_value );
 									?>
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 									<td>
 
@@ -117,6 +102,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</tbody>
 						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="frm-right-panel">
+				<div class="frm_with_icons frm_no_print">
+					<h3><?php esc_html_e( 'Subscription Details', 'formidable' ); ?></h3>
+					<div class="inside">
+						<div class="submitbox">
+							<div id="minor-publishing" style="border:none;">
+								<div class="misc-pub-section">
+									<?php FrmTransLiteSubscriptionsController::load_sidebar_actions( $subscription ); ?>
+									<div class="clear"></div>
+								</div>
+							</div>
+
+							<div id="misc-pub-section">
+								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+									<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
+									<span class="frm_link_label">
+										<?php esc_html_e( 'Delete Subscription', 'formidable' ); ?>
+									</span>
+								</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

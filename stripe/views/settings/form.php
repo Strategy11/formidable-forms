@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <table class="form-table">
-	<tr class="form-field" valign="top">
+	<tr class="form-field">
 		<td>
 			<label><?php esc_html_e( 'Test Mode', 'formidable' ); ?></label>
 		</td>

@@ -56,16 +56,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php foreach ( $subscriptions as $sub ) { ?>
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_repeater_icon' ); ?>
-				<span><?php esc_html_e( 'Subscription:', 'formidable' ); ?></span>
-				<a href="?page=formidable-payments&amp;action=show&amp;type=subscriptions&amp;id=<?php echo absint( $sub->id ); ?>">
-					<?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $sub ) ); ?>
-				</a>
-				<?php
-				if ( $sub->status === 'active' ) {
-					FrmTransLiteSubscriptionsController::show_cancel_link( $sub );
-				}
-				?>
+				<span>
+					<a href="?page=formidable-payments&amp;action=show&amp;type=subscriptions&amp;id=<?php echo absint( $sub->id ); ?>">
+						<?php esc_html_e( 'Subscription:', 'formidable' ); ?>
+						<?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $sub ) ); ?>
+					</a>
+				</span>
 			</div>
+
+			<?php if ( $sub->status === 'active' ) { ?>
+				<div class="misc-pub-section">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_x_icon' ); ?>
+					<?php
+					FrmTransLiteSubscriptionsController::show_cancel_link(
+						$sub,
+						array(
+							'cancel' => __( 'Cancel Subscription', 'formidable' ),
+						)
+					);
+					?>
+				</div>
+			<?php } ?>
 		<?php } ?>
 
 		<?php

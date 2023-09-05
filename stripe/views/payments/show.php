@@ -3,14 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$is_sub = ! empty( $payment->sub_id );
 ?>
 <div class="frm_wrap">
 	<div>
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'      => $is_sub ? __( 'View Subscription', 'formidable' ) : __( 'View Payment', 'formidable' ),
+				'label'      => __( 'View Payment', 'formidable' ),
 				'form'       => $form_id,
 				'hide_title' => true,
 			)
@@ -25,24 +24,24 @@ $is_sub = ! empty( $payment->sub_id );
 				<div class="postbox">
 
 					<h3 class="hndle">
-						<span><?php $is_sub ? esc_html_e( 'Subscription', 'formidable' ) : esc_html_e( 'Payment', 'formidable' ); ?></span>
+						<span><?php esc_html_e( 'Payment', 'formidable' ); ?></span>
 					</h3>
 
 					<table class="frm-alt-table">
 						<tbody>
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Status', 'formidable' ); ?>:</th>
 								<td><?php echo esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $payment ) ) ); ?></td>
 							</tr>
 
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'User', 'formidable' ); ?>:</th>
 								<td>
 									<?php echo wp_kses_post( $user_name ); ?>
 								</td>
 							</tr>
 
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Entry', 'formidable' ); ?>:</th>
 								<td>
 									<?php FrmTransLitePaymentsController::show_entry_link( $payment ); ?>
@@ -50,7 +49,7 @@ $is_sub = ! empty( $payment->sub_id );
 							</tr>
 
 							<?php if ( ! empty( $payment->receipt_id ) ) { ?>
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Receipt', 'formidable' ); ?>:</th>
 								<td>
 									<?php FrmTransLitePaymentsController::show_receipt_link( $payment ); ?>
@@ -61,7 +60,7 @@ $is_sub = ! empty( $payment->sub_id );
 							<?php FrmTransLiteAppHelper::show_in_table( $payment->invoice_id, __( 'Invoice #', 'formidable' ) ); ?>
 
 							<?php if ( ! empty( $payment->sub_id ) ) { ?>
-								<tr valign="top">
+								<tr>
 									<th scope="row"><?php esc_html_e( 'Subscription', 'formidable' ); ?>:</th>
 									<td>
 										<a href="?page=formidable-payments&amp;action=show&amp;type=subscriptions&amp;id=<?php echo absint( $payment->sub_id ); ?>">
@@ -71,13 +70,13 @@ $is_sub = ! empty( $payment->sub_id );
 								</tr>
 							<?php } ?>
 
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Amount', 'formidable' ); ?>:</th>
 								<td><?php echo esc_html( FrmTransLiteAppHelper::formatted_amount( $payment ) ); ?></td>
 							</tr>
 
 							<?php if ( $payment->expire_date && $payment->expire_date !== '0000-00-00' ) { ?>
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Payment Dates', 'formidable' ); ?>:</th>
 								<td>
 									<?php echo esc_html( FrmTransLiteAppHelper::format_the_date( $payment->begin_date, $date_format ) ); ?> -
@@ -90,7 +89,7 @@ $is_sub = ! empty( $payment->sub_id );
 							if ( $payment->meta_value ) {
 								$payment->meta_value = maybe_unserialize( $payment->meta_value );
 								?>
-							<tr valign="top">
+							<tr>
 								<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 								<td>
 
@@ -132,15 +131,13 @@ $is_sub = ! empty( $payment->sub_id );
 						</tbody>
 						</table>
 				</div>
-
-
 			</div>
 		</div>
 
 		<div class="frm-right-panel">
 			<div class="frm_with_icons frm_no_print">
 				<h3>
-					<?php $is_sub ? esc_html_e( 'Subscription Details', 'formidable' ) : esc_html_e( 'Payment Details', 'formidable' ); ?>
+					<?php esc_html_e( 'Payment Details', 'formidable' ); ?>
 				</h3>
 				<div class="inside">
 					<?php FrmTransLitePaymentsController::load_sidebar_actions( $payment ); ?>
@@ -150,13 +147,14 @@ $is_sub = ! empty( $payment->sub_id );
 						<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this payment?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
 							<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
 							<span class="frm_link_label">
-								<?php $is_sub ? esc_html_e( 'Delete Subscription', 'formidable' ) : esc_html_e( 'Delete Payment', 'formidable' ); ?>
+								<?php esc_html_e( 'Delete Payment', 'formidable' ); ?>
 							</span>
 						</a>
 						<div class="clear"></div>
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 	</div>
 </div>
