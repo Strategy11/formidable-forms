@@ -2,11 +2,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+FrmStrpLiteAppHelper::fee_education( 'settings' );
 ?>
 <table class="form-table">
 	<tr class="form-field">
 		<td>
-			<label><?php esc_html_e( 'Test Mode', 'formidable' ); ?></label>
+			<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
 		</td>
 		<td>
 			<label for="frm_strp_test_mode">

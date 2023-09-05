@@ -101,4 +101,29 @@ class FrmStrpLiteAppHelper {
 		$settings = self::get_settings();
 		return $settings->settings->test_mode ? 'test' : 'live';
 	}
+
+	/**
+	 * Add education about Stripe fees.
+	 *
+	 * @return void
+	 */
+	public static function fee_education( $medium = 'tip' ) {
+		$license_type = FrmAddonsController::license_type();
+		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+			return;
+		}
+
+		FrmTipsHelper::show_tip(
+			array(
+				'link'  => array(
+					'content' => 'stripe-fee',
+					'medium'  => $medium,
+				),
+				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
+				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
+				'class' => 'frm-light-tip',
+			),
+			'p'
+		);
+	}
 }

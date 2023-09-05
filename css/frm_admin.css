@@ -2941,6 +2941,16 @@ a.frm_pro_tip .frmsvg {
 	margin-right: 10px;
 }
 
+.frm-light-tip a.frm_pro_tip {
+	background: var(--primary-25);
+}
+
+.frm-light-tip a.frm_pro_tip .frmsvg,
+.frm-light-tip a.frm_pro_tip i,
+.frm-light-tip .frm-tip-cta {
+	color: var(--primary-500);
+}
+
 .frm-tip-info {
 	flex: 1;
 	text-align: left;
