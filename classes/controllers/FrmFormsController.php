@@ -1285,7 +1285,7 @@ class FrmFormsController {
 					array(
 						'upgrade'    => __( 'Form Abandonment', 'formidable' ),
 						'message'    => __( 'Capture form data before it\'s submitted to save more leads and learn to optimize forms.', 'formidable' ),
-						'screenshot' => 'chat.png',
+						'screenshot' => 'abandonment.png',
 					)
 				),
 			),
