@@ -126,4 +126,23 @@ class FrmStrpLiteAppHelper {
 			'p'
 		);
 	}
+
+	/**
+	 * Show a message to connect Stripe with link to settings.
+	 *
+	 * @return void
+	 */
+	public static function not_connected_warning() {
+		?>
+		<div class="frm_warning_style frm-with-icon">
+			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+			<span>
+				<?php
+				/* translators: %1$s: Link HTML, %2$s: End link */
+				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>' );
+				?>
+			</span>
+		</div>
+		<?php
+	}
 }

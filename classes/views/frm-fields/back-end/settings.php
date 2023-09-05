@@ -37,17 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
-				?>
-				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
-					<span>
-						<?php
-						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>' );
-						?>
-					</span>
-				</div>
-				<?php
+				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">

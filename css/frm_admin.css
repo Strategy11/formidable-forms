@@ -2942,7 +2942,7 @@ a.frm_pro_tip .frmsvg {
 }
 
 .frm-light-tip a.frm_pro_tip {
-	background: var(--primary-25);
+	background: rgba(188, 224, 253, 0.23);
 }
 
 .frm-light-tip a.frm_pro_tip .frmsvg,

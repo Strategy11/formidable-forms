@@ -3,7 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-FrmStrpLiteAppHelper::fee_education();
+if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+	FrmStrpLiteAppHelper::not_connected_warning();
+} else {
+	FrmStrpLiteAppHelper::fee_education();
+}
 ?>
 
 <input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
