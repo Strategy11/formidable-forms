@@ -134,8 +134,13 @@ class FrmAppController {
 			'formidable-inbox',
 			'formidable-welcome',
 			'formidable-applications',
-			'formidable-payments',
 		);
+
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			// Only consider the payments page as a "white page" when the Payments submodule is off.
+			// Otherwise this causes a lot of styling issues when the Stripe add-on is active.
+			$white_pages[] = 'formidable-payments';
+		}
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$is_white_page = in_array( $get_page, $white_pages, true );
