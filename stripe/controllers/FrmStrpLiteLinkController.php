@@ -328,14 +328,17 @@ class FrmStrpLiteLinkController {
 		$amount          = $atts['amount'];
 		$customer        = $atts['customer'];
 
-		FrmStrpLiteAppHelper::call_stripe_helper_class(
-			'update_intent',
-			$intent_id,
-			array(
-				'amount'   => $amount,
-				'customer' => $customer->id,
-			)
-		);
+		if ( ! $is_setup_intent ) {
+			// Update the amount and set the customer before confirming the payment.
+			FrmStrpLiteAppHelper::call_stripe_helper_class(
+				'update_intent',
+				$intent_id,
+				array(
+					'amount'   => $amount,
+					'customer' => $customer->id,
+				)
+			);
+		}
 
 		self::add_temporary_referer_meta( (int) $entry->id );
 
