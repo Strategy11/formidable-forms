@@ -1,7 +1,7 @@
 export class FrmOverlay {
 
 	constructor() {
-		this.body = document.querySelector( 'body' );
+		this.body = document.body;
 	}
 
 	/**
@@ -72,8 +72,7 @@ export class FrmOverlay {
 		});
 
 		if ( buttons ) {
-			const buttonsWrapperElementOptions = { className: 'frm-overlay--cta', children: [] };
-			buttons.map( item => buttonsWrapperElementOptions.children.push( item ) );
+			const buttonsWrapperElementOptions = { className: 'frm-overlay--cta', children: buttons };
 			return frmDom.div( buttonsWrapperElementOptions );
 		}
 
@@ -103,10 +102,6 @@ export class FrmOverlay {
 				overlayWrapper.classList.add( 'frm-active' );
 			}, delay );
 		}
-	}
-
-	escapeHtml( html ) {
-		return `${html}`;
 	}
 
 	buildOverlay() {
