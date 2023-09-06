@@ -29,13 +29,6 @@ class FrmSummaryEmailsHelper {
 	public static $option_name = 'frm_summary_emails_options';
 
 	/**
-	 * Cache the summary emails options.
-	 *
-	 * @var array
-	 */
-	private static $options;
-
-	/**
 	 * Checks if summary emails are enabled.
 	 *
 	 * @return bool
@@ -51,16 +44,20 @@ class FrmSummaryEmailsHelper {
 	 * @return array
 	 */
 	private static function get_options() {
-		$default_options = array(
-			'last_' . self::MONTHLY         => '',
-			'last_' . self::YEARLY          => '',
-			'last_' . self::LICENSE_EXPIRED => '',
-			'renewal_date'                  => '',
-		);
-		if ( ! self::$options ) {
-			self::$options = get_option( self::$option_name, $default_options );
+		$options = get_option( self::$option_name );
+		if ( ! $options ) {
+			$default_options = array(
+				'last_' . self::MONTHLY         => date( 'Y-m-d', strtotime( '-15 days' ) ), // Do not send email within 15 days after updating.
+				'last_' . self::YEARLY          => '',
+				'last_' . self::LICENSE_EXPIRED => '',
+				'renewal_date'                  => '',
+			);
+
+			self::save_options( $default_options );
+			return $default_options;
 		}
-		return self::$options;
+
+		return $options;
 	}
 
 	/**
@@ -69,7 +66,7 @@ class FrmSummaryEmailsHelper {
 	 * @param array $options Options data.
 	 */
 	private static function save_options( $options ) {
-		update_option( 'frm_summary_emails_options', $options );
+		update_option( self::$option_name, $options );
 	}
 
 	/**

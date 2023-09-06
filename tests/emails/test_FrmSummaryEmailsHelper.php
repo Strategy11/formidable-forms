@@ -124,6 +124,9 @@ class test_FrmSummaryEmailsHelper extends FrmUnitTest {
 	}
 
 	private function save_options( $options ) {
-		$this->set_private_property( 'FrmSummaryEmailsHelper', 'options', $options );
+		$this->run_private_method(
+			array( 'FrmSummaryEmailsHelper', 'save_options' ),
+			array( $options )
+		);
 	}
 }
