@@ -140,7 +140,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	display: none;
 }
 
-body.frm-admin-page-formidableedit:not(.frm-full-screen) .mce-fullscreen {
+body.frm-white-body:not(.frm-full-screen) .mce-fullscreen {
 	top: 32px;
 	left: 160px;
 }
