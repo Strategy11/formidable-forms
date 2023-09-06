@@ -396,7 +396,12 @@ class FrmStrpLiteAuth {
 		}
 
 		foreach ( $intents as $k => $intent ) {
-			$intent_id = explode( '_secret_', $intent )[0];
+			$intent_id       = explode( '_secret_', $intent )[0];
+			$is_setup_intent = 0 === strpos( $intent, 'seti_' );
+			if ( $is_setup_intent ) {
+				continue;
+			}
+
 			$saved     = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
 			foreach ( $actions as $action ) {
 				if ( $saved->metadata->action != $action->ID ) {
