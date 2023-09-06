@@ -249,6 +249,7 @@ class FrmSummaryEmailsHelper {
 		$options = self::get_options();
 
 		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
+		self::save_options( $options );
 	}
 
 	/**
