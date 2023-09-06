@@ -397,7 +397,7 @@ class FrmStrpLiteAuth {
 
 		foreach ( $intents as $k => $intent ) {
 			$intent_id       = explode( '_secret_', $intent )[0];
-			$is_setup_intent = 0 === strpos( $intent, 'seti_' );
+			$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
 			if ( $is_setup_intent ) {
 				continue;
 			}
