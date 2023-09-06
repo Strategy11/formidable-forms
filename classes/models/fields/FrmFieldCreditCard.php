@@ -52,6 +52,7 @@ class FrmFieldCreditCard extends FrmFieldType {
 		if ( FrmAppHelper::is_style_editor_page() ) {
 			// The styler preview doesn't load the Stripe scripts.
 			// We need to use the form builder view instead.
+			$field = $this->field;
 			include $this->include_form_builder_file();
 		} else {
 			FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
