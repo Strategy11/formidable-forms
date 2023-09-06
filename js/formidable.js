@@ -1811,7 +1811,7 @@ jQuery( document ).ready( function() {
 
 function frmRecaptcha() {
 	var c, cl,
-		captchas = jQuery( '.frm-g-recaptcha' );
+		captchas = jQuery( document ).find( '.frm-g-recaptcha, .g-recaptcha' );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
 		frmFrontForm.renderRecaptcha( captchas[c]);
 	}
