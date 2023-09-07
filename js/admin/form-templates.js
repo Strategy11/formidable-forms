@@ -8,8 +8,9 @@
 	// WordPress globals
 	const { __ } = wp.i18n;
 	// Internal globals
-	let { favoritesCount, FEATURED_TEMPLATES_KEYS } =  frmFormTemplatesVars;
-	const { search } = frmDom;
+	let { favoritesCount, FEATURED_TEMPLATES_KEYS } = frmFormTemplatesVars;
+	const { url: pluginURL } = frmGlobal;
+	const { tag, div, span, a, img, search } = frmDom;
 	const { doJsonPost } = frmDom.ajax;
 	const { onClickPreventDefault } = frmDom.util;
 
@@ -79,6 +80,14 @@
 		static FAVORITE_BUTTON_CLASS = 'frm-form-templates-item-favorite-button';
 
 		/**
+		 * Id for empty state.
+		 *
+		 * @since x.x
+		 * @type {string}
+		 */
+		static EMPTY_STATE_ID = 'frm-form-templates-empty-state';
+
+		/**
 		 * Class added to an element to mark it as hidden.
 		 *
 		 * @since x.x
@@ -116,7 +125,7 @@
 		 * @since x.x
 		 * @type {string}
 		 */
-		static ALL_TEMPLATES_CATEGORY_SLUG = 'all-templates';
+		static ALL_TEMPLATES_SLUG = 'all-templates';
 
 		/**
 		 * Initializes the FrmFormTemplates instance.
@@ -151,8 +160,11 @@
 		 * @since x.x
 		 */
 		initialize() {
-			/// Initialize DOM elements and other properties
+			// Initialize DOM elements and other properties
 			this.initProperties();
+
+			// Prepare the initial UI components
+			this.prepareUI();
 
 			// Set up the initial state, including any required DOM manipulations
 			this.setupInitialState();
@@ -162,6 +174,16 @@
 
 			// Attach event listeners for user interactions
 			this.addEventListeners();
+		}
+
+		/**
+		 * Prepares the UI by creating and appending necessary elements.
+		 *
+		 * @since x.x
+		 */
+		prepareUI() {
+			// Create and append Empty State to the bodyContent element
+			this.createEmptyState();
 		}
 
 		/**
@@ -284,12 +306,12 @@
 			this.categorizedTemplates = {};
 
 			/**
-			 * The currently Selected Category. Defaults to ALL_TEMPLATES_CATEGORY_SLUG.
+			 * The currently Selected Category. Defaults to ALL_TEMPLATES_SLUG.
 			 *
 			 * @since x.x
 			 * @type {string}
 			 */
-			this.selectedCategory = this.constructor.ALL_TEMPLATES_CATEGORY_SLUG;
+			this.selectedCategory = this.constructor.ALL_TEMPLATES_SLUG;
 
 			/**
 			 * The currently Selected Category element. Defaults to 'All Templates' category element.
@@ -338,6 +360,38 @@
 			 * @type {HTMLElement}
 			 */
 			this.bodyContentChildren = Array.from( this.bodyContent?.children );
+
+			/**
+			 * Empty State element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.emptyState = document.querySelector( `#${this.constructor.EMPTY_STATE_ID}` );
+
+			/**
+			 * Empty State Title element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.emptyStateTitle = this.emptyState.querySelector( `.${this.constructor.EMPTY_STATE_ID}-title` );
+
+			/**
+			 * Empty State Text element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.emptyStateText = this.emptyState.querySelector( `.${this.constructor.EMPTY_STATE_ID}-text` );
+
+			/**
+			 * Empty State Button element.
+			 *
+			 * @since x.x
+			 * @type {HTMLElement}
+			 */
+			this.emptyStateButton = this.emptyState.querySelector( `.${this.constructor.EMPTY_STATE_ID}-button` );
 		}
 
 		/**
@@ -563,7 +617,7 @@
 		 * @since x.x
 		 */
 		displayCategorizedTemplates() {
-			this.showElements([ this.templatesList, ...this.categorizedTemplates[ this.selectedCategory ] ]);
+			this.showElements([ this.templatesList, ...this.categorizedTemplates[this.selectedCategory] ]);
 		}
 
 		/**
@@ -698,9 +752,12 @@
 
 			// If no templates are found, show the empty state
 			if ( ! foundSomething ) {
-				console.log( 'displayEmptyState' );
+				this.displaySearchEmptyState();
 				return;
 			}
+
+			// Hide the empty state if showing
+			this.hide( this.emptyState );
 
 			// If a category is currently selected, transition to displaying search results
 			if ( this.selectedCategory ) {
@@ -737,6 +794,31 @@
 		}
 
 		/**
+		 * Displays the empty state UI.
+		 * Used when no search results are found.
+		 *
+		 * @since x.x
+		 */
+		displaySearchEmptyState = () => {
+			if ( 'search' === this.emptyState.dataset?.search ) {
+				return;
+			}
+
+			// Set the Empty State elements text content
+			this.emptyStateTitle.textContent = __( 'No results found', 'formidable' );
+			this.emptyStateText.textContent = __( 'Sorry, we didn\'t find any templates that match your criteria.', 'formidable' );
+			this.emptyStateButton.textContent = __( 'Start from scratch', 'formidable' );
+
+			// Add id to the Empty State Button
+			this.emptyStateButton.setAttribute( 'id', 'frm-search-empty-state-button' );
+
+			this.emptyState.setAttribute( 'data-state', 'search' );
+
+			// Show the empty state UI element
+			this.show( this.emptyState );
+		}
+
+		/**
 		 * Clears the search input and triggers the input event manually.
 		 *
 		 * @since x.x
@@ -751,6 +833,38 @@
 		}
 
 		/**
+		 * Create and append Empty State element to the Body Content element.
+		 *
+		 * @since x.x
+		 */
+		createEmptyState() {
+			// Setup the button element
+			const button = a({
+				class: 'button button-primary frm-button-primary',
+				href: '#'
+			});
+			button.setAttribute( 'role', 'button' );
+
+			// Create the Empty State element
+			const emptyState = div({
+				id: this.constructor.EMPTY_STATE_ID,
+				children: [
+					img({ src: `${pluginURL}/images/form-templates/empty-state.svg`, alt: __( 'Empty State', 'formidable' ) }),
+					tag( 'h3', {
+						class: 'frm-form-templates-title'
+					}),
+					span({
+						class: 'frm-form-templates-text'
+					}),
+					button
+				]
+			});
+
+			// Append the Empty State to the Body Content element
+			this.bodyContent.appendChild( emptyState );
+		}
+
+		/**
 		 * Checks if the category is "All Templates".
 		 *
 		 * @since x.x
@@ -758,7 +872,7 @@
 		 * @returns {boolean} True if the category is "All Templates", otherwise false.
 		 */
 		isAllTemplatesCategory( category ) {
-			return this.constructor.ALL_TEMPLATES_CATEGORY_SLUG === category;
+			return this.constructor.ALL_TEMPLATES_SLUG === category;
 		}
 
 		/**
@@ -844,6 +958,17 @@
 		 */
 		hide( element ) {
 			element?.classList.add( this.constructor.HIDDEN_CLASS );
+		}
+
+		/**
+		 * Checks if an element is visible.
+		 *
+		 * @since x.x
+		 * @param {HTMLElement} element The HTML element to check for visibility.
+		 * @returns {boolean} Returns true if the element is visible, otherwise false.
+		 */
+		isVisible( element ) {
+			return element?.classList.contains( this.constructor.HIDDEN_CLASS );
 		}
 
 		/**
