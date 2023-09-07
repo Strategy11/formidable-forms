@@ -106,7 +106,7 @@ class FrmOverlayController {
 	private function is_time_to_execute() {
 		if ( ! isset( $this->options_data[ $this->config['config-option-name'] ] ) ) {
 			return true;
-		};
+		}
 
 		$options = $this->options_data[ $this->config['config-option-name'] ];
 
@@ -153,7 +153,7 @@ class FrmOverlayController {
 				return false;
 			}
 			$this->update_next_execution_time();
-		};
+		}
 
 		$this->enqueue_assets();
 		$inline_script = 'frmOverlay.open(' . wp_json_encode( $data ) . ')';
