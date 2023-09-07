@@ -118,7 +118,7 @@ class test_FrmSummaryEmailsHelper extends FrmUnitTest {
 		$this->assertEquals( array( 'monthly' ), FrmSummaryEmailsHelper::should_send_emails() );
 
 		// renewal date is coming in more than 45 days, but yearly was sent more than 1 year ago.
-		$options['last_yearly']  = date( 'Y-m-d', strtotime( '-365 days' ) );
+		$options['last_yearly']  = gmdate( 'Y-m-d', strtotime( '-365 days' ) );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'yearly' ), FrmSummaryEmailsHelper::should_send_emails() );
 	}

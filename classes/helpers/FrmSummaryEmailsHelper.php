@@ -33,7 +33,7 @@ class FrmSummaryEmailsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function is_enabled() {
+	private static function is_enabled() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return ! empty( $frm_settings->summary_emails ) && ! empty( $frm_settings->summary_emails_recipients );
 	}
@@ -47,7 +47,7 @@ class FrmSummaryEmailsHelper {
 		$options = get_option( self::$option_name );
 		if ( ! $options ) {
 			$default_options = array(
-				'last_' . self::MONTHLY         => date( 'Y-m-d', strtotime( '-15 days' ) ), // Do not send email within 15 days after updating.
+				'last_' . self::MONTHLY         => gmdate( 'Y-m-d', strtotime( '-15 days' ) ), // Do not send email within 15 days after updating.
 				'last_' . self::YEARLY          => '',
 				'last_' . self::LICENSE_EXPIRED => '',
 				'renewal_date'                  => '',
@@ -75,7 +75,7 @@ class FrmSummaryEmailsHelper {
 	 * @return array|false Return array of emails should be sent, or `false` if not send any emails.
 	 */
 	public static function should_send_emails() {
-		if ( ! FrmSummaryEmailsHelper::is_enabled() ) {
+		if ( ! self::is_enabled() ) {
 			return false;
 		}
 
@@ -83,7 +83,7 @@ class FrmSummaryEmailsHelper {
 		$current_date = gmdate( 'Y-m-d' );
 
 		// Check for license expired email.
-		$last_expired = FrmSummaryEmailsHelper::get_last_sent_date( 'license' ); // TODO: clear this sent date after renewing.
+		$last_expired = self::get_last_sent_date( 'license' ); // TODO: clear this sent date after renewing.
 		if ( ! $last_expired ) {
 			// License expired email hasn't been sent. Check for the license.
 			if ( FrmAddonsController::is_license_expired() ) {
@@ -92,25 +92,25 @@ class FrmSummaryEmailsHelper {
 		}
 
 		// Check for monthly or yearly email.
-		$last_monthly = FrmSummaryEmailsHelper::get_last_sent_date( 'monthly' );
-		$last_yearly  = FrmSummaryEmailsHelper::get_last_sent_date( 'yearly' );
+		$last_monthly = self::get_last_sent_date( 'monthly' );
+		$last_yearly  = self::get_last_sent_date( 'yearly' );
 		$last_stats   = max( $last_monthly, $last_yearly );
 
 		// Do not send any email if it isn't enough 30 days from the last stats email.
-		if ( $last_stats && 30 > FrmSummaryEmailsHelper::get_date_diff( $current_date, $last_stats ) ) {
+		if ( $last_stats && 30 > self::get_date_diff( $current_date, $last_stats ) ) {
 			return $emails;
 		}
 
 		if ( $last_yearly ) {
 			// If this isn't the first yearly email, send the new one after 1 year.
-			if ( $last_yearly && 365 <= FrmSummaryEmailsHelper::get_date_diff( $current_date, $last_yearly ) ) {
+			if ( $last_yearly && 365 <= self::get_date_diff( $current_date, $last_yearly ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
 			}
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
-			$renewal_date = FrmSummaryEmailsHelper::get_renewal_date();
-			if ( $renewal_date && 45 >= FrmSummaryEmailsHelper::get_date_diff( $current_date, $renewal_date ) ) {
+			$renewal_date = self::get_renewal_date();
+			if ( $renewal_date && 45 >= self::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
 			}
@@ -228,7 +228,7 @@ class FrmSummaryEmailsHelper {
 	 * @param string $type Accepts `monthly`, `yearly`, or `license`.
 	 * @return string|false
 	 */
-	public static function get_last_sent_date( $type ) {
+	private static function get_last_sent_date( $type ) {
 		$options = self::get_options();
 		if ( empty( $options[ 'last_' . $type ] ) ) {
 			return false;
