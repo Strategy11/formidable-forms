@@ -339,6 +339,13 @@ td.column-title .frm_actions_dropdown {
 	font-weight: 500;
 }
 
+/* Error modal */
+.frm_error_modal .frm_modal_title {
+	font-size: var(--text-xl);
+	font-weight: 400;
+	color: var(--grey-900);
+}
+
 /* Override CSS in Views plugin. */
 .frm-views-editor-body .frm_page_container #frm_top_bar h1 {
 	padding: 0 !important;

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="metabox-holder">
 		<div class="inside">
 			<div style="padding: 16px;">
-				<div style="font-size: var(--text-xl); font-weight: 400; color: var(--grey-900);"><?php echo esc_html( $error['title'] ); ?></div>
+				<div class="frm_modal_title"><?php echo esc_html( $error['title'] ); ?></div>
 				<?php echo esc_html( $error['body'] ); ?>
 				<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script>
 				<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script>
