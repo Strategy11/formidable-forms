@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.2.2
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 6.4
+Stable tag: 6.4.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,23 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.4.2 =
+* New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
+* New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
+* Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
+* Fix: The option to save and reload when activating an add on was not reloading the page when the setting to save the builder with AJAX was on.
+* Fix: An Automatic conversion of false to array deprecation message would get logged when saving styles in newer versions of PHP.
+* Fix: Whitelabel icons were appearing too large when displayed as Gutenberg block options in WordPress v6.3.
+* Admin footer links and the floating support button have been removed for websites that use a whitelabel setting.
+
+= 6.4.1 =
+* New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
+* New: Forms without names will now appear as (no title) when displayed as options inside of a Gutenberg block.
+* New: Radio button fields are now grouped in a tabbable element with a radiogroup role for improved accessibility.
+* New: Required attributes are now defined on the radio and checkbox field groups instead of on each input for improved accessibility.
+* Fix: A global JavaScript variable conflict was causing a conflict with the Google Spreadsheets add on. This was causing issues with authorizing and deauthorizing Google Sheets.
+* Fix: The up arrow icon was either hidden or displayed as a down arrow for one of the styling options for section icons.
+
 = 6.4 =
 * New: A floating button has been added to some admin pages with links for documentation and support.
 * New: When importing, if a matching trashed form is found based on a key match, it will be deleted before the import begins. This prevents conflicts that cause field shortcodes and conditional logic not to update as expected when imported.

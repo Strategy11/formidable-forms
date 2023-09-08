@@ -4994,6 +4994,10 @@ function frmAdminBuildJS() {
 	function maybeCollapseSettings() {
 		/*jshint validthis:true */
 		this.classList.toggle( 'frm-collapsed' );
+
+		// Toggles the "aria-expanded" attribute
+		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
+		this.setAttribute( 'aria-expanded', ! expanded );
 	}
 
 	function clickLabel() {
@@ -5998,6 +6002,11 @@ function frmAdminBuildJS() {
 
 			container.addClass( 'frm-open' );
 			box.classList.remove( 'frm_hidden' );
+
+			/**
+			 * @since 6.4.1
+			 */
+			wp.hooks.doAction( 'frm_show_inline_modal', box, icon );
 		}
 	}
 
@@ -6095,6 +6104,7 @@ function frmAdminBuildJS() {
 				$html.setAttribute( 'class', 'frm_updated_message' );
 				$html.innerHTML = msg;
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
+				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
 			error: function() {
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
@@ -7693,8 +7703,21 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function reloadIfAddonActivatedAjaxSubmitOnly() {
+		const submitButton = document.getElementById( 'frm_submit_side_top' );
+		if ( submitButton.hasAttribute( 'data-new-addon-installed' ) && 'true' === submitButton.getAttribute( 'data-new-addon-installed' ) ) {
+			submitButton.removeAttribute( 'data-new-addon-installed' );
+			window.location.reload();
+		}
+
+	}
+
 	function saveAndReloadFormBuilder() {
-		document.getElementById( 'frm_submit_side_top' ).click();
+		const submitButton = document.getElementById( 'frm_submit_side_top' );
+		if ( submitButton.classList.contains( 'frm_submit_ajax' ) ) {
+			submitButton.setAttribute( 'data-new-addon-installed', true );
+		}
+		submitButton.click();
 	}
 
 	function confirmExit( event ) {
@@ -9222,12 +9245,15 @@ function frmAdminBuildJS() {
 	 * If all associated fields are hidden (indicating no search matches),
 	 * the heading is hidden.
 	 *
-	 * @since x.x
+	 * @since 6.4.1
 	 */
 	function updateCatHeadingVisibility() {
 		const insertFieldsElement = document.querySelector( '#frm-insert-fields' );
-		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+		if ( ! insertFieldsElement ) {
+			return;
+		}
 
+		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
 		headingElements.forEach( heading => {
 			const fieldsListElement = heading.nextElementSibling;
 			if ( ! fieldsListElement ) {
@@ -9934,6 +9960,13 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
+				// If so, only proceed if the key pressed was 'Enter' or 'Space'
+				if ( event.key === 'Enter' || event.key === ' ' ) {
+					event.preventDefault();
+					maybeCollapseSettings.call( this, event );
+				}
+			});
 
 			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 

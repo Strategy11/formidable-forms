@@ -692,6 +692,15 @@
 		return div({ children: [ label, input ] });
 	}
 
+	/**
+	 * Build an element.
+	 *
+	 * @since 6.4.1 Accept a string as one of `children` to append a text node inside the element.
+	 *
+	 * @param {String} type Element tag name.
+	 * @param {Object} args The args.
+	 * @return {Object}
+	 */
 	function tag( type, args = {}) {
 		const output = document.createElement( type );
 
@@ -710,7 +719,13 @@
 			output.className = className;
 		}
 		if ( children ) {
-			children.forEach( child => output.appendChild( child ) );
+			children.forEach( child => {
+				if ( 'string' === typeof child ) {
+					output.appendChild( document.createTextNode( child ) );
+				} else {
+					output.appendChild( child )
+				}
+			} );
 		} else if ( child ) {
 			output.appendChild( child );
 		} else if ( text ) {

@@ -19,7 +19,7 @@ class FrmAddonsController {
 		}
 
 		$label = __( 'Add-Ons', 'formidable' );
-		$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+		$label = '<span style="color:#1da867">' . $label . '</span>';
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
@@ -1079,8 +1079,10 @@ class FrmAddonsController {
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
 
+		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+
 		$response = array(
-			'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+			'message'       => $message,
 			'saveAndReload' => $activating_page,
 		);
 
@@ -1352,6 +1354,29 @@ class FrmAddonsController {
 		}
 
 		return $allowed_url_list;
+	}
+
+	/**
+	 * Gets required plan for an addon.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Empty string if no plan is required for active license.
+	 */
+	public static function get_addon_required_plan( $addon_id ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
+
+		if ( is_array( $addons ) && array_key_exists( $addon_id, $addons ) ) {
+			$dates    = $addons[ $addon_id ];
+			$requires = FrmFormsHelper::get_plan_required( $dates );
+		}
+
+		if ( ! isset( $requires ) || ! is_string( $requires ) ) {
+			$requires = '';
+		}
+
+		return $requires;
 	}
 
 	/**

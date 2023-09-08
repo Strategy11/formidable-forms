@@ -753,7 +753,14 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'file', 'data', 'lookup' ), true ) ) {
+		$excluded_field_types =
+			FrmField::is_radio( $field ) ||
+			FrmField::is_checkbox( $field ) ||
+			FrmField::is_field_type( $field, 'file' ) ||
+			FrmField::is_field_type( $field, 'nps' ) ||
+			FrmField::is_field_type( $field, 'scale' );
+
+		if ( $excluded_field_types ) {
 			return;
 		}
 
