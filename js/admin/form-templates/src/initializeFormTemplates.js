@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -13,17 +13,31 @@
  * GNU General Public License for more details.
  */
 
-import { initialize as initElements } from './elements';
+/**
+ * Internal dependencies
+ */
+import { initializeElements } from './elements';
+import { setupInitialView } from './ui';
+import { buildCategorizedTemplates } from './templates';
+import { addEventListeners } from './events';
 
 /**
  * Initializes form templates.
  *
  * @since x.x
- *
- * @param {Object} config Configuration settings for template initialization.
  */
-function initializeFormTemplates( config ) {
-	initElements();
+function initializeFormTemplates() {
+	// Initializes essential DOM elements
+	initializeElements();
+
+	// Set up the initial view, including any required DOM manipulations for proper presentation
+	setupInitialView();
+
+	// Generate a categorized list of templates
+	buildCategorizedTemplates();
+
+	// Attach event listeners for user interactions
+	addEventListeners();
 }
 
 export default initializeFormTemplates;

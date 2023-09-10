@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -19,10 +19,11 @@
 import { PREFIX } from '../shared';
 
 /**
- * Gets DOM elements during initialization.
+ * Gets essential DOM elements.
  *
  * @since x.x
- * @returns {Object} DOM elements gathered at initialization.
+ *
+ * @returns {Object} DOM elements.
  */
 function getElements() {
 	// Body Elements
@@ -53,18 +54,6 @@ function getElements() {
 		customTemplateItems: customTemplatesSection?.querySelectorAll( `.${PREFIX}-item` )
 	};
 
-	// Sidebar Elements
-	const searchInput = document.querySelector( '#template-search-input' );
-	const selectedCategoryEl = document.querySelector( `.${PREFIX}-cat-item[data-category="all-templates"]` );
-	const favoritesCategory = document.querySelector( `.${PREFIX}-cat-item[data-category="favorites"]` );
-	const sidebar = {
-		searchInput,
-		selectedCategoryEl,
-		favoritesCategory,
-		favoritesCategoryCountEl: favoritesCategory?.querySelector( `.${PREFIX}-cat-count` ),
-		allTemplatesCategory: selectedCategoryEl
-	};
-
 	// Empty State Elements
 	const emptyState = document.querySelector( `#${PREFIX}-empty-state` );
 	const emptyStateElements = {
@@ -74,12 +63,23 @@ function getElements() {
 		emptyStateButton: emptyState?.querySelector( `.${PREFIX}-button` )
 	};
 
+	// Sidebar Elements
+	const searchInput = document.querySelector( '#template-search-input' );
+	const allTemplatesCategory = document.querySelector( `.${PREFIX}-cat-item[data-category="all-templates"]` );
+	const favoritesCategory = document.querySelector( `.${PREFIX}-cat-item[data-category="favorites"]` );
+	const sidebar = {
+		searchInput,
+		allTemplatesCategory,
+		favoritesCategory,
+		favoritesCategoryCountEl: favoritesCategory?.querySelector( `.${PREFIX}-cat-count` )
+	};
+
 	return {
 		...bodyElements,
 		...templates,
 		...customTemplates,
-		...sidebar,
-		...emptyStateElements
+		...emptyStateElements,
+		...sidebar
 	};
 }
 

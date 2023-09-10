@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -21,43 +21,30 @@ import domReady from '@wordpress/dom-ready';
 /**
  * Internal dependencies
  */
-import { ALL_TEMPLATES_SLUG } from './src/shared';
+import { getAppState, setAppState } from './src/shared';
 import initializeFormTemplates from './src/initializeFormTemplates';
 
 domReady( () => {
 	/**
-	 * State object containing key configurations, passed to hooks and template initializer.
-	 *
-	 * @since x.x
-	 *
-	 * @var {Object} formTemplatesConfig
-	 * @property {string} selectedCategory The currently selected template category.
-	 */
-	const formTemplatesConfig = {
-		selectedCategory: ALL_TEMPLATES_SLUG
-	};
-
-	/**
-	 * Provides an entry point for custom logic or modification to `formTemplatesConfig`
-	 * before form templates initialization.
+	 * Entry point for pre-initialization adjustments to the application state.
 	 *
 	 * @since x.x
 	 *
 	 * @hook frmFormTemplates.beforeInitialize
-	 * @param {Object} formTemplatesConfig - Template initialization settings.
+	 * @param {Object} appState Current state of the application.
 	 */
-	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', formTemplatesConfig );
+	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', { getAppState, setAppState });
 
 	// Initialize the form templates
-	initializeFormTemplates( formTemplatesConfig );
+	initializeFormTemplates();
 
 	/**
-	 * Provides an entry point for custom logic or modification to `formTemplatesConfig`
-	 * after form templates initialization.
+	 * Entry point for post-initialization custom logic or adjustments to the application state.
 	 *
 	 * @since x.x
+	 *
 	 * @hook frmFormTemplates.afterInitialize
-	 * @param {Object} formTemplatesConfig - Template initialization settings.
+	 * @param {Object} appState Current state of the application.
 	 */
-	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', formTemplatesConfig );
+	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', { getAppState, setAppState });
 });

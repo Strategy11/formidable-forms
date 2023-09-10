@@ -167,7 +167,7 @@
 			this.prepareUI();
 
 			// Set up the initial state, including any required DOM manipulations
-			this.setupInitialState();
+			this.setupInitialView();
 
 			// Create a categorized list of templates
 			this.buildCategorizedTemplates();
@@ -262,7 +262,7 @@
 			 * @since x.x
 			 * @type {Boolean}
 			 */
-			this.searchInputNotEmpty = false;
+			this.notEmptySearchText = false;
 
 			/**
 			 * Custom Templates List Section element.
@@ -402,7 +402,7 @@
 		 *
 		 * @since x.x
 		 */
-		setupInitialState() {
+		setupInitialView() {
 			// Clear the Search Input value
 			this.searchInput.value = '';
 
@@ -503,7 +503,7 @@
 			this.updateBodyContent();
 
 			// Clears the search input
-			if ( this.searchInputNotEmpty ) {
+			if ( this.notEmptySearchText ) {
 				this.clearSearchInput( this.searchInput );
 			}
 		}
@@ -741,10 +741,10 @@
 		 */
 		handleSearchDisplay = ({ foundSomething, notEmptySearchText }) => {
 			// Update class property to manage the state of search input across the class.
-			this.searchInputNotEmpty = notEmptySearchText;
+			this.notEmptySearchText = notEmptySearchText;
 
 			// If the search input and the selected category are empty, revert to default 'All Templates'
-			if ( ! this.searchInputNotEmpty && ! this.selectedCategory ) {
+			if ( ! this.notEmptySearchText && ! this.selectedCategory ) {
 				// Dispatch the input event manually
 				this.allTemplatesCategory.dispatchEvent( new Event( 'click', { 'bubbles': true }) );
 				return;

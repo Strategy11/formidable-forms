@@ -13,25 +13,4 @@
  * GNU General Public License for more details.
  */
 
-/**
- * Internal dependencies
- */
-import addCategoryEvents from './categoryListener';
-import addFavoriteButtonEvents from './favoriteButtonListener';
-import addSearchEvents, { resetSearchInput } from './searchListener';
-
-/**
- * Attaches event listeners for handling user interactions.
- *
- * @since x.x
- */
-function addEventListeners() {
-	addCategoryEvents();
-	addFavoriteButtonEvents;
-	addSearchEvents();
-}
-
-export default {
-	addEventListeners,
-	resetSearchInput
-};
+export const { tag, div, span, a, img } = window.frmDom;

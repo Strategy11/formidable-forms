@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -20,21 +20,21 @@ import { searchInput, bodyContent, twinFeaturedTemplateItems } from '../elements
 import { show, fadeIn, hideElements } from '../utils';
 
 /**
- * Sets up the initial state of the UI, including any DOM manipulations
- * required for the correct presentation of elements.
+ * Sets up the initial view, performing any required
+ * DOM manipulations for proper element presentation.
  *
  * @since x.x
  */
-function setupInitialState() {
-	// Clear the Search Input value
+function setupInitialView() {
+	// Clear the value in the search input
 	searchInput.value = '';
 
 	// Hide the twin featured template items
 	hideElements( twinFeaturedTemplateItems );
 
-	// Show the main body content and smoothly display the updated UI elements
+	// Display the main body content and gradually reveal the updated UI elements
 	show( bodyContent );
 	fadeIn( bodyContent );
 };
 
-export default setupInitialState;
+export default setupInitialView;

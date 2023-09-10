@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -13,6 +13,9 @@
  * GNU General Public License for more details.
  */
 
+/**
+ * Internal dependencies
+ */
 import { templateItems } from '../elements';
 
 let categorizedTemplates;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Formidable Forms
+ * Copyright (C) 2023 Formidable Forms
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -25,7 +25,7 @@ import { HIDDEN_CLASS } from '../shared';
  *
  * @param {Array<Element>} elements An array of elements to show.
  */
-export const showElements = ( elements ) => elements?.forEach( element => show( element ) );
+export const showElements = elements => elements?.forEach( element => show( element ) );
 
 /**
  * Hides specified elements by adding the hidden class.
@@ -34,7 +34,7 @@ export const showElements = ( elements ) => elements?.forEach( element => show( 
  *
  * @param {Array<Element>} elements An array of elements to hide.
  */
-export const hideElements = ( elements ) => elements?.forEach( element => hide( element ) );
+export const hideElements = elements => elements?.forEach( element => hide( element ) );
 
 /**
  * Removes the hidden class to show the element.
@@ -43,7 +43,7 @@ export const hideElements = ( elements ) => elements?.forEach( element => hide( 
  *
  * @param {Element} element The element to show.
  */
-export const show = ( element ) => element?.classList.remove( HIDDEN_CLASS );
+export const show = element => element?.classList.remove( HIDDEN_CLASS );
 
 /**
  * Adds the hidden class to hide the element.
@@ -52,7 +52,7 @@ export const show = ( element ) => element?.classList.remove( HIDDEN_CLASS );
  *
  * @param {Element} element The element to hide.
  */
-export const hide = ( element ) => element?.classList.add( HIDDEN_CLASS );
+export const hide = element => element?.classList.add( HIDDEN_CLASS );
 
 /**
  * Checks if an element is visible.
@@ -62,4 +62,4 @@ export const hide = ( element ) => element?.classList.add( HIDDEN_CLASS );
  * @param {HTMLElement} element The HTML element to check for visibility.
  * @returns {boolean} Returns true if the element is visible, otherwise false.
  */
-export const isVisible = ( element ) => element?.classList.contains( HIDDEN_CLASS );
+export const isVisible = element => element?.classList.contains( HIDDEN_CLASS );
