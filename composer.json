@@ -23,16 +23,16 @@
 		"classmap": [
 			"classes/controllers/",
 			"classes/factories/",
-            "classes/helpers/",
+			"classes/helpers/",
 			"classes/models/",
-            "classes/widgets/",
-            "classes/views/"
+			"classes/widgets/",
+			"classes/views/"
 		]
 	},
-    "require-dev": {
+	"require-dev": {
 		"yoast/phpunit-polyfills": "^1.0",
 		"php-stubs/wordpress-stubs": "^5.7.0"
-    },
+	},
 	"config": {
 		"allow-plugins": {
 			"composer/installers": true
