@@ -29,6 +29,22 @@ class FrmCronController {
 	}
 
 	/**
+	 * Schedules cron events.
+	 *
+	 * @since x.x
+	 */
+	public static function schedule_events() {
+		$events = self::get_events();
+		unset( $events['formidable_send_usage'] ); // This is scheduled in another place.
+
+		foreach ( $events as $event => $recurrence ) {
+			if ( ! wp_next_scheduled( $event ) ) {
+				wp_schedule_event( time(), $recurrence, $event );
+			}
+		}
+	}
+
+	/**
 	 * Removes all cron events.
 	 *
 	 * @since 6.3.2
