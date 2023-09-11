@@ -276,7 +276,15 @@ class FrmSummaryEmailsHelper {
 			'entries'   => self::get_entries_count( $from_date, $to_date ),
 		);
 
-		return apply_filters( 'frm_summary_data', $data, compact( 'from_date', 'to_date' ) );
+		/**
+		 * Filters the summary email data in a date range.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $data The summary email data.
+		 * @param array $args Contains `from_date` and `to_date`.
+		 */
+		return apply_filters( 'frm_summary_email_data', $data, compact( 'from_date', 'to_date' ) );
 	}
 
 	/**
