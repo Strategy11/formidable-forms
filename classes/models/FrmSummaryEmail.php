@@ -41,14 +41,14 @@ abstract class FrmSummaryEmail {
 	}
 
 	/**
-	 * Gets receptions.
+	 * Gets recipients.
 	 *
 	 * @return string
 	 */
-	protected function get_receptions() {
-		$receptions = FrmAppHelper::get_settings()->summary_emails_recipients;
-		$receptions = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $receptions );
-		return $receptions;
+	protected function get_recipients() {
+		$recipients = FrmAppHelper::get_settings()->summary_emails_recipients;
+		$recipients = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $recipients );
+		return $recipients;
 	}
 
 	/**
@@ -122,11 +122,17 @@ abstract class FrmSummaryEmail {
 	 * @return bool
 	 */
 	public function send() {
-		$receptions = $this->get_receptions();
+		$recipients = $this->get_recipients();
 		$content    = $this->get_content();
 		$subject    = $this->get_subject();
 		$headers    = $this->get_headers();
 
-		return wp_mail( $receptions, $subject, $content, $headers );
+		$sent = wp_mail( $recipients, $subject, $content, $headers );
+		if ( ! $sent ) {
+			$headers = implode( "\r\n", $headers );
+			$sent    = mail( $recipients, $subject, $content, $headers );
+		}
+
+		return $sent;
 	}
 }
