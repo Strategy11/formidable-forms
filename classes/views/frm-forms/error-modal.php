@@ -22,13 +22,15 @@ $error = wp_parse_args( $error, $defaults );
 					<a href="<?php echo esc_attr( $error['cancel_url'] ); ?>" class="alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 					</a>
-					<p><?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' ); ?></p>
-					<div class="frm-modal-title"><?php echo esc_html( $error['title'] ); ?></div>
 				</div>
 				<div class="frm_modal_content">
 					<div class="inside">
-						<?php echo esc_html( $error['body'] ); ?>
+						<span class="frm_lock_simple"><?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' ); ?></span>
+						<br><br>
+						<div class="frm-modal-title"><h2><?php echo esc_html( $error['title'] ); ?></h2></div>
+						<p><?php echo esc_html( $error['body'] ); ?></p>
 					</div>
+				</div>
 				<div class="frm_modal_footer">
 					<a href="<?php echo esc_attr( $error['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error['cancel_classes'] ); ?>"><?php esc_html_e( $error['cancel_text'], 'formidable' ); ?></a>
 					<a href="<?php echo esc_attr( $error['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error['continue_classes'] ); ?>"><?php esc_html_e( $error['continue_text'], 'formidable' ); ?></a>
