@@ -128,7 +128,7 @@ class FrmOverlayController {
 	 * @return void
 	 */
 	private function update_options_data() {
-		update_option( $this->option_meta_name, $this->options_data );
+		update_option( $this->option_meta_name, $this->options_data, 'no' );
 	}
 
 	/**

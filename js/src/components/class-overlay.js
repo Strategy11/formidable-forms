@@ -57,13 +57,15 @@ export class FrmOverlay {
 	}
 
 	getButtons() {
-		const buttons = this.overlayData.buttons.map( ( button ) => {
+		const buttons = this.overlayData.buttons.map( ( button, index ) => {
 			if ( ! button.url || '' === button.url ) {
 				return '';
 			};
+			const buttonTypeClassname = 1 === index ? 'frm-button-primary' : 'frm-button-secondary';
 			const options = {
 				href: button.url,
-				text: button.label
+				text: button.label,
+				className: 'button frm_animate_bg ' + buttonTypeClassname
 			};
 			if ( button.target ) {
 				options.target = button.target;
@@ -72,7 +74,7 @@ export class FrmOverlay {
 		});
 
 		if ( buttons ) {
-			const buttonsWrapperElementOptions = { className: 'frm-overlay--cta', children: buttons };
+			const buttonsWrapperElementOptions = { className: 'frm-overlay--cta frm-flex-box', children: buttons };
 			return frmDom.div( buttonsWrapperElementOptions );
 		}
 
@@ -81,7 +83,7 @@ export class FrmOverlay {
 
 	getHeading() {
 		if ( this.overlayData.heading )	{
-			return frmDom.tag( 'h2', { className: 'frm-overlay--heading', text: this.overlayData.heading });
+			return frmDom.tag( 'h2', { className: 'frm-overlay--heading frm-text-xl', text: this.overlayData.heading });
 		}
 		return '';
 	}
@@ -108,7 +110,7 @@ export class FrmOverlay {
 		const container = frmDom.div({
 			className: 'frm-overlay--container',
 			children: [
-				frmDom.div({className: 'frm-overlay--hero-image', children: [ this.getHeroImage() ] }),
+				frmDom.div({className: 'frm-overlay--hero-image frm-mb-md', children: [ this.getHeroImage() ] }),
 				this.getHeading(),
 				this.getCopy(),
 				this.getButtons()

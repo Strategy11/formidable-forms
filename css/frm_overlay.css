@@ -42,40 +42,18 @@ body.admin-bar .frm-overlay--close {
 	max-width: 468px;
 	height: 260px;
 }
-.frm-overlay--container .frm-overlay--hero-image {
-	margin-bottom:24px;
-}
 .frm-overlay--container .frm-overlay--heading {
-	margin-bottom: 8px;
+	margin-bottom: var( --gap-xs );
 	font-weight: 600;
 	color: white;
-	font-size: var( --h-xs );
-	line-height: 32px;
 }
-.frm-overlay--container .frm-overlay--copy {
-	font-size: 14px;
-	color: white;
-	font-weight: 400;
-	line-height: 20px;
-}
+
 .frm-overlay--container .frm-overlay--cta {
 	margin-top: 32px;
-	display: flex;
-	align-items: center;
 	justify-content: center;
-	gap: 8px;
+	gap: var( --gap-sm );
 }
-.frm-overlay--container .frm-overlay--cta a {
-	display: block;
-	padding: 10px 18px;
-	text-align: center;
-	font-weight: 600;
-	font-size: var( --text-md );
-	line-height: 24px;
-	border-radius: var( --border-radius );
-	background: white;
-	color: var( --grey-800 );
-}
+
 .frm-overlay--container .frm-overlay--cta a:nth-child(2){
 	color: white;
 	background: var( --primary-color );
