@@ -12,18 +12,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 abstract class FrmStatsEmail extends FrmSummaryEmail {
 
+	/**
+	 * Should show inbox notice section?
+	 *
+	 * @var bool
+	 */
 	protected $has_inbox_msg = false;
 
+	/**
+	 * Should show comparison with the stats data of the previous date range?
+	 *
+	 * @var bool
+	 */
 	protected $has_comparison = true;
 
+	/**
+	 * Should show out of date plugin section?
+	 *
+	 * @var bool
+	 */
 	protected $has_out_of_date_plugins = true;
 
+	/**
+	 * From date.
+	 *
+	 * @var string
+	 */
 	protected $from_date;
 
+	/**
+	 * To date.
+	 *
+	 * @var string
+	 */
 	protected $to_date;
 
+	/**
+	 * From date of the previous date range.
+	 *
+	 * @var string
+	 */
 	protected $prev_from_date;
 
+	/**
+	 * To date of the previous date range.
+	 *
+	 * @var string
+	 */
 	protected $prev_to_date;
 
 	/**
@@ -66,8 +101,13 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			$args['stats']['entries']['compare'] = ( $stats_data['entries'] - $prev_stats_data['entries'] ) / $stats_data['entries'];
 		}
 
-		return $args; // TODO: add filter.
+		return $args;
 	}
 
+	/**
+	 * Gets label of Top forms section.
+	 *
+	 * @return string
+	 */
 	abstract protected function get_top_forms_label();
 }

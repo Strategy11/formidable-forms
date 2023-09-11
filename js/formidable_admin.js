@@ -7225,7 +7225,6 @@ function frmAdminBuildJS() {
 	function toggleFormOpts() {
 		/*jshint validthis:true */
 		var changedOpt = jQuery( this );
-		console.log( changedOpt );
 		var val = changedOpt.val();
 		if ( changedOpt.attr( 'type' ) === 'checkbox' ) {
 			if ( this.checked === false ) {
