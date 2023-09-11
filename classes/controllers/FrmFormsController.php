@@ -1094,6 +1094,15 @@ class FrmFormsController {
 			$error = array(
 				'title' => __( 'You can\'t edit the form', 'formidable' ),
 				'body'  => __( 'The form you\'re trying to edit is in trash. You must restore it first before you can make changes', 'formidable' ),
+				'cancel_url' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
+				'continue_url' => add_query_arg(
+					array(
+						'_wpnonce' => wp_create_nonce( 'untrash_form_' . $id ),
+						'form_type' => 'trash',
+						'frm_action' => 'untrash'
+					),
+				),
+				'continue_text' => __( 'Restore form', 'formidable' ),
 			);
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
 			return;

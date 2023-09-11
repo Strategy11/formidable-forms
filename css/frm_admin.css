@@ -340,10 +340,33 @@ td.column-title .frm_actions_dropdown {
 }
 
 /* Error modal */
-.frm_error_modal .frm_modal_title {
+#frm_error_modal {
+	display: block;
+}
+/* .frm-error-modal .frm_modal_top {
+	border-bottom: 1px solid var(--grey-border);
+} */
+
+.frm-error-modal #frm_lock_simple {
+	color: var(--primary-500);
+}
+
+#frm_error_modal.frm_modal_title {
 	font-size: var(--text-xl);
 	font-weight: 400;
 	color: var(--grey-900);
+}
+
+#frm_error_modal.frm-dialog {
+	border-radius: 16px;
+    border: none;
+    background-color: #fff;
+}
+
+.frm-error-modal .ui-widget-content {
+	border: none;
+    background: none;
+    border-radius: 16px !important;
 }
 
 /* Override CSS in Views plugin. */
@@ -2236,13 +2259,15 @@ h2.frm-h2 + .howto {
 }
 
 .frm-modal .postbox .frm_modal_top,
-.frm-dialog .frm_common_modal .postbox > div:first-child {
+.frm-dialog .frm_common_modal .postbox > div:first-child,
+.frm-error-modal .frm_modal_top {
 	padding: var(--gap-md) var(--gap-md) 0;
 	position: relative;
 }
 
 .frm-modal .postbox .frm-modal-title,
-.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child,
+.frm-error-modal .frm-modal-title {
 	display: inline-block;
 	font-size: var(--text-xl);
 	color: var(--grey-900);
