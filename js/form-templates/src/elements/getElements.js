@@ -54,7 +54,7 @@ function getElements() {
 	const customTemplates = {
 		customTemplatesSection,
 		customTemplatesTitle: customTemplatesSection?.querySelector(
-			`#${ PREFIX }-title`
+			`#${ PREFIX }-custom-list-title`
 		),
 		customTemplatesList: customTemplatesSection?.querySelector(
 			`#${ PREFIX }-custom-list`
@@ -68,9 +68,9 @@ function getElements() {
 	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );
 	const emptyStateElements = {
 		emptyState,
-		emptyStateTitle: emptyState?.querySelector( `.${ PREFIX }-title` ),
-		emptyStateText: emptyState?.querySelector( `.${ PREFIX }-text` ),
-		emptyStateButton: emptyState?.querySelector( `.${ PREFIX }-button` )
+		emptyStateTitle: emptyState?.querySelector( `.${ PREFIX }-empty-state-title` ),
+		emptyStateText: emptyState?.querySelector( `.${ PREFIX }-empty-state-text` ),
+		emptyStateButton: emptyState?.querySelector( `.${ PREFIX }-empty-state-button` )
 	};
 
 	// Sidebar Elements

@@ -21,9 +21,9 @@ import { categorizedTemplates } from '../templates';
 import {
 	getAppState,
 	PREFIX,
-	ALL_TEMPLATES_SLUG,
-	FAVORITES_SLUG,
-	CUSTOM_SLUG
+	ALL_TEMPLATES,
+	FAVORITES,
+	CUSTOM
 } from '../shared';
 import {
 	show,
@@ -44,7 +44,8 @@ const {
 	customTemplatesSection,
 	customTemplatesTitle,
 	customTemplatesList,
-	customTemplateItems
+	customTemplateItems,
+	emptyState
 } = getElements();
 
 /**
@@ -54,22 +55,26 @@ const {
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
+	if ( ALL_TEMPLATES !== selectedCategory ) {
+		hideElements( bodyContentChildren );
+	}
+
 	updatePageTitle();
 	show( pageTitle );
 
 	switch ( selectedCategory ) {
-		case ALL_TEMPLATES_SLUG:
+		case ALL_TEMPLATES:
 			showAllTemplates();
 			break;
-		case FAVORITES_SLUG:
+		case FAVORITES:
 			showFavoriteTemplates();
 			break;
-		case CUSTOM_SLUG:
+		case CUSTOM:
 			showCustomTemplates();
 			break;
 		default:
 			// Clear the stage for new content
-			hideElements([ ...bodyContentChildren, ...templateItems ]);
+			hideElements( templateItems );
 
 			showElements([
 				templatesList,
@@ -86,7 +91,7 @@ export function showSelectedCategory( selectedCategory ) {
  */
 export function showAllTemplates() {
 	showElements([ ...bodyContentChildren, ...templateItems ]);
-	hideElements([ ...twinFeaturedTemplateItems, customTemplatesSection ]);
+	hideElements( twinFeaturedTemplateItems, customTemplatesSection, emptyState );
 }
 
 /**
@@ -96,7 +101,7 @@ export function showAllTemplates() {
  */
 export function showFavoriteTemplates() {
 	// Clear the stage for new content
-	hideElements([ ...bodyContentChildren, ...templateItems ]);
+	hideElements( templateItems );
 
 	const { favoritesCount } = getAppState();
 	const elementsToShow = [];
@@ -115,15 +120,18 @@ export function showFavoriteTemplates() {
 	// Add custom favorites if available
 	if ( favoritesCount.custom > 0 ) {
 		const nonFavCustomTemplates = Array.from( customTemplateItems ).filter(
-			( template ) => ! isFavoriteTemplate( template )
+			template => ! isFavoriteTemplate( template )
 		);
 
 		hideElements( nonFavCustomTemplates );
 		elementsToShow.push( customTemplatesSection );
 		elementsToShow.push( customTemplatesList );
-		0 === favoritesCount.default ?
-			hide( customTemplatesTitle ) :
+
+		if ( 0 === favoritesCount.default ) {
+			hide( customTemplatesTitle );
+		} else {
 			elementsToShow.push( customTemplatesTitle );
+		}
 	}
 
 	// Show elements that were selected to be shown
@@ -136,9 +144,6 @@ export function showFavoriteTemplates() {
  * @return {void}
  */
 export function showCustomTemplates() {
-	// Clear the stage for new content
-	hideElements( bodyContentChildren );
-
 	showElements([
 		customTemplatesSection,
 		customTemplatesList,

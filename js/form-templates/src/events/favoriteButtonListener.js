@@ -32,7 +32,8 @@ import {
 	hide
 } from '../utils';
 
-const HEART_ICON_SELECTOR = '.frm-form-templates-item-favorite-button use';
+const FAVORITE_BUTTON_CLASS = `.${ PREFIX }-item-favorite-button`;
+const HEART_ICON_SELECTOR = `${FAVORITE_BUTTON_CLASS} use`;
 const FILLED_HEART_ICON = '#frm_heart_solid_icon';
 const LINEAR_HEART_ICON = '#frm_heart_icon';
 const OPERATION = {
@@ -52,9 +53,7 @@ const {
  * @return {void}
  */
 function addFavoriteButtonEvents() {
-	const favoriteButtons = document.querySelectorAll(
-		`.${ PREFIX }-favorite-button`
-	);
+	const favoriteButtons = document.querySelectorAll( FAVORITE_BUTTON_CLASS );
 
 	// Attach click event listeners to each favorite button.
 	favoriteButtons.forEach( ( favoriteButton ) =>
@@ -96,16 +95,16 @@ const onFavoriteButtonClick = ( event ) => {
 
 	template.classList.toggle( `${ PREFIX }-favorite-item`, ! isFavorited );
 	if ( isTemplateFeatured ) {
-		const templateList = template.closest( `#${ PREFIX }-featured-list` ) ?
+		const templateList = template.closest( `#${ PREFIX }-list` ) ?
 			featuredTemplatesList :
 			templatesList;
+
+		// Toggle twin template's favorite status
 		twinFeaturedTemplate = templateList?.querySelector(
 			`.${ PREFIX }-item[data-id="${ templateId }"]`
 		);
-
-		// Toggle twin template's favorite status
 		twinFeaturedTemplate?.classList.toggle(
-			`${ PREFIX }-item`,
+			`${ PREFIX }-favorite-item`,
 			! isFavorited
 		);
 	}

@@ -17,14 +17,13 @@
  * Internal dependencies
  */
 import getElements from '../elements';
-import { ALL_TEMPLATES_SLUG } from './';
+import { ALL_TEMPLATES } from './';
 
-// Extract initial data from the global frmFormTemplatesVars variable
 const { favoritesCount, FEATURED_TEMPLATES_KEYS } = window.frmFormTemplatesVars;
-const {allTemplatesCategory} = getElements();
+const { allTemplatesCategory } = getElements();
 
 let appState = {
-	selectedCategory: ALL_TEMPLATES_SLUG,
+	selectedCategory: ALL_TEMPLATES,
 	selectedCategoryEl: allTemplatesCategory,
 	notEmptySearchText: false,
 	FEATURED_TEMPLATES_KEYS,

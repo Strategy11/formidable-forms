@@ -21,7 +21,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, tag, div, span, a, img } from '../shared';
+import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, span, a, img } from '../shared';
 
 /**
  * Create and return Empty State element.
@@ -37,6 +37,7 @@ function createEmptyStateElement() {
 
 	return div({
 		id: `${ PREFIX }-empty-state`,
+		className: HIDDEN_CLASS,
 		children: [
 			img({
 				src: `${ PLUGIN_URL }/images/form-templates/empty-state.svg`,

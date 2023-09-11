@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 
 				<!-- Empty State -->
-				<div id="frm-form-templates-empty-state">
+				<div class="frm_hidden">
 					<img class="frm-form-templates-image" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/empty-state.svg' ); ?>" alt="<?php esc_attr_e( 'No results found', 'formidable' ); ?>">
 					<h3 class="frm-form-templates-title"><?php esc_html_e( 'No results found', 'formidable' ); ?></h3>
 					<p class="frm-form-templates-text"><?php esc_html_e( 'Sorry, we didn\'t find any templates that match your criteria.', 'formidable' ); ?></p>

@@ -19,6 +19,6 @@ export const PREFIX = 'frm-form-templates';
 export const HIDDEN_CLASS = 'frm_hidden';
 export const CURRENT_CLASS = 'frm-current';
 
-export const ALL_TEMPLATES_SLUG = 'all-templates';
-export const FAVORITES_SLUG = 'favorites';
-export const CUSTOM_SLUG = 'custom';
+export const ALL_TEMPLATES = 'all-templates';
+export const FAVORITES = 'favorites';
+export const CUSTOM = 'custom';

@@ -18,7 +18,7 @@
  */
 import getElements from '../elements';
 
-export let categorizedTemplates;
+export let categorizedTemplates = {};
 
 /**
  * Builds a categorized list of templates.

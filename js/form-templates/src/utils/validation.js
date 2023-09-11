@@ -18,10 +18,12 @@
  */
 import {
 	PREFIX,
-	ALL_TEMPLATES_SLUG,
-	FAVORITES_SLUG,
+	ALL_TEMPLATES,
+	FAVORITES,
 	getAppState
 } from '../shared';
+
+const { FEATURED_TEMPLATES_KEYS } = getAppState();
 
 /**
  * Checks if the category is "All Templates".
@@ -30,7 +32,7 @@ import {
  * @return {boolean} True if the category is "All Templates", otherwise false.
  */
 export const isAllTemplatesCategory = ( category ) =>
-	ALL_TEMPLATES_SLUG === category;
+	ALL_TEMPLATES === category;
 
 /**
  * Checks if the category is "Favorites".
@@ -38,7 +40,7 @@ export const isAllTemplatesCategory = ( category ) =>
  * @param {string} category The category slug.
  * @return {boolean} True if the category is "Favorites", otherwise false.
  */
-export const isFavoritesCategory = ( category ) => FAVORITES_SLUG === category;
+export const isFavoritesCategory = ( category ) => FAVORITES === category;
 
 /**
  * Checks if a template is a favorite.
@@ -65,6 +67,6 @@ export const isCustomTemplate = ( template ) =>
  * @return {boolean} True if the template is featured, otherwise false.
  */
 export const isFeaturedTemplate = ( template ) =>
-	getAppState.FEATURED_TEMPLATES_KEYS.includes(
+	FEATURED_TEMPLATES_KEYS.includes(
 		Number( template.dataset.id )
 	);
