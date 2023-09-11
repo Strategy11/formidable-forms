@@ -205,7 +205,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 99 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -273,6 +273,17 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Create a daily cron event.
+	 *
+	 * @since x.x
+	 */
+	private function migrate_to_99() {
+		if ( ! wp_next_scheduled( 'frm_daily_event' ) ) {
+			wp_schedule_event( time(), 'daily', 'frm_daily_event' );
+		}
 	}
 
 	/**
