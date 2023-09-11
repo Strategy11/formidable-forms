@@ -22,10 +22,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { show } from '../utils';
-import getElements from '../elements';
-
-const { emptyState, emptyStateTitle, emptyStateText, emptyStateButton } =
-	getElements();
+import { getElements } from '../elements';
 
 /**
  * Display the search-empty state.
@@ -33,10 +30,14 @@ const { emptyState, emptyStateTitle, emptyStateText, emptyStateButton } =
  * @return {void}
  */
 export const showSearchEmptyState = () => {
+	const { emptyState } = getElements();
+
 	// Exit early if the UI is already in the empty search state
 	if ( 'search' === emptyState.dataset?.ui ) {
 		return;
 	}
+
+	const { emptyStateTitle, emptyStateText, emptyStateButton } = getElements();
 
 	// Update text content
 	emptyStateTitle.textContent = __( 'No results found', 'sherv-challenge' );

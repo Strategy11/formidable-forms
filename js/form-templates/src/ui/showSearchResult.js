@@ -21,7 +21,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import getElements from '../elements';
+import { getElements } from '../elements';
 import { CURRENT_CLASS, getAppStateProperty } from '../shared';
 import { showElements, hideElements, fadeIn } from '../utils';
 import { updatePageTitle } from '.';

@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import getElements from '../elements';
+import { getElements } from '../elements';
 import { ALL_TEMPLATES } from './';
 
 const { favoritesCount, FEATURED_TEMPLATES_KEYS } = window.frmFormTemplatesVars;

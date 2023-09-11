@@ -28,9 +28,9 @@ import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, span, a, img } from '../sha
  *
  * @return {HTMLElement} The Empty State element.
  */
-function createEmptyStateElement() {
+export function createEmptyStateElement() {
 	const button = a({
-		class: 'button button-primary frm-button-primary',
+		className: 'button button-primary frm-button-primary',
 		href: '#'
 	});
 	button.setAttribute( 'role', 'button' );
@@ -44,14 +44,23 @@ function createEmptyStateElement() {
 				alt: __( 'Empty State', 'sherv-challenge' )
 			}),
 			tag( 'h3', {
-				class: `${ PREFIX }-title`
+				className: `${ PREFIX }-title`
 			}),
 			span({
-				class: `${ PREFIX }-text`
+				className: `${ PREFIX }-text`
 			}),
 			button
 		]
 	});
 }
 
-export default createEmptyStateElement;
+export function getEmptyStateElements() {
+	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );
+
+	return {
+		emptyState,
+		emptyStateTitle: emptyState?.querySelector( `.${ PREFIX }-title` ),
+		emptyStateText: emptyState?.querySelector( `.${ PREFIX }-text` ),
+		emptyStateButton: emptyState?.querySelector( '.button' )
+	};
+}

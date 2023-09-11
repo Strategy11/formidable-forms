@@ -25,7 +25,7 @@ import { HIDDEN_CLASS } from '../shared';
  * @return {void}
  */
 export const showElements = ( elements ) =>
-	elements?.forEach( ( element ) => show( element ) );
+	Array.from( elements )?.forEach( ( element ) => show( element ) );
 
 /**
  * Hides specified elements by adding the hidden class.
@@ -34,7 +34,7 @@ export const showElements = ( elements ) =>
  * @return {void}
  */
 export const hideElements = ( elements ) =>
-	elements?.forEach( ( element ) => hide( element ) );
+	Array.from( elements )?.forEach( ( element ) => hide( element ) );
 
 /**
  * Removes the hidden class to show the element.

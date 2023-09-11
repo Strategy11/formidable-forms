@@ -14,7 +14,7 @@
  */
 
 export { default as setupInitialView } from './setupInitialView';
-export * from './showSelectedCategory';
 export * from './pageTitle';
-export * from './emptyState';
-export * from './searchResult';
+export * from './showSelectedCategory';
+export * from './showSearchResult';
+export * from './showEmptyState';

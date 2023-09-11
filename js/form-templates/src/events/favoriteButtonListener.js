@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import getElements from '../elements';
+import { getElements } from '../elements';
 import {
 	PREFIX,
 	doJsonPost,

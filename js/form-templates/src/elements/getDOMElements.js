@@ -1,21 +1,3 @@
-/**
- * Copyright (C) 2023 Formidable Forms
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
-
-/**
- * Internal dependencies
- */
 import { PREFIX } from '../shared';
 
 /**
@@ -23,7 +5,7 @@ import { PREFIX } from '../shared';
  *
  * @return {Object} DOM elements.
  */
-function getElements() {
+function getDOMElements() {
 	// Body Elements
 	const bodyContent = document.querySelector( '#post-body-content' );
 	const bodyElements = {
@@ -64,15 +46,6 @@ function getElements() {
 		)
 	};
 
-	// Empty State Elements
-	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );
-	const emptyStateElements = {
-		emptyState,
-		emptyStateTitle: emptyState?.querySelector( `.${ PREFIX }-empty-state-title` ),
-		emptyStateText: emptyState?.querySelector( `.${ PREFIX }-empty-state-text` ),
-		emptyStateButton: emptyState?.querySelector( `.${ PREFIX }-empty-state-button` )
-	};
-
 	// Sidebar Elements
 	const searchInput = document.querySelector( '#template-search-input' );
 	const allTemplatesCategory = document.querySelector(
@@ -94,9 +67,8 @@ function getElements() {
 		...bodyElements,
 		...templates,
 		...customTemplates,
-		...emptyStateElements,
 		...sidebar
 	};
 }
 
-export default getElements;
+export default getDOMElements;

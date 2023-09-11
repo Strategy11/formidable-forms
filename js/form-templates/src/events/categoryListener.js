@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import getElements from '../elements';
+import { getElements } from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
 import { fadeIn } from '../utils';

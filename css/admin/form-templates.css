@@ -218,7 +218,7 @@
 	gap: 10px;
 	border: 1px solid var(--grey-200);
 	border-radius: var(--small-radius);
-	padding: calc(var(--gap-sm) - 1px) var(--gap-sm);
+	padding: 15px 16px;
 	box-shadow: var(--box-shadow-xs);
 }
 
