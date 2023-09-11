@@ -8601,7 +8601,6 @@ function frmAdminBuildJS() {
 		var installFormTrigger,
 			activeHoverIcons,
 			$modal,
-			handleError,
 			handleConfirmEmailAddressError,
 			firstLockedTemplate,
 			isShowFreeTemplatesFormFirst,
