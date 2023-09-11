@@ -8898,7 +8898,7 @@ function frmAdminBuildJS() {
 
 					$modal.attr( 'frm-page', 'email' );
 					$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
-			
+
 					$li.append( installFormTrigger );
 				}
 
@@ -9678,25 +9678,25 @@ function frmAdminBuildJS() {
 				const email = document.getElementById( 'frm_leave_email' ).value.trim();
 
 				event.preventDefault();
-	
+
 				if ( '' === email ) {
 					handleEmailAddressError( 'empty' );
 					return;
 				}
-	
+
 				const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-	
+
 				if ( regex.test( email ) === false ) {
 					handleEmailAddressError( 'invalid' );
 					return;
 				}
-	
+
 				const $hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
 				const $hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
 				if ( ! $hiddenEmailField.length ) {
 					return;
 				}
-	
+
 				$hiddenEmailField.val( email );
 				jQuery.ajax({
 					type: 'POST',
