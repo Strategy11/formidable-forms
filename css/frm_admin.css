@@ -370,8 +370,6 @@ td.column-title .frm_actions_dropdown {
 }
 
 #frm_error_modal.frm-dialog {
-	border-radius: 16px;
-    border: none;
     background-color: #fff;
 }
 
