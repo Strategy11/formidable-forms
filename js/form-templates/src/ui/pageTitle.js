@@ -16,21 +16,23 @@
 /**
  * Internal dependencies
  */
-import getElements from './getElements';
-import createEmptyStateElement from './emptyStateElement';
+import getElements from '../elements';
+import { getAppStateProperty } from '../shared';
 
-let elements = {};
+const { pageTitle } = getElements();
 
 /**
- * Initialize the elements.
+ * Sets the page title based on a given string or the currently selected category.
  *
- * @since x.x
+ * @param {string} [title] Optional title to display.
+ * @return {void}
  */
-export const initializeElements = () => {
-	elements = getElements();
+export function updatePageTitle( title ) {
+	const newTitle =
+		title ||
+		getAppStateProperty( 'selectedCategoryEl' ).querySelector(
+			'.frm-form-templates-cat-text'
+		).textContent;
 
-	const emptyState = createEmptyStateElement();
-	elements.bodyContent.appendChild( emptyState );
-};
-
-export default elements;
+	pageTitle.textContent = newTitle;
+}

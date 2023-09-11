@@ -1,14 +1,17 @@
 {
 	"presets": [
 		[
-			"env",
+			"@babel/preset-env",
 			{
 				"targets": {
-					"browsers": [
-						"last 2 versions",
-						"ie >= 9"
-					]
+					"browsers": ["last 2 versions", "ie >= 9"]
 				}
+			}
+		],
+		[
+			"@babel/preset-react",
+			{
+				"pragma": "wp.element.createElement"
 			}
 		]
 	],
@@ -18,20 +21,12 @@
 			{
 				"output": "languages/formidable-js.pot"
 			}
-		],
-		[
-			"transform-react-jsx",
-			{
-				"pragma": "wp.element.createElement"
-			}
-		],
-		"dynamic-import-webpack",
-		"transform-object-rest-spread"
+		]
 	],
 	"env": {
 		"test": {
 			"plugins": [
-				"transform-react-jsx",
+				"@babel/plugin-transform-react-jsx",
 				"babel-plugin-styled-components"
 			]
 		}

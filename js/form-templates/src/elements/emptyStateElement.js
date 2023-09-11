@@ -26,9 +26,7 @@ import { PLUGIN_URL, PREFIX, tag, div, span, a, img } from '../shared';
 /**
  * Create and return Empty State element.
  *
- * @since x.x
- *
- * @returns {HTMLElement} The Empty State element.
+ * @return {HTMLElement} The Empty State element.
  */
 function createEmptyStateElement() {
 	const button = a({
@@ -38,18 +36,21 @@ function createEmptyStateElement() {
 	button.setAttribute( 'role', 'button' );
 
 	return div({
-		id: `${PREFIX}-empty-state`,
+		id: `${ PREFIX }-empty-state`,
 		children: [
-			img({ src: `${PLUGIN_URL}/images/form-templates/empty-state.svg`, alt: __( 'Empty State', 'formidable' ) }),
+			img({
+				src: `${ PLUGIN_URL }/images/form-templates/empty-state.svg`,
+				alt: __( 'Empty State', 'sherv-challenge' )
+			}),
 			tag( 'h3', {
-				class: `${PREFIX}-title`
+				class: `${ PREFIX }-title`
 			}),
 			span({
-				class: `${PREFIX}-text`
+				class: `${ PREFIX }-text`
 			}),
 			button
 		]
 	});
-};
+}
 
 export default createEmptyStateElement;

@@ -14,15 +14,23 @@
  */
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
 import { show } from '../utils';
-import { emptyState, emptyStateTitle, emptyStateText, emptyStateButton } from '../elements';
+import getElements from '../elements';
+
+const { emptyState, emptyStateTitle, emptyStateText, emptyStateButton } =
+	getElements();
 
 /**
  * Display the search-empty state.
  *
- * @since x.x
+ * @return {void}
  */
 export const showSearchEmptyState = () => {
 	// Exit early if the UI is already in the empty search state
@@ -31,9 +39,15 @@ export const showSearchEmptyState = () => {
 	}
 
 	// Update text content
-	emptyStateTitle.textContent = __( 'No results found', 'formidable' );
-	emptyStateText.textContent = __( 'Sorry, we didn\'t find any templates that match your criteria.', 'formidable' );
-	emptyStateButton.textContent = __( 'Start from scratch', 'formidable' );
+	emptyStateTitle.textContent = __( 'No results found', 'sherv-challenge' );
+	emptyStateText.textContent = __(
+		'Sorry, we didn\'t find any templates that match your criteria.',
+		'sherv-challenge'
+	);
+	emptyStateButton.textContent = __(
+		'Start from scratch',
+		'sherv-challenge'
+	);
 
 	// Assign unique ID and state attributes
 	emptyStateButton.setAttribute( 'id', 'frm-search-empty-state-button' );

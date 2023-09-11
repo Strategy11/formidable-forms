@@ -16,30 +16,37 @@
 /**
  * Internal dependencies
  */
-import { initSearch, getAppState, setAppStateProperty, PREFIX } from '../shared';
-import { searchInput, allTemplatesCategory, emptyState } from '../elements';
+import getElements from '../elements';
+import {
+	PREFIX,
+	getAppState,
+	setAppStateProperty,
+	initSearch
+} from '../shared';
 import { showSearchEmptyState, showSearchResults } from '../ui';
 import { hide } from '../utils';
+
+const { searchInput, allTemplatesCategory, emptyState } = getElements();
 
 /**
  * Adds search-related event listeners by calling the 'initSearch' function.
  *
- * @since x.x
- *
  * @see frmDom.search method
+ * @return {void}
  */
 function addSearchEvents() {
-	initSearch( searchInput, `${PREFIX}-item`, { handleSearchResult });
-};
+	initSearch( searchInput, `${ PREFIX }-item`, {
+		handleSearchResult
+	});
+}
 
 /**
  * Manages UI state based on search results and input value.
  *
- * @since x.x
- *
  * @param {Object} args Contains flags for search status.
  * @param {boolean} args.foundSomething True if search yielded results.
  * @param {boolean} args.notEmptySearchText True if search input is not empty.
+ * @return {void}
  */
 function handleSearchResult({ foundSomething, notEmptySearchText }) {
 	const appState = getAppState();
@@ -48,7 +55,9 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 
 	// Revert to 'All Templates' if search and selected category are both empty
 	if ( ! appState.notEmptySearchText && ! appState.selectedCategory ) {
-		allTemplatesCategory.dispatchEvent( new Event( 'click', { 'bubbles': true }) );
+		allTemplatesCategory.dispatchEvent(
+			new Event( 'click', { bubbles: true })
+		);
 		return;
 	}
 
@@ -68,16 +77,16 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 		// Clear selected category, acting as a flag to indicate search result state
 		setAppStateProperty( 'selectedCategory', '' );
 	}
-};
+}
 
 /**
  * Resets the value of the search input and triggers an input event.
  *
- * @since x.x
+ * @return {void}
  */
 export function resetSearchInput() {
 	searchInput.value = '';
-	searchInput.dispatchEvent( new Event( 'input', { 'bubbles': true }) );
+	searchInput.dispatchEvent( new Event( 'input', { bubbles: true }) );
 }
 
 export default addSearchEvents;

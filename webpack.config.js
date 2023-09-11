@@ -11,15 +11,16 @@ const config = {
 		extensions: [ '.json', '.js', '.jsx' ],
 		modules: [
 			`${ __dirname }/js`,
-			'node_modules',
-		],
+			'node_modules'
+		]
 	},
 	entry: {
 		formidable_blocks: './js/src/blocks.js',
+		'form-templates': './js/form-templates/index.js'
 	},
 	output: {
 		filename: '[name].js',
-		path: path.resolve( __dirname, 'js' ),
+		path: path.resolve( __dirname, 'js' )
 	},
 	module: {
 		rules: [
@@ -29,20 +30,20 @@ const config = {
 				include: /js/,
 				use: [
 					{
-						loader: 'babel-loader',
-					},
-				],
+						loader: 'babel-loader'
+					}
+				]
 			},
 			{
 				test: /\.svg$/,
-				use: ['@svgr/webpack'],
-			},
-		],
+				use: [ '@svgr/webpack' ]
+			}
+		]
 	},
 	externals: {
 		jquery: 'jQuery',
-		$: 'jQuery',
-	},
+		$: 'jQuery'
+	}
 };
 
 module.exports = config;

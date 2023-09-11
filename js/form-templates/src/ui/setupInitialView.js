@@ -16,14 +16,16 @@
 /**
  * Internal dependencies
  */
-import { searchInput, bodyContent, twinFeaturedTemplateItems } from '../elements';
-import { show, fadeIn, hideElements } from '../utils';
+import getElements from '../elements';
+import { show, hideElements, fadeIn } from '../utils';
+
+const { searchInput, bodyContent, twinFeaturedTemplateItems } = getElements();
 
 /**
  * Sets up the initial view, performing any required
  * DOM manipulations for proper element presentation.
  *
- * @since x.x
+ * @return {void}
  */
 function setupInitialView() {
 	// Clear the value in the search input
@@ -35,6 +37,6 @@ function setupInitialView() {
 	// Display the main body content and gradually reveal the updated UI elements
 	show( bodyContent );
 	fadeIn( bodyContent );
-};
+}
 
 export default setupInitialView;

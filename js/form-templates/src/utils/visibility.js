@@ -21,45 +21,42 @@ import { HIDDEN_CLASS } from '../shared';
 /**
  * Shows specified elements by removing the hidden class.
  *
- * @since x.x
- *
  * @param {Array<Element>} elements An array of elements to show.
+ * @return {void}
  */
-export const showElements = elements => elements?.forEach( element => show( element ) );
+export const showElements = ( elements ) =>
+	elements?.forEach( ( element ) => show( element ) );
 
 /**
  * Hides specified elements by adding the hidden class.
  *
- * @since x.x
- *
  * @param {Array<Element>} elements An array of elements to hide.
+ * @return {void}
  */
-export const hideElements = elements => elements?.forEach( element => hide( element ) );
+export const hideElements = ( elements ) =>
+	elements?.forEach( ( element ) => hide( element ) );
 
 /**
  * Removes the hidden class to show the element.
  *
- * @since x.x
- *
  * @param {Element} element The element to show.
+ * @return {void}
  */
-export const show = element => element?.classList.remove( HIDDEN_CLASS );
+export const show = ( element ) => element?.classList.remove( HIDDEN_CLASS );
 
 /**
  * Adds the hidden class to hide the element.
  *
- * @since x.x
- *
  * @param {Element} element The element to hide.
+ * @return {void}
  */
-export const hide = element => element?.classList.add( HIDDEN_CLASS );
+export const hide = ( element ) => element?.classList.add( HIDDEN_CLASS );
 
 /**
  * Checks if an element is visible.
  *
- * @since x.x
- *
  * @param {HTMLElement} element The HTML element to check for visibility.
- * @returns {boolean} Returns true if the element is visible, otherwise false.
+ * @return {boolean} Returns true if the element is visible, otherwise false.
  */
-export const isVisible = element => element?.classList.contains( HIDDEN_CLASS );
+export const isVisible = ( element ) =>
+	element?.classList.contains( HIDDEN_CLASS );

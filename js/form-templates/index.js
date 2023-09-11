@@ -28,12 +28,12 @@ domReady( () => {
 	/**
 	 * Entry point for pre-initialization adjustments to the application state.
 	 *
-	 * @since x.x
-	 *
-	 * @hook frmFormTemplates.beforeInitialize
 	 * @param {Object} appState Current state of the application.
 	 */
-	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', { getAppState, setAppState });
+	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', {
+		getAppState,
+		setAppState
+	});
 
 	// Initialize the form templates
 	initializeFormTemplates();
@@ -41,10 +41,10 @@ domReady( () => {
 	/**
 	 * Entry point for post-initialization custom logic or adjustments to the application state.
 	 *
-	 * @since x.x
-	 *
-	 * @hook frmFormTemplates.afterInitialize
 	 * @param {Object} appState Current state of the application.
 	 */
-	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', { getAppState, setAppState });
+	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', {
+		getAppState,
+		setAppState
+	});
 });

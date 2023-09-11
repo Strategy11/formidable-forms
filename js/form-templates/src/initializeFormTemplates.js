@@ -24,7 +24,7 @@ import { addEventListeners } from './events';
 /**
  * Initializes form templates.
  *
- * @since x.x
+ * @return {void}
  */
 function initializeFormTemplates() {
 	// Initializes essential DOM elements

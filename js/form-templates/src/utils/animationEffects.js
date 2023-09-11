@@ -21,19 +21,22 @@ import { PREFIX } from '../shared';
 /**
  * Applies a fade-in animation to an element.
  *
- * @since x.x
- *
  * @param {HTMLElement} element The element to apply the fade-in to.
  * @param {string} [fadingClass=`${PREFIX}-flex`] The CSS class to apply during the fading.
+ * @return {void}
  */
-export const fadeIn = ( element, fadingClass = `${PREFIX}-flex` ) => {
+export const fadeIn = ( element, fadingClass = `${ PREFIX }-flex` ) => {
 	if ( ! element ) {
 		return;
 	}
 
-	element.classList.add( `${PREFIX}-fadein`, fadingClass );
+	element.classList.add( `${ PREFIX }-fadein`, fadingClass );
 
-	element.addEventListener( 'animationend', () => {
-		element.classList.remove( `${PREFIX}-fadein`, fadingClass );
-	}, { once: true });
+	element.addEventListener(
+		'animationend',
+		() => {
+			element.classList.remove( `${ PREFIX }-fadein`, fadingClass );
+		},
+		{ once: true }
+	);
 };

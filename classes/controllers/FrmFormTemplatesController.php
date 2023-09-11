@@ -534,7 +534,7 @@ class FrmFormTemplatesController {
 		wp_enqueue_style( self::SCRIPT_HANDLE );
 
 		// Register and enqueue "Form Templates" script.
-		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/admin/form-templates.js', $js_dependencies, $version, true );
+		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/form-templates.js', $js_dependencies, $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmFormTemplatesVars', self::get_js_variables() );
 		wp_enqueue_script( self::SCRIPT_HANDLE );
 

@@ -16,34 +16,37 @@
 /**
  * Internal dependencies
  */
-import { resetSearchInput } from './';
-import { bodyContent } from '../elements';
+import getElements from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
 import { fadeIn } from '../utils';
+import { resetSearchInput } from '.';
+
+const {bodyContent} = getElements();
 
 /**
  * Manages event handling for sidebar category links.
  *
- * @since x.x
-*/
+ * @return {void}
+ */
 function addCategoryEvents() {
-	const categoryItems = document.querySelectorAll( `.${PREFIX}-cat-item` );
+	const categoryItems = document.querySelectorAll( `.${ PREFIX }-cat-item` );
 	// Attach click event listeners to each sidebar category
-	categoryItems.forEach( category => category.addEventListener( 'click', onCategoryClick ) );
+	categoryItems.forEach( ( category ) =>
+		category.addEventListener( 'click', onCategoryClick )
+	);
 }
 
 /**
  * Handles the click event on a category item.
- *
- * @since x.x
  *
  * @param {Event} event The click event object.
  */
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getAppState();
+	let { selectedCategory, selectedCategoryEl, notEmptySearchText } =
+		getAppState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -53,12 +56,12 @@ const onCategoryClick = ( event ) => {
 	/**
 	 * Filter hook to modify the selected category.
 	 *
-	 * @since x.x
-	 *
-	 * @hook frmFormTemplates.selectedCategory
 	 * @param {string} selectedCategory The selected category.
 	 */
-	selectedCategory = wp.hooks.applyFilters( 'frmFormTemplates.selectedCategory', newSelectedCategory );
+	selectedCategory = wp.hooks.applyFilters(
+		'frmFormTemplates.selectedCategory',
+		newSelectedCategory
+	);
 
 	// Highlight the newly clicked category and update the application state
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );

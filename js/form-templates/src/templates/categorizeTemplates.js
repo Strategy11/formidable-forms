@@ -16,30 +16,32 @@
 /**
  * Internal dependencies
  */
-import { templateItems } from '../elements';
+import getElements from '../elements';
 
-let categorizedTemplates;
+export let categorizedTemplates;
 
 /**
  * Builds a categorized list of templates.
  *
- * @since x.x
+ * @return {void}
  */
 export function buildCategorizedTemplates() {
-	templateItems.forEach( template => {
-		// Extract and split the categories from data attribute
-		const categories = template.getAttribute( 'data-categories' ).split( ',' );
+	const { templateItems } = getElements();
 
-		categories.forEach( category => {
+	templateItems.forEach( ( template ) => {
+		// Extract and split the categories from data attribute
+		const categories = template
+			.getAttribute( 'data-categories' )
+			.split( ',' );
+
+		categories.forEach( ( category ) => {
 			// Initialize the category array if not already done
-			if ( ! categorizedTemplates[category]) {
-				categorizedTemplates[category] = [];
+			if ( ! categorizedTemplates[ category ]) {
+				categorizedTemplates[ category ] = [];
 			}
 
 			// Add the template to the appropriate category
-			categorizedTemplates[category].push( template );
+			categorizedTemplates[ category ].push( template );
 		});
 	});
 }
-
-export default categorizedTemplates;

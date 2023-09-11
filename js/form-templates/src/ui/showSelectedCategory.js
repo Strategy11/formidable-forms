@@ -16,10 +16,25 @@
 /**
  * Internal dependencies
  */
+import getElements from '../elements';
 import { categorizedTemplates } from '../templates';
-import { getAppState, PREFIX, ALL_TEMPLATES_SLUG, FAVORITES_SLUG, CUSTOM_SLUG } from '../shared';
-import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import {
+	getAppState,
+	PREFIX,
+	ALL_TEMPLATES_SLUG,
+	FAVORITES_SLUG,
+	CUSTOM_SLUG
+} from '../shared';
+import {
+	show,
+	hide,
+	showElements,
+	hideElements,
+	isFavoriteTemplate
+} from '../utils';
+import { updatePageTitle } from '.';
+
+const {
 	bodyContent,
 	bodyContentChildren,
 	pageTitle,
@@ -30,14 +45,13 @@ import {
 	customTemplatesTitle,
 	customTemplatesList,
 	customTemplateItems
-} from '../elements';
+} = getElements();
 
 /**
  * Show templates based on selected category.
  *
- * @since x.x
- *
  * @param {string} selectedCategory The selected category to display templates for.
+ * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
 	updatePageTitle();
@@ -46,6 +60,7 @@ export function showSelectedCategory( selectedCategory ) {
 	switch ( selectedCategory ) {
 		case ALL_TEMPLATES_SLUG:
 			showAllTemplates();
+			break;
 		case FAVORITES_SLUG:
 			showFavoriteTemplates();
 			break;
@@ -56,7 +71,10 @@ export function showSelectedCategory( selectedCategory ) {
 			// Clear the stage for new content
 			hideElements([ ...bodyContentChildren, ...templateItems ]);
 
-			showElements([ templatesList, ...categorizedTemplates[selectedCategory] ]);
+			showElements([
+				templatesList,
+				...categorizedTemplates[ selectedCategory ]
+			]);
 			break;
 	}
 }
@@ -64,7 +82,7 @@ export function showSelectedCategory( selectedCategory ) {
 /**
  * Shows all templates when 'All Templates' is the selected category.
  *
- * @since x.x
+ * @return {void}
  */
 export function showAllTemplates() {
 	showElements([ ...bodyContentChildren, ...templateItems ]);
@@ -74,7 +92,7 @@ export function showAllTemplates() {
 /**
  * Shows favorite templates.
  *
- * @since x.x
+ * @return {void}
  */
 export function showFavoriteTemplates() {
 	// Clear the stage for new content
@@ -84,7 +102,9 @@ export function showFavoriteTemplates() {
 	const elementsToShow = [];
 
 	// Get all favorite items from the DOM and add the elements to show
-	const favoriteItems = bodyContent.querySelectorAll( `.${PREFIX}-favorite-item` );
+	const favoriteItems = bodyContent.querySelectorAll(
+		`.${ PREFIX }-favorite-item`
+	);
 	elementsToShow.push( ...favoriteItems );
 
 	// Add default favorites if available
@@ -94,12 +114,16 @@ export function showFavoriteTemplates() {
 
 	// Add custom favorites if available
 	if ( favoritesCount.custom > 0 ) {
-		const nonFavCustomTemplates = Array.from( customTemplateItems ).filter( template => ! isFavoriteTemplate( template ) );
+		const nonFavCustomTemplates = Array.from( customTemplateItems ).filter(
+			( template ) => ! isFavoriteTemplate( template )
+		);
 
 		hideElements( nonFavCustomTemplates );
 		elementsToShow.push( customTemplatesSection );
 		elementsToShow.push( customTemplatesList );
-		favoritesCount.default === 0 ? hide( customTemplatesTitle ) : elementsToShow.push( customTemplatesTitle );
+		0 === favoritesCount.default ?
+			hide( customTemplatesTitle ) :
+			elementsToShow.push( customTemplatesTitle );
 	}
 
 	// Show elements that were selected to be shown
@@ -109,13 +133,17 @@ export function showFavoriteTemplates() {
 /**
  * Shows custom templates.
  *
- * @since x.x
+ * @return {void}
  */
 export function showCustomTemplates() {
 	// Clear the stage for new content
 	hideElements( bodyContentChildren );
 
-	showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
+	showElements([
+		customTemplatesSection,
+		customTemplatesList,
+		...customTemplateItems
+	]);
 }
 
 export default showSelectedCategory;

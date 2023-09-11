@@ -14,27 +14,42 @@
  */
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
-import { showElements, hideElements, fadeIn } from '../utils';
+import getElements from '../elements';
 import { CURRENT_CLASS, getAppStateProperty } from '../shared';
-import { bodyContent, bodyContentChildren, pageTitle, templatesList, templateItems } from '../elements';
-import { updatePageTitle } from './';
+import { showElements, hideElements, fadeIn } from '../utils';
+import { updatePageTitle } from '.';
+
+const {
+	bodyContent,
+	bodyContentChildren,
+	pageTitle,
+	templatesList,
+	templateItems
+} = getElements();
 
 /**
  * Updates the UI to display the search results.
  *
- * @since x.x
+ * @return {void}
  */
 export const showSearchResults = () => {
 	// Remove highlighting from the currently selected category
-	getAppStateProperty( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
+	getAppStateProperty( 'selectedCategoryEl' ).classList.remove(
+		CURRENT_CLASS
+	);
 
 	// Hide non-relevant elements in the body content
 	hideElements( bodyContentChildren );
 
 	// Update the page title and display relevant elements
-	updatePageTitle( __( 'Search Result', 'formidable' ) );
+	updatePageTitle( __( 'Search Result', 'sherv-challenge' ) );
 	showElements([ pageTitle, templatesList, ...templateItems ]);
 
 	// Smoothly display the updated UI elements

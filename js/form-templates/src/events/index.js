@@ -16,17 +16,19 @@
 /**
  * Internal dependencies
  */
-import { getAppStateProperty } from '../shared';
-import { pageTitle } from '../elements';
+import addCategoryEvents from './categoryListener';
+import addFavoriteButtonEvents from './favoriteButtonListener';
+import addSearchEvents from './searchListener';
+
+export { resetSearchInput } from './searchListener';
 
 /**
- * Sets the page title based on a given string or the currently selected category.
+ * Attaches event listeners for handling user interactions.
  *
- * @since x.x
- *
- * @param {string} [title] Optional title to display.
+ * @return {void}
  */
-export function updatePageTitle( title ) {
-	const newTitle = title || getAppStateProperty( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
-	pageTitle.textContent = newTitle;
+export function addEventListeners() {
+	addCategoryEvents();
+	addFavoriteButtonEvents();
+	addSearchEvents();
 }

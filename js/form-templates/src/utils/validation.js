@@ -16,54 +16,55 @@
 /**
  * Internal dependencies
  */
-import { PREFIX, ALL_TEMPLATES_SLUG, FAVORITES_SLUG, FEATURED_TEMPLATES_KEYS } from '../shared';
+import {
+	PREFIX,
+	ALL_TEMPLATES_SLUG,
+	FAVORITES_SLUG,
+	getAppState
+} from '../shared';
 
 /**
  * Checks if the category is "All Templates".
  *
- * @since x.x
- *
  * @param {string} category The category slug.
- * @returns {boolean} True if the category is "All Templates", otherwise false.
+ * @return {boolean} True if the category is "All Templates", otherwise false.
  */
-export const isAllTemplatesCategory = category => ALL_TEMPLATES_SLUG === category;
+export const isAllTemplatesCategory = ( category ) =>
+	ALL_TEMPLATES_SLUG === category;
 
 /**
  * Checks if the category is "Favorites".
  *
- * @since x.x
- *
  * @param {string} category The category slug.
- * @returns {boolean} True if the category is "Favorites", otherwise false.
+ * @return {boolean} True if the category is "Favorites", otherwise false.
  */
-export const isFavoritesCategory = category => FAVORITES_SLUG === category;
+export const isFavoritesCategory = ( category ) => FAVORITES_SLUG === category;
 
 /**
  * Checks if a template is a favorite.
  *
- * @since x.x
- *
  * @param {HTMLElement} template The template element.
- * @returns {boolean} True if the template is a favorite, otherwise false.
+ * @return {boolean} True if the template is a favorite, otherwise false.
  */
-export const isFavoriteTemplate = template => template?.classList.contains( `${PREFIX}-favorite-item` );
+export const isFavoriteTemplate = ( template ) =>
+	template?.classList.contains( `${ PREFIX }-favorite-item` );
 
 /**
  * Checks if a template is custom.
  *
- * @since x.x
- *
  * @param {HTMLElement} template The template element.
- * @returns {boolean} True if the template is custom, otherwise false.
+ * @return {boolean} True if the template is custom, otherwise false.
  */
-export const isCustomTemplate = template => template?.classList.contains( `${PREFIX}-custom-item` );
+export const isCustomTemplate = ( template ) =>
+	template?.classList.contains( `${ PREFIX }-custom-item` );
 
 /**
  * Checks if a template is featured.
  *
- * @since x.x
- *
  * @param {HTMLElement} template The template element.
- * @returns {boolean} True if the template is featured, otherwise false.
+ * @return {boolean} True if the template is featured, otherwise false.
  */
-export const isFeaturedTemplate = template => FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) );
+export const isFeaturedTemplate = ( template ) =>
+	getAppState.FEATURED_TEMPLATES_KEYS.includes(
+		Number( template.dataset.id )
+	);

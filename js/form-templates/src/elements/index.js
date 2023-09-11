@@ -13,4 +13,22 @@
  * GNU General Public License for more details.
  */
 
-export { default as categorizedTemplates, buildCategorizedTemplates } from './categorizeTemplates';
+/**
+ * Internal dependencies
+ */
+import getElements from './getElements';
+import createEmptyStateElement from './emptyStateElement';
+
+/**
+ * Initialize the elements.
+ *
+ * @return {void}
+ */
+export const initializeElements = () => {
+	const { bodyContent } = getElements();
+	const emptyState = createEmptyStateElement();
+
+	bodyContent?.appendChild( emptyState );
+};
+
+export default getElements;
