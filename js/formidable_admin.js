@@ -8763,6 +8763,9 @@ function frmAdminBuildJS() {
 				showFreeTemplatesForm();
 
 				$modal.attr( 'frm-page', 'email' );
+
+				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
+				$li.append( installFormTrigger );
 				return;
 			}
 
@@ -8897,9 +8900,9 @@ function frmAdminBuildJS() {
 					showFreeTemplatesForm();
 
 					$modal.attr( 'frm-page', 'email' );
-					$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
+					$modal.attr( 'frm-this-form', firstLockedTemplate.attr( 'data-key' ) );
 
-					$li.append( installFormTrigger );
+					firstLockedTemplate.append( installFormTrigger );
 				}
 
 				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
