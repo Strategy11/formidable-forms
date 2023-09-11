@@ -9202,6 +9202,26 @@ Responsive Design
 	text-align: center;
 }
 
+#frm_leave_email_wrapper {
+	position: relative;
+	margin: 0 auto;
+}
+
+#frm_new_form_modal #frm_leave_email_wrapper {
+	width: 600px;
+}
+
+#frm_leave_email_wrapper .frmsvg {
+	top: 0;
+}
+
+#frm_leave_email_error {
+	position: absolute;
+	right: 71px;
+	top: 7px;
+	color: #973937;
+}
+
 .frm-ready-made-solution h3 ~ a {
 	color: var(--primary-500);
 }

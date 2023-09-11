@@ -9703,18 +9703,18 @@ function frmAdminBuildJS() {
 					url: $hiddenForm.attr( 'action' ),
 					data: $hiddenForm.serialize() + '&action=frm_forms_preview'
 				}).done( function( data ) {
-					var message = jQuery( data ).find( '.frm_message' ).text().trim();
-					if ( message.indexOf( 'Thanks!' ) >= 0 ) {
-						const modal = document.getElementById( 'frm_new_form_modal' );
-						if ( modal ) {
-							$modal = jQuery( modal );
-							$modal.attr( 'frm-page', 'code' );
-						} else {
-							document.getElementById( 'frmapi-email-form' ).parentElement.innerHTML = 'Success';
-							document.getElementById( 'frm-add-my-email-address' ).remove();
-						}
-					} else {
+					const message = jQuery( data ).find( '.frm_message' ).text().trim();
+					if ( message.indexOf( 'Thanks!' ) === -1 ) {
 						handleEmailAddressError( 'invalid' );
+						return;
+					}
+
+					const modal = document.getElementById( 'frm_new_form_modal' );
+					if ( modal ) {
+						modal.setAttribute( 'frm-page', 'code' );
+					} else {
+						document.getElementById( 'frmapi-email-form' ).parentElement.innerHTML = 'Thank you for signing up!';
+						document.getElementById( 'frm-add-my-email-address' ).remove();
 					}
 				});
 			});
