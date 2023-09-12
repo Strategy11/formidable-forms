@@ -66,14 +66,15 @@ if ( $has_messages ) {
 </div>
 
 <div class="frm_no_items <?php echo esc_attr( $has_messages ? 'frm_hidden' : '' ); ?>" id="frm_empty_inbox">
-	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/email.jpg' ); ?>" alt="Email Address" height="202px" />
-	<h2><?php esc_html_e( 'You don\'t have any messages', 'formidable' ); ?></h2>
-	<p>
-		<?php esc_html_e( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' ); ?>
-		<?php esc_html_e( 'Want more news and email updates?', 'formidable' ); ?>
-	</p>
 
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new-form-overlay/leave-email.php'; ?>
+	<?php
+	FrmAppController::api_email_form(
+		'subscribe',
+		__( 'You don\'t have any messages', 'formidable' ),
+		__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.' )
+			. "\n" . __(  'Want more news and email updates?', 'formidable' )
+	);
+	?>
 
 	<button id="frm-add-my-email-address" class="button-primary frm-button-primary"><?php esc_html_e( 'Subscribe', 'formidable' ); ?></button>
 </div>

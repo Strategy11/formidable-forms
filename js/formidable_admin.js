@@ -8568,7 +8568,15 @@ function frmAdminBuildJS() {
 	/* Templates */
 
 	function showFreeTemplatesForm() {
-		var formContainer = document.getElementById( 'frmapi-email-form' );
+		loadApiEmailForm();
+	}
+
+	function showActiveCampaignForm() {
+		loadApiEmailForm();
+	}
+
+	function loadApiEmailForm() {
+		const formContainer = document.getElementById( 'frmapi-email-form' );
 		jQuery.ajax({
 			dataType: 'json',
 			url: formContainer.getAttribute( 'data-url' ),
@@ -9675,52 +9683,62 @@ function frmAdminBuildJS() {
 		frmDom.util.documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
 	}
 
+	function initAddMyEmailAddress() {
+		jQuery( document ).on(
+			'click',
+			'#frm-add-my-email-address',
+			event => {
+				event.preventDefault();
+				addMyEmailAddress();
+			}
+		);
+	}
+
+	function addMyEmailAddress() {
+		const email = document.getElementById( 'frm_leave_email' ).value.trim();
+		if ( '' === email ) {
+			handleEmailAddressError( 'empty' );
+			return;
+		}
+
+		const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+		if ( regex.test( email ) === false ) {
+			handleEmailAddressError( 'invalid' );
+			return;
+		}
+
+		const $hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
+		const $hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
+		if ( ! $hiddenEmailField.length ) {
+			return;
+		}
+
+		$hiddenEmailField.val( email );
+		jQuery.ajax({
+			type: 'POST',
+			url: $hiddenForm.attr( 'action' ),
+			data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+		}).done( function( data ) {
+			const message = jQuery( data ).find( '.frm_message' ).text().trim();
+			if ( message.indexOf( 'Thanks!' ) === -1 ) {
+				handleEmailAddressError( 'invalid' );
+				return;
+			}
+
+			// TODO Don't hardcode this.
+			const modal = document.getElementById( 'frm_new_form_modal' );
+			if ( modal ) {
+				modal.setAttribute( 'frm-page', 'code' );
+			} else {
+				document.getElementById( 'frmapi-email-form' ).parentElement.innerHTML = 'Thank you for signing up!';
+				document.getElementById( 'frm-add-my-email-address' ).remove();
+			}
+		});
+	}
+
 	return {
 		init: function() {
-			jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
-				const email = document.getElementById( 'frm_leave_email' ).value.trim();
-
-				event.preventDefault();
-
-				if ( '' === email ) {
-					handleEmailAddressError( 'empty' );
-					return;
-				}
-
-				const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-
-				if ( regex.test( email ) === false ) {
-					handleEmailAddressError( 'invalid' );
-					return;
-				}
-
-				const $hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-				const $hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
-				if ( ! $hiddenEmailField.length ) {
-					return;
-				}
-
-				$hiddenEmailField.val( email );
-				jQuery.ajax({
-					type: 'POST',
-					url: $hiddenForm.attr( 'action' ),
-					data: $hiddenForm.serialize() + '&action=frm_forms_preview'
-				}).done( function( data ) {
-					const message = jQuery( data ).find( '.frm_message' ).text().trim();
-					if ( message.indexOf( 'Thanks!' ) === -1 ) {
-						handleEmailAddressError( 'invalid' );
-						return;
-					}
-
-					const modal = document.getElementById( 'frm_new_form_modal' );
-					if ( modal ) {
-						modal.setAttribute( 'frm-page', 'code' );
-					} else {
-						document.getElementById( 'frmapi-email-form' ).parentElement.innerHTML = 'Thank you for signing up!';
-						document.getElementById( 'frm-add-my-email-address' ).remove();
-					}
-				});
-			});
+			initAddMyEmailAddress();
 
 			s = {};
 
@@ -10376,13 +10394,7 @@ function frmAdminBuildJS() {
 				postAjax( data, function() {
 					fadeOut( document.getElementById( 'frm_message_list' ), function() {
 						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-
-						showFreeTemplatesForm();
-
-						const wrapper = document.getElementById( 'frmapi-email-form' ).parentElement;
-						wrapper.querySelectorAll( 'h3, p, img' ).forEach(
-							element => element.remove()
-						);
+						showActiveCampaignForm();
 					});
 				});
 			});
