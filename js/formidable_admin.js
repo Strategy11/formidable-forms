@@ -8588,7 +8588,7 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	const handleError = function( inputId, errorId, type, message ) {
+	function handleApiFormError( inputId, errorId, type, message ) {
 		const $error = jQuery( errorId );
 		$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
 
@@ -8599,11 +8599,11 @@ function frmAdminBuildJS() {
 		jQuery( inputId ).one( 'keyup', function() {
 			$error.addClass( 'frm_hidden' );
 		});
-	};
+	}
 
-	const handleEmailAddressError = function( type ) {
-		handleError( '#frm_leave_email', '#frm_leave_email_error', type );
-	};
+	function handleEmailAddressError( type ) {
+		handleApiFormError( '#frm_leave_email', '#frm_leave_email_error', type );
+	}
 
 	function initNewFormModal() {
 		var installFormTrigger,
@@ -8800,7 +8800,7 @@ function frmAdminBuildJS() {
 		});
 
 		handleConfirmEmailAddressError = function( type, message ) {
-			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
+			handleApiFormError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
 		};
 
 		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
@@ -9689,14 +9689,48 @@ function frmAdminBuildJS() {
 	 * It is also used for the Active Campaign sign-up form in the inbox page (when there are no messages).
 	 */
 	function initAddMyEmailAddress() {
+		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
+
 		jQuery( document ).on(
 			'click',
 			'#frm-add-my-email-address',
 			event => {
 				event.preventDefault();
+
+				if ( emptyInbox ) {
+					event.currentTarget.remove();
+
+					const emailWrapper = document.getElementById( 'frm_leave_email_wrapper' );
+					if ( emailWrapper ) {
+						emailWrapper.classList.add( 'frm_hidden' );
+						const spinner = span({ className: 'frm-wait frm_spinner' });
+						spinner.style.visibility = 'visible';
+						spinner.style.float      = 'none';
+						emailWrapper.parentElement.insertBefore(
+							spinner,
+							emailWrapper.nextElementSibling
+						);
+					}
+				}
+
 				addMyEmailAddress();
 			}
 		);
+
+		if ( emptyInbox ) {
+			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+			leaveEmailIput.addEventListener(
+				'keyup',
+				event => {
+					if ( 'Enter' === event.key ) {
+						const button = document.getElementById( 'frm-add-my-email-address' );
+						if ( button ) {
+							button.click();
+						}
+					}
+				}
+			);
+		}
 	}
 
 	function addMyEmailAddress() {
@@ -9730,6 +9764,12 @@ function frmAdminBuildJS() {
 				return;
 			}
 
+			const apiForm = document.getElementById( 'frmapi-email-form' );
+			const spinner = apiForm.parentElement.querySelector( '.frm_spinner' );
+			if ( spinner ) {
+				spinner.remove();
+			}
+
 			// Handle successful form submission.
 			// If the new form modal exists, handle the free templates form.
 			const modal = document.getElementById( 'frm_new_form_modal' );
@@ -9740,7 +9780,6 @@ function frmAdminBuildJS() {
 				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
 					document.createTextNode( 'Thank you for signing up!' )
 				);
-				document.getElementById( 'frm-add-my-email-address' ).remove();
 			}
 		});
 	}
