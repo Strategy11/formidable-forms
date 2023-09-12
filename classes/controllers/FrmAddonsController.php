@@ -1358,7 +1358,7 @@ class FrmAddonsController {
 	/**
 	 * Gets required plan for an addon.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 *
 	 * @return string Empty string if no plan is required for active license.
 	 */

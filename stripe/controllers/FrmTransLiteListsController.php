@@ -77,7 +77,7 @@ class FrmTransLiteListsController {
 	 * Prevent the "screen options" tab from showing when
 	 * viewing a payment or subscription
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {

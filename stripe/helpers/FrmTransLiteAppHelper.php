@@ -199,7 +199,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since x.x, introduced in v1.16 of the Payments submodule.
+	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param int $number
 	 * @return array
@@ -214,7 +214,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since x.x, introduced in v1.16 of the Payments submodule.
+	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param string $value
 	 * @param int $number
@@ -339,7 +339,7 @@ class FrmTransLiteAppHelper {
 	 * Echo a link that includes a data-deleteconfirm attribute.
 	 * This includes refund links and links to cancel a subscription.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param string $link
 	 * @return void
@@ -355,7 +355,7 @@ class FrmTransLiteAppHelper {
 	 * Allow the data-deleteconfirm attribute for confirmation links.
 	 * The attribute is used for the confirmation message.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param array $allowed
 	 * @return array
@@ -370,7 +370,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Formats non zero-decimal currencies.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param string|int $amount
 	 * @param WP_Post    $action

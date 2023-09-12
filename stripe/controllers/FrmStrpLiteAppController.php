@@ -18,7 +18,7 @@ class FrmStrpLiteAppController {
 	/**
 	 * Remove Stripe database items after uninstall.
 	 *
-	 * @since x.x, introduced in v2.07 of the Stripe add on.
+	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @return void
 	 */

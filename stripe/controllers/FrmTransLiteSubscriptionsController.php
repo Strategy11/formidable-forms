@@ -21,7 +21,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param object $subscription
 	 * @return void
@@ -33,7 +33,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			 * Filter a receipt link for a specific gateway.
 			 * For example, Stripe uses frm_sub_stripe_receipt.
 			 *
-			 * @since x.x
+			 * @since 6.5
 			 *
 			 * @param string $link
 			 */
@@ -121,7 +121,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since x.x, introduced in v1.12 of the Payments submodule.
+	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param array $atts
 	 * @return void

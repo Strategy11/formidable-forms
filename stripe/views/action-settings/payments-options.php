@@ -106,7 +106,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 	/**
 	 * Trigger an action so Pro can include an Address dropdown.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param array $args {
 	 *     @type FrmFormAction $action_control

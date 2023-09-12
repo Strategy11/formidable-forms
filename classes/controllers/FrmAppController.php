@@ -1047,7 +1047,7 @@ class FrmAppController {
 	 * The payment cron is unscheduled when Formidable is deactivated.
 	 * We need to add it back again on activation if Stripe is configured.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @return void
 	 */

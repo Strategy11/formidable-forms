@@ -44,7 +44,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * This echos the HTML for a faded out capture payment dropdown.
 	 * When it is clicked, it should prompt to install Stripe.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @return void
 	 */
@@ -84,7 +84,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	/**
-	 * @since x.x, introduced in v2.01 of the Payments submodule.
+	 * @since 6.5, introduced in v2.01 of the Payments submodule.
 	 *
 	 * @return string
 	 */
