@@ -9713,6 +9713,50 @@ function frmAdminBuildJS() {
 		frmDom.util.documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
 	}
 
+	function handleTimeFieldStepUnit() {
+		const changeFormatValue = ( inputId, unit ) => {
+			const input = document.getElementById( inputId );
+			if ( ! input ) {
+				return;
+			}
+
+			const parts = input.value.split( ':' );
+
+			parts.push( '00' );
+			parts.push( '00' );
+
+			switch ( unit ) {
+				case 'sec':
+					input.value = parts[0] + ':' + parts[1] + ':' + parts[2];
+					break;
+
+				case 'millisec':
+					input.value = parts[0] + ':' + parts[1] + ':' + parts[2];
+					break;
+
+				default:
+					input.value = parts[0] + ':' + parts[1];
+			}
+		};
+
+		const onChangeStepUnitSelect = event => {
+			const wrapperEl = event.target.closest( '.frm-single-settings' );
+			if ( ! wrapperEl ) {
+				return;
+			}
+
+			const fieldId = wrapperEl.getAttribute( 'data-fid' );
+			if ( ! fieldId ) {
+				return;
+			}
+
+			changeFormatValue( 'start_time_' + fieldId, event.target.value );
+			changeFormatValue( 'end_time_' + fieldId, event.target.value );
+		};
+
+		frmDom.util.documentOn( 'change', '.frm_step_unit_select', onChangeStepUnitSelect );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -10041,6 +10085,7 @@ function frmAdminBuildJS() {
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
+			handleTimeFieldStepUnit();
 		},
 
 		settingsInit: function() {
