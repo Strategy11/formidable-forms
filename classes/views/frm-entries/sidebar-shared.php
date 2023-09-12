@@ -70,6 +70,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
+<?php do_action( 'frm_entry_shared_sidebar_middle', $entry ); ?>
+
 <div class="frm_with_icons">
 	<h3><?php esc_html_e( 'User Information', 'formidable' ); ?></h3>
 	<div class="inside">
