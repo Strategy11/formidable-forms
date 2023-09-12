@@ -18,7 +18,7 @@ class FrmStrpLiteAuth {
 	 * If returning from Stripe to authorize a payment, show the message.
 	 * This is used for 3D secure and for Stripe link.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string $html Form HTML that gets filtered through frm_filter_final_form.
 	 * @return string
@@ -87,7 +87,7 @@ class FrmStrpLiteAuth {
 	 * - The client secret which is used to verify the intent.
 	 * - The charge ID (if applicable)
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param string|int $form_id
 	 * @return array|false
@@ -157,7 +157,7 @@ class FrmStrpLiteAuth {
 	 * To determine which form is being filtered, this function checks for the
 	 * hidden form_id input. If there is a match, it returns the matching form id.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param string $html
 	 * @return int|false Matching form id or false if there is no match.
@@ -181,7 +181,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check the client secret in the URL, verify it matches the Stripe object and isn't being manipulated.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $intent
 	 * @param bool   $is_setup_intent
@@ -197,7 +197,7 @@ class FrmStrpLiteAuth {
 	 * Translate an error code into a readable message for the front end.
 	 * FrmStrpLiteLinkRedirectHelper uses these codes to redirect errors that are then handled in self::maybe_show_message.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $code
 	 * @return string
@@ -227,7 +227,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Add the parameters the receiving functions are expecting.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
 	 * @return void
@@ -242,7 +242,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Insert a message/error where the form styling will be applied.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 */
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';
@@ -283,7 +283,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Include hidden fields with payment intent IDs in the form.
 	 *
-	 * @since x.x, introduced in v2.02 of the Stripe add on.
+	 * @since 6.5, introduced in v2.02 of the Stripe add on.
 	 *
 	 * @param array    $intents
 	 * @param stdClass $form
@@ -306,7 +306,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check POST data for payment intents.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string $name
 	 * @return mixed
@@ -324,7 +324,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Update pricing before authorizing.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @return void
 	 */
@@ -368,7 +368,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Update pricing on page turn and non-ajax validation.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 * @param int   $form_id
 	 * @param array $intents
 	 * @return void
@@ -433,7 +433,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Create an entry object with posted values.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {
@@ -464,7 +464,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Reformat the form data in name => value array.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $form
 	 * @return void
@@ -492,7 +492,7 @@ class FrmStrpLiteAuth {
 	 * Create intents on form load when required.
 	 * This only happens in two cases: For stripe link, and when processing a one-time payment before the entry is created.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string|int $form_id
 	 * @return array
@@ -575,7 +575,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Create a customer and an associated setup intent for a recurring Stripe link payment.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $payment_method_types
 	 * @return object|false
@@ -595,7 +595,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string|int $form_id
 	 * @param array      $actions
@@ -614,7 +614,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
 	 * @return string
@@ -629,7 +629,7 @@ class FrmStrpLiteAuth {
 	 * This may either use the success URL on redirect, or the message on success.
 	 * It shouldn't be confused for the Stripe link return URL. It isn't used for that. That uses the frmstrplinkreturn AJAX action instead.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
 	 * @return string
@@ -652,7 +652,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * If the form should redirect, get the url to redirect to.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
 	 *     @type stdClass $form
@@ -673,7 +673,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * If the form should should a message, apend it to the success url.
 	 *
-	 * @since x.x, introduced in v2.0 of the Stripe add on.
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
 	 */
@@ -686,7 +686,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param string|int $entry_id
 	 * @param bool       $delete_meta

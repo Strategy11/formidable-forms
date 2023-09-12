@@ -106,7 +106,7 @@
 	 * confirmSetup gets called for a recurring payment and confirmPayment is called for one-time payments.
 	 * In both cases they redirect to the return url which uses the frmstrplinkreturn AJAX action.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} object
 	 * @param {Object} meta
@@ -181,7 +181,7 @@
 	/**
 	 * Check if the stripe setting is for a recurring payment.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @returns {bool}
 	 */
@@ -330,7 +330,7 @@
 	/**
 	 * Get all variables from frm_stripe_vars.settings that match the Stripe gateway.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @returns {array}
 	 */
@@ -403,7 +403,7 @@
 	}
 
 	/**
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @returns {bool} True if stripe link loads successfully.
 	 */
@@ -439,7 +439,7 @@
 	/**
 	 * Disable submit button for a target form.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
 	 * @returns {void}
@@ -452,7 +452,7 @@
 	/**
 	 * Load elements for Stripe link (a Link Authentication Element and a Payment Element).
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {String} clientSecret
 	 * @returns {void}
@@ -492,7 +492,7 @@
 	/**
 	 * Stripe doesn't support RGBA so convert it to HEX.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {String} color
 	 * @returns {String}
@@ -516,7 +516,7 @@
 	 * The Authentication Element includes an email field that works with the Payment element.
 	 * If the email matches a Stripe link account, this field will also include the 6 digit code prompt for using your linked credit card instead.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
 	 * @returns {void}
@@ -574,7 +574,7 @@
 	 * In a non-conversational form we need to check if the authentication element is complete as well.
 	 * If we do not, the button could still be disabled after everything is filled out if we fill out the email last.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
 	 * @param {Element} emailInput
@@ -620,7 +620,7 @@
 	/**
 	 * Hide email field and put the Stripe link authentication element to be used in its place.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} emailField
 	 * @param {Element} emailInput
@@ -644,7 +644,7 @@
 	 * The Payment element for Stripe link includes credit card, country, and postal code.
 	 * When a new Stripe link account is being set up, it will also include an additional block underneath that asks for Phone Number and Full Name.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
 	 * @returns {void}
@@ -684,7 +684,7 @@
 	}
 
 	/**
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
 	 * @returns {void}
@@ -714,7 +714,7 @@
 	/**
 	 * The submit button toggles enabled/disabled based on if the payment element is "complete" or not.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
 	 * @returns {bool}
@@ -734,7 +734,7 @@
 	/**
 	 * Check Stripe settings for first name and last name fields for the default "Full Name" value for Stripe Link's payment element.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @returns {string}
 	 */
@@ -755,7 +755,7 @@
 	/**
 	 * Get value for a form field. It may be a field container or a hidden input if it's a field from another page.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} field
 	 * @returns {String}
@@ -773,7 +773,7 @@
 	/**
 	 * Check Stripe settings and DOM for a mapped email field.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @returns {Element|false}
 	 */
@@ -848,7 +848,7 @@
 	/**
 	 * Create and return a new element to use for mounting a Stripe element to.
 	 *
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {string} className
 	 * @returns {Element}
@@ -860,7 +860,7 @@
 	}
 
 	/**
-	 * @since x.x, introduced in v3.0 of the Stripe add on.
+	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {@array|NodeList} items
 	 * @param {function} callback

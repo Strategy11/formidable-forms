@@ -158,7 +158,7 @@ class FrmAppHelper {
 	 * Checks the menu title, retrieved through get_menu_name,
 	 * and verifies if it matches the 'formidable' branding.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 *
 	 * @return bool True if the menu title is 'formidable', false otherwise.
 	 */
@@ -1361,8 +1361,9 @@ class FrmAppHelper {
 		$files = array(
 			FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.min.js',
 		);
+
 		/**
-		 * @since x.x
+		 * @since 6.5
 		 *
 		 * @param array $files
 		 */
@@ -3090,7 +3091,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @return string
 	 */

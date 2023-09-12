@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x Added with Stripe Lite.
+ * @since 6.5 Added with Stripe Lite.
  */
 class FrmCurrencyHelper {
 
@@ -29,7 +29,7 @@ class FrmCurrencyHelper {
 	/**
 	 * Get a list of all supported currencies.
 	 *
-	 * @since x.x.
+	 * @since 6.5.
 	 *
 	 * @return array
 	 */
@@ -317,7 +317,7 @@ class FrmCurrencyHelper {
 		);
 
 		/**
-		 * @since x.x
+		 * @since 6.5
 		 *
 		 * @param array $currencies
 		 */
