@@ -443,6 +443,7 @@ class FrmAppController {
 	public static function api_email_form( $form_key, $title, $description ) {
 		$url         = 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css';
 		$view_path   = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new-form-overlay/';
+		$user        = wp_get_current_user();
 		require $view_path . 'leave-email.php';
 	}
 
