@@ -33,9 +33,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
-
 <h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
-<?php do_action( 'frm_settings_form', $frm_settings ); ?>
+
+<?php
+ob_start();
+
+/**
+ * Trigger an action so Pro can display additional General settings in the Other section.
+ *
+ * @param FrmSettings $frm_settings
+ */
+do_action( 'frm_settings_form', $frm_settings );
+
+$more_html = ob_get_clean();
+echo $more_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+FrmSettingsController::maybe_render_currency_selector( $frm_settings, $more_html );
+unset( $more_html );
+?>
 
 <div class="clear"></div>
 

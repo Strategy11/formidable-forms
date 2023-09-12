@@ -665,11 +665,21 @@ DEFAULT_HTML;
 		return $invalid;
 	}
 
+	/**
+	 * Get the default field name when a field is inserted into a form.
+	 *
+	 * @return string
+	 */
 	protected function get_new_field_name() {
-		$name = __( 'Untitled', 'formidable' );
+		$name       = __( 'Untitled', 'formidable' );
+		$fields     = FrmField::field_selection();
+		$pro_fields = FrmField::pro_field_selection();
 
-		$fields = FrmField::field_selection();
-		$fields = array_merge( $fields, FrmField::pro_field_selection() );
+		// As the credit card field is in Lite now, we want the name from the Lite array.
+		// The pro key would is still set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
 			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
@@ -678,10 +688,16 @@ DEFAULT_HTML;
 		return $name;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function new_field_settings() {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_default_field_options() {
 		$opts       = array(
 			'size'               => '',
@@ -711,6 +727,9 @@ DEFAULT_HTML;
 		return apply_filters( 'frm_default_field_options', $opts, $filter_args );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array();
 	}
@@ -757,6 +776,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @return void
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
@@ -767,6 +787,9 @@ DEFAULT_HTML;
 		$this->get_field_scripts_hook( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function get_field_scripts_hook( $args ) {
 		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
@@ -828,6 +851,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string $align
+	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
 		if ( 'inline' === $align ) {
@@ -837,6 +863,9 @@ DEFAULT_HTML;
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_label_class() {
 		return ' frm_primary_label';
 	}
@@ -845,6 +874,8 @@ DEFAULT_HTML;
 	 * Add classes to the input for output
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function add_input_class() {
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
@@ -866,6 +897,8 @@ DEFAULT_HTML;
 	 * Add extra classes on front-end input
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function get_input_class() {
 		return '';
@@ -891,6 +924,9 @@ DEFAULT_HTML;
 		return $input;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return '';
 	}
@@ -919,6 +955,9 @@ DEFAULT_HTML;
 		return $hidden . $input_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
@@ -964,6 +1003,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
 		$frm_settings = FrmAppHelper::get_settings();

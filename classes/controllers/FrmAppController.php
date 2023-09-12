@@ -136,6 +136,12 @@ class FrmAppController {
 			'formidable-applications',
 		);
 
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			// Only consider the payments page as a "white page" when the Payments submodule is off.
+			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
+			$white_pages[] = 'formidable-payments';
+		}
+
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$is_white_page = in_array( $get_page, $white_pages, true );
 
@@ -1040,6 +1046,31 @@ class FrmAppController {
 		delete_site_option( 'frmpro-credentials' );
 		delete_site_option( 'frmpro-authorized' );
 		wp_die();
+	}
+
+	/**
+	 * This is triggered when Formidable is activated.
+	 *
+	 * @return void
+	 */
+	public static function handle_activation() {
+		self::maybe_activate_payment_cron();
+	}
+
+	/**
+	 * The payment cron is unscheduled when Formidable is deactivated.
+	 * We need to add it back again on activation if Stripe is configured.
+	 *
+	 * @since 6.5
+	 *
+	 * @return void
+	 */
+	private static function maybe_activate_payment_cron() {
+		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+			return;
+		}
+
+		FrmTransLiteAppController::maybe_schedule_cron();
 	}
 
 	public static function set_footer_text( $text ) {

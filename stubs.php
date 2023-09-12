@@ -19,6 +19,7 @@ namespace {
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
 	define( 'WP_IMPORTING', false );
+	define( 'ICL_PLUGIN_INACTIVE', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
@@ -71,7 +72,26 @@ namespace {
 	}
 	class FrmProEntriesHelper {
 	}
+	class FrmProFieldsHelper {
+		/**
+		 * @param array  $args
+		 * @param string $value
+		 * @return void
+		 */
+		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
+	}
 	class FrmViewsAppHelper {
+	}
+	class FrmProCreditCardsController {
+		/**
+		 * @param array  $field
+		 * @param string $field_name
+		 * @param array  $atts
+		 * @return void
+		 */
+		public static function show_in_form( $field, $field_name, $atts ) {
+		}
 	}
 	class Akismet {
 	}

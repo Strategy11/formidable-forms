@@ -33,7 +33,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</span>
 			</div>
-		<?php } ?>
+			<?php
+		}
+		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+				FrmStrpLiteAppHelper::not_connected_warning();
+			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
+				?>
+				<div class="frm_warning_style frm-with-icon">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<span>
+						<?php
+						/* translators: %1$s: Link HTML, %2$s: End link */
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						?>
+					</span>
+				</div>
+				<?php
+			}
+		}
+		?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
