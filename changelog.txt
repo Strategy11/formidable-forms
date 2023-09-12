@@ -1,4 +1,8 @@
 == Changelog ==
+= 6.5 =
+* New: Stripe forms are now available for free without the need for other add ons. Global settings now include a Stripe section. Payment fields and Collect Payment actions have been added, as well as the Global setting for defining the default currency.
+* Fix: The TinyMCE editor would exceed the page boundaries after the fullscreen button was clicked.
+
 = 6.4.2 =
 * New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
 * New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
