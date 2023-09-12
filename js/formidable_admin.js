@@ -9689,34 +9689,16 @@ function frmAdminBuildJS() {
 	 * It is also used for the Active Campaign sign-up form in the inbox page (when there are no messages).
 	 */
 	function initAddMyEmailAddress() {
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-
 		jQuery( document ).on(
 			'click',
 			'#frm-add-my-email-address',
 			event => {
 				event.preventDefault();
-
-				if ( emptyInbox ) {
-					event.currentTarget.remove();
-
-					const emailWrapper = document.getElementById( 'frm_leave_email_wrapper' );
-					if ( emailWrapper ) {
-						emailWrapper.classList.add( 'frm_hidden' );
-						const spinner = span({ className: 'frm-wait frm_spinner' });
-						spinner.style.visibility = 'visible';
-						spinner.style.float      = 'none';
-						emailWrapper.parentElement.insertBefore(
-							spinner,
-							emailWrapper.nextElementSibling
-						);
-					}
-				}
-
 				addMyEmailAddress();
 			}
 		);
 
+		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
 		if ( emptyInbox ) {
 			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
 			leaveEmailIput.addEventListener(
@@ -9750,6 +9732,23 @@ function frmAdminBuildJS() {
 		const $hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
 		if ( ! $hiddenEmailField.length ) {
 			return;
+		}
+
+		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
+		if ( emptyInbox ) {
+			document.getElementById( 'frm-add-my-email-address' ).remove();
+
+			const emailWrapper = document.getElementById( 'frm_leave_email_wrapper' );
+			if ( emailWrapper ) {
+				emailWrapper.classList.add( 'frm_hidden' );
+				const spinner = span({ className: 'frm-wait frm_spinner' });
+				spinner.style.visibility = 'visible';
+				spinner.style.float      = 'none';
+				emailWrapper.parentElement.insertBefore(
+					spinner,
+					emailWrapper.nextElementSibling
+				);
+			}
 		}
 
 		$hiddenEmailField.val( email );
