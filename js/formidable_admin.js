@@ -8589,7 +8589,7 @@ function frmAdminBuildJS() {
 	}
 
 	const handleError = function( inputId, errorId, type, message ) {
-		var $error = jQuery( errorId );
+		const $error = jQuery( errorId );
 		$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
 
 		if ( typeof message !== 'undefined' ) {
@@ -9725,12 +9725,16 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			// TODO Don't hardcode this.
+			// Handle successful form submission.
+			// If the new form modal exists, handle the free templates form.
 			const modal = document.getElementById( 'frm_new_form_modal' );
 			if ( modal ) {
 				modal.setAttribute( 'frm-page', 'code' );
 			} else {
-				document.getElementById( 'frmapi-email-form' ).parentElement.innerHTML = 'Thank you for signing up!';
+				// If no modal exists handle the Active Campaign form on the inbox page.
+				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
+					document.createTextNode( 'Thank you for signing up!' )
+				);
 				document.getElementById( 'frm-add-my-email-address' ).remove();
 			}
 		});

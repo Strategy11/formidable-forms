@@ -71,7 +71,7 @@ if ( $has_messages ) {
 	FrmAppController::api_email_form(
 		'subscribe',
 		__( 'You don\'t have any messages', 'formidable' ),
-		__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.' )
+		__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' )
 			. "\n" . __(  'Want more news and email updates?', 'formidable' )
 	);
 	?>
