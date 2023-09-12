@@ -20,8 +20,6 @@ import addCategoryEvents from './categoryListener';
 import addFavoriteButtonEvents from './favoriteButtonListener';
 import addSearchEvents from './searchListener';
 
-export { resetSearchInput } from './searchListener';
-
 /**
  * Attaches event listeners for handling user interactions.
  *
@@ -32,3 +30,5 @@ export function addEventListeners() {
 	addFavoriteButtonEvents();
 	addSearchEvents();
 }
+
+export { resetSearchInput } from './searchListener';

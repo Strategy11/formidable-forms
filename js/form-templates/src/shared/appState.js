@@ -19,15 +19,23 @@
 import { getElements } from '../elements';
 import { ALL_TEMPLATES } from './';
 
-const { favoritesCount, FEATURED_TEMPLATES_KEYS } = window.frmFormTemplatesVars;
-const { allTemplatesCategory } = getElements();
+let appState = null;
 
-let appState = {
-	selectedCategory: ALL_TEMPLATES,
-	selectedCategoryEl: allTemplatesCategory,
-	notEmptySearchText: false,
-	FEATURED_TEMPLATES_KEYS,
-	favoritesCount
+/**
+ * Initialize the application state.
+ *
+ * @return {void}
+*/
+export const initializeAppState = () => {
+	const { favoritesCount } = window.frmFormTemplatesVars;
+	const { allTemplatesCategory } = getElements();
+
+	appState = {
+		selectedCategory: ALL_TEMPLATES,
+		selectedCategoryEl: allTemplatesCategory,
+		notEmptySearchText: false,
+		favoritesCount
+	};
 };
 
 /**
@@ -42,7 +50,7 @@ export const getAppState = () => appState;
  *
  * @param {Object} newState The new values to update the state.
  */
-export const setAppState = ( newState ) => {
+export const setAppState = newState => {
 	appState = { ...appState, ...newState };
 };
 
@@ -52,7 +60,7 @@ export const setAppState = ( newState ) => {
  * @param {string} propertyName The property name to retrieve from the state.
  * @return {*} The value of the specified property, or null if it doesn't exist.
  */
-export const getAppStateProperty = ( propertyName ) =>
+export const getAppStateProperty = propertyName =>
 	Reflect.get( appState, propertyName ) ?? null;
 
 /**

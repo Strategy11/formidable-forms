@@ -32,11 +32,7 @@ export const fadeIn = ( element, fadingClass = `${ PREFIX }-flex` ) => {
 
 	element.classList.add( `${ PREFIX }-fadein`, fadingClass );
 
-	element.addEventListener(
-		'animationend',
-		() => {
-			element.classList.remove( `${ PREFIX }-fadein`, fadingClass );
-		},
-		{ once: true }
-	);
+	element.addEventListener( 'animationend', () => {
+		element.classList.remove( `${ PREFIX }-fadein`, fadingClass );
+	}, { once: true });
 };

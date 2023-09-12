@@ -1,16 +1,33 @@
+/**
+ * Copyright (C) 2023 Formidable Forms
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ *
+ * https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/**
+ * Internal dependencies
+ */
 import { PREFIX } from '../shared';
 
 /**
- * Gets essential DOM elements.
+ * Return essential DOM elements.
  *
- * @return {Object} DOM elements.
+ * @return {Object} The DOM elements queried and constructed into an object.
  */
 function getDOMElements() {
 	// Body Elements
 	const bodyContent = document.querySelector( '#post-body-content' );
 	const bodyElements = {
 		bodyContent,
-		bodyContentChildren: Array.from( bodyContent?.children || []),
 		createFormButton: document.querySelector( `#${ PREFIX }-create-form` ),
 		pageTitle: document.querySelector( `#${ PREFIX }-page-title` ),
 		upsellBanner: document.querySelector( `#${ PREFIX }-upsell-banner` )

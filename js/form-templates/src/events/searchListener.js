@@ -17,16 +17,9 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import {
-	PREFIX,
-	getAppState,
-	setAppStateProperty,
-	initSearch
-} from '../shared';
+import { PREFIX, getAppState, setAppStateProperty, initSearch } from '../shared';
 import { showSearchEmptyState, showSearchResults } from '../ui';
 import { hide } from '../utils';
-
-const { searchInput, allTemplatesCategory, emptyState } = getElements();
 
 /**
  * Adds search-related event listeners by calling the 'initSearch' function.
@@ -35,6 +28,8 @@ const { searchInput, allTemplatesCategory, emptyState } = getElements();
  * @return {void}
  */
 function addSearchEvents() {
+	const { searchInput } = getElements();
+
 	initSearch( searchInput, `${ PREFIX }-item`, {
 		handleSearchResult
 	});
@@ -43,6 +38,7 @@ function addSearchEvents() {
 /**
  * Manages UI state based on search results and input value.
  *
+ * @private
  * @param {Object} args Contains flags for search status.
  * @param {boolean} args.foundSomething True if search yielded results.
  * @param {boolean} args.notEmptySearchText True if search input is not empty.
@@ -50,6 +46,7 @@ function addSearchEvents() {
  */
 function handleSearchResult({ foundSomething, notEmptySearchText }) {
 	const appState = getAppState();
+	const { allTemplatesCategory, emptyState } = getElements();
 
 	setAppStateProperty( 'notEmptySearchText', notEmptySearchText );
 
@@ -58,6 +55,7 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 		allTemplatesCategory.dispatchEvent(
 			new Event( 'click', { bubbles: true })
 		);
+
 		return;
 	}
 
@@ -85,6 +83,8 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
  * @return {void}
  */
 export function resetSearchInput() {
+	const { searchInput } = getElements();
+
 	searchInput.value = '';
 	searchInput.dispatchEvent( new Event( 'input', { bubbles: true }) );
 }

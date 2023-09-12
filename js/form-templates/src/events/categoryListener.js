@@ -20,9 +20,7 @@ import { getElements } from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
 import { fadeIn } from '../utils';
-import { resetSearchInput } from '.';
-
-const {bodyContent} = getElements();
+import { resetSearchInput } from './';
 
 /**
  * Manages event handling for sidebar category links.
@@ -31,8 +29,9 @@ const {bodyContent} = getElements();
  */
 function addCategoryEvents() {
 	const categoryItems = document.querySelectorAll( `.${ PREFIX }-cat-item` );
+
 	// Attach click event listeners to each sidebar category
-	categoryItems.forEach( ( category ) =>
+	categoryItems.forEach( category =>
 		category.addEventListener( 'click', onCategoryClick )
 	);
 }
@@ -40,13 +39,13 @@ function addCategoryEvents() {
 /**
  * Handles the click event on a category item.
  *
+ * @private
  * @param {Event} event The click event object.
  */
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, notEmptySearchText } =
-		getAppState();
+	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getAppState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -77,6 +76,7 @@ const onCategoryClick = ( event ) => {
 	}
 
 	// Smoothly display the updated UI elements
+	const { bodyContent } = getElements();
 	fadeIn( bodyContent );
 };
 

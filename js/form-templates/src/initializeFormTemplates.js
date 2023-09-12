@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import { initializeElements } from './elements';
+import { initializeAppState } from './shared';
 import { setupInitialView } from './ui';
 import { buildCategorizedTemplates } from './templates';
 import { addEventListeners } from './events';
@@ -29,6 +30,9 @@ import { addEventListeners } from './events';
 function initializeFormTemplates() {
 	// Initializes essential DOM elements
 	initializeElements();
+
+	// Initialize application state
+	initializeAppState();
 
 	// Set up the initial view, including any required DOM manipulations for proper presentation
 	setupInitialView();

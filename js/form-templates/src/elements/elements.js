@@ -19,7 +19,7 @@
 import { createEmptyStateElement, getEmptyStateElements } from './emptyStateElement';
 import getDOMElements from './getDOMElements';
 
-let elements = getDOMElements();
+let elements = null;
 
 /**
  * Initialize the elements.
@@ -27,10 +27,27 @@ let elements = getDOMElements();
  * @return {void}
  */
 export function initializeElements() {
+	elements = getDOMElements();
 	addEmptyStateElements();
+	addBodyContentChildren();
 }
 
-export function addEmptyStateElements() {
+/**
+ * Retrieve the initialized essential DOM elements.
+ *
+ * @return {Object|null} The initialized elements object or null.
+ */
+export function getElements() {
+	return elements;
+}
+
+/**
+ * Inject empty state elements into the DOM and the elements object.
+ *
+ * @private
+ * @return {void}
+ */
+function addEmptyStateElements() {
 	if ( elements.emptyState ) {
 		return;
 	}
@@ -43,14 +60,12 @@ export function addEmptyStateElements() {
 }
 
 /**
- * Gets essential DOM elements.
+ * Add children of the bodyContent to the elements object.
  *
- * @return {Object} DOM elements.
+ * @private
+ * @return {void}
  */
-export function getElements() {
-	if ( null !== elements ) {
-		return elements;
-	}
-
-	initializeElements();
+function addBodyContentChildren() {
+	const bodyContentChildren = elements.bodyContent?.children;
+	elements = { ...elements, bodyContentChildren };
 }

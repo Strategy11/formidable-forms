@@ -24,26 +24,24 @@ import { __ } from '@wordpress/i18n';
 import { getElements } from '../elements';
 import { CURRENT_CLASS, getAppStateProperty } from '../shared';
 import { showElements, hideElements, fadeIn } from '../utils';
-import { updatePageTitle } from '.';
-
-const {
-	bodyContent,
-	bodyContentChildren,
-	pageTitle,
-	templatesList,
-	templateItems
-} = getElements();
+import { updatePageTitle } from './';
 
 /**
  * Updates the UI to display the search results.
  *
  * @return {void}
  */
-export const showSearchResults = () => {
+export function showSearchResults() {
+	const {
+		bodyContent,
+		bodyContentChildren,
+		pageTitle,
+		templatesList,
+		templateItems
+	} = getElements();
+
 	// Remove highlighting from the currently selected category
-	getAppStateProperty( 'selectedCategoryEl' ).classList.remove(
-		CURRENT_CLASS
-	);
+	getAppStateProperty( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
 
 	// Hide non-relevant elements in the body content
 	hideElements( bodyContentChildren );

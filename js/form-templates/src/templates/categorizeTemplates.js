@@ -28,13 +28,13 @@ export let categorizedTemplates = {};
 export function buildCategorizedTemplates() {
 	const { templateItems } = getElements();
 
-	templateItems.forEach( ( template ) => {
+	templateItems.forEach( template => {
 		// Extract and split the categories from data attribute
 		const categories = template
 			.getAttribute( 'data-categories' )
 			.split( ',' );
 
-		categories.forEach( ( category ) => {
+		categories.forEach( category => {
 			// Initialize the category array if not already done
 			if ( ! categorizedTemplates[ category ]) {
 				categorizedTemplates[ category ] = [];

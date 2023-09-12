@@ -19,8 +19,6 @@
 import { getElements } from '../elements';
 import { show, hideElements, fadeIn } from '../utils';
 
-const { searchInput, bodyContent, twinFeaturedTemplateItems } = getElements();
-
 /**
  * Sets up the initial view, performing any required
  * DOM manipulations for proper element presentation.
@@ -28,6 +26,8 @@ const { searchInput, bodyContent, twinFeaturedTemplateItems } = getElements();
  * @return {void}
  */
 function setupInitialView() {
+	const { searchInput, bodyContent, twinFeaturedTemplateItems } = getElements();
+
 	// Clear the value in the search input
 	searchInput.value = '';
 

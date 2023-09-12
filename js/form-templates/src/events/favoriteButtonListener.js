@@ -17,12 +17,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import {
-	PREFIX,
-	doJsonPost,
-	getAppState,
-	setAppStateProperty
-} from '../shared';
+import { PREFIX, getAppState, setAppStateProperty, doJsonPost } from '../shared';
 import {
 	onClickPreventDefault,
 	isFavoriteTemplate,
@@ -40,12 +35,6 @@ const OPERATION = {
 	ADD: 'add',
 	REMOVE: 'remove'
 };
-const {
-	templatesList,
-	featuredTemplatesList,
-	favoritesCategoryCountEl,
-	customTemplatesTitle
-} = getElements();
 
 /**
  * Manages event handling for favorite buttons.
@@ -56,7 +45,7 @@ function addFavoriteButtonEvents() {
 	const favoriteButtons = document.querySelectorAll( FAVORITE_BUTTON_CLASS );
 
 	// Attach click event listeners to each favorite button.
-	favoriteButtons.forEach( ( favoriteButton ) =>
+	favoriteButtons.forEach( favoriteButton =>
 		onClickPreventDefault( favoriteButton, onFavoriteButtonClick )
 	);
 }
@@ -64,6 +53,7 @@ function addFavoriteButtonEvents() {
 /**
  * Handles the click event on the add to favorite button.
  *
+ * @private
  * @param {Event} event The click event object.
  * @return {void}
  */
@@ -77,6 +67,8 @@ const onFavoriteButtonClick = ( event ) => {
 
 	// Temporarily disable the button to prevent multiple clicks
 	favoriteButton.setAttribute( 'data-disabled', 'true' );
+
+	const { templatesList, featuredTemplatesList, favoritesCategoryCountEl, customTemplatesTitle } = getElements();
 
 	/**
 	 * Get necessary template information

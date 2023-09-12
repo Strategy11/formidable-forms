@@ -21,8 +21,8 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { show } from '../utils';
 import { getElements } from '../elements';
+import { show } from '../utils';
 
 /**
  * Display the search-empty state.
@@ -45,10 +45,7 @@ export const showSearchEmptyState = () => {
 		'Sorry, we didn\'t find any templates that match your criteria.',
 		'sherv-challenge'
 	);
-	emptyStateButton.textContent = __(
-		'Start from scratch',
-		'sherv-challenge'
-	);
+	emptyStateButton.textContent = __( 'Start from scratch', 'sherv-challenge' );
 
 	// Assign unique ID and state attributes
 	emptyStateButton.setAttribute( 'id', 'frm-search-empty-state-button' );

@@ -19,8 +19,6 @@
 import { getElements } from '../elements';
 import { getAppStateProperty } from '../shared';
 
-const { pageTitle } = getElements();
-
 /**
  * Sets the page title based on a given string or the currently selected category.
  *
@@ -28,11 +26,11 @@ const { pageTitle } = getElements();
  * @return {void}
  */
 export function updatePageTitle( title ) {
+	const { pageTitle } = getElements();
+
 	const newTitle =
 		title ||
-		getAppStateProperty( 'selectedCategoryEl' ).querySelector(
-			'.frm-form-templates-cat-text'
-		).textContent;
+		getAppStateProperty( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
 
 	pageTitle.textContent = newTitle;
 }

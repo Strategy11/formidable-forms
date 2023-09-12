@@ -17,36 +17,10 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
+import { PREFIX, ALL_TEMPLATES, FAVORITES, CUSTOM, getAppState } from '../shared';
+import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
-import {
-	getAppState,
-	PREFIX,
-	ALL_TEMPLATES,
-	FAVORITES,
-	CUSTOM
-} from '../shared';
-import {
-	show,
-	hide,
-	showElements,
-	hideElements,
-	isFavoriteTemplate
-} from '../utils';
-import { updatePageTitle } from '.';
-
-const {
-	bodyContent,
-	bodyContentChildren,
-	pageTitle,
-	templatesList,
-	templateItems,
-	twinFeaturedTemplateItems,
-	customTemplatesSection,
-	customTemplatesTitle,
-	customTemplatesList,
-	customTemplateItems,
-	emptyState
-} = getElements();
+import { updatePageTitle } from './';
 
 /**
  * Show templates based on selected category.
@@ -55,6 +29,8 @@ const {
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
+	const { bodyContentChildren, pageTitle, templatesList, templateItems } = getElements();
+
 	if ( ALL_TEMPLATES !== selectedCategory ) {
 		hideElements( bodyContentChildren );
 	}
@@ -76,10 +52,7 @@ export function showSelectedCategory( selectedCategory ) {
 			// Clear the stage for new content
 			hideElements( templateItems );
 
-			showElements([
-				templatesList,
-				...categorizedTemplates[ selectedCategory ]
-			]);
+			showElements([ templatesList, ...categorizedTemplates[ selectedCategory ] ]);
 			break;
 	}
 }
@@ -90,8 +63,16 @@ export function showSelectedCategory( selectedCategory ) {
  * @return {void}
  */
 export function showAllTemplates() {
+	const {
+		bodyContentChildren,
+		templateItems,
+		twinFeaturedTemplateItems,
+		customTemplatesSection,
+		emptyState
+	} = getElements();
+
 	showElements([ ...bodyContentChildren, ...templateItems ]);
-	hideElements( twinFeaturedTemplateItems, customTemplatesSection, emptyState );
+	hideElements([ ...twinFeaturedTemplateItems, customTemplatesSection, emptyState ]);
 }
 
 /**
@@ -100,16 +81,24 @@ export function showAllTemplates() {
  * @return {void}
  */
 export function showFavoriteTemplates() {
+	const { favoritesCount } = getAppState();
+	const {
+		bodyContent,
+		templatesList,
+		templateItems,
+		customTemplatesSection,
+		customTemplatesTitle,
+		customTemplatesList,
+		customTemplateItems
+	} = getElements();
+
 	// Clear the stage for new content
 	hideElements( templateItems );
 
-	const { favoritesCount } = getAppState();
 	const elementsToShow = [];
 
 	// Get all favorite items from the DOM and add the elements to show
-	const favoriteItems = bodyContent.querySelectorAll(
-		`.${ PREFIX }-favorite-item`
-	);
+	const favoriteItems = bodyContent.querySelectorAll( `.${ PREFIX }-favorite-item` );
 	elementsToShow.push( ...favoriteItems );
 
 	// Add default favorites if available
@@ -127,11 +116,9 @@ export function showFavoriteTemplates() {
 		elementsToShow.push( customTemplatesSection );
 		elementsToShow.push( customTemplatesList );
 
-		if ( 0 === favoritesCount.default ) {
-			hide( customTemplatesTitle );
-		} else {
+		0 === favoritesCount.default ?
+			hide( customTemplatesTitle ) :
 			elementsToShow.push( customTemplatesTitle );
-		}
 	}
 
 	// Show elements that were selected to be shown
@@ -144,11 +131,8 @@ export function showFavoriteTemplates() {
  * @return {void}
  */
 export function showCustomTemplates() {
-	showElements([
-		customTemplatesSection,
-		customTemplatesList,
-		...customTemplateItems
-	]);
+	const { customTemplatesSection, customTemplatesList, customTemplateItems } = getElements();
+	showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
 }
 
 export default showSelectedCategory;

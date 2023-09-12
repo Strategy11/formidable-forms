@@ -24,7 +24,7 @@ import { __ } from '@wordpress/i18n';
 import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, span, a, img } from '../shared';
 
 /**
- * Create and return Empty State element.
+ * Create and return the Empty State HTML element.
  *
  * @return {HTMLElement} The Empty State element.
  */
@@ -54,6 +54,11 @@ export function createEmptyStateElement() {
 	});
 }
 
+/**
+ * Return the elements related to the Empty State.
+ *
+ * @return {Object} Object containing Empty State related DOM elements.
+ */
 export function getEmptyStateElements() {
 	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );
 
