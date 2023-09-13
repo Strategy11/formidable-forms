@@ -93,6 +93,14 @@ namespace {
 		public static function show_in_form( $field, $field_name, $atts ) {
 		}
 	}
+	class FrmProAppController {
+		/**
+		 * @return bool
+		 */
+		public static function has_combo_js_file() {
+		}
+	}
+	
 	class Akismet {
 	}
 	class PHPMailer {
