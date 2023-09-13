@@ -62,12 +62,29 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
+	 * Check if the payments table has been created.
+	 * This includes either the frm_trans_db_version option (used in Stripe Lite and the Payments submodule) or frm_pay_db_version option (from the PayPal add on).
+	 *
+	 * @since 6.5
+	 * @since x.x A check for the PayPal add on option was added.
+	 *
 	 * @return bool
 	 */
 	private static function payments_are_installed() {
 		$db     = new FrmTransLiteDb();
 		$option = get_option( $db->db_opt_name );
-		return false !== $option;
+		if ( false !== $option ) {
+			return true;
+		}
+
+		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
+			$option = get_option( FrmPaymentsController::$db_opt_name );
+			if ( false !== $option ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
