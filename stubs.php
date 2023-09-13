@@ -99,6 +99,9 @@ namespace {
 		public function __construct( $exceptions = null ) {
 		}
 	}
+	class FrmPaymentsController {
+		public static $db_opt_name = 'frm_pay_db_version';
+	}
 	/**
 	 * @return void
 	 */
