@@ -10445,6 +10445,10 @@ function frmAdminBuildJS() {
 					});
 				});
 			});
+
+			if ( ! document.getElementById( 'frm_empty_inbox' ).classList.contains( 'frm_hidden' ) ) {
+				showActiveCampaignForm();
+			}
 		},
 
 		solutionInit: function() {
