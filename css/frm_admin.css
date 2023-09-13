@@ -1112,7 +1112,10 @@ body.rtl .frm-admin-footer-links {
 	padding-left: unset;
 	padding-right: 160px;
 }
-
+body.frm-hidden-overlflow {
+	height:100%;
+	overflow:hidden;
+}
 
 .frm-admin-footer-links-nav {
 	gap: var(--gap-2xs);

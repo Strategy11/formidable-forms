@@ -25,15 +25,25 @@ export class FrmOverlay {
 		};
 
 		this.overlayData = { ...this.overlayData, ...overlayData };
+		this.bodyAddOverflowHidden();
 		this.body.insertBefore( this.buildOverlay(), this.body.firstChild );
 		this.initCloseButton();
 		this.initOverlayIntroAnimation( 200 );
 
 	}
 
+	bodyAddOverflowHidden() {
+		this.body.classList.add( 'frm-hidden-overflow' );
+		setTimeout( () => {
+			document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+		}, 80 );
+	}
+
 	close() {
 		const overlayWrapper = document.querySelector( '.frm-overlay--wrapper' );
 		if ( overlayWrapper ) {
+			document.body.classList.remove( 'frm-hidden-overflow' );
 			overlayWrapper.remove();
 		}
 	}
