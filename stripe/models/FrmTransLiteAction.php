@@ -89,10 +89,6 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return string
 	 */
 	private function default_currency() {
-		if ( ! is_callable( 'FrmAppHelper::get_settings' ) ) {
-			return 'usd';
-		}
-
 		$frm_settings = FrmAppHelper::get_settings();
 		$currency     = trim( $frm_settings->currency );
 		if ( ! $currency ) {
