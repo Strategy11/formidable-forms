@@ -157,10 +157,6 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function trigger_actions_after_payment( $payment, $atts = array() ) {
-		if ( ! is_callable( 'FrmFormActionsController::trigger_actions' ) ) {
-			return;
-		}
-
 		if ( 'pending' === $payment->status ) {
 			// 3D Secure has a delayed payment status, so avoid sending a payment failed email for a pending payment.
 			return;
