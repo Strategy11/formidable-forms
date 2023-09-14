@@ -248,7 +248,13 @@ class FrmSettingsController {
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
-			wp_die( esc_html( $frm_settings->admin_permission ) );
+			$error_args = array(
+				'title' => __( 'Verification failed', 'formidable' ),
+				'body'  => $frm_settings->admin_permission,
+				'cancel_text' => __( 'Cancel', 'formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			die();
 		}
 
 		$errors  = array();

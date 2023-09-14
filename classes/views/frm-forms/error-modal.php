@@ -4,62 +4,72 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $defaults = array(
-	'cancel_text' => __( 'Cancel', 'formidable' ),
-	'cancel_url'  => '',
-	'cancel_classes' => '',
-	'continue_text' => __( 'Continue', 'formidable' ),
-	'continue_url' => '',
+	'title'            => '',
+	'body'             => '',
+	'cancel_url'       => '',
+	'cancel_classes'   => '',
+	'continue_url'     => '',
 	'continue_classes' => '',
+	'icon'             => 'frm_lock_simple'
 );
 
-$error = wp_parse_args( $error, $defaults );
+$error_args = wp_parse_args( $error_args, $defaults );
 ?>
-<div id="frm_error_modal" class="frm-dialog frm-modal frm_common_modal">
+<div id="frm_error_modal" class="frm-dialog frm-modal frm_common_modal frm_hidden">
 	<div class="metabox-holder">
 		<div class="inside">
 			<div>
 				<div class="frm_modal_top">
-					<a href="<?php echo esc_attr( $error['cancel_url'] ); ?>" class="alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
+					<a href="<?php echo esc_attr( $error_args['cancel_url'] ); ?>" class="alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 					</a>
 				</div>
 				<div class="frm_modal_content">
 					<div class="inside">
-						<span class="frm_lock_simple"><?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' ); ?></span>
-						<br><br>
-						<div class="frm-modal-title"><h2><?php echo esc_html( $error['title'] ); ?></h2></div>
-						<p><?php echo esc_html( $error['body'] ); ?></p>
+						<?php
+						if ( ! empty( $error_args['icon'] ) ) { ?>
+							<span class="frm_lock_simple"><?php FrmAppHelper::icon_by_class( 'frmfont ' . $error_args['icon'] ); ?></span><br><br>
+						<?php }
+						?>
+						<div class="frm-modal-title"><h2><?php echo esc_html( $error_args['title'] ); ?></h2></div>
+						<p><?php echo esc_html( $error_args['body'] ); ?></p>
 					</div>
 				</div>
 				<div class="frm_modal_footer">
-					<a href="<?php echo esc_attr( $error['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error['cancel_classes'] ); ?>"><?php esc_html_e( $error['cancel_text'], 'formidable' ); ?></a>
-					<a href="<?php echo esc_attr( $error['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error['continue_classes'] ); ?>"><?php esc_html_e( $error['continue_text'], 'formidable' ); ?></a>
+					<?php
+					if ( ! empty( $error_args['cancel_text'] ) ) { ?>
+						<a href="<?php echo esc_attr( $error_args['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error_args['cancel_classes'] ); ?>"><?php esc_html_e( $error_args['cancel_text'], 'formidable' ); ?></a>
+					<?php }
+					if ( ! empty( $error_args['continue_text'] ) ) { ?>
+						<a href="<?php echo esc_attr( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>"><?php esc_html_e( $error_args['continue_text'], 'formidable' ); ?></a>
+					<?php } ?>
 				</div>
-				<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script>
-				<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script>
-				<script>
-					jQuery( document ).ready(
-						function() {
-							document.querySelector( 'body' ).classList.add( 'frm-error-modal' );
-							const modal = document.querySelector( '#frm_error_modal' );
-							jQuery( modal ).dialog(
-								{
-									dialogClass: 'frm-dialog',
-									modal: true,
-									autoOpen: true,
-									closeOnEscape: false,
-									width: '550px',
-									resizable: false,
-									draggable: false,
-									open: function() {
-										jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
-									}
-								}
-							);
-						}
-					);
-				</script>
 			</div>
 		</div>
 	</div>
 </div>
+<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script>
+<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script>
+<script>
+	jQuery( document ).ready(
+		function() {
+			document.querySelector( 'body' ).classList.add( 'frm-error-modal' );
+			const modal = document.querySelector( '#frm_error_modal' );
+			jQuery( modal ).dialog(
+				{
+					dialogClass: 'frm-dialog',
+					modal: true,
+					autoOpen: true,
+					closeOnEscape: false,
+					width: '550px',
+					resizable: false,
+					draggable: false,
+					open: function() {
+						jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
+					}
+				}
+			);
+			const dismiss = modal.querySelector( '.dismiss' );
+		}
+	);
+</script>

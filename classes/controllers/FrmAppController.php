@@ -1059,6 +1059,10 @@ class FrmAppController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 	}
 
+	public static function show_error_modal( $error_args ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
+	}
+
 	/**
 	 * @deprecated 3.0.04
 	 *
