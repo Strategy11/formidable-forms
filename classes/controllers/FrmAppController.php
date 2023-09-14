@@ -1059,8 +1059,18 @@ class FrmAppController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 	}
 
+	/**
+	 * Show an error modal and terminate the script execution. 
+	 *
+	 * @since x.x
+	 *
+	 * @param array $error_args Arguments that control the behavior of the error modal.
+	 *
+	 * @return void
+	 */
 	public static function show_error_modal( $error_args ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
+		die();
 	}
 
 	/**
