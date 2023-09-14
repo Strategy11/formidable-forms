@@ -147,7 +147,7 @@ class FrmSummaryEmailsHelper {
 	/**
 	 * Sends license expired email.
 	 */
-	public static function send_license_expired() {
+	public static function send_license() {
 		$license_email = new FrmLicenseExpiredEmail();
 
 		if ( $license_email->send() ) {

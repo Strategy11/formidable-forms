@@ -110,9 +110,10 @@ abstract class FrmSummaryEmail {
 	 */
 	protected function get_content_args() {
 		return array(
-			'subject'         => $this->get_subject(),
-			'site_url'        => FrmSummaryEmailsHelper::add_url_data( home_url( '/' ) ),
-			'unsubscribe_url' => FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings' ),
+			'subject'          => $this->get_subject(),
+			'site_url'         => FrmSummaryEmailsHelper::add_url_data( home_url( '/' ) ),
+			'site_url_display' => home_url( '/' ),
+			'unsubscribe_url'  => FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings' ),
 		);
 	}
 
