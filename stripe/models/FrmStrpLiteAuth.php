@@ -661,6 +661,15 @@ class FrmStrpLiteAuth {
 	 * @return string
 	 */
 	private static function get_redirect_url( $atts ) {
+		$actions = FrmFormsController::get_met_on_submit_actions( $atts );
+		if ( $actions ) {
+			$success_url = reset( $actions )->post_content['success_url'];
+		}
+
+		if ( empty( $success_url ) ) {
+			$success_url = $atts['form']->options['success_url'];
+		}
+
 		$success_url = trim( $atts['form']->options['success_url'] );
 		$success_url = apply_filters( 'frm_content', $success_url, $atts['form'], $atts['entry'] );
 		$success_url = do_shortcode( $success_url );
