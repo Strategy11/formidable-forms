@@ -112,6 +112,9 @@ class FrmHooksController {
 
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmSummaryEmailsController::maybe_send_emails' );
+
+		FrmTransLiteHooksController::load_hooks();
+		FrmStrpLiteHooksController::load_hooks();
 	}
 
 	/**
@@ -194,6 +197,8 @@ class FrmHooksController {
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 
+		FrmTransLiteHooksController::load_admin_hooks();
+		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();

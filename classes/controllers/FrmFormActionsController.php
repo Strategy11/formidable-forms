@@ -49,7 +49,7 @@ class FrmFormActionsController {
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'paypal'            => 'FrmDefPayPalAction',
-			'payment'           => 'FrmDefHrsAction',
+			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
 			'mailchimp'         => 'FrmDefMlcmpAction',
@@ -487,7 +487,7 @@ class FrmFormActionsController {
 		$stored_actions  = array();
 		$action_priority = array();
 
-		if ( in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+		if ( in_array( $event, array( 'create', 'update' ), true ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			$this_event = 'import';
 		} else {
 			$this_event = $event;
@@ -544,7 +544,7 @@ class FrmFormActionsController {
 				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
 
 				// If post is created, get updated $entry object.
-				if ( $action->post_excerpt == 'wppost' && $event == 'create' ) {
+				if ( $action->post_excerpt === 'wppost' && $event === 'create' ) {
 					$entry = FrmEntry::getOne( $entry->id, true );
 				}
 			}
@@ -552,7 +552,7 @@ class FrmFormActionsController {
 	}
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
-		if ( ! isset( $args['old_id'] ) || empty( $args['old_id'] ) ) {
+		if ( empty( $args['old_id'] ) ) {
 			// Continue if we know which actions to copy.
 			return;
 		}

@@ -45,7 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				$displayed_actions[] = $action_control->id_base;
 				FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
-				unset( $actions_icon, $classes );
 			}
 
 			foreach ( $group['actions'] as $action ) {

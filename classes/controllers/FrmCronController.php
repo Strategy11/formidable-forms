@@ -25,6 +25,7 @@ class FrmCronController {
 		return array(
 			'formidable_send_usage' => 'weekly',
 			'frm_daily_event'       => 'daily',
+			'frm_payment_cron'      => 'daily',
 		);
 	}
 
@@ -36,6 +37,7 @@ class FrmCronController {
 	public static function schedule_events() {
 		$events = self::get_events();
 		unset( $events['formidable_send_usage'] ); // This is scheduled in another place.
+		unset( $events['frm_payment_cron'] ); // This is scheduled in another place.
 
 		foreach ( $events as $event => $recurrence ) {
 			if ( ! wp_next_scheduled( $event ) ) {
@@ -48,6 +50,8 @@ class FrmCronController {
 	 * Removes all cron events.
 	 *
 	 * @since 6.3.2
+	 *
+	 * @return void
 	 */
 	public static function remove_crons() {
 		$events = self::get_events();

@@ -9,15 +9,6 @@ class FrmField {
 	public static $transient_size = 200;
 
 	public static function field_selection() {
-		$frm_settings   = FrmAppHelper::get_settings();
-		$active_captcha = $frm_settings->active_captcha;
-		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'Captcha';
-		} elseif ( $active_captcha === 'recaptcha' ) {
-			$captcha_name = 'reCAPTCHA';
-		} else {
-			$captcha_name = 'hCaptcha';
-		}
 		$fields = array(
 			'text'     => array(
 				'name' => __( 'Text', 'formidable' ),
@@ -72,12 +63,37 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
-				'name' => $captcha_name,
+				'name' => self::get_captcha_field_name(),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
+			),
+			'credit_card' => array(
+				'name'  => __( 'Payment', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
 		);
 
+		/**
+		 * @param array $fields
+		 */
 		return apply_filters( 'frm_available_fields', $fields );
+	}
+
+	/**
+	 * Get the name of the Captcha field based on the global Captcha setting.
+	 *
+	 * @return string
+	 */
+	private static function get_captcha_field_name() {
+		$frm_settings   = FrmAppHelper::get_settings();
+		$active_captcha = $frm_settings->active_captcha;
+		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
+			$captcha_name = 'Captcha';
+		} elseif ( $active_captcha === 'recaptcha' ) {
+			$captcha_name = 'reCAPTCHA';
+		} else {
+			$captcha_name = 'hCaptcha';
+		}
+		return $captcha_name;
 	}
 
 	public static function pro_field_selection() {
@@ -167,10 +183,11 @@ class FrmField {
 				'name' => __( 'Tags', 'formidable' ),
 				'icon' => 'frm_icon_font frm_price_tags_icon',
 			),
+			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
+			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
 			'credit_card'    => array(
-				'name'  => __( 'Credit Card', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_credit_card_icon frm_show_upgrade',
-				'addon' => 'stripe',
+				'name'  => '',
+				'icon'  => '',
 			),
 			'address'        => array(
 				'name' => __( 'Address', 'formidable' ),
@@ -238,6 +255,13 @@ class FrmField {
 		return array_merge( $pro_field_selection, self::field_selection() );
 	}
 
+	/**
+	 * Create a field.
+	 *
+	 * @param array $values
+	 * @param bool  $return
+	 * @return int|false
+	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 
@@ -277,25 +301,23 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
-		$new_id        = 0;
-		if ( $query_results ) {
-			self::delete_form_transient( $new_values['form_id'] );
-			$new_id = $wpdb->insert_id;
+
+		if ( ! $query_results ) {
+			return false;
 		}
+
+		self::delete_form_transient( $new_values['form_id'] );
+		$new_id = $wpdb->insert_id;
 
 		if ( ! $return ) {
 			return false;
 		}
 
-		if ( $query_results ) {
-			if ( isset( $values['id'] ) ) {
-				$frm_duplicate_ids[ $values['id'] ] = $new_id;
-			}
-
-			return $new_id;
-		} else {
-			return false;
+		if ( isset( $values['id'] ) ) {
+			$frm_duplicate_ids[ $values['id'] ] = $new_id;
 		}
+
+		return $new_id;
 	}
 
 	/**

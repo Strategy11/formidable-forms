@@ -35,7 +35,8 @@ class FrmFormAction {
 	/**
 	 * Echo the settings update form
 	 *
-	 * @param array $instance Current settings
+	 * @param WP_Post $instance Current settings
+	 * @param array   $args
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -649,7 +650,7 @@ class FrmFormAction {
 
 		foreach ( $default_values as $k => $vals ) {
 			if ( is_array( $vals ) && ! empty( $vals ) ) {
-				if ( 'event' == $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
 				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );

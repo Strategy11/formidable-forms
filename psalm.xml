@@ -9,8 +9,8 @@
 	<projectFiles>
 		<file name="formidable.php" />
 		<directory name="classes" />
+		<directory name="stripe" />
 		<directory name="deprecated" />
-		<directory name="classes/views/" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		</ignoreFiles>
@@ -28,6 +28,7 @@
 		<InvalidGlobal>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 			</errorLevel>
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
@@ -62,8 +63,14 @@
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
+				<directory name="stripe" />
 			</errorLevel>
 		</UndefinedGlobalVariable>
+		<UndefinedAttributeClass>
+			<errorLevel type="suppress">
+				<referencedClass name="AllowDynamicProperties"/>
+			</errorLevel>
+		</UndefinedAttributeClass>
 		<UndefinedVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
@@ -82,6 +89,7 @@
 		<InvalidScope>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
+				<directory name="stripe" />
 			</errorLevel>
 		</InvalidScope>
 		<InaccessibleMethod>
