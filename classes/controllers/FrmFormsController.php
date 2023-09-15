@@ -1283,7 +1283,7 @@ class FrmFormsController {
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'abandonment',
 					array(
-						'upgrade'    => __( 'Form Abandonment', 'formidable' ),
+						'upgrade'    => __( 'Form Abandonment settings', 'formidable' ),
 						'message'    => __( 'Capture form data before it\'s submitted to save more leads and learn to optimize forms.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
 					)
