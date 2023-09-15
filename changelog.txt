@@ -1,4 +1,17 @@
 == Changelog ==
+= 6.5 =
+* New: Stripe forms are now available for free without the need for other add ons. Global settings now include a Stripe section. Payment fields and Collect Payment actions have been added, as well as the Global setting for defining the default currency.
+* Fix: The TinyMCE editor would exceed the page boundaries after the fullscreen button was clicked.
+
+= 6.4.2 =
+* New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
+* New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
+* Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
+* Fix: The option to save and reload when activating an add on was not reloading the page when the setting to save the builder with AJAX was on.
+* Fix: An Automatic conversion of false to array deprecation message would get logged when saving styles in newer versions of PHP.
+* Fix: Whitelabel icons were appearing too large when displayed as Gutenberg block options in WordPress v6.3.
+* Admin footer links and the floating support button have been removed for websites that use a whitelabel setting.
+
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
 * New: Forms without names will now appear as (no title) when displayed as options inside of a Gutenberg block.

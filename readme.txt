@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.2.2
+Tested up to: 6.3.1
 Requires PHP: 5.6
-Stable tag: 6.4.1
+Stable tag: 6.5
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,19 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.5 =
+* New: Stripe forms are now available for free without the need for other add ons. Global settings now include a Stripe section. Payment fields and Collect Payment actions have been added, as well as the Global setting for defining the default currency.
+* Fix: The TinyMCE editor would exceed the page boundaries after the fullscreen button was clicked.
+
+= 6.4.2 =
+* New: Entry statuses are now shown with color coded backgrounds on admin entry list pages.
+* New: Additional attributes have been added to collapsible sections in the form builder page to improve accessibility.
+* Fix: A fatal error would occur on when sending tracking data when the php_uname function was disabled and unavailable.
+* Fix: The option to save and reload when activating an add on was not reloading the page when the setting to save the builder with AJAX was on.
+* Fix: An Automatic conversion of false to array deprecation message would get logged when saving styles in newer versions of PHP.
+* Fix: Whitelabel icons were appearing too large when displayed as Gutenberg block options in WordPress v6.3.
+* Admin footer links and the floating support button have been removed for websites that use a whitelabel setting.
+
 = 6.4.1 =
 * New: The pop up that prevents navigating away from the form builder when changes have been made will now also pop up when options are added or removed.
 * New: Forms without names will now appear as (no title) when displayed as options inside of a Gutenberg block.

@@ -59,6 +59,9 @@ if ( $no_allow_class === 'frm_noallow' ) {
 }
 
 $pro_fields = FrmField::pro_field_selection();
+// This is a Lite field. It's kept in pro_field_selection for backward compatibility.
+unset( $pro_fields['credit_card'] );
+
 $field_sections = array();
 foreach ( $pro_fields as $field_key => $field_type ) {
 

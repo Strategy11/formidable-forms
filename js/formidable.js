@@ -1800,7 +1800,9 @@ function frmFrontFormJS() {
 
 		visible: function( classes ) {
 			jQuery( classes ).css( 'visibility', 'visible' );
-		}
+		},
+
+		triggerCustomEvent: triggerCustomEvent
 	};
 }
 frmFrontForm = frmFrontFormJS();

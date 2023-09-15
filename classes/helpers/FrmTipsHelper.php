@@ -19,7 +19,7 @@ class FrmTipsHelper {
 		$tips = self::$callback();
 		$tip  = self::get_random_tip( $tips );
 
-		self::show_tip( $tip );
+		self::show_tip( $tip, $html );
 	}
 
 	/**
@@ -41,15 +41,18 @@ class FrmTipsHelper {
 	 * @return void
 	 */
 	public static function show_tip( $tip, $html = '' ) {
-		if ( ! isset( $tip['page'] ) ) {
-			$tip['page'] = '';
-		}
+		$defaults = array(
+			'page'  => '',
+			'class' => 'frm-mt-0',
+		);
+		$tip      = array_merge( $defaults, $tip );
+
 		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
 			$tip['link']['medium'] = 'tip';
 		}
 
 		if ( 'p' === $html ) {
-			echo '<p class="frmcenter frm-mt-0">';
+			echo '<p class="frmcenter ' . esc_attr( $tip['class'] ) . '">';
 		}
 
 		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );

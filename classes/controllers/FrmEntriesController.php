@@ -81,9 +81,9 @@ class FrmEntriesController {
 		if ( $form_id ) {
 			self::get_columns_for_form( $form_id, $columns );
 		} else {
-			$columns[ $form_id . '_form_id' ] = __( 'Form', 'formidable' );
-			$columns[ $form_id . '_name' ]    = __( 'Entry Name', 'formidable' );
-			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
+			$columns[ $form_id . '_form_id' ] = esc_html__( 'Form', 'formidable' );
+			$columns[ $form_id . '_name' ]    = esc_html__( 'Entry Name', 'formidable' );
+			$columns[ $form_id . '_user_id' ] = esc_html__( 'Created By', 'formidable' );
 		}
 
 		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
@@ -98,7 +98,7 @@ class FrmEntriesController {
 			add_screen_option(
 				'per_page',
 				array(
-					'label'   => __( 'Entries', 'formidable' ),
+					'label'   => esc_html__( 'Entries', 'formidable' ),
 					'default' => 20,
 					'option'  => 'formidable_page_formidable_entries_per_page',
 				)

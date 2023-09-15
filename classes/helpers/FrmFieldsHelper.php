@@ -14,7 +14,12 @@ class FrmFieldsHelper {
 		$values = self::get_default_field( $type );
 
 		global $wpdb;
-		$field_count = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ), 'field_order', array( 'order_by' => 'field_order DESC' ) );
+		$field_count = FrmDb::get_var(
+			'frm_fields',
+			array( 'form_id' => $form_id ),
+			'field_order',
+			array( 'order_by' => 'field_order DESC' )
+		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
 		$values['form_id']     = $form_id;
@@ -22,8 +27,8 @@ class FrmFieldsHelper {
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
-		if ( isset( $setting ) && ! empty( $setting ) ) {
-			if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
+		if ( ! empty( $setting ) ) {
+			if ( in_array( $type, array( 'data', 'lookup' ), true ) ) {
 				$values['field_options']['data_type'] = $setting;
 			} else {
 				$values['field_options'][ $setting ] = 1;
@@ -849,13 +854,13 @@ class FrmFieldsHelper {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
 		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
-		} elseif ( $clean_tag == 'user_agent' ) {
+		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;
 			$replace_with = FrmEntriesHelper::get_browser( $description['browser'] );
-		} elseif ( $clean_tag == 'created_at' || $clean_tag == 'updated_at' ) {
+		} elseif ( $clean_tag === 'created_at' || $clean_tag === 'updated_at' ) {
 			$atts['tag']  = $clean_tag;
 			$replace_with = self::get_entry_timestamp( $atts );
-		} elseif ( $clean_tag == 'created_by' || $clean_tag == 'updated_by' ) {
+		} elseif ( $clean_tag === 'created_by' || $clean_tag === 'updated_by' ) {
 			$replace_with = self::get_display_value( $atts['entry']->{$clean_tag}, (object) array( 'type' => 'user_id' ), $atts );
 		} else {
 			$replace_with = self::get_field_shortcode_value( $atts );
