@@ -425,7 +425,7 @@ class FrmSummaryEmailsHelper {
 	 */
 	public static function get_out_of_date_plugins() {
 		$update_data = FrmAddonsController::check_update( '' );
-		if ( ! $update_data ) {
+		if ( ! $update_data || ! is_object( $update_data ) || empty( $update_data->response ) ) {
 			return array();
 		}
 
