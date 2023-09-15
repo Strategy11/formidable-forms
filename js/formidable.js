@@ -1484,9 +1484,7 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
-			jQuery( document ).on( 'elementor/popup/show', () => {
-				frmRecaptcha();
-			});
+			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 		},
 
 		getFieldId: function( field, fullID ) {
