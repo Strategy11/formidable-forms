@@ -9,7 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/leave-email.svg' ); ?>" />
 	<h3><?php echo esc_html( $title ); ?></h3>
-	<p><?php echo wpautop( esc_html( $description ) ); ?></p>
+	<p>
+		<?php
+		echo wp_kses(
+			wpautop( esc_html( $description ) ),
+			array(
+				'p' => true,
+				'br' => true,
+			)
+		);
+		?>
+	</p>
 	<div id="frm_leave_email_wrapper">
 		<span class="frm-with-left-icon">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
