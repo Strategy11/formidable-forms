@@ -23,15 +23,14 @@ import { __ } from '@wordpress/i18n';
  */
 import { getElements } from '../elements';
 import { VIEW_SLUGS, getAppState } from '../shared';
-import { onEmptyStateButtonClick } from '../events';
-import { show, hide, showElements, hideElements, onClickPreventDefault } from '../utils';
+import { show, hide, showElements, hideElements } from '../utils';
 
 /**
  * Display the search-empty state.
  *
  * @return {void}
  */
-export const showSearchEmptyState = () => {
+export function showSearchEmptyState() {
 	const { notEmptySearchText } = getAppState();
 	const { pageTitle, emptyState, emptyStateButton } = getElements();
 
@@ -42,22 +41,14 @@ export const showSearchEmptyState = () => {
 			hide( pageTitle );
 		} else {
 			hide( emptyState );
-			// Clear button's unique ID and detach its click listener
-			emptyStateButton.removeAttribute( 'id' );
-			emptyStateButton.removeEventListener( 'click', onEmptyStateButtonClick );
-			// Clear element's state attribute
 			emptyState.removeAttribute( 'data-view' );
 		}
 
 		return;
 	}
 
-	// Assign unique ID and state attributes
-	emptyStateButton.setAttribute( 'id', 'frm-search-empty-state-button' );
+	// Assign state attributes
 	emptyState.setAttribute( 'data-view', VIEW_SLUGS.SEARCH );
-
-	// Attach click event listener to the button
-	onClickPreventDefault( emptyStateButton, onEmptyStateButtonClick );
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
@@ -78,7 +69,7 @@ export const showSearchEmptyState = () => {
  *
  * @return {void}
  */
-export const showFavoritesEmptyState = () => {
+export function showFavoritesEmptyState() {
 	const { pageTitle, emptyState, emptyStateButton } = getElements();
 
 	// Assign state attributes
@@ -95,4 +86,29 @@ export const showFavoritesEmptyState = () => {
 	// Display the empty state
 	hideElements([ pageTitle, emptyStateButton ]);
 	show( emptyState );
+};
+
+/**
+ * Display the custom-empty state.
+ *
+ * @return {void}
+ */
+export function showCustomTemplatesEmptyState() {
+	const { pageTitle, emptyState, emptyStateButton } = getElements();
+
+	// Assign state attributes
+	emptyState.setAttribute( 'data-view', VIEW_SLUGS.CUSTOM );
+
+	// Update text content
+	const { emptyStateTitle, emptyStateText } = getElements();
+	emptyStateTitle.textContent = __( 'No custom templates', 'sherv-challenge' );
+	emptyStateText.textContent = __(
+		'You haven\'t created any custom templates yet. You can create a new blank form or explore the wide range of templates.',
+		'sherv-challenge'
+	);
+	emptyStateButton.textContent = __( 'All Templates', 'sherv-challenge' );
+
+	// Display the empty state
+	hide( pageTitle );
+	showElements([ emptyState, emptyStateButton ]);
 };

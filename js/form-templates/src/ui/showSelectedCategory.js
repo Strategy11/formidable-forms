@@ -20,7 +20,7 @@ import { getElements } from '../elements';
 import { PREFIX, VIEW_SLUGS, getAppState } from '../shared';
 import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
-import { showFavoritesEmptyState, updatePageTitle } from './';
+import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState } from './';
 
 /**
  * Show templates based on selected category.
@@ -134,6 +134,12 @@ export function showFavoriteTemplates() {
  * @return {void}
  */
 export function showCustomTemplates() {
+	const { customCount } = getAppState();
+
+	if ( 0 === customCount ) {
+		showCustomTemplatesEmptyState();
+	}
+
 	const { customTemplatesSection, customTemplatesList, customTemplateItems } = getElements();
 	showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
 }

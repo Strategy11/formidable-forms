@@ -77,22 +77,10 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 	if ( appState.selectedCategory ) {
 		showSearchResults();
 
-		// Clear selected category, acting as a flag to indicate search result state
+		// Setting "selectedCategory" to an empty string as a flag for search state
 		setAppStateProperty( 'selectedCategory', '' );
 	}
 }
-
-/**
- * Handles the click event on the empty state button.
- *
- * @param {Event} event The click event object.
- * @return {void}
- */
-export const onEmptyStateButtonClick = ( event ) => {
-	const { searchInput } = getElements();
-	resetSearchInput();
-	searchInput.focus();
-};
 
 /**
  * Resets the value of the search input and triggers an input event.

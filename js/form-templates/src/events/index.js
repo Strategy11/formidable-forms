@@ -19,6 +19,7 @@
 import addCategoryEvents from './categoryListener';
 import addFavoriteButtonEvents from './favoriteButtonListener';
 import addSearchEvents from './searchListener';
+import addEmptyStateButtonEvents from './emptyStateButtonListener';
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -29,6 +30,7 @@ export function addEventListeners() {
 	addCategoryEvents();
 	addFavoriteButtonEvents();
 	addSearchEvents();
+	addEmptyStateButtonEvents();
 }
 
-export { resetSearchInput, onEmptyStateButtonClick } from './searchListener';
+export { resetSearchInput } from './searchListener';

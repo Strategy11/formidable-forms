@@ -334,7 +334,9 @@
 }
 
 #frm-form-templates-empty-state .frm-form-templates-text {
+	max-width: 420px;
 	font-weight: 400;
+	text-align: center;
 }
 
 #frm-form-templates-empty-state .button {

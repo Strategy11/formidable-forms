@@ -561,6 +561,7 @@ class FrmFormTemplatesController {
 				'default' => count( self::$favorite_templates['default'] ),
 				'custom'  => count( self::$favorite_templates['custom'] ),
 			),
+			'customCount'             => count( self::$custom_templates ),
 			'proUpgradeUrl'           => FrmAppHelper::admin_upgrade_link( 'form-templates' ),
 		);
 
