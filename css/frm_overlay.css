@@ -49,7 +49,7 @@ body.admin-bar .frm-overlay--close {
 }
 
 .frm-overlay--container .frm-overlay--cta {
-	margin-top: 32px;
+	margin-top: var(--gap-lg);
 	justify-content: center;
 	gap: var( --gap-sm );
 }
