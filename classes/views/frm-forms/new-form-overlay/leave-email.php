@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		echo wp_kses(
 			wpautop( esc_html( $description ) ),
 			array(
-				'p' => true, 
+				'p' => true,
 				'br' => true,
 			)
 		);
