@@ -32,13 +32,7 @@ import { updatePageTitle } from './';
  * @return {void}
  */
 export function showSearchResults() {
-	const {
-		bodyContent,
-		bodyContentChildren,
-		pageTitle,
-		templatesList,
-		templateItems
-	} = getElements();
+	const { bodyContent, bodyContentChildren, pageTitle, templatesList } = getElements();
 
 	// Remove highlighting from the currently selected category
 	getAppStateProperty( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
@@ -48,7 +42,7 @@ export function showSearchResults() {
 
 	// Update the page title and display relevant elements
 	updatePageTitle( __( 'Search Result', 'sherv-challenge' ) );
-	showElements([ pageTitle, templatesList, ...templateItems ]);
+	showElements([ pageTitle, templatesList ]);
 
 	// Smoothly display the updated UI elements
 	fadeIn( bodyContent );

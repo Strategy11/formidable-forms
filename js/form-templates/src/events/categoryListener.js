@@ -68,12 +68,13 @@ const onCategoryClick = ( event ) => {
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
 	setAppState({ selectedCategory, selectedCategoryEl });
 
-	showSelectedCategory( selectedCategory );
-
 	// Reset the search input if it contains text
 	if ( notEmptySearchText ) {
 		resetSearchInput();
 	}
+
+	// Display templates of the selected category
+	showSelectedCategory( selectedCategory );
 
 	// Smoothly display the updated UI elements
 	const { bodyContent } = getElements();

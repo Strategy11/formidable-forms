@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { show, hideElements, fadeIn } from '../utils';
+import { hideElements, fadeIn } from '../utils';
 
 /**
  * Sets up the initial view, performing any required
@@ -34,8 +34,7 @@ function setupInitialView() {
 	// Hide the twin featured template items
 	hideElements( twinFeaturedTemplateItems );
 
-	// Display the main body content and gradually reveal the updated UI elements
-	show( bodyContent );
+	// Smoothly display the updated UI elements
 	fadeIn( bodyContent );
 }
 

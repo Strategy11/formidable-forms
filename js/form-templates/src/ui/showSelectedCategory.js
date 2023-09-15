@@ -17,10 +17,10 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, ALL_TEMPLATES, FAVORITES, CUSTOM, getAppState } from '../shared';
+import { PREFIX, VIEW_SLUGS, getAppState } from '../shared';
 import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
-import { updatePageTitle } from './';
+import { showFavoritesEmptyState, updatePageTitle } from './';
 
 /**
  * Show templates based on selected category.
@@ -31,7 +31,7 @@ import { updatePageTitle } from './';
 export function showSelectedCategory( selectedCategory ) {
 	const { bodyContentChildren, pageTitle, templatesList, templateItems } = getElements();
 
-	if ( ALL_TEMPLATES !== selectedCategory ) {
+	if ( VIEW_SLUGS.ALL_TEMPLATES !== selectedCategory ) {
 		hideElements( bodyContentChildren );
 	}
 
@@ -39,19 +39,17 @@ export function showSelectedCategory( selectedCategory ) {
 	show( pageTitle );
 
 	switch ( selectedCategory ) {
-		case ALL_TEMPLATES:
+		case VIEW_SLUGS.ALL_TEMPLATES:
 			showAllTemplates();
 			break;
-		case FAVORITES:
+		case VIEW_SLUGS.FAVORITES:
 			showFavoriteTemplates();
 			break;
-		case CUSTOM:
+		case VIEW_SLUGS.CUSTOM:
 			showCustomTemplates();
 			break;
 		default:
-			// Clear the stage for new content
-			hideElements( templateItems );
-
+			hideElements( templateItems ); // Clear the view for new content
 			showElements([ templatesList, ...categorizedTemplates[ selectedCategory ] ]);
 			break;
 	}
@@ -82,6 +80,11 @@ export function showAllTemplates() {
  */
 export function showFavoriteTemplates() {
 	const { favoritesCount } = getAppState();
+
+	if ( 0 === favoritesCount.total ) {
+		showFavoritesEmptyState();
+	}
+
 	const {
 		bodyContent,
 		templatesList,
@@ -92,7 +95,7 @@ export function showFavoriteTemplates() {
 		customTemplateItems
 	} = getElements();
 
-	// Clear the stage for new content
+	// Clear the view for new content
 	hideElements( templateItems );
 
 	const elementsToShow = [];

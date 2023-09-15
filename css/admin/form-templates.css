@@ -314,10 +314,37 @@
 }
 
 /**
+ * Empty State.
+ *
+ */
+#frm-form-templates-empty-state {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	gap: var(--gap-md);
+	margin-top: calc(-1 * var(--gap-md));
+}
+
+#frm-form-templates-empty-state h3.frm-form-templates-title {
+	font-size: var(--text-lg);
+	margin-bottom: calc(var(--gap-xs) - var(--gap-md));
+	color: var(--grey-900);
+}
+
+#frm-form-templates-empty-state .frm-form-templates-text {
+	font-weight: 400;
+}
+
+#frm-form-templates-empty-state .button {
+	font-weight: 600;
+}
+
+/**
  * Helpers.
  *
  */
-
 #frm-form-templates-page .frm_hidden {
 	display: none !important;
 }

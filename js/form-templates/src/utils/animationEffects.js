@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import { PREFIX } from '../shared';
+import { isVisible, show } from './';
 
 /**
  * Applies a fade-in animation to an element.
@@ -28,6 +29,10 @@ import { PREFIX } from '../shared';
 export const fadeIn = ( element, fadingClass = `${ PREFIX }-flex` ) => {
 	if ( ! element ) {
 		return;
+	}
+
+	if ( ! isVisible( element ) ) {
+		show( element );
 	}
 
 	element.classList.add( `${ PREFIX }-fadein`, fadingClass );

@@ -31,4 +31,4 @@ export function addEventListeners() {
 	addSearchEvents();
 }
 
-export { resetSearchInput } from './searchListener';
+export { resetSearchInput, onEmptyStateButtonClick } from './searchListener';

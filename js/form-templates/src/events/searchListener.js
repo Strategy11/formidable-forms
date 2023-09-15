@@ -19,7 +19,7 @@
 import { getElements } from '../elements';
 import { PREFIX, getAppState, setAppStateProperty, initSearch } from '../shared';
 import { showSearchEmptyState, showSearchResults } from '../ui';
-import { hide } from '../utils';
+import { isVisible, show, hide } from '../utils';
 
 /**
  * Adds search-related event listeners by calling the 'initSearch' function.
@@ -66,7 +66,12 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 	}
 
 	// Hide empty state if currently displayed
-	hide( emptyState );
+	if ( isVisible( emptyState ) ) {
+		hide( emptyState );
+
+		const { pageTitle } = getElements();
+		show( pageTitle );
+	}
 
 	// Switch to displaying search results if a category is selected
 	if ( appState.selectedCategory ) {
@@ -76,6 +81,18 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 		setAppStateProperty( 'selectedCategory', '' );
 	}
 }
+
+/**
+ * Handles the click event on the empty state button.
+ *
+ * @param {Event} event The click event object.
+ * @return {void}
+ */
+export const onEmptyStateButtonClick = ( event ) => {
+	const { searchInput } = getElements();
+	resetSearchInput();
+	searchInput.focus();
+};
 
 /**
  * Resets the value of the search input and triggers an input event.

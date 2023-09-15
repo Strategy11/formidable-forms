@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { ALL_TEMPLATES } from './';
+import { VIEW_SLUGS } from './';
 
 let appState = null;
 
@@ -31,7 +31,7 @@ export const initializeAppState = () => {
 	const { allTemplatesCategory } = getElements();
 
 	appState = {
-		selectedCategory: ALL_TEMPLATES,
+		selectedCategory: VIEW_SLUGS.ALL_TEMPLATES,
 		selectedCategoryEl: allTemplatesCategory,
 		notEmptySearchText: false,
 		favoritesCount

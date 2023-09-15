@@ -20,6 +20,9 @@ export const PREFIX = 'frm-form-templates';
 export const HIDDEN_CLASS = 'frm_hidden';
 export const CURRENT_CLASS = 'frm-current';
 
-export const ALL_TEMPLATES = 'all-templates';
-export const FAVORITES = 'favorites';
-export const CUSTOM = 'custom';
+export const VIEW_SLUGS = {
+	ALL_TEMPLATES: 'all-templates',
+	FAVORITES: 'favorites',
+	CUSTOM: 'custom',
+	SEARCH: 'search'
+};

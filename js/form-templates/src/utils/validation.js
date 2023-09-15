@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import { PREFIX, ALL_TEMPLATES, FAVORITES, FEATURED_TEMPLATES_KEYS } from '../shared';
+import { PREFIX, VIEW_SLUGS, FEATURED_TEMPLATES_KEYS } from '../shared';
 
 /**
  * Checks if the category is "All Templates".
@@ -24,7 +24,7 @@ import { PREFIX, ALL_TEMPLATES, FAVORITES, FEATURED_TEMPLATES_KEYS } from '../sh
  * @param {string} category The category slug.
  * @return {boolean} True if the category is "All Templates", otherwise false.
  */
-export const isAllTemplatesCategory = category => ALL_TEMPLATES === category;
+export const isAllTemplatesCategory = category => VIEW_SLUGS.ALL_TEMPLATES === category;
 
 /**
  * Checks if the category is "Favorites".
@@ -32,7 +32,7 @@ export const isAllTemplatesCategory = category => ALL_TEMPLATES === category;
  * @param {string} category The category slug.
  * @return {boolean} True if the category is "Favorites", otherwise false.
  */
-export const isFavoritesCategory = category => FAVORITES === category;
+export const isFavoritesCategory = category => VIEW_SLUGS.FAVORITES === category;
 
 /**
  * Checks if a template is a favorite.

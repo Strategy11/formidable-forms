@@ -18,6 +18,7 @@
  */
 import { getElements } from '../elements';
 import { PREFIX, getAppState, setAppStateProperty, doJsonPost } from '../shared';
+import { showFavoritesEmptyState } from '../ui';
 import {
 	onClickPreventDefault,
 	isFavoriteTemplate,
@@ -134,6 +135,10 @@ const onFavoriteButtonClick = ( event ) => {
 	 * Hide UI elements if 'Favorites' is active and counts are zero.
 	 */
 	if ( isFavoritesCategory( selectedCategory ) ) {
+		if ( 0 === favoritesCount.total ) {
+			showFavoritesEmptyState();
+		}
+
 		hide( template );
 
 		if ( 0 === favoritesCount.default ) {

@@ -59,4 +59,4 @@ export const hide = element => element?.classList.add( HIDDEN_CLASS );
  * @return {boolean} Returns true if the element is visible, otherwise false.
  */
 export const isVisible = element =>
-	element?.classList.contains( HIDDEN_CLASS );
+	! element?.classList.contains( HIDDEN_CLASS );
