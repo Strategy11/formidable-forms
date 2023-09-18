@@ -27,6 +27,33 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Check if the payments table has been created.
+	 * This includes either the frm_trans_db_version option (used in Stripe Lite and the Payments submodule) or frm_pay_db_version option (from the PayPal add on).
+	 *
+	 * @since 6.5
+	 * @since x.x A check for the PayPal add on option
+	 * @since x.x This function was renamed and moved from FrmStrpLiteAppController::payments_are_installed and made public.
+	 *
+	 * @return bool
+	 */
+	public static function payments_table_exists() {
+		$db     = new FrmTransLiteDb();
+		$option = get_option( $db->db_opt_name );
+		if ( false !== $option ) {
+			return true;
+		}
+
+		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
+			$option = get_option( FrmPaymentsController::$db_opt_name );
+			if ( false !== $option ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get a payment status label.
 	 *
 	 * @param string $status The lowercase payment status value.
