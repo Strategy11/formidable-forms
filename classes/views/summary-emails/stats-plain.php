@@ -25,7 +25,7 @@ esc_html_e( 'Statistics', 'formidable' );
 echo "\r\n\r\n";
 
 foreach ( $args['stats'] as $key => $stat ) {
-	echo esc_html( $stat['label'] ) . ': ' . intval( $stat['count'] ) . "\r\n";
+	echo esc_html( $stat['label'] ) . ': ' . ( isset( $stat['display'] ) ? esc_html( $stat['display'] ) : intval( $stat['count'] ) ) . "\r\n";
 }
 
 if ( ! empty( $args['dashboard_url'] ) ) {

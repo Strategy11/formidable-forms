@@ -274,6 +274,7 @@ class FrmSummaryEmailsHelper {
 		$data = array(
 			'top_forms' => self::get_top_forms( $from_date, $to_date ),
 			'entries'   => self::get_entries_count( $from_date, $to_date ),
+			'payments'  => self::get_payments_data( $from_date, $to_date ),
 		);
 
 		/**
@@ -285,6 +286,41 @@ class FrmSummaryEmailsHelper {
 		 * @param array $args Contains `from_date` and `to_date`.
 		 */
 		return apply_filters( 'frm_summary_email_data', $data, compact( 'from_date', 'to_date' ) );
+	}
+
+	/**
+	 * Gets payments data.
+	 *
+	 * @param string $from_date From date.
+	 * @param string $to_date   To date.
+	 * @return array            Contains `count` and `total`.
+	 */
+	private static function get_payments_data( $from_date, $to_date ) {
+		$data = array(
+			'count' => 0,
+			'total' => 0,
+		);
+
+		$payments = FrmDb::get_col(
+			'frm_payments',
+			array(
+				'created_at >' => $from_date,
+				'created_at <' => $to_date,
+				'status'       => 'complete',
+			),
+			'amount'
+		);
+
+		if ( ! $payments ) {
+			return $data;
+		}
+
+		$data['count'] = count( $payments );
+		foreach ( $payments as $payment ) {
+			$data['total'] += floatval( $payment );
+		}
+
+		return $data;
 	}
 
 	/**

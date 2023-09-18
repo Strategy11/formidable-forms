@@ -84,9 +84,20 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/admin.php?page=formidable' );
 		$args['stats']           = array(
-			'entries' => array(
-				'label' => __( 'Entries created', 'formidable' ),
-				'count' => $stats_data['entries'],
+			'entries'        => array(
+				'label'   => __( 'Entries created', 'formidable' ),
+				'count'   => $stats_data['entries'],
+				'compare' => 0,
+			),
+			'payments_count' => array(
+				'label'   => __( 'Payments collected', 'formidable' ),
+				'count'   => $stats_data['payments']['count'],
+				'compare' => 0,
+			),
+			'payments_total' => array(
+				'label'   => __( 'Total', 'formidable' ),
+				'count'   => $stats_data['payments']['total'],
+				'display' => $this->get_displayed_price( $stats_data['payments']['total'] ),
 				'compare' => 0,
 			),
 		);
@@ -96,12 +107,39 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			$args['plugins_url']         = FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/plugins.php' );
 		}
 
-		if ( $this->has_comparison && $stats_data['entries'] ) {
+		if ( $this->has_comparison ) {
 			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );
-			$args['stats']['entries']['compare'] = ( $stats_data['entries'] - $prev_stats_data['entries'] ) / $stats_data['entries'];
+			$args['stats']['entries']['compare']        = $this->get_compare_diff( $stats_data['entries'], $prev_stats_data['entries'] );
+			$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $stats_data['payments']['count'], $prev_stats_data['payments']['count'] );
+			$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $stats_data['payments']['total'], $prev_stats_data['payments']['total'] );
 		}
 
 		return $args;
+	}
+
+	protected function get_compare_diff( $current, $prev ) {
+		if ( ! $current && ! $prev ) {
+			return 0; // No comparison if both are zero.
+		}
+
+		if ( ! $prev ) {
+			return 1; // Increase 100%;
+		}
+
+		return ( $current - $prev ) / $prev;
+	}
+
+	/**
+	 * Gets displayed string for price.
+	 *
+	 * @param float $amount Price amount.
+	 * @return string
+	 */
+	protected function get_displayed_price( $amount ) {
+		$settings = FrmAppHelper::get_settings();
+		$currency = FrmCurrencyHelper::get_currency( $settings->currency );
+		FrmTransLiteAppHelper::format_amount_for_currency( $currency, $amount );
+		return $amount;
 	}
 
 	/**

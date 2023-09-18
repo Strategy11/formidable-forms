@@ -38,7 +38,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
 						<div>
-							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;"><?php echo intval( $stat['count'] ); ?></strong>
+							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;">
+								<?php echo isset( $stat['display'] ) ? esc_html( $stat['display'] ) : intval( $stat['count'] ); ?>
+							</strong>
 							<?php FrmSummaryEmailsHelper::show_comparison( $stat['compare'] ); ?>
 						</div>
 					</td>
