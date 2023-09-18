@@ -17,5 +17,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<p><?php esc_html_e( 'Your license is expired. You can use the button below to renew.', 'formidable' ); ?></p>
 
-	<p><a href="<?php esc_url( $args['renew_url'] ); ?>" title=""><?php esc_html_e( 'Renew now', 'formidable' ); ?></a></p>
+	<p><a href="<?php echo esc_url( $args['renew_url'] ); ?>" title=""><?php esc_html_e( 'Renew now', 'formidable' ); ?></a></p>
 </div>
