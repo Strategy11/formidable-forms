@@ -305,7 +305,7 @@ class FrmSummaryEmailsHelper {
 			'frm_payments',
 			array(
 				'created_at >' => $from_date,
-				'created_at <' => $to_date,
+				'created_at <' => $to_date . ' 23:59:59',
 				'status'       => 'complete',
 			),
 			'amount'
@@ -335,7 +335,7 @@ class FrmSummaryEmailsHelper {
 			'frm_items',
 			array(
 				'created_at >' => $from_date, // The `=` is added after `>` in the query.
-				'created_at <' => $to_date,
+				'created_at <' => $to_date . ' 23:59:59',
 				'is_draft'     => 0,
 			)
 		);
