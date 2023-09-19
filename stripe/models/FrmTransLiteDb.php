@@ -195,6 +195,11 @@ class FrmTransLiteDb {
 	}
 
 	public function get_all_by( $value, $field = 'item_id' ) {
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			// If no migrations have run yet return nothing.
+			return array();
+		}
+
 		$field = sanitize_text_field( $field );
 
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {

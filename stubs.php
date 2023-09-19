@@ -100,7 +100,6 @@ namespace {
 		public static function has_combo_js_file() {
 		}
 	}
-	
 	class Akismet {
 	}
 	class PHPMailer {
