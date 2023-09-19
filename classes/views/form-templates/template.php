@@ -1,4 +1,28 @@
 <?php
+/**
+ * Form Templates - Template.
+ *
+ * @package   Strategy11/FormidableForms
+ * @copyright 2010 Formidable Forms
+ * @license   GNU General Public License, version 2
+ * @link      https://formidableforms.com/
+ */
+
+/**
+ * Copyright (C) 2023 Formidable Forms
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ *
+ * https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -16,7 +40,6 @@ $template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'
  * Set Attributes.
  */
 $attributes                    = array();
-$attributes['class']           = 'frm-form-templates-item frm4';
 $attributes['data-id']         = $template['id'];
 $attributes['aria-label']      = $template_name;
 $attributes['frm-search-text'] = strtolower( $template_name );
@@ -27,6 +50,7 @@ if ( ! empty( $template['category_slugs'] ) ) {
 }
 
 // Set class attribute.
+$attributes['class'] = 'frm-form-templates-item';
 if ( $is_featured_template ) {
 	$attributes['class'] .= ' frm-form-templates-featured-item';
 }
@@ -34,13 +58,13 @@ if ( $is_favorite_template ) {
 	$attributes['class'] .= ' frm-form-templates-favorite-item';
 }
 if ( $is_custom_template ) {
-	$attributes['class']       .= ' frm-form-templates-custom-item';
-	$attributes['data-formid'] = absint( $template['id'] );
-	$attributes['data-custom'] = '1';
-	$attributes['data-href']   = esc_url( $template['url'] );
+	$attributes['class']     .= ' frm-form-templates-custom-item';
+	$attributes['data-href'] = esc_url( $template['url'] );
 }
 if ( $plan_required ) {
-	$attributes['class'] .= ' frm-form-templates-locked-item frm-' . esc_attr( $plan_required ) . '-template';
+	$required_plan_slug  = sanitize_title( $plan_required );
+	$attributes['class'] .= ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
+	$attributes['data-required-plan'] = $required_plan_slug;
 }
 ?>
 
@@ -57,7 +81,7 @@ if ( $plan_required ) {
 		<h3 class="frm-form-templates-item-title">
 			<div class="frm-form-templates-item-title-text">
 				<!-- Lock Icon -->
-				<?php if ( $plan_required && 'free' !== $plan_required ) { ?>
+				<?php if ( $plan_required ) { ?>
 					<span class="frm-form-templates-item-lock-icon">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 					</span>
@@ -82,7 +106,7 @@ if ( $plan_required ) {
 				<a href="<?php echo esc_url( $template['link'] ); ?>" class="button button-secondary frm-button-secondary" target="_blank" role="button">
 					<?php esc_html_e( 'View Demo', 'formidable' ); ?>
 				</a>
-				<a href="<?php echo esc_url( $template['url'] ); ?>" class="button button-primary frm-button-primary" role="button">
+				<a href="" class="button button-primary frm-button-primary frm-form-templates-use-template-button" role="button">
 					<?php esc_html_e( 'Use Template', 'formidable' ); ?>
 				</a>
 			</div><!-- .frm-form-templates-item-buttons -->

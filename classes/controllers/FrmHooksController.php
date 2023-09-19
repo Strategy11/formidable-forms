@@ -188,6 +188,7 @@ class FrmHooksController {
 		// Form Templates Controller.
 		add_action( 'admin_init', 'FrmFormTemplatesController::set_form_templates_data' );
 		add_action( 'admin_menu', 'FrmFormTemplatesController::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
+		add_action( 'admin_footer', 'FrmFormTemplatesController::render_modal' );
 		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets', 15 );
 		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::dequeue_scripts', 15 );
 
@@ -233,7 +234,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
-		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 		add_action( 'wp_ajax_frm_create_page_with_shortcode', 'FrmFormsController::create_page_with_shortcode' );
 		add_action( 'wp_ajax_get_page_dropdown', 'FrmFormsController::get_page_dropdown' );
 

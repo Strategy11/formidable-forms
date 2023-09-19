@@ -18,7 +18,7 @@
  */
 import { initializeElements } from './elements';
 import { initializeAppState } from './shared';
-import { setupInitialView } from './ui';
+import { setupInitialView, initializeModal } from './ui';
 import { buildCategorizedTemplates } from './templates';
 import { addEventListeners } from './events';
 
@@ -36,6 +36,9 @@ function initializeFormTemplates() {
 
 	// Set up the initial view, including any required DOM manipulations for proper presentation
 	setupInitialView();
+
+	// Initialize the modal dialog
+	initializeModal();
 
 	// Generate a categorized list of templates
 	buildCategorizedTemplates();

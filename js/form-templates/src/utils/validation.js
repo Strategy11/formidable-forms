@@ -60,3 +60,12 @@ export const isCustomTemplate = template =>
  */
 export const isFeaturedTemplate = template =>
 	FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) );
+
+/**
+ * Checks if a template is locked.
+ *
+ * @param {HTMLElement} template The template element.
+ * @return {boolean} True if the template is locked, otherwise false.
+ */
+export const isLockedTemplate = template =>
+	template?.classList.contains( `${ PREFIX }-locked-item` );

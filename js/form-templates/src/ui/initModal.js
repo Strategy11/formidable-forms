@@ -16,23 +16,34 @@
 /**
  * Internal dependencies
  */
-import addCategoryEvents from './categoryListener';
-import addFavoriteButtonEvents from './favoriteButtonListener';
-import addSearchEvents from './searchListener';
-import addEmptyStateButtonEvents from './emptyStateButtonListener';
-import addUseTemplateButtonEvents from './useTemplateButtonListener';
+import { initModal } from '../shared';
+
+let $modal = null;
 
 /**
- * Attaches event listeners for handling user interactions.
+ * Initialize the modal dialog.
  *
  * @return {void}
  */
-export function addEventListeners() {
-	addCategoryEvents();
-	addFavoriteButtonEvents();
-	addSearchEvents();
-	addEmptyStateButtonEvents();
-	addUseTemplateButtonEvents();
+export function initializeModal() {
+	$modal = initModal( '#frm-form-templates-modal', '440px' );
+	setVerticalOffset( $modal, '103px' );
 }
 
-export { resetSearchInput } from './searchListener';
+/**
+ * Sets a vertical offset for the modal dialog.
+ *
+ * @param {Object} $modal The modal dialog element.
+ * @param {string} verticalOffset The vertical offset to apply.
+ */
+function setVerticalOffset( $modal, verticalOffset ) {
+	const position = {
+		my: 'top',
+		at: 'top+' + verticalOffset,
+		of: window
+	};
+
+	$modal.dialog( 'option', 'position', position );
+}
+
+export default $modal;

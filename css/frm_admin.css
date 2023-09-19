@@ -34,6 +34,8 @@
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
+	--success-500: #12b76a;
+	--success-25: #f6fef9;
 	--border-radius: 35px;
 	--small-radius: 8px;
 	--small-sidebar: 275px;
@@ -2368,8 +2370,7 @@ body.frm-body-with-open-modal {
 	color: var(--primary-700) !important;
 }
 
-.frm-application-card h4 .frmsvg,
-.frm-locked-template h3 .frmsvg {
+.frm-application-card h4 .frmsvg {
 	height: var(--text-sm);
 	width: var(--text-sm);
 	vertical-align: text-top;

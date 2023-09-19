@@ -50,6 +50,7 @@ export const getAppState = () => appState;
  * Updates the application state with new values.
  *
  * @param {Object} newState The new values to update the state.
+ * @return {void}
  */
 export const setAppState = newState => {
 	appState = { ...appState, ...newState };
@@ -69,6 +70,7 @@ export const getAppStateProperty = propertyName =>
  *
  * @param {string} propertyName The property name to update.
  * @param {*} value The new value to set.
+ * @return {void}
  */
 export const setAppStateProperty = ( propertyName, value ) => {
 	if ( Reflect.has( appState, propertyName ) ) {

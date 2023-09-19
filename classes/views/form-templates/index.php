@@ -1,16 +1,40 @@
 <?php
+/**
+ * Form Templates Page.
+ *
+ * @package   Strategy11/FormidableForms
+ * @copyright 2010 Formidable Forms
+ * @license   GNU General Public License, version 2
+ * @link      https://formidableforms.com/
+ */
+
+/**
+ * Copyright (C) 2023 Formidable Forms
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ *
+ * https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <div id="frm-form-templates-page" class="frm_wrap">
 	<div class="frm_page_container">
 		<!-- Page Header -->
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label' => __( 'Form Templates', 'formidable' ),
+				'label'   => __( 'Form Templates', 'formidable' ),
+				'publish' => array( 'FrmFormTemplatesController::get_header_cancel_button', array() ),
 			)
 		);
 		?>
@@ -51,145 +75,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 			</div><!-- #post-body-content -->
 		</div><!-- .columns-2 -->
-
-		<!--
-		<div id="frm-details-block">
-			<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
-				<p>
-					<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
-						<?php esc_html_e( 'Form Name', 'formidable' ); ?>
-					</label>
-					<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
-				</p>
-
-				<input type="hidden" name="template_desc" id="frm_template_desc" />
-				<input type="hidden" name="link" id="frm_link" value="" />
-				<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
-
-				<button type="submit" class="button-primary frm-button-primary">
-					<?php esc_html_e( 'Create', 'formidable' ); ?>
-				</button>
-			</form>
-		</div>
-
-		<?php if ( in_array( 'upgrade', $blocks_to_render, true ) ) { ?>
-			<div id="frm-upgrade-block">
-				<?php require $view_path . '_upgrade-body.php'; ?>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
-			<div id="frm-email-block">
-				<?php require $view_path . '_leave-email.php'; ?>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>
-			<div id="frm-code-block">
-				<?php require $view_path . '_code-from-email.php'; ?>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'renew', $blocks_to_render, true ) ) { ?>
-			<div id="frm-renew-block">
-				<?php require $view_path . '_renew-account.php'; ?>
-			</div>
-		<?php } ?>
-
-		<?php do_action( 'frm_overlay_footer', array( 'type' => 'form' ) ); ?>
-
-		<div id="frm-preview-footer" class="frm_modal_footer">
-			<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
-				<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>
-			</a>
-			<a href="#" class="button button-primary frm-button-primary frm-use-this-template">
-				<?php esc_html_e( 'Use this template', 'formidable' ); ?>
-			</a>
-		</div>
-
-		<div id="frm-details-footer" class="frm_modal_footer">
-			<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
-				<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-			</a>
-			<a href="#" class="button button-primary frm-button-primary frm-submit-new-template">
-				<?php esc_html_e( 'Create', 'formidable' ); ?>
-			</a>
-		</div>
-
-		<?php if ( in_array( 'upgrade', $blocks_to_render, true ) ) { ?>
-			<div id="frm-upgrade-footer" class="frm_modal_footer">
-				<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
-					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-				</a>
-				<a href="<?php echo esc_url( $upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
-					<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
-				</a>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
-			<div id="frm-email-footer" class="frm_modal_footer">
-				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
-					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-				</a>
-				<a id="frm-add-my-email-address" href="#" class="button button-primary frm-button-primary">
-					<?php esc_html_e( 'Get Code', 'formidable' ); ?>
-				</a>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>
-			<div id="frm-code-footer" class="frm_modal_footer">
-				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
-					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-				</a>
-				<a href="#" class="button button-primary frm-button-primary frm-confirm-email-address">
-					<?php esc_html_e( 'Save Code', 'formidable' ); ?>
-				</a>
-			</div>
-		<?php } ?>
-
-		<?php if ( in_array( 'renew', $blocks_to_render, true ) ) { ?>
-			<div id="frm-renew-footer" class="frm_modal_footer">
-				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
-					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-				</a>
-				<a href="<?php echo esc_url( $renew_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
-					<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
-				</a>
-			</div>
-		<?php } ?> -->
 	</div><!-- .frm_page_container -->
 </div><!-- #frm-from-templates-page.frm_wrap -->
 
 <div class="frm_hidden">
-	<?php
-	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
-	?>
-	<div id="frm-hover-icons-template" class="frm-hover-icons">
-		<a role="button" href="#" class="frm-delete-form" aria-label="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>">
-			<svg class="frmsvg">
-				<use xlink:href="#frm_delete_icon"></use>
-			</svg>
-		</a>
-		<a role="button" href="#" class="frm-preview-form" aria-label="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>">
-			<svg class="frmsvg">
-				<use xlink:href="#frm_eye_simple"></use>
-			</svg>
-		</a>
-		<a role="button" href="#" class="frm-create-form" aria-label="<?php esc_attr_e( 'Create form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Create form', 'formidable' ); ?>">
-			<svg class="frmsvg">
-				<use xlink:href="#frm_plus_icon"></use>
-			</svg>
-		</a>
-		<a role="button" href="#" class="frm-unlock-form" aria-label="<?php esc_html_e( 'Unlock form', 'formidable' ); ?>" title="<?php esc_html_e( 'Unlock form', 'formidable' ); ?>">
-			<svg class="frmsvg">
-				<use xlink:href="#frm_unlock_simple"></use>
-			</svg>
-		</a>
+	<!-- Create new form -->
+	<div id="frm-details-block">
+		<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
+			<p>
+				<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
+				<?php esc_html_e( 'Form Name', 'formidable' ); ?>
+				</label>
+				<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
+			</p>
+
+			<input type="hidden" name="template_desc" id="frm_template_desc" />
+			<input type="hidden" name="link" id="frm_link" value="" />
+			<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
+
+			<button type="submit" class="button-primary frm-button-primary">
+				<?php esc_html_e( 'Create', 'formidable' ); ?>
+			</button>
+		</form>
 	</div>
 </div>

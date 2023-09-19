@@ -45,7 +45,7 @@ const OPERATION = {
 function addFavoriteButtonEvents() {
 	const favoriteButtons = document.querySelectorAll( FAVORITE_BUTTON_CLASS );
 
-	// Attach click event listeners to each favorite button.
+	// Attach click event listeners to each favorite button
 	favoriteButtons.forEach( favoriteButton =>
 		onClickPreventDefault( favoriteButton, onFavoriteButtonClick )
 	);

@@ -13,9 +13,4 @@
  * GNU General Public License for more details.
  */
 
-export * from './constants';
-export * from './appState';
-export * from './domElements';
-export * from './search';
-export * from './modal';
-export * from './ajaxRequest';
+export const { initModal } = window.frmAdminBuild;

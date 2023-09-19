@@ -1,6 +1,6 @@
 <?php
 /**
- * Form Templates - Categories.
+ * Form Templates - Modal.
  *
  * @package   Strategy11/FormidableForms
  * @copyright 2010 Formidable Forms
@@ -26,21 +26,24 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Return early if no view parts to render.
+if ( ! $view_parts ) {
+	return;
+}
 ?>
-<ul class="frm-form-templates-categories">
-	<?php foreach ( $categories as $category_slug => $category_data ) { ?>
-		<?php
-		$classes = 'frm-form-templates-cat-item';
+<div id="frm-form-templates-modal" class="frm-modal frm_common_modal frm_hidden" frm-page="">
+	<div class="metabox-holder">
+		<div class="postbox">
+			<a class="frm-modal-close dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>
+			</a><!-- .dismiss -->
 
-		if ( 'all-templates' === $category_slug ) {
-			echo '<li class="frm-form-templates-divider"></li>';
-			$classes .= ' frm-current';
-		}
-		?>
-
-		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>">
-			<span class="frm-form-templates-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
-			<span class="frm-form-templates-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
-		</li><!-- .frm-form-templates-cat-item -->
-	<?php } ?>
-</ul><!-- .frm-form-templates-categories -->
+			<?php
+			foreach ( $view_parts as $modal => $file ) {
+				require $view_path . $file;
+			}
+			?>
+		</div><!-- .postbox -->
+	</div><!-- .metabox-holder -->
+</div>

@@ -130,6 +130,27 @@ class FrmFormTemplatesController {
 	private static $license_type = '';
 
 	/**
+	 * Path to views.
+	 *
+	 * @var string $view_path Path to form templates views.
+	 */
+	private static $view_path = '';
+
+	/**
+	 * Upgrade URL.
+	 *
+	 * @var string $upgrade_link URL for upgrading accounts.
+	 */
+	private static $upgrade_link = '';
+
+	/**
+	 * Renew URL.
+	 *
+	 * @var string $renew_link URL for renewing accounts.
+	 */
+	private static $renew_link = '';
+
+	/**
 	 * Add Form Templates menu item to sidebar and define index page.
 	 *
 	 * @since x.x
@@ -160,51 +181,58 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function render() {
-		// Get current user.
-		$user = wp_get_current_user();
+		// Include SVG images for icons.
+		FrmAppHelper::include_svg();
 
-		// Retrieve various template types and categories.
+		$view_path    = self::get_view_path();
+		$upgrade_link = self::get_upgrade_link();
+
+		// Get various template types and categories.
 		$templates          = self::get_templates();
 		$favorite_templates = self::get_favorite_templates();
 		$featured_templates = self::get_featured_templates();
 		$custom_templates   = self::get_custom_templates();
 		$categories         = self::get_categories();
 
-		// Define view path.
-		$view_path = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
-
-		// License information and upgrade/renewal links.
-		$expired      = self::is_expired();
-		$upgrade_link = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'new-template',
-				'content' => 'upgrade',
-			)
-		);
-		$renew_link   = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'new-template',
-				'content' => 'renew',
-			)
-		);
-
-		// Determine which blocks to render based on license status.
-		$blocks_to_render = array();
-		if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
-			array_push( $blocks_to_render, 'email', 'code' );
-		}
-		if ( 'elite' !== FrmAddonsController::license_type() ) {
-			$blocks_to_render[] = 'upgrade';
-		}
-		if ( $expired ) {
-			$blocks_to_render[] = 'renew';
-		}
-
-		// Include SVG images for icons.
-		FrmAppHelper::include_svg();
-
 		// Render the view.
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Renders a modal component in the WordPress admin area.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function render_modal() {
+		$view_path  = self::$view_path;
+		$view_parts = array();
+
+		// User and license-related variables.
+		$user         = wp_get_current_user();
+		$expired      = self::is_expired();
+		$upgrade_link = self::get_upgrade_link();
+		$renew_link   = self::get_renew_link();
+
+		// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
+		if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
+			$view_parts[] = 'modals/leave-email-modal.php';
+			$view_parts[] = 'modals/code-from-email-modal.php';
+		}
+
+		// Add 'upgrade' modal view for non-elite users.
+		if ( 'elite' !== FrmAddonsController::license_type() ) {
+			$view_parts[] = 'modals/upgrade-modal.php';
+		}
+
+		// Add 'renew-account' modal view for expired users.
+		if ( $expired ) {
+			$view_parts[] = 'modals/renew-account-modal.php';
+		}
+
+		// Render the view.
+		include $view_path . 'modal.php';
 	}
 
 	/**
@@ -240,6 +268,9 @@ class FrmFormTemplatesController {
 
 		// Update global variables to synchronize with the current class state.
 		self::update_global_variables();
+
+		// Initialize essential resources.
+		self::init_template_resources();
 	}
 
 	/**
@@ -491,6 +522,48 @@ class FrmFormTemplatesController {
 	}
 
 	/**
+	 * Initializes essential resources.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function init_template_resources() {
+		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/form-templates/';
+
+		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'form-templates',
+				'content' => 'upgrade',
+			)
+		);
+
+		self::$renew_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'form-templates',
+				'content' => 'renew',
+			)
+		);
+	}
+
+	/**
+	 * Adds a Cancel button to the header of the Form Templates page.
+	 *
+	 * It's hidden by default and will show when the user clicks on 'Create Form' from
+	 * another place in Formidable Forms.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function get_header_cancel_button() {
+		echo '
+		<a class="button frm-button-secondary frm_hidden" href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '" role="button">
+			' . esc_html__( 'Cancel', 'formidable' ) . '
+		</a>';
+	}
+
+	/**
 	 * Updates global variables with the current state of the class.
 	 *
 	 * @since x.x
@@ -670,4 +743,36 @@ class FrmFormTemplatesController {
 		return self::$is_expired;
 	}
 
+	/**
+	 * Get the path to form templates views.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Path to views.
+	 */
+	public static function get_view_path() {
+		return self::$view_path;
+	}
+
+	/**
+	 * Get the upgrade link.
+	 *
+	 * @since x.x
+	 *
+	 * @return string URL for upgrading accounts.
+	 */
+	public static function get_upgrade_link() {
+		return self::$upgrade_link;
+	}
+
+	/**
+	 * Get the renewal link.
+	 *
+	 * @since x.x
+	 *
+	 * @return string URL for renewing accounts.
+	 */
+	public static function get_renew_link() {
+		return self::$renew_link;
+	}
 }

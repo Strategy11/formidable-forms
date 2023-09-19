@@ -1,9 +1,14 @@
 /**
- * Form Templates Page Styles.
+ * Form Templates Page Styles
  *
- * This file includes all CSS of the Form Templates page.
+ * This file includes all CSS rules specifically for the Form Templates page.
  */
 
+/**
+ * Page General Styles
+ *
+ * This section defines the basic typography and layout styles for the Form Templates page.
+ */
 #frm-form-templates-page h1,
 #frm-form-templates-page h2,
 #frm-form-templates-page h3,
@@ -14,6 +19,10 @@
 #frm-form-templates-page ul,
 #frm-form-templates-page li {
 	margin: 0;
+}
+
+#frm-form-templates-page .frm-upgrade-bar {
+	display: none;
 }
 
 #frm-form-templates-page .frm-form-templates-title {
@@ -27,9 +36,9 @@
 }
 
 /**
- * Sidebar.
+ * Sidebar Styles
  *
- * Includes scrollbar, search box, and categories list.
+ * Defines the layout and styling for the sidebar, including scroll behavior.
  */
 #frm-form-templates-page .frm-right-panel {
 	display: flex;
@@ -41,14 +50,12 @@
 	overflow-y: initial;
 }
 
-#frm-form-templates-page .frm-right-panel .frm-scrollbar-wrapper {
+/* Sidebar Scrollbar */
+#frm-form-templates-page .frm-scrollbar-wrapper {
 	display: flex;
 	flex-direction: column;
 	gap: var(--gap-md);
-}
 
-/* Sidebar Scrollbar */
-#frm-form-templates-page .frm-scrollbar-wrapper {
 	overflow-y: auto; /* Enable scrolling */
 	-ms-overflow-style: none; /* For IE and Edge */
 	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
@@ -150,8 +157,9 @@
 }
 
 /**
- * Page Content.
+ * Page Content Styles
  *
+ * Focuses on the main content area, laying out the various elements and components.
  */
 #frm-form-templates-page #post-body-content {
 	display: flex;
@@ -314,8 +322,9 @@
 }
 
 /**
- * Empty State.
+ * Empty State Styles
  *
+ * Provides styles for when the Form Templates page is empty.
  */
 #frm-form-templates-empty-state {
 	display: flex;
@@ -344,8 +353,147 @@
 }
 
 /**
- * Helpers.
+ * Modal Styles
  *
+ * Customizes the look of modals on the Form Templates page.
+ */
+#frm-form-templates-modal .inside,
+#frm-form-templates-modal .frm_modal_footer {
+	padding-right: var(--gap-md);
+	padding-left: var(--gap-md);
+	color: var(--grey-900);
+}
+
+#frm-form-templates-modal .frm_modal_footer {
+	display: flex;
+	justify-content: end;
+	gap: var(--gap-sm);
+	padding-bottom: var(--gap-md);
+	text-align: unset;
+}
+
+#frm-form-templates-modal h3 {
+	font-size: var(--text-lg);
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+
+#frm-form-templates-modal p {
+	margin-top: 0;
+}
+
+#frm-form-templates-modal input {
+	width: 100%;
+}
+
+/* Dismiss icon button */
+#frm-form-templates-modal .postbox > a.dismiss {
+	top: 19px;
+	right: 19px;
+	display: flex;
+}
+
+#frm-form-templates-modal .postbox > a.dismiss .frmsvg {
+	color: var(--grey-400);
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-inputs {
+	position: relative;
+	margin-top: var(--gap-sm);
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-inputs .frm-with-left-icon .frmsvg {
+	padding: 0;
+	top: 0;
+	left: 13px;
+}
+
+/* Upgrade Modal */
+#frm-upgrade-modal .inside {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-sm);
+}
+
+#frm-upgrade-modal p {
+	margin-bottom: 0;
+	color: var(--grey-900);
+}
+
+.frm-upgrade-modal-lock-icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	background-color: var(--primary-25);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-banner {
+	padding: 12px 20px;
+	border-radius: var(--small-radius);
+	background-color: var(--success-25);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-banner-title {
+	display: flex;
+	align-items: center;
+	gap: calc(var(--gap-2xs) + 1px);
+	font-weight: 500;
+	color: var(--grey-700);
+	margin-bottom: var(--gap-2xs);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-banner-tag {
+	color: #fff;
+	font-weight: 600;
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: var(--success-500);
+}
+
+#frm-upgrade-modal #frm-upgrade-modal-available-plans {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-xs);
+}
+
+#frm-upgrade-modal #frm-upgrade-modal-plans {
+	display: flex;
+	gap: var(--gap-md);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-plan {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-plan-icon {
+	display: flex;
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-plan-icon.frm-plan-close-icon {
+	color: var(--error-500);
+}
+
+/* Code from email modal */
+#frm-code-modal-back-button {
+	color: var(--grey-400);
+}
+
+/* Renew account modal */
+#frm-renew-modal p {
+	margin-bottom: 10px;
+}
+
+/**
+ * Helper Classes
+ *
+ * Provides helper classes for common layout patterns and animations in the
+ * Form Templates page.
  */
 #frm-form-templates-page .frm_hidden {
 	display: none !important;
@@ -362,6 +510,18 @@
 #frm-form-templates-page .frm-form-templates-divider {
 	border-top: 1px solid var(--grey-200);
 	margin: 0;
+}
+
+[class*="frm-form-templates-space-"] {
+	display: flex;
+}
+
+.frm-form-templates-space-5 {
+	height: 5px;
+}
+
+.frm-form-templates-space-10 {
+	height: 10px;
 }
 
 .frm-form-templates-fadein {
@@ -405,191 +565,10 @@
 	}
 }
 
-/* Breakpoints */
-@media only screen and (max-width: 782px) {
-
-}
-
 /**
- * Unorganized.
+ * Media Queries
  *
+ * Provides responsive styles for the Form Templates page.
  */
-#frm-email-block p,
-#frm-code-block p,
-#frm-renew-block p {
-	padding: 0 40px;
-	max-width: 400px;
-	margin: 0 auto 20px;
-}
-
-#frm_leave_email,
-#frm_code_from_email {
-	width: 480px;
-}
-
-#frm-email-block .frm-with-left-icon .frmsvg {
-	padding: 0;
-	top: 0;
-	left: 13px;
-}
-
-.frm-templates-list.frm-categories-list li > div > div:last-child {
-	padding-left: 0;
-}
-
-#frm-form-templates-page .frm-templates-list.frm-categories-list li.frm-selectable {
-	padding: 0 10px;
-	overflow: hidden;
-}
-
-#frm-form-templates-page .frm-use-this-template {
-	margin-left: 10px;
-}
-
-#frm-form-templates-page #frm-details-block {
-	padding: var(--gap-md) var(--gap-lg);
-}
-
-#frm_code_from_email_options {
-	margin-top: 20px;
-}
-
-#frm_code_from_email_options * {
-	color: var(--primary-500);
-}
-
-.frm-locked-template .frm-hover-icons .frm-unlock-form,
-li[data-preview] .frm-hover-icons .frm-preview-form,
-#frm-form-templates-page .frm-selectable[data-custom="1"] .frm-hover-icons .frm-delete-form {
-	display: inline-flex;
-}
-
-#frm-upgrade-body-list-wrapper > div {
-	display: inline-block;
-	width: calc(100% / 3);
-	vertical-align: top;
-	text-align: left;
-	margin-bottom: 10px;
-}
-
-#frm-upgrade-body-list-wrapper ul {
-	padding-left: 40px;
-}
-
-#frm-upgrade-body-list-wrapper ul li::before {
-	content: "\2022";
-	color: var(--primary-500);
-	display: inline-block;
-	width: 1em;
-	margin-left: -1em;
-}
-
-.frm-ready-made-solution .frm-hover-icons {
-	visibility: hidden;
-}
-
-.frm-ready-made-solution:hover .frm-hover-icons {
-	visibility: visible;
-}
-
-.frm-hover-icons > .frm-create-form,
-.frm-ready-made-solution .frm-hover-icons a {
-	background-color: var(--primary-500);
-}
-
-.frm-ready-made-solution .frmsvg {
-	width: 14px;
-	height: 14px;
-}
-
-.frm-hover-icons .frm-create-form svg,
-.frm-ready-made-solution .frm-hover-icons svg {
-	color: #fff;
-}
-
-.frm-hover-icons .frm-create-form:hover,
-.frm-ready-made-solution .frm-hover-icons a:hover,
-.frm-hover-icons > .frm-unlock-form:hover,
-.frm-hover-icons > .frm-unlock-form:hover .frmsvg {
-	background-color: var(--primary-700) !important;
-}
-
-.frm-plan-required-tag {
-	margin-left: 5px;
-	transform: translateY(-1px);
-	background: #fde6de;
-	color: #f15a24;
-}
-
-.frm-ready-made-solution .frm-meta-tag {
-	width: fit-content;
-	background: #fde6de;
-	color: #f15a24;
-}
-
-.frm-ready-made-solution:not(.frm-search-result) {
-	display: none !important;
-}
-
-#frm-form-templates-page .frm-ready-made-solution {
-	padding: var(--gap-xs) !important;
-	margin: var(--gap-xs) 0 var(--gap-sm);
-	display: flex;
-	gap: var(--gap-sm);
-	position: relative;
-	overflow: visible !important;
-}
-
-#frm-form-templates-page .frm-ready-made-solution::after {
-	width: 100%;
-	height: 1px;
-	background: var(--grey-300);
-	content: "";
-	position: absolute;
-	bottom: -10px;
-	left: 0;
-}
-
-#frm-form-templates-page .frm-ready-made-solution.frm-search-result:last-of-type::after {
-	content: none;
-}
-
-#frm-form-templates-page .frm-solution-details {
-	flex: 1;
-	display: flex;
-	gap: var(--gap-2xs);
-	flex-direction: column;
-}
-
-#frm-form-templates-page .frm-ready-made-solution > div:first-child {
-	width: 30%;
-	text-align: center;
-}
-
-.frm-ready-made-solution h3 ~ a {
-	color: var(--primary-500);
-}
-
-.frm-ready-made-solution img {
-	max-width: 100%;
-	display: block;
-	box-shadow: var(--box-shadow-lg);
-}
-
-.frm-hover-icons > .frm-unlock-form {
-	background-color: var(--primary-500);
-}
-
-.frm-hover-icons > .frm-unlock-form .frmsvg {
-	background-color: var(--primary-500);
-}
-
-li .frm-hover-icons .frm-preview-form,
-.frm-hover-icons .frm-unlock-form {
-	display: none;
-}
-
-.frm-hover-icons > .frm-preview-form,
-.frm-hover-icons > .frm-delete-form {
-	border: 1px solid var(--primary-500);
+@media only screen and (max-width: 782px) {
 }
