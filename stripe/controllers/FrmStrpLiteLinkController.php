@@ -258,6 +258,11 @@ class FrmStrpLiteLinkController {
 			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
 			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+
+			$new_payment_values['expire_date'] = '0000-00-00';
+			foreach ( $subscription->latest_invoice->lines->data as $line ) {
+				$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
+			}
 		} elseif ( $trial_end ) {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
@@ -269,8 +274,21 @@ class FrmStrpLiteLinkController {
 		$frm_payment->update( $payment->id, $new_payment_values );
 
 		if ( $customer_has_been_charged ) {
+			// Set the payment to complete.
 			$status = 'complete';
 			FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+
+			// Update the next billing date.
+			$next_bill_date = gmdate( 'Y-m-d' );
+			foreach ( $subscription->latest_invoice->lines->data as $line ) {
+				$next_bill_date = gmdate( 'Y-m-d', $line->period->end );
+			}
+
+			$frm_sub = new FrmTransLiteSubscription();
+			$frm_sub->update(
+				$new_payment_values['sub_id'],
+				array( 'next_bill_date' => $next_bill_date )
+			);
 		}
 
 		$redirect_helper->handle_success( $entry, isset( $charge ) ? $charge->id : '' );
