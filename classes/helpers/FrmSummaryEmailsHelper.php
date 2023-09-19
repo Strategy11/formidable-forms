@@ -359,7 +359,7 @@ class FrmSummaryEmailsHelper {
 						WHERE it.created_at BETWEEN %s AND %s AND it.is_draft = 0
 						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
 				$from_date,
-				$to_date,
+				$to_date . ' 23:59:59',
 				intval( $limit )
 			)
 		);
