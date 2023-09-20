@@ -18,8 +18,8 @@
  */
 import { getElements } from '../elements';
 import { PREFIX, getAppState, initModal, setAppState } from '../shared';
-import { $modal } from '../ui';
-import { isLockedTemplate, onClickPreventDefault } from '../utils';
+import { getModal } from '../ui';
+import { isCustomTemplate, isLockedTemplate } from '../utils';
 
 /**
  * Manages event handling for use template buttons.
@@ -31,7 +31,7 @@ function addUseTemplateButtonEvents() {
 
 	// Attach click event listeners to each use template button
 	useTemplateButtons.forEach( useTemplateButton =>
-		onClickPreventDefault( useTemplateButton, onUseTemplateClick )
+		useTemplateButton.addEventListener( 'click', onUseTemplateClick )
 	);
 }
 
@@ -45,11 +45,13 @@ function addUseTemplateButtonEvents() {
 const onUseTemplateClick = ( event ) => {
 	const useTemplateButton = event.currentTarget;
 
-	/**
-	 * Get necessary template information
-	 */
 	const template = useTemplateButton.closest( `.${ PREFIX }-item` );
 	const isLocked = isLockedTemplate( template );
+	const isTemplateCustom = isCustomTemplate( template );
+
+	if ( ! isLocked && isTemplateCustom ) {
+		return;
+	}
 };
 
 export default addUseTemplateButtonEvents;

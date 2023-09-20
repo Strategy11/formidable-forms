@@ -373,6 +373,15 @@ class FrmAppController {
 	}
 
 	/**
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	private static function new_form_overlay_html() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public static function include_info_overlay() {
@@ -486,6 +495,10 @@ class FrmAppController {
 		if ( ! FrmAppHelper::doing_ajax() ) {
 			// don't continue during ajax calls
 			self::admin_js();
+		}
+
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			FrmInbox::maybe_disable_screen_options();
 		}
 
 		self::maybe_add_ip_warning();

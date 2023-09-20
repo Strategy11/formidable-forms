@@ -30,9 +30,7 @@ export function buildCategorizedTemplates() {
 
 	templateItems.forEach( template => {
 		// Extract and split the categories from data attribute
-		const categories = template
-			.getAttribute( 'data-categories' )
-			.split( ',' );
+		const categories = template.getAttribute( 'data-categories' ).split( ',' );
 
 		categories.forEach( category => {
 			// Initialize the category array if not already done

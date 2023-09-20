@@ -481,6 +481,8 @@
 
 /* Code from email modal */
 #frm-code-modal-back-button {
+	cursor: pointer;
+	margin-right: var(--gap-2xs);
 	color: var(--grey-400);
 }
 

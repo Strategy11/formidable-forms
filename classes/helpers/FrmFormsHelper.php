@@ -1302,6 +1302,65 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @deprecated x.x
+	 *
+	 * @param array $categories
+	 * @param array $atts {
+	 *     @type string  $html 'span' or 'div'.
+	 *     @type boolean $bg   Whether to add a bg color or not.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function template_icon( $categories, $atts = array() ) {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::template_icon' );
+		return FrmFormTemplatesHelper::template_icon( $categories, $atts );
+	}
+
+	/**
+	 * @since 4.03.01
+	 * @deprecated x.x
+	 *
+	 * @return array<string>
+	 */
+	public static function ignore_template_categories() {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::ignore_template_categories' );
+		return FrmFormTemplatesHelper::ignore_template_categories();
+	}
+
+	/**
+	 * @since 4.02
+	 * @deprecated x.x
+	 */
+	public static function get_template_install_link( $template, $args ) {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::get_template_install_link' );
+		return FrmFormTemplatesHelper::get_template_install_link( $template, $args );
+	}
+
+	/**
+	 * Is the template included with the license type?
+	 *
+	 * @since 4.02.02
+	 * @deprecated x.x
+	 *
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
+	public static function plan_is_allowed( $args ) {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::plan_is_allowed' );
+		return FrmFormTemplatesHelper::plan_is_allowed( $args );
+	}
+
+	/**
+	 * @since 4.02
+	 * @deprecated x.x
+	 */
+	public static function template_install_html( $link, $class = '' ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
 	 * If a template or add-on cannot be installed, show a message
 	 * about which plan is required.
 	 *
@@ -1505,6 +1564,19 @@ BEFORE_HTML;
 			'w',
 			'year',
 		);
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @deprecated x.x
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 
 	/**

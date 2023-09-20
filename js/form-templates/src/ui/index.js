@@ -14,7 +14,7 @@
  */
 
 export { default as setupInitialView } from './setupInitialView';
-export { default as $modal, initializeModal } from './initModal';
+export * from './initializeModal';
 export * from './pageTitle';
 export * from './showSelectedCategory';
 export * from './showSearchResult';

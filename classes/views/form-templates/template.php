@@ -36,38 +36,47 @@ $plan_required = FrmFormsHelper::get_plan_required( $template );
 // Remove "Form Template" string from `$template['name']` and assign to a variable.
 $template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
+$class_names      = array( 'frm-form-templates-item' );
+$use_template_url = '#';
+
 /**
  * Set Attributes.
  */
 $attributes                    = array();
 $attributes['data-id']         = $template['id'];
-$attributes['aria-label']      = $template_name;
 $attributes['frm-search-text'] = strtolower( $template_name );
+$attributes['aria-label']      = $template_name;
 
 // Set data categories attribute.
 if ( ! empty( $template['category_slugs'] ) ) {
 	$attributes['data-categories'] = implode( ',', $template['category_slugs'] );
 }
 
-// Set class attribute.
-$attributes['class'] = 'frm-form-templates-item';
 if ( $is_featured_template ) {
-	$attributes['class'] .= ' frm-form-templates-featured-item';
+	$class_names[] = ' frm-form-templates-featured-item';
 }
-if ( $is_favorite_template ) {
-	$attributes['class'] .= ' frm-form-templates-favorite-item';
-}
-if ( $is_custom_template ) {
-	$attributes['class']     .= ' frm-form-templates-custom-item';
-	$attributes['data-href'] = esc_url( $template['url'] );
-}
-if ( $plan_required ) {
-	$required_plan_slug  = sanitize_title( $plan_required );
-	$attributes['class'] .= ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
-	$attributes['data-required-plan'] = $required_plan_slug;
-}
-?>
 
+if ( $is_favorite_template ) {
+	$class_names[] = ' frm-form-templates-favorite-item';
+}
+
+if ( $is_custom_template ) {
+	$class_names[]     = ' frm-form-templates-custom-item';
+	$use_template_url = esc_url( $template['url'] );
+}
+
+if ( $plan_required ) {
+	$required_plan_slug = sanitize_title( $plan_required );
+	$class_names[]      = ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
+	$attributes['data-required-plan'] = $required_plan_slug;
+} else {
+	$link             = FrmFormTemplatesHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
+	$use_template_url = esc_url( $link['url'] );
+}
+
+// Set class attribute.
+$attributes['class'] = implode( ' ', $class_names );
+?>
 <li <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
 	<!-- Featured Template Icon -->
 	<?php if ( $is_featured_template ) : ?>
@@ -106,7 +115,7 @@ if ( $plan_required ) {
 				<a href="<?php echo esc_url( $template['link'] ); ?>" class="button button-secondary frm-button-secondary" target="_blank" role="button">
 					<?php esc_html_e( 'View Demo', 'formidable' ); ?>
 				</a>
-				<a href="" class="button button-primary frm-button-primary frm-form-templates-use-template-button" role="button">
+				<a href="<?php echo esc_url( $use_template_url ); ?>" class="button button-primary frm-button-primary frm-form-templates-use-template-button" role="button">
 					<?php esc_html_e( 'Use Template', 'formidable' ); ?>
 				</a>
 			</div><!-- .frm-form-templates-item-buttons -->

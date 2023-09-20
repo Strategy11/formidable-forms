@@ -8452,27 +8452,6 @@ function frmAdminBuildJS() {
 		thisStep.nextElementSibling.classList.remove( 'frm_grey' );
 	}
 
-	function frmApiPreview( cont, link ) {
-		cont.innerHTML = '<div class="frm-wait"></div>';
-		jQuery.ajax({
-			dataType: 'json',
-			url: link,
-			success: function( json ) {
-				var form = json.renderedHtml;
-				form = form.replace( /<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-				form = form.replace( /<link\b[^>]*(jquery-ui.min.css)[^>]*>/gi, '' );
-				form = form.replace( ' frm_logic_form ', ' ' );
-				form = form.replace( '<form ', '<form onsubmit="event.preventDefault();" ' );
-				cont.innerHTML = '<div class="frm-wait" id="frm-remove-me"></div><div class="frm-fade" id="frm-show-me">' +
-				form + '</div>';
-				setTimeout( function() {
-					document.getElementById( 'frm-remove-me' ).style.display = 'none';
-					document.getElementById( 'frm-show-me' ).style.opacity = '1';
-				}, 300 );
-			}
-		});
-	}
-
 	function installTemplateFieldset( e ) {
 		/*jshint validthis:true */
 		var fieldset = this.parentNode.parentNode,
@@ -9210,7 +9189,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {

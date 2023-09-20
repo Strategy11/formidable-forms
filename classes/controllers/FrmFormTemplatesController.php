@@ -186,6 +186,8 @@ class FrmFormTemplatesController {
 
 		$view_path    = self::get_view_path();
 		$upgrade_link = self::get_upgrade_link();
+		$license_type = self::get_license_type();
+		$pricing      = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
 		// Get various template types and categories.
 		$templates          = self::get_templates();

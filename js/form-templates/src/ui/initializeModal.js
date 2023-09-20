@@ -31,12 +31,27 @@ export function initializeModal() {
 }
 
 /**
+ * Retrieve the the modal dialog element.
+ *
+ * @return {Object|false} The modal dialog element or false.
+ */
+export function getModal() {
+	return $modal;
+}
+
+/**
  * Sets a vertical offset for the modal dialog.
  *
+ * @private
  * @param {Object} $modal The modal dialog element.
  * @param {string} verticalOffset The vertical offset to apply.
+ * @return {void}
  */
 function setVerticalOffset( $modal, verticalOffset ) {
+	if ( ! $modal ) {
+		return;
+	}
+
 	const position = {
 		my: 'top',
 		at: 'top+' + verticalOffset,
@@ -45,5 +60,3 @@ function setVerticalOffset( $modal, verticalOffset ) {
 
 	$modal.dialog( 'option', 'position', position );
 }
-
-export default $modal;

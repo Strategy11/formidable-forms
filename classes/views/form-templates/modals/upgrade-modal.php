@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // List of pricing plans.
-$plans = array( 'Basic', 'Plus', 'Elite', 'Business' );
+$plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
 <div id="frm-upgrade-modal" class="frm_hidden">
 	<!-- Modal Body -->

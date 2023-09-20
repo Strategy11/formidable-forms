@@ -126,7 +126,13 @@ class FrmFormTemplatesHelper {
 	}
 
 	/**
-	 * @since 4.02
+	 * Get template install link.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $template Template details.
+	 * @param array $args Additional arguments.
+	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
 		$defaults = array(
@@ -161,10 +167,9 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Is the template included with the license type?
 	 *
-	 * @since 4.02.02
+	 * @since x.x
 	 *
 	 * @param array $args
-	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
@@ -172,18 +177,20 @@ class FrmFormTemplatesHelper {
 			return false;
 		}
 
-		$included = $args['license_type'] === strtolower( $args['plan_required'] );
+		$plans         = array( 'free', 'personal', 'business', 'elite' );
+		$license_type  = strtolower( $args['license_type'] );
+		$plan_required = strtolower( $args['plan_required'] );
+		$included      = $license_type === $plan_required;
 
-		$plans = array( 'free', 'personal', 'business', 'elite' );
-		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans, true ) ) {
+		if ( $included || ! in_array( $plan_required, $plans, true ) ) {
 			return $included;
 		}
 
 		foreach ( $plans as $plan ) {
-			if ( $included || $plan === $args['license_type'] ) {
+			if ( $included || $plan === $license_type ) {
 				break;
 			}
-			$included = $plan === strtolower( $args['plan_required'] );
+			$included = $plan === $plan_required;
 		}
 
 		return $included;
