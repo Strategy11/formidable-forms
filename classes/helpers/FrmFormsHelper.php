@@ -1314,7 +1314,7 @@ BEFORE_HTML;
 	 */
 	public static function template_icon( $categories, $atts = array() ) {
 		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::template_icon' );
-		return FrmFormTemplatesHelper::template_icon( $categories, $atts );
+		FrmFormTemplatesHelper::template_icon( $categories, $atts );
 	}
 
 	/**
