@@ -483,7 +483,13 @@ class FrmEntriesController {
 	public static function destroy() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
-			wp_die( esc_html( $permission_error ) );
+			$error_args = array(
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $permission_error,
+				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
+				'cancel_text' => __( 'Cancel', 'formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
 		}
 
 		$params = FrmForm::get_admin_params();

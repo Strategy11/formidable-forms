@@ -10,7 +10,7 @@ $defaults = array(
 	'cancel_classes'   => '',
 	'continue_url'     => '',
 	'continue_classes' => '',
-	'icon'             => 'frm_lock_simple'
+	'icon'             => 'frm_lock_simple',
 );
 
 $error_args = wp_parse_args( $error_args, $defaults );
