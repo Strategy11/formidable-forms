@@ -467,9 +467,7 @@ class FrmSummaryEmailsHelper {
 
 		$plugins = array();
 		foreach ( $update_data->response as $plugin_data ) {
-			if ( version_compare( $plugin_data->new_version, $plugin_data->version, '>' ) ) {
-				$plugins[] = FrmAppHelper::get_menu_name() . ' ' . $plugin_data->display_name;
-			}
+			$plugins[] = FrmAppHelper::get_menu_name() . ' ' . $plugin_data->display_name;
 		}
 
 		return $plugins;
