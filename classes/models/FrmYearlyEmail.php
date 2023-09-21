@@ -22,7 +22,7 @@ class FrmYearlyEmail extends FrmStatsEmail {
 	}
 
 	protected function get_subject() {
-		return __( 'Your year with Formidable Forms', 'formidable' );
+		return __( 'How your forms performed this year', 'formidable' );
 	}
 
 	protected function get_top_forms_label() {

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			data-toggleclass="frm_summary_emails_recipients_wrapper"
 			<?php checked( $frm_settings->summary_emails, 1 ); ?>
 		/>
-		<?php esc_html_e( 'Allow Formidable Forms to send monthly and annual summary emails with your activity.', 'formidable' ); ?>
+		<?php esc_html_e( 'Send monthly and annual summary emails with your activity.', 'formidable' ); ?>
 	</label>
 </p>
 

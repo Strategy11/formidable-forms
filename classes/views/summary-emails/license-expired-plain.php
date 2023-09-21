@@ -21,3 +21,5 @@ esc_html_e( 'Your license is expired. You can go to the link below to renew.', '
 echo "\r\n";
 
 echo esc_url( $args['renew_url'] );
+
+echo "\r\n\r\n";

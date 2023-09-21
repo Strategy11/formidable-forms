@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
+$frm_settings  = FrmAppHelper::get_settings();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -59,9 +60,11 @@ $section_style = 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0';
 		%%INNER_CONTENT%%
 
 		<div style="<?php echo esc_attr( $section_style ); ?>">
-			<p style="line-height: 1.5; margin: 0;">Keep conquering new heights with FormidableForms. Your progress fuels our passion!</p>
-			<img style="margin-top: 0.9em; margin-bottom: 3.7em;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/frm-signature.png' ); ?>" alt="" />
-			<p style="font-size: 0.75em; line-height: 1.33; color: #98a2b3; margin-bottom: 0.75em;">Strategy11, 12180 S 300 E #785, Draper, UT 84020, United States</p>
+			<?php if ( 'Formidable' === $frm_settings->menu ) : ?>
+				<p style="line-height: 1.5; margin: 0;">Keep conquering new heights with Formidable Forms. Your progress fuels our passion!</p>
+				<img style="margin-top: 0.9em; margin-bottom: 3.7em;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/frm-signature.png' ); ?>" alt="" />
+				<p style="font-size: 0.75em; line-height: 1.33; color: #98a2b3; margin-bottom: 0.75em;">Strategy11, 12180 S 300 E #785, Draper, UT 84020, United States</p>
+			<?php endif; ?>
 			<a href="<?php echo esc_url( $args['unsubscribe_url'] ); ?>" style="color: currentColor; font-size: 0.75em; line-height: 1.33; font-weight: 500;"><?php esc_html_e( 'Unsubscribe', 'formidable' ); ?></a>
 		</div>
 	</div>

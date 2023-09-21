@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h1 style="font-size: 2.5em; line-height: 1.2em; margin: 0 0 32px;"><?php echo esc_html( $args['subject'] ); ?></h1>
 
 		<div style="line-height: 1.5; color: #475467;">
-			<?php echo esc_html( $args['from_date'] ); ?> - <?php echo esc_html( $args['to_date'] ); ?> &middot; <a href="<?php echo esc_url( $args['site_url'] ); ?>" title=""><?php echo esc_url( $args['site_url_display'] ); ?></a>
+			<?php echo esc_html( $args['from_date'] ); ?> - <?php echo esc_html( $args['to_date'] ); ?> &middot; <a style="color: #475467;" href="<?php echo esc_url( $args['site_url'] ); ?>" title=""><?php echo esc_url( $args['site_url_display'] ); ?></a>
 		</div>
 	</div>
 
@@ -112,8 +112,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</h2>
 
 			<p>
-				<?php esc_html_e( 'Following plugins are out of date:', 'formidable' ); ?>
-				<?php echo esc_html( implode( ', ', $args['out_of_date_plugins'] ) ); ?>
+				<?php
+				printf(
+					esc_html__( 'Following plugins are out of date: %s', 'formidable' ),
+					esc_html( implode( ', ', $args['out_of_date_plugins'] ) )
+				)
+				?>
 			</p>
 
 			<a

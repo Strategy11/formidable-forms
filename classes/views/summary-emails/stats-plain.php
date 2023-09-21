@@ -28,23 +28,33 @@ foreach ( $args['stats'] as $key => $stat ) {
 	echo esc_html( $stat['label'] ) . ': ' . ( isset( $stat['display'] ) ? esc_html( $stat['display'] ) : intval( $stat['count'] ) ) . "\r\n";
 }
 
-if ( ! empty( $args['dashboard_url'] ) ) {
-	esc_html_e( 'Go to Dashboard:', 'formidable' ) . ' ' . esc_url( $args['dashboard_url'] ) . "\r\n";
-}
-
 echo "\r\n";
 
-echo esc_html( $args['top_forms_label'] );
+if ( ! empty( $args['dashboard_url'] ) ) {
+	esc_html_e( 'Go to Dashboard:', 'formidable' );
+	echo ' ' . esc_url( $args['dashboard_url'] ) . "\r\n\r\n";
+}
 
-echo "\r\n\r\n";
+if ( $args['top_forms'] ) {
+	echo esc_html( $args['top_forms_label'] );
 
-foreach ( $args['top_forms'] as $index => $top_form ) {
-	echo esc_html( $top_form->form_name ) . ': ';
-	printf( esc_html( _n( 'submission', 'submissions', $top_form->items_count, 'formidable' ) ), intval( number_format_i18n( $top_form->items_count ) ) );
+	echo "\r\n\r\n";
+
+	foreach ( $args['top_forms'] as $index => $top_form ) {
+		echo esc_html( $top_form->form_name ) . ': ';
+		printf( esc_html( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ) ), intval( number_format_i18n( $top_form->items_count ) ) );
+		echo "\r\n";
+	}
+
 	echo "\r\n";
 }
 
 if ( ! empty( $args['out_of_date_plugins'] ) ) {
+	printf(
+		esc_html__( 'Following plugins are out of date: %s', 'formidable' ),
+		esc_html( implode( ', ', $args['out_of_date_plugins'] ) )
+	);
 	echo "\r\n";
-	esc_html_e( 'Following plugins are out of date:', 'formidable' ) . ' ' . esc_html( implode( ', ', $args['out_of_date_plugins'] ) );
+	esc_html_e( 'Please go to your Plugins page to update them.' );
+	echo "\r\n\r\n";
 }

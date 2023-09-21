@@ -23,7 +23,7 @@ class FrmMonthlyEmail extends FrmStatsEmail {
 	}
 
 	protected function get_subject() {
-		return __( 'Your month with Formidable Forms', 'formidable' );
+		return __( 'How your forms performed this month', 'formidable' );
 	}
 
 	protected function get_top_forms_label() {
