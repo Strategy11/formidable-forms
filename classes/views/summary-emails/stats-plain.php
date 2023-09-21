@@ -42,6 +42,7 @@ if ( $args['top_forms'] ) {
 
 	foreach ( $args['top_forms'] as $index => $top_form ) {
 		echo esc_html( $top_form->form_name ) . ': ';
+		// translators: submission count.
 		printf( esc_html( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ) ), intval( number_format_i18n( $top_form->items_count ) ) );
 		echo "\r\n";
 	}
@@ -51,10 +52,11 @@ if ( $args['top_forms'] ) {
 
 if ( ! empty( $args['out_of_date_plugins'] ) ) {
 	printf(
+		// translators: the list of out-of-date plugins.
 		esc_html__( 'Following plugins are out of date: %s', 'formidable' ),
 		esc_html( implode( ', ', $args['out_of_date_plugins'] ) )
 	);
 	echo "\r\n";
-	esc_html_e( 'Please go to your Plugins page to update them.' );
+	esc_html_e( 'Please go to your Plugins page to update them.', 'formidable' );
 	echo "\r\n\r\n";
 }
