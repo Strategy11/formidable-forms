@@ -382,8 +382,120 @@ function frmAdminBuildJS() {
 		if ( message === null || link.id === 'frm-confirmed-click' ) {
 			return true;
 		} else {
-			return confirmModal( link );
+			return new confirmDeleteAllEntriesModal( link );
 		}
+	}
+
+	function confirmDeleteAllEntriesModal( link ) {
+
+		var self = this;
+
+		this.modal = initModal( '#frm_confirm_modal', '500px' );
+
+		this.wrapper           = document.getElementById( 'frm_confirm_modal' );
+		this.confirmButton     = document.getElementById( 'frm-confirmed-click' );
+
+		this.confirmationInput = self.wrapper.querySelector( '.frm-delete-confirmation-input' );
+
+		this.timeoutInterval;
+
+		this.modalOptions = {
+			heading: 'Delete all %entriesCount% entries?',
+			headingSingleEntry: 'Delete the entry?',
+			copy: '',
+			inputPlaceholder: 'Type in "DELETE ALL" to delete all entries',
+			entriesCount: 0
+		};
+
+		this.countEntries = function() {
+			self.modalOptions.entriesCount = 0;
+			document.querySelectorAll( 'input[name="item-action[]"]' ).forEach( function( checkbox ) {
+				if ( checkbox.checked ) {
+					self.modalOptions.entriesCount++;
+				}
+			});
+			return self.modalOptions.entriesCount;
+		};
+
+		this.getHeading = function() {
+			if ( 1 === self.modalOptions.entriesCount ) {
+				return self.modalOptions.headingSingleEntry;
+			}
+			return self.modalOptions.heading.replace( '%entriesCount%', self.modalOptions.entriesCount );
+		};
+
+		this.getCopy = function() {
+			var copy;
+			if ( ! link.getAttribute( 'data-frmverify' ) ) {
+				return self.modalOptions.copy;
+			}
+			copy = frmDom.tag( 'span' );
+			copy.innerHTML = link.getAttribute( 'data-frmverify' );
+			self.modalOptions.copy = copy;
+			return copy;
+		};
+
+		this.getConfirmationInput = function() {
+			self.confirmationInput = frmDom.tag( 'input', { className: 'frm-delete-confirmation-input' });
+			self.confirmationInput.setAttribute( 'type', 'text' );
+			return self.confirmationInput;
+		};
+
+		this.initConfirmButton = function( active ) {
+			self.confirmButton.classList.add( link.getAttribute( 'data-frmverify-btn' ) );
+			if ( true === active ) {
+				self.confirmButton.classList.remove( 'frm-btn-inactive' );
+				self.confirmButton.classList.add( 'dismiss' );
+				self.confirmButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+				return;
+			}
+			self.confirmButton.setAttribute( 'href', '#' );
+			self.confirmButton.classList.add( 'frm-btn-inactive' );
+			self.confirmButton.classList.remove( 'dismiss' );
+		};
+
+		this.initConfirmationInput = function() {
+			self.confirmationInput.placeholder = self.modalOptions.inputPlaceholder;
+			self.confirmationInput.addEventListener( 'keydown', function() {
+				clearTimeout( self.timeoutInterval );
+				self.timeoutInterval = setTimeout( self.confirmationCheck, 100 );
+			});
+		};
+
+		this.confirmationCheck = function() {
+			if ( 'delete all' === self.confirmationInput.value.toLowerCase().trim() ) {
+				self.initConfirmButton( true );
+				return;
+			}
+			self.initConfirmButton( false );
+		};
+
+		this.initModal = function() {
+			var copyWrapper;
+			if ( null === this.wrapper || null === this.wrapper.querySelector( '.frm-confirm-msg' ) ) {
+				return;
+			}
+			copyWrapper           = this.wrapper.querySelector( '.frm-confirm-msg' );
+			copyWrapper.classList.add( 'frm-delete-all-entires-modal-confirmation' );
+			copyWrapper.innerHTML = '';
+			copyWrapper.append( frmDom.tag( 'h2', self.getHeading() ) );
+			copyWrapper.append( self.getCopy() );
+			copyWrapper.append( self.getConfirmationInput() );
+
+			self.initConfirmationInput();
+			self.initConfirmButton( false );
+
+		};
+
+		this.openModal = function() {
+			if ( false === this.modal || 0 === self.countEntries() ) {
+				return false;
+			}
+			self.initModal();
+			this.modal.dialog( 'open' );
+		};
+
+		return this.openModal();
 	}
 
 	function confirmModal( link ) {
@@ -600,7 +712,7 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '#frm-confirmed-click', function( event ) {
-			if ( doAction === false ) {
+			if ( doAction === false || event.target.classList.contains( 'frm-btn-inactive' ) ) {
 				return;
 			}
 
