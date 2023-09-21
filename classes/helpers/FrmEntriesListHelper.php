@@ -399,6 +399,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function confirm_bulk_delete() {
-		return __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
+		return sprintf(
+			/* translators: %1$s: HTML break line + open link, %2$s: HTML close link */
+			esc_html__( 'ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below.', 'formidable' ),
+			'<br/>',
+			'<b>DELETE ALL</b>'
+		);
 	}
 }

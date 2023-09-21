@@ -382,8 +382,120 @@ function frmAdminBuildJS() {
 		if ( message === null || link.id === 'frm-confirmed-click' ) {
 			return true;
 		} else {
-			return confirmModal( link );
+			return new confirmDeleteAllEntriesModal( link );
 		}
+	}
+
+	function confirmDeleteAllEntriesModal( link ) {
+
+		var self = this;
+
+		this.modal = initModal( '#frm_confirm_modal', '500px' );
+
+		this.wrapper           = document.getElementById( 'frm_confirm_modal' );
+		this.confirmButton     = document.getElementById( 'frm-confirmed-click' );
+
+		this.confirmationInput = self.wrapper.querySelector( '.frm-delete-confirmation-input' );
+
+		this.timeoutInterval;
+
+		this.modalOptions = {
+			heading: 'Delete all %entriesCount% entries?',
+			headingSingleEntry: 'Delete the entry?',
+			copy: '',
+			inputPlaceholder: 'Type in "DELETE ALL" to delete all entries',
+			entriesCount: 0
+		};
+
+		this.countEntries = function() {
+			self.modalOptions.entriesCount = 0;
+			document.querySelectorAll( 'input[name="item-action[]"]' ).forEach( function( checkbox ) {
+				if ( checkbox.checked ) {
+					self.modalOptions.entriesCount++;
+				}
+			});
+			return self.modalOptions.entriesCount;
+		};
+
+		this.getHeading = function() {
+			if ( 1 === self.modalOptions.entriesCount ) {
+				return self.modalOptions.headingSingleEntry;
+			}
+			return self.modalOptions.heading.replace( '%entriesCount%', self.modalOptions.entriesCount );
+		};
+
+		this.getCopy = function() {
+			var copy;
+			if ( ! link.getAttribute( 'data-frmverify' ) ) {
+				return self.modalOptions.copy;
+			}
+			copy = frmDom.tag( 'span' );
+			copy.innerHTML = link.getAttribute( 'data-frmverify' );
+			self.modalOptions.copy = copy;
+			return copy;
+		};
+
+		this.getConfirmationInput = function() {
+			self.confirmationInput = frmDom.tag( 'input', { className: 'frm-delete-confirmation-input' });
+			self.confirmationInput.setAttribute( 'type', 'text' );
+			return self.confirmationInput;
+		};
+
+		this.initConfirmButton = function( active ) {
+			self.confirmButton.classList.add( link.getAttribute( 'data-frmverify-btn' ) );
+			if ( true === active ) {
+				self.confirmButton.classList.remove( 'frm-btn-inactive' );
+				self.confirmButton.classList.add( 'dismiss' );
+				self.confirmButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+				return;
+			}
+			self.confirmButton.setAttribute( 'href', '#' );
+			self.confirmButton.classList.add( 'frm-btn-inactive' );
+			self.confirmButton.classList.remove( 'dismiss' );
+		};
+
+		this.initConfirmationInput = function() {
+			self.confirmationInput.placeholder = self.modalOptions.inputPlaceholder;
+			self.confirmationInput.addEventListener( 'keydown', function() {
+				clearTimeout( self.timeoutInterval );
+				self.timeoutInterval = setTimeout( self.confirmationCheck, 100 );
+			});
+		};
+
+		this.confirmationCheck = function() {
+			if ( 'delete all' === self.confirmationInput.value.toLowerCase().trim() ) {
+				self.initConfirmButton( true );
+				return;
+			}
+			self.initConfirmButton( false );
+		};
+
+		this.initModal = function() {
+			var copyWrapper;
+			if ( null === this.wrapper || null === this.wrapper.querySelector( '.frm-confirm-msg' ) ) {
+				return;
+			}
+			copyWrapper           = this.wrapper.querySelector( '.frm-confirm-msg' );
+			copyWrapper.classList.add( 'frm-delete-all-entires-modal-confirmation' );
+			copyWrapper.innerHTML = '';
+			copyWrapper.append( frmDom.tag( 'h2', self.getHeading() ) );
+			copyWrapper.append( self.getCopy() );
+			copyWrapper.append( self.getConfirmationInput() );
+
+			self.initConfirmationInput();
+			self.initConfirmButton( false );
+
+		};
+
+		this.openModal = function() {
+			if ( false === this.modal || 0 === self.countEntries() ) {
+				return false;
+			}
+			self.initModal();
+			this.modal.dialog( 'open' );
+		};
+
+		return this.openModal();
 	}
 
 	function confirmModal( link ) {
@@ -600,7 +712,7 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '#frm-confirmed-click', function( event ) {
-			if ( doAction === false ) {
+			if ( doAction === false || event.target.classList.contains( 'frm-btn-inactive' ) ) {
 				return;
 			}
 
@@ -8567,49 +8679,14 @@ function frmAdminBuildJS() {
 
 	/* Templates */
 
-	function showFreeTemplatesForm() {
-		loadApiEmailForm();
-	}
-
-	function showActiveCampaignForm() {
-		loadApiEmailForm();
-	}
-
-	function loadApiEmailForm() {
-		const formContainer = document.getElementById( 'frmapi-email-form' );
-		jQuery.ajax({
-			dataType: 'json',
-			url: formContainer.getAttribute( 'data-url' ),
-			success: function( json ) {
-				var form = json.renderedHtml;
-				form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
-				formContainer.innerHTML = form;
-			}
-		});
-	}
-
-	function handleApiFormError( inputId, errorId, type, message ) {
-		const $error = jQuery( errorId );
-		$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
-
-		if ( typeof message !== 'undefined' ) {
-			$error.find( 'span[frm-error="' + type + '"]' ).text( message );
-		}
-
-		jQuery( inputId ).one( 'keyup', function() {
-			$error.addClass( 'frm_hidden' );
-		});
-	}
-
-	function handleEmailAddressError( type ) {
-		handleApiFormError( '#frm_leave_email', '#frm_leave_email_error', type );
-	}
-
 	function initNewFormModal() {
 		var installFormTrigger,
 			activeHoverIcons,
 			$modal,
+			handleError,
+			handleEmailAddressError,
 			handleConfirmEmailAddressError,
+			showFreeTemplatesForm,
 			firstLockedTemplate,
 			isShowFreeTemplatesFormFirst,
 			url,
@@ -8759,6 +8836,23 @@ function frmAdminBuildJS() {
 			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
 		});
 
+		showFreeTemplatesForm = function( $el ) {
+			var formContainer = document.getElementById( 'frmapi-email-form' );
+			jQuery.ajax({
+				dataType: 'json',
+				url: formContainer.getAttribute( 'data-url' ),
+				success: function( json ) {
+					var form = json.renderedHtml;
+					form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
+					formContainer.innerHTML = form;
+				}
+			});
+
+			$modal.attr( 'frm-page', 'email' );
+			$modal.attr( 'frm-this-form', $el.attr( 'data-key' ) );
+			$el.append( installFormTrigger );
+		};
+
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
 				activePage;
@@ -8768,12 +8862,7 @@ function frmAdminBuildJS() {
 			$li = jQuery( this ).closest( '.frm-locked-template' );
 
 			if ( $li.hasClass( 'frm-free-template' ) ) {
-				showFreeTemplatesForm();
-
-				$modal.attr( 'frm-page', 'email' );
-
-				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
-				$li.append( installFormTrigger );
+				showFreeTemplatesForm( $li );
 				return;
 			}
 
@@ -8799,8 +8888,66 @@ function frmAdminBuildJS() {
 			transitionToAddDetails( $modal, name, link, action );
 		});
 
+		handleError = function( inputId, errorId, type, message ) {
+			var $error = jQuery( errorId );
+			$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
+
+			if ( typeof message !== 'undefined' ) {
+				$error.find( 'span[frm-error="' + type + '"]' ).text( message );
+			}
+
+			jQuery( inputId ).one( 'keyup', function() {
+				$error.addClass( 'frm_hidden' );
+			});
+		};
+
+		handleEmailAddressError = function( type ) {
+			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
+		};
+
+		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
+			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
+				regex,
+				$hiddenForm,
+				$hiddenEmailField;
+
+			event.preventDefault();
+
+			if ( '' === email ) {
+				handleEmailAddressError( 'empty' );
+				return;
+			}
+
+			regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+
+			if ( regex.test( email ) === false ) {
+				handleEmailAddressError( 'invalid' );
+				return;
+			}
+
+			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
+			$hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
+			if ( ! $hiddenEmailField.length ) {
+				return;
+			}
+
+			$hiddenEmailField.val( email );
+			jQuery.ajax({
+				type: 'POST',
+				url: $hiddenForm.attr( 'action' ),
+				data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+			}).done( function( data ) {
+				var message = jQuery( data ).find( '.frm_message' ).text().trim();
+				if ( message.indexOf( 'Thanks!' ) >= 0 ) {
+					$modal.attr( 'frm-page', 'code' );
+				} else {
+					handleEmailAddressError( 'invalid' );
+				}
+			});
+		});
+
 		handleConfirmEmailAddressError = function( type, message ) {
-			handleApiFormError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
+			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
 		};
 
 		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
@@ -8905,12 +9052,7 @@ function frmAdminBuildJS() {
 				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template' ).eq( 0 );
 
 				if ( firstLockedTemplate.length ) {
-					showFreeTemplatesForm();
-
-					$modal.attr( 'frm-page', 'email' );
-					$modal.attr( 'frm-this-form', firstLockedTemplate.attr( 'data-key' ) );
-
-					firstLockedTemplate.append( installFormTrigger );
+					showFreeTemplatesForm( firstLockedTemplate );
 				}
 
 				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
@@ -9683,110 +9825,8 @@ function frmAdminBuildJS() {
 		frmDom.util.documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
 	}
 
-	/**
-	 * Listen for click events for an API-loaded email collection form.
-	 * This is used for the free templates flow of the new form modal.
-	 * It is also used for the Active Campaign sign-up form in the inbox page (when there are no messages).
-	 */
-	function initAddMyEmailAddress() {
-		jQuery( document ).on(
-			'click',
-			'#frm-add-my-email-address',
-			event => {
-				event.preventDefault();
-				addMyEmailAddress();
-			}
-		);
-
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
-			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
-			leaveEmailIput.addEventListener(
-				'keyup',
-				event => {
-					if ( 'Enter' === event.key ) {
-						const button = document.getElementById( 'frm-add-my-email-address' );
-						if ( button ) {
-							button.click();
-						}
-					}
-				}
-			);
-		}
-	}
-
-	function addMyEmailAddress() {
-		const email = document.getElementById( 'frm_leave_email' ).value.trim();
-		if ( '' === email ) {
-			handleEmailAddressError( 'empty' );
-			return;
-		}
-
-		const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-		if ( regex.test( email ) === false ) {
-			handleEmailAddressError( 'invalid' );
-			return;
-		}
-
-		const $hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-		const $hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
-		if ( ! $hiddenEmailField.length ) {
-			return;
-		}
-
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
-			document.getElementById( 'frm-add-my-email-address' ).remove();
-
-			const emailWrapper = document.getElementById( 'frm_leave_email_wrapper' );
-			if ( emailWrapper ) {
-				emailWrapper.classList.add( 'frm_hidden' );
-				const spinner = span({ className: 'frm-wait frm_spinner' });
-				spinner.style.visibility = 'visible';
-				spinner.style.float      = 'none';
-				emailWrapper.parentElement.insertBefore(
-					spinner,
-					emailWrapper.nextElementSibling
-				);
-			}
-		}
-
-		$hiddenEmailField.val( email );
-		jQuery.ajax({
-			type: 'POST',
-			url: $hiddenForm.attr( 'action' ),
-			data: $hiddenForm.serialize() + '&action=frm_forms_preview'
-		}).done( function( data ) {
-			const message = jQuery( data ).find( '.frm_message' ).text().trim();
-			if ( message.indexOf( 'Thanks!' ) === -1 ) {
-				handleEmailAddressError( 'invalid' );
-				return;
-			}
-
-			const apiForm = document.getElementById( 'frmapi-email-form' );
-			const spinner = apiForm.parentElement.querySelector( '.frm_spinner' );
-			if ( spinner ) {
-				spinner.remove();
-			}
-
-			// Handle successful form submission.
-			// If the new form modal exists, handle the free templates form.
-			const modal = document.getElementById( 'frm_new_form_modal' );
-			if ( modal ) {
-				modal.setAttribute( 'frm-page', 'code' );
-			} else {
-				// If no modal exists handle the Active Campaign form on the inbox page.
-				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-					document.createTextNode( 'Thank you for signing up!' )
-				);
-			}
-		});
-	}
-
 	return {
 		init: function() {
-			initAddMyEmailAddress();
-
 			s = {};
 
 			// Bootstrap dropdown button
@@ -10441,14 +10481,9 @@ function frmAdminBuildJS() {
 				postAjax( data, function() {
 					fadeOut( document.getElementById( 'frm_message_list' ), function() {
 						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-						showActiveCampaignForm();
 					});
 				});
 			});
-
-			if ( ! document.getElementById( 'frm_empty_inbox' ).classList.contains( 'frm_hidden' ) ) {
-				showActiveCampaignForm();
-			}
 		},
 
 		solutionInit: function() {
