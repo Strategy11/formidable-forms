@@ -400,7 +400,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	protected function confirm_bulk_delete() {
 		return sprintf(
-			/* translators: %1$s: HTML break line + open link, %2$s: HTML close link */
+			/* translators: %1$s: HTML break line, %2$s: HTML bold text */
 			esc_html__( 'ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below.', 'formidable' ),
 			'<br/>',
 			'<b>DELETE ALL</b>'
