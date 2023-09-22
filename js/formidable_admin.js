@@ -9731,12 +9731,14 @@ function frmAdminBuildJS() {
 					break;
 
 				case 'millisec':
-					input.value = parts[0] + ':' + parts[1] + ':' + parts[2];
+					input.value = parts[0] + ':' + parts[1] + ':' + parts[2] + ':' + parts[3];
 					break;
 
 				default:
 					input.value = parts[0] + ':' + parts[1];
 			}
+
+			input.setAttribute( 'size', input.value.length );
 		};
 
 		const onChangeStepUnitSelect = event => {
@@ -9754,7 +9756,7 @@ function frmAdminBuildJS() {
 			changeFormatValue( 'end_time_' + fieldId, event.target.value );
 		};
 
-		frmDom.util.documentOn( 'change', '.frm_step_unit_select', onChangeStepUnitSelect );
+		frmDom.util.documentOn( 'change', 'select[id^="step_unit_"]', onChangeStepUnitSelect );
 	}
 
 	return {
