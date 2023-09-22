@@ -27,7 +27,7 @@
 	background: url( '../images/overlay/close-overlay.svg' ) no-repeat;
 	cursor: pointer;
 }
-body.admin-bar .frm-overlay--close {
+body.admin-bar:not(.frm-full-screen) .frm-overlay--close {
 	top:40px;
 }
 .frm-overlay--container {
