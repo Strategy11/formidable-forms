@@ -98,7 +98,7 @@ class FrmHoneypot extends FrmValidate {
 				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
 					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
 				</label>
-				<input type="<?php echo esc_attr( 'strict' === $honeypot ? 'email' : 'text' ); ?>" id="frm_email_<?php echo esc_attr( $form->id ); ?>" class="<?php echo esc_attr( $class_name ); ?>" name="<?php echo esc_attr( $class_name ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
+				<input type="<?php echo esc_attr( 'strict' === $honeypot ? 'email' : 'text' ); ?>" id="frm_email_<?php echo esc_attr( $form->id ); ?>" class="frm_verify" name="<?php echo esc_attr( $class_name ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
 			</div>
 		<?php
 	}
