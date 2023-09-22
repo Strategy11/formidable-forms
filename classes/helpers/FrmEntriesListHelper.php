@@ -406,4 +406,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 			'<b>DELETE ALL</b>'
 		);
 	}
+
+	/**
+	 * @return string
+	 */
+	protected function loaded_from() {
+		return 'entries-list';
+	}
 }

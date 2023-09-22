@@ -377,18 +377,23 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmLinkClick( link ) {
-		var message = link.getAttribute( 'data-frmverify' );
+		var message    = link.getAttribute( 'data-frmverify' ),
+			loadedFrom = link.getAttribute( 'data-loaded-from' ) ;
 
 		if ( message === null || link.id === 'frm-confirmed-click' ) {
 			return true;
-		} else {
+		}
+
+		if ( 'entries-list' === loadedFrom ) {
 			return new confirmDeleteAllEntriesModal( link );
 		}
+
+		return confirmModal( link );
 	}
 
 	function confirmDeleteAllEntriesModal( link ) {
 
-		var self = this;
+		const self = this;
 
 		this.modal = initModal( '#frm_confirm_modal', '500px' );
 
@@ -425,7 +430,7 @@ function frmAdminBuildJS() {
 		};
 
 		this.getCopy = function() {
-			var copy;
+			let copy;
 			if ( ! link.getAttribute( 'data-frmverify' ) ) {
 				return self.modalOptions.copy;
 			}
@@ -471,12 +476,12 @@ function frmAdminBuildJS() {
 		};
 
 		this.initModal = function() {
-			var copyWrapper;
-			if ( null === this.wrapper || null === this.wrapper.querySelector( '.frm-confirm-msg' ) ) {
+			let copyWrapper;
+			if ( null === self.wrapper || null === self.wrapper.querySelector( '.frm-confirm-msg' ) ) {
 				return;
 			}
-			copyWrapper           = this.wrapper.querySelector( '.frm-confirm-msg' );
-			copyWrapper.classList.add( 'frm-delete-all-entires-modal-confirmation' );
+			copyWrapper           = self.wrapper.querySelector( '.frm-confirm-msg' );
+			copyWrapper.classList.add( 'frm-delete-all-entries-modal-confirmation' );
 			copyWrapper.innerHTML = '';
 			copyWrapper.append( frmDom.tag( 'h2', self.getHeading() ) );
 			copyWrapper.append( self.getCopy() );
@@ -488,11 +493,11 @@ function frmAdminBuildJS() {
 		};
 
 		this.openModal = function() {
-			if ( false === this.modal || 0 === self.countEntries() ) {
+			if ( false === self.modal || 0 === self.countEntries() ) {
 				return false;
 			}
 			self.initModal();
-			this.modal.dialog( 'open' );
+			self.modal.dialog( 'open' );
 		};
 
 		return this.openModal();
