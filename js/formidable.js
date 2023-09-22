@@ -1129,9 +1129,8 @@ function frmFrontFormJS() {
 
 		function makeHoneypotFieldsUntabbable() {
 			document.querySelectorAll( '.frm_verify' ).forEach(
-				function( wrapper ) {
-					var input = wrapper.querySelector( 'input[id^=frm_email]' );
-					if ( input ) {
+				function( input ) {
+					if ( input.id && 0 === input.id.indexOf( 'frm_email_' ) ) {
 						input.setAttribute( 'tabindex', -1 );
 					}
 				}
