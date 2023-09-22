@@ -80,11 +80,25 @@ function getDOMElements() {
 		)
 	};
 
+	// Modal Elements
+	const modal = document.querySelector( `#${PREFIX}-modal` );
+	const modals = {
+		modal,
+		modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
+		renewAccountModal: modal?.querySelector( '#frm-renew-modal' ),
+		leaveEmailModal: modal?.querySelector( '#frm-leave-email-modal' ),
+		codeFromEmailModal: modal?.querySelector( '#frm-code-from-email-modal' ),
+		upgradeModal: modal?.querySelector( '#frm-upgrade-modal' ),
+		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
+		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' )
+	};
+
 	return {
 		...bodyElements,
 		...templates,
 		...customTemplates,
-		...sidebar
+		...sidebar,
+		...modals
 	};
 }
 

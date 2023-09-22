@@ -421,7 +421,7 @@
 	color: var(--grey-900);
 }
 
-.frm-upgrade-modal-lock-icon {
+#frm-upgrade-modal .frm-upgrade-modal-lock-icon {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -429,6 +429,10 @@
 	height: 60px;
 	border-radius: 50%;
 	background-color: var(--primary-25);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-template-name {
+	text-transform: capitalize;
 }
 
 #frm-upgrade-modal .frm-upgrade-modal-banner {
@@ -444,6 +448,10 @@
 	font-weight: 500;
 	color: var(--grey-700);
 	margin-bottom: var(--gap-2xs);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-banner-text {
+	color: var(--grey-500);
 }
 
 #frm-upgrade-modal .frm-upgrade-modal-banner-tag {
@@ -475,8 +483,12 @@
 	display: flex;
 }
 
-#frm-upgrade-modal .frm-upgrade-modal-plan-icon.frm-plan-close-icon {
+#frm-upgrade-modal .frm-upgrade-modal-plan-icon {
 	color: var(--error-500);
+}
+
+#frm-upgrade-modal .frm-upgrade-modal-plan-icon.frm-plan-checkmark-icon {
+	color: var(--success-500);
 }
 
 /* Code from email modal */

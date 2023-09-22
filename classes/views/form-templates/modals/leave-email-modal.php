@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-leave-email-modal" class="frm_hidden">
+<div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<!-- Modal Header -->
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">

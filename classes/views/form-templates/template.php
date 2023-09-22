@@ -45,7 +45,6 @@ $use_template_url = '#';
 $attributes                    = array();
 $attributes['data-id']         = $template['id'];
 $attributes['frm-search-text'] = strtolower( $template_name );
-$attributes['aria-label']      = $template_name;
 
 // Set data categories attribute.
 if ( ! empty( $template['category_slugs'] ) ) {
@@ -68,7 +67,7 @@ if ( $is_custom_template ) {
 if ( $plan_required ) {
 	$required_plan_slug = sanitize_title( $plan_required );
 	$class_names[]      = ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
-	$attributes['data-required-plan'] = $required_plan_slug;
+	$attributes['data-required-plan'] = ! $expired ? $required_plan_slug : 'renew';
 } else {
 	$link             = FrmFormTemplatesHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
 	$use_template_url = esc_url( $link['url'] );
@@ -96,7 +95,7 @@ $attributes['class'] = implode( ' ', $class_names );
 					</span>
 				<?php } ?>
 
-				<!-- Template Title Text -->
+				<!-- Template Name -->
 				<span><?php echo esc_html( $template_name ); ?></span>
 			</div><!-- .frm-form-templates-item-title-text -->
 

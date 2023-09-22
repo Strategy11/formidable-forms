@@ -18,37 +18,37 @@
  */
 import { initModal } from '../shared';
 
-let $modal = null;
+let modalWidget = null;
 
 /**
- * Initialize the modal dialog.
+ * Initialize the modal widget.
  *
  * @return {void}
  */
 export function initializeModal() {
-	$modal = initModal( '#frm-form-templates-modal', '440px' );
-	setVerticalOffset( $modal, '103px' );
+	modalWidget = initModal( '#frm-form-templates-modal', '440px' );
+	setVerticalOffset( modalWidget, '103px' );
 }
 
 /**
- * Retrieve the the modal dialog element.
+ * Retrieve the modal widget.
  *
- * @return {Object|false} The modal dialog element or false.
+ * @return {Object|false} The modal widget or false.
  */
-export function getModal() {
-	return $modal;
+export function getModalWidget() {
+	return modalWidget;
 }
 
 /**
- * Sets a vertical offset for the modal dialog.
+ * Sets a vertical offset for the modal widget.
  *
  * @private
- * @param {Object} $modal The modal dialog element.
+ * @param {Object} modalWidget The modal widget.
  * @param {string} verticalOffset The vertical offset to apply.
  * @return {void}
  */
-function setVerticalOffset( $modal, verticalOffset ) {
-	if ( ! $modal ) {
+function setVerticalOffset( modalWidget, verticalOffset ) {
+	if ( ! modalWidget ) {
 		return;
 	}
 
@@ -58,5 +58,5 @@ function setVerticalOffset( $modal, verticalOffset ) {
 		of: window
 	};
 
-	$modal.dialog( 'option', 'position', position );
+	modalWidget.dialog( 'option', 'position', position );
 }

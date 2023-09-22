@@ -19,3 +19,4 @@ export * from './pageTitle';
 export * from './showSelectedCategory';
 export * from './showSearchResult';
 export * from './showEmptyState';
+export * from './showModal';

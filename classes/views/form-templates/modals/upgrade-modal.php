@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // List of pricing plans.
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
-<div id="frm-upgrade-modal" class="frm_hidden">
+<div id="frm-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
 	<!-- Modal Body -->
 	<div class="inside">
 		<span class="frm-form-templates-space-5"></span>
@@ -39,10 +39,28 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/lock.svg' ); ?>" />
 		</div><!-- .frm-upgrade-modal-lock-icon -->
 
-		<div class="frm-upgrade-modal-content">
-			<h3><?php esc_html_e( 'ROI Calculator is a PRO Template', 'formidable' ); ?></h3>
-			<p><?php esc_html_e( 'We\'re sorry, the ROI Calculator is not available on your plan. Please upgrade to the PRO plan to unlock all the awesome templates.', 'formidable' ); ?></p>
-		</div><!-- .frm-upgrade-modal-content -->
+		<div id="frm-upgrade-modal-content">
+			<h3>
+				<?php
+				printf(
+					/* translators: %1$s: Open span tag, %2$s: Close span tag */
+					esc_html__( '%1$sTEMPLATE NAME%2$s is a PRO Template', 'formidable' ),
+					'<span class="frm-upgrade-modal-template-name">',
+					'</span>'
+				);
+				?>
+			</h3>
+			<p>
+				<?php
+				printf(
+					/* translators: %1$s: Open span tag, %2$s: Close span tag */
+					esc_html__( 'We\'re sorry, the %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to the PRO plan to unlock all the awesome templates.', 'formidable' ),
+					'<span class="frm-upgrade-modal-template-name">',
+					'</span>'
+				);
+				?>
+			</p>
+		</div><!-- #frm-upgrade-modal-content -->
 
 		<div class="frm-upgrade-modal-banner">
 			<span class="frm-upgrade-modal-banner-title">
@@ -63,7 +81,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			<div id="frm-upgrade-modal-plans">
 				<?php foreach ( $plans as $plan ) { ?>
 					<span class="frm-upgrade-modal-plan">
-						<span class="frm-upgrade-modal-plan-icon frm-plan-close-icon">
+						<span class="frm-upgrade-modal-plan-icon" data-plan="<?php echo esc_attr( strtolower( $plan ) ); ?>">
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?>
 						</span>
 						<span class="frm-upgrade-modal-plan-text"><?php echo esc_html( $plan ); ?></span>

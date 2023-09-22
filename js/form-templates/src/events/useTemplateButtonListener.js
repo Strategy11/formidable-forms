@@ -16,9 +16,8 @@
 /**
  * Internal dependencies
  */
-import { getElements } from '../elements';
-import { PREFIX, getAppState, initModal, setAppState } from '../shared';
-import { getModal } from '../ui';
+import { PREFIX } from '../shared';
+import { showLockedTemplateModal } from '../ui/';
 import { isCustomTemplate, isLockedTemplate } from '../utils';
 
 /**
@@ -49,7 +48,16 @@ const onUseTemplateClick = ( event ) => {
 	const isLocked = isLockedTemplate( template );
 	const isTemplateCustom = isCustomTemplate( template );
 
+	// Allow the default link behavior, if the template is custom and not locked
 	if ( ! isLocked && isTemplateCustom ) {
+		return;
+	}
+
+	// Prevent the default link behavior for non-custom or locked templates
+	event.preventDefault();
+
+	if ( isLocked ) {
+		showLockedTemplateModal( template );
 		return;
 	}
 };

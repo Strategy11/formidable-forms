@@ -188,6 +188,7 @@ class FrmFormTemplatesController {
 		$upgrade_link = self::get_upgrade_link();
 		$license_type = self::get_license_type();
 		$pricing      = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$expired      = self::is_expired();
 
 		// Get various template types and categories.
 		$templates          = self::get_templates();
