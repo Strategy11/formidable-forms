@@ -67,7 +67,7 @@ if ( $is_custom_template ) {
 if ( $plan_required ) {
 	$required_plan_slug = sanitize_title( $plan_required );
 	$class_names[]      = ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
-	$attributes['data-required-plan'] = ! $expired ? $required_plan_slug : 'renew';
+	$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
 } else {
 	$link             = FrmFormTemplatesHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
 	$use_template_url = esc_url( $link['url'] );

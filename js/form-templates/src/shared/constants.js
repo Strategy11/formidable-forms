@@ -26,3 +26,12 @@ export const VIEW_SLUGS = {
 	CUSTOM: 'custom',
 	SEARCH: 'search'
 };
+
+export const PLANS = {
+	BASIC: 'basic',
+	PLUS: 'plus',
+	BUSINESS: 'business',
+	ELITE: 'elite',
+	RENEW: 'renew',
+	FREE: 'free'
+};

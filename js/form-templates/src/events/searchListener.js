@@ -59,6 +59,14 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 		return;
 	}
 
+	// Switch to displaying search results
+	if ( appState.selectedCategory ) {
+		showSearchResults();
+
+		// Setting "selectedCategory" to an empty string as a flag for search state
+		setAppStateProperty( 'selectedCategory', '' );
+	}
+
 	// Show empty state if no templates found
 	if ( ! foundSomething ) {
 		showSearchEmptyState();
@@ -71,14 +79,6 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 
 		const { pageTitle } = getElements();
 		show( pageTitle );
-	}
-
-	// Switch to displaying search results if a category is selected
-	if ( appState.selectedCategory ) {
-		showSearchResults();
-
-		// Setting "selectedCategory" to an empty string as a flag for search state
-		setAppStateProperty( 'selectedCategory', '' );
 	}
 }
 

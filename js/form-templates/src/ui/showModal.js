@@ -24,6 +24,7 @@ import { __ } from '@wordpress/i18n';
 import { getElements } from '../elements';
 import { hideElements, show } from '../utils';
 import { getModalWidget } from './';
+import { PLANS } from '../shared';
 
 /**
  * Display the locked template modal.
@@ -35,16 +36,16 @@ export function showLockedTemplateModal( template ) {
 	const plan = template.dataset.requiredPlan;
 
 	switch ( plan ) {
-		case 'basic':
-		case 'plus':
-		case 'business':
-		case 'elite':
+		case PLANS.BASIC:
+		case PLANS.PLUS:
+		case PLANS.BUSINESS:
+		case PLANS.ELITE:
 			showUpgradeModal( plan, template );
 			break;
-		case 'renew':
+		case PLANS.RENEW:
 			showRenewAccountModal();
 			break;
-		case 'free':
+		case PLANS.FREE:
 			showLeaveEmailModal();
 			break;
 	}
