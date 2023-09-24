@@ -40,8 +40,6 @@ function addGetCodeButtonEvents() {
  * @return {void}
  */
 const onGetCodeButtonClick = async( event ) => {
-	event.preventDefault();
-
 	const { leaveEmailModalInput } = getElements();
 	const email = leaveEmailModalInput.value.trim();
 
@@ -57,20 +55,21 @@ const onGetCodeButtonClick = async( event ) => {
 		return;
 	}
 
+	const { leaveEmailModalHiddenForm, leaveEmailModalHiddenInput } = getElements();
+
+	// Check if the hidden form exists
+	if ( ! leaveEmailModalHiddenForm ) {
+		return;
+	}
+
+	// Set the email value in the hidden input field
+	leaveEmailModalHiddenInput.value = email;
+
+	// Prepare FormData for the POST request
+	const formData = new FormData( leaveEmailModalHiddenForm );
+	formData.append( 'action', 'frm_forms_preview' );
+
 	try {
-		const { leaveEmailModalHiddenForm, leaveEmailModalHiddenInput } = getElements();
-		// Check if the hidden form exists
-		if ( ! leaveEmailModalHiddenForm ) {
-			return;
-		}
-
-		// Set the email value in the hidden input field
-		leaveEmailModalHiddenInput.value = email;
-
-		// Prepare FormData for the POST request
-		const formData = new FormData( leaveEmailModalHiddenForm );
-		formData.append( 'action', 'frm_forms_preview' );
-
 		// Perform the POST request
 		const response = await fetch( leaveEmailModalHiddenForm.getAttribute( 'action' ), {
 			method: 'POST',

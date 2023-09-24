@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
-		<a href="#" class="button button-primary frm-button-primary frm-confirm-email-address" role="button">
+		<a href="#" id="frm-confirm-email-address" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Save Code', 'formidable' ); ?>
 		</a>
 	</div><!-- .frm_modal_footer -->

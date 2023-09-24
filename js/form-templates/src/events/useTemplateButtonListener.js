@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import { PREFIX } from '../shared';
+import { PREFIX, setAppStateProperty } from '../shared';
 import { showLockedTemplateModal } from '../ui/';
 import { isCustomTemplate, isLockedTemplate } from '../utils';
 
@@ -55,6 +55,8 @@ const onUseTemplateButtonClick = ( event ) => {
 
 	// Prevent the default link behavior for non-custom or locked templates
 	event.preventDefault();
+
+	setAppStateProperty( 'selectedTemplate', template );
 
 	if ( isLocked ) {
 		showLockedTemplateModal( template );

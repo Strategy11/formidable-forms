@@ -35,7 +35,10 @@ export async function initializeModal() {
 
 	// Show the email modal if the 'free-templates' query param is present
 	if ( hasQueryParam( 'free-templates' ) ) {
-		showLeaveEmailModal();
+		const { leaveEmailModal } = getElements();
+		if ( leaveEmailModal ) {
+			showLeaveEmailModal();
+		}
 	}
 
 	// Maybe fetch and inject the API email form into the modal

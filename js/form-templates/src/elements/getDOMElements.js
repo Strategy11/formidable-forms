@@ -43,7 +43,8 @@ function getDOMElements() {
 		templateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item` ),
 		twinFeaturedTemplateItems: templatesList?.querySelectorAll(
 			`.${ PREFIX }-featured-item`
-		)
+		),
+		firstLockedFreeTemplate: templatesList?.querySelector( '.frm-free-template' )
 	};
 
 	// Custom Templates Section Element
@@ -90,7 +91,9 @@ function getDOMElements() {
 		leaveEmailModal: modal?.querySelector( '#frm-leave-email-modal' ),
 		leaveEmailModalInput: modal?.querySelector( '#frm_leave_email' ),
 		leaveEmailModalApiEmailForm: modal?.querySelector( '#frmapi-email-form' ),
+		// Code from Email Modal
 		codeFromEmailModal: modal?.querySelector( '#frm-code-from-email-modal' ),
+		codeFromEmailModalInput: modal?.querySelector( '#frm_code_from_email' ),
 		// Upgrade Modal
 		upgradeModal: modal?.querySelector( '#frm-upgrade-modal' ),
 		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),

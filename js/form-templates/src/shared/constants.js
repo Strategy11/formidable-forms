@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-export const { url: PLUGIN_URL } = window.frmGlobal;
+export const { url: PLUGIN_URL, nonce } = window.frmGlobal;
 export const { FEATURED_TEMPLATES_KEYS } = window.frmFormTemplatesVars;
 
 export const PREFIX = 'frm-form-templates';
