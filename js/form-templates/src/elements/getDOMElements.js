@@ -86,8 +86,12 @@ function getDOMElements() {
 		modal,
 		modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
 		renewAccountModal: modal?.querySelector( '#frm-renew-modal' ),
+		// Leave Email Modal
 		leaveEmailModal: modal?.querySelector( '#frm-leave-email-modal' ),
+		leaveEmailModalInput: modal?.querySelector( '#frm_leave_email' ),
+		leaveEmailModalApiEmailForm: modal?.querySelector( '#frmapi-email-form' ),
 		codeFromEmailModal: modal?.querySelector( '#frm-code-from-email-modal' ),
+		// Upgrade Modal
 		upgradeModal: modal?.querySelector( '#frm-upgrade-modal' ),
 		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
 		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' )

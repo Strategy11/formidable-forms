@@ -21,6 +21,7 @@ import addFavoriteButtonEvents from './favoriteButtonListener';
 import addSearchEvents from './searchListener';
 import addEmptyStateButtonEvents from './emptyStateButtonListener';
 import addUseTemplateButtonEvents from './useTemplateButtonListener';
+import addGetCodeButtonEvents from './getCodeButtonListener';
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -33,6 +34,7 @@ export function addEventListeners() {
 	addSearchEvents();
 	addEmptyStateButtonEvents();
 	addUseTemplateButtonEvents();
+	addGetCodeButtonEvents();
 }
 
 export { resetSearchInput } from './searchListener';

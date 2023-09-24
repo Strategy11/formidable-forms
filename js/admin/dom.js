@@ -423,7 +423,7 @@
 				event.preventDefault();
 				callback( event );
 			};
-			element.addEventListener( 'click', listener );
+			element?.addEventListener( 'click', listener );
 		},
 
 		/**

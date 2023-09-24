@@ -22,9 +22,9 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { getElements } from '../elements';
+import { PLANS } from '../shared';
 import { hideElements, show } from '../utils';
 import { getModalWidget } from './';
-import { PLANS } from '../shared';
 
 /**
  * Display the locked template modal.
@@ -57,7 +57,7 @@ export function showLockedTemplateModal( template ) {
  * @param {Function} executePreOpen The function to be executed before opening the modal dialog.
  * @return {Function} A higher-order function that can be invoked to display the modal dialog.
  */
-const showModal = executePreOpen => ( ...params ) => {
+const showModal = executePreOpen => async( ...params ) => {
 	const dialogWidget = getModalWidget();
 	if ( ! dialogWidget ) {
 		return;
@@ -66,7 +66,7 @@ const showModal = executePreOpen => ( ...params ) => {
 	const { modalItems } = getElements();
 	hideElements( modalItems );
 
-	executePreOpen?.( ...params );
+	await executePreOpen?.( ...params );
 	dialogWidget.dialog( 'open' );
 };
 
@@ -126,4 +126,14 @@ export const showRenewAccountModal = showModal( () => {
 export const showLeaveEmailModal = showModal( () => {
 	const { leaveEmailModal } = getElements();
 	show( leaveEmailModal );
+});
+
+/**
+ * Display the modal dialog to prompt the user to save the code sent to their email address.
+ *
+ * @return {void}
+ */
+export const showCodeFromEmailModal = showModal( () => {
+	const { codeFromEmailModal } = getElements();
+	show( codeFromEmailModal );
 });

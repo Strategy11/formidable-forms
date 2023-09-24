@@ -46,18 +46,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h3><?php esc_html_e( 'Check your inbox', 'formidable' ); ?></h3>
 			<p><?php esc_html_e( 'Enter code that we\'ve sent to your email address', 'formidable' ); ?></p>
 
-			<div class="frm-form-templates-modal-inputs">
+			<div class="frm-form-templates-modal-fieldset">
 				<input id="frm_code_from_email" type="text" placeholder="<?php esc_attr_e( 'Code from email', 'formidable' ); ?>" />
-				<span id="frm_code_from_email_error" class="frm_hidden">
+
+				<span id="frm_code_from_email_error" class="frm-form-templates-modal-error frm_hidden">
 					<span frm-error="custom"></span>
 					<span frm-error="wrong-code"><?php esc_html_e( 'Verification code is wrong', 'formidable' ); ?></span>
 					<span frm-error="empty"><?php esc_html_e( 'Verification code is empty', 'formidable' ); ?></span>
 				</span>
-			</div><!-- .frm-form-templates-modal-inputs -->
+			</div><!-- .frm-form-templates-modal-fieldset -->
 
 			<div id="frm_code_from_email_options" class="frm_hidden">
 				<a href="#" id="frm-change-email-address"><?php esc_html_e( 'Change email address', 'formidable' ); ?></a>
-				<span class="frm-inline-divider">|</span>
+				<span>|</span>
 				<a href="#" id="frm-resend-code"><?php esc_html_e( 'Resend code', 'formidable' ); ?></a>
 			</div><!-- #frm_code_from_email_options -->
 		</div><!-- .frmcenter -->

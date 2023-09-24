@@ -69,3 +69,14 @@ export const isFeaturedTemplate = template =>
  */
 export const isLockedTemplate = template =>
 	template?.classList.contains( `${ PREFIX }-locked-item` );
+
+/**
+ * Validates an email address using a regular expression.
+ *
+ * @param {string} email The email address to validate.
+ * @return {boolean} True if the email address is valid, otherwise false.
+ */
+export const isValidEmail = email => {
+	const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+	return regex.test( email );
+};

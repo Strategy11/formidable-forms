@@ -46,17 +46,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h3><?php esc_html_e( 'Get 10+ Free Form Templates', 'formidable' ); ?></h3>
 			<p><?php esc_html_e( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ); ?></p>
 
-			<div class="frm-form-templates-modal-inputs">
+			<div class="frm-form-templates-modal-fieldset">
 				<span class="frm-with-left-icon">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
 					<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 				</span><!-- .frm-with-left-icon -->
 
-				<span id="frm_leave_email_error" class="frm_hidden">
+				<span id="frm_leave_email_error" class="frm-form-templates-modal-error frm_hidden">
 					<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
 					<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
 				</span><!-- #frm_leave_email_error -->
-			</div><!-- .frm-form-templates-modal-inputs -->
+			</div><!-- .frm-form-templates-modal-fieldset -->
 		</div><!-- .frmcenter -->
 	</div><!-- .inside -->
 

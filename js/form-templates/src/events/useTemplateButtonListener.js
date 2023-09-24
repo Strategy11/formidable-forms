@@ -30,7 +30,7 @@ function addUseTemplateButtonEvents() {
 
 	// Attach click event listeners to each use template button
 	useTemplateButtons.forEach( useTemplateButton =>
-		useTemplateButton.addEventListener( 'click', onUseTemplateClick )
+		useTemplateButton.addEventListener( 'click', onUseTemplateButtonClick )
 	);
 }
 
@@ -41,7 +41,7 @@ function addUseTemplateButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onUseTemplateClick = ( event ) => {
+const onUseTemplateButtonClick = ( event ) => {
 	const useTemplateButton = event.currentTarget;
 
 	const template = useTemplateButton.closest( `.${ PREFIX }-item` );

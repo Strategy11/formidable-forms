@@ -42,6 +42,16 @@ export function getElements() {
 }
 
 /**
+ * Add new elements to the elements object.
+ *
+ * @param {Object} newElements An object containing new elements to be added.
+ * @return {void} Updates the global `elements` object by merging the new elements into it.
+ */
+export function addElements( newElements ) {
+	elements = { ...elements, ...newElements };
+}
+
+/**
  * Inject empty state elements into the DOM and the elements object.
  *
  * @private

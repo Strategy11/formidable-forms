@@ -19,7 +19,7 @@
 import { getElements } from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
-import { fadeIn } from '../utils';
+import { fadeIn, onClickPreventDefault } from '../utils';
 import { resetSearchInput } from './';
 
 /**
@@ -32,7 +32,7 @@ function addCategoryEvents() {
 
 	// Attach click event listeners to each sidebar category
 	categoryItems.forEach( category =>
-		category.addEventListener( 'click', onCategoryClick )
+		onClickPreventDefault( category, onCategoryClick )
 	);
 }
 
