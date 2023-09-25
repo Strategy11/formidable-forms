@@ -101,7 +101,7 @@ $attributes['class'] = implode( ' ', $class_names );
 				<?php } ?>
 
 				<!-- Template Name -->
-				<span><?php echo esc_html( $template_name ); ?></span>
+				<span class="frm-form-template-name"><?php echo esc_html( $template_name ); ?></span>
 			</div><!-- .frm-form-templates-item-title-text -->
 
 			<!-- Add to Favorite Button -->
