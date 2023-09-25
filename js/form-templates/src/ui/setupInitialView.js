@@ -17,7 +17,9 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
+import { hasQueryParam } from '../shared';
 import { hideElements, fadeIn } from '../utils';
+import { showHeaderCancelButton } from './';
 
 /**
  * Sets up the initial view, performing any required
@@ -36,6 +38,11 @@ function setupInitialView() {
 
 	// Smoothly display the updated UI elements
 	fadeIn( bodyContent );
+
+	// Show the "Cancel" button in the header if the 'return_page' query param is present
+	if ( hasQueryParam( 'return_page' ) ) {
+		showHeaderCancelButton();
+	}
 }
 
 export default setupInitialView;

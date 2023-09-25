@@ -28,6 +28,7 @@ function getDOMElements() {
 	const bodyContent = document.querySelector( '#post-body-content' );
 	const bodyElements = {
 		bodyContent,
+		headerCancelButton: document.querySelector( '#frm-publishing a' ),
 		createFormButton: document.querySelector( `#${ PREFIX }-create-form` ),
 		pageTitle: document.querySelector( `#${ PREFIX }-page-title` ),
 		upsellBanner: document.querySelector( `#${ PREFIX }-upsell-banner` )

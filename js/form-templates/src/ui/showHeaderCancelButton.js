@@ -13,12 +13,18 @@
  * GNU General Public License for more details.
  */
 
-export { default as setupInitialView } from './setupInitialView';
-export * from './initializeModal';
-export * from './pageTitle';
-export * from './showHeaderCancelButton';
-export * from './showSelectedCategory';
-export * from './showSearchResult';
-export * from './showEmptyState';
-export * from './showModal';
-export * from './showError';
+/**
+ * Internal dependencies
+ */
+import { getElements } from '../elements';
+import { fadeIn } from '../utils';
+
+/**
+ * Display the "Cancel" button in the header.
+ *
+ * @return {void}
+ */
+export function showHeaderCancelButton() {
+	const { headerCancelButton } = getElements();
+	fadeIn( headerCancelButton );
+};
