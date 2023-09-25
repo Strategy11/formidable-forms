@@ -86,7 +86,7 @@ const upgradablePlans = {
  * @return {void}
  */
 export const showUpgradeModal = showModal( ( plan, template ) => {
-	const templateName = template.getAttribute( 'frm-search-text' );
+	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
 	const { upgradeModal, upgradeModalTemplateNames, upgradeModalPlansIcons } = getElements();
 
 	// Update template names
