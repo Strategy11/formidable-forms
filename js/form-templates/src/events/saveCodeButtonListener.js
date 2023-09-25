@@ -19,7 +19,7 @@
 import { getElements } from '../elements';
 import { PREFIX, getAppState, hasQueryParam, removeQueryParam, nonce  } from '../shared';
 import { showConfirmEmailAddressError } from '../ui';
-import { onClickPreventDefault, show } from '../utils';
+import { show, hide, hideElements, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Save Code" button.
@@ -28,9 +28,19 @@ import { onClickPreventDefault, show } from '../utils';
  */
 function addSaveCodeButtonEvents() {
 	const saveCodeButton = document.querySelector( '#frm-confirm-email-address' );
+	const backButton = document.querySelector( '#frm-code-modal-back-button' );
+	const changeEmailButton = document.querySelector( '#frm-change-email-address' );
+	const resendCode = document.querySelector( '#frm-resend-code' );
 
-	// Attach click event listener
+	// Attach click event to the "Save Code" button
 	onClickPreventDefault( saveCodeButton, onSaveCodeButtonClick );
+
+	// Attach click events to the "Back" and "Change email address" buttons
+	onClickPreventDefault( backButton, onBackButton );
+	onClickPreventDefault( changeEmailButton, onBackButton );
+
+	// Attach click event to the "Resend code" button
+	onClickPreventDefault( resendCode, onResendCode );
 }
 
 /**
@@ -99,6 +109,35 @@ const onSaveCodeButtonClick = async( event ) => {
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
 	}
+};
+
+/**
+ * Handles the click event on the "Back" or "Change email address" buttons.
+ *
+ * @private
+ * @param {Event} event The click event object.
+ * @return {void}
+ */
+const onBackButton = ( event ) => {
+	const { leaveEmailModal, codeFromEmailModal } = getElements();
+	hide( codeFromEmailModal );
+	show( leaveEmailModal );
+};
+
+/**
+ * Handles the click event on the "Resend code" button.
+ *
+ * @private
+ * @param {Event} event The click event object.
+ * @return {void}
+ */
+const onResendCode = ( event ) => {
+	const { codeFromEmailModalInput } = getElements();
+	codeFromEmailModalInput.value = '';
+	hideElements( document.querySelectorAll( '#frm_code_from_email_options, #frm_code_from_email_error' ) );
+	document.querySelector( '#frm-add-my-email-address' ).dispatchEvent(
+		new Event( 'click', { bubbles: true })
+	);
 };
 
 export default addSaveCodeButtonEvents;
