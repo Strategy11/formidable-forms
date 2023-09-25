@@ -41,15 +41,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <!-- Upsell Banner -->
 <?php
-FrmAppHelper::show_admin_cta(
-	array(
-		'title'       => esc_html__( 'Upgrade to get all 200+ templates', 'formidable' ),
-		'description' => esc_html__( 'Upgrade to PRO to get access to all of our templates and unlock the full potential of your forms.', 'formidable' ),
-		'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
-		'link_url'    => $upgrade_link,
-		'id'          => 'frm-form-templates-upsell-banner',
-	)
-);
+// Show 'upgrade' banner for non-elite users.
+if ( 'elite' !== FrmAddonsController::license_type() ) {
+	FrmAppHelper::show_admin_cta(
+		array(
+			'title'       => esc_html__( 'Upgrade to get all 200+ templates', 'formidable' ),
+			'description' => esc_html__( 'Upgrade to PRO to get access to all of our templates and unlock the full potential of your forms.', 'formidable' ),
+			'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+			'link_url'    => $upgrade_link,
+			'id'          => 'frm-upgrade-banner',
+		)
+	);
+}
+
+// TODO: Get the actual text for expired users from Steph
+// Show 'renew' banner for expired users.
+if ( $expired ) {
+	FrmAppHelper::show_admin_cta(
+		array(
+			'title'       => esc_html__( 'Your Subscription Has Expired', 'formidable' ),
+			'description' => esc_html__( 'To continue using all 200+ templates, please renew your subscription.', 'formidable' ),
+			'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
+			'link_url'    => $renew_link,
+			'id'          => 'frm-renew-subscription-banner',
+		)
+	);
+}
 ?>
 
 <!-- Templates List -->

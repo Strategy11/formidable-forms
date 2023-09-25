@@ -22,7 +22,7 @@ if ( $id ) {
 		</span><!-- .frm-cta-text -->
 	</div><!-- .frm-cta-content -->
 
-	<a class="frm-cta-link button button-primary frm-button-primary" href="<?php echo esc_url( $link_url ); ?>">
+	<a href="<?php echo esc_url( $link_url ); ?>" target="_blank" class="frm-cta-link button button-primary frm-button-primary">
 		<?php echo esc_html( $link_text ); ?>
 	</a><!-- .frm-cta-link -->
 </div><!-- .frm-cta -->

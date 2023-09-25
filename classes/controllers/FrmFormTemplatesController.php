@@ -186,6 +186,7 @@ class FrmFormTemplatesController {
 
 		$view_path    = self::get_view_path();
 		$upgrade_link = self::get_upgrade_link();
+		$renew_link   = self::get_renew_link();
 		$license_type = self::get_license_type();
 		$pricing      = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 		$expired      = self::is_expired();
@@ -268,9 +269,6 @@ class FrmFormTemplatesController {
 
 		// Assign featured templates.
 		self::assign_featured_templates();
-
-		// Update global variables to synchronize with the current class state.
-		self::update_global_variables();
 
 		// Initialize essential resources.
 		self::init_template_resources();
@@ -564,21 +562,6 @@ class FrmFormTemplatesController {
 		<a class="button frm-button-secondary frm_hidden" href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '" role="button">
 			' . esc_html__( 'Cancel', 'formidable' ) . '
 		</a>';
-	}
-
-	/**
-	 * Updates global variables with the current state of the class.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function update_global_variables() {
-		global $frm_templates;
-		global $frm_license_type;
-
-		$frm_templates    = self::get_templates();
-		$frm_license_type = self::get_license_type();
 	}
 
 	/**
