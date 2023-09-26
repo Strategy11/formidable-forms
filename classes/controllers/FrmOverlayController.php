@@ -10,7 +10,7 @@ class FrmOverlayController {
 	 *
 	 * @var string Handle name used for wp_register_script|wp_register_style
 	 */
-	private static $assets_handle_name = 'formidable-overlay';
+	public static $assets_handle_name = 'formidable-overlay';
 
 	/**
 	 * Check if the overlay will run again periodically.
