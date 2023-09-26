@@ -213,26 +213,38 @@ class FrmFormTemplatesController {
 		$view_path  = self::$view_path;
 		$view_parts = array();
 
-		// User and license-related variables.
-		$user         = wp_get_current_user();
-		$expired      = self::is_expired();
-		$upgrade_link = self::get_upgrade_link();
-		$renew_link   = self::get_renew_link();
+		// Check if the current page is the form templates page.
+		if ( FrmAppHelper::is_form_templates_page() ) {
+			// User and license-related variables.
+			$user         = wp_get_current_user();
+			$expired      = self::is_expired();
+			$upgrade_link = self::get_upgrade_link();
+			$renew_link   = self::get_renew_link();
 
-		// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
-		if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
-			$view_parts[] = 'modals/leave-email-modal.php';
-			$view_parts[] = 'modals/code-from-email-modal.php';
+			// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
+			if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
+				$view_parts[] = 'modals/leave-email-modal.php';
+				$view_parts[] = 'modals/code-from-email-modal.php';
+			}
+
+			// Add 'upgrade' modal view for non-elite users.
+			if ( 'elite' !== FrmAddonsController::license_type() ) {
+				$view_parts[] = 'modals/upgrade-modal.php';
+			}
+
+			// Add 'renew-account' modal view for expired users.
+			if ( $expired ) {
+				$view_parts[] = 'modals/renew-account-modal.php';
+			}
 		}
 
-		// Add 'upgrade' modal view for non-elite users.
-		if ( 'elite' !== FrmAddonsController::license_type() ) {
-			$view_parts[] = 'modals/upgrade-modal.php';
-		}
+		// Check if the current page is the form builder page.
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		// Add 'renew-account' modal view for expired users.
-		if ( $expired ) {
-			$view_parts[] = 'modals/renew-account-modal.php';
+			if ( $action === 'edit' ) {
+				$view_parts[] = 'modals/name-your-form-modal.php';
+			}
 		}
 
 		// Render the view.

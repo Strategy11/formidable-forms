@@ -681,7 +681,7 @@ class FrmFormsController {
 		self::create_default_email_action( $form_id );
 
 		$response = array(
-			'redirect' => FrmForm::get_edit_link( $form_id ),
+			'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
 		);
 
 		echo wp_json_encode( $response );
@@ -1681,6 +1681,30 @@ class FrmFormsController {
 
 				return;
 		}
+	}
+
+	/**
+	 * Rename a form.
+	 *
+	 * Handles the AJAX request for renaming a form.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function rename_form() {
+		// Check permission and nonce
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		$form_name = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
+
+		// Update the form name
+		FrmForm::update( $form_id, array( 'name' => $form_name ) );
+
+		wp_send_json_success();
 	}
 
 	public static function json_error( $errors ) {

@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import { addElements, getElements } from '../elements';
-import { initModal, hasQueryParam } from '../shared';
+import { initModal, offsetModalY, hasQueryParam } from '../shared';
 import { showLeaveEmailModal } from './';
 
 let modalWidget = null;
@@ -31,7 +31,7 @@ export async function initializeModal() {
 	modalWidget = initModal( '#frm-form-templates-modal', '440px' );
 
 	// Set the vertical offset for the modal
-	setVerticalOffset( modalWidget, '103px' );
+	offsetModalY( modalWidget, '103px' );
 
 	// Show the email modal if the 'free-templates' query param is present
 	if ( hasQueryParam( 'free-templates' ) ) {
@@ -52,28 +52,6 @@ export async function initializeModal() {
  */
 export function getModalWidget() {
 	return modalWidget;
-}
-
-/**
- * Sets a vertical offset for the modal widget.
- *
- * @private
- * @param {Object} modalWidget The modal widget.
- * @param {string} verticalOffset The vertical offset to apply.
- * @return {void}
- */
-function setVerticalOffset( modalWidget, verticalOffset ) {
-	if ( ! modalWidget ) {
-		return;
-	}
-
-	const position = {
-		my: 'top',
-		at: 'top+' + verticalOffset,
-		of: window
-	};
-
-	modalWidget.dialog( 'option', 'position', position );
 }
 
 /**

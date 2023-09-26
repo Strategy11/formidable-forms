@@ -10,7 +10,15 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 }
 ?>
 			<button class="frm_submit_form button-primary frm-button-primary frm_button_submit <?php echo esc_attr( $class ); ?>" type="button" id="frm_submit_side_top" >
-				<?php esc_html_e( 'Update', 'formidable' ); ?>
+				<?php
+				$is_new_template = FrmAppHelper::simple_get( 'new_template' );
+				$action          = FrmAppHelper::simple_get( 'frm_action' );
+				if ( 'edit' === $action && $is_new_template ) {
+					esc_html_e( 'Save', 'formidable' );
+				} else {
+					esc_html_e( 'Update', 'formidable' );
+				}
+				?>
 			</button>
 
 			<div id="frm-preview-action">

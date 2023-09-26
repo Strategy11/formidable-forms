@@ -17,10 +17,11 @@
  * Internal dependencies
  */
 import addCategoryEvents from './categoryListener';
+import addCreateFormButtonEvents from './createFormButtonListener';
 import addFavoriteButtonEvents from './favoriteButtonListener';
+import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addSearchEvents from './searchListener';
 import addEmptyStateButtonEvents from './emptyStateButtonListener';
-import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addGetCodeButtonEvents from './getCodeButtonListener';
 import addSaveCodeButtonEvents from './saveCodeButtonListener';
 
@@ -31,10 +32,11 @@ import addSaveCodeButtonEvents from './saveCodeButtonListener';
  */
 export function addEventListeners() {
 	addCategoryEvents();
+	addCreateFormButtonEvents();
 	addFavoriteButtonEvents();
+	addUseTemplateButtonEvents();
 	addSearchEvents();
 	addEmptyStateButtonEvents();
-	addUseTemplateButtonEvents();
 	addGetCodeButtonEvents();
 	addSaveCodeButtonEvents();
 }

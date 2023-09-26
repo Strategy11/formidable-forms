@@ -23,6 +23,7 @@
 	--sidebar-hover: var(--grey-200);
 	--primary-700: #2B66A9;
 	--primary-500: #4199FD;
+	--primary-200: #C0DDFE;
 	--primary-25: #F5FAFF;
 	--primary-color: var(--primary-500); /* Deprecated */
 	--primary-hover: var(--primary-700); /* Deprecated */
@@ -8834,3 +8835,110 @@ Responsive Design
     font-weight: 400;
 }
 /* End call-to-action */
+
+/* Start form-templates-modal */
+#frm-form-templates-modal .inside,
+#frm-form-templates-modal .frm_modal_footer {
+	padding-right: var(--gap-md);
+	padding-left: var(--gap-md);
+	color: var(--grey-900);
+}
+
+#frm-form-templates-modal .frm_modal_footer {
+	display: flex;
+	justify-content: end;
+	gap: var(--gap-sm);
+	padding-bottom: var(--gap-md);
+	text-align: unset;
+}
+
+#frm-form-templates-modal h3 {
+	font-size: var(--text-lg);
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+
+#frm-form-templates-modal p {
+	margin-top: 0;
+}
+
+#frm-form-templates-modal input {
+	width: 100%;
+}
+
+/* Dismiss icon button */
+#frm-form-templates-modal .postbox > a.dismiss {
+	top: 19px;
+	right: 19px;
+	display: flex;
+}
+
+#frm-form-templates-modal .postbox > a.dismiss .frmsvg {
+	color: var(--grey-400);
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-fieldset {
+	position: relative;
+	margin-top: var(--gap-sm);
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-fieldset .frm-with-left-icon .frmsvg {
+	padding: 0;
+	top: 0;
+	left: 13px;
+}
+
+/* Fixes pro issue #3508, prevent a conflict that hides the postbox in modal */
+#frm-form-templates-modal .postbox {
+	display: block !important;
+}
+
+/* Name your form modal */
+#frm-name-your-form-modal p {
+	color: var(--grey-700);
+	margin-top: var(--gap-2xs);
+}
+
+#frm-name-your-form-modal .frm-modal-title-text {
+	font-size: var(--text-lg);
+	font-weight: 600;
+}
+
+#frm-name-your-form-modal .frm_modal_top {
+	padding-top: var(--gap-sm);
+}
+
+#frm-name-your-form-modal .frm-new-form-name-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-top: calc(var(--gap-sm) + 2px);
+}
+
+#frm-name-your-form-modal .frm-new-form-name-field label {
+	margin: 0;
+}
+
+#frm-name-your-form-modal #frm_new_form_name {
+	padding: 0 calc(var(--gap-sm) - 2px) 2px;
+	border-radius: var(--small-radius);
+	border-color: var(--grey-300);
+}
+
+#frm-name-your-form-modal #frm_new_form_name::placeholder {
+	color: var(--grey-500);
+	font-size: var(--text-sm);
+}
+
+#frm-name-your-form-modal #frm-rename-form-button[data-disabled="true"] {
+	background-color: var(--primary-200) !important;
+	border-color: var(--primary-200);
+	cursor: default;
+}
+
+#frm-name-your-form-modal #frm-rename-form-button[data-disabled]:hover,
+#frm-name-your-form-modal #frm-rename-form-button[data-disabled]:focus {
+	border-color: var(--primary-200) !important;
+}
+/* End form-templates-modal */

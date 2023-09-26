@@ -228,6 +228,7 @@ class FrmHooksController {
 
 		// Forms Controller.
 		add_action( 'wp_ajax_frm_save_form', 'FrmFormsController::route' );
+		add_action( 'wp_ajax_frm_rename_form', 'FrmFormsController::rename_form' );
 		add_action( 'wp_ajax_frm_get_default_html', 'FrmFormsController::get_email_html' );
 		add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
 		add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );

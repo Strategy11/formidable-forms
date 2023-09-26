@@ -13,4 +13,4 @@
  * GNU General Public License for more details.
  */
 
-export const { initModal, offsetModalY } = window.frmAdminBuild;
+export const { installNewForm } = window.frmAdminBuild;

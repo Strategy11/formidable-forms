@@ -84,7 +84,7 @@ function getDOMElements() {
 
 	// Modal Elements
 	const modal = document.querySelector( `#${PREFIX}-modal` );
-	const modals = {
+	const modalElements = {
 		modal,
 		modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
 		renewAccountModal: modal?.querySelector( '#frm-renew-modal' ),
@@ -101,12 +101,23 @@ function getDOMElements() {
 		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' )
 	};
 
+	// New Template Form Elements
+	const newTemplateForm = document.querySelector( '#frm-new-template' );
+	const newTemplateFormElements = {
+		newTemplateForm,
+		newTemplateNameInput: newTemplateForm?.querySelector( '#frm_template_name' ),
+		newTemplateDescriptionInput: newTemplateForm?.querySelector( '#frm_template_desc' ),
+		newTemplateLinkInput: newTemplateForm?.querySelector( '#frm_link' ),
+		newTemplateActionInput: newTemplateForm?.querySelector( '#frm_action_type' )
+	};
+
 	return {
 		...bodyElements,
 		...templates,
 		...customTemplates,
 		...sidebar,
-		...modals
+		...modalElements,
+		...newTemplateFormElements
 	};
 }
 

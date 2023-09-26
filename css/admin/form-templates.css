@@ -357,63 +357,6 @@
  *
  * Customizes the look of modals on the Form Templates page.
  */
-#frm-form-templates-modal .inside,
-#frm-form-templates-modal .frm_modal_footer {
-	padding-right: var(--gap-md);
-	padding-left: var(--gap-md);
-	color: var(--grey-900);
-}
-
-#frm-form-templates-modal .frm_modal_footer {
-	display: flex;
-	justify-content: end;
-	gap: var(--gap-sm);
-	padding-bottom: var(--gap-md);
-	text-align: unset;
-}
-
-#frm-form-templates-modal h3 {
-	font-size: var(--text-lg);
-	font-weight: 600;
-	margin-top: 0;
-	margin-bottom: 8px;
-}
-
-#frm-form-templates-modal p {
-	margin-top: 0;
-}
-
-#frm-form-templates-modal input {
-	width: 100%;
-}
-
-/* Dismiss icon button */
-#frm-form-templates-modal .postbox > a.dismiss {
-	top: 19px;
-	right: 19px;
-	display: flex;
-}
-
-#frm-form-templates-modal .postbox > a.dismiss .frmsvg {
-	color: var(--grey-400);
-}
-
-#frm-form-templates-modal .frm-form-templates-modal-fieldset {
-	position: relative;
-	margin-top: var(--gap-sm);
-}
-
-#frm-form-templates-modal .frm-form-templates-modal-fieldset .frm-with-left-icon .frmsvg {
-	padding: 0;
-	top: 0;
-	left: 13px;
-}
-
-/* Fixes pro issue #3508, prevent a conflict that hides the postbox in modal */
-#frm-form-templates-modal .postbox {
-	display: block !important;
-}
-
 /* Modal Errors */
 #frm-form-templates-modal .frm-form-templates-modal-error:not(.frm_hidden),
 #frm_code_from_email_options:not(.frm_hidden) {

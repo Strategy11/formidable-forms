@@ -76,26 +76,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div><!-- #post-body-content -->
 		</div><!-- .columns-2 -->
 	</div><!-- .frm_page_container -->
+
+	<?php
+	/**
+	 * Hidden form used for creating or using a form template.
+	 *
+	 * This form works in the background and is not shown to the user. It gets submitted by JavaScript
+	 * when the user clicks on either the 'Create a blank form' or 'Use template' buttons, sending the user's choices.
+	 *
+	 * @see formidable_admin::installNewForm() This method handles the form submission.
+	 */
+	?>
+	<form class="frm_hidden" id="frm-new-template" name="frm-new-template" method="post">
+		<input type="hidden" name="template_name" id="frm_template_name" value="" />
+		<input type="hidden" name="template_desc" id="frm_template_desc" />
+		<input type="hidden" name="link" id="frm_link" value="" />
+		<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
+	</form>
 </div><!-- #frm-from-templates-page.frm_wrap -->
-
-<div class="frm_hidden">
-	<!-- Create new form -->
-	<div id="frm-details-block">
-		<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
-			<p>
-				<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
-				<?php esc_html_e( 'Form Name', 'formidable' ); ?>
-				</label>
-				<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
-			</p>
-
-			<input type="hidden" name="template_desc" id="frm_template_desc" />
-			<input type="hidden" name="link" id="frm_link" value="" />
-			<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
-
-			<button type="submit" class="button-primary frm-button-primary">
-				<?php esc_html_e( 'Create', 'formidable' ); ?>
-			</button>
-		</form>
-	</div>
-</div>
