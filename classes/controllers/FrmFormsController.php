@@ -1270,12 +1270,6 @@ class FrmFormsController {
 					)
 				),
 			),
-			'html'        => array(
-				'name'     => __( 'Customize HTML', 'formidable' ),
-				'class'    => __CLASS__,
-				'function' => 'html_settings',
-				'icon'     => 'frm_icon_font frm_code_icon',
-			),
 			'abandonment'   => array(
 				'name'       => __( 'Form Abandonment', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_abandoned_icon',
@@ -1283,11 +1277,17 @@ class FrmFormsController {
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'abandonment',
 					array(
-						'upgrade'    => __( 'Form Abandonment settings', 'formidable' ),
-						'message'    => __( 'Capture form data before it\'s submitted to save more leads and learn to optimize forms.', 'formidable' ),
+						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
+						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
 					)
 				),
+			),
+			'html'        => array(
+				'name'     => __( 'Customize HTML', 'formidable' ),
+				'class'    => __CLASS__,
+				'function' => 'html_settings',
+				'icon'     => 'frm_icon_font frm_code_icon',
 			),
 		);
 
