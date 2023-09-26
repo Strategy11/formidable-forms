@@ -505,7 +505,17 @@ class FrmFormActionsController {
 				$entry = FrmEntry::getOne( $entry, true );
 			}
 
-			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
+			$skip_draft = empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event );
+			/**
+			 * Check if the action should be skipped for draft entries.
+			 *
+			 * @since x.x
+			 *
+			 * @param bool  $skip_draft
+			 * @param array $args
+			 */
+			$skip_draft = apply_filters( 'frm_skip_draft_action', $skip_draft, compact( 'action', 'entry', 'form', 'event' ) );
+			if ( $skip_draft ) {
 				continue;
 			}
 
