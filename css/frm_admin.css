@@ -350,12 +350,6 @@ td.column-title .frm_actions_dropdown {
 	color: var(--primary-500);
 }
 
-#frm_error_modal.frm_modal_title {
-	font-size: var(--text-xl);
-	font-weight: 400;
-	color: var(--grey-900);
-}
-
 #frm_error_modal .frm-modal-title h2 {
 	font-weight: 600;
 	font-size: var(--text-xl);
@@ -371,8 +365,6 @@ td.column-title .frm_actions_dropdown {
 }
 
 .frm-error-modal .ui-widget-content {
-	border: none;
-    background: none;
     border-radius: 16px !important;
 }
 
