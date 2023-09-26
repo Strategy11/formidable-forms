@@ -319,6 +319,9 @@ function frmAdminBuildJS() {
 		thisFormId = thisForm.value;
 	}
 
+	const currentURL = new URL( window.location.href );
+	const urlParams = currentURL.searchParams;
+
 	// Global settings
 	var s;
 
@@ -6063,6 +6066,10 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var $thisEle = this;
 
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		preFormSave( this );
 
 		var $form = jQuery( builderForm );
@@ -6105,11 +6112,89 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var form;
 
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		preFormSave( this );
 		form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
 		triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 	}
+
+	/**
+	 * Display a modal dialog for naming a new form template, if applicable.
+	 *
+	 * @return {boolean} True if the modal is successfully initialized and displayed; false otherwise.
+	 */
+	function showNameYourFormModal() {
+		// Exit early if the 'new_template' URL parameter is not set to 'true'
+		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+			return false;
+		}
+
+		const modalWidget = initModal( '#frm-form-templates-modal', '440px' );
+		if ( ! modalWidget ) {
+			return false;
+		}
+
+		// Set the vertical offset for the modal and open it
+		offsetModalY( modalWidget, '72px' );
+		modalWidget.dialog( 'open' );
+
+		return true;
+	}
+
+	/**
+	 * Handles the click event on the rename form button.
+	 *
+	 * @param {Event} event The click event object.
+	 * @return {void}
+	 */
+	const onRenameFormButton = ( event ) => {
+		const renameFormButton = event.currentTarget;
+
+		// Check if the button is currently disabled
+		if ( 'true' === renameFormButton.getAttribute( 'data-disabled' ) ) {
+			return;
+		}
+
+		// Prepare FormData for the POST request
+		const formData = new FormData();
+		const newFormName = document.querySelector( '#frm_new_form_name' );
+		formData.append( 'form_id', urlParams.get( 'id' ) );
+		formData.append( 'form_name', newFormName.value.trim() );
+
+		// Perform the POST request
+		doJsonPost( 'rename_form', formData ).finally( () => {
+			// Re-enable the button
+			renameFormButton.setAttribute( 'data-disabled', 'false' );
+
+			// Remove the 'new_template' parameter from the URL and update the browser history
+			urlParams.delete( 'new_template' );
+			currentURL.search = urlParams.toString();
+			history.replaceState({}, '', currentURL.toString() );
+
+			// Trigger the 'Save' button click using jQuery
+			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
+		});
+	};
+
+	/**
+	 * Handles the click event on the cancel rename form button.
+	 *
+	 * @private
+	 * @param {Event} event The click event object.
+	 * @return {void}
+	 */
+	const onCancelRenameFormButton = ( event ) => {
+		// Remove the 'new_template' parameter from the URL and then reload the page.
+		urlParams.delete( 'new_template' );
+		currentURL.search = urlParams.toString();
+		window.location.href = currentURL.toString();
+
+		return;
+	};
 
 	function preFormSave( b ) {
 		removeWPUnload();
@@ -7711,6 +7796,15 @@ function frmAdminBuildJS() {
 		$modal.on( 'click', 'a.dismiss', closeModal );
 	}
 
+	function offsetModalY( $modal, amount ) {
+		const position = {
+			my: 'top',
+			at: 'top+' + amount,
+			of: window
+		};
+		$modal.dialog( 'option', 'position', position );
+	}
+
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
@@ -9270,6 +9364,25 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
 
+			// Attach click event listeners to 'Name your form' modal
+			const renameFormButton = document.querySelector( '#frm-rename-form-button' );
+			const cancelRenameFormButton = document.querySelector( '#frm-cancel-rename-form-button' );
+			const newFormName = document.querySelector( '#frm_new_form_name' );
+
+			onClickPreventDefault( renameFormButton, onRenameFormButton );
+			onClickPreventDefault( cancelRenameFormButton, onCancelRenameFormButton );
+
+			newFormName.addEventListener( 'input', function() {
+				const inputValue = this.value.trim();
+
+				if ( '' === inputValue ) {
+					renameFormButton.setAttribute( 'data-disabled', 'true' );
+				} else {
+					renameFormButton.removeAttribute( 'data-disabled' );
+				}
+			});
+
+
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );
 			jQuery( '.save-form-status' ).on( 'click', function() {
@@ -9903,8 +10016,10 @@ function frmAdminBuildJS() {
 
 		initModal: initModal,
 		infoModal: infoModal,
+		offsetModalY: offsetModalY,
 		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
-		addRadioCheckboxOpt: addRadioCheckboxOpt
+		addRadioCheckboxOpt: addRadioCheckboxOpt,
+		installNewForm: installNewForm
 	};
 }
 
