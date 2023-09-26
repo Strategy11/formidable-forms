@@ -31,7 +31,9 @@ export async function initializeModal() {
 	modalWidget = initModal( '#frm-form-templates-modal', '440px' );
 
 	// Set the vertical offset for the modal
-	offsetModalY( modalWidget, '103px' );
+	if ( modalWidget ) {
+		offsetModalY( modalWidget, '103px' );
+	}
 
 	// Show the email modal if the 'free-templates' query param is present
 	if ( hasQueryParam( 'free-templates' ) ) {

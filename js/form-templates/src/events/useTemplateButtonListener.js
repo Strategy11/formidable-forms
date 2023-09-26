@@ -16,7 +16,8 @@
 /**
  * Internal dependencies
  */
-import { PREFIX, setAppStateProperty } from '../shared';
+import { getElements } from '../elements';
+import { PREFIX, setAppStateProperty, installNewForm } from '../shared';
 import { showLockedTemplateModal } from '../ui/';
 import { isCustomTemplate, isLockedTemplate } from '../utils';
 
@@ -56,12 +57,26 @@ const onUseTemplateButtonClick = ( event ) => {
 	// Prevent the default link behavior for non-custom or locked templates
 	event.preventDefault();
 
+	// Update app state with selected template
 	setAppStateProperty( 'selectedTemplate', template );
 
+	// Handle locked templates
 	if ( isLocked ) {
 		showLockedTemplateModal( template );
 		return;
 	}
+
+	// Prepare for new template installation
+	const { newTemplateForm, newTemplateNameInput, newTemplateLinkInput, newTemplateActionInput } = getElements();
+	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
+	const actionName = 'frm_install_template';
+
+	newTemplateNameInput.value = templateName;
+	newTemplateActionInput.value = actionName;
+	newTemplateLinkInput.value = useTemplateButton.href;
+
+	// Install new form template
+	installNewForm( newTemplateForm, actionName, useTemplateButton );
 };
 
 export default addUseTemplateButtonEvents;
