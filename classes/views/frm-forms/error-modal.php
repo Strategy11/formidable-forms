@@ -35,18 +35,19 @@ $error_args = wp_parse_args( $error_args, $defaults );
 				</div>
 				<div class="frm_modal_footer">
 					<?php if ( ! empty( $error_args['cancel_text'] ) ) : ?>
-						<a href="<?php echo esc_attr( $error_args['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error_args['cancel_classes'] ); ?>"><?php esc_html_e( $error_args['cancel_text'], 'formidable' ); ?></a>
+						<a href="<?php echo esc_attr( $error_args['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error_args['cancel_classes'] ); ?>"><?php echo esc_html( $error_args['cancel_text'] ); ?></a>
 					<?php endif;
-					if ( ! empty( $error_args['continue_text'] ) ) : ?>
-						<a href="<?php echo esc_attr( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>"><?php esc_html_e( $error_args['continue_text'], 'formidable' ); ?></a>
+					if ( ! empty( $error_args['continue_text'] ) ) :
+					?>
+						<a href="<?php echo esc_attr( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>"><?php echo esc_html( $error_args['continue_text'] ); ?></a>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script>
-<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script>
+<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script> <?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
+<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script> <?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
 <script>
 	jQuery( document ).ready(
 		function() {
