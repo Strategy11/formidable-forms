@@ -36,9 +36,10 @@ $error_args = wp_parse_args( $error_args, $defaults );
 				<div class="frm_modal_footer">
 					<?php if ( ! empty( $error_args['cancel_text'] ) ) : ?>
 						<a href="<?php echo esc_attr( $error_args['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss <?php echo esc_attr( $error_args['cancel_classes'] ); ?>"><?php echo esc_html( $error_args['cancel_text'] ); ?></a>
-					<?php endif;
+					<?php
+						endif;
 					if ( ! empty( $error_args['continue_text'] ) ) :
-					?>
+						?>
 						<a href="<?php echo esc_attr( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>"><?php echo esc_html( $error_args['continue_text'] ); ?></a>
 					<?php endif; ?>
 				</div>
