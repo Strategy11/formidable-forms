@@ -69,7 +69,6 @@ $error_args = wp_parse_args( $error_args, $defaults );
 					}
 				}
 			);
-			const dismiss = modal.querySelector( '.dismiss' );
 		}
 	);
 </script>
