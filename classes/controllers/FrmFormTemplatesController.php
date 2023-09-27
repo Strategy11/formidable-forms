@@ -457,21 +457,33 @@ class FrmFormTemplatesController {
 		ksort( self::$categories );
 
 		// Add special categories.
-		self::$categories = array_merge(
-			array(
-				'favorites' => array(
-					'name'  => __( 'Favorites', 'formidable' ),
-					'count' => self::get_favorite_templates_count(),
-				),
-				'custom' => array(
-					'name'  => __( 'Custom', 'formidable' ),
-					'count' => count( self::$custom_templates ),
-				),
-				'all-templates' => array(
-					'name'  => __( 'All Templates', 'formidable' ),
-					'count' => count( self::$templates ),
-				),
+		$special_categories = array(
+			'favorites' => array(
+				'name'  => __( 'Favorites', 'formidable' ),
+				'count' => self::get_favorite_templates_count(),
 			),
+			'custom' => array(
+				'name'  => __( 'Custom', 'formidable' ),
+				'count' => count( self::$custom_templates ),
+			),
+		);
+		// Add the 'Available Templates' category for non-elite users.
+		if ( 'elite' !== FrmAddonsController::license_type() ) {
+			$special_categories['available-templates'] = array(
+				'name'  => __( 'Available Templates', 'formidable' ),
+				'count' => 0, // Assigned via JavaScript
+			);
+		}
+		$special_categories['all-templates'] = array(
+			'name'  => __( 'All Templates', 'formidable' ),
+			'count' => count( self::$templates ),
+		);
+		$special_categories['free-templates'] = array(
+			'name'  => __( 'Free Templates', 'formidable' ),
+			'count' => 0, // Assigned via JavaScript
+		);
+		self::$categories = array_merge(
+			$special_categories,
 			self::$categories
 		);
 	}

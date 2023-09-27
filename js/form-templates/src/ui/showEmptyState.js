@@ -52,12 +52,12 @@ export function showSearchEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	emptyStateTitle.textContent = __( 'No results found', 'sherv-challenge' );
+	emptyStateTitle.textContent = __( 'No results found', 'formidable' );
 	emptyStateText.textContent = __(
 		'Sorry, we didn\'t find any templates that match your criteria.',
-		'sherv-challenge'
+		'formidable'
 	);
-	emptyStateButton.textContent = __( 'Start from scratch', 'sherv-challenge' );
+	emptyStateButton.textContent = __( 'Start from scratch', 'formidable' );
 
 	// Display the empty state
 	hide( pageTitle );
@@ -77,10 +77,10 @@ export function showFavoritesEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	emptyStateTitle.textContent = __( 'No favorites', 'sherv-challenge' );
+	emptyStateTitle.textContent = __( 'No favorites', 'formidable' );
 	emptyStateText.textContent = __(
 		'You haven\'t added any templates to your favorites yet.',
-		'sherv-challenge'
+		'formidable'
 	);
 
 	// Display the empty state
@@ -101,14 +101,38 @@ export function showCustomTemplatesEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	emptyStateTitle.textContent = __( 'No custom templates', 'sherv-challenge' );
+	emptyStateTitle.textContent = __( 'No custom templates', 'formidable' );
 	emptyStateText.textContent = __(
 		'You haven\'t created any custom templates yet. You can create a new blank form or explore the wide range of templates.',
-		'sherv-challenge'
+		'formidable'
 	);
-	emptyStateButton.textContent = __( 'All Templates', 'sherv-challenge' );
+	emptyStateButton.textContent = __( 'All Templates', 'formidable' );
 
 	// Display the empty state
 	hide( pageTitle );
 	showElements([ emptyState, emptyStateButton ]);
+};
+
+/**
+ * Display the available-templates-empty state.
+ *
+ * @return {void}
+ */
+export function showAvailableTemplatesEmptyState() {
+	const { pageTitle, emptyState, emptyStateButton } = getElements();
+
+	// Assign state attributes
+	emptyState.setAttribute( 'data-view', VIEW_SLUGS.AVAILABLE_TEMPLATES );
+
+	// Update text content
+	const { emptyStateTitle, emptyStateText } = getElements();
+	emptyStateTitle.textContent = __( 'No Templates Available', 'formidable' );
+	emptyStateText.textContent = __(
+		'Upgrade to PRO for 200+ options or explore Free Templates.',
+		'formidable'
+	);
+
+	// Display the empty state
+	hideElements([ pageTitle, emptyStateButton ]);
+	show( emptyState );
 };

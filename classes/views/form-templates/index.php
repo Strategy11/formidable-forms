@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- Page Body -->
 		<div class="columns-2">
 			<!-- Page Sidebar -->
-			<div class="frm-right-panel">
+			<div id="frm-form-templates-sidebar" class="frm-right-panel frm_hidden">
 				<div class="frm-scrollbar-wrapper">
 					<?php
 					// Search box.

@@ -22,6 +22,8 @@ export const CURRENT_CLASS = 'frm-current';
 
 export const VIEW_SLUGS = {
 	ALL_TEMPLATES: 'all-templates',
+	AVAILABLE_TEMPLATES: 'available-templates',
+	FREE_TEMPLATES: 'free-templates',
 	FAVORITES: 'favorites',
 	CUSTOM: 'custom',
 	SEARCH: 'search'

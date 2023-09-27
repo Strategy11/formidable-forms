@@ -41,7 +41,7 @@ export function showSearchResults() {
 	hideElements( bodyContentChildren );
 
 	// Update the page title and display relevant elements
-	updatePageTitle( __( 'Search Result', 'sherv-challenge' ) );
+	updatePageTitle( __( 'Search Result', 'formidable' ) );
 	showElements([ pageTitle, templatesList ]);
 
 	// Smoothly display the updated UI elements

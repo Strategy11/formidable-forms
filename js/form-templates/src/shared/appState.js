@@ -28,7 +28,7 @@ let appState = null;
 */
 export const initializeAppState = () => {
 	const { favoritesCount, customCount } = window.frmFormTemplatesVars;
-	const { allTemplatesCategory, firstLockedFreeTemplate } = getElements();
+	const { allTemplatesCategory, availableTemplateItems, freeTemplateItems, firstLockedFreeTemplate } = getElements();
 
 	appState = {
 		selectedCategory: VIEW_SLUGS.ALL_TEMPLATES,
@@ -36,7 +36,9 @@ export const initializeAppState = () => {
 		selectedTemplate: firstLockedFreeTemplate,
 		notEmptySearchText: false,
 		favoritesCount,
-		customCount: Number( customCount )
+		customCount: Number( customCount ),
+		availableTemplatesCount: availableTemplateItems.length,
+		freeTemplatesCount: freeTemplateItems.length
 	};
 };
 

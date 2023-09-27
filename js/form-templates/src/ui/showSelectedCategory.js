@@ -20,7 +20,7 @@ import { getElements } from '../elements';
 import { PREFIX, VIEW_SLUGS, getAppState } from '../shared';
 import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
-import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState } from './';
+import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState, showAvailableTemplatesEmptyState } from './';
 
 /**
  * Show templates based on selected category.
@@ -41,6 +41,12 @@ export function showSelectedCategory( selectedCategory ) {
 	switch ( selectedCategory ) {
 		case VIEW_SLUGS.ALL_TEMPLATES:
 			showAllTemplates();
+			break;
+		case VIEW_SLUGS.AVAILABLE_TEMPLATES:
+			showAvailableTemplates();
+			break;
+		case VIEW_SLUGS.FREE_TEMPLATES:
+			showFreeTemplates();
 			break;
 		case VIEW_SLUGS.FAVORITES:
 			showFavoriteTemplates();
@@ -83,6 +89,7 @@ export function showFavoriteTemplates() {
 
 	if ( 0 === favoritesCount.total ) {
 		showFavoritesEmptyState();
+		return;
 	}
 
 	const {
@@ -138,10 +145,44 @@ export function showCustomTemplates() {
 
 	if ( 0 === customCount ) {
 		showCustomTemplatesEmptyState();
+		return;
 	}
 
-	const { customTemplatesSection, customTemplatesList, customTemplateItems } = getElements();
+	const { customTemplatesSection, customTemplatesList, customTemplatesTitle, customTemplateItems } = getElements();
+
+	hide( customTemplatesTitle );
 	showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
+}
+
+/**
+ * Shows available templates.
+ *
+ * @return {void}
+ */
+export function showAvailableTemplates() {
+	const { availableTemplatesCount } = getAppState();
+
+	if ( 0 === availableTemplatesCount ) {
+		showAvailableTemplatesEmptyState();
+		return;
+	}
+
+	const { templatesList, templateItems, availableTemplateItems } = getElements();
+
+	hideElements( templateItems ); // Clear the view for new content
+	showElements([ templatesList, ...availableTemplateItems ]);
+}
+
+/**
+ * Shows free templates.
+ *
+ * @return {void}
+ */
+export function showFreeTemplates() {
+	const { templatesList, templateItems, freeTemplateItems } = getElements();
+
+	hideElements( templateItems ); // Clear the view for new content
+	showElements([ templatesList, ...freeTemplateItems ]);
 }
 
 export default showSelectedCategory;

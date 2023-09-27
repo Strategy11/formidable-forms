@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import { PREFIX } from '../shared';
+import { PREFIX, VIEW_SLUGS } from '../shared';
 
 /**
  * Return essential DOM elements.
@@ -42,6 +42,8 @@ function getDOMElements() {
 			`#${ PREFIX }-featured-list`
 		),
 		templateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item` ),
+		availableTemplateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item:not(.${ PREFIX }-locked-item)` ),
+		freeTemplateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item.frm-free-template` ),
 		twinFeaturedTemplateItems: templatesList?.querySelectorAll(
 			`.${ PREFIX }-featured-item`
 		),
@@ -66,20 +68,30 @@ function getDOMElements() {
 	};
 
 	// Sidebar Elements
+	const sidebar = document.querySelector( `#${PREFIX}-sidebar` );
 	const searchInput = document.querySelector( '#template-search-input' );
 	const allTemplatesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="all-templates"]`
+		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.ALL_TEMPLATES}"]`
 	);
 	const favoritesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="favorites"]`
+		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.FAVORITES}"]`
 	);
-	const sidebar = {
+	const availableTemplatesCategory = document.querySelector(
+		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
+	);
+	const freeTemplatesCategory = document.querySelector(
+		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
+	);
+	const sidebarElements = {
+		sidebar,
 		searchInput,
 		allTemplatesCategory,
 		favoritesCategory,
 		favoritesCategoryCountEl: favoritesCategory?.querySelector(
 			`.${ PREFIX }-cat-count`
-		)
+		),
+		availableTemplatesCategory,
+		freeTemplatesCategory
 	};
 
 	// Modal Elements
@@ -115,7 +127,7 @@ function getDOMElements() {
 		...bodyElements,
 		...templates,
 		...customTemplates,
-		...sidebar,
+		...sidebarElements,
 		...modalElements,
 		...newTemplateFormElements
 	};
