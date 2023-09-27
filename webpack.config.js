@@ -7,6 +7,7 @@ const path = require( 'path' );
 // Webpack configuration.
 const config = {
 	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+	devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : undefined,
 	resolve: {
 		extensions: [ '.json', '.js', '.jsx' ],
 		modules: [
