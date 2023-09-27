@@ -47,7 +47,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @var string SCRIPT_HANDLE Unique handle for the admin script.
 	 */
-	const SCRIPT_HANDLE = 'sherv-challenge-admin';
+	const SCRIPT_HANDLE = 'frm-form-templates';
 
 	/**
 	 * The required user capability to view form templates.
