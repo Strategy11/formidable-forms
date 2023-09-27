@@ -137,6 +137,12 @@ class FrmAppController {
 			FrmFormTemplatesController::PAGE_SLUG,
 		);
 
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			// Only consider the payments page as a "white page" when the Payments submodule is off.
+			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
+			$white_pages[] = 'formidable-payments';
+		}
+
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$is_white_page = in_array( $get_page, $white_pages, true );
 
@@ -379,6 +385,21 @@ class FrmAppController {
 	 */
 	private static function new_form_overlay_html() {
 		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * Create a basic form with an email field.
+	 *
+	 * @param string $form_key
+	 * @param string $title
+	 * @param string $description
+	 * @return void
+	 */
+	public static function api_email_form( $form_key, $title, $description ) {
+		$url         = 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css';
+		$view_path   = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new-form-overlay/';
+		$user        = wp_get_current_user();
+		require $view_path . 'leave-email.php';
 	}
 
 	/**
@@ -986,6 +1007,31 @@ class FrmAppController {
 		delete_site_option( 'frmpro-credentials' );
 		delete_site_option( 'frmpro-authorized' );
 		wp_die();
+	}
+
+	/**
+	 * This is triggered when Formidable is activated.
+	 *
+	 * @return void
+	 */
+	public static function handle_activation() {
+		self::maybe_activate_payment_cron();
+	}
+
+	/**
+	 * The payment cron is unscheduled when Formidable is deactivated.
+	 * We need to add it back again on activation if Stripe is configured.
+	 *
+	 * @since 6.5
+	 *
+	 * @return void
+	 */
+	private static function maybe_activate_payment_cron() {
+		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+			return;
+		}
+
+		FrmTransLiteAppController::maybe_schedule_cron();
 	}
 
 	public static function set_footer_text( $text ) {

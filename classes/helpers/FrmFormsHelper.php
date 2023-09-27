@@ -210,7 +210,7 @@ class FrmFormsHelper {
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
-		echo ( $sort_col == $col && $sort_dir == 'desc' ) ? ' asc' : ' desc';
+		echo ( $sort_col == $col && $sort_dir === 'desc' ) ? ' asc' : ' desc';
 	}
 
 	/**

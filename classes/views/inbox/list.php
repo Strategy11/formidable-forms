@@ -66,56 +66,17 @@ if ( $has_messages ) {
 </div>
 
 <div class="frm_no_items <?php echo esc_attr( $has_messages ? 'frm_hidden' : '' ); ?>" id="frm_empty_inbox">
-	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/email.jpg' ); ?>" alt="Email Address" height="202px" />
-	<h2><?php esc_html_e( 'You don\'t have any messages', 'formidable' ); ?></h2>
-	<p>
-		<?php esc_html_e( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' ); ?>
-		<?php esc_html_e( 'Want more news and email updates?', 'formidable' ); ?>
-	</p>
-<style>
-	#_form_3_ { font-size:14px; line-height:1.6; font-family:arial, helvetica, sans-serif; margin:0; }
-	._form_hide { display:none; visibility:hidden; }
-	._form_show { display:block; visibility:visible; }
-	#_form_3_ ._form_element { position:relative; }
-	#_form_3_ input[type="text"]._has_error { border-color:#f37c7b; }
-	#_form_3_ ._error { display:block; position:absolute; font-size:14px; z-index:10000001; }
-	#_form_3_ ._error._above { padding-bottom:4px; bottom:39px; right:0; }
-	#_form_3_ ._error._below { padding-top:4px; top:100%; right:0; }
-	#_form_3_ ._error._above ._error-arrow { bottom:0; right:15px; border-left:5px solid transparent; border-right:5px solid transparent; border-top:5px solid #f37c7b; }
-	#_form_3_ ._error._below ._error-arrow { top:0; right:15px; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:5px solid #f37c7b; }
-	#_form_3_ ._error-inner { padding:8px 12px; background-color:#f37c7b; font-size:14px; font-family:arial, sans-serif; color:#fff; text-align:center; text-decoration:none; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; }
-	#_form_3_ ._error-inner._form_error { margin-bottom:5px; text-align:left; }
-	#_form_3_ ._button-wrapper ._error-inner._form_error { position:static; }
-	#_form_3_ ._error-inner._no_arrow { margin-bottom:10px; }
-	#_form_3_ ._error-arrow { position:absolute; width:0; height:0; }
-	#_form_3_ ._error-html { margin-bottom:10px; }
-	#_form_3_ { position:relative; }
-	#_form_3_:before,#_form_3_:after { content:" "; display:table; }
-	#_form_3_:after { clear:both; }
-	#_form_3_ ._form-thank-you { position:relative; left:0; right:0; text-align:center; font-size:18px; }
-</style>
-	<form method="POST" action="https://strategy1137274.activehosted.com/proc.php" id="_form_3_" class="_form _form_3 frm-fields frm-subscribe" novalidate>
-		<input type="hidden" name="u" value="3" />
-		<input type="hidden" name="f" value="3" />
-		<input type="hidden" name="s" />
-		<input type="hidden" name="c" value="0" />
-		<input type="hidden" name="m" value="0" />
-		<input type="hidden" name="act" value="sub" />
-		<input type="hidden" name="v" value="2" />
-		<div class="_form-content">
-			<p>
-				<input type="text" name="email" value="<?php echo esc_attr( $user->user_email ); ?>" placeholder="<?php esc_attr_e( 'Type your email', 'formidable' ); ?>" required/>
-			</p>
-			<div class="_button-wrapper">
-				<button id="_form_3_submit" type="submit" class="_submit button-primary frm-button-primary">
-					<?php esc_html_e( 'Subscribe', 'formidable' ); ?>
-				</button>
-			</div>
-			<div class="_clear-element"></div>
-		</div>
-		<div class="_form-thank-you" style="display:none;"></div>
-		<?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?>
-	</form>
+
+	<?php
+	FrmAppController::api_email_form(
+		'subscribe',
+		__( 'You don\'t have any messages', 'formidable' ),
+		__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' )
+			. "\n" . __( 'Want more news and email updates?', 'formidable' )
+	);
+	?>
+
+	<button id="frm-add-my-email-address" class="button-primary frm-button-primary"><?php esc_html_e( 'Subscribe', 'formidable' ); ?></button>
 </div>
 
 	</div>

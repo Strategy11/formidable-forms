@@ -87,16 +87,6 @@ class FrmDefTwilioAction extends FrmFormAction {
 	}
 }
 
-// add payment action
-class FrmDefHrsAction extends FrmFormAction {
-	public function __construct() {
-		$action_ops           = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit_card_alt_icon frm_show_upgrade' );
-		$action_ops['color']  = 'var(--green)';
-		$action_ops['plugin'] = 'stripe';
-		parent::__construct( 'payment', __( 'eCommerce', 'formidable' ), $action_ops );
-	}
-}
-
 class FrmDefActiveCampaignAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_activecampaign_icon frm_show_upgrade' );
@@ -174,5 +164,16 @@ class FrmDefGoogleSpreadsheetAction extends FrmFormAction {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_googlesheets_icon frm_show_upgrade' );
 		$action_ops['color'] = 'var(--green)';
 		parent::__construct( 'googlespreadsheet', __( 'Google Sheets', 'formidable' ), $action_ops );
+	}
+}
+
+class FrmDefHrsAction extends FrmFormAction {
+	public function __construct() {
+		_deprecated_function( __METHOD__, 'x.x' );
+
+		$action_ops           = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit_card_alt_icon frm_show_upgrade' );
+		$action_ops['color']  = 'var(--green)';
+		$action_ops['plugin'] = 'stripe';
+		parent::__construct( 'payment', __( 'eCommerce', 'formidable' ), $action_ops );
 	}
 }
