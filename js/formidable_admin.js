@@ -6183,7 +6183,6 @@ function frmAdminBuildJS() {
 	/**
 	 * Handles the click event on the cancel rename form button.
 	 *
-	 * @private
 	 * @param {Event} event The click event object.
 	 * @return {void}
 	 */
