@@ -31,23 +31,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm_grid_container frm-mb-lg">
-		<div class="frm6 frm-ws-block frm-create-blank-form">
+		<div class="frm6 frm-ws-block">
 			<div class="frm-icon-wrapper">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
 			</div>
 			<div class="frm-fill">
-				<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
-				<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
-			</div>
-			<span class="caret rotate-270"></span>
-		</div>
-		<div class="frm6 frm-ws-block frm-trigger-new-form-modal">
-			<div class="frm-icon-wrapper frm-icon-briefcase">
-				<svg class="frmsvg" viewBox="0 0 24 24"><path d="M15 6.5a1 1 0 01-1-1V4h-4v1.5a1 1 0 01-2 0V4c0-1.1.9-2 2-2h4a2 2 0 012 2v1.5a1 1 0 01-1 1z" fill="currentColor" fill-opacity=".6"/><path d="M18 12.5v1c0 .3-.3.7-.8.7s-.7-.4-.7-.8v-.9h-9v1c0 .3-.3.7-.8.7s-.7-.4-.7-.8v-.9H0v6.8A2.8 2.8 0 002.8 22h18.4a2.8 2.8 0 002.8-2.8v-6.7h-6zM21.3 5H2.6A2.8 2.8 0 000 7.8V11h6V9.7c0-.4.3-.7.8-.7s.7.3.7.8V11h9V9.7c0-.4.3-.7.8-.7s.7.3.7.8V11h6V7.7A2.8 2.8 0 0021.2 5z" fill="currentColor"/></svg>
-			</div>
-			<div class="frm-fill">
-				<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
-				<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ) ); ?>" target="_blank">
+					<!-- TODO: Get the actual text from Steph -->
+					<h3><?php esc_html_e( 'Create a New Form or Use Template', 'formidable' ); ?></h3>
+					<p><?php esc_html_e( 'Start from scratch or choose from our selection of pre-built templates', 'formidable' ); ?></p>
+				</a>
 			</div>
 			<span class="caret rotate-270"></span>
 		</div>

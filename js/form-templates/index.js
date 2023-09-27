@@ -47,4 +47,12 @@ domReady( () => {
 		getAppState,
 		setAppState
 	});
+
+	/**
+	 * Trigger a specific action to interact with the hidden form '#frm-new-template',
+	 * which is used for creating or using a form template.
+	 *
+	 * @param {jQuery} jQuery('#frm-new-template') The jQuery object containing the hidden form element.
+	 */
+	wp.hooks.doAction( 'frm_new_form_modal_form', jQuery( '#frm-new-template' ) );
 });
