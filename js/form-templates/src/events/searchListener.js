@@ -61,10 +61,12 @@ function handleSearchResult({ foundSomething, notEmptySearchText }) {
 
 	// Switch to displaying search results
 	if ( appState.selectedCategory ) {
-		showSearchResults();
+		showSearchResults( notEmptySearchText );
 
 		// Setting "selectedCategory" to an empty string as a flag for search state
-		setAppStateProperty( 'selectedCategory', '' );
+		if ( notEmptySearchText ) {
+			setAppStateProperty( 'selectedCategory', '' );
+		}
 	}
 
 	// Show empty state if no templates found
