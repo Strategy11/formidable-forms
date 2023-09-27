@@ -498,6 +498,18 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
+			// This provides backward compatibility for old addons that use legacy modal templates.
+			$action = FrmAppHelper::get_param( 'frm_action' );
+			$trigger_name_modal = FrmAppHelper::get_param( 'triggerNewFormModal' );
+			if ( $trigger_name_modal || in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
+				$application_id = FrmAppHelper::simple_get( 'applicationId', 'absint' );
+				$url_param = $application_id ? '&applicationId=' . $application_id : '';
+
+				wp_safe_redirect( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . $url_param ) );
+				exit;
+			}
+
 			FrmInbox::maybe_disable_screen_options();
 		}
 
