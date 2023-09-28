@@ -111,12 +111,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php esc_html_e( 'Out of date plugins', 'formidable' ); ?>
 			</h2>
 
-			<p>
+			<p style="line-height: 1.5;">
 				<?php
 				printf(
 					// translators: the list of out-of-date plugins.
 					esc_html__( 'Following plugins are out of date: %s', 'formidable' ),
-					esc_html( implode( ', ', $args['out_of_date_plugins'] ) )
+					'<span style="font-style: italic;">' . esc_html( implode( ', ', $args['out_of_date_plugins'] ) ) . '</span>'
 				)
 				?>
 			</p>

@@ -37,6 +37,13 @@ abstract class FrmSummaryEmail {
 	 * Constructor.
 	 */
 	public function __construct() {
+		/**
+		 * Enables HTML for summary emails.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $enable Set to `true` to enable.
+		 */
 		$this->is_html = apply_filters( 'frm_html_summary_emails', true );
 	}
 

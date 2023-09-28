@@ -127,7 +127,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 	 * @param float $prev    Previous value.
 	 * @return float
 	 */
-	protected function get_compare_diff( $current, $prev ) {
+	public function get_compare_diff( $current, $prev ) {
 		if ( ! $current && ! $prev ) {
 			return 0; // No comparison if both are zero.
 		}
