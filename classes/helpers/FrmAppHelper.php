@@ -395,12 +395,11 @@ class FrmAppHelper {
 	/**
 	 * Get the server OS
 	 *
-	 * @since 6.4.x
+	 * @since 6.4.2
 	 *
 	 * @return string
 	 */
 	public static function get_server_os() {
-
 		if ( function_exists( 'php_uname' ) ) {
 			return php_uname( 's' );
 		}
