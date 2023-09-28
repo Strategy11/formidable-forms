@@ -211,8 +211,8 @@ function frmFrontFormJS() {
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
 			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
-					// skip rich text field buttons.
+				if ( hasClass( requiredFields[r], 'ed_button' ) || requiredFields[r].disabled ) {
+					// skip rich text field buttons + readonly fields.
 					continue;
 				}
 				errors = checkRequiredField( requiredFields[r], errors );
