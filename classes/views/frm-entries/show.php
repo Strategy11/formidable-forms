@@ -19,6 +19,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="columns-2">
 
 		<div id="post-body-content" class="frm-fields">
+			<?php
+			/**
+			 * Fires after the `#post-body-content` element on the entry show page.
+			 *
+			 * This action is used in Pro to display the pagination buttons. It allows developers
+			 * to add custom HTML content after the main post body content.
+			 *
+			 * @since 6.4.1
+			 *
+			 * @param array $args Associative array with 'id' for entry ID and 'form' for form object.
+			 *
+			 * @type int    $args['id']   The ID of the entry.
+			 * @type object $args['form'] The form object.
+			 */
+			do_action( 'frm_show_entry_start_content', compact( 'id', 'form' ) );
+			?>
+
 			<div class="wrap frm-with-margin frm_form_fields">
 				<div class="postbox">
 					<a href="#" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable' ); ?>">

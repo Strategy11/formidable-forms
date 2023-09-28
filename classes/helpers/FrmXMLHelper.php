@@ -304,7 +304,13 @@ class FrmXMLHelper {
 
 		$edit_query = apply_filters( 'frm_match_xml_form', $edit_query, $form );
 
-		return FrmForm::getAll( $edit_query, '', 1 );
+		$form = FrmForm::getAll( $edit_query, '', 1 );
+		if ( is_object( $form ) && $form->status === 'trash' ) {
+			FrmForm::destroy( $form->id );
+			return false;
+		}
+
+		return $form;
 	}
 
 	private static function update_form( $this_form, $form, &$imported ) {

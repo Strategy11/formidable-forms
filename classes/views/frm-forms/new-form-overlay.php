@@ -65,7 +65,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php } ?>
 			<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-email-block">
-					<?php require $view_path . 'leave-email.php'; ?>
+					<?php
+					FrmAppController::api_email_form(
+						'freetemplates',
+						__( 'Get 10+ Free Form Templates', 'formidable' ),
+						__( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' )
+					);
+					?>
 				</div>
 			<?php } ?>
 			<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>

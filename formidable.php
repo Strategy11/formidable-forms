@@ -2,7 +2,7 @@
 /*
 Plugin Name: Formidable Forms
 Description: Quickly and easily create drag-and-drop forms
-Version: 6.3.2
+Version: 6.5
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11 Form Builder Team
@@ -49,7 +49,7 @@ function load_formidable_forms() {
 }
 
 // if __autoload is active, put it on the spl_autoload stack
-if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions() ) ) {
+if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions(), true ) ) {
 	spl_autoload_register( '__autoload' );
 }
 
@@ -76,8 +76,9 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated    = array( 'FrmEntryFormat', 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
-	$is_deprecated = in_array( $class_name, $deprecated ) || preg_match( '/^.+Deprecate/', $class_name );
+	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
+	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
+	$original_filepath = $filepath;
 
 	if ( $is_deprecated ) {
 		$filepath .= '/deprecated/';
@@ -85,9 +86,9 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		$filepath .= '/classes/';
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
-		} else if ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
 			$filepath .= 'controllers/';
-		} else if ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
 			$filepath .= 'factories/';
 		} else {
 			$filepath .= 'models/';
@@ -97,21 +98,46 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		}
 	}
 
+	if ( file_exists( $filepath . $class_name . '.php' ) ) {
+		require $filepath . $class_name . '.php';
+		return;
+	}
+
+	if ( ! preg_match( '/^FrmStrpLite.+$/', $class_name ) && ! preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
+		// Exit early if the class does not match the Stripe Lite prefix.
+		return;
+	}
+
+	// Autoload for /stripe/ folder.
+	$filepath = $original_filepath . '/stripe/';
+	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+		$filepath .= 'helpers/';
+	} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		$filepath .= 'controllers/';
+	} else {
+		$filepath .= 'models/';
+	}
+
 	$filepath .= $class_name . '.php';
 
 	if ( file_exists( $filepath ) ) {
-		require( $filepath );
+		require $filepath;
 	}
 }
 
 add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'frm_maybe_install' );
+
 /**
+ * This function is triggered when Formidable is activated.
+ *
  * @return void
  */
 function frm_maybe_install() {
 	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
 		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
 	}
+
+	FrmAppController::handle_activation();
 }
 
 register_deactivation_hook(

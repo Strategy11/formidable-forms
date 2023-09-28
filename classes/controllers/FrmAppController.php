@@ -136,6 +136,12 @@ class FrmAppController {
 			'formidable-applications',
 		);
 
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			// Only consider the payments page as a "white page" when the Payments submodule is off.
+			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
+			$white_pages[] = 'formidable-payments';
+		}
+
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$is_white_page = in_array( $get_page, $white_pages, true );
 
@@ -287,7 +293,7 @@ class FrmAppController {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
+			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
@@ -424,6 +430,21 @@ class FrmAppController {
 		}
 
 		include $path . 'new-form-overlay.php';
+	}
+
+	/**
+	 * Create a basic form with an email field.
+	 *
+	 * @param string $form_key
+	 * @param string $title
+	 * @param string $description
+	 * @return void
+	 */
+	public static function api_email_form( $form_key, $title, $description ) {
+		$url         = 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css';
+		$view_path   = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new-form-overlay/';
+		$user        = wp_get_current_user();
+		require $view_path . 'leave-email.php';
 	}
 
 	/**
@@ -623,6 +644,7 @@ class FrmAppController {
 		$version    = FrmAppHelper::plugin_version();
 
 		FrmAppHelper::load_admin_wide_js();
+		FrmOverlayController::register_assets();
 
 		wp_register_style( 'formidable_admin_global', $plugin_url . '/css/admin/frm_admin_global.css', array(), $version );
 		wp_enqueue_style( 'formidable_admin_global' );
@@ -644,7 +666,7 @@ class FrmAppController {
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page ) {
+		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 		unset( $is_valid_page );
@@ -1028,12 +1050,60 @@ class FrmAppController {
 		wp_die();
 	}
 
+	/**
+	 * This is triggered when Formidable is activated.
+	 *
+	 * @return void
+	 */
+	public static function handle_activation() {
+		self::maybe_activate_payment_cron();
+	}
+
+	/**
+	 * The payment cron is unscheduled when Formidable is deactivated.
+	 * We need to add it back again on activation if Stripe is configured.
+	 *
+	 * @since 6.5
+	 *
+	 * @return void
+	 */
+	private static function maybe_activate_payment_cron() {
+		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+			return;
+		}
+
+		FrmTransLiteAppController::maybe_schedule_cron();
+	}
+
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
 			$text = '';
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Add admin footer links.
+	 *
+	 * @since 6.4.1
+	 *
+	 * @return void
+	 */
+	public static function add_admin_footer_links() {
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+
+		// Check admin privileges, screen mode, and branding
+		$is_not_admin = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
+		$is_full_screen = FrmAppHelper::is_full_screen();
+		$is_not_formidable_branding = ! FrmAppHelper::is_formidable_branding();
+
+		// Exit if any of the above conditions are met
+		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding ) {
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 	}
 
 	/**
@@ -1081,7 +1151,7 @@ class FrmAppController {
 	/**
 	 * Handles Floating Links' scripts and styles enqueueing.
 	 *
-	 * @since x.x
+	 * @since 6.4
 	 *
 	 * @param string $plugin_url URL of the plugin.
 	 * @param string $version Current version of the plugin.

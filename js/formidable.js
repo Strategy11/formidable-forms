@@ -1521,6 +1521,9 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
 
 			setSelectPlaceholderColor();
+
+			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
+			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 		},
 
 		getFieldId: function( field, fullID ) {
@@ -1834,7 +1837,9 @@ function frmFrontFormJS() {
 
 		visible: function( classes ) {
 			jQuery( classes ).css( 'visibility', 'visible' );
-		}
+		},
+
+		triggerCustomEvent: triggerCustomEvent
 	};
 }
 frmFrontForm = frmFrontFormJS();

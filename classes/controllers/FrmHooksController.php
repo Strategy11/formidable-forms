@@ -106,6 +106,9 @@ class FrmHooksController {
 		// Elementor.
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
+
+		FrmTransLiteHooksController::load_hooks();
+		FrmStrpLiteHooksController::load_hooks();
 	}
 
 	/**
@@ -119,6 +122,7 @@ class FrmHooksController {
 		add_action( 'admin_enqueue_scripts', 'FrmAppController::admin_enqueue_scripts' );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
+		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 
 		// Addons Controller.
@@ -187,6 +191,8 @@ class FrmHooksController {
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 
+		FrmTransLiteHooksController::load_admin_hooks();
+		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();

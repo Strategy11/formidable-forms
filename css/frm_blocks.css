@@ -46,6 +46,16 @@
 	fill: #f05a24;
 }
 
+.frm-block-intro-content .dashicons-feedback,
+.frm-block-intro-content .frm_white_label_icon {
+	width:120px;
+	height:120px;
+}
+.frm-block-intro-content .dashicons-feedback:before,
+.frm-block-intro-content .frm_white_label_icon:before {
+	font-size:120px;
+}
+
 .frm-block-selector-screen {
 	margin-bottom: 15px;
 }
@@ -76,4 +86,9 @@
 	color: var(--submit-text-color) !important;
 	/* Ensure consistent background color on focus for Add/Remove buttons */
 	background: var(--submit-bg-color) !important;
+}
+
+/* Disables all interactions with form fields */
+.editor-styles-wrapper .frm_form_fields * {
+	pointer-events: none;
 }

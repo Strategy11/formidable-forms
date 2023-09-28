@@ -43,6 +43,8 @@ class FrmSettings {
 	public $current_form = 0;
 	public $tracking;
 
+	public $currency;
+
 	/**
 	 * @since 6.0
 	 *
@@ -162,6 +164,10 @@ class FrmSettings {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
 			}
+		}
+
+		if ( ! isset( $this->currency ) ) {
+			$this->currency = 'USD';
 		}
 	}
 
@@ -349,6 +355,7 @@ class FrmSettings {
 		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
 		$this->load_style       = $params['frm_load_style'];
 		$this->custom_css       = $params['frm_custom_css'];
+		$this->currency         = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
