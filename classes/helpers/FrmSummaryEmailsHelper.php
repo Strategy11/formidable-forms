@@ -264,38 +264,13 @@ class FrmSummaryEmailsHelper {
 	}
 
 	/**
-	 * Gets summary data in a date range.
-	 *
-	 * @param string $from_date From date.
-	 * @param string $to_date   To date.
-	 * @return array
-	 */
-	public static function get_summary_data( $from_date, $to_date ) {
-		$data = array(
-			'top_forms' => self::get_top_forms( $from_date, $to_date ),
-			'entries'   => self::get_entries_count( $from_date, $to_date ),
-			'payments'  => self::get_payments_data( $from_date, $to_date ),
-		);
-
-		/**
-		 * Filters the summary email data in a date range.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $data The summary email data.
-		 * @param array $args Contains `from_date` and `to_date`.
-		 */
-		return apply_filters( 'frm_summary_email_data', $data, compact( 'from_date', 'to_date' ) );
-	}
-
-	/**
 	 * Gets payments data.
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
 	 * @return array            Contains `count` and `total`.
 	 */
-	private static function get_payments_data( $from_date, $to_date ) {
+	public static function get_payments_data( $from_date, $to_date ) {
 		$data = array(
 			'count' => 0,
 			'total' => 0,
@@ -330,7 +305,7 @@ class FrmSummaryEmailsHelper {
 	 * @param string $to_date   To date.
 	 * @return int
 	 */
-	private static function get_entries_count( $from_date, $to_date ) {
+	public static function get_entries_count( $from_date, $to_date ) {
 		return FrmDb::get_count(
 			'frm_items',
 			array(
@@ -349,7 +324,7 @@ class FrmSummaryEmailsHelper {
 	 * @param int    $limit     Limit the result. Default is 10.
 	 * @return array            Contains `form_id`, `form_name`, and `items_count`.
 	 */
-	private static function get_top_forms( $from_date, $to_date, $limit = 10 ) {
+	public static function get_top_forms( $from_date, $to_date, $limit = 10 ) {
 		global $wpdb;
 
 		return $wpdb->get_results(

@@ -75,29 +75,30 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 	protected function get_content_args() {
 		$args = parent::get_content_args();
 
-		$stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->from_date, $this->to_date );
+		$payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->from_date, $this->to_date );
+		$entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->from_date, $this->to_date );
 
 		$args['inbox_msg']       = $this->has_inbox_msg ? FrmSummaryEmailsHelper::get_latest_inbox_message() : false;
 		$args['from_date']       = $this->from_date;
 		$args['to_date']         = $this->to_date;
-		$args['top_forms']       = $stats_data['top_forms'];
+		$args['top_forms']       = FrmSummaryEmailsHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = FrmSummaryEmailsHelper::add_url_data( site_url() . '/wp-admin/admin.php?page=formidable' );
 		$args['stats']           = array(
 			'entries'        => array(
 				'label'   => __( 'Entries created', 'formidable' ),
-				'count'   => $stats_data['entries'],
+				'count'   => $entries_count,
 				'compare' => 0,
 			),
 			'payments_count' => array(
 				'label'   => __( 'Payments collected', 'formidable' ),
-				'count'   => $stats_data['payments']['count'],
+				'count'   => $payment_data['count'],
 				'compare' => 0,
 			),
 			'payments_total' => array(
 				'label'   => __( 'Total', 'formidable' ),
-				'count'   => $stats_data['payments']['total'],
-				'display' => $this->get_displayed_price( $stats_data['payments']['total'] ),
+				'count'   => $payment_data['total'],
+				'display' => $this->get_displayed_price( $payment_data['total'] ),
 				'compare' => 0,
 			),
 		);
@@ -108,10 +109,12 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		}
 
 		if ( $this->has_comparison ) {
-			$prev_stats_data = FrmSummaryEmailsHelper::get_summary_data( $this->prev_from_date, $this->prev_to_date );
-			$args['stats']['entries']['compare']        = $this->get_compare_diff( $stats_data['entries'], $prev_stats_data['entries'] );
-			$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $stats_data['payments']['count'], $prev_stats_data['payments']['count'] );
-			$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $stats_data['payments']['total'], $prev_stats_data['payments']['total'] );
+			$prev_entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
+			$prev_payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
+
+			$args['stats']['entries']['compare']        = $this->get_compare_diff( $entries_count, $prev_entries_count );
+			$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $payment_data['count'], $prev_payment_data['count'] );
+			$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $payment_data['total'], $prev_payment_data['total'] );
 		}
 
 		return $args;
