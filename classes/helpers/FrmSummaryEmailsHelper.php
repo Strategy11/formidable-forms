@@ -83,12 +83,11 @@ class FrmSummaryEmailsHelper {
 		$current_date = gmdate( 'Y-m-d' );
 
 		// Check for license expired email.
-		$last_expired = self::get_last_sent_date( 'license' ); // TODO: clear this sent date after renewing.
-		if ( ! $last_expired ) {
-			// License expired email hasn't been sent. Check for the license.
-			if ( FrmAddonsController::is_license_expired() ) {
-				$emails[] = self::LICENSE_EXPIRED;
-			}
+		if ( ! FrmAddonsController::is_license_expired() ) {
+			self::set_last_sent_date( self::LICENSE_EXPIRED, '' ); // Clear last sent date if license is renewed.
+		} elseif ( ! self::get_last_sent_date( self::LICENSE_EXPIRED ) ) {
+			// If license expired and license email hasn't been sent, send it.
+			$emails[] = self::LICENSE_EXPIRED;
 		}
 
 		// Check for monthly or yearly email.
@@ -241,8 +240,9 @@ class FrmSummaryEmailsHelper {
 	 * Sets the last sent date of an email type.
 	 *
 	 * @param string $type Email type.
+	 * @param mixed  $value Set custom value. If this is null, set the current date.
 	 */
-	private static function set_last_sent_date( $type ) {
+	private static function set_last_sent_date( $type, $value = null ) {
 		$options = self::get_options();
 
 		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
