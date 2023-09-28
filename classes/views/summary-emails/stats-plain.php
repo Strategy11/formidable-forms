@@ -16,7 +16,7 @@ echo esc_html( $args['subject'] );
 
 echo "\r\n\r\n";
 
-echo esc_html( $args['from_date'] ) . ' - ' . esc_html( $args['to_date'] ) . ' - ' . esc_url( $args['site_url'] );
+echo esc_html( FrmAppHelper::get_formatted_time( $args['from_date'] ) ) . ' - ' . esc_html( FrmAppHelper::get_formatted_time( $args['to_date'] ) ) . ' - ' . esc_url( $args['site_url'] );
 
 echo "\r\n\r\n";
 
