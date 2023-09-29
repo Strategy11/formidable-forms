@@ -620,7 +620,7 @@ class FrmFieldsController {
 
 		if ( $placeholder !== '' ) {
 			?>
-			<option value="">
+			<option class="frm-select-placeholder" value="">
 				<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
 			</option>
 			<?php

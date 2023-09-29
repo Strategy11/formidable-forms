@@ -491,6 +491,43 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since x.x
+	 */
+	function setSelectPlaceholderColor() {
+		var selects = document.querySelectorAll( '.form-field select' ),
+			styleElement = document.querySelector( '.with_frm_style' ),
+			textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '',
+			changeSelectColor;
+
+		// Exit if there are no select elements or the textColorDisabled property is missing
+		if ( ! selects.length || ! textColorDisabled ) {
+			return;
+		}
+
+		// Function to change the color of a select element
+		changeSelectColor = function( select ) {
+			if ( hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+				select.style.setProperty( 'color', textColorDisabled, 'important' );
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		// Use a loop to iterate through each select element
+		Array.prototype.forEach.call( selects, function( select ) {
+			// Apply the color change to each select element
+			changeSelectColor( select );
+
+			// Add an event listener for future changes
+			select.addEventListener( 'change', function() {
+				changeSelectColor( select );
+			});
+		});
+	}
+
 	function hasInvisibleRecaptcha( object ) {
 		var recaptcha, recaptchaID, alreadyChecked;
 
@@ -1482,6 +1519,8 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
 			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
+
+			setSelectPlaceholderColor();
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
