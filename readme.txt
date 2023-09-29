@@ -1,4 +1,4 @@
-=== Formidable Forms - Contact Form, Survey, Quiz, Calculator & Custom Form Builder ===
+=== Formidable Forms - Contact Form, Survey, Quiz, Calculator, Payment & Custom Form Builder ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
