@@ -147,4 +147,28 @@ class FrmStrpLiteSubscriptionHelper {
 		}
 		return absint( $trial );
 	}
+
+	/**
+	 * If a subscription fails because the plan does not exist, create the plan and try again.
+	 *
+	 * @since x.x
+	 *
+	 * @param object|string|false $subscription
+	 * @param array               $charge_data
+	 * @param WP_Post             $action
+	 * @param int                 $amount
+	 * @return object|string|false
+	 */
+	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
+		if ( ! is_string( $subscription ) || 0 !== strpos( $subscription, 'No such plan: ' ) ) {
+			// Only retry when there is a No such plan string error.
+			return $subscription;
+		}
+
+		// The full error message looks like "No such plan: '_399_1month_usd".
+		$action->post_content['plan_id'] = '';
+		$charge_data['plan']             = self::get_plan_from_atts( compact( 'action', 'amount' ) );
+		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
+		return $subscription;
+	}
 }
