@@ -240,6 +240,8 @@ class FrmStrpLiteLinkController {
 		}
 
 		$subscription = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $new_charge );
+		$subscription = FrmStrpLiteSubscriptionHelper::maybe_create_missing_plan_and_create_subscription( $subscription, $new_charge, $action, $amount );
+
 		if ( ! is_object( $subscription ) ) {
 			$redirect_helper->handle_error( 'create_subscription_failed' );
 			die();
