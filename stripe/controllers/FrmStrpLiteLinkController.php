@@ -206,6 +206,7 @@ class FrmStrpLiteLinkController {
 		$customer_id       = $setup_intent->customer;
 		$payment_method_id = self::get_link_payment_method( $setup_intent );
 		if ( ! $payment_method_id ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'did_not_complete' );
 			die();
 		}
@@ -416,7 +417,18 @@ class FrmStrpLiteLinkController {
 	 * @return void
 	 */
 	private static function add_temporary_referer_meta( $entry_id ) {
-		$referer    = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$referer                          = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$query_args_to_strip_from_referer = array(
+			'frm_link_error',
+			'payment_intent',
+			'payment_intent_client_secret',
+			'setup_intent',
+			'setup_intent_client_secret',
+		);
+		foreach ( $query_args_to_strip_from_referer as $arg ) {
+			$referer = remove_query_arg( $arg, $referer );
+		}
+
 		$meta_value = json_encode( compact( 'referer' ) );
 		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', $meta_value );
 	}
