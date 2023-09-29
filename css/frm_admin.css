@@ -9297,31 +9297,3 @@ Responsive Design
 	color: var(--primary-color);
 }
 /* End On Submit action */
-
-/* Delete All Entries Modal Confirmation */
-.frm-delete-all-entries-modal-confirmation {
-	text-align: left;
-}
-.frm-delete-all-entries-modal-confirmation h2 {
-	font-weight: 500;
-}
-.frm-delete-all-entries-modal-confirmation b {
-	color: var(--error-500);
-}
-.frm-delete-all-entries-modal-confirmation input {
-	display: block;
-	width: 100%;
-	height: 36px;
-	box-sizing: border-box;
-	margin-top: var(--gap-sm);
-	border-radius: var(--small-radius);
-	border: 1px solid var(--grey-300);
-}
-#frm-confirmed-click.button.frm-btn-inactive {
-	background-color: var(--error-300) !important;
-	border: 1px solid var(--error-300);
-}
-#frm-confirmed-click.button.frm-btn-inactive:hover {
-	border-color: var(--error-300) !important;
-}
-/* End Delete All Entries Modal Confirmation */
