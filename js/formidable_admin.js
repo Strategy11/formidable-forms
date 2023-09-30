@@ -6305,7 +6305,13 @@ function frmAdminBuildJS() {
 		}
 
 		appendClonedModalElementToContainer( 'frm-upgrade-message' );
-		addOneClick( element, 'tab', element.dataset.message );
+
+		let upgradeLabel = element.dataset.message;
+
+		if ( upgradeLabel === undefined ) {
+			upgradeLabel = element.dataset.upgrade;
+		}
+		addOneClick( element, 'tab', upgradeLabel );
 
 		if ( element.dataset.screenshot ) {
 			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
