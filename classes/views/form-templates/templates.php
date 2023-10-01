@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- Upsell Banner -->
 <?php
 // Show 'upgrade' banner for non-elite users.
-if ( 'elite' !== FrmAddonsController::license_type() ) {
+if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 	FrmAppHelper::show_admin_cta(
 		array(
 			'title'       => esc_html__( 'Upgrade to get all 200+ templates', 'formidable' ),
