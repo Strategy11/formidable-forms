@@ -1302,54 +1302,162 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @deprecated x.x
+	 * Renders a template icon based on the given categories.
 	 *
-	 * @param array $categories
+	 * @param array $categories The categories to render the icon for.
 	 * @param array $atts {
-	 *     @type string  $html 'span' or 'div'.
-	 *     @type boolean $bg   Whether to add a bg color or not.
+	 *     Optional. An array of attributes for rendering.
+	 *     @type string  $html 'span' or 'div'. Default 'span'.
+	 *     @type boolean $bg   Whether to add a background color or not. Default false.
 	 * }
 	 *
 	 * @return void
 	 */
 	public static function template_icon( $categories, $atts = array() ) {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::template_icon' );
-		FrmFormTemplatesHelper::template_icon( $categories, $atts );
+		// Define defaults.
+		$defaults = array(
+			'bg'   => true,
+		);
+		$atts = array_merge( $defaults, $atts );
+
+		// Filter out ignored categories.
+		$ignore     = self::ignore_template_categories();
+		$categories = array_diff( $categories, $ignore );
+
+		// Define icons mapping.
+		$icons = array(
+			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
+			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'Registration and Signup' => array( 'register', 'var(--pink)' ),
+			'PayPal'              => array( 'paypal' ),
+			'Stripe'              => array( 'credit_card', 'var(--green)' ),
+			'Twilio'              => array( 'sms' ),
+			'Payment'             => array( 'credit_card' ),
+			'Order Form'          => array( 'product' ),
+			'Finance'             => array( 'total' ),
+			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
+			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
+			'Real Estate'         => array( 'house' ),
+			'Nonprofit'           => array( 'heart_solid' ),
+			'Calculator'          => array( 'calculator', 'var(--purple)' ),
+			'Quiz'                => array( 'percent' ),
+			'Registrations'       => array( 'address_card' ),
+			'Customer Service'    => array( 'users_solid' ),
+			'Education'           => array( 'pencil' ),
+			'Marketing'           => array( 'eye' ),
+			'Feedback'            => array( 'smile' ),
+			'Business Operations' => array( 'case' ),
+			'Contact Form'        => array( 'email' ),
+			'Conversational Forms' => array( 'chat_forms' ),
+			'Survey'              => array( 'chat_forms', 'var(--orange)' ),
+			'Application'         => array( 'align_right' ),
+			'Signature'           => array( 'signature' ),
+			''                    => array( 'align_right' ),
+		);
+
+		// Determine the icon to be used.
+		$icon = $icons[''];
+		if ( count( $categories ) === 1 ) {
+			$category = reset( $categories );
+			$icon = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
+		} elseif ( ! empty( $categories ) ) {
+			$icons = array_intersect_key( $icons, array_flip( $categories ) );
+			$icon = reset( $icons );
+		}
+
+		// Prepare variables for output.
+		$icon_name = $icon[0];
+		$bg_color  = isset( $icon[1] ) ? $icon[1] : '';
+
+		// Render the icon.
+		echo '<span class="frm-category-icon frm-icon-wrapper"';
+		echo $bg_color && $atts['bg'] ? ' style="background-color:' . esc_attr( $bg_color ) . '"' : '';
+		echo '>';
+			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
+		echo '</span>';
 	}
 
 	/**
-	 * @since 4.03.01
-	 * @deprecated x.x
+	 * Retrieves the list of template categories to ignore.
 	 *
-	 * @return array<string>
+	 * @since 4.03.01
+	 *
+	 * @return string[] Array of categories to ignore.
 	 */
 	public static function ignore_template_categories() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::ignore_template_categories' );
-		return FrmFormTemplatesHelper::ignore_template_categories();
+		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
+	 * Get template install link.
+	 *
 	 * @since 4.02
-	 * @deprecated x.x
+	 *
+	 * @param array $template Template details.
+	 * @param array $args Additional arguments.
+	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::get_template_install_link' );
-		return FrmFormTemplatesHelper::get_template_install_link( $template, $args );
+		$defaults = array(
+			'class' => 'install-now',
+			'href'  => 'href',
+			'atts'  => true,
+		);
+
+		if ( ! empty( $template['url'] ) ) {
+			$link = array(
+				'url'   => $template['url'],
+				'label' => __( 'Create Form', 'formidable' ),
+				'class' => 'frm-install-template',
+				'href'  => 'rel',
+				'atts'  => '',
+			);
+		} elseif ( self::plan_is_allowed( $args ) ) {
+			$link = array(
+				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
+				'label' => __( 'Renew', 'formidable' ),
+			);
+		} else {
+			$link = array(
+				'url'   => $args['pricing'],
+				'label' => __( 'Upgrade', 'formidable' ),
+			);
+		}
+
+		return array_merge( $defaults, $link );
 	}
 
 	/**
 	 * Is the template included with the license type?
 	 *
 	 * @since 4.02.02
-	 * @deprecated x.x
 	 *
 	 * @param array $args
-	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFormTemplatesHelper::plan_is_allowed' );
-		return FrmFormTemplatesHelper::plan_is_allowed( $args );
+		if ( empty( $args['license_type'] ) ) {
+			return false;
+		}
+
+		$plans         = array( 'free', 'personal', 'business', 'elite' );
+		$license_type  = strtolower( $args['license_type'] );
+		$plan_required = strtolower( $args['plan_required'] );
+		$included      = $license_type === $plan_required;
+
+		if ( $included || ! in_array( $plan_required, $plans, true ) ) {
+			return $included;
+		}
+
+		foreach ( $plans as $plan ) {
+			if ( $included || $plan === $license_type ) {
+				break;
+			}
+			$included = $plan === $plan_required;
+		}
+
+		return $included;
 	}
 
 	/**

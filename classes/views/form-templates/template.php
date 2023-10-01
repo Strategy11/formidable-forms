@@ -74,7 +74,7 @@ if ( $plan_required ) {
 		$attributes['data-key'] = $template['key'];
 	}
 } else {
-	$link             = FrmFormTemplatesHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
+	$link             = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
 	$use_template_url = esc_url( $link['url'] );
 }
 
@@ -85,7 +85,7 @@ $attributes['class'] = implode( ' ', $class_names );
 	<!-- Featured Template Icon -->
 	<?php if ( $is_featured_template ) : ?>
 		<div class="frm-form-templates-item-icon">
-			<?php FrmFormTemplatesHelper::template_icon( $template['categories'] ); ?>
+			<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
 		</div><!-- .frm-form-templates-item-icon -->
 	<?php endif; ?>
 
