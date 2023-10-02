@@ -339,12 +339,7 @@ class FrmFormTemplatesController {
 		$published_forms = FrmForm::get_published_forms();
 
 		// Get IDs from the published forms for matching.
-		$published_form_ids = array_map(
-			function( $form ) {
-				return $form->id;
-			},
-			$published_forms
-		);
+		$published_form_ids = wp_list_pluck( $published_forms, 'id' );
 		// Update custom favorite templates to include only IDs that are also in the published forms.
 		self::$favorite_templates['custom'] = array_intersect( self::$favorite_templates['custom'], $published_form_ids );
 
