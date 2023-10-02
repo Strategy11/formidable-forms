@@ -421,7 +421,7 @@ class FrmFormTemplatesController {
 			}
 
 			// Add the 'is_favorite' key
-			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'] );
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'], true );
 		}
 		unset( $template ); // Unset the reference `$template` variable
 
