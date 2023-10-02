@@ -9720,25 +9720,17 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			const parts = input.value.split( ':' );
+			const parts = input.value.replace( '.', ':' ).split( ':' );
+			let newValue = parts[0] + ':' + parts[1];
 
-			parts.push( '00' );
-			parts.push( '00' );
-
-			switch ( unit ) {
-				case 'sec':
-					input.value = parts[0] + ':' + parts[1] + ':' + parts[2];
-					break;
-
-				case 'millisec':
-					input.value = parts[0] + ':' + parts[1] + ':' + parts[2] + ':' + parts[3];
-					break;
-
-				default:
-					input.value = parts[0] + ':' + parts[1];
+			if ( 'sec' === unit ) {
+				newValue += ( ':' + ( parts[2] ? parts[2] : '00' ) );
+			} else if ( 'millisec' === unit ) {
+				newValue += ( ':' + ( parts[2] ? parts[2] : '00' ) + '.' + ( parts[3] ? parts[3] : '000' ) );
 			}
 
-			input.setAttribute( 'size', input.value.length );
+			input.value = newValue;
+			input.setAttribute( 'size', newValue.length );
 		};
 
 		const onChangeStepUnitSelect = event => {
