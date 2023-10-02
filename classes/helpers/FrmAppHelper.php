@@ -1241,15 +1241,15 @@ class FrmAppHelper {
 	 *     @type string $description The description of the section.
 	 *     @type string $link_text   The text for the link.
 	 *     @type string $link_url    The URL for the link.
-	 *     @type string $user        The required user role to view the section. Default 'administrator'.
+	 *     @type string $role        The required user role to view the section. Default 'administrator'.
 	 * }
 	 *
 	 * @return void
 	 */
 	public static function show_admin_cta( $args ) {
-		$user = ! empty( $args['user'] ) ? $args['user'] : 'administrator';
+		$role = ! empty( $args['role'] ) ? $args['role'] : 'administrator';
 
-		if ( ! current_user_can( $user ) ) {
+		if ( ! current_user_can( $role ) ) {
 			return; // Return early if the user doesn't have the required capability
 		}
 
