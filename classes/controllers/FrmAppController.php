@@ -379,15 +379,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated x.x
-	 *
-	 * @return void
-	 */
-	private static function new_form_overlay_html() {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
 	 * Create a basic form with an email field.
 	 *
 	 * @param string $form_key

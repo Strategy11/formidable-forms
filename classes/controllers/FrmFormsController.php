@@ -689,16 +689,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Create a custom template from a form
-	 *
-	 * @since 3.06
-	 * @deprecated x.x
-	 */
-	public static function build_template() {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
 	 * Before creating a new form, get the name and description from the modal.
 	 *
 	 * @since 4.0
@@ -926,51 +916,6 @@ class FrmFormsController {
 		}
 
 		return $save;
-	}
-
-	/**
-	 * @deprecated x.x
-	 *
-	 * @return bool
-	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * Get data from api before rendering it so that we can flag the modal as expired
-	 *
-	 * @deprecated x.x
-	 *
-	 * @return void
-	 */
-	public static function before_list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * @deprecated x.x
-	 *
-	 * @return void
-	 */
-	public static function list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * @deprecated x.x
-	 *
-	 * @since 4.03.01
-	 */
-	private static function get_template_categories( $templates ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * @deprecated x.x
-	 */
-	private static function add_user_templates( &$templates ) {
-		_deprecated_function( __METHOD__, 'x.x' );
 	}
 
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
@@ -3037,5 +2982,45 @@ class FrmFormsController {
 	 */
 	public static function add_new() {
 		_deprecated_function( __FUNCTION__, '4.08' );
+	}
+
+	/**
+	 * Create a custom template from a form
+	 *
+	 * @since 3.06
+	 * @deprecated x.x
+	 */
+	public static function build_template() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function expired() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return FrmFormTemplatesController::is_expired();
+	}
+
+	/**
+	 * Get data from api before rendering it so that we can flag the modal as expired
+	 *
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function before_list_templates() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function list_templates() {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }

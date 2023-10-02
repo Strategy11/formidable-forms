@@ -1461,14 +1461,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since 4.02
-	 * @deprecated x.x
-	 */
-	public static function template_install_html( $link, $class = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
 	 * If a template or add-on cannot be installed, show a message
 	 * about which plan is required.
 	 *
@@ -1675,19 +1667,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * Check an array of templates, determine how many the logged in user can use
-	 *
-	 * @deprecated x.x
-	 *
-	 * @param array $templates
-	 * @param array $args
-	 * @return int
-	 */
-	public static function available_count( $templates, $args ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
 	 * Make sure the field shortcodes in a url always add the sanitize_url=1 option if nothing is defined.
 	 * This is to prevent some field characters like ', @, and | from being stripped from the redirect URL.
 	 *
@@ -1757,5 +1736,43 @@ BEFORE_HTML;
 	 */
 	public static function should_use_pro_for_ajax_submit() {
 		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProFormsHelper::lite_supports_ajax_submit' );
+	}
+
+	/**
+	 * @since 4.02
+	 * @deprecated x.x
+	 */
+	public static function template_install_html( $link, $class = '' ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @deprecated x.x
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+
+		return array_reduce(
+			$templates,
+			function( $total, $template ) use ( $args ) {
+				if ( ! empty( $template['url'] ) ) {
+					return $total + 1;
+				}
+
+				$args['plan_required'] = self::get_plan_required( $template );
+				if ( self::plan_is_allowed( $args ) ) {
+					return $total + 1;
+				}
+
+				return $total;
+			},
+			0
+		);
 	}
 }
