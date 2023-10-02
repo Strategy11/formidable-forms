@@ -326,8 +326,7 @@ class FrmAppHelper {
 	 * @return bool True if the current page is the form templates page, false otherwise.
 	 */
 	public static function is_form_templates_page() {
-		$page = self::simple_get( 'page', 'sanitize_title' );
-		return strpos( $page, FrmFormTemplatesController::PAGE_SLUG ) !== false;
+		return self::is_admin_page( FrmFormTemplatesController::PAGE_SLUG );
 	}
 
 	/**
