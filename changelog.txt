@@ -7,7 +7,7 @@
 * Fix: A wp_frm_payments doesn't exist database error would get logged when viewing an entry when payments migrations had not run yet.
 * Fix: Conditional logic wasn't working for redirect confirmation actions when using the free Stripe action. The same redirect URL would always be used regardless of field values.
 * Fix: An unexpected redirect to global settings would happen when trying to view payments when only the Paypal payments migration has run.
-* Fix: Stripe scripts were not loading properly when the Lite minified JS was available but not the minified Pro scripts.
+* Fix: Stripe scripts were not loading properly when the Lite minified JS was available but not the minified Pro scripts when using the free Stripe action.
 * Fix: CAPTCHA fields were not properly initializing inside of Elementor pop ups.
 
 = 6.5 =
