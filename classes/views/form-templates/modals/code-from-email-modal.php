@@ -13,18 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm-code-from-email-modal" class="frm-form-templates-modal-item frm_hidden">
-	<!-- Modal Header -->
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<span id="frm-code-modal-back-button" role="button" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_back' ); ?>
-			</span><!-- #frm-code-modal-back-button -->
+			</span>
 
 			<span class="frm-modal-title-text"><?php esc_html_e( 'Leave your email address', 'formidable' ); ?></span>
-		</div><!-- .frm-modal-title -->
-	</div><!-- .frm_modal_top -->
+		</div>
+	</div>
 
-	<!-- Modal Body -->
 	<div class="inside">
 		<div class="frmcenter">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/leave-email.svg' ); ?>" />
@@ -39,17 +37,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span frm-error="wrong-code"><?php esc_html_e( 'Verification code is wrong', 'formidable' ); ?></span>
 					<span frm-error="empty"><?php esc_html_e( 'Verification code is empty', 'formidable' ); ?></span>
 				</span>
-			</div><!-- .frm-form-templates-modal-fieldset -->
+			</div>
 
 			<div id="frm_code_from_email_options" class="frm_hidden">
 				<a href="#" id="frm-change-email-address"><?php esc_html_e( 'Change email address', 'formidable' ); ?></a>
 				<span>|</span>
 				<a href="#" id="frm-resend-code"><?php esc_html_e( 'Resend code', 'formidable' ); ?></a>
-			</div><!-- #frm_code_from_email_options -->
-		</div><!-- .frmcenter -->
-	</div><!-- .inside -->
+			</div>
+		</div>
+	</div>
 
-	<!-- Modal Footer -->
 	<div class="frm_modal_footer">
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
@@ -57,5 +54,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" id="frm-confirm-email-address" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Save Code', 'formidable' ); ?>
 		</a>
-	</div><!-- .frm_modal_footer -->
+	</div>
 </div>

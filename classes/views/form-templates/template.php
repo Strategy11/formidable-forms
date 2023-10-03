@@ -67,39 +67,33 @@ if ( $plan_required ) {
 $attributes['class'] = implode( ' ', $class_names );
 ?>
 <li <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
-	<!-- Featured Template Icon -->
 	<?php if ( $is_featured_template ) : ?>
 		<div class="frm-form-templates-item-icon">
 			<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
-		</div><!-- .frm-form-templates-item-icon -->
+		</div>
 	<?php endif; ?>
 
 	<div class="frm-form-templates-item-body">
-		<!-- Template Title -->
 		<h3 class="frm-form-templates-item-title">
 			<div class="frm-form-templates-item-title-text">
-				<!-- Lock Icon -->
 				<?php if ( $plan_required ) { ?>
 					<span class="frm-form-templates-item-lock-icon">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 					</span>
 				<?php } ?>
 
-				<!-- Template Name -->
 				<span class="frm-form-template-name"><?php echo esc_html( $template_name ); ?></span>
-			</div><!-- .frm-form-templates-item-title-text -->
+			</div>
 
-			<!-- Add to Favorite Button -->
 			<a href="#" class="frm-form-templates-item-favorite-button" role="button" aria-label="<?php esc_attr_e( 'Add to favorite button', 'formidable' ); ?>">
 				<?php
 				$favorite_button_icon = $is_favorite_template ? 'frm_heart_solid_icon' : 'frm_heart_icon';
 				FrmAppHelper::icon_by_class( 'frmfont ' . $favorite_button_icon );
 				?>
-			</a><!-- .frm-form-templates-item-favorite-button -->
-		</h3><!-- .frm-form-templates-item-title -->
+			</a>
+		</h3>
 
 		<div class="frm-form-templates-item-content">
-			<!-- Action Buttons -->
 			<div class="frm-form-templates-item-buttons">
 				<a href="<?php echo esc_url( $template['link'] ); ?>" class="button button-secondary frm-button-secondary" target="_blank" role="button">
 					<?php esc_html_e( 'View Demo', 'formidable' ); ?>
@@ -107,10 +101,9 @@ $attributes['class'] = implode( ' ', $class_names );
 				<a href="<?php echo esc_url( $use_template_url ); ?>" class="button button-primary frm-button-primary frm-form-templates-use-template-button" role="button">
 					<?php esc_html_e( 'Use Template', 'formidable' ); ?>
 				</a>
-			</div><!-- .frm-form-templates-item-buttons -->
+			</div>
 
-			<!-- Template Description -->
 			<p class="frm-form-templates-item-description"><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
-		</div><!-- .frm-form-templates-item-content -->
-	</div><!-- .frm-form-templates-item-body -->
-</li><!-- .frm-form-templates-item -->
+		</div>
+	</div>
+</li>

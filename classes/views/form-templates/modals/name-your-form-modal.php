@@ -13,14 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm-name-your-form-modal" class="frm-form-templates-modal-item">
-	<!-- Modal Header -->
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<span class="frm-modal-title-text"><?php esc_html_e( 'Name your form', 'formidable' ); ?></span>
 		</div>
-	</div><!-- .frm_modal_top -->
+	</div>
 
-	<!-- Modal Body -->
 	<div class="inside">
 		<p><?php esc_html_e( 'Before we save your form, do you want to name your form first?', 'formidable' ); ?></p>
 		<p class="frm-new-form-name-field">
@@ -29,9 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 			<input type="text" name="frm_new_form_name" id="frm_new_form_name" placeholder="<?php esc_html_e( 'Enter your form name', 'formidable' ); ?>" class="frm_long_input" />
 		</p>
-	</div><!-- .inside -->
+	</div>
 
-	<!-- Modal Footer -->
 	<div class="frm_modal_footer">
 		<a href="#" id="frm-cancel-rename-form-button" class="button button-secondary frm-button-secondary" role="button">
 			<?php esc_html_e( 'Cancel', 'formidable' ); ?>
@@ -39,5 +36,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a  href="#" id="frm-rename-form-button" class="button button-primary frm-button-primary" role="button" data-disabled="true">
 			<?php esc_html_e( 'Rename', 'formidable' ); ?>
 		</a>
-	</div><!-- .frm_modal_footer -->
+	</div>
 </div>

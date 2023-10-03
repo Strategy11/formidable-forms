@@ -26,6 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>">
 			<span class="frm-form-templates-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
 			<span class="frm-form-templates-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
-		</li><!-- .frm-form-templates-cat-item -->
+		</li>
 	<?php } ?>
-</ul><!-- .frm-form-templates-categories -->
+</ul>

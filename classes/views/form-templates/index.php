@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm-form-templates-page" class="frm_wrap">
 	<div class="frm_page_container">
-		<!-- Page Header -->
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
@@ -24,9 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 
-		<!-- Page Body -->
 		<div class="columns-2">
-			<!-- Page Sidebar -->
 			<div id="frm-form-templates-sidebar" class="frm-right-panel frm_hidden">
 				<div class="frm-scrollbar-wrapper">
 					<?php
@@ -43,24 +40,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 					require $view_path . 'categories.php';
 					?>
 				</div>
-			</div><!-- .frm-right-panel -->
+			</div>
 
-			<!-- Page Content -->
 			<div id="post-body-content" class="frm_hidden">
-				<!-- Create a blank form -->
 				<span id="frm-form-templates-create-form">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
 					<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
-				</span><!-- #frm-form-templates-new-form -->
+				</span>
 				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider"></span>
 
 				<?php
 				// Templates list.
 				require $view_path . 'templates.php';
 				?>
-			</div><!-- #post-body-content -->
-		</div><!-- .columns-2 -->
-	</div><!-- .frm_page_container -->
+			</div>
+		</div>
+	</div>
 
 	<?php
 	/**
@@ -78,4 +73,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="link" id="frm_link" value="" />
 		<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
 	</form>
-</div><!-- #frm-from-templates-page.frm_wrap -->
+</div>

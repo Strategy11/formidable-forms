@@ -22,13 +22,13 @@ if ( ! $view_parts ) {
 		<div class="postbox">
 			<a class="frm-modal-close dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>
-			</a><!-- .dismiss -->
+			</a>
 
 			<?php
 			foreach ( $view_parts as $modal => $file ) {
 				require $view_path . $file;
 			}
 			?>
-		</div><!-- .postbox -->
-	</div><!-- .metabox-holder -->
+		</div>
+	</div>
 </div>

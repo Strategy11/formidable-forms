@@ -16,13 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
 <div id="frm-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
-	<!-- Modal Body -->
 	<div class="inside">
 		<span class="frm-form-templates-space-5"></span>
 
 		<div class="frm-upgrade-modal-lock-icon">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/lock.svg' ); ?>" />
-		</div><!-- .frm-upgrade-modal-lock-icon -->
+		</div>
 
 		<div id="frm-upgrade-modal-content">
 			<h3>
@@ -45,7 +44,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 				);
 				?>
 			</p>
-		</div><!-- #frm-upgrade-modal-content -->
+		</div>
 
 		<div class="frm-upgrade-modal-banner">
 			<span class="frm-upgrade-modal-banner-title">
@@ -59,7 +58,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 				?>
 			</span>
 			<span class="frm-upgrade-modal-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
-		</div><!-- .frm-upgrade-modal-banner -->
+		</div>
 
 		<div id="frm-upgrade-modal-available-plans">
 			<span><?php esc_html_e( 'Template available on:', 'formidable' ); ?></span>
@@ -73,10 +72,9 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 					</span>
 				<?php } ?>
 			</div>
-		</div><!-- #frm-upgrade-modal-available-plans -->
-	</div><!-- .inside -->
+		</div>
+	</div>
 
-	<!-- Modal Footer -->
 	<div class="frm_modal_footer">
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
@@ -84,5 +82,5 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 		<a href="<?php echo esc_url( $upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Upgrade to PRO', 'formidable' ); ?>
 		</a>
-	</div><!-- .frm_modal_footer -->
+	</div>
 </div>
