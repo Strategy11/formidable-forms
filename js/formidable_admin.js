@@ -6161,7 +6161,7 @@ function frmAdminBuildJS() {
 
 		// Prepare FormData for the POST request
 		const formData = new FormData();
-		const newFormName = document.querySelector( '#frm_new_form_name' );
+		const newFormName = document.getElementById( 'frm_new_form_name' );
 		formData.append( 'form_id', urlParams.get( 'id' ) );
 		formData.append( 'form_name', newFormName.value.trim() );
 
@@ -9466,9 +9466,9 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
 
 			// Attach click event listeners to 'Name your form' modal
-			const renameFormButton = document.querySelector( '#frm-rename-form-button' );
-			const cancelRenameFormButton = document.querySelector( '#frm-cancel-rename-form-button' );
-			const newFormName = document.querySelector( '#frm_new_form_name' );
+			const renameFormButton = document.getElementById( 'frm-rename-form-button' );
+			const cancelRenameFormButton = document.getElementById( 'frm-cancel-rename-form-button' );
+			const newFormName = document.getElementById( 'frm_new_form_name' );
 
 			onClickPreventDefault( renameFormButton, onRenameFormButton );
 			onClickPreventDefault( cancelRenameFormButton, onCancelRenameFormButton );
