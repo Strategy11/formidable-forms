@@ -779,6 +779,21 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_field( $args ) {
+
+		/**
+		 * Allows hiding a form field from displaying in form front end.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  Whether to hide the field
+		 * @param array $atts Contains $field, $args
+		 */
+		$hide_field_from_front = apply_filters( 'frm_hide_field_from_front', false, array( 'field' => $this, compact( 'args' ) ) );
+
+		if ( $hide_field_from_front ) {
+			return;
+		}
+
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
 			echo $this->prepare_field_html( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
