@@ -85,7 +85,7 @@ const onSaveCodeButtonClick = async( event ) => {
 		}
 
 		// Remove the 'locked' status from the selected template
-		selectedTemplate.classList.remove( `${ PREFIX }-locked-item` );
+		selectedTemplate.classList.remove( `${PREFIX}-locked-item` );
 
 		// Set the URL to the 'Use Template' button and trigger its click event
 		const useTemplateButton = selectedTemplate.querySelector( '.frm-form-templates-use-template-button' );

@@ -13,7 +13,7 @@ import { resetSearchInput } from './';
  * @return {void}
  */
 function addCategoryEvents() {
-	const categoryItems = document.querySelectorAll( `.${ PREFIX }-cat-item` );
+	const categoryItems = document.querySelectorAll( `.${PREFIX}-cat-item` );
 
 	// Attach click event listeners to each sidebar category
 	categoryItems.forEach( category =>

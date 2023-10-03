@@ -21,18 +21,18 @@ export function createEmptyStateElement() {
 	button.setAttribute( 'role', 'button' );
 
 	return div({
-		id: `${ PREFIX }-empty-state`,
+		id: `${PREFIX}-empty-state`,
 		className: HIDDEN_CLASS,
 		children: [
 			img({
-				src: `${ PLUGIN_URL }/images/form-templates/empty-state.svg`,
+				src: `${PLUGIN_URL}/images/form-templates/empty-state.svg`,
 				alt: __( 'Empty State', 'formidable' )
 			}),
 			tag( 'h3', {
-				className: `${ PREFIX }-title`
+				className: `${PREFIX}-title`
 			}),
 			span({
-				className: `${ PREFIX }-text`
+				className: `${PREFIX}-text`
 			}),
 			button
 		]
@@ -45,12 +45,12 @@ export function createEmptyStateElement() {
  * @return {Object} Object containing Empty State related DOM elements.
  */
 export function getEmptyStateElements() {
-	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );
+	const emptyState = document.querySelector( `#${PREFIX}-empty-state` );
 
 	return {
 		emptyState,
-		emptyStateTitle: emptyState?.querySelector( `.${ PREFIX }-title` ),
-		emptyStateText: emptyState?.querySelector( `.${ PREFIX }-text` ),
+		emptyStateTitle: emptyState?.querySelector( `.${PREFIX}-title` ),
+		emptyStateText: emptyState?.querySelector( `.${PREFIX}-text` ),
 		emptyStateButton: emptyState?.querySelector( '.button' )
 	};
 }

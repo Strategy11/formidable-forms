@@ -15,7 +15,7 @@ import { isVisible, show, hide } from '../utils';
 function addSearchEvents() {
 	const { searchInput } = getElements();
 
-	initSearch( searchInput, `${ PREFIX }-item`, {
+	initSearch( searchInput, `${PREFIX}-item`, {
 		handleSearchResult
 	});
 }

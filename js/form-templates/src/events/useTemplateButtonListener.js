@@ -30,7 +30,7 @@ function addUseTemplateButtonEvents() {
 const onUseTemplateButtonClick = ( event ) => {
 	const useTemplateButton = event.currentTarget;
 
-	const template = useTemplateButton.closest( `.${ PREFIX }-item` );
+	const template = useTemplateButton.closest( `.${PREFIX}-item` );
 	const isLocked = isLockedTemplate( template );
 	const isTemplateCustom = isCustomTemplate( template );
 

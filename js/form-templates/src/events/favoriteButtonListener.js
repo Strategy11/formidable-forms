@@ -13,7 +13,7 @@ import {
 	hide
 } from '../utils';
 
-const FAVORITE_BUTTON_CLASS = `.${ PREFIX }-item-favorite-button`;
+const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
 const HEART_ICON_SELECTOR = `${FAVORITE_BUTTON_CLASS} use`;
 const FILLED_HEART_ICON = '#frm_heart_solid_icon';
 const LINEAR_HEART_ICON = '#frm_heart_icon';
@@ -59,7 +59,7 @@ const onFavoriteButtonClick = ( event ) => {
 	/**
 	 * Get necessary template information
 	 */
-	const template = favoriteButton.closest( `.${ PREFIX }-item` );
+	const template = favoriteButton.closest( `.${PREFIX}-item` );
 	const templateId = template.dataset.id;
 	const isFavorited = isFavoriteTemplate( template );
 	const isTemplateCustom = isCustomTemplate( template );
@@ -71,18 +71,18 @@ const onFavoriteButtonClick = ( event ) => {
 	 */
 	let twinFeaturedTemplate = null;
 
-	template.classList.toggle( `${ PREFIX }-favorite-item`, ! isFavorited );
+	template.classList.toggle( `${PREFIX}-favorite-item`, ! isFavorited );
 	if ( isTemplateFeatured ) {
-		const templateList = template.closest( `#${ PREFIX }-list` ) ?
+		const templateList = template.closest( `#${PREFIX}-list` ) ?
 			featuredTemplatesList :
 			templatesList;
 
 		// Toggle twin template's favorite status
 		twinFeaturedTemplate = templateList?.querySelector(
-			`.${ PREFIX }-item[data-id="${ templateId }"]`
+			`.${PREFIX}-item[data-id="${templateId}"]`
 		);
 		twinFeaturedTemplate?.classList.toggle(
-			`${ PREFIX }-favorite-item`,
+			`${PREFIX}-favorite-item`,
 			! isFavorited
 		);
 	}

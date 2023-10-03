@@ -93,7 +93,7 @@ export function showFavoriteTemplates() {
 	const elementsToShow = [];
 
 	// Get all favorite items from the DOM and add the elements to show
-	const favoriteItems = bodyContent.querySelectorAll( `.${ PREFIX }-favorite-item` );
+	const favoriteItems = bodyContent.querySelectorAll( `.${PREFIX}-favorite-item` );
 	elementsToShow.push( ...favoriteItems );
 
 	// Add default favorites if available

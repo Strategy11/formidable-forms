@@ -26,7 +26,7 @@ export const isFavoritesCategory = category => VIEW_SLUGS.FAVORITES === category
  * @return {boolean} True if the template is a favorite, otherwise false.
  */
 export const isFavoriteTemplate = template =>
-	template?.classList.contains( `${ PREFIX }-favorite-item` );
+	template?.classList.contains( `${PREFIX}-favorite-item` );
 
 /**
  * Checks if a template is custom.
@@ -35,7 +35,7 @@ export const isFavoriteTemplate = template =>
  * @return {boolean} True if the template is custom, otherwise false.
  */
 export const isCustomTemplate = template =>
-	template?.classList.contains( `${ PREFIX }-custom-item` );
+	template?.classList.contains( `${PREFIX}-custom-item` );
 
 /**
  * Checks if a template is featured.
@@ -53,7 +53,7 @@ export const isFeaturedTemplate = template =>
  * @return {boolean} True if the template is locked, otherwise false.
  */
 export const isLockedTemplate = template =>
-	template?.classList.contains( `${ PREFIX }-locked-item` );
+	template?.classList.contains( `${PREFIX}-locked-item` );
 
 /**
  * Validates an email address using a regular expression.
