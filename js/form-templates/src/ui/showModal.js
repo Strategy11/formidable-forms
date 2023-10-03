@@ -57,10 +57,10 @@ const showModal = executePreOpen => async( ...params ) => {
 
 // Mapping each plan to the subsequent plans it can upgrade to
 const upgradablePlans = {
-	'basic': [ 'basic', 'plus', 'business', 'elite' ],
-	'plus': [ 'plus', 'business', 'elite' ],
-	'business': [ 'business', 'elite' ],
-	'elite': [ 'elite' ]
+	basic: [ 'basic', 'plus', 'business', 'elite' ],
+	plus: [ 'plus', 'business', 'elite' ],
+	business: [ 'business', 'elite' ],
+	elite: [ 'elite' ]
 };
 
 /**
