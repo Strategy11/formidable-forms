@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
-		<a href="#" id="frm-add-my-email-address" class="button button-primary frm-button-primary" role="button">
+		<a href="#" id="frm-get-code-button" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Get Code', 'formidable' ); ?>
 		</a>
 	</div>

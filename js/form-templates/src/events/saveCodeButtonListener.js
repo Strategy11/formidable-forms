@@ -117,12 +117,10 @@ const onBackButton = ( event ) => {
  * @return {void}
  */
 const onResendCode = ( event ) => {
-	const { codeFromEmailModalInput } = getElements();
+	const { codeFromEmailModalInput, leaveEmailModalGetCodeButton: getCodeButton } = getElements();
 	codeFromEmailModalInput.value = '';
 	hideElements( document.querySelectorAll( '#frm_code_from_email_options, #frm_code_from_email_error' ) );
-	document.getElementById( 'frm-add-my-email-address' ).dispatchEvent(
-		new Event( 'click', { bubbles: true })
-	);
+	getCodeButton.dispatchEvent( new Event( 'click', { bubbles: true }) );
 };
 
 export default addSaveCodeButtonEvents;

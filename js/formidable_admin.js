@@ -9170,8 +9170,8 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Listen for click events for an API-loaded email collection form.
-	 * This is used for the free templates flow of the new form modal.
-	 * It is also used for the Active Campaign sign-up form in the inbox page (when there are no messages).
+	 *
+	 * This is used for the Active Campaign sign-up form in the inbox page (when there are no messages).
 	 */
 	function initAddMyEmailAddress() {
 		jQuery( document ).on(
