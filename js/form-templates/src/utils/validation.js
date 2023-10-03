@@ -26,7 +26,7 @@ export const isFavoritesCategory = category => VIEW_SLUGS.FAVORITES === category
  * @return {boolean} True if the template is a favorite, otherwise false.
  */
 export const isFavoriteTemplate = template =>
-	template?.classList.contains( `${PREFIX}-favorite-item` );
+	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-favorite-item` ) : false;
 
 /**
  * Checks if a template is custom.
@@ -35,7 +35,7 @@ export const isFavoriteTemplate = template =>
  * @return {boolean} True if the template is custom, otherwise false.
  */
 export const isCustomTemplate = template =>
-	template?.classList.contains( `${PREFIX}-custom-item` );
+	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-custom-item` ) : false;
 
 /**
  * Checks if a template is featured.
@@ -44,7 +44,7 @@ export const isCustomTemplate = template =>
  * @return {boolean} True if the template is featured, otherwise false.
  */
 export const isFeaturedTemplate = template =>
-	FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) );
+	isHTMLElement( template ) ? FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) ) : false;
 
 /**
  * Checks if a template is locked.
@@ -53,7 +53,7 @@ export const isFeaturedTemplate = template =>
  * @return {boolean} True if the template is locked, otherwise false.
  */
 export const isLockedTemplate = template =>
-	template?.classList.contains( `${PREFIX}-locked-item` );
+	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-locked-item` ) : false;
 
 /**
  * Validates an email address using a regular expression.
@@ -61,7 +61,14 @@ export const isLockedTemplate = template =>
  * @param {string} email The email address to validate.
  * @return {boolean} True if the email address is valid, otherwise false.
  */
-export const isValidEmail = email => {
-	const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-	return regex.test( email );
-};
+export const isValidEmail = email =>
+	typeof email === 'string' ? /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test( email ) : false;
+
+/**
+ * Validates if the given element is an instance of HTMLElement.
+ *
+ * @private
+ * @param {any} element Element to be checked.
+ * @return {boolean} True if it's an HTMLElement, otherwise false.
+ */
+const isHTMLElement = element => element instanceof HTMLElement || console.warn( 'Invalid argument: Element must be an instance of HTMLElement' ) || false;
