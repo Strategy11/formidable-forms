@@ -20,7 +20,9 @@ class FrmStrpLiteHooksController {
 		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
 
 		// Filters.
+		add_filter( 'frm_saved_errors', 'FrmStrpLiteAppController::maybe_add_payment_error', 10, 2 );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
+		add_filter( 'frm_setup_edit_entry_vars', 'FrmStrpLiteAppController::maybe_delete_pay_entry', 20, 2 );
 
 		// This filter flags the Pro credit card field that Stripe is enabled.
 		add_filter(

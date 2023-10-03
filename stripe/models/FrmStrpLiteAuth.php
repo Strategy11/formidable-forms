@@ -6,13 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteAuth {
 
 	/**
-	 * Payment details are stored after checking the request params.
-	 * The details are then accessed later in self::maybe_show_message.
-	 * These details include entry, intent, and payment.
+	 * All of the form IDs with payment details in the URL params will be included in this array.
 	 *
 	 * @var array
 	 */
-	private static $details_by_form_id = array();
+	private static $form_ids = array();
 
 	/**
 	 * If returning from Stripe to authorize a payment, show the message.
@@ -36,7 +34,11 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
-		$details = self::$details_by_form_id[ $form_id ];
+		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+		if ( ! is_array( $details ) ) {
+			return $html;
+		}
+
 		$atts    = array(
 			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
 			'entry'  => $details['entry'],
@@ -46,7 +48,7 @@ class FrmStrpLiteAuth {
 		$intent  = $details['intent'];
 		$payment = $details['payment'];
 
-		if ( in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true ) ) {
+		if ( self::intent_has_failed_status( $intent ) ) {
 			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
 			self::insert_error_message( $message, $html );
 			return $html;
@@ -77,79 +79,22 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * Check the URL params for Stripe intent details.
-	 * When these params are detected, the form is replaced with a success message.
-	 * These params are used in 3D secure as well as Stripe Link.
-	 *
-	 * The params include:
-	 * - The ID of the payment intent or setup intent.
-	 * - The ID of the entry.
-	 * - The client secret which is used to verify the intent.
-	 * - The charge ID (if applicable)
-	 *
-	 * @since 6.5
-	 *
 	 * @param string|int $form_id
 	 * @return array|false
 	 */
 	private static function check_request_params( $form_id ) {
-		$form_id         = (int) $form_id;
-		$intent_id       = FrmAppHelper::simple_get( 'payment_intent' );
-		$is_setup_intent = false;
-
-		if ( ! $intent_id ) {
-			$intent_id = FrmAppHelper::simple_get( 'setup_intent' );
-			if ( ! $intent_id ) {
-				return false;
-			}
-
-			$is_setup_intent = true;
-		}
-
-		$entry_id = FrmAppHelper::simple_get( 'frmstrp', 'absint', 0 );
-		if ( ! $entry_id ) {
-			return false;
-		}
-
-		$entry = FrmEntry::getOne( $entry_id );
-		if ( ! $entry || (int) $entry->form_id !== $form_id ) {
-			return false;
-		}
-
-		$charge_id   = FrmAppHelper::simple_get( 'charge' );
-		$has_charge  = (bool) $charge_id;
-		$frm_payment = new FrmTransLitePayment();
-
-		if ( $has_charge ) {
-			// Stripe link payments use charge id.
-			$payment = $frm_payment->get_one_by( $charge_id, 'receipt_id' );
-		} else {
-			// 3D secure payments use intent id.
-			$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
-		}
-
-		if ( ! $payment || (int) $payment->item_id !== (int) $entry->id ) {
-			return false;
-		}
-
 		if ( ! FrmStrpLiteAppHelper::stripe_is_configured() ) {
 			return false;
 		}
 
-		$intent_function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
-		$intent               = FrmStrpLiteAppHelper::call_stripe_helper_class( $intent_function_name, $intent_id );
-
-		if ( ! $intent || ! self::verify_client_secret( $intent, $is_setup_intent ) ) {
+		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+		if ( ! is_array( $details ) ) {
 			return false;
 		}
 
-		self::$details_by_form_id[ $form_id ] = array(
-			'entry'   => $entry,
-			'intent'  => $intent,
-			'payment' => $payment,
-		);
+		self::$form_ids[] = $form_id;
 
-		return self::$details_by_form_id[ $form_id ];
+		return $details;
 	}
 
 	/**
@@ -163,12 +108,7 @@ class FrmStrpLiteAuth {
 	 * @return int|false Matching form id or false if there is no match.
 	 */
 	private static function check_html_for_form_id_match( $html ) {
-		if ( empty( self::$details_by_form_id ) ) {
-			return false;
-		}
-
-		$form_ids = array_keys( self::$details_by_form_id );
-		foreach ( $form_ids as $form_id ) {
+		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
 			if ( strpos( $html, $substring ) ) {
 				return $form_id;
@@ -176,21 +116,6 @@ class FrmStrpLiteAuth {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Check the client secret in the URL, verify it matches the Stripe object and isn't being manipulated.
-	 *
-	 * @since 6.5, introduced in v3.0 of the Stripe add on.
-	 *
-	 * @param object $intent
-	 * @param bool   $is_setup_intent
-	 * @return bool True if the client secret is set and valid.
-	 */
-	private static function verify_client_secret( $intent, $is_setup_intent ) {
-		$client_secret_param = $is_setup_intent ? 'setup_intent_client_secret' : 'payment_intent_client_secret';
-		$client_secret       = FrmAppHelper::simple_get( $client_secret_param );
-		return $client_secret && $client_secret === $intent->client_secret;
 	}
 
 	/**
@@ -501,7 +426,7 @@ class FrmStrpLiteAuth {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
-		if ( is_array( $details ) ) {
+		if ( is_array( $details ) && ! self::intent_has_failed_status( $details['intent'] ) ) {
 			// Exit early if the request params are set.
 			// This way an extra payment intent isn't created for Stripe Link.
 			return $intents;
@@ -516,6 +441,14 @@ class FrmStrpLiteAuth {
 		self::add_amount_to_actions( $form_id, $actions );
 
 		foreach ( $actions as $action ) {
+			if ( is_array( $details ) && self::intent_has_failed_status( $details['intent'] ) ) {
+				$intents[] = array(
+					'id'     => $details['intent']->client_secret,
+					'action' => $action->ID,
+				);
+				continue;
+			}
+
 			$intent = self::create_intent( $action );
 			if ( ! is_object( $intent ) ) {
 				// A non-object is a string error message.
@@ -735,5 +668,17 @@ class FrmStrpLiteAuth {
 	private static function delete_temporary_referer_meta( $row_id ) {
 		global $wpdb;
 		$wpdb->delete( $wpdb->prefix . 'frm_item_metas', array( 'id' => $row_id ) );
+	}
+
+	/**
+	 * Check if a payment or setup intent has failed.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $intent
+	 * @return bool
+	 */
+	private static function intent_has_failed_status( $intent ) {
+		return in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true );
 	}
 }
