@@ -11,7 +11,7 @@ import { isValidEmail, onClickPreventDefault } from '../utils';
  * @return {void}
  */
 function addGetCodeButtonEvents() {
-	const getCodeButton = document.querySelector( '#frm-add-my-email-address' );
+	const getCodeButton = document.getElementById( 'frm-add-my-email-address' );
 
 	// Attach click event listener
 	onClickPreventDefault( getCodeButton, onGetCodeButtonClick );

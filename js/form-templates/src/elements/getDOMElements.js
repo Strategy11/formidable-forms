@@ -10,102 +10,87 @@ import { PREFIX, VIEW_SLUGS } from '../shared';
  */
 function getDOMElements() {
 	// Body Elements
-	const bodyContent = document.querySelector( '#post-body-content' );
+	const bodyContent = document.getElementById( 'post-body-content' );
 	const bodyElements = {
 		bodyContent,
-		headerCancelButton: document.querySelector( '#frm-publishing a' ),
-		createFormButton: document.querySelector( `#${ PREFIX }-create-form` ),
-		pageTitle: document.querySelector( `#${ PREFIX }-page-title` ),
-		upsellBanner: document.querySelector( `#${ PREFIX }-upsell-banner` )
+		headerCancelButton: document.getElementById( 'frm-publishing' ).querySelector( 'a' ),
+		createFormButton: document.getElementById( `${PREFIX}-create-form` ),
+		pageTitle: document.getElementById( `${PREFIX}-page-title` ),
+		upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` )
 	};
 
 	// Templates Elements
-	const templatesList = document.querySelector( `#${ PREFIX }-list` );
+	const templatesList = document.getElementById( `${PREFIX}-list` );
 	const templates = {
 		templatesList,
-		featuredTemplatesList: document.querySelector(
-			`#${ PREFIX }-featured-list`
-		),
-		templateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item` ),
-		availableTemplateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item:not(.${ PREFIX }-locked-item)` ),
-		freeTemplateItems: templatesList?.querySelectorAll( `.${ PREFIX }-item.frm-free-template` ),
-		twinFeaturedTemplateItems: templatesList?.querySelectorAll(
-			`.${ PREFIX }-featured-item`
-		),
-		firstLockedFreeTemplate: templatesList?.querySelector( '.frm-free-template' )
+		templateItems: templatesList.querySelectorAll( `.${PREFIX}-item` ),
+		availableTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-item:not(.${PREFIX}-locked-item)` ),
+		freeTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-item.frm-free-template` ),
+		twinFeaturedTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-featured-item` ),
+		firstLockedFreeTemplate: templatesList.querySelector( '.frm-free-template' ),
+		featuredTemplatesList: document.getElementById( `${PREFIX}-featured-list` )
 	};
 
 	// Custom Templates Section Element
-	const customTemplatesSection = document.querySelector(
-		`#${ PREFIX }-custom-list-section`
-	);
+	const customTemplatesSection = document.getElementById( `${PREFIX}-custom-list-section` );
 	const customTemplates = {
 		customTemplatesSection,
-		customTemplatesTitle: customTemplatesSection?.querySelector(
-			`#${ PREFIX }-custom-list-title`
-		),
-		customTemplatesList: customTemplatesSection?.querySelector(
-			`#${ PREFIX }-custom-list`
-		),
-		customTemplateItems: customTemplatesSection?.querySelectorAll(
-			`.${ PREFIX }-item`
-		)
+		customTemplateItems: customTemplatesSection.querySelectorAll( `.${PREFIX}-item` ),
+		customTemplatesTitle: document.getElementById( `${PREFIX}-custom-list-title` ),
+		customTemplatesList: document.getElementById( `${PREFIX}-custom-list` )
 	};
 
 	// Sidebar Elements
-	const sidebar = document.querySelector( `#${PREFIX}-sidebar` );
-	const searchInput = document.querySelector( '#template-search-input' );
-	const allTemplatesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.ALL_TEMPLATES}"]`
-	);
+	const sidebar = document.getElementById( `${PREFIX}-sidebar` );
 	const favoritesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.FAVORITES}"]`
-	);
-	const availableTemplatesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
-	);
-	const freeTemplatesCategory = document.querySelector(
-		`.${ PREFIX }-cat-item[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
+		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FAVORITES}"]`
 	);
 	const sidebarElements = {
 		sidebar,
-		searchInput,
-		allTemplatesCategory,
 		favoritesCategory,
-		favoritesCategoryCountEl: favoritesCategory?.querySelector(
-			`.${ PREFIX }-cat-count`
+		favoritesCategoryCountEl: favoritesCategory.querySelector(
+			`.${PREFIX}-cat-count`
 		),
-		availableTemplatesCategory,
-		freeTemplatesCategory
+		searchInput: document.getElementById( 'template-search-input' ),
+		allTemplatesCategory: document.querySelector(
+			`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.ALL_TEMPLATES}"]`
+		),
+		availableTemplatesCategory: document.querySelector(
+			`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
+		),
+		freeTemplatesCategory: document.querySelector(
+			`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
+		)
 	};
 
 	// Modal Elements
-	const modal = document.querySelector( `#${PREFIX}-modal` );
+	const modal = document.getElementById( `${PREFIX}-modal` );
 	const modalElements = {
 		modal,
 		modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
-		renewAccountModal: modal?.querySelector( '#frm-renew-modal' ),
+		// Renew Account Modal
+		renewAccountModal: document.getElementById( 'frm-renew-modal' ),
 		// Leave Email Modal
-		leaveEmailModal: modal?.querySelector( '#frm-leave-email-modal' ),
-		leaveEmailModalInput: modal?.querySelector( '#frm_leave_email' ),
-		leaveEmailModalApiEmailForm: modal?.querySelector( '#frmapi-email-form' ),
+		leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
+		leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
+		leaveEmailModalApiEmailForm: document.getElementById( 'frmapi-email-form' ),
 		// Code from Email Modal
-		codeFromEmailModal: modal?.querySelector( '#frm-code-from-email-modal' ),
-		codeFromEmailModalInput: modal?.querySelector( '#frm_code_from_email' ),
+		codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
+		codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
 		// Upgrade Modal
-		upgradeModal: modal?.querySelector( '#frm-upgrade-modal' ),
+		upgradeModal: document.getElementById( 'frm-upgrade-modal' ),
 		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
 		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' )
 	};
 
 	// New Template Form Elements
-	const newTemplateForm = document.querySelector( '#frm-new-template' );
+	const newTemplateForm = document.getElementById( 'frm-new-template' );
 	const newTemplateFormElements = {
 		newTemplateForm,
-		newTemplateNameInput: newTemplateForm?.querySelector( '#frm_template_name' ),
-		newTemplateDescriptionInput: newTemplateForm?.querySelector( '#frm_template_desc' ),
-		newTemplateLinkInput: newTemplateForm?.querySelector( '#frm_link' ),
-		newTemplateActionInput: newTemplateForm?.querySelector( '#frm_action_type' )
+		newTemplateNameInput: document.getElementById( 'frm_template_name' ),
+		newTemplateDescriptionInput: document.getElementById( 'frm_template_desc' ),
+		newTemplateLinkInput: document.getElementById( 'frm_link' ),
+		newTemplateActionInput: document.getElementById( 'frm_action_type' )
 	};
 
 	return {

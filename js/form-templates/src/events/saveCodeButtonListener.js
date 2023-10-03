@@ -12,10 +12,10 @@ import { show, hide, hideElements, onClickPreventDefault } from '../utils';
  * @return {void}
  */
 function addSaveCodeButtonEvents() {
-	const saveCodeButton = document.querySelector( '#frm-confirm-email-address' );
-	const backButton = document.querySelector( '#frm-code-modal-back-button' );
-	const changeEmailButton = document.querySelector( '#frm-change-email-address' );
-	const resendCode = document.querySelector( '#frm-resend-code' );
+	const saveCodeButton = document.getElementById( 'frm-confirm-email-address' );
+	const backButton = document.getElementById( 'frm-code-modal-back-button' );
+	const changeEmailButton = document.getElementById( 'frm-change-email-address' );
+	const resendCode = document.getElementById( 'frm-resend-code' );
 
 	// Attach click event to the "Save Code" button
 	onClickPreventDefault( saveCodeButton, onSaveCodeButtonClick );
@@ -69,7 +69,7 @@ const onSaveCodeButtonClick = async( event ) => {
 			const { message: errorMessage } = data?.data?.[0] || {};
 			const errorType = errorMessage ? 'custom' : 'wrong-code';
 			showConfirmEmailAddressError( errorType, errorMessage );
-			show( document.querySelector( '#frm_code_from_email_options' ) );
+			show( document.getElementById( 'frm_code_from_email_options' ) );
 			return;
 		}
 
@@ -120,7 +120,7 @@ const onResendCode = ( event ) => {
 	const { codeFromEmailModalInput } = getElements();
 	codeFromEmailModalInput.value = '';
 	hideElements( document.querySelectorAll( '#frm_code_from_email_options, #frm_code_from_email_error' ) );
-	document.querySelector( '#frm-add-my-email-address' ).dispatchEvent(
+	document.getElementById( 'frm-add-my-email-address' ).dispatchEvent(
 		new Event( 'click', { bubbles: true })
 	);
 };
