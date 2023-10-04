@@ -454,7 +454,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Conditional logic wasn't working for redirect confirmation actions when using the free Stripe action. The same redirect URL would always be used regardless of field values.
 * Fix: An unexpected redirect to global settings would happen when trying to view payments when only the Paypal payments migration has run.
 * Fix: Stripe scripts were not loading properly when the Lite minified JS was available but not the minified Pro scripts when using the free Stripe action.
-* Fix: iDEAL, Bancontact, and SOFORT subscriptions would fail with a The payment method must be attached to the customer error when using the free Stripe action.
 * Fix: CAPTCHA fields were not properly initializing inside of Elementor pop ups.
 * Fix: Gateway fields were always hidden from the form builder. These fields will appear again when the Stripe or Authorize.Net add ons are active.
 
