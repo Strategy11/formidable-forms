@@ -83,7 +83,7 @@ class FrmTipsHelper {
 	/**
 	 * Use the correct label for the license.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @return string
 	 */

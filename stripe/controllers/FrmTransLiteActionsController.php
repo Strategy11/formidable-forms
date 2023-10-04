@@ -378,7 +378,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * Entries are deleted on payment failure so set the form values after an error from the entry data that gets deleted.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param array    $values
 	 * @param stdClass $field
@@ -408,7 +408,7 @@ class FrmTransLiteActionsController {
 	 * It needs to happen late enough that FrmProNestedFormsController::display_single_iteration_of_nested_form is able to fill in data for repeater fields.
 	 * See Formidable Stripe issue #136 for more information.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param string|int $entry_id
 	 * @return void

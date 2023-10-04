@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Check, verify, and store URL param details.
  * This is used for 3D Secure and Stripe Link.
  *
- * @since x.x
+ * @since 6.5.1
  */
 class FrmStrpLiteUrlParamHelper {
 
@@ -42,7 +42,7 @@ class FrmStrpLiteUrlParamHelper {
 	 * - The client secret which is used to verify the intent.
 	 * - The charge ID (if applicable)
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param string|int $form_id
 	 * @return void
@@ -100,8 +100,7 @@ class FrmStrpLiteUrlParamHelper {
 	/**
 	 * Check the client secret in the URL, verify it matches the Stripe object and isn't being manipulated.
 	 *
-	 * @since 3.0
-	 * @since x.x This was moved from FrmStrpAuth.
+	 * @since 6.5.1
 	 *
 	 * @param object $intent
 	 * @param bool   $is_setup_intent

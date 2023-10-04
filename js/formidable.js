@@ -494,7 +494,7 @@ function frmFrontFormJS() {
 	/**
 	 * Set color for select placeholders.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 */
 	function setSelectPlaceholderColor() {
 		var selects = document.querySelectorAll( '.form-field select' ),

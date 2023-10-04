@@ -96,7 +96,7 @@ class FrmStrpLiteAppController {
 	/**
 	 * Maybe add payment error to the form errors data.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param array $errors Errors data. Is empty array if no errors found.
 	 * @param array $params Form params. See {@FrmForm::get_params()}.
@@ -112,7 +112,7 @@ class FrmStrpLiteAppController {
 	 * Handle Stripe Link redirect failures.
 	 * When a payment fails, the entry is deleted, and the previous entry's values are loaded in the form.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param array $errors
 	 * @param int   $form_id
@@ -164,7 +164,7 @@ class FrmStrpLiteAppController {
 	/**
 	 * Reset a form after a payment fails.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param int                  $form_id
 	 * @param int                  $entry_id

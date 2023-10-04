@@ -151,7 +151,7 @@ class FrmStrpLiteSubscriptionHelper {
 	/**
 	 * If a subscription fails because the plan does not exist, create the plan and try again.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param object|string|false $subscription
 	 * @param array               $charge_data
