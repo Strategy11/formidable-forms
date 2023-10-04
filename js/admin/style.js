@@ -1376,7 +1376,7 @@
 
 		// Function to change the color of a select element
 		const changeSelectColor = ( select ) => {
-			if ( select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
+			if ( select.options[select.selectedIndex] && select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';
