@@ -10,9 +10,7 @@ const urlParams = url.searchParams;
  * @param {string} paramName The name of the query parameter to retrieve.
  * @return {string|null} The value associated with the specified query parameter name, or null if not found.
  */
-export const getQueryParam = ( paramName ) => {
-	return urlParams.get( paramName );
-};
+export const getQueryParam = paramName => urlParams.get( paramName );
 
 /**
  * Removes a query parameter from the current URL and returns the updated URL string.
@@ -45,6 +43,4 @@ export const setQueryParam = ( paramName, paramValue ) => {
  * @param {string} paramName The name of the query parameter to check.
  * @return {boolean} True if the query parameter exists, otherwise false.
  */
-export const hasQueryParam = ( paramName ) => {
-	return urlParams.has( paramName );
-};
+export const hasQueryParam = paramName => urlParams.has( paramName );
