@@ -705,6 +705,17 @@ class FrmAppController {
 
 		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
 
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			/**
+			 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+			 * They do however need to be visible when the payments submodule is active.
+			 */
+			wp_add_inline_style(
+				'formidable-admin',
+				'#frm_builder_page li[data-ftype="gateway"] { display: none; }'
+			);
+		}
+
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
