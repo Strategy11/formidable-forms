@@ -77,14 +77,16 @@ const onFavoriteButtonClick = ( event ) => {
 			featuredTemplatesList :
 			templatesList;
 
-		// Toggle twin template's favorite status
-		twinFeaturedTemplate = templateList?.querySelector(
-			`.${PREFIX}-item[data-id="${templateId}"]`
-		);
-		twinFeaturedTemplate?.classList.toggle(
-			`${PREFIX}-favorite-item`,
-			! isFavorited
-		);
+		if ( templateList ) {
+			twinFeaturedTemplate = templateList.querySelector(
+				`.${PREFIX}-item[data-id="${templateId}"]`
+			);
+			// Toggle twin template's favorite status
+			twinFeaturedTemplate.classList.toggle(
+				`${PREFIX}-favorite-item`,
+				! isFavorited
+			);
+		}
 	}
 
 	/**
