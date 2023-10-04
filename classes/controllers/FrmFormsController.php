@@ -2281,7 +2281,11 @@ class FrmFormsController {
 			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
 		}
 
-		$entry       = FrmEntry::getOne( $args['entry_id'], true );
+		$entry = FrmEntry::getOne( $args['entry_id'], true );
+		if ( ! $entry ) {
+			return array();
+		}
+
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
 		$has_redirect = false;
