@@ -398,8 +398,18 @@ class FrmFormsController {
 		FrmStylesController::enqueue_css( 'enqueue', true );
 
 		if ( false === get_template_part( 'page' ) ) {
+			add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
 			self::fallback_when_page_template_part_is_not_supported_by_theme();
 		}
+	}
+
+	/**
+	 * @since 6.x
+	 * @param array $classes The body classes list.
+	 */
+	public static function preview_block_theme_body_classnames( $classes ) {
+		$classes[] = 'has-global-padding';
+		return $classes;
 	}
 
 	/**
