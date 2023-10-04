@@ -15,8 +15,7 @@ import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, span, a, img } from '../sha
  */
 export function createEmptyStateElement() {
 	const button = a({
-		className: 'button button-primary frm-button-primary',
-		href: '#'
+		className: 'button button-primary frm-button-primary'
 	});
 	button.setAttribute( 'role', 'button' );
 
