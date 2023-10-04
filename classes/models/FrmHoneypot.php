@@ -90,15 +90,26 @@ class FrmHoneypot extends FrmValidate {
 	 * @return void
 	 */
 	public function render_field() {
-		$honeypot   = $this->check_honeypot_setting();
-		$form       = $this->get_form();
-		$class_name = $this->get_honeypot_class_name();
+		$honeypot    = $this->check_honeypot_setting();
+		$form        = $this->get_form();
+		$class_name  = $this->get_honeypot_class_name();
+		$input_attrs = array(
+			'id'    => 'frm_email_' . absint( $form->id ),
+			'type'  => 'strict' === $honeypot ? 'email' : 'text',
+			'class' => 'frm_verify',
+			'name'  => $class_name,
+			'value' => FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ),
+		);
+
+		if ( 'strict' !== $honeypot ) {
+			$input_attrs['autocomplete'] = 'false';
+		}
 		?>
 			<div class="<?php echo esc_attr( $class_name ); ?>" <?php echo in_array( $honeypot, array( true, 'strict' ), true ) ? '' : 'aria-hidden="true"'; ?>>
 				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
 					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
 				</label>
-				<input type="<?php echo esc_attr( 'strict' === $honeypot ? 'email' : 'text' ); ?>" id="frm_email_<?php echo esc_attr( $form->id ); ?>" class="frm_verify" name="<?php echo esc_attr( $class_name ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
+				<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
 			</div>
 		<?php
 	}
