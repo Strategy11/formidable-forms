@@ -6146,30 +6146,20 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Handles the click event on the rename form button.
+	 * Handles the click event on the save form name button.
 	 *
 	 * @param {Event} event The click event object.
 	 * @return {void}
 	 */
-	const onRenameFormButton = ( event ) => {
-		const renameFormButton = event.currentTarget;
-
-		// Check if the button is currently disabled
-		if ( 'true' === renameFormButton.getAttribute( 'data-disabled' ) ) {
-			return;
-		}
-
+	const onSaveFormNameButton = ( event ) => {
 		// Prepare FormData for the POST request
 		const formData = new FormData();
-		const newFormName = document.getElementById( 'frm_new_form_name' );
+		const newFormName = document.getElementById( 'frm_new_form_name_input' );
 		formData.append( 'form_id', urlParams.get( 'id' ) );
 		formData.append( 'form_name', newFormName.value.trim() );
 
 		// Perform the POST request
 		doJsonPost( 'rename_form', formData ).finally( () => {
-			// Re-enable the button
-			renameFormButton.setAttribute( 'data-disabled', 'false' );
-
 			// Remove the 'new_template' parameter from the URL and update the browser history
 			urlParams.delete( 'new_template' );
 			currentURL.search = urlParams.toString();
@@ -6178,21 +6168,6 @@ function frmAdminBuildJS() {
 			// Trigger the 'Save' button click using jQuery
 			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
 		});
-	};
-
-	/**
-	 * Handles the click event on the cancel rename form button.
-	 *
-	 * @param {Event} event The click event object.
-	 * @return {void}
-	 */
-	const onCancelRenameFormButton = ( event ) => {
-		// Remove the 'new_template' parameter from the URL and then reload the page.
-		urlParams.delete( 'new_template' );
-		currentURL.search = urlParams.toString();
-		window.location.href = currentURL.toString();
-
-		return;
 	};
 
 	function preFormSave( b ) {
@@ -9466,23 +9441,14 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
 
 			// Attach click event listeners to 'Name your form' modal
-			const renameFormButton = document.getElementById( 'frm-rename-form-button' );
-			const cancelRenameFormButton = document.getElementById( 'frm-cancel-rename-form-button' );
-			const newFormName = document.getElementById( 'frm_new_form_name' );
-
-			onClickPreventDefault( renameFormButton, onRenameFormButton );
-			onClickPreventDefault( cancelRenameFormButton, onCancelRenameFormButton );
-
-			newFormName.addEventListener( 'input', function() {
-				const inputValue = this.value.trim();
-
-				if ( '' === inputValue ) {
-					renameFormButton.setAttribute( 'data-disabled', 'true' );
-				} else {
-					renameFormButton.removeAttribute( 'data-disabled' );
+			const saveFormNameButton = document.getElementById( 'frm-save-form-name-button' );
+			const newFormNameInput = document.getElementById( 'frm_new_form_name_input' );
+			onClickPreventDefault( saveFormNameButton, onSaveFormNameButton );
+			newFormNameInput.addEventListener( 'keydown', function( event ) {
+				if ( event.key === 'Enter' ) {
+					onSaveFormNameButton.call( this, event );
 				}
 			});
-
 
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );

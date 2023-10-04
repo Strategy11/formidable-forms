@@ -9183,25 +9183,14 @@ Responsive Design
 	margin: 0;
 }
 
-#frm-name-your-form-modal #frm_new_form_name {
+#frm-name-your-form-modal #frm_new_form_name_input {
 	padding: 0 calc(var(--gap-sm) - 2px) 2px;
 	border-radius: var(--small-radius);
 	border-color: var(--grey-300);
 }
 
-#frm-name-your-form-modal #frm_new_form_name::placeholder {
+#frm-name-your-form-modal #frm_new_form_name_input::placeholder {
 	color: var(--grey-500);
 	font-size: var(--text-sm);
-}
-
-#frm-name-your-form-modal #frm-rename-form-button[data-disabled="true"] {
-	background-color: var(--primary-200) !important;
-	border-color: var(--primary-200);
-	cursor: default;
-}
-
-#frm-name-your-form-modal #frm-rename-form-button[data-disabled]:hover,
-#frm-name-your-form-modal #frm-rename-form-button[data-disabled]:focus {
-	border-color: var(--primary-200) !important;
 }
 /* End form-templates-modal */
