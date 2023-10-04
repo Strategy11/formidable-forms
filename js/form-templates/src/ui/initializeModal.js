@@ -62,28 +62,32 @@ async function maybeFetchInjectForm() {
 	// Get the URL to fetch the form HTML from
 	const url = leaveEmailModalApiEmailForm.getAttribute( 'data-url' );
 
+	let json;
+
 	try {
-		// Fetch form HTML
 		const response = await fetch( url );
-		const json = await response.json();
-		if ( ! json.renderedHtml ) {
-			console.warn( 'renderedHtml is not available.' );
-			return;
-		}
-		let formHtml = json.renderedHtml;
-
-		// Remove unnecessary link tags from the HTML
-		const regex = /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi;
-		formHtml = formHtml.replace( regex, '' );
-
-		// Inject form HTML into the email form container
-		leaveEmailModalApiEmailForm.innerHTML = formHtml;
-
-		// Add the fetched form and email input to the initialized elements list for later use
-		const leaveEmailModalHiddenForm = leaveEmailModalApiEmailForm.querySelector( 'form' );
-		const leaveEmailModalHiddenInput = leaveEmailModalHiddenForm.querySelector( '[type="email"]:not(.frm_verify)' );
-		addElements({ leaveEmailModalHiddenForm, leaveEmailModalHiddenInput });
+		json = await response.json();
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
+		return;
 	}
+
+	if ( ! json.renderedHtml ) {
+		console.warn( 'renderedHtml is not available.' );
+		return;
+	}
+
+	let formHtml = json.renderedHtml;
+
+	// Remove unnecessary link tags from the HTML
+	const regex = /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi;
+	formHtml = formHtml.replace( regex, '' );
+
+	// Inject form HTML into the email form container
+	leaveEmailModalApiEmailForm.innerHTML = formHtml;
+
+	// Add the fetched form and email input to the initialized elements list for later use
+	const leaveEmailModalHiddenForm = leaveEmailModalApiEmailForm.querySelector( 'form' );
+	const leaveEmailModalHiddenInput = leaveEmailModalHiddenForm.querySelector( '[type="email"]:not(.frm_verify)' );
+	addElements({ leaveEmailModalHiddenForm, leaveEmailModalHiddenInput });
 }

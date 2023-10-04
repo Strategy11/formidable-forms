@@ -54,6 +54,8 @@ const onSaveCodeButtonClick = async( event ) => {
 	formData.append( 'code', code );
 	formData.append( 'key', selectedTemplate.dataset.key );
 
+	let data;
+
 	try {
 		// Perform the POST request
 		const response = await fetch( ajaxurl, {
@@ -62,38 +64,39 @@ const onSaveCodeButtonClick = async( event ) => {
 		});
 
 		// Parse the JSON response
-		const data = await response.json();
-
-		// Handle unsuccessful request
-		if ( ! data.success ) {
-			const { message: errorMessage } = data?.data?.[0] || {};
-			const errorType = errorMessage ? 'custom' : 'wrong-code';
-			showConfirmEmailAddressError( errorType, errorMessage );
-			show( document.getElementById( 'frm_code_from_email_options' ) );
-			return;
-		}
-
-		// If the 'free-templates' query parameter is set, remove it and reload the page
-		if ( hasQueryParam( 'free-templates' ) ) {
-			window.location.href = removeQueryParam( 'free-templates' );
-			return;
-		}
-
-		// Check if data and URL are present
-		if ( ! data.data || ! data.data.url ) {
-			return;
-		}
-
-		// Remove the 'locked' status from the selected template
-		selectedTemplate.classList.remove( `${PREFIX}-locked-item` );
-
-		// Set the URL to the 'Use Template' button and trigger its click event
-		const useTemplateButton = selectedTemplate.querySelector( '.frm-form-templates-use-template-button' );
-		useTemplateButton.setAttribute( 'href', data.data.url );
-		useTemplateButton.dispatchEvent( new Event( 'click', { bubbles: true }) );
+		data = await response.json();
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
+		return;
 	}
+
+	// Handle unsuccessful request
+	if ( ! data.success ) {
+		const { message: errorMessage } = data?.data?.[0] || {};
+		const errorType = errorMessage ? 'custom' : 'wrong-code';
+		showConfirmEmailAddressError( errorType, errorMessage );
+		show( document.getElementById( 'frm_code_from_email_options' ) );
+		return;
+	}
+
+	// If the 'free-templates' query parameter is set, remove it and reload the page
+	if ( hasQueryParam( 'free-templates' ) ) {
+		window.location.href = removeQueryParam( 'free-templates' );
+		return;
+	}
+
+	// Check if data and URL are present
+	if ( ! data.data || ! data.data.url ) {
+		return;
+	}
+
+	// Remove the 'locked' status from the selected template
+	selectedTemplate.classList.remove( `${PREFIX}-locked-item` );
+
+	// Set the URL to the 'Use Template' button and trigger its click event
+	const useTemplateButton = selectedTemplate.querySelector( '.frm-form-templates-use-template-button' );
+	useTemplateButton.setAttribute( 'href', data.data.url );
+	useTemplateButton.dispatchEvent( new Event( 'click', { bubbles: true }) );
 };
 
 /**

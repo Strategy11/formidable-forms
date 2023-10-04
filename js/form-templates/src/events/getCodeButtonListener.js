@@ -54,6 +54,8 @@ const onGetCodeButtonClick = async( event ) => {
 	const formData = new FormData( leaveEmailModalHiddenForm );
 	formData.append( 'action', 'frm_forms_preview' );
 
+	let doc;
+
 	try {
 		// Perform the POST request
 		const response = await fetch( leaveEmailModalHiddenForm.getAttribute( 'action' ), {
@@ -64,20 +66,22 @@ const onGetCodeButtonClick = async( event ) => {
 		// Parse the response text to HTML
 		const text = await response.text();
 		const parser = new DOMParser();
-		const doc = parser.parseFromString( text, 'text/html' );
-
-		// Extract and trim the message from the HTML response
-		const message = doc.querySelector( '.frm_message' )?.textContent.trim();
-
-		// Check if the message indicates success ("Thanks!")
-		if ( message && message.indexOf( 'Thanks!' ) >= 0 ) {
-			showCodeFromEmailModal();
-		} else {
-			// Show an error if the email is invalid
-			showEmailAddressError( 'invalid' );
-		}
+		doc = parser.parseFromString( text, 'text/html' );
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
+		return;
+	}
+
+
+	// Extract and trim the message from the HTML response
+	const message = doc.querySelector( '.frm_message' )?.textContent.trim();
+
+	// Check if the message indicates success ("Thanks!")
+	if ( message && message.indexOf( 'Thanks!' ) >= 0 ) {
+		showCodeFromEmailModal();
+	} else {
+		// Show an error if the email is invalid
+		showEmailAddressError( 'invalid' );
 	}
 };
 
