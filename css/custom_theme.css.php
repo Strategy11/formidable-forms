@@ -69,9 +69,10 @@ input:-webkit-autofill {
 <?php } ?>
 }
 
-form input.frm_verify{
-	position:absolute;
-	left:-3000px;
+form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
+	overflow: hidden;
+	width: 0;
+	height: 0;
 }
 
 .with_frm_style fieldset{
