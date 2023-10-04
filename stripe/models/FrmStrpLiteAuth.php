@@ -673,7 +673,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check if a payment or setup intent has failed.
 	 *
-	 * @since x.x
+	 * @since 6.5.1
 	 *
 	 * @param object $intent
 	 * @return bool
