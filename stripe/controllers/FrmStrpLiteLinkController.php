@@ -309,9 +309,19 @@ class FrmStrpLiteLinkController {
 	 * @return string|false
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
+		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
+			$payment_method_details = $setup_intent->latest_attempt->payment_method_details;
+			foreach ( array( 'ideal', 'sofort', 'bancontact' ) as $payment_method_type ) {
+				if ( ! empty( $payment_method_details->$payment_method_type ) ) {
+					return $payment_method_details->$payment_method_type->generated_sepa_debit;
+				}
+			}
+		}
+
 		if ( ! empty( $setup_intent->payment_method ) ) {
 			return $setup_intent->payment_method;
 		}
+
 		return false;
 	}
 
