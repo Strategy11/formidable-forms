@@ -1643,11 +1643,12 @@ class FrmFormsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data
-		$form_id   = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
-		$form_name = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
-		// Update the form name
-		FrmForm::update( $form_id, array( 'name' => $form_name ) );
+		// Update the form name and form key.
+		$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
 
 		wp_send_json_success();
 	}
