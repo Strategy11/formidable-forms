@@ -453,6 +453,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Stripe scripts were not loading properly when the Lite minified JS was available but not the minified Pro scripts when using the free Stripe action.
 * Fix: iDEAL, Bancontact, and SOFORT subscriptions would fail with a The payment method must be attached to the customer error when using the free Stripe action.
 * Fix: CAPTCHA fields were not properly initializing inside of Elementor pop ups.
+* Fix: Gateway fields were always hidden from the form builder. These fields will appear again when the Stripe or Authorize.Net add ons are active.
 
 = 6.5 =
 * New: Stripe forms are now available for free without the need for other add ons. Global settings now include a Stripe section. Payment fields and Collect Payment actions have been added, as well as the Global setting for defining the default currency.
