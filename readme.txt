@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.3.1
 Requires PHP: 5.6
-Stable tag: 6.5
+Stable tag: 6.5.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,22 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.5.1 =
+* New: Dropdown placeholders now use placeholder styling.
+* New: The honeypot field is now hidden using a new style rule to help avoid a styling conflict with RTL languages in Elementor.
+* New: The honeypot field has been updated to make it more random and less obvious.
+* New: An additional attribute has been added for basic honeypot protection to help avoid conflicts with false postiives caused by autofilling form fields.
+* Fix: Stripe subscriptions would fail with a No such plan error if the payment action was created when a different mode was active when using the free Stripe action.
+* Fix: Entries would not get deleted on Stripe payment failure, and old entry data would not get displayed with payment errors, when using the free Stripe action.
+* Fix: The payment expire date and next subscription billing date values were not accurate for payment table records when using the free Stripe action.
+* Fix: A wp_frm_payments doesn't exist database error would get logged when viewing an entry when payments migrations had not run yet.
+* Fix: Conditional logic wasn't working for redirect confirmation actions when using the free Stripe action. The same redirect URL would always be used regardless of field values.
+* Fix: An unexpected redirect to global settings would happen when trying to view payments when only the Paypal payments migration has run.
+* Fix: Stripe scripts were not loading properly when the Lite minified JS was available but not the minified Pro scripts when using the free Stripe action.
+* Fix: iDEAL, Bancontact, and SOFORT subscriptions would fail with a The payment method must be attached to the customer error when using the free Stripe action.
+* Fix: CAPTCHA fields were not properly initializing inside of Elementor pop ups.
+* Fix: Gateway fields were always hidden from the form builder. These fields will appear again when the Stripe or Authorize.Net add ons are active.
+
 = 6.5 =
 * New: Stripe forms are now available for free without the need for other add ons. Global settings now include a Stripe section. Payment fields and Collect Payment actions have been added, as well as the Global setting for defining the default currency.
 * Fix: The TinyMCE editor would exceed the page boundaries after the fullscreen button was clicked.
