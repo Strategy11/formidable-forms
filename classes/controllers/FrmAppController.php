@@ -1183,7 +1183,11 @@ class FrmAppController {
 
 		// Enqueue the config script.
 		wp_enqueue_script( 's11-floating-links-config', $plugin_url . '/js/packages/floating-links/config.js', array( 'wp-i18n' ), $version, true );
-		wp_set_script_translations( 's11-floating-links-config', 's11-' );
+
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations( 's11-floating-links-config', 's11-' );
+		}
+
 		$floating_links_data = array(
 			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
 		);
