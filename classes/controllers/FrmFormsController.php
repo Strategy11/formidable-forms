@@ -1270,6 +1270,19 @@ class FrmFormsController {
 					)
 				),
 			),
+			'abandonment'   => array(
+				'name'       => __( 'Form Abandonment', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_abandoned_icon',
+				'html_class' => 'frm_show_upgrade_tab frm_noallow',
+				'data'       => FrmAppHelper::get_upgrade_data_params(
+					'abandonment',
+					array(
+						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
+						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
+						'screenshot' => 'abandonment.png',
+					)
+				),
+			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
@@ -1278,7 +1291,7 @@ class FrmFormsController {
 			),
 		);
 
-		foreach ( array( 'landing', 'chat' ) as $feature ) {
+		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
 			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
 				unset( $sections[ $feature ] );
 			}
