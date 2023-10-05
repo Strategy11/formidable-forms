@@ -73,6 +73,7 @@ form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
 	overflow: hidden;
 	width: 0;
 	height: 0;
+	position: absolute;
 }
 
 .with_frm_style fieldset{
