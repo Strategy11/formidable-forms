@@ -406,8 +406,12 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since 6.x
+	 * Add padding to the body for block themes.
+	 *
+	 * @since 6.5.2
+	 *
 	 * @param array $classes The body classes list.
+	 * @return array
 	 */
 	public static function preview_block_theme_body_classnames( $classes ) {
 		$classes[] = 'has-global-padding';
