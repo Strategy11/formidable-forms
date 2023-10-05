@@ -28,6 +28,7 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
+	--error-300: #FECDCA;
 	--error-500: #F04438;
 	--error-700: #B42318;
 	--green: rgb(63, 172, 37);

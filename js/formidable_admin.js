@@ -377,13 +377,18 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmLinkClick( link ) {
-		var message = link.getAttribute( 'data-frmverify' );
+		var message    = link.getAttribute( 'data-frmverify' ),
+			loadedFrom = link.getAttribute( 'data-loaded-from' ) ;
 
 		if ( message === null || link.id === 'frm-confirmed-click' ) {
 			return true;
-		} else {
-			return confirmModal( link );
 		}
+
+		if ( 'entries-list' === loadedFrom ) {
+			return wp.hooks.applyFilters( 'frm_on_multiple_entries_delete', { link, initModal });
+		}
+
+		return confirmModal( link );
 	}
 
 	function confirmModal( link ) {
@@ -600,7 +605,7 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '#frm-confirmed-click', function( event ) {
-			if ( doAction === false ) {
+			if ( doAction === false || event.target.classList.contains( 'frm-btn-inactive' ) ) {
 				return;
 			}
 
