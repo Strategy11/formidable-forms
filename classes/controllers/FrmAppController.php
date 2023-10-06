@@ -647,6 +647,8 @@ class FrmAppController {
 		FrmAppHelper::load_admin_wide_js();
 
 		if ( class_exists( 'FrmOverlayController' ) ) {
+			// This should always exist.
+			// But it may not have loaded properly when updating the plugin.
 			FrmOverlayController::register_assets();
 		}
 
