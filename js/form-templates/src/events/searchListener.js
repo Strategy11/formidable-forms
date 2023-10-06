@@ -29,7 +29,13 @@ function addSearchEvents() {
  * @param {boolean} args.notEmptySearchText True if search input is not empty.
  * @return {void}
  */
-function handleSearchResult({ foundSomething, notEmptySearchText }) {
+function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
+	// Prevent double calls as window.frmDom.search.init attaches both 'input' and 'search' events,
+	// triggering this method twice on 'x' button click.
+	if ( event && event.type === 'search' && event.target.value === '' ) {
+		return;
+	}
+
 	const appState = getAppState();
 	const { allTemplatesCategory, emptyState } = getElements();
 

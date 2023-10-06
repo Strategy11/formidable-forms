@@ -373,7 +373,7 @@
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );
 
-			function handleSearch() {
+			function handleSearch( event ) {
 				const searchText = input.value.toLowerCase();
 				const notEmptySearchText = searchText !== '';
 				const items = Array.from( document.getElementsByClassName( targetClassName ) );
@@ -381,7 +381,7 @@
 				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
 				if ( 'function' === typeof handleSearchResult ) {
-					handleSearchResult({ foundSomething, notEmptySearchText });
+					handleSearchResult({ foundSomething, notEmptySearchText }, event );
 				}
 
 				function toggleSearchClassesForItem( item ) {
