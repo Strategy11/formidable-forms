@@ -32,7 +32,7 @@ function addCreateFormButtonEvents() {
 const onCreateFormButtonClick = ( event ) => {
 	const { createFormButton, newTemplateForm, newTemplateNameInput, newTemplateActionInput } = getElements();
 
-	newTemplateNameInput.value = __( 'No name', 'formidable' );
+	newTemplateNameInput.value = '';
 	newTemplateActionInput.value = 'frm_install_form';
 	installNewForm( newTemplateForm, 'frm_install_form', createFormButton );
 };
