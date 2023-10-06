@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.3.1
 Requires PHP: 5.6
-Stable tag: 6.5.1
+Stable tag: 6.5.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,10 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.5.2 =
+* Fix: Field validation errors were accidentally getting removed. Instead of validation errors, it would show an incorrect It looks like you've already submitted that error message.
+* Fix: The honeypot field would cause inline submit buttons to break to the next line.
+
 = 6.5.1 =
 * New: Dropdown placeholders now use placeholder styling.
 * New: The honeypot field is now hidden using a new style rule to help avoid a styling conflict with RTL languages in Elementor.
