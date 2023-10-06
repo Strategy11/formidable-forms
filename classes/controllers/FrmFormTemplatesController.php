@@ -227,7 +227,7 @@ class FrmFormTemplatesController {
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-			if ( $action === 'edit' ) {
+			if ( 'edit' === $action || 'settings' === $action ) {
 				$view_parts[] = 'modals/name-your-form-modal.php';
 			}
 		}
@@ -566,6 +566,28 @@ class FrmFormTemplatesController {
 		<a class="button frm-button-secondary frm_hidden" href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '" role="button">
 			' . esc_html__( 'Cancel', 'formidable' ) . '
 		</a>';
+	}
+
+	/**
+	 * Append 'new_template' query parameter to navigation links if it exists in the URL.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $nav_items Navigation items.
+	 * @param array $nav_args Additional navigation arguments.
+	 * @return array Modified navigation items with 'new_template' query parameter.
+	 */
+	public static function append_new_template_to_nav( $nav_items, $nav_args ) {
+		$is_new_template = FrmAppHelper::simple_get( 'new_template' );
+
+		// Append 'new_template=true' to each nav item's link if 'new_template' exists in the URL.
+		if ( $is_new_template ) {
+			foreach ( $nav_items as &$item ) {
+				$item['link'] .= '&new_template=true';
+			}
+		}
+
+		return $nav_items;
 	}
 
 	/**

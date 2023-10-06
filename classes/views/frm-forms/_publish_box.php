@@ -13,7 +13,7 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 				<?php
 				$is_new_template = FrmAppHelper::simple_get( 'new_template' );
 				$action          = FrmAppHelper::simple_get( 'frm_action' );
-				if ( 'edit' === $action && $is_new_template ) {
+				if ( ( 'edit' === $action || 'settings' === $action ) && $is_new_template ) {
 					esc_html_e( 'Save', 'formidable' );
 				} else {
 					esc_html_e( 'Update', 'formidable' );

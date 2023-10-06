@@ -1650,7 +1650,7 @@ class FrmFormsController {
 		$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
 		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
 
-		wp_send_json_success();
+		wp_send_json_success( compact( 'form_key' ) );
 	}
 
 	public static function json_error( $errors ) {

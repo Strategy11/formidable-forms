@@ -6146,24 +6146,52 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Manages event handling for the 'Name your form' modal.
+	 *
+	 * Attaches click and keydown event listeners to the save button and input field.
+	 *
+	 * @return {void}
+	 */
+	function addFormNameModalEvents() {
+		const saveFormNameButton = document.getElementById( 'frm-save-form-name-button' );
+		const newFormNameInput = document.getElementById( 'frm_new_form_name_input' );
+
+		// Attach click event listener
+		onClickPreventDefault( saveFormNameButton, onSaveFormNameButton );
+
+		// Attach keydown event listener
+		newFormNameInput.addEventListener( 'keydown', function( event ) {
+			if ( event.key === 'Enter' ) {
+				onSaveFormNameButton.call( this, event );
+			}
+		});
+	}
+
+	/**
 	 * Handles the click event on the save form name button.
 	 *
 	 * @param {Event} event The click event object.
 	 * @return {void}
 	 */
 	const onSaveFormNameButton = ( event ) => {
+		const newFormName = document.getElementById( 'frm_new_form_name_input' ).value.trim();
+
 		// Prepare FormData for the POST request
 		const formData = new FormData();
-		const newFormName = document.getElementById( 'frm_new_form_name_input' );
 		formData.append( 'form_id', urlParams.get( 'id' ) );
-		formData.append( 'form_name', newFormName.value.trim() );
+		formData.append( 'form_name', newFormName );
 
 		// Perform the POST request
-		doJsonPost( 'rename_form', formData ).finally( () => {
+		doJsonPost( 'rename_form', formData ).then( data => {
 			// Remove the 'new_template' parameter from the URL and update the browser history
 			urlParams.delete( 'new_template' );
 			currentURL.search = urlParams.toString();
 			history.replaceState({}, '', currentURL.toString() );
+
+			if ( null !== document.getElementById( 'frm_notification_settings' ) ) {
+				document.getElementById( 'frm_form_name' ).value = newFormName;
+				document.getElementById( 'frm_form_key' ).value = data.form_key;
+			}
 
 			// Trigger the 'Save' button click using jQuery
 			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
@@ -7278,6 +7306,10 @@ function frmAdminBuildJS() {
 	}
 
 	function submitSettings() {
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		/*jshint validthis:true */
 		preFormSave( this );
 		triggerSubmit( document.querySelector( '.frm_form_settings' ) );
@@ -9440,15 +9472,7 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
 
-			// Attach click event listeners to 'Name your form' modal
-			const saveFormNameButton = document.getElementById( 'frm-save-form-name-button' );
-			const newFormNameInput = document.getElementById( 'frm_new_form_name_input' );
-			onClickPreventDefault( saveFormNameButton, onSaveFormNameButton );
-			newFormNameInput.addEventListener( 'keydown', function( event ) {
-				if ( event.key === 'Enter' ) {
-					onSaveFormNameButton.call( this, event );
-				}
-			});
+			addFormNameModalEvents();
 
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );
@@ -9618,6 +9642,8 @@ function frmAdminBuildJS() {
 			});
 
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
+
+			addFormNameModalEvents();
 
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
