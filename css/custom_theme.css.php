@@ -1215,7 +1215,7 @@ select.frm_loading_lookup{
 
 <?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
 
-.frm_conf_field.frm_left_container .frm_primary_label{
+.frm_conf_field.frm_conf_hide_label .frm_primary_label{
 	display:none;
 }
 
