@@ -398,8 +398,24 @@ class FrmFormsController {
 		FrmStylesController::enqueue_css( 'enqueue', true );
 
 		if ( false === get_template_part( 'page' ) ) {
+			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+				add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
+			}
 			self::fallback_when_page_template_part_is_not_supported_by_theme();
 		}
+	}
+
+	/**
+	 * Add padding to the body for block themes.
+	 *
+	 * @since 6.5.2
+	 *
+	 * @param array $classes The body classes list.
+	 * @return array
+	 */
+	public static function preview_block_theme_body_classnames( $classes ) {
+		$classes[] = 'has-global-padding';
+		return $classes;
 	}
 
 	/**
