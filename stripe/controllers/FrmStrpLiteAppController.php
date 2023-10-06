@@ -106,6 +106,7 @@ class FrmStrpLiteAppController {
 		if ( ! $params['posted_form_id'] ) {
 			return self::maybe_add_payment_error_on_redirect( $errors, (int) $params['form_id'] );
 		}
+		return $errors;
 	}
 
 	/**
