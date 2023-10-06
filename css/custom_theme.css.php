@@ -1219,6 +1219,11 @@ select.frm_loading_lookup{
 	display:none;
 }
 
+.frm_conf_field.frm_inline_container.frm_none_container .frm_primary_label{
+	display:inline-block;
+	visibility:hidden;
+}
+
 .wp-editor-wrap *,
 .wp-editor-wrap *:after,
 .wp-editor-wrap *:before{
