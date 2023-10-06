@@ -5,12 +5,13 @@ import { getElements } from '../elements';
 import { PREFIX, getAppState, setAppStateProperty, doJsonPost } from '../shared';
 import { showFavoritesEmptyState } from '../ui';
 import {
+	hide,
 	onClickPreventDefault,
 	isFavoriteTemplate,
 	isCustomTemplate,
 	isFeaturedTemplate,
 	isFavoritesCategory,
-	hide
+	addToRequestQueue
 } from '../utils';
 
 const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
@@ -45,15 +46,6 @@ function addFavoriteButtonEvents() {
  */
 const onFavoriteButtonClick = ( event ) => {
 	const favoriteButton = event.currentTarget;
-
-	// Check if the button is currently disabled
-	if ( 'true' === favoriteButton.getAttribute( 'data-disabled' ) ) {
-		return;
-	}
-
-	// Temporarily disable the button to prevent multiple clicks
-	favoriteButton.setAttribute( 'data-disabled', 'true' );
-
 	const { templatesList, featuredTemplatesList, favoritesCategoryCountEl, customTemplatesTitle } = getElements();
 
 	/**
@@ -137,18 +129,25 @@ const onFavoriteButtonClick = ( event ) => {
 		}
 	}
 
-	/**
-	 * Update server-side data for favorite templates
-	 */
-	const formData = new FormData();
-	formData.append( 'template_id', template.dataset.id );
-	formData.append( 'operation', currentOperation );
-	formData.append( 'is_custom_template', isTemplateCustom );
-
-	doJsonPost( 'add_or_remove_favorite_template', formData ).finally( () => {
-		// Finally, re-enable the button
-		favoriteButton.setAttribute( 'data-disabled', 'false' );
-	});
+	// Update server-side data for favorite templates
+	addToRequestQueue( () => updateFavoriteTemplate( templateId, currentOperation, isTemplateCustom ) );
 };
+
+/**
+ * Update server-side data for favorite templates.
+ *
+ * @param {string} id The template ID.
+ * @param {string} operation The operation to perform ('add' or 'remove').
+ * @param {boolean} isCustom Flag indicating whether the template is custom.
+ * @return {Promise<any>}
+ */
+function updateFavoriteTemplate( id, operation, isCustom ) {
+	const formData = new FormData();
+	formData.append( 'template_id', id );
+	formData.append( 'operation', operation );
+	formData.append( 'is_custom_template', isCustom );
+
+	return doJsonPost( 'add_or_remove_favorite_template', formData );
+}
 
 export default addFavoriteButtonEvents;
