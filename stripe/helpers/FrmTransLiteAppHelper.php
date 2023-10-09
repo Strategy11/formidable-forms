@@ -31,8 +31,8 @@ class FrmTransLiteAppHelper {
 	 * This includes either the frm_trans_db_version option (used in Stripe Lite and the Payments submodule) or frm_pay_db_version option (from the PayPal add on).
 	 *
 	 * @since 6.5
-	 * @since x.x A check for the PayPal add on option
-	 * @since x.x This function was renamed and moved from FrmStrpLiteAppController::payments_are_installed and made public.
+	 * @since 6.5.1 A check for the PayPal add on option
+	 * @since 6.5.1 This function was renamed and moved from FrmStrpLiteAppController::payments_are_installed and made public.
 	 *
 	 * @return bool
 	 */

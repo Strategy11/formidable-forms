@@ -6,6 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteActionsController {
 
 	/**
+	 * Track the entry IDs we're destroying so we don't attempt to delete an entry more than once.
+	 * Set in self::destroy_entry_later.
+	 *
+	 * @var array
+	 */
+	private static $entry_ids_to_destroy_later = array();
+
+	/**
 	 * Register payment action type.
 	 *
 	 * @param array $actions
@@ -365,5 +373,66 @@ class FrmTransLiteActionsController {
 
 		$values['type'] = 'hidden';
 		return $values;
+	}
+
+	/**
+	 * Entries are deleted on payment failure so set the form values after an error from the entry data that gets deleted.
+	 *
+	 * @since 6.5.1
+	 *
+	 * @param array    $values
+	 * @param stdClass $field
+	 * @return array
+	 */
+	public static function fill_entry_from_previous( $values, $field ) {
+		global $frm_vars;
+		$previous_entry = isset( $frm_vars['frm_trans']['pay_entry'] ) ? $frm_vars['frm_trans']['pay_entry'] : false;
+		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
+			return $values;
+		}
+
+		if ( is_array( $previous_entry->metas ) && isset( $previous_entry->metas[ $field->id ] ) ) {
+			$values['value'] = $previous_entry->metas[ $field->id ];
+		}
+
+		$frm_vars['trans_filled'] = true;
+
+		$previous_entry_id = $previous_entry->id;
+		self::destroy_entry_later( $previous_entry_id );
+
+		return $values;
+	}
+
+	/**
+	 * Destroy an entry, but delay it to happen when the form is displayed.
+	 * It needs to happen late enough that FrmProNestedFormsController::display_single_iteration_of_nested_form is able to fill in data for repeater fields.
+	 * See Formidable Stripe issue #136 for more information.
+	 *
+	 * @since 6.5.1
+	 *
+	 * @param string|int $entry_id
+	 * @return void
+	 */
+	private static function destroy_entry_later( $entry_id ) {
+		if ( in_array( (int) $entry_id, self::$entry_ids_to_destroy_later, true ) ) {
+			// Avoid trying to delete this multiple times as fill_entry_from_previous is called more than once.
+			return;
+		}
+
+		$destroy_callback =
+			/**
+			 * Destroy an entry and remove this action so it only tries to destroy the entry once.
+			 *
+			 * @param string|int $entry_id
+			 * @param Closure    $destroy_callback
+			 * @return void
+			 */
+			function() use ( $entry_id, &$destroy_callback ) {
+				FrmEntry::destroy( $entry_id );
+				remove_action( 'frm_entry_form', $destroy_callback ); // Only call this once.
+			};
+		add_action( 'frm_entry_form', $destroy_callback );
+
+		self::$entry_ids_to_destroy_later[] = (int) $entry_id;
 	}
 }

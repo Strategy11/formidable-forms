@@ -14,9 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 	<div class="frmcenter frm-m-12">
-		<div class="frm-video-wrapper frm-mb-md">
-			<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-		</div>
 		<h2><?php esc_html_e( 'Show and Edit Entries with Views', 'formidable' ); ?></h2>
 		<p style="max-width:400px;margin:20px auto">
 			<?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?>
@@ -25,8 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$upgrade_link_args = array(
 			'medium' => 'views-info',
 			'plan'   => 'view',
+			'class'  => 'frm-mb-md frm-button-primary',
 		);
 		FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
 		?>
+		<div class="frm-video-wrapper">
+			<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		</div>
 	</div>
 </div>

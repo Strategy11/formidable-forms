@@ -29,6 +29,7 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
+	--error-300: #FECDCA;
 	--error-500: #F04438;
 	--error-700: #B42318;
 	--green: rgb(63, 172, 37);
@@ -1122,6 +1123,10 @@ body.rtl .frm-admin-footer-links {
 	padding-right: 160px;
 }
 
+body.frm-hidden-overflow {
+	height: 100%;
+	overflow: hidden;
+}
 
 .frm-admin-footer-links-nav {
 	gap: var(--gap-2xs);
@@ -6031,11 +6036,6 @@ span.howto {
 
 .frm-has-fields #frm-show-fields {
 	min-height: 50px;
-}
-
-#frm_builder_page li[data-ftype="gateway"] {
-	/* Gateway fields are included for add-on compatibility but we do not want it to be visible. */
-	display: none;
 }
 
 #frm_builder_page .frm-lite-credit-card-element,

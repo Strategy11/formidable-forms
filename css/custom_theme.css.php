@@ -69,9 +69,11 @@ input:-webkit-autofill {
 <?php } ?>
 }
 
-form input.frm_verify{
-	position:absolute;
-	left:-3000px;
+form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
+	overflow: hidden;
+	width: 0;
+	height: 0;
+	position: absolute;
 }
 
 .with_frm_style fieldset{
@@ -265,6 +267,16 @@ legend.frm_hidden{
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
+.with_frm_style select option {
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style select option.frm-select-placeholder {
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
@@ -288,8 +300,8 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
+	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
@@ -880,7 +892,7 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio],
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.with_frm_style .frm_scale input[type=radio],	
+.with_frm_style .frm_scale input[type=radio],
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;

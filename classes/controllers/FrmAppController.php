@@ -294,7 +294,8 @@ class FrmAppController {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
+			$label      = FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro', 'formidable' );
+			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
@@ -596,6 +597,12 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
+		if ( class_exists( 'FrmOverlayController' ) ) {
+			// This should always exist.
+			// But it may not have loaded properly when updating the plugin.
+			FrmOverlayController::register_assets();
+		}
+
 		wp_register_style( 'formidable_admin_global', $plugin_url . '/css/admin/frm_admin_global.css', array(), $version );
 		wp_enqueue_style( 'formidable_admin_global' );
 
@@ -653,6 +660,17 @@ class FrmAppController {
 		}
 
 		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+
+		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+			/**
+			 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+			 * They do however need to be visible when the payments submodule is active.
+			 */
+			wp_add_inline_style(
+				'formidable-admin',
+				'#frm_builder_page li[data-ftype="gateway"] { display: none; }'
+			);
+		}
 
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
@@ -1122,7 +1140,11 @@ class FrmAppController {
 
 		// Enqueue the config script.
 		wp_enqueue_script( 's11-floating-links-config', $plugin_url . '/js/packages/floating-links/config.js', array( 'wp-i18n' ), $version, true );
-		wp_set_script_translations( 's11-floating-links-config', 's11-' );
+
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations( 's11-floating-links-config', 's11-' );
+		}
+
 		$floating_links_data = array(
 			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
 		);
