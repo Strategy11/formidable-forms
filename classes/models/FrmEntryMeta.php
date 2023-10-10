@@ -29,6 +29,13 @@ class FrmEntryMeta {
 		self::set_value_before_save( $new_values );
 		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
 
+		if (  ! is_numeric( $new_values['field_id'] ) ) {
+			$field = FrmField::getOne( $new_values['field_id'] );
+			if ( is_object( $field ) ) {
+				$new_values['field_id'] = $field->id;
+			}
+		}
+
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
 
 		if ( $query_results ) {
