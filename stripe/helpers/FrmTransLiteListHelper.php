@@ -42,15 +42,20 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			$order = 'DESC';
 		}
 
-		$page     = $this->get_pagenum();
-		$per_page = $this->get_items_per_page( 'formidable_page_formidable_payments_per_page' );
-		$start    = ( $page - 1 ) * $per_page;
-		$start    = FrmAppHelper::get_param( 'start', $start, 'get', 'absint' );
-		$query    = $this->get_table_query();
+		$page        = $this->get_pagenum();
+		$per_page    = $this->get_items_per_page( 'formidable_page_formidable_payments_per_page' );
+		$start       = ( $page - 1 ) * $per_page;
+		$start       = FrmAppHelper::get_param( 'start', $start, 'get', 'absint' );
+		$query       = $this->get_table_query();
+		$order_query = FrmDb::esc_order( "ORDER BY p.{$orderby} $order" );
 
 		// @codingStandardsIgnoreStart
 		$this->items = $wpdb->get_results(
-			'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page"
+			$wpdb->prepare(
+				'SELECT * ' . $query . $order_query . ' LIMIT %d, %d',
+				$start,
+				$per_page
+			)
 		);
 		$total_items = $wpdb->get_var( 'SELECT COUNT(*) ' . $query );
 		// @codingStandardsIgnoreEnd

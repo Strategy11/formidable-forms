@@ -1262,7 +1262,9 @@ class FrmAddonsController {
 
 		$addon        = self::get_addon( $plugin );
 		$upgrade_link = FrmAppHelper::admin_upgrade_link( $upgrade_link_args );
-		self::addon_upgrade_link( $addon, $upgrade_link );
+
+		$upgrade_link_args['link'] = $upgrade_link;
+		self::addon_upgrade_link( $addon, $upgrade_link_args );
 	}
 
 	/**
@@ -1286,11 +1288,15 @@ class FrmAddonsController {
 	/**
 	 * @since 4.09.01
 	 *
-	 * @param array|false $addon
+	 * @param array|false  $addon
+	 * @param string|array $upgrade_link
 	 *
 	 * @return void
 	 */
 	protected static function addon_upgrade_link( $addon, $upgrade_link ) {
+		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
+		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
+
 		if ( $addon ) {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
 		}
@@ -1299,8 +1305,13 @@ class FrmAddonsController {
 			// Solutions will go to a separate page.
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );
 		}
+
+		$class = ! empty( $atts['class'] ) ? $atts['class'] : '';
+		if ( strpos( $class, 'frm-button' ) === false ) {
+			$class .= ' frm-button-secondary frm-button-sm';
+		}
 		?>
-		<a class="install-now button frm-button-secondary frm-button-sm" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 			<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 		</a>
 		<?php

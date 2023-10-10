@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.5';
+	public static $plug_version = '6.5.2';
 
 	/**
 	 * @since 1.07.02
@@ -149,7 +149,7 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
-		return $frm_settings->menu;
+		return FrmAddonsController::is_license_expired() ? 'Formidable' : $frm_settings->menu;
 	}
 
 	/**
@@ -395,12 +395,11 @@ class FrmAppHelper {
 	/**
 	 * Get the server OS
 	 *
-	 * @since 6.4.x
+	 * @since 6.4.2
 	 *
 	 * @return string
 	 */
 	public static function get_server_os() {
-
 		if ( function_exists( 'php_uname' ) ) {
 			return php_uname( 's' );
 		}

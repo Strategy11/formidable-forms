@@ -206,6 +206,7 @@ class FrmStrpLiteLinkController {
 		$customer_id       = $setup_intent->customer;
 		$payment_method_id = self::get_link_payment_method( $setup_intent );
 		if ( ! $payment_method_id ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'did_not_complete' );
 			die();
 		}
@@ -240,6 +241,8 @@ class FrmStrpLiteLinkController {
 		}
 
 		$subscription = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $new_charge );
+		$subscription = FrmStrpLiteSubscriptionHelper::maybe_create_missing_plan_and_create_subscription( $subscription, $new_charge, $action, $amount );
+
 		if ( ! is_object( $subscription ) ) {
 			$redirect_helper->handle_error( 'create_subscription_failed' );
 			die();
@@ -258,6 +261,11 @@ class FrmStrpLiteLinkController {
 			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
 			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+
+			$new_payment_values['expire_date'] = '0000-00-00';
+			foreach ( $subscription->latest_invoice->lines->data as $line ) {
+				$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
+			}
 		} elseif ( $trial_end ) {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
@@ -269,8 +277,21 @@ class FrmStrpLiteLinkController {
 		$frm_payment->update( $payment->id, $new_payment_values );
 
 		if ( $customer_has_been_charged ) {
+			// Set the payment to complete.
 			$status = 'complete';
 			FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+
+			// Update the next billing date.
+			$next_bill_date = gmdate( 'Y-m-d' );
+			foreach ( $subscription->latest_invoice->lines->data as $line ) {
+				$next_bill_date = gmdate( 'Y-m-d', $line->period->end );
+			}
+
+			$frm_sub = new FrmTransLiteSubscription();
+			$frm_sub->update(
+				$new_payment_values['sub_id'],
+				array( 'next_bill_date' => $next_bill_date )
+			);
 		}
 
 		$redirect_helper->handle_success( $entry, isset( $charge ) ? $charge->id : '' );
@@ -288,9 +309,19 @@ class FrmStrpLiteLinkController {
 	 * @return string|false
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
+		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
+			$payment_method_details = $setup_intent->latest_attempt->payment_method_details;
+			foreach ( array( 'ideal', 'sofort', 'bancontact' ) as $payment_method_type ) {
+				if ( ! empty( $payment_method_details->$payment_method_type ) ) {
+					return $payment_method_details->$payment_method_type->generated_sepa_debit;
+				}
+			}
+		}
+
 		if ( ! empty( $setup_intent->payment_method ) ) {
 			return $setup_intent->payment_method;
 		}
+
 		return false;
 	}
 
@@ -396,7 +427,18 @@ class FrmStrpLiteLinkController {
 	 * @return void
 	 */
 	private static function add_temporary_referer_meta( $entry_id ) {
-		$referer    = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$referer                          = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$query_args_to_strip_from_referer = array(
+			'frm_link_error',
+			'payment_intent',
+			'payment_intent_client_secret',
+			'setup_intent',
+			'setup_intent_client_secret',
+		);
+		foreach ( $query_args_to_strip_from_referer as $arg ) {
+			$referer = remove_query_arg( $arg, $referer );
+		}
+
 		$meta_value = json_encode( compact( 'referer' ) );
 		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', $meta_value );
 	}

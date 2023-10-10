@@ -1,5 +1,6 @@
 **/*.min.js
 **/formidable_blocks.js
+**/formidable_overlay.js
 **/node_modules/**
 **/vendor/**
 build

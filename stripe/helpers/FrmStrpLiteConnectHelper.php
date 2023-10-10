@@ -10,7 +10,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public static $latest_error_from_stripe_connect;
 
@@ -734,7 +734,16 @@ class FrmStrpLiteConnectHelper {
 	 * @return mixed
 	 */
 	public static function create_subscription( $new_charge ) {
-		return self::post_with_authenticated_body( 'create_subscription', compact( 'new_charge' ) );
+		$data = self::post_with_authenticated_body( 'create_subscription', compact( 'new_charge' ) );
+		if ( is_object( $data ) ) {
+			return $data;
+		}
+
+		if ( isset( self::$latest_error_from_stripe_connect ) && 0 === strpos( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+			return self::$latest_error_from_stripe_connect;
+		}
+
+		return false;
 	}
 
 	/**
