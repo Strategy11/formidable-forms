@@ -22,6 +22,26 @@ class FrmSummaryEmailsHelper {
 	const LICENSE_EXPIRED = 'license';
 
 	/**
+	 * Number of days to send the next monthly email.
+	 */
+	const MONTHLY_PERIOD = 3; // TODO: Change this to 30.
+
+	/**
+	 * Number of days to send the next yearly email.
+	 */
+	const YEARLY_PERIOD = 365;
+
+	/**
+	 * Number of days before renewal date to send yearly email.
+	 */
+	const BEFORE_RENEWAL_PERIOD = 45;
+
+	/**
+	 * Number of days before sending the first summary email after upgrade plugin.
+	 */
+	const DELAY_AFTER_UPGRADE = 1; // TODO: Change this to 15.
+
+	/**
 	 * Summary emails option name.
 	 *
 	 * @var string
@@ -47,7 +67,7 @@ class FrmSummaryEmailsHelper {
 		$options = get_option( self::$option_name );
 		if ( ! $options ) {
 			$default_options = array(
-				'last_' . self::MONTHLY         => gmdate( 'Y-m-d', strtotime( '-15 days' ) ), // Do not send email within 15 days after updating.
+				'last_' . self::MONTHLY         => gmdate( 'Y-m-d', strtotime( '-' . self::DELAY_AFTER_UPGRADE . ' days' ) ), // Do not send email within 15 days after updating.
 				'last_' . self::YEARLY          => '',
 				'last_' . self::LICENSE_EXPIRED => '',
 				'renewal_date'                  => '',
@@ -96,20 +116,20 @@ class FrmSummaryEmailsHelper {
 		$last_stats   = max( $last_monthly, $last_yearly );
 
 		// Do not send any email if it isn't enough 30 days from the last stats email.
-		if ( $last_stats && 30 > self::get_date_diff( $current_date, $last_stats ) ) {
+		if ( $last_stats && self::MONTHLY_PERIOD > self::get_date_diff( $current_date, $last_stats ) ) {
 			return $emails;
 		}
 
 		if ( $last_yearly ) {
 			// If this isn't the first yearly email, send the new one after 1 year.
-			if ( $last_yearly && 365 <= self::get_date_diff( $current_date, $last_yearly ) ) {
+			if ( $last_yearly && self::YEARLY_PERIOD <= self::get_date_diff( $current_date, $last_yearly ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
 			}
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
 			$renewal_date = self::get_renewal_date();
-			if ( $renewal_date && 45 >= self::get_date_diff( $current_date, $renewal_date ) ) {
+			if ( $renewal_date && self::BEFORE_RENEWAL_PERIOD >= self::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
 			}
@@ -161,10 +181,13 @@ class FrmSummaryEmailsHelper {
 	 */
 	private static function get_renewal_date() {
 		$options = self::get_options();
+
+		// Get cached value from options.
 		if ( ! empty( $options['renewal_date'] ) ) {
 			return $options['renewal_date'];
 		}
 
+		// Return the actual renewal date if it exists.
 		$license_info = FrmAddonsController::get_primary_license_info();
 		if ( ! empty( $license_info['expires'] ) ) {
 			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
@@ -174,9 +197,10 @@ class FrmSummaryEmailsHelper {
 			return $renewal_date;
 		}
 
+		// If renewal date doesn't exist, return 365 days since the first form.
 		$first_form_date = self::get_earliest_form_created_date();
 		if ( $first_form_date ) {
-			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+365 days' ) );
+			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
 
 			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
