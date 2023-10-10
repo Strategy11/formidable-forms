@@ -242,6 +242,9 @@ function frmFrontFormJS() {
 	 * @returns {boolean}
 	 */
 	function hasClass( element, targetClass ) {
+		if ( ! element || ! element.className ) {
+			return false;
+		}
 		var className = ' ' + element.className + ' ';
 		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
 	}
@@ -1849,7 +1852,7 @@ jQuery( document ).ready( function() {
 
 function frmRecaptcha() {
 	var c, cl,
-		captchas = jQuery( '.frm-g-recaptcha' );
+		captchas = document.querySelectorAll( '.frm-g-recaptcha, .frm_form_field .g-recaptcha' );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
 		frmFrontForm.renderRecaptcha( captchas[c]);
 	}
