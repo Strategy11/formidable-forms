@@ -1747,6 +1747,10 @@ a.frm_hidden,
 	line-height: var(--leading);
 }
 
+#frm_form_editor_container #frm-show-fields .frm_primary_label {
+	min-height: 21px;
+}
+
 .frm-fields td input + label {
 	display: inline;
 }
