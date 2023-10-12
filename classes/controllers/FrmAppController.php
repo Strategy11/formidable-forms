@@ -1060,7 +1060,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * Show an error modal and terminate the script execution. 
+	 * Show an error modal and terminate the script execution.
 	 *
 	 * @since x.x
 	 *
