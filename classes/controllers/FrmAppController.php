@@ -1069,6 +1069,25 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function show_error_modal( $error_args ) {
+		$defaults = array(
+			'title'            => '',
+			'body'             => '',
+			'cancel_url'       => '',
+			'cancel_classes'   => '',
+			'continue_url'     => '',
+			'continue_classes' => '',
+			'icon'             => 'frm_lock_simple',
+		);
+
+		$error_args = wp_parse_args( $error_args, $defaults );
+		if ( empty( $error_args['cancel_text'] ) && ! empty( $error_args['cancel_url'] ) ) {
+			$error_args['cancel_text'] = __( 'Cancel', 'formidable' );
+		}
+
+		if ( empty( $error_args['continue_text'] ) && ! empty( $error_args['continue_url'] ) ) {
+			$error_args['continue_text'] = __( 'Continue', 'formidable' );
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
 		die();
 	}

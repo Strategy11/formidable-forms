@@ -2,18 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-$defaults = array(
-	'title'            => '',
-	'body'             => '',
-	'cancel_url'       => '',
-	'cancel_classes'   => '',
-	'continue_url'     => '',
-	'continue_classes' => '',
-	'icon'             => 'frm_lock_simple',
-);
-
-$error_args = wp_parse_args( $error_args, $defaults );
 ?>
 <div id="frm_error_modal" class="frm-dialog frm-modal frm_common_modal frm_hidden">
 	<div class="metabox-holder">
