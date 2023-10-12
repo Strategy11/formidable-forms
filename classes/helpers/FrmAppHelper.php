@@ -1666,7 +1666,6 @@ class FrmAppHelper {
 			'frm_create_entries' => __( 'Add Entries from Admin Area', 'formidable' ),
 			'frm_edit_entries'   => __( 'Edit Entries from Admin Area', 'formidable' ),
 			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
-			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
 		/**
 		 * @since 5.3.1
