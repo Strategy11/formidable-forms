@@ -103,7 +103,7 @@ $attributes['class'] = implode( ' ', $class_names );
 				</a>
 			</div>
 
-			<p class="frm-form-templates-item-description"><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
+			<p class="frm-form-templates-item-description"><?php echo $template['description'] ? FrmAppHelper::kses( $template['description'], 'all' ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
 		</div>
 	</div>
 </li>
