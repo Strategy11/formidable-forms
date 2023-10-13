@@ -103,7 +103,15 @@ $attributes['class'] = implode( ' ', $class_names );
 				</a>
 			</div>
 
-			<p class="frm-form-templates-item-description"><?php echo $template['description'] ? FrmAppHelper::kses( $template['description'], 'all' ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
+			<p class="frm-form-templates-item-description">
+				<?php
+				if ( $template['description'] ) {
+					echo FrmAppHelper::kses( $template['description'], 'all' ); // phpcs: ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				} else {
+					echo '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>';
+				}
+				?>
+			</p>
 		</div>
 	</div>
 </li>
