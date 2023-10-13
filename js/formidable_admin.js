@@ -8559,6 +8559,39 @@ function frmAdminBuildJS() {
 	}
 
 	/* Templates */
+	function showActiveCampaignForm() {
+		loadApiEmailForm();
+	}
+
+	function handleApiFormError( inputId, errorId, type, message ) {
+		const $error = jQuery( errorId );
+		$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
+
+		if ( typeof message !== 'undefined' ) {
+			$error.find( 'span[frm-error="' + type + '"]' ).text( message );
+		}
+
+		jQuery( inputId ).one( 'keyup', function() {
+			$error.addClass( 'frm_hidden' );
+		});
+	}
+
+	function handleEmailAddressError( type ) {
+		handleApiFormError( '#frm_leave_email', '#frm_leave_email_error', type );
+	}
+
+	function loadApiEmailForm() {
+		const formContainer = document.getElementById( 'frmapi-email-form' );
+		jQuery.ajax({
+			dataType: 'json',
+			url: formContainer.getAttribute( 'data-url' ),
+			success: function( json ) {
+				var form = json.renderedHtml;
+				form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
+				formContainer.innerHTML = form;
+			}
+		});
+	}
 	function initSelectionAutocomplete() {
 		frmDom.autocomplete.initSelectionAutocomplete();
 	}
@@ -9208,6 +9241,11 @@ function frmAdminBuildJS() {
 
 		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
 		if ( emptyInbox ) {
+			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
+			leaveEmailModal.classList.remove( 'frm_hidden' );
+			leaveEmailModal.querySelector( '.frm_modal_top' ).classList.add( 'frm_hidden' );
+			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
+
 			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
 			leaveEmailIput.addEventListener(
 				'keyup',
@@ -9278,16 +9316,10 @@ function frmAdminBuildJS() {
 			}
 
 			// Handle successful form submission.
-			// If the new form modal exists, handle the free templates form.
-			const modal = document.getElementById( 'frm_new_form_modal' );
-			if ( modal ) {
-				modal.setAttribute( 'frm-page', 'code' );
-			} else {
-				// If no modal exists handle the Active Campaign form on the inbox page.
-				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-					document.createTextNode( 'Thank you for signing up!' )
-				);
-			}
+			// handle the Active Campaign form on the inbox page.
+			document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
+				document.createTextNode( 'Thank you for signing up!' )
+			);
 		});
 	}
 

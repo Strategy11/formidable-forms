@@ -11,6 +11,19 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Initialize $args if not set.
+if ( ! isset( $args ) ) {
+	$args = array();
+}
+
+$defaults = array(
+	'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css',
+	'title'       => esc_html__( 'Get 10+ Free Form Templates', 'formidable' ),
+	'description' => esc_html__( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ),
+);
+
+$args = wp_parse_args( $args, $defaults );
 ?>
 <div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
@@ -21,15 +34,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="inside">
 		<div class="frmcenter">
-			<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css">
+			<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
 				<span class="frm-wait"></span>
 			</div>
 
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/leave-email.svg' ); ?>" />
-			<h3><?php esc_html_e( 'Get 10+ Free Form Templates', 'formidable' ); ?></h3>
-			<p><?php esc_html_e( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ); ?></p>
+			<h3><?php echo esc_html( $args['title'] ); ?></h3>
+			<p>
+				<?php
+				echo wp_kses(
+					wpautop( esc_html( $args['description'] ) ),
+					array(
+						'p' => true,
+						'br' => true,
+					)
+				);
+				?>
+			</p>
 
-			<div class="frm-form-templates-modal-fieldset">
+			<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset">
 				<span class="frm-with-left-icon">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
 					<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />

@@ -388,10 +388,13 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function api_email_form( $form_key, $title, $description ) {
-		$url         = 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css';
-		$view_path   = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new-form-overlay/';
 		$user        = wp_get_current_user();
-		require $view_path . 'leave-email.php';
+		$args = array(
+			'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css',
+			'title'       => $title,
+			'description' => $description,
+		);
+		require FrmAppHelper::plugin_path() . '/classes/views/form-templates/modals/leave-email-modal.php';
 	}
 
 	/**

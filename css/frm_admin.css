@@ -2312,7 +2312,6 @@ body.frm-body-with-open-modal {
 	overflow-y: hidden;
 }
 
-
 .frm-templates-list {
 	margin-top: 0;
 }
@@ -2419,6 +2418,12 @@ body.frm-body-with-open-modal {
 
 .frm-templates-list .frm-install-template div {
 	text-align: left;
+}
+
+#frm_leave_email,
+#frm_code_from_email
+{
+	width: 480px;
 }
 
 .control-section:hover .accordion-section-title {
@@ -9023,6 +9028,14 @@ Responsive Design
 
 .frm-ready-made-solution:not(.frm-search-result) {
 	display: none !important;
+}
+
+#frm_leave_email_wrapper .frmsvg {
+	top: 0;
+}
+
+#frm-add-my-email-address {
+	margin-top: 30px;
 }
 
 .frm-ready-made-solution h3 ~ a {
