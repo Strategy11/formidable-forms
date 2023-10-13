@@ -308,6 +308,12 @@
 	font-size: var(--text-xs);
 	margin: 0;
 	min-height: var(--h-md);
+
+	display: -webkit-box;         /* Required for line-clamp to work */
+	-webkit-box-orient: vertical; /* Required for line-clamp to work */
+	-webkit-line-clamp: 2;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 #frm-form-templates-page .frm-form-templates-item:hover .frm-form-templates-item-description {
