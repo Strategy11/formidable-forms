@@ -15,8 +15,15 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @var string
 	 */
 	public static $plug_version = '6.5.2';
+
+	/**
+	 * @var bool
+	 */
+	private static $included_svg = false;
 
 	/**
 	 * @since 1.07.02
@@ -1110,9 +1117,16 @@ class FrmAppHelper {
 	 * Include svg images.
 	 *
 	 * @since 4.0.02
+	 * @return void
 	 */
 	public static function include_svg() {
-		include_once self::plugin_path() . '/images/icons.svg';
+		if ( self::$included_svg ) {
+			return;
+		}
+
+		// Use readfile instead of include_once because of a default security rule in Snuffleupagus.
+		readfile( self::plugin_path() . '/images/icons.svg' );
+		self::$included_svg = true;
 	}
 
 	/**
