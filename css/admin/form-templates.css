@@ -252,11 +252,10 @@
 	gap: 6px;
 	align-items: center;
 	margin: 0;
-	width: 100%;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title {
-	justify-content: space-between;
+#frm-form-templates-page .frm-form-templates-item-title-text {
+	width: calc(100% - 24px);
 }
 
 #frm-form-templates-page .frm-form-templates-item-lock-icon .frmsvg {
@@ -276,6 +275,7 @@
 	cursor: pointer;
 	transition: color 200ms ease-out;
 	color: var(--grey-900);
+	margin-left: auto;
 }
 
 #frm-form-templates-page .frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
