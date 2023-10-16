@@ -3,7 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$pro_is_installed = FrmAppHelper::pro_is_installed();
+$pro_is_installed           = FrmAppHelper::pro_is_installed();
+$should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'frm_create_entries' );
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
 		<?php
@@ -14,7 +15,7 @@ $pro_is_installed = FrmAppHelper::pro_is_installed();
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
 				'import_link' => $pro_is_installed,
-				'publish'     => ! $form || ! $pro_is_installed ? true : array(
+				'publish'     => ! $should_show_add_new_button ? true : array(
 					'FrmAppHelper::add_new_item_link',
 					array(
 						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
