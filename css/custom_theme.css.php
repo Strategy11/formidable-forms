@@ -848,7 +848,6 @@ a.frm_save_draft{
 	text-indent: -20px;
 }
 
-<!-- Removing left padding for radio label in vertical layout -->
 .with_frm_style .vertical_radio .frm_opt_container > .frm_radio label {
 	padding-left: 0;
 }
