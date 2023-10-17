@@ -202,8 +202,9 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, rl, n, nl, fields, field, value, requiredFields,
-			errors = [];
+		var errors, r, rl, n, nl, fields, field, fieldID, requiredFields;
+
+		errors = [];
 
 		// Make sure required text field is filled in
 		requiredFields = jQuery( object ).find(
@@ -223,8 +224,19 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				if ( '' !== field.value ) {
-					validateFieldValue( field, errors );
+				if ( '' === field.value ) {
+					continue;
+				}
+
+				validateFieldValue( field, errors );
+
+				if ( 'object' === typeof field.validity && false === field.validity.valid ) {
+					fieldID           = getFieldId( field, true );
+					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+
+					if ( 'function' === typeof field.reportValidity ) {
+						field.reportValidity();
+					}
 				}
 			}
 		}
