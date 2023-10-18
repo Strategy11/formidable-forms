@@ -1676,6 +1676,7 @@ class FrmAppHelper {
 
 		if ( ! array_key_exists( 'frm_edit_displays', $pro_cap ) && is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) {
 			// For backward compatibility, add the Add/Edit Views permission if Pro is not up to date.
+			// This was added in x.x. Remove this in the future.
 			$pro_cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
 		}
 
