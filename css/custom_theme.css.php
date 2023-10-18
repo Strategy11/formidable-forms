@@ -353,7 +353,7 @@ legend.frm_hidden{
 	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
 	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
-	background-position-y: center;
+	background-position-y: calc(50% + 3px);
 }
 
 .with_frm_style input[disabled],
