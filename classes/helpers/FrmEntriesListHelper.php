@@ -85,8 +85,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since x.x
-	 * @param int $per_page
 	 *
+	 * @param int $per_page
 	 * @return string
 	 */
 	protected function get_limit( $per_page ) {
