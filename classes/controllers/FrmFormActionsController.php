@@ -538,6 +538,8 @@ class FrmFormActionsController {
 			// Make sure hooks are loaded.
 			new FrmNotification();
 
+			add_filter( 'frm_keep_address_value_array', '__return_true' );
+
 			foreach ( $action_priority as $action_id => $priority ) {
 				$action = $stored_actions[ $action_id ];
 				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );

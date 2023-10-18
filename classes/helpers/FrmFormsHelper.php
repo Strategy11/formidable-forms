@@ -269,6 +269,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_success_message( $atts ) {
+		add_filter( 'frm_keep_address_value_array', '__return_true' );
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
 		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
