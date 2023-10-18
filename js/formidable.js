@@ -202,7 +202,7 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var errors, r, rl, n, nl, fields, field, fieldID, requiredFields;
+		var errors, r, rl, n, nl, fields, field, requiredFields;
 
 		errors = [];
 
@@ -225,25 +225,46 @@ function frmFrontFormJS() {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
 				if ( '' === field.value ) {
+					if ( 'number' === field.type ) {
+						// A number field will return an empty string when it is invalid.
+						checkValidity( field, errors );
+					}
 					continue;
 				}
 
 				validateFieldValue( field, errors );
-
-				if ( 'object' === typeof field.validity && false === field.validity.valid ) {
-					fieldID           = getFieldId( field, true );
-					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
-
-					if ( 'function' === typeof field.reportValidity ) {
-						field.reportValidity();
-					}
-				}
+				checkValidity( field, errors );
 			}
 		}
 
 		errors = validateRecaptcha( object, errors );
 
 		return errors;
+	}
+
+	/**
+	 * Check the ValidityState interface for the field.
+	 * If it is invalid, show an error for it.
+	 *
+	 * @param {HTMLElement} field
+	 * @param {Array} errors
+	 * @returns 
+	 */
+	function checkValidity( field, errors ) {
+		var fieldID;
+		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
+			return;
+		}
+
+		fieldID = getFieldId( field, true );
+		if ( 'undefined' === typeof errors[ fieldID ] ) {
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+
+		if ( 'function' === typeof field.reportValidity ) {
+			// This triggers an error pop up.
+			field.reportValidity();
+		}
 	}
 
 	/**
