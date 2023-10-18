@@ -35,6 +35,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param int|string $form_id
+	 * @param int        $per_page
+	 * @param array      $s_query
+	 * @param bool       $join_form_in_query
+	 *
+	 * @return array
+	 */
 	protected function get_entry_items( $form_id, $per_page, &$s_query, &$join_form_in_query ) {
 		$s_query = $this->get_search_query( $form_id, $join_form_in_query );
 		$order   = $this->get_order_by();
@@ -43,6 +53,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 	}
 
+	/**
+	 * @since x.x
+	 * @return string
+	 */
 	protected function get_order_by() {
 		$orderby = self::get_param(
 			array(
@@ -66,6 +80,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return FrmDb::esc_order( $orderby . ' ' . $order );
 	}
 
+	/**
+	 * @since x.x
+	 * @param int $per_page
+	 *
+	 * @return string
+	 */
 	protected function get_limit( $per_page ) {
 		$page  = $this->get_pagenum();
 		$start = (int) self::get_param(
@@ -78,6 +98,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $limit = FrmDb::esc_limit( $start . ',' . $per_page );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param int|string $form_id
+	 * @param bool       $join_form_in_query
+	 *
+	 * @return array
+	 */
 	protected function get_search_query( $form_id, &$join_form_in_query ) {
 		$s_query = array();
 
@@ -107,6 +135,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param int|string $form_id
+	 * @return int|string
+	 */
 	protected function get_form_ids( $form_id ) {
 		return $form_id;
 	}
