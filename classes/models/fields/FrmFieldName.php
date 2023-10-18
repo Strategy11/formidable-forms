@@ -109,6 +109,8 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @since 4.0
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
+	 * @return void
 	 */
 	public function show_primary_options( $args ) {
 		$field = (array) $args['field'];
@@ -163,6 +165,8 @@ class FrmFieldName extends FrmFieldCombo {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
@@ -196,6 +200,8 @@ class FrmFieldName extends FrmFieldCombo {
 	 *     @type array  $errors         Field errors.
 	 *     @type bool   $remove_names   Remove name attribute or not.
 	 * }
+	 *
+	 * @return void
 	 */
 	protected function process_args_for_field_output( &$args ) {
 		parent::process_args_for_field_output( $args );

@@ -74,6 +74,18 @@ abstract class FrmFieldType {
 	 */
 	protected $is_tall = false;
 
+	/**
+	 * Does this type support array values (like a checkbox or a name field).
+	 *
+	 * @var bool
+	 * @since 6.2
+	 */
+	protected $array_allowed = true;
+
+	/**
+	 * @param object|array|int $field
+	 * @param string           $type
+	 */
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
@@ -152,8 +164,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 *
-	 * @return object|array
+	 * @return array|int|object
 	 */
 	public function get_field() {
 		return $this->field;
@@ -188,6 +199,16 @@ DEFAULT_HTML;
 		return '[input]';
 	}
 
+	/**
+	 * Creates a template for generating HTML containing multiple input fields enclosed in a div container.
+	 *
+	 * The placeholders [key] and [input] will be replaced dynamically during runtime.
+	 *
+	 * @see FrmFieldFormHtml->get_html() for the function handling the dynamic replacement.
+	 *
+	 * @return string The template HTML string for a div container with multiple input fields. This string is
+	 *                prepared for dynamic replacement of the placeholders [key], and [input].
+	 */
 	protected function multiple_input_html() {
 		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
 	}
@@ -644,11 +665,21 @@ DEFAULT_HTML;
 		return $invalid;
 	}
 
+	/**
+	 * Get the default field name when a field is inserted into a form.
+	 *
+	 * @return string
+	 */
 	protected function get_new_field_name() {
-		$name = __( 'Untitled', 'formidable' );
+		$name       = __( 'Untitled', 'formidable' );
+		$fields     = FrmField::field_selection();
+		$pro_fields = FrmField::pro_field_selection();
 
-		$fields = FrmField::field_selection();
-		$fields = array_merge( $fields, FrmField::pro_field_selection() );
+		// As the credit card field is in Lite now, we want the name from the Lite array.
+		// The pro key would is still set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
 			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
@@ -657,10 +688,16 @@ DEFAULT_HTML;
 		return $name;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function new_field_settings() {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_default_field_options() {
 		$opts       = array(
 			'size'               => '',
@@ -690,6 +727,9 @@ DEFAULT_HTML;
 		return apply_filters( 'frm_default_field_options', $opts, $filter_args );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array();
 	}
@@ -736,6 +776,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @return void
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
@@ -746,6 +787,9 @@ DEFAULT_HTML;
 		$this->get_field_scripts_hook( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function get_field_scripts_hook( $args ) {
 		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
@@ -807,6 +851,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string $align
+	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
 		if ( 'inline' === $align ) {
@@ -816,6 +863,9 @@ DEFAULT_HTML;
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_label_class() {
 		return ' frm_primary_label';
 	}
@@ -824,6 +874,8 @@ DEFAULT_HTML;
 	 * Add classes to the input for output
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function add_input_class() {
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
@@ -845,6 +897,8 @@ DEFAULT_HTML;
 	 * Add extra classes on front-end input
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function get_input_class() {
 		return '';
@@ -870,6 +924,9 @@ DEFAULT_HTML;
 		return $input;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return '';
 	}
@@ -898,6 +955,9 @@ DEFAULT_HTML;
 		return $hidden . $input_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
@@ -943,6 +1003,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -1408,5 +1470,22 @@ DEFAULT_HTML;
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_with_html( $value );
+	}
+
+	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (including checkbox, name, address, credit_card, select, file, lookup, data, product).
+	 * If a type does not require it, $this->array_allowed = false can be set to avoid the unserialize call.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function maybe_decode_value( $value ) {
+		if ( $this->has_input && $this->array_allowed ) {
+			FrmAppHelper::unserialize_or_decode( $value );
+		}
+		return $value;
 	}
 }

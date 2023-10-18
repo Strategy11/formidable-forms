@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|boolean id on success or false on failure
+	 * @return int|bool id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -285,11 +285,6 @@ class FrmForm {
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		if ( ! empty( $options['success_url'] ) && ! empty( $args['form_id'] ) ) {
-			$options['success_url']           = FrmFormsHelper::maybe_add_sanitize_url_attr( $options['success_url'], (int) $args['form_id'] );
-			$values['options']['success_url'] = $options['success_url'];
-		}
-
 		/**
 		 * Allows modifying form options before updating or creating.
 		 *
@@ -370,6 +365,16 @@ class FrmForm {
 				'field_options' => $field->field_options,
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
+
+			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
+				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
+					if ( is_array( $option ) ) {
+						foreach ( $option as $key => $item ) {
+							$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+						}
+					}
+				}
+			}
 
 			self::prepare_field_update_values( $field, $values, $new_field );
 
@@ -683,7 +688,9 @@ class FrmForm {
 
 		$query_key = is_numeric( $id ) ? 'id' : 'form_key';
 		$r         = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
-		$r         = stripslashes( $r );
+
+		// An empty form name can result in a null value.
+		$r = is_null( $r ) ? '' : stripslashes( $r );
 
 		return $r;
 	}
@@ -808,7 +815,11 @@ class FrmForm {
 	 * Get all published forms
 	 *
 	 * @since 2.0
-	 * @return array of forms
+	 *
+	 * @param array  $query
+	 * @param int    $limit
+	 * @param string $inc_children
+	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
@@ -1110,22 +1121,38 @@ class FrmForm {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
+	 * Check if the "Submit this form with AJAX" setting is toggled on.
 	 *
-	 * @param string $key
+	 * @since 6.2
 	 *
-	 * @return int form id
+	 * @param stdClass $form
+	 * @return bool
 	 */
-	public static function getIdByKey( $key ) {
-		return FrmFormDeprecated::getIdByKey( $key );
+	public static function is_ajax_on( $form ) {
+		return ! empty( $form->options['ajax_submit'] );
 	}
 
 	/**
-	 * @deprecated 3.0
+	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
+	 *
+	 * @param string $key
+	 * @return int form id
+	 */
+	public static function getIdByKey( $key ) {
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
+		return self::get_id_by_key( $key );
+	}
+
+	/**
+	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
+	 * @codeCoverageIgnore
+	 *
+	 * @param string|int $id
+	 * @return string
 	 */
 	public static function getKeyById( $id ) {
-		return FrmFormDeprecated::getKeyById( $id );
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_key_by_id' );
+		return self::get_key_by_id( $id );
 	}
 }

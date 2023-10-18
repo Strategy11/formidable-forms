@@ -65,20 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
 
-<?php
-// Show a temporary message. This can be removed after the date is passed.
-if ( time() < strtotime( '2023-03-07' ) ) {
-	FrmTipsHelper::show_tip(
-		array(
-			'tip'  => __( 'New: The form confirmation settings have moved.', 'formidable' ),
-			'call' => __( 'Go to the Form Actions', 'formidable' ),
-			'page' => add_query_arg( 't', 'email_settings' ),
-		),
-		'p'
-	);
-}
-?>
-
 <p class="frm8 frm_form_field">
 	<label for="no_save" class="frm_inline_block">
 		<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
@@ -87,7 +73,7 @@ if ( time() < strtotime( '2023-03-07' ) ) {
 </p>
 
 <?php
-is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values );
+is_callable( 'FrmFormsController::render_spam_settings' ) && FrmFormsController::render_spam_settings( $values );
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 
@@ -106,12 +92,12 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
-	<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+	<?php if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() ) { ?>
 		<tr>
 			<td>
-				<label data-upgrade="<?php esc_attr_e( 'AJAX Form Submissions', 'formidable' ); ?>" data-medium="ajax" data-message="<?php esc_attr_e( 'Want to submit forms without reloading the page?', 'formidable' ); ?>">
-					<input type="checkbox" disabled="disabled" />
-					<span class="frm_noallow"><?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?></span>
+				<label for="ajax_submit">
+					<input type="checkbox" name="options[ajax_submit]" id="ajax_submit" value="1" <?php checked( $values['ajax_submit'], 1 ); ?> />
+					<?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?>
 					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
 				</label>
 			</td>

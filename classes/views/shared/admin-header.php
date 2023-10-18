@@ -35,6 +35,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 			?>
 		</h1>
 	</div>
+	<ul class="frm_form_nav"></ul>
 		<?php
 	}
 

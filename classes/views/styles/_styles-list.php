@@ -38,14 +38,6 @@ if ( $globally_disabled ) {
 		$trigger_params['data-image']   = 'styles-upsell.svg';
 	}
 	?>
-	<div id="frm_new_style_trigger_wrapper">
-		<a <?php FrmAppHelper::array_to_html_params( $trigger_params, true ); ?>>
-			<?php
-			FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
-			esc_html_e( 'New Style', 'formidable' );
-			?>
-		</a>
-	</div>
 	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
 	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $enabled ? $active_style->ID : 0 ); ?>" />
@@ -53,7 +45,7 @@ if ( $globally_disabled ) {
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div class="frm-mb-sm">
+	<div class="frm-mb-sm frm-flex-justify">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',
@@ -67,6 +59,14 @@ if ( $globally_disabled ) {
 			)
 		);
 		?>
+		<div id="frm_new_style_trigger_wrapper">
+			<a <?php FrmAppHelper::array_to_html_params( $trigger_params, true ); ?>>
+				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
+				esc_html_e( 'New Style', 'formidable' );
+				?>
+			</a>
+		</div>
 	</div>
 
 	<div class="frm_form_settings">

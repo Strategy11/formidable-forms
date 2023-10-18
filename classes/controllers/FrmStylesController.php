@@ -917,7 +917,7 @@ class FrmStylesController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frm_style = new FrmStyle();
-		$defaults  = false; // Intentionally avoid defaults here so nothing gets removed from our style.
+		$defaults  = array(); // Intentionally avoid defaults here so nothing gets removed from our style.
 		$style     = '';
 
 		echo '<style type="text/css">';
@@ -1018,7 +1018,25 @@ class FrmStylesController {
 		$output = apply_filters( 'frm_saved_css', $output );
 
 		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		self::maybe_hide_sample_form_error_message();
+
 		wp_die();
+	}
+
+	/**
+	 * Add an extra style rule to hide a broken style warning.
+	 * To avoid cluttering the front end with any unecessary styles this is only added when the referer URL matches the styler.
+	 *
+	 * @since 6.2.3
+	 *
+	 * @return void
+	 */
+	public static function maybe_hide_sample_form_error_message() {
+		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		if ( false !== strpos( $referer, 'admin.php?page=formidable-styles' ) ) {
+			echo '#frm_broken_styles_warning { display: none; }';
+		}
 	}
 
 	/**
@@ -1233,11 +1251,11 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @deprecated x.x Saving custom CSS has been moved into Global Settings.
+	 * @deprecated 6.1 Saving custom CSS has been moved into Global Settings.
 	 *
 	 * @return void
 	 */
 	public static function save_css() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.1' );
 	}
 }

@@ -15,6 +15,8 @@ class FrmReviews {
 	 * Add admin notices as needed for reviews
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	public function review_request() {
 
@@ -43,6 +45,8 @@ class FrmReviews {
 	 * When was the review request last dismissed?
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	private function set_review_status() {
 		$user_id = get_current_user_id();
@@ -67,6 +71,8 @@ class FrmReviews {
 	 * Maybe show review request
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	private function review() {
 
@@ -116,6 +122,13 @@ class FrmReviews {
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/review.php' );
 	}
 
+	/**
+	 * @param string $title
+	 * @param string $name
+	 * @param int    $asked
+	 *
+	 * @return void
+	 */
 	private function add_to_inbox( $title, $name, $asked ) {
 		$message = new FrmInbox();
 		$requests = $message->get_messages();
@@ -156,6 +169,8 @@ class FrmReviews {
 	 * If there are already later requests, don't add it to the inbox again.
 	 *
 	 * @since 4.05.02
+	 *
+	 * @return bool
 	 */
 	private function has_later_request( $requests, $asked ) {
 		return isset( $requests[ $this->inbox_key . ( $asked + 1 ) ] ) || isset( $requests[ $this->inbox_key . ( $asked + 2 ) ] );
@@ -163,6 +178,8 @@ class FrmReviews {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @return array
 	 */
 	private function inbox_keys() {
 		return array(
@@ -174,6 +191,8 @@ class FrmReviews {
 
 	/**
 	 * @since 4.05.01
+	 *
+	 * @return void
 	 */
 	private function set_inbox_dismissed() {
 		$message = new FrmInbox();
@@ -184,6 +203,8 @@ class FrmReviews {
 
 	/**
 	 * @since 4.05.01
+	 *
+	 * @return void
 	 */
 	private function set_inbox_read() {
 		$message = new FrmInbox();
@@ -196,6 +217,8 @@ class FrmReviews {
 	 * Save the request to hide the review
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	public function dismiss_review() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );

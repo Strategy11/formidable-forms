@@ -13,6 +13,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	/**
+	 * @return void
+	 */
 	public function prepare_items() {
 		global $per_page;
 
@@ -145,6 +148,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $form_id;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function no_items() {
 		$s = self::get_param(
 			array(
@@ -173,13 +179,19 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$colspan = $this->get_column_count();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function search_box( $text, $input_id ) {
 		// Searching is a pro feature
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function display_tablenav( $which ) {
 		$is_footer = ( $which !== 'top' );
 		if ( $is_footer && ! empty( $this->items ) ) {
@@ -195,6 +207,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		parent::display_tablenav( $which );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
 		if ( $which === 'top' && ! $form_id ) {
@@ -232,6 +247,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $primary_column;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function single_row( $item, $style = '' ) {
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -270,7 +288,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
-			if ( $this->column_name == 'cb' ) {
+			if ( $this->column_name === 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
 				if ( in_array( $column_name, $hidden, true ) ) {
@@ -298,11 +316,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * Get the column names that the logged in user can action on
+	 *
+	 * @return string[]
 	 */
 	private function get_action_columns() {
 		return array( 'cb', 'form_id', 'id', 'post_id' );
 	}
 
+	/**
+	 * @param object $item
+	 */
 	private function column_value( $item ) {
 		$col_name = $this->column_name;
 
@@ -313,7 +336,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = $item->{$col_name};
 				break;
 			case 'name':
-			case 'description':
 				$val = FrmAppHelper::truncate( strip_tags( $item->{$col_name} ), 100 );
 				break;
 			case 'created_at':
@@ -322,7 +344,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val  = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 				break;
 			case 'is_draft':
-				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
+				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
+				$val = sprintf(
+					'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
+					sanitize_html_class( $item->is_draft ),
+					esc_html( $entry_status )
+				);
 				break;
 			case 'form_id':
 				$form_id             = $item->form_id;
@@ -365,6 +392,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $view_link
+	 * @param array $actions
+	 * @param object $item
+	 *
+	 * @return void
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
@@ -377,6 +408,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );
 	}
 
+	/**
+	 * @param false $val
+	 *
+	 * @return void
+	 */
 	private function get_column_value( $item, &$val ) {
 		$col_name = $this->column_name;
 
@@ -420,6 +456,18 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function confirm_bulk_delete() {
-		return __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
+		return sprintf(
+			/* translators: %1$s: HTML break line, %2$s: HTML bold text */
+			esc_html__( 'ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below.', 'formidable' ),
+			'<br/>',
+			'<b>DELETE ALL</b>'
+		);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function loaded_from() {
+		return 'entries-list';
 	}
 }

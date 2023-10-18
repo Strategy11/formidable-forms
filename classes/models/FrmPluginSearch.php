@@ -29,6 +29,8 @@ class FrmPluginSearch {
 	 * @param object $screen WP Screen object.
 	 *
 	 * @since 4.12
+	 *
+	 * @return void
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -47,6 +49,8 @@ class FrmPluginSearch {
 	 * @param object $result Plugin search results.
 	 * @param string $action unused.
 	 * @param object $args Search args.
+	 *
+	 * @return object
 	 */
 	public function inject_suggestion( $result, $action, $args ) {
 		// Looks like a search query; it's matching time.
@@ -101,7 +105,10 @@ class FrmPluginSearch {
 	 *
 	 * @since 4.12
 	 *
-	 * @return int
+	 * @param array $addon_list
+	 * @param array $normalized_term
+	 *
+	 * @return int|null
 	 */
 	private function matching_addon( $addon_list, $normalized_term ) {
 		$matching_addon = null;
@@ -118,9 +125,9 @@ class FrmPluginSearch {
 
 			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 
-			$matches = ! empty( array_intersect( $addon_terms, $normalized_term ) );
+			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
-			if ( $matches ) {
+			if ( count( $matched_terms ) === count( $normalized_term ) ) {
 				$matching_addon = $addon_id;
 				break;
 			}
@@ -189,6 +196,8 @@ class FrmPluginSearch {
 
 	/**
 	 * @since 4.12
+	 *
+	 * @return void
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
@@ -267,6 +276,7 @@ class FrmPluginSearch {
 	/**
 	 * @since 4.12
 	 *
+	 * @param string $terms
 	 * @return array
 	 */
 	private function search_to_array( $terms ) {
@@ -279,6 +289,8 @@ class FrmPluginSearch {
 	 *
 	 * @param array $links Related links.
 	 * @param array $plugin Plugin result information.
+	 *
+	 * @return array
 	 */
 	public function insert_related_links( $links, $plugin ) {
 		if ( self::$slug !== $plugin['slug'] ) {
@@ -344,6 +356,8 @@ class FrmPluginSearch {
 
 	/**
 	 * Load the search scripts and CSS for PSH.
+	 *
+	 * @return void
 	 */
 	public function load_plugins_search_script() {
 		wp_enqueue_script( self::$slug, FrmAppHelper::plugin_url() . '/js/plugin-search.js', array(), FrmAppHelper::plugin_version(), true );

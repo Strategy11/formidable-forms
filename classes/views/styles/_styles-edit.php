@@ -33,10 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 */
 	?>
 	<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
-</div>
 
-<?php
-// This holds the custom CSS for a single theme that is being worked on on the edit page.
-// It gets populated with the frm_change_styling action.
-?>
-<div id="this_css"></div>
+	<?php
+	// This holds the custom CSS for a single theme that is being worked on on the edit page.
+	// It gets populated with the frm_change_styling action.
+	?>
+	<div id="this_css"></div>
+</div>

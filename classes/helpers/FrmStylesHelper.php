@@ -399,6 +399,8 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @return array
 	 */
 	private static function allow_color_override() {
 		$frm_style = new FrmStyle();
@@ -420,7 +422,6 @@ class FrmStylesHelper {
 			'submit_active_border_color',
 			'submit_hover_bg_color',
 			'submit_active_bg_color',
-			'success_bg_color',
 		);
 
 		return array(
@@ -654,47 +655,47 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.0
-	 * @deprecated x.x The style menu is no longer used in the styler.
+	 * @deprecated 6.0 The style menu is no longer used in the styler.
 	 *
 	 * @param string $active
 	 * @return string
 	 */
 	public static function get_style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.0' );
 		return '';
 	}
 
 	/**
-	 * @deprecated x.x The style menu is no longer used in the styler.
+	 * @deprecated 6.0 The style menu is no longer used in the styler.
 	 *
 	 * @param string $active
 	 * @return void
 	 */
 	public static function style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.0' );
 	}
 
 	/**
 	 * Either get the heading or the style switcher.
 	 *
 	 * @since 4.0
-	 * @deprecated x.x The style switcher was replaced with a form switcher and is no longer used.
+	 * @deprecated 6.0 The style switcher was replaced with a form switcher and is no longer used.
 	 *
 	 * @param array $atts
 	 * @return void
 	 */
 	public static function styler_switcher( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.0' );
 	}
 
 	/**
 	 * @since 4.0
-	 * @deprecated x.x The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
+	 * @deprecated 6.0 The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
 	 *
 	 * @param array $atts
 	 * @return void
 	 */
 	public static function styler_save_button( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.0' );
 	}
 }

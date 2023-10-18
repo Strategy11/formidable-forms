@@ -45,6 +45,9 @@ class FrmStyle {
 		return FrmDb::save_settings( $settings, 'frm_styles' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function duplicate( $id ) {
 		// Duplicating is a pro feature. This is handled in FrmProStyle::duplicate instead.
 	}
@@ -238,17 +241,118 @@ class FrmStyle {
 			} else {
 				$sanitized_settings[ $key ] = $defaults[ $key ];
 			}
+
+			if ( 'custom_css' !== $key ) {
+				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
+			}
 		}
 		return $sanitized_settings;
 	}
 
 	/**
+	 * Remove any characters that should not be used in CSS.
+	 *
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @return string
+	 */
+	private function strip_invalid_characters( $setting ) {
+		$characters_to_remove = array( '{', '}', ';', '[', ']' );
+
+		// RGB is handled instead in self::maybe_sanitize_rgba_value.
+		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
+		}
+
+		return str_replace( $characters_to_remove, '', $setting );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @param array  $characters_to_remove
+	 * @return string
+	 */
+	private function maybe_fix_braces( $setting, &$characters_to_remove ) {
+		$number_of_opening_braces = substr_count( $setting, '(' );
+		$number_of_closing_braces = substr_count( $setting, ')' );
+
+		if ( $number_of_opening_braces === $number_of_closing_braces ) {
+			return $this->trim_braces( $setting );
+		}
+
+		if ( $this->should_remove_every_brace( $setting ) ) {
+			// Add to $characters_to_remove to remove when str_replace is called.
+			array_push( $characters_to_remove, '(', ')' );
+			return $setting;
+		}
+
+		return $this->trim_braces( $setting );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	private function trim_braces( $input ) {
+		$output = $input;
+		// Remove any ( from the start of the string as no CSS values expect at the first character.
+		if ( $output ) {
+			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
+				$output = ltrim( $output, '()' );
+			}
+		}
+		// Remove extra braces from the end.
+		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
+			$output = rtrim( $output, '()' );
+			if ( false !== strpos( $output, '(' ) ) {
+				$output .= ')';
+			}
+		}
+		return $output;
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $setting
+	 * @return bool
+	 */
+	private function should_remove_every_brace( $setting ) {
+		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+			// Support calc() sizes. We do not want to remove all braces when calc is used.
+			return false;
+		}
+
+		// Matches hex values but also checks for unexpected ( and ).
+		$looks_like_a_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+		if ( $looks_like_a_hex_value ) {
+			return true;
+		}
+
+		// Matches size values but also checks for unexpected ( and ).
+		// This is case insensitive so it will catch PX, PT, etc, as well.
+		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
+		if ( $looks_like_a_size ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * @since 3.01.01
+	 *
+	 * @param string $setting
+	 * @return bool
 	 */
 	private function is_color( $setting ) {
 		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors );
+		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
 	}
 
 	/**
@@ -443,6 +547,9 @@ class FrmStyle {
 		return $styles;
 	}
 
+	/**
+	 * @param array|null $styles
+	 */
 	public function get_default_style( $styles = null ) {
 		if ( ! isset( $styles ) ) {
 			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
@@ -663,7 +770,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * Don't let imbalanced font families ruin the whole stylesheet
+	 * Don't let imbalanced font families ruin the whole stylesheet.
 	 *
 	 * @param string $value
 	 * @return string
@@ -673,11 +780,17 @@ class FrmStyle {
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
 			$is_balanced = $char_count % 2 == 0;
-			if ( ! $is_balanced ) {
+
+			if ( $is_balanced ) {
+				continue;
+			}
+
+			if ( $value && $char === $value[ strlen( $value ) - 1 ] ) {
+				$value = $char . $value;
+			} else {
 				$value .= $char;
 			}
 		}
-
 		return $value;
 	}
 }

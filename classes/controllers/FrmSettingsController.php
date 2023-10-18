@@ -12,8 +12,15 @@ class FrmSettingsController {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
 	}
 
+	/**
+	 * Include license box template on demand.
+	 *
+	 * @return void
+	 */
 	public static function license_box() {
-		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
 	}
 
@@ -178,15 +185,36 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Render the general global settings section.
+	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function general_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
+		$uploads      = wp_upload_dir();
+		$target_path  = $uploads['basedir'] . '/formidable/css';
 
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php';
+	}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php' );
+	/**
+	 * Render the global currency selector if Pro is up to date.
+	 *
+	 * @param FrmSettings $frm_settings
+	 * @param string $more_html
+	 * @return void
+	 */
+	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
+			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
+			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
+			return;
+		}
+
+		$currencies = FrmCurrencyHelper::get_currencies();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/_currency.php';
 	}
 
 	/**
@@ -374,10 +402,10 @@ class FrmSettingsController {
 	}
 
 	/**
-	 * @deprecated x.x use FrmSettingsController::captcha_settings().
+	 * @deprecated 6.0 use FrmSettingsController::captcha_settings().
 	 */
 	public static function recaptcha_settings() {
-		_deprecated_function( __FUNCTION__, 'x.x', 'FrmSettingsController::captcha_settings()' );
+		_deprecated_function( __FUNCTION__, '6.0', 'FrmSettingsController::captcha_settings()' );
 		self::captcha_settings();
 	}
 }

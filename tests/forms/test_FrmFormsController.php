@@ -2,6 +2,7 @@
 
 /**
  * @group forms
+ * @group forms-controller
  */
 class test_FrmFormsController extends FrmUnitTest {
 
@@ -210,6 +211,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		// Update form object from cache.
 		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
 		$form = FrmForm::getOne( $form_id );
 
 		// Create entry.
@@ -230,12 +232,15 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		// Test the output.
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
-		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
-
-		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
-
-		$this->assertNotFalse( strpos( $response, 'Test page content' ) );
+		$contains = array(
+			'frmFrontForm.scrollMsg(' . $form->id . ')',
+			'Done!',
+			'window.location="http://example.com"',
+			'Test page content',
+		);
+		foreach ( $contains as $c ) {
+			$this->assertStringContainsString( $c, $response );
+		}
 	}
 
 	/**
@@ -244,34 +249,43 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * @covers FrmFormsController::redirect_after_submit
 	 */
 	public function test_redirect_after_create() {
-		$form_id = $this->factory->form->create();
+		$form_id  = $this->factory->form->create();
+		$field_id = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ) );
 
 		$this->create_on_submit_action(
 			$form_id,
 			array(
 				'event'          => array( 'create' ),
 				'success_action' => 'redirect',
-				'success_url'    => 'http://example.com',
+				'success_url'    => 'http://example.com?param=[' . $field_id . ']',
 			)
 		);
 
 		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
 
 		$form = $this->factory->form->get_object_by_id( $form_id );
 
 		$entry_key = 'submit-redirect';
-		$response = $this->post_new_entry( $form, $entry_key );
+		$response  = $this->post_new_entry( $form, $entry_key );
 
-		if ( headers_sent() ) {
-			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
-		}
+		$created_entry_id = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry_id, 'No entry found with key ' . $entry_key );
 
-		$created_entry = FrmEntry::get_id_by_key( $entry_key );
-		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
+		$entry        = FrmEntry::getOne( $created_entry_id, true );
+		$expected_url = 'http://example.com?param=' . $entry->metas[ $field_id ];
 
-		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
+		$this->assertTrue( headers_sent() );
+
+		// Since headers are sent by phpunit, we will get the js redirect.
+		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
+	}
+
+	/**
+	 * Trigger migration check and the flag.
+	 */
+	private function trigger_migrate_actions( $form_id ) {
+		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
 	}
 
 	/**
@@ -346,5 +360,32 @@ class test_FrmFormsController extends FrmUnitTest {
 		ob_end_clean();
 
 		return $response;
+	}
+
+	public function test_redirect_in_new_tab() {
+		$form_id  = $this->factory->form->create();
+
+		$this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'           => array( 'create' ),
+				'success_action'  => 'redirect',
+				'success_url'     => 'http://example.com',
+				'open_in_new_tab' => 1,
+			)
+		);
+
+		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
+		$form = $this->factory->form->get_object_by_id( $form_id );
+
+		$entry_key = 'submit-redirect';
+		$response  = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertTrue( headers_sent() );
+
+		// Since headers are sent by phpunit, we will get the js redirect.
+		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
+		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
 	}
 }

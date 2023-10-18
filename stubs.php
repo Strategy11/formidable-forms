@@ -19,6 +19,7 @@ namespace {
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
 	define( 'WP_IMPORTING', false );
+	define( 'ICL_PLUGIN_INACTIVE', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
@@ -32,21 +33,8 @@ namespace {
 		public static function import_attachment( $val, $field ) {
 		}
 	}
-	class FrmProDisplaysController {
-
-	}
 	class FrmProAppHelper {
-		public static function maybe_convert_to_db_date( $date_str, $to_format = 'Y-m-d' ) {
-		}
-		public static function format_time( $time, $format = 'H:i' ) {
-		}
-		public static function get_current_user_value( $value, $return_array = false ) {
-		}
-		public static function icon_by_class( $class, $atts = array() ) {
-		}
 		public static function get_settings() {
-		}
-		public static function get_custom_taxonomy( $post_type, $field ) {
 		}
 	}
 	class FrmProEntryMetaHelper {
@@ -54,12 +42,6 @@ namespace {
 		}
 	}
 	class FrmProFormActionsController {
-		public static function prepare_logic_value( &$logic_value, $entry ) {
-		}
-		public static function get_value_from_entry( $entry, $field_id ) {
-		}
-	}
-	class FrmProFieldValue {
 	}
 	class FrmViewsLayout {
 	}
@@ -90,12 +72,32 @@ namespace {
 	}
 	class FrmProEntriesHelper {
 	}
-	class FrmProFormsController {
+	class FrmProFieldsHelper {
+		/**
+		 * @param array  $args
+		 * @param string $value
+		 * @return void
+		 */
+		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
 	}
 	class FrmViewsAppHelper {
 	}
-	class FrmProHtmlHelper {
-		public static function toggle( $id, $name, $args ) {
+	class FrmProCreditCardsController {
+		/**
+		 * @param array  $field
+		 * @param string $field_name
+		 * @param array  $atts
+		 * @return void
+		 */
+		public static function show_in_form( $field, $field_name, $atts ) {
+		}
+	}
+	class FrmProAppController {
+		/**
+		 * @return bool
+		 */
+		public static function has_combo_js_file() {
 		}
 	}
 	class Akismet {
@@ -103,6 +105,9 @@ namespace {
 	class PHPMailer {
 		public function __construct( $exceptions = null ) {
 		}
+	}
+	class FrmPaymentsController {
+		public static $db_opt_name = 'frm_pay_db_version';
 	}
 	/**
 	 * @return void

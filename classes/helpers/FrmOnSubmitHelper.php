@@ -94,6 +94,27 @@ class FrmOnSubmitHelper {
 				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
 			/>
 		</div>
+
+		<?php
+		$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
+		$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
+		?>
+		<div class="frm_form_field">
+			<?php
+			FrmHtmlHelper::toggle(
+				$id_attr,
+				$name_attr,
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
+					'echo'      => true,
+				)
+			);
+			?>
+			<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
+				<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
+			</label>
+		</div>
 		<?php
 	}
 
@@ -178,6 +199,17 @@ class FrmOnSubmitHelper {
 	}
 
 	/**
+	 * Gets the default open in new tab message.
+	 *
+	 * @since 6.3.1
+	 *
+	 * @return string
+	 */
+	public static function get_default_new_tab_msg() {
+		return FrmAppHelper::get_settings()->new_tab_msg;
+	}
+
+	/**
 	 * Adds the first On Submit action data to the form options to be saved.
 	 *
 	 * @param int $form_id Form ID.
@@ -229,7 +261,8 @@ class FrmOnSubmitHelper {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
 				break;
 
 			case 'page':
@@ -240,5 +273,179 @@ class FrmOnSubmitHelper {
 				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : self::get_default_msg();
 				$form_options['show_form']    = ! empty( $action->post_content['show_form'] );
 		}
+	}
+
+	/**
+	 * Maybe migrate submit settings from the form options to On Submit action.
+	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	public static function maybe_migrate_submit_settings_to_action( $form_id ) {
+		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
+		if ( ! $form ) {
+			return;
+		}
+
+		FrmAppHelper::unserialize_or_decode( $form->options );
+
+		if ( self::form_has_migrated( $form ) ) {
+			return;
+		}
+
+		$form->id = $form_id;
+		$action_type = FrmOnSubmitAction::$slug;
+
+		// Check if form already has form actions to avoid creating duplicates.
+		$has_actions = FrmFormAction::form_has_action_type( $form_id, $action_type );
+		if ( ! empty( $has_actions ) ) {
+			// Don't migrate again.
+			self::save_migrated_success_actions( $form );
+			return;
+		}
+
+		// Create On Submit action.
+		$base_action = array();
+
+		$base_action['post_type']    = FrmFormActionsController::$action_post_type;
+		$base_action['post_excerpt'] = $action_type;
+		$base_action['post_title']   = FrmOnSubmitAction::get_name();
+		$base_action['menu_order']   = $form_id;
+		$base_action['post_status']  = 'publish';
+		$base_action['post_content'] = array(
+			'event' => array( 'create' ),
+		);
+
+		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
+
+		// If frontend editing is enabled, migrate its settings too.
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
+			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
+
+			if ( $action_data === $edit_data ) {
+				// Just create one action for both create and update if they are the same.
+				$base_action['post_content']['event'][] = 'update';
+			} else {
+				// Create a separate action for update.
+				$edit_action                          = $base_action;
+				$edit_action['post_content']         += $edit_data;
+				$edit_action['post_content']['event'] = array( 'update' );
+
+				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
+				FrmDb::save_json_post( $edit_action );
+			}
+		}
+
+		$action                  = $base_action;
+		$action['post_content'] += $action_data;
+
+		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
+		FrmDb::save_json_post( $action );
+
+		self::save_migrated_success_actions( $form );
+	}
+
+	/**
+	 * Gets On Submit action data from form options to be used for the migration.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @param array  $form_options Form options.
+	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
+	 * @return array
+	 */
+	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
+		$opt  = 'update' === $event ? 'edit_' : 'success_';
+		$data = array(
+			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : self::get_default_action_type(),
+		);
+
+		switch ( $data['success_action'] ) {
+			case 'redirect':
+				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
+				break;
+
+			case 'page':
+				$data['success_page_id'] = isset( $form_options[ $opt . 'page_id' ] ) ? $form_options[ $opt . 'page_id' ] : '';
+				break;
+
+			default:
+				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : self::get_default_msg();
+				$data['show_form']   = ! empty( $form_options['show_form'] );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Checks if On Submit settings are migrated.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @param object $form Form object.
+	 * @return bool
+	 */
+	public static function form_has_migrated( $form ) {
+		return ! empty( $form->options['on_submit_migrated'] );
+	}
+
+	/**
+	 * @since 6.1.1
+	 *
+	 * @param object $form Limited form object.
+	 */
+	private static function save_migrated_success_actions( $form ) {
+		$form->options['on_submit_migrated'] = 1;
+		FrmForm::update( $form->id, array( 'options' => $form->options ) );
+	}
+
+	/**
+	 * Gets fallback action, used when no actions match.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @param string|array $event Uses 'create' or 'update'.
+	 *
+	 * @return object
+	 */
+	public static function get_fallback_action( $event = 'create' ) {
+		$action = new stdClass();
+
+		$action->post_content = array(
+			'event'          => (array) $event,
+			'success_action' => 'message',
+			'success_msg'    => self::get_default_msg(),
+		);
+
+		return $action;
+	}
+
+	/**
+	 * Gets fallback action after opening the redirect URL in a new tab.
+	 *
+	 * @since 6.3.1
+	 *
+	 * @param string|array $event Uses 'create' or 'update'.
+	 * @return object
+	 */
+	public static function get_fallback_action_after_open_in_new_tab( $event ) {
+		$action = self::get_fallback_action( $event );
+
+		$action->post_content['success_msg'] = self::get_default_new_tab_msg();
+
+		return $action;
+	}
+
+	/**
+	 * Check if the current event has been paased. If not, use create actions.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @return string
+	 */
+	public static function current_event( $atts ) {
+		return ! empty( $atts['action'] ) ? $atts['action'] : 'create';
 	}
 }

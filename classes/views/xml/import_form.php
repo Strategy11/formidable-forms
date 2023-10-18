@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
 
 		<?php do_action( 'frm_import_settings' ); ?>
-		<br/><br/>
+
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
@@ -114,7 +114,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
-							<td class="column-cb check-column"></td>
+							<td class="column-cb check-column">
+								<label class="screen-reader-text" for="frm-export-select-all"><?php esc_html_e( 'Select All', 'formidable' ); ?></label>
+								<input id="frm-export-select-all" type="checkbox">
+							</td>
 							<td><?php esc_html_e( 'Form Title', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'Type', 'formidable' ); ?></td>

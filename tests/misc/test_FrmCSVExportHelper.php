@@ -10,8 +10,6 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 	 * @covers FrmCsvExportHelper::csv_headings
 	 */
 	public function test_csv_headings() {
-		$this->check_php_version( '5.3' );
-
 		$this->set_form( FrmForm::getOne( 'all_field_types' ) );
 
 		$headings = $this->csv_headings();
@@ -21,7 +19,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'updated_at' => 'Last Updated',
 			'user_id'    => 'Created By',
 			'updated_by' => 'Updated By',
-			'is_draft'   => 'Draft',
+			'is_draft'   => 'Entry Status',
 			'ip'         => 'IP',
 			'id'         => 'ID',
 			'item_key'   => 'Key',
@@ -75,8 +73,6 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 	 * @covers FrmCsvExportHelper::csv_headings exports the fields in a section for an embedded form
 	 */
 	public function test_csv_headings_for_embedded_sections() {
-		$this->check_php_version( '5.3' );
-
 		$embedded_form = $this->factory->form->create_and_get();
 		$section       = $this->factory->field->create_and_get(
 			array(

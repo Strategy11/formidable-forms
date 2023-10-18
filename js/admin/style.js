@@ -50,6 +50,7 @@
 	function initPreview() {
 		initFloatingLabels();
 		fillMissingSignatureValidationFunction();
+		setSelectPlaceholderColor();
 
 		// Remove .wp-core-ui from the body so the preview can avoid it.
 		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
@@ -1159,7 +1160,10 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: handleChangeStylingSuccess
+				success: ( css ) => {
+					handleChangeStylingSuccess( css );
+					setSelectPlaceholderColor();
+				}
 			});
 		}
 
@@ -1289,8 +1293,6 @@
 	/**
 	 * Update label container classes when the label "Position" setting is changed.
 	 *
-	 * @todo This doesn't work yet with the "My form" preview.
-	 *
 	 * @returns {void}
 	 */
 	function setPosClass() {
@@ -1302,7 +1304,7 @@
 			value = 'none';
 		}
 
-		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field.frm-default-label-position, #frm_sample_form .frm_form_field' ).forEach( container => {
 			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
 			const shouldForceTopStyling = 'inside' === value && ( ! input || 'hidden' === input.type ); // We do not want file upload to use floating labels, or inline datepickers, which both use hidden inputs.
 			const currentValue          = shouldForceTopStyling ? 'top' : value;
@@ -1355,6 +1357,40 @@
 		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
 			$sample.datepicker({ changeMonth: true, changeYear: true });
 		}
+	}
+
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since 6.5.1
+	 */
+	function setSelectPlaceholderColor() {
+		const selects = document.querySelectorAll( '.form-field select' );
+		const styleElement = document.querySelector( '.with_frm_style' );
+		const textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
+
+		// Exit if there are no select elements or the textColorDisabled property is missing
+		if ( ! selects.length || ! textColorDisabled ) {
+			return;
+		}
+
+		// Function to change the color of a select element
+		const changeSelectColor = ( select ) => {
+			if ( select.options[select.selectedIndex] && select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
+				select.style.setProperty( 'color', textColorDisabled, 'important' );
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		// Use a loop to iterate through each select element
+		selects.forEach( ( select ) => {
+			// Apply the color change to each select element
+			changeSelectColor( select );
+
+			// Add an event listener for future changes
+			select.addEventListener( 'change', () => changeSelectColor( select ) );
+		});
 	}
 
 	// Hook into the styleInit function in formidable_admin.js

@@ -1,5 +1,23 @@
 <?php
 
+class FrmUnitTestFactory extends WP_UnitTest_Factory {
+
+	/**
+	 * @var Form_Factory|null
+	 */
+	public $form;
+
+	/**
+	 * @var Field_Factory|null
+	 */
+	public $field;
+
+	/**
+	 * @var Entry_Factory|null
+	 */
+	public $entry;
+}
+
 class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	public function __construct( $factory = null ) {

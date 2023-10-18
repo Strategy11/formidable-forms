@@ -24,13 +24,19 @@ class FrmFieldSelect extends FrmFieldType {
 		return $this->include_front_form_file();
 	}
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'clear_on_focus' => true,
-			'size' => true,
+			'size'           => true,
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	protected function new_field_settings() {
 		return array(
 			'options' => serialize(
@@ -56,16 +62,25 @@ class FrmFieldSelect extends FrmFieldType {
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args - Includes 'field', 'display', and 'values'
+	 *
+	 * @return void
 	 */
 	public function show_extra_field_choices( $args ) {
 		$this->auto_width_setting( $args );
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/dropdown-field.php';
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function show_readonly_hidden() {
 		return true;
 	}

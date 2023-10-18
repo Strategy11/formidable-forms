@@ -16,6 +16,8 @@ class FrmFieldDefault extends FrmFieldType {
 
 	/**
 	 * @param $type string
+	 *
+	 * @return void
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $type ) ) {
@@ -24,6 +26,9 @@ class FrmFieldDefault extends FrmFieldType {
 		parent::set_type( $type );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 
@@ -40,6 +45,9 @@ class FrmFieldDefault extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @return false|string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$pass_args = array(
 			'errors'  => $args['errors'],

@@ -13,6 +13,8 @@ class FrmUsageController {
 	 * Randomize the first send to prevent our servers from crashing.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @return void
 	 */
 	public static function schedule_send() {
 		if ( wp_next_scheduled( 'formidable_send_usage' ) ) {
@@ -47,6 +49,8 @@ class FrmUsageController {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @return void
 	 */
 	public static function send_snapshot() {
 		$usage = new FrmUsage();

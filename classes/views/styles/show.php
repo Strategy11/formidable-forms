@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</div>
-	<div id="frm_styler_wrapper">
+	<div id="frm_styler_wrapper" class="columns-2">
 		<?php
 		$view_file = 'list' === $view ? 'list' : 'edit';
 		include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
