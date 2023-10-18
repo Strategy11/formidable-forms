@@ -98,7 +98,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		return $limit = FrmDb::esc_limit( $start . ',' . $per_page );
+		return FrmDb::esc_limit( $start . ',' . $per_page );
 	}
 
 	/**
