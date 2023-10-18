@@ -68,20 +68,24 @@
 					renderStripeConnectSettingsButton();
 				}
 			},
-			isTriggerInTestMode( trigger )
+			isTriggerInTestMode( trigger ),
+			function( data ) {
+				alert( data );
+				renderStripeConnectSettingsButton();
+			}
 		);
 	}
 
-	function strpSettingsAjaxRequest( action, success, testMode ) {
+	function strpSettingsAjaxRequest( action, success, testMode, error ) {
 		var data = {
 			action: action,
 			testMode: testMode,
 			nonce: frmGlobal.nonce
 		};
-		postAjax( data, success );
+		postAjax( data, success, error );
 	}
 
-	function postAjax( data, success ) {
+	function postAjax( data, success, error ) {
 		var xmlHttp, params;
 
 		xmlHttp = new XMLHttpRequest();
@@ -103,6 +107,8 @@
 							response.data = {};
 						}
 						success( response.data );
+					} else if ( 'function' === typeof error ) {
+						error( response.data );
 					}
 				}
 			}
