@@ -6,15 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
-	 * @since x.x    Added $field parameter.
 	 *
 	 * @param int    $entry_id
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
 	 * @param mixed  $meta_value
-	 * @param object|null $field
 	 */
-	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value, $field = null ) {
+	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
@@ -31,10 +29,6 @@ class FrmEntryMeta {
 
 		self::set_value_before_save( $new_values );
 		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
-
-		if ( ! is_numeric( $new_values['field_id'] ) && $field ) {
-			$new_values['field_id'] = $field->id;
-		}
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
 
@@ -143,9 +137,9 @@ class FrmEntryMeta {
 					// if value exists, then update it
 					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 				}
-			} else {
+			} elseif ( ! empty( $field ) ) {
 				// if value does not exist, then create it
-				self::add_entry_meta( $entry_id, $field_id, '', $meta_value, $field );
+				self::add_entry_meta( $entry_id, $field->id, '', $meta_value );
 			}
 		}
 
