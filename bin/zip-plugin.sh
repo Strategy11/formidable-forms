@@ -58,6 +58,7 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/phpunit.xml.dist" \
 	-x "*/psalm.xml" \
 	-x "*/phpstan.neon" \
 	-x "*/*.stubs.php" \
