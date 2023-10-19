@@ -136,7 +136,7 @@ class FrmEntryMeta {
 					// if value exists, then update it
 					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 				}
-			} elseif ( ! empty( $field ) ) {
+			} elseif ( ! empty( $field ) && $field->id ) {
 				// if value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field->id, '', $meta_value );
 			}
