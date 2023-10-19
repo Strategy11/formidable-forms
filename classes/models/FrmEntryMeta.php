@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
-	 *
 	 * @param int    $entry_id
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
