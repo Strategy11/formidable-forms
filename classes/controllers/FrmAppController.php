@@ -1080,11 +1080,11 @@ class FrmAppController {
 		);
 
 		$error_args = wp_parse_args( $error_args, $defaults );
-		if ( empty( $error_args['cancel_text'] ) && ! empty( $error_args['cancel_url'] ) ) {
+		if ( ! isset( $error_args['cancel_text'] ) && ! empty( $error_args['cancel_url'] ) ) {
 			$error_args['cancel_text'] = __( 'Cancel', 'formidable' );
 		}
 
-		if ( empty( $error_args['continue_text'] ) && ! empty( $error_args['continue_url'] ) ) {
+		if ( ! isset( $error_args['continue_text'] ) && ! empty( $error_args['continue_url'] ) ) {
 			$error_args['continue_text'] = __( 'Continue', 'formidable' );
 		}
 

@@ -421,7 +421,6 @@ class FrmFormActionsController {
 					),
 					admin_url( 'admin.php?' )
 				),
-				'cancel_text' => __( 'Cancel', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 		}

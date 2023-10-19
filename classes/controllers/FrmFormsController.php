@@ -1095,7 +1095,6 @@ class FrmFormsController {
 					'page' => 'formidable',
 				)
 			),
-			'cancel_text'   => __( 'Cancel', 'formidable' ),
 		);
 		if ( ! $form ) {
 			FrmAppController::show_error_modal( $error_args );

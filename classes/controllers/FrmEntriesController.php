@@ -487,7 +487,6 @@ class FrmEntriesController {
 				'title'       => __( 'Verification failed', 'formidable' ),
 				'body'        => $permission_error,
 				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
-				'cancel_text' => __( 'Cancel', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 		}
