@@ -335,7 +335,7 @@ function frmAdminBuildJS() {
 		optionMap = {},
 		lastNewActionIdReturned = 0;
 
-	const { __ } = wp.i18n;
+	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop, postBodyContent, $postBodyContent;
 
 	if ( thisForm !== null ) {
@@ -4259,6 +4259,8 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
+		maybeShowFieldGroupMessage();
+
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
@@ -4329,8 +4331,101 @@ function frmAdminBuildJS() {
 		hoverTarget.classList.add( 'frm-selected-field-group' );
 		syncAfterMultiSelect( numberOfSelectedGroups );
 
+		maybeHideFieldGroupMessage();
+
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
+	}
+
+	/**
+	 * Hide the field group message by manipulating classes.
+	 *
+	 * @param {Element} fieldGroupMessge The field group message element.
+	 * @return {void}
+	 */
+	function hideFieldGroupMessage( fieldGroupMessge ) {
+		if ( ! fieldGroupMessge ) {
+			return;
+		}
+
+		fieldGroupMessge.classList.add( 'frm_hidden' );
+		fieldGroupMessge.classList.remove( 'frm-fadein' );
+	}
+
+	/**
+	 * Show the field group message by manipulating classes.
+	 *
+	 * @param {Element} fieldGroupMessge The field group message element.
+	 * @return {void}
+	 */
+	function showFieldGroupMessage( fieldGroupMessge ) {
+		if ( ! fieldGroupMessge ) {
+			return;
+		}
+
+		fieldGroupMessge.classList.remove( 'frm_hidden' );
+		fieldGroupMessge.classList.add( 'frm-fadein' );
+	}
+
+	/**
+	 * Maybe show a message if there are at least two rows.
+	 *
+	 * @return {void}
+	 */
+	function maybeShowFieldGroupMessage() {
+		let fieldGroupMessge = document.getElementById( 'frm-field-group-message' );
+		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
+
+		if ( rows.length < 2 ) {
+			hideFieldGroupMessage( fieldGroupMessge );
+			return;
+		}
+
+		if ( fieldGroupMessge ) {
+			showFieldGroupMessage( fieldGroupMessge );
+			return;
+		}
+
+		fieldGroupMessage = div({
+			id: 'frm-field-group-message',
+			className: 'frm-flex-center frm-fadein',
+			children: [
+				span({
+					className: 'frm-field-group-message-text frm-flex-center',
+					html: sprintf(
+						/* translators: %1$s: Start span HTML, %2$s: end span HTML */
+						__( 'You can hold %1$sShift%2$s on your keyboard to select more multiple fields', 'formidable' ),
+						'<span class="frm-shift-key frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
+						'</span>'
+					)
+				}),
+				span({
+					id: 'frm-field-group-message-dismiss',
+					className: 'frm-flex-center',
+					child: svg({ href: '#frm_close_icon' })
+				})
+			]
+		});
+
+		document.getElementById( 'post-body-content' ).appendChild( fieldGroupMessage );
+		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
+			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
+		});
+	}
+
+	/**
+	 * Maybe hide the field group message based on the number of selected rows.
+	 *
+	 * @return {void}
+	 */
+	function maybeHideFieldGroupMessage() {
+		const selectedRowCount = document.querySelectorAll( '.frm-selected-field-group' ).length;
+		if ( selectedRowCount < 2 ) {
+			return;
+		}
+
+		const fieldGroupMessge = document.getElementById( 'frm-field-group-message' );
+		hideFieldGroupMessage( fieldGroupMessge );
 	}
 
 	function getSelectedField() {
