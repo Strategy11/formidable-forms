@@ -27,8 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 	FrmAppHelper::show_admin_cta(
 		array(
-			'title'       => esc_html__( 'Get Super Powers with 200+ Pre-built Forms', 'formidable' ) . ' ' . 🦸,
-			'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates, and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
+			'title'       => esc_html__( 'Get Super Powers with 200+ Pre-built Forms', 'formidable' ) . ' 🦸',
+			'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
 			'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
 			'link_url'    => $upgrade_link,
 			'id'          => 'frm-upgrade-banner',
@@ -40,9 +40,9 @@ if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 if ( $expired ) {
 	FrmAppHelper::show_admin_cta(
 		array(
-			'title'       => esc_html__( 'Get Super Powers with 200+ Pre-built Forms', 'formidable' ),
-			'description' => esc_html__( 'Unleash the potential of hundreds of form templates, and save precious time. Renew today for unparalleled form-building capabilities.', 'formidable' ),
-			'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
+			'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
+			'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
+			'link_text'   => esc_html__( 'Renew now', 'formidable' ),
 			'link_url'    => $renew_link,
 			'id'          => 'frm-renew-subscription-banner',
 		)
