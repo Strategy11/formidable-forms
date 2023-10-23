@@ -6692,6 +6692,10 @@ tr.frm_options_heading td {
 	top: 0;
 }
 
+.frm-empty-fields .frm_no_fields {
+	margin-top: 83px
+}
+
 .frm-has-fields .frm_no_fields {
 	display: none;
 }
