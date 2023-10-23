@@ -15,19 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm-code-from-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<span id="frm-code-modal-back-button" role="button" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_back' ); ?>
-			</span>
+			<h2><?php esc_html_e( 'Check Your Inbox', 'formidable' ); ?></h2>
 
-			<span class="frm-modal-title-text"><?php esc_html_e( 'Leave your email address', 'formidable' ); ?></span>
+
 		</div>
 	</div>
 
 	<div class="inside">
-		<div class="frmcenter">
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/leave-email.svg' ); ?>" />
-			<h3><?php esc_html_e( 'Check your inbox', 'formidable' ); ?></h3>
-			<p><?php esc_html_e( 'Enter code that we\'ve sent to your email address', 'formidable' ); ?></p>
+		<div>
+			<p><?php esc_html_e( 'Enter the code that we sent to your email address.', 'formidable' ); ?></p>
 
 			<div class="frm-form-templates-modal-fieldset">
 				<input id="frm_code_from_email" type="text" placeholder="<?php esc_attr_e( 'Code from email', 'formidable' ); ?>" />
@@ -48,8 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm_modal_footer">
-		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
-			<?php esc_html_e( 'Close', 'formidable' ); ?>
+		<a href="#" id="frm-code-modal-back-button" role="button" class="button button-secondary frm-button-secondary" role="button">
+			<?php esc_html_e( 'Back', 'formidable' ); ?>
 		</a>
 		<a href="#" id="frm-confirm-email-address" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Save Code', 'formidable' ); ?>

@@ -15,16 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm-renew-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<span class="frm-modal-title-text"><?php esc_html_e( 'Renew your account', 'formidable' ); ?></span>
+			<div class="frm-upgrade-modal-lock-icon frm-mb-sm">
+				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/lock.svg' ); ?>" />
+			</div>
+
+			<h2><?php esc_html_e( 'Get Access to 200+ Pre-built Forms', 'formidable' ); ?></h2>
 		</div>
 	</div>
 
 	<div class="inside">
-		<div class="frmcenter">
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/renew-account.svg' ); ?>" />
-			<h3><?php esc_html_e( 'Get access to Formidable Forms templates', 'formidable' ); ?></h3>
-			<p><?php esc_html_e( 'Renew your license to create powerful online forms.', 'formidable' ); ?></p>
-		</div>
+		<p>
+			<?php esc_html_e( 'That template is not available on your plan. Please renew to unlock this and more awesome templates.', 'formidable' ); ?>
+		</p>
 	</div>
 
 	<div class="frm_modal_footer">
@@ -32,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
 		<a href="<?php echo esc_url( $renew_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
-			<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
+			<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 		</a>
 	</div>
 </div>

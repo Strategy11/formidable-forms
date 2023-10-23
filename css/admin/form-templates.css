@@ -410,7 +410,7 @@
 	color: var(--grey-900);
 }
 
-#frm-upgrade-modal .frm-upgrade-modal-lock-icon {
+.frm-upgrade-modal-lock-icon {
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				array(
 					'create_form' => current_user_can( 'frm_edit_forms' ),
 					'new_link'    => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&return_page=forms' ),
-					'button_text' => esc_html__( 'Create form', 'formidable' ),
 				),
 			),
 		)

@@ -20,7 +20,7 @@ if ( ! isset( $args ) ) {
 $defaults = array(
 	'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css',
 	'title'       => esc_html__( 'Get 10+ Free Form Templates', 'formidable' ),
-	'description' => esc_html__( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ),
+	'description' => esc_html__( 'Just add your email address and we\'ll send you a code for free form templates!', 'formidable' ),
 );
 
 $args = wp_parse_args( $args, $defaults );
@@ -28,18 +28,16 @@ $args = wp_parse_args( $args, $defaults );
 <div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<span class="frm-modal-title-text"><?php esc_html_e( 'Leave your email address', 'formidable' ); ?></span>
+			<h2><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 	</div>
 
 	<div class="inside">
-		<div class="frmcenter">
+		<div>
 			<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
 				<span class="frm-wait"></span>
 			</div>
 
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/leave-email.svg' ); ?>" />
-			<h3><?php echo esc_html( $args['title'] ); ?></h3>
 			<p>
 				<?php
 				echo wp_kses(
