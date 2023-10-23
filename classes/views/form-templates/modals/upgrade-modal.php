@@ -38,7 +38,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
-					esc_html__( 'We\'re sorry, the %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to the PRO plan to unlock all the awesome templates.', 'formidable' ),
+					esc_html__( 'The %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to unlock this and more awesome templates.', 'formidable' ),
 					'<span class="frm-upgrade-modal-template-name">',
 					'</span>'
 				);

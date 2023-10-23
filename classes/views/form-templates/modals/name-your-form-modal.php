@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="inside">
-		<p><?php esc_html_e( 'Before we save your form, do you want to name your form first?', 'formidable' ); ?></p>
+		<p><?php esc_html_e( 'Before we save this form, do you want to name it first?', 'formidable' ); ?></p>
 		<p class="frm-new-form-name-field">
 			<label for="frm_new_form_name_input">
 				<?php esc_html_e( 'Form Name (Optional)', 'formidable' ); ?>

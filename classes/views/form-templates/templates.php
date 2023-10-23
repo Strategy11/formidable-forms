@@ -27,8 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 	FrmAppHelper::show_admin_cta(
 		array(
-			'title'       => esc_html__( 'Upgrade to get all 200+ templates', 'formidable' ),
-			'description' => esc_html__( 'Upgrade to PRO to get access to all of our templates and unlock the full potential of your forms.', 'formidable' ),
+			'title'       => esc_html__( 'Get Super Powers with 200+ Pre-built Forms', 'formidable' ) . ' ' . 🦸,
+			'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates, and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
 			'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
 			'link_url'    => $upgrade_link,
 			'id'          => 'frm-upgrade-banner',
@@ -36,13 +36,12 @@ if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 	);
 }
 
-// TODO: Get the actual text for expired users from Steph
 // Show 'renew' banner for expired users.
 if ( $expired ) {
 	FrmAppHelper::show_admin_cta(
 		array(
-			'title'       => esc_html__( 'Your Subscription Has Expired', 'formidable' ),
-			'description' => esc_html__( 'To continue using all 200+ templates, please renew your subscription.', 'formidable' ),
+			'title'       => esc_html__( 'Get Super Powers with 200+ Pre-built Forms', 'formidable' ),
+			'description' => esc_html__( 'Unleash the potential of hundreds of form templates, and save precious time. Renew today for unparalleled form-building capabilities.', 'formidable' ),
 			'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
 			'link_url'    => $renew_link,
 			'id'          => 'frm-renew-subscription-banner',

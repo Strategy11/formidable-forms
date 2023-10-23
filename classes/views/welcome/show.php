@@ -37,9 +37,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="frm-fill">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ) ); ?>" target="_blank">
-					<!-- TODO: Get the actual text from Steph -->
-					<h3><?php esc_html_e( 'Create a New Form or Use Template', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Start from scratch or choose from our selection of pre-built templates', 'formidable' ); ?></p>
+					<h3><?php esc_html_e( 'Create a New Form', 'formidable' ); ?></h3>
+					<p><?php esc_html_e( 'Start from scratch or choose from a huge selection of pre-built templates', 'formidable' ); ?></p>
 				</a>
 			</div>
 			<span class="caret rotate-270"></span>
