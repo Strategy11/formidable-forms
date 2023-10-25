@@ -449,6 +449,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: The way icons are loaded has been modified for improved compatibility with the Snuffleupagus security module.
 * Fix: An add entry button would appear for users without the permission to create entries on the admin page.
 * Fix: Field controls would appear in the incorrect place for fields with no label.
+* Fix: Connecting an account would fail because of a permission check issue.
 * The payments page will now fallback to the PayPal add on when Stripe is not configured. This helps to prevent a wp_frm_subscriptions does not exist database error when viewing payments.
 * An extra check has been added to prevent an FrmOverlayController not found error when upgrading.
 
