@@ -410,14 +410,19 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_oauth() {
+		$redirect_url  = self::get_oauth_redirect_url();
+		if ( is_array( $redirect_url ) ) {
+			wp_send_json_error( $redirect_url['error'] );
+		}
+
 		$response_data = array(
-			'redirect_url' => self::get_oauth_redirect_url(),
+			'redirect_url' => $redirect_url,
 		);
 		wp_send_json_success( $response_data );
 	}
 
 	/**
-	 * @return string|false
+	 * @return array|string|false
 	 */
 	private static function get_oauth_redirect_url() {
 		$mode = self::get_mode_value_from_post();
@@ -437,7 +442,7 @@ class FrmStrpLiteConnectHelper {
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
-			return false;
+			return array( 'error' => $data );
 		}
 
 		if ( ! empty( $data->password ) ) {
