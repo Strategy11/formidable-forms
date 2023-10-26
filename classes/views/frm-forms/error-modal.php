@@ -36,6 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 <script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/core.js?ver=1.13.2" id="jquery-ui-core-js"></script> <?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
+<script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/button.js?ver=1.13.2" id="jquery-ui-core-js"></script> <?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
 <script src="<?php echo esc_attr( includes_url() ); ?>js/jquery/ui/dialog.js?ver=1.13.2" id="jquery-ui-dialog-js"></script> <?php // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript ?>
 <script>
 	jQuery( document ).ready(
