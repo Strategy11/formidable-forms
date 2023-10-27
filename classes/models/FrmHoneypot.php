@@ -30,7 +30,7 @@ class FrmHoneypot extends FrmValidate {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 		if ( ! $is_honeypot_spam ) {
 			// Check the newer honeypot input name which is randomly generated so it's more difficult to detect.
-			$class_name       = $this->get_honeypot_class_name();
+			$class_name       = self::get_honeypot_class_name();
 			$honeypot_value   = FrmAppHelper::get_param( $class_name, '', 'get', 'sanitize_text_field' );
 			$is_honeypot_spam = '' !== $honeypot_value;
 		}
@@ -92,7 +92,7 @@ class FrmHoneypot extends FrmValidate {
 	public function render_field() {
 		$honeypot    = $this->check_honeypot_setting();
 		$form        = $this->get_form();
-		$class_name  = $this->get_honeypot_class_name();
+		$class_name  = self::get_honeypot_class_name();
 		$input_attrs = array(
 			'id'    => 'frm_email_' . absint( $form->id ),
 			'type'  => 'strict' === $honeypot ? 'email' : 'text',
@@ -120,6 +120,13 @@ class FrmHoneypot extends FrmValidate {
 	 * @return string The generated class name.
 	 */
 	public static function generate_class_name() {
+		$class_name = self::get_honeypot_class_name();
+		if ( 'frm_verify' !== $class_name ) {
+			// Re-use the option.
+			// We can't generate a new class too often or the field may not be hidden.
+			return $class_name;
+		}
+
 		$prefix     = 'frm__';
 		$class_name = $prefix . uniqid();
 		update_option( 'frm_honeypot_class', $class_name );
@@ -129,7 +136,7 @@ class FrmHoneypot extends FrmValidate {
 	/**
 	 * @return string The current class name to use the for Honeypot field.
 	 */
-	private function get_honeypot_class_name() {
+	private static function get_honeypot_class_name() {
 		$option = get_option( 'frm_honeypot_class' );
 		if ( ! is_string( $option ) ) {
 			// For backward compatibility use the old class name.
