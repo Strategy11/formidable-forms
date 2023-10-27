@@ -120,6 +120,13 @@ class FrmHoneypot extends FrmValidate {
 	 * @return string The generated class name.
 	 */
 	public static function generate_class_name() {
+		$class_name = $this->get_honeypot_class_name();
+		if ( 'frm_verify' !== $class_name ) {
+			// Re-use the option.
+			// We can't generate a new class too often or the field may not be hidden.
+			return $class_name;
+		}
+
 		$prefix     = 'frm__';
 		$class_name = $prefix . uniqid();
 		update_option( 'frm_honeypot_class', $class_name );
