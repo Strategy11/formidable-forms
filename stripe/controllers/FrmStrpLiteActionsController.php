@@ -419,7 +419,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! $form_id || ! is_int( $form_id ) ) {
-			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', '6.5' );
 			return;
 		}
 

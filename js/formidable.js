@@ -248,7 +248,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field
 	 * @param {Array} errors
-	 * @returns 
+	 * @returns
 	 */
 	function checkValidity( field, errors ) {
 		var fieldID;
@@ -257,7 +257,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		if ( 'undefined' === typeof errors[ fieldID ]) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 

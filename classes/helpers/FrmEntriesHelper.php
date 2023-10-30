@@ -847,7 +847,7 @@ class FrmEntriesHelper {
 		$extended_entry_status = apply_filters( 'frm_entry_statuses', array() );
 
 		if ( ! is_array( $extended_entry_status ) ) {
-			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), '6.5' );
 			$extended_entry_status = array();
 		}
 
