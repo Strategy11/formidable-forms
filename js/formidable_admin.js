@@ -4606,15 +4606,18 @@ function frmAdminBuildJS() {
 						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
 						popAllProductFields();
 					}
-					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
-						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
-					} else if ( $section.length ) {
-						toggleOneSectionHolder( $section );
-					}
 					if ( $adjacentFields.length ) {
 						syncLayoutClasses( $adjacentFields.first() );
 					} else {
 						$liWrapper.remove();
+					}
+
+					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
+						const formEditorContainer = document.getElementById( 'frm_form_editor_container' );
+						formEditorContainer.classList.remove( 'frm-has-fields' );
+						formEditorContainer.classList.add( 'frm-empty-fields' );
+					} else if ( $section.length ) {
+						toggleOneSectionHolder( $section );
 					}
 
 					// prevent "More Options" tooltips from staying around after their target field is deleted.
