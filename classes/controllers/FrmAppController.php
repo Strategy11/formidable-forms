@@ -134,6 +134,7 @@ class FrmAppController {
 			'formidable-inbox',
 			'formidable-welcome',
 			'formidable-applications',
+			'formidable-dashboard',
 		);
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
@@ -646,6 +647,11 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
+		if ( class_exists( 'FrmDashboardController' ) ) {
+			FrmDashboardController::register_assets();
+			FrmDashboardController::enqueue_assets();
+		}
+
 		if ( class_exists( 'FrmOverlayController' ) ) {
 			// This should always exist.
 			// But it may not have loaded properly when updating the plugin.
@@ -1111,12 +1117,13 @@ class FrmAppController {
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		// Check admin privileges, screen mode, and branding
-		$is_not_admin = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
-		$is_full_screen = FrmAppHelper::is_full_screen();
+		$is_not_admin               = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
+		$is_full_screen             = FrmAppHelper::is_full_screen();
 		$is_not_formidable_branding = ! FrmAppHelper::is_formidable_branding();
+		$is_dashboard_page          = 'formidable-dashboard' === FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		// Exit if any of the above conditions are met
-		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding ) {
+		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding || $is_dashboard_page ) {
 			return;
 		}
 

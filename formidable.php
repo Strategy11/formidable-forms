@@ -88,6 +88,8 @@ function frm_class_autoloader( $class_name, $filepath ) {
 			$filepath .= 'helpers/';
 		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
 			$filepath .= 'controllers/';
+		} elseif ( preg_match( '/^.+View$/', $class_name ) ) {
+			$filepath .= 'views/';
 		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
 			$filepath .= 'factories/';
 		} else {
