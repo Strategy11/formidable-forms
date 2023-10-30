@@ -2408,7 +2408,33 @@ class FrmAppHelper {
 			unset( $total_len, $word );
 		}
 
+		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
+
 		return $sub . ( ( $len < $original_len ) ? $continue : '' );
+	}
+
+	/**
+	 * If the string is still too long because there may not have been any spaces, force truncate.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sub    Current substring.
+	 * @param int    $length The length limit.
+	 * @return string
+	 */
+	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
+		if ( strlen( $sub ) < $length + 50 ) {
+			// If the string isn't way over the limit, leave it.
+			return $sub;
+		}
+
+		$first_space = strpos( $sub, ' ', $length );
+		if ( false !== $first_space ) {
+			// Ignore anything with spaces.
+			return $sub;
+		}
+
+		return substr( $sub, 0, $length + 10 );
 	}
 
 	public static function mb_function( $function_names, $args ) {
