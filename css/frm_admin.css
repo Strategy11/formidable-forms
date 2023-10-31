@@ -6715,6 +6715,10 @@ tr.frm_options_heading td {
 	top: 0;
 }
 
+.frm-empty-fields .frm_updated_message ~ .frm_no_fields {
+	top: 60px;
+}
+
 .frm-has-fields .frm_no_fields {
 	display: none;
 }

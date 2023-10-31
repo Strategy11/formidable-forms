@@ -169,7 +169,7 @@ class FrmDefGoogleSpreadsheetAction extends FrmFormAction {
 
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.5' );
 
 		$action_ops           = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit_card_alt_icon frm_show_upgrade' );
 		$action_ops['color']  = 'var(--green)';
