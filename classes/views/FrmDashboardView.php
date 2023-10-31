@@ -30,6 +30,9 @@ class FrmDashboardView {
 	}
 
 	public function get_welcome_banner( $echo = true ) {
+		if ( true === FrmDashboardController::welcome_banner_has_closed() ) {
+			return;
+		}
 		if ( false === $echo ) {
 			return $this->load_welcome_template();
 		}

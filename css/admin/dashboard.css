@@ -50,6 +50,7 @@
 }
 .frm-dashboard-banner {
 	max-width: calc( 1480px - var(--gap-xl) * 2 );
+	width: calc( 100% - ( var(--gap-xl) * 2 ) );
 	margin: 0 auto;
 	margin-top: 33px;
 	box-sizing: border-box;
@@ -59,7 +60,7 @@
 	background: #1961D5;
 	border-radius: 8px;
 }
-.frm-dashboard-banner .frm-dashboard-close {
+.frm-dashboard-banner .frm-dashboard-banner-close {
 	position: absolute;
 	top: 16px; right: 16px;
 	width: 24px;

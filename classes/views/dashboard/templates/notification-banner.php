@@ -1,6 +1,6 @@
 <div class="frm-dashboard-banner">
 	<span class="frm-dashboard-banner-bg-shape"></span>
-	<span class="frm-dashboard-close"></span>
+	<span class="frm-dashboard-banner-close"></span>
 	<div class="frm-flex-box frm-justify-between frm-align-center">
 		<div>
 			<h4>Welcome to Formidable Forms 🎉</h4>
