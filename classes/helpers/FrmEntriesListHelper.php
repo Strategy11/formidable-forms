@@ -113,7 +113,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$s_query = array();
 
 		if ( $form_id ) {
-			$s_query['it.form_id'] = $this->get_form_ids( $form_id );
+			$form_ids              = $this->get_form_ids( $form_id );
+			$s_query['it.form_id'] = count( $form_ids ) > 1 ? $form_ids : $form_ids[0];
 		} else {
 			$s_query[]          = array(
 				'or'               => 1,
@@ -142,10 +143,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since x.x
 	 *
 	 * @param int|string $form_id
-	 * @return int|string
+	 * @return array
 	 */
 	protected function get_form_ids( $form_id ) {
-		return $form_id;
+		return array( $form_id );
 	}
 
 	/**
