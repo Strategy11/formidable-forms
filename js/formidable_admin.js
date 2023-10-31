@@ -4340,31 +4340,31 @@ function frmAdminBuildJS() {
 	/**
 	 * Hide the field group message by manipulating classes.
 	 *
-	 * @param {Element} fieldGroupMessge The field group message element.
+	 * @param {Element} fieldGroupMessage The field group message element.
 	 * @return {void}
 	 */
-	function hideFieldGroupMessage( fieldGroupMessge ) {
-		if ( ! fieldGroupMessge ) {
+	function hideFieldGroupMessage( fieldGroupMessage ) {
+		if ( ! fieldGroupMessage ) {
 			return;
 		}
 
-		fieldGroupMessge.classList.add( 'frm_hidden' );
-		fieldGroupMessge.classList.remove( 'frm-fadein' );
+		fieldGroupMessage.classList.add( 'frm_hidden' );
+		fieldGroupMessage.classList.remove( 'frm-fadein' );
 	}
 
 	/**
 	 * Show the field group message by manipulating classes.
 	 *
-	 * @param {Element} fieldGroupMessge The field group message element.
+	 * @param {Element} fieldGroupMessage The field group message element.
 	 * @return {void}
 	 */
-	function showFieldGroupMessage( fieldGroupMessge ) {
-		if ( ! fieldGroupMessge ) {
+	function showFieldGroupMessage( fieldGroupMessage ) {
+		if ( ! fieldGroupMessage ) {
 			return;
 		}
 
-		fieldGroupMessge.classList.remove( 'frm_hidden' );
-		fieldGroupMessge.classList.add( 'frm-fadein' );
+		fieldGroupMessage.classList.remove( 'frm_hidden' );
+		fieldGroupMessage.classList.add( 'frm-fadein' );
 	}
 
 	/**
@@ -4373,16 +4373,16 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function maybeShowFieldGroupMessage() {
-		let fieldGroupMessge = document.getElementById( 'frm-field-group-message' );
+		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
 		if ( rows.length < 2 ) {
-			hideFieldGroupMessage( fieldGroupMessge );
+			hideFieldGroupMessage( fieldGroupMessage );
 			return;
 		}
 
-		if ( fieldGroupMessge ) {
-			showFieldGroupMessage( fieldGroupMessge );
+		if ( fieldGroupMessage ) {
+			showFieldGroupMessage( fieldGroupMessage );
 			return;
 		}
 
@@ -4424,8 +4424,8 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const fieldGroupMessge = document.getElementById( 'frm-field-group-message' );
-		hideFieldGroupMessage( fieldGroupMessge );
+		const fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
+		hideFieldGroupMessage( fieldGroupMessage );
 	}
 
 	function getSelectedField() {
