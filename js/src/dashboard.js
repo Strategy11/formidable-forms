@@ -4,6 +4,7 @@ import { FrmCounter } from './components/class-counter';
 class FrmDashboard {
 
 	constructor() {
+
 		this.options = {
 			ajax: {
 				action: 'dashboard_ajax_action',
@@ -26,9 +27,19 @@ class FrmDashboard {
 		});
 	}
 
-	initCounter() {
+	initCounters() {
 		const counters = document.querySelectorAll( '.frm-counter' );
 		counters.forEach( counter => new FrmCounter( counter ) );
+	}
+
+	initTooltips() {
+		if ( 'undefined' === typeof bootstrap ) {
+			return;
+		}
+		const tooltipItems = document.querySelectorAll( '.frm-has-tooltip' );
+		tooltipItems.forEach( tooltip => {
+			new bootstrap.Tooltip( tooltip );
+		});
 	}
 
 	initCloseWelcomeBanner() {
@@ -74,6 +85,7 @@ const dashboard = new FrmDashboard();
 document.addEventListener( 'DOMContentLoaded', () => {
 	dashboard.initInbox();
 	dashboard.initIntroWidgetAnimation();
-	dashboard.initCounter();
+	dashboard.initCounters();
 	dashboard.initCloseWelcomeBanner();
+	dashboard.initTooltips();
 });

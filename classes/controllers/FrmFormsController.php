@@ -3107,6 +3107,28 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Count and return total forms.
+	 * To do: Cache the results.
+	 *
+	 * @since 6.x
+	 * @return int
+	 */
+	public static function get_forms_count() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return FrmDb::get_count( 'frm_forms', $args );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function new_form( $values = array() ) {

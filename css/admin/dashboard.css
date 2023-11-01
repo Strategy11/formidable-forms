@@ -170,6 +170,9 @@
 	width: 29%;
 }
 /* Counter Card */
+.frm-counter-card-wrapper {
+	position: relative;
+}
 .frm-counter-card-wrapper .frm-counter-card {
 	width: 25%;
 	height: 85px;
@@ -179,6 +182,9 @@
 }
 .frm-counter-card-wrapper.frm-full-width .frm-counter-card {
 	width: 100%;
+}
+.frm-counter-card-wrapper .frm-counter-card.frm-disabled {
+	opacity: 0.5;
 }
 .frm-counter-card-wrapper .frm-counter-card h4 {
 	color: #656F7C;
@@ -376,3 +382,12 @@
 	margin: 12px 0px;
 }
 /* END Inbox */
+
+/* Tooltip */
+.tooltip > .tooltip-inner {
+	background: rgba(84, 95, 110, 1);
+}
+.tooltip.bs-tooltip-top .arrow::before {
+    border-top-color: rgba(84, 95, 110, 1);
+}
+/* END Tooltip */

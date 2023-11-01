@@ -96,7 +96,7 @@ class FrmDashboardView {
 
 	private function load_counters_template( $template ) {
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/counter-item.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/counters.php';
 		return ob_get_clean();
 	}
 
@@ -129,5 +129,4 @@ class FrmDashboardView {
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
 		return ob_get_clean();
 	}
-
 }

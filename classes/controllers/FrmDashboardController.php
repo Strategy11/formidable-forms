@@ -23,32 +23,51 @@ class FrmDashboardController {
 			array(
 				'counters' => array(
 					'template-type' => '',
-					'counters'      => array(
-						array(
-							'heading' => 'Total Forms',
-							'type'    => 'default',
-							'counter' => 120,
-						),
-						array(
-							'heading' => 'Total Entries',
-							'type'    => 'default',
-							'counter' => 300,
-						),
-						array(
-							'heading' => 'All Views',
-							'counter' => 65,
-							'type'    => 'default',
-						),
-						array(
-							'heading' => 'Installed Apps',
-							'counter' => 75,
-							'type'    => 'default',
-						),
-					),
+					'counters'      => self::view_args_counters(),
 				),
 			),
 		);
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
+	}
+
+	private static function view_args_counters() {
+		$lite_counters = array(
+			array(
+				'heading' => 'Total Forms',
+				'type'    => 'default',
+				'counter' => FrmFormsController::get_forms_count(),
+			),
+			array(
+				'heading' => 'Total Entries',
+				'type'    => 'default',
+				'counter' => FrmEntriesController::get_entries_count(),
+			),
+		);
+
+		$pro_counters_placeholder = array(
+			array(
+				'heading'  => 'All Views',
+				'counter'  => 0,
+				'type'     => 'default',
+				'disabled' => true,
+				'tooltip'  => 'Views are available with a PRO plan only',
+			),
+			array(
+				'heading'  => 'Installed Apps',
+				'counter'  => 0,
+				'type'     => 'default',
+				'disabled' => true,
+				'tooltip'  => 'Aplications are available with a PRO plan only',
+			),
+		);
+
+		if ( class_exists( 'FrmProDashboardController' ) ) {
+			$pro_counters = FrmProDashboardController::get_counters();
+			return array_merge( $lite_counters, $pro_counters );
+		}
+
+		return array_merge( $lite_counters, $pro_counters_placeholder );
+
 	}
 
 	public static function ajax_requests() {

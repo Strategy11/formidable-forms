@@ -10,13 +10,28 @@ export class FrmCounter {
 			this.template = element.getAttribute( 'data-type' );
 		}
 
-		this.element       = element;
-		this.value         = parseInt( element.getAttribute( 'data-counter' ), 10 );
-		this.activeCounter = 0;
-		this.speed         = 'undefined' !== typeof options && 'undefined' !== typeof options.speed ? options.speed : 270;
-		this.valueStep     = Math.ceil( this.value / this.speed );
+		this.element         = element;
+		this.value           = parseInt( element.getAttribute( 'data-counter' ), 10 );
+		this.activeCounter   = 0;
+		this.speed           = 'undefined' !== typeof options && 'undefined' !== typeof options.speed ? options.speed : 270;
+		this.valueStep       = Math.ceil( this.value / this.speed );
+		this.timeoutInterval = this.initTimeoutInterval();
+
+		if ( 0 === this.value ) {
+			return;
+		}
 
 		this.animate();
+	}
+
+	initTimeoutInterval() {
+		if ( this.value < 10 ) {
+			return 160;
+		}
+		if ( this.value < 70 ) {
+			return 40;
+		}
+		return 4;
 	}
 
 	formatNumber( number ) {
@@ -32,7 +47,7 @@ export class FrmCounter {
 			this.element.innerText = this.formatNumber( this.activeCounter );
 			setTimeout( () => {
 				this.animate();
-			}, 4 );
+			}, this.timeoutInterval );
 		} else {
 			this.element.innerText = this.formatNumber( this.value );
 		}
