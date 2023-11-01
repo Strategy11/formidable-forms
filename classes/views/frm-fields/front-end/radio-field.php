@@ -40,7 +40,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		if ( get_called_class() === 'FrmSurveys\models\fields\Radio' ) {
-			$checked = $field['value'] === $field_val;
+			$checked = is_array( $field['value'] ) ? in_array( $field_val, $field['value'], true ) : $field['value'] === $field_val;
 		} else {
 			$checked = FrmAppHelper::check_selected( $field['value'], $field_val );
 		}
