@@ -19,9 +19,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	public function prepare_items() {
 		global $per_page;
 
-		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
-		$form_id  = $this->params['form'];
-		$s_query  = array();
+		$this->set_per_page();
+		$form_id = $this->params['form'];
+		$s_query = array();
 
 		$join_form_in_query = false;
 
@@ -29,13 +29,33 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$total_items = FrmEntry::getRecordCount( $s_query );
 
 		$this->total_items = $total_items;
+		$this->prepare_pagination();
+	}
+
+	/**
+	 * Prepares pagination.
+	 *
+	 * @since x.x
+	 */
+	public function prepare_pagination() {
+		global $per_page;
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $total_items,
+				'total_items' => $this->total_items,
 				'per_page'    => $per_page,
 			)
 		);
+	}
+
+	/**
+	 * Sets the global $per_page variable
+	 *
+	 * @since x.x
+	 */
+	public function set_per_page() {
+		global $per_page;
+		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 	}
 
 	/**
