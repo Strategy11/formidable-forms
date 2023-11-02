@@ -80,9 +80,12 @@ class FrmFieldsController {
 	 */
 	public static function include_new_field( $field_type, $form_id ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$field_values = apply_filters( 'frm_before_field_created', $field_values );
 
-		$field_id = FrmField::create( $field_values );
+		/**
+		 * @param array $field_values
+		 */
+		$field_values = apply_filters( 'frm_before_field_created', $field_values );
+		$field_id     = FrmField::create( $field_values );
 
 		if ( ! $field_id ) {
 			return false;
@@ -313,7 +316,8 @@ class FrmFieldsController {
 		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
 	/**
@@ -389,8 +393,11 @@ class FrmFieldsController {
 		}
 
 		$pro_fields = FrmField::pro_field_selection();
-		$types      = array_keys( $pro_fields );
-		if ( in_array( $type, $types ) ) {
+		// We want to keep credit_card types as credit card types for Stripe Lite.
+		// The credit_card key is set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		if ( array_key_exists( $type, $pro_fields ) ) {
 			$type = 'text';
 		}
 
@@ -494,7 +501,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_html_cols( $field, array &$add_html ) {
-		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ) ) ) {
+		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ), true ) ) {
 			return;
 		}
 
@@ -613,7 +620,7 @@ class FrmFieldsController {
 
 		if ( $placeholder !== '' ) {
 			?>
-			<option value="">
+			<option class="frm-select-placeholder" value="">
 				<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
 			</option>
 			<?php

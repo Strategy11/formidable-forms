@@ -15,8 +15,15 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @var string
 	 */
-	public static $plug_version = '6.4.2';
+	public static $plug_version = '6.5.3';
+
+	/**
+	 * @var bool
+	 */
+	private static $included_svg = false;
 
 	/**
 	 * @since 1.07.02
@@ -149,7 +156,7 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
-		return $frm_settings->menu;
+		return FrmAddonsController::is_license_expired() ? 'Formidable' : $frm_settings->menu;
 	}
 
 	/**
@@ -158,7 +165,7 @@ class FrmAppHelper {
 	 * Checks the menu title, retrieved through get_menu_name,
 	 * and verifies if it matches the 'formidable' branding.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 *
 	 * @return bool True if the menu title is 'formidable', false otherwise.
 	 */
@@ -395,12 +402,11 @@ class FrmAppHelper {
 	/**
 	 * Get the server OS
 	 *
-	 * @since 6.4.x
+	 * @since 6.4.2
 	 *
 	 * @return string
 	 */
 	public static function get_server_os() {
-
 		if ( function_exists( 'php_uname' ) ) {
 			return php_uname( 's' );
 		}
@@ -575,12 +581,12 @@ class FrmAppHelper {
 		$args     = wp_parse_args( $args, $defaults );
 
 		$value = $args['default'];
-		if ( $args['type'] == 'get' ) {
+		if ( $args['type'] === 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
-		} elseif ( $args['type'] == 'post' ) {
+		} elseif ( $args['type'] === 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_POST[ $args['param'] ] );
@@ -1111,9 +1117,16 @@ class FrmAppHelper {
 	 * Include svg images.
 	 *
 	 * @since 4.0.02
+	 * @return void
 	 */
 	public static function include_svg() {
-		include_once self::plugin_path() . '/images/icons.svg';
+		if ( self::$included_svg ) {
+			return;
+		}
+
+		// Use readfile instead of include_once because of a default security rule in Snuffleupagus.
+		readfile( self::plugin_path() . '/images/icons.svg' );
+		self::$included_svg = true;
 	}
 
 	/**
@@ -1323,9 +1336,12 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Save all front-end js scripts into a single file
+	 * Save all front-end js scripts into a single file.
+	 * And save an additional single file of all front-end Stripe JS scripts.
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public static function save_combined_js() {
 		$file_atts = apply_filters(
@@ -1340,7 +1356,31 @@ class FrmAppHelper {
 		$files = array(
 			self::plugin_path() . '/js/formidable.min.js',
 		);
+		/**
+		 * @param array $files
+		 */
 		$files = apply_filters( 'frm_combined_js_files', $files );
+		$new_file->combine_files( $files );
+
+		// Create the minified Stripe Script.
+		$file_atts = apply_filters(
+			'frm_stripe_js_location',
+			array(
+				'file_name'     => 'frmstrp.min.js',
+				'new_file_path' => self::plugin_path() . '/js',
+			)
+		);
+		$new_file  = new FrmCreateFile( $file_atts );
+		$files = array(
+			FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.min.js',
+		);
+
+		/**
+		 * @since 6.5
+		 *
+		 * @param array $files
+		 */
+		$files = apply_filters( 'frm_stripe_combined_js_files', $files );
 		$new_file->combine_files( $files );
 	}
 
@@ -1640,7 +1680,6 @@ class FrmAppHelper {
 			'frm_create_entries' => __( 'Add Entries from Admin Area', 'formidable' ),
 			'frm_edit_entries'   => __( 'Edit Entries from Admin Area', 'formidable' ),
 			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
-			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
 		/**
 		 * @since 5.3.1
@@ -1648,6 +1687,12 @@ class FrmAppHelper {
 		 * @param array<string,string> $pro_cap
 		 */
 		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
+
+		if ( ! array_key_exists( 'frm_edit_displays', $pro_cap ) && is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) {
+			// For backward compatibility, add the Add/Edit Views permission if Pro is not up to date.
+			// This was added in x.x. Remove this in the future.
+			$pro_cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
+		}
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;
@@ -1876,7 +1921,7 @@ class FrmAppHelper {
 			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
 			} else {
-				if ( $keys == 'keep' ) {
+				if ( $keys === 'keep' ) {
 					$return[ $key ] = $value;
 				} else {
 					$return[] = $value;
@@ -1962,7 +2007,7 @@ class FrmAppHelper {
 		}
 
 		$user_id = sanitize_text_field( $user_id );
-		if ( $user_id == 'current' ) {
+		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
 			if ( is_email( $user_id ) ) {
@@ -2363,7 +2408,33 @@ class FrmAppHelper {
 			unset( $total_len, $word );
 		}
 
+		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
+
 		return $sub . ( ( $len < $original_len ) ? $continue : '' );
+	}
+
+	/**
+	 * If the string is still too long because there may not have been any spaces, force truncate.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sub    Current substring.
+	 * @param int    $length The length limit.
+	 * @return string
+	 */
+	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
+		if ( strlen( $sub ) < $length + 50 ) {
+			// If the string isn't way over the limit, leave it.
+			return $sub;
+		}
+
+		$first_space = strpos( $sub, ' ', $length );
+		if ( false !== $first_space ) {
+			// Ignore anything with spaces.
+			return $sub;
+		}
+
+		return substr( $sub, 0, $length + 10 );
 	}
 
 	public static function mb_function( $function_names, $args ) {
@@ -2977,11 +3048,8 @@ class FrmAppHelper {
 	public static function localize_script( $location ) {
 		global $wp_scripts;
 
-		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
-		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
-
 		$script_strings = array(
-			'ajax_url'           => $ajax_url,
+			'ajax_url'           => esc_url_raw( self::get_ajax_url() ),
 			'images_url'         => self::plugin_url() . '/images',
 			'loading'            => __( 'Loading&hellip;', 'formidable' ),
 			'remove'             => __( 'Remove', 'formidable' ),
@@ -2997,70 +3065,89 @@ class FrmAppHelper {
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
-		if ( empty( $data ) ) {
+		if ( ! $data ) {
 			wp_localize_script( 'formidable', 'frm_js', $script_strings );
 		}
 
-		if ( $location == 'admin' ) {
+		if ( $location === 'admin' ) {
 			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
-				'desc'              => __( '(Click to add description)', 'formidable' ),
-				'blank'             => __( '(Blank)', 'formidable' ),
-				'no_label'          => __( '(no label)', 'formidable' ),
-				'saving'            => '', // Deprecated in 6.0.
-				'saved'             => '', // Deprecated in 6.0.
-				'ok'                => __( 'OK', 'formidable' ),
-				'cancel'            => __( 'Cancel', 'formidable' ),
-				'default_label'     => __( 'Default', 'formidable' ),
-				'clear_default'     => __( 'Clear default value when typing', 'formidable' ),
-				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
-				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
-				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'confirm'           => __( 'Are you sure?', 'formidable' ),
-				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
-				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
-				'conf_no_repeat'    => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'    => $frm_settings->unique_msg,
-				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
-				'enter_email'       => __( 'Enter Email', 'formidable' ),
-				'confirm_email'     => __( 'Confirm Email', 'formidable' ),
-				'conditional_text'  => __( 'Conditional content here', 'formidable' ),
-				'new_option'        => __( 'New Option', 'formidable' ),
-				'css_invalid_size'  => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
-				'enter_password'    => __( 'Enter Password', 'formidable' ),
-				'confirm_password'  => __( 'Confirm Password', 'formidable' ),
-				'import_complete'   => __( 'Import Complete', 'formidable' ),
-				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
-				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
-				'private_label'     => __( 'Private', 'formidable' ),
-				'jquery_ui_url'     => '',
-				'pro_url'           => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
-				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
-				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
-				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
-				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'   => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
-				'unsafe_params'     => FrmFormsHelper::reserved_words(),
+				'desc'               => __( '(Click to add description)', 'formidable' ),
+				'blank'              => __( '(Blank)', 'formidable' ),
+				'no_label'           => __( '(no label)', 'formidable' ),
+				'ok'                 => __( 'OK', 'formidable' ),
+				'cancel'             => __( 'Cancel', 'formidable' ),
+				'default_label'      => __( 'Default', 'formidable' ),
+				'clear_default'      => __( 'Clear default value when typing', 'formidable' ),
+				'no_clear_default'   => __( 'Do not clear default value when typing', 'formidable' ),
+				'valid_default'      => __( 'Default value will pass form validation', 'formidable' ),
+				'no_valid_default'   => __( 'Default value will NOT pass form validation', 'formidable' ),
+				'confirm'            => __( 'Are you sure?', 'formidable' ),
+				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
+				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
+				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
+				'default_unique'     => $frm_settings->unique_msg,
+				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
+				'enter_email'        => __( 'Enter Email', 'formidable' ),
+				'confirm_email'      => __( 'Confirm Email', 'formidable' ),
+				'conditional_text'   => __( 'Conditional content here', 'formidable' ),
+				'new_option'         => __( 'New Option', 'formidable' ),
+				'css_invalid_size'   => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
+				'enter_password'     => __( 'Enter Password', 'formidable' ),
+				'confirm_password'   => __( 'Confirm Password', 'formidable' ),
+				'import_complete'    => __( 'Import Complete', 'formidable' ),
+				'updating'           => __( 'Please wait while your site updates.', 'formidable' ),
+				'no_save_warning'    => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
+				'private_label'      => __( 'Private', 'formidable' ),
+				'jquery_ui_url'      => '',
+				'pro_url'            => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
+				'no_licenses'        => __( 'No new licenses were found', 'formidable' ),
+				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
+				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
+				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
+				'only_one_action'    => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				'unsafe_params'      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
-				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
+				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
-				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
-				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
-				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
-				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
-				'install'           => __( 'Install', 'formidable' ),
-				'active'            => __( 'Active', 'formidable' ),
-				'select_a_field'    => __( 'Select a Field', 'formidable' ),
-				'no_items_found'    => __( 'No items found.', 'formidable' ),
+				'param_is_reserved'  => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
+				'reserved_words'     => __( 'See the list of reserved words in WordPress.', 'formidable' ),
+				'repeat_limit_min'   => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
+				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
+				'install'            => __( 'Install', 'formidable' ),
+				'active'             => __( 'Active', 'formidable' ),
+				'select_a_field'     => __( 'Select a Field', 'formidable' ),
+				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
+				'saving'             => '', // Deprecated in 6.0.
+				'saved'              => '', // Deprecated in 6.0.
 			);
+			/**
+			 * @param array $admin_script_strings
+			 */
 			$admin_script_strings = apply_filters( 'frm_admin_script_strings', $admin_script_strings );
 
 			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
-			if ( empty( $data ) ) {
+			if ( ! $data ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	/**
+	 * @since 6.5
+	 *
+	 * @return string
+	 */
+	public static function get_ajax_url() {
+		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
+
+		/**
+		 * @since 2.0.13
+		 *
+		 * @param string $ajax_url
+		 */
+		return apply_filters( 'frm_ajax_url', $ajax_url );
 	}
 
 	/**

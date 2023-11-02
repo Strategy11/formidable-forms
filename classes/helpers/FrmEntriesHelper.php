@@ -8,7 +8,7 @@ class FrmEntriesHelper {
 	/**
 	 * "Submitted" entry status.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 * @var int
 	 */
 	const SUBMITTED_ENTRY_STATUS = 0;
@@ -16,7 +16,7 @@ class FrmEntriesHelper {
 	/**
 	 * "Draft" entry status.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 * @var int
 	 */
 	const DRAFT_ENTRY_STATUS = 1;
@@ -785,7 +785,7 @@ class FrmEntriesHelper {
 	/**
 	 * Return entry status based on is_draft column value.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param int $status is_draft column.
 	 *
@@ -808,7 +808,7 @@ class FrmEntriesHelper {
 	/**
 	 * Return entry status label based on passed value.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @param int $status is_draft column.
 	 *
@@ -823,7 +823,7 @@ class FrmEntriesHelper {
 	/**
 	 * Get all entry statuses.
 	 *
-	 * @since x.x
+	 * @since 6.5
 	 *
 	 * @return array<string>
 	 */
@@ -840,14 +840,14 @@ class FrmEntriesHelper {
 		 * "2" is used in abandonment-addon and reserved for "In progress".
 		 * "3" is used in abandonment-addon and reserved for "Abandoned".
 		 *
-		 * @since x.x
+		 * @since 6.5
 		 *
 		 * @param array<string> $extended_entry_status Entry statuses.
 		 */
 		$extended_entry_status = apply_filters( 'frm_entry_statuses', array() );
 
 		if ( ! is_array( $extended_entry_status ) ) {
-			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), 'x.x' );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Entry status must be return in array format.', 'formidable' ), '6.5' );
 			$extended_entry_status = array();
 		}
 

@@ -28,6 +28,7 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
+	--error-300: #FECDCA;
 	--error-500: #F04438;
 	--error-700: #B42318;
 	--green: rgb(63, 172, 37);
@@ -138,6 +139,11 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #adminmenumain,
 .frm-full-screen .wp-header-end {
 	display: none;
+}
+
+body.frm-white-body:not(.frm-full-screen) .mce-fullscreen {
+	top: 32px;
+	left: 160px;
 }
 
 .frm-full-screen #wpbody-content,
@@ -1140,6 +1146,10 @@ body.rtl .frm-admin-footer-links {
 	padding-right: 160px;
 }
 
+body.frm-hidden-overflow {
+	height: 100%;
+	overflow: hidden;
+}
 
 .frm-admin-footer-links-nav {
 	gap: var(--gap-2xs);
@@ -1762,6 +1772,10 @@ a.frm_hidden,
 	font-size: var(--text-sm);
 	display: block;
 	line-height: var(--leading);
+}
+
+#frm_form_editor_container #frm-show-fields .frm_primary_label {
+	min-height: 21px;
 }
 
 .frm-fields td input + label {
@@ -2968,6 +2982,16 @@ a.frm_pro_tip i {
 
 a.frm_pro_tip .frmsvg {
 	margin-right: 10px;
+}
+
+.frm-light-tip a.frm_pro_tip {
+	background: rgba(188, 224, 253, 0.23);
+}
+
+.frm-light-tip a.frm_pro_tip .frmsvg,
+.frm-light-tip a.frm_pro_tip i,
+.frm-light-tip .frm-tip-cta {
+	color: var(--primary-500);
 }
 
 .frm-tip-info {
@@ -6212,6 +6236,20 @@ span.howto {
 	min-height: 50px;
 }
 
+#frm_builder_page .frm-lite-credit-card-element,
+body.frm-admin-page-styles .frm-lite-credit-card-element {
+	position: relative;
+}
+
+#frm_builder_page .frm-lite-credit-card-element > div,
+body.frm-admin-page-styles .frm-lite-credit-card-element > div {
+	position: absolute;
+	top: calc( 50% - 1px);
+	transform: translateY(-50%);
+	right: 10px;
+	color: #d0d4dd;
+}
+
 #frm_builder_page #frm_field_group_controls {
 	position: absolute;
 	padding: 5px;
@@ -6681,6 +6719,10 @@ tr.frm_options_heading td {
 	margin: 20px 5%;
 	width: 90%;
 	top: 0;
+}
+
+.frm-empty-fields .frm_updated_message ~ .frm_no_fields {
+	top: 60px;
 }
 
 .frm-has-fields .frm_no_fields {
@@ -7838,7 +7880,7 @@ h2 .frm-sub-label {
 .frm-views-editor-body .ui-widget-overlay,
 .frm-white-body .ui-widget-overlay,
 .toplevel_page_formidable .ui-widget-overlay,
-.formidable_page_formidable-payments .ui-widget-overlay {
+body[class*=formidable-payments] .ui-widget-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -9224,6 +9266,26 @@ Responsive Design
 #frm_new_form_modal .frm-ready-made-solution > div:first-child {
 	width: 30%;
 	text-align: center;
+}
+
+#frm_leave_email_wrapper {
+	position: relative;
+	margin: 0 auto;
+}
+
+#frm_new_form_modal #frm_leave_email_wrapper {
+	width: 600px;
+}
+
+#frm_leave_email_wrapper .frmsvg {
+	top: 0;
+}
+
+#frm_leave_email_error {
+	position: absolute;
+	right: 71px;
+	top: 7px;
+	color: #973937;
 }
 
 .frm-ready-made-solution h3 ~ a {
