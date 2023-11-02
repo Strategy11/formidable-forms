@@ -143,10 +143,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since x.x
 	 *
 	 * @param int|string $form_id
-	 * @return array
+	 * @return array<int>
 	 */
 	protected function get_form_ids( $form_id ) {
-		return array( $form_id );
+		return array( (int) $form_id );
 	}
 
 	/**
