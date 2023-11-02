@@ -119,10 +119,6 @@ class FrmEntryValidate {
 			$value = reset( $value );
 		}
 
-		if ( ! is_array( $value ) ) {
-			$value = trim( $value );
-		}
-
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
 		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
