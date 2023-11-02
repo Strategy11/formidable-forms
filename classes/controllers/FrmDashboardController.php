@@ -31,16 +31,26 @@ class FrmDashboardController {
 	}
 
 	private static function view_args_counters() {
-		$lite_counters = array(
+		$latest_available_form = FrmFormsController::get_latest_form();
+		$counters_value        = array(
+			'forms'   => FrmFormsController::get_forms_count(),
+			'entries' => FrmEntriesController::get_entries_count(),
+		);
+		$lite_counters         = array(
 			array(
 				'heading' => 'Total Forms',
 				'type'    => 'default',
-				'counter' => FrmFormsController::get_forms_count(),
+				'counter' => $counters_value['forms'],
 			),
 			array(
 				'heading' => 'Total Entries',
 				'type'    => 'default',
-				'counter' => FrmEntriesController::get_entries_count(),
+				'cta'     => array(
+					'display' => self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
+					'title'   => 'Add Entry',
+					'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ),
+				),
+				'counter' => $counters_value['entries'],
 			),
 		);
 
@@ -68,6 +78,18 @@ class FrmDashboardController {
 
 		return array_merge( $lite_counters, $pro_counters_placeholder );
 
+	}
+
+	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = null ) {
+		if ( $counter_value > 0 ) {
+			return false;
+		}
+
+		if ( 'entries' === $counter_type && null !== $latest_available_form && is_object( $latest_available_form ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static function ajax_requests() {

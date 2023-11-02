@@ -199,6 +199,13 @@
 	font-style: normal;
 	font-weight: 600;
 }
+.frm-counter-card-wrapper .frm-counter-card a {
+	color: var(--primary-500);
+	font-size: 14px;
+	line-height: 20px;
+	margin-top:7px;
+	font-weight: 600;
+}
 /* END Counter Card */
 
 /* License Management */
