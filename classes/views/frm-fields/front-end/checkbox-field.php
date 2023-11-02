@@ -38,10 +38,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 			// Let the checked state of 'Other' fields be determined solely by FrmFieldsHelper::prepare_other_input as below.
 			// Without this check, one 'Other' field being checked leads to making all 'Other' fields checked on submit error
 			// since they all have the same value attr of 'Other'.
-			// $checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? ' checked="checked"' : '';
 			$checked = is_array( $field['value'] ) ? in_array( $field_val, $field['value'], true ) : $field['value'] === $field_val;
+			$checked = $checked ? 'checked="checked" ' : ' ';
 		}
-		$checked = $checked ? 'checked="checked" ' : ' ';
 
 		// Check if other opt, and get values for other field if needed
 		$other_opt = false;
