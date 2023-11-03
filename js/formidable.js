@@ -248,7 +248,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field
 	 * @param {Array} errors
-	 * @returns 
+	 * @returns
 	 */
 	function checkValidity( field, errors ) {
 		var fieldID;
@@ -257,7 +257,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		if ( 'undefined' === typeof errors[ fieldID ]) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -542,7 +542,7 @@ function frmFrontFormJS() {
 
 		// Function to change the color of a select element
 		changeSelectColor = function( select ) {
-			if ( hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+			if ( select.options[select.selectedIndex] && hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';

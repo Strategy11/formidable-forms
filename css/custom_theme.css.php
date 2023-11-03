@@ -238,9 +238,6 @@ legend.frm_hidden{
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-<?php if ( ! empty( $important ) ) { ?>
-	background-image:none !important;
-<?php } ?>
 	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
@@ -266,6 +263,27 @@ legend.frm_hidden{
 	font-weight:var(--field-weight);
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
+
+<?php if ( ! empty( $important ) ) { ?>
+.with_frm_style input[type=text],
+.with_frm_style input[type=password],
+.with_frm_style input[type=email],
+.with_frm_style input[type=number],
+.with_frm_style input[type=url],
+.with_frm_style input[type=tel],
+.with_frm_style input[type=phone],
+.with_frm_style input[type=search],
+.with_frm_style textarea,
+.frm_form_fields_style,
+.with_frm_style .frm_scroll_box .frm_opt_container,
+.frm_form_fields_active_style,
+.frm_form_fields_error_style,
+.with_frm_style .frm-card-element.StripeElement,
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single{
+	background-image:none !important;
+}
+<?php } ?>
 
 .with_frm_style select option {
 	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
@@ -353,7 +371,7 @@ legend.frm_hidden{
 	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
 	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
-	background-position-y: center;
+	background-position-y: calc(50% + 3px);
 }
 
 .with_frm_style input[disabled],
