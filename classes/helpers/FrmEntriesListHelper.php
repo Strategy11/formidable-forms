@@ -25,7 +25,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$join_form_in_query = false;
 
-		$this->items = $this->get_entry_items( $form_id, $per_page, $s_query, $join_form_in_query );
+		$this->items = $this->get_entry_items( $s_query, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
 
 		$this->total_items = $total_items;
@@ -37,7 +37,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since x.x
 	 */
-	public function prepare_pagination() {
+	protected function prepare_pagination() {
 		global $per_page;
 
 		$this->set_pagination_args(
@@ -53,7 +53,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since x.x
 	 */
-	public function set_per_page() {
+	protected function set_per_page() {
 		global $per_page;
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 	}
@@ -68,7 +68,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @return array
 	 */
-	protected function get_entry_items( $form_id, $per_page, &$s_query, &$join_form_in_query ) {
+	protected function get_entry_items( &$s_query, &$join_form_in_query ) {
+		global $per_page;
+		$form_id = $this->params['form'];
 		$s_query = $this->get_search_query( $form_id, $join_form_in_query );
 		$order   = $this->get_order_by();
 		$limit   = $this->get_limit( $per_page );
