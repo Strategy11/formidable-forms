@@ -61,8 +61,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param int|string $form_id
-	 * @param int        $per_page
 	 * @param array      $s_query
 	 * @param bool       $join_form_in_query
 	 *
