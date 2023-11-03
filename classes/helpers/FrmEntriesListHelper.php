@@ -68,8 +68,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	protected function get_entry_items( &$s_query, &$join_form_in_query ) {
 		global $per_page;
-		$form_id = $this->params['form'];
-		$s_query = $this->get_search_query( $form_id, $join_form_in_query );
+		$s_query = $this->get_search_query( $join_form_in_query );
 		$order   = $this->get_order_by();
 		$limit   = $this->get_limit( $per_page );
 
@@ -124,12 +123,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param int|string $form_id
-	 * @param bool       $join_form_in_query
-	 *
+	 * @param bool $join_form_in_query
 	 * @return array
 	 */
-	protected function get_search_query( $form_id, &$join_form_in_query ) {
+	protected function get_search_query( &$join_form_in_query ) {
+		$form_id = $this->params['form'];
 		$s_query = array();
 
 		if ( $form_id ) {
