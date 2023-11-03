@@ -1876,6 +1876,20 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function trim_if_not_blank( $value ) {
+		if ( trim( $value ) === '' ) {
+			return $value;
+		}
+
+		return trim( $value );
+	}
+
 	public static function check_selected( $values, $current ) {
 		$values  = self::recursive_function_map( $values, 'trim' );
 		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
