@@ -54,6 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					draggable: false,
 					open: function() {
 						jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
+						document.querySelector( '.frm_modal_top a' )?.blur();
 					}
 				}
 			);
