@@ -17,19 +17,18 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $per_page;
-
 		$this->set_per_page();
-		$form_id = $this->params['form'];
 		$s_query = array();
 
 		$join_form_in_query = false;
 
 		$this->items = $this->get_entry_items( $s_query, $join_form_in_query );
-		$total_items = FrmEntry::getRecordCount( $s_query );
-
-		$this->total_items = $total_items;
+		$this->set_total_items( $s_query );
 		$this->prepare_pagination();
+	}
+
+	protected function set_total_items( $s_query ) {
+		$this->total_items = FrmEntry::getRecordCount( $s_query );
 	}
 
 	/**
