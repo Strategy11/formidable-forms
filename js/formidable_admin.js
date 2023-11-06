@@ -9802,9 +9802,27 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	/**
+	 * Adds footer links to the admin body content.
+	 *
+	 * @return {void}
+	 */
+	function addAdminFooterLinks() {
+		const footerLinks = document.querySelector( '.frm-admin-footer-links' );
+		const bodyContent = document.querySelector( '#wpbody-content' );
+
+		if ( ! footerLinks || ! bodyContent ) {
+			return;
+		}
+
+		bodyContent.appendChild( footerLinks );
+		footerLinks.classList.remove( 'frm_hidden' );
+	}
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
+			addAdminFooterLinks();
 
 			s = {};
 
