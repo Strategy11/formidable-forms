@@ -9811,6 +9811,10 @@ function frmAdminBuildJS() {
 		const footerLinks = document.querySelector( '.frm-admin-footer-links' );
 		const bodyContent = document.querySelector( '#wpbody-content' );
 
+		if ( ! footerLinks || ! bodyContent ) {
+			return;
+		}
+
 		bodyContent.appendChild( footerLinks );
 		footerLinks.classList.remove( 'frm_hidden' );
 	}
