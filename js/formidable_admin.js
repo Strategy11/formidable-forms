@@ -4391,15 +4391,6 @@ function frmAdminBuildJS() {
 			className: 'frm-flex-center frm-fadein',
 			children: [
 				span({
-					className: 'frm-field-group-message-text frm-flex-center',
-					html: sprintf(
-						/* translators: %1$s: Start span HTML, %2$s: end span HTML */
-						__( 'You can hold %1$sShift%2$s on your keyboard to select more multiple fields', 'formidable' ),
-						'<span class="frm-shift-key frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
-						'</span>'
-					)
-				}),
-				span({
 					id: 'frm-field-group-message-dismiss',
 					className: 'frm-flex-center',
 					child: svg({ href: '#frm_close_icon' })
@@ -4407,10 +4398,35 @@ function frmAdminBuildJS() {
 			]
 		});
 
+		// Insert the field group into the DOM
 		document.getElementById( 'post-body-content' ).appendChild( fieldGroupMessage );
+
+		// Get and add the field group message text
+		const messageText = getFieldGroupMessageText();
+		fieldGroupMessage.prepend( messageText );
+
+		// Set up a click event listener
 		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
 			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
 		});
+	}
+
+	/**
+	 * Get a span element with text about selecting multiple fields.
+	 *
+	 * @return {HTMLElement} A span element with the message and style classes.
+	 */
+	function getFieldGroupMessageText() {
+		const text = document.createElement( 'span' );
+		text.classList.add( 'frm-field-group-message-text', 'frm-flex-center' );
+		text.innerHTML = sprintf(
+			/* translators: %1$s: Start span HTML, %2$s: end span HTML */
+			__( 'You can hold %1$sShift%2$s on your keyboard to select more multiple fields', 'formidable' ),
+			'<span class="frm-shift-key frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
+			'</span>'
+		);
+
+		return text;
 	}
 
 	/**

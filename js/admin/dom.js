@@ -710,7 +710,7 @@
 			return output;
 		}
 
-		const { id, className, children, child, text, html, data } = args;
+		const { id, className, children, child, text, data } = args;
 
 		if ( id ) {
 			output.id = id;
@@ -730,8 +730,6 @@
 			output.appendChild( child );
 		} else if ( text ) {
 			output.textContent = text;
-		} else if ( html ) {
-			output.innerHTML = html;
 		}
 		if ( data ) {
 			Object.keys( data ).forEach( function( dataKey ) {
