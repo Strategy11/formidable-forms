@@ -30,12 +30,21 @@
 	border-radius: 8px;
 	box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
 	background: white;
-	overflow: hidden;
 	margin-bottom: 24px;
 	transform: translateY( 0px );
 	opacity: 1.0;
 	transition: 0.35s transform, 0.35s opacity linear;
 	will-change: transform;
+	position: relative;
+}
+.frm-license-widget {
+	z-index: 4;
+}
+.frm-yt-widget {
+	z-index: 3;
+}
+.frm-inbox-widget {
+	overflow: hidden;
 }
 .frm-dashboard-wrapper .frm-dashboard-widget > * {
 	transition: 0.3s opacity linear;
@@ -220,6 +229,9 @@
 }
 .frm-dashboard-wrapper .frm-dashboard-license-management > div {
 	margin-top: var( --gap-sm );
+}
+.frm-dashboard-wrapper .frm-dashboard-license-management .frm-button-primary {
+	margin-right: 12px;
 }
 /* END License Management */
 

@@ -10635,6 +10635,7 @@ function frmAdminBuildJS() {
 		},
 
 		infoModal: infoModal,
+		initModal: initModal,
 		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};

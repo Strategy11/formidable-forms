@@ -25,6 +25,7 @@ class FrmDashboardController {
 					'template-type' => '',
 					'counters'      => self::view_args_counters(),
 				),
+				'license'  => self::view_args_licence(),
 			),
 		);
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
@@ -80,6 +81,30 @@ class FrmDashboardController {
 
 	}
 
+	private static function view_args_licence() {
+		if ( class_exists( 'FrmProDashboardController' ) ) {
+			return FrmProDashboardController::view_args_licence();
+		}
+		return array(
+			'heading' => 'License Key',
+			'copy'    => 'You\'re using Formidable Forms Lite - no license needed. Enjoy! 🙂',
+			'buttons' => array(
+				array(
+					'label'  => 'Connect Account',
+					'link'   => FrmAddonsController::connect_link(),
+					'action' => 'default',
+					'type'   => 'primary',
+				),
+				array(
+					'label'  => 'Get Formidable PRO',
+					'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
+					'action' => 'default',
+					'type'   => 'secondary',
+				),
+			),
+		);
+	}
+
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = null ) {
 		if ( $counter_value > 0 ) {
 			return false;
@@ -118,8 +143,8 @@ class FrmDashboardController {
 		if ( isset( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) {
 			list( $cookie_value, $expiration_time ) = explode( '|', sanitize_text_field( wp_unslash( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) );
 			if ( 1 === (int) $cookie_value ) {
-				// Refresh welcome banner cookie if it will expire in 45 days.
-				if ( (int) $expiration_time <= time() + ( 45 * 24 * 60 * 60 ) ) {
+				// Refresh welcome banner cookie if it will expire in less 45 days.
+				if ( (int) $expiration_time < time() + ( 45 * 24 * 60 * 60 ) ) {
 					self::ajax_set_cookie_banner( 1 );
 				}
 				return true;
@@ -135,7 +160,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function register_assets() {
-		wp_register_script( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array(), FrmAppHelper::plugin_version(), true );
+		wp_register_script( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
 		wp_register_style( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
 	}
 

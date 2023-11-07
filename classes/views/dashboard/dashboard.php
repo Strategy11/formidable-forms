@@ -31,13 +31,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 		<div>
-			<div class="frm-dashboard-widget frm-animate">
+			<div class="frm-dashboard-widget frm-license-widget frm-animate">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
-			<div class="frm-dashboard-widget frm-animate">
+			<div class="frm-dashboard-widget frm-yt-widget frm-animate">
 				<?php $dashboard_view->get_youtube_video(); ?>
 			</div>
-			<div class="frm-dashboard-widget frm-animate">
+			<div class="frm-dashboard-widget frm-inbox-widget frm-animate">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>
 		</div>

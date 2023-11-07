@@ -10,6 +10,24 @@ class FrmDashboardView {
 			'template-type' => '',
 			'counters'      => array( array() ),
 		),
+		'license'  => array(
+			'heading'        => '',
+			'copy'           => '',
+			'license-status' => array(
+				'status'      => '',
+				'status-copy' => '',
+			),
+			'buttons'        => array(
+				array(
+					'label' => '',
+					'link'  => '',
+				),
+				array(
+					'label' => '',
+					'link'  => '',
+				),
+			),
+		),
 		'payments' => array(
 			'template-type' => 'full-width',
 			'counters'      => array(
@@ -26,6 +44,12 @@ class FrmDashboardView {
 	public function __construct( $data ) {
 		if ( isset( $data['counters'] ) ) {
 			$this->view['counters'] = $data['counters'];
+		}
+		if ( isset( $data['license'] ) ) {
+			$this->view['license'] = $data['license'];
+		}
+		if ( isset( $data['payments'] ) ) {
+			$this->view['payments'] = $data['payments'];
 		}
 	}
 
@@ -55,9 +79,9 @@ class FrmDashboardView {
 
 	public function get_license_management( $echo = true ) {
 		if ( false === $echo ) {
-			return $this->load_license_management_template();
+			return $this->load_license_management_template( $this->view['license'] );
 		}
-		echo wp_kses_post( $this->load_license_management_template() );
+		echo wp_kses_post( $this->load_license_management_template( $this->view['license'] ) );
 	}
 
 	public function get_inbox( $echo = true ) {
@@ -106,7 +130,10 @@ class FrmDashboardView {
 		return ob_get_clean();
 	}
 
-	private function load_license_management_template() {
+	private function load_license_management_template( $template ) {
+		if ( is_callable( 'FrmProDashboardView::load_license_management' ) ) {
+			return FrmProDashboardView::load_license_management( $template );
+		}
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/license-management.php';
 		return ob_get_clean();
