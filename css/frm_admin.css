@@ -1558,6 +1558,12 @@ input.frm_insert_in_template {
 	gap: var(--gap-sm);
 }
 
+.frm-flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .frm-gap-xs {
 	gap: var(--gap-xs);
 }
@@ -1622,6 +1628,23 @@ input.frm_insert_in_template {
 
 .frm-on-bottom {
 	z-index: -1;
+}
+
+.frm-fadein {
+	animation: fadeInUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fadeInUp {
+
+	0% {
+		opacity: 0;
+		transform: translateY(32px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 /* End Generic Classes, Start Forced Generic Classes */
 
@@ -9283,3 +9306,42 @@ Responsive Design
 	color: var(--primary-color);
 }
 /* End On Submit action */
+
+/* Field Group Message */
+#frm-field-group-message {
+	position: absolute;
+	bottom: 32px;
+	right: calc(50% - var(--biggest-sidebar));
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: 100px;
+	background-color: var(--primary-25);
+}
+
+#frm-field-group-message .frm-field-group-message-text {
+	gap: 10px;
+	color: var(--grey-800);
+}
+
+#frm-field-group-message .frm-shift-key {
+	padding: var(--gap-2xs) var(--gap-xs);
+	background-color: #D9EBFF;
+	border-radius: var(--small-radius);
+	gap: 2px;
+}
+
+#frm-field-group-message-dismiss {
+	margin-left: var(--gap-xs)
+}
+
+#frm-field-group-message-dismiss .frmsvg {
+	color: var(--grey-800);
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+	transition: color 300ms ease-in-out;
+}
+
+#frm-field-group-message-dismiss .frmsvg:hover {
+	color: var(--grey-500);
+}
+/* End Field Group Message */
