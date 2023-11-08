@@ -9835,7 +9835,7 @@ function frmAdminBuildJS() {
 		let isOdd = true;
 		rows.forEach( row => {
 			row.classList.add( isOdd ? 'frm-odd' : 'frm-even' );
-			isOdd = !isOdd;
+			isOdd = ! isOdd;
 		});
 
 		const tables = document.querySelectorAll( tableSelector );
