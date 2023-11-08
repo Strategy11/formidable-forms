@@ -3027,7 +3027,6 @@ class FrmAppHelper {
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
-			'holdShiftMsg'                  => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -3122,6 +3121,7 @@ class FrmAppHelper {
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
 				'saving'             => '', // Deprecated in 6.0.
 				'saved'              => '', // Deprecated in 6.0.
+				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 			);
 			/**
 			 * @param array $admin_script_strings
