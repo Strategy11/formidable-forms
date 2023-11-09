@@ -19,25 +19,30 @@ class FrmDashboardController {
 	}
 
 	public static function route() {
-		$dashboard_view = new FrmDashboardView(
-			array(
-				'counters' => array(
-					'template-type' => '',
-					'counters'      => self::view_args_counters(),
-				),
-				'license'  => self::view_args_licence(),
-			),
-		);
-		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
-	}
-
-	private static function view_args_counters() {
 		$latest_available_form = FrmFormsController::get_latest_form();
 		$counters_value        = array(
 			'forms'   => FrmFormsController::get_forms_count(),
 			'entries' => FrmEntriesController::get_entries_count(),
 		);
-		$lite_counters         = array(
+
+		$dashboard_view = new FrmDashboardView(
+			array(
+				'counters' => array(
+					'template-type' => '',
+					'counters'      => self::view_args_counters( $latest_available_form, $counters_value ),
+				),
+				'license'  => self::view_args_licence(),
+				'entries'  => array(
+					'show_placeholder' => 0 < (int) $counters_value['entries'] ? ! false : true, // to do: remove always true
+					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'], $counters_value['entries'] ),
+				),
+			),
+		);
+		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
+	}
+
+	private static function view_args_counters( $latest_available_form, $counters_value ) {
+		$lite_counters = array(
 			array(
 				'heading' => 'Total Forms',
 				'type'    => 'default',
@@ -105,6 +110,31 @@ class FrmDashboardController {
 		);
 	}
 
+	private static function view_args_entries_placeholder( $forms_count ) {
+		// to do: remove
+		$forms_count = 0;
+
+		if ( 0 === (int) $forms_count ) {
+			return array(
+				'background'     => 'entries-placeholder',
+				'widget-heading' => 'Latest Entries',
+				'heading'        => 'You Have No Entries Yet',
+				'copy'           => 'See the <a href="#"><b>form documentation</b></a> for instructions on publishin your form',
+				'button'         => array(
+					'label' => 'Add New Form',
+					'link'  => '#',
+				),
+			);
+		}
+
+		return array(
+			'background' => 'entries-placeholder',
+			'heading'    => 'You Have No Entries Yet',
+			'copy'       => 'See the <a href="#"><b>form documentation</b></a> for instructions on publishin your form. once vou nave at least one entry you\'ll see it here.',
+			'button'     => null,
+		);
+	}
+
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = null ) {
 		if ( $counter_value > 0 ) {
 			return false;
@@ -115,6 +145,17 @@ class FrmDashboardController {
 		}
 
 		return false;
+	}
+
+	public static function remove_admin_notices_on_dashboard() {
+		if ( 'formidable-dashboard' !== FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+			return;
+		}
+
+		global $wp_filter;
+		if ( isset( $wp_filter['admin_notices'] ) ) {
+			unset( $wp_filter['admin_notices'] );
+		}
 	}
 
 	public static function ajax_requests() {

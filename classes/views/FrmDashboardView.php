@@ -28,6 +28,18 @@ class FrmDashboardView {
 				),
 			),
 		),
+		'entries'  => array(
+			'show_placeholder' => true,
+			'placeholder'      => array(
+				'background' => 'entries-placeholder',
+				'heading'    => 'You Have No Entries Yet',
+				'copy'       => 'See the <a href="#">form documentation</a> for instructions on publishin your form',
+				'button'     => array(
+					'label' => 'Add New Form',
+					'link'  => '#',
+				),
+			),
+		),
 		'payments' => array(
 			'template-type' => 'full-width',
 			'counters'      => array(
@@ -51,6 +63,26 @@ class FrmDashboardView {
 		if ( isset( $data['payments'] ) ) {
 			$this->view['payments'] = $data['payments'];
 		}
+		if ( isset( $data['entries'] ) ) {
+			$this->view['entries'] = $data['entries'];
+		}
+	}
+
+	public function get_main_widget( $echo = true ) {
+		if ( is_callable( 'FrmProDashboardView::get_main_widget' ) ) {
+			return FrmProDashboardView::get_main_widget( $this->view['entries'], $echo );
+		}
+		if ( false === $echo ) {
+			return self::load_entries_template( $this->view['entries'] );
+		}
+		echo wp_kses_post( self::load_entries_template( $this->view['entries'] ) );
+	}
+
+	public function get_bottom_widget( $echo = true ) {
+		if ( is_callable( 'FrmProDashboardView::get_bottom_widget' ) ) {
+			return FrmProDashboardView::get_bottom_widget( $this->view['entries'], $echo );
+		}
+		return $this->get_pro_features( $echo );
 	}
 
 	public function get_welcome_banner( $echo = true ) {
@@ -70,13 +102,6 @@ class FrmDashboardView {
 		echo wp_kses_post( $this->load_counters_template( $this->view['counters'] ) );
 	}
 
-	public function get_chart( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_chart_template();
-		}
-		echo wp_kses_post( $this->load_chart_template() );
-	}
-
 	public function get_license_management( $echo = true ) {
 		if ( false === $echo ) {
 			return $this->load_license_management_template( $this->view['license'] );
@@ -91,11 +116,11 @@ class FrmDashboardView {
 		echo wp_kses_post( $this->load_inbox_template() );
 	}
 
-	public function get_entries( $echo = true ) {
+	public function get_pro_features( $echo = true ) {
 		if ( false === $echo ) {
-			return $this->load_entries_template();
+			return $this->load_pro_features_template();
 		}
-		echo wp_kses_post( $this->load_entries_template() );
+		echo wp_kses_post( $this->load_pro_features_template() );
 	}
 
 	public function get_payments( $echo = true ) {
@@ -112,6 +137,18 @@ class FrmDashboardView {
 		echo $this->load_youtube_video_template();
 	}
 
+	public static function load_placeholder_template( $template ) {
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/widget-placeholder.php';
+		return ob_get_clean();
+	}
+
+	private function load_pro_features_template() {
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/pro-features-list.php';
+		return ob_get_clean();
+	}
+
 	private function load_welcome_template() {
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/notification-banner.php';
@@ -121,12 +158,6 @@ class FrmDashboardView {
 	private function load_counters_template( $template ) {
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/counters.php';
-		return ob_get_clean();
-	}
-
-	private function load_chart_template() {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/chart-placeholder.php';
 		return ob_get_clean();
 	}
 
@@ -145,10 +176,11 @@ class FrmDashboardView {
 		return ob_get_clean();
 	}
 
-	private function load_entries_template() {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/pro-features-list.php';
-		return ob_get_clean();
+	public static function load_entries_template( $template ) {
+		if ( true === $template['show_placeholder'] ) {
+			return self::load_placeholder_template( $template );
+		}
+		return self::load_placeholder_template( $template );
 	}
 
 	private function load_youtube_video_template() {

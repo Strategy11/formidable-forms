@@ -33,18 +33,28 @@
 	margin-bottom: 24px;
 	transform: translateY( 0px );
 	opacity: 1.0;
+	overflow: hidden;
 	transition: 0.35s transform, 0.35s opacity linear;
 	will-change: transform;
 	position: relative;
 }
-.frm-license-widget {
+.frm-counter-card-wrapper.frm-full-width .frm-counter-card h4,
+.frm-dashboard-wrapper .frm-dashboard-widget h2.frm-widget-heading {
+	color: #101828;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 24px;
+}
+.frm-dashboard-wrapper .frm-dashboard-widget h2.frm-widget-heading {
+	padding: 14px 24px 0px 24px;
+	margin-bottom: 0px;
+}
+.frm-dashboard-wrapper .frm-dashboard-widget.frm-license-widget {
 	z-index: 4;
+	overflow: inherit;
 }
 .frm-yt-widget {
 	z-index: 3;
-}
-.frm-inbox-widget {
-	overflow: hidden;
 }
 .frm-dashboard-wrapper .frm-dashboard-widget > * {
 	transition: 0.3s opacity linear;
@@ -236,14 +246,22 @@
 /* END License Management */
 
 /* Chart Placeholder */
-.frm-chart-placeholder {
-	height: 314px;
+.frm-widget-placeholder {
 	width: 100%;
 	position: relative;
+}
+.frm-widget-placeholder[data-background="chart-placeholder"] {
 	background: url( '../../images/dashboard/chart-placeholder.jpg' ) no-repeat;
 	background-size: 100%;
+	height: 314px;
 }
-.frm-chart-placeholder > div {
+.frm-widget-placeholder[data-background="entries-placeholder"] {
+	background: url( '../../images/dashboard/entries-placeholder.jpg' ) no-repeat;
+	background-size: 100%;
+	background-position: left -15px;
+	height: 385px;
+}
+.frm-widget-placeholder > div {
 	position: absolute;
 	top: 0; left: 0; right: 0; bottom: 0;
 	margin: auto;
@@ -251,12 +269,12 @@
 	height: 130px;
 	text-align: center;
 }
-.frm-chart-placeholder > div h4 {
+.frm-widget-placeholder > div h4 {
 	color: #282F36;
 	font-size: 16px;
 	font-weight: 700;
 }
-.frm-chart-placeholder > div p {
+.frm-widget-placeholder > div p {
 	margin-top: var( --gap-sm );
 	margin-bottom: var( --gap-md );
 }

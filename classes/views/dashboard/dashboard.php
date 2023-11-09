@@ -23,11 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div>
 			<?php $dashboard_view->get_counters(); ?>
 			<div class="frm-dashboard-widget frm-animate">
-				<?php $dashboard_view->get_chart(); ?>
+				<?php $dashboard_view->get_main_widget(); ?>
 			</div>
 			<?php $dashboard_view->get_payments(); ?>
 			<div class="frm-dashboard-widget frm-animate">
-				<?php $dashboard_view->get_entries(); ?>
+				<?php $dashboard_view->get_bottom_widget(); ?>
 			</div>
 		</div>
 		<div>

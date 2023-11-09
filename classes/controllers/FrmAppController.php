@@ -565,6 +565,8 @@ class FrmAppController {
 			self::admin_js();
 		}
 
+		FrmDashboardController::remove_admin_notices_on_dashboard();
+
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$action = FrmAppHelper::get_param( 'frm_action' );
 

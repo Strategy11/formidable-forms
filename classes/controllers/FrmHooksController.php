@@ -142,6 +142,7 @@ class FrmHooksController {
 		}
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
+		// Dashboard Controller
 		add_action( 'admin_menu', 'FrmDashboardController::menu', 9 );
 
 		// Forms Controller.
