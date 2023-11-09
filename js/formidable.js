@@ -1510,7 +1510,7 @@ function frmFrontFormJS() {
 	}
 
 	function enableSubmitButtonOnBackButtonPress() {
-		window.onpageshow = function( event ) {
+		window.addEventListener( 'pageshow', function( event ) {
 			if ( event.persisted ) {				
 				document.querySelectorAll( '.frm_loading_form' ).forEach(
 					function( form ) {
@@ -1519,7 +1519,7 @@ function frmFrontFormJS() {
 				);
 				removeSubmitLoading();
 			}
-		};
+		} );
 	}
 
 	return {
