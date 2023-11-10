@@ -533,10 +533,15 @@ class FrmSolution {
 
 		if ( ! $has_file ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'We didn\'t find anything to import. Please contact our team.', 'formidable' ) . '</p>';
-		} elseif ( ! isset( $addons[ $id ]['beta']['package'] ) ) {
+		} elseif ( ! isset( $addons[ $id ]['beta']['package'] ) && ! isset( $addons[ $id ]['beta']['location'] ) ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
 		} else {
-			$xml = $addons[ $id ]['beta']['package'];
+			if ( isset( $addons[ $id ]['beta']['package'] ) ) {
+				$xml = $addons[ $id ]['beta']['package'];
+			} else {
+				$xml = $addons[ $id ]['beta']['location'];
+			}
+
 			if ( is_array( $xml ) ) {
 				$xml = reset( $xml );
 			}
