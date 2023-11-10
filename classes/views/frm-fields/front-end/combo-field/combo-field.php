@@ -64,7 +64,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 							value="<?php echo esc_attr( isset( $field_value[ $name ] ) ? $field_value[ $name ] : '' ); ?>"
 							<?php
 							if ( ! empty( $field_value[ $name ] ) ) {
-								echo 'data-frmval=' . esc_attr( $field_value[ $name ] );
+								echo 'data-frmval="' . esc_attr( $field_value[ $name ] ) . '" ';
 							}
 							if ( empty( $args['remove_names'] ) ) {
 								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
