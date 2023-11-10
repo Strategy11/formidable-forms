@@ -1511,7 +1511,7 @@ function frmFrontFormJS() {
 
 	function enableSubmitButtonOnBackButtonPress() {
 		window.addEventListener( 'pageshow', function( event ) {
-			if ( event.persisted ) {				
+			if ( event.persisted ) {
 				document.querySelectorAll( '.frm_loading_form' ).forEach(
 					function( form ) {
 						enableSubmitButton( jQuery( form ) );
@@ -1519,7 +1519,7 @@ function frmFrontFormJS() {
 				);
 				removeSubmitLoading();
 			}
-		} );
+		});
 	}
 
 	return {
