@@ -9827,14 +9827,17 @@ function frmAdminBuildJS() {
 	 */
 	function applyZebraStriping( tableSelector, emptyRowClass ) {
 		// Get all non-empty table rows within the specified table
-		const rows = document.querySelectorAll( `${tableSelector} tr:not(.${emptyRowClass})` );
-		if ( rows?.length < 1 ) {
+		const rows = document.querySelectorAll( `${tableSelector} tr${emptyRowClass ? `:not(.${emptyRowClass})` : ''}` );
+		if ( rows.length < 1 ) {
 			return;
 		}
 
 		let isOdd = true;
 		rows.forEach( row => {
+			// Clean old "frm-odd" or "frm-even" classes and add the appropriate new class
+			row.classList.remove( 'frm-odd', 'frm-even' );
 			row.classList.add( isOdd ? 'frm-odd' : 'frm-even' );
+
 			isOdd = ! isOdd;
 		});
 
@@ -9846,7 +9849,6 @@ function frmAdminBuildJS() {
 		init: function() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
-			applyZebraStriping( '.frm-alt-table', 'frm-empty-row' );
 
 			s = {};
 
@@ -10679,6 +10681,7 @@ function frmAdminBuildJS() {
 			}
 		},
 
+		applyZebraStriping: applyZebraStriping,
 		infoModal: infoModal,
 		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt: addRadioCheckboxOpt

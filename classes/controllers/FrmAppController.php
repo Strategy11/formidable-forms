@@ -744,6 +744,10 @@ class FrmAppController {
 			if ( 'formidable-entries' === $page ) {
 				// Load front end js for entries.
 				wp_enqueue_script( 'formidable' );
+
+				// Registers and enqueues the entries page scripts.
+				wp_register_script( 'formidable_entries', $plugin_url . '/js/admin/entries.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
+				wp_enqueue_script( 'formidable_entries' );
 			}
 
 			do_action( 'frm_enqueue_builder_scripts' );
