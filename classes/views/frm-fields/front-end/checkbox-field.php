@@ -57,7 +57,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
-			echo 'aria-required="true"';
+			echo ' aria-required="true" ';
 		}
 
 		?> /><?php
