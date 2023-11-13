@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.3.1
+Tested up to: 6.3.2
 Requires PHP: 5.6
-Stable tag: 6.5.2
+Stable tag: 6.5.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,27 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.5.4 =
+* New: A database query has been optimized when checking for entries in a timeframe.
+* New: The honeypot class name will no longer change as often to help prevent issues with visible honeypot fields.
+* New: The placement of dropdown arrows has been updated for better theme compatibility.
+* Fix: Really long strings with no spaces were not being made short enough during truncation. This would result in really large text previews for HTML fields when using base 64 image data.
+* Fix: An element is undefined JavaScript error has been fixed.
+* Fix: The "Add fields here" placeholder would not always appear after deleting every field.
+* Fix: The "Add fields here" placeholder would sometimes overlap the form updated message.
+
+= 6.5.3 =
+* New: A new "Refunded Payment" action trigger type has been added for Stripe payments.
+* New: Additional validation checks have been added when JavaScript validation is enabled that prevent a form from submitting with invalid values like an a number with an invalid step.
+* New: The in-theme preview has been updated to look better with block themes.
+* New: The way icons are loaded has been modified for improved compatibility with the Snuffleupagus security module.
+* Fix: An add entry button would appear for users without the permission to create entries on the admin page.
+* Fix: Field controls would appear in the incorrect place for fields with no label.
+* Fix: Connecting an account would fail because of a permission check issue.
+* Fix: Dropdown arrows would disappear when overriding theme styling was enabled.
+* The payments page will now fallback to the PayPal add on when Stripe is not configured. This helps to prevent a wp_frm_subscriptions does not exist database error when viewing payments.
+* An extra check has been added to prevent an FrmOverlayController not found error when upgrading.
+
 = 6.5.2 =
 * Fix: Field validation errors were accidentally getting removed. Instead of validation errors, it would show an incorrect It looks like you've already submitted that error message.
 * Fix: The honeypot field would cause inline submit buttons to break to the next line.

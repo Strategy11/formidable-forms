@@ -9,6 +9,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function menu() {
+		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
+			return;
+		}
+
 		$frm_settings = FrmAppHelper::get_settings();
 
 		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).

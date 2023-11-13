@@ -137,7 +137,7 @@ class FrmAppController {
 			FrmFormTemplatesController::PAGE_SLUG,
 		);
 
-		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
+		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
 			// Only consider the payments page as a "white page" when the Payments submodule is off.
 			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
 			$white_pages[] = 'formidable-payments';

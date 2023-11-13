@@ -45,12 +45,14 @@ zip -r $zipname $destination \
 	-x "*/composer.lock" \
 	-x "*/formidableforms.css" \
 	-x "*/js/src/*" \
+	-x "*/assets/src/*" \
 	-x "*/js/frm.min.js" \
 	-x "formidable/js/frmstrp.min.js" \
 	-x "formidable/stripe/js/frmstrp.js" \
 	-x "formidable-pro/js/frmstrp.js" \
 	-x "*/dropzone.js" \
 	-x "*/formidable-js.pot" \
+	-x "*/jest.config.js" \
 	-x "*/node_modules/*" \
 	-x "*/npm-debug.log" \
 	-x "*/results.log" \
@@ -58,6 +60,7 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/phpunit.xml.dist" \
 	-x "*/psalm.xml" \
 	-x "*/phpstan.neon" \
 	-x "*/*.stubs.php" \
