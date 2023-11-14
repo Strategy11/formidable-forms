@@ -5,6 +5,11 @@
  */
 class test_FrmPersonalData extends FrmUnitTest {
 
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	/**
 	 * @covers FrmPersonalData::get_user_entries
 	 */

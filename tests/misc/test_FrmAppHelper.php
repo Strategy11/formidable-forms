@@ -4,6 +4,11 @@
  */
 class test_FrmAppHelper extends FrmUnitTest {
 
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	/**
 	 * @covers FrmAppHelper::plugin_version
 	 */
@@ -347,13 +352,13 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses_icon
 	 */
 	public function test_kses_icon() {
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:rgb(0,160,210)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:rgb(0,160,210)"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
@@ -513,7 +518,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_get_unique_key() {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'frm_fields';
+
+		// Test field keys
+		$table_name = 'frm_fields';
 		$column     = 'field_key';
 
 		$name = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
@@ -534,9 +541,43 @@ class test_FrmAppHelper extends FrmUnitTest {
 			array( 'form_key' => $super_long_form_key )
 		);
 
-		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, 'frm_forms', 'form_key' );
+		$name    = 'examplefieldkey';
+		$form_id = $this->factory->form->create();
+		$this->add_field_to_form( $form_id, $name );
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
+		$this->assertEquals( strlen( $name ) + 1, strlen( $key ), 'Field key should be the previous key + "2" incremented counter value' );
+		$this->assertEquals( $name . 2, $key, 'Key value should increment' );
+
+		$this->add_field_to_form( $form_id, $key );
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertEquals( $name . 3, $key, 'Key value should increment' );
+
+		add_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
+		$this->assertStringContainsString( '___', $key, 'Field key should contain custom separator' );
+		$this->assertEquals( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
+		$this->assertEquals( $name . '___2', $key );
+
+		remove_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+
+		// Test form keys
+		$table_name = 'frm_forms';
+		$column     = 'form_key';
+		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
 		$this->assertTrue( strlen( $unique_key ) <= 70 );
 		$this->assertNotEquals( $super_long_form_key, $unique_key );
+	}
+
+	private function add_field_to_form( $form_id, $field_key ) {
+		$type = 'text';
+		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
+	}
+
+	public static function underscore_key_separator() {
+		return '___';
 	}
 
 	/**
@@ -549,5 +590,165 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'fgf' ) );
 		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'z1z1z1' ) );
 		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'FGF' ) );
+	}
+
+	public function test_count_decimals() {
+		$this->assertFalse( FrmAppHelper::count_decimals( 'str' ) );
+		$this->assertFalse( FrmAppHelper::count_decimals( '1.0.0' ) );
+		$this->assertEquals( 0, FrmAppHelper::count_decimals( 13 ) );
+		$this->assertEquals( 0, FrmAppHelper::count_decimals( '13' ) );
+		$this->assertEquals( 1, FrmAppHelper::count_decimals( 13.1 ) );
+		$this->assertEquals( 1, FrmAppHelper::count_decimals( '13.1' ) );
+		$this->assertEquals( 3, FrmAppHelper::count_decimals( 13.123 ) );
+		$this->assertEquals( 3, FrmAppHelper::count_decimals( '13.123' ) );
+	}
+
+	/**
+	 * @covers FrmAppHelper::get_ip_address
+	 */
+	public function test_get_ip_address() {
+		$ip_address = FrmAppHelper::get_ip_address();
+
+		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
+
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '1.2.3.4';
+
+		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address(), 'When custom header IPs are disabled, ignore headers like HTTP_X_FORWARDED_FOR.' );
+		add_filter( 'frm_use_custom_header_ip', '__return_true' );
+		$this->assertEquals( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::human_time_diff
+	 */
+	public function test_human_time_diff() {
+		$difference = FrmAppHelper::human_time_diff( 0, 0 );
+		$this->assertEquals( '0 seconds', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, 1 );
+		$this->assertEquals( '1 second', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, HOUR_IN_SECONDS );
+		$this->assertEquals( '1 hour', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS );
+		$this->assertEquals( '1 day', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS * 2 );
+		$this->assertEquals( '2 days', $difference );
+	}
+
+	/**
+	 * @covers FrmAppHelper::unserialize_or_decode
+	 */
+	public function test_unserialize_or_decode() {
+		$json_encoded_string = '{"key":"value"}';
+		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
+		$this->assertIsArray( $json_encoded_string );
+		$this->assertArrayHasKey( 'key', $json_encoded_string );
+		$this->assertEquals( 'value', $json_encoded_string['key'] );
+
+		$serialized_string = 'a:1:{s:3:"key";s:5:"value";}';
+		FrmAppHelper::unserialize_or_decode( $serialized_string );
+		$this->assertIsArray( $serialized_string );
+		$this->assertArrayHasKey( 'key', $serialized_string );
+		$this->assertEquals( 'value', $serialized_string['key'] );
+	}
+
+	/**
+	 * @covers FrmAppHelper::maybe_unserialize_array
+	 */
+	public function test_maybe_unserialize_array() {
+		$serialized_string  = 'a:1:{s:3:"key";s:5:"value";}';
+		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsArray( $unserialized_array );
+		$this->assertArrayHasKey( 'key', $unserialized_array );
+		$this->assertEquals( 'value', $unserialized_array['key'] );
+
+		$serialized_string = 'O:8:"DateTime":0:{}';
+		$unserialized = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsString( $unserialized );
+		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::clip
+	 */
+	public function test_clip() {
+		// Test a function.
+		$echo_function = function() {
+			echo '<div>My html</div>';
+		};
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My html</div>', $html );
+
+		// Test a callable string.
+		$echo_function = __CLASS__ . '::echo_function';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My echo function content</div>', $html );
+
+		// Test something uncallable.
+		// Make sure it isn't fatal just in case.
+		$echo_function = __CLASS__ . '::something_uncallable';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '', $html );
+	}
+
+	/**
+	 * Echo HTML for the test_clip unit test.
+	 *
+	 * @return void
+	 */
+	public static function echo_function() {
+		echo '<div>My echo function content</div>';
+	}
+
+	/**
+	 * @covers FrmAppHelper::add_dismissable_warning_message
+	*/
+	public function test_add_dismissable_warning_message() {
+		// Test with missing message and option parameters.
+		FrmAppHelper::add_dismissable_warning_message();
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+
+		// Test with valid message and option parameters.
+		$message = 'Test warning message';
+		$option = 'test_option';
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertNotEmpty( $messages );
+		$this->assertArrayHasKey( 0, $messages );
+		$this->assertArrayHasKey( 1, $messages );
+		$this->assertEquals( $message, $messages[0] );
+
+		// Test with dismissed message.
+		update_option( $option, true );
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+	}
+
+	/**
+	 * @covers FrmAppHelper::truncate
+	 */
+	public function test_truncate() {
+		$assertions = array(
+			array(
+				'string'   => 'This is my first example string',
+				'length'   => 10,
+				'expected' => 'This is my...',
+			),
+			array(
+				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ),
+				'length'   => 60,
+				'expected' => '&lt;img src=&quot;data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAA',
+			),
+		);
+
+		foreach ( $assertions as $assertion ) {
+			$result = FrmAppHelper::truncate( $assertion['string'], $assertion['length'] );
+			$this->assertEquals( $assertion['expected'], $result );
+		}
 	}
 }

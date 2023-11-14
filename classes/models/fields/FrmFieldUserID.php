@@ -33,6 +33,12 @@ class FrmFieldUserID extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+
+	/**
 	 * @return string
 	 */
 	protected function include_form_builder_file() {
@@ -124,6 +130,8 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'intval', $value );

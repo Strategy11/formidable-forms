@@ -83,7 +83,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> div.description,
 .<?php echo esc_html( $style_class ); ?> div.frm_description,
 .<?php echo esc_html( $style_class ); ?> .frm-show-form > div.frm_description,
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_pro_max_limit_desc{
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
 	<?php } ?>
@@ -159,6 +160,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	display:none<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
 .<?php echo esc_html( $style_class ); ?> .frm_scale label{
 	<?php if ( ! empty( $check_weight ) ) { ?>
 		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
@@ -173,6 +175,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 		color:<?php echo esc_html( $check_label_color . $important ); ?>;
 	<?php } ?>
 }
+<?php endif; ?>
 
 /* These do not work if they are combined */
 .<?php echo esc_html( $style_class ); ?> input::placeholder,
@@ -186,6 +189,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
+	opacity: 1;
 }
 .<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
 <?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
@@ -404,12 +408,14 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-color:<?php echo esc_html( $border_color_error ); ?> !important;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field label,
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	color:<?php echo esc_html( $border_color_error . $important ); ?>;
 }
 

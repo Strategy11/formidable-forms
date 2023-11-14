@@ -68,7 +68,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	if ( 'email' === $form_action->post_excerpt ) {
 		?>
 		<h3>
-			<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Email attachments', 'formidable' ); ?>" data-medium="email-attachment">
+			<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Email attachments', 'formidable' ); ?>" data-message="<?php esc_attr_e( 'Email a CSV or a PDF of each new entry, or attach a file of your choice.', 'formidable' ); ?>" data-medium="email-attachment">
 				<?php esc_html_e( 'Attachment', 'formidable' ); ?>
 			</a>
 		</h3>
@@ -79,7 +79,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 }
 
 // Show Form Action Automation indicator.
-if ( ! function_exists( 'load_frm_autoresponder' ) ) {
+if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->post_excerpt, apply_filters( 'frm_autoresponder_allowed_actions', array( 'email', 'twilio', 'api', 'register' ) ), true ) ) {
 	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
 	$params    = array(
 		'href'         => 'javascript:void(0)',

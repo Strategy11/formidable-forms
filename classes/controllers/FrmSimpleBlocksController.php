@@ -7,6 +7,8 @@ class FrmSimpleBlocksController {
 
 	/**
 	 * Enqueue Formidable Simple Blocks' js and CSS for editor in admin.
+	 *
+	 * @return void
 	 */
 	public static function block_editor_assets() {
 		$version = FrmAppHelper::plugin_version();
@@ -31,12 +33,18 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
+		$modal_addon = self::get_modal_addon_info();
+
 		$script_vars = array(
 			'forms' => self::get_forms_options(),
 			'icon'  => $icon,
 			'name'  => $block_name,
 			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'   => FrmAppHelper::plugin_url(),
+			'modalAddon' => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
+				'hasAccess' => ! empty( $modal_addon['url'] ),
+			),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
@@ -50,6 +58,25 @@ class FrmSimpleBlocksController {
 			array( 'wp-edit-blocks' ),
 			$version
 		);
+	}
+
+	/**
+	 * Gets the modal addon info.
+	 *
+	 * @since 6.3.2
+	 *
+	 * @return array|false
+	 */
+	private static function get_modal_addon_info() {
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
+		$addon_id = 185013;
+
+		if ( ! is_array( $addons ) || ! array_key_exists( $addon_id, $addons ) ) {
+			return false;
+		}
+
+		return $addons[ $addon_id ];
 	}
 
 	/**
@@ -83,13 +110,15 @@ class FrmSimpleBlocksController {
 	 */
 	private static function set_form_options( $form ) {
 		return array(
-			'label' => $form->name,
+			'label' => FrmFormsHelper::edit_form_link_label( $form ),
 			'value' => $form->id,
 		);
 	}
 
 	/**
 	 * Registers simple form block
+	 *
+	 * @return void
 	 */
 	public static function register_simple_form_block() {
 		if ( ! is_callable( 'register_block_type' ) ) {
@@ -131,14 +160,19 @@ class FrmSimpleBlocksController {
 	/**
 	 * Renders a form given the specified attributes.
 	 *
-	 * @param $attributes
-	 *
+	 * @param array $attributes
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {
 		if ( ! isset( $attributes['formId'] ) ) {
 			return '';
 		}
+
+		/**
+		 * @since 5.5.2
+		 * @param array $attributes
+		 */
+		do_action( 'frm_before_simple_form_render', $attributes );
 
 		$params       = array_filter( $attributes );
 		$params['id'] = $params['formId'];

@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|boolean id on success or false on failure
+	 * @return int|bool id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -33,7 +33,16 @@ class FrmForm {
 		$options['after_html']  = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html'] = isset( $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		/**
+		 * Allows modifying form options before updating or creating.
+		 *
+		 * @since 5.4 Add the third param.
+		 *
+		 * @param array $options Form options.
+		 * @param array $values  Form data.
+		 * @param bool  $update  Is form updating or creating. It's `true` if is updating.
+		 */
+		$options               = apply_filters( 'frm_form_options_before_update', $options, $values, false );
 		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
 
@@ -132,6 +141,81 @@ class FrmForm {
 			global $wpdb;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $new_opts ) ), array( 'id' => $form_id ) );
 		}
+
+		self::switch_field_ids_in_fields( $form_id );
+	}
+
+	/**
+	 * Switches field ID in fields.
+	 *
+	 * @since 5.3
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	private static function switch_field_ids_in_fields( $form_id ) {
+		global $wpdb;
+
+		// Keys of fields that you want to check to replace field ID.
+		$keys     = array( 'default_value', 'field_options' );
+		$sql_cols = 'fi.id';
+		foreach ( $keys as $key ) {
+			$sql_cols .= ( ',fi.' . $key );
+		}
+
+		$fields = FrmDb::get_results(
+			"{$wpdb->prefix}frm_fields AS fi LEFT OUTER JOIN {$wpdb->prefix}frm_forms AS fr ON fi.form_id = fr.id",
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			),
+			$sql_cols
+		);
+
+		if ( ! $fields || ! is_array( $fields ) ) {
+			return;
+		}
+
+		foreach ( $fields as $field ) {
+			self::switch_field_ids_in_field( (array) $field );
+		}
+	}
+
+	/**
+	 * Switches field ID in a field.
+	 *
+	 * @since 5.3
+	 *
+	 * @param array $field Field array.
+	 */
+	private static function switch_field_ids_in_field( $field ) {
+		$new_values = array();
+		foreach ( $field as $key => $value ) {
+			if ( 'id' === $key || ! $value ) {
+				continue;
+			}
+
+			if ( ! is_string( $value ) && ! is_array( $value ) ) {
+				continue;
+			}
+
+			if ( 'field_options' === $key ) {
+				// Need to loop through field_options to prevent breaking serialized string when length changed.
+				FrmAppHelper::unserialize_or_decode( $value );
+				$new_val = FrmFieldsHelper::switch_field_ids( $value );
+				$new_val = serialize( $new_val );
+			} else {
+				$new_val = FrmFieldsHelper::switch_field_ids( $value );
+			}
+
+			if ( $new_val !== $value ) {
+				$new_values[ $key ] = $new_val;
+			}
+		}
+
+		if ( ! empty( $new_values ) ) {
+			FrmField::update( $field['id'], $new_values );
+		}
 	}
 
 	/**
@@ -201,12 +285,16 @@ class FrmForm {
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		if ( ! empty( $options['success_url'] ) && ! empty( $args['form_id'] ) ) {
-			$options['success_url']           = FrmFormsHelper::maybe_add_sanitize_url_attr( $options['success_url'], (int) $args['form_id'] );
-			$values['options']['success_url'] = $options['success_url'];
-		}
-
-		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		/**
+		 * Allows modifying form options before updating or creating.
+		 *
+		 * @since 5.4 Added the third param.
+		 *
+		 * @param array $options Form options.
+		 * @param array $values  Form data.
+		 * @param bool  $update  Is form updating or creating. It's `true` if is updating.
+		 */
+		$options               = apply_filters( 'frm_form_options_before_update', $options, $values, true );
 		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
 
@@ -278,6 +366,16 @@ class FrmForm {
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
 
+			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
+				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
+					if ( is_array( $option ) ) {
+						foreach ( $option as $key => $item ) {
+							$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+						}
+					}
+				}
+			}
+
 			self::prepare_field_update_values( $field, $values, $new_field );
 
 			FrmField::update( $field_id, $new_field );
@@ -289,15 +387,38 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param string $opt
+	 * @param mixed  $value
+	 * @return void
+	 */
 	private static function sanitize_field_opt( $opt, &$value ) {
-		if ( is_string( $value ) ) {
-			if ( $opt === 'calc' ) {
-				$value = self::sanitize_calc( $value );
-			} else {
-				$value = FrmAppHelper::kses( $value, 'all' );
-			}
-			$value = trim( $value );
+		if ( ! is_string( $value ) ) {
+			return;
 		}
+
+		/**
+		 * Allow the option to turn off sanitization for a field. This way a custom rule can be used instead.
+		 * Make sure to add custom sanitization using the frm_update_field_options filter as the data will no longer be sanitized.
+		 *
+		 * @since 6.0
+		 *
+		 * @param bool   $should_sanitize
+		 * @param string $opt
+		 */
+		$should_sanitize = apply_filters( 'frm_should_sanitize_field_opt_string', true, $opt );
+
+		if ( ! $should_sanitize ) {
+			return;
+		}
+
+		if ( $opt === 'calc' ) {
+			$value = self::sanitize_calc( $value );
+		} else {
+			$value = FrmAppHelper::kses( $value, 'all' );
+		}
+
+		$value = trim( $value );
 	}
 
 	/**
@@ -390,6 +511,10 @@ class FrmForm {
 			'submit_value',
 			'submit_msg',
 			'success_msg',
+			'invalid_msg',
+			'failed_msg',
+			'login_msg',
+			'admin_permission',
 		);
 
 		return apply_filters( 'frm_form_strings', $strings, $form );
@@ -563,7 +688,9 @@ class FrmForm {
 
 		$query_key = is_numeric( $id ) ? 'id' : 'form_key';
 		$r         = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
-		$r         = stripslashes( $r );
+
+		// An empty form name can result in a null value.
+		$r = is_null( $r ) ? '' : stripslashes( $r );
 
 		return $r;
 	}
@@ -630,7 +757,7 @@ class FrmForm {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
 
-				return wp_unslash( $cache );
+				return apply_filters( 'frm_form_object', wp_unslash( $cache ) );
 			}
 		}
 
@@ -688,7 +815,11 @@ class FrmForm {
 	 * Get all published forms
 	 *
 	 * @since 2.0
-	 * @return array of forms
+	 *
+	 * @param array  $query
+	 * @param int    $limit
+	 * @param string $inc_children
+	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
@@ -990,22 +1121,38 @@ class FrmForm {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
+	 * Check if the "Submit this form with AJAX" setting is toggled on.
 	 *
-	 * @param string $key
+	 * @since 6.2
 	 *
-	 * @return int form id
+	 * @param stdClass $form
+	 * @return bool
 	 */
-	public static function getIdByKey( $key ) {
-		return FrmFormDeprecated::getIdByKey( $key );
+	public static function is_ajax_on( $form ) {
+		return ! empty( $form->options['ajax_submit'] );
 	}
 
 	/**
-	 * @deprecated 3.0
+	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
+	 *
+	 * @param string $key
+	 * @return int form id
+	 */
+	public static function getIdByKey( $key ) {
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
+		return self::get_id_by_key( $key );
+	}
+
+	/**
+	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
+	 * @codeCoverageIgnore
+	 *
+	 * @param string|int $id
+	 * @return string
 	 */
 	public static function getKeyById( $id ) {
-		return FrmFormDeprecated::getKeyById( $id );
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_key_by_id' );
+		return self::get_key_by_id( $id );
 	}
 }

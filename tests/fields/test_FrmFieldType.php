@@ -214,4 +214,42 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
 	}
+
+	/**
+	 * @covers FrmFieldType::add_aria_description
+	 */
+	public function test_add_aria_description() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'input',
+				'form_id' => $form_id,
+			)
+		);
+
+		$field_object = FrmFieldFactory::get_field_type( 'text', $field );
+		$args         = array(
+			'field_id' => 1,
+			'html_id'  => 2,
+			'errors'   => array(
+				'field1' => 'This field cannot be blank.',
+			),
+		);
+
+		$input_html_actual_expected = array(
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_2 my_custom_aria_describedby frm_desc_2" aria-invalid="true" ',
+
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_2 frm_desc_2"',
+
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_2 frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
+		);
+
+		foreach ( $input_html_actual_expected as $actual => $expected ) {
+			$this->run_private_method( array( $field_object, 'add_aria_description' ), array( $args, &$actual ) );
+			$this->assertEquals( $expected, $actual );
+		}
+	}
 }

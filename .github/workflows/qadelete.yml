@@ -1,0 +1,17 @@
+on: delete
+
+name: Branch Deleted
+jobs:
+  delete:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete remote branch
+        uses: StephanThierry/ftp-delete-action@v2.1
+        with:
+          host: ftp.gyj.ilw.mybluehost.me
+          user: ${{ secrets.FRM_FTP_USERNAME }}
+          password: ${{ secrets.FRM_FTP_PASSWORD }}
+          remoteFiles: ${{ github.event.repository.name }}-${{ github.event.ref }}
+          remoteDirectories: ${{ github.event.repository.name }}-${{ github.event.ref }}
+          ignoreSSL: "1"

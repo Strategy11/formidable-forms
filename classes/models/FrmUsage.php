@@ -10,6 +10,8 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @return void
 	 */
 	public function send_snapshot() {
 		if ( ! $this->tracking_allowed() ) {
@@ -68,7 +70,7 @@ class FrmUsage {
 			'wp_version'     => $wp_version,
 			'php_version'    => phpversion(),
 			'mysql_version'  => $wpdb->db_version(),
-			'os'             => php_uname( 's' ),
+			'os'             => FrmAppHelper::get_server_os(),
 			'locale'         => get_locale(),
 
 			'active_license' => FrmAppHelper::pro_is_installed(),
@@ -94,7 +96,7 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function plugins() {
-		$plugin_list = get_plugins();
+		$plugin_list = FrmAppHelper::get_plugins();
 
 		$plugins = array();
 		foreach ( $plugin_list as $slug => $info ) {
@@ -155,6 +157,10 @@ class FrmUsage {
 	 * Include the permissions settings for each capability.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @return array
+	 *
+	 * @param FrmSettings $settings_list
 	 * @return array
 	 */
 	private function messages( $settings_list ) {
@@ -181,6 +187,8 @@ class FrmUsage {
 	 * Include the permissions settings for each capability.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @param FrmSettings $settings_list
 	 * @return array
 	 */
 	private function permissions( $settings_list ) {

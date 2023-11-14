@@ -3,8 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-FrmAppController::include_embed_form_icons();
-
 if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
 	$class = 'frm_submit_settings_btn';
 } else {
@@ -18,12 +16,11 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 			<div id="frm-preview-action">
 				<?php if ( ( ! isset( $hide_preview ) || ! $hide_preview ) && isset( $values['form_key'] ) ) { ?>
 					<div class="preview dropdown">
-						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" data-toggle="dropdown">
+						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" role="button">
 							<?php esc_html_e( 'Preview', 'formidable' ); ?>
-							<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 						</a>
-
-						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
+						<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<li>
 								<a href="<?php echo esc_url( FrmFormsHelper::get_direct_link( $values['form_key'] ) ); ?>" target="_blank">
 									<?php esc_html_e( 'On Blank Page', 'formidable' ); ?>
@@ -44,8 +41,6 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 				<?php } ?>
 			</div>
 
-			<a id="frm-embed-action" href="#" role="button" class="frm_submit_form button-secondary frm-button-secondary frm_button_submit">
+			<a id="frm-embed-action" href="#" role="button" class="frm_submit_form frm-button-tertiary frm_button_submit">
 				<?php esc_html_e( 'Embed', 'formidable' ); ?>
 			</a>
-
-<div class="clear"></div>

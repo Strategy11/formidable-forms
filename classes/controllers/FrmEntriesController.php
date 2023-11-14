@@ -24,7 +24,7 @@ class FrmEntriesController {
 	 * @since 2.05.07
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new' ) ) ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$base      = self::base_column_key( $menu_name );
 
@@ -81,11 +81,12 @@ class FrmEntriesController {
 		if ( $form_id ) {
 			self::get_columns_for_form( $form_id, $columns );
 		} else {
-			$columns[ $form_id . '_form_id' ] = __( 'Form', 'formidable' );
-			$columns[ $form_id . '_name' ]    = __( 'Entry Name', 'formidable' );
-			$columns[ $form_id . '_user_id' ] = __( 'Created By', 'formidable' );
+			$columns[ $form_id . '_form_id' ] = esc_html__( 'Form', 'formidable' );
+			$columns[ $form_id . '_name' ]    = esc_html__( 'Entry Name', 'formidable' );
+			$columns[ $form_id . '_user_id' ] = esc_html__( 'Created By', 'formidable' );
 		}
 
+		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
 		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
@@ -97,7 +98,7 @@ class FrmEntriesController {
 			add_screen_option(
 				'per_page',
 				array(
-					'label'   => __( 'Entries', 'formidable' ),
+					'label'   => esc_html__( 'Entries', 'formidable' ),
 					'default' => 20,
 					'option'  => 'formidable_page_formidable_entries_per_page',
 				)
@@ -306,7 +307,18 @@ class FrmEntriesController {
 		return apply_filters( 'frm_field_column_is_sortable', $is_sortable, $field );
 	}
 
+	/**
+	 * @param mixed $result Option value from database for hidden columns in entries table.
+	 * @return array
+	 */
 	public static function hidden_columns( $result ) {
+		if ( ! is_array( $result ) ) {
+			// Force an unexpected value to be an array.
+			// Since $result is a filtered option and gets saved to the database, it's possible it could be a string.
+			// Since this code expects an array it would break with a "Uncaught Error: [] operator not supported for strings" error.
+			$result = array();
+		}
+
 		$form_id = FrmForm::get_current_form_id();
 
 		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
@@ -462,8 +474,17 @@ class FrmEntriesController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
 	}
 
+	/**
+	 * Destroy an entry from the admin page.
+	 * This is triggered from the entries list from the "Delete" row action, and also from the "Delete Entry" trigger in the view/edit entry sidebar.
+	 *
+	 * @return void
+	 */
 	public static function destroy() {
-		FrmAppHelper::permission_check( 'frm_delete_entries' );
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
+		if ( false !== $permission_error ) {
+			wp_die( esc_html( $permission_error ) );
+		}
 
 		$params = FrmForm::get_admin_params();
 
@@ -473,7 +494,7 @@ class FrmEntriesController {
 
 		$message = '';
 		if ( FrmEntry::destroy( $params['id'] ) ) {
-			$message = __( 'Entry was Successfully Deleted', 'formidable' );
+			$message = __( 'Entry was successfully deleted', 'formidable' );
 		}
 
 		self::display_list( $message );
@@ -666,6 +687,13 @@ class FrmEntriesController {
 			if ( isset( $data['browser'] ) ) {
 				$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 			}
+			/**
+			 * Add or remove information in the entry sidebar.
+			 *
+			 * @since 5.5.2
+			 * @param array $data
+			 */
+			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
@@ -677,21 +705,5 @@ class FrmEntriesController {
 	public static function contextual_help( $help, $screen_id, $screen ) {
 		_deprecated_function( __METHOD__, '4.0' );
 		return $help;
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
-		return FrmDeprecated::show_form( $id, $key, $title, $description );
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form( $filename, $form, $title, $description ) {
-		return FrmDeprecated::get_form( $filename, $form, $title, $description );
 	}
 }

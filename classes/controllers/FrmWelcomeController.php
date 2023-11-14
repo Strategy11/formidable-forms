@@ -14,7 +14,9 @@ class FrmWelcomeController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access   public
+	 * @access public
+	 *
+	 * @return void
 	 */
 	public static function load_hooks() {
 		add_action( 'admin_init', __CLASS__ . '::redirect' );
@@ -65,6 +67,8 @@ class FrmWelcomeController {
 
 	/**
 	 * Don't redirect every time the plugin is activated.
+	 *
+	 * @return bool
 	 */
 	private static function already_redirected() {
 		$last_redirect = get_option( self::$last_redirect );
@@ -82,6 +86,9 @@ class FrmWelcomeController {
 	 * @return void
 	 */
 	public static function screen_page() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Welcome Screen', 'formidable' ), __( 'Welcome Screen', 'formidable' ), 'read', self::$menu_slug, __CLASS__ . '::screen_content' );
 	}
 
@@ -134,22 +141,34 @@ class FrmWelcomeController {
 		return admin_url( 'admin.php?page=' . self::$menu_slug );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function upgrade_to_pro_button() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			?>
-				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" class="button-secondary frm-button-secondary" target="_blank" rel="nofollow noopener">
+				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'welcome' ) ); ?>" class="button-secondary frm-button-secondary frm-button-sm" target="_blank" rel="nofollow noopener">
 					<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 				</a>
 			<?php
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function maybe_show_license_box() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			FrmSettingsController::license_box();
 		}
 	}
 
+	/**
+	 * @param string $plugin
+	 * @param string $upgrade_link_args
+	 *
+	 * @return void
+	 */
 	public static function maybe_show_conditional_action_button( $plugin, $upgrade_link_args ) {
 		$is_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 		if ( ! $is_installed ) {

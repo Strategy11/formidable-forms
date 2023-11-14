@@ -7,6 +7,30 @@
 class test_FrmEntryValidate extends FrmUnitTest {
 
 	/**
+	 * @covers FrmEntryValidate::validate
+	 */
+	public function test_validate() {
+		$add_a_custom_error = function( $errors ) {
+			$errors['custom_error'] = 'Error message';
+			return $errors;
+		};
+
+		add_filter( 'frm_validate_entry', $add_a_custom_error );
+
+		$values = array(
+			'form_id'   => 1,
+			'item_meta' => array(),
+		);
+		$errors = FrmEntryValidate::validate( $values );
+		$this->assertIsArray( $errors );
+
+		$this->assertArrayHasKey( 'custom_error', $errors );
+		$this->assertEquals( 'Error message', $errors['custom_error'] );
+
+		remove_filter( 'frm_validate_entry', $add_a_custom_error );
+	}
+
+	/**
 	 * @covers FrmEntryValidate::get_spam_check_user_info
 	 */
 	public function test_get_spam_check_user_info() {
@@ -141,6 +165,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$form   = $this->factory->form->create_and_get();
 		$fields = array();
 
+		// These types are skipped.
 		foreach ( array( 'radio', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $field_type ) {
 			$fields[ $field_type ] = $this->factory->field->create_and_get(
 				array(
@@ -150,10 +175,56 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			);
 		}
 
-		$fields['checkbox']->field_options['other'] = '1';
-		FrmField::update( $fields['checkbox']->id, array( 'field_options' => $fields['checkbox']->field_options ) );
+		// Radio field, has Other, but no options.
+		$fields['radio_2'] = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form->id,
+				'type'          => 'radio',
+				'field_options' => array( 'other' => '1' ),
+			)
+		);
+
+		/*
+		 * Radio_3: has Other and options, value is one of option. Skip this from values.
+		 * Radio_4: has Other and options, value is Other and same as one of options. Skip this from values.
+		 * Radio_5: has Other and options, value is Other and different from one of option. Do not skip this.
+		 */
+		$options = array(
+			array(
+				'label' => 'Option 1',
+				'value' => 'option-1',
+			),
+			array(
+				'label' => 'Option 2',
+				'value' => 'option-2',
+			),
+			array(
+				'label' => 'Option 3',
+				'value' => 'option-3',
+			),
+			'other_3' => 'Other',
+		);
+
+		foreach ( array( 'radio_3', 'radio_4', 'radio_5' ) as $key ) {
+			$fields[ $key ] = $this->factory->field->create_and_get(
+				array(
+					'form_id'       => $form->id,
+					'type'          => 'radio',
+					'field_options' => array( 'other' => '1' ),
+					'options'       => $options,
+				)
+			);
+		}
 
 		$values = $this->factory->field->generate_entry_array( $form );
+
+		$values['item_meta'][ $fields['radio_3']->id ] = 'option-2';
+		$values['item_meta'][ $fields['radio_4']->id ] = 'Other';
+		$values['item_meta'][ $fields['radio_5']->id ] = 'Other';
+		$values['item_meta']['other'] = array(
+			$fields['radio_4']->id => 'option-3',
+			$fields['radio_5']->id => 'another-value',
+		);
 
 		$values['form_ids'] = $this->run_private_method(
 			array( 'FrmEntryValidate', 'get_all_form_ids_and_flatten_meta' ),
@@ -166,9 +237,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 
 		// Checkbox field shouldn't be skipped.
-		foreach ( array( 'radio', 'select', 'scale', 'star', 'range', 'toggle' ) as $field_type ) {
-			$this->assertFalse( isset( $values['item_meta'][ $fields[ $field_type ]->id ] ) );
+		foreach ( array( 'radio', 'radio_2', 'radio_3', 'radio_4', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $key ) {
+			$this->assertFalse( isset( $values['item_meta'][ $fields[ $key ]->id ] ) );
 		}
-		$this->assertTrue( isset( $values['item_meta'][ $fields['checkbox']->id ] ) );
+
+		$this->assertTrue( isset( $values['item_meta'][ $fields['radio_5']->id ] ) );
 	}
 }

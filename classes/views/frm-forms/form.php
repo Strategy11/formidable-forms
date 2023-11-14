@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
+<div id="frm_form_editor_container" class="frm-m-12 <?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
 	<?php
 	if ( $has_fields ) {
@@ -14,12 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div id="frm-fake-page" class="frm_hidden">
 		<div class="frm-page-break">
-			<div class="frm-collapse-page button frm-button-secondary">
+			<div class="frm-collapse-page button frm-button-secondary frm-button-sm">
 				<?php
 				/* translators: %s: The page number */
 				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
 				?>
-				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</div>
 		</div>
 	</div>

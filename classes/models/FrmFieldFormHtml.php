@@ -137,6 +137,8 @@ class FrmFieldFormHtml {
 		$this->replace_form_shortcodes();
 		$this->process_wp_shortcodes();
 		$this->maybe_replace_description_shortcode( true );
+
+		$this->add_multiple_input_attributes();
 	}
 
 	/**
@@ -231,7 +233,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
 
-		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) ) {
+		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
@@ -409,9 +411,6 @@ class FrmFieldFormHtml {
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
 		$this->html  = str_replace( '[label_position]', $label_class, $this->html );
-		if ( $this->field_obj->get_field_column( 'label' ) == 'inside' && $this->field_obj->get_field_column( 'value' ) != '' ) {
-			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
-		}
 	}
 
 	/**
@@ -453,7 +452,13 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
-			$classes .= ' frm_' . $this->field_obj->get_field_column( 'label' ) . '_container';
+			$label_position = $this->field_obj->get_field_column( 'label' );
+			$classes .= ' frm_' . $label_position . '_container';
+
+			// Add class if field has value, to be used for floating label styling.
+			if ( 'inside' === $label_position && $this->field_obj->get_field_column( 'value' ) ) {
+				$classes .= ' frm_label_float_top';
+			}
 		}
 
 		// Add CSS layout classes
@@ -480,5 +485,51 @@ class FrmFieldFormHtml {
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$this->html = do_shortcode( $this->html );
 		}
+	}
+
+	/**
+	 * Adds multiple input attributes.
+	 *
+	 * @since 6.4.1
+	 * @return void
+	 */
+	private function add_multiple_input_attributes() {
+		$field_type = $this->field_obj->get_field_column( 'type' );
+
+		// Check if the field type is one of the following.
+		if ( ! in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true ) ) {
+			return;
+		}
+
+		$field                       = (array) $this->field_obj->get_field();
+		$attributes                  = array();
+		$is_radio                    = 'radio' === $field_type || 'scale' === $field_type;
+		$type_requires_aria_required = true;
+
+		// Check if the field type is 'data' or 'product'.
+		if ( in_array( $field_type, array( 'data', 'product' ), true ) ) {
+			$data_type = FrmField::get_option( $field, 'data_type' );
+			// Check if the data type isn't 'radio' or 'checkbox'.
+			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
+				// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
+				$type_requires_aria_required = false;
+			}
+			// Check if data type is 'radio'
+			if ( 'radio' === $data_type ) {
+				$is_radio = true;
+			}
+		}
+
+		// Add 'role' attribute to the field.
+		$attributes['role'] = $is_radio ? 'radiogroup' : 'group';
+
+		// Add 'aria-required' attribute to the field if required.
+		if ( $type_requires_aria_required && '1' === $field['required'] ) {
+			$attributes['aria-required'] = 'true';
+		}
+
+		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
+		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
+		$this->html      = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }

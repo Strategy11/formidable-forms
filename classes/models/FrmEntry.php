@@ -251,23 +251,45 @@ class FrmEntry {
 		return $query_results;
 	}
 
+	/**
+	 * Delete an entry.
+	 *
+	 * @param string|int $id
+	 * @return bool True on success, false if nothing was deleted.
+	 */
 	public static function destroy( $id ) {
 		global $wpdb;
 		$id = (int) $id;
 
-		$entry = self::getOne( $id );
+		$entry = self::getOne( $id, true ); // Item meta is required for conditional logic in actions with 'delete' events.
 		if ( ! $entry ) {
 			$result = false;
-
 			return $result;
 		}
 
+		/**
+		 * Trigger an action to run custom logic before the entry is deleted.
+		 *
+		 * @param int      $id    The id of the entry that was destroyed.
+		 * @param stdClass $entry The entry object.
+		 */
 		do_action( 'frm_before_destroy_entry', $id, $entry );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE item_id=%d', $id ) );
 		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $id ) );
 
 		self::clear_cache();
+
+		/**
+		 * Trigger an action to run custom logic after the entry is deleted.
+		 * Use this hook if you need to update caching after an entry is deleted.
+		 *
+		 * @since 5.4.1
+		 *
+		 * @param int      $id    The id of the entry that was destroyed.
+		 * @param stdClass $entry The entry object.
+		 */
+		do_action( 'frm_after_destroy_entry', $id, $entry );
 
 		return $result;
 	}
@@ -393,15 +415,16 @@ class FrmEntry {
 				'item_id'    => $entry->id,
 				'field_id !' => 0,
 			),
-			'field_id, meta_value, field_key, item_id'
+			'field_id, meta_value, field_key, item_id, f.type'
 		);
 
 		$entry->metas = array();
 
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
 		foreach ( $metas as $meta_val ) {
+			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
+
 			if ( $meta_val->item_id == $entry->id ) {
-				FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
@@ -414,7 +437,6 @@ class FrmEntry {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
-			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
 			$entry->metas[ $meta_val->field_id ][] = $meta_val->meta_value;
 
 			unset( $meta_val );
@@ -457,7 +479,7 @@ class FrmEntry {
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
-			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft';
+			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description';
 			$table  = $wpdb->prefix . 'frm_items it ';
 
 			if ( $inc_form ) {
@@ -496,7 +518,11 @@ class FrmEntry {
 			$meta_where['item_id'] = array_keys( $entries );
 		}
 
-		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON (it.field_id = fi.id)', $meta_where, 'item_id, meta_value, field_id, field_key, form_id' );
+		$metas = FrmDb::get_results(
+			$wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id = fi.id',
+			$meta_where,
+			'item_id, meta_value, field_id, field_key, form_id, fi.type'
+		);
 
 		unset( $meta_where );
 
@@ -514,7 +540,7 @@ class FrmEntry {
 				$entries[ $meta_val->item_id ]->metas = array();
 			}
 
-			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 			unset( $m_key, $meta_val );
 		}
@@ -729,7 +755,11 @@ class FrmEntry {
 	 * @return int
 	 */
 	private static function get_is_draft_value( $values ) {
-		return ( ( isset( $values['frm_saving_draft'] ) && $values['frm_saving_draft'] == 1 ) || ( isset( $values['is_draft'] ) && $values['is_draft'] == 1 ) ) ? 1 : 0;
+		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
+			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
+		}
+
+		return isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
 	}
 
 	/**

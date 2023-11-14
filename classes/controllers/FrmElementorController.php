@@ -8,9 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmElementorController {
 
+	/**
+	 * @return void
+	 */
 	public static function register_elementor_hooks() {
 		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmElementorWidget.php';
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \FrmElementorWidget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new \FrmElementorWidget() );
 
 		if ( is_admin() ) {
 			add_action(
@@ -22,6 +25,9 @@ class FrmElementorController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function admin_init() {
 		FrmAppController::load_wp_admin_style();
 		FrmFormsController::insert_form_popup();

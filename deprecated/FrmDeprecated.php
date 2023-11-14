@@ -265,39 +265,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * Filter shortcodes in text widgets
-	 *
-	 * @deprecated 2.5.4
-	 */
-	public static function widget_text_filter( $content ) {
-		_deprecated_function( __FUNCTION__, '2.5.4' );
-		$regex = '/\[\s*(formidable|display-frm-data|frm-stats|frm-graph|frm-entry-links|formresults|frm-search)\s+.*\]/';
-		return preg_replace_callback( $regex, 'FrmAppHelper::widget_text_filter_callback', $content );
-	}
-
-	/**
-	 * Used to filter shortcode in text widgets
-	 *
-	 * @deprecated 2.5.4
-	 */
-	public static function widget_text_filter_callback( $matches ) {
-		_deprecated_function( __FUNCTION__, '2.5.4' );
-		return do_shortcode( $matches[0] );
-	}
-
-	/**
-	 * Deprecated in favor of wpmu_upgrade_site
-	 *
-	 * @deprecated 2.3
-	 */
-	public static function front_head() {
-		_deprecated_function( __FUNCTION__, '2.3' );
-		if ( is_multisite() && FrmAppController::needs_update() ) {
-			FrmAppController::install();
-		}
-	}
-
-	/**
 	 * @deprecated 3.0.04
 	 */
 	public static function activation_install() {
@@ -321,30 +288,6 @@ class FrmDeprecated {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 */
-	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
-		return FrmFormsController::get_form_shortcode( $atts );
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 */
-	public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::show_form()' );
-		return FrmFormsController::show_form( $id, $key, $title, $description );
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 */
-	public static function get_form( $filename, $form, $title, $description ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form()' );
-		return FrmFormsController::get_form( $form, $title, $description );
 	}
 
 	/**
@@ -415,16 +358,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 2.03
-	 */
-	public static function register_pro_scripts() {
-		_deprecated_function( __FUNCTION__, '2.03', 'FrmProEntriesController::register_scripts' );
-		if ( FrmAppHelper::pro_is_installed() ) {
-			FrmProEntriesController::register_scripts();
-		}
-	}
-
-	/**
 	 * @deprecated 3.0
 	 */
 	public static function edit_key() {
@@ -463,229 +396,11 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 1.07.05
-	 */
-	public static function add_default_templates( $path, $default = true, $template = true ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmXMLController::add_default_templates()' );
-
-		$path = untrailingslashit( trim( $path ) );
-		$templates = glob( $path . '/*.php' );
-
-		for ( $i = count( $templates ) - 1; $i >= 0; $i-- ) {
-			$filename = str_replace( '.php', '', str_replace( $path . '/', '', $templates[ $i ] ) );
-			$template_query = array( 'form_key' => $filename );
-			if ( $template ) {
-				$template_query['is_template'] = 1;
-			}
-			if ( $default ) {
-				$template_query['default_template'] = 1;
-			}
-			$form = FrmForm::getAll( $template_query, '', 1 );
-
-			$values = FrmFormsHelper::setup_new_vars();
-			$values['form_key'] = $filename;
-			$values['is_template'] = $template;
-			$values['status'] = 'published';
-
-			include( $templates[ $i ] );
-
-			//get updated form
-			if ( isset( $form ) && ! empty( $form ) ) {
-				$old_id = $form->id;
-				$form = FrmForm::getOne( $form->id );
-			} else {
-				$old_id = false;
-				$form = FrmForm::getAll( $template_query, '', 1 );
-			}
-
-			if ( $form ) {
-				do_action( 'frm_after_duplicate_form', $form->id, (array) $form, array( 'old_id' => $old_id ) );
-			}
-		}
-	}
-
-	/**
 	 * @deprecated 3.01
 	 */
 	public static function sanitize_array( &$values ) {
 		_deprecated_function( __FUNCTION__, '3.01', 'FrmAppHelper::sanitize_value' );
 		FrmAppHelper::sanitize_value( 'wp_kses_post', $values );
-	}
-
-	/**
-	 * Prepare and save settings in styles and actions
-	 *
-	 * @param array $settings
-	 * @param string $group
-	 *
-	 * @since 2.0.6
-	 * @deprecated 2.05.06
-	 */
-	public static function save_settings( $settings, $group ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::save_settings( $settings, $group );
-	}
-
-	/**
-	 * Since actions are JSON encoded, we don't want any filters messing with it.
-	 * Remove the filters and then add them back in case any posts or views are
-	 * also being imported.
-	 *
-	 * Used when saving form actions and styles
-	 *
-	 * @since 2.0.4
-	 * @deprecated 2.05.06
-	 */
-	public static function save_json_post( $settings ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::save_json_post( $settings );
-	}
-
-	/**
-	 * Check cache before fetching values and saving to cache
-	 *
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 *
-	 * @param string $cache_key The unique name for this cache
-	 * @param string $group The name of the cache group
-	 * @param string $query If blank, don't run a db call
-	 * @param string $type The wpdb function to use with this query
-	 * @return mixed $results The cache or query results
-	 */
-	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::check_cache( $cache_key, $group, $query, $type, $time );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		FrmDb::set_cache( $cache_key, $results, $group, $time );
-	}
-
-	/**
-	 * Keep track of the keys cached in each group so they can be deleted
-	 * in Redis and Memcache
-	 * @deprecated 2.05.06
-	 */
-	public static function add_key_to_group_cache( $key, $group ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		FrmDb::add_key_to_group_cache( $key, $group );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function get_group_cached_keys( $group ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::get_group_cached_keys( $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @param string $cache_key
-	 */
-	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		FrmDb::delete_cache_and_transient( $cache_key, $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 *
-	 * @param string $group The name of the cache group
-	 */
-	public static function cache_delete_group( $group ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		FrmDb::cache_delete_group( $group );
-	}
-
-	/**
-	 * Added for < WP 4.0 compatability
-	 *
-	 * @since 1.07.10
-	 * @deprecated 2.05.06
-	 *
-	 * @param string $term The value to escape
-	 * @return string The escaped value
-	 */
-	public static function esc_like( $term ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::esc_like( $term );
-	}
-
-	/**
-	 * @param string $order_query
-	 * @deprecated 2.05.06
-	 */
-	public static function esc_order( $order_query ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::esc_order( $order_query );
-	}
-
-	/**
-	 * Make sure this is ordering by either ASC or DESC
-	 * @deprecated 2.05.06
-	 */
-	public static function esc_order_by( &$order_by ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		FrmDb::esc_order_by( $order_by );
-	}
-
-	/**
-	 * @param string $limit
-	 * @deprecated 2.05.06
-	 */
-	public static function esc_limit( $limit ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::esc_limit( $limit );
-	}
-
-	/**
-	 * Get an array of values ready to go through $wpdb->prepare
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 */
-	public static function prepare_array_values( $array, $type = '%s' ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::prepare_array_values( $array, $type );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		_deprecated_function( __FUNCTION__, '2.05.06', 'FrmDb::' . __FUNCTION__ );
-		return FrmDb::prepend_and_or_where( $starts_with, $where );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function upgrade() {
-		$db = new FrmDbDeprecated();
-		$db->upgrade();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function collation() {
-		$db = new FrmDbDeprecated();
-		return $db->collation();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 */
-	public static function uninstall() {
-		$db = new FrmDbDeprecated();
-		$db->uninstall();
 	}
 
 	/**
@@ -718,22 +433,6 @@ class FrmDeprecated {
 		}
 
 		return $field_options;
-	}
-
-	/**
-	 * @deprecated 2.02.07
-	 */
-	public static function dropdown_categories( $args ) {
-		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
-
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$args['location'] = 'front';
-			$dropdown = FrmProPost::get_category_dropdown( $args['field'], $args );
-		} else {
-			$dropdown = '';
-		}
-
-		return $dropdown;
 	}
 
 	/**
@@ -893,5 +592,21 @@ class FrmDeprecated {
 		}
 
 		FrmEntryValidate::validate_field_types( $errors, $field, '', $args );
+	}
+
+	/**
+	 * @deprecated 2.02.07
+	 */
+	public static function dropdown_categories( $args ) {
+		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$args['location'] = 'front';
+			$dropdown = FrmProPost::get_category_dropdown( $args['field'], $args );
+		} else {
+			$dropdown = '';
+		}
+
+		return $dropdown;
 	}
 }

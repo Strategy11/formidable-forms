@@ -80,9 +80,12 @@ class FrmFieldsController {
 	 */
 	public static function include_new_field( $field_type, $form_id ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$field_values = apply_filters( 'frm_before_field_created', $field_values );
 
-		$field_id = FrmField::create( $field_values );
+		/**
+		 * @param array $field_values
+		 */
+		$field_values = apply_filters( 'frm_before_field_created', $field_values );
+		$field_id     = FrmField::create( $field_values );
 
 		if ( ! $field_id ) {
 			return false;
@@ -313,7 +316,8 @@ class FrmFieldsController {
 		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
 	/**
@@ -389,8 +393,11 @@ class FrmFieldsController {
 		}
 
 		$pro_fields = FrmField::pro_field_selection();
-		$types      = array_keys( $pro_fields );
-		if ( in_array( $type, $types ) ) {
+		// We want to keep credit_card types as credit card types for Stripe Lite.
+		// The credit_card key is set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		if ( array_key_exists( $type, $pro_fields ) ) {
 			$type = 'text';
 		}
 
@@ -494,7 +501,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_html_cols( $field, array &$add_html ) {
-		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ) ) ) {
+		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ), true ) ) {
 			return;
 		}
 
@@ -570,18 +577,15 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
+	 * Prepares field placeholder.
+	 *
+	 * @since 5.4 This doesn't call `FrmFieldsController::get_default_value_from_name()` anymore.
+	 *
+	 * @param array $field Field array.
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder          = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
-		$placeholder_is_blank = empty( $placeholder ) && '0' !== $placeholder;
-		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
-		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ), true );
-
-		if ( $placeholder_is_blank && $is_placeholder_field && ! $is_combo_field ) {
-			$placeholder = self::get_default_value_from_name( $field );
-		}
+		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
 
 		return $placeholder;
 	}
@@ -591,23 +595,14 @@ class FrmFieldsController {
 	 * get the label to use as the placeholder
 	 *
 	 * @since 2.05
+	 * @since 5.4 Remove the logic code for "inside" label position.
 	 *
 	 * @param array $field
 	 *
 	 * @return string
 	 */
 	public static function get_default_value_from_name( $field ) {
-		$position = FrmField::get_option( $field, 'label' );
-		if ( $position == 'inside' ) {
-			$default_value = $field['name'];
-			if ( FrmField::is_required( $field ) ) {
-				$default_value .= ' ' . $field['required_indicator'];
-			}
-		} else {
-			$default_value = '';
-		}
-
-		return $default_value;
+		return '';
 	}
 
 	/**
@@ -625,7 +620,7 @@ class FrmFieldsController {
 
 		if ( $placeholder !== '' ) {
 			?>
-			<option value="">
+			<option class="frm-select-placeholder" value="">
 				<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
 			</option>
 			<?php
@@ -765,7 +760,14 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'file', 'data', 'lookup' ), true ) ) {
+		$excluded_field_types =
+			FrmField::is_radio( $field ) ||
+			FrmField::is_checkbox( $field ) ||
+			FrmField::is_field_type( $field, 'file' ) ||
+			FrmField::is_field_type( $field, 'nps' ) ||
+			FrmField::is_field_type( $field, 'scale' );
+
+		if ( $excluded_field_types ) {
 			return;
 		}
 
@@ -778,6 +780,10 @@ class FrmFieldsController {
 	private static function add_shortcodes_to_html( $field, array &$add_html ) {
 		if ( FrmField::is_option_empty( $field, 'shortcodes' ) ) {
 			return;
+		}
+
+		if ( ! empty( $field['autocomplete'] ) ) {
+			unset( $field['shortcodes']['autocomplete'] );
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
@@ -887,10 +893,7 @@ class FrmFieldsController {
 	 * @deprecated 4.0 Moved to Pro for Other option only.
 	 */
 	public static function add_option() {
-		_deprecated_function( __METHOD__, '4.0', 'FrmProFormsController::add_other_option' );
-		if ( is_callable( 'FrmProFormsController::add_other_option' ) ) {
-			FrmProFormsController::add_other_option();
-		}
+		_deprecated_function( __METHOD__, '4.0', 'FrmProFieldsController::add_other_option' );
 	}
 
 	/**
@@ -920,21 +923,5 @@ class FrmFieldsController {
 	 */
 	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
 		return FrmDeprecated::include_single_field( $field_id, $values, $form_id );
-	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
-	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function delete_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
 	}
 }

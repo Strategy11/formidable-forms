@@ -17,5 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</span>
 		</span>
 		<?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?>
+		<?php if ( ! empty( $action_control->action_options['keywords'] ) ) { ?>
+			<span class="frm_hidden">
+				<?php
+				// Include keywords for the action search.
+				echo esc_html( $action_control->action_options['keywords'] );
+				?>
+			</span>
+		<?php } ?>
 	</a>
 </li>

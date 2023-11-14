@@ -22,10 +22,5 @@ jobs:
       - name: "💽  Installing Composer Packages"
         run: composer install
 
-      - name: "💽  Installing PHPStan Package"
-        run: |
-          composer global require szepeviktor/phpstan-wordpress
-          composer global require phpstan/extension-installer
-
       - name: "🧪 Test"
-        run: phpstan analyze ./ --level=max
+        run: phpstan analyze ./

@@ -98,4 +98,83 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			$this->assertEquals( $color['end'], $result, $color['start'] . ' was not adusted as expected by ' . $color['steps'] . ' steps' );
 		}
 	}
+
+	/**
+	 * @covers FrmStylesHelper::get_form_count_for_style
+	 */
+	public function test_get_form_count_for_style() {
+		$new_style_id = $this->factory->post->create(
+			array( 'post_type' => FrmStylesController::$post_type )
+		);
+		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
+
+		$this->factory->form->create(
+			array(
+				'status'  => 'published',
+				'options' => array(
+					'custom_style' => (string) $new_style_id,
+				),
+			)
+		);
+		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
+
+		$data_for_all_published_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'published' ), 'id, options' );
+		$default_count                = 0;
+		foreach ( $data_for_all_published_forms as $row ) {
+			$form_id = $row->id;
+			$options = $row->options;
+			FrmAppHelper::unserialize_or_decode( $options );
+
+			if ( ! isset( $options['custom_style'] ) || in_array( $options['custom_style'], array( '1', 1 ), true ) ) {
+				$default_count++;
+			}
+
+			unset( $options );
+		}
+
+		unset( $data_for_all_published_forms );
+
+		$this->assertEquals( 1 + $default_count, FrmStylesHelper::get_form_count_for_style( $new_style_id, true ) );
+
+		$conversational_style_id = $this->factory->post->create(
+			array(
+				'post_type' => FrmStylesController::$post_type,
+				'post_name' => 'lines-no-boxes',
+			)
+		);
+
+		// Clear the cache after adding the conversational style.
+		$where     = array( 'post_name' => 'lines-no-boxes' );
+		$args      = array( 'limit' => 1 );
+		$cache_key = FrmDb::generate_cache_key( $where, $args, 'ID', 'var' );
+		wp_cache_delete( $cache_key, 'post' );
+
+		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+
+		// Add a form with the conversational default.
+		$this->factory->form->create(
+			array(
+				'options' => array(
+					'custom_style' => 1,
+					'chat'         => 1,
+				),
+			)
+		);
+
+		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
+
+		// Create a second conversational form.
+		$this->factory->form->create(
+			array(
+				'options' => array(
+					'custom_style' => (string) $conversational_style_id,
+					'chat'         => 1,
+				),
+			)
+		);
+
+		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
+		$this->assertEquals( 2, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+	}
 }

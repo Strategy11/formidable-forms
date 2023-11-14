@@ -76,7 +76,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>">
 		<?php esc_html_e( 'Message', 'formidable' ); ?>
 	</label>
-	<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+	<?php
+	$rich_text_emails = empty( $form_action->post_content['plain_text'] );
+
+	/**
+	 * @since 5.5.2
+	 *
+	 * @param bool  $rich_text_emails True by default unless plain text is selected.
+	 * @param array $args {
+	 *     @type stdClass $form
+	 *     @type WP_Post  $form_action
+	 * }
+	 */
+	$rich_text_emails = apply_filters( 'frm_rich_text_emails', $rich_text_emails, compact( 'form', 'form_action' ) );
+
+	if ( $rich_text_emails ) {
+		$editor_args = array(
+			'textarea_name' => $this->get_field_name( 'email_message' ),
+			'textarea_rows' => 6,
+			'editor_class'  => 'frm_not_email_message',
+		);
+		wp_editor(
+			$form_action->post_content['email_message'],
+			$this->get_field_id( 'email_message' ),
+			$editor_args
+		);
+	} else {
+		?>
+		<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+		<?php
+	}
+	?>
 </p>
 
 <label for="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>">

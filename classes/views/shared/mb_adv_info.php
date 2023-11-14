@@ -34,6 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm-insert-fields-box" class="tabs-panel">
 		<?php
 		if ( count( $fields ) > 8 ) {
+			echo '<div class="dropdown-item frm-with-search">';
 			FrmAppHelper::show_search_box(
 				array(
 					'input_id'    => 'field',
@@ -41,6 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'tosearch'    => 'frm-customize-list',
 				)
 			);
+			echo '</div>';
 		}
 		?>
 
@@ -66,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'key'  => $f->field_key,
 						'name' => $f->name,
 						'type' => $f->type,
-						'class' => 'frm-customize-list',
+						'class' => 'frm-customize-list dropdown-item',
 					)
 				);
 
@@ -88,20 +90,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel">
 		<div class="frmcenter">
-			<label class="frm_toggle frm_toggle_long">
-				<input type="checkbox" value="id" checked="checked" id="frm-id-key-condition" />
-				<span class="frm_toggle_slider"></span>
-				<span class="frm_toggle_on">
-					<?php esc_html_e( 'ID', 'formidable' ); ?>
-				</span>
-				<span class="frm_toggle_off">
-					<?php esc_html_e( 'Key', 'formidable' ); ?>
-				</span>
-			</label>
+			<?php
+			FrmHtmlHelper::toggle(
+				'frm-id-key-condition',
+				'',
+				array(
+					'checked'     => true,
+					'on_label'    => __( 'Use IDs', 'formidable' ),
+					'off_label'   => __( 'Use Keys', 'formidable' ),
+					'value'       => 'id',
+					'show_labels' => true,
+					'echo'        => true,
+				)
+			);
+			?>
 		</div>
 
-		<div class="frm_grid_container frm-fields">
-			<div class="frm1 frm_form_field" style="line-height:27px;">
+		<div class="frm_grid_container frm-fields frm-mx-sm">
+			<div class="frm1 frm_form_field frm-inline-select">
 				<label for="frm-id-condition">
 					<?php esc_html_e( 'IF', 'formidable' ); ?>
 				</label>
@@ -158,24 +164,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm11 frm_form_field">
 				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
 			</div>
-			<h3 class="frm-with-line">
-				<span><?php esc_html_e( 'Click to Insert', 'formidable' ); ?></span>
-			</h3>
-			<ul class="frm_code_list frm-full-hover frmcenter">
+		</div>
+			<p class="frmcenter frm-mb-0">
+				<?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:
+			</p>
+			<ul class="frm_code_list frm-full-hover frmcenter frm-m-0">
 				<li>
 					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
 						[if x equals=""][/if x]
 					</a>
 				</li>
 			</ul>
-			<br/>
-		</div>
 	</div>
 		<?php
 	}
 	?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
+		<div class="dropdown-item frm-with-search">
 		<?php
 		FrmAppHelper::show_search_box(
 			array(
@@ -185,6 +191,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			)
 		);
 		?>
+		</div>
 		<ul class="frm_code_list frm-full-hover">
 		<?php
 		foreach ( $entry_shortcodes as $skey => $sname ) {

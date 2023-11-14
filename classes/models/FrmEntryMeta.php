@@ -166,6 +166,15 @@ class FrmEntryMeta {
 
 	public static function duplicate_entry_metas( $old_id, $new_id ) {
 		$metas = self::get_entry_meta_info( $old_id );
+
+		/**
+		 * Allows changing entry duplicate values before save.
+		 *
+		 * @since 5.4.4
+		 *
+		 * @param array $metas The list of entry meta values.
+		 */
+		$metas = apply_filters( 'frm_before_duplicate_entry_values', $metas );
 		foreach ( $metas as $meta ) {
 			self::add_entry_meta( $new_id, $meta->field_id, '', $meta->meta_value );
 			unset( $meta );

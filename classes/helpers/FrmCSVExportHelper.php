@@ -343,7 +343,7 @@ class FrmCSVExportHelper {
 		$headings['updated_at'] = __( 'Last Updated', 'formidable' );
 		$headings['user_id']    = __( 'Created By', 'formidable' );
 		$headings['updated_by'] = __( 'Updated By', 'formidable' );
-		$headings['is_draft']   = __( 'Draft', 'formidable' );
+		$headings['is_draft']   = __( 'Entry Status', 'formidable' );
 		$headings['ip']         = __( 'IP', 'formidable' );
 		$headings['id']         = __( 'ID', 'formidable' );
 		$headings['item_key']   = __( 'Key', 'formidable' );
@@ -477,7 +477,12 @@ class FrmCSVExportHelper {
 
 		foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
 			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
-				$metas[ $repeater_child->id ]                                            = '';
+				$metas[ $repeater_child->id ] = '';
+
+				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
+					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] = array();
+				}
+
 				$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
 			}
 		}
@@ -499,7 +504,7 @@ class FrmCSVExportHelper {
 		foreach ( self::$fields as $col ) {
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
-			FrmAppHelper::unserialize_or_decode( $field_value );
+			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
 			$field_value = apply_filters(
@@ -517,8 +522,11 @@ class FrmCSVExportHelper {
 				$label_key = $col->id . '_label';
 				if ( self::is_the_child_of_a_repeater( $col ) ) {
 					$row[ $label_key ] = array();
-					foreach ( $field_value as $value ) {
-						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
+
+					if ( is_array( $field_value ) ) {
+						foreach ( $field_value as $value ) {
+							$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
+						}
 					}
 				} else {
 					$row[ $label_key ] = self::get_separate_value_label( $field_value, $col );
@@ -585,7 +593,7 @@ class FrmCSVExportHelper {
 		$row['updated_at'] = FrmAppHelper::get_formatted_time( self::$entry->updated_at, self::$wp_date_format, ' ' );
 		$row['user_id']    = self::$entry->user_id;
 		$row['updated_by'] = self::$entry->updated_by;
-		$row['is_draft']   = self::$entry->is_draft ? '1' : '0';
+		$row['is_draft']   = self::$entry->is_draft;
 		$row['ip']         = self::$entry->ip;
 		$row['id']         = self::$entry->id;
 		$row['item_key']   = self::$entry->item_key;

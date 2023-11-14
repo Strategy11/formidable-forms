@@ -11,17 +11,68 @@ function frmFrontFormJS() {
 	var action = '';
 	var jsErrors = [];
 
-	function maybeShowLabel() {
-		/*jshint validthis:true */
-		var $field = jQuery( this ),
-			$label = $field.closest( '.frm_inside_container' ).find( '.frm_primary_label' ),
-			val = $field.val();
-
-		if ( val !== null && val.length > 0 ) {
-			$label.addClass( 'frm_visible' );
-		} else {
-			$label.removeClass( 'frm_visible' );
+	/**
+	 * Maybe add polyfills.
+	 *
+	 * @since 5.4
+	 */
+	function maybeAddPolyfills() {
+		var i;
+		if ( ! Element.prototype.matches ) {
+			// IE9 supports matches but as msMatchesSelector instead.
+			Element.prototype.matches = Element.prototype.msMatchesSelector;
 		}
+
+		if ( ! Element.prototype.closest ) {
+			Element.prototype.closest = function( s ) {
+				var el = this;
+
+				do {
+					if ( el.matches( s ) ) {
+						return el;
+					}
+					el = el.parentElement || el.parentNode;
+				} while ( el !== null && el.nodeType === 1 );
+
+				return null;
+			};
+		}
+
+		// NodeList.forEach().
+		if ( window.NodeList && ! NodeList.prototype.forEach ) {
+			NodeList.prototype.forEach = function( callback, thisArg ) {
+				thisArg = thisArg || window;
+				for ( i = 0; i < this.length; i++ ) {
+					callback.call( thisArg, this[ i ], i, this );
+				}
+			};
+		}
+	}
+
+	/**
+	 * Triggers custom JS event.
+	 *
+	 * @since 5.5.3
+	 *
+	 * @param {HTMLElement} el        The HTML element.
+	 * @param {String}      eventName Event name.
+	 * @param {mixed}       data      The passed data.
+	 */
+	function triggerCustomEvent( el, eventName, data ) {
+		var event;
+
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventName );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventName, false, true );
+		} else {
+			return;
+		}
+
+		event.frmData = data;
+
+		el.dispatchEvent( event );
 	}
 
 	/* Get the ID of the field that changed*/
@@ -112,7 +163,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function disableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
 	}
@@ -123,7 +174,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function enableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
@@ -151,8 +202,9 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, rl, n, nl, fields, field, value, requiredFields,
-			errors = [];
+		var errors, r, rl, n, nl, fields, field, requiredFields;
+
+		errors = [];
 
 		// Make sure required text field is filled in
 		requiredFields = jQuery( object ).find(
@@ -172,28 +224,47 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				value = field.value;
-				if ( value !== '' ) {
-					if ( field.type === 'hidden' ) {
-						// don't validate
-					} else if ( field.type === 'number' ) {
-						errors = checkNumberField( field, errors );
-					} else if ( field.type === 'email' ) {
-						errors = checkEmailField( field, errors );
-					} else if ( field.type === 'password' ) {
-						errors = checkPasswordField( field, errors );
-					} else if ( field.type === 'url' ) {
-						errors = checkUrlField( field, errors );
-					} else if ( field.pattern !== null ) {
-						errors = checkPatternField( field, errors );
+				if ( '' === field.value ) {
+					if ( 'number' === field.type ) {
+						// A number field will return an empty string when it is invalid.
+						checkValidity( field, errors );
 					}
+					continue;
 				}
+
+				validateFieldValue( field, errors );
+				checkValidity( field, errors );
 			}
 		}
 
 		errors = validateRecaptcha( object, errors );
 
 		return errors;
+	}
+
+	/**
+	 * Check the ValidityState interface for the field.
+	 * If it is invalid, show an error for it.
+	 *
+	 * @param {HTMLElement} field
+	 * @param {Array} errors
+	 * @returns
+	 */
+	function checkValidity( field, errors ) {
+		var fieldID;
+		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
+			return;
+		}
+
+		fieldID = getFieldId( field, true );
+		if ( 'undefined' === typeof errors[ fieldID ]) {
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+
+		if ( 'function' === typeof field.reportValidity ) {
+			// This triggers an error pop up.
+			field.reportValidity();
+		}
 	}
 
 	/**
@@ -235,17 +306,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( errors.length < 1 ) {
-			if ( field.type === 'email' ) {
-				errors = checkEmailField( field, errors );
-			} else if ( field.type === 'password' ) {
-				errors = checkPasswordField( field, errors );
-			} else if ( field.type === 'number' ) {
-				errors = checkNumberField( field, errors );
-			} else if ( field.type === 'url' ) {
-				errors = checkUrlField( field, errors );
-			} else if ( field.pattern !== null ) {
-				errors = checkPatternField( field, errors );
-			}
+			validateFieldValue( field, errors );
 		}
 
 		removeFieldError( $fieldCont );
@@ -254,6 +315,27 @@ function frmFrontFormJS() {
 				addFieldError( $fieldCont, key, errors );
 			}
 		}
+	}
+
+	function validateFieldValue( field, errors ) {
+		if ( field.type === 'hidden' ) {
+			// don't validate
+		} else if ( field.type === 'number' ) {
+			checkNumberField( field, errors );
+		} else if ( field.type === 'email' ) {
+			checkEmailField( field, errors );
+		} else if ( field.type === 'password' ) {
+			checkPasswordField( field, errors );
+		} else if ( field.type === 'url' ) {
+			checkUrlField( field, errors );
+		} else if ( field.pattern !== null ) {
+			checkPatternField( field, errors );
+		}
+
+		triggerCustomEvent( document, 'frm_validate_field_value', {
+			field: field,
+			errors: errors
+		});
 	}
 
 	function checkRequiredField( field, errors ) {
@@ -373,7 +455,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkEmailField( field, errors ) {
@@ -386,12 +467,10 @@ function frmFrontFormJS() {
 		}
 
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function confirmField( field, errors ) {
@@ -427,7 +506,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkPatternField( field, errors ) {
@@ -444,7 +522,43 @@ function frmFrontFormJS() {
 				}
 			}
 		}
-		return errors;
+	}
+
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since 6.5.1
+	 */
+	function setSelectPlaceholderColor() {
+		var selects = document.querySelectorAll( '.form-field select' ),
+			styleElement = document.querySelector( '.with_frm_style' ),
+			textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '',
+			changeSelectColor;
+
+		// Exit if there are no select elements or the textColorDisabled property is missing
+		if ( ! selects.length || ! textColorDisabled ) {
+			return;
+		}
+
+		// Function to change the color of a select element
+		changeSelectColor = function( select ) {
+			if ( select.options[select.selectedIndex] && hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+				select.style.setProperty( 'color', textColorDisabled, 'important' );
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		// Use a loop to iterate through each select element
+		Array.prototype.forEach.call( selects, function( select ) {
+			// Apply the color change to each select element
+			changeSelectColor( select );
+
+			// Add an event listener for future changes
+			select.addEventListener( 'change', function() {
+				changeSelectColor( select );
+			});
+		});
 	}
 
 	function hasInvisibleRecaptcha( object ) {
@@ -533,7 +647,7 @@ function frmFrontFormJS() {
 	}
 
 	function getFormErrors( object, action ) {
-		var fieldset, data, success, error;
+		var fieldset, data, success, error, shouldTriggerEvent;
 
 		if ( typeof action === 'undefined' ) {
 			jQuery( object ).find( 'input[name="frm_action"]' ).val();
@@ -542,12 +656,19 @@ function frmFrontFormJS() {
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
+		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		success = function( response ) {
-			var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger,
-				defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
+			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
+				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
+
+			defaultResponse = {
+				content: '',
+				errors: {},
+				pass: false
+			};
+
 			if ( response === null ) {
 				response = defaultResponse;
 			}
@@ -560,15 +681,39 @@ function frmFrontFormJS() {
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
+				if ( shouldTriggerEvent ) {
+					triggerCustomEvent( object, 'frmSubmitEvent' );
+					return;
+				}
+
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-				window.location = response.redirect;
-			} else if ( response.content !== '' ) {
+
+				if ( ! response.openInNewTab ) {
+					// We return here because we're redirecting there is no need to update content.
+					window.location = response.redirect;
+					return;
+				}
+
+				// We don't return here because we're opening in a new tab, the old tab will still update.
+				newTab = window.open( response.redirect, '_blank' );
+				if ( ! newTab && response.fallbackMsg && response.content ) {
+					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				}
+			}
+
+			if ( response.content !== '' ) {
 				// the form or success message was returned
 
+				if ( shouldTriggerEvent ) {
+					triggerCustomEvent( object, 'frmSubmitEvent' );
+					return;
+				}
+
 				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) {
+				if ( frm_js.offset != -1 ) { // eslint-disable-line camelcase
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
+
 				formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
 				replaceContent = jQuery( object ).closest( '.frm_forms' );
@@ -607,7 +752,6 @@ function frmFrontFormJS() {
 				);
 			} else if ( Object.keys( response.errors ).length ) {
 				// errors were returned
-
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
 				//show errors
@@ -639,7 +783,7 @@ function frmFrontFormJS() {
 					}
 				}
 
-				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' ).each( function() {
+				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).each( function() {
 					var $recaptcha  = jQuery( this ),
 						recaptchaID = $recaptcha.data( 'rid' );
 
@@ -649,6 +793,9 @@ function frmFrontFormJS() {
 						} else {
 							grecaptcha.reset();
 						}
+					}
+					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
+						hcaptcha.reset();
 					}
 				});
 
@@ -683,7 +830,7 @@ function frmFrontFormJS() {
 	function postToAjaxUrl( form, data, success, error ) {
 		var ajaxUrl, action, ajaxParams;
 
-		ajaxUrl = frm_js.ajax_url;
+		ajaxUrl = frm_js.ajax_url; // eslint-disable-line camelcase
 		action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
@@ -771,7 +918,7 @@ function frmFrontFormJS() {
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
-		var input, id, describedBy;
+		var input, id, describedBy, roleString;
 		if ( $fieldCont.length && $fieldCont.is( ':visible' ) ) {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
@@ -786,18 +933,23 @@ function frmFrontFormJS() {
 						jsErrors[key]
 					);
 				} else {
-					$fieldCont.append( '<div class="frm_error" role="alert" id="' + id + '">' + jsErrors[key] + '</div>' );
+					roleString = frm_js.include_alert_role ? 'role="alert"' : ''; // eslint-disable-line camelcase
+					$fieldCont.append( '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[key] + '</div>' );
 				}
 
 				if ( typeof describedBy === 'undefined' ) {
 					describedBy = id;
-				} else if ( describedBy.indexOf( id ) === -1 ) {
-					describedBy = describedBy + ' ' + id;
+				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_' ) === -1 ) {
+					if ( input.data( 'error-first' ) === 0 ) {
+						describedBy = describedBy + ' ' + id;
+					} else {
+						describedBy = id + ' ' + describedBy;
+					}
 				}
+
 				input.attr( 'aria-describedby', describedBy );
 			}
 			input.attr( 'aria-invalid', true );
-			input.attr( 'aria-describedby', id );
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
@@ -929,12 +1081,12 @@ function frmFrontFormJS() {
 
 		jQuery.ajax({
 			type: 'POST',
-			url: frm_js.ajax_url,
+			url: frm_js.ajax_url, // eslint-disable-line camelcase
 			data: {
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
 				form_id: formId,
-				nonce: frm_js.nonce
+				nonce: frm_js.nonce // eslint-disable-line camelcase
 			},
 			success: function( msg ) {
 				var admin = document.getElementById( 'wpbody' );
@@ -974,30 +1126,7 @@ function frmFrontFormJS() {
 	 * Fallback functions
 	 *********************************************/
 
-	function addIndexOfFallbackForIE8() {
-		var len, from;
-
-		if ( ! Array.prototype.indexOf ) {
-			Array.prototype.indexOf = function( elt /*, from*/ ) {
-				len = this.length >>> 0;
-
-				from = Number( arguments[1]) || 0;
-				from = ( from < 0 ) ? Math.ceil( from ) : Math.floor( from );
-				if ( from < 0 ) {
-					from += len;
-				}
-
-				for ( ; from < len; from++ ) {
-					if ( from in this && this[from] === elt ) {
-						return from;
-					}
-				}
-				return -1;
-			};
-		}
-	}
-
-	function addTrimFallbackForIE8() {
+	function addTrimFallbackForIE() {
 		if ( typeof String.prototype.trim !== 'function' ) {
 			String.prototype.trim = function() {
 				return this.replace( /^\s+|\s+$/g, '' );
@@ -1005,7 +1134,7 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addFilterFallbackForIE8() {
+	function addFilterFallbackForIE() {
 		var t, len, res, thisp, i, val;
 
 		if ( ! Array.prototype.filter ) {
@@ -1038,24 +1167,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addKeysFallbackForIE8() {
-		var keys, i;
-
-		if ( ! Object.keys ) {
-			Object.keys = function( obj ) {
-				keys = [];
-
-				for ( i in obj ) {
-					if ( obj.hasOwnProperty( i ) ) {
-						keys.push( i );
-					}
-				}
-
-				return keys;
-			};
-		}
-	}
-
 	/**
 	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
 	 * If this is a match, the User is autofilling the input on a Webkit browser.
@@ -1068,15 +1179,44 @@ function frmFrontFormJS() {
 		}
 	}
 
+	function maybeMakeHoneypotFieldsUntabbable() {
+		document.addEventListener( 'keydown', handleKeyUp );
+
+		function handleKeyUp( event ) {
+			var code;
+
+			if ( 'undefined' !== typeof event.key ) {
+				code = event.key;
+			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
+				code = 'Tab';
+			}
+
+			if ( 'Tab' === code ) {
+				makeHoneypotFieldsUntabbable();
+				document.removeEventListener( 'keydown', handleKeyUp );
+			}
+		}
+
+		function makeHoneypotFieldsUntabbable() {
+			document.querySelectorAll( '.frm_verify' ).forEach(
+				function( input ) {
+					if ( input.id && 0 === input.id.indexOf( 'frm_email_' ) ) {
+						input.setAttribute( 'tabindex', -1 );
+					}
+				}
+			);
+		}
+	}
+
 	/**
 	 * Focus on the first sub field when clicking to the primary label of combo field.
 	 *
 	 * @since 4.10.02
 	 */
 	function changeFocusWhenClickComboFieldLabel() {
-		let label;
+		var label;
 
-		const comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
+		var comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
 		comboInputsContainer.forEach( function( inputsContainer ) {
 			if ( ! inputsContainer.closest( '.frm_form_field' ) ) {
 				return;
@@ -1095,6 +1235,10 @@ function frmFrontFormJS() {
 
 	function checkForErrorsAndMaybeSetFocus() {
 		var errors, element, timeoutCallback;
+
+		if ( ! frm_js.focus_first_error ) { // eslint-disable-line camelcase
+			return;
+		}
 
 		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
@@ -1131,8 +1275,257 @@ function frmFrontFormJS() {
 		} while ( element.previousSibling );
 	}
 
+	/**
+	 * Checks if is on IE browser.
+	 *
+	 * @since 5.4
+	 *
+	 * @return {Boolean}
+	 */
+	function isIE() {
+		return navigator.userAgent.indexOf( 'MSIE' ) > -1 || navigator.userAgent.indexOf( 'Trident' ) > -1;
+	}
+
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target && target.matches && target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
+	function initFloatingLabels() {
+		var checkFloatLabel, checkDropdownLabel, checkPlaceholderIE, runOnLoad, selector, floatClass;
+
+		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		floatClass = 'frm_label_float_top';
+
+		checkFloatLabel = function( input ) {
+			var container, shouldFloatTop, firstOpt;
+
+			container = input.closest( '.frm_inside_container' );
+			if ( ! container ) {
+				return;
+			}
+
+			shouldFloatTop = input.value || document.activeElement === input;
+
+			container.classList.toggle( floatClass, shouldFloatTop );
+
+			if ( 'SELECT' === input.tagName ) {
+				firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( shouldFloatTop ) {
+					if ( firstOpt.hasAttribute( 'data-label' ) ) {
+						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
+						firstOpt.removeAttribute( 'data-label' );
+					}
+				} else {
+					if ( firstOpt.textContent ) {
+						firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+						firstOpt.textContent = '';
+					}
+				}
+			} else if ( isIE() ) {
+				checkPlaceholderIE( input );
+			}
+		};
+
+		checkDropdownLabel = function() {
+			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
+				var firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
+				}
+			});
+		};
+
+		checkPlaceholderIE = function( input ) {
+			if ( input.value ) {
+				// Don't need to handle this case because placeholder isn't shown.
+				return;
+			}
+
+			if ( document.activeElement === input ) {
+				if ( input.hasAttribute( 'data-placeholder' ) ) {
+					input.placeholder = input.getAttribute( 'data-placeholder' );
+					input.removeAttribute( 'data-placeholder' );
+				}
+			} else {
+				if ( input.placeholder ) {
+					input.setAttribute( 'data-placeholder', input.placeholder );
+					input.placeholder = '';
+				}
+			}
+		};
+
+		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
+			documentOn(
+				eventName,
+				selector,
+				function( event ) {
+					checkFloatLabel( event.target );
+				},
+				true
+			);
+		});
+
+		jQuery( document ).on( 'change', selector, function( event ) {
+			checkFloatLabel( event.target );
+		});
+
+		runOnLoad = function( firstLoad ) {
+			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+				checkFloatLabel( document.activeElement );
+			} else if ( firstLoad ) {
+				document.querySelectorAll( '.frm_inside_container' ).forEach(
+					function( container ) {
+						var input = container.querySelector( 'input, select, textarea' );
+						if ( input && '' !== input.value ) {
+							checkFloatLabel( input );
+						}
+					}
+				);
+			}
+
+			checkDropdownLabel();
+
+			if ( isIE() ) {
+				document.querySelectorAll( selector ).forEach( function( input ) {
+					checkPlaceholderIE( input );
+				});
+			}
+		};
+
+		runOnLoad( true );
+
+		jQuery( document ).on( 'frmPageChanged', function( event ) {
+			runOnLoad();
+		});
+
+		document.addEventListener( 'frm_after_start_over', function( event ) {
+			runOnLoad();
+		});
+	}
+
+	function shouldUpdateValidityMessage( target ) {
+		if ( 'INPUT' !== target.nodeName ) {
+			return false;
+		}
+
+		if ( ! target.dataset.invmsg ) {
+			return false;
+		}
+
+		if ( 'text' !== target.getAttribute( 'type' ) ) {
+			return false;
+		}
+
+		if ( target.classList.contains( 'frm_verify' ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function maybeClearCustomValidityMessage( event, field ) {
+		var key,
+			isInvalid = false;
+
+		if ( ! shouldUpdateValidityMessage( field ) ) {
+			return;
+		}
+
+		for ( key in field.validity ) {
+			if ( 'customError' === key ) {
+				continue;
+			}
+			if ( 'valid' !== key && field.validity[ key ] === true ) {
+				isInvalid = true;
+				break;
+			}
+		};
+
+		if ( ! isInvalid ) {
+			field.setCustomValidity( '' );
+		}
+	}
+
+	function maybeShowNewTabFallbackMessage() {
+		var messageEl;
+
+		if ( ! window.frmShowNewTabFallback ) {
+			return;
+		}
+
+		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		if ( ! messageEl ) {
+			return;
+		}
+
+		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
+	}
+
+	function setCustomValidityMessage() {
+		var forms, length, index;
+
+		forms  = document.getElementsByClassName( 'frm-show-form' );
+		length = forms.length;
+
+		for ( index = 0; index < length; ++index ) {
+			forms[ index ].addEventListener(
+				'invalid',
+				function( event ) {
+					var target = event.target;
+
+					if ( shouldUpdateValidityMessage( target ) ) {
+						target.setCustomValidity( target.dataset.invmsg );
+					}
+				},
+				true
+			);
+		}
+	}
+
+	function enableSubmitButtonOnBackButtonPress() {
+		window.addEventListener( 'pageshow', function( event ) {
+			if ( event.persisted ) {
+				document.querySelectorAll( '.frm_loading_form' ).forEach(
+					function( form ) {
+						enableSubmitButton( jQuery( form ) );
+					}
+				);
+				removeSubmitLoading();
+			}
+		});
+	}
+
 	return {
 		init: function() {
+			maybeAddPolyfills();
+
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
@@ -1149,9 +1542,9 @@ function frmFrontFormJS() {
 			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
-			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
@@ -1161,11 +1554,23 @@ function frmFrontFormJS() {
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
 
-			// Add fallbacks for the beloved IE8
-			addIndexOfFallbackForIE8();
-			addTrimFallbackForIE8();
-			addFilterFallbackForIE8();
-			addKeysFallbackForIE8();
+			// Add fallbacks for IE.
+			addTrimFallbackForIE(); // Trim only works in IE10+.
+			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
+
+			initFloatingLabels();
+			maybeShowNewTabFallbackMessage();
+
+			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
+			setCustomValidityMessage();
+			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
+
+			setSelectPlaceholderColor();
+
+			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
+			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
+
+			enableSubmitButtonOnBackButtonPress();
 		},
 
 		getFieldId: function( field, fullID ) {
@@ -1350,10 +1755,10 @@ function frmFrontFormJS() {
 			removeSubmitLoading( $object, enable, processesRunning );
 		},
 
-        scrollToID: function( id ) {
-            var object = jQuery( document.getElementById( id ) );
-            frmFrontForm.scrollMsg( object, false );
-        },
+		scrollToID: function( id ) {
+			var object = jQuery( document.getElementById( id ) );
+			frmFrontForm.scrollMsg( object, false );
+		},
 
 		scrollMsg: function( id, object, animate ) {
 			var newPos, m, b, screenTop, screenBottom,
@@ -1371,10 +1776,10 @@ function frmFrontFormJS() {
 
 			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
-			if ( ! newPos || frm_js.offset === '-1' ) {
+			if ( ! newPos || frm_js.offset === '-1' ) { // eslint-disable-line camelcase
 				return;
 			}
-			newPos = newPos - frm_js.offset;
+			newPos = newPos - frm_js.offset; // eslint-disable-line camelcase
 
 			m = jQuery( 'html' ).css( 'margin-top' );
 			b = jQuery( 'body' ).css( 'margin-top' );
@@ -1479,7 +1884,9 @@ function frmFrontFormJS() {
 
 		visible: function( classes ) {
 			jQuery( classes ).css( 'visibility', 'visible' );
-		}
+		},
+
+		triggerCustomEvent: triggerCustomEvent
 	};
 }
 frmFrontForm = frmFrontFormJS();
@@ -1504,13 +1911,13 @@ function frmUpdateField( entryId, fieldId, value, message, num ) {
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
 			value: value,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
@@ -1527,11 +1934,11 @@ function frmDeleteEntry( entryId, prefix ) {
 	jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entryId + '"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_destroy',
 			entry: entryId,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function( html ) {
 			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
@@ -1554,12 +1961,12 @@ function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 	$link.append( '<span class="spinner" style="display:inline"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_send_email',
 			entry_id: entryId,
 			form_id: formId,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function( msg ) {
 			$link.replaceWith( msg );

@@ -60,7 +60,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
 							</span>
 							<?php } else { ?>
-							<span class="frm-nope">&#10008;</span>
+							<span class="frm-nope">
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon' ); ?>
+							</span>
 							<?php } ?>
 						</td>
 						<td class="<?php echo esc_attr( 'frm-checked' ); ?> frmcenter">

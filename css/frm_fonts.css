@@ -20,7 +20,7 @@
 .wp-media-buttons .button.frm_insert_form{padding-left:5px;}
 
 /* Upgrade notice */
-#frm_install_message, .frm_previous_install{padding:7px;}
+#frm_install_message{padding:7px;}
 .frm_deauthorize_link .spinner{
     display:inline-block;
     margin-top:0;

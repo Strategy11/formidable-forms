@@ -8,6 +8,7 @@ if ( ! isset( $saving ) ) {
 
 	if ( ! empty( $css ) ) {
 		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
 }
@@ -68,9 +69,11 @@ input:-webkit-autofill {
 <?php } ?>
 }
 
-form input.frm_verify{
-	position:absolute;
-	left:-3000px;
+form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
+	overflow: hidden;
+	width: 0;
+	height: 0;
+	position: absolute;
 }
 
 .with_frm_style fieldset{
@@ -86,7 +89,7 @@ form input.frm_verify{
 }
 
 .with_frm_style .frm_form_fields > fieldset{
-<?php if ( ! empty( $defaults['fieldset'] ) ) { ?>
+<?php if ( isset( $defaults['fieldset'] ) && ( $defaults['fieldset'] || '0' === $defaults['fieldset'] ) ) { ?>
 	border-width:<?php echo esc_html( $defaults['fieldset'] . $important ); ?>;
 	border-width:var(--fieldset)<?php echo esc_html( $important ); ?>;
 <?php } ?>
@@ -235,9 +238,6 @@ legend.frm_hidden{
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-<?php if ( ! empty( $important ) ) { ?>
-	background-image:none !important;
-<?php } ?>
 	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
@@ -264,6 +264,37 @@ legend.frm_hidden{
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( ! empty( $important ) ) { ?>
+.with_frm_style input[type=text],
+.with_frm_style input[type=password],
+.with_frm_style input[type=email],
+.with_frm_style input[type=number],
+.with_frm_style input[type=url],
+.with_frm_style input[type=tel],
+.with_frm_style input[type=phone],
+.with_frm_style input[type=search],
+.with_frm_style textarea,
+.frm_form_fields_style,
+.with_frm_style .frm_scroll_box .frm_opt_container,
+.frm_form_fields_active_style,
+.frm_form_fields_error_style,
+.with_frm_style .frm-card-element.StripeElement,
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single{
+	background-image:none !important;
+}
+<?php } ?>
+
+.with_frm_style select option {
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style select option.frm-select-placeholder {
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
@@ -287,8 +318,8 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
+	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
@@ -328,6 +359,7 @@ legend.frm_hidden{
 
 .with_frm_style .wp-editor-container textarea{
 	border:none<?php echo esc_html( $important ); ?>;
+	box-shadow:none !important;
 }
 
 .with_frm_style .mceIframeContainer{
@@ -339,6 +371,7 @@ legend.frm_hidden{
 	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
 	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
+	background-position-y: calc(50% + 3px);
 }
 
 .with_frm_style input[disabled],
@@ -435,17 +468,102 @@ legend.frm_hidden{
 	white-space:nowrap;
 }
 
-.with_frm_style .frm_inside_container .frm_primary_label{
-	opacity:0;
-	transition: opacity 0.1s linear;
-}
-
-.with_frm_style .frm_inside_container label.frm_visible,
 .frm_visible{
 	opacity:1;
 }
 
-.with_frm_style .frm_description{
+/* Floating labels */
+.with_frm_style .frm_inside_container {
+	position: relative;
+	padding-top: 16px;
+	padding-top: calc(0.5 * var(--field-height));
+}
+
+.with_frm_style .frm_inside_container > input,
+.with_frm_style .frm_inside_container > select,
+.with_frm_style .frm_inside_container > textarea {
+	display: block;
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container > input::-moz-placeholder,
+.with_frm_style .frm_inside_container > textarea::-moz-placeholder {
+	opacity: 0 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container > textarea:-ms-input-placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input::placeholder,
+.with_frm_style .frm_inside_container > textarea::placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > label {
+	transition: all 0.3s ease-in;
+
+	position: absolute;
+	top: 17px;
+	top: calc(1px + .5 * var(--field-height));
+	left: 3px;
+	width: 100%;
+
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
+	padding: 6px 10px;
+	padding: var(--field-pad);
+
+	font-size: 14px;
+	font-size: var(--field-font-size);
+	font-weight: normal;
+	font-weight: var(--field-weight);
+
+	-ms-pointer-events: none;
+	pointer-events: none;
+}
+
+.with_frm_style.frm_style_lines-no-boxes .frm_inside_container > label {
+	line-height: 1;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > label {
+	top: 0;
+	left: 0;
+	padding: 0;
+	font-size: 12px;
+	font-size: calc(0.85 * var(--field-font-size));
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container.frm_label_float_top > input::-moz-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::-moz-placeholder {
+	opacity: 1 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea:-ms-input-placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+/* End floating label */
+
+.with_frm_style .frm_description,
+.with_frm_style .frm_pro_max_limit_desc{
 	clear:both;
 }
 
@@ -679,7 +797,8 @@ a.frm_save_draft{
 	cursor:pointer;
 }
 
-.with_frm_style a.frm_save_draft{
+.with_frm_style a.frm_save_draft,
+.with_frm_style a.frm_start_over{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
@@ -777,7 +896,11 @@ a.frm_save_draft{
 	vertical-align:middle;
 }
 
-.with_frm_style .frm_radio input[type=radio]{
+.with_frm_style .frm_radio input[type=radio]
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+, .with_frm_style .frm_scale input[type=radio]
+<?php endif; ?>
+{
 	border-radius:50%;
 }
 
@@ -786,12 +909,15 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio],
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio],
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;
 	appearance: none;
 	background-color: var(--bg-color);
 	flex: none;
-	display:inline-block;
+	display:inline-block !important;
 	margin: 0 5px 0 0;
 	color: var(--border-color);
 	width: 18px;
@@ -805,6 +931,9 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:before,
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio]:before,
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:before {
 	content: '';
 	width: 12px;
@@ -1139,7 +1268,10 @@ select.frm_loading_lookup{
 
 .frm_grid .frm_error,
 .frm_grid_first .frm_error,
-.frm_grid_odd .frm_error{
+.frm_grid_odd .frm_error,
+.frm_grid .frm_limit_error,
+.frm_grid_first .frm_limit_error,
+.frm_grid_odd .frm_limit_error{
 	display:none;
 }
 
@@ -1474,9 +1606,24 @@ select.frm_loading_lookup{
 	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
 
-/* Fonts */
-<?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
-<?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-middle,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-last {
+	margin-bottom: 0 !important;
+}
+
+<?php
+FrmStylesHelper::maybe_include_font_icon_css();
+
+/**
+ * Call action so other plugins can add additional CSS.
+ *
+ * @param array $args {
+ *     @type array $defaults
+ * }
+ */
+do_action( 'frm_include_front_css', compact( 'defaults' ) );
+?>
 
 /* Responsive */
 
@@ -1533,4 +1680,4 @@ select.frm_loading_lookup{
 }
 <?php
 
-echo strip_tags( $defaults['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

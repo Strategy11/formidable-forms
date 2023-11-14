@@ -74,6 +74,18 @@ abstract class FrmFieldType {
 	 */
 	protected $is_tall = false;
 
+	/**
+	 * Does this type support array values (like a checkbox or a name field).
+	 *
+	 * @var bool
+	 * @since 6.2
+	 */
+	protected $array_allowed = true;
+
+	/**
+	 * @param object|array|int $field
+	 * @param string           $type
+	 */
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
@@ -152,8 +164,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 *
-	 * @return object|array
+	 * @return array|int|object
 	 */
 	public function get_field() {
 		return $this->field;
@@ -188,6 +199,16 @@ DEFAULT_HTML;
 		return '[input]';
 	}
 
+	/**
+	 * Creates a template for generating HTML containing multiple input fields enclosed in a div container.
+	 *
+	 * The placeholders [key] and [input] will be replaced dynamically during runtime.
+	 *
+	 * @see FrmFieldFormHtml->get_html() for the function handling the dynamic replacement.
+	 *
+	 * @return string The template HTML string for a div container with multiple input fields. This string is
+	 *                prepared for dynamic replacement of the placeholders [key], and [input].
+	 */
 	protected function multiple_input_html() {
 		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
 	}
@@ -398,6 +419,64 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Allows adding extra html attributes to field default value setting field.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $field
+	 *
+	 * @return void
+	 */
+	public function echo_field_default_setting_attributes( $field ) {}
+
+	/**
+	 * @param array $field
+	 * @param object $field_obj
+	 * @param array $default_value_types
+	 * @param array $display
+	 *
+	 * @return void
+	 */
+	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-setting.php';
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return void
+	 */
+	public function display_smart_values_modal_trigger_icon( $field ) {
+		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
+		FrmAppHelper::icon_by_class(
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			array(
+				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
+				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+			)
+		);
+	}
+
+	/**
+	 * @since 6.0
+	 *
+	 * @param array  $field
+	 * @param string $default_name
+	 * @param mixed  $default_value
+	 *
+	 * @return void
+	 */
+	public function show_default_value_field( $field, $default_name, $default_value ) {
+		if ( $field['type'] === 'rte' ) {
+			// This function is overwritten in Pro. This check is for backwards compatibility.
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
+	}
+
+	/**
 	 * @since 4.04
 	 */
 	protected function should_continue_to_field_options( $args ) {
@@ -471,8 +550,8 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
 			?>
-			<i class="frm_icon_font frm_arrowdown6_icon"></i>
 		</h3>
 		<?php
 	}
@@ -586,11 +665,21 @@ DEFAULT_HTML;
 		return $invalid;
 	}
 
+	/**
+	 * Get the default field name when a field is inserted into a form.
+	 *
+	 * @return string
+	 */
 	protected function get_new_field_name() {
-		$name = __( 'Untitled', 'formidable' );
+		$name       = __( 'Untitled', 'formidable' );
+		$fields     = FrmField::field_selection();
+		$pro_fields = FrmField::pro_field_selection();
 
-		$fields = FrmField::field_selection();
-		$fields = array_merge( $fields, FrmField::pro_field_selection() );
+		// As the credit card field is in Lite now, we want the name from the Lite array.
+		// The pro key would is still set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
 			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
@@ -599,10 +688,16 @@ DEFAULT_HTML;
 		return $name;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function new_field_settings() {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_default_field_options() {
 		$opts       = array(
 			'size'               => '',
@@ -632,6 +727,9 @@ DEFAULT_HTML;
 		return apply_filters( 'frm_default_field_options', $opts, $filter_args );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array();
 	}
@@ -678,6 +776,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @return void
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
@@ -688,6 +787,9 @@ DEFAULT_HTML;
 		$this->get_field_scripts_hook( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function get_field_scripts_hook( $args ) {
 		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
@@ -749,6 +851,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string $align
+	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
 		if ( 'inline' === $align ) {
@@ -758,6 +863,9 @@ DEFAULT_HTML;
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_label_class() {
 		return ' frm_primary_label';
 	}
@@ -766,6 +874,8 @@ DEFAULT_HTML;
 	 * Add classes to the input for output
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function add_input_class() {
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
@@ -787,6 +897,8 @@ DEFAULT_HTML;
 	 * Add extra classes on front-end input
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function get_input_class() {
 		return '';
@@ -812,6 +924,9 @@ DEFAULT_HTML;
 		return $input;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return '';
 	}
@@ -840,6 +955,9 @@ DEFAULT_HTML;
 		return $hidden . $input_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
@@ -885,6 +1003,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -1056,17 +1176,52 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
-		$describedby = '';
-		if ( $this->get_field_column( 'description' ) != '' ) {
-			$describedby = 'frm_desc_' . $args['html_id'];
+		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
+		if ( $aria_describedby_exists ) {
+			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
+		} else {
+			$describedby = array();
 		}
 
-		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
-			$describedby .= ' frm_error_' . $args['html_id'];
+		$error_comes_first = true;
+
+		$custom_error_fields = preg_grep( '/frm_error_field_*/', $describedby );
+		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
+
+		if ( $custom_desc_fields && $custom_error_fields ) {
+			reset( $custom_error_fields );
+			reset( $custom_desc_fields );
+			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
+				$error_comes_first = false;
+			}
 		}
 
-		if ( ! empty( $describedby ) ) {
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
+			if ( $error_comes_first ) {
+				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+			} else {
+				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+			}
+		}
+
+		if ( $this->get_field_column( 'description' ) !== '' ) {
+			if ( ! $error_comes_first ) {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			}
+		}
+
+		$describedby = implode( ' ', $describedby );
+
+		if ( $aria_describedby_exists ) {
+			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', 'aria-describedby="' . $describedby . '"', $input_html );
+		} elseif ( $describedby ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
+		}
+
+		if ( ! $error_comes_first ) {
+			$input_html .= ' data-error-first="0"';
 		}
 	}
 
@@ -1315,5 +1470,22 @@ DEFAULT_HTML;
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_with_html( $value );
+	}
+
+	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (including checkbox, name, address, credit_card, select, file, lookup, data, product).
+	 * If a type does not require it, $this->array_allowed = false can be set to avoid the unserialize call.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function maybe_decode_value( $value ) {
+		if ( $this->has_input && $this->array_allowed ) {
+			FrmAppHelper::unserialize_or_decode( $value );
+		}
+		return $value;
 	}
 }

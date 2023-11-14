@@ -54,6 +54,14 @@ class FrmTableHTMLGenerator {
 	protected $td_style = '';
 
 	/**
+	 * Used to add a class in tables. Set in Pro.
+	 *
+	 * @var bool
+	 * @since 5.4.2
+	 */
+	public $is_child = false;
+
+	/**
 	 * FrmTableHTMLGenerator constructor.
 	 *
 	 * @param string $type
@@ -75,6 +83,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_style_settings( $atts ) {
 		$style_settings       = array(
@@ -106,6 +115,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_use_inline_style( $atts ) {
 		if ( isset( $atts['inline_style'] ) && ! $atts['inline_style'] ) {
@@ -119,6 +129,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	private function init_direction( $atts ) {
 		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
@@ -130,6 +141,7 @@ class FrmTableHTMLGenerator {
 	 * Set the table_style property
 	 *
 	 * @since 2.04
+	 * @return void
 	 */
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
@@ -148,6 +160,7 @@ class FrmTableHTMLGenerator {
 	 * Set the td_style property
 	 *
 	 * @since 2.04
+	 * @return void
 	 */
 	private function init_td_style() {
 		if ( $this->use_inline_style === true ) {
@@ -230,6 +243,8 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
+	 *
+	 * @return void
 	 */
 	protected function switch_odd() {
 		if ( $this->type !== 'shortcode' ) {
@@ -271,9 +286,7 @@ class FrmTableHTMLGenerator {
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
 		$row = '<tr' . $this->tr_style();
-		if ( $value === '' ) {
-			$row .= ' class="frm-empty-row"';
-		}
+		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
 		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
@@ -304,12 +317,38 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_single_cell_table_row( $value ) {
-		$row = '<tr' . $this->tr_style() . '>';
+		$row = '<tr' . $this->tr_style();
+		$row .= $this->add_row_class();
+		$row .= '>';
 		$row .= '<td colspan="2"' . $this->td_style . '>' . $value . '</td>';
 		$row .= '</tr>' . "\r\n";
 
 		$this->switch_odd();
 
 		return $row;
+	}
+
+	/**
+	 * Add classes to the tr.
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param bool $empty If the value in the row is blank.
+	 *
+	 * @return string
+	 */
+	protected function add_row_class( $empty = false ) {
+		$class = '';
+		if ( $empty ) {
+			// Only add this class on two cell rows.
+			$class .= ' frm-empty-row';
+		}
+		if ( $this->is_child ) {
+			$class .= ' frm-child-row';
+		}
+		if ( $class ) {
+			$class = ' class="' . trim( $class ) . '"';
+		}
+		return $class;
 	}
 }

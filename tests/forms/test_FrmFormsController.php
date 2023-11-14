@@ -2,6 +2,7 @@
 
 /**
  * @group forms
+ * @group forms-controller
  */
 class test_FrmFormsController extends FrmUnitTest {
 
@@ -150,35 +151,141 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
+	private function create_on_submit_action( $form_id, $post_content ) {
+		$post_data = array(
+			'post_type'    => FrmFormActionsController::$action_post_type,
+			'menu_order'   => $form_id,
+			'post_excerpt' => FrmOnSubmitAction::$slug,
+			'post_status'  => 'publish',
+			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
+		);
+
+		return $this->factory->post->create_and_get( $post_data );
+	}
+
+	public function test_multiple_on_submit_actions() {
+		$test_page_id = $this->factory->post->create(
+			array(
+				'post_type'    => 'page',
+				'post_content' => 'Test page content',
+			)
+		);
+
+		$form_id = $this->factory->form->create();
+
+		$message_action = $this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'          => array( 'create' ),
+				'success_action' => 'message',
+				'success_msg'    => 'Done!',
+			)
+		);
+
+		$page_action = $this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'           => array( 'create', 'update' ),
+				'success_action'  => 'page',
+				'success_page_id' => $test_page_id,
+			)
+		);
+
+		$redirect_action_1 = $this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'          => array( 'create' ),
+				'success_action' => 'redirect',
+				'success_url'    => 'http://example.com',
+			)
+		);
+
+		$redirect_action_2 = $this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'          => array( 'create', 'update' ),
+				'success_action' => 'redirect',
+				'success_url'    => 'https://abc2.test',
+			)
+		);
+
+		// Update form object from cache.
+		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
+		$form = FrmForm::getOne( $form_id );
+
+		// Create entry.
+		$entry_key = 'submit-actions';
+		$response  = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertEmpty( $response );
+
+		$entry_id = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $entry_id, 'No entry found with key ' . $entry_key );
+
+		// Test get_met_on_submit_actions.
+		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ) );
+		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
+
+		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ), 'update' );
+		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
+
+		// Test the output.
+		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$contains = array(
+			'frmFrontForm.scrollMsg(' . $form->id . ')',
+			'Done!',
+			'window.location="http://example.com"',
+			'Test page content',
+		);
+		foreach ( $contains as $c ) {
+			$this->assertStringContainsString( $c, $response );
+		}
+	}
+
 	/**
 	 * Test redirect after create
 	 *
 	 * @covers FrmFormsController::redirect_after_submit
 	 */
 	public function test_redirect_after_create() {
-		$form = $this->factory->form->create_and_get(
+		$form_id  = $this->factory->form->create();
+		$field_id = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ) );
+
+		$this->create_on_submit_action(
+			$form_id,
 			array(
-				'options' => array(
-					'success_action' => 'redirect',
-					'success_url'    => 'http://example.com',
-				),
+				'event'          => array( 'create' ),
+				'success_action' => 'redirect',
+				'success_url'    => 'http://example.com?param=[' . $field_id . ']',
 			)
 		);
-		$this->assertEquals( $form->options['success_action'], 'redirect' );
+
+		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
+
+		$form = $this->factory->form->get_object_by_id( $form_id );
 
 		$entry_key = 'submit-redirect';
-		$response = $this->post_new_entry( $form, $entry_key );
+		$response  = $this->post_new_entry( $form, $entry_key );
 
-		if ( headers_sent() ) {
-			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
-		}
+		$created_entry_id = FrmEntry::get_id_by_key( $entry_key );
+		$this->assertNotEmpty( $created_entry_id, 'No entry found with key ' . $entry_key );
 
-		$created_entry = FrmEntry::get_id_by_key( $entry_key );
-		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
+		$entry        = FrmEntry::getOne( $created_entry_id, true );
+		$expected_url = 'http://example.com?param=' . $entry->metas[ $field_id ];
 
-		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
+		$this->assertTrue( headers_sent() );
+
+		// Since headers are sent by phpunit, we will get the js redirect.
+		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
+	}
+
+	/**
+	 * Trigger migration check and the flag.
+	 */
+	private function trigger_migrate_actions( $form_id ) {
+		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
 	}
 
 	/**
@@ -205,7 +312,22 @@ class test_FrmFormsController extends FrmUnitTest {
 				),
 			)
 		);
+
+		// Test default action.
 		$this->assertEquals( $form->options['success_action'], 'message' );
+
+		$this->create_on_submit_action(
+			$form->id,
+			array(
+				'event'          => array( 'create' ),
+				'success_action' => 'message',
+				'success_msg'    => 'Done!',
+				'show_form'      => $show_form,
+			)
+		);
+
+		// Update $form object after action is created.
+		wp_cache_delete( $form->id, 'frm_form' );
 
 		$entry_key = 'submit-message';
 		$response = $this->post_new_entry( $form, $entry_key );
@@ -238,5 +360,32 @@ class test_FrmFormsController extends FrmUnitTest {
 		ob_end_clean();
 
 		return $response;
+	}
+
+	public function test_redirect_in_new_tab() {
+		$form_id  = $this->factory->form->create();
+
+		$this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'           => array( 'create' ),
+				'success_action'  => 'redirect',
+				'success_url'     => 'http://example.com',
+				'open_in_new_tab' => 1,
+			)
+		);
+
+		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
+		$form = $this->factory->form->get_object_by_id( $form_id );
+
+		$entry_key = 'submit-redirect';
+		$response  = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertTrue( headers_sent() );
+
+		// Since headers are sent by phpunit, we will get the js redirect.
+		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
+		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
 	}
 }

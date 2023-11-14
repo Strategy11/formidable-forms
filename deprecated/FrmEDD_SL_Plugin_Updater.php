@@ -49,8 +49,6 @@ class FrmEDD_SL_Plugin_Updater {
 		/**
 		 * Fires after the $frm_edd_plugin_data is setup.
 		 *
-		 * @since x.x.x
-		 *
 		 * @param array $frm_edd_plugin_data Array of EDD SL plugin data.
 		 */
 		do_action( 'post_edd_sl_plugin_updater_setup', $frm_edd_plugin_data );
@@ -83,7 +81,8 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @uses api_request()
 	 *
 	 * @param array   $_transient_data Update array build by WordPress.
-	 * @return array Modified update array with custom plugin data.
+	 *
+	 * @return stdClass Modified update array with custom plugin data.
 	 */
 	public function check_update( $_transient_data ) {
 
@@ -213,7 +212,8 @@ class FrmEDD_SL_Plugin_Updater {
 	 *
 	 * @param array   $args
 	 * @param string  $url
-	 * @return object $array
+	 *
+	 * @return array $array
 	 */
 	public function http_request_args( $args, $url ) {
 

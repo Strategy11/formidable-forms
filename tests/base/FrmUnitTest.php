@@ -2,6 +2,13 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	/**
+	 * Track if an install has happened to avoid installing too often.
+	 *
+	 * @var bool
+	 */
+	protected static $installed = false;
+
 	protected $user_id = 0;
 
 	protected $contact_form_key = 'contact-with-email';
@@ -29,13 +36,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
-		global $wp_version;
-		if ( $wp_version <= 4.6 ) {
-			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
-			delete_option( 'frm_options' );
-			delete_option( 'frm_db_version' );
-		}
-
 		self::empty_tables();
 	}
 
@@ -54,11 +54,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 
-		$this->factory->form = new Form_Factory( $this );
+		$this->factory        = new FrmUnitTestFactory();
+		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->create_users();
 	}
 
 	/**
@@ -85,12 +84,30 @@ class FrmUnitTest extends WP_UnitTestCase {
 			define( 'WP_IMPORTING', false );
 		}
 
+		if ( self::$installed ) {
+			self::import_xml();
+			return;
+		}
+
+		$allow_xml_mime_types_function = function( $mimes ) {
+			$mimes['xml'] = 'application/xml';
+			return $mimes;
+		};
+
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter( 'mime_types', $allow_xml_mime_types_function );
+
+		if ( is_multisite() ) {
+			// Mimes get changed because of add_filter( 'upload_mimes', 'check_upload_mimes' ); in ms-default-filters.php (A WordPress file).
+			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
+		}
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
-
 		self::do_tables_exist();
 		self::import_xml();
 		self::create_files();
+		self::$installed = true;
 	}
 
 	public static function get_table_names() {
@@ -131,6 +148,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
 			return;
 		}
+
+		add_filter( 'frm_should_import_files', '__return_true' );
 
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
@@ -188,15 +207,24 @@ class FrmUnitTest extends WP_UnitTestCase {
 			),
 		);
 
-		$_REQUEST['csv_files'] = 1;
-		$uploads_dir           = wp_upload_dir()['basedir'] . '/formidable/';
-		$test                  = new FrmUnitTest();
+		$uploads_dir = wp_upload_dir()['basedir'] . '/formidable/';
+		$test        = new FrmUnitTest();
 		foreach ( $file_urls as $values ) {
 			$vals      = (array) $values['val'];
 			$media_ids = false;
 			foreach ( $vals as $val ) {
 				$filename = basename( $val );
 				$path     = $uploads_dir . $filename;
+
+				if ( ! file_exists( $path ) && is_object( $values['field'] ) ) {
+					// File may be in formidable folder or it may be in the form_id folder so check the form as well.
+					$form_id_path = $uploads_dir . $values['field']->form_id . '/' . $filename;
+					if ( file_exists( $form_id_path ) ) {
+						copy( $form_id_path, $path );
+					}
+					unset( $form_id_path );
+				}
+
 				if ( file_exists( $path ) ) {
 					if ( ! is_array( $media_ids ) ) {
 						$media_ids = array();
@@ -559,10 +587,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Create an administrator, editor, and subscriber
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
-	private function create_users() {
+	protected function create_users() {
 		$has_user = get_user_by( 'email', 'admin@mail.com' );
-		if ( ! empty( $has_user ) ) {
+		if ( $has_user ) {
 			return;
 		}
 
@@ -596,7 +626,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	protected function run_private_method( $method, $args = array() ) {
-		$this->check_php_version( '5.3' );
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
 		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
@@ -610,7 +639,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return ReflectionProperty
 	 */
 	protected function get_accessible_property( $object, $property ) {
-		$this->check_php_version( '5.3' );
 		$rc = new ReflectionClass( $object );
 		$p = $rc->getProperty( $property );
 		$p->setAccessible( true );
@@ -619,7 +647,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected function get_private_property( $object, $property ) {
 		$p = $this->get_accessible_property( $object, $property );
-		return $p->getValue( $object );
+		return $p->getValue( is_object( $object ) ? $object : null );
 	}
 
 	protected function set_private_property( $object, $property, $value ) {

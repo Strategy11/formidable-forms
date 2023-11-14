@@ -93,17 +93,11 @@ class FrmDb {
 	 * @param string|array $value
 	 * @param string $where
 	 * @param array $values
+	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
-		$key = trim( $key );
-
-		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
-			$k        = explode( ' ', $key );
-			$where    .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
-			$values[] = '%Y-%m-%d %H:%i:%s';
-		} else {
-			$where .= ' ' . $key;
-		}
+		$key    = trim( $key );
+		$where .= ' ' . $key;
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
 		$lowercase_key = end( $lowercase_key );
@@ -232,7 +226,7 @@ class FrmDb {
 	 *
 	 * @return string
 	 */
-	private static function generate_cache_key( $where, $args, $field, $type ) {
+	public static function generate_cache_key( $where, $args, $field, $type ) {
 		$cache_key = '';
 		$where     = FrmAppHelper::array_flatten( $where );
 		foreach ( $where as $key => $value ) {
@@ -623,6 +617,9 @@ class FrmDb {
 	 * Used when saving form actions and styles
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param array $settings
+	 * @return int|WP_Error
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
@@ -737,29 +734,5 @@ class FrmDb {
 
 			wp_cache_delete( 'cached_keys', $group );
 		}
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function upgrade() {
-		FrmDeprecated::upgrade();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function collation() {
-		return FrmDeprecated::collation();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function uninstall() {
-		FrmDeprecated::uninstall();
 	}
 }

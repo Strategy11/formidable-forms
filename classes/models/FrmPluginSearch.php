@@ -29,6 +29,8 @@ class FrmPluginSearch {
 	 * @param object $screen WP Screen object.
 	 *
 	 * @since 4.12
+	 *
+	 * @return void
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -47,6 +49,8 @@ class FrmPluginSearch {
 	 * @param object $result Plugin search results.
 	 * @param string $action unused.
 	 * @param object $args Search args.
+	 *
+	 * @return object
 	 */
 	public function inject_suggestion( $result, $action, $args ) {
 		// Looks like a search query; it's matching time.
@@ -83,6 +87,10 @@ class FrmPluginSearch {
 			'version'             => $addon_list[ $matching_addon ]['version'],
 		);
 
+		if ( ! empty( $addon_list[ $matching_addon ]['external'] ) ) {
+			unset( $overrides['name'] );
+		}
+
 		// Splice in the base addon data.
 		$inject = array_merge( $inject, $addon_list[ $matching_addon ], $overrides );
 
@@ -97,7 +105,10 @@ class FrmPluginSearch {
 	 *
 	 * @since 4.12
 	 *
-	 * @return int
+	 * @param array $addon_list
+	 * @param array $normalized_term
+	 *
+	 * @return int|null
 	 */
 	private function matching_addon( $addon_list, $normalized_term ) {
 		$matching_addon = null;
@@ -108,20 +119,15 @@ class FrmPluginSearch {
 				continue;
 			}
 
-			/*
-			* Does the site's current plan support the feature?
-			*/
-			$is_supported_by_plan = ! empty( $addon_opts['url'] );
-
 			if ( ! isset( $addon_opts['search_terms'] ) ) {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ', ' . $addon_opts['name'] );
+			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 
-			$matches = ! empty( array_intersect( $addon_terms, $normalized_term ) );
+			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
-			if ( $matches && $is_supported_by_plan ) {
+			if ( count( $matched_terms ) === count( $normalized_term ) ) {
 				$matching_addon = $addon_id;
 				break;
 			}
@@ -137,7 +143,8 @@ class FrmPluginSearch {
 	 */
 	private function get_addons() {
 		$api    = new FrmFormApi();
-		return $api->get_api_info();
+		$addons = $api->get_api_info();
+		return apply_filters( 'frm_plugin_search', $addons );
 	}
 
 	/**
@@ -189,6 +196,8 @@ class FrmPluginSearch {
 
 	/**
 	 * @since 4.12
+	 *
+	 * @return void
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
@@ -267,11 +276,12 @@ class FrmPluginSearch {
 	/**
 	 * @since 4.12
 	 *
+	 * @param string $terms
 	 * @return array
 	 */
 	private function search_to_array( $terms ) {
 		$terms = $this->sanitize_search_term( $terms );
-		return array_filter( explode( ',', $terms ) );
+		return array_filter( explode( ' ', $terms ) );
 	}
 
 	/**
@@ -279,6 +289,8 @@ class FrmPluginSearch {
 	 *
 	 * @param array $links Related links.
 	 * @param array $plugin Plugin result information.
+	 *
+	 * @return array
 	 */
 	public function insert_related_links( $links, $plugin ) {
 		if ( self::$slug !== $plugin['slug'] ) {
@@ -291,7 +303,6 @@ class FrmPluginSearch {
 		$links = array();
 		$is_installed = $this->is_installed( $plugin['plugin'] );
 		$is_active    = is_plugin_active( $plugin['plugin'] );
-		$has_access   = ! empty( $plugin['url'] );
 
 		// Plugin installed, active, feature not enabled; prompt to enable.
 		if ( ! $is_active && $is_installed ) {
@@ -334,18 +345,19 @@ class FrmPluginSearch {
 		return $links;
 	}
 
+	/**
+	 * @param string $plugin
+	 * @return bool
+	 */
 	protected function is_installed( $plugin ) {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$all_plugins = get_plugins();
-
+		$all_plugins = FrmAppHelper::get_plugins();
 		return isset( $all_plugins[ $plugin ] );
 	}
 
 	/**
 	 * Load the search scripts and CSS for PSH.
+	 *
+	 * @return void
 	 */
 	public function load_plugins_search_script() {
 		wp_enqueue_script( self::$slug, FrmAppHelper::plugin_url() . '/js/plugin-search.js', array(), FrmAppHelper::plugin_version(), true );

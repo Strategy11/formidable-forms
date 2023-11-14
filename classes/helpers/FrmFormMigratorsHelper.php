@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormMigratorsHelper {
 
+	/**
+	 * @return bool
+	 */
 	private static function is_dismissed( $form, $dismissed = null ) {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
@@ -17,6 +20,9 @@ class FrmFormMigratorsHelper {
 		return false;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function maybe_show_download_link() {
 		$forms = self::import_links();
 		foreach ( $forms as $form ) {
@@ -32,6 +38,8 @@ class FrmFormMigratorsHelper {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	public static function maybe_add_to_inbox() {
 		$inbox = new FrmInbox();
@@ -51,6 +59,9 @@ class FrmFormMigratorsHelper {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	private static function import_links() {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return array();
@@ -72,6 +83,9 @@ class FrmFormMigratorsHelper {
 		return $forms;
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	private static function importable_forms() {
 		return array(
 			'gf' => array(
@@ -110,6 +124,12 @@ class FrmFormMigratorsHelper {
 		<?php
 	}
 
+	/**
+	 * @param array  $install
+	 * @param string $label
+	 *
+	 * @return void
+	 */
 	private static function install_button( $install, $label = '' ) {
 		$primary = 'button-secondary frm-button-secondary ';
 
@@ -141,6 +161,9 @@ class FrmFormMigratorsHelper {
 		<?php
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function dismiss_migrator() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		$dismissed = get_option( 'frm_dismissed' );
@@ -154,6 +177,8 @@ class FrmFormMigratorsHelper {
 
 	/**
 	 * @deprecated 4.05
+	 *
+	 * @return void
 	 */
 	public static function notification_count() {
 		_deprecated_function( __METHOD__, '4.05' );

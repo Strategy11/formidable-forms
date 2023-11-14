@@ -3,11 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden frm_common_modal <?php echo esc_attr( $modal_class ); ?>" frm-page="create">
+<div id="frm_new_form_modal" class="frm_hidden frm-modal frm_common_modal <?php echo esc_attr( $modal_class ); ?>" frm-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
-			<div>
-				<div>
+			<div class="frm_modal_top">
+				<div class="frm-modal-title">
 					<span role="button" class="frm-modal-back" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
 						<svg class="frmsvg">
 							<use xlink:href="#frm_back"></use>
@@ -45,18 +45,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<p>
 						<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
 							<?php esc_html_e( 'Form Name', 'formidable' ); ?>
-						</label><br/>
+						</label>
 						<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
 					</p>
 
-					<p>
-						<label for="frm_template_desc" id="frm_new_desc" data-template="<?php esc_attr_e( 'Template Description', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Description', 'formidable' ); ?>">
-							<?php esc_html_e( 'Form Description', 'formidable' ); ?>
-						</label>
-						<span class="frm-sub-label"><?php esc_html_e( '(optional)', 'formidable' ); ?></span>
-						<br/>
-						<textarea name="template_desc" id="frm_template_desc" class="frm_long_input"></textarea>
-					</p>
+					<input type="hidden" name="template_desc" id="frm_template_desc" />
 					<input type="hidden" name="link" id="frm_link" value="" />
 					<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
 
@@ -72,7 +65,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php } ?>
 			<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-email-block">
-					<?php require $view_path . 'leave-email.php'; ?>
+					<?php
+					FrmAppController::api_email_form(
+						'freetemplates',
+						__( 'Get 10+ Free Form Templates', 'formidable' ),
+						__( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' )
+					);
+					?>
 				</div>
 			<?php } ?>
 			<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>
@@ -151,13 +150,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
 	?>
 	<div id="frm-hover-icons-template" class="frm-hover-icons">
 		<a role="button" href="#" class="frm-delete-form" aria-label="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>">
 			<svg class="frmsvg">
-				<use xlink:href="#frm_delete_solid_icon"></use>
+				<use xlink:href="#frm_delete_icon"></use>
 			</svg>
 		</a><a role="button" href="#" class="frm-preview-form" aria-label="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>">
 			<svg class="frmsvg">

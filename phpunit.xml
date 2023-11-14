@@ -26,7 +26,6 @@
 			<exclude>
 				<directory suffix=".php">./classes/views</directory>
 				<directory suffix=".php">./deprecated</directory>
-				<file>deprecated.php</file>
 			</exclude>
 		</whitelist>
 	</filter>

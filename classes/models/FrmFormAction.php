@@ -35,7 +35,8 @@ class FrmFormAction {
 	/**
 	 * Echo the settings update form
 	 *
-	 * @param array $instance Current settings
+	 * @param WP_Post $instance Current settings
+	 * @param array   $args
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -50,6 +51,9 @@ class FrmFormAction {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_switch_fields() {
 		return array();
 	}
@@ -94,6 +98,7 @@ class FrmFormAction {
 			'tooltip'     => $name,
 			'group'       => $id_base,
 			'color'       => '',
+			'keywords'    => '',
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
@@ -106,7 +111,7 @@ class FrmFormAction {
 			$action_options['color'] = 'var(--' . reset( $colors ) . ')';
 		}
 
-		$upgrade_class = $action_options['classes'] === 'frm_show_upgrade';
+		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
@@ -198,13 +203,18 @@ class FrmFormAction {
 		return $field_name . '_' . $this->number;
 	}
 
-	// Private Function. Don't worry about this.
-
+	/**
+	 * @param int|string $number
+	 * @return void
+	 */
 	public function _set( $number ) {
 		$this->number = $number;
 		$this->id     = $this->id_base . '-' . $number;
 	}
 
+	/**
+	 * @return object
+	 */
 	public function prepare_new( $form_id = false ) {
 		if ( $form_id ) {
 			$this->form_id = $form_id;
@@ -243,6 +253,9 @@ class FrmFormAction {
 		return $this->save_settings( $action );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
@@ -280,6 +293,9 @@ class FrmFormAction {
 		return $post_id;
 	}
 
+	/**
+	 * @param object $action
+	 */
 	public function duplicate_one( $action, $form_id ) {
 		global $frm_duplicate_ids;
 
@@ -384,7 +400,6 @@ class FrmFormAction {
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
-
 			$instance = $this->update( $new_instance, $old_instance );
 
 			/**
@@ -421,17 +436,23 @@ class FrmFormAction {
 	 * If the status of the action has changed, update it
 	 *
 	 * @since 3.04
+	 *
+	 * @param array          $new_instance
+	 * @param stdClass|array $old_instance
+	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
-		if ( $new_instance['post_status'] !== $old_instance->post_status ) {
-			self::clear_cache();
-			wp_update_post(
-				array(
-					'ID'          => $new_instance['ID'],
-					'post_status' => $new_instance['post_status'],
-				)
-			);
+		if ( ! is_object( $old_instance ) || $new_instance['post_status'] === $old_instance->post_status ) {
+			return;
 		}
+
+		self::clear_cache();
+		wp_update_post(
+			array(
+				'ID'          => $new_instance['ID'],
+				'post_status' => $new_instance['post_status'],
+			)
+		);
 	}
 
 	public function save_settings( $settings ) {
@@ -503,8 +524,11 @@ class FrmFormAction {
 
 	/**
 	 * @since 3.04
+	 *
 	 * @param array  $args
 	 * @param string $default_status
+	 *
+	 * @return void
 	 */
 	protected static function prepare_get_action( &$args, $default_status = 'publish' ) {
 		if ( is_numeric( $args ) ) {
@@ -544,7 +568,12 @@ class FrmFormAction {
 	}
 
 	public function get_all( $form_id = false, $atts = array() ) {
+		if ( is_array( $atts ) && ! isset( $atts['limit'] ) && $this->action_options['limit'] > 99 ) {
+			$atts['limit'] = $this->action_options['limit'];
+		}
+
 		self::prepare_get_action( $atts, 'any' );
+
 		$limit = $atts['limit'];
 
 		if ( $form_id ) {
@@ -588,6 +617,9 @@ class FrmFormAction {
 		return $settings;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function action_args( $form_id = 0, $limit = 99 ) {
 		$args = array(
 			'post_type'   => FrmFormActionsController::$action_post_type,
@@ -604,6 +636,9 @@ class FrmFormAction {
 		return $args;
 	}
 
+	/**
+	 * @param WP_Post|array $action
+	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
 		$action->post_excerpt = sanitize_title( $action->post_excerpt );
@@ -615,7 +650,7 @@ class FrmFormAction {
 
 		foreach ( $default_values as $k => $vals ) {
 			if ( is_array( $vals ) && ! empty( $vals ) ) {
-				if ( 'event' == $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
 				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
@@ -629,6 +664,9 @@ class FrmFormAction {
 		return $action;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function destroy( $form_id = false, $type = 'default' ) {
 		global $wpdb;
 
@@ -654,6 +692,8 @@ class FrmFormAction {
 	 * Delete the action cache when a form action is created, deleted, or updated
 	 *
 	 * @since 2.0.5
+	 *
+	 * @return void
 	 */
 	public static function clear_cache() {
 		FrmDb::cache_delete_group( 'frm_actions' );
@@ -663,6 +703,9 @@ class FrmFormAction {
 		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_global_defaults() {
 		$defaults = $this->get_defaults();
 
@@ -782,9 +825,12 @@ class FrmFormAction {
 	 * Prepare the logic value for comparison against the entered value
 	 *
 	 * @since 2.01.02
+	 *
 	 * @deprecated 4.06.02
 	 *
 	 * @param array|string $logic_value
+	 *
+	 * @return void
 	 */
 	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
 		if ( is_array( $logic_value ) ) {
@@ -834,6 +880,11 @@ class FrmFormAction {
 		return $observed_value;
 	}
 
+	/**
+	 * @param string $class
+	 *
+	 * @return array
+	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
 			'classes' => 'frm_icon_font ' . $class,
@@ -854,6 +905,9 @@ class FrmFormAction {
 		return apply_filters( 'frm_action_triggers', $triggers );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function render_conditional_logic_call_to_action() {
 		?>
 			<h3>
@@ -864,6 +918,9 @@ class FrmFormAction {
 		<?php
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function get_upgrade_text() {
 		return __( 'Conditional form actions', 'formidable' );
 	}

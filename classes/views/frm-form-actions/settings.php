@@ -45,7 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				$displayed_actions[] = $action_control->id_base;
 				FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
-				unset( $actions_icon, $classes );
 			}
 
 			foreach ( $group['actions'] as $action ) {
@@ -61,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$icon_atts = array();
 								if ( isset( $group['color'] ) ) {
 									$icon_atts = array(
-										'style' => '--primary-hover:' . $group['color'],
+										'style' => '--primary-700:' . $group['color'],
 									);
 								}
 								FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );

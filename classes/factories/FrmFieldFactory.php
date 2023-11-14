@@ -49,6 +49,11 @@ class FrmFieldFactory {
 		return $field_info;
 	}
 
+	/**
+	 * @param int|string|object $field
+	 *
+	 * @return stdClass
+	 */
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
 			$field = FrmField::getOne( $field );
@@ -85,21 +90,22 @@ class FrmFieldFactory {
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
-			'text'     => 'FrmFieldText',
-			'textarea' => 'FrmFieldTextarea',
-			'select'   => 'FrmFieldSelect',
-			'radio'    => 'FrmFieldRadio',
-			'checkbox' => 'FrmFieldCheckbox',
-			'number'   => 'FrmFieldNumber',
-			'phone'    => 'FrmFieldPhone',
-			'url'      => 'FrmFieldUrl',
-			'website'  => 'FrmFieldUrl',
-			'email'    => 'FrmFieldEmail',
-			'user_id'  => 'FrmFieldUserID',
-			'html'     => 'FrmFieldHTML',
-			'hidden'   => 'FrmFieldHidden',
-			'captcha'  => 'FrmFieldCaptcha',
-			'name'     => 'FrmFieldName',
+			'text'        => 'FrmFieldText',
+			'textarea'    => 'FrmFieldTextarea',
+			'select'      => 'FrmFieldSelect',
+			'radio'       => 'FrmFieldRadio',
+			'checkbox'    => 'FrmFieldCheckbox',
+			'number'      => 'FrmFieldNumber',
+			'phone'       => 'FrmFieldPhone',
+			'url'         => 'FrmFieldUrl',
+			'website'     => 'FrmFieldUrl',
+			'email'       => 'FrmFieldEmail',
+			'user_id'     => 'FrmFieldUserID',
+			'html'        => 'FrmFieldHTML',
+			'hidden'      => 'FrmFieldHidden',
+			'captcha'     => 'FrmFieldCaptcha',
+			'name'        => 'FrmFieldName',
+			'credit_card' => 'FrmFieldCreditCard',
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
@@ -119,6 +125,8 @@ class FrmFieldFactory {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $property
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );

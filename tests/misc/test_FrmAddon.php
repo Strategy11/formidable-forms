@@ -10,7 +10,6 @@ class test_FrmAddon extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->check_php_version( '5.4' );
 		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )
 							->setMethods( null )
 							->getMock();
@@ -81,6 +80,30 @@ class test_FrmAddon extends FrmUnitTest {
 			$should_run = $this->run_private_method( array( $this->addon, 'is_time_to_auto_activate' ) );
 			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
 
+		}
+	}
+
+	/**
+	 * @covers FrmAddon::update_pro_capabilities
+	 */
+	public function test_update_pro_capabilities() {
+		// Remove the roles first so we're not getting false positives for data that already exists prior to running FrmAddon::update_pro_capabilities.
+		$caps       = array_keys( FrmAppHelper::frm_capabilities( 'pro_only' ) );
+		$admin_role = get_role( 'administrator' );
+		foreach ( $caps as $cap ) {
+			$admin_role->remove_cap( $cap );
+		}
+
+		$this->run_private_method( array( $this->addon, 'update_pro_capabilities' ) );
+
+		// The global $wp_roles object stores an internal role_objects array.
+		// We need to reset the $wp_roles object in order to avoid stale WP_Role capabilities.
+		global $wp_roles;
+		$wp_roles = new WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+
+		$admin_role = get_role( 'administrator' );
+		foreach ( $caps as $cap ) {
+			$this->assertTrue( $admin_role->has_cap( $cap ) );
 		}
 	}
 }

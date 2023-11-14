@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ); ?></p>
 		<br/>
-		<form enctype="multipart/form-data" method="post">
+		<form enctype="multipart/form-data" method="post" class="frm-fields">
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
 
 		<?php do_action( 'frm_import_settings' ); ?>
-		<br/><br/>
+
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<div class="frm-table-box">
-			<p class="alignleft" style="margin-bottom:0;">
+			<p class="alignleft frm-mb-sm">
 				<label class="xml_opts">
 					<?php esc_html_e( 'Select Form(s)', 'formidable' ); ?>
 				</label>
@@ -111,10 +111,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 			?>
 			<div class="frm-scroll-box">
-				<table class="widefat striped frm-border frm_no_top_margin">
+				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
-							<td class="column-cb check-column"></td>
+							<td class="column-cb check-column">
+								<label class="screen-reader-text" for="frm-export-select-all"><?php esc_html_e( 'Select All', 'formidable' ); ?></label>
+								<input id="frm-export-select-all" type="checkbox">
+							</td>
 							<td><?php esc_html_e( 'Form Title', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'Type', 'formidable' ); ?></td>
@@ -124,7 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</thead>
 					<tbody>
 						<?php foreach ( $forms as $form ) { ?>
-							<tr class="frm-row">
+							<tr class="frm-row <?php echo ! empty( $form->parent_form_id ) ? esc_attr( 'frm-is-repeater' ) : ''; ?>">
 								<td>
 									<input type="checkbox" name="frm_export_forms[]" value="<?php echo esc_attr( $form->id ); ?>" id="export_form_<?php echo esc_attr( $form->id ); ?>" />
 								</td>

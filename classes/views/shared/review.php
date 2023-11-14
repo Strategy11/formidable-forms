@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<br/>
 			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
 		</p>
-		<a href="#" class="frm_reverse_button frm_animate_bg show-frm-feedback frm-button-secondary" data-link="feedback">
+		<a href="#" class="show-frm-feedback button frm-button-secondary" data-link="feedback">
 			<?php esc_html_e( 'Not Really', 'formidable' ); ?>
 		</a>
-		<a href="#" class="frm_animate_bg show-frm-feedback frm-button-primary" data-link="review">
+		<a href="#" class="show-frm-feedback button frm-button-primary" data-link="review">
 			<?php esc_html_e( 'Yes!', 'formidable' ); ?>
 		</a>
 	</div>
@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p>- Steph Wells<br/>
 			<span><?php esc_html_e( 'Co-Founder and CTO of Formidable Forms', 'formidable' ); ?><span>
 		</p>
-		<a href="#" class="frm-dismiss-review-notice frm_reverse_button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
+		<a href="#" class="frm-dismiss-review-notice button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'No thanks, maybe later', 'formidable' ); ?>
 		</a>
-		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out frm-button-primary" data-link="yes" target="_blank" rel="noopener">
+		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-primary" data-link="yes" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Ok, you deserve it', 'formidable' ); ?>
 		</a>
 		<br/>
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-feedback-request frm_hidden">
 		<p><?php esc_html_e( 'Sorry to hear you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
 
-		<div id="frmapi-feedback" class="frmapi-form" data-url="https://community.formidableforms.com/wp-json/frm/v2/forms/feedback?return=html">
+		<div id="frmapi-feedback" class="frmapi-form" data-url="https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/feedback?return=html&exclude_script=jquery&exclude_style=formidable-css">
 			<span class="frm-wait frm_visible_spinner"></span>
 		</div>
 	</div>
@@ -89,8 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			url:frmcont.data('url'),
 			success:function(json){
 				var form = json.renderedHtml;
-				form = form.replace(/<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-				form = form.replace(/<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
+				form = form.replace(/<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 				frmcont.html(form);
 			}
 		});

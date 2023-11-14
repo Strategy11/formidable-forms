@@ -9,49 +9,26 @@
 	<projectFiles>
 		<file name="formidable.php" />
 		<directory name="classes" />
+		<directory name="stripe" />
+		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
-			<directory name="classes/views/" />
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
 		<file name="vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
-		<file name="psalm.stubs.php" />
+		<file name="stubs.php" />
 	</stubs>
 	<issueHandlers>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="FrmProDisplaysController" />
-				<referencedClass name="FrmProAppHelper" />
-				<referencedClass name="FrmProEntryMetaHelper" />
-				<referencedClass name="FrmProFormActionsController" />
-				<referencedClass name="FrmProFieldValue" />
-				<referencedClass name="FrmViewsLayout" />
-				<referencedClass name="FrmProDisplaysHelper" />
-				<referencedClass name="FrmProAddonsController" />
-				<referencedClass name="FrmProDb" />
-				<referencedClass name="FrmProSettings" />
-				<referencedClass name="FrmProEntryShortcodeFormatter" />
-				<referencedClass name="FrmProStylesController" />
-				<referencedClass name="FrmDeprecated" />
-				<referencedClass name="FrmProEntriesController" />
-				<referencedClass name="FrmProFormsHelper" />
-				<referencedClass name="FrmProEntry" />
-				<referencedClass name="WPMailSMTP\Options" />
-				<referencedClass name="Akismet" />
-				<referencedClass name="PHPMailer" />
-				<referencedClass name="FrmProEntryFormatter" />
-				<referencedClass name="FrmProEntriesHelper" />
-				<referencedClass name="FrmProFormsController" />
-				<referencedClass name="FrmViewsAppHelper" />
-				<referencedClass name="Elementor\Plugin" />
 				<referencedClass name="FrmElementorWidget" />
-				<referencedClass name="FrmFormDeprecated" />
 			</errorLevel>
 		</UndefinedClass>
 		<InvalidGlobal>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 			</errorLevel>
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
@@ -64,10 +41,76 @@
 				<referencedFunction name="WP_Optimize" />
 				<referencedFunction name="bp_core_email_from_address_filter" />
 				<referencedFunction name="bp_core_email_from_name_filter" />
-				<referencedFunction name="wp_mail_smtp" />
 				<referencedFunction name="__autoload" />
-				<referencedFunction name="akismet_test_mode" />
 			</errorLevel>
 		</UndefinedFunction>
+		<MissingFile>
+			<errorLevel type="suppress">
+				<file name="formidable.php" />
+			</errorLevel>
+		</MissingFile>
+		<InvalidParamDefault>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+			</errorLevel>
+		</InvalidParamDefault>
+		<MethodSignatureMustProvideReturnType>
+			<errorLevel type="suppress">
+				<file name="classes/widgets/FrmShowForm.php" />
+			</errorLevel>
+		</MethodSignatureMustProvideReturnType>
+		<!-- Add exceptions for classes/views files. -->
+		<UndefinedGlobalVariable>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UndefinedGlobalVariable>
+		<UndefinedAttributeClass>
+			<errorLevel type="suppress">
+				<referencedClass name="AllowDynamicProperties"/>
+			</errorLevel>
+		</UndefinedAttributeClass>
+		<UndefinedVariable>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</UndefinedVariable>
+		<NonStaticSelfCall>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</NonStaticSelfCall>
+		<NullReference>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</NullReference>
+		<InvalidScope>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidScope>
+		<InaccessibleMethod>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</InaccessibleMethod>
+		<ParadoxicalCondition>
+			<errorLevel type="suppress">
+				<file name="classes/views/frm-form-actions/_action_inside.php" />
+			</errorLevel>
+		</ParadoxicalCondition>
+		<ParamNameMismatch>
+			<errorLevel type="suppress">
+				<file name="classes/views/frm-form-actions/email_action.php" />
+			</errorLevel>
+		</ParamNameMismatch>
+		<UndefinedAttributeClass>
+			<errorLevel type="suppress">
+				<referencedClass name="AllowDynamicProperties" />
+			</errorLevel>
+		</UndefinedAttributeClass>
 	</issueHandlers>
 </psalm>

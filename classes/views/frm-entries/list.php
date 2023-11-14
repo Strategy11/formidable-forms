@@ -2,19 +2,25 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$pro_is_installed           = FrmAppHelper::pro_is_installed();
+$should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'frm_create_entries' );
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
-	<?php if ( $form ) { ?>
-	<div class="frm_page_container">
-	<?php } ?>
-
 		<?php
+		// Adding new entries from an admin page is a Pro feature.
 		FrmAppHelper::get_admin_header(
 			array(
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
-				'import_link' => $form ? false : true,
+				'import_link' => $pro_is_installed,
+				'publish'     => ! $should_show_add_new_button ? true : array(
+					'FrmAppHelper::add_new_item_link',
+					array(
+						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
+					),
+				),
 			)
 		);
 		?>
@@ -23,18 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $form ) { ?>
 				<h2>
 					<?php esc_html_e( 'Form Entries', 'formidable' ); ?>
-					<?php
-					FrmAppHelper::add_new_item_link(
-						array(
-							'new_link' => FrmAppHelper::maybe_full_screen_link( admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ) ),
-						)
-					);
-					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
-						<?php esc_html_e( 'Import', 'formidable' ); ?>
-					</a>
 				</h2>
-				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+				<?php if ( ! $pro_is_installed ) { ?>
 				<div class="clear"></div>
 				<?php } ?>
 			<?php } ?>
@@ -49,12 +45,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmTipsHelper::pro_tip( 'get_entries_tip', 'p' ); ?>
 
 				<div class="clear"></div>
-				<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+				<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 				<?php $wp_list_table->display(); ?>
 			</form>
 			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 		</div>
-	<?php if ( $form ) { ?>
-	</div>
-	<?php } ?>
 </div>
