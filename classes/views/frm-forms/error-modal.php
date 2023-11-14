@@ -50,6 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					modalElement.parentElement.classList.remove( 'ui-widget', 'ui-corner-all', 'ui-widget-content' );
 					modalElement.classList.remove( 'ui-widget-content', 'ui-dialog-content' );
+					document.querySelector( '.frm_modal_top a' )?.blur();
 				}
 			});
 		}
