@@ -260,6 +260,18 @@ class FrmXMLHelper {
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
 
+		/**
+		 * @since x.x
+		 * @param array $args
+		 */
+		do_action(
+			'frm_after_xml_imported',
+			array(
+				'imported'    => $imported,
+				'child_forms' => $child_forms,
+			)
+		);
+
 		return $imported;
 	}
 
