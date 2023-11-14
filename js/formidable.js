@@ -202,8 +202,9 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, rl, n, nl, fields, field, value, requiredFields,
-			errors = [];
+		var errors, r, rl, n, nl, fields, field, requiredFields;
+
+		errors = [];
 
 		// Make sure required text field is filled in
 		requiredFields = jQuery( object ).find(
@@ -223,15 +224,47 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				if ( '' !== field.value ) {
-					validateFieldValue( field, errors );
+				if ( '' === field.value ) {
+					if ( 'number' === field.type ) {
+						// A number field will return an empty string when it is invalid.
+						checkValidity( field, errors );
+					}
+					continue;
 				}
+
+				validateFieldValue( field, errors );
+				checkValidity( field, errors );
 			}
 		}
 
 		errors = validateRecaptcha( object, errors );
 
 		return errors;
+	}
+
+	/**
+	 * Check the ValidityState interface for the field.
+	 * If it is invalid, show an error for it.
+	 *
+	 * @param {HTMLElement} field
+	 * @param {Array} errors
+	 * @returns
+	 */
+	function checkValidity( field, errors ) {
+		var fieldID;
+		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
+			return;
+		}
+
+		fieldID = getFieldId( field, true );
+		if ( 'undefined' === typeof errors[ fieldID ]) {
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+
+		if ( 'function' === typeof field.reportValidity ) {
+			// This triggers an error pop up.
+			field.reportValidity();
+		}
 	}
 
 	/**
@@ -489,6 +522,43 @@ function frmFrontFormJS() {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since 6.5.1
+	 */
+	function setSelectPlaceholderColor() {
+		var selects = document.querySelectorAll( '.form-field select' ),
+			styleElement = document.querySelector( '.with_frm_style' ),
+			textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '',
+			changeSelectColor;
+
+		// Exit if there are no select elements or the textColorDisabled property is missing
+		if ( ! selects.length || ! textColorDisabled ) {
+			return;
+		}
+
+		// Function to change the color of a select element
+		changeSelectColor = function( select ) {
+			if ( select.options[select.selectedIndex] && hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+				select.style.setProperty( 'color', textColorDisabled, 'important' );
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		// Use a loop to iterate through each select element
+		Array.prototype.forEach.call( selects, function( select ) {
+			// Apply the color change to each select element
+			changeSelectColor( select );
+
+			// Add an event listener for future changes
+			select.addEventListener( 'change', function() {
+				changeSelectColor( select );
+			});
+		});
 	}
 
 	function hasInvisibleRecaptcha( object ) {
@@ -1129,9 +1199,8 @@ function frmFrontFormJS() {
 
 		function makeHoneypotFieldsUntabbable() {
 			document.querySelectorAll( '.frm_verify' ).forEach(
-				function( wrapper ) {
-					var input = wrapper.querySelector( 'input[id^=frm_email]' );
-					if ( input ) {
+				function( input ) {
+					if ( input.id && 0 === input.id.indexOf( 'frm_email_' ) ) {
 						input.setAttribute( 'tabindex', -1 );
 					}
 				}
@@ -1440,6 +1509,19 @@ function frmFrontFormJS() {
 		}
 	}
 
+	function enableSubmitButtonOnBackButtonPress() {
+		window.addEventListener( 'pageshow', function( event ) {
+			if ( event.persisted ) {
+				document.querySelectorAll( '.frm_loading_form' ).forEach(
+					function( form ) {
+						enableSubmitButton( jQuery( form ) );
+					}
+				);
+				removeSubmitLoading();
+			}
+		});
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1482,6 +1564,13 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
 			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
+
+			setSelectPlaceholderColor();
+
+			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
+			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
+
+			enableSubmitButtonOnBackButtonPress();
 		},
 
 		getFieldId: function( field, fullID ) {
@@ -1795,7 +1884,9 @@ function frmFrontFormJS() {
 
 		visible: function( classes ) {
 			jQuery( classes ).css( 'visibility', 'visible' );
-		}
+		},
+
+		triggerCustomEvent: triggerCustomEvent
 	};
 }
 frmFrontForm = frmFrontFormJS();

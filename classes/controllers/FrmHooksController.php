@@ -106,6 +106,9 @@ class FrmHooksController {
 		// Elementor.
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
+
+		FrmTransLiteHooksController::load_hooks();
+		FrmStrpLiteHooksController::load_hooks();
 	}
 
 	/**
@@ -188,6 +191,8 @@ class FrmHooksController {
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 
+		FrmTransLiteHooksController::load_admin_hooks();
+		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();

@@ -1,9 +1,9 @@
 <?php
 
-class test_FrmSerialziedStringParserHelper extends FrmUnitTest {
+class test_FrmSerializedStringParserHelper extends FrmUnitTest {
 
 	/**
-	 * @covers FrmSerialziedStringParserHelper::parse
+	 * @covers FrmSerializedStringParserHelper::parse
 	 */
 	public function test_parse() {
 		// Test an unexpected serialized string format.
