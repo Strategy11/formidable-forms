@@ -1029,6 +1029,8 @@ class FrmFormsController {
 		}
 		unset( $template );
 
+		self::add_addon_required( $templates );
+
 		// Subcategories that are included elsewhere.
 		$redundant_cats = array( 'PayPal', 'Stripe', 'Twilio' );
 
@@ -1058,6 +1060,61 @@ class FrmFormsController {
 		unset( $pricing, $license_type, $where );
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 		require $view_path . 'list-templates.php';
+	}
+
+	/**
+	 * Adds addon required data to the template array.
+	 *
+	 * @since 5.2.1
+	 *
+	 * @param array[] $templates Templates list.
+	 */
+	private static function add_addon_required( &$templates ) {
+		// TODO: Remove this.
+		$templates[20872734]['categories'][] = 'Quizzes';
+
+		$mapping = array(
+			'Quizzes' => 'quiz_maker',
+		);
+
+		foreach ( $mapping as $category => $addon ) {
+			foreach ( $templates as $index => $template ) {
+				if ( ! is_array( $template ) ) {
+					continue;
+				}
+
+				if ( ! in_array( $category, $template['categories'], true ) ) {
+					continue;
+				}
+
+				if ( ! FrmAddon::get_addon( $addon ) ) {
+					$templates[ $index ]['addon'] = $addon;
+				}
+			}
+			unset( $template );
+		}
+	}
+
+	/**
+	 * Gets addon install strings to use for upgrade overlay.
+	 *
+	 * @since 5.2.1
+	 *
+	 * @return array[]
+	 */
+	public static function get_addon_install_strings() {
+		return array(
+			'quiz_maker' => array(
+				'slug'            => 'quiz_maker',
+				'overlay_heading' => __( 'Install Quizzes form action', 'formidable' ),
+				'content_heading' => __( 'Quizzes action is not installed', 'formidable' ),
+				'content_desc'    => __( 'In order to set weights to answers, create different outcomes, randomize questions and options, install Quizzes form action', 'formidable' ),
+				'install_button'  => __( 'Install and activate it now', 'formidable' ),
+				'install_url'     => 'https://formidableforms.com', // TODO: change this.
+				'cancel_button'   => __( 'Install it later on the Form Actions page', 'formidable' ),
+				'image'           => FrmAppHelper::plugin_url() . '/images/quizzes.png',
+			),
+		);
 	}
 
 	/**

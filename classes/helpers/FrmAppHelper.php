@@ -3123,6 +3123,7 @@ class FrmAppHelper {
 				'saved'              => '', // Deprecated in 6.0.
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				'addon_install'      => FrmFormsController::get_addon_install_strings(),
 			);
 			/**
 			 * @param array $admin_script_strings
