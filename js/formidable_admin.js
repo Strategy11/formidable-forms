@@ -8894,7 +8894,7 @@ function frmAdminBuildJS() {
 		changeUpgradeOverlayContent = function( addon ) {
 			var innerTexts = [ 'overlay_heading', 'content_heading', 'install_button', 'cancel_button' ],
 				strings = {};
-			if ( ! frm_admin_js.addon_install.hasOwnProperty( addon ) ) {
+			if ( ! frm_admin_js.addonInstall.hasOwnProperty( addon ) ) {
 				return;
 			}
 
@@ -8910,7 +8910,7 @@ function frmAdminBuildJS() {
 				};
 			}
 
-			if ( ! frm_admin_js.addon_install.hasOwnProperty( 'upgrade' ) ) {
+			if ( ! frm_admin_js.addonInstall.hasOwnProperty( 'upgrade' ) ) {
 				// Store upgrade strings to add it back later.
 				innerTexts.forEach( function( str ) {
 					strings[ str ] = overlayStringElementMapping[ str ].innerText;
@@ -8920,11 +8920,11 @@ function frmAdminBuildJS() {
 				strings.content_desc = overlayStringElementMapping.content_desc.innerHTML;
 				strings.image = overlayStringElementMapping.image.getAttribute( 'src' );
 
-				frm_admin_js.addon_install.upgrade = strings;
+				frm_admin_js.addonInstall.upgrade = strings;
 			}
 
 			// Replace strings on overlay.
-			strings = frm_admin_js.addon_install[ addon ];
+			strings = frm_admin_js.addonInstall[ addon ];
 			Object.keys( overlayStringElementMapping ).forEach( function( str ) {
 				var p;
 
