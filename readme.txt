@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.3.2
 Requires PHP: 5.6
-Stable tag: 6.5.3
+Stable tag: 6.5.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,15 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.5.4 =
+* New: A database query has been optimized when checking for entries in a timeframe.
+* New: The honeypot class name will no longer change as often to help prevent issues with visible honeypot fields.
+* New: The placement of dropdown arrows has been updated for better theme compatibility.
+* Fix: Really long strings with no spaces were not being made short enough during truncation. This would result in really large text previews for HTML fields when using base 64 image data.
+* Fix: An element is undefined JavaScript error has been fixed.
+* Fix: The "Add fields here" placeholder would not always appear after deleting every field.
+* Fix: The "Add fields here" placeholder would sometimes overlap the form updated message.
+
 = 6.5.3 =
 * New: A new "Refunded Payment" action trigger type has been added for Stripe payments.
 * New: Additional validation checks have been added when JavaScript validation is enabled that prevent a form from submitting with invalid values like an a number with an invalid step.

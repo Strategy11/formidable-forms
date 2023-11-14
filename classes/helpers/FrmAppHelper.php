@@ -18,7 +18,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.5.3';
+	public static $plug_version = '6.5.4';
 
 	/**
 	 * @var bool
@@ -3121,6 +3121,8 @@ class FrmAppHelper {
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
 				'saving'             => '', // Deprecated in 6.0.
 				'saved'              => '', // Deprecated in 6.0.
+				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
+				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 			);
 			/**
 			 * @param array $admin_script_strings

@@ -1509,6 +1509,19 @@ function frmFrontFormJS() {
 		}
 	}
 
+	function enableSubmitButtonOnBackButtonPress() {
+		window.addEventListener( 'pageshow', function( event ) {
+			if ( event.persisted ) {
+				document.querySelectorAll( '.frm_loading_form' ).forEach(
+					function( form ) {
+						enableSubmitButton( jQuery( form ) );
+					}
+				);
+				removeSubmitLoading();
+			}
+		});
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1556,6 +1569,8 @@ function frmFrontFormJS() {
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
+
+			enableSubmitButtonOnBackButtonPress();
 		},
 
 		getFieldId: function( field, fullID ) {
