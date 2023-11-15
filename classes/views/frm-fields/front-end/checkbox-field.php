@@ -15,6 +15,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
+	$option_index = 0;
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			continue;
@@ -54,7 +55,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		do_action( 'frm_field_input_html', $field );
+
+		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
+			echo ' aria-required="true" ';
+		}
+
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
@@ -78,5 +83,6 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 
 		?></div>
 <?php
+		++$option_index;
 	}
 }

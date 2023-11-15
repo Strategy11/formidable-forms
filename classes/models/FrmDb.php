@@ -93,17 +93,11 @@ class FrmDb {
 	 * @param string|array $value
 	 * @param string $where
 	 * @param array $values
+	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
-		$key = trim( $key );
-
-		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
-			$k        = explode( ' ', $key );
-			$where    .= ' DATE_FORMAT(' . reset( $k ) . ', %s) ' . str_replace( reset( $k ), '', $key );
-			$values[] = '%Y-%m-%d %H:%i:%s';
-		} else {
-			$where .= ' ' . $key;
-		}
+		$key    = trim( $key );
+		$where .= ' ' . $key;
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
 		$lowercase_key = end( $lowercase_key );
