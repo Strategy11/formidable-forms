@@ -2777,22 +2777,57 @@ function frmAdminBuildJS() {
 				continue;
 			}
 
-			var span = document.createElement( 'span' );
-			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
+			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
 
-			var a = document.createElement( 'a' );
-			a.setAttribute( 'href', '#' );
-			a.setAttribute( 'data-code', fields[i].fieldId );
-			a.classList.add( 'frm_insert_code' );
-			a.appendChild( span );
-			a.appendChild( document.createTextNode( fields[i].fieldName ) );
-
-			var li = document.createElement( 'li' );
-			li.classList.add( 'frm-field-list-' + fieldId );
-			li.classList.add( 'frm-field-list-' + fields[i].fieldType );
-			li.appendChild( a );
-			list.appendChild( li );
+			if ( 'name' === fields[i].fieldType ) {
+				Object.entries({
+					first: __( 'First', 'formidable' ),
+					middle: __( 'Middle', 'formidable' ),
+					last: __( 'Last', 'formidable' ),
+				}).forEach(
+					([ code, label ]) => {
+						addCalcFieldLiToList(
+							list,
+							fieldId,
+							fields[i].fieldId + ' show=' + code,
+							fields[i].fieldName + ' (' + label + ')',
+							fields[i].fieldType
+						);
+					}
+				);
+			}
 		}
+	}
+
+	/**
+	 * @param {HTMLElement} list
+	 * @param {string} fieldId
+	 * @param {string} code
+	 * @param {string} label
+	 * @param {string} fieldType
+	 * @returns {void}
+	 */
+	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
+		const anchor = a({
+			className: 'frm_insert_code',
+			children: [
+				span({
+					text: '[' + code + ']'
+				}),
+				document.createTextNode( label )
+			]
+		});
+		anchor.setAttribute( 'data-code', code );
+
+		list.appendChild(
+			tag(
+				'li',
+				{
+					className: 'frm-field-list-' + fieldId + ' ' + 'frm-field-list-' + fieldType,
+					child: anchor
+				}
+			)
+		);
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
