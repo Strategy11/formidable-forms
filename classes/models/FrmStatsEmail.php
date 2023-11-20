@@ -112,9 +112,16 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			$prev_entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
 			$prev_payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
 
-			$args['stats']['entries']['compare']        = $this->get_compare_diff( $entries_count, $prev_entries_count );
-			$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $payment_data['count'], $prev_payment_data['count'] );
-			$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $payment_data['total'], $prev_payment_data['total'] );
+			$args['stats']['entries']['compare'] = $this->get_compare_diff( $entries_count, $prev_entries_count );
+
+			if ( ! $payment_data['count'] && ! $prev_payment_data['count'] ) {
+				// Maybe this site doesn't collect payment, hide these sections.
+				unset( $args['stats']['payments_count'] );
+				unset( $args['stats']['payments_total'] );
+			} else {
+				$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $payment_data['count'], $prev_payment_data['count'] );
+				$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $payment_data['total'], $prev_payment_data['total'] );
+			}
 		}
 
 		return $args;
