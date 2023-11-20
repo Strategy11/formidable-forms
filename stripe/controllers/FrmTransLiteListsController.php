@@ -9,6 +9,10 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
+		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
+			return;
+		}
+
 		$hook_name = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-payments_columns';
 		add_filter( $hook_name, __CLASS__ . '::payment_columns' );
 		add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
