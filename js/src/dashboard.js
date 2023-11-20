@@ -9,7 +9,9 @@ class FrmDashboard {
 			ajax: {
 				action: 'dashboard_ajax_action',
 				dashboardActions: {
-					welcomeBanner: 'welcome-banner-cookie'
+					welcomeBanner: 'welcome-banner-cookie',
+					checkEmailIfSubscribed: 'email-has-subscribed',
+					saveSubscribedEmail: 'save-subscribed-email'
 				}
 			}
 		};
@@ -17,6 +19,12 @@ class FrmDashboard {
 
 	initInbox() {
 		new FrmTabsNavigator( '.frm-inbox-wrapper' );
+		const userEmailInput  = document.querySelector( '#frm_leave_email' );
+		const subscribeButton = document.querySelector( '#frm-add-my-email-address' );
+
+		subscribeButton.addEventListener( 'click', () => {
+			this.saveSubscribedEmail( userEmailInput.value ).then( data => {});
+		});
 	}
 
 	initIntroWidgetAnimation() {
@@ -59,6 +67,46 @@ class FrmDashboard {
 		});
 	}
 
+	checkIfEmailIsSubscribed( email ) {
+		return new Promise( ( resolve, reject ) => {
+			fetch( window.ajaxurl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: new URLSearchParams({
+					action: this.options.ajax.action,
+					dashboard_action: this.options.ajax.dashboardActions.checkEmailIfSubscribed,
+					email: email
+				})
+			}).then( result => {
+				result.json().then( ( data ) => {
+					resolve( data );
+				});
+			});
+		});
+	}
+
+	saveSubscribedEmail( email ) {
+		return new Promise( ( resolve, reject ) => {
+			fetch( window.ajaxurl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: new URLSearchParams({
+					action: this.options.ajax.action,
+					dashboard_action: this.options.ajax.dashboardActions.saveSubscribedEmail,
+					email: email
+				})
+			}).then( result => {
+				result.json().then( ( data ) => {
+					resolve( data );
+				});
+			});
+		});
+	}
+
 	closeWelcomeBannerSaveCookieRequest() {
 		return new Promise( ( resolve, reject ) => {
 			fetch( window.ajaxurl, {
@@ -78,7 +126,6 @@ class FrmDashboard {
 			});
 		});
 	}
-
 }
 
 const dashboard = new FrmDashboard();

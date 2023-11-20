@@ -40,6 +40,13 @@ class FrmDashboardView {
 				),
 			),
 		),
+		'inbox'    => array(
+			'unread'    => array(),
+			'dismissed' => array(),
+		),
+		'video'    => array(
+			'id' => null,
+		),
 		'payments' => array(
 			'template-type' => 'full-width',
 			'counters'      => array(
@@ -65,6 +72,12 @@ class FrmDashboardView {
 		}
 		if ( isset( $data['entries'] ) ) {
 			$this->view['entries'] = $data['entries'];
+		}
+		if ( isset( $data['inbox'] ) ) {
+			$this->view['inbox'] = $data['inbox'];
+		}
+		if ( isset( $data['video'] ) ) {
+			$this->view['video'] = $data['video'];
 		}
 	}
 
@@ -111,9 +124,9 @@ class FrmDashboardView {
 
 	public function get_inbox( $echo = true ) {
 		if ( false === $echo ) {
-			return $this->load_inbox_template();
+			return $this->load_inbox_template( $this->view['inbox'] );
 		}
-		echo wp_kses_post( $this->load_inbox_template() );
+		echo $this->load_inbox_template( $this->view['inbox'] );
 	}
 
 	public function get_pro_features( $echo = true ) {
@@ -132,9 +145,9 @@ class FrmDashboardView {
 
 	public function get_youtube_video( $echo = true ) {
 		if ( false === $echo ) {
-			return $this->load_youtube_video_template();
+			return $this->load_youtube_video_template( $this->view['video'] );
 		}
-		echo $this->load_youtube_video_template();
+		echo $this->load_youtube_video_template( $this->view['video'] );
 	}
 
 	public static function load_placeholder_template( $template ) {
@@ -170,7 +183,11 @@ class FrmDashboardView {
 		return ob_get_clean();
 	}
 
-	private function load_inbox_template() {
+	private function load_inbox_template( $template ) {
+		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
+		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
+		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
+
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/inbox.php';
 		return ob_get_clean();
@@ -183,9 +200,10 @@ class FrmDashboardView {
 		return self::load_placeholder_template( $template );
 	}
 
-	private function load_youtube_video_template() {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
-		return ob_get_clean();
+	private function load_youtube_video_template( $template ) {
+		if ( null === $template['id'] ) {
+			return '';
+		}
+		return '<iframe style="width: 100%; height: 224px; margin-bottom:-6px" src="https://www.youtube.com/embed/' . $template['id'] . '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 	}
 }

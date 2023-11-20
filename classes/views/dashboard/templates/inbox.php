@@ -10,61 +10,68 @@
 	</div>
 	<div class="frm-tabs-container">
 		<div class="frm-tabs-slide-track frm-flex-box">
-			<div class="frm-active">
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know?</h4>
-						<label>2 weeks ago</label>
+			<div class="frm-active" data-mdb-perfect-scrollbar ata-mdb-suppress-scroll-x='true'>
+				<div>
+					<div id="frm_empty_inbox" class="<?php echo esc_attr( $subscribe_inbox_classnames ); ?>"> 
+						<?php
+							FrmAppController::api_email_form(
+								'subscribe',
+								__( 'You don\'t have any messages', 'formidable' ),
+								__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' )
+							);
+							?>
+						<button id="frm-add-my-email-address" class="button-primary frm-button-primary"><?php esc_html_e( 'Subscribe', 'formidable' ); ?></button>
 					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Open YouTube Channel</a>
+
+					<?php foreach ( $template['unread'] as $key => $message ) : ?>
+						<div class="frm-inbox-message-container" data-message="<?php echo esc_attr( $key ); ?>" >
+							<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
+								<div>
+									<span>
+										<?php
+										printf(
+											/* translators: %s: Time stamp */
+											esc_html__( '%s ago', 'formidable' ),
+											esc_html( FrmAppHelper::human_time_diff( $message['created'] ) )
+										);
+										?>
+									</span>
+									<h4><?php echo esc_html( $message['subject'] ); ?></h4>
+								</div>
+								<a href="#" class="frm_inbox_dismiss">Dismiss</a>
+							</div>
+							<p><?php echo wp_kses_post( $message['message'] ); ?></p>
+							<?php echo wp_kses_post( $message['cta'] ); ?>
+						</div>
+					<?php endforeach; ?>
 				</div>
 
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know?</h4>
-						<label>2 weeks ago</label>
-					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Read more</a>
-				</div>
-
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know?</h4>
-						<label>2 weeks ago</label>
-					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Read more</a>
-				</div>
 			</div>
 
-			<div>
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know / dismissed?</h4>
-						<label>2 weeks ago</label>
+			<div data-mdb-perfect-scrollbar ata-mdb-suppress-scroll-x='true'>
+				<div class="frm-dismissed-inbox-messages">
+				<?php foreach ( $template['dismissed'] as $key => $message ) : ?>
+					<div class="frm-inbox-message-container">
+						<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
+							<div>
+								<span>
+									<?php
+									printf(
+										/* translators: %s: Time stamp */
+										esc_html__( '%s ago', 'formidable' ),
+										esc_html( FrmAppHelper::human_time_diff( $message['created'] ) )
+									);
+									?>
+								</span>
+								<h4>
+									<?php echo esc_html( $message['subject'] ); ?>
+								</h4>
+							</div>
+						</div>
+						<p><?php echo wp_kses_post( $message['message'] ); ?></p>
+						<?php echo wp_kses_post( $message['cta'] ); ?>
 					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Open YouTube Channel</a>
-				</div>
-
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know / dismissed?</h4>
-						<label>2 weeks ago</label>
-					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Read more</a>
-				</div>
-
-				<div class="frm-inbox-message-container">
-					<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-						<h4>Did you know / dismissed?</h4>
-						<label>2 weeks ago</label>
-					</div>
-					<p>There's a growing collection of great video tutorials ready for you! Have a request? Let us know! Don't forget to subscribe so you'll hear about new videos too.</p>
-					<a href="#" title="Open YouTube Channel">Read more</a>
+				<?php endforeach; ?>
 				</div>
 			</div>
 		</div>

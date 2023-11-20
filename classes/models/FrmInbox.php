@@ -173,11 +173,11 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @return void
 	 */
-	private function filter_messages( &$messages ) {
+	public function filter_messages( &$messages, $type = 'unread' ) {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( empty( $k ) || $this->is_expired( $message ) || $dismissed ) {
+			if ( empty( $k ) || $this->is_expired( $message ) || ( $dismissed && 'dismissed' !== $type ) || ( 'dismissed' === $type && ! $dismissed ) ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );

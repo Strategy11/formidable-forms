@@ -371,29 +371,89 @@
 	position: relative;
 	overflow: hidden;
 	margin-top: 24px;
+	height: calc( 100% - 74px );
 }
 .frm-inbox-message-heading {
 	margin: 0px 0px 10px 0px;
 	position: relative;
 }
+.frm-inbox-wrapper .frm-inbox-message-heading a.frm_inbox_dismiss,
+.frm-inbox-wrapper .frm-inbox-message-heading span {
+	color: #98A2B3;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+}
+
 .frm-inbox-wrapper .frm-inbox-message-heading h4 {
 	color: #282F36;
 	font-size: 16px;
 	font-weight: 500;
 }
-.frm-inbox-message-container label {
-	color: #656F7C;
-	font-size: 12px;
-	font-weight: 400;
-}
+
 .frm-inbox-message-container {
 	padding-bottom: 16px;
 	margin-bottom: 16px;
 	border-bottom: 1px solid var(--grey-200);
-
+}
+div.frm-inbox-subscribe h3 {
+	color: #282F36;
+	font-weight: 600;
+	font-size: 16px;
+}
+div.frm-inbox-subscribe p {
+	color: #667085;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+}
+div.frm-inbox-subscribe input[type="email"] {
+	border-radius: 8px;
+	border: 1px solid  #D0D5DD;
+	height: 36px;
+	color: #667085;
+}
+.frm-inbox-subscribe h3:before {
+	content:'';
+	display:block;
+	background: url( '../../images/dashboard/bell-cross.svg' ) no-repeat;
+	width: 40px;
+	height: 40px;
+	margin: auto auto 20px auto;
+}
+.frm-inbox-subscribe #frmapi-email-form + img{
+	display: none;
+}
+.frm-inbox-subscribe input#frm_leave_email {
+	width: calc( 100% - 2px );
 }
 .frm-tabs-container .frm-tabs-slide-track {
+	height: 100%;
 	transition: 0.4s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+#frm_empty_inbox .ps__rail-y,
+.frm-tabs-container .frm-tabs-slide-track > div:not(.frm-active) .ps__rail-y {
+	opacity: 0.0;
+}
+#frm_empty_inbox.frm-inbox-hide-form #frm_leave_email_wrapper,
+#frm_empty_inbox.frm-inbox-hide-form #frm-add-my-email-address {
+	display: none;
+}
+.frm-tabs-container .frm-tabs-slide-track .ps__rail-y {
+	position: absolute;
+	right: 0;
+	left: auto;
+	width: 4px;
+	background: var(--grey-100);
+	border-radius: 4px;
+}
+.frm-tabs-container .frm-tabs-slide-track .ps__rail-y .ps__thumb-y {
+	width: 4px;
+	background: var(--grey-500);
+	position: absolute;
+	border-radius: 4px;
+	cursor: pointer;
+	z-index: 99;
 }
 .frm-tabs-container .frm-tabs-slide-track > div .frm-inbox-message-container:last-child {
 	border-bottom: none;
@@ -403,15 +463,39 @@
 	flex: 0 0 100%;
 	opacity: 0.0;
 	transition: 0.25s opacity linear;
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+.frm-tabs-slide-track > div.ps--active-y {
+	padding-right: 12px;
+}
+.frm-tabs-slide-track > div > div {
+	overflow: auto;
+	position: relative;
+	width:100%;
 }
 .frm-tabs-slide-track > div.frm-active {
 	opacity: 1.0;
 	transition: 0.35s opacity linear;
 }
+.frm-inbox-wrapper div.frm-tabs-container div.frm-inbox-message-container a.frm-button-primary,
 .frm-inbox-message-container a {
 	font-weight: 600;
 	color: var(--primary-500);
 	font-size: 12px;
+}
+.frm-inbox-wrapper div.frm-tabs-container div.frm-inbox-message-container a.frm-button-primary {
+	background-color: unset !important;
+	height: auto;
+	color: var(--primary-500) !important;
+	display: block;
+	border: 0px;
+	padding: 0px;
+}
+.frm-inbox-wrapper .frm-tabs-container .frm-inbox-message-container > .frm_inbox_dismiss {
+	display: none;
 }
 .frm-inbox-message-container p {
 	font-size: 14px;

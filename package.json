@@ -30,6 +30,7 @@
 		"classnames": "^2.2.6",
 		"google-closure-compiler": "^20181210.0.0",
 		"npm": "^8.19.2",
+		"perfect-scrollbar": "^1.5.5",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"styled-components": "^5.3.5"

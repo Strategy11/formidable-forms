@@ -34,9 +34,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-dashboard-widget frm-license-widget frm-animate">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
-			<div class="frm-dashboard-widget frm-yt-widget frm-animate">
-				<?php $dashboard_view->get_youtube_video(); ?>
-			</div>
+			<?php if ( '' !== $dashboard_view->get_youtube_video( false ) ) : ?>
+				<div class="frm-dashboard-widget frm-yt-widget frm-animate">
+					<?php $dashboard_view->get_youtube_video(); ?>
+				</div>
+			<?php endif; ?>
 			<div class="frm-dashboard-widget frm-inbox-widget frm-animate">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>

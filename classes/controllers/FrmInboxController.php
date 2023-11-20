@@ -62,6 +62,29 @@ class FrmInboxController {
 	}
 
 	/**
+	 * @since 6.x
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_messages() {
+		self::add_tracking_request();
+		self::add_free_template_message();
+
+		$inbox              = new FrmInbox();
+		$unread_messages    = $inbox->get_messages();
+		$dismissed_messages = $inbox->get_messages();
+
+		$inbox->filter_messages( $unread_messages, 'filter' );
+		$inbox->filter_messages( $dismissed_messages, 'dismissed' );
+
+		return array(
+			'unread'    => array_reverse( $unread_messages ),
+			'dismissed' => array_reverse( $dismissed_messages ),
+			'user'      => wp_get_current_user(),
+		);
+	}
+
+	/**
 	 * @since 4.05
 	 *
 	 * @return void
