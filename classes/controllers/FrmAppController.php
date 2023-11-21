@@ -142,7 +142,7 @@ class FrmAppController {
 
 			// Add an extra check to avoid white page styling on the PayPal "edit" action.
 			// We fallback to the PayPal add on for the "edit" action since Stripe Lite does not have an edit view.
-			if ( 'edit' !== FrmAppHelper::simple_get( 'action' ) || ! is_callable( 'FrmPaymentsController::route' ) ) {
+			if ( ! in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) || ! is_callable( 'FrmPaymentsController::route' ) ) {
 				$white_pages[] = 'formidable-payments';
 			}
 		}

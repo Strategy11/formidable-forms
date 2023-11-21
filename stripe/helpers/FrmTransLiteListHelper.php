@@ -372,7 +372,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions           = array();
 		$actions['view']   = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
-		if ( $this->table !== 'subscriptions' && class_exists( 'FrmPaymentsController', false ) ) {
+		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable-payments' ) . '</a>';
 		}
