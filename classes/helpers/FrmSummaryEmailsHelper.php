@@ -345,10 +345,10 @@ class FrmSummaryEmailsHelper {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
-	 * @param int    $limit     Limit the result. Default is 10.
+	 * @param int    $limit     Limit the result. Default is 5.
 	 * @return array            Contains `form_id`, `form_name`, and `items_count`.
 	 */
-	public static function get_top_forms( $from_date, $to_date, $limit = 10 ) {
+	public static function get_top_forms( $from_date, $to_date, $limit = 5 ) {
 		global $wpdb;
 
 		return $wpdb->get_results(
