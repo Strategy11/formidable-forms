@@ -471,4 +471,31 @@ class FrmSummaryEmailsHelper {
 
 		return $plugins;
 	}
+
+	/**
+	 * Processes inbox CTA button before showing in email.
+	 *
+	 * @param string $button_html Button HTML. This usually contains 1 button and 1 dismiss button.
+	 * @return string
+	 */
+	public static function process_inbox_cta_button( $button_html ) {
+		// Remove dismiss button.
+		$button_html = preg_replace( '/<a[^>]*class="[^"]*\bfrm_inbox_dismiss\b[^"]*"[^>]*>[^<]*<\/a>/', '', $button_html );
+
+		// Replace link utm.
+		$button_html = str_replace( 'utm_medium=inbox', 'utm_medium=summary-email', $button_html );
+
+		if ( strpos( $button_html, 'style="' ) ) {
+			// Maybe this button contains inline style.
+			return $button_html;
+		}
+
+		// Add inline CSS for specific button types.
+		if ( strpos( $button_html, 'frm-button-primary' ) ) {
+			$button_style = 'display:inline-block;font-size:0.75em;display:inline-block;line-height:2.4;padding-left:1em;padding-right:1em;border-radius:1.2em;border:0;font-weight:600;color:#fff;background-color:#4199fd;text-decoration:none;';
+			$button_html = str_replace( '<a', '<a style="' . $button_style . '"', $button_html );
+		}
+
+		return $button_html;
+	}
 }

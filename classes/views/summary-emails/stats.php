@@ -98,7 +98,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<?php if ( ! empty( $args['inbox_msg']['cta'] ) ) : ?>
 				<p>
-					<?php echo wp_kses_post( $args['inbox_msg']['cta'] ); ?>
+					<?php echo wp_kses_post( FrmSummaryEmailsHelper::process_inbox_cta_button( $args['inbox_msg']['cta'] ) ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
