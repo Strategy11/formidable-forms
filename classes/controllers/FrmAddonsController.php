@@ -359,6 +359,8 @@ class FrmAddonsController {
 				$slug                           = explode( '/', $folder );
 				$plugin->slug                   = $slug[0];
 				$transient->response[ $folder ] = $plugin;
+			} else {
+				$transient->no_update[ $folder ] = $plugin;
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
