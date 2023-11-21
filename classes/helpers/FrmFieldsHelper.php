@@ -1236,6 +1236,10 @@ class FrmFieldsHelper {
 			$checked = 'checked="checked" ';
 		}
 
+		if ( ! $checked && is_array( $args['field']['value'] ) && in_array( $args['field_val'], $args['field']['value'], true ) ) {
+			$checked = 'checked="checked" ';
+		}
+
 		return $other_args;
 	}
 
