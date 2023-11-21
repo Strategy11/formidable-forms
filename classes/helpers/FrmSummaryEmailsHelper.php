@@ -445,6 +445,7 @@ class FrmSummaryEmailsHelper {
 			return false;
 		}
 
+		$messages = array_reverse( $messages );
 		foreach ( $messages as $message ) {
 			if ( 'news' !== $message['type'] ) {
 				continue;
