@@ -63,7 +63,7 @@ $frm_settings = FrmAppHelper::get_settings();
                 <tr>
                     <td><?php esc_html_e( 'Need help? Get in touch with our team', 'formidable' ); ?></td>
                     <td align="right">
-                        <a href="<?php echo esc_url( $args['contact_support'] ); ?>" style="color: #F15A24; font-weight: 700; text-decoration: none;"><?php esc_html_e( 'Contact support', 'formidable' ); ?></a>
+                        <a href="<?php echo esc_url( $args['support_url'] ); ?>" style="color: #F15A24; font-weight: 700; text-decoration: none;"><?php esc_html_e( 'Contact support', 'formidable' ); ?></a>
                     </td>
                 </tr>
             </table>

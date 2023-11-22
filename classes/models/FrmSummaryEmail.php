@@ -127,7 +127,7 @@ abstract class FrmSummaryEmail {
 				site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
 				array( 'utm_content' => 'unsubscribe_url' )
 			),
-			'contact_support'  => FrmSummaryEmailsHelper::add_url_data(
+			'support_url'      => FrmSummaryEmailsHelper::add_url_data(
 				'https://formidableforms.com/new-topic/',
 				array( 'utm_content' => 'contact_support' )
 			)

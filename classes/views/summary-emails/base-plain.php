@@ -16,5 +16,9 @@ $frm_settings = FrmAppHelper::get_settings();
 
 echo '%%INNER_CONTENT%%';
 
+printf( esc_html__( 'Need help? Get in touch with our team at: %s', 'formidable' ), esc_url( $args['support_url'] ) );
+
+echo "\r\n\r\n";
+
 // translators: Unsubscribe URL.
 printf( esc_html__( 'Unsubscribe this email at: %s', 'formidable' ), esc_url( $args['unsubscribe_url'] ) );
