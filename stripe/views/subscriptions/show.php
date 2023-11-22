@@ -56,10 +56,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</tr>
 								<?php } ?>
 
-								<?php if ( isset( $payment->test ) ) { ?>
+								<?php if ( isset( $subscription->test ) ) { ?>
 								<tr valign="top">
 									<th scope="row"><?php esc_html_e( 'Mode', 'formidable' ); ?>:</th>
-									<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $payment ) ); ?></td>
+									<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $subscription ) ); ?></td>
 								</tr>
 								<?php } ?>
 
