@@ -352,12 +352,11 @@ class FrmAddonsController {
 				continue;
 			}
 
-			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
-			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$wp_plugin    = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
+			$wp_version   = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$plugin->slug = explode( '/', $folder )[0];
 
 			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
-				$slug                           = explode( '/', $folder );
-				$plugin->slug                   = $slug[0];
 				$transient->response[ $folder ] = $plugin;
 			} else {
 				$transient->no_update[ $folder ] = $plugin;
