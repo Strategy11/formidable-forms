@@ -400,10 +400,16 @@ class FrmSummaryEmailsHelper {
 	/**
 	 * Gets section CSS in the email.
 	 *
+	 * @param string $border_pos Border position. Default is `top`. Set to empty if no border.
 	 * @return string
 	 */
-	public static function get_section_style() {
-		return 'padding: 3em 4.375em; border-bottom: 1px solid #eaecf0;';
+	public static function get_section_style( $border_pos = 'top' ) {
+		if ( $border_pos ) {
+			$border = 'border-' . $border_pos . ': 1px solid #eaecf0;';
+		} else {
+			$border = '';
+		}
+		return 'padding: 3em 4.375em;' . $border;
 	}
 
 	/**
