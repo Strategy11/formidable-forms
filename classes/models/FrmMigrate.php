@@ -165,6 +165,8 @@ class FrmMigrate {
 	/**
 	 * These indexes help optimize database queries for entries.
 	 *
+	 * @since x.x
+	 *
 	 * @return void
 	 */
 	private function add_composite_indexes_for_entries() {
@@ -183,6 +185,30 @@ class FrmMigrate {
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_field_id_item_id ON `{$wpdb->prefix}frm_item_metas` (field_id, item_id)" );
 		}
+	}
+
+	/**
+	 * Check that an index exists in a database table before trying to add it (which results in an error).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $table_name
+	 * @param string $index_name
+	 * @return bool
+	 */
+	private static function index_exists( $table_name, $index_name ) {
+		global $wpdb;
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT 1 FROM information_schema.statistics
+					WHERE table_schema = database()
+						AND table_name = %s
+						AND index_name = %s
+					LIMIT 1',
+				array( $table_name, $index_name )
+			)
+		);
+		return (bool) $row;
 	}
 
 	private function maybe_create_contact_form() {
@@ -623,29 +649,5 @@ DEFAULT_HTML;
 			}
 			unset( $form );
 		}
-	}
-
-	/**
-	 * Check that an index exists in a database table before trying to add it (which results in an error).
-	 *
-	 * @since x.x
-	 *
-	 * @param string $table_name
-	 * @param string $index_name
-	 * @return bool
-	 */
-	private static function index_exists( $table_name, $index_name ) {
-		global $wpdb;
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
-				'SELECT 1 FROM information_schema.statistics
-					WHERE table_schema = database()
-						AND table_name = %s
-						AND index_name = %s
-					LIMIT 1',
-				array( $table_name, $index_name )
-			)
-		);
-		return (bool) $row;
 	}
 }
