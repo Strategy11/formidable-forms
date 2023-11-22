@@ -74,6 +74,8 @@ class FrmTransLiteListsController {
 			$columns['paysys'] = esc_html__( 'Processor', 'formidable' );
 		}
 
+		$columns['mode'] = esc_html__( 'Mode', 'formidable' );
+
 		return $columns;
 	}
 

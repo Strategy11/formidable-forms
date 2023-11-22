@@ -56,6 +56,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</tr>
 								<?php } ?>
 
+								<?php if ( isset( $payment->test ) ) { ?>
+								<tr valign="top">
+									<th scope="row"><?php esc_html_e( 'Mode', 'formidable' ); ?>:</th>
+									<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $payment ) ); ?></td>
+								</tr>
+								<?php } ?>
+
 								<tr>
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
 									<td><?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $subscription ) ); ?></td>

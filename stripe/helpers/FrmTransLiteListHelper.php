@@ -374,7 +374,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
-			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable-payments' ) . '</a>';
+			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
 		}
 
 		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>';
@@ -532,5 +532,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 				return 'PayPal';
 		}
 		return $item->paysys;
+	}
+
+	/**
+	 * Display 'Test' or 'Live' in a mode column if the value is known.
+	 * Old payment entries will have a NULL 'test' column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $item Payment or Subscription object.
+	 * @return string
+	 */
+	private function get_mode_column( $item ) {
+		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
 	}
 }
