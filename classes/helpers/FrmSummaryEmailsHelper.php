@@ -24,7 +24,7 @@ class FrmSummaryEmailsHelper {
 	/**
 	 * Number of days to send the next monthly email.
 	 */
-	const MONTHLY_PERIOD = 3; // TODO: Change this to 30.
+	const MONTHLY_PERIOD = 30;
 
 	/**
 	 * Number of days to send the next yearly email.
@@ -39,7 +39,7 @@ class FrmSummaryEmailsHelper {
 	/**
 	 * Number of days before sending the first summary email after upgrade plugin.
 	 */
-	const DELAY_AFTER_UPGRADE = 1; // TODO: Change this to 15.
+	const DELAY_AFTER_UPGRADE = 15;
 
 	/**
 	 * Summary emails option name.
