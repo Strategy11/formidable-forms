@@ -27,7 +27,10 @@ class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 	protected function get_content_args() {
 		$args = parent::get_content_args();
 
-		$args['renew_url'] = FrmSummaryEmailsHelper::add_url_data( 'https://formidableforms.com/knowledgebase/manage-licenses-and-sites/renewing-an-expired-license/' );
+		$args['renew_url'] = FrmSummaryEmailsHelper::add_url_data(
+			'https://formidableforms.com/knowledgebase/manage-licenses-and-sites/renewing-an-expired-license/',
+			array( 'utm_content' => 'renew_url' )
+		);
 
 		return $args;
 	}
