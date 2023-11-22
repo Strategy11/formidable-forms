@@ -824,6 +824,7 @@ class FrmEntriesHelper {
 	 * Get all entry statuses.
 	 *
 	 * @since 6.5
+	 * @since x.x function went from private to public.
 	 *
 	 * @return array<string>
 	 */
