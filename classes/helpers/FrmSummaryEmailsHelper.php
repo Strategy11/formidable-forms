@@ -394,10 +394,10 @@ class FrmSummaryEmailsHelper {
 		}
 
 		if ( $diff > 0 ) {
-			$image = 'arrow-up.png';
+			$arrow = '&uarr;';
 			$color = '#12b76a';
 		} else {
-			$image = 'arrow-down.png';
+			$arrow = '&darr;';
 			$color = '#f04438';
 		}
 
@@ -408,10 +408,10 @@ class FrmSummaryEmailsHelper {
 
 		printf(
 			'<span style="color: %1$s; font-size: 0.75em; font-weight: 700;">
-					<img src="%2$s" alt="" style="vertical-align: text-bottom;" /><span style="display: inline-block; line-height: 1.33;">%3$s</span>
+					%2$s<span style="display: inline-block; line-height: 1.33;">%3$s</span>
 				</span>',
 			esc_attr( $color ),
-			esc_url( FrmAppHelper::plugin_url() . '/images/' . $image ),
+			esc_html( $arrow ),
 			intval( $displayed_value ) . '%'
 		);
 	}
