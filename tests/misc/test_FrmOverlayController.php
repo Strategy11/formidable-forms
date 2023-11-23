@@ -2,6 +2,8 @@
 
 class test_FrmOverlayController extends FrmUnitTest {
 
+	private $time_mock;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->time_mock = $this->getMockBuilder( 'FrmOverlayController' )
