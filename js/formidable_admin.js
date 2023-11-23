@@ -404,6 +404,16 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		/**
+		 * Triggers the pre-open action for a confirmation modal. This action passes
+		 * relevant modal information and associated link to any listening hooks.
+		 *
+		 * @param {Object} options An object containing modal elements and data.
+		 * @param {HTMLElement} options.$info The HTML element containing modal information.
+		 * @param {string} options.link The link associated with the modal action.
+		 */
+		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link });
+
 		$info.dialog( 'open' );
 		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
 		return false;
@@ -10292,12 +10302,12 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		initModal: initModal,
-		infoModal: infoModal,
-		offsetModalY: offsetModalY,
-		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
-		addRadioCheckboxOpt: addRadioCheckboxOpt,
-		installNewForm: installNewForm
+		initModal,
+		infoModal,
+		offsetModalY,
+		adjustConditionalLogicOptionOrders,
+		addRadioCheckboxOpt,
+		installNewForm
 	};
 }
 
