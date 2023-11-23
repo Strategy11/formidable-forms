@@ -300,14 +300,14 @@ class FrmSummaryEmailsHelper {
 			'total' => 0,
 		);
 
-		$payments = FrmDb::get_col(
+		$payments = FrmDb::get_results(
 			'frm_payments',
 			array(
 				'created_at >' => $from_date,
 				'created_at <' => $to_date . ' 23:59:59',
 				'status'       => 'complete',
 			),
-			'amount'
+			'action_id,amount'
 		);
 
 		if ( ! $payments ) {
@@ -315,8 +315,27 @@ class FrmSummaryEmailsHelper {
 		}
 
 		$data['count'] = count( $payments );
+		$data['total'] = self::get_payment_total_data( $payments );
+
+		return $data;
+	}
+
+	/**
+	 * Gets payment total data.
+	 *
+	 * @param object[] $payments Array of payment objects.
+	 * @return array Return array of total amount for each currency.
+	 */
+	private static function get_payment_total_data( $payments ) {
+		$data = array();
 		foreach ( $payments as $payment ) {
-			$data['total'] += floatval( $payment );
+			list( $amount, $currency ) = FrmTransLiteAppHelper::get_amount_and_currency_from_payment( $payment );
+
+			if ( ! isset( $data[ $currency ] ) ) {
+				$data[ $currency ] = 0;
+			}
+
+			$data[ $currency ] += floatval( $amount );
 		}
 
 		return $data;

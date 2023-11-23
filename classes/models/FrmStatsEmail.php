@@ -75,7 +75,6 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 	protected function get_content_args() {
 		$args = parent::get_content_args();
 
-		$payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->from_date, $this->to_date );
 		$entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->from_date, $this->to_date );
 
 		$args['inbox_msg']       = $this->has_inbox_msg ? FrmSummaryEmailsHelper::get_latest_inbox_message() : false;
@@ -88,20 +87,9 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			array( 'utm_content' => 'dashboard_url' )
 		);
 		$args['stats']           = array(
-			'entries'        => array(
+			'entries' => array(
 				'label'   => __( 'Entries created', 'formidable' ),
 				'count'   => $entries_count,
-				'compare' => 0,
-			),
-			'payments_count' => array(
-				'label'   => __( 'Payments collected', 'formidable' ),
-				'count'   => $payment_data['count'],
-				'compare' => 0,
-			),
-			'payments_total' => array(
-				'label'   => __( 'Total', 'formidable' ),
-				'count'   => $payment_data['total'],
-				'display' => $this->get_displayed_price( $payment_data['total'] ),
 				'compare' => 0,
 			),
 		);
@@ -114,23 +102,96 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 			);
 		}
 
-		if ( $this->has_comparison ) {
-			$prev_entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
-			$prev_payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
+		$this->add_entries_comparison_data( $args['stats'] );
+		$this->add_payments_data( $args['stats'] );
 
-			$args['stats']['entries']['compare'] = $this->get_compare_diff( $entries_count, $prev_entries_count );
+		return $args;
+	}
+
+	/**
+	 * Adds entries comparison data.
+	 *
+	 * @param array $stats Statistics section data.
+	 */
+	protected function add_entries_comparison_data( &$stats ) {
+		if ( ! $this->has_comparison ) {
+			return;
+		}
+
+		$prev_entries_count = FrmSummaryEmailsHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
+		$stats['entries']['compare'] = $this->get_compare_diff( $stats['entries']['count'], $prev_entries_count );
+	}
+
+	/**
+	 * Adds payments count and total data.
+	 *
+	 * @param array $stats Statistics section data.
+	 */
+	protected function add_payments_data( &$stats ) {
+		$payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->from_date, $this->to_date );
+		$stats['payments_count'] = array(
+			'label'   => __( 'Payments collected', 'formidable' ),
+			'count'   => $payment_data['count'],
+			'compare' => 0,
+		);
+
+		// Build total for each currency.
+		foreach ( $payment_data['total'] as $currency => $amount ) {
+			$stats[ 'payments_total_' . $currency ] = array(
+				'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
+				'count'   => $amount,
+				'display' => $this->get_formatted_price( $amount, $currency ),
+				'compare' => 0,
+			);
+		}
+
+		if ( $this->has_comparison ) {
+			$prev_payment_data  = FrmSummaryEmailsHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
 
 			if ( ! $payment_data['count'] && ! $prev_payment_data['count'] ) {
 				// Maybe this site doesn't collect payment, hide these sections.
-				unset( $args['stats']['payments_count'] );
-				unset( $args['stats']['payments_total'] );
-			} else {
-				$args['stats']['payments_count']['compare'] = $this->get_compare_diff( $payment_data['count'], $prev_payment_data['count'] );
-				$args['stats']['payments_total']['compare'] = $this->get_compare_diff( $payment_data['total'], $prev_payment_data['total'] );
+				unset( $stats['payments_count'] );
+				return;
+			}
+
+			$stats['payments_count']['compare'] = $this->get_compare_diff( $payment_data['count'], $prev_payment_data['count'] );
+
+			// Compare total for each currency.
+			foreach ( $payment_data['total'] as $currency => $amount ) {
+				if ( ! isset( $prev_payment_data['total'][ $currency ] ) ) {
+					$stats[ 'payments_total_' . $currency ]['compare'] = 1;
+					continue;
+				}
+
+				$stats[ 'payments_total_' . $currency ]['compare'] = $this->get_compare_diff( $amount, $prev_payment_data['total'][ $currency ] );
+				unset( $prev_payment_data['total'][ $currency ] );
+			}
+
+			// If prev month has more currencies.
+			foreach ( $prev_payment_data['total'] as $currency => $amount ) {
+				$stats[ 'payments_total_' . $currency ] = array(
+					'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
+					'count'   => 0,
+					'display' => $this->get_formatted_price( 0, $currency ),
+					'compare' => -1,
+				);
 			}
 		}
+	}
 
-		return $args;
+	/**
+	 * Gets formatted price.
+	 *
+	 * @param float $amount Amount.
+	 * @param string|array $currency Currency string value or array.
+	 * @return string
+	 */
+	protected function get_formatted_price(&$amount, $currency ) {
+		if ( ! is_array( $currency ) ) {
+			$currency = FrmCurrencyHelper::get_currency( $currency );
+		}
+		FrmTransLiteAppHelper::format_amount_for_currency( $currency, $amount );
+		return $amount;
 	}
 
 	/**
@@ -150,19 +211,6 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		}
 
 		return ( $current - $prev ) / $prev;
-	}
-
-	/**
-	 * Gets displayed string for price.
-	 *
-	 * @param float $amount Price amount.
-	 * @return string
-	 */
-	protected function get_displayed_price( $amount ) {
-		$settings = FrmAppHelper::get_settings();
-		$currency = FrmCurrencyHelper::get_currency( $settings->currency );
-		FrmTransLiteAppHelper::format_amount_for_currency( $currency, $amount );
-		return $amount;
 	}
 
 	/**
