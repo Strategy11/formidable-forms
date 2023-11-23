@@ -91,7 +91,8 @@ function getDOMElements() {
 		// Upgrade Modal
 		upgradeModal: document.getElementById( 'frm-upgrade-modal' ),
 		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
-		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' )
+		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' ),
+		upgradeModalLink: document.getElementById( 'frm-upgrade-modal-link' )
 	};
 
 	// New Template Form Elements

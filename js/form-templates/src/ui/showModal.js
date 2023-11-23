@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { MODAL_SIZES, PLANS } from '../shared';
+import { MODAL_SIZES, PLANS, upgradeLink } from '../shared';
 import { hideElements, show } from '../utils';
 import { getModalWidget } from './';
 
@@ -73,7 +73,7 @@ const upgradablePlans = {
  */
 export const showUpgradeModal = showModal( ( plan, template ) => {
 	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
-	const { upgradeModal, upgradeModalTemplateNames, upgradeModalPlansIcons } = getElements();
+	const { upgradeModal, upgradeModalTemplateNames, upgradeModalPlansIcons, upgradeModalLink } = getElements();
 
 	// Update template names
 	upgradeModalTemplateNames.forEach( element => element.textContent = templateName );
@@ -90,6 +90,10 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 		const svg = icon.querySelector( 'svg > use' );
 		svg.setAttribute( 'xlink:href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
 	});
+
+	// Append template slug to the upgrade modal link URL
+	const templateSlug = template.dataset.slug ? `-${template.dataset.slug}` : '';
+	upgradeModalLink.href = upgradeLink + templateSlug;
 
 	show( upgradeModal );
 });
