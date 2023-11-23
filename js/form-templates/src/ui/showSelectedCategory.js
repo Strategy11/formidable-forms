@@ -14,13 +14,14 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
-	const { bodyContentChildren, pageTitle, templatesList, templateItems } = getElements();
+	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems } = getElements();
 
 	if ( VIEW_SLUGS.ALL_TEMPLATES !== selectedCategory ) {
 		hideElements( bodyContentChildren );
 	}
 
 	updatePageTitle();
+	hide( showCreateTemplateModalButton );
 	show( pageTitle );
 
 	switch ( selectedCategory ) {
@@ -54,6 +55,7 @@ export function showSelectedCategory( selectedCategory ) {
 export function showAllTemplates() {
 	const {
 		bodyContentChildren,
+		pageTitleDivider,
 		templateItems,
 		twinFeaturedTemplateItems,
 		customTemplatesSection,
@@ -61,7 +63,7 @@ export function showAllTemplates() {
 	} = getElements();
 
 	showElements([ ...bodyContentChildren, ...templateItems ]);
-	hideElements([ ...twinFeaturedTemplateItems, customTemplatesSection, emptyState ]);
+	hideElements([ pageTitleDivider, ...twinFeaturedTemplateItems, customTemplatesSection, emptyState ]);
 }
 
 /**
@@ -133,10 +135,17 @@ export function showCustomTemplates() {
 		return;
 	}
 
-	const { customTemplatesSection, customTemplatesList, customTemplatesTitle, customTemplateItems } = getElements();
+	const {
+		showCreateTemplateModalButton,
+		pageTitleDivider,
+		customTemplatesSection,
+		customTemplatesList,
+		customTemplatesTitle,
+		customTemplateItems
+	} = getElements();
 
 	hide( customTemplatesTitle );
-	showElements([ customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
+	showElements([ showCreateTemplateModalButton, pageTitleDivider, customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
 }
 
 /**

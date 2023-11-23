@@ -22,3 +22,8 @@ export const PLANS = {
 	RENEW: 'renew',
 	FREE: 'free'
 };
+
+export const MODAL_SIZES = {
+	GENERAL: '440px',
+	CREATE_TEMPLATE: '550px'
+};

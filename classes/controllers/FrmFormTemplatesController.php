@@ -205,6 +205,10 @@ class FrmFormTemplatesController {
 			$expired      = self::is_expired();
 			$upgrade_link = self::get_upgrade_link();
 			$renew_link   = self::get_renew_link();
+			$published_forms = self::get_published_forms();
+
+			// Add `create-template` modal view.
+			$view_parts[] = 'modals/create-template-modal.php';
 
 			// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
 			if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
@@ -297,19 +301,19 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function ajax_add_or_remove_favorite() {
-		// Check permission and nonce
+		// Check permission and nonce.
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Get posted data
+		// Get posted data.
 		$template_id        = FrmAppHelper::get_post_param( 'template_id', '', 'absint' );
 		$operation          = FrmAppHelper::get_post_param( 'operation', '', 'sanitize_text_field' );
 		$is_custom_template = FrmAppHelper::get_post_param( 'is_custom_template', '', 'rest_sanitize_boolean' );
 
-		// Determine the key based on whether it's a custom template or not
+		// Determine the key based on whether it's a custom template or not.
 		$key = $is_custom_template ? 'custom' : 'default';
 
-		// Perform add or remove operation
+		// Perform add or remove operation.
 		if ( 'add' === $operation ) {
 			self::$favorite_templates[ $key ][ $template_id ] = $template_id;
 		} elseif ( 'remove' === $operation ) {
@@ -318,11 +322,53 @@ class FrmFormTemplatesController {
 			}
 		}
 
-		// Update the favorite templates option
+		// Update the favorite templates option.
 		update_option( self::FAVORITE_TEMPLATES_OPTION, self::$favorite_templates );
 
-		// Return the updated list of favorite templates
+		// Return the updated list of favorite templates.
 		wp_send_json_success( self::$favorite_templates );
+	}
+
+	/**
+	 * Create a custom template from a form.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_create_template() {
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data.
+		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
+		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
+
+		if ( ! $new_form_id ) {
+			// Send an error response if form duplication fails.
+			$response = array(
+				'message' => __( 'There was an error creating a template.', 'formidable' ),
+			);
+		} else {
+			global $wpdb;
+
+			$new_values    = FrmFormsController::get_modal_values();
+			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
+
+			if ( $query_results ) {
+				FrmForm::clear_form_cache();
+			}
+
+			// Send a success response with redirect URL.
+			$response = array(
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
+			);
+		}
+
+		// Send response.
+		echo wp_json_encode( $response );
+		wp_die();
 	}
 
 	/**
@@ -335,31 +381,38 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	private static function fetch_and_format_custom_templates() {
-		// Get all published forms.
-		$published_forms = FrmForm::get_published_forms();
+		// Get all custom templates that are not default templates.
+		$custom_templates = FrmForm::getAll(
+			array(
+				'is_template'      => 1,
+				'default_template' => 0,
+			),
+			'name'
+		);
 
-		// Get IDs from the published forms for matching.
-		$published_form_ids = wp_list_pluck( $published_forms, 'id' );
-		// Update custom favorite templates to include only IDs that are also in the published forms.
-		self::$favorite_templates['custom'] = array_intersect( self::$favorite_templates['custom'], $published_form_ids );
+		// Extract IDs from the custom templates for matching with favorite templates.
+		$custom_templates_ids = wp_list_pluck( $custom_templates, 'id' );
 
-		foreach ( $published_forms as $template ) {
+		// Refine the list of favorite templates to include only those present in custom templates.
+		self::$favorite_templates['custom'] = array_intersect( self::$favorite_templates['custom'], $custom_templates_ids );
+
+		foreach ( $custom_templates as $template ) {
 			$template = array(
 				'id'          => $template->id,
 				'name'        => $template->name,
 				'key'         => $template->form_key,
 				'description' => $template->description,
-				'link'        => FrmFormsHelper::get_direct_link( $template->form_key ),
-				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ) ),
+				'link'        => FrmForm::get_edit_link( absint( $template->id ) ),
+				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&new_template=true&id=' . absint( $template->id ) ) ),
 				'released'    => $template->created_at,
 				'installed'   => 1,
 				'is_custom'   => true,
 			);
 
-			// Add the 'is_favorite' key
+			// Mark the template as favorite if it's in the favorite templates list.
 			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['custom'] );
 
-			// Add the formatted custom template to the list.
+			// Add the formatted template to the custom templates list.
 			array_unshift( self::$custom_templates, $template );
 		}
 	}
@@ -420,7 +473,7 @@ class FrmFormTemplatesController {
 				self::$categories[ $category_slug ]['count']++;
 			}
 
-			// Add the 'is_favorite' key
+			// Mark the template as favorite if it's in the favorite templates list.
 			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'] );
 		}
 		unset( $template ); // Unset the reference `$template` variable
@@ -647,7 +700,7 @@ class FrmFormTemplatesController {
 				'custom'  => count( self::$favorite_templates['custom'] ),
 			),
 			'customCount'             => count( self::$custom_templates ),
-			'proUpgradeUrl'           => FrmAppHelper::admin_upgrade_link( 'form-templates' ),
+			'upgradeLink'           => self::$upgrade_link,
 		);
 
 		/**
@@ -687,6 +740,18 @@ class FrmFormTemplatesController {
 	 */
 	public static function get_templates() {
 		return self::$templates;
+	}
+
+	/**
+	 * Get the published forms based on applied filters.
+	 *
+	 * @since x.x
+	 *
+	 * @return array An array of published forms.
+	 */
+	public static function get_published_forms() {
+		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
+		return FrmForm::get_published_forms( $where );
 	}
 
 	/**

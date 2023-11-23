@@ -20,6 +20,14 @@ export const isAllTemplatesCategory = category => VIEW_SLUGS.ALL_TEMPLATES === c
 export const isFavoritesCategory = category => VIEW_SLUGS.FAVORITES === category;
 
 /**
+ * Checks if the category is "Custom".
+ *
+ * @param {string} category The category slug.
+ * @return {boolean} True if the category is "Custom", otherwise false.
+ */
+export const isCustomCategory = category => VIEW_SLUGS.CUSTOM === category;
+
+/**
  * Checks if a template is a favorite.
  *
  * @param {HTMLElement} template The template element.

@@ -7,6 +7,7 @@ import addFavoriteButtonEvents from './favoriteButtonListener';
 import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addSearchEvents from './searchListener';
 import addEmptyStateButtonEvents from './emptyStateButtonListener';
+import addCreateTemplateEvents from './createTemplateListeners';
 import addGetCodeButtonEvents from './getCodeButtonListener';
 import addSaveCodeButtonEvents from './saveCodeButtonListener';
 
@@ -22,6 +23,7 @@ export function addEventListeners() {
 	addUseTemplateButtonEvents();
 	addSearchEvents();
 	addEmptyStateButtonEvents();
+	addCreateTemplateEvents();
 	addGetCodeButtonEvents();
 	addSaveCodeButtonEvents();
 }

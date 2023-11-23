@@ -283,7 +283,8 @@ class FrmFormsController {
 		$message = 'form_duplicate_error';
 
 		if ( $form ) {
-			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) );
+			$new_template = FrmAppHelper::simple_get( 'new_template' ) ? '&new_template=true' : '';
+			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) . $new_template );
 			$message = 'form_duplicated';
 		}
 
@@ -709,7 +710,7 @@ class FrmFormsController {
 	 *
 	 * @since 4.0
 	 */
-	private static function get_modal_values() {
+	public static function get_modal_values() {
 		$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
 		$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
 

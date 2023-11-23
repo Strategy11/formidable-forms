@@ -11,11 +11,11 @@ import { getAppStateProperty } from '../shared';
  * @return {void}
  */
 export function updatePageTitle( title ) {
-	const { pageTitle } = getElements();
+	const { pageTitleText } = getElements();
 
 	const newTitle =
 		title ||
 		getAppStateProperty( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
 
-	pageTitle.textContent = newTitle;
+	pageTitleText.textContent = newTitle;
 }

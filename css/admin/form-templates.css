@@ -190,7 +190,6 @@
 	cursor: pointer;
 	transition: color 200ms ease-out;
 	color: var(--grey-900);
-	margin-left: auto;
 }
 
 #frm-form-templates-page .frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
@@ -200,6 +199,46 @@
 #frm-form-templates-page .frm-form-templates-item-favorite-button:hover,
 #frm-form-templates-page .frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
 	color: var(--error-500);
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button {
+	position: relative;
+	display: none;
+	border-radius: var(--small-radius);
+	cursor: pointer;
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button::before {
+	content: '';
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	bottom: -4px;
+	left: -4px;
+	background-color: transparent;
+	border-radius: var(--small-radius);
+	transition: background-color 200ms ease-out;
+	z-index: 1;
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button:hover::before {
+	background-color: var(--primary-25);
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button .frmsvg {
+	width: 18px;
+	height: 18px;
+	color: var(--grey-900);
+	transition: color 200ms ease-out;
+	z-index: 2;
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button .frmsvg:hover {
+	color: var(--primary-500);
+}
+
+#frm-form-templates-page .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
+	display: none;
 }
 
 #frm-form-templates-page .frm-form-templates-item-content {
@@ -240,7 +279,9 @@
 	display: flex;
 }
 
-#frm-form-templates-page .frm-form-templates-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button {
+#frm-form-templates-page .frm-form-templates-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
+#frm-form-templates-page .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button,
+#frm-form-templates-page .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
 	display: flex;
 }
 
@@ -317,7 +358,7 @@
 
 .frm-upgrade-modal-lock-icon .frmsvg use {
 	color: var(--primary-500);
-}
+ }
 
 #frm-upgrade-modal .frm-upgrade-modal-banner {
 	padding: 12px 20px;
@@ -355,6 +396,13 @@
 	color: var(--primary-500);
 }
 
+/* Confirm modal */
+#frm_confirm_modal .frm-confirm-msg {
+	max-width: 268px;
+	font-size: var(--text-lg);
+	color: var(--grey-900);
+	font-weight: 500;
+}
 
 /**
  * Helper Classes

@@ -1830,6 +1830,15 @@ a.frm_hidden,
 
 /* End Forced Generic Classes */
 
+/* Start Helper Classes */
+.frm-vertical-line {
+	display: inline-block;
+	width: 1px;
+	height: 12px;
+	background-color: var(--grey-300);
+}
+/* End Helper Classes */
+
 .frm_forms.with_frm_style {
 	max-width: 100%;
 }
@@ -8109,6 +8118,7 @@ iframe#dyncontent_ifr {
 .frm-white-body .wrap input[type="search"],
 .frm-white-body .wrap input[type="number"],
 .frm-white-body .wrap select,
+#frm-form-templates-modal select,
 .frm-white-body .wrap textarea,
 button.frm_choose_image_box,
 #titlediv input[type="text"],
@@ -8146,6 +8156,7 @@ button.frm_choose_image_box,
 .frm_wrap input:focus,
 .frm_wrap select:focus,
 .wp-core-ui .frm_wrap select:focus,
+#frm-form-templates-modal select:focus,
 .frm-btn-group .multiselect.dropdown-toggle:focus,
 .frm_wrap textarea:focus {
 	border-color: var(--primary-500) !important;
@@ -8166,7 +8177,8 @@ button.frm_choose_image_box,
 	padding: 2px;
 }
 
-.wp-admin .frm_wrap select {
+.wp-admin .frm_wrap select,
+#frm-form-templates-modal select {
 	max-width: 100%;
 }
 
@@ -8201,7 +8213,8 @@ button.frm_choose_image_box,
 
 #postbox-container-2 select,
 .wp-admin .frm_wrap select,
-.frm_wrap .frm_form_builder select {
+.frm_wrap .frm_form_builder select,
+#frm-form-templates-modal select {
 	height: auto;
 	background-position: right 11px top 55%;
 }

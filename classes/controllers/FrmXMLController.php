@@ -88,7 +88,7 @@ class FrmXMLController {
 			$form_id  = key( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
-				'redirect' => FrmForm::get_edit_link( $form_id ),
+				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
 				'success'  => 1,
 			);
 			if ( ! empty( $imported['imported']['posts'] ) ) {

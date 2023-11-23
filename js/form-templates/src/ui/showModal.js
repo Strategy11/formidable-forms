@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PLANS } from '../shared';
+import { MODAL_SIZES, PLANS } from '../shared';
 import { hideElements, show } from '../utils';
 import { getModalWidget } from './';
 
@@ -51,6 +51,7 @@ const showModal = executePreOpen => async( ...params ) => {
 	const { modalItems } = getElements();
 	hideElements( modalItems );
 
+	dialogWidget.dialog( 'option', 'width', MODAL_SIZES.GENERAL );
 	await executePreOpen?.( ...params );
 	dialogWidget.dialog( 'open' );
 };
@@ -121,4 +122,17 @@ export const showLeaveEmailModal = showModal( () => {
 export const showCodeFromEmailModal = showModal( () => {
 	const { codeFromEmailModal } = getElements();
 	show( codeFromEmailModal );
+});
+
+/**
+ * Displays a modal dialog prompting the user to create a new template.
+ *
+ * @return {void}
+ */
+export const showCreateTemplateModal = showModal( () => {
+	const dialogWidget = getModalWidget();
+	dialogWidget.dialog( 'option', 'width', MODAL_SIZES.CREATE_TEMPLATE );
+
+	const { createTemplateModal } = getElements();
+	show( createTemplateModal );
 });

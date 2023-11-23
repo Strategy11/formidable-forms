@@ -52,11 +52,13 @@ const onUseTemplateButtonClick = ( event ) => {
 	}
 
 	// Prepare for new template installation
-	const { newTemplateForm, newTemplateNameInput, newTemplateLinkInput, newTemplateActionInput } = getElements();
+	const { newTemplateForm, newTemplateNameInput, newTemplateDescriptionInput, newTemplateLinkInput, newTemplateActionInput } = getElements();
 	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
+	const templateDescription = template.querySelector( '.frm-form-templates-item-description' ).textContent.trim();
 	const actionName = 'frm_install_template';
 
 	newTemplateNameInput.value = templateName;
+	newTemplateDescriptionInput.value = templateDescription;
 	newTemplateActionInput.value = actionName;
 	newTemplateLinkInput.value = useTemplateButton.href;
 

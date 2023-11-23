@@ -86,12 +86,12 @@ export function showCustomTemplatesEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	emptyStateTitle.textContent = __( 'No custom templates', 'formidable' );
+	emptyStateTitle.textContent = __( 'You currently have no templates.', 'formidable' );
 	emptyStateText.textContent = __(
-		'You haven\'t created any custom templates yet. You can create a new blank form or explore the wide range of templates.',
+		'You haven\'t created any form templates. Begin now to simplify your workflow and save time.',
 		'formidable'
 	);
-	emptyStateButton.textContent = __( 'All Templates', 'formidable' );
+	emptyStateButton.textContent = __( 'Create Template', 'formidable' );
 
 	// Display the empty state
 	hide( pageTitle );

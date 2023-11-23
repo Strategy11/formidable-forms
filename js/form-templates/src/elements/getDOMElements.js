@@ -16,6 +16,8 @@ function getDOMElements() {
 		headerCancelButton: document.getElementById( 'frm-publishing' ).querySelector( 'a' ),
 		createFormButton: document.getElementById( `${PREFIX}-create-form` ),
 		pageTitle: document.getElementById( `${PREFIX}-page-title` ),
+		pageTitleText: document.getElementById( `${PREFIX}-page-title-text` ),
+		pageTitleDivider: document.getElementById( `${PREFIX}-page-title-divider` ),
 		upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` )
 	};
 
@@ -68,6 +70,13 @@ function getDOMElements() {
 	const modalElements = {
 		modal,
 		modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
+		// Create New Template Modal
+		showCreateTemplateModalButton: document.getElementById( 'frm-show-create-template-modal' ),
+		createTemplateModal: document.getElementById( 'frm-create-template-modal' ),
+		createTemplateFormsDropdown: document.getElementById( 'frm-create-template-modal-forms-select' ),
+		createTemplateName: document.getElementById( 'frm_create_template_name' ),
+		createTemplateDescription: document.getElementById( 'frm_create_template_description' ),
+		createTemplateButton: document.getElementById( 'frm-create-template-button' ),
 		// Renew Account Modal
 		renewAccountModal: document.getElementById( 'frm-renew-modal' ),
 		// Leave Email Modal

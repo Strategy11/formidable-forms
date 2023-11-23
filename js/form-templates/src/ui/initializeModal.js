@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { addElements, getElements } from '../elements';
-import { initModal, offsetModalY, hasQueryParam } from '../shared';
+import { initModal, offsetModalY, hasQueryParam, MODAL_SIZES } from '../shared';
 import { showLeaveEmailModal } from './';
 
 let modalWidget = null;
@@ -13,7 +13,7 @@ let modalWidget = null;
  * @return {void}
  */
 export async function initializeModal() {
-	modalWidget = initModal( '#frm-form-templates-modal', '440px' );
+	modalWidget = initModal( '#frm-form-templates-modal', MODAL_SIZES.GENERAL );
 
 	// Set the vertical offset for the modal
 	if ( modalWidget ) {
@@ -30,6 +30,14 @@ export async function initializeModal() {
 
 	// Maybe fetch and inject the API email form into the modal
 	maybeFetchInjectForm();
+
+	// Customize the confirm modal appearance: adjusting its width and vertical position
+	wp.hooks.addAction( 'frmAdmin.beforeOpenConfirmModal', 'frmFormTemplates', ( options ) => {
+		const { $info: confirmModal } = options;
+
+		confirmModal.dialog( 'option', 'width', MODAL_SIZES.CREATE_TEMPLATE );
+		offsetModalY( confirmModal, '103px' );
+	});
 }
 
 /**
