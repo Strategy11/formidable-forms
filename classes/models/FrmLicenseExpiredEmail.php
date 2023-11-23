@@ -20,8 +20,22 @@ class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 		$args = $this->get_content_args();
 
 		ob_start();
-		include $this->get_include_file( 'license-expired' );
-		return ob_get_clean();
+		include FrmAppHelper::plugin_path() . '/classes/views/summary-emails/license-expired.php';
+		$content = ob_get_clean();
+		if ( ! $this->is_html ) {
+			$content = html_entity_decode( strip_tags( $content ) );
+		}
+
+		$content = str_replace(
+			__( 'Renew Now', 'formidable' ),
+			sprintf(
+				__( 'Renew now at %s', 'formidable' ),
+				$args['renew_url']
+			),
+			$content
+		);
+
+		return $content;
 	}
 
 	protected function get_content_args() {
