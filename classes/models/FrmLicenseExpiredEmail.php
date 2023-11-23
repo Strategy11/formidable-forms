@@ -24,16 +24,16 @@ class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 		$content = ob_get_clean();
 		if ( ! $this->is_html ) {
 			$content = html_entity_decode( strip_tags( $content ) );
-		}
 
-		$content = str_replace(
-			__( 'Renew Now', 'formidable' ),
-			sprintf(
-				__( 'Renew now at %s', 'formidable' ),
-				$args['renew_url']
-			),
-			$content
-		);
+			$content = str_replace(
+				__( 'Renew Now', 'formidable' ),
+				sprintf(
+					__( 'Renew now at %s', 'formidable' ),
+					$args['renew_url']
+				),
+				$content
+			);
+		}
 
 		return $content;
 	}
@@ -41,10 +41,7 @@ class FrmLicenseExpiredEmail extends FrmSummaryEmail {
 	protected function get_content_args() {
 		$args = parent::get_content_args();
 
-		$args['renew_url'] = FrmSummaryEmailsHelper::add_url_data(
-			'https://formidableforms.com/account/downloads/',
-			array( 'utm_content' => 'renew_url' )
-		);
+		$args['renew_url'] = FrmSummaryEmailsHelper::get_frm_url( 'account/downloads/', 'renew_url' );
 
 		return $args;
 	}

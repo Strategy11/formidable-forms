@@ -118,19 +118,10 @@ abstract class FrmSummaryEmail {
 	protected function get_content_args() {
 		return array(
 			'subject'          => $this->get_subject(),
-			'site_url'         => FrmSummaryEmailsHelper::add_url_data(
-				home_url( '/' ),
-				array( 'utm_content' => 'site_url' )
-			),
+			'site_url'         => home_url( '/' ),
 			'site_url_display' => home_url( '/' ),
-			'unsubscribe_url'  => FrmSummaryEmailsHelper::add_url_data(
-				site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
-				array( 'utm_content' => 'unsubscribe_url' )
-			),
-			'support_url'      => FrmSummaryEmailsHelper::add_url_data(
-				'https://formidableforms.com/new-topic/',
-				array( 'utm_content' => 'contact_support' )
-			)
+			'unsubscribe_url'  => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
+			'support_url'      => FrmSummaryEmailsHelper::get_frm_url( 'new-topic', 'contact_support' ),
 		);
 	}
 

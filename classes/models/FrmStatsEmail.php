@@ -82,10 +82,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 		$args['to_date']         = $this->to_date;
 		$args['top_forms']       = FrmSummaryEmailsHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
-		$args['dashboard_url']   = FrmSummaryEmailsHelper::add_url_data(
-			site_url() . '/wp-admin/admin.php?page=formidable',
-			array( 'utm_content' => 'dashboard_url' )
-		);
+		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
 		$args['stats']           = array(
 			'entries' => array(
 				'label'   => __( 'Entries created', 'formidable' ),
@@ -96,10 +93,7 @@ abstract class FrmStatsEmail extends FrmSummaryEmail {
 
 		if ( $this->has_out_of_date_plugins ) {
 			$args['out_of_date_plugins'] = FrmSummaryEmailsHelper::get_out_of_date_plugins();
-			$args['plugins_url']         = FrmSummaryEmailsHelper::add_url_data(
-				site_url() . '/wp-admin/plugins.php',
-				array( 'utm_content' => 'plugins_url' )
-			);
+			$args['plugins_url']         = site_url() . '/wp-admin/plugins.php';
 		}
 
 		$this->add_entries_comparison_data( $args['stats'] );

@@ -441,21 +441,29 @@ class FrmSummaryEmailsHelper {
 	}
 
 	/**
-	 * Adds custom data to URL.
+	 * Gets Formidable URL with tracking params.
 	 *
-	 * @param string $url         The URL.
-	 * @param array  $custom_data Custom data.
+	 * @param string $url  The URL.
+	 * @param string|array $args Custom tracking args if is array, or `utm_content` if is string.
 	 * @return string
 	 */
-	public static function add_url_data( $url, $custom_data = array() ) {
-		$data = array(
-			'utm_medium'  => 'summary-email',
-			'utm_content' => 'link',
-		);
+	public static function get_frm_url( $url, $args = array() ) {
+		if ( is_array( $args ) ) {
+			$args = wp_parse_args(
+				$args,
+				array(
+					'medium'  => 'summary-email',
+					'content' => 'link',
+				)
+			);
+		} else {
+			$args = array(
+				'medium'  => 'summary-email',
+				'content' => $args,
+			);
+		}
 
-		$data += $custom_data;
-
-		return add_query_arg( $data, $url );
+		return FrmAppHelper::admin_upgrade_link( $args, $url );
 	}
 
 	/**
