@@ -377,6 +377,7 @@ class FrmForm {
 			}
 
 			self::prepare_field_update_values( $field, $values, $new_field );
+			self::maybe_update_max_option( $new_field, $field, $values );
 
 			FrmField::update( $field_id, $new_field );
 
@@ -385,6 +386,31 @@ class FrmForm {
 		self::clear_form_cache();
 
 		return $values;
+	}
+
+	/**
+	 * Resets the 'max' option of a field when changing paragraph field type to other field types like text, email etc.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $new_field
+	 * @param array $field
+	 * @param array $values
+	 * @return void
+	 */
+	private static function maybe_update_max_option( &$new_field, $field, $values ) {
+		if ( $field->type === 'textarea' &&
+			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
+			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
+
+			$new_field['field_options']['max'] = '';
+
+			/**
+			 * Update posted field setting so that new 'max' option is displayed after form is saved and page reloads.
+			 * FrmFieldsHelper::fill_default_field_opts populates field options by calling self::get_posted_field_setting.
+			 */
+			$_POST['field_options'][ 'max_' . $field->id ] = '';
+		}
 	}
 
 	/**
