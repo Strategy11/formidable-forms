@@ -410,4 +410,50 @@ class FrmTipsHelper {
 
 		return $tips[ $random ];
 	}
+
+	/**
+	 * Displays a call-to-action section in the admin area.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *     An array of arguments to configure the call-to-action section.
+	 *
+	 *     @type string $title       The title of the section.
+	 *     @type string $description The description of the section.
+	 *     @type string $link_text   The text for the link.
+	 *     @type string $link_url    The URL for the link.
+	 *     @type string $role        The required user role to view the section. Default 'administrator'.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function show_admin_cta( $args ) {
+		$role = ! empty( $args['role'] ) ? $args['role'] : 'administrator';
+
+		if ( ! current_user_can( $role ) ) {
+			return; // Return early if the user doesn't have the required capability
+		}
+
+		$defaults = array(
+			'title'       => '',
+			'description' => '',
+			'link_text'   => '',
+			'link_url'    => '#',
+			'class'       => '',
+			'id'          => '',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		// Extract the remaining variables.
+		$title       = $args['title'];
+		$description = $args['description'];
+		$link_text   = $args['link_text'];
+		$link_url    = $args['link_url'];
+		$class       = $args['class'];
+		$id          = $args['id'];
+
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
+	}
 }
