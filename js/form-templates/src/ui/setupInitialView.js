@@ -41,6 +41,11 @@ function setupInitialView() {
 		hide( freeTemplatesCategory );
 	}
 
+	// Update extra templates count
+	const { extraTemplateCountElements } = getElements();
+	const { extraTemplatesCount } = getAppState();
+	extraTemplateCountElements.forEach( element => element.textContent = extraTemplatesCount );
+
 	// Smoothly display the updated UI elements
 	fadeIn( bodyContent );
 	show( sidebar );

@@ -18,7 +18,8 @@ function getDOMElements() {
 		pageTitle: document.getElementById( `${PREFIX}-page-title` ),
 		pageTitleText: document.getElementById( `${PREFIX}-page-title-text` ),
 		pageTitleDivider: document.getElementById( `${PREFIX}-page-title-divider` ),
-		upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` )
+		upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` ),
+		extraTemplateCountElements: document.querySelectorAll( `.${PREFIX}-extra-templates-count` )
 	};
 
 	// Templates Elements

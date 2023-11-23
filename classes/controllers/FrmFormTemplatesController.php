@@ -694,6 +694,7 @@ class FrmFormTemplatesController {
 	private static function get_js_variables() {
 		$js_variables = array(
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
+			'templatesCount'          => count( self::$templates ),
 			'favoritesCount'          => array(
 				'total'   => self::get_favorite_templates_count(),
 				'default' => count( self::$favorite_templates['default'] ),

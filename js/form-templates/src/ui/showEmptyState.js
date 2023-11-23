@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -111,10 +111,11 @@ export function showAvailableTemplatesEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
+	const { extraTemplatesCount } = getAppState();
 	emptyStateTitle.textContent = __( 'No Templates Available', 'formidable' );
-	emptyStateText.textContent = __(
-		'Upgrade to PRO for 200+ options or explore Free Templates.',
-		'formidable'
+	emptyStateText.textContent = sprintf(
+		__( 'Upgrade to PRO for %s+ options or explore Free Templates.', 'formidable' ),
+		extraTemplatesCount
 	);
 
 	// Display the empty state
