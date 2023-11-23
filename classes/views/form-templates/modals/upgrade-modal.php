@@ -16,38 +16,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
 <div id="frm-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
-	<div class="inside">
-		<span class="frm-form-templates-space-5"></span>
-
-		<div class="frm-upgrade-modal-lock-icon">
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-templates/lock.svg' ); ?>" />
+	<div class="frm_modal_top frm-mt-xs">
+		<div class="frm-upgrade-modal-lock-icon frm-flex-center frm-mb-sm">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
 		</div>
 
-		<div id="frm-upgrade-modal-content">
-			<h3>
+		<div class="frm-modal-title">
+			<h2 class="frm-font-semibold frm-m-0 frm-p-0">
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
 					esc_html__( '%1$sTEMPLATE NAME%2$s is a PRO Template', 'formidable' ),
-					'<span class="frm-upgrade-modal-template-name">',
+					'<span class="frm-upgrade-modal-template-name frm-capitalize">',
 					'</span>'
 				);
 				?>
-			</h3>
-			<p>
-				<?php
-				printf(
-					/* translators: %1$s: Open span tag, %2$s: Close span tag */
-					esc_html__( 'The %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to unlock this and more awesome templates.', 'formidable' ),
-					'<span class="frm-upgrade-modal-template-name">',
-					'</span>'
-				);
-				?>
-			</p>
+			</h2>
 		</div>
+	</div>
+
+	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
+		<p class="frm-m-0">
+			<?php
+			printf(
+				/* translators: %1$s: Open span tag, %2$s: Close span tag */
+				esc_html__( 'The %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to unlock this and more awesome templates.', 'formidable' ),
+				'<span class="frm-upgrade-modal-template-name frm-capitalize">',
+				'</span>'
+			);
+			?>
+		</p>
 
 		<div class="frm-upgrade-modal-banner">
-			<span class="frm-upgrade-modal-banner-title">
+			<span class="frm-upgrade-modal-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
@@ -60,12 +61,12 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			<span class="frm-upgrade-modal-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
 		</div>
 
-		<div id="frm-upgrade-modal-available-plans">
+		<div id="frm-upgrade-modal-available-plans" class="frm-flex-col frm-gap-xs">
 			<span><?php esc_html_e( 'Template available on:', 'formidable' ); ?></span>
-			<div id="frm-upgrade-modal-plans">
+			<div class="frm-flex-box frm-gap-md">
 				<?php foreach ( $plans as $plan ) { ?>
-					<span class="frm-upgrade-modal-plan">
-						<span class="frm-upgrade-modal-plan-icon" data-plan="<?php echo esc_attr( strtolower( $plan ) ); ?>">
+					<span class="frm-upgrade-modal-plan frm-flex-box frm-gap-xs frm-items-center">
+						<span class="frm-upgrade-modal-plan-icon frm-flex-box" data-plan="<?php echo esc_attr( strtolower( $plan ) ); ?>">
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?>
 						</span>
 						<span class="frm-upgrade-modal-plan-text"><?php echo esc_html( $plan ); ?></span>
@@ -75,11 +76,11 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 		</div>
 	</div>
 
-	<div class="frm_modal_footer">
+	<div class="frm_modal_footer frm-flex-box frm-justify-end frm-pt-sm frm-pb-md">
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
-		<a href="<?php echo esc_url( $upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
+		<a id="frm-upgrade-modal-link" href="#" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Upgrade to PRO', 'formidable' ); ?>
 		</a>
 	</div>

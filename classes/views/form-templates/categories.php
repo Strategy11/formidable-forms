@@ -12,10 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<ul class="frm-form-templates-categories">
+<ul class="frm-form-templates-categories frm-flex-col frm-gap-md">
 	<?php foreach ( $categories as $category_slug => $category_data ) { ?>
 		<?php
-		$classes = 'frm-form-templates-cat-item';
+		$classes = 'frm-form-templates-cat-item frm-flex-box frm-justify-between frm-font-medium';
 
 		if ( 'all-templates' === $category_slug ) {
 			echo '<li class="frm-form-templates-divider"></li>';

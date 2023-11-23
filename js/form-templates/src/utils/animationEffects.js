@@ -20,9 +20,9 @@ export const fadeIn = ( element, fadingClass = `${PREFIX}-flex` ) => {
 		show( element );
 	}
 
-	element.classList.add( `${PREFIX}-fadein`, fadingClass );
+	element.classList.add( 'frm-fadein-up', fadingClass );
 
 	element.addEventListener( 'animationend', () => {
-		element.classList.remove( `${PREFIX}-fadein`, fadingClass );
+		element.classList.remove( 'frm-fadein-up', fadingClass );
 	}, { once: true });
 };

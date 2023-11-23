@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<div class="columns-2">
-			<div id="frm-form-templates-sidebar" class="frm-right-panel frm_hidden">
+			<div id="frm-form-templates-sidebar" class="frm-right-panel frm-flex-col frm_hidden">
 				<div class="frm-scrollbar-wrapper">
 					<?php
 					// Search box.
@@ -42,16 +42,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 
-			<div id="post-body-content" class="frm_hidden">
-				<span id="frm-form-templates-create-form">
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
-					<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
+			<div id="post-body-content" class="frm-flex-col frm-gap-md frm-p-md frm_hidden">
+				<span class="frm-form-templates-grid-layout">
+					<div id="frm-form-templates-create-form" class="frm-form-templates-grid-item frm-flex-box frm-items-center">
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
+						<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
+					</div>
 				</span>
 				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider"></span>
 
 				<?php
 				// Templates list.
-				require $view_path . 'templates.php';
+				require $view_path . 'list.php';
 				?>
 			</div>
 		</div>

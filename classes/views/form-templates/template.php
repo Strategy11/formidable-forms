@@ -21,7 +21,7 @@ $plan_required = FrmFormsHelper::get_plan_required( $template );
 // Remove "Form Template" string from `$template['name']` and assign to a variable.
 $template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
-$class_names      = array( 'frm-form-templates-item' );
+$class_names      = array( 'frm-form-templates-item', 'frm-form-templates-grid-item' );
 $use_template_url = '#';
 
 /**
@@ -74,7 +74,7 @@ $attributes['class'] = implode( ' ', $class_names );
 	<?php endif; ?>
 
 	<div class="frm-form-templates-item-body">
-		<h3 class="frm-form-templates-item-title">
+		<h3 class="frm-form-templates-item-title frm-font-medium">
 			<div class="frm-form-templates-item-title-text">
 				<?php if ( $plan_required ) { ?>
 					<span class="frm-form-templates-item-lock-icon">

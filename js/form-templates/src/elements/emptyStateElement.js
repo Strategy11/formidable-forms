@@ -21,14 +21,14 @@ export function createEmptyStateElement() {
 
 	return div({
 		id: `${PREFIX}-empty-state`,
-		className: HIDDEN_CLASS,
+		className: `frm-flex-col frm-flex-center frm-gap-md ${HIDDEN_CLASS}`,
 		children: [
 			img({
 				src: `${PLUGIN_URL}/images/form-templates/empty-state.svg`,
 				alt: __( 'Empty State', 'formidable' )
 			}),
 			tag( 'h3', {
-				className: `${PREFIX}-title`
+				className: `${PREFIX}-title frm-text-lg frm-font-medium frm-mt-0`
 			}),
 			span({
 				className: `${PREFIX}-text`

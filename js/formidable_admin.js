@@ -4329,7 +4329,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldGroupMessage.classList.add( 'frm_hidden' );
-		fieldGroupMessage.classList.remove( 'frm-fadein' );
+		fieldGroupMessage.classList.remove( 'frm-fadein-up-back' );
 	}
 
 	/**
@@ -4344,7 +4344,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldGroupMessage.classList.remove( 'frm_hidden' );
-		fieldGroupMessage.classList.add( 'frm-fadein' );
+		fieldGroupMessage.classList.add( 'frm-fadein-up-back' );
 	}
 
 	/**
@@ -4368,7 +4368,7 @@ function frmAdminBuildJS() {
 
 		fieldGroupMessage = div({
 			id: 'frm-field-group-message',
-			className: 'frm-flex-center frm-fadein',
+			className: 'frm-flex-center frm-fadein-up-back',
 			children: [
 				span({
 					id: 'frm-field-group-message-dismiss',

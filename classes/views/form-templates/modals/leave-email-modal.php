@@ -28,43 +28,39 @@ $args = wp_parse_args( $args, $defaults );
 <div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<h2><?php echo esc_html( $args['title'] ); ?></h2>
+			<h2 class="frm-font-semibold frm-m-0"><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside">
-		<div>
-			<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
-				<span class="frm-wait"></span>
-			</div>
+	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
+		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
+			<span class="frm-wait"></span>
+		</div>
 
-			<p>
-				<?php
-				echo wp_kses(
-					wpautop( esc_html( $args['description'] ) ),
-					array(
-						'p' => true,
-						'br' => true,
-					)
-				);
-				?>
-			</p>
+		<?php
+		echo wp_kses(
+			wpautop( esc_html( $args['description'] ) ),
+			array(
+				'p' => true,
+				'br' => true,
+			)
+		);
+		?>
 
-			<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset">
-				<span class="frm-with-left-icon">
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
-					<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
-				</span>
+		<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset">
+			<span class="frm-with-left-icon">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
+				<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
+			</span>
 
-				<span id="frm_leave_email_error" class="frm-form-templates-modal-error frm_hidden">
-					<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
-					<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
-				</span>
-			</div>
+			<span id="frm_leave_email_error" class="frm-form-templates-modal-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
+				<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
+				<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
+			</span>
 		</div>
 	</div>
 
-	<div class="frm_modal_footer">
+	<div class="frm_modal_footer frm-flex-box frm-justify-end frm-pt-sm frm-pb-md">
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
