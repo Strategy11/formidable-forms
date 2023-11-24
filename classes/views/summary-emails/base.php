@@ -58,7 +58,7 @@ $frm_settings = FrmAppHelper::get_settings();
 	<div style="background-color: #fff; max-width: 42.5em; border-radius: 1em; margin: 4.375em auto auto;">
 		%%INNER_CONTENT%%
 
-		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style( '' ) ) ?>padding-top: 0;">
+		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style( '' ) ); ?>padding-top: 0;">
 			<table style="background-color: #FEF7F4; color: #501E0C; border-radius: 1em; line-height: 1.5; padding: 1em; width: 100%;">
 				<tr>
 					<td><?php esc_html_e( 'Need help? Get in touch with our team', 'formidable' ); ?></td>
