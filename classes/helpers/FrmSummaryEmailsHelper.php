@@ -242,9 +242,8 @@ class FrmSummaryEmailsHelper {
 	 * Sets the last sent date of an email type.
 	 *
 	 * @param string $type Email type.
-	 * @param mixed  $value Set custom value. If this is null, set the current date.
 	 */
-	public static function set_last_sent_date( $type, $value = null ) {
+	public static function set_last_sent_date( $type ) {
 		$options = self::get_options();
 
 		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
