@@ -16,6 +16,7 @@ $frm_settings = FrmAppHelper::get_settings();
 
 echo '%%INNER_CONTENT%%';
 
+// translators: contact support URL.
 printf( esc_html__( 'Need help? Get in touch with our team at: %s', 'formidable' ), esc_url( $args['support_url'] ) );
 
 echo "\r\n\r\n";

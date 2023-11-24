@@ -132,6 +132,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		// Build total for each currency.
 		foreach ( $payment_data['total'] as $currency => $amount ) {
 			$stats[ 'payments_total_' . $currency ] = array(
+				// translators: currency name.
 				'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
 				'count'   => $amount,
 				'display' => $this->get_formatted_price( $amount, $currency ),
@@ -164,6 +165,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 			// If prev month has more currencies.
 			foreach ( $prev_payment_data['total'] as $currency => $amount ) {
 				$stats[ 'payments_total_' . $currency ] = array(
+					// translators: currency name.
 					'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
 					'count'   => 0,
 					'display' => $this->get_formatted_price( 0, $currency ),
@@ -180,7 +182,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @param string|array $currency Currency string value or array.
 	 * @return string
 	 */
-	protected function get_formatted_price(&$amount, $currency ) {
+	protected function get_formatted_price( &$amount, $currency ) {
 		if ( ! is_array( $currency ) ) {
 			$currency = FrmCurrencyHelper::get_currency( $currency );
 		}

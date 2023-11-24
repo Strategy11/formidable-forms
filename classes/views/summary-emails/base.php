@@ -58,16 +58,16 @@ $frm_settings = FrmAppHelper::get_settings();
 	<div style="background-color: #fff; max-width: 42.5em; border-radius: 1em; margin: 4.375em auto auto;">
 		%%INNER_CONTENT%%
 
-        <div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style( '' ) ) ?>padding-top: 0;">
-            <table style="background-color: #FEF7F4; color: #501E0C; border-radius: 1em; line-height: 1.5; padding: 1em; width: 100%;">
-                <tr>
-                    <td><?php esc_html_e( 'Need help? Get in touch with our team', 'formidable' ); ?></td>
-                    <td align="right">
-                        <a href="<?php echo esc_url( $args['support_url'] ); ?>" style="color: #F15A24; font-weight: 700; text-decoration: none;"><?php esc_html_e( 'Contact support', 'formidable' ); ?></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
+		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style( '' ) ) ?>padding-top: 0;">
+			<table style="background-color: #FEF7F4; color: #501E0C; border-radius: 1em; line-height: 1.5; padding: 1em; width: 100%;">
+				<tr>
+					<td><?php esc_html_e( 'Need help? Get in touch with our team', 'formidable' ); ?></td>
+					<td align="right">
+						<a href="<?php echo esc_url( $args['support_url'] ); ?>" style="color: #F15A24; font-weight: 700; text-decoration: none;"><?php esc_html_e( 'Contact support', 'formidable' ); ?></a>
+					</td>
+				</tr>
+			</table>
+		</div>
 
 		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
 			<a href="<?php echo esc_url( $args['unsubscribe_url'] ); ?>" style="color: currentColor; font-size: 0.75em; line-height: 1.33; font-weight: 500;"><?php esc_html_e( 'Unsubscribe', 'formidable' ); ?></a>
