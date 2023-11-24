@@ -19,8 +19,6 @@ class FrmSummaryEmailsHelper {
 
 	const YEARLY = 'yearly';
 
-	const LICENSE_EXPIRED = 'license';
-
 	/**
 	 * Number of days to send the next monthly email.
 	 */
@@ -53,7 +51,7 @@ class FrmSummaryEmailsHelper {
 	 *
 	 * @return bool
 	 */
-	private static function is_enabled() {
+	public static function is_enabled() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return ! empty( $frm_settings->summary_emails ) && ! empty( $frm_settings->summary_emails_recipients );
 	}
@@ -67,10 +65,9 @@ class FrmSummaryEmailsHelper {
 		$options = get_option( self::$option_name );
 		if ( ! $options ) {
 			$default_options = array(
-				'last_' . self::MONTHLY         => gmdate( 'Y-m-d', strtotime( '-' . self::DELAY_AFTER_UPGRADE . ' days' ) ), // Do not send email within 15 days after updating.
-				'last_' . self::YEARLY          => '',
-				'last_' . self::LICENSE_EXPIRED => '',
-				'renewal_date'                  => '',
+				'last_' . self::MONTHLY => gmdate( 'Y-m-d', strtotime( '-' . self::DELAY_AFTER_UPGRADE . ' days' ) ), // Do not send email within 15 days after updating.
+				'last_' . self::YEARLY  => '',
+				'renewal_date'          => '',
 			);
 
 			self::save_options( $default_options );
@@ -101,14 +98,6 @@ class FrmSummaryEmailsHelper {
 
 		$emails       = array();
 		$current_date = gmdate( 'Y-m-d' );
-
-		// Check for license expired email.
-		if ( ! FrmAddonsController::is_license_expired() ) {
-			self::set_last_sent_date( self::LICENSE_EXPIRED, '' ); // Clear last sent date if license is renewed.
-		} elseif ( ! self::get_last_sent_date( self::LICENSE_EXPIRED ) ) {
-			// If license expired and license email hasn't been sent, send it.
-			$emails[] = self::LICENSE_EXPIRED;
-		}
 
 		// Check for monthly or yearly email.
 		$last_monthly = self::get_last_sent_date( 'monthly' );
@@ -160,17 +149,6 @@ class FrmSummaryEmailsHelper {
 
 		if ( $yearly_email->send() ) {
 			self::set_last_sent_date( self::YEARLY );
-		}
-	}
-
-	/**
-	 * Sends license expired email.
-	 */
-	public static function send_license() {
-		$license_email = new FrmEmailLicenseExpired();
-
-		if ( $license_email->send() ) {
-			self::set_last_sent_date( self::LICENSE_EXPIRED );
 		}
 	}
 
@@ -246,12 +224,12 @@ class FrmSummaryEmailsHelper {
 	}
 
 	/**
-	 * Gets sent date of the last monthly, yearly, or license expired email.
+	 * Gets sent date of the last monthly or yearly email.
 	 *
-	 * @param string $type Accepts `monthly`, `yearly`, or `license`.
+	 * @param string $type Accepts `monthly`, `yearly`.
 	 * @return string|false
 	 */
-	private static function get_last_sent_date( $type ) {
+	public static function get_last_sent_date( $type ) {
 		$options = self::get_options();
 		if ( empty( $options[ 'last_' . $type ] ) ) {
 			return false;
@@ -266,7 +244,7 @@ class FrmSummaryEmailsHelper {
 	 * @param string $type Email type.
 	 * @param mixed  $value Set custom value. If this is null, set the current date.
 	 */
-	private static function set_last_sent_date( $type, $value = null ) {
+	public static function set_last_sent_date( $type, $value = null ) {
 		$options = self::get_options();
 
 		$options[ 'last_' . $type ] = gmdate( 'Y-m-d' );
@@ -297,7 +275,7 @@ class FrmSummaryEmailsHelper {
 	public static function get_payments_data( $from_date, $to_date ) {
 		$data = array(
 			'count' => 0,
-			'total' => 0,
+			'total' => array(),
 		);
 
 		$payments = FrmDb::get_results(
