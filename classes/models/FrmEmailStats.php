@@ -182,7 +182,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @param string|array $currency Currency string value or array.
 	 * @return string
 	 */
-	protected function get_formatted_price( &$amount, $currency ) {
+	protected function get_formatted_price( $amount, $currency ) {
 		if ( ! is_array( $currency ) ) {
 			$currency = FrmCurrencyHelper::get_currency( $currency );
 		}
