@@ -9,7 +9,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-class FrmMonthlyEmail extends FrmStatsEmail {
+class FrmEmailMonthly extends FrmEmailStats {
 
 	protected $has_inbox_msg = true;
 

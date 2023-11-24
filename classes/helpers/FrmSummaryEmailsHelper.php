@@ -145,7 +145,7 @@ class FrmSummaryEmailsHelper {
 	 * Sends monthly email.
 	 */
 	public static function send_monthly() {
-		$monthly_email = new FrmMonthlyEmail();
+		$monthly_email = new FrmEmailMonthly();
 
 		if ( $monthly_email->send() ) {
 			self::set_last_sent_date( self::MONTHLY );
@@ -156,7 +156,7 @@ class FrmSummaryEmailsHelper {
 	 * Sends yearly email.
 	 */
 	public static function send_yearly() {
-		$yearly_email = new FrmYearlyEmail();
+		$yearly_email = new FrmEmailYearly();
 
 		if ( $yearly_email->send() ) {
 			self::set_last_sent_date( self::YEARLY );
@@ -167,7 +167,7 @@ class FrmSummaryEmailsHelper {
 	 * Sends license expired email.
 	 */
 	public static function send_license() {
-		$license_email = new FrmLicenseExpiredEmail();
+		$license_email = new FrmEmailLicenseExpired();
 
 		if ( $license_email->send() ) {
 			self::set_last_sent_date( self::LICENSE_EXPIRED );

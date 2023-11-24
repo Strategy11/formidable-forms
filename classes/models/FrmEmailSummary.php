@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-abstract class FrmSummaryEmail {
+abstract class FrmEmailSummary {
 
 	/**
 	 * Is HTML email?

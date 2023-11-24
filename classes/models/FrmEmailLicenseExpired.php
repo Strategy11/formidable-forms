@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmLicenseExpiredEmail extends FrmSummaryEmail {
+class FrmEmailLicenseExpired extends FrmEmailSummary {
 
 	protected function get_subject() {
 		return __( 'Your Formidable Forms license is expired', 'formidable' );

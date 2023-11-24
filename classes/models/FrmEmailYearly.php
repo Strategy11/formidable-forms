@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmYearlyEmail extends FrmStatsEmail {
+class FrmEmailYearly extends FrmEmailStats {
 
 	public function __construct() {
 		parent::__construct();
