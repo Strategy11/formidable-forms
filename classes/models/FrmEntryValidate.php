@@ -72,7 +72,7 @@ class FrmEntryValidate {
 	 */
 	private static function maybe_fix_item_meta() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		if ( ! is_array( $_POST['item_meta'] ) ) {
+		if ( ! isset( $_POST['item_meta'] ) || ! is_array( $_POST['item_meta'] ) ) {
 			$_POST['item_meta'] = array();
 		}
 	}
