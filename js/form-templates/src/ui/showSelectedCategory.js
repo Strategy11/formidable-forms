@@ -59,11 +59,12 @@ export function showAllTemplates() {
 		templateItems,
 		twinFeaturedTemplateItems,
 		customTemplatesSection,
-		emptyState
+		emptyState,
+		applicationTemplates
 	} = getElements();
 
 	showElements([ ...bodyContentChildren, ...templateItems ]);
-	hideElements([ pageTitleDivider, ...twinFeaturedTemplateItems, customTemplatesSection, emptyState ]);
+	hideElements([ pageTitleDivider, ...twinFeaturedTemplateItems, customTemplatesSection, emptyState, applicationTemplates ]);
 }
 
 /**

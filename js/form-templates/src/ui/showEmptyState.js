@@ -17,13 +17,13 @@ import { show, hide, showElements, hideElements } from '../utils';
  */
 export function showSearchEmptyState() {
 	const { notEmptySearchText } = getAppState();
-	const { pageTitle, emptyState, emptyStateButton } = getElements();
+	const { pageTitle, emptyState, emptyStateButton, applicationTemplates } = getElements();
 
 	// Toggle visibility and remove attributes based on search status
 	if ( VIEW_SLUGS.SEARCH === emptyState.dataset?.view ) {
 		if ( notEmptySearchText ) {
 			show( emptyState );
-			hide( pageTitle );
+			hideElements([ pageTitle, applicationTemplates ]);
 		} else {
 			hide( emptyState );
 			emptyState.removeAttribute( 'data-view' );
@@ -45,7 +45,7 @@ export function showSearchEmptyState() {
 	emptyStateButton.textContent = __( 'Start from scratch', 'formidable' );
 
 	// Display the empty state
-	hide( pageTitle );
+	hideElements([ pageTitle, applicationTemplates ]);
 	showElements([ emptyState, emptyStateButton ]);
 };
 

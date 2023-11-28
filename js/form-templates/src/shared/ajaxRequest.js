@@ -1,1 +1,1 @@
-export const { doJsonPost } = window.frmDom.ajax;
+export const { doJsonFetch, doJsonPost } = window.frmDom.ajax;

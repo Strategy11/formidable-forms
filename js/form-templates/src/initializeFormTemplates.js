@@ -4,7 +4,7 @@
 import { initializeElements } from './elements';
 import { initializeAppState } from './shared';
 import { setupInitialView, initializeModal } from './ui';
-import { buildCategorizedTemplates } from './templates';
+import { buildCategorizedTemplates, maybeAddApplicationTemplates } from './templates';
 import { addEventListeners } from './events';
 
 /**
@@ -18,6 +18,9 @@ function initializeFormTemplates() {
 
 	// Initialize application state
 	initializeAppState();
+
+	// Add application templates
+	maybeAddApplicationTemplates();
 
 	// Set up the initial view, including any required DOM manipulations for proper presentation
 	setupInitialView();

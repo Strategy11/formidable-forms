@@ -3,8 +3,7 @@
  */
 import { getElements } from '../elements';
 import { PREFIX, getAppState, setAppStateProperty, initSearch } from '../shared';
-import { showSearchEmptyState, showSearchResults } from '../ui';
-import { isVisible, show, hide } from '../utils';
+import { showSearchState, displaySearchElements } from '../ui';
 
 /**
  * Adds search-related event listeners by calling the 'initSearch' function.
@@ -37,7 +36,7 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 	}
 
 	const appState = getAppState();
-	const { allTemplatesCategory, emptyState } = getElements();
+	const { allTemplatesCategory } = getElements();
 
 	setAppStateProperty( 'notEmptySearchText', notEmptySearchText );
 
@@ -50,9 +49,9 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 		return;
 	}
 
-	// Switch to displaying search results
+	// Display search state if a category is selected
 	if ( appState.selectedCategory ) {
-		showSearchResults( notEmptySearchText );
+		showSearchState( notEmptySearchText );
 
 		// Setting "selectedCategory" to an empty string as a flag for search state
 		if ( notEmptySearchText ) {
@@ -60,19 +59,7 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 		}
 	}
 
-	// Show empty state if no templates found
-	if ( ! foundSomething ) {
-		showSearchEmptyState();
-		return;
-	}
-
-	// Hide empty state if currently displayed
-	if ( isVisible( emptyState ) ) {
-		hide( emptyState );
-
-		const { pageTitle } = getElements();
-		show( pageTitle );
-	}
+	displaySearchElements( foundSomething, notEmptySearchText );
 }
 
 /**

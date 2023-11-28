@@ -285,6 +285,26 @@
 	display: flex;
 }
 
+/* Application templates */
+#frm-form-templates-applications img {
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	box-sizing: border-box;
+}
+
+#frm-form-templates-applications .frm-meta-tag {
+	color: var(--orange);
+	background-color: #FEF7F4;
+	max-width: max-content;
+}
+
+#frm-form-templates-applications .frm-form-templates-item {
+	cursor: pointer;
+}
+
 /**
  * Empty State Styles
  *

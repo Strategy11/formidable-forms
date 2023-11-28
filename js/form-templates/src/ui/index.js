@@ -3,7 +3,7 @@ export * from './initializeModal';
 export * from './pageTitle';
 export * from './showHeaderCancelButton';
 export * from './showSelectedCategory';
-export * from './showSearchResult';
+export * from './searchState';
 export * from './showEmptyState';
 export * from './showModal';
 export * from './showError';

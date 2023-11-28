@@ -1514,6 +1514,10 @@ input.frm_insert_in_template {
 	margin-top: var(--gap-md) !important;
 }
 
+.frm-mt-auto {
+	margin-top: auto !important;
+}
+
 .frm_no_bottom_margin, /* deprecated */
 .frm-mb-0 {
 	margin-bottom: 0 !important;
@@ -1521,6 +1525,10 @@ input.frm_insert_in_template {
 
 .frm-mb-2xs {
 	margin-bottom: var(--gap-2xs) !important;
+}
+
+.frm-mb-xs {
+	margin-bottom: var(--gap-xs) !important;
 }
 
 .frm-mb-sm {
@@ -1611,7 +1619,7 @@ input.frm_insert_in_template {
 }
 
 .frm-rounded-sm {
-	border-radius: var(--small-radius);
+	border-radius: var(--small-radius) !important;
 }
 
 .frm-w-auto {
@@ -1636,6 +1644,10 @@ input.frm_insert_in_template {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.frm-gap-0 {
+	gap: 0 !important;
 }
 
 .frm-gap-xs {

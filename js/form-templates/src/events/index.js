@@ -29,3 +29,4 @@ export function addEventListeners() {
 }
 
 export { resetSearchInput } from './searchListener';
+export { addApplicationTemplateEvents } from './applicationTemplateListener';
