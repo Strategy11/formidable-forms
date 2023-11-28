@@ -317,13 +317,10 @@
 
 #frm-form-templates-empty-state h3.frm-form-templates-title {
 	margin-bottom: calc(var(--gap-xs) - var(--gap-md));
-	color: var(--grey-900);
 }
 
 #frm-form-templates-empty-state .frm-form-templates-text {
 	max-width: 420px;
-	font-weight: 400;
-	text-align: center;
 }
 
 /**
@@ -432,14 +429,6 @@
  */
 #frm-form-templates-page .frm_hidden {
 	display: none !important;
-}
-
-#frm-form-templates-page .frm-form-templates-flex {
-	display: flex;
-}
-
-#frm-form-templates-page .frm-form-templates-grid {
-	display: grid;
 }
 
 #frm-form-templates-page .frm-form-templates-divider {

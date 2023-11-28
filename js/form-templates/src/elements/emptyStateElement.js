@@ -31,7 +31,7 @@ export function createEmptyStateElement() {
 				className: `${PREFIX}-title frm-text-lg frm-font-medium frm-mt-0`
 			}),
 			span({
-				className: `${PREFIX}-text`
+				className: `${PREFIX}-text frmcenter`
 			}),
 			button
 		]
