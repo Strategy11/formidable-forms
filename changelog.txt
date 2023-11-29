@@ -5,6 +5,7 @@
 * New: [frm-entry-links] shortcodes now support a new drafts=all option, and drafts=2 and drafts=3 options for filtering for in-progress and abandoned entries. It also now supports comma separated values like drafts="2,3" to include both in-progress and abandoned entries.
 * New: Checkbox groups will no longer use an aria-required attribute on the group element. This was causing accessibility errors in axe DevTools and Google PageSpeed.
 * New: The more options icon in the form builder now has screen reader text for improved accessibility.
+* New: A new test flag colum has been added for payments for more accurate payment tracking.
 * Fix: A fix has been added to help avoid warnings and error messages when form data is sent in an unexpected format.
 * Fix: Name fields would not properly reset to their default values when using a start over button or when the field was conditionally shown.
 * Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
