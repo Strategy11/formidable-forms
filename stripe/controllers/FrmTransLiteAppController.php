@@ -16,6 +16,20 @@ class FrmTransLiteAppController {
 	}
 
 	/**
+	 * This is called on the frm_after_install hook that is called when Lite migrations have run.
+	 *
+	 * @return void
+	 */
+	public static function on_after_install() {
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return;
+		}
+
+		$db = new FrmTransLiteDb();
+		$db->upgrade();
+	}
+
+	/**
 	 * Schedule the payment cron if it is not already scheduled.
 	 *
 	 * @return void

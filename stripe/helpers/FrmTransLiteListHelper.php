@@ -533,4 +533,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 		return $item->paysys;
 	}
+
+	/**
+	 * Display 'Test' or 'Live' in a mode column if the value is known.
+	 * Old payment entries will have a NULL 'test' column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $item Payment or Subscription object.
+	 * @return string
+	 */
+	private function get_mode_column( $item ) {
+		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
+	}
 }
