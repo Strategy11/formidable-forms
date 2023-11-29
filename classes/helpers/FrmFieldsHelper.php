@@ -1236,7 +1236,13 @@ class FrmFieldsHelper {
 			$checked = 'checked="checked" ';
 		}
 
-		if ( ! $checked && is_array( $args['field']['value'] ) && isset( $args['field_val'] ) && in_array( $args['field_val'], $args['field']['value'], true ) ) {
+		// If 'other' is selected as one of the default values for a checkbox field, 'checked' attribute should be on.
+		if ( ! $checked &&
+			$args['field']['type'] === 'checkbox' &&
+			is_array( $args['field']['value'] ) &&
+			isset( $args['field_val'] ) &&
+			in_array( $args['field_val'], $args['field']['value'], true )
+		) {
 			$checked = 'checked="checked" ';
 		}
 
