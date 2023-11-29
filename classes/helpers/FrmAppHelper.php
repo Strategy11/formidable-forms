@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version     = 99; // Version of the database we are moving to.
+	public static $db_version     = 100; // Version of the database we are moving to.
 	public static $pro_db_version = 37; //deprecated
 	public static $font_version   = 7;
 

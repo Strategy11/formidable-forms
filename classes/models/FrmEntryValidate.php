@@ -25,6 +25,7 @@ class FrmEntryValidate {
 			$errors['form'] = $frm_settings->admin_permission;
 		}
 
+		self::maybe_fix_item_meta();
 		self::set_item_key( $values );
 
 		$posted_fields = self::get_fields_to_validate( $values, $exclude );
@@ -59,6 +60,21 @@ class FrmEntryValidate {
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * In case $_POST['item_meta'] is not an array, change it to an empty array.
+	 * This helps to avoid some warnings and errors when $_POST['item_meta'] is updated.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_fix_item_meta() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		if ( ! isset( $_POST['item_meta'] ) || ! is_array( $_POST['item_meta'] ) ) {
+			$_POST['item_meta'] = array();
+		}
 	}
 
 	private static function set_item_key( &$values ) {
