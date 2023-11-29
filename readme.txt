@@ -453,6 +453,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
 * Fix: The checkbox was in the wrong position on the edit entry admin page for checkbox options displayed as images.
 * Fix: The submit button would be disabled and spin after pressing the back button and reloading a form.
+* Fix: The Other option text input would be hidden on load when a checkbox field had an Other option as its default value.
 
 = 6.5.4 =
 * New: A database query has been optimized when checking for entries in a timeframe.
