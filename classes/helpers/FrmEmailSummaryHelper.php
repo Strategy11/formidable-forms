@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class FrmSummaryEmailsHelper
+ * Class FrmEmailSummaryHelper
  */
-class FrmSummaryEmailsHelper {
+class FrmEmailSummaryHelper {
 
 	const MONTHLY = 'monthly';
 

@@ -111,7 +111,7 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
 		// Summary emails.
-		add_action( 'frm_daily_event', 'FrmSummaryEmailsController::maybe_send_emails' );
+		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();

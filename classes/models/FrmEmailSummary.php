@@ -121,7 +121,7 @@ abstract class FrmEmailSummary {
 			'site_url'         => home_url( '/' ),
 			'site_url_display' => home_url( '/' ),
 			'unsubscribe_url'  => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
-			'support_url'      => FrmSummaryEmailsHelper::get_frm_url( 'new-topic', 'contact_support' ),
+			'support_url'      => FrmEmailSummaryHelper::get_frm_url( 'new-topic', 'contact_support' ),
 		);
 	}
 

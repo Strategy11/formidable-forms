@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div style="padding-top: 1.375em;">
 	<!-- Header section -->
-	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style( '' ) ); ?>">
+	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style( '' ) ); ?>">
 		<h1 style="font-size: 2.5em; line-height: 1.2em; margin: 0 0 32px;"><?php echo esc_html( $args['subject'] ); ?></h1>
 
 		<div style="line-height: 1.5; color: #475467;">
@@ -24,8 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Overall section -->
-	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
-		<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
+		<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
 			<img style="vertical-align: bottom; margin-right: 4px;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/chart.png' ); ?>" alt="chart" />
 			<?php esc_html_e( 'Statistics', 'formidable' ); ?>
 		</h2>
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;">
 								<?php echo isset( $stat['display'] ) ? esc_html( $stat['display'] ) : intval( $stat['count'] ); ?>
 							</strong>
-							<?php FrmSummaryEmailsHelper::show_comparison( $stat['compare'] ); ?>
+							<?php FrmEmailSummaryHelper::show_comparison( $stat['compare'] ); ?>
 						</div>
 					</td>
 					<?php
@@ -59,8 +59,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<!-- Top forms section -->
-	<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
-		<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
+		<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
 			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
 			<?php echo esc_html( $args['top_forms_label'] ); ?>
 		</h2>
@@ -86,8 +86,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( ! empty( $args['inbox_msg'] ) ) : ?>
 		<!-- Inbox notice section -->
-		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
-			<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
+			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
 				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/speaker.png' ); ?>" alt="speaker" />
 				<?php echo esc_html( $args['inbox_msg']['subject'] ); ?>
 			</h2>
@@ -98,15 +98,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<?php if ( ! empty( $args['inbox_msg']['cta'] ) ) : ?>
 				<p>
-					<?php echo wp_kses_post( FrmSummaryEmailsHelper::process_inbox_cta_button( $args['inbox_msg']['cta'] ) ); ?>
+					<?php echo wp_kses_post( FrmEmailSummaryHelper::process_inbox_cta_button( $args['inbox_msg']['cta'] ) ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( ! empty( $args['out_of_date_plugins'] ) ) : ?>
-		<div style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_section_style() ); ?>">
-			<h2 style="<?php echo esc_attr( FrmSummaryEmailsHelper::get_heading2_style() ); ?>">
+		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
+			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
 				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/notice.png' ); ?>" alt="speaker" />
 				<?php esc_html_e( 'Out of date plugins', 'formidable' ); ?>
 			</h2>
