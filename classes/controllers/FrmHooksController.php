@@ -108,7 +108,7 @@ class FrmHooksController {
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		// Cronjob.
-		add_action( 'init', 'FrmCronController::schedule_events' );
+		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmSummaryEmailsController::maybe_send_emails' );
