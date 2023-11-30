@@ -425,6 +425,10 @@
 	display: none !important;
 }
 
+#frm-form-templates-page .frm-form-templates-flex {
+	display: flex;
+}
+
 #frm-form-templates-page .frm-form-templates-divider {
 	border-top: 1px solid var(--grey-200);
 	margin: 0;
