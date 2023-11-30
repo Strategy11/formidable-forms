@@ -28,7 +28,7 @@ $args = wp_parse_args( $args, $defaults );
 <div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<h2 class="frm-font-semibold frm-m-0"><?php echo esc_html( $args['title'] ); ?></h2>
+			<h2><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 	</div>
 

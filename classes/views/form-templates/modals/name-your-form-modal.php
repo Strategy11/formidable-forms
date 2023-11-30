@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm-name-your-form-modal" class="frm-form-templates-modal-item">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<h2 class="frm-font-semibold frm-m-0"><?php esc_html_e( 'Name your form', 'formidable' ); ?></h2>
+			<h2><?php esc_html_e( 'Name your form', 'formidable' ); ?></h2>
 		</div>
 	</div>
 

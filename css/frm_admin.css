@@ -9300,6 +9300,11 @@ Responsive Design
 	color: var(--grey-900);
 }
 
+#frm-form-templates-modal .frm-modal-title h2 {
+	font-weight: 600;
+	margin: 0;
+}
+
 #frm-form-templates-modal input {
 	width: 100%;
 	padding: 0 calc(var(--gap-sm) - 2px) 2px;
@@ -9381,6 +9386,7 @@ Responsive Design
 #frm-name-your-form-modal .frm_modal_top {
 	padding-top: var(--gap-sm);
 }
+/* End confirm and form templates modals */
 
 /* Field Group Message */
 #frm-field-group-message {

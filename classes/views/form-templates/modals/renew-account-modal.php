@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="frm-modal-title">
-			<h2 class="frm-font-semibold frm-m-0 frm-p-0">
+			<h2>
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
