@@ -393,8 +393,28 @@ class FrmEntryMeta {
 		if ( is_array( $where ) ) {
 			if ( ! $args['is_draft'] ) {
 				$where['e.is_draft'] = 0;
-			} elseif ( $args['is_draft'] == 1 ) {
-				$where['e.is_draft'] = 1;
+			} elseif ( is_numeric( $args['is_draft'] ) ) {
+				if ( class_exists( 'FrmAbandonmentHooksController', false ) ) {
+					$where['e.is_draft'] = absint( $args['is_draft'] );
+				} else {
+					$where['e.is_draft'] = 1;
+				}
+			} elseif ( 'both' === $args['is_draft'] && class_exists( 'FrmAbandonmentHooksController', false ) ) {
+				$where['e.is_draft'] = array( 0, 1 );
+			} elseif ( false !== strpos( $args['is_draft'], ',' ) ) {
+				$is_draft = array_reduce(
+					explode( ',', $args['is_draft'] ),
+					function( $total, $current ) {
+						if ( is_numeric( $current ) ) {
+							$total[] = absint( $current );
+						}
+						return $total;
+					},
+					array()
+				);
+				if ( $is_draft ) {
+					$where['e.is_draft'] = $is_draft;
+				}
 			}
 
 			if ( ! empty( $args['user_id'] ) ) {
