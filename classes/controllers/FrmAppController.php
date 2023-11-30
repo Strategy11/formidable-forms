@@ -76,6 +76,10 @@ class FrmAppController {
 			$classes .= ' frm-lite ';
 		}
 
+		if ( get_user_setting( 'unfold' ) && 'f' !== get_user_setting( 'mfold' ) ) {
+			$classes .= ' frm-unfold ';
+		}
+
 		return $classes;
 	}
 

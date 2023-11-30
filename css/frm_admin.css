@@ -676,7 +676,9 @@ ul.frm_form_nav > li {
 }
 
 .auto-fold.frm-admin-page-styles .frm_page_container,
-.auto-fold .frm_wrap .frm_page_container {
+.auto-fold .frm_wrap .frm_page_container,
+.frm-unfold.frm-admin-page-styles .frm_page_container,
+.frm-unfold .frm_wrap .frm_page_container {
 	left: 160px;
 }
 
