@@ -377,7 +377,7 @@ class FrmForm {
 			}
 
 			self::prepare_field_update_values( $field, $values, $new_field );
-			self::maybe_update_max_option( $new_field, $field, $values );
+			self::maybe_update_max_option( $field, $values, $new_field );
 
 			FrmField::update( $field_id, $new_field );
 
@@ -393,12 +393,12 @@ class FrmForm {
 	 *
 	 * @since x.x
 	 *
-	 * @param array $new_field
 	 * @param array $field
 	 * @param array $values
+	 * @param array $new_field
 	 * @return void
 	 */
-	private static function maybe_update_max_option( &$new_field, $field, $values ) {
+	private static function maybe_update_max_option( $field, $values, &$new_field ) {
 		if ( $field->type === 'textarea' &&
 			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
 			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
