@@ -453,7 +453,7 @@ class FrmTransLiteAppHelper {
 	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
 	 * Old payments will just output an empty string.
 	 *
-	 * @since x.x
+	 * @since 6.6
 	 *
 	 * @param stdClass $payment
 	 * @return string

@@ -165,7 +165,7 @@ class FrmMigrate {
 	/**
 	 * These indexes help optimize database queries for entries.
 	 *
-	 * @since x.x
+	 * @since 6.6
 	 *
 	 * @return void
 	 */
@@ -190,7 +190,7 @@ class FrmMigrate {
 	/**
 	 * Check that an index exists in a database table before trying to add it (which results in an error).
 	 *
-	 * @since x.x
+	 * @since 6.6
 	 *
 	 * @param string $table_name
 	 * @param string $index_name
