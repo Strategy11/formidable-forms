@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
 		<p class="frm-m-0"><?php esc_html_e( 'Before we save this form, do you want to name it first?', 'formidable' ); ?></p>
 
-		<div class="frm-flex-col frm-gap-xs-minus-2">
+		<div class="frm-flex-col frm-gap-xs">
 			<label for="frm_new_form_name_input" class="frm-m-0">
 				<?php esc_html_e( 'Form Name (Optional)', 'formidable' ); ?>
 			</label>

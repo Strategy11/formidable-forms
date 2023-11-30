@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-md frm-mb-xs">
-		<div class="frm-flex-col frm-gap-xs-minus-2">
+		<div class="frm-flex-col frm-gap-xs">
 			<label for="frm-create-template-modal-forms-select" class="frm-m-0">
 				<?php esc_html_e( 'Select form for a new template', 'formidable' ); ?>
 			</label>
@@ -45,14 +45,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</select>
 		</div>
 
-		<div class="frm-flex-col frm-gap-xs-minus-2">
+		<div class="frm-flex-col frm-gap-xs">
 			<label for="frm_create_template_name" class="frm-m-0">
 				<?php esc_html_e( 'Template Name', 'formidable' ); ?>
 			</label>
 			<input type="text" name="frm_create_template_name" id="frm_create_template_name" disabled />
 		</div>
 
-		<div class="frm-flex-col frm-gap-xs-minus-2">
+		<div class="frm-flex-col frm-gap-xs">
 			<label for="frm_create_template_description" class="frm-m-0">
 				<?php esc_html_e( 'Description', 'formidable' ); ?>
 			</label>
