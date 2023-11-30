@@ -455,6 +455,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: The checkbox was in the wrong position on the edit entry admin page for checkbox options displayed as images.
 * Fix: The submit button would be disabled and spin after pressing the back button and reloading a form.
 * Fix: The Other option text input would be hidden on load when a checkbox field had an Other option as its default value.
+* Fix: User journeys would display as Array, Array and trigger Array to string conversion warnings after deactivating the User Flow add on.
 
 = 6.5.4 =
 * New: A database query has been optimized when checking for entries in a timeframe.
