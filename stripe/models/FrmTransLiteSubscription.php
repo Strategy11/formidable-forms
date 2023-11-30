@@ -71,7 +71,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 			),
 			'test'           => array(
 				'sanitize' => 'sanitize_text_field',
-				'default'  => NULL,
+				'default'  => null,
 			),
 		);
 
