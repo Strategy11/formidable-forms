@@ -82,10 +82,6 @@
  *
  * Focuses on the main content area, laying out the various elements and components.
  */
-#frm-form-templates-page #post-body-content {
-	border-left-color: var(--grey-300);
-}
-
 #frm-form-templates-page .frm-form-templates-grid-layout {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));

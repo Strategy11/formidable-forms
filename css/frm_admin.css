@@ -715,7 +715,7 @@ ul.frm_form_nav > li {
 
 .columns-2 .frm-right-panel + div {
 	padding-bottom: var(--gap-md);
-	border-left: 1px solid var(--sidebar-hover);
+	border-left: 1px solid var(--grey-300);
 }
 
 .columns-2 .frm-right-panel + div,
