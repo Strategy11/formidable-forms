@@ -199,7 +199,7 @@ class FrmFormTemplatesController {
 		$view_parts = array();
 
 		// Check if the current page is the form templates page.
-		if ( FrmAppHelper::is_form_templates_page() ) {
+		if ( self::is_templates_page() ) {
 			// User and license-related variables.
 			$user         = wp_get_current_user();
 			$expired      = self::is_expired();
@@ -651,7 +651,7 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-		if ( ! FrmAppHelper::is_form_templates_page() ) {
+		if ( ! self::is_templates_page() ) {
 			return;
 		}
 
@@ -724,12 +724,23 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function dequeue_scripts() {
-		if ( ! FrmAppHelper::is_form_templates_page() ) {
+		if ( ! self::is_templates_page() ) {
 			return;
 		}
 
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	/**
+	 * Check if the current page is the form templates page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the current page is the form templates page, false otherwise.
+	 */
+	public static function is_templates_page() {
+		return FrmAppHelper::is_admin_page( self::PAGE_SLUG );
 	}
 
 	/**

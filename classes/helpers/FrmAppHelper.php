@@ -326,17 +326,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if the current page is the form templates page.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool True if the current page is the form templates page, false otherwise.
-	 */
-	public static function is_form_templates_page() {
-		return self::is_admin_page( FrmFormTemplatesController::PAGE_SLUG );
-	}
-
-	/**
 	 * Check for ajax except the form preview page
 	 *
 	 * @since 2.0
