@@ -119,6 +119,7 @@
 #frm-form-templates-create-form .frmsvg {
 	width: 20px;
 	height: 20px;
+	color: var(--grey-500);
 	background: var(--grey-100);
 	border-radius: var(--small-radius);
 	padding: calc(var(--gap-2xs) + 2px);
