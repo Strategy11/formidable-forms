@@ -424,6 +424,15 @@ class FrmEmailSummaryHelper {
 	}
 
 	/**
+	 * Gets CSS for button.
+	 *
+	 * @return string
+	 */
+	public static function get_button_style( $display_block = false ) {
+		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none;';
+	}
+
+	/**
 	 * Gets Formidable URL with tracking params.
 	 *
 	 * @param string $url  The URL.
@@ -512,8 +521,7 @@ class FrmEmailSummaryHelper {
 
 		// Add inline CSS for specific button types.
 		if ( strpos( $button_html, 'frm-button-primary' ) ) {
-			$button_style = 'display:inline-block;font-size:0.75em;display:inline-block;line-height:2.4;padding-left:1em;padding-right:1em;border-radius:1.2em;border:0;font-weight:600;color:#fff;background-color:#4199fd;text-decoration:none;';
-			$button_html = str_replace( '<a', '<a style="' . $button_style . '"', $button_html );
+			$button_html = str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
 		}
 
 		return $button_html;

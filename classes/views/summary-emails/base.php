@@ -38,19 +38,7 @@ $frm_settings = FrmAppHelper::get_settings();
 	<style type="text/css">
 		.frm_inbox_dismiss { display: none; }
 
-		.frm-button-primary {
-			font-size: 0.75em;
-			display: inline-block;
-			line-height: 2.4;
-			padding-left: 1em;
-			padding-right: 1em;
-			border-radius: 1.2em;
-			border: 1px solid #d0d5dd;
-			font-weight: 600;
-			color: #fff;
-			background-color: #4199fd;
-			text-decoration: none;
-		}
+		.frm-button-primary { <?php echo esc_attr( FrmEmailSummaryHelper::get_button_style() ); ?> }
 	</style>
 </head>
 
