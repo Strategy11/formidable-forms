@@ -9352,7 +9352,7 @@ Responsive Design
 #welcome-panel:has(#frm_form_pf_importer) .welcome-panel-content {
 	text-align: start !important;
 	min-height: unset;
-    display: block;
+	display: block;
 }
 
 #frm_form_pf_importer div {
@@ -9360,17 +9360,17 @@ Responsive Design
 }
 
 #frm_form_pf_importer button {
-    border: 1px solid var(--primary-500);
-    padding: 7px 16px;
-    min-height: 28px;
-    line-height: var(--leading);
-    margin-bottom: 0;
+	border: 1px solid var(--primary-500);
+	padding: 7px 16px;
+	min-height: 28px;
+	line-height: var(--leading);
+	margin-bottom: 0;
 	background: var(--primary-500);
-    color: #fff !important;
+	color: #fff !important;
 }
 
 #frm_form_pf_importer button:hover {
 	background: #135e96;
-    border-color: #135e96;
+	border-color: #135e96;
 }
 /* End Pirate forms importer */
