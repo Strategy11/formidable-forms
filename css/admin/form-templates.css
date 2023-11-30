@@ -24,9 +24,6 @@
  * Defines the layout and styling for the sidebar, including scroll behavior.
  */
 #frm-form-templates-page .frm-right-panel {
-	flex-basis: var(--small-sidebar);
-	width: var(--small-sidebar);
-	min-width: var(--small-sidebar);
 	padding: 2px;
 	overflow-y: initial;
 }

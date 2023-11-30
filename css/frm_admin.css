@@ -826,7 +826,8 @@ p.frm_has_shortcodes {
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
-#form_settings_page .columns-2 .frm-right-panel {
+#form_settings_page .columns-2 .frm-right-panel,
+#frm-form-templates-page .frm-right-panel {
 	flex: 0 0 var(--small-sidebar);
 	width: var(--small-sidebar);
 	min-width: var(--small-sidebar);
