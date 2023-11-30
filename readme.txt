@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.3.2
+Tested up to: 6.4.1
 Requires PHP: 5.6
-Stable tag: 6.5.4
+Stable tag: 6.6
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,20 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.6 =
+* New: Database indexes have been added to entry and entry meta tables to help significantly optimize some database queries, including queries used for reports.
+* New: Honeypot field containers will no longer include an aria-hidden attribute. This was causing issues with Accessibility testing tools including Google PageSight.
+* New: [frm-entry-links] shortcodes now support a new drafts=all option, and drafts=2 and drafts=3 options for filtering for in-progress and abandoned entries. It also now supports comma separated values like drafts="2,3" to include both in-progress and abandoned entries.
+* New: Checkbox groups will no longer use an aria-required attribute on the group element. This was causing accessibility errors in axe DevTools and Google PageSpeed.
+* New: The more options icon in the form builder now has screen reader text for improved accessibility.
+* New: A new test flag colum has been added for payments for more accurate payment tracking.
+* Fix: A fix has been added to help avoid warnings and error messages when form data is sent in an unexpected format.
+* Fix: Name fields would not properly reset to their default values when using a start over button or when the field was conditionally shown.
+* Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
+* Fix: The checkbox was in the wrong position on the edit entry admin page for checkbox options displayed as images.
+* Fix: The submit button would be disabled and spin after pressing the back button and reloading a form.
+* Fix: The Other option text input would be hidden on load when a checkbox field had an Other option as its default value.
+
 = 6.5.4 =
 * New: A database query has been optimized when checking for entries in a timeframe.
 * New: The honeypot class name will no longer change as often to help prevent issues with visible honeypot fields.
