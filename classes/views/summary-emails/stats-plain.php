@@ -53,7 +53,7 @@ if ( $args['top_forms'] ) {
 if ( ! empty( $args['out_of_date_plugins'] ) ) {
 	printf(
 		// translators: the list of out-of-date plugins.
-		esc_html__( 'Following plugins are out of date: %s', 'formidable' ),
+		esc_html__( 'The following plugins are out of date: %s', 'formidable' ),
 		esc_html( implode( ', ', $args['out_of_date_plugins'] ) )
 	);
 	echo "\r\n";
