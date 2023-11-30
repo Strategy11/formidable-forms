@@ -66,7 +66,7 @@ class FrmEntryValidate {
 	 * In case $_POST['item_meta'] is not an array, change it to an empty array.
 	 * This helps to avoid some warnings and errors when $_POST['item_meta'] is updated.
 	 *
-	 * @since x.x
+	 * @since 6.6
 	 *
 	 * @return void
 	 */

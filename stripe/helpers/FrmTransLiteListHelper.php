@@ -538,7 +538,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Display 'Test' or 'Live' in a mode column if the value is known.
 	 * Old payment entries will have a NULL 'test' column value.
 	 *
-	 * @since x.x
+	 * @since 6.6
 	 *
 	 * @param stdClass $item Payment or Subscription object.
 	 * @return string
