@@ -425,15 +425,85 @@ class FrmFormsController {
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
 		if ( have_posts() ) {
 			the_post();
-			get_header( '' );
+			self::get_template( 'header' );
+
 			// add some generic class names to the container to add some natural padding to the content.
 			// .entry-content catches the WordPress TwentyTwenty theme.
 			// .container catches Customizr content.
 			echo '<div class="container entry-content">';
 			the_content();
 			echo '</div>';
-			get_footer();
+
+			self::get_template( 'footer' );
 		}
+	}
+
+	/**
+	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
+	 * and renders required html fragements calling required functions.
+	 *
+	 * @since x.x
+	 * @param string $template
+	 * @return void
+	 */
+	private static function get_template( $template ) {
+		if ( self::should_try_getting_template( $template ) ) {
+			call_user_func( 'get_' . $template );
+			return;
+		}
+
+		if ( 'header' === $template ) {
+			wp_head();
+			?>
+			</head>
+			<body <?php body_class(); ?>>
+			<div id="page">
+				<div id="header" role="banner">
+					<div id="headerimg">
+						<h1><a href="<?php echo home_url(); ?>/"><?php bloginfo( 'name' ); ?></a></h1>
+						<div class="description"><?php bloginfo( 'description' ); ?></div>
+					</div>
+				</div>
+				<hr />
+		<?php
+		} else {
+			wp_footer();
+			?>
+				<hr />
+				<div id="footer" role="contentinfo">
+					<p>
+						<?php
+						printf(
+							/* translators: 1: Site name, 2: WordPress */
+							__( '%1$s is proudly powered by %2$s' ),
+							get_bloginfo( 'name' ),
+							'<a href="https://wordpress.org/">WordPress</a>'
+						);
+						?>
+					</p>
+				</div>
+			</div>
+			<?php wp_footer(); ?>
+			</body>
+			</html>
+		<?php
+		}
+	}
+
+	/**
+	 * Returns true if calling a template function doesn't trigger deprecation warnings.
+	 *
+	 * @since x.x
+	 * @param string $template
+	 * @return bool
+	 */
+	private static function should_try_getting_template( $template ) {
+		$stylesheet_path = get_stylesheet_directory();
+		$template_path   = get_template_directory();
+		$is_child_theme  = $stylesheet_path !== $template_path;
+		$template_name   = $template . '.php';
+
+		return file_exists( $stylesheet_path . '/' . $template_name ) || $is_child_theme && file_exists( $template_path . '/' . $template_name );
 	}
 
 	/**
