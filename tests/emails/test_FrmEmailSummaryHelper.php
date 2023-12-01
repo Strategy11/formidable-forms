@@ -65,7 +65,18 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 			'renewal_date' => '',
 		);
 		$this->save_options( $options );
-		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
+
+		// Test against the actual renewal date when running Github workflow.
+		$renewal_date = $this->run_private_method(
+			array( 'FrmEmailSummaryHelper', 'get_renewal_date' )
+		);
+		if ( gmdate( 'Y-m-d', strtotime( '+' . FrmEmailSummaryHelper::BEFORE_RENEWAL_PERIOD . ' days' ) ) < $renewal_date ) {
+			$expected = array( 'monthly' );
+		} else {
+			$expected = array( 'yearly' );
+		}
+
+		$this->assertEquals( $expected, FrmEmailSummaryHelper::should_send_emails() );
 
 		// Yearly was sent less than 1 month ago.
 		$options['last_yearly'] = gmdate( 'Y-m-d', strtotime( '-29 days' ) );

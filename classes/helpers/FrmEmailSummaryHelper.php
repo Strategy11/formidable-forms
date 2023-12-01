@@ -118,7 +118,6 @@ class FrmEmailSummaryHelper {
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
 			$renewal_date = self::get_renewal_date();
-			print_r( $renewal_date );
 			if ( $renewal_date && self::BEFORE_RENEWAL_PERIOD >= self::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
