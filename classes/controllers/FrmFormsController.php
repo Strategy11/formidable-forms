@@ -460,7 +460,7 @@ class FrmFormsController {
 			<div id="page">
 				<div id="header" role="banner">
 					<div id="headerimg">
-						<h1><a href="<?php echo home_url(); ?>/"><?php bloginfo( 'name' ); ?></a></h1>
+						<h1><a href="<?php echo esc_url( home_url() ); ?>/"><?php bloginfo( 'name' ); ?></a></h1>
 						<div class="description"><?php bloginfo( 'description' ); ?></div>
 					</div>
 				</div>
@@ -478,8 +478,8 @@ class FrmFormsController {
 						<?php
 						printf(
 							/* translators: 1: Site name, 2: WordPress */
-							__( '%1$s is proudly powered by %2$s' ),
-							get_bloginfo( 'name' ),
+							esc_html__( '%1$s is proudly powered by %2$s', 'formidable' ),
+							esc_html( get_bloginfo( 'name' ) ),
 							'<a href="https://wordpress.org/">WordPress</a>'
 						);
 						?>
