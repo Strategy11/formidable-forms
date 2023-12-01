@@ -465,8 +465,11 @@ class FrmFormsController {
 					</div>
 				</div>
 				<hr />
-		<?php
-		} else {
+			<?php
+			return;
+		}
+
+		if ( 'footer' === $template ) {
 			wp_footer();
 			?>
 				<hr />
@@ -486,7 +489,7 @@ class FrmFormsController {
 			<?php wp_footer(); ?>
 			</body>
 			</html>
-		<?php
+			<?php
 		}
 	}
 
