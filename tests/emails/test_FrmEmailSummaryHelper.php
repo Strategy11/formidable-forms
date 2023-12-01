@@ -9,7 +9,6 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 		$this->assertTrue( isset( $options['last_monthly'] ) );
 		$this->assertTrue( isset( $options['last_yearly'] ) );
-		$this->assertTrue( isset( $options['last_license'] ) );
 		$this->assertTrue( isset( $options['renewal_date'] ) );
 	}
 
@@ -63,7 +62,6 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$options = array(
 			'last_monthly' => '',
 			'last_yearly'  => '',
-			'last_license' => '',
 			'renewal_date' => '',
 		);
 		$this->save_options( $options );
