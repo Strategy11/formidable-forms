@@ -282,6 +282,89 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Gets amount and currency from payment object or amount.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|float|object|array $payment Payment object, payment array or amount.
+	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 */
+	public static function get_amount_and_currency_from_payment( $payment ) {
+		$currency = '';
+		$amount   = $payment;
+
+		if ( is_object( $payment ) || is_array( $payment ) ) {
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
+			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
+		}
+
+		return array( $amount, $currency );
+	}
+
+	/**
+	 * Gets payments data.
+	 *
+	 * @param string $from_date From date.
+	 * @param string $to_date   To date.
+	 * @return array            Contains `count` and `total`.
+	 */
+	public static function get_payments_data( $from_date = null, $to_date = null ) {
+		$data = array(
+			'count' => 0,
+			'total' => array(),
+		);
+
+		$where['status'] = 'complete';
+		if ( null !== $from_date ) {
+			$where['created_at >'] = $from_data;
+		}
+		if ( null !== $to_date ) {
+			$where['created_at <'] = $to_date . ' 23:59:59';
+		}
+
+		$payments = FrmDb::get_results(
+			'frm_payments',
+			$where,
+			'action_id,amount'
+		);
+
+		if ( ! $payments ) {
+			return $data;
+		}
+
+		$data['count'] = count( $payments );
+		$data['total'] = self::get_payment_total_data( $payments );
+
+		return $data;
+	}
+
+	/**
+	 * Gets payment total data.
+	 *
+	 * @param object[] $payments Array of payment objects.
+	 * @return array Return array of total amount for each currency.
+	 */
+	private static function get_payment_total_data( $payments ) {
+		$data = array();
+		foreach ( $payments as $payment ) {
+			list( $amount, $currency ) = self::get_amount_and_currency_from_payment( $payment );
+
+			if ( ! isset( $data[ $currency ] ) ) {
+				$data[ $currency ] = 0;
+			}
+
+			$data[ $currency ] += floatval( $amount );
+		}
+
+		return $data;
+	}
+
+	/**
 	 * @param array $currency
 	 * @param float $amount
 	 * @return void

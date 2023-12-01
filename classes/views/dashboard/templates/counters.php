@@ -16,9 +16,21 @@ if ( isset( $template['template-type'] ) && 'full-width' === $template['template
 				<?php if ( isset( $counter['cta'] ) && isset( $counter['cta']['display'] ) && true === $counter['cta']['display'] ) : ?>
 					<a href="<?php echo esc_url( $counter['cta']['link'] ); ?>"><?php echo esc_attr( $counter['cta']['title'] ); ?></a>
 				<?php else : ?>
-					<b>
-						<?php echo isset( $counter['counter_label'] ) ? esc_html( $counter['counter_label'] ) : ''; ?><span class="frm-counter" data-type="<?php echo esc_attr( $counter['type'] ); ?>" data-counter="<?php echo (int) $counter['counter']; ?>"><?php echo (int) $counter['counter']; ?></span>
-					</b>
+					<?php if ( 'currency' === $counter['type'] ) : ?>
+						<div class="frm-flex-box frm-gap-md">
+							<?php foreach ( $counter['items'] as $item ) : ?>
+								<b>
+									<?php echo esc_attr( $item['counter_label']['symbol_left'] ); ?>
+									<span class="frm-counter" data-type="<?php echo esc_attr( $counter['type'] ); ?>" data-locale="<?php echo esc_attr( get_locale() ); ?>" data-counter="<?php echo (int) $item['counter']; ?>"><?php echo (int) $item['counter']; ?></span>
+									<?php echo esc_attr( $item['counter_label']['symbol_right'] ); ?>
+								</b>
+							<?php endforeach; ?>
+						</div>
+					<?php else : ?>
+						<b>
+							<span class="frm-counter" data-type="<?php echo esc_attr( $counter['type'] ); ?>" data-locale="<?php echo esc_attr( get_locale() ); ?>" data-counter="<?php echo (int) $counter['counter']; ?>"><?php echo (int) $counter['counter']; ?></span>
+						</b>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>

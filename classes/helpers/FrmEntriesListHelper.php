@@ -15,12 +15,18 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @return void
+	 * @param array $args
 	 */
-	public function prepare_items() {
+	public function prepare_items( $args = array() ) {
 		global $per_page;
 
-		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
-		$form_id  = $this->params['form'];
+		if ( isset( $args['items-per-page'] ) ) {
+			$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page', $args['items-per-page'] );
+		} else {
+			$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
+		}
+
+		$form_id = $this->params['form'];
 
 		$s_query = array();
 

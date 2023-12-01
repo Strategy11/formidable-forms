@@ -51,10 +51,14 @@ class FrmDashboardView {
 			'template-type' => 'full-width',
 			'counters'      => array(
 				array(
-					'heading'       => 'Total earnings',
-					'counter_label' => '$',
-					'type'          => 'currency',
-					'counter'       => '20023',
+					'heading' => 'Total earnings',
+					'type'    => 'currency',
+					'items'   => array(
+						array(
+							'counter_label' => '$',
+							'counter'       => '20023',
+						),
+					),
 				),
 			),
 		),
@@ -79,6 +83,9 @@ class FrmDashboardView {
 		if ( isset( $data['video'] ) ) {
 			$this->view['video'] = $data['video'];
 		}
+		if ( isset( $data['payments'] ) ) {
+			$this->view['payments'] = $data['payments'];
+		}
 	}
 
 	public function get_main_widget( $echo = true ) {
@@ -88,7 +95,7 @@ class FrmDashboardView {
 		if ( false === $echo ) {
 			return self::load_entries_template( $this->view['entries'] );
 		}
-		echo wp_kses_post( self::load_entries_template( $this->view['entries'] ) );
+		echo self::load_entries_template( $this->view['entries'] );
 	}
 
 	public function get_bottom_widget( $echo = true ) {
@@ -138,9 +145,9 @@ class FrmDashboardView {
 
 	public function get_payments( $echo = true ) {
 		if ( false === $echo ) {
-			return $this->load_counters_template( $this->view['payments'] );
+			return $this->load_payments_template( $this->view['payments'] );
 		}
-		echo wp_kses_post( $this->load_counters_template( $this->view['payments'] ) );
+		echo $this->load_payments_template( $this->view['payments'] );
 	}
 
 	public function get_youtube_video( $echo = true ) {
@@ -156,6 +163,14 @@ class FrmDashboardView {
 		return ob_get_clean();
 	}
 
+	private function load_payments_template( $template ) {
+		if ( true === $template['show_placeholder'] ) {
+			return $this->load_payments_placeholder( $template );
+		}
+
+		return $this->load_counters_template( $template );
+	}
+
 	private function load_pro_features_template() {
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/pro-features-list.php';
@@ -165,6 +180,12 @@ class FrmDashboardView {
 	private function load_welcome_template() {
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/notification-banner.php';
+		return ob_get_clean();
+	}
+
+	private function load_payments_placeholder( $template ) {
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/payment-placeholder.php';
 		return ob_get_clean();
 	}
 
@@ -197,7 +218,26 @@ class FrmDashboardView {
 		if ( true === $template['show_placeholder'] ) {
 			return self::load_placeholder_template( $template );
 		}
-		return self::load_placeholder_template( $template );
+
+		$widget_heading = '<div class="frm-flex-box frm-justify-between"><h2 class="frm-widget-heading">Latest Entries </h2><a class="frm-widget-cta" href="">View all entries</a></div>';
+		return $widget_heading . self::load_entries_list_template();
+	}
+
+	private static function load_entries_list_template() {
+		$params                  = FrmForm::get_admin_params();
+		$controler_entires_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
+		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
+		$wp_list_table->prepare_items( array( 'items-per-page' => 7 ) );
+
+		ob_start();
+		$wp_list_table->display(
+			array(
+				'display-top-nav'        => false,
+				'display-bottom-nav'     => false,
+				'display-bottom-headers' => false,
+			),
+		);
+		return ob_get_clean();
 	}
 
 	private function load_youtube_video_template( $template ) {

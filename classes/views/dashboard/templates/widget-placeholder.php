@@ -1,4 +1,4 @@
-<h2 class="frm-widget-heading"><?php echo esc_html( $template['placeholder']['widget-heading'] ); ?></h2>
+<h2 class="frm-widget-heading"><?php echo esc_html( $template['widget-heading'] ); ?></h2>
 <div class="frm-widget-placeholder" data-background="<?php echo esc_attr( $template['placeholder']['background'] ); ?>">
 	<div>
 		<h4><?php echo esc_html( $template['placeholder']['heading'] ); ?></h4>

@@ -18,10 +18,15 @@ class FrmDashboardController {
 
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+		if ( ! self::is_dashboard_page() ) {
+			return;
+		}
+		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
 	}
 
 	public static function route() {
 		$latest_available_form = FrmFormsController::get_latest_form();
+		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
 			'forms'   => FrmFormsController::get_forms_count(),
 			'entries' => FrmEntriesController::get_entries_count(),
@@ -36,8 +41,27 @@ class FrmDashboardController {
 				'license'  => self::view_args_licence(),
 				'inbox'    => self::view_args_inbox(),
 				'entries'  => array(
-					'show_placeholder' => 0 < (int) $counters_value['entries'] ? ! false : true, // to do: remove always true
+					'show_placeholder' => 0 < (int) $counters_value['entries'] ? false : true, // to do: remove always true
+					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'], $counters_value['entries'] ),
+				),
+				'payments'  => array(
+					'template-type'    => 'full-width',
+					'show_placeholder' => empty( $total_payments ),
+					'placeholder'      => array(
+						'copy' => 'You don\'t have a payment form setup yet.',
+						'cta'  => array(
+							'link'  => '',
+							'label' => 'Create a Payment Form',
+						),
+					),
+					'counters'         => array(
+						array(
+							'heading' => 'Total earnings',
+							'type'    => 'currency',
+							'items'   => $total_payments,
+						),
+					),
 				),
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			),
@@ -90,6 +114,21 @@ class FrmDashboardController {
 
 	}
 
+	private static function view_args_payments() {
+		$payments      = FrmTransLiteAppHelper::get_payments_data();
+		$prepared_data = array();
+		foreach ( $payments['total'] as $currency => $total_payments ) {
+			if ( 0 < (int) $total_payments ) {
+				$prepared_data[] = array(
+					'counter_label' => FrmCurrencyHelper::get_currency( $currency ),
+					'counter'       => (int) $total_payments,
+				);
+			}
+		}
+
+		return $prepared_data;
+	}
+
 	private static function view_args_licence() {
 		if ( class_exists( 'FrmProDashboardController' ) ) {
 			return FrmProDashboardController::view_args_licence();
@@ -115,8 +154,6 @@ class FrmDashboardController {
 	}
 
 	private static function view_args_entries_placeholder( $forms_count ) {
-		// to do: remove
-		$forms_count = 0;
 
 		if ( 0 === (int) $forms_count ) {
 			return array(
@@ -149,25 +186,6 @@ class FrmDashboardController {
 		}
 
 		return false;
-	}
-
-	private static function view_args_inbox() {
-		return FrmInboxController::get_inbox_messages();
-	}
-
-	private static function get_youtube_embed_video( $entries_count ) {
-		$youtube_api   = new FrmYoutubeFeedApi();
-		$welcome_video = $youtube_api->get_welcome_video();
-		$latest_video  = $youtube_api->get_latest_video();
-
-		if ( 0 === (int) $entries_count && false === $welcome_video && false === $latest_video ) {
-			return null;
-		}
-		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
-			return $welcome_video['video-id'];
-		}
-		return $latest_video[0]['video-id'];
-
 	}
 
 	public static function remove_admin_notices_on_dashboard() {
@@ -209,12 +227,96 @@ class FrmDashboardController {
 				wp_die();
 				break;
 		}
+	}
 
+	public static function entries_columns( $columns = array() ) {
+
+		$form_id = FrmForm::get_current_form_id();
+
+		if ( $form_id ) {
+			self::get_columns_for_form( $form_id, $columns );
+		} else {
+			$columns[ $form_id . '_form_id' ] = esc_html__( 'Form', 'formidable' );
+			$columns[ $form_id . '_name' ]    = esc_html__( 'Name', 'formidable' );
+			$columns[ $form_id . '_user_id' ] = esc_html__( 'Author', 'formidable' );
+		}
+
+		$columns[ $form_id . '_created_at' ] = __( 'Created on', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = __( 'Updated on', 'formidable' );
+
+		return $columns;
+
+	}
+
+	public static function welcome_banner_has_closed() {
+		if ( isset( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) {
+			list( $cookie_value, $expiration_time ) = explode( '|', sanitize_text_field( wp_unslash( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) );
+			if ( 1 === (int) $cookie_value ) {
+				// Refresh welcome banner cookie if it will expire in less 45 days.
+				if ( (int) $expiration_time < time() + ( 45 * 24 * 60 * 60 ) ) {
+					self::ajax_set_cookie_banner( 1 );
+				}
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	public static function is_dashboard_page() {
+		if ( 'formidable-dashboard' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
 		return false !== array_search( $email, $subscribed_emails, true ) ? true : false;
+	}
+
+	/**
+	 * Register controller assets.
+	 *
+	 * @return void
+	 */
+	public static function register_assets() {
+		wp_register_script( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
+		wp_register_style( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+	}
+
+	/**
+	 * Enqueue controller assets.
+	 *
+	 * @return void
+	 */
+	public static function enqueue_assets() {
+
+		if ( false === self::is_dashboard_page() ) {
+			return;
+		}
+
+		wp_enqueue_style( self::$assets_handle_name );
+		wp_enqueue_script( self::$assets_handle_name );
+	}
+
+	private static function view_args_inbox() {
+		return FrmInboxController::get_inbox_messages();
+	}
+
+	private static function get_youtube_embed_video( $entries_count ) {
+		$youtube_api   = new FrmYoutubeFeedApi();
+		$welcome_video = $youtube_api->get_welcome_video();
+		$latest_video  = $youtube_api->get_latest_video();
+
+		if ( 0 === (int) $entries_count && false === $welcome_video && false === $latest_video ) {
+			return null;
+		}
+		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
+			return $welcome_video['video-id'];
+		}
+		return $latest_video[0]['video-id'];
+
 	}
 
 	private static function save_subscribed_email( $email ) {
@@ -252,45 +354,4 @@ class FrmDashboardController {
 		}
 		return false;
 	}
-
-	public static function welcome_banner_has_closed() {
-		if ( isset( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) {
-			list( $cookie_value, $expiration_time ) = explode( '|', sanitize_text_field( wp_unslash( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) );
-			if ( 1 === (int) $cookie_value ) {
-				// Refresh welcome banner cookie if it will expire in less 45 days.
-				if ( (int) $expiration_time < time() + ( 45 * 24 * 60 * 60 ) ) {
-					self::ajax_set_cookie_banner( 1 );
-				}
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
-
-	/**
-	 * Register controller assets.
-	 *
-	 * @return void
-	 */
-	public static function register_assets() {
-		wp_register_script( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
-		wp_register_style( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
-	}
-
-	/**
-	 * Enqueue controller assets.
-	 *
-	 * @return void
-	 */
-	public static function enqueue_assets() {
-
-		if ( 'formidable-dashboard' !== FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
-			return;
-		}
-
-		wp_enqueue_style( self::$assets_handle_name );
-		wp_enqueue_script( self::$assets_handle_name );
-	}
-
 }

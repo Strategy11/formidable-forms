@@ -13,6 +13,7 @@ export class FrmCounter {
 		this.element         = element;
 		this.value           = parseInt( element.getAttribute( 'data-counter' ), 10 );
 		this.activeCounter   = 0;
+		this.locale          = null !== element.getAttribute( 'data-locale' ) ? element.getAttribute( 'data-locale' ).replace( '_', '-' ) : 'en-US';
 		this.speed           = 'undefined' !== typeof options && 'undefined' !== typeof options.speed ? options.speed : 270;
 		this.valueStep       = Math.ceil( this.value / this.speed );
 		this.timeoutInterval = this.initTimeoutInterval();
@@ -36,7 +37,7 @@ export class FrmCounter {
 
 	formatNumber( number ) {
 		if ( 'currency' === this.template ) {
-			return number.toLocaleString( undefined, { minimumFractionDigits: 2 });
+			return number.toLocaleString( this.locale, { minimumFractionDigits: 2 });
 		}
 		return number;
 	}

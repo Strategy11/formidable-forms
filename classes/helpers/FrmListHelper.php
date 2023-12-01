@@ -985,15 +985,17 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @access public
+	 * @param array $args
 	 */
-	public function display() {
+	public function display( $args = array() ) {
 		$singular     = $this->_args['singular'];
 		$tbody_params = array();
 		if ( $singular ) {
 			$tbody_params['data-wp-lists'] = 'list:' . $singular;
 		}
-
-		$this->display_tablenav( 'top' );
+		if ( ! isset( $args['display-top-nav'] ) || false !== $args['display-top-nav'] ) {
+			$this->display_tablenav( 'top' );
+		}
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
@@ -1008,7 +1010,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) ) { ?>
+			<?php if ( $this->has_min_items( 1 ) && ( ! isset( $args['display-bottom-headers'] ) || false !== $args['display-bottom-headers'] )) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
@@ -1017,7 +1019,9 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
-		$this->display_tablenav( 'bottom' );
+		if ( ! isset( $args['display-bottom-nav'] ) || false !== $args['display-bottom-nav'] ) {
+			$this->display_tablenav( 'bottom' );
+		}
 	}
 
 	/**

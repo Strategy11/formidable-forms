@@ -38,17 +38,34 @@
 	will-change: transform;
 	position: relative;
 }
+.frm-counter-card-wrapper.frm-payments-placeholder p, .frm-counter-card-wrapper.frm-payments-placeholder .frm-counter-card a {
+	margin: 0px;
+	padding: 0px;
+}
+.frm-counter-card-wrapper.frm-payments-placeholder .frm-counter-card a {
+	margin-right: var(--gap-md);
+}
 .frm-counter-card-wrapper.frm-full-width .frm-counter-card h4,
 .frm-dashboard-wrapper .frm-dashboard-widget h2.frm-widget-heading {
 	color: #101828;
 	font-size: 16px;
 	font-weight: 600;
 	line-height: 24px;
+	position: relative;
+	z-index: 22;
 }
+.frm-dashboard-wrapper .frm-dashboard-widget .frm-widget-cta {
+	font-weight: 600;
+	position: relative;
+	z-index: 22;
+}
+.frm-dashboard-wrapper .frm-dashboard-widget .frm-widget-cta,
 .frm-dashboard-wrapper .frm-dashboard-widget h2.frm-widget-heading {
 	padding: 14px 24px 0px 24px;
 	margin-bottom: 0px;
 }
+
+
 .frm-dashboard-wrapper .frm-dashboard-widget.frm-license-widget {
 	z-index: 4;
 	overflow: inherit;
@@ -196,7 +213,7 @@
 	width: 25%;
 	height: 85px;
 	box-sizing: border-box;
-	padding: var( --gap-sm ) 0px 0px var( --gap-2xl );
+	padding: var( --gap-sm ) 0px 0px var( --gap-md );
 
 }
 .frm-counter-card-wrapper.frm-full-width .frm-counter-card {
@@ -244,6 +261,34 @@
 	margin-right: 12px;
 }
 /* END License Management */
+
+/* Entries Widget */
+.frm-white-body .frm-dashboard-widget table.wp-list-table th,
+.frm-white-body .frm-dashboard-widget table.wp-list-table td,
+.frm-dashboard-widget table.wp-list-table th,
+.frm-dashboard-widget table.wp-list-table td {
+	padding: 12px 24px;
+	font-weight: 500;
+	line-height: 20px;
+}
+.frm-dashboard-widget table.wp-list-table td {
+	color: #282F36;
+	font-size: 14px;
+}
+.frm-dashboard-widget table.wp-list-table td abbr {
+	text-decoration: none;
+}
+.frm-dashboard-widget table.wp-list-table td a {
+	line-height: 20px;
+}
+.frm-white-body .frm-dashboard-widget table.wp-list-table th,
+.frm-dashboard-widget table.wp-list-table th {
+	color: #656F7C;
+	font-size: 12px;
+	text-transform: uppercase;
+	border-bottom: 1px solid #E9EAEA;
+}
+/* End Entries Widget */
 
 /* Chart Placeholder */
 .frm-widget-placeholder {
