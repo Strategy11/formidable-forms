@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm-renew-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top frm-mt-xs">
-		<div class="frm-upgrade-modal-lock-icon frm-flex-center frm-mb-sm">
+		<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
 		</div>
 

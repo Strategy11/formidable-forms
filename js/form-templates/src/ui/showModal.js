@@ -84,7 +84,7 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 		const shouldDisplayCheck = upgradablePlans[plan].includes( planType );
 
 		// Toggle icon class based on plan availability
-		icon.classList.toggle( 'frm-plan-checkmark-icon', shouldDisplayCheck );
+		icon.classList.toggle( 'frm_green', shouldDisplayCheck );
 
 		// Update SVG icon
 		const svg = icon.querySelector( 'svg > use' );

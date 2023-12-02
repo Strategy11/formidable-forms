@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // List of pricing plans.
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
-<div id="frm-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
+<div id="frm-form-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top frm-mt-xs">
-		<div class="frm-upgrade-modal-lock-icon frm-flex-center frm-mb-sm">
+		<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
 		</div>
 
@@ -47,18 +47,18 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			?>
 		</p>
 
-		<div class="frm-upgrade-modal-banner">
-			<span class="frm-upgrade-modal-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
+		<div class="frm-green-banner">
+			<span class="frm-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
 					esc_html__( 'Lite users get %1$s50%% OFF%2$s regular price.', 'formidable' ),
-					'<span class="frm-upgrade-modal-banner-tag">',
+					'<span class="frm-banner-tag">',
 					'</span>'
 				);
 				?>
 			</span>
-			<span class="frm-upgrade-modal-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
+			<span class="frm-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
 		</div>
 
 		<div id="frm-upgrade-modal-available-plans" class="frm-flex-col frm-gap-xs">

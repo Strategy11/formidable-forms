@@ -351,55 +351,9 @@
 }
 
 /* Upgrade Modal */
-#frm-upgrade-modal p {
-	color: var(--grey-900);
-}
 
-.frm-upgrade-modal-lock-icon {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	background-color: var(--primary-25);
-}
-
-.frm-upgrade-modal-lock-icon .frmsvg {
-	width: 21px;
-	height: 24px;
-}
-
-.frm-upgrade-modal-lock-icon .frmsvg use {
-	color: var(--primary-500);
- }
-
-#frm-upgrade-modal .frm-upgrade-modal-banner {
-	padding: 12px 20px;
-	border-radius: var(--small-radius);
-	background-color: var(--success-25);
-}
-
-#frm-upgrade-modal .frm-upgrade-modal-banner-title {
-	gap: calc(var(--gap-2xs) + 1px);
-	color: var(--grey-700);
-}
-
-#frm-upgrade-modal .frm-upgrade-modal-banner-text {
-	color: var(--grey-500);
-}
-
-#frm-upgrade-modal .frm-upgrade-modal-banner-tag {
-	color: #fff;
-	font-weight: 600;
-	padding: var(--gap-2xs) var(--gap-xs);
-	border-radius: var(--small-radius);
-	background-color: var(--success-500);
-}
-
-#frm-upgrade-modal .frm-upgrade-modal-plan-icon {
+#frm-form-upgrade-modal .frm-upgrade-modal-plan-icon {
 	color: var(--error-500);
-}
-
-#frm-upgrade-modal .frm-upgrade-modal-plan-icon.frm-plan-checkmark-icon {
-	color: var(--success-500);
 }
 
 /* Code from email modal */

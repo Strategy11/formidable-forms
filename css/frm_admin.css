@@ -2430,20 +2430,32 @@ h2.frm-h2 + .howto {
 	position: relative;
 }
 
+.frm-modal h2,
+.frm-modal .postbox .inside h2, /* Override WP. */
 .frm-modal .postbox .frm-modal-title,
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
-	font-size: var(--text-xl);
+	font-size: var(--text-lg);
 	color: var(--grey-900);
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
 }
+
+.frm-modal h3 {
+	font-weight: 500;
+}
+
+/* Dismiss icon button */
 
 .frm-inline-modal > a.dismiss,
 .frm-modal .postbox > a.dismiss,
 .frm-modal .postbox .frm-modal-title + div:last-child,
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
-	right: 30px;
-	top: 25px;
+	top: 19px;
+	right: 19px;
+	display: flex;
 	z-index: 2;
 }
 
@@ -2464,7 +2476,7 @@ body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-chi
 .frm-modal .postbox .frm-modal-title + div:last-child a,
 .frm-modal a.dismiss .frmsvg,
 .frm_common_modal .frm_modal_top a .frmsvg {
-	color: var(--grey-900);
+	color: var(--grey-400);
 }
 
 .frm-modal .frm_modal_content > div.inside,
@@ -2475,6 +2487,10 @@ body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-chi
 	color: var(--grey-700);
 }
 
+.frm-modal p {
+	color: var(--grey-900);
+}
+
 .frm_common_modal .postbox {
 	display: flex;
 	flex-direction: column;
@@ -2483,7 +2499,6 @@ body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-chi
 .frm-modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
 	height: auto;
-	padding: 0 var(--gap-sm);
 }
 
 .frm_modal_footer {
@@ -2573,7 +2588,6 @@ body.frm-body-with-open-modal {
 
 .frm-templates-list li .frm-category-icon {
 	overflow: hidden;
-	align-self: flex-start;
 }
 
 .frm-templates-list .frm-template-details {
@@ -7409,7 +7423,6 @@ ul .frm_col_two {
 .frm-info-modal,
 .settings-lite-cta a,
 .settings-lite-cta ul,
-.settings-lite-cta p,
 .settings-lite-cta {
 	color: #666;
 	font-size: var(--text-md);
@@ -7427,7 +7440,7 @@ ul .frm_col_two {
 
 .frm-info-modal .postbox .inside,
 .settings-lite-cta .postbox .inside {
-	padding: 20px 40px;
+	padding: var(--gap-md);
 	margin: 0;
 }
 
@@ -7880,18 +7893,23 @@ body[class*=formidable-payments] .ui-widget-overlay {
 	z-index: 2;
 }
 
-#frm_upgrade_modal {
-	text-align: center;
+.frm-circled-icon {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	background-color: var(--primary-25);
 }
 
-#frm_upgrade_modal .frm_lock_icon {
-	display: block;
-	margin: 0 auto;
-	height: 35px;
-	width: 35px;
-	color: #c4c4c4;
-	padding-bottom: 20px;
+.frm-circled-icon .frmsvg {
+	width: 21px;
+	height: 24px;
 }
+
+.frm-circled-icon .frmsvg use {
+	color: var(--primary-500);
+ }
+
+
 
 .frm-upgrade-message img {
 	max-width: 100%;
@@ -9204,6 +9222,29 @@ Responsive Design
 	vertical-align: top;
 }
 
+.frm-green-banner {
+	padding: 12px 20px;
+	border-radius: var(--small-radius);
+	background-color: var(--success-25);
+}
+
+.frm-green-banner .frm-banner-title {
+	gap: calc(var(--gap-2xs) + 1px);
+	color: var(--grey-700);
+}
+
+.frm-green-banner .frm-banner-text {
+	color: var(--grey-500);
+}
+
+.frm-green-banner .frm-banner-tag {
+	color: #fff;
+	font-weight: 600;
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: var(--success-500);
+}
+
 .frm-ready-made-solution:not(.frm-search-result) {
 	display: none !important;
 }
@@ -9296,11 +9337,6 @@ Responsive Design
 	color: var(--grey-900);
 }
 
-#frm-form-templates-modal .frm-modal-title h2 {
-	font-weight: 600;
-	margin: 0;
-}
-
 #frm-form-templates-modal input {
 	width: 100%;
 	padding: 0 calc(var(--gap-sm) - 2px) 2px;
@@ -9341,19 +9377,6 @@ Responsive Design
 	border-color: var(--primary-200) !important;
 }
 
-/* Dismiss icon button */
-#frm-form-templates-modal .postbox > a.dismiss,
-#frm_confirm_modal .postbox > a.dismiss {
-	top: 19px;
-	right: 19px;
-	display: flex;
-}
-
-#frm-form-templates-modal .postbox > a.dismiss .frmsvg,
-#frm_confirm_modal .postbox > a.dismiss .frmsvg {
-	color: var(--grey-400);
-}
-
 #frm-form-templates-modal .frm-form-templates-modal-fieldset {
 	position: relative;
 }
@@ -9372,6 +9395,10 @@ Responsive Design
 /* Leave email modal */
 #frm-leave-email-modal p {
 	margin: 0;
+}
+
+#frm_empty_inbox #frm-leave-email-modal {
+	margin-top: var(--gap-2xl);
 }
 
 /* Name your form modal */

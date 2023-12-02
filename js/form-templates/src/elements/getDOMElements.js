@@ -89,7 +89,7 @@ function getDOMElements() {
 		codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
 		codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
 		// Upgrade Modal
-		upgradeModal: document.getElementById( 'frm-upgrade-modal' ),
+		upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
 		upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
 		upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' ),
 		upgradeModalLink: document.getElementById( 'frm-upgrade-modal-link' )
