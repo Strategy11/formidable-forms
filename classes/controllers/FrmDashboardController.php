@@ -12,10 +12,25 @@ class FrmDashboardController {
 	 */
 	public static $assets_handle_name = 'formidable-dashboard';
 
+	/**
+	 * Welcome banner cookie name. When welcome banner is closed we store its status into a cookie.
+	 *
+	 * @var string
+	 */
 	private static $banner_closed_cookie_name = 'frm-welcome-banner-closed';
 
+	/**
+	 * Option name used to store the dashboard options into db options table.
+	 *
+	 * @var string
+	 */
 	private static $option_meta_name = 'frm-dashboard-options';
 
+	/**
+	 * Register Dashboard page tp Formidable admin menu.
+	 *
+	 * @return void
+	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
 		if ( ! self::is_dashboard_page() ) {
@@ -24,6 +39,11 @@ class FrmDashboardController {
 		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
 	}
 
+	/**
+	 * Init dashboard page.
+	 *
+	 * @return void
+	 */
 	public static function route() {
 		$latest_available_form = FrmFormsController::get_latest_form();
 		$total_payments        = self::view_args_payments();
@@ -69,6 +89,14 @@ class FrmDashboardController {
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
 
+	/**
+	 * Init top counters widgets view args used to construct FrmDashboardView.
+	 *
+	 * @param object|null $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param array $counters_value. The counter values for "Total Forms" & "Total Entries"
+	 *
+	 * @return array
+	 */
 	private static function view_args_counters( $latest_available_form, $counters_value ) {
 		$lite_counters = array(
 			array(
@@ -114,6 +142,14 @@ class FrmDashboardController {
 
 	}
 
+	/**
+	 * Init total earnings widget view args to construct FrmDashboardView.
+	 *
+	 * @param object|null $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param array $counters_value. The counter values for Total Forms & Total Entries.
+	 *
+	 * @return array
+	 */
 	private static function view_args_payments() {
 		$payments      = FrmTransLiteAppHelper::get_payments_data();
 		$prepared_data = array();
@@ -212,13 +248,6 @@ class FrmDashboardController {
 				echo wp_json_encode( array( 'success' => false ) );
 				wp_die();
 				break;
-
-			// case 'email-has-subscribed':
-			// 	$email             = FrmAppHelper::get_post_param( 'email' );
-			// 	$subscribed_emails = self::get_subscribed_emails();
-			// 	echo wp_json_encode( array( 'success' => false !== array_search( $email, $subscribed_emails, true ) ? true : false ) );
-			// 	wp_die();
-			// 	break;
 
 			case 'save-subscribed-email':
 				$email = FrmAppHelper::get_post_param( 'email' );

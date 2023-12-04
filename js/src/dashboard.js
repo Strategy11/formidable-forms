@@ -15,6 +15,10 @@ class FrmDashboard {
 				}
 			}
 		};
+
+		if ( 'undefined' !== typeof window.frmAdminBuild ) {
+			window.frmAdminBuild.initNewFormModal();
+		}
 	}
 
 	initInbox() {

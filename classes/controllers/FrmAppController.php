@@ -378,7 +378,7 @@ class FrmAppController {
 		include $shared_path . 'upgrade_overlay.php';
 		include $shared_path . 'confirm-overlay.php';
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-welcome' ) || FrmAppHelper::on_form_listing_page() ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-welcome' ) || FrmAppHelper::on_form_listing_page() || FrmDashboardController::is_dashboard_page() ) {
 			self::new_form_overlay_html();
 		}
 	}
