@@ -645,6 +645,9 @@ class FrmFormsController {
 		return '';
 	}
 
+	/**
+	 * @since x.x Function went from private to public
+	 */
 	public static function delete_all() {
 		// Check nonce url.
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
@@ -654,10 +657,10 @@ class FrmFormsController {
 			return;
 		}
 
-		$count   = FrmForm::scheduled_delete( time() );
-
-		$url = remove_query_arg( 'delete_all' );
-		$url .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
+		$count = FrmForm::scheduled_delete( time() );
+		$url   = remove_query_arg( array( 'delete_all' ) );
+		
+		$url  .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
 
 		wp_safe_redirect( $url );
 		die();
@@ -1818,7 +1821,7 @@ class FrmFormsController {
 				}
 
 				if ( 'forms_permanently_deleted' === $message ) {
-					$count = FrmAppHelper::get_param( 'forms_deleted' );
+					$count = FrmAppHelper::get_param( 'forms_deleted', 0, 'get', 'absint' );
 					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 					self::display_forms_list( array(), $message, '' );
 					return;
