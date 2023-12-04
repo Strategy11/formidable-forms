@@ -109,7 +109,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Define test data for favorite templates.
 		$test_favorites = array(
 			'default' => array( 20872734 => 20872734 ),
-			'custom'  => array( 51 => 51 )
+			'custom'  => array( 51 => 51 ),
 		);
 
 		// Update the option to include test favorite templates.
@@ -200,11 +200,11 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Mock navigation items.
 		$nav_items = array(
 			array(
-				'link' => 'http://example.com/page1'
+				'link' => 'http://example.com/page1',
 			),
 			array(
-				'link' => 'http://example.com/page2'
-			)
+				'link' => 'http://example.com/page2',
+			),
 		);
 
 		// Case 1: 'new_template' not present in the URL.
