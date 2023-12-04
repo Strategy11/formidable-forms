@@ -423,6 +423,7 @@ class FrmFormActionsController {
 				),
 			);
 			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		global $wpdb;
