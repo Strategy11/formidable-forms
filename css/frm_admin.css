@@ -100,6 +100,12 @@
 	line-height: var(--leading);
 }
 
+.frm-white-body p,
+.frm_wrap p {
+	margin: var(--gap-sm) 0;
+}
+
+
 body:not(.frm-admin-page-styles):not(.frm-admin-page-style) .with_frm_style .frm_form_fields > fieldset {
 	--fieldset-padding: 15px 0;
 }
@@ -2963,72 +2969,6 @@ li[data-preview] .frm-hover-icons .frm-preview-form {
 
 .frm_image_from_url {
 	height: 50px;
-}
-
-.frm-right-panel .inside a.frm_pro_tip,
-a.frm_pro_tip {
-	font-size: var(--text-sm);
-	display: inline-block;
-	color: var(--grey-700);
-	background: #FFE7DE;
-	border-radius: var(--small-radius);
-	padding: 5px 15px;
-	margin: 0 auto;
-	display: flex;
-	align-items: center;
-}
-
-a.frm_pro_tip:hover {
-	color: var(--grey-700);
-	border-color: var(--primary-500);
-}
-
-a.frm_pro_tip:hover .frmsvg {
-	fill: var(--primary-500);
-}
-
-.frm_field_list .frm_pro_tip {
-	margin: 10px 15px;
-	position: relative;
-	width: calc(100% - 30px);
-    box-sizing: border-box;
-}
-
-a.frm_pro_tip .frmsvg,
-a.frm_pro_tip i {
-	color: var(--orange);
-	margin-right: 5px;
-}
-
-a.frm_pro_tip .frmsvg {
-	margin-right: 10px;
-}
-
-.frm-light-tip a.frm_pro_tip {
-	background: rgba(188, 224, 253, 0.23);
-}
-
-.frm-light-tip a.frm_pro_tip .frmsvg,
-.frm-light-tip a.frm_pro_tip i,
-.frm-light-tip .frm-tip-cta {
-	color: var(--primary-500);
-}
-
-.frm-tip-info {
-	flex: 1;
-	text-align: left;
-}
-
-.frm-tip-cta {
-	color: var(--orange);
-}
-
-.nav-tab-wrapper .frm_pro_tip {
-	float: right;
-}
-
-.frm_pro_tip:hover .frm-tip-cta {
-	color: var(--primary-500);
 }
 
 /*Switch form dropdown*/
@@ -9232,29 +9172,6 @@ Responsive Design
 	vertical-align: top;
 }
 
-.frm-green-banner {
-	padding: 12px 20px;
-	border-radius: var(--small-radius);
-	background-color: var(--success-25);
-}
-
-.frm-green-banner .frm-banner-title {
-	gap: calc(var(--gap-2xs) + 1px);
-	color: var(--grey-700);
-}
-
-.frm-green-banner .frm-banner-text {
-	color: var(--grey-500);
-}
-
-.frm-green-banner .frm-banner-tag {
-	color: #fff;
-	font-weight: 600;
-	padding: var(--gap-2xs) var(--gap-xs);
-	border-radius: var(--small-radius);
-	background-color: var(--success-500);
-}
-
 .frm-ready-made-solution:not(.frm-search-result) {
 	display: none !important;
 }
@@ -9314,30 +9231,84 @@ Responsive Design
 /* End On Submit action */
 
 /* Start call-to-action */
+.frm_pro_tip,
 .frm-cta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: calc(3 * var(--gap-2xl) - 7px);
-    padding: var(--gap-md);
-    border-radius: var(--small-radius);
-    background: var(--primary-25);
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--gap-2xl);
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: var(--small-radius);
+	background: var(--primary-25);
 }
 
-.frm-cta .frm-cta-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-2xs);
+.frm-cta h4 {
+	font-weight: 600;
+	margin: 0;
 }
 
-.frm-cta .frm-cta-title {
-    font-weight: 600;
-    margin: 0;
+.frm-cta-green {
+	background-color: var(--success-25);
 }
 
-.frm-cta .frm-cta-text {
-    color: var(--grey-500);
-    font-weight: 400;
+.frm-cta-green .frm-banner-title {
+	gap: calc(var(--gap-2xs) + 1px);
+	color: var(--grey-700);
+}
+
+.frm-cta-tag {
+	color: #fff;
+	font-weight: 600;
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: var(--success-500);
+}
+
+.frm-right-panel .inside .frm_pro_tip,
+.frm_pro_tip {
+	color: var(--grey-700);
+	background: #FFE7DE;
+	margin: 0 auto;
+	display: flex;
+	gap: var(--gap-xs);
+}
+
+.frm_field_list .frm_pro_tip {
+	margin: 10px 15px;
+	position: relative;
+	width: calc(100% - 30px);
+	box-sizing: border-box;
+}
+
+.frm_pro_tip .frmsvg,
+.frm_pro_tip i {
+	color: var(--orange);
+}
+
+.frm-tip-info {
+	flex: 1;
+	text-align: left;
+}
+
+.frm-tip-cta {
+	color: var(--orange);
+}
+
+.frm-light-tip .frm_pro_tip {
+	background: var(--primary-25);
+}
+
+.frm-light-tip .frm_pro_tip .frmsvg,
+.frm-light-tip .frm_pro_tip i,
+.frm-light-tip .frm-tip-cta {
+	color: var(--primary-500);
+}
+
+.frm-tip-cta:hover  {
+	color: var(--primary-500);
+}
+
+.nav-tab-wrapper .frm_pro_tip {
+	float: right;
 }
 /* End call-to-action */
 

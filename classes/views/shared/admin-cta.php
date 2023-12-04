@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $attributes          = array();
-$attributes['class'] = trim( 'frm-cta ' . $class );
+$attributes['class'] = trim( 'frm-cta frm-flex frm-p-md ' . $class );
 
 if ( $id ) {
 	$attributes['id'] = $id;
@@ -12,14 +12,14 @@ if ( $id ) {
 ?>
 
 <div <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
-	<div class="frm-cta-content">
-		<h4 class="frm-cta-title">
+	<div>
+		<h4>
 			<?php echo FrmAppHelper::kses( $title, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</h4>
 
-		<span class="frm-cta-text">
+		<p class="frm-mb-0">
 			<?php echo FrmAppHelper::kses( $description, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		</span>
+		</p>
 	</div>
 
 	<a href="<?php echo esc_url( $link_url ); ?>" target="_blank" class="frm-cta-link button button-primary frm-button-primary">

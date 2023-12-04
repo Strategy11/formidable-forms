@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // List of pricing plans.
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
-<div id="frm-form-upgrade-modal" class="frm-form-templates-modal-item frm_hidden">
+<div id="frm-form-upgrade-modal" class="frm-form-templates-modal-item frm_hidden frm_wrap">
 	<div class="frm_modal_top frm-mt-xs">
 		<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
@@ -35,8 +35,8 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 		</div>
 	</div>
 
-	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
-		<p class="frm-m-0">
+	<div class="inside frm-px-md frm-mt-xs frm-m-0">
+		<p>
 			<?php
 			printf(
 				/* translators: %1$s: Open span tag, %2$s: Close span tag */
@@ -47,13 +47,13 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			?>
 		</p>
 
-		<div class="frm-green-banner">
+		<div class="frm-cta frm-cta-green">
 			<span class="frm-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
 					esc_html__( 'Lite users get %1$s50%% OFF%2$s regular price.', 'formidable' ),
-					'<span class="frm-banner-tag">',
+					'<span class="frm-cta-tag">',
 					'</span>'
 				);
 				?>
@@ -61,9 +61,11 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			<span class="frm-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
 		</div>
 
-		<div id="frm-upgrade-modal-available-plans" class="frm-flex-col frm-gap-xs">
-			<span><?php esc_html_e( 'Template available on:', 'formidable' ); ?></span>
-			<div class="frm-flex-box frm-gap-md">
+		<div id="frm-upgrade-modal-available-plans">
+			<p>
+				<?php esc_html_e( 'Template available on:', 'formidable' ); ?>
+			</p>
+			<p class="frm-flex-box frm-gap-md frm-m-0">
 				<?php foreach ( $plans as $plan ) { ?>
 					<span class="frm-upgrade-modal-plan frm-flex-box frm-gap-xs frm-items-center">
 						<span class="frm-upgrade-modal-plan-icon frm-flex-box" data-plan="<?php echo esc_attr( strtolower( $plan ) ); ?>">
