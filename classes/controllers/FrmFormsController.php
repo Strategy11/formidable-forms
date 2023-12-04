@@ -1102,8 +1102,35 @@ class FrmFormsController {
 		global $frm_vars;
 
 		$form = FrmForm::getOne( $id );
+		$error_args = array(
+			'title'       => __( 'You can\'t edit the form', 'formidable' ),
+			'body'        => __( 'You are trying to edit a form that does not exist', 'formidable' ),
+			'cancel_url'  => admin_url( 'admin.php?page=formidable' ),
+			'continue_url' => add_query_arg(
+				array(
+					'page' => 'formidable',
+				)
+			),
+		);
 		if ( ! $form ) {
+			FrmAppController::show_error_modal( $error_args );
 			wp_die( esc_html__( 'You are trying to edit a form that does not exist.', 'formidable' ) );
+		}
+
+		if ( 'trash' === $form->status ) {
+			$error_args['body'] = __( 'The form you\'re trying to edit is in trash. You must restore it first before you can make changes', 'formidable' );
+			$error_args['continue_url'] = add_query_arg(
+				array(
+					'page'       => 'formidable',
+					'_wpnonce'   => wp_create_nonce( 'untrash_form_' . $id ),
+					'form_type'  => 'trash',
+					'frm_action' => 'untrash',
+					'id'         => $id,
+				)
+			);
+			$error_args['continue_text'] = __( 'Restore form', 'formidable' );
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		if ( $form->parent_form_id ) {
