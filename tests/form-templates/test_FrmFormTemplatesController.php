@@ -107,16 +107,16 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 */
 	public function test_init_favorite_templates() {
 		// Define test data for favorite templates.
-		$test_favorites = [
-			'default' => [ 20872734 => 20872734 ],
-			'custom'  => [ 51 => 51 ]
-		];
+		$test_favorites = array(
+			'default' => array( 20872734 => 20872734 ),
+			'custom'  => array( 51 => 51 )
+		);
 
 		// Update the option to include test favorite templates.
 		update_option( $this->controller::FAVORITE_TEMPLATES_OPTION, $test_favorites );
 
 		// Initialize favorite templates.
-		$this->run_private_method( [ $this->controller, 'init_favorite_templates' ] );
+		$this->run_private_method( array( $this->controller, 'init_favorite_templates' ) );
 		$favorites = $this->controller::get_favorite_templates();
 
 		// Verify the favorite templates are correctly initialized.
@@ -147,7 +147,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Set up the testing environment by initializing template data and categorizing them.
 		$this->set_private_property( $this->controller, 'custom_templates', array() );
 		$this->controller::set_form_templates_data();
-		$this->run_private_method( [ $this->controller, 'organize_and_set_categories' ] );
+		$this->run_private_method( array( $this->controller, 'organize_and_set_categories' ) );
 
 		// Get the organized categories for validation.
 		$categories = $this->controller::get_categories();
@@ -171,7 +171,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertArrayHasKey( $expected_category, $categories, "Should contain the '{$expected_category}' category." );
 
 			// Calculate the expected count for each category and validate it.
-			if ( isset( $categories[$expected_category] ) ) {
+			if ( isset( $categories[ $expected_category ] ) ) {
 				$expected_count = 0;
 				switch ( $expected_category ) {
 					case 'favorites':
@@ -188,7 +188,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 						$expected_count = 0;
 						break;
 				}
-				$this->assertEquals( $expected_count, $categories[$expected_category]['count'], "The '{$expected_category}' category count should match the expected number." );
+				$this->assertEquals( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 			}
 		}
 	}
@@ -199,24 +199,28 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_append_new_template_to_nav() {
 		// Mock navigation items.
 		$nav_items = array(
-			array( 'link' => 'http://example.com/page1' ),
-			array( 'link' => 'http://example.com/page2' )
+			array(
+				'link' => 'http://example.com/page1'
+			),
+			array(
+				'link' => 'http://example.com/page2'
+			)
 		);
 
 		// Case 1: 'new_template' not present in the URL.
 		$_GET['new_template'] = null;
-		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, [] );
+		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, array() );
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$this->assertEquals( $nav_items[$index]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
+			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
 		}
 
 		// Case 2: 'new_template' is present in the URL.
 		$_GET['new_template'] = 'true';
-		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, [] );
+		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, array() );
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$expected_link = $nav_items[$index]['link'] . '&new_template=true';
+			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';
 			$this->assertEquals( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
 		}
 	}
@@ -228,23 +232,23 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		global $wp_scripts, $wp_styles;
 
 		// Mock the global WordPress objects for scripts and styles.
-		$wp_scripts = new WP_Scripts();
-		$wp_styles  = new WP_Styles();
+		$wp_scripts = new WP_Scripts(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$wp_styles  = new WP_Styles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		// Case 1: Not on the form templates page.
 		$this->set_admin_screen();
 		$_GET['page'] = 'some-other-page';
 		$this->controller::enqueue_assets();
 		// Assert that the specific scripts and styles for the form templates page are not enqueued.
-		$this->assertFalse( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), "Script should not be enqueued when not on the form templates page." );
-		$this->assertFalse( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), "Style should not be enqueued when not on the form templates page." );
+		$this->assertFalse( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Script should not be enqueued when not on the form templates page.' );
+		$this->assertFalse( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Style should not be enqueued when not on the form templates page.' );
 
 		// Case 2: On the form templates page.
 		$_GET['page'] = $this->controller::PAGE_SLUG;
 		$this->controller::set_form_templates_data();
 		$this->controller::enqueue_assets();
 		// Assert that the specific scripts and styles for the form templates page are enqueued.
-		$this->assertTrue( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), "Script should be enqueued on the form templates page." );
-		$this->assertTrue( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), "Style should be enqueued on the form templates page." );
+		$this->assertTrue( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Script should be enqueued on the form templates page.' );
+		$this->assertTrue( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Style should be enqueued on the form templates page.' );
 	}
 }

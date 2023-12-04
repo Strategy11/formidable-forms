@@ -25,7 +25,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 			'nonce'              => wp_create_nonce( 'frm_ajax' ),
 			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
 			'operation'          => 'add',
-			'is_custom_template' => 'false'
+			'is_custom_template' => 'false',
 		);
 		$response = $this->trigger_action( $_POST['action'] );
 
