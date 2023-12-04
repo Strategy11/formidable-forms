@@ -448,4 +448,20 @@ class FrmTransLiteAppHelper {
 
 		return self::$should_fallback_to_paypal;
 	}
+
+	/**
+	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
+	 * Old payments will just output an empty string.
+	 *
+	 * @since 6.6
+	 *
+	 * @param stdClass $payment
+	 * @return string
+	 */
+	public static function get_test_mode_display_string( $payment ) {
+		if ( ! isset( $payment->test ) ) {
+			return '';
+		}
+		return $payment->test ? __( 'Test', 'formidable' ) : __( 'Live', 'formidable' );
+	}
 }
