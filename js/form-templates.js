@@ -1961,7 +1961,7 @@ function createApplicationTemplates(applications) {
       text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Application Templates'),
       className: 'frm-text-sm frm-font-medium frm-mb-sm'
     }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('ul', {
-      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-grid-layout"),
+      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list frm-grid-container"),
       children: templateItems
     })]
   });
@@ -1980,7 +1980,7 @@ function createTemplateItem(template) {
     hasLiteThumbnail = template.hasLiteThumbnail;
   var thumbnailURL = hasLiteThumbnail ? "".concat(thumbnailBaseURL, "/").concat(key, ".png") : "".concat(thumbnailBaseURL, "/placeholder.svg");
   return (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('li', {
-    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-grid-item"),
+    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item frm4"),
     data: {
       href: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.applicationsUrl, "&triggerViewApplicationModal=1&template=").concat(key),
       'frm-search-text': name.toLowerCase()
