@@ -336,6 +336,7 @@ td.column-title .frm_actions_dropdown {
 .frm-white-body .wrap h2,
 .frm-white-body h2 {
 	font-size: var(--text-lg);
+	font-weight: 500;
 }
 
 .frm-white-body .wrap h3,
@@ -1570,6 +1571,11 @@ input.frm_insert_in_template {
 	padding: var(--gap-md) !important;
 }
 
+.frm-py-0 {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
 .frm-pt-sm {
 	padding-top: var(--gap-sm) !important;
 }
@@ -1629,6 +1635,27 @@ input.frm_insert_in_template {
 
 .frm-w-full {
 	width: 100% !important;
+}
+
+.frm_block, /* deprecated */
+.frm-block {
+	display: block;
+}
+
+.frm_inline {
+	display: inline;
+}
+
+.frm_inline_block {
+	display: inline-block !important;
+}
+
+.frm-flex {
+	display: flex;
+}
+
+.frm_hidden {
+	display: none;
 }
 
 .frm-flex-box {
@@ -1698,23 +1725,6 @@ input.frm_insert_in_template {
 
 .frm_no_float {
 	float: none;
-}
-
-.frm_block, /* deprecated */
-.frm-block {
-	display: block;
-}
-
-.frm_inline {
-	display: inline;
-}
-
-.frm_inline_block {
-	display: inline-block !important;
-}
-
-.frm_hidden {
-	display: none;
 }
 
 .frm-text-right {
@@ -9332,31 +9342,8 @@ Responsive Design
 /* End call-to-action */
 
 /* Start confirm and form templates modals */
-#frm-form-templates-modal .frm_modal_footer {
-	text-align: unset;
-	color: var(--grey-900);
-}
-
-#frm-form-templates-modal input {
-	width: 100%;
-	padding: 0 calc(var(--gap-sm) - 2px) 2px;
-	border-radius: var(--small-radius);
-	border-color: var(--grey-300);
-}
-
-#frm-form-templates-modal input::placeholder {
-	color: var(--grey-500);
-	font-size: var(--text-sm);
-}
-
 #frm-form-templates-modal textarea {
 	height: 108px;
-	border-color: var(--grey-300);
-}
-
-#frm-form-templates-modal input[disabled],
-#frm-form-templates-modal textarea[disabled] {
-	background-color: var(--grey-50);
 }
 
 #frm-form-templates-modal .frm-fields button.btn {
@@ -9369,12 +9356,6 @@ Responsive Design
 	color: var(--grey-400);
 	width: 14px;
 	height: 14px;
-}
-
-#frm-form-templates-modal .frm-button-primary.disabled {
-	color: #fff !important;
-	background: var(--primary-200) !important;
-	border-color: var(--primary-200) !important;
 }
 
 #frm-form-templates-modal .frm-form-templates-modal-fieldset {
@@ -9393,19 +9374,11 @@ Responsive Design
 }
 
 /* Leave email modal */
-#frm-leave-email-modal p {
-	margin: 0;
-}
-
 #frm_empty_inbox #frm-leave-email-modal {
 	margin-top: var(--gap-2xl);
 }
 
 /* Name your form modal */
-#frm-name-your-form-modal p {
-	color: var(--grey-700);
-}
-
 #frm-name-your-form-modal .frm_modal_top {
 	padding-top: var(--gap-sm);
 }

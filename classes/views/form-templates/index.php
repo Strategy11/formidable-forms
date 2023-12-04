@@ -43,12 +43,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 			<div id="post-body-content" class="frm-flex-col frm-gap-md frm-p-md frm_hidden">
-				<span class="frm-form-templates-grid-layout">
-					<div id="frm-form-templates-create-form" class="frm-form-templates-grid-item frm-flex-box frm-items-center">
+				<div class="frm_grid_container">
+					<div id="frm-form-templates-create-form" class="frm4 frm-flex-box frm-items-center">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
 						<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
 					</div>
-				</span>
+				</div>
 				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider"></span>
 
 				<?php

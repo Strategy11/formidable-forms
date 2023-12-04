@@ -25,14 +25,14 @@ $defaults = array(
 
 $args = wp_parse_args( $args, $defaults );
 ?>
-<div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden">
+<div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden frm_wrap">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<h2><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
+	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-mb-2xs">
 		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
 			<span class="frm-wait"></span>
 		</div>
@@ -41,7 +41,7 @@ $args = wp_parse_args( $args, $defaults );
 		echo wp_kses(
 			wpautop( esc_html( $args['description'] ) ),
 			array(
-				'p' => true,
+				'p'  => true,
 				'br' => true,
 			)
 		);

@@ -8,10 +8,9 @@ import { isVisible, show } from './';
  * Applies a fade-in animation to an element.
  *
  * @param {HTMLElement} element The element to apply the fade-in to.
- * @param {string} [fadingClass=`${PREFIX}-flex`] The CSS class to apply during the fading.
  * @return {void}
  */
-export const fadeIn = ( element, fadingClass = `${PREFIX}-flex` ) => {
+export const fadeIn = ( element ) => {
 	if ( ! element ) {
 		return;
 	}
@@ -20,9 +19,9 @@ export const fadeIn = ( element, fadingClass = `${PREFIX}-flex` ) => {
 		show( element );
 	}
 
-	element.classList.add( 'frm-fadein-up', fadingClass );
+	element.classList.add( 'frm-fadein-up' );
 
 	element.addEventListener( 'animationend', () => {
-		element.classList.remove( 'frm-fadein-up', fadingClass );
+		element.classList.remove( 'frm-fadein-up' );
 	}, { once: true });
 };

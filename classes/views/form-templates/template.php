@@ -21,7 +21,7 @@ $plan_required = FrmFormsHelper::get_plan_required( $template );
 // Remove "Form Template" string from `$template['name']` and assign to a variable.
 $template_name = $is_custom_template ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
-$class_names      = array( 'frm-form-templates-item', 'frm-form-templates-grid-item' );
+$class_names      = array( 'frm-form-templates-item', 'frm4' );
 $use_template_url = '#';
 
 /**
@@ -96,7 +96,7 @@ $attributes['class'] = implode( ' ', $class_names );
 					$trash_links = FrmFormsHelper::delete_trash_links( $template['id'] )
 					?>
 					<a href="<?php echo esc_url( $trash_links['trash']['url'] ); ?>" class="frm-form-templates-custom-item-trash-button frm-flex-center frm-fadein" data-frmverify="<?php esc_attr_e( 'Do you want to move this form template to the trash?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" role="button" aria-label="<?php esc_attr_e( 'Move to the trash button', 'formidable' ); ?>">
-						<?php FrmAppHelper::icon_by_class( 'frmfont frm_trash_icon' ); ?>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
 					</a>
 					<span class="frm-vertical-line frm-fadein"></span>
 				<?php } ?>

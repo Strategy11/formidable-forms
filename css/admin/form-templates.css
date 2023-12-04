@@ -33,17 +33,17 @@
 	float: none;
 }
 
-#frm-form-templates-page #template-search-input {
+#template-search-input {
 	width: 100%;
 }
 
 /* Categories List */
-#frm-form-templates-page .frm-form-templates-cat-item {
+.frm-form-templates-cat-item {
 	position: relative;
 	cursor: pointer;
 }
 
-#frm-form-templates-page .frm-form-templates-cat-item::before {
+.frm-form-templates-cat-item::before {
 	content: "";
 	position: absolute;
 	top: -8px;
@@ -56,24 +56,24 @@
 	z-index: 1;
 }
 
-#frm-form-templates-page .frm-form-templates-cat-item:hover::before {
+.frm-form-templates-cat-item:hover::before {
 	background-color: var(--grey-100);
 }
 
-#frm-form-templates-page .frm-form-templates-cat-item > * {
+.frm-form-templates-cat-item > * {
 	z-index: 2;
 }
 
-#frm-form-templates-page .frm-form-templates-cat-text {
+.frm-form-templates-cat-text {
 	color: var(--grey-900);
 }
 
-#frm-form-templates-page .frm-form-templates-cat-count {
+.frm-form-templates-cat-count {
 	color: var(--grey-400);
 }
 
-#frm-form-templates-page .frm-current .frm-form-templates-cat-text,
-#frm-form-templates-page .frm-current .frm-form-templates-cat-count {
+.frm-current .frm-form-templates-cat-text,
+.frm-current .frm-form-templates-cat-count {
 	color: var(--primary-500);
 }
 
@@ -82,15 +82,20 @@
  *
  * Focuses on the main content area, laying out the various elements and components.
  */
-#frm-form-templates-page .frm-form-templates-grid-layout {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
-	grid-auto-rows: max-content;
+#frm-form-templates-page .frm_grid_container {
 	gap: var(--gap-sm);
 }
 
-#frm-form-templates-page .frm-form-templates-grid-item {
-	grid-column: span 1;
+@media only screen and (max-width: 1430px) {
+	#frm-form-templates-page .frm_grid_container .frm4 {
+		grid-column: span 6;
+	}
+}
+
+@media only screen and (max-width: 1115px) {
+	#frm-form-templates-page .frm_grid_container .frm4 {
+		grid-column: span 12;
+	}
 }
 
 /* Create a blank form */
@@ -119,16 +124,16 @@
 }
 
 /* Templates list */
-#frm-form-templates-page #frm-form-templates-featured-list {
+#frm-form-templates-featured-list {
 	margin-top: calc(-1 * var(--gap-xs));
 }
 
-#frm-form-templates-page #frm-form-templates-custom-list-title {
+#frm-form-templates-custom-list-title {
 	color: var(--grey-500);
 }
 
 /* Templates item */
-#frm-form-templates-page .frm-form-templates-item {
+.frm-form-templates-item {
 	display: flex;
 	gap: 10px;
 	border: 1px solid var(--grey-200);
@@ -137,15 +142,15 @@
 	box-shadow: var(--box-shadow-xs);
 }
 
-#frm-form-templates-page .frm-form-templates-item-icon {
+.frm-form-templates-item-icon {
 	flex-shrink: 0;
 }
 
-#frm-form-templates-page #frm-form-templates-list .frm-form-templates-item-icon {
+#frm-form-templates-list .frm-form-templates-item-icon {
 	display: none;
 }
 
-#frm-form-templates-page .frm-form-templates-item-body {
+.frm-form-templates-item-body {
 	display: flex;
 	flex-direction: column;
 	gap: calc(var(--gap-xs) - 2px);
@@ -153,56 +158,56 @@
 	flex-grow: 1;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title,
-#frm-form-templates-page .frm-form-templates-item-title-text {
+.frm-form-templates-item-title,
+.frm-form-templates-item-title-text {
 	display: flex;
 	gap: 6px;
 	align-items: center;
 	margin: 0;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title-text {
+.frm-form-templates-item-title-text {
 	width: calc(100% - 24px);
 	font-size: var(--text-sm);
 }
 
-#frm-form-templates-page .frm-form-templates-item-lock-icon .frmsvg {
+.frm-form-templates-item-lock-icon .frmsvg {
 	display: flex;
 	width: 11px;
 	height: 13px;
 	flex-shrink: 0;
 }
 
-#frm-form-templates-page .frm-form-templates-item-title-text > span {
+.frm-form-templates-item-title-text > span {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-#frm-form-templates-page .frm-form-templates-item-favorite-button {
+.frm-form-templates-item-favorite-button {
 	display: none;
 	cursor: pointer;
 	transition: color 200ms ease-out;
 	color: var(--grey-900);
 }
 
-#frm-form-templates-page .frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
+.frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
 	display: flex;
 }
 
-#frm-form-templates-page .frm-form-templates-item-favorite-button:hover,
-#frm-form-templates-page .frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
+.frm-form-templates-item-favorite-button:hover,
+.frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
 	color: var(--error-500);
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button {
+.frm-form-templates-custom-item-trash-button {
 	position: relative;
 	display: none;
 	border-radius: var(--small-radius);
 	cursor: pointer;
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button::before {
+.frm-form-templates-custom-item-trash-button::before {
 	content: '';
 	position: absolute;
 	top: -4px;
@@ -215,11 +220,11 @@
 	z-index: 1;
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button:hover::before {
+.frm-form-templates-custom-item-trash-button:hover::before {
 	background-color: var(--primary-25);
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button .frmsvg {
+.frm-form-templates-custom-item-trash-button .frmsvg {
 	width: 18px;
 	height: 18px;
 	color: var(--grey-900);
@@ -227,19 +232,19 @@
 	z-index: 2;
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button .frmsvg:hover {
+.frm-form-templates-custom-item-trash-button .frmsvg:hover {
 	color: var(--primary-500);
 }
 
-#frm-form-templates-page .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
+.frm-form-templates-custom-item-trash-button + .frm-vertical-line {
 	display: none;
 }
 
-#frm-form-templates-page .frm-form-templates-item-content {
+.frm-form-templates-item-content {
 	position: relative;
 }
 
-#frm-form-templates-page .frm-form-templates-item-buttons {
+.frm-form-templates-item-buttons {
 	display: none;
 	position: absolute;
 	gap: 12px;
@@ -247,12 +252,12 @@
 	z-index: 2;
 }
 
-#frm-form-templates-page .frm-form-templates-item-buttons .button {
+.frm-form-templates-item-buttons .button {
 	font-size: var(--text-xs);
 	padding: 4px 12px;
 }
 
-#frm-form-templates-page .frm-form-templates-item-description {
+.frm-form-templates-item-description {
 	font-size: var(--text-xs);
 	margin: 0;
 	min-height: var(--h-md);
@@ -264,18 +269,18 @@
 	overflow: hidden;
 }
 
-#frm-form-templates-page .frm-form-templates-item:hover .frm-form-templates-item-description {
+.frm-form-templates-item:hover .frm-form-templates-item-description {
 	visibility: hidden;
 	opacity: 0;
 }
 
-#frm-form-templates-page .frm-form-templates-item:hover .frm-form-templates-item-buttons {
+.frm-form-templates-item:hover .frm-form-templates-item-buttons {
 	display: flex;
 }
 
-#frm-form-templates-page .frm-form-templates-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
-#frm-form-templates-page .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button,
-#frm-form-templates-page .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
+.frm-form-templates-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
+.frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button,
+.frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
 	display: flex;
 }
 
@@ -374,15 +379,12 @@
  * Provides helper classes for common layout patterns and animations in the
  * Form Templates page.
  */
-#frm-form-templates-page .frm_hidden {
-	display: none !important;
+
+.frm_hidden {
+	display: none; /* Load this last for overrides */
 }
 
-#frm-form-templates-page .frm-form-templates-flex {
-	display: flex;
-}
-
-#frm-form-templates-page .frm-form-templates-divider {
+.frm-form-templates-divider {
 	border-top: 1px solid var(--grey-200);
 	margin: 0;
 }

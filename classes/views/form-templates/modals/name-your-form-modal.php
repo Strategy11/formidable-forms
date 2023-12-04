@@ -12,21 +12,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-name-your-form-modal" class="frm-form-templates-modal-item">
+<div id="frm-name-your-form-modal" class="frm-form-templates-modal-item frm_wrap">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<h2><?php esc_html_e( 'Name your form', 'formidable' ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
-		<p class="frm-m-0"><?php esc_html_e( 'Before we save this form, do you want to name it first?', 'formidable' ); ?></p>
+	<div class="inside frm-px-md frm-mt-xs frm-m-0 frm-py-0 frm_grid_container frm-fields">
+		<p><?php esc_html_e( 'Before we save this form, do you want to name it first?', 'formidable' ); ?></p>
 
-		<div class="frm-flex-col frm-gap-xs">
-			<label for="frm_new_form_name_input" class="frm-m-0">
+		<div class="frm_form_field">
+			<label for="frm_new_form_name_input">
 				<?php esc_html_e( 'Form Name (Optional)', 'formidable' ); ?>
 			</label>
-			<input type="text" name="frm_new_form_name_input" id="frm_new_form_name_input" placeholder="<?php esc_html_e( 'Enter your form name', 'formidable' ); ?>" class="frm_long_input" />
+			<input type="text" name="frm_new_form_name_input" id="frm_new_form_name_input" placeholder="<?php esc_html_e( 'Enter your form name', 'formidable' ); ?>" />
 		</div>
 	</div>
 

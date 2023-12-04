@@ -5124,20 +5124,18 @@ __webpack_require__.r(__webpack_exports__);
  * Applies a fade-in animation to an element.
  *
  * @param {HTMLElement} element The element to apply the fade-in to.
- * @param {string} [fadingClass=`${PREFIX}-flex`] The CSS class to apply during the fading.
  * @return {void}
  */
 var fadeIn = function fadeIn(element) {
-  var fadingClass = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-flex");
   if (!element) {
     return;
   }
   if (!(0,___WEBPACK_IMPORTED_MODULE_1__.isVisible)(element)) {
     (0,___WEBPACK_IMPORTED_MODULE_1__.show)(element);
   }
-  element.classList.add('frm-fadein-up', fadingClass);
+  element.classList.add('frm-fadein-up');
   element.addEventListener('animationend', function () {
-    element.classList.remove('frm-fadein-up', fadingClass);
+    element.classList.remove('frm-fadein-up');
   }, {
     once: true
   });
