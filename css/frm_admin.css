@@ -350,10 +350,15 @@ td.column-title .frm_actions_dropdown {
 	padding: 20px;
     border-radius: 50%;
 	background-color: var(--primary-25);
+	display: inline-block;
 }
 
-.frm-error-modal #frm_lock_simple {
+#frm_error_modal #frm_lock_simple {
 	color: var(--primary-500);
+}
+
+#frm_error_modal .frm-modal-title {
+	display: block;
 }
 
 #frm_error_modal .frm-modal-title h2 {
@@ -362,16 +367,9 @@ td.column-title .frm_actions_dropdown {
 	margin: 0;
 }
 
-#frm_error_modal .frm_modal_content p {
+#frm_error_modal .frm_modal_content {
+	padding: var(--gap-md);
 	color: var(--grey-900);
-}
-
-#frm_error_modal.frm-dialog {
-    background-color: #fff;
-}
-
-.frm-error-modal .ui-widget-content {
-    border-radius: 16px !important;
 }
 
 /* Override CSS in Views plugin. */
