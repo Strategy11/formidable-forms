@@ -549,6 +549,10 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_init() {
+		if ( FrmAppHelper::get_param( 'delete_all' ) ) {
+			FrmFormsController::delete_all();
+		}
+
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && 'duplicate' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			FrmFormsController::duplicate();
 		}

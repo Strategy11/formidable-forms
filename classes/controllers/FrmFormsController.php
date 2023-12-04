@@ -645,7 +645,7 @@ class FrmFormsController {
 		return '';
 	}
 
-	private static function delete_all() {
+	public static function delete_all() {
 		// Check nonce url.
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
 		if ( $permission_error !== false ) {
@@ -656,6 +656,11 @@ class FrmFormsController {
 
 		$count   = FrmForm::scheduled_delete( time() );
 
+		$url = remove_query_arg( 'delete_all' );
+		$url .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
+
+		wp_safe_redirect( $url );
+		die();
 		/* translators: %1$s: Number of forms */
 		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 
@@ -1785,7 +1790,6 @@ class FrmFormsController {
 			case 'trash':
 			case 'untrash':
 			case 'destroy':
-			case 'delete_all':
 			case 'settings':
 			case 'update_settings':
 				return self::$action( $vars );
@@ -1814,6 +1818,13 @@ class FrmFormsController {
 				$message = FrmAppHelper::get_param( 'message' );
 				if ( 'form_duplicate_error' === $message ) {
 					self::display_forms_list( array(), '', array( __( 'There was a problem duplicating the form', 'formidable' ) ) );
+					return;
+				}
+
+				if ( 'forms_permanently_deleted' === $message ) {
+					$count = FrmAppHelper::get_param( 'forms_deleted' );
+					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+					self::display_forms_list( array(), $message, '' );
 					return;
 				}
 
