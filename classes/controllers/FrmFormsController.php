@@ -661,10 +661,6 @@ class FrmFormsController {
 
 		wp_safe_redirect( $url );
 		die();
-		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
-
-		self::display_forms_list( array(), $message );
 	}
 
 	/**
