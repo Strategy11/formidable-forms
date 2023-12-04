@@ -26,9 +26,9 @@ function getDOMElements() {
 	const templatesList = document.getElementById( `${PREFIX}-list` );
 	const templates = {
 		templatesList,
-		templateItems: templatesList.querySelectorAll( `.${PREFIX}-item` ),
-		availableTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-item:not(.${PREFIX}-locked-item)` ),
-		freeTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-item.frm-free-template` ),
+		templateItems: templatesList.querySelectorAll( '.frm-card-item' ),
+		availableTemplateItems: templatesList.querySelectorAll( `.frm-card-item:not(.${PREFIX}-locked-item)` ),
+		freeTemplateItems: templatesList.querySelectorAll( '.frm-card-item.frm-free-template' ),
 		twinFeaturedTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-featured-item` ),
 		firstLockedFreeTemplate: templatesList.querySelector( '.frm-free-template' ),
 		featuredTemplatesList: document.getElementById( `${PREFIX}-featured-list` )
@@ -38,7 +38,7 @@ function getDOMElements() {
 	const customTemplatesSection = document.getElementById( `${PREFIX}-custom-list-section` );
 	const customTemplates = {
 		customTemplatesSection,
-		customTemplateItems: customTemplatesSection.querySelectorAll( `.${PREFIX}-item` ),
+		customTemplateItems: customTemplatesSection.querySelectorAll( '.frm-card-item' ),
 		customTemplatesTitle: document.getElementById( `${PREFIX}-custom-list-title` ),
 		customTemplatesList: document.getElementById( `${PREFIX}-custom-list` )
 	};

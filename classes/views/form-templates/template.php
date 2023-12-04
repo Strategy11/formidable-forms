@@ -21,7 +21,7 @@ $plan_required = FrmFormsHelper::get_plan_required( $template );
 // Remove "Form Template" string from `$template['name']` and assign to a variable.
 $template_name = $is_custom_template ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
-$class_names      = array( 'frm-form-templates-item', 'frm4' );
+$class_names      = array( 'frm-card-item', 'frm4' );
 $use_template_url = '#';
 
 /**

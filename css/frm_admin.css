@@ -9423,6 +9423,18 @@ Responsive Design
 }
 /* End Field Group Message */
 
+/* Start card layout */
+.frm-card-item {
+	display: flex;
+	gap: 10px;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	padding: var(--gap-sm);
+	box-shadow: var(--box-shadow-xs);
+	background: #FFFFFF;
+}
+/* End card layout */
+
 /* Start scrollbar */
 .frm-scrollbar-wrapper {
 	display: flex;

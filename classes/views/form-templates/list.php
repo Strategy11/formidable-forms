@@ -33,7 +33,7 @@ if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
 		array(
 			'title'       => sprintf(
 				/* translators: %1$s: Open span tag, %2$s: Close span tag */
-				esc_html__( 'Get Super Powers with %1$s%2$s+ Pre-built Forms', 'formidable' ),
+				esc_html__( 'Get Super Powers with %1$s%2$s+ Pre-built Forms', 'formidable' ) . ' 🦸',
 				'<span class="frm-form-templates-extra-templates-count">',
 				'</span>'
 			),

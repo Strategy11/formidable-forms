@@ -1961,7 +1961,7 @@ function createApplicationTemplates(applications) {
       text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Application Templates'),
       className: 'frm-text-sm frm-font-medium frm-mb-sm'
     }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('ul', {
-      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list frm-grid-container"),
+      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list frm_grid_container"),
       children: templateItems
     })]
   });
@@ -1980,7 +1980,7 @@ function createTemplateItem(template) {
     hasLiteThumbnail = template.hasLiteThumbnail;
   var thumbnailURL = hasLiteThumbnail ? "".concat(thumbnailBaseURL, "/").concat(key, ".png") : "".concat(thumbnailBaseURL, "/placeholder.svg");
   return (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('li', {
-    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item frm4"),
+    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item frm-card-item frm4"),
     data: {
       href: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.applicationsUrl, "&triggerViewApplicationModal=1&template=").concat(key),
       'frm-search-text': name.toLowerCase()
@@ -2023,7 +2023,7 @@ function addApplicationTemplatesElement() {
     applicationTemplates: applicationTemplates,
     applicationTemplatesTitle: applicationTemplates.querySelector('h2'),
     applicationTemplatesList: applicationTemplates.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list")),
-    applicationTemplateItems: applicationTemplates.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item"))
+    applicationTemplateItems: applicationTemplates.querySelectorAll('.frm-card-item')
   });
 }
 
@@ -2231,9 +2231,9 @@ function getDOMElements() {
   var templatesList = document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-list"));
   var templates = {
     templatesList: templatesList,
-    templateItems: templatesList.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-item")),
-    availableTemplateItems: templatesList.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-item:not(.").concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-locked-item)")),
-    freeTemplateItems: templatesList.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-item.frm-free-template")),
+    templateItems: templatesList.querySelectorAll('.frm-card-item'),
+    availableTemplateItems: templatesList.querySelectorAll(".frm-card-item:not(.".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-locked-item)")),
+    freeTemplateItems: templatesList.querySelectorAll('.frm-card-item.frm-free-template'),
     twinFeaturedTemplateItems: templatesList.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-featured-item")),
     firstLockedFreeTemplate: templatesList.querySelector('.frm-free-template'),
     featuredTemplatesList: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-featured-list"))
@@ -2243,7 +2243,7 @@ function getDOMElements() {
   var customTemplatesSection = document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-custom-list-section"));
   var customTemplates = {
     customTemplatesSection: customTemplatesSection,
-    customTemplateItems: customTemplatesSection.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-item")),
+    customTemplateItems: customTemplatesSection.querySelectorAll('.frm-card-item'),
     customTemplatesTitle: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-custom-list-title")),
     customTemplatesList: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-custom-list"))
   };
@@ -2811,7 +2811,7 @@ var onFavoriteButtonClick = function onFavoriteButtonClick(event) {
   /**
    * Get necessary template information
    */
-  var template = favoriteButton.closest(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item"));
+  var template = favoriteButton.closest('.frm-card-item');
   var templateId = template.dataset.id;
   var isFavorited = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.isFavoriteTemplate)(template);
   var isTemplateCustom = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.isCustomTemplate)(template);
@@ -2826,7 +2826,7 @@ var onFavoriteButtonClick = function onFavoriteButtonClick(event) {
   if (isTemplateFeatured) {
     var templateList = template.closest("#".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list")) ? featuredTemplatesList : templatesList;
     if (templateList) {
-      twinFeaturedTemplate = templateList.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item[data-id=\"").concat(templateId, "\"]"));
+      twinFeaturedTemplate = templateList.querySelector(".frm-card-item[data-id=\"".concat(templateId, "\"]"));
       // Toggle twin template's favorite status
       twinFeaturedTemplate.classList.toggle("".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-favorite-item"), !isFavorited);
     }
@@ -3287,7 +3287,7 @@ __webpack_require__.r(__webpack_exports__);
 function addSearchEvents() {
   var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
     searchInput = _getElements.searchInput;
-  (0,_shared__WEBPACK_IMPORTED_MODULE_1__.initSearch)(searchInput, "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item"), {
+  (0,_shared__WEBPACK_IMPORTED_MODULE_1__.initSearch)(searchInput, 'frm-card-item', {
     handleSearchResult: handleSearchResult
   });
 }
@@ -3397,7 +3397,7 @@ function addUseTemplateButtonEvents() {
  */
 var onUseTemplateButtonClick = function onUseTemplateButtonClick(event) {
   var useTemplateButton = event.currentTarget;
-  var template = useTemplateButton.closest(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-item"));
+  var template = useTemplateButton.closest('.frm-card-item');
   var isLocked = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.isLockedTemplate)(template);
   var isTemplateCustom = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.isCustomTemplate)(template);
 

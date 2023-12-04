@@ -14,7 +14,7 @@ import { showSearchState, displaySearchElements } from '../ui';
 function addSearchEvents() {
 	const { searchInput } = getElements();
 
-	initSearch( searchInput, `${PREFIX}-item`, {
+	initSearch( searchInput, 'frm-card-item', {
 		handleSearchResult
 	});
 }

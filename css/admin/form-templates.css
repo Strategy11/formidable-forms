@@ -133,15 +133,6 @@
 }
 
 /* Templates item */
-.frm-form-templates-item {
-	display: flex;
-	gap: 10px;
-	border: 1px solid var(--grey-200);
-	border-radius: var(--small-radius);
-	padding: calc(var(--gap-sm) - 1px) var(--gap-sm);
-	box-shadow: var(--box-shadow-xs);
-}
-
 .frm-form-templates-item-icon {
 	flex-shrink: 0;
 }
@@ -269,16 +260,16 @@
 	overflow: hidden;
 }
 
-.frm-form-templates-item:hover .frm-form-templates-item-description {
+.frm-card-item:hover .frm-form-templates-item-description {
 	visibility: hidden;
 	opacity: 0;
 }
 
-.frm-form-templates-item:hover .frm-form-templates-item-buttons {
+.frm-card-item:hover .frm-form-templates-item-buttons {
 	display: flex;
 }
 
-.frm-form-templates-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
+.frm-card-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
 .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button,
 .frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
 	display: flex;

@@ -51,7 +51,7 @@ const onFavoriteButtonClick = ( event ) => {
 	/**
 	 * Get necessary template information
 	 */
-	const template = favoriteButton.closest( `.${PREFIX}-item` );
+	const template = favoriteButton.closest( '.frm-card-item' );
 	const templateId = template.dataset.id;
 	const isFavorited = isFavoriteTemplate( template );
 	const isTemplateCustom = isCustomTemplate( template );
@@ -71,7 +71,7 @@ const onFavoriteButtonClick = ( event ) => {
 
 		if ( templateList ) {
 			twinFeaturedTemplate = templateList.querySelector(
-				`.${PREFIX}-item[data-id="${templateId}"]`
+				`.frm-card-item[data-id="${templateId}"]`
 			);
 			// Toggle twin template's favorite status
 			twinFeaturedTemplate.classList.toggle(
