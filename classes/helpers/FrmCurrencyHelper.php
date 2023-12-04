@@ -21,7 +21,7 @@ class FrmCurrencyHelper {
 		} elseif ( isset( $currencies[ strtolower( $currency ) ] ) ) {
 			$currency = $currencies[ strtolower( $currency ) ];
 		} else {
-			$currency = $currencies['usd'];
+			$currency = $currencies['USD'];
 		}
 		return $currency;
 	}

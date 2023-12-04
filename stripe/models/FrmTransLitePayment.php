@@ -61,6 +61,10 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 				'sanitize' => 'maybe_serialize',
 				'default'  => '',
 			),
+			'test'        => array(
+				'sanitize' => 'sanitize_text_field',
+				'default'  => null,
+			),
 		);
 		return $values;
 	}

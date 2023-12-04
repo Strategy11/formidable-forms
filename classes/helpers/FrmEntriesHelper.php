@@ -824,10 +824,11 @@ class FrmEntriesHelper {
 	 * Get all entry statuses.
 	 *
 	 * @since 6.5
+	 * @since 6.6 function went from private to public.
 	 *
 	 * @return array<string>
 	 */
-	private static function get_entry_statuses() {
+	public static function get_entry_statuses() {
 
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
