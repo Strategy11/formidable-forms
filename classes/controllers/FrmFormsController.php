@@ -1114,7 +1114,7 @@ class FrmFormsController {
 		);
 		if ( ! $form ) {
 			FrmAppController::show_error_modal( $error_args );
-			wp_die( esc_html__( 'You are trying to edit a form that does not exist.', 'formidable' ) );
+			return;
 		}
 
 		if ( 'trash' === $form->status ) {

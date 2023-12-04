@@ -1158,7 +1158,6 @@ class FrmAppController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
-		die();
 	}
 
 	/**

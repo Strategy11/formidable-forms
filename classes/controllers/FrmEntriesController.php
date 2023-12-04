@@ -489,6 +489,7 @@ class FrmEntriesController {
 				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$params = FrmForm::get_admin_params();

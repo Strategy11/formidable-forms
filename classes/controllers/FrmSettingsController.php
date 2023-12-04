@@ -275,6 +275,7 @@ class FrmSettingsController {
 				'cancel_text' => __( 'Cancel', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$errors  = array();
