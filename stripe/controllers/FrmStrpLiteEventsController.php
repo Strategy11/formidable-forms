@@ -232,6 +232,8 @@ class FrmStrpLiteEventsController {
 			$frm_payment->update( $payment->id, $payment_values );
 			$payment_id = $payment->id;
 		} else {
+			$payment_values['test'] = $this->event->livemode ? 0 : 1;
+
 			// If this isn't the first, create a new payment.
 			$payment_id = $frm_payment->create( $payment_values );
 		}

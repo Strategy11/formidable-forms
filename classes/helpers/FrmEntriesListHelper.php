@@ -34,7 +34,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * Prepares pagination.
 	 *
-	 * @since x.x
+	 * @since 6.5.4
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -50,7 +50,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * Sets the global $per_page variable
 	 *
-	 * @since x.x
+	 * @since 6.5.4
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -58,7 +58,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param array      $s_query
 	 * @param bool       $join_form_in_query
@@ -75,7 +75,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -102,7 +102,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param int $per_page
 	 * @return string
@@ -120,7 +120,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
 	 * @return array
@@ -157,7 +157,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
 	 * @return array<int>

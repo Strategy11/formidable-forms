@@ -139,7 +139,12 @@ class FrmAppController {
 		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
 			// Only consider the payments page as a "white page" when the Payments submodule is off.
 			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
-			$white_pages[] = 'formidable-payments';
+
+			// Add an extra check to avoid white page styling on the PayPal "edit" action.
+			// We fallback to the PayPal add on for the "edit" action since Stripe Lite does not have an edit view.
+			if ( ! in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) || ! is_callable( 'FrmPaymentsController::route' ) ) {
+				$white_pages[] = 'formidable-payments';
+			}
 		}
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
