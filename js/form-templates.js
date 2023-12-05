@@ -1909,9 +1909,9 @@ function sprintf(format) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/elements/applicationTemplatesElement.js":
+/***/ "./js/src/form-templates/elements/applicationTemplatesElement.js":
 /*!***********************************************************************!*\
-  !*** ./js/form-templates/src/elements/applicationTemplatesElement.js ***!
+  !*** ./js/src/form-templates/elements/applicationTemplatesElement.js ***!
   \***********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -1922,8 +1922,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createApplicationTemplates: () => (/* binding */ createApplicationTemplates)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./elements */ "./js/form-templates/src/elements/elements.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./elements */ "./js/src/form-templates/elements/elements.js");
 /**
  * WordPress dependencies
  */
@@ -2029,9 +2029,9 @@ function addApplicationTemplatesElement() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/elements/elements.js":
+/***/ "./js/src/form-templates/elements/elements.js":
 /*!****************************************************!*\
-  !*** ./js/form-templates/src/elements/elements.js ***!
+  !*** ./js/src/form-templates/elements/elements.js ***!
   \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2042,8 +2042,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getElements: () => (/* binding */ getElements),
 /* harmony export */   initializeElements: () => (/* binding */ initializeElements)
 /* harmony export */ });
-/* harmony import */ var _emptyStateElement__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emptyStateElement */ "./js/form-templates/src/elements/emptyStateElement.js");
-/* harmony import */ var _getDOMElements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getDOMElements */ "./js/form-templates/src/elements/getDOMElements.js");
+/* harmony import */ var _emptyStateElement__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emptyStateElement */ "./js/src/form-templates/elements/emptyStateElement.js");
+/* harmony import */ var _getDOMElements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getDOMElements */ "./js/src/form-templates/elements/getDOMElements.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -2120,9 +2120,9 @@ function addBodyContentChildren() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/elements/emptyStateElement.js":
+/***/ "./js/src/form-templates/elements/emptyStateElement.js":
 /*!*************************************************************!*\
-  !*** ./js/form-templates/src/elements/emptyStateElement.js ***!
+  !*** ./js/src/form-templates/elements/emptyStateElement.js ***!
   \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2133,7 +2133,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getEmptyStateElements: () => (/* binding */ getEmptyStateElements)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * WordPress dependencies
  */
@@ -2185,9 +2185,9 @@ function getEmptyStateElements() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/elements/getDOMElements.js":
+/***/ "./js/src/form-templates/elements/getDOMElements.js":
 /*!**********************************************************!*\
-  !*** ./js/form-templates/src/elements/getDOMElements.js ***!
+  !*** ./js/src/form-templates/elements/getDOMElements.js ***!
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2196,7 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -2305,9 +2305,9 @@ function getDOMElements() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/elements/index.js":
+/***/ "./js/src/form-templates/elements/index.js":
 /*!*************************************************!*\
-  !*** ./js/form-templates/src/elements/index.js ***!
+  !*** ./js/src/form-templates/elements/index.js ***!
   \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2320,16 +2320,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getElements: () => (/* reexport safe */ _elements__WEBPACK_IMPORTED_MODULE_0__.getElements),
 /* harmony export */   initializeElements: () => (/* reexport safe */ _elements__WEBPACK_IMPORTED_MODULE_0__.initializeElements)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./elements */ "./js/form-templates/src/elements/elements.js");
-/* harmony import */ var _applicationTemplatesElement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./applicationTemplatesElement */ "./js/form-templates/src/elements/applicationTemplatesElement.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./elements */ "./js/src/form-templates/elements/elements.js");
+/* harmony import */ var _applicationTemplatesElement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./applicationTemplatesElement */ "./js/src/form-templates/elements/applicationTemplatesElement.js");
 
 
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/applicationTemplateListener.js":
+/***/ "./js/src/form-templates/events/applicationTemplateListener.js":
 /*!*********************************************************************!*\
-  !*** ./js/form-templates/src/events/applicationTemplateListener.js ***!
+  !*** ./js/src/form-templates/events/applicationTemplateListener.js ***!
   \*********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2338,8 +2338,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addApplicationTemplateEvents: () => (/* binding */ addApplicationTemplateEvents)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
 */
@@ -2379,9 +2379,9 @@ var onApplicationTemplateClick = function onApplicationTemplateClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/categoryListener.js":
+/***/ "./js/src/form-templates/events/categoryListener.js":
 /*!**********************************************************!*\
-  !*** ./js/form-templates/src/events/categoryListener.js ***!
+  !*** ./js/src/form-templates/events/categoryListener.js ***!
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2390,11 +2390,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/events/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/events/index.js");
 /**
  * Internal dependencies
  */
@@ -2470,9 +2470,9 @@ var onCategoryClick = function onCategoryClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/createFormButtonListener.js":
+/***/ "./js/src/form-templates/events/createFormButtonListener.js":
 /*!******************************************************************!*\
-  !*** ./js/form-templates/src/events/createFormButtonListener.js ***!
+  !*** ./js/src/form-templates/events/createFormButtonListener.js ***!
   \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2482,9 +2482,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * WordPress dependencies
  */
@@ -2531,9 +2531,9 @@ var onCreateFormButtonClick = function onCreateFormButtonClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/createTemplateListeners.js":
+/***/ "./js/src/form-templates/events/createTemplateListeners.js":
 /*!*****************************************************************!*\
-  !*** ./js/form-templates/src/events/createTemplateListeners.js ***!
+  !*** ./js/src/form-templates/events/createTemplateListeners.js ***!
   \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2543,10 +2543,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * WordPress dependencies
  */
@@ -2685,9 +2685,9 @@ var onCreateTemplateButtonClick = function onCreateTemplateButtonClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/emptyStateButtonListener.js":
+/***/ "./js/src/form-templates/events/emptyStateButtonListener.js":
 /*!******************************************************************!*\
-  !*** ./js/form-templates/src/events/emptyStateButtonListener.js ***!
+  !*** ./js/src/form-templates/events/emptyStateButtonListener.js ***!
   \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2696,10 +2696,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/events/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/events/index.js");
 /**
  * Internal dependencies
 */
@@ -2747,9 +2747,9 @@ var onEmptyStateButtonClick = function onEmptyStateButtonClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/favoriteButtonListener.js":
+/***/ "./js/src/form-templates/events/favoriteButtonListener.js":
 /*!****************************************************************!*\
-  !*** ./js/form-templates/src/events/favoriteButtonListener.js ***!
+  !*** ./js/src/form-templates/events/favoriteButtonListener.js ***!
   \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2758,10 +2758,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
  */
@@ -2902,9 +2902,9 @@ function updateFavoriteTemplate(id, operation, isCustom) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/getCodeButtonListener.js":
+/***/ "./js/src/form-templates/events/getCodeButtonListener.js":
 /*!***************************************************************!*\
-  !*** ./js/form-templates/src/events/getCodeButtonListener.js ***!
+  !*** ./js/src/form-templates/events/getCodeButtonListener.js ***!
   \***************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -2913,9 +2913,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _ref;
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -3025,9 +3025,9 @@ var onGetCodeButtonClick = function onGetCodeButtonClick(_x) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/index.js":
+/***/ "./js/src/form-templates/events/index.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/events/index.js ***!
+  !*** ./js/src/form-templates/events/index.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3038,16 +3038,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   addEventListeners: () => (/* binding */ addEventListeners),
 /* harmony export */   resetSearchInput: () => (/* reexport safe */ _searchListener__WEBPACK_IMPORTED_MODULE_4__.resetSearchInput)
 /* harmony export */ });
-/* harmony import */ var _categoryListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./categoryListener */ "./js/form-templates/src/events/categoryListener.js");
-/* harmony import */ var _createFormButtonListener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createFormButtonListener */ "./js/form-templates/src/events/createFormButtonListener.js");
-/* harmony import */ var _favoriteButtonListener__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./favoriteButtonListener */ "./js/form-templates/src/events/favoriteButtonListener.js");
-/* harmony import */ var _useTemplateButtonListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useTemplateButtonListener */ "./js/form-templates/src/events/useTemplateButtonListener.js");
-/* harmony import */ var _searchListener__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./searchListener */ "./js/form-templates/src/events/searchListener.js");
-/* harmony import */ var _emptyStateButtonListener__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./emptyStateButtonListener */ "./js/form-templates/src/events/emptyStateButtonListener.js");
-/* harmony import */ var _createTemplateListeners__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createTemplateListeners */ "./js/form-templates/src/events/createTemplateListeners.js");
-/* harmony import */ var _getCodeButtonListener__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./getCodeButtonListener */ "./js/form-templates/src/events/getCodeButtonListener.js");
-/* harmony import */ var _saveCodeButtonListener__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./saveCodeButtonListener */ "./js/form-templates/src/events/saveCodeButtonListener.js");
-/* harmony import */ var _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./applicationTemplateListener */ "./js/form-templates/src/events/applicationTemplateListener.js");
+/* harmony import */ var _categoryListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./categoryListener */ "./js/src/form-templates/events/categoryListener.js");
+/* harmony import */ var _createFormButtonListener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createFormButtonListener */ "./js/src/form-templates/events/createFormButtonListener.js");
+/* harmony import */ var _favoriteButtonListener__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./favoriteButtonListener */ "./js/src/form-templates/events/favoriteButtonListener.js");
+/* harmony import */ var _useTemplateButtonListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useTemplateButtonListener */ "./js/src/form-templates/events/useTemplateButtonListener.js");
+/* harmony import */ var _searchListener__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./searchListener */ "./js/src/form-templates/events/searchListener.js");
+/* harmony import */ var _emptyStateButtonListener__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./emptyStateButtonListener */ "./js/src/form-templates/events/emptyStateButtonListener.js");
+/* harmony import */ var _createTemplateListeners__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createTemplateListeners */ "./js/src/form-templates/events/createTemplateListeners.js");
+/* harmony import */ var _getCodeButtonListener__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./getCodeButtonListener */ "./js/src/form-templates/events/getCodeButtonListener.js");
+/* harmony import */ var _saveCodeButtonListener__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./saveCodeButtonListener */ "./js/src/form-templates/events/saveCodeButtonListener.js");
+/* harmony import */ var _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./applicationTemplateListener */ "./js/src/form-templates/events/applicationTemplateListener.js");
 /**
  * Internal dependencies
  */
@@ -3082,9 +3082,9 @@ function addEventListeners() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/saveCodeButtonListener.js":
+/***/ "./js/src/form-templates/events/saveCodeButtonListener.js":
 /*!****************************************************************!*\
-  !*** ./js/form-templates/src/events/saveCodeButtonListener.js ***!
+  !*** ./js/src/form-templates/events/saveCodeButtonListener.js ***!
   \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3093,10 +3093,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _ref;
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -3256,9 +3256,9 @@ var onResendCode = function onResendCode(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/searchListener.js":
+/***/ "./js/src/form-templates/events/searchListener.js":
 /*!********************************************************!*\
-  !*** ./js/form-templates/src/events/searchListener.js ***!
+  !*** ./js/src/form-templates/events/searchListener.js ***!
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3268,9 +3268,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   resetSearchInput: () => (/* binding */ resetSearchInput)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
 /**
  * Internal dependencies
  */
@@ -3351,9 +3351,9 @@ function resetSearchInput() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/events/useTemplateButtonListener.js":
+/***/ "./js/src/form-templates/events/useTemplateButtonListener.js":
 /*!*******************************************************************!*\
-  !*** ./js/form-templates/src/events/useTemplateButtonListener.js ***!
+  !*** ./js/src/form-templates/events/useTemplateButtonListener.js ***!
   \*******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3362,10 +3362,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/ */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/ */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
  */
@@ -3440,9 +3440,9 @@ var onUseTemplateButtonClick = function onUseTemplateButtonClick(event) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/initializeFormTemplates.js":
+/***/ "./js/src/form-templates/initializeFormTemplates.js":
 /*!**********************************************************!*\
-  !*** ./js/form-templates/src/initializeFormTemplates.js ***!
+  !*** ./js/src/form-templates/initializeFormTemplates.js ***!
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3451,11 +3451,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui */ "./js/form-templates/src/ui/index.js");
-/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./templates */ "./js/form-templates/src/templates/index.js");
-/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./events */ "./js/form-templates/src/events/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./templates */ "./js/src/form-templates/templates/index.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./events */ "./js/src/form-templates/events/index.js");
 /**
  * Internal dependencies
  */
@@ -3496,9 +3496,9 @@ function initializeFormTemplates() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/ajaxRequest.js":
+/***/ "./js/src/form-templates/shared/ajaxRequest.js":
 /*!*****************************************************!*\
-  !*** ./js/form-templates/src/shared/ajaxRequest.js ***!
+  !*** ./js/src/form-templates/shared/ajaxRequest.js ***!
   \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3515,9 +3515,9 @@ var _window$frmDom$ajax = window.frmDom.ajax,
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/appState.js":
+/***/ "./js/src/form-templates/shared/appState.js":
 /*!**************************************************!*\
-  !*** ./js/form-templates/src/shared/appState.js ***!
+  !*** ./js/src/form-templates/shared/appState.js ***!
   \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3530,8 +3530,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setAppState: () => (/* binding */ setAppState),
 /* harmony export */   setAppStateProperty: () => (/* binding */ setAppStateProperty)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/shared/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -3620,9 +3620,9 @@ var setAppStateProperty = function setAppStateProperty(propertyName, value) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/constants.js":
+/***/ "./js/src/form-templates/shared/constants.js":
 /*!***************************************************!*\
-  !*** ./js/form-templates/src/shared/constants.js ***!
+  !*** ./js/src/form-templates/shared/constants.js ***!
   \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3678,9 +3678,9 @@ var MODAL_SIZES = {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/domElements.js":
+/***/ "./js/src/form-templates/shared/domElements.js":
 /*!*****************************************************!*\
-  !*** ./js/form-templates/src/shared/domElements.js ***!
+  !*** ./js/src/form-templates/shared/domElements.js ***!
   \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3703,9 +3703,9 @@ var _window$frmDom = window.frmDom,
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/form.js":
+/***/ "./js/src/form-templates/shared/form.js":
 /*!**********************************************!*\
-  !*** ./js/form-templates/src/shared/form.js ***!
+  !*** ./js/src/form-templates/shared/form.js ***!
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3719,9 +3719,9 @@ var installNewForm = window.frmAdminBuild.installNewForm;
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/index.js":
+/***/ "./js/src/form-templates/shared/index.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/shared/index.js ***!
+  !*** ./js/src/form-templates/shared/index.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3761,14 +3761,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   tag: () => (/* reexport safe */ _domElements__WEBPACK_IMPORTED_MODULE_3__.tag),
 /* harmony export */   upgradeLink: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.upgradeLink)
 /* harmony export */ });
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./js/form-templates/src/shared/constants.js");
-/* harmony import */ var _url__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./url */ "./js/form-templates/src/shared/url.js");
-/* harmony import */ var _appState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./appState */ "./js/form-templates/src/shared/appState.js");
-/* harmony import */ var _domElements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./domElements */ "./js/form-templates/src/shared/domElements.js");
-/* harmony import */ var _search__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./search */ "./js/form-templates/src/shared/search.js");
-/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modal */ "./js/form-templates/src/shared/modal.js");
-/* harmony import */ var _form__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./form */ "./js/form-templates/src/shared/form.js");
-/* harmony import */ var _ajaxRequest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ajaxRequest */ "./js/form-templates/src/shared/ajaxRequest.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./js/src/form-templates/shared/constants.js");
+/* harmony import */ var _url__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./url */ "./js/src/form-templates/shared/url.js");
+/* harmony import */ var _appState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./appState */ "./js/src/form-templates/shared/appState.js");
+/* harmony import */ var _domElements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./domElements */ "./js/src/form-templates/shared/domElements.js");
+/* harmony import */ var _search__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./search */ "./js/src/form-templates/shared/search.js");
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modal */ "./js/src/form-templates/shared/modal.js");
+/* harmony import */ var _form__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./form */ "./js/src/form-templates/shared/form.js");
+/* harmony import */ var _ajaxRequest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ajaxRequest */ "./js/src/form-templates/shared/ajaxRequest.js");
 
 
 
@@ -3780,9 +3780,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/modal.js":
+/***/ "./js/src/form-templates/shared/modal.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/shared/modal.js ***!
+  !*** ./js/src/form-templates/shared/modal.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3799,9 +3799,9 @@ var _window$frmAdminBuild = window.frmAdminBuild,
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/search.js":
+/***/ "./js/src/form-templates/shared/search.js":
 /*!************************************************!*\
-  !*** ./js/form-templates/src/shared/search.js ***!
+  !*** ./js/src/form-templates/shared/search.js ***!
   \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3815,9 +3815,9 @@ var initSearch = window.frmDom.search.init;
 
 /***/ }),
 
-/***/ "./js/form-templates/src/shared/url.js":
+/***/ "./js/src/form-templates/shared/url.js":
 /*!*********************************************!*\
-  !*** ./js/form-templates/src/shared/url.js ***!
+  !*** ./js/src/form-templates/shared/url.js ***!
   \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3882,9 +3882,9 @@ var hasQueryParam = function hasQueryParam(paramName) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/templates/applicationTemplates.js":
+/***/ "./js/src/form-templates/templates/applicationTemplates.js":
 /*!*****************************************************************!*\
-  !*** ./js/form-templates/src/templates/applicationTemplates.js ***!
+  !*** ./js/src/form-templates/templates/applicationTemplates.js ***!
   \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3893,9 +3893,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   maybeAddApplicationTemplates: () => (/* binding */ maybeAddApplicationTemplates)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../events */ "./js/form-templates/src/events/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../events */ "./js/src/form-templates/events/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * Internal dependencies
  */
@@ -3939,9 +3939,9 @@ function setupApplicationTemplates(data) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/templates/categorizeTemplates.js":
+/***/ "./js/src/form-templates/templates/categorizeTemplates.js":
 /*!****************************************************************!*\
-  !*** ./js/form-templates/src/templates/categorizeTemplates.js ***!
+  !*** ./js/src/form-templates/templates/categorizeTemplates.js ***!
   \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3951,7 +3951,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   buildCategorizedTemplates: () => (/* binding */ buildCategorizedTemplates),
 /* harmony export */   categorizedTemplates: () => (/* binding */ categorizedTemplates)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
 /**
  * Internal dependencies
  */
@@ -3983,9 +3983,9 @@ function buildCategorizedTemplates() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/templates/index.js":
+/***/ "./js/src/form-templates/templates/index.js":
 /*!**************************************************!*\
-  !*** ./js/form-templates/src/templates/index.js ***!
+  !*** ./js/src/form-templates/templates/index.js ***!
   \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3996,16 +3996,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   categorizedTemplates: () => (/* reexport safe */ _categorizeTemplates__WEBPACK_IMPORTED_MODULE_0__.categorizedTemplates),
 /* harmony export */   maybeAddApplicationTemplates: () => (/* reexport safe */ _applicationTemplates__WEBPACK_IMPORTED_MODULE_1__.maybeAddApplicationTemplates)
 /* harmony export */ });
-/* harmony import */ var _categorizeTemplates__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./categorizeTemplates */ "./js/form-templates/src/templates/categorizeTemplates.js");
-/* harmony import */ var _applicationTemplates__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./applicationTemplates */ "./js/form-templates/src/templates/applicationTemplates.js");
+/* harmony import */ var _categorizeTemplates__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./categorizeTemplates */ "./js/src/form-templates/templates/categorizeTemplates.js");
+/* harmony import */ var _applicationTemplates__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./applicationTemplates */ "./js/src/form-templates/templates/applicationTemplates.js");
 
 
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/index.js":
+/***/ "./js/src/form-templates/ui/index.js":
 /*!*******************************************!*\
-  !*** ./js/form-templates/src/ui/index.js ***!
+  !*** ./js/src/form-templates/ui/index.js ***!
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4039,15 +4039,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showUpgradeModal: () => (/* reexport safe */ _showModal__WEBPACK_IMPORTED_MODULE_7__.showUpgradeModal),
 /* harmony export */   updatePageTitle: () => (/* reexport safe */ _pageTitle__WEBPACK_IMPORTED_MODULE_2__.updatePageTitle)
 /* harmony export */ });
-/* harmony import */ var _setupInitialView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setupInitialView */ "./js/form-templates/src/ui/setupInitialView.js");
-/* harmony import */ var _initializeModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initializeModal */ "./js/form-templates/src/ui/initializeModal.js");
-/* harmony import */ var _pageTitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pageTitle */ "./js/form-templates/src/ui/pageTitle.js");
-/* harmony import */ var _showHeaderCancelButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./showHeaderCancelButton */ "./js/form-templates/src/ui/showHeaderCancelButton.js");
-/* harmony import */ var _showSelectedCategory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./showSelectedCategory */ "./js/form-templates/src/ui/showSelectedCategory.js");
-/* harmony import */ var _searchState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./searchState */ "./js/form-templates/src/ui/searchState.js");
-/* harmony import */ var _showEmptyState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./showEmptyState */ "./js/form-templates/src/ui/showEmptyState.js");
-/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./showModal */ "./js/form-templates/src/ui/showModal.js");
-/* harmony import */ var _showError__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./showError */ "./js/form-templates/src/ui/showError.js");
+/* harmony import */ var _setupInitialView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./setupInitialView */ "./js/src/form-templates/ui/setupInitialView.js");
+/* harmony import */ var _initializeModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initializeModal */ "./js/src/form-templates/ui/initializeModal.js");
+/* harmony import */ var _pageTitle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pageTitle */ "./js/src/form-templates/ui/pageTitle.js");
+/* harmony import */ var _showHeaderCancelButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./showHeaderCancelButton */ "./js/src/form-templates/ui/showHeaderCancelButton.js");
+/* harmony import */ var _showSelectedCategory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./showSelectedCategory */ "./js/src/form-templates/ui/showSelectedCategory.js");
+/* harmony import */ var _searchState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./searchState */ "./js/src/form-templates/ui/searchState.js");
+/* harmony import */ var _showEmptyState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./showEmptyState */ "./js/src/form-templates/ui/showEmptyState.js");
+/* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./showModal */ "./js/src/form-templates/ui/showModal.js");
+/* harmony import */ var _showError__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./showError */ "./js/src/form-templates/ui/showError.js");
 
 
 
@@ -4060,9 +4060,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/initializeModal.js":
+/***/ "./js/src/form-templates/ui/initializeModal.js":
 /*!*****************************************************!*\
-  !*** ./js/form-templates/src/ui/initializeModal.js ***!
+  !*** ./js/src/form-templates/ui/initializeModal.js ***!
   \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4072,9 +4072,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getModalWidget: () => (/* binding */ getModalWidget),
 /* harmony export */   initializeModal: () => (/* binding */ initializeModal)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _initializeModal, _maybeFetchInjectForm;
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -4213,9 +4213,9 @@ function maybeFetchInjectForm() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/pageTitle.js":
+/***/ "./js/src/form-templates/ui/pageTitle.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/ui/pageTitle.js ***!
+  !*** ./js/src/form-templates/ui/pageTitle.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4224,8 +4224,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   updatePageTitle: () => (/* binding */ updatePageTitle)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * Internal dependencies
  */
@@ -4247,9 +4247,9 @@ function updatePageTitle(title) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/searchState.js":
+/***/ "./js/src/form-templates/ui/searchState.js":
 /*!*************************************************!*\
-  !*** ./js/form-templates/src/ui/searchState.js ***!
+  !*** ./js/src/form-templates/ui/searchState.js ***!
   \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4260,10 +4260,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showSearchState: () => (/* binding */ showSearchState)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! . */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! . */ "./js/src/form-templates/ui/index.js");
 /**
  * WordPress dependencies
  */
@@ -4346,9 +4346,9 @@ function displaySearchElements(foundSomething) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/setupInitialView.js":
+/***/ "./js/src/form-templates/ui/setupInitialView.js":
 /*!******************************************************!*\
-  !*** ./js/form-templates/src/ui/setupInitialView.js ***!
+  !*** ./js/src/form-templates/ui/setupInitialView.js ***!
   \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4357,10 +4357,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 /**
  * Internal dependencies
  */
@@ -4427,9 +4427,9 @@ function setupInitialView() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/showEmptyState.js":
+/***/ "./js/src/form-templates/ui/showEmptyState.js":
 /*!****************************************************!*\
-  !*** ./js/form-templates/src/ui/showEmptyState.js ***!
+  !*** ./js/src/form-templates/ui/showEmptyState.js ***!
   \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4442,9 +4442,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showSearchEmptyState: () => (/* binding */ showSearchEmptyState)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * WordPress dependencies
  */
@@ -4587,9 +4587,9 @@ function showAvailableTemplatesEmptyState() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/showError.js":
+/***/ "./js/src/form-templates/ui/showError.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/ui/showError.js ***!
+  !*** ./js/src/form-templates/ui/showError.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4600,7 +4600,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showEmailAddressError: () => (/* binding */ showEmailAddressError),
 /* harmony export */   showFormError: () => (/* binding */ showFormError)
 /* harmony export */ });
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
  */
@@ -4662,9 +4662,9 @@ var showConfirmEmailAddressError = function showConfirmEmailAddressError(type, m
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/showHeaderCancelButton.js":
+/***/ "./js/src/form-templates/ui/showHeaderCancelButton.js":
 /*!************************************************************!*\
-  !*** ./js/form-templates/src/ui/showHeaderCancelButton.js ***!
+  !*** ./js/src/form-templates/ui/showHeaderCancelButton.js ***!
   \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4673,8 +4673,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   showHeaderCancelButton: () => (/* binding */ showHeaderCancelButton)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
  */
@@ -4695,9 +4695,9 @@ function showHeaderCancelButton() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/showModal.js":
+/***/ "./js/src/form-templates/ui/showModal.js":
 /*!***********************************************!*\
-  !*** ./js/form-templates/src/ui/showModal.js ***!
+  !*** ./js/src/form-templates/ui/showModal.js ***!
   \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4712,10 +4712,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showUpgradeModal: () => (/* binding */ showUpgradeModal)
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4895,9 +4895,9 @@ var showCreateTemplateModal = showModal(function () {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/ui/showSelectedCategory.js":
+/***/ "./js/src/form-templates/ui/showSelectedCategory.js":
 /*!**********************************************************!*\
-  !*** ./js/form-templates/src/ui/showSelectedCategory.js ***!
+  !*** ./js/src/form-templates/ui/showSelectedCategory.js ***!
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4912,11 +4912,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showFreeTemplates: () => (/* binding */ showFreeTemplates),
 /* harmony export */   showSelectedCategory: () => (/* binding */ showSelectedCategory)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/form-templates/src/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/form-templates/src/utils/index.js");
-/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../templates */ "./js/form-templates/src/templates/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
+/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../templates */ "./js/src/form-templates/templates/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5101,9 +5101,9 @@ function showFreeTemplates() {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/utils/animationEffects.js":
+/***/ "./js/src/form-templates/utils/animationEffects.js":
 /*!*********************************************************!*\
-  !*** ./js/form-templates/src/utils/animationEffects.js ***!
+  !*** ./js/src/form-templates/utils/animationEffects.js ***!
   \*********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5112,12 +5112,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   fadeIn: () => (/* binding */ fadeIn)
 /* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ */ "./js/form-templates/src/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
  */
-
 
 
 /**
@@ -5130,8 +5128,8 @@ var fadeIn = function fadeIn(element) {
   if (!element) {
     return;
   }
-  if (!(0,___WEBPACK_IMPORTED_MODULE_1__.isVisible)(element)) {
-    (0,___WEBPACK_IMPORTED_MODULE_1__.show)(element);
+  if (!(0,___WEBPACK_IMPORTED_MODULE_0__.isVisible)(element)) {
+    (0,___WEBPACK_IMPORTED_MODULE_0__.show)(element);
   }
   element.classList.add('frm-fadein-up');
   element.addEventListener('animationend', function () {
@@ -5143,9 +5141,9 @@ var fadeIn = function fadeIn(element) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/utils/index.js":
+/***/ "./js/src/form-templates/utils/index.js":
 /*!**********************************************!*\
-  !*** ./js/form-templates/src/utils/index.js ***!
+  !*** ./js/src/form-templates/utils/index.js ***!
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5169,10 +5167,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.show),
 /* harmony export */   showElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.showElements)
 /* harmony export */ });
-/* harmony import */ var _validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validation */ "./js/form-templates/src/utils/validation.js");
-/* harmony import */ var _visibility__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./visibility */ "./js/form-templates/src/utils/visibility.js");
-/* harmony import */ var _animationEffects__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animationEffects */ "./js/form-templates/src/utils/animationEffects.js");
-/* harmony import */ var _requestQueue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./requestQueue */ "./js/form-templates/src/utils/requestQueue.js");
+/* harmony import */ var _validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validation */ "./js/src/form-templates/utils/validation.js");
+/* harmony import */ var _visibility__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./visibility */ "./js/src/form-templates/utils/visibility.js");
+/* harmony import */ var _animationEffects__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animationEffects */ "./js/src/form-templates/utils/animationEffects.js");
+/* harmony import */ var _requestQueue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./requestQueue */ "./js/src/form-templates/utils/requestQueue.js");
 var onClickPreventDefault = window.frmDom.util.onClickPreventDefault;
 
 
@@ -5182,9 +5180,9 @@ var onClickPreventDefault = window.frmDom.util.onClickPreventDefault;
 
 /***/ }),
 
-/***/ "./js/form-templates/src/utils/requestQueue.js":
+/***/ "./js/src/form-templates/utils/requestQueue.js":
 /*!*****************************************************!*\
-  !*** ./js/form-templates/src/utils/requestQueue.js ***!
+  !*** ./js/src/form-templates/utils/requestQueue.js ***!
   \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5212,9 +5210,9 @@ var addToRequestQueue = function addToRequestQueue(task) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/utils/validation.js":
+/***/ "./js/src/form-templates/utils/validation.js":
 /*!***************************************************!*\
-  !*** ./js/form-templates/src/utils/validation.js ***!
+  !*** ./js/src/form-templates/utils/validation.js ***!
   \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5230,7 +5228,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isLockedTemplate: () => (/* binding */ isLockedTemplate),
 /* harmony export */   isValidEmail: () => (/* binding */ isValidEmail)
 /* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * Internal dependencies
  */
@@ -5329,9 +5327,9 @@ var isHTMLElement = function isHTMLElement(element) {
 
 /***/ }),
 
-/***/ "./js/form-templates/src/utils/visibility.js":
+/***/ "./js/src/form-templates/utils/visibility.js":
 /*!***************************************************!*\
-  !*** ./js/form-templates/src/utils/visibility.js ***!
+  !*** ./js/src/form-templates/utils/visibility.js ***!
   \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5344,7 +5342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   show: () => (/* binding */ show),
 /* harmony export */   showElements: () => (/* binding */ showElements)
 /* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/form-templates/src/shared/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
 /**
  * Internal dependencies
  */
@@ -6363,13 +6361,13 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!************************************!*\
-  !*** ./js/form-templates/index.js ***!
-  \************************************/
+/*!****************************************!*\
+  !*** ./js/src/form-templates/index.js ***!
+  \****************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/dom-ready */ "./node_modules/@wordpress/dom-ready/build-module/index.js");
-/* harmony import */ var _src_shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/shared */ "./js/form-templates/src/shared/index.js");
-/* harmony import */ var _src_initializeFormTemplates__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/initializeFormTemplates */ "./js/form-templates/src/initializeFormTemplates.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var _initializeFormTemplates__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initializeFormTemplates */ "./js/src/form-templates/initializeFormTemplates.js");
 /**
  * WordPress dependencies
  */
@@ -6387,12 +6385,12 @@ __webpack_require__.r(__webpack_exports__);
    * @param {Object} appState Current state of the application.
    */
   wp.hooks.doAction('frmFormTemplates.beforeInitialize', {
-    getAppState: _src_shared__WEBPACK_IMPORTED_MODULE_0__.getAppState,
-    setAppState: _src_shared__WEBPACK_IMPORTED_MODULE_0__.setAppState
+    getAppState: _shared__WEBPACK_IMPORTED_MODULE_0__.getAppState,
+    setAppState: _shared__WEBPACK_IMPORTED_MODULE_0__.setAppState
   });
 
   // Initialize the form templates
-  (0,_src_initializeFormTemplates__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_initializeFormTemplates__WEBPACK_IMPORTED_MODULE_1__["default"])();
 
   /**
    * Entry point for post-initialization custom logic or adjustments to the application state.
@@ -6400,8 +6398,8 @@ __webpack_require__.r(__webpack_exports__);
    * @param {Object} appState Current state of the application.
    */
   wp.hooks.doAction('frmFormTemplates.afterInitialize', {
-    getAppState: _src_shared__WEBPACK_IMPORTED_MODULE_0__.getAppState,
-    setAppState: _src_shared__WEBPACK_IMPORTED_MODULE_0__.setAppState
+    getAppState: _shared__WEBPACK_IMPORTED_MODULE_0__.getAppState,
+    setAppState: _shared__WEBPACK_IMPORTED_MODULE_0__.setAppState
   });
 
   /**

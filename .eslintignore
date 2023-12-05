@@ -1,6 +1,10 @@
+# Exclude auto generated files.
 **/*.min.js
+**/*.js.map
 **/formidable_blocks.js
 **/formidable_overlay.js
+**/formidable-templates.js
+
 **/node_modules/**
 **/vendor/**
 build

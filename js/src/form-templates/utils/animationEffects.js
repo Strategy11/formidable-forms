@@ -1,7 +1,6 @@
 /**
  * Internal dependencies
  */
-import { PREFIX } from '../shared';
 import { isVisible, show } from './';
 
 /**

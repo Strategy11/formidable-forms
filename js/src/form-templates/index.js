@@ -6,8 +6,8 @@ import domReady from '@wordpress/dom-ready';
 /**
  * Internal dependencies
  */
-import { getAppState, setAppState } from './src/shared';
-import initializeFormTemplates from './src/initializeFormTemplates';
+import { getAppState, setAppState } from './shared';
+import initializeFormTemplates from './initializeFormTemplates';
 
 domReady( () => {
 	/**

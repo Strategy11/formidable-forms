@@ -68,8 +68,6 @@ if ( $expired ) {
 </ul>
 
 <div id="frm-form-templates-custom-list-section" class="frm-flex-col frm-gap-sm">
-	<h3 id="frm-form-templates-custom-list-title" class="frm-form-templates-title frm-text-xs frm-font-medium frm-mt-xs frm-mb-0 frm_hidden"><?php esc_html_e( 'Custom List', 'formidable' ); ?></h3>
-
 	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_grid_container frm_hidden">
 		<?php
 		foreach ( $custom_templates as $template ) {
