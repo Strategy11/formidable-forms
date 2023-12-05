@@ -2,10 +2,7 @@
 /**
  * Form Templates - Template.
  *
- * @package   Strategy11/FormidableForms
- * @copyright 2010 Formidable Forms
- * @license   GNU General Public License, version 2
- * @link      https://formidableforms.com/
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
