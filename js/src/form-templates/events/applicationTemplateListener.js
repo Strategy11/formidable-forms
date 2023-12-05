@@ -2,7 +2,6 @@
  * Internal dependencies
 */
 import { getElements } from '../elements';
-import { onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for an application template.

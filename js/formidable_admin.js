@@ -9379,7 +9379,6 @@ function frmAdminBuildJS() {
 		if ( emptyInbox ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
-			leaveEmailModal.querySelector( '.frm_modal_top' ).classList.add( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
 			const leaveEmailIput = document.getElementById( 'frm_leave_email' );

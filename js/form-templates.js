@@ -1909,6 +1909,177 @@ function sprintf(format) {
 
 /***/ }),
 
+/***/ "./js/src/common/utilities/animationEffects.js":
+/*!*****************************************************!*\
+  !*** ./js/src/common/utilities/animationEffects.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fadeIn: () => (/* binding */ fadeIn)
+/* harmony export */ });
+/* harmony import */ var _visibility__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./visibility */ "./js/src/common/utilities/visibility.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Applies a fade-in animation to an element.
+ *
+ * @param {HTMLElement} element The element to apply the fade-in to.
+ * @return {void}
+ */
+var fadeIn = function fadeIn(element) {
+  if (!element) {
+    return;
+  }
+  if (!(0,_visibility__WEBPACK_IMPORTED_MODULE_0__.isVisible)(element)) {
+    (0,_visibility__WEBPACK_IMPORTED_MODULE_0__.show)(element);
+  }
+  element.classList.add('frm-fadein-up');
+  element.addEventListener('animationend', function () {
+    element.classList.remove('frm-fadein-up');
+  }, {
+    once: true
+  });
+};
+
+/***/ }),
+
+/***/ "./js/src/common/utilities/index.js":
+/*!******************************************!*\
+  !*** ./js/src/common/utilities/index.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addToRequestQueue: () => (/* reexport safe */ _requestQueue__WEBPACK_IMPORTED_MODULE_2__.addToRequestQueue),
+/* harmony export */   fadeIn: () => (/* reexport safe */ _animationEffects__WEBPACK_IMPORTED_MODULE_1__.fadeIn),
+/* harmony export */   hide: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.hide),
+/* harmony export */   hideElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.hideElements),
+/* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.isVisible),
+/* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.show),
+/* harmony export */   showElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.showElements)
+/* harmony export */ });
+/* harmony import */ var _visibility__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./visibility */ "./js/src/common/utilities/visibility.js");
+/* harmony import */ var _animationEffects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./animationEffects */ "./js/src/common/utilities/animationEffects.js");
+/* harmony import */ var _requestQueue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./requestQueue */ "./js/src/common/utilities/requestQueue.js");
+
+
+
+
+/***/ }),
+
+/***/ "./js/src/common/utilities/requestQueue.js":
+/*!*************************************************!*\
+  !*** ./js/src/common/utilities/requestQueue.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addToRequestQueue: () => (/* binding */ addToRequestQueue)
+/* harmony export */ });
+// Initialize lastPromise with a resolved promise as the starting point for the queue
+var lastPromise = Promise.resolve();
+
+/**
+ * Adds a task to the request queue.
+ *
+ * @param {function(): Promise<any>} task A function that returns a promise.
+ * @return {Promise<any>} The new last promise in the queue.
+ */
+var addToRequestQueue = function addToRequestQueue(task) {
+  return lastPromise = lastPromise.then(function () {
+    return task();
+  }).catch(function () {
+    return task();
+  });
+};
+
+/***/ }),
+
+/***/ "./js/src/common/utilities/visibility.js":
+/*!***********************************************!*\
+  !*** ./js/src/common/utilities/visibility.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   hide: () => (/* binding */ hide),
+/* harmony export */   hideElements: () => (/* binding */ hideElements),
+/* harmony export */   isVisible: () => (/* binding */ isVisible),
+/* harmony export */   show: () => (/* binding */ show),
+/* harmony export */   showElements: () => (/* binding */ showElements)
+/* harmony export */ });
+var HIDDEN_CLASS = 'frm_hidden';
+
+/**
+ * Shows specified elements by removing the hidden class.
+ *
+ * @param {Array<Element>} elements An array of elements to show.
+ * @return {void}
+ */
+var showElements = function showElements(elements) {
+  var _Array$from;
+  return (_Array$from = Array.from(elements)) === null || _Array$from === void 0 ? void 0 : _Array$from.forEach(function (element) {
+    return show(element);
+  });
+};
+
+/**
+ * Hides specified elements by adding the hidden class.
+ *
+ * @param {Array<Element>} elements An array of elements to hide.
+ * @return {void}
+ */
+var hideElements = function hideElements(elements) {
+  var _Array$from2;
+  return (_Array$from2 = Array.from(elements)) === null || _Array$from2 === void 0 ? void 0 : _Array$from2.forEach(function (element) {
+    return hide(element);
+  });
+};
+
+/**
+ * Removes the hidden class to show the element.
+ *
+ * @param {Element} element The element to show.
+ * @return {void}
+ */
+var show = function show(element) {
+  return element === null || element === void 0 ? void 0 : element.classList.remove(HIDDEN_CLASS);
+};
+
+/**
+ * Adds the hidden class to hide the element.
+ *
+ * @param {Element} element The element to hide.
+ * @return {void}
+ */
+var hide = function hide(element) {
+  return element === null || element === void 0 ? void 0 : element.classList.add(HIDDEN_CLASS);
+};
+
+/**
+ * Checks if an element is visible.
+ *
+ * @param {HTMLElement} element The HTML element to check for visibility.
+ * @return {boolean} Returns true if the element is visible, otherwise false.
+ */
+var isVisible = function isVisible(element) {
+  return !(element !== null && element !== void 0 && element.classList.contains(HIDDEN_CLASS));
+};
+
+/***/ }),
+
 /***/ "./js/src/form-templates/elements/applicationTemplatesElement.js":
 /*!***********************************************************************!*\
   !*** ./js/src/form-templates/elements/applicationTemplatesElement.js ***!
@@ -2339,11 +2510,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   addApplicationTemplateEvents: () => (/* binding */ addApplicationTemplateEvents)
 /* harmony export */ });
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils */ "./js/src/form-templates/utils/index.js");
 /**
  * Internal dependencies
 */
-
 
 
 /**
@@ -5101,46 +5270,6 @@ function showFreeTemplates() {
 
 /***/ }),
 
-/***/ "./js/src/form-templates/utils/animationEffects.js":
-/*!*********************************************************!*\
-  !*** ./js/src/form-templates/utils/animationEffects.js ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   fadeIn: () => (/* binding */ fadeIn)
-/* harmony export */ });
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/utils/index.js");
-/**
- * Internal dependencies
- */
-
-
-/**
- * Applies a fade-in animation to an element.
- *
- * @param {HTMLElement} element The element to apply the fade-in to.
- * @return {void}
- */
-var fadeIn = function fadeIn(element) {
-  if (!element) {
-    return;
-  }
-  if (!(0,___WEBPACK_IMPORTED_MODULE_0__.isVisible)(element)) {
-    (0,___WEBPACK_IMPORTED_MODULE_0__.show)(element);
-  }
-  element.classList.add('frm-fadein-up');
-  element.addEventListener('animationend', function () {
-    element.classList.remove('frm-fadein-up');
-  }, {
-    once: true
-  });
-};
-
-/***/ }),
-
 /***/ "./js/src/form-templates/utils/index.js":
 /*!**********************************************!*\
   !*** ./js/src/form-templates/utils/index.js ***!
@@ -5150,10 +5279,10 @@ var fadeIn = function fadeIn(element) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addToRequestQueue: () => (/* reexport safe */ _requestQueue__WEBPACK_IMPORTED_MODULE_3__.addToRequestQueue),
-/* harmony export */   fadeIn: () => (/* reexport safe */ _animationEffects__WEBPACK_IMPORTED_MODULE_2__.fadeIn),
-/* harmony export */   hide: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.hide),
-/* harmony export */   hideElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.hideElements),
+/* harmony export */   addToRequestQueue: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.addToRequestQueue),
+/* harmony export */   fadeIn: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.fadeIn),
+/* harmony export */   hide: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.hide),
+/* harmony export */   hideElements: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.hideElements),
 /* harmony export */   isAllTemplatesCategory: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isAllTemplatesCategory),
 /* harmony export */   isCustomCategory: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isCustomCategory),
 /* harmony export */   isCustomTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isCustomTemplate),
@@ -5162,51 +5291,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isFeaturedTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isFeaturedTemplate),
 /* harmony export */   isLockedTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isLockedTemplate),
 /* harmony export */   isValidEmail: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_0__.isValidEmail),
-/* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.isVisible),
+/* harmony export */   isVisible: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.isVisible),
 /* harmony export */   onClickPreventDefault: () => (/* binding */ onClickPreventDefault),
-/* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.show),
-/* harmony export */   showElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_1__.showElements)
+/* harmony export */   show: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.show),
+/* harmony export */   showElements: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_1__.showElements)
 /* harmony export */ });
 /* harmony import */ var _validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validation */ "./js/src/form-templates/utils/validation.js");
-/* harmony import */ var _visibility__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./visibility */ "./js/src/form-templates/utils/visibility.js");
-/* harmony import */ var _animationEffects__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animationEffects */ "./js/src/form-templates/utils/animationEffects.js");
-/* harmony import */ var _requestQueue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./requestQueue */ "./js/src/form-templates/utils/requestQueue.js");
+/* harmony import */ var _common_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/utilities */ "./js/src/common/utilities/index.js");
 var onClickPreventDefault = window.frmDom.util.onClickPreventDefault;
 
 
 
-
-
-
-/***/ }),
-
-/***/ "./js/src/form-templates/utils/requestQueue.js":
-/*!*****************************************************!*\
-  !*** ./js/src/form-templates/utils/requestQueue.js ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addToRequestQueue: () => (/* binding */ addToRequestQueue)
-/* harmony export */ });
-// Initialize lastPromise with a resolved promise as the starting point for the queue
-var lastPromise = Promise.resolve();
-
-/**
- * Adds a task to the request queue.
- *
- * @param {function(): Promise<any>} task A function that returns a promise.
- * @return {Promise<any>} The new last promise in the queue.
- */
-var addToRequestQueue = function addToRequestQueue(task) {
-  return lastPromise = lastPromise.then(function () {
-    return task();
-  }).catch(function () {
-    return task();
-  });
-};
 
 /***/ }),
 
@@ -5323,85 +5418,6 @@ var isValidEmail = function isValidEmail(email) {
  */
 var isHTMLElement = function isHTMLElement(element) {
   return element instanceof HTMLElement || console.warn('Invalid argument: Element must be an instance of HTMLElement') || false;
-};
-
-/***/ }),
-
-/***/ "./js/src/form-templates/utils/visibility.js":
-/*!***************************************************!*\
-  !*** ./js/src/form-templates/utils/visibility.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   hide: () => (/* binding */ hide),
-/* harmony export */   hideElements: () => (/* binding */ hideElements),
-/* harmony export */   isVisible: () => (/* binding */ isVisible),
-/* harmony export */   show: () => (/* binding */ show),
-/* harmony export */   showElements: () => (/* binding */ showElements)
-/* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
-/**
- * Internal dependencies
- */
-
-
-/**
- * Shows specified elements by removing the hidden class.
- *
- * @param {Array<Element>} elements An array of elements to show.
- * @return {void}
- */
-var showElements = function showElements(elements) {
-  var _Array$from;
-  return (_Array$from = Array.from(elements)) === null || _Array$from === void 0 ? void 0 : _Array$from.forEach(function (element) {
-    return show(element);
-  });
-};
-
-/**
- * Hides specified elements by adding the hidden class.
- *
- * @param {Array<Element>} elements An array of elements to hide.
- * @return {void}
- */
-var hideElements = function hideElements(elements) {
-  var _Array$from2;
-  return (_Array$from2 = Array.from(elements)) === null || _Array$from2 === void 0 ? void 0 : _Array$from2.forEach(function (element) {
-    return hide(element);
-  });
-};
-
-/**
- * Removes the hidden class to show the element.
- *
- * @param {Element} element The element to show.
- * @return {void}
- */
-var show = function show(element) {
-  return element === null || element === void 0 ? void 0 : element.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_0__.HIDDEN_CLASS);
-};
-
-/**
- * Adds the hidden class to hide the element.
- *
- * @param {Element} element The element to hide.
- * @return {void}
- */
-var hide = function hide(element) {
-  return element === null || element === void 0 ? void 0 : element.classList.add(_shared__WEBPACK_IMPORTED_MODULE_0__.HIDDEN_CLASS);
-};
-
-/**
- * Checks if an element is visible.
- *
- * @param {HTMLElement} element The HTML element to check for visibility.
- * @return {boolean} Returns true if the element is visible, otherwise false.
- */
-var isVisible = function isVisible(element) {
-  return !(element !== null && element !== void 0 && element.classList.contains(_shared__WEBPACK_IMPORTED_MODULE_0__.HIDDEN_CLASS));
 };
 
 /***/ }),

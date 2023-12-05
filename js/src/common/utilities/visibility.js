@@ -1,7 +1,4 @@
-/**
- * Internal dependencies
- */
-import { HIDDEN_CLASS } from '../shared';
+const HIDDEN_CLASS = 'frm_hidden';
 
 /**
  * Shows specified elements by removing the hidden class.

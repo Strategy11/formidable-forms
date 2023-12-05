@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { isVisible, show } from './';
+import { isVisible, show } from './visibility';
 
 /**
  * Applies a fade-in animation to an element.
