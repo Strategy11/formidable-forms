@@ -73,6 +73,11 @@
 .frm-yt-widget {
 	z-index: 3;
 }
+.frm-yt-widget iframe {
+	width: 100%;
+	height: 224px;
+	margin-bottom:-6px
+}
 .frm-dashboard-wrapper .frm-dashboard-widget > * {
 	transition: 0.3s opacity linear;
 	transition-delay: 0.1s;

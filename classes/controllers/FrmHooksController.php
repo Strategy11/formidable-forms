@@ -163,7 +163,7 @@ class FrmHooksController {
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
 		// Inbox Controller.
-		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
+		// add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
 
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );

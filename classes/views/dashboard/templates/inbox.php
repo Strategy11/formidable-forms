@@ -1,8 +1,8 @@
 <div class="frm-inbox-wrapper">
 	<div class="frm-tabs-navs">
 		<ul class="frm-flex-box">
-			<li class="frm-active">Inbox</li>
-			<li>Dismissed</li>
+			<li class="frm-active"><?php echo esc_html__( 'Inbox', 'formidable' ); ?></li>
+			<li><?php echo esc_html__( 'Dismissed', 'formidable' ); ?></li>
 		</ul>
 	</div>
 	<div class="frm-tabs-delimiter">

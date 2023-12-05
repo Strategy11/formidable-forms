@@ -9714,9 +9714,9 @@ function frmAdminBuildJS() {
 			}
 		);
 
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
-			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
+		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+		if ( emptyInbox && leaveEmailIput ) {
 			leaveEmailIput.addEventListener(
 				'keyup',
 				event => {

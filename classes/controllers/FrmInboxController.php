@@ -21,7 +21,7 @@ class FrmInboxController {
 	/**
 	 * @since 4.05
 	 */
-	private static function get_notice_count() {
+	public static function get_notice_count() {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
 		$inbox = new FrmInbox();

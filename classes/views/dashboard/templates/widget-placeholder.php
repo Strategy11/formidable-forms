@@ -4,7 +4,7 @@
 		<h4><?php echo esc_html( $template['placeholder']['heading'] ); ?></h4>
 		<p><?php echo wp_kses_post( $template['placeholder']['copy'] ); ?></p>
 		<?php if ( null !== $template['placeholder']['button'] ) : ?>
-			<a href="<?php echo esc_url( $template['placeholder']['button']['link'] ); ?>" class="frm-button-secondary"><?php echo esc_html( $template['placeholder']['button']['label'] ); ?></a>
+			<a href="<?php echo esc_url( $template['placeholder']['button']['link'] ); ?>" class="frm-button-secondary <?php echo isset( $template['placeholder']['button']['classname'] ) ? esc_attr( $template['placeholder']['button']['classname'] ) : ''; ?>"><?php echo esc_html( $template['placeholder']['button']['label'] ); ?></a>
 		<?php endif; ?>
 	</div>
 </div>

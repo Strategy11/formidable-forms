@@ -32,7 +32,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
 		if ( ! self::is_dashboard_page() ) {
 			return;
 		}
@@ -58,26 +58,31 @@ class FrmDashboardController {
 					'template-type' => '',
 					'counters'      => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
-				'license'  => self::view_args_licence(),
+				'license'  => self::view_args_license(),
 				'inbox'    => self::view_args_inbox(),
 				'entries'  => array(
-					'show_placeholder' => 0 < (int) $counters_value['entries'] ? false : true, // to do: remove always true
+					'widget-heading'   => esc_html__( 'Latest Entries', 'formidable' ),
+					'cta'              => array(
+						'label' => esc_html__( 'View all entries', 'formidable' ),
+						'link'  => admin_url( 'admin.php?page=formidable-entries' ),
+					),
+					'show-placeholder' => 0 < (int) $counters_value['entries'] ? false : true,
 					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'], $counters_value['entries'] ),
 				),
-				'payments'  => array(
+				'payments' => array(
 					'template-type'    => 'full-width',
-					'show_placeholder' => empty( $total_payments ),
+					'show-placeholder' => empty( $total_payments ),
 					'placeholder'      => array(
-						'copy' => 'You don\'t have a payment form setup yet.',
+						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
 							'link'  => '',
-							'label' => 'Create a Payment Form',
+							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
 						),
 					),
 					'counters'         => array(
 						array(
-							'heading' => 'Total earnings',
+							'heading' => esc_html__( 'Total earnings', 'formidable' ),
 							'type'    => 'currency',
 							'items'   => $total_payments,
 						),
@@ -100,16 +105,16 @@ class FrmDashboardController {
 	private static function view_args_counters( $latest_available_form, $counters_value ) {
 		$lite_counters = array(
 			array(
-				'heading' => 'Total Forms',
+				'heading' => esc_html__( 'Total Forms', 'formidable' ),
 				'type'    => 'default',
 				'counter' => $counters_value['forms'],
 			),
 			array(
-				'heading' => 'Total Entries',
+				'heading' => esc_html__( 'Total Entries', 'formidable' ),
 				'type'    => 'default',
 				'cta'     => array(
 					'display' => self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
-					'title'   => 'Add Entry',
+					'title'   => esc_html__( 'Add Entry', 'formidable' ),
 					'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ),
 				),
 				'counter' => $counters_value['entries'],
@@ -118,18 +123,18 @@ class FrmDashboardController {
 
 		$pro_counters_placeholder = array(
 			array(
-				'heading'  => 'All Views',
+				'heading'  => esc_html__( 'All Views', 'formidable' ),
 				'counter'  => 0,
 				'type'     => 'default',
 				'disabled' => true,
-				'tooltip'  => 'Views are available with a PRO plan only',
+				'tooltip'  => esc_html__( 'Views are available with a PRO plan only', 'formidable' ),
 			),
 			array(
-				'heading'  => 'Installed Apps',
+				'heading'  => esc_html__( 'Installed Apps', 'formidable' ),
 				'counter'  => 0,
 				'type'     => 'default',
 				'disabled' => true,
-				'tooltip'  => 'Aplications are available with a PRO plan only',
+				'tooltip'  => esc_html__( 'Aplications are available with a PRO plan only', 'formidable' ),
 			),
 		);
 
@@ -151,8 +156,14 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_payments() {
-		$payments      = FrmTransLiteAppHelper::get_payments_data();
+
 		$prepared_data = array();
+
+		if ( ! is_callable( 'FrmTransLiteAppHelper::get_payments_data' ) ) {
+			return $prepared_data;
+		}
+
+		$payments = FrmTransLiteAppHelper::get_payments_data();
 		foreach ( $payments['total'] as $currency => $total_payments ) {
 			if ( 0 < (int) $total_payments ) {
 				$prepared_data[] = array(
@@ -165,22 +176,27 @@ class FrmDashboardController {
 		return $prepared_data;
 	}
 
-	private static function view_args_licence() {
+	/**
+	 * Init the view args for LITE license.
+	 *
+	 * @return array
+	 */
+	private static function view_args_license() {
 		if ( class_exists( 'FrmProDashboardController' ) ) {
-			return FrmProDashboardController::view_args_licence();
+			return FrmProDashboardController::view_args_license();
 		}
 		return array(
 			'heading' => 'License Key',
-			'copy'    => 'You\'re using Formidable Forms Lite - no license needed. Enjoy! 🙂',
+			'copy'    => esc_html__( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂',
 			'buttons' => array(
 				array(
-					'label'  => 'Connect Account',
+					'label'  => esc_html__( 'Connect Account', 'formidable' ),
 					'link'   => FrmAddonsController::connect_link(),
 					'action' => 'default',
 					'type'   => 'primary',
 				),
 				array(
-					'label'  => 'Get Formidable PRO',
+					'label'  => esc_html__( 'Get Formidable PRO', 'formidable' ),
 					'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
 					'action' => 'default',
 					'type'   => 'secondary',
@@ -189,29 +205,55 @@ class FrmDashboardController {
 		);
 	}
 
+	/**
+	 * Init view args for entries placeholder.
+	 *
+	 * @param array $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
+	 * @return array
+	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
 
 		if ( 0 === (int) $forms_count ) {
+			$copy = sprintf(
+				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
+				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
+				'<a target="_blank" href="https://formidableforms.com/knowledgebase/publish-a-form/"><b>',
+				'</b></a>'
+			);
 			return array(
-				'background'     => 'entries-placeholder',
-				'widget-heading' => 'Latest Entries',
-				'heading'        => 'You Have No Entries Yet',
-				'copy'           => 'See the <a href="#"><b>form documentation</b></a> for instructions on publishin your form',
-				'button'         => array(
-					'label' => 'Add New Form',
-					'link'  => '#',
+				'background' => 'entries-placeholder',
+				'heading'    => esc_html__( 'You Have No Entries Yet', 'formidable' ),
+				'copy'       => $copy,
+				'button'     => array(
+					'label'     => esc_html__( 'Add New Form', 'formidable' ),
+					'link'      => '#',
+					'classname' => 'frm-trigger-new-form-modal',
 				),
 			);
 		}
 
+		$copy = sprintf(
+			/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
+			esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
+			'<a target="_blank" href="https://formidableforms.com/knowledgebase/publish-a-form/"><b>',
+			'</b></a>'
+		);
 		return array(
 			'background' => 'entries-placeholder',
 			'heading'    => 'You Have No Entries Yet',
-			'copy'       => 'See the <a href="#"><b>form documentation</b></a> for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.',
+			'copy'       => $copy,
 			'button'     => null,
 		);
 	}
 
+	/**
+	 * A function to handle the counters cta from the top: Total Forms, Total Entries, All Views, Installed Apps.
+	 *
+	 * @param string $counter_type
+	 * @param int $counter_value
+	 * @param object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @return array
+	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = null ) {
 		if ( $counter_value > 0 ) {
 			return false;
@@ -224,6 +266,11 @@ class FrmDashboardController {
 		return false;
 	}
 
+	/**
+	 * Hide 3rd party notifications from dashboard
+	 *
+	 * @return void
+	 */
 	public static function remove_admin_notices_on_dashboard() {
 		if ( 'formidable-dashboard' !== FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
 			return;
@@ -235,6 +282,12 @@ class FrmDashboardController {
 		}
 	}
 
+	/**
+	 * Handle dashboard AJAX requests. Used in FrmHooksController
+	 * Action name: dashboard_ajax_action.
+	 *
+	 * @return void
+	 */
 	public static function ajax_requests() {
 		$dashboard_action = FrmAppHelper::get_post_param( 'dashboard_action', '', 'sanitize_text_field' );
 
@@ -258,6 +311,13 @@ class FrmDashboardController {
 		}
 	}
 
+	/**
+	 * Handle the entries list. Called via add_filter.
+	 * Hook name: manage_formidable_page_formidable-dashboard_columns.
+	 *
+	 * @param array $columns.
+	 * @return array
+	 */
 	public static function entries_columns( $columns = array() ) {
 
 		$form_id = FrmForm::get_current_form_id();
@@ -270,13 +330,18 @@ class FrmDashboardController {
 			$columns[ $form_id . '_user_id' ] = esc_html__( 'Author', 'formidable' );
 		}
 
-		$columns[ $form_id . '_created_at' ] = __( 'Created on', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = __( 'Updated on', 'formidable' );
+		$columns[ $form_id . '_created_at' ] = esc_html__( 'Created on', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Updated on', 'formidable' );
 
 		return $columns;
 
 	}
 
+	/**
+	 * Check if user has closed the welcome banner. The status of banner is saved in a cookie: self::$banner_closed_cookie_name.
+	 *
+	 * @return boolean
+	 */
 	public static function welcome_banner_has_closed() {
 		if ( isset( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) {
 			list( $cookie_value, $expiration_time ) = explode( '|', sanitize_text_field( wp_unslash( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) );
@@ -292,6 +357,11 @@ class FrmDashboardController {
 		return false;
 	}
 
+	/**
+	 * Check if is dashboard page.
+	 *
+	 * @return boolean
+	 */
 	public static function is_dashboard_page() {
 		if ( 'formidable-dashboard' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
 			return true;
@@ -299,6 +369,12 @@ class FrmDashboardController {
 		return false;
 	}
 
+	/**
+	 * Detect if the logged user's email is subscribed. Used for inbox email subscribe.
+	 *
+	 * @param string $email The logged user's email.
+	 * @return boolean
+	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
 		return false !== array_search( $email, $subscribed_emails, true ) ? true : false;
@@ -329,10 +405,21 @@ class FrmDashboardController {
 		wp_enqueue_script( self::$assets_handle_name );
 	}
 
+	/**
+	 * Init the view args for Inbox widged.
+	 *
+	 * @return array
+	 */
 	private static function view_args_inbox() {
 		return FrmInboxController::get_inbox_messages();
 	}
 
+	/**
+	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
+	 *
+	 * @param int $entries_count The total entries available.
+	 * @return string The YouTube video ID.
+	 */
 	private static function get_youtube_embed_video( $entries_count ) {
 		$youtube_api   = new FrmYoutubeFeedApi();
 		$welcome_video = $youtube_api->get_welcome_video();
@@ -348,6 +435,13 @@ class FrmDashboardController {
 
 	}
 
+	/**
+	 * Save subscribed user's email to dashboard options.
+	 * Used for Inbox widget - email subscribe.
+	 *
+	 * @param string $email.
+	 * @return void
+	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
 		$options           = self::get_dashboard_options();
@@ -359,6 +453,11 @@ class FrmDashboardController {
 		}
 	}
 
+	/**
+	 * Get list of subscribed emails. The list will contain all emails subscribed via Inbox widget.
+	 *
+	 * @return array
+	 */
 	private static function get_subscribed_emails() {
 		$options = self::get_dashboard_options();
 		if ( ! isset( $options['inbox-subscribed-emails'] ) ) {
@@ -367,14 +466,30 @@ class FrmDashboardController {
 		return $options['inbox-subscribed-emails'];
 	}
 
+	/**
+	 * Get the dashboard options from db.
+	 *
+	 * @return array
+	 */
 	private static function get_dashboard_options() {
 		return get_option( self::$option_meta_name, array() );
 	}
 
+	/**
+	 * Update the dashboard options to db.
+	 *
+	 * @return void
+	 */
 	private static function update_dashboard_options( $data ) {
 		update_option( self::$option_meta_name, $data, 'no' );
 	}
 
+	/**
+	 * When the welcome banner is closed, we save its status into a cookie.
+	 * Cookie name: self::$banner_closed_cookie_name.
+	 *
+	 * @return boolean
+	 */
 	private static function ajax_set_cookie_banner( $banner_has_closed ) {
 		if ( 1 === (int) $banner_has_closed ) {
 			$expiration_time = time() + ( 400 * 24 * 60 * 60 ); // 400 days. Maximum expiration time allowed by Chrome.
