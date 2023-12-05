@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <span id="frm-form-templates-page-title-divider" class="frm-form-templates-divider frm_hidden"></span>
 
-<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm_grid_container">
+<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-form-templates-grid-layout">
 	<?php
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
@@ -56,7 +56,7 @@ if ( $expired ) {
 }
 ?>
 
-<ul id="frm-form-templates-list" class="frm-form-templates-list frm_grid_container">
+<ul id="frm-form-templates-list" class="frm-form-templates-list frm-form-templates-grid-layout">
 	<?php
 	foreach ( $templates as $template ) {
 		require $view_path . 'template.php';
@@ -65,7 +65,7 @@ if ( $expired ) {
 </ul>
 
 <div id="frm-form-templates-custom-list-section" class="frm-flex-col frm-gap-sm">
-	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm_grid_container frm_hidden">
+	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm-form-templates-grid-layout frm_hidden">
 		<?php
 		foreach ( $custom_templates as $template ) {
 			require $view_path . 'template.php';

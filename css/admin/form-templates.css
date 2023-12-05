@@ -82,20 +82,15 @@
  *
  * Focuses on the main content area, laying out the various elements and components.
  */
-#frm-form-templates-page .frm_grid_container {
+.frm-form-templates-grid-layout {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
+	grid-auto-rows: max-content;
 	gap: var(--gap-sm);
 }
 
-@media only screen and (max-width: 1430px) {
-	#frm-form-templates-page .frm_grid_container .frm4 {
-		grid-column: span 6;
-	}
-}
-
-@media only screen and (max-width: 1115px) {
-	#frm-form-templates-page .frm_grid_container .frm4 {
-		grid-column: span 12;
-	}
+.frm-form-templates-grid-layout > * {
+	grid-column: span 1;
 }
 
 /* Create a blank form */
