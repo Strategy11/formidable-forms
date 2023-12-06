@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-renew-modal" class="frm-form-templates-modal-item frm_hidden">
+<div id="frm-renew-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top frm-mt-xs">
 		<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
+	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-mb-2xs">
 		<p class="frm-m-0">
 			<?php esc_html_e( 'That template is not available on your plan. Please renew to unlock this and more awesome templates.', 'formidable' ); ?>
 		</p>

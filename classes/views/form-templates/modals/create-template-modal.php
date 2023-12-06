@@ -9,14 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-create-template-modal" class="frm-form-templates-modal-item frm_hidden frm_wrap">
+<div id="frm-create-template-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<h2><?php esc_html_e( 'Create New Template', 'formidable' ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-px-md frm-py-0 frm-mt-sm frm-m-0 frm-fields">
+	<div class="inside frm_grid_container frm-fields frm-px-md frm-py-0 frm-mt-sm frm-m-0">
 		<div class="frm_form_field">
 			<label for="frm-create-template-modal-forms-select">
 				<?php esc_html_e( 'Select form for a new template', 'formidable' ); ?>

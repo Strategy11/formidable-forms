@@ -22,14 +22,14 @@ $defaults = array(
 
 $args = wp_parse_args( $args, $defaults );
 ?>
-<div id="frm-leave-email-modal" class="frm-form-templates-modal-item frm_hidden frm_wrap">
+<div id="frm-leave-email-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<h2><?php echo esc_html( $args['title'] ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-mb-2xs">
+	<div class="inside frm_grid_container frm-fields frm-px-md frm-mt-xs frm-mb-2xs">
 		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
 			<span class="frm-wait"></span>
 		</div>
@@ -44,7 +44,7 @@ $args = wp_parse_args( $args, $defaults );
 		);
 		?>
 
-		<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset">
+		<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset frm_form_field">
 			<span class="frm-with-left-icon">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
 				<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />

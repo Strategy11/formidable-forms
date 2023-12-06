@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // List of pricing plans.
 $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 ?>
-<div id="frm-form-upgrade-modal" class="frm-form-templates-modal-item frm_hidden frm_wrap">
+<div id="frm-form-upgrade-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top frm-mt-xs">
 		<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
@@ -32,7 +32,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 		</div>
 	</div>
 
-	<div class="inside frm-px-md frm-mt-xs frm-m-0">
+	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-m-0">
 		<p>
 			<?php
 			printf(

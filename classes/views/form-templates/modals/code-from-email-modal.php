@@ -9,17 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-code-from-email-modal" class="frm-form-templates-modal-item frm_hidden">
+<div id="frm-code-from-email-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
 			<h2><?php esc_html_e( 'Check Your Inbox', 'formidable' ); ?></h2>
 		</div>
 	</div>
 
-	<div class="inside frm-flex-col frm-gap-sm frm-px-md frm-mt-xs frm-mb-2xs">
-		<p class="frm-m-0"><?php esc_html_e( 'Enter the code that we sent to your email address.', 'formidable' ); ?></p>
+	<div class="inside frm_grid_container frm-fields frm-px-md frm-mt-xs frm-mb-2xs">
+		<p><?php esc_html_e( 'Enter the code that we sent to your email address.', 'formidable' ); ?></p>
 
-		<div class="frm-form-templates-modal-fieldset">
+		<div class="frm-form-templates-modal-fieldset frm_form_field">
 			<input id="frm_code_from_email" type="text" placeholder="<?php esc_attr_e( 'Code from email', 'formidable' ); ?>" />
 
 			<span id="frm_code_from_email_error" class="frm-form-templates-modal-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
