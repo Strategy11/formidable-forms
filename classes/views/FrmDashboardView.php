@@ -376,10 +376,17 @@ class FrmDashboardView {
 	 * @return string HTML template
 	 */
 	private static function load_entries_list_template() {
+		add_filter(
+			'formidable_page_formidable_entries_per_page',
+			function() {
+				return 7;
+			}
+		);
+
 		$params                  = FrmForm::get_admin_params();
 		$controler_entires_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
 		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
-		$wp_list_table->prepare_items( array( 'items-per-page' => 7 ) );
+		$wp_list_table->prepare_items();
 
 		ob_start();
 		$wp_list_table->display(
