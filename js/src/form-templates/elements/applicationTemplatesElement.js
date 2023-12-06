@@ -37,7 +37,7 @@ export function createApplicationTemplates( applications ) {
 				className: 'frm-text-sm frm-font-medium frm-mb-sm'
 			}),
 			tag( 'ul', {
-				className: `${PREFIX}-list frm_grid_container`,
+				className: `${PREFIX}-list ${PREFIX}-grid-layout`,
 				children: templateItems
 			})
 		]
@@ -58,7 +58,7 @@ function createTemplateItem( template ) {
 		`${thumbnailBaseURL}/placeholder.svg`;
 
 	return tag( 'li', {
-		className: `${PREFIX}-application-item frm-card-item frm4`,
+		className: `${PREFIX}-application-item frm-card-item`,
 		data: {
 			href: `${applicationsUrl}&triggerViewApplicationModal=1&template=${key}`,
 			'frm-search-text': name.toLowerCase()
