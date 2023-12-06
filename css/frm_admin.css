@@ -1688,10 +1688,6 @@ input.frm_insert_in_template {
 	gap: var(--gap-xs);
 }
 
-.frm-gap-xs-2xs {
-    gap: calc(var(--gap-xs) + var(--gap-2xs));
-}
-
 .frm-gap-sm {
 	gap: var(--gap-sm);
 }

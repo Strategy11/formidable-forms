@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Are you sure?', 'formidable' ); ?>
 					</p>
 
-					<div class="frm-flex-box frm-gap-xs-2xs frm-justify-center">
+					<div class="frm-flex-box frm-gap-xs frm-justify-center">
 						<a href="#" class="button button-secondary frm-button-secondary dismiss">
 							<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 						</a>
