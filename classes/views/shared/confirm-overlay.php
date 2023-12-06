@@ -9,13 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="#" class="dismiss" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
-			<div class="inside frm-pt-xl frm-pb-md">
-				<div class="cta-inside frm-flex-col frm-items-center frm-gap-xl frmcenter">
-					<p class="frm-confirm-msg frm-m-0">
+			<div class="inside">
+				<div class="cta-inside frm-flex-col frm-items-center">
+					<p class="frm-confirm-msg">
 						<?php esc_html_e( 'Are you sure?', 'formidable' ); ?>
 					</p>
 
-					<div class="frm-flex-box frm-gap-xs frm-justify-center">
+					<div class="frm-flex-box frm-gap-sm frm-justify-center">
 						<a href="#" class="button button-secondary frm-button-secondary dismiss">
 							<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 						</a>
