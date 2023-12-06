@@ -68,7 +68,7 @@ class FrmDashboardController {
 					),
 					'show-placeholder' => 0 < (int) $counters_value['entries'] ? false : true,
 					'count'            => $counters_value['entries'],
-					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'], $counters_value['entries'] ),
+					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
 				'payments' => array(
 					'template-type'    => 'full-width',
