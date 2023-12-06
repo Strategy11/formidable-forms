@@ -321,7 +321,7 @@ class FrmTransLiteAppHelper {
 
 		$where['status'] = 'complete';
 		if ( null !== $from_date ) {
-			$where['created_at >'] = $from_data;
+			$where['created_at >'] = $from_date;
 		}
 		if ( null !== $to_date ) {
 			$where['created_at <'] = $to_date . ' 23:59:59';
