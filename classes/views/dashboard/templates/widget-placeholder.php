@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <h2 class="frm-widget-heading"><?php echo esc_html( $template['widget-heading'] ); ?></h2>
 <div class="frm-widget-placeholder" data-background="<?php echo esc_attr( $template['placeholder']['background'] ); ?>">
 	<div>

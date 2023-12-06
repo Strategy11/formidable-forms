@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $classname = 'frm-counter-card-wrapper frm-flex-box frm-justify-between';
 if ( isset( $template['template-type'] ) && 'full-width' === $template['template-type'] ) {
 	$classname .= ' frm-full-width';

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm-dashboard-license-management">
 	<h4><?php echo esc_attr( $template['heading'] ); ?></h4>
 	<span><?php echo esc_html( $template['copy'] ); ?></span>

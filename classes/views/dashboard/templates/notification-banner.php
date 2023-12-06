@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm-dashboard-banner">
 	<span class="frm-dashboard-banner-bg-shape"></span>
 	<span class="frm-dashboard-banner-close"></span>

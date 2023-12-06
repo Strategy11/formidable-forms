@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm-pro-features-list">
 	<h2><?php echo esc_html__( 'Unlock all the Powerful Features to Defy the Limits', 'formidable' ); ?></h2>
 	<ul class="frm-flex-box">

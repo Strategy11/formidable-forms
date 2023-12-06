@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm-counter-card-wrapper frm-payments-placeholder frm-full-width">
 	<div class="frm-dashboard-widget frm-counter-card frm-animate">
 		<h4><?php echo esc_html( $template['counters'][0]['heading'] ); ?></h4>
