@@ -248,7 +248,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field
 	 * @param {Array} errors
-	 * @returns 
+	 * @returns
 	 */
 	function checkValidity( field, errors ) {
 		var fieldID;
@@ -257,7 +257,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		if ( 'undefined' === typeof errors[ fieldID ]) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -542,7 +542,7 @@ function frmFrontFormJS() {
 
 		// Function to change the color of a select element
 		changeSelectColor = function( select ) {
-			if ( hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+			if ( select.options[select.selectedIndex] && hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';
@@ -1509,6 +1509,19 @@ function frmFrontFormJS() {
 		}
 	}
 
+	function enableSubmitButtonOnBackButtonPress() {
+		window.addEventListener( 'pageshow', function( event ) {
+			if ( event.persisted ) {
+				document.querySelectorAll( '.frm_loading_form' ).forEach(
+					function( form ) {
+						enableSubmitButton( jQuery( form ) );
+					}
+				);
+				removeSubmitLoading();
+			}
+		});
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1556,6 +1569,8 @@ function frmFrontFormJS() {
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
+
+			enableSubmitButtonOnBackButtonPress();
 		},
 
 		getFieldId: function( field, fullID ) {

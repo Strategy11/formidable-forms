@@ -8,7 +8,7 @@ class FrmTransLiteDb {
 	/**
 	 * @var int
 	 */
-	public $db_version = 5;
+	public $db_version = 6;
 
 	/**
 	 * @var string
@@ -60,6 +60,7 @@ class FrmTransLiteDb {
 				expire_date date default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
@@ -83,6 +84,7 @@ class FrmTransLiteDb {
 				status varchar(100) default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
@@ -176,7 +178,7 @@ class FrmTransLiteDb {
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', '6.5' );
 			return null;
 		}
 
@@ -203,7 +205,7 @@ class FrmTransLiteDb {
 		$field = sanitize_text_field( $field );
 
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', '6.5' );
 			return array();
 		}
 
@@ -292,6 +294,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
+	 * This migration checks for PayPal payments and sets a status value based on the completed status.
+	 *
 	 * @return void
 	 */
 	private function migrate_to_4() {

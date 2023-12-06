@@ -41,7 +41,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 		// log in as user
 		wp_set_current_user( $user_id );
-		$this->$user_id = $user_id;
+		$this->user_id = $user_id;
 		$this->assertTrue( current_user_can( $role ) );
 	}
 

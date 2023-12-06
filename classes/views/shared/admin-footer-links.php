@@ -10,7 +10,7 @@ $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/supp
 $upgrade_link = ! FrmAppHelper::pro_is_installed() ? 'https://formidableforms.com/lite-upgrade/' : 'https://formidableforms.com/account/downloads/';
 ?>
 
-<div class="frm-admin-footer-links">
+<div class="frm-admin-footer-links frm_hidden">
 	<span class="frm-admin-footer-links-text">
 		<?php
 		printf(

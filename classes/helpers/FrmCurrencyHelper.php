@@ -21,7 +21,7 @@ class FrmCurrencyHelper {
 		} elseif ( isset( $currencies[ strtolower( $currency ) ] ) ) {
 			$currency = $currencies[ strtolower( $currency ) ];
 		} else {
-			$currency = $currencies['usd'];
+			$currency = $currencies['USD'];
 		}
 		return $currency;
 	}
@@ -326,7 +326,7 @@ class FrmCurrencyHelper {
 		if ( is_array( $filtered_currencies ) ) {
 			$currencies = $filtered_currencies;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_currencies filter.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_currencies filter.', '6.5' );
 		}
 
 		return $currencies;

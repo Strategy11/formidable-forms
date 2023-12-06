@@ -355,13 +355,14 @@ class FrmAddonsController {
 				continue;
 			}
 
-			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
-			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$wp_plugin    = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
+			$wp_version   = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$plugin->slug = explode( '/', $folder )[0];
 
 			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
-				$slug                           = explode( '/', $folder );
-				$plugin->slug                   = $slug[0];
 				$transient->response[ $folder ] = $plugin;
+			} else {
+				$transient->no_update[ $folder ] = $plugin;
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
@@ -1027,8 +1028,6 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	protected static function install_addon() {
-		FrmAppHelper::permission_check( 'install_plugins' );
-
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 		$download_url = self::get_current_plugin();
@@ -1183,15 +1182,11 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
-		if ( ! current_user_can( 'activate_plugins' ) ) {
-			return false;
-		}
-
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
-		if ( empty( $post_auth ) || empty( $post_url ) ) {
+		if ( ! $post_auth || ! $post_url ) {
 			return false;
 		}
 
