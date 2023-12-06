@@ -1257,7 +1257,15 @@ class FrmAddonsController {
 		$addon        = self::get_addon( $plugin );
 		$upgrade_link = FrmAppHelper::admin_upgrade_link( $upgrade_link_args );
 
+		if ( ! is_array( $upgrade_link_args ) ) {
+			// A string $args in FrmAppHelper::admin_upgrade_link sets $args as the utm-medium value.
+			$upgrade_link_args = array(
+				'medium' => $upgrade_link_args,
+			);
+		}
+
 		$upgrade_link_args['link'] = $upgrade_link;
+
 		self::addon_upgrade_link( $addon, $upgrade_link_args );
 	}
 
