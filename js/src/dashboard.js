@@ -19,6 +19,12 @@ class FrmDashboard {
 		if ( 'undefined' !== typeof window.frmAdminBuild ) {
 			window.frmAdminBuild.initNewFormModal();
 		}
+
+		this.initInbox();
+		this.initIntroWidgetAnimation();
+		this.initCounters();
+		this.initCloseWelcomeBanner();
+		this.initTooltips();
 	}
 
 	initInbox() {
@@ -132,11 +138,6 @@ class FrmDashboard {
 	}
 }
 
-const dashboard = new FrmDashboard();
 document.addEventListener( 'DOMContentLoaded', () => {
-	dashboard.initInbox();
-	dashboard.initIntroWidgetAnimation();
-	dashboard.initCounters();
-	dashboard.initCloseWelcomeBanner();
-	dashboard.initTooltips();
+	new FrmDashboard();
 });

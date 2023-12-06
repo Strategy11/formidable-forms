@@ -45,7 +45,13 @@
 .frm-counter-card-wrapper.frm-payments-placeholder .frm-counter-card a {
 	margin-right: var(--gap-md);
 }
-.frm-counter-card-wrapper.frm-full-width .frm-counter-card h4,
+.frm-counter-card-wrapper.frm-full-width .frm-counter-card h4 {
+	color: #656F7C;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+}
+.frm-counter-card-wrapper.frm-payments-placeholder .frm-counter-card h4,
 .frm-dashboard-wrapper .frm-dashboard-widget h2.frm-widget-heading {
 	color: #101828;
 	font-size: 16px;
@@ -268,6 +274,12 @@
 /* END License Management */
 
 /* Entries Widget */
+.frm-white-body .frm-dashboard-widget table.wp-list-table {
+	margin-bottom: 0px;
+}
+.frm-white-body .frm-dashboard-widget table.wp-list-table .row-actions{
+	display: none;
+}
 .frm-white-body .frm-dashboard-widget table.wp-list-table th,
 .frm-white-body .frm-dashboard-widget table.wp-list-table td,
 .frm-dashboard-widget table.wp-list-table th,
@@ -275,6 +287,7 @@
 	padding: 12px 24px;
 	font-weight: 500;
 	line-height: 20px;
+	vertical-align: middle;
 }
 .frm-dashboard-widget table.wp-list-table td {
 	color: #282F36;
@@ -387,7 +400,7 @@
 /* Inbox */
 .frm-inbox-wrapper {
 	padding: 16px 24px;
-	height: 505px;
+	height: 612px;
 }
 .frm-tabs-navs ul {
 	margin: 0px 0px 11px 0px;
@@ -446,10 +459,17 @@
 	margin-bottom: 16px;
 	border-bottom: 1px solid var(--grey-200);
 }
+div.frm-inbox-subscribe:not(.frm_hidden) {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
 div.frm-inbox-subscribe h3 {
 	color: #282F36;
 	font-weight: 600;
 	font-size: 16px;
+	margin-top: 0px;
 }
 div.frm-inbox-subscribe p {
 	color: #667085;
@@ -484,6 +504,13 @@ div.frm-inbox-subscribe input[type="email"] {
 #frm_empty_inbox .ps__rail-y,
 .frm-tabs-container .frm-tabs-slide-track > div:not(.frm-active) .ps__rail-y {
 	opacity: 0.0;
+}
+#frm_empty_inbox #frm-add-my-email-address {
+	align-self: flex-start;
+	flex: 0 0 auto;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 14px;
 }
 #frm_empty_inbox.frm-inbox-hide-form #frm_leave_email_wrapper,
 #frm_empty_inbox.frm-inbox-hide-form #frm-add-my-email-address {
@@ -526,6 +553,12 @@ div.frm-inbox-subscribe input[type="email"] {
 	position: relative;
 	width:100%;
 }
+.frm-tabs-slide-track > div > div:first-child {
+	height: 100%;
+}
+/* .frm-tabs-slide-track > div:first-child > div {
+	height: 100%;
+} */
 .frm-tabs-slide-track > div.frm-active {
 	opacity: 1.0;
 	transition: 0.35s opacity linear;

@@ -31,5 +31,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 		<div class="clear"></div>
 	</div>
-	<div style="height: 30px;"></div>
 </div>

@@ -20,5 +20,5 @@
 			</ul>
 		</li>
 	</ul>
-	<a href="" title="Upgrade to PRO & Get 50% OFF" class="frm-button-primary"><?php echo esc_html__( 'Upgrade to PRO & Get 50% OFF', 'formidable' ); ?></a>
+	<a target="_blank" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( '', 'lite-upgrade' ) ); ?>" title="Upgrade to PRO & Get 50% OFF" class="frm-button-primary"><?php echo esc_html__( 'Upgrade to PRO & Get 50% OFF', 'formidable' ); ?></a>
 </div>

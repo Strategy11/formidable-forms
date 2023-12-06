@@ -76,8 +76,9 @@ class FrmDashboardController {
 					'placeholder'      => array(
 						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
-							'link'  => '',
-							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
+							'classname' => 'frm-trigger-new-form-modal',
+							'link'      => '#',
+							'label'     => esc_html__( 'Create a Payment Form', 'formidable' ),
 						),
 					),
 					'counters'         => array(
@@ -97,12 +98,14 @@ class FrmDashboardController {
 	/**
 	 * Init top counters widgets view args used to construct FrmDashboardView.
 	 *
-	 * @param object|null $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param object|false $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
 	 * @param array $counters_value. The counter values for "Total Forms" & "Total Entries"
 	 *
 	 * @return array
 	 */
 	private static function view_args_counters( $latest_available_form, $counters_value ) {
+		$add_entry_cta_link = false !== $latest_available_form && isset( $latest_available_form->id ) ? admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ) : '';
+
 		$lite_counters = array(
 			array(
 				'heading' => esc_html__( 'Total Forms', 'formidable' ),
@@ -115,7 +118,7 @@ class FrmDashboardController {
 				'cta'     => array(
 					'display' => self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
 					'title'   => esc_html__( 'Add Entry', 'formidable' ),
-					'link'    => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ),
+					'link'    => $add_entry_cta_link,
 				),
 				'counter' => $counters_value['entries'],
 			),
@@ -149,9 +152,6 @@ class FrmDashboardController {
 
 	/**
 	 * Init total earnings widget view args to construct FrmDashboardView.
-	 *
-	 * @param object|null $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
-	 * @param array $counters_value. The counter values for Total Forms & Total Entries.
 	 *
 	 * @return array
 	 */
@@ -217,7 +217,7 @@ class FrmDashboardController {
 			$copy = sprintf(
 				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
 				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
-				'<a target="_blank" href="https://formidableforms.com/knowledgebase/publish-a-form/"><b>',
+				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
 				'</b></a>'
 			);
 			return array(
@@ -235,7 +235,7 @@ class FrmDashboardController {
 		$copy = sprintf(
 			/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
 			esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
-			'<a target="_blank" href="https://formidableforms.com/knowledgebase/publish-a-form/"><b>',
+			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
 			'</b></a>'
 		);
 		return array(
@@ -251,19 +251,15 @@ class FrmDashboardController {
 	 *
 	 * @param string $counter_type
 	 * @param int $counter_value
-	 * @param object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @param object|false $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
 	 * @return array
 	 */
-	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = null ) {
-		if ( $counter_value > 0 ) {
+	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
+		if ( $counter_value > 0 || ( 'entries' === $counter_type && false === $latest_available_form ) ) {
 			return false;
 		}
 
-		if ( 'entries' === $counter_type && null !== $latest_available_form && is_object( $latest_available_form ) ) {
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	/**

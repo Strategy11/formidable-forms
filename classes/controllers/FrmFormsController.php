@@ -3108,7 +3108,6 @@ class FrmFormsController {
 
 	/**
 	 * Count and return total forms.
-	 * To do: Cache the results.
 	 *
 	 * @since 6.x
 	 * @return int
@@ -3129,10 +3128,10 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Count and return total forms.
+	 * Get the latest form available.
 	 *
 	 * @since 6.x
-	 * @return int
+	 * @return object
 	 */
 	public static function get_latest_form() {
 
