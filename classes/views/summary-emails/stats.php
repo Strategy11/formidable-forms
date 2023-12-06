@@ -58,31 +58,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endif; ?>
 	</div>
 
-	<!-- Top forms section -->
-	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-		<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
-			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
-			<?php echo esc_html( $args['top_forms_label'] ); ?>
-		</h2>
+	<?php if ( $args['top_forms'] ) : ?>
+		<!-- Top forms section -->
+		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
+			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
+				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
+				<?php echo esc_html( $args['top_forms_label'] ); ?>
+			</h2>
 
-		<table width="100%" cellspacing="0" cellpadding="0">
-			<tr style="font-size: 0.75em; font-weight: 500; line-height: 2; text-transform: uppercase;">
-				<th align="left" style=""><?php esc_html_e( 'Form name', 'formidable' ); ?></th>
-				<th align="right" style=""><?php esc_html_e( 'Submissions', 'formidable' ); ?></th>
-			</tr>
-
-			<?php
-			foreach ( $args['top_forms'] as $index => $top_form ) {
-				?>
-				<tr>
-					<td align="left" style="padding: 1em 0.33em 0.28em"><?php echo intval( $index + 1 ); ?>. <?php echo esc_html( $top_form->form_name ); ?></td>
-					<td align="right" style="padding: 1em 0 0.28em;"><?php echo intval( $top_form->items_count ); ?></td>
+			<table width="100%" cellspacing="0" cellpadding="0">
+				<tr style="font-size: 0.75em; font-weight: 500; line-height: 2; text-transform: uppercase;">
+					<th align="left" style=""><?php esc_html_e( 'Form name', 'formidable' ); ?></th>
+					<th align="right" style=""><?php esc_html_e( 'Submissions', 'formidable' ); ?></th>
 				</tr>
+
 				<?php
-			}
-			?>
-		</table>
-	</div>
+				foreach ( $args['top_forms'] as $index => $top_form ) {
+					?>
+					<tr>
+						<td align="left" style="padding: 1em 0.33em 0.28em"><?php echo intval( $index + 1 ); ?>. <?php echo esc_html( $top_form->form_name ); ?></td>
+						<td align="right" style="padding: 1em 0 0.28em;"><?php echo intval( $top_form->items_count ); ?></td>
+					</tr>
+					<?php
+				}
+				?>
+			</table>
+		</div>
+	<?php endif; ?>
 
 	<?php if ( ! empty( $args['inbox_msg'] ) ) : ?>
 		<!-- Inbox notice section -->
