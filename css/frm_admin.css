@@ -1332,6 +1332,13 @@ body.frm-hidden-overflow {
 	padding: 9px 18px !important;
 }
 
+.frm-button-secondary.frm-small,
+.frm-button-primary.frm-small {
+    font-size: var(--text-xs) !important;
+    height: auto !important;
+    padding: var(--gap-2xs) 12px !important;
+}
+
 .frm-button-primary i:before {
 	color: #fff;
 }

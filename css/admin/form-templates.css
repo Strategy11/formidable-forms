@@ -170,9 +170,8 @@
 	text-overflow: ellipsis;
 }
 
-.frm-form-templates-item-favorite-button {
+a.frm-form-templates-item-favorite-button {
 	display: none;
-	cursor: pointer;
 	transition: color 200ms ease-out;
 	color: var(--grey-900);
 }
@@ -187,27 +186,7 @@
 }
 
 .frm-form-templates-custom-item-trash-button {
-	position: relative;
 	display: none;
-	border-radius: var(--small-radius);
-	cursor: pointer;
-}
-
-.frm-form-templates-custom-item-trash-button::before {
-	content: '';
-	position: absolute;
-	top: -4px;
-	right: -4px;
-	bottom: -4px;
-	left: -4px;
-	background-color: transparent;
-	border-radius: var(--small-radius);
-	transition: background-color 200ms ease-out;
-	z-index: 1;
-}
-
-.frm-form-templates-custom-item-trash-button:hover::before {
-	background-color: var(--primary-25);
 }
 
 .frm-form-templates-custom-item-trash-button .frmsvg {
@@ -218,7 +197,7 @@
 	z-index: 2;
 }
 
-.frm-form-templates-custom-item-trash-button .frmsvg:hover {
+.frm-form-templates-custom-item-trash-button:hover .frmsvg {
 	color: var(--primary-500);
 }
 
@@ -238,12 +217,7 @@
 	z-index: 2;
 }
 
-.frm-form-templates-item-buttons .button {
-	font-size: var(--text-xs);
-	padding: 4px 12px;
-}
-
-.frm-form-templates-item-description {
+p.frm-form-templates-item-description {
 	font-size: var(--text-xs);
 	margin: 0;
 	min-height: var(--h-md);
@@ -286,7 +260,7 @@
 	max-width: max-content;
 }
 
-#frm-form-templates-applications .frm-form-templates-item {
+.frm-form-templates-application-item {
 	cursor: pointer;
 }
 
@@ -349,14 +323,6 @@
 /* Code from email modal */
 #frm_code_from_email_options {
 	color: var(--primary-500);
-}
-
-/* Confirm modal */
-#frm_confirm_modal .frm-confirm-msg {
-	max-width: 268px;
-	font-size: var(--text-lg);
-	color: var(--grey-900);
-	font-weight: 500;
 }
 
 /**
