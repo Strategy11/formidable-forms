@@ -123,14 +123,17 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
+	 * @param array $form_id
 	 * @return array
 	 */
-	protected function get_search_query( &$join_form_in_query ) {
-		$form_id = $this->params['form'];
+	protected function get_search_query( &$join_form_in_query, $form_id = array() ) {
+		if ( empty( $form_id ) ) {
+			$form_id = $this->params['form'];
+		}
 		$s_query = array();
 
 		if ( $form_id ) {
-			$form_ids              = $this->get_form_ids( $form_id );
+			$form_ids              = is_array( $form_id ) ? $form_id : $this->get_form_ids( $form_id );
 			$s_query['it.form_id'] = count( $form_ids ) > 1 ? $form_ids : $form_ids[0];
 		} else {
 			$s_query[]          = array(
