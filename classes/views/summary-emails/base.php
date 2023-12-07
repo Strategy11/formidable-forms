@@ -42,8 +42,8 @@ $frm_settings = FrmAppHelper::get_settings();
 	</style>
 </head>
 
-<body style="background-color: #f2f4f7; color: #475467; font-family: 'Inter', Arial, sans-serif;">
-	<div style="background-color: #fff; max-width: 42.5em; border-radius: 1em; margin: 4.375em auto auto;">
+<body style="background-color: #f2f4f7; color: #475467; font-family: 'Inter', Arial, sans-serif; padding: 4.375em 0;">
+	<div style="background-color: #fff; max-width: 42.5em; border-radius: 1em; margin: auto;">
 		%%INNER_CONTENT%%
 
 		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style( '' ) ); ?>padding-top: 0;">
