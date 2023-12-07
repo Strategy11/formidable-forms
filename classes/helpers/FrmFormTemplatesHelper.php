@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since x.x
  */
-class FrmFormsTemplatesHelper {
+class FrmFormTemplatesHelper {
 
 	/**
 	 * Echo attributes for the link to view a template.
