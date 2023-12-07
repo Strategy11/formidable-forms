@@ -1775,22 +1775,6 @@ BEFORE_HTML;
 	 */
 	public static function available_count( $templates, $args ) {
 		_deprecated_function( __METHOD__, 'x.x' );
-
-		return array_reduce(
-			$templates,
-			function( $total, $template ) use ( $args ) {
-				if ( ! empty( $template['url'] ) ) {
-					return $total + 1;
-				}
-
-				$args['plan_required'] = self::get_plan_required( $template );
-				if ( self::plan_is_allowed( $args ) ) {
-					return $total + 1;
-				}
-
-				return $total;
-			},
-			0
-		);
+		return 0;
 	}
 }
