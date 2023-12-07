@@ -71,7 +71,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 						<span class="frm-upgrade-modal-plan-text"><?php echo esc_html( $plan ); ?></span>
 					</span>
 				<?php } ?>
-			</div>
+			</p>
 		</div>
 	</div>
 
