@@ -200,10 +200,10 @@ class FrmFormTemplatesController {
 		// Check if the current page is the form templates page.
 		if ( self::is_templates_page() ) {
 			// User and license-related variables.
-			$user         = wp_get_current_user();
-			$expired      = self::is_expired();
-			$upgrade_link = self::get_upgrade_link();
-			$renew_link   = self::get_renew_link();
+			$user            = wp_get_current_user();
+			$expired         = self::is_expired();
+			$upgrade_link    = self::get_upgrade_link();
+			$renew_link      = self::get_renew_link();
 			$published_forms = self::get_published_forms();
 
 			// Add `create-template` modal view.
@@ -416,8 +416,8 @@ class FrmFormTemplatesController {
 	private static function retrieve_and_set_templates() {
 		self::$templates = self::$form_template_api->get_api_info();
 
-		// Handle any errors returned from the API.
-		self::handle_api_errors();
+		self::$is_expired   = FrmAddonsController::is_license_expired();
+		self::$license_type = FrmAddonsController::license_type();
 	}
 
 	/**
@@ -538,31 +538,6 @@ class FrmFormTemplatesController {
 		$default_count = count( self::$favorite_templates['default'] );
 
 		return $custom_count + $default_count;
-	}
-
-	/**
-	 * Handles any errors from the API request.
-	 * Sets the `$is_expired` and `$license_type` properties.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function handle_api_errors() {
-		if ( ! isset( self::$templates['error'] ) ) {
-			return;
-		}
-
-		// Extract error message and modify the `utm_medium`.
-		$error = self::$templates['error']['message'];
-		$error = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-
-		// Determine if request expired and set the license type.
-		self::$is_expired   = 'expired' === self::$templates['error']['code'];
-		self::$license_type = isset( self::$templates['error']['type'] ) ? self::$templates['error']['type'] : '';
-
-		// Remove error from the templates.
-		unset( self::$templates['error'] );
 	}
 
 	/**

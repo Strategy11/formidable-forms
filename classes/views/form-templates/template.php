@@ -109,18 +109,7 @@ $attributes['class'] = implode( ' ', $class_names );
 
 		<div class="frm-form-templates-item-content">
 			<div class="frm-form-templates-item-buttons frm-fadein-down-short">
-				<?php
-				$view_demo_attributes          = array();
-				$view_demo_attributes['class'] = 'button button-secondary frm-button-secondary frm-small';
-				$view_demo_attributes['role'] = 'button';
-				if ( ! $is_custom_template ) {
-					$view_demo_attributes['href']   = esc_url( $template['link'] . '?utm_source=WordPress&utm_medium=form-templates&utm_campaign=liteplugin&utm_content=' . $template['slug'] );
-					$view_demo_attributes['target'] = '_blank';
-				} else {
-					$view_demo_attributes['href'] = esc_url( $template['link'] );
-				}
-				?>
-				<a <?php FrmAppHelper::array_to_html_params( $view_demo_attributes, true ); ?>>
+				<a <?php FrmFormTemplatesHelper::add_link_attributes( $template ); ?>>
 					<?php echo $is_custom_template ? esc_html__( 'Edit', 'formidable' ) : esc_html__( 'View Demo', 'formidable' ); ?>
 				</a>
 				<a href="<?php echo esc_url( $use_template_url ); ?>" class="button button-primary frm-button-primary frm-small frm-form-templates-use-template-button" role="button">
