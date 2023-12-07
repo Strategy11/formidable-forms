@@ -34,7 +34,7 @@ export function createApplicationTemplates( applications ) {
 		children: [
 			tag( 'h2', {
 				text: __( 'Application Templates' ),
-				className: 'frm-text-sm frm-font-medium frm-mb-sm'
+				className: 'frm-text-sm frm-mb-sm'
 			}),
 			tag( 'ul', {
 				className: `${PREFIX}-list ${PREFIX}-grid-layout`,

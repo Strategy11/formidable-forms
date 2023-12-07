@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 
 			<select name="frm-create-template-modal-forms-select" id="frm-create-template-modal-forms-select">
-				<option value=""><?php esc_html_e( 'Select form for a new template', 'formidable' ); ?></option>
+				<option value=""> </option>
 
 				<?php if ( empty( $published_forms ) ) { ?>
 					<option value="no-forms" disabled>
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="frm_form_field">
 			<label for="frm_create_template_name">
-				<?php esc_html_e( 'Template Name', 'formidable' ); ?>
+				<?php esc_html_e( 'Template name', 'formidable' ); ?>
 			</label>
 			<input type="text" name="frm_create_template_name" id="frm_create_template_name" disabled />
 		</div>

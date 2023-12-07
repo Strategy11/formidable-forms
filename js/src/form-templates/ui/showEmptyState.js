@@ -37,12 +37,12 @@ export function showSearchEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	emptyStateTitle.textContent = __( 'No results found', 'formidable' );
+	emptyStateTitle.textContent = __( 'No templates found', 'formidable' );
 	emptyStateText.textContent = __(
 		'Sorry, we didn\'t find any templates that match your criteria.',
 		'formidable'
 	);
-	emptyStateButton.textContent = __( 'Start from scratch', 'formidable' );
+	emptyStateButton.textContent = __( 'Start from Scratch', 'formidable' );
 
 	// Display the empty state
 	hideElements([ pageTitle, applicationTemplates ]);

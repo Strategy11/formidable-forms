@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $attributes          = array();
-$attributes['class'] = trim( 'frm-cta frm-flex frm-p-md ' . $class );
+$attributes['class'] = trim( 'frm-cta frm-flex frm-p-sm ' . $class );
 
 if ( $id ) {
 	$attributes['id'] = $id;
@@ -17,7 +17,7 @@ if ( $id ) {
 			<?php echo FrmAppHelper::kses( $title, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</h4>
 
-		<p class="frm-mb-0">
+		<p class="frm-m-0">
 			<?php echo FrmAppHelper::kses( $description, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</p>
 	</div>

@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, span, a, img } from '../shared';
+import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, a, img } from '../shared';
 
 /**
  * Create and return the Empty State HTML element.
@@ -27,11 +27,16 @@ export function createEmptyStateElement() {
 				src: `${PLUGIN_URL}/images/form-templates/empty-state.svg`,
 				alt: __( 'Empty State', 'formidable' )
 			}),
-			tag( 'h3', {
-				className: `${PREFIX}-title frm-text-lg frm-font-medium frm-mt-0`
-			}),
-			span({
-				className: `${PREFIX}-text frmcenter`
+			div({
+				className: 'frmcenter',
+				children: [
+					tag( 'h2', {
+						className: `${PREFIX}-title frm-mb-0`
+					}),
+					tag( 'p', {
+						className: `${PREFIX}-text frm-mb-0`
+					}),
+				]
 			}),
 			button
 		]

@@ -2130,9 +2130,9 @@ function createApplicationTemplates(applications) {
     className: _shared__WEBPACK_IMPORTED_MODULE_1__.HIDDEN_CLASS,
     children: [(0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('h2', {
       text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Application Templates'),
-      className: 'frm-text-sm frm-font-medium frm-mb-sm'
+      className: 'frm-text-sm frm-mb-sm'
     }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('ul', {
-      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list frm_grid_container"),
+      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-list ").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-grid-layout"),
       children: templateItems
     })]
   });
@@ -2151,7 +2151,7 @@ function createTemplateItem(template) {
     hasLiteThumbnail = template.hasLiteThumbnail;
   var thumbnailURL = hasLiteThumbnail ? "".concat(thumbnailBaseURL, "/").concat(key, ".png") : "".concat(thumbnailBaseURL, "/placeholder.svg");
   return (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('li', {
-    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item frm-card-item frm4"),
+    className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-application-item frm-card-item"),
     data: {
       href: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.applicationsUrl, "&triggerViewApplicationModal=1&template=").concat(key),
       'frm-search-text': name.toLowerCase()
@@ -2331,10 +2331,13 @@ function createEmptyStateElement() {
     children: [(0,_shared__WEBPACK_IMPORTED_MODULE_1__.img)({
       src: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PLUGIN_URL, "/images/form-templates/empty-state.svg"),
       alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Empty State', 'formidable')
-    }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('h3', {
-      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-title frm-text-lg frm-font-medium frm-mt-0")
-    }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.span)({
-      className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-text frmcenter")
+    }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.div)({
+      className: 'frmcenter',
+      children: [(0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('h2', {
+        className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-title frm-mb-0")
+      }), (0,_shared__WEBPACK_IMPORTED_MODULE_1__.tag)('p', {
+        className: "".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-text frm-mb-0")
+      })]
     }), button]
   });
 }
@@ -4660,9 +4663,9 @@ function showSearchEmptyState() {
   var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
     emptyStateTitle = _getElements2.emptyStateTitle,
     emptyStateText = _getElements2.emptyStateText;
-  emptyStateTitle.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No results found', 'formidable');
+  emptyStateTitle.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No templates found', 'formidable');
   emptyStateText.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Sorry, we didn\'t find any templates that match your criteria.', 'formidable');
-  emptyStateButton.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Start from scratch', 'formidable');
+  emptyStateButton.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Start from Scratch', 'formidable');
 
   // Display the empty state
   (0,_utils__WEBPACK_IMPORTED_MODULE_3__.hideElements)([pageTitle, applicationTemplates]);

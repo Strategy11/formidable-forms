@@ -1575,8 +1575,9 @@ input.frm_insert_in_template {
 	padding: 4px;
 }
 
+.frm-p-sm,
 .frm-p-4 {
-	padding: var(--gap-sm);
+	padding: var(--gap-sm) !important;
 }
 
 .frm-p-6,
@@ -9413,13 +9414,13 @@ Responsive Design
 .frm-scrollbar-wrapper {
 	display: flex;
 	flex-direction: column;
-	gap: var(--gap-md);
+	gap: var(--gap-sm);
 
 	overflow-y: auto; /* Enable scrolling */
 	-ms-overflow-style: none; /* For IE and Edge */
 	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
 	scrollbar-width: thin;
-	padding: calc(var(--gap-md) - var(--gap-2xs));
+	padding: var(--gap-md) var(--gap-sm);
 }
 
 .frm-scrollbar-wrapper:hover {
