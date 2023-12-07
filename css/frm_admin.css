@@ -2638,9 +2638,9 @@ body.frm-body-with-open-modal {
 }
 
 #frm_leave_email,
-#frm_code_from_email
-{
+#frm_code_from_email {
 	width: 480px;
+	max-width: 100%;
 }
 
 .control-section:hover .accordion-section-title {
