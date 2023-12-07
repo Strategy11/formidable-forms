@@ -16,9 +16,7 @@ export function maybeAddApplicationTemplates() {
 		return;
 	}
 
-	doJsonFetch( 'get_applications_data&view=templates' ).then( ( data ) => {
-		setupApplicationTemplates( data );
-	});
+	doJsonFetch( 'get_applications_data&view=templates' ).then( setupApplicationTemplates );
 }
 
 /**
