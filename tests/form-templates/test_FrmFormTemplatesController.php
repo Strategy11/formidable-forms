@@ -28,6 +28,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 */
 	public function test_render() {
 		// Prepare the necessary environment and data for the test.
+		$this->controller::init_template_resources();
 		$this->controller::set_form_templates_data();
 
 		// Assertions for verifying that necessary variables are set by the render method.
@@ -245,6 +246,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Case 2: On the form templates page.
 		$_GET['page'] = $this->controller::PAGE_SLUG;
+		$this->controller::init_template_resources();
 		$this->controller::set_form_templates_data();
 		$this->controller::enqueue_assets();
 		// Assert that the specific scripts and styles for the form templates page are enqueued.
