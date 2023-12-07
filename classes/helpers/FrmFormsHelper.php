@@ -1372,7 +1372,9 @@ BEFORE_HTML;
 
 		// Render the icon.
 		echo '<span class="frm-category-icon frm-icon-wrapper"';
-		echo $bg_color && $atts['bg'] ? ' style="background-color:' . esc_attr( $bg_color ) . '"' : '';
+		if ( $bg_color && $atts['bg'] ) {
+			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
+		}
 		echo '>';
 			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
