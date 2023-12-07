@@ -420,7 +420,7 @@ class FrmEmailSummaryHelper {
 	 * @return string
 	 */
 	public static function get_heading2_style() {
-		return 'font-size: 1.125em; line-height: 1.33em; margin: 0 0 1.33em;';
+		return 'font-size: 1.125em; line-height: 1.5em; margin: 0 0 1.33em;';
 	}
 
 	/**
