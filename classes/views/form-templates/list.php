@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <span id="frm-form-templates-page-title-divider" class="frm-form-templates-divider frm-mb-xs frm_hidden"></span>
 
-<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs">
+<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-form-templates-grid-layout">
 	<?php
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
@@ -25,12 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 // Show 'upgrade' banner for non-elite users.
-if ( 'elite' !== FrmAddonsController::license_type() && ! $expired ) {
+if ( ! in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && ! $expired ) {
 	FrmTipsHelper::show_admin_cta(
 		array(
 			'title'       => sprintf(
 				/* translators: %1$s: Open span tag, %2$s: Close span tag */
-				esc_html__( 'Get Super Powers with %1$s%2$s+ Pre-built Forms', 'formidable' ) . ' 🦸',
+				esc_html__( 'Get Super Powers with %1$s%2$s More Pre-built Forms', 'formidable' ) . ' 🦸',
 				'<span class="frm-form-templates-extra-templates-count">',
 				'</span>'
 			),

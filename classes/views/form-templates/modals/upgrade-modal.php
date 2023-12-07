@@ -44,6 +44,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			?>
 		</p>
 
+		<?php if ( 'free' === FrmAddonsController::license_type() ) { ?>
 		<div class="frm-cta frm-cta-green">
 			<span class="frm-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
 				<?php
@@ -57,6 +58,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			</span>
 			<span class="frm-banner-text"><?php esc_html_e( 'Discount is automatically applied at checkout.', 'formidable' ); ?></span>
 		</div>
+		<?php } ?>
 
 		<div id="frm-upgrade-modal-available-plans">
 			<p>
@@ -80,7 +82,13 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 			<?php esc_html_e( 'Close', 'formidable' ); ?>
 		</a>
 		<a id="frm-upgrade-modal-link" href="#" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
-			<?php esc_html_e( 'Upgrade to PRO', 'formidable' ); ?>
+			<?php
+			if ( 'free' === FrmAddonsController::license_type() ) {
+				esc_html_e( 'Upgrade to PRO', 'formidable' );
+			} else {
+				esc_html_e( 'Upgrade Now', 'formidable' );
+			}
+			?>
 		</a>
 	</div>
 </div>
