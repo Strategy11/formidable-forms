@@ -67,6 +67,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$_GET['page'] = $this->controller::PAGE_SLUG;
 
 		// Prepare the necessary environment and data for the test.
+		$this->controller::init_template_resources();
 		$this->controller::set_form_templates_data();
 
 		ob_start();
@@ -130,6 +131,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 */
 	public function test_fetch_and_format_custom_templates() {
 		// Prepare the necessary environment and data for the test.
+		$this->controller::init_template_resources();
 		$this->controller::set_form_templates_data();
 
 		// Get the custom templates.
@@ -147,6 +149,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_organize_and_set_categories() {
 		// Set up the testing environment by initializing template data and categorizing them.
 		$this->set_private_property( $this->controller, 'custom_templates', array() );
+		$this->controller::init_template_resources();
 		$this->controller::set_form_templates_data();
 		$this->run_private_method( array( $this->controller, 'organize_and_set_categories' ) );
 
