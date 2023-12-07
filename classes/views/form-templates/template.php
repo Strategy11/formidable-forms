@@ -132,6 +132,14 @@ $attributes['class'] = implode( ' ', $class_names );
 				<?php
 				if ( $template['description'] ) {
 					echo FrmAppHelper::kses( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				} elseif ( $is_custom_template ) {
+					echo '<i>';
+					printf(
+						/* translators: %s: date */
+						esc_html__( 'Created %s', 'formidable' ),
+						esc_html( date_i18n( get_option( 'date_format' ), strtotime( $template['created_at'] ) ) )
+					);
+					echo '</i>';
 				} else {
 					echo '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>';
 				}

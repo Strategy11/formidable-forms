@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
-					esc_html__( 'Get Access to %1$s%2$s+ Pre-built Forms', 'formidable' ),
+					esc_html__( 'Get Access to %1$s%2$s more Pre-built Forms', 'formidable' ),
 					'<span class="frm-form-templates-extra-templates-count">',
 					'</span>'
 				);
@@ -29,8 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-mb-2xs">
-		<p class="frm-m-0">
+	<div class="inside frm-px-md frm-mb-0 frm-py-0">
+		<p>
 			<?php esc_html_e( 'That template is not available on your plan. Please renew to unlock this and more awesome templates.', 'formidable' ); ?>
 		</p>
 	</div>

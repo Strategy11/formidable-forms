@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <span id="frm-form-templates-page-title-divider" class="frm-form-templates-divider frm-mb-xs frm_hidden"></span>
 
-<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-form-templates-grid-layout">
+<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs">
 	<?php
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
@@ -56,7 +56,7 @@ if ( $expired ) {
 }
 ?>
 
-<ul id="frm-form-templates-list" class="frm-form-templates-list frm-form-templates-grid-layout">
+<ul id="frm-form-templates-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs">
 	<?php
 	foreach ( $templates as $template ) {
 		require $view_path . 'template.php';
@@ -68,7 +68,7 @@ if ( $expired ) {
 	<h2 id="frm-form-templates-custom-list-title" class="frm-text-sm frm-mb-sm frm_hidden">
 		<?php esc_html_e( 'Custom', 'formidable' ); ?>
 	</h2>
-	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm-form-templates-grid-layout frm_hidden">
+	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs frm_hidden">
 		<?php
 		foreach ( $custom_templates as $template ) {
 			require $view_path . 'template.php';

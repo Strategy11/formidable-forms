@@ -32,7 +32,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-px-md frm-mt-xs frm-m-0">
+	<div class="inside frm-px-md frm-mt-xs frm-m-0">
 		<p>
 			<?php
 			printf(
