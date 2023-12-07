@@ -1739,6 +1739,22 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Outputs the appropriate button text in the publish box.
+	 *
+	 * @return void
+	 */
+	public static function publish_box_button_text() {
+		$is_new_template = FrmAppHelper::simple_get( 'new_template' );
+		$action          = FrmAppHelper::simple_get( 'frm_action' );
+
+		if ( ( 'edit' === $action || 'settings' === $action ) && $is_new_template ) {
+			esc_html_e( 'Save', 'formidable' );
+		} else {
+			esc_html_e( 'Update', 'formidable' );
+		}
+	}
+
+	/**
 	 * @since 4.02
 	 * @deprecated x.x
 	 */
