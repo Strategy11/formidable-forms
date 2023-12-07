@@ -429,7 +429,7 @@ class FrmEmailSummaryHelper {
 	 * @return string
 	 */
 	public static function get_button_style( $display_block = false ) {
-		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none;';
+		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none; padding-left: 1em; padding-right: 1em;';
 	}
 
 	/**
