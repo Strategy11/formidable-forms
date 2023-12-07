@@ -9425,6 +9425,7 @@ function frmAdminBuildJS() {
 				const spinner = span({ className: 'frm-wait frm_spinner' });
 				spinner.style.visibility = 'visible';
 				spinner.style.float      = 'none';
+				spinner.style.width      = 'unset';
 				emailWrapper.parentElement.insertBefore(
 					spinner,
 					emailWrapper.nextElementSibling
@@ -9453,7 +9454,7 @@ function frmAdminBuildJS() {
 			// Handle successful form submission.
 			// handle the Active Campaign form on the inbox page.
 			document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-				document.createTextNode( 'Thank you for signing up!' )
+				span({ text: __( 'Thank you for signing up!', 'formidable' ) })
 			);
 		});
 	}
