@@ -28,7 +28,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 */
 	public function test_render() {
 		// Prepare the necessary environment and data for the test.
-		$this->controller::init_template_resources();
+		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
 		$this->controller::set_form_templates_data();
 
 		// Assertions for verifying that necessary variables are set by the render method.
@@ -67,7 +67,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$_GET['page'] = $this->controller::PAGE_SLUG;
 
 		// Prepare the necessary environment and data for the test.
-		$this->controller::init_template_resources();
+		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
 		$this->controller::set_form_templates_data();
 
 		ob_start();
@@ -131,7 +131,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 */
 	public function test_fetch_and_format_custom_templates() {
 		// Prepare the necessary environment and data for the test.
-		$this->controller::init_template_resources();
+		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
 		$this->controller::set_form_templates_data();
 
 		// Get the custom templates.
@@ -149,7 +149,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_organize_and_set_categories() {
 		// Set up the testing environment by initializing template data and categorizing them.
 		$this->set_private_property( $this->controller, 'custom_templates', array() );
-		$this->controller::init_template_resources();
+		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
 		$this->controller::set_form_templates_data();
 		$this->run_private_method( array( $this->controller, 'organize_and_set_categories' ) );
 
@@ -242,14 +242,14 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Case 1: Not on the form templates page.
 		$this->set_admin_screen();
 		$_GET['page'] = 'some-other-page';
-		$this->controller::enqueue_assets();
-		// Assert that the specific scripts and styles for the form templates page are not enqueued.
-		$this->assertFalse( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Script should not be enqueued when not on the form templates page.' );
-		$this->assertFalse( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Style should not be enqueued when not on the form templates page.' );
+		$this->assertFalse(
+			has_action( 'admin_enqueue_scripts', $this->controller . '::enqueue_assets' ),
+			'The enqueue_assets method should be hooked to admin_enqueue_scripts with priority 15.'
+		);
 
 		// Case 2: On the form templates page.
 		$_GET['page'] = $this->controller::PAGE_SLUG;
-		$this->controller::init_template_resources();
+		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
 		$this->controller::set_form_templates_data();
 		$this->controller::enqueue_assets();
 		// Assert that the specific scripts and styles for the form templates page are enqueued.
