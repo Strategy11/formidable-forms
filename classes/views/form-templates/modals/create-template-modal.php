@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$form_description = FrmAppHelper::kses( $form->description, array( 'a', 'i', 'span', 'use', 'svg' ) );
 					?>
 					<option value="<?php echo esc_attr( $form->id ); ?>" data-name="<?php echo esc_attr( $form->name ); ?>" data-description="<?php echo esc_attr( $form_description ); ?>">
-						<?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?>
+						<?php echo esc_html( FrmFormsHelper::edit_form_link_label( $form ) ); ?>
 					</option>
 				<?php } ?>
 			</select>
