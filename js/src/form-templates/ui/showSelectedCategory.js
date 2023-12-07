@@ -114,9 +114,11 @@ export function showFavoriteTemplates() {
 		elementsToShow.push( customTemplatesSection );
 		elementsToShow.push( customTemplatesList );
 
-		0 === favoritesCount.default ?
-			hide( customTemplatesTitle ) :
+		if ( 0 === favoritesCount.default ) {
+			hide( customTemplatesTitle );
+		} else {
 			elementsToShow.push( customTemplatesTitle );
+		}
 	}
 
 	// Show elements that were selected to be shown
