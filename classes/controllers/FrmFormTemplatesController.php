@@ -250,25 +250,13 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function set_form_templates_data() {
-		// Instantiate the Form Template API class.
 		self::$form_template_api = new FrmFormTemplateApi();
 
-		// Initialize favorite templates.
 		self::init_favorite_templates();
-
-		// Fetch and format custom templates.
 		self::fetch_and_format_custom_templates();
-
-		// Retrieve and set the templates.
 		self::retrieve_and_set_templates();
-
-		// Organize and set categories.
 		self::organize_and_set_categories();
-
-		// Assign featured templates.
 		self::assign_featured_templates();
-
-		// Initialize essential resources.
 		self::init_template_resources();
 	}
 
