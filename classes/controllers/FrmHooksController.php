@@ -189,12 +189,14 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		// Form Templates Controller.
-		add_action( 'admin_init', 'FrmFormTemplatesController::set_form_templates_data' );
 		add_action( 'admin_menu', 'FrmFormTemplatesController::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
 		add_action( 'admin_footer', 'FrmFormTemplatesController::render_modal' );
 		add_filter( 'frm_form_nav_list', 'FrmFormTemplatesController::append_new_template_to_nav', 10, 2 );
-		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets', 15 );
-		add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::dequeue_scripts', 15 );
+		if ( FrmFormTemplatesController::is_templates_page() ) {
+			add_action( 'admin_init', 'FrmFormTemplatesController::set_form_templates_data' );
+			add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::enqueue_assets', 15 );
+			add_action( 'admin_enqueue_scripts', 'FrmFormTemplatesController::dequeue_scripts', 15 );
+		}
 
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );

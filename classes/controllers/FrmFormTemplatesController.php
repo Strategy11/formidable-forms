@@ -150,6 +150,8 @@ class FrmFormTemplatesController {
 			self::PAGE_SLUG,
 			array( __CLASS__, 'render' )
 		);
+
+		self::init_template_resources();
 	}
 
 	/**
@@ -257,7 +259,6 @@ class FrmFormTemplatesController {
 		self::retrieve_and_set_templates();
 		self::organize_and_set_categories();
 		self::assign_featured_templates();
-		self::init_template_resources();
 	}
 
 	/**
@@ -636,10 +637,6 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-		if ( ! self::is_templates_page() ) {
-			return;
-		}
-
 		$plugin_url      = FrmAppHelper::plugin_url();
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array(
@@ -709,10 +706,6 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	public static function dequeue_scripts() {
-		if ( ! self::is_templates_page() ) {
-			return;
-		}
-
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
