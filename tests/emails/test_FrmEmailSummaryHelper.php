@@ -70,7 +70,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$renewal_date = $this->run_private_method(
 			array( 'FrmEmailSummaryHelper', 'get_renewal_date' )
 		);
-		if ( gmdate( 'Y-m-d', strtotime( '+' . FrmEmailSummaryHelper::BEFORE_RENEWAL_PERIOD . ' days' ) ) < $renewal_date ) {
+		if ( FrmEmailSummaryHelper::get_date_from_today( '+' . FrmEmailSummaryHelper::BEFORE_RENEWAL_PERIOD . ' days' ) < $renewal_date ) {
 			$expected = array( 'monthly' );
 		} else {
 			$expected = array( 'yearly' );
@@ -79,23 +79,23 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$this->assertEquals( $expected, FrmEmailSummaryHelper::should_send_emails() );
 
 		// Yearly was sent less than 1 month ago.
-		$options['last_yearly'] = gmdate( 'Y-m-d', strtotime( '-29 days' ) );
+		$options['last_yearly'] = FrmEmailSummaryHelper::get_date_from_today( '-29 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
 		// Yearly was sent less than 1 month ago, and monthly was sent over 1 month ago.
-		$options['last_monthly'] = gmdate( 'Y-m-d', strtotime( '-30 days' ) );
+		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today() ( '-30 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
 		// Both yearly and monthly were sent over 1 month ago.
-		$options['last_monthly'] = gmdate( 'Y-m-d', strtotime( '-31 days' ) );
-		$options['last_yearly'] = gmdate( 'Y-m-d', strtotime( '-31 days' ) );
+		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today( '-31 days' );
+		$options['last_yearly'] = $options['last_monthly'];
 		$this->save_options( $options );
 		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
 
 		// Monthly was sent over 1 month ago, yearly was sent over 1 year ago.
-		$options['last_yearly'] = gmdate( 'Y-m-d', strtotime( '-365 days' ) );
+		$options['last_yearly'] = FrmEmailSummaryHelper::get_date_from_today( '-365 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'yearly' ), FrmEmailSummaryHelper::should_send_emails() );
 
@@ -104,30 +104,30 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 			'last_monthly' => '',
 			'last_yearly'  => '',
 			'last_license' => '',
-			'renewal_date' => gmdate( 'Y-m-d', strtotime( '+1 day' ) ),
+			'renewal_date' => FrmEmailSummaryHelper::get_date_from_today( '+1 day' ),
 		);
 		$this->save_options( $options );
 		$this->assertEquals( array( 'yearly' ), FrmEmailSummaryHelper::should_send_emails() );
 
 		// Nothing set, renewal date is coming in more than 45 days.
-		$options['renewal_date'] = gmdate( 'Y-m-d', strtotime( '+46 days' ) );
+		$options['renewal_date'] = FrmEmailSummaryHelper::get_date_from_today( '+46 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
 
 		// renewal date is coming, but monthly was sent less than 30 days ago.
-		$options['last_monthly'] = gmdate( 'Y-m-d', strtotime( '-29 days' ) );
-		$options['renewal_date'] = gmdate( 'Y-m-d', strtotime( '+1 day' ) );
+		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today( '-29 days' );
+		$options['renewal_date'] = FrmEmailSummaryHelper::get_date_from_today( '+1 day' );
 		$this->save_options( $options );
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
 		// renewal date is coming, but yearly was sent less than 1 year ago.
 		$options['last_monthly'] = '';
-		$options['last_yearly']  = gmdate( 'Y-m-d', strtotime( '-300 days' ) );
+		$options['last_yearly']  = FrmEmailSummaryHelper::get_date_from_today( '-300 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
 
 		// renewal date is coming in more than 45 days, but yearly was sent more than 1 year ago.
-		$options['last_yearly']  = gmdate( 'Y-m-d', strtotime( '-365 days' ) );
+		$options['last_yearly']  = FrmEmailSummaryHelper::get_date_from_today( '-365 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'yearly' ), FrmEmailSummaryHelper::should_send_emails() );
 	}
