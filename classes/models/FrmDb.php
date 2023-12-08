@@ -96,8 +96,14 @@ class FrmDb {
 	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
-		$key    = trim( $key );
-		$where .= ' ' . $key;
+		$key = trim( $key );
+
+		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
+			$k      = explode( ' ', $key );
+			$where .= ' CAST(' . reset( $k ) . ' as NCHAR) ' . str_replace( reset( $k ), '', $key );
+		} else {
+			$where .= ' ' . $key;
+		}
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
 		$lowercase_key = end( $lowercase_key );
