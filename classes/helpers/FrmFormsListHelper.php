@@ -79,14 +79,19 @@ class FrmFormsListHelper extends FrmListHelper {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
 			foreach ( (array) $search_terms as $term ) {
-				$s_query[] = array(
+				$query_part = array(
 					'or'               => true,
 					'name LIKE'        => $term,
 					'description LIKE' => $term,
-					'created_at LIKE'  => $term,
 					'form_key LIKE'    => $term,
 					'id'               => $term,
 				);
+
+				if ( preg_match( '/^[0-9\-: ]+$/', $term ) ) {
+					$query_part['created_at LIKE'] = $term;
+				}
+
+				$s_query[] = $query_part;
 				unset( $term );
 			}
 		}
