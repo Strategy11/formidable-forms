@@ -3032,7 +3032,7 @@ class FrmFormsController {
 	 */
 	public static function expired() {
 		_deprecated_function( __METHOD__, 'x.x' );
-		return FrmFormTemplatesController::is_expired();
+		return FrmAddonsController::is_license_expired();
 	}
 
 	/**
