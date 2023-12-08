@@ -774,9 +774,9 @@ legend.frm_hidden{
 	animation:         spin 2s linear infinite;
 }
 
-.with_frm_style .frm_button_submit ~ .frm_prev_page {
+.with_frm_style .frm_submit button.frm_button_submit ~ .frm_prev_page {
 	float: left;
-	margin-right: 0.6ch !important;
+	margin-right: 0.6ch;
 }
 
 <?php
