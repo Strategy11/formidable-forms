@@ -291,6 +291,9 @@ class FrmFormTemplatesController {
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
+		// Set up form templates environment, ensuring data is ready for processing.
+		self::set_form_templates_data();
+
 		// Get posted data.
 		$template_id        = FrmAppHelper::get_post_param( 'template_id', '', 'absint' );
 		$operation          = FrmAppHelper::get_post_param( 'operation', '', 'sanitize_text_field' );
@@ -326,6 +329,9 @@ class FrmFormTemplatesController {
 		// Check permission and nonce.
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Set up form templates environment, ensuring data is ready for processing.
+		self::set_form_templates_data();
 
 		// Get posted data.
 		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
