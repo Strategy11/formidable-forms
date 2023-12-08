@@ -9,67 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$is_featured_template = ! empty( $template['is_featured'] );
-$is_favorite_template = ! empty( $template['is_favorite'] );
-$is_custom_template   = ! empty( $template['is_custom'] );
-
-$plan_required = FrmFormsHelper::get_plan_required( $template );
-
-// Remove "Form Template" string from `$template['name']` and assign to a variable.
-$template_name = $is_custom_template ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
-
-$class_names      = array( 'frm-card-item' );
-$use_template_url = '#';
-
-/**
- * Set Attributes.
- */
-$attributes                    = array();
-$attributes['data-id']         = $template['id'];
-$attributes['frm-search-text'] = strtolower( $template_name );
-
-// Set 'data-slug' attribute.
-if ( ! empty( $template['slug'] ) ) {
-	$attributes['data-slug'] = $template['slug'];
-}
-
-// Set 'data-categories' attribute.
-if ( ! empty( $template['category_slugs'] ) ) {
-	$attributes['data-categories'] = implode( ',', $template['category_slugs'] );
-}
-
-if ( $is_featured_template ) {
-	$class_names[] = 'frm-form-templates-featured-item';
-}
-
-if ( $is_favorite_template ) {
-	$class_names[] = 'frm-form-templates-favorite-item';
-}
-
-if ( $is_custom_template ) {
-	$class_names[]     = 'frm-form-templates-custom-item';
-	$use_template_url = esc_url( $template['url'] );
-}
-
-if ( $plan_required ) {
-	$required_plan_slug = sanitize_title( $plan_required );
-	$class_names[]      = 'frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
-	// Set 'data-required-plan' attribute.
-	$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
-	if ( 'free' === $required_plan_slug ) {
-		// Set 'data-key' attribute for free templates.
-		$attributes['data-key'] = $template['key'];
-	}
-} else {
-	$link             = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
-	$use_template_url = esc_url( $link['url'] );
-}
-
-// Set 'class' attribute.
-$attributes['class'] = implode( ' ', $class_names );
+FrmFormTemplatesHelper::update_template_details( $template, $pricing, $license_type );
 ?>
-<li <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
-	<?php if ( $is_featured_template ) : ?>
+<li <?php FrmFormTemplatesHelper::add_template_attributes( $template, $expired ); ?>>
+	<?php if ( $template['is_featured'] ) : ?>
 		<div class="frm-form-templates-item-icon">
 			<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
 		</div>
@@ -78,18 +21,18 @@ $attributes['class'] = implode( ' ', $class_names );
 	<div class="frm-form-templates-item-body">
 		<h3 class="frm-form-templates-item-title frm-font-medium">
 			<div class="frm-form-templates-item-title-text">
-				<?php if ( $plan_required ) { ?>
+				<?php if ( $template['plan_required'] ) { ?>
 					<span class="frm-form-templates-item-lock-icon">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 					</span>
 				<?php } ?>
 
-				<span class="frm-form-template-name"><?php echo esc_html( $template_name ); ?></span>
+				<span class="frm-form-template-name"><?php echo esc_html( $template['name'] ); ?></span>
 			</div>
 
 			<div class="frm-flex-box frm-gap-xs frm-items-center frm-ml-auto">
 				<?php
-				if ( $is_custom_template ) {
+				if ( $template['is_custom'] ) {
 					$trash_links = FrmFormsHelper::delete_trash_links( $template['id'] )
 					?>
 					<a href="<?php echo esc_url( $trash_links['trash']['url'] ); ?>" class="frm-form-templates-custom-item-trash-button frm-flex-center frm-fadein" data-frmverify="<?php esc_attr_e( 'Do you want to move this form template to the trash?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" role="button" aria-label="<?php esc_attr_e( 'Move to the trash button', 'formidable' ); ?>">
@@ -100,7 +43,7 @@ $attributes['class'] = implode( ' ', $class_names );
 
 				<a href="#" class="frm-form-templates-item-favorite-button frm-fadein" role="button" aria-label="<?php esc_attr_e( 'Add to favorite button', 'formidable' ); ?>">
 					<?php
-					$favorite_button_icon = $is_favorite_template ? 'frm_heart_solid_icon' : 'frm_heart_icon';
+					$favorite_button_icon = $template['is_favorite'] ? 'frm_heart_solid_icon' : 'frm_heart_icon';
 					FrmAppHelper::icon_by_class( 'frmfont ' . $favorite_button_icon );
 					?>
 				</a>
@@ -109,10 +52,10 @@ $attributes['class'] = implode( ' ', $class_names );
 
 		<div class="frm-form-templates-item-content">
 			<div class="frm-form-templates-item-buttons frm-fadein-down-short">
-				<a <?php FrmFormTemplatesHelper::add_link_attributes( $template ); ?>>
-					<?php echo $is_custom_template ? esc_html__( 'Edit', 'formidable' ) : esc_html__( 'View Demo', 'formidable' ); ?>
+				<a <?php FrmFormTemplatesHelper::add_template_link_attributes( $template ); ?>>
+					<?php echo $template['is_custom'] ? esc_html__( 'Edit', 'formidable' ) : esc_html__( 'View Demo', 'formidable' ); ?>
 				</a>
-				<a href="<?php echo esc_url( $use_template_url ); ?>" class="button button-primary frm-button-primary frm-small frm-form-templates-use-template-button" role="button">
+				<a href="<?php echo esc_url( $template['use_template'] ); ?>" class="button button-primary frm-button-primary frm-small frm-form-templates-use-template-button" role="button">
 					<?php esc_html_e( 'Use Template', 'formidable' ); ?>
 				</a>
 			</div>
@@ -121,7 +64,7 @@ $attributes['class'] = implode( ' ', $class_names );
 				<?php
 				if ( $template['description'] ) {
 					echo FrmAppHelper::kses( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				} elseif ( $is_custom_template ) {
+				} elseif ( $template['is_custom'] ) {
 					echo '<i>';
 					printf(
 						/* translators: %s: date */
