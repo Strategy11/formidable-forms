@@ -100,7 +100,7 @@ class FrmDb {
 
 		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
 			$k      = explode( ' ', $key );
-			$where .= ' CAST(' . reset( $k ) . ' as NCHAR) ' . str_replace( reset( $k ), '', $key );
+			$where .= ' CAST(' . reset( $k ) . ' as CHAR) ' . str_replace( reset( $k ), '', $key );
 		} else {
 			$where .= ' ' . $key;
 		}
