@@ -84,7 +84,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
 		// Yearly was sent less than 1 month ago, and monthly was sent over 1 month ago.
-		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today() ( '-30 days' );
+		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today( '-30 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
