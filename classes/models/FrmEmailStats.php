@@ -62,6 +62,24 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	protected $prev_to_date;
 
 	/**
+	 * The number of days to get the stats data.
+	 *
+	 * @var int
+	 */
+	protected $date_range;
+
+	public function __construct() {
+		parent::__construct();
+
+		$date_minus = $this->date_range - 1;
+
+		$this->to_date        = FrmEmailSummaryHelper::get_date_from_today();
+		$this->from_date      = gmdate( 'Y-m-d', strtotime( $this->to_date . '-' . $date_minus . ' days' ) );
+		$this->prev_to_date   = gmdate( 'Y-m-d', strtotime( $this->from_date . '-1 day' ) );
+		$this->prev_from_date = gmdate( 'Y-m-d', strtotime( $this->prev_to_date . '-' . $date_minus . ' days' ) );
+	}
+
+	/**
 	 * @return mixed
 	 */
 	protected function get_inner_content() {

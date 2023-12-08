@@ -65,7 +65,7 @@ class FrmEmailSummaryHelper {
 		$options = get_option( self::$option_name );
 		if ( ! $options ) {
 			$default_options = array(
-				'last_' . self::MONTHLY => gmdate( 'Y-m-d', strtotime( '-' . self::DELAY_AFTER_UPGRADE . ' days' ) ), // Do not send email within 15 days after updating.
+				'last_' . self::MONTHLY => self::get_date_from_today( '-' . self::DELAY_AFTER_UPGRADE . ' days' ), // Do not send email within 15 days after updating.
 				'last_' . self::YEARLY  => '',
 				'renewal_date'          => '',
 			);
@@ -97,7 +97,7 @@ class FrmEmailSummaryHelper {
 		}
 
 		$emails       = array();
-		$current_date = gmdate( 'Y-m-d' );
+		$current_date = self::get_date_from_today();
 
 		// Check for monthly or yearly email.
 		$last_monthly = self::get_last_sent_date( 'monthly' );
@@ -181,8 +181,8 @@ class FrmEmailSummaryHelper {
 			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
 
 			// If the first form is more than 1 year in the past, set renewal date to the next 45 days.
-			if ( $renewal_date < gmdate( 'Y-m-d' ) ) {
-				$renewal_date = gmdate( 'Y-m-d', strtotime( '+' . self::BEFORE_RENEWAL_PERIOD . ' days' ) );
+			if ( $renewal_date < self::get_date_from_today() ) {
+				$renewal_date = self::get_date_from_today( '+' . self::BEFORE_RENEWAL_PERIOD . ' days' );
 			}
 
 			$options['renewal_date'] = $renewal_date;
@@ -252,7 +252,7 @@ class FrmEmailSummaryHelper {
 	public static function set_last_sent_date( $type, $value = null ) {
 		$options = self::get_options();
 
-		$options[ 'last_' . $type ] = null === $value ? gmdate( 'Y-m-d' ) : '';
+		$options[ 'last_' . $type ] = null === $value ? self::get_date_from_today() : '';
 		self::save_options( $options );
 	}
 
@@ -535,5 +535,18 @@ class FrmEmailSummaryHelper {
 		}
 
 		return $button_html;
+	}
+
+	/**
+	 * Gets the localized date with the date diff from today.
+	 *
+	 * @param string $date_diff Date diff string. By default, this is empty, the result will be the current date.
+	 * @return string
+	 */
+	public static function get_date_from_today( $date_diff = '' ) {
+		if ( ! $date_diff ) {
+			return FrmAppHelper::get_localized_date( 'Y-m-d', gmdate( 'Y-m-d H:i:s' ) );
+		}
+		return FrmAppHelper::get_localized_date( 'Y-m-d', gmdate( 'Y-m-d H:i:s', strtotime( $date_diff ) ) );
 	}
 }
