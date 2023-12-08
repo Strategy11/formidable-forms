@@ -104,12 +104,15 @@ class FrmTransLiteAction extends FrmFormAction {
 	 */
 	public function get_field_options( $form_id ) {
 
+		$form_ids = absint( $form_id );
+
 		/**
 		 * @since x.x
 		 *
+		 * @param mixed $form_ids
 		 * @param mixed $form_id
 		 */
-		$form_ids = apply_filters( 'frm_get_field_options_form_id', absint( $form_id ) );
+		$form_ids = apply_filters( 'frm_get_field_options_form_id', $form_ids, absint( $form_id ) );
 
 		$form_fields = FrmField::getAll(
 			array(
