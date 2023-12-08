@@ -28,6 +28,10 @@
 	overflow-y: initial;
 }
 
+#frm-form-templates-page .frm-scrollbar-wrapper {
+	padding: var(--gap-md) var(--gap-sm);
+}
+
 /* Search Box */
 #frm-form-templates-page .frm-search {
 	float: none;

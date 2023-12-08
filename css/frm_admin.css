@@ -8306,6 +8306,39 @@ button.frm_choose_image_box,
 	background: transparent;
 }
 
+.frm-scrollbar-wrapper {
+	overflow-y: auto; /* Enable scrolling */
+	-ms-overflow-style: none; /* For IE and Edge */
+	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
+	scrollbar-width: thin;
+}
+
+.frm-scrollbar-wrapper:hover {
+	scrollbar-color: var(--grey-300) var(--sidebar-color); /* Firefox Scrollbar - Show on hover */
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar {
+	width: 3px;
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-track {
+	background: var(--sidebar-color);
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-thumb {
+	background: transparent;
+	border-radius: 100vw;
+}
+
+.frm-scrollbar-wrapper:hover::-webkit-scrollbar-thumb {
+	background: var(--grey-300); /* Show scrollbar on hover */
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
+	background: var(--grey-400); /* Show scrollbar on hover */
+}
+/* End scrollbar */
+
 /* RTL */
 .rtl h3 {
 	font-weight: inherit !important;
@@ -9410,45 +9443,6 @@ Responsive Design
 	background: #FFFFFF;
 }
 /* End card layout */
-
-/* Start scrollbar */
-.frm-scrollbar-wrapper {
-	display: flex;
-	flex-direction: column;
-	gap: var(--gap-sm);
-
-	overflow-y: auto; /* Enable scrolling */
-	-ms-overflow-style: none; /* For IE and Edge */
-	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
-	scrollbar-width: thin;
-	padding: var(--gap-md) var(--gap-sm);
-}
-
-.frm-scrollbar-wrapper:hover {
-	scrollbar-color: var(--grey-300) var(--sidebar-color); /* Firefox Scrollbar - Show on hover */
-}
-
-.frm-scrollbar-wrapper::-webkit-scrollbar {
-	width: 3px;
-}
-
-.frm-scrollbar-wrapper::-webkit-scrollbar-track {
-	background: var(--sidebar-color);
-}
-
-.frm-scrollbar-wrapper::-webkit-scrollbar-thumb {
-	background: transparent;
-	border-radius: 100vw;
-}
-
-.frm-scrollbar-wrapper:hover::-webkit-scrollbar-thumb {
-	background: var(--grey-300); /* Show scrollbar on hover */
-}
-
-.frm-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
-	background: var(--grey-400); /* Show scrollbar on hover */
-}
-/* End scrollbar */
 
 /* Pirate forms importer */
 #welcome-panel:has(#frm_form_pf_importer) {

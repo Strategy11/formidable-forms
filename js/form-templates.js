@@ -1996,11 +1996,7 @@ var lastPromise = Promise.resolve();
  * @return {Promise<any>} The new last promise in the queue.
  */
 var addToRequestQueue = function addToRequestQueue(task) {
-  return lastPromise = lastPromise.then(function () {
-    return task();
-  }).catch(function () {
-    return task();
-  });
+  return lastPromise = lastPromise.then(task).catch(task);
 };
 
 /***/ }),
@@ -2075,7 +2071,8 @@ var hide = function hide(element) {
  * @return {boolean} Returns true if the element is visible, otherwise false.
  */
 var isVisible = function isVisible(element) {
-  return !(element !== null && element !== void 0 && element.classList.contains(HIDDEN_CLASS));
+  var styles = window.getComputedStyle(element);
+  return styles.getPropertyValue('display') !== 'none';
 };
 
 /***/ }),
@@ -3804,6 +3801,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CURRENT_CLASS: () => (/* binding */ CURRENT_CLASS),
 /* harmony export */   FEATURED_TEMPLATES_KEYS: () => (/* binding */ FEATURED_TEMPLATES_KEYS),
 /* harmony export */   HIDDEN_CLASS: () => (/* binding */ HIDDEN_CLASS),
+/* harmony export */   HIDE_JS_CLASS: () => (/* binding */ HIDE_JS_CLASS),
 /* harmony export */   MODAL_SIZES: () => (/* binding */ MODAL_SIZES),
 /* harmony export */   PLANS: () => (/* binding */ PLANS),
 /* harmony export */   PLUGIN_URL: () => (/* binding */ PLUGIN_URL),
@@ -3826,6 +3824,7 @@ var _window$frmFormTempla = window.frmFormTemplatesVars,
 
 var PREFIX = 'frm-form-templates';
 var HIDDEN_CLASS = 'frm_hidden';
+var HIDE_JS_CLASS = 'frm-hide-js';
 var CURRENT_CLASS = 'frm-current';
 var VIEW_SLUGS = {
   ALL_TEMPLATES: 'all-templates',
@@ -3903,6 +3902,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CURRENT_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.CURRENT_CLASS),
 /* harmony export */   FEATURED_TEMPLATES_KEYS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.FEATURED_TEMPLATES_KEYS),
 /* harmony export */   HIDDEN_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.HIDDEN_CLASS),
+/* harmony export */   HIDE_JS_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS),
 /* harmony export */   MODAL_SIZES: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.MODAL_SIZES),
 /* harmony export */   PLANS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.PLANS),
 /* harmony export */   PLUGIN_URL: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.PLUGIN_URL),
@@ -4085,9 +4085,7 @@ function maybeAddApplicationTemplates() {
   if (!_shared__WEBPACK_IMPORTED_MODULE_2__.canAccessApplicationDashboard) {
     return;
   }
-  (0,_shared__WEBPACK_IMPORTED_MODULE_2__.doJsonFetch)('get_applications_data&view=templates').then(function (data) {
-    setupApplicationTemplates(data);
-  });
+  (0,_shared__WEBPACK_IMPORTED_MODULE_2__.doJsonFetch)('get_applications_data&view=templates').then(setupApplicationTemplates);
 }
 
 /**
@@ -4587,6 +4585,8 @@ function setupInitialView() {
   });
 
   // Smoothly display the updated UI elements
+  bodyContent.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_1__.HIDE_JS_CLASS);
+  sidebar.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_1__.HIDE_JS_CLASS);
   (0,_utils__WEBPACK_IMPORTED_MODULE_2__.fadeIn)(bodyContent);
   (0,_utils__WEBPACK_IMPORTED_MODULE_2__.show)(sidebar);
 
@@ -5206,7 +5206,11 @@ function showFavoriteTemplates() {
     (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hideElements)(nonFavCustomTemplates);
     elementsToShow.push(customTemplatesSection);
     elementsToShow.push(customTemplatesList);
-    0 === favoritesCount.default ? (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(customTemplatesTitle) : elementsToShow.push(customTemplatesTitle);
+    if (0 === favoritesCount.default) {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(customTemplatesTitle);
+    } else {
+      elementsToShow.push(customTemplatesTitle);
+    }
   }
 
   // Show elements that were selected to be shown

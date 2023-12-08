@@ -40,5 +40,7 @@ export const hide = element => element?.classList.add( HIDDEN_CLASS );
  * @param {HTMLElement} element The HTML element to check for visibility.
  * @return {boolean} Returns true if the element is visible, otherwise false.
  */
-export const isVisible = element =>
-	! element?.classList.contains( HIDDEN_CLASS );
+export const isVisible = element => {
+	const styles = window.getComputedStyle(element);
+    return styles.getPropertyValue('display') !== 'none';
+};

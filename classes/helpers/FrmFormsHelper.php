@@ -1360,7 +1360,7 @@ BEFORE_HTML;
 		$icon = $icons[''];
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
-			$icon = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
+			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
 		} elseif ( ! empty( $categories ) ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon = reset( $icons );

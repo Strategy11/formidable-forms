@@ -133,6 +133,22 @@ class FrmFormTemplatesController {
 	private static $renew_link = '';
 
 	/**
+	 * Initialize hooks for template page only.
+	 *
+	 * @since x.x
+	 */
+	public static function load_admin_hooks() {
+		add_action( 'admin_menu', __CLASS__ . '::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
+		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
+		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
+
+		if ( self::is_templates_page() ) {
+			add_action( 'admin_init', __CLASS__ . '::set_form_templates_data' );
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+		}
+	}
+
+	/**
 	 * Add Form Templates menu item to sidebar and define index page.
 	 *
 	 * @since x.x
@@ -645,6 +661,8 @@ class FrmFormTemplatesController {
 		 * @since x.x
 		 */
 		do_action( 'frm_form_templates_enqueue_assets' );
+
+		self::dequeue_scripts();
 	}
 
 	/**
@@ -686,7 +704,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @return void
 	 */
-	public static function dequeue_scripts() {
+	private static function dequeue_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}

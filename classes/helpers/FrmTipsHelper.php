@@ -442,13 +442,13 @@ class FrmTipsHelper {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		// Extract the remaining variables.
-		$title       = $args['title'];
-		$description = $args['description'];
-		$link_text   = $args['link_text'];
-		$link_url    = $args['link_url'];
-		$class       = $args['class'];
-		$id          = $args['id'];
+		$attribute = array(
+			'class' => trim( 'frm-cta frm-flex frm-p-sm ' . $args['class'] ),
+		);
+
+		if ( $args['id'] ) {
+			$attributes['id'] = $args['id'];
+		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
 	}

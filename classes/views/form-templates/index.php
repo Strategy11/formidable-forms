@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="columns-2">
 			<div id="frm-form-templates-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
-				<div class="frm-scrollbar-wrapper">
+				<div class="frm-scrollbar-wrapper frm-flex-col frm-gap-sm">
 					<?php
 					// Search box.
 					FrmAppHelper::show_search_box(
