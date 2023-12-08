@@ -13,9 +13,7 @@ if ( isset( $template['template-type'] ) && 'full-width' === $template['template
 	<div class="<?php echo esc_attr( $classname ); ?>">
 
 		<?php foreach ( $template['counters'] as $counter ) : ?>
-			<?php $counter_status = isset( $counter['disabled'] ) && true === $counter['disabled'] ? 'frm-disabled frm-has-tooltip' : ''; ?>
-			<?php $tooltip = isset( $counter['tooltip'] ) ? $counter['tooltip'] : ''; ?>
-			<div title="<?php echo esc_attr( $tooltip ); ?>" class="frm-counter-card frm-dashboard-widget frm-animate <?php echo esc_attr( $counter_status ); ?>">
+			<div class="frm-counter-card frm-dashboard-widget frm-animate">
 				<h4><?php echo esc_html( $counter['heading'] ); ?></h4>
 				<?php if ( isset( $counter['cta'] ) && isset( $counter['cta']['display'] ) && true === $counter['cta']['display'] ) : ?>
 					<a href="<?php echo esc_url( $counter['cta']['link'] ); ?>"><?php echo esc_attr( $counter['cta']['title'] ); ?></a>

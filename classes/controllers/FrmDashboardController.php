@@ -107,37 +107,32 @@ class FrmDashboardController {
 		$add_entry_cta_link = false !== $latest_available_form && isset( $latest_available_form->id ) ? admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ) : '';
 
 		$lite_counters = array(
-			array(
-				'heading' => esc_html__( 'Total Forms', 'formidable' ),
-				'type'    => 'default',
-				'counter' => $counters_value['forms'],
-			),
-			array(
-				'heading' => esc_html__( 'Total Entries', 'formidable' ),
-				'type'    => 'default',
-				'cta'     => array(
-					'display' => self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
-					'title'   => esc_html__( 'Add Entry', 'formidable' ),
-					'link'    => $add_entry_cta_link,
+			self::view_args_build_counter( esc_html__( 'Total Forms', 'formidable' ), array(), $counters_value['forms'] ),
+			self::view_args_build_counter(
+				esc_html__( 'Total Entries', 'formidable' ),
+				self::view_args_build_cta(
+					esc_html__( 'Add Entry', 'formidable' ),
+					$add_entry_cta_link,
+					self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
 				),
-				'counter' => $counters_value['entries'],
+				$counters_value['entries'],
 			),
 		);
 
 		$pro_counters_placeholder = array(
-			array(
-				'heading'  => esc_html__( 'All Views', 'formidable' ),
-				'counter'  => 0,
-				'type'     => 'default',
-				'disabled' => true,
-				'tooltip'  => esc_html__( 'Views are available with a PRO plan only', 'formidable' ),
+			self::view_args_build_counter(
+				esc_html__( 'All Views', 'formidable' ),
+				self::view_args_build_cta(
+					esc_html__( 'Learn More', 'formidable' ),
+					admin_url( 'admin.php?page=formidable-views' )
+				),
 			),
-			array(
-				'heading'  => esc_html__( 'Installed Apps', 'formidable' ),
-				'counter'  => 0,
-				'type'     => 'default',
-				'disabled' => true,
-				'tooltip'  => esc_html__( 'Aplications are available with a PRO plan only', 'formidable' ),
+			self::view_args_build_counter(
+				esc_html__( 'Installed Apps', 'formidable' ),
+				self::view_args_build_cta(
+					esc_html__( 'Learn More', 'formidable' ),
+					admin_url( 'admin.php?page=formidable-applications' )
+				),
 			),
 		);
 
@@ -148,6 +143,46 @@ class FrmDashboardController {
 
 		return array_merge( $lite_counters, $pro_counters_placeholder );
 
+	}
+
+	/**
+	 * Build view args for counter widget.
+	 *
+	 * @param string $heading,
+	 * @param array $cta,
+	 * @param string $type
+	 *
+	 * @return array
+	 */
+	public static function view_args_build_counter( $heading, $cta = array(), $value = 0, $type = 'default' ) {
+
+		$counter_args = array(
+			'heading' => $heading,
+			'counter' => $value,
+			'type'    => 'default',
+		);
+		if ( ! empty( $cta ) ) {
+			$counter_args['cta'] = $cta;
+		}
+
+		return $counter_args;
+	}
+
+	/**
+	 * Build view args for cta.
+	 *
+	 * @param string $title,
+	 * @param string $link,
+	 * @param boolean $type
+	 *
+	 * @return array
+	 */
+	public static function view_args_build_cta( $title, $link = '#', $display = true ) {
+		return array(
+			'title'   => $title,
+			'link'    => $link,
+			'display' => $display,
+		);
 	}
 
 	/**
@@ -402,7 +437,7 @@ class FrmDashboardController {
 	}
 
 	/**
-	 * Init the view args for Inbox widged.
+	 * Init the view args for Inbox widget.
 	 *
 	 * @return array
 	 */
