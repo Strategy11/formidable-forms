@@ -283,15 +283,19 @@ class FrmEmailSummaryHelper {
 			'total' => array(),
 		);
 
-		$payments = FrmDb::get_results(
-			'frm_payments',
-			array(
-				'created_at >' => $from_date,
-				'created_at <' => $to_date . ' 23:59:59',
-				'status'       => 'complete',
-			),
-			'action_id,amount'
+		$where = array(
+			'created_at >' => $from_date,
+			'created_at <' => $to_date . ' 23:59:59',
+			'status'       => 'complete',
 		);
+
+		// Do not collect test payment, this is a new feature of Stripe lite.
+		$trans_db = new FrmTransLiteDb();
+		if ( 6 <= get_option( $trans_db->db_opt_name ) ) {
+			$where['test'] = array( null, 0 );
+		}
+
+		$payments = FrmDb::get_results( 'frm_payments', $where, 'action_id,amount' );
 
 		if ( ! $payments ) {
 			return $data;
