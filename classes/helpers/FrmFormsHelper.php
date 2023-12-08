@@ -426,6 +426,7 @@ class FrmFormsHelper {
 <div class="frm_submit">
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+<span class="frm-space">&nbsp;</span>
 $draft_link
 $start_over
 </div>
