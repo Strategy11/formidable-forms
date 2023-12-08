@@ -735,4 +735,20 @@ class FrmDb {
 			wp_cache_delete( 'cached_keys', $group );
 		}
 	}
+
+	/**
+	 * Checks if a DB column exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $table Table name without `$wpdb->prefix`.
+	 * @param string $column Column name.
+	 * @return bool
+	 */
+	public static function db_column_exists( $table, $column ) {
+		global $wpdb;
+
+		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . $table . ' LIKE %s', $column ) );
+		return ! empty( $result );
+	}
 }

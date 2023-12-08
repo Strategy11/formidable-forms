@@ -286,13 +286,19 @@ class FrmEmailSummaryHelper {
 		$where = array(
 			'created_at >' => $from_date,
 			'created_at <' => $to_date . ' 23:59:59',
-			'status'       => 'complete',
 		);
 
 		// Do not collect test payment, this is a new feature of Stripe lite.
 		$trans_db = new FrmTransLiteDb();
 		if ( 6 <= get_option( $trans_db->db_opt_name ) ) {
 			$where['test'] = array( null, 0 );
+		}
+
+		// If only Paypal is used, and the DB isn't migrated (to version 4), use `completed` column instead of `status`.
+		if ( 4 > get_option( $trans_db->db_opt_name ) && FrmDb::db_column_exists( 'frm_payments', 'completed' ) ) {
+			$where['completed'] = 1;
+		} else {
+			$where['status'] = 'complete';
 		}
 
 		$payments = FrmDb::get_results( 'frm_payments', $where, 'action_id,amount' );
