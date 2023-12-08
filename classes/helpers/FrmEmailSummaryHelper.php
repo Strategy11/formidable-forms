@@ -443,6 +443,21 @@ class FrmEmailSummaryHelper {
 	}
 
 	/**
+	 * Shows the section heading with icon.
+	 *
+	 * @param string $icon Icon file name, without file path and extension. Use .png image.
+	 * @param string $text Heading text.
+	 */
+	public static function section_heading_with_icon( $icon, $text ) {
+		?>
+		<h2 style="<?php echo esc_attr( self::get_heading2_style() ); ?>">
+			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" />
+			<span style="display: inline-block; vertical-align: text-bottom;"><?php echo esc_html( $text ); ?></span>
+		</h2>
+		<?php
+	}
+
+	/**
 	 * Gets Formidable URL with tracking params.
 	 *
 	 * @param string $url  The URL.

@@ -25,10 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Overall section -->
 	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-		<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
-			<img style="vertical-align: bottom; margin-right: 4px;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/chart.png' ); ?>" alt="chart" />
-			<?php esc_html_e( 'Statistics', 'formidable' ); ?>
-		</h2>
+        <?php FrmEmailSummaryHelper::section_heading_with_icon( 'chart', __( 'Statistics', 'formidable' ) ); ?>
 
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr>
@@ -61,10 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( $args['top_forms'] ) : ?>
 		<!-- Top forms section -->
 		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
-				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/trophy.png' ); ?>" alt="trophy" />
-				<?php echo esc_html( $args['top_forms_label'] ); ?>
-			</h2>
+			<?php FrmEmailSummaryHelper::section_heading_with_icon( 'trophy', $args['top_forms_label'] ); ?>
 
 			<table width="100%" cellspacing="0" cellpadding="0">
 				<tr style="font-size: 0.75em; font-weight: 500; line-height: 2; text-transform: uppercase;">
@@ -89,10 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! empty( $args['inbox_msg'] ) ) : ?>
 		<!-- Inbox notice section -->
 		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
-				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/speaker.png' ); ?>" alt="speaker" />
-				<?php echo esc_html( $args['inbox_msg']['subject'] ); ?>
-			</h2>
+			<?php FrmEmailSummaryHelper::section_heading_with_icon( 'speaker', $args['inbox_msg']['subject'] ); ?>
 
 			<div style="line-height: 1.5;">
 				<?php echo wp_kses_post( wpautop( $args['inbox_msg']['message'] ) ); ?>
@@ -108,10 +99,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( ! empty( $args['out_of_date_plugins'] ) ) : ?>
 		<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-			<h2 style="<?php echo esc_attr( FrmEmailSummaryHelper::get_heading2_style() ); ?>">
-				<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/notice.png' ); ?>" alt="speaker" />
-				<?php esc_html_e( 'Out of date plugins', 'formidable' ); ?>
-			</h2>
+			<?php FrmEmailSummaryHelper::section_heading_with_icon( 'notice', __( 'Out of date plugins', 'formidable' ) ); ?>
 
 			<p style="line-height: 1.5;">
 				<?php
