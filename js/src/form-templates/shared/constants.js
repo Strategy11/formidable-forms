@@ -3,6 +3,7 @@ export const { FEATURED_TEMPLATES_KEYS, upgradeLink } = window.frmFormTemplatesV
 
 export const PREFIX = 'frm-form-templates';
 export const HIDDEN_CLASS = 'frm_hidden';
+export const HIDE_JS_CLASS = 'frm-hide-js';
 export const CURRENT_CLASS = 'frm-current';
 
 export const VIEW_SLUGS = {

@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState, hasQueryParam } from '../shared';
+import { HIDE_JS_CLASS, getAppState, hasQueryParam } from '../shared';
 import { show, hide, hideElements, fadeIn } from '../utils';
 import { showHeaderCancelButton } from './';
 
@@ -47,6 +47,8 @@ function setupInitialView() {
 	extraTemplateCountElements.forEach( element => element.textContent = extraTemplatesCount );
 
 	// Smoothly display the updated UI elements
+	bodyContent.classList.remove( HIDE_JS_CLASS );
+	sidebar.classList.remove( HIDE_JS_CLASS );
 	fadeIn( bodyContent );
 	show( sidebar );
 

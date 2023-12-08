@@ -1668,7 +1668,8 @@ input.frm_insert_in_template {
 	display: flex;
 }
 
-.frm_hidden {
+.frm_hidden,
+.js .frm-hide-js {
 	display: none;
 }
 

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<div class="columns-2">
-			<div id="frm-form-templates-sidebar" class="frm-right-panel frm-flex-col frm_hidden">
+			<div id="frm-form-templates-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
 				<div class="frm-scrollbar-wrapper">
 					<?php
 					// Search box.
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 
-			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-md frm_hidden">
+			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-md frm-hide-js">
 				<div class="frm-form-templates-grid-layout">
 					<div id="frm-form-templates-create-form" class="frm-flex-box frm-items-center">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
