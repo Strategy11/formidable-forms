@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<!-- Overall section -->
 	<div style="<?php echo esc_attr( FrmEmailSummaryHelper::get_section_style() ); ?>">
-        <?php FrmEmailSummaryHelper::section_heading_with_icon( 'chart', __( 'Statistics', 'formidable' ) ); ?>
+		<?php FrmEmailSummaryHelper::section_heading_with_icon( 'chart', __( 'Statistics', 'formidable' ) ); ?>
 
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr>
