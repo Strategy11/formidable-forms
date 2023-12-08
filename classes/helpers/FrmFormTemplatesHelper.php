@@ -36,8 +36,9 @@ class FrmFormTemplatesHelper {
 		$template['use_template'] = '#';
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
-		} else if ( ! $template['plan_required'] ) {
+		} elseif ( ! $template['plan_required'] ) {
 			$link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
+
 			$template['use_template'] = esc_url( $link['url'] );
 		}
 	}
@@ -80,7 +81,7 @@ class FrmFormTemplatesHelper {
 
 		// Handle attributes related to plan requirements.
 		if ( $template['plan_required'] ) {
-			$required_plan_slug = sanitize_title( $template['plan_required'] );
+			$required_plan_slug               = sanitize_title( $template['plan_required'] );
 			$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
 			if ( 'free' === $required_plan_slug ) {
 				$attributes['data-key'] = $template['key'];
@@ -113,6 +114,7 @@ class FrmFormTemplatesHelper {
 				'medium'  => 'form-templates',
 				'content' => $template['slug'],
 			);
+
 			$attributes['href']   = FrmAppHelper::admin_upgrade_link( $utm, $attributes['href'] );
 			$attributes['target'] = '_blank';
 		}

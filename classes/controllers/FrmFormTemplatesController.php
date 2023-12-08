@@ -359,14 +359,7 @@ class FrmFormTemplatesController {
 				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
 		} else {
-			global $wpdb;
-
-			$new_values    = FrmFormsController::get_modal_values();
-			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
-
-			if ( $query_results ) {
-				FrmForm::clear_form_cache();
-			}
+			FrmForm::update( $new_form_id, FrmFormsController::get_modal_values() );
 
 			// Send a success response with redirect URL.
 			$response = array(
@@ -418,7 +411,7 @@ class FrmFormTemplatesController {
 			);
 
 			// Mark the template as favorite if it's in the favorite templates list.
-			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['custom'] );
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['custom'], true );
 
 			// Add the formatted template to the custom templates list.
 			array_unshift( self::$custom_templates, $template );
@@ -482,9 +475,9 @@ class FrmFormTemplatesController {
 			}
 
 			// Mark the template as favorite if it's in the favorite templates list.
-			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'] );
+			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'], true );
 		}
-		unset( $template ); // Unset the reference `$template` variable
+		unset( $template ); // Unset the reference `$template` variable.
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
@@ -503,7 +496,7 @@ class FrmFormTemplatesController {
 				'name'  => __( 'Favorites', 'formidable' ),
 				'count' => self::get_favorite_templates_count(),
 			),
-			'custom' => array(
+			'custom'    => array(
 				'name'  => __( 'Custom', 'formidable' ),
 				'count' => count( self::$custom_templates ),
 			),
@@ -512,17 +505,18 @@ class FrmFormTemplatesController {
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
 				'name'  => __( 'Available Templates', 'formidable' ),
-				'count' => 0, // Assigned via JavaScript
+				'count' => 0, // Assigned via JavaScript.
 			);
 		}
-		$special_categories['all-templates'] = array(
+		$special_categories['all-templates']  = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => count( self::$templates ),
 		);
 		$special_categories['free-templates'] = array(
 			'name'  => __( 'Free Templates', 'formidable' ),
-			'count' => 0, // Assigned via JavaScript
+			'count' => 0, // Assigned via JavaScript.
 		);
+
 		self::$categories = array_merge(
 			$special_categories,
 			self::$categories
@@ -543,7 +537,7 @@ class FrmFormTemplatesController {
 		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
 			if ( isset( self::$templates[ $key ] ) ) {
 				self::$templates[ $key ]['is_featured'] = true;
-				self::$featured_templates[] = self::$templates[ $key ];
+				self::$featured_templates[]             = self::$templates[ $key ];
 			}
 		}
 	}
@@ -682,7 +676,7 @@ class FrmFormTemplatesController {
 				'custom'  => count( self::$favorite_templates['custom'] ),
 			),
 			'customCount'             => count( self::$custom_templates ),
-			'upgradeLink'           => self::$upgrade_link,
+			'upgradeLink'             => self::$upgrade_link,
 		);
 
 		/**
