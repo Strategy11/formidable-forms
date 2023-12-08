@@ -774,17 +774,13 @@ legend.frm_hidden{
 	animation:         spin 2s linear infinite;
 }
 
-.with_frm_style .frm_submit button.frm_button_submit + span.frm-space {
-	display: none;
+.with_frm_style .frm_submit.frm_flex {
+	align-items: center;
+	gap: 0.6ch;
 }
 
-.with_frm_style .frm_submit button.frm_button_submit ~ .frm_prev_page {
-	float: left;
-}
-
-.with_frm_style .frm_submit button.frm_button_submit ~ .frm_prev_page + span.frm-space {
-	display: inline;
-	float: left;
+.with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
+	order: -1;
 }
 
 <?php

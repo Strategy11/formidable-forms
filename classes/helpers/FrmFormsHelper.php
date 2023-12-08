@@ -423,10 +423,9 @@ class FrmFormsHelper {
 			$draft_link   = self::get_draft_link();
 			$start_over   = self::get_start_over_shortcode();
 			$default_html = <<<SUBMIT_HTML
-<div class="frm_submit">
+<div class="frm_submit frm_flex">
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
-<span class="frm-space">&nbsp;</span>
 $draft_link
 $start_over
 </div>
