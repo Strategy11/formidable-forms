@@ -419,18 +419,18 @@ class FrmFormsHelper {
 	 * @param string $loc
 	 */
 	public static function get_default_html( $loc ) {
-		if ( $loc == 'submit' ) {
+		if ( $loc === 'submit' ) {
 			$draft_link   = self::get_draft_link();
 			$start_over   = self::get_start_over_shortcode();
 			$default_html = <<<SUBMIT_HTML
 <div class="frm_submit">
-[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
+[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 $draft_link
 $start_over
 </div>
 SUBMIT_HTML;
-		} elseif ( $loc == 'before' ) {
+		} elseif ( $loc === 'before' ) {
 			$default_html = <<<BEFORE_HTML
 <legend class="frm_screen_reader">[form_name]</legend>
 [if form_name]<h3 class="frm_form_title">[form_name]</h3>[/if form_name]

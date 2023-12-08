@@ -774,6 +774,11 @@ legend.frm_hidden{
 	animation:         spin 2s linear infinite;
 }
 
+.with_frm_style .frm_button_submit ~ .frm_prev_page {
+	float: left;
+	margin-right: 0.6ch !important;
+}
+
 <?php
 foreach ( $styles as $style ) {
 	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
