@@ -108,12 +108,14 @@ class FrmTransLiteAction extends FrmFormAction {
 		$form_ids = $form_id;
 
 		/**
+		 * Allows updating form ids used to query fields for displaying options with in the Payment action.
+		 *
 		 * @since x.x
 		 *
 		 * @param int|int[] $form_ids
 		 * @param int $form_id
 		 */
-		$form_ids = apply_filters( 'frm_get_field_options_form_id', $form_ids, $form_id );
+		$form_ids = apply_filters( 'frm_trans_action_get_field_options_form_id', $form_ids, $form_id );
 
 		$form_fields = FrmField::getAll(
 			array(
