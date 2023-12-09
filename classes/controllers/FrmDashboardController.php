@@ -248,7 +248,7 @@ class FrmDashboardController {
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
 
-		if ( 0 === (int) $forms_count ) {
+		if ( ! $forms_count ) {
 			$copy = sprintf(
 				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
 				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
@@ -303,7 +303,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function remove_admin_notices_on_dashboard() {
-		if ( 'formidable-dashboard' !== FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+		if ( false === self::is_dashboard_page() ) {
 			return;
 		}
 
@@ -326,18 +326,15 @@ class FrmDashboardController {
 
 			case 'welcome-banner-cookie':
 				if ( true === self::ajax_set_cookie_banner( FrmAppHelper::get_post_param( 'banner_has_closed' ) ) ) {
-					echo wp_json_encode( array( 'success' => true ) );
-					wp_die();
+					wp_send_json_success();
 				}
-				echo wp_json_encode( array( 'success' => false ) );
-				wp_die();
+				wp_send_json_error();
 				break;
 
 			case 'save-subscribed-email':
 				$email = FrmAppHelper::get_post_param( 'email' );
 				self::save_subscribed_email( $email );
-				echo wp_json_encode( array( 'success' => true ) );
-				wp_die();
+				wp_send_json_success();
 				break;
 		}
 	}
@@ -394,7 +391,7 @@ class FrmDashboardController {
 	 * @return boolean
 	 */
 	public static function is_dashboard_page() {
-		if ( 'formidable-dashboard' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-dashboard' ) ) {
 			return true;
 		}
 		return false;
@@ -442,7 +439,30 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_inbox() {
-		return FrmInboxController::get_inbox_messages();
+		return self::inbox_prepare_messages( FrmInboxController::get_inbox_messages() );
+	}
+
+	/**
+	 * Prepare inbox messages data.
+	 *
+	 * @return array
+	 */
+	private static function inbox_prepare_messages( $data ) {
+		foreach ( $data as $key => &$messages ) {
+			if ( in_array( $key, array( 'undread', 'dismissed' ), true ) ) {
+				foreach ( $messages as &$message ) {
+					$message['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
+				}
+			}
+		}
+		return $data;
+	}
+
+	private static function inbox_clean_messages_cta( $cta ) {
+
+		// remove dismiss button
+		$pattern = '/<a[^>]*class="[^"]*frm_inbox_dismiss[^"]*"[^>]*>.*?<\/a>/is';
+		return preg_replace( $pattern, ' ', $cta );
 	}
 
 	/**

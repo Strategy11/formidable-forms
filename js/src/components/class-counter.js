@@ -1,19 +1,19 @@
 export class FrmCounter {
 
 	constructor( element, options ) {
-		if ( ! element instanceof Element || null === element.getAttribute( 'data-counter' ) ) {
+		if ( ! element instanceof Element || ! element.dataset.counter ) {
 			return;
 		}
 
 		this.template = 'default';
-		if ( null !== element.getAttribute( 'data-type' ) ) {
-			this.template = element.getAttribute( 'data-type' );
+		if ( element.dataset.type ) {
+			this.template = element.dataset.type;
 		}
 
 		this.element         = element;
-		this.value           = parseInt( element.getAttribute( 'data-counter' ), 10 );
+		this.value           = parseInt( element.dataset.counter, 10 );
 		this.activeCounter   = 0;
-		this.locale          = null !== element.getAttribute( 'data-locale' ) ? element.getAttribute( 'data-locale' ).replace( '_', '-' ) : 'en-US';
+		this.locale          = element.dataset.locale ? element.dataset.locale.replace( '_', '-' ) : 'en-US';
 		this.speed           = 'undefined' !== typeof options && 'undefined' !== typeof options.speed ? options.speed : 270;
 		this.valueStep       = Math.ceil( this.value / this.speed );
 		this.timeoutInterval = this.initTimeoutInterval();
@@ -46,9 +46,7 @@ export class FrmCounter {
 		if ( this.activeCounter < this.value ) {
 			this.activeCounter += this.valueStep;
 			this.element.innerText = this.formatNumber( this.activeCounter );
-			setTimeout( () => {
-				this.animate();
-			}, this.timeoutInterval );
+			setTimeout( this.animate.bind( this ), this.timeoutInterval );
 		} else {
 			this.element.innerText = this.formatNumber( this.value );
 		}

@@ -10122,7 +10122,7 @@ function frmAdminBuildJS() {
 			});
 		},
 
-		initNewFormModal: initNewFormModal,
+		initNewFormModal,
 
 		buildInit: function() {
 			let loadFieldId, $builderForm, builderArea;

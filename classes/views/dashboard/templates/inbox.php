@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="frm-tabs-container">
 		<div class="frm-tabs-slide-track frm-flex-box">
-			<div class="frm-active" data-mdb-perfect-scrollbar ata-mdb-suppress-scroll-x='true'>
+			<div class="frm-active" data-mdb-perfect-scrollbar data-mdb-suppress-scroll-x='true'>
 				<div>
 					<div id="frm_empty_inbox" class="<?php echo esc_attr( $subscribe_inbox_classnames ); ?>"> 
 						<?php
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<a href="#" class="frm_inbox_dismiss">Dismiss</a>
 							</div>
 							<p><?php echo wp_kses_post( $message['message'] ); ?></p>
-							<?php echo wp_kses_post( $message['cta'] ); ?>
+							<?php echo wp_kses( $message['cta'], array( 'a' => array( 'href' => true ) ) ); ?>
 						</div>
 					<?php endforeach; ?>
 				</div>
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 						</div>
 						<p><?php echo wp_kses_post( $message['message'] ); ?></p>
-						<?php echo wp_kses_post( $message['cta'] ); ?>
+						<?php echo wp_kses( $message['cta'], array( 'a' => array( 'href' => true ) ) ); ?>
 					</div>
 				<?php endforeach; ?>
 				</div>

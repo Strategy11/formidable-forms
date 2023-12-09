@@ -1586,6 +1586,9 @@ input.frm_insert_in_template {
 	display: flex;
 	gap: var(--gap-sm);
 }
+.frm-vertical-align-middle {
+	align-items: center;
+}
 
 .frm-flex-center {
 	display: flex;

@@ -140,7 +140,7 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widget's HTML
 	 */
 	public function get_welcome_banner( $echo = true ) {
-		if ( true === FrmDashboardController::welcome_banner_has_closed() ) {
+		if ( true === FrmDashboardController::welcome_banner_has_closed() || FrmFormsController::get_forms_count() ) {
 			return;
 		}
 		if ( false === $echo ) {
@@ -199,7 +199,7 @@ class FrmDashboardView {
 	 *
 	 * @return void|string Echo or return the widgets's HTML
 	 */
-	public function get_pro_features( $echo = true ) {
+	private function get_pro_features( $echo = true ) {
 		if ( false === $echo ) {
 			return $this->load_pro_features_template();
 		}
