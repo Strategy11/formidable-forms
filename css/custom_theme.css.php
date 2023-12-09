@@ -688,6 +688,10 @@ legend.frm_hidden{
 	text-align:center;
 }
 
+.with_frm_style.frm_center_submit .frm_flex.frm_submit {
+	justify-content: center;
+}
+
 .with_frm_style .frm_inline_success .frm_submit{
 	display: flex;
 	flex-direction: row;
