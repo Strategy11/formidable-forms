@@ -42,7 +42,7 @@ class FrmFormTemplatesController {
 	 * The keys of the featured templates.
 	 *
 	 * Contains the unique keys for the templates that are considered "featured":
-	 * "Contact Us", "User Registration", "Create WordPress Post", "Credit Card Payment", "Survey", and "Quiz".
+	 * "Contact Us", "Stripe Payment", "User Registration", "Create WordPress Post", "Survey", and "Quiz".
 	 *
 	 * @var array FEATURED_TEMPLATES_KEYS Unique keys for the featured templates.
 	 */
