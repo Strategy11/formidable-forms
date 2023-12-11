@@ -23,38 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </ul>
 
-<?php
-// Show 'upgrade' banner for non-elite users.
-if ( ! in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && ! $expired ) {
-	FrmTipsHelper::show_admin_cta(
-		array(
-			'title'       => sprintf(
-				/* translators: %1$s: Open span tag, %2$s: Close span tag */
-				esc_html__( 'Get Super Powers with %1$s%2$s More Pre-built Forms', 'formidable' ) . ' 🦸',
-				'<span class="frm-form-templates-extra-templates-count">',
-				'</span>'
-			),
-			'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
-			'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
-			'link_url'    => $upgrade_link,
-			'id'          => 'frm-upgrade-banner',
-		)
-	);
-}
-
-// Show 'renew' banner for expired users.
-if ( $expired ) {
-	FrmTipsHelper::show_admin_cta(
-		array(
-			'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
-			'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
-			'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
-			'link_url'    => $renew_link,
-			'id'          => 'frm-renew-subscription-banner',
-		)
-	);
-}
-?>
+<?php FrmFormTemplatesHelper::show_upgrade_renew_cta( compact( 'upgrade_link', 'renew_link' ) ); ?>
 
 <ul id="frm-form-templates-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs">
 	<?php

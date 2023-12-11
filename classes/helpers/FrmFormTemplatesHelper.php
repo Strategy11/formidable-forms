@@ -122,4 +122,49 @@ class FrmFormTemplatesHelper {
 
 		FrmAppHelper::array_to_html_params( $attributes, true );
 	}
+
+	/**
+	 * Show the CTA to upgrade or renew.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *    @type string $upgrade_link Upgrade link URL.
+	 *   @type string $renew_link Renew link URL.
+	 * }
+	 * @return void
+	 */
+	public static function show_upgrade_renew_cta( $args ) {
+		// Show 'renew' banner for expired users.
+		if ( $expired ) {
+			FrmTipsHelper::show_admin_cta(
+				array(
+					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
+					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
+					'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
+					'link_url'    => $args['renew_link'],
+					'id'          => 'frm-renew-subscription-banner',
+				)
+			);
+			return;
+		}
+
+		// Show 'upgrade' banner for non-elite users.
+		if ( ! in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) ) {
+			FrmTipsHelper::show_admin_cta(
+				array(
+					'title'       => sprintf(
+						/* translators: %1$s: Open span tag, %2$s: Close span tag */
+						esc_html__( 'Get Super Powers with %1$s%2$s More Pre-built Forms', 'formidable' ) . ' 🦸',
+						'<span class="frm-form-templates-extra-templates-count">',
+						'</span>'
+					),
+					'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
+					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+					'link_url'    => $args['upgrade_link'],
+					'id'          => 'frm-upgrade-banner',
+				)
+			);
+		}
+	}
 }
