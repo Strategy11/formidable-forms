@@ -215,11 +215,8 @@ class FrmDashboardController {
 
 		$prepared_data = array();
 
-		if ( ! is_callable( 'FrmTransLiteAppHelper::get_payments_data' ) ) {
-			return $prepared_data;
-		}
-
-		$payments = FrmTransLiteAppHelper::get_payments_data();
+		$model_payments = new FrmTransLitePayment();
+		$payments       = $model_payments->get_payments_stats();
 		foreach ( $payments['total'] as $currency => $total_payments ) {
 			if ( 0 < (int) $total_payments ) {
 				$prepared_data[] = array(
