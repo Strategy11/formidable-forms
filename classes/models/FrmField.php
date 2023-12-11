@@ -444,7 +444,7 @@ class FrmField {
 
 		if ( isset( $values['type'] ) ) {
 			if ( 'dropdown' === $values['type'] ) {
-				// TO avoid conflicts with security plugins the value "dropdown" is sent for select fields.
+				// To avoid conflicts with security plugins the value "dropdown" is sent for select fields.
 				// This is because "select" gets matched for SQL injection attempts.
 				$values['type'] = 'select';
 			}
