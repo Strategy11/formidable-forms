@@ -286,6 +286,7 @@ class FrmMigrate {
 		delete_option( 'frm_inbox' );
 		delete_option( 'frmpro_css' );
 		delete_option( 'frm_welcome_redirect' );
+		delete_option( FrmEmailSummaryHelper::$option_name );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();

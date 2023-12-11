@@ -96,8 +96,14 @@ class FrmDb {
 	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
-		$key    = trim( $key );
-		$where .= ' ' . $key;
+		$key = trim( $key );
+
+		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
+			$k      = explode( ' ', $key );
+			$where .= ' CAST(' . reset( $k ) . ' as CHAR) ' . str_replace( reset( $k ), '', $key );
+		} else {
+			$where .= ' ' . $key;
+		}
 
 		$lowercase_key = explode( ' ', strtolower( $key ) );
 		$lowercase_key = end( $lowercase_key );
@@ -734,5 +740,22 @@ class FrmDb {
 
 			wp_cache_delete( 'cached_keys', $group );
 		}
+	}
+
+	/**
+	 * Checks if a DB column exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $table Table name without `$wpdb->prefix`.
+	 * @param string $column Column name.
+	 * @return bool
+	 */
+	public static function db_column_exists( $table, $column ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . $table . ' LIKE %s', $column ) );
+		return ! empty( $result );
 	}
 }

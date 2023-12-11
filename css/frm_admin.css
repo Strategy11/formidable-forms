@@ -356,6 +356,33 @@ td.column-title .frm_actions_dropdown {
 	font-weight: 500;
 }
 
+/* Error modal */
+#frm_error_modal .frm_lock_simple {
+	padding: 20px;
+    border-radius: 50%;
+	background-color: var(--primary-25);
+	display: inline-block;
+}
+
+#frm_error_modal #frm_lock_simple {
+	color: var(--primary-500);
+}
+
+#frm_error_modal .frm-modal-title {
+	display: block;
+}
+
+#frm_error_modal .frm-modal-title h2 {
+	font-weight: 600;
+	font-size: var(--text-xl);
+	margin: 0;
+}
+
+#frm_error_modal .frm_modal_content {
+	padding: var(--gap-md);
+	color: var(--grey-900);
+}
+
 /* Override CSS in Views plugin. */
 .frm-views-editor-body .frm_page_container #frm_top_bar h1 {
 	padding: 0 !important;
@@ -687,7 +714,9 @@ ul.frm_form_nav > li {
 }
 
 .auto-fold.frm-admin-page-styles .frm_page_container,
-.auto-fold .frm_wrap .frm_page_container {
+.auto-fold .frm_wrap .frm_page_container,
+.frm-unfold.frm-admin-page-styles .frm_page_container,
+.frm-unfold .frm_wrap .frm_page_container {
 	left: 160px;
 }
 
@@ -2446,7 +2475,8 @@ h2.frm-h2 + .howto {
 }
 
 .frm-modal .postbox .frm_modal_top,
-.frm-dialog .frm_common_modal .postbox > div:first-child {
+.frm-dialog .frm_common_modal .postbox > div:first-child,
+.frm-error-modal .frm_modal_top {
 	padding: var(--gap-md) var(--gap-md) 0;
 	position: relative;
 }
@@ -2454,7 +2484,8 @@ h2.frm-h2 + .howto {
 .frm-modal h2,
 .frm-modal .postbox .inside h2, /* Override WP. */
 .frm-modal .postbox .frm-modal-title,
-.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child,
+.frm-error-modal .frm-modal-title {
 	display: inline-block;
 	font-size: var(--text-lg);
 	color: var(--grey-900);

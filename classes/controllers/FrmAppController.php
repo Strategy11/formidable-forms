@@ -76,6 +76,10 @@ class FrmAppController {
 			$classes .= ' frm-lite ';
 		}
 
+		if ( get_user_setting( 'unfold' ) && 'f' !== get_user_setting( 'mfold' ) ) {
+			$classes .= ' frm-unfold ';
+		}
+
 		return $classes;
 	}
 
@@ -1096,6 +1100,38 @@ class FrmAppController {
 		 * @return bool
 		 */
 		return apply_filters( 'frm_show_footer_links', $show_footer_links );
+	}
+
+	/**
+	 * Show an error modal and terminate the script execution.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $error_args Arguments that control the behavior of the error modal.
+	 *
+	 * @return void
+	 */
+	public static function show_error_modal( $error_args ) {
+		$defaults = array(
+			'title'            => '',
+			'body'             => '',
+			'cancel_url'       => '',
+			'cancel_classes'   => '',
+			'continue_url'     => '',
+			'continue_classes' => '',
+			'icon'             => 'frm_lock_simple',
+		);
+
+		$error_args = wp_parse_args( $error_args, $defaults );
+		if ( ! isset( $error_args['cancel_text'] ) && ! empty( $error_args['cancel_url'] ) ) {
+			$error_args['cancel_text'] = __( 'Cancel', 'formidable' );
+		}
+
+		if ( ! isset( $error_args['continue_text'] ) && ! empty( $error_args['continue_url'] ) ) {
+			$error_args['continue_text'] = __( 'Continue', 'formidable' );
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/error-modal.php';
 	}
 
 	/**
