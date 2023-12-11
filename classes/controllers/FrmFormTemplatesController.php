@@ -290,7 +290,15 @@ class FrmFormTemplatesController {
 			'default' => array(),
 			'custom'  => array(),
 		);
-		self::$favorite_templates = get_option( self::FAVORITE_TEMPLATES_OPTION, $default_option_structure );
+
+		$favorites = get_option( self::FAVORITE_TEMPLATES_OPTION, $default_option_structure );
+		$favorites = wp_parse_args( $favorites, $default_option_structure );
+
+		// Set the favorite templates property and remove empty values.
+		self::$favorite_templates = array(
+			'default' => array_filter( (array) $favorites['default'] ),
+			'custom'  => array_filter( (array) $favorites['custom'] ),
+		);
 	}
 
 	/**
@@ -321,10 +329,11 @@ class FrmFormTemplatesController {
 
 		// Perform add or remove operation.
 		if ( 'add' === $operation ) {
-			self::$favorite_templates[ $key ][ $template_id ] = $template_id;
+			self::$favorite_templates[ $key ][] = $template_id;
 		} elseif ( 'remove' === $operation ) {
-			if ( isset( self::$favorite_templates[ $key ][ $template_id ] ) ) {
-				unset( self::$favorite_templates[ $key ][ $template_id ] );
+			$position = array_search( $template_id, self::$favorite_templates[ $key ], true );
+			if ( $position !== false ) {
+				unset( self::$favorite_templates[ $key ][ $position ] );
 			}
 		}
 
@@ -388,6 +397,7 @@ class FrmFormTemplatesController {
 			array(
 				'is_template'      => 1,
 				'default_template' => 0,
+				'status'           => array( null, '', 'published' ),
 			),
 			'name'
 		);
@@ -400,7 +410,7 @@ class FrmFormTemplatesController {
 
 		foreach ( $custom_templates as $template ) {
 			$template = array(
-				'id'          => $template->id,
+				'id'          => absint( $template->id ),
 				'name'        => $template->name,
 				'key'         => $template->form_key,
 				'description' => $template->description,
@@ -409,6 +419,7 @@ class FrmFormTemplatesController {
 				'released'    => $template->created_at,
 				'installed'   => 1,
 				'is_custom'   => true,
+				'created_at'  => $template->created_at,
 			);
 
 			// Mark the template as favorite if it's in the favorite templates list.

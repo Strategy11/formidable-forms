@@ -110,20 +110,35 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_init_favorite_templates() {
 		// Define test data for favorite templates.
 		$test_favorites = array(
-			'default' => array( 20872734 => 20872734 ),
-			'custom'  => array( 51 => 51 ),
+			array(
+				'default' => array( 20872734 ),
+				'custom'  => array( 51 ),
+			),
+			array(
+				'custom' => array( 51 ),
+			),
 		);
 
-		// Update the option to include test favorite templates.
-		update_option( $this->controller::FAVORITE_TEMPLATES_OPTION, $test_favorites );
+		$default = array(
+			'default' => array(),
+			'custom'  => array(),
+		);
 
-		// Initialize favorite templates.
-		$this->run_private_method( array( $this->controller, 'init_favorite_templates' ) );
-		$favorites = $this->controller::get_favorite_templates();
+		foreach ( $test_favorites as $test_favorite ) {
+			// Update the option to include test favorite templates.
+			update_option( $this->controller::FAVORITE_TEMPLATES_OPTION, $test_favorites );
 
-		// Verify the favorite templates are correctly initialized.
-		$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
-		$this->assertEquals( $test_favorites, $favorites, 'Favorite templates should match the example data.' );
+			// Initialize favorite templates.
+			$this->run_private_method( array( $this->controller, 'init_favorite_templates' ) );
+			$favorites = $this->controller::get_favorite_templates();
+
+			// Verify the favorite templates are correctly initialized.
+			$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
+			$this->assertTrue( isset( $favorites['default'] ), 'Missing default in favorites.' );
+
+			$expected = array_merge( $test_favorites, $default );
+			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );
+		}
 	}
 
 	/**

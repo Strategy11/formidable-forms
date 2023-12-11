@@ -136,7 +136,7 @@ class FrmFormTemplatesHelper {
 	 */
 	public static function show_upgrade_renew_cta( $args ) {
 		// Show 'renew' banner for expired users.
-		if ( $expired ) {
+		if ( $args['expired'] ) {
 			FrmTipsHelper::show_admin_cta(
 				array(
 					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
