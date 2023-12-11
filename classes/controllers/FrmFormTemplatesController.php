@@ -46,7 +46,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @var array FEATURED_TEMPLATES_KEYS Unique keys for the featured templates.
 	 */
-	const FEATURED_TEMPLATES_KEYS = array( 20872734, 20874748, 20882522, 20874739, 20908981, 28109851 );
+	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
 
 	/**
 	 * Option name to store favorite templates.
@@ -145,6 +145,7 @@ class FrmFormTemplatesController {
 		if ( self::is_templates_page() ) {
 			add_action( 'admin_init', __CLASS__ . '::set_form_templates_data' );
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
 

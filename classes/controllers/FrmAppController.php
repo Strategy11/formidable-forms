@@ -1067,23 +1067,35 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		if ( self::should_show_footer_links() ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
+		}
+	}
 
-		// Exit early based on specific admin context checks.
-		if ( ! FrmAppHelper::is_formidable_admin() && 'frm_logs' !== $post_type ) {
-			return;
-		}
-		if ( FrmAppHelper::is_full_screen() ) {
-			return;
-		}
-		if ( FrmFormTemplatesController::is_templates_page() ) {
-			return;
-		}
-		if ( ! FrmAppHelper::is_formidable_branding() ) {
-			return;
+	/**
+	 * Check if the footer links should be shown.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_show_footer_links() {
+		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$is_formidable_page = FrmAppHelper::is_formidable_admin() || 'frm_logs' === $post_type;
+		$show_footer_links  = $is_formidable_page;
+		if ( FrmAppHelper::is_full_screen() || ! FrmAppHelper::is_formidable_branding() ) {
+			$show_footer_links = false;
 		}
 
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
+		/**
+		 * Filter whether to show the Formidable footer links.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $show_footer_links
+		 * @return bool
+		 */
+		return apply_filters( 'frm_show_footer_links', $show_footer_links );
 	}
 
 	/**
