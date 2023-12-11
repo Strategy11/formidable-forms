@@ -442,7 +442,7 @@ class FrmTipsHelper {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$attribute = array(
+		$attributes = array(
 			'class' => trim( 'frm-cta frm-flex frm-p-sm ' . $args['class'] ),
 		);
 

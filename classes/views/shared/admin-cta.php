@@ -1,12 +1,13 @@
 <?php
 /**
- * Admin CTA banner.
+ * Admin CTA banner view.
  *
  * @package Formidable
  *
- * @var array $attributes
- * @var array $args
+ * @var array $attributes HTML attributes for the wrapper element.
+ * @var array $args       Arguments used in FrmTipsHelper::show_admin_cta.
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
