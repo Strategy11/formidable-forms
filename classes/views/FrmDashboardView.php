@@ -129,6 +129,9 @@ class FrmDashboardView {
 		if ( is_callable( 'FrmProDashboardView::get_bottom_widget' ) ) {
 			return FrmProDashboardView::get_bottom_widget( $this->view['entries'], $echo );
 		}
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return '';
+		}
 		return $this->get_pro_features( $echo );
 	}
 
@@ -143,10 +146,12 @@ class FrmDashboardView {
 		if ( true === FrmDashboardController::welcome_banner_has_closed() || FrmFormsController::get_forms_count() ) {
 			return;
 		}
-		if ( false === $echo ) {
-			return $this->load_welcome_template();
-		}
-		echo wp_kses_post( $this->load_welcome_template() );
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses_post( $this->load_welcome_template() );
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -157,10 +162,12 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	public function get_counters( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_counters_template( $this->view['counters'] );
-		}
-		echo wp_kses_post( $this->load_counters_template( $this->view['counters'] ) );
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses_post( $this->load_counters_template( $this->view['counters'] ) );
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -171,10 +178,12 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	public function get_license_management( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_license_management_template( $this->view['license'] );
-		}
-		echo wp_kses_post( $this->load_license_management_template( $this->view['license'] ) );
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses_post( $this->load_license_management_template( $this->view['license'] ) );
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -185,11 +194,13 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	public function get_inbox( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_inbox_template( $this->view['inbox'] );
-		}
-		// needs kses input
-		echo $this->load_inbox_template( $this->view['inbox'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return FrmAppHelper::clip(
+			function() {
+				// needs kses input
+				echo $this->load_inbox_template( $this->view['inbox'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -200,10 +211,12 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	private function get_pro_features( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_pro_features_template();
-		}
-		echo wp_kses_post( $this->load_pro_features_template() );
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses_post( $this->load_pro_features_template() );
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -214,10 +227,12 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	public function get_payments( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_payments_template( $this->view['payments'] );
-		}
-		echo wp_kses_post( $this->load_payments_template( $this->view['payments'] ) );
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses_post( $this->load_payments_template( $this->view['payments'] ) );
+			},
+			$echo
+		);
 	}
 
 	/**
@@ -228,20 +243,22 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widgets's HTML
 	 */
 	public function get_youtube_video( $echo = true ) {
-		if ( false === $echo ) {
-			return $this->load_youtube_video_template( $this->view['video'] );
-		}
-		echo wp_kses(
-			$this->load_youtube_video_template( $this->view['video'] ),
-			array(
-				'iframe' => array(
-					'src'             => true,
-					'title'           => true,
-					'alow'            => true,
-					'frameborder'     => true,
-					'allowfullscreen' => true,
-				),
-			),
+		return FrmAppHelper::clip(
+			function() {
+				echo wp_kses(
+					$this->load_youtube_video_template( $this->view['video'] ),
+					array(
+						'iframe' => array(
+							'src'             => true,
+							'title'           => true,
+							'alow'            => true,
+							'frameborder'     => true,
+							'allowfullscreen' => true,
+						),
+					),
+				);
+			},
+			$echo
 		);
 	}
 

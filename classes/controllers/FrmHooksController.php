@@ -109,6 +109,7 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+		FrmDashboardController::load_hooks();
 	}
 
 	/**

@@ -658,10 +658,8 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
-		if ( class_exists( 'FrmDashboardController' ) ) {
-			FrmDashboardController::register_assets();
-			FrmDashboardController::enqueue_assets();
-		}
+		FrmDashboardController::register_assets();
+		FrmDashboardController::enqueue_assets();
 
 		if ( class_exists( 'FrmOverlayController' ) ) {
 			// This should always exist.
@@ -1131,10 +1129,9 @@ class FrmAppController {
 		$is_not_admin               = ! FrmAppHelper::is_formidable_admin() && $post_type !== 'frm_logs';
 		$is_full_screen             = FrmAppHelper::is_full_screen();
 		$is_not_formidable_branding = ! FrmAppHelper::is_formidable_branding();
-		$is_dashboard_page          = 'formidable-dashboard' === FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		// Exit if any of the above conditions are met
-		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding || $is_dashboard_page ) {
+		if ( $is_not_admin || $is_full_screen || $is_not_formidable_branding ) {
 			return;
 		}
 

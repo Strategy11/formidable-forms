@@ -578,3 +578,27 @@ div.frm-inbox-subscribe input[type="email"] {
 	margin: 12px 0px;
 }
 /* END Inbox */
+
+@media only screen and ( max-width: 960px ) {
+	.frm-dashboard-container.frm-flex-box {
+		flex-direction: column;
+		gap: 0px;
+	}
+	.frm-dashboard-container > div:first-child,
+	.frm-dashboard-container > div:last-child {
+		width: 100%;
+	}
+	.frm-yt-widget iframe {
+		height: 400px;
+	}
+}
+@media only screen and ( max-width: 960px ) {
+	.frm-dashboard-desktop-only {
+		display: none;
+	}
+}
+@media only screen and ( min-width: 961px ) {
+	.frm-dashboard-mobile-only {
+		display: none;
+	}
+}

@@ -21,6 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php $dashboard_view->get_welcome_banner(); ?>
 	<div class="frm-dashboard-container frm-flex-box frm-justify-between">
 		<div>
+			<div class="frm-dashboard-widget frm-license-widget frm-dashboard-mobile-only frm-animate">
+				<?php $dashboard_view->get_license_management(); ?>
+			</div>
 			<?php $dashboard_view->get_counters(); ?>
 			<div class="frm-dashboard-widget frm-animate">
 				<?php $dashboard_view->get_main_widget(); ?>
@@ -31,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 		<div>
-			<div class="frm-dashboard-widget frm-license-widget frm-animate">
+			<div class="frm-dashboard-widget frm-license-widget frm-dashboard-desktop-only frm-animate">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
 			<?php if ( '' !== $dashboard_view->get_youtube_video( false ) ) : ?>

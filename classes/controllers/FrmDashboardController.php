@@ -40,6 +40,27 @@ class FrmDashboardController {
 	}
 
 	/**
+	 * Load controller hooks.
+	 *
+	 * @return void
+	 */
+	public static function load_hooks() {
+		add_action( 'admin_init', 'FrmDashboardController::admin_init' );
+	}
+
+	/**
+	 * Init admin_init hook callback.
+	 *
+	 * @return void
+	 */
+	public static function admin_init() {
+		if ( self::is_dashboard_page() ) {
+			remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
+			return;
+		}
+	}
+
+	/**
 	 * Init dashboard page.
 	 *
 	 * @return void
@@ -220,23 +241,30 @@ class FrmDashboardController {
 		if ( class_exists( 'FrmProDashboardController' ) ) {
 			return FrmProDashboardController::view_args_license();
 		}
+		$copy    = FrmSettingsController::copy_for_lite_license() . ' 🙂';
+		$buttons = array(
+			array(
+				'label'  => esc_html__( 'Connect Account', 'formidable' ),
+				'link'   => FrmAddonsController::connect_link(),
+				'action' => 'default',
+				'type'   => 'primary',
+			),
+			array(
+				'label'  => esc_html__( 'Get Formidable PRO', 'formidable' ),
+				'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
+				'action' => 'default',
+				'type'   => 'secondary',
+			),
+		);
+		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
+			// Manage PRO versions without PRO dashboard functionality.
+			$copy    = 'Formidable Pro ' . FrmProAddonsController::get_readable_license_type();
+			$buttons = array();
+		}
 		return array(
 			'heading' => 'License Key',
-			'copy'    => esc_html__( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂',
-			'buttons' => array(
-				array(
-					'label'  => esc_html__( 'Connect Account', 'formidable' ),
-					'link'   => FrmAddonsController::connect_link(),
-					'action' => 'default',
-					'type'   => 'primary',
-				),
-				array(
-					'label'  => esc_html__( 'Get Formidable PRO', 'formidable' ),
-					'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
-					'action' => 'default',
-					'type'   => 'secondary',
-				),
-			),
+			'copy'    => $copy,
+			'buttons' => $buttons,
 		);
 	}
 
@@ -449,7 +477,7 @@ class FrmDashboardController {
 	 */
 	private static function inbox_prepare_messages( $data ) {
 		foreach ( $data as $key => &$messages ) {
-			if ( in_array( $key, array( 'undread', 'dismissed' ), true ) ) {
+			if ( in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
 				foreach ( $messages as &$message ) {
 					$message['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
 				}
