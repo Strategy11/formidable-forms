@@ -305,11 +305,16 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				</label>
 				<select name="field_options[type_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
-						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+						<?php
+						// We need to avoid the word "select" in POST requests.
+						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
+						$type_option_value = 'select' === $fkey ? 'dropdown' : $fkey;
+						?>
+						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?>
 						</option>
 						<?php
-						unset( $fkey, $ftype );
+						unset( $fkey, $ftype, $type_option_value );
 					}
 					?>
 				</select>
