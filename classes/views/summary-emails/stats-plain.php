@@ -32,7 +32,7 @@ echo "\r\n";
 
 if ( ! empty( $args['dashboard_url'] ) ) {
 	esc_html_e( 'Go to Dashboard:', 'formidable' );
-	echo ' ' . esc_url( $args['dashboard_url'] ) . "\r\n\r\n";
+	echo ' ' . esc_url_raw( $args['dashboard_url'] ) . "\r\n\r\n";
 }
 
 if ( $args['top_forms'] ) {
