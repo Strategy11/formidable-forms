@@ -783,14 +783,6 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
-.with_frm_style.frm_default_submit .frm_submit.frm_flex .frm_button_submit + *:not(.frm_prev_page) {
-	margin-left: auto;
-}
-
-.with_frm_style.frm_default_submit .frm_submit.frm_flex .frm_button_submit {
-	order: 4;
-}
-
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
 }
