@@ -148,7 +148,6 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
 	 * @return string
 	 */
 	public function get_html_for_form_preview() {

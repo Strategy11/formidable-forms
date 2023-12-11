@@ -1101,7 +1101,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed data
+	 * @param mixed $data
 	 * @return int
 	 */
 	private static function get_form_id_from_data( $data ) {

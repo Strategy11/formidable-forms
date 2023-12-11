@@ -542,7 +542,6 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $active_style
-	 * @param array<WP_Post>   $styles
 	 * @param stdClass         $form
 	 * @param WP_Post          $default_style
 	 * @return void

@@ -28,8 +28,6 @@ class FrmAppHelper {
 	/**
 	 * @since 1.07.02
 	 *
-	 * @param none
-	 *
 	 * @return string The version of this plugin
 	 */
 	public static function plugin_version() {
@@ -314,8 +312,6 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_preview_page() {
@@ -329,8 +325,6 @@ class FrmAppHelper {
 	 * Check for ajax except the form preview page
 	 *
 	 * @since 2.0
-	 *
-	 * @param None
 	 *
 	 * @return boolean
 	 */
@@ -373,8 +367,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param mixed $value - value to check
-	 * @param string
+	 * @param mixed  $value - value to check
+	 * @param string $empty
 	 *
 	 * @return boolean
 	 */
@@ -3713,7 +3707,7 @@ class FrmAppHelper {
 	/**
 	 * @since 5.0.17
 	 *
-	 * @param string
+	 * @param string $feature
 	 * @return bool
 	 */
 	public static function show_new_feature( $feature ) {

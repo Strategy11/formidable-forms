@@ -220,7 +220,7 @@ class FrmAddon {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array error
+	 * @param array $error
 	 */
 	public function maybe_clear_license( $error ) {
 		if ( $error['code'] === 'disabled' && $error['license'] === $this->license ) {

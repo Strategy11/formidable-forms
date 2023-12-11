@@ -596,8 +596,8 @@ class FrmField {
 	/**
 	 * Get the field type by key or id
 	 *
-	 * @param int|string The field id or key
-	 * @param mixed $col The name of the column in the fields database table
+	 * @param int|string $id The field id or key
+	 * @param mixed      $col The name of the column in the fields database table
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );

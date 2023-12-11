@@ -6,6 +6,7 @@
 		"build": "cross-env NODE_ENV=production webpack --progress",
 		"dev": "cross-env NODE_ENV=default webpack --watch",
 		"lint": "./node_modules/.bin/eslint .; exit 0",
+		"phpstan": "./vendor/bin/phpstan analyze ./ --memory-limit=1G",
 		"package-plugin": "./bin/build-plugin.sh formidable",
 		"set-version": "./bin/set-version.sh formidable formidable classes/helpers/FrmAppHelper",
 		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE && npx google-closure-compiler --js=stripe/js/frmstrp.js --js_output_file=stripe/js/frmstrp.min.js --compilation_level=WHITESPACE",

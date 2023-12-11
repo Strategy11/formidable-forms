@@ -361,6 +361,11 @@ class FrmFormsController {
 		}
 
 		$random_page = reset( $random_page );
+		if ( ! is_a( $random_page, 'WP_Post' ) ) {
+			// The return type can also be int.
+			return;
+		}
+
 		query_posts(
 			array(
 				'post_type' => 'page',
@@ -378,7 +383,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.5.2
 	 *
-	 * @param WP_Post $post
+	 * @param WP_Post $page
 	 * @return void
 	 */
 	private static function set_post_global( $page ) {
@@ -3090,8 +3095,7 @@ class FrmFormsController {
 	/**
 	 * @since 5.3
 	 *
-	 * @param string $content
-	 * @param int    $form_id
+	 * @param int $form_id
 	 * @return string
 	 */
 	private static function get_page_shortcode_content_for_form( $form_id ) {

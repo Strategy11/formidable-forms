@@ -940,7 +940,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	protected static function get_current_plugin() {
-		if ( ! isset( self::$plugin ) ) {
+		if ( empty( self::$plugin ) ) {
 			self::$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
 		}
 		return self::$plugin;
@@ -1246,13 +1246,15 @@ class FrmAddonsController {
 	/**
 	 * Render a conditional action button for a specified plugin
 	 *
+	 * @since 4.09
+	 *
 	 * @param string $plugin
 	 * @param array|string $upgrade_link_args
-	 * @since 4.09
+	 * @return void
 	 */
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		if ( is_callable( 'FrmProAddonsController::conditional_action_button' ) ) {
-			return FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
 		}
 
 		$addon        = self::get_addon( $plugin );
@@ -1275,14 +1277,17 @@ class FrmAddonsController {
 	 *
 	 * @since 4.09.01
 	 *
-	 * @param array $addon
-	 * @param string|false $license_type
-	 * @param string $plan_required
-	 * @param string $upgrade_link
+	 * @param array $atts {
+	 *    @type array $addon
+	 *    @type string|false $license_type
+	 *    @type string $plan_required
+	 *    @type string $upgrade_link
+	 * }
+	 * @return void
 	 */
 	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
-			return FrmProAddonsController::show_conditional_action_button( $atts );
+			FrmProAddonsController::show_conditional_action_button( $atts );
 		}
 
 		self::addon_upgrade_link( $atts['addon'], $atts['upgrade_link'] );

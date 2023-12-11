@@ -106,7 +106,7 @@ class FrmStringReaderHelper {
 	 *  "abc" => abc
 	 *  ""abc"" => "abc"
 	 *
-	 * @param string string
+	 * @param string $string
 	 * @return string
 	 */
 	private function strip_quotes( $string ) {

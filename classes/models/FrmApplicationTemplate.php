@@ -29,9 +29,6 @@ class FrmApplicationTemplate {
 	private $api_data;
 
 	/**
-	 * @param array<string> $keys
-	 * @param array<string> $keys_with_images
-	 *
 	 * @return void
 	 */
 	public static function init() {

@@ -2037,7 +2037,7 @@ class FrmXMLHelper {
 	/**
 	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
 	 *
-	 * @param  boolean $disable
+	 * @param boolean $loader
 	 *
 	 * @return boolean
 	 */

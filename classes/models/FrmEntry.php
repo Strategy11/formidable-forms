@@ -578,7 +578,7 @@ class FrmEntry {
 
 	// Pagination Methods
 	/**
-	 * @param int|array|string If int, use the form id.
+	 * @param int|array|string $where If int, use the form id.
 	 */
 	public static function getRecordCount( $where = '' ) {
 		global $wpdb;

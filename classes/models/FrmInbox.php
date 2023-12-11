@@ -15,7 +15,7 @@ class FrmInbox extends FrmFormApi {
 	private static $messages = false;
 
 	/**
-	 * @param array
+	 * @var array
 	 */
 	private static $banner_messages;
 

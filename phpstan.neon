@@ -4,6 +4,9 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
+	scanDirectories:
+		- ../formidable-pro
+		- ../formidable-views
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -21,7 +24,7 @@ parameters:
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
-		- '#Function (remove_filter|remove_action|apply_filters)+ invoked with#'
+		- '#Function (apply_filters)+ invoked with#'
 		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
 		- '#Possibly invalid array key type#'
 		- '#always exists and is not nullable.#'
@@ -41,10 +44,8 @@ parameters:
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#PHPDoc tag @param (references unknown parameter:|has invalid valu)+#'
 		- '#has no return type specified#'
 		- '#with no type specified#'
-		- '#is not nullable.#'
 		- '#in isset\(\) does not exist.#'
 		- '#has no type specified.#'
 		- '#has invalid return type#'

@@ -284,8 +284,9 @@ class FrmEntryValues {
 		 *
 		 * @since 5.5.1
 		 *
-		 * @param array $referrer
-		 * @param array @entry_description
+		 * @param array  $referrer
+		 * @param array  $entry_description
+		 * @param object $entry
 		 */
 		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
