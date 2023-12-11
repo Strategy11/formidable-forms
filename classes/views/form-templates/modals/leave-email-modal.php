@@ -29,7 +29,7 @@ $args = wp_parse_args( $args, $defaults );
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-fields frm-px-md frm-mt-xs frm-mb-2xs">
+	<div class="inside frm_grid_container frm-fields frm-px-md frm-py-0 frm-mt-xs frm-mb-0">
 		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
 			<span class="frm-wait"></span>
 		</div>

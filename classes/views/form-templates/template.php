@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-FrmFormTemplatesHelper::update_template_details( $template, $pricing, $license_type );
+FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_type );
 ?>
 <li <?php FrmFormTemplatesHelper::add_template_attributes( $template, $expired ); ?>>
 	<?php if ( $template['is_featured'] ) : ?>
@@ -27,7 +27,9 @@ FrmFormTemplatesHelper::update_template_details( $template, $pricing, $license_t
 					</span>
 				<?php } ?>
 
-				<span class="frm-form-template-name"><?php echo esc_html( $template['name'] ); ?></span>
+				<span class="frm-form-template-name">
+					<?php echo esc_html( $template['name'] ); ?>
+				</span>
 			</div>
 
 			<div class="frm-flex-box frm-gap-xs frm-items-center frm-ml-auto">
@@ -36,12 +38,12 @@ FrmFormTemplatesHelper::update_template_details( $template, $pricing, $license_t
 					$trash_links = FrmFormsHelper::delete_trash_links( $template['id'] )
 					?>
 					<a href="<?php echo esc_url( $trash_links['trash']['url'] ); ?>" class="frm-form-templates-custom-item-trash-button frm-flex-center frm-fadein" data-frmverify="<?php esc_attr_e( 'Do you want to move this form template to the trash?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" role="button" aria-label="<?php esc_attr_e( 'Move to the trash button', 'formidable' ); ?>">
-						<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon', array( 'aria-label' => __( 'Move to Trash', 'formidable' ) ) ); ?>
 					</a>
 					<span class="frm-vertical-line frm-fadein"></span>
 				<?php } ?>
 
-				<a href="#" class="frm-form-templates-item-favorite-button frm-fadein" role="button" aria-label="<?php esc_attr_e( 'Add to favorite button', 'formidable' ); ?>">
+				<a href="#" class="frm-form-templates-item-favorite-button frm-fadein" role="button" aria-label="<?php esc_attr_e( 'Add to favorites', 'formidable' ); ?>">
 					<?php
 					$favorite_button_icon = $template['is_favorite'] ? 'frm_heart_solid_icon' : 'frm_heart_icon';
 					FrmAppHelper::icon_by_class( 'frmfont ' . $favorite_button_icon );

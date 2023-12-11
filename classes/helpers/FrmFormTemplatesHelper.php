@@ -19,11 +19,11 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Updates template array with additional details and URL.
 	 *
-	 * @param array &$template Template data.
+	 * @param array  &$template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
 	 */
-	public static function update_template_details( &$template, $pricing, $license_type ) {
+	public static function prepare_template_details( &$template, $pricing, $license_type ) {
 		$template['is_featured']   = ! empty( $template['is_featured'] );
 		$template['is_favorite']   = ! empty( $template['is_favorite'] );
 		$template['is_custom']     = ! empty( $template['is_custom'] );
@@ -49,14 +49,15 @@ class FrmFormTemplatesHelper {
 	 * @since x.x
 	 *
 	 * @param array $template The template data.
-	 * @param bool $expired Whether the API request is expired or not.
+	 * @param bool  $expired Whether the API request is expired or not.
 	 * @return void
 	 */
 	public static function add_template_attributes( $template, $expired ) {
-		$attributes                    = array();
-		$attributes['tabindex']        = '0';
-		$attributes['data-id']         = $template['id'];
-		$attributes['frm-search-text'] = strtolower( $template['name'] );
+		$attributes = array(
+			'tabindex'        => '0',
+			'data-id'         => $template['id'],
+			'frm-search-text' => strtolower( $template['name'] ),
+		);
 
 		// Set 'data-slug' attribute.
 		if ( ! empty( $template['slug'] ) ) {
@@ -68,7 +69,21 @@ class FrmFormTemplatesHelper {
 			$attributes['data-categories'] = implode( ',', $template['category_slugs'] );
 		}
 
-		// Set 'class' attribute.
+		$attributes['class'] = self::prepare_single_template_classes( $template );
+		self::prepare_single_template_plan( $template, $expired, $attributes );
+
+		FrmAppHelper::array_to_html_params( $attributes, true );
+	}
+
+	/**
+	 * Add classes for a given template.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $template The template data.
+	 * @return string
+	 */
+	private static function prepare_single_template_classes( $template ) {
 		$class_names = array( 'frm-card-item' );
 		if ( $template['is_featured'] ) {
 			$class_names[] = 'frm-form-templates-featured-item';
@@ -80,19 +95,30 @@ class FrmFormTemplatesHelper {
 			$class_names[] = 'frm-form-templates-custom-item';
 		}
 
-		// Handle attributes related to plan requirements.
-		if ( $template['plan_required'] ) {
-			$required_plan_slug               = sanitize_title( $template['plan_required'] );
-			$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
-			if ( 'free' === $required_plan_slug ) {
-				$attributes['data-key'] = $template['key'];
-			}
-			$class_names[] = 'frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
+		return implode( ' ', $class_names );
+	}
+
+	/**
+	 * Add info about the required plan for this template.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $template The template data.
+	 * @param array $attributes The template attributes.
+	 * @return void
+	 */
+	private static function prepare_single_template_plan( $template, $expired, &$attributes ) {
+		if ( ! $template['plan_required'] ) {
+			return;
 		}
 
-		$attributes['class'] = implode( ' ', $class_names );
+		$required_plan_slug               = sanitize_title( $template['plan_required'] );
+		$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
+		if ( 'free' === $required_plan_slug ) {
+			$attributes['data-key'] = $template['key'];
+		}
 
-		FrmAppHelper::array_to_html_params( $attributes, true );
+		$attributes['class'] .= ' frm-form-templates-locked-item frm-' . esc_attr( $required_plan_slug ) . '-template';
 	}
 
 	/**
@@ -130,7 +156,7 @@ class FrmFormTemplatesHelper {
 	 *
 	 * @param array $args {
 	 *    @type string $upgrade_link Upgrade link URL.
-	 *   @type string $renew_link Renew link URL.
+	 *    @type string $renew_link Renew link URL.
 	 * }
 	 * @return void
 	 */

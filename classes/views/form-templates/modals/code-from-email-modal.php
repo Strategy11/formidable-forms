@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="inside frm_grid_container frm-fields frm-px-md frm-mt-xs frm-mb-2xs">
+	<div class="inside frm_grid_container frm-fields frm-px-md frm-py-0 frm-mt-xs frm-mb-0">
 		<p><?php esc_html_e( 'Enter the code that we sent to your email address.', 'formidable' ); ?></p>
 
 		<div class="frm-form-templates-modal-fieldset frm_form_field">
