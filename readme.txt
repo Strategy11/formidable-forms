@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires PHP: 5.6
-Stable tag: 6.6
+Stable tag: 6.7
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,18 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.7 =
+* New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
+* New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
+* New: A new dashboard landing page has been added with form and payment stats.
+* New: Error handling has been improved when trying to edit a form in trash or a form that does not exist.
+* New: The query for getting entry count has been optimized, significantly reducing the time it takes to count entries.
+* Fix: The form search was broken on some databases when comparing a datetime value to a non-date value.
+* Fix: The default maximum value of 5 used for row count in a Paragraph field would carry to other field type settings after changing field type, acting as a 5 character limit. This is now cleared when changing field types from Paragraph to another field.
+* Fix: A styling issue has been fixed that was causing the WordPress sidebar to overlap on top of admin page content when using specific user preferences.
+* Fix: The pirate forms importer style has been updated to look better.
+* Fix: A fatal error on the welcome page has been fixed.
+
 = 6.6 =
 * New: Database indexes have been added to entry and entry meta tables to help significantly optimize some database queries, including queries used for reports.
 * New: Honeypot field containers will no longer include an aria-hidden attribute. This was causing issues with Accessibility testing tools including Google PageSight.
