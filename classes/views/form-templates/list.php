@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </ul>
 
-<?php FrmFormTemplatesHelper::show_upgrade_renew_cta( compact( 'upgrade_link', 'renew_link' ) ); ?>
+<?php FrmFormTemplatesHelper::show_upgrade_renew_cta( compact( 'expired', 'upgrade_link', 'renew_link' ) ); ?>
 
 <ul id="frm-form-templates-list" class="frm-form-templates-list frm-form-templates-grid-layout frm-mb-xs">
 	<?php
