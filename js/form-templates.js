@@ -2581,9 +2581,10 @@ __webpack_require__.r(__webpack_exports__);
 function addCategoryEvents() {
   var categoryItems = document.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-cat-item"));
 
-  // Attach click event listeners to each sidebar category
+  // Attach click and keyboard event listeners to each sidebar category
   categoryItems.forEach(function (category) {
-    return (0,_utils__WEBPACK_IMPORTED_MODULE_3__.onClickPreventDefault)(category, onCategoryClick);
+    (0,_utils__WEBPACK_IMPORTED_MODULE_3__.onClickPreventDefault)(category, onCategoryClick);
+    category.addEventListener('keydown', onCategoryKeydown);
   });
 }
 
@@ -2635,6 +2636,20 @@ var onCategoryClick = function onCategoryClick(event) {
     bodyContent = _getElements.bodyContent;
   (0,_utils__WEBPACK_IMPORTED_MODULE_3__.fadeIn)(bodyContent);
 };
+
+/**
+ * Handles the keyboard event on a category item.
+ *
+ * @param {KeyboardEvent} event The keyboard event object.
+ * @return {void}
+ */
+function onCategoryKeydown(event) {
+  // Only respond to 'Enter' or 'Space' key presses
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault(); // Prevent default action
+    onCategoryClick(event);
+  }
+}
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (addCategoryEvents);
 
 /***/ }),

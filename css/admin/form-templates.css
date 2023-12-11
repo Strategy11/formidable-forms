@@ -55,6 +55,10 @@
 	background-color: var(--grey-100);
 }
 
+.frm-form-templates-cat-item:focus {
+	outline: 2px solid var(--primary-700);
+}
+
 .frm-form-templates-cat-item > * {
 	z-index: 2;
 }
@@ -92,6 +96,7 @@
 #frm-form-templates-create-form {
 	gap: 10px;
 	color: var(--grey-900);
+	background-color: transparent;
 	border: 1px dashed var(--grey-400);
 	border-radius: var(--small-radius);
 	padding: calc(var(--gap-sm) - 2px) var(--gap-sm);
@@ -102,6 +107,11 @@
 
 #frm-form-templates-create-form:hover {
 	background-color: var(--grey-50);
+}
+
+#frm-form-templates-create-form:focus {
+	outline: 1px solid var(--primary-700);
+	border-color: var(--primary-700);
 }
 
 #frm-form-templates-create-form .frmsvg {
@@ -219,12 +229,14 @@ p.frm-form-templates-item-description {
 	overflow: hidden;
 }
 
-.frm-card-item:hover .frm-form-templates-item-description {
+.frm-card-item:hover .frm-form-templates-item-description,
+.frm-card-item:focus-within .frm-form-templates-item-description {
 	visibility: hidden;
 	opacity: 0;
 }
 
-.frm-card-item:hover .frm-form-templates-item-buttons {
+.frm-card-item:hover .frm-form-templates-item-buttons,
+.frm-card-item:focus-within .frm-form-templates-item-buttons {
 	display: flex;
 }
 

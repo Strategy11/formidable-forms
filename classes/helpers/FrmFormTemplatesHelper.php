@@ -54,6 +54,7 @@ class FrmFormTemplatesHelper {
 	 */
 	public static function add_template_attributes( $template, $expired ) {
 		$attributes                    = array();
+		$attributes['tabindex']        = '0';
 		$attributes['data-id']         = $template['id'];
 		$attributes['frm-search-text'] = strtolower( $template['name'] );
 

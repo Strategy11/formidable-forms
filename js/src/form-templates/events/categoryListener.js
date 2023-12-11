@@ -15,10 +15,11 @@ import { resetSearchInput } from './';
 function addCategoryEvents() {
 	const categoryItems = document.querySelectorAll( `.${PREFIX}-cat-item` );
 
-	// Attach click event listeners to each sidebar category
-	categoryItems.forEach( category =>
-		onClickPreventDefault( category, onCategoryClick )
-	);
+	// Attach click and keyboard event listeners to each sidebar category
+	categoryItems.forEach( category => {
+		onClickPreventDefault( category, onCategoryClick );
+		category.addEventListener( 'keydown', onCategoryKeydown );
+	});
 }
 
 /**
@@ -65,5 +66,19 @@ const onCategoryClick = ( event ) => {
 	const { bodyContent } = getElements();
 	fadeIn( bodyContent );
 };
+
+/**
+ * Handles the keyboard event on a category item.
+ *
+ * @param {KeyboardEvent} event The keyboard event object.
+ * @return {void}
+ */
+function onCategoryKeydown( event ) {
+    // Only respond to 'Enter' or 'Space' key presses
+    if ( event.key === 'Enter' || event.key === ' ' ) {
+        event.preventDefault(); // Prevent default action
+        onCategoryClick( event );
+    }
+}
 
 export default addCategoryEvents;
