@@ -854,8 +854,6 @@ BEFORE_HTML;
 			$class .= self::maybe_align_fields_top( $form );
 		} elseif ( 'center' === $submit_align ) {
 			$class .= ' frm_center_submit';
-		} elseif ( 'default' === $submit_align ) {
-			$class .= ' frm_default_submit';
 		}
 
 		$class = apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
