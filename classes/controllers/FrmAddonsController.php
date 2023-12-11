@@ -298,10 +298,11 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 * @since x.x This is public.
 	 *
 	 * @return array|false
 	 */
-	protected static function get_primary_license_info() {
+	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
