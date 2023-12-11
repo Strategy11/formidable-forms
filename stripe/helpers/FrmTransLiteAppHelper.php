@@ -282,6 +282,31 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Gets amount and currency from payment object or amount.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|float|object|array $payment Payment object, payment array or amount.
+	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 */
+	public static function get_amount_and_currency_from_payment( $payment ) {
+		$currency = '';
+		$amount   = $payment;
+
+		if ( is_object( $payment ) || is_array( $payment ) ) {
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
+			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
+		}
+
+		return array( $amount, $currency );
+	}
+
+	/**
 	 * @param array $currency
 	 * @param float $amount
 	 * @return void
