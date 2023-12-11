@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmYoutubeFeedApi {
+class FrmYoutubeFeedApi extends FrmFormApi {
 
 	/**
 	 * The YouTube API URL.
@@ -24,6 +24,13 @@ class FrmYoutubeFeedApi {
 	);
 
 	/**
+	 * The active API endpoint.
+	 *
+	 * @var string
+	 */
+	private $api_active_endpoint = '';
+
+	/**
 	 * The cache key names.
 	 *
 	 * @var array
@@ -33,12 +40,9 @@ class FrmYoutubeFeedApi {
 		'latest-video'  => 'frm-latest-video',
 	);
 
-	/**
-	 * The cache expiration time.
-	 *
-	 * @var int
-	 */
-	private $cache_expire = HOUR_IN_SECONDS * 2; // 2h
+	public function __construct() {
+		$this->init_api_options();
+	}
 
 	/**
 	 * Build the YouTube API URL.
@@ -47,8 +51,34 @@ class FrmYoutubeFeedApi {
 	 *
 	 * @return string
 	 */
-	private function get_api_url( $api_endpoint ) {
-		return $this->api_url . '?action=' . $api_endpoint;
+	protected function api_url() {
+		return $this->api_url . '?action=' . $this->get_api_endpoint();
+	}
+
+	/**
+	 * Build the API endpoint
+	 *
+	 * @return string
+	 */
+	private function get_api_endpoint() {
+		return $this->api_active_endpoint;
+	}
+
+	/**
+	 * Init api options: cache key and url endpoint.
+	 *
+	 * @return string
+	 */
+	private function init_api_options( $endpoint = null, $cache_key = null ) {
+		$this->cache_key           = $this->cache_keys['welcome-video'];
+		$this->api_active_endpoint = $this->api_endpoints['welcome-video'];
+
+		if ( null !== $endpoint ) {
+			$this->api_active_endpoint = $endpoint;
+		}
+		if ( null !== $cache_key ) {
+			$this->cache_key = $cache_key;
+		}
 	}
 
 	/**
@@ -57,12 +87,6 @@ class FrmYoutubeFeedApi {
 	 * @return array
 	 */
 	public function get_latest_video() {
-
-		$cached_data = get_transient( $this->cache_keys['latest-video'] );
-		if ( false !== $cached_data ) {
-			return $cached_data;
-		}
-
 		return $this->get_feed_by_api_endpoint( $this->api_endpoints['latest-video'], $this->cache_keys['latest-video'] );
 	}
 
@@ -72,11 +96,6 @@ class FrmYoutubeFeedApi {
 	 * @return array
 	 */
 	public function get_welcome_video() {
-		$cached_data = get_transient( $this->cache_keys['welcome-video'] );
-		if ( false !== $cached_data ) {
-			return $cached_data;
-		}
-
 		return $this->get_feed_by_api_endpoint( $this->api_endpoints['welcome-video'], $this->cache_keys['welcome-video'] );
 	}
 
@@ -89,18 +108,7 @@ class FrmYoutubeFeedApi {
 	 * @return array
 	 */
 	private function get_feed_by_api_endpoint( $api_endpoint, $cache_key ) {
-		$response = wp_remote_get( $this->get_api_url( $api_endpoint ) );
-		if ( is_wp_error( $response ) ) {
-			return false;
-		}
-
-		$results = json_decode( wp_remote_retrieve_body( $response ), true );
-		set_transient(
-			$cache_key,
-			$results,
-			$this->cache_expire
-		);
-
-		return $results;
+		$this->init_api_options( $api_endpoint, $cache_key );
+		return $this->get_api_info( $api_endpoint, $cache_key );
 	}
 }

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-dashboard-banner">
 	<span class="frm-dashboard-banner-bg-shape"></span>
-	<span class="frm-dashboard-banner-close"></span>
+	<span class="frm-dashboard-banner-close"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></span>
 	<div class="frm-flex-box frm-justify-between frm-align-center">
 		<div>
 			<h4><?php echo esc_html__( 'Welcome to Formidable Forms', 'formidable' ); ?> 🎉</h4>

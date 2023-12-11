@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'publish' => array(
 				'FrmAppHelper::add_new_item_link',
 				array(
-					'trigger_new_form_modal' => current_user_can( 'frm_edit_forms' ),
+					'new_link' => admin_url( 'admin.php?page=formidable-form-templates' ),
 				),
 			),
 		)

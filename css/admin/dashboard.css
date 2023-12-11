@@ -118,8 +118,11 @@
 	height: 24px;
 	cursor: pointer;
 	z-index: 3;
-	background: url( '../../images/dashboard/close.svg' ) no-repeat;
-	background-size: 100%;
+}
+.frm-dashboard-banner .frm-dashboard-banner-close svg {
+	width:100%;
+	color: white;
+	opacity: .5;
 }
 .frm-dashboard-banner > div {
 	position: relative;

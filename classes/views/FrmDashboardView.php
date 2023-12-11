@@ -136,6 +136,38 @@ class FrmDashboardView {
 	}
 
 	/**
+	 * Dashboard - kses args for svg.
+	 *
+	 * @return array
+	 */
+	private static function wp_svg_kses_args() {
+		$kses_defaults = wp_kses_allowed_html( 'post' );
+		$svg_args      = array(
+			'svg'   => array(
+				'class'           => true,
+				'aria-hidden'     => true,
+				'aria-labelledby' => true,
+				'role'            => true,
+				'xmlns'           => true,
+				'width'           => true,
+				'height'          => true,
+				'viewbox'         => true,
+			),
+			'use'   => array(
+				'xlink:href' => true,
+			),
+			'g'     => array( 'fill' => true ),
+			'title' => array( 'title' => true ),
+			'path'  => array(
+				'd'    => true,
+				'fill' => true,
+			),
+		);
+
+		return array_merge( $kses_defaults, $svg_args );
+	}
+
+	/**
 	 * Dashboard - welcome banner template.
 	 *
 	 * @param boolean $echo
@@ -148,7 +180,7 @@ class FrmDashboardView {
 		}
 		return FrmAppHelper::clip(
 			function() {
-				echo wp_kses_post( $this->load_welcome_template() );
+				echo wp_kses( $this->load_welcome_template(), self::wp_svg_kses_args() );
 			},
 			$echo
 		);
