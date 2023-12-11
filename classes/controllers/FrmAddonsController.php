@@ -301,10 +301,11 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 * @since x.x This is public.
 	 *
 	 * @return array|false
 	 */
-	protected static function get_primary_license_info() {
+	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
@@ -1260,7 +1261,15 @@ class FrmAddonsController {
 		$addon        = self::get_addon( $plugin );
 		$upgrade_link = FrmAppHelper::admin_upgrade_link( $upgrade_link_args );
 
+		if ( ! is_array( $upgrade_link_args ) ) {
+			// A string $upgrade_link_args is used for the utm-medium value when calling
+			// FrmAppHelper::admin_upgrade_link above.
+			// For self::addon_upgrade_link, we'll pass just an empty array with the link key (set below).
+			$upgrade_link_args = array();
+		}
+
 		$upgrade_link_args['link'] = $upgrade_link;
+
 		self::addon_upgrade_link( $addon, $upgrade_link_args );
 	}
 

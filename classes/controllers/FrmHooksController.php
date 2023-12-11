@@ -107,6 +107,9 @@ class FrmHooksController {
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
+		// Summary emails.
+		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
+
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
 		FrmDashboardController::load_hooks();
@@ -194,6 +197,9 @@ class FrmHooksController {
 
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
+
+		// Cronjob.
+		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
