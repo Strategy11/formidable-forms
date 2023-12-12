@@ -10278,7 +10278,7 @@ function frmAdminBuildJS() {
 		settingsInit: function() {
 			const $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 
-			let formSettings, $loggedIn, $cookieExp, $editable;
+			let formSettings, $loggedIn, singleEntryType, $editable;
 
 			// BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
@@ -10385,28 +10385,17 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			$cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
-			jQuery( document.getElementById( 'frm_single_entry_type' ) ).on( 'change', function() {
-				if ( this.value === 'cookie' ) {
-					$cookieExp.fadeIn( 'slow' );
-				} else {
-					$cookieExp.fadeOut( 'slow' );
-				}
-			});
+			document.getElementById( 'frm_single_entry_type' ).addEventListener( 'change', function() {
+				singleEntryType = document.getElementById( `frm-${this.value}-toggle` );
 
-			var $singleEntry = document.getElementById( 'single_entry' );
-			jQuery( $singleEntry ).on( 'change', function() {
-				if ( this.checked ) {
-					visible( '.hide_single_entry' );
-				} else {
-					invisible( '.hide_single_entry' );
-				}
+				Array.prototype.forEach.call( document.getElementsByClassName( 'single-entry-type-dependency' ), ( selector ) => {
+					selector.classList.add('frm_hidden');
+				} );
 
-				if ( this.checked && jQuery( document.getElementById( 'frm_single_entry_type' ) ).val() === 'cookie' ) {
-					$cookieExp.fadeIn( 'slow' );
-				} else {
-					$cookieExp.fadeOut( 'slow' );
+				if ( ! singleEntryType ) {
+					return;
 				}
+				singleEntryType.classList.remove('frm_hidden');
 			});
 
 			jQuery( '.hide_save_draft' ).hide();
