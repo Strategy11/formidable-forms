@@ -30,7 +30,7 @@ wp.domReady( () => {
 		const showEmptyFieldsButton = document.getElementById( 'frm-entry-show-empty-fields' );
 
 		// Early return if the button is not found in the DOM.
-		if ( !showEmptyFieldsButton ) {
+		if ( ! showEmptyFieldsButton ) {
 			return;
 		}
 
