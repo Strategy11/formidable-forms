@@ -445,7 +445,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.7 =
 * New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
 * New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
-* New: A new dashboard landing page has been added with form and payment stats.
 * New: Error handling has been improved when trying to edit a form in trash or a form that does not exist.
 * New: The query for getting entry count has been optimized, significantly reducing the time it takes to count entries.
 * New: Default submit button HTML has been updated for new forms. Forms with the previous HTML would trigger the Previous button when the Enter key was pressed. Forms with the new layout have corrected this and will trigger the Next button instead when the Enter key is pressed.
