@@ -98,7 +98,7 @@ class FrmDashboardController {
 						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
 							'classname' => 'frm-trigger-new-form-modal',
-							'link'      => '#',
+							'link'      => admin_url( 'admin.php?page=formidable' ),
 							'label'     => esc_html__( 'Create a Payment Form', 'formidable' ),
 						),
 					),
@@ -194,7 +194,7 @@ class FrmDashboardController {
 	 *
 	 * @param string $title,
 	 * @param string $link,
-	 * @param boolean $type
+	 * @param boolean $display
 	 *
 	 * @return array
 	 */
@@ -286,7 +286,7 @@ class FrmDashboardController {
 				'copy'       => $copy,
 				'button'     => array(
 					'label'     => esc_html__( 'Add New Form', 'formidable' ),
-					'link'      => '#',
+					'link'      => admin_url( 'admin.php?page=formidable' ),
 					'classname' => 'frm-trigger-new-form-modal',
 				),
 			);

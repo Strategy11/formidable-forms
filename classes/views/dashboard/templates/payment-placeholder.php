@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<h4><?php echo esc_html( $template['counters'][0]['heading'] ); ?></h4>
 				<p><?php echo esc_html( $template['placeholder']['copy'] ); ?></p>
 			</div>
-			<a href="<?php esc_url( $template['placeholder']['cta']['link'] ); ?>" class=" <?php echo isset( $template['placeholder']['cta']['classname'] ) ? esc_attr( $template['placeholder']['cta']['classname'] ) : ''; ?>"><?php echo esc_html( $template['placeholder']['cta']['label'] ); ?></a>
+			<a href="<?php echo esc_url( $template['placeholder']['cta']['link'] ); ?>" class=" <?php echo isset( $template['placeholder']['cta']['classname'] ) ? esc_attr( $template['placeholder']['cta']['classname'] ) : ''; ?>"><?php echo esc_html( $template['placeholder']['cta']['label'] ); ?></a>
 		</div>
 	</div>
 </div>
