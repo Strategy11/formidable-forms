@@ -88,8 +88,6 @@ abstract class FrmEmailSummary {
 		 */
 		$args = apply_filters( 'frm_summary_email_content_args', $args, array( 'email_obj' => $this ) );
 
-		$suffix = $this->is_html ? '' : '-plain';
-
 		ob_start();
 		include $this->get_include_file( 'base' );
 		$content = ob_get_clean();

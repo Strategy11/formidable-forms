@@ -51,29 +51,6 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 				app.updateForm( msg.data );
 			});
-
-			jQuery( document ).on( 'mouseover', '#frm_new_form_modal .frm-selectable', function() {
-				var $item = jQuery( this ),
-					$icons = $item.find( '.frm-hover-icons' ),
-					$clone;
-
-				if ( ! $icons.length ) {
-					$clone = jQuery( '#frm-hover-icons-template' ).clone();
-					$clone.removeAttr( 'id' );
-					$item.append( $clone );
-				}
-
-				$icons.show();
-			});
-
-			jQuery( document ).on( 'mouseout', '#frm_new_form_modal .frm-selectable', function() {
-				var $item = jQuery( this ),
-					$icons = $item.find( '.frm-hover-icons' );
-
-				if ( $icons.length ) {
-					$icons.hide();
-				}
-			});
 		},
 
 		/**
@@ -342,6 +319,9 @@ function frmAdminBuildJS() {
 		thisFormId = thisForm.value;
 	}
 
+	const currentURL = new URL( window.location.href );
+	const urlParams = currentURL.searchParams;
+
 	// Global settings
 	var s;
 
@@ -423,6 +403,16 @@ function frmAdminBuildJS() {
 				continueButton.setAttribute( 'data-' + i, dataAtts[i]);
 			}
 		}
+
+		/**
+		 * Triggers the pre-open action for a confirmation modal. This action passes
+		 * relevant modal information and associated link to any listening hooks.
+		 *
+		 * @param {Object} options An object containing modal elements and data.
+		 * @param {HTMLElement} options.$info The HTML element containing modal information.
+		 * @param {string} options.link The link associated with the modal action.
+		 */
+		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link });
 
 		$info.dialog( 'open' );
 		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
@@ -4361,7 +4351,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldGroupMessage.classList.add( 'frm_hidden' );
-		fieldGroupMessage.classList.remove( 'frm-fadein' );
+		fieldGroupMessage.classList.remove( 'frm-fadein-up-back' );
 	}
 
 	/**
@@ -4376,7 +4366,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldGroupMessage.classList.remove( 'frm_hidden' );
-		fieldGroupMessage.classList.add( 'frm-fadein' );
+		fieldGroupMessage.classList.add( 'frm-fadein-up-back' );
 	}
 
 	/**
@@ -4400,7 +4390,7 @@ function frmAdminBuildJS() {
 
 		fieldGroupMessage = div({
 			id: 'frm-field-group-message',
-			className: 'frm-flex-center frm-fadein',
+			className: 'frm-flex-center frm-fadein-up-back',
 			children: [
 				span({
 					id: 'frm-field-group-message-dismiss',
@@ -6217,6 +6207,10 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var $thisEle = this;
 
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		preFormSave( this );
 
 		var $form = jQuery( builderForm );
@@ -6259,11 +6253,91 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var form;
 
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		preFormSave( this );
 		form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
 		triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 	}
+
+	/**
+	 * Display a modal dialog for naming a new form template, if applicable.
+	 *
+	 * @return {boolean} True if the modal is successfully initialized and displayed; false otherwise.
+	 */
+	function showNameYourFormModal() {
+		// Exit early if the 'new_template' URL parameter is not set to 'true'
+		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+			return false;
+		}
+
+		const modalWidget = initModal( '#frm-form-templates-modal', '440px' );
+		if ( ! modalWidget ) {
+			return false;
+		}
+
+		// Set the vertical offset for the modal and open it
+		offsetModalY( modalWidget, '72px' );
+		modalWidget.dialog( 'open' );
+
+		return true;
+	}
+
+	/**
+	 * Manages event handling for the 'Name your form' modal.
+	 *
+	 * Attaches click and keydown event listeners to the save button and input field.
+	 *
+	 * @return {void}
+	 */
+	function addFormNameModalEvents() {
+		const saveFormNameButton = document.getElementById( 'frm-save-form-name-button' );
+		const newFormNameInput = document.getElementById( 'frm_new_form_name_input' );
+
+		// Attach click event listener
+		onClickPreventDefault( saveFormNameButton, onSaveFormNameButton );
+
+		// Attach keydown event listener
+		newFormNameInput.addEventListener( 'keydown', function( event ) {
+			if ( event.key === 'Enter' ) {
+				onSaveFormNameButton.call( this, event );
+			}
+		});
+	}
+
+	/**
+	 * Handles the click event on the save form name button.
+	 *
+	 * @param {Event} event The click event object.
+	 * @return {void}
+	 */
+	const onSaveFormNameButton = ( event ) => {
+		const newFormName = document.getElementById( 'frm_new_form_name_input' ).value.trim();
+
+		// Prepare FormData for the POST request
+		const formData = new FormData();
+		formData.append( 'form_id', urlParams.get( 'id' ) );
+		formData.append( 'form_name', newFormName );
+
+		// Perform the POST request
+		doJsonPost( 'rename_form', formData ).then( data => {
+			// Remove the 'new_template' parameter from the URL and update the browser history
+			urlParams.delete( 'new_template' );
+			currentURL.search = urlParams.toString();
+			history.replaceState({}, '', currentURL.toString() );
+
+			if ( null !== document.getElementById( 'frm_notification_settings' ) ) {
+				document.getElementById( 'frm_form_name' ).value = newFormName;
+				document.getElementById( 'frm_form_key' ).value = data.form_key;
+			}
+
+			// Trigger the 'Save' button click using jQuery
+			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
+		});
+	};
 
 	function preFormSave( b ) {
 		removeWPUnload();
@@ -7384,6 +7458,10 @@ function frmAdminBuildJS() {
 	}
 
 	function submitSettings() {
+		if ( showNameYourFormModal() ) {
+			return;
+		}
+
 		/*jshint validthis:true */
 		preFormSave( this );
 		triggerSubmit( document.querySelector( '.frm_form_settings' ) );
@@ -7874,97 +7952,6 @@ function frmAdminBuildJS() {
 		};
 		jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
 		$modal.on( 'click', 'a.dismiss', closeModal );
-	}
-
-	function triggerNewFormModal( event ) {
-		var $modal,
-			dismiss = document.getElementById( 'frm_new_form_modal' ).querySelector( 'a.dismiss' );
-
-		if ( typeof event !== 'undefined' ) {
-			event.preventDefault();
-		}
-
-		dismiss.setAttribute( 'tabindex', -1 );
-
-		$modal = initModal( '#frm_new_form_modal', '600px' );
-		offsetModalY( $modal, '50px' );
-		$modal.attr( 'frm-page', 'create' );
-		$modal.find( '#template-search-input' ).val( '' ).trigger( 'change' );
-		$modal.dialog( 'open' );
-
-		dismiss.removeAttribute( 'tabindex' );
-		bindClickForDialogClose( $modal );
-
-		addApplicationsToNewFormModal( $modal.get( 0 ) );
-	}
-
-	function addApplicationsToNewFormModal( modal ) {
-		if ( modal.querySelector( '.frm-ready-made-solution' ) ) {
-			// Avoid adding duplicates if the modal is opened multiple times.
-			return;
-		}
-
-		if ( ! frmGlobal.canAccessApplicationDashboard ) {
-			// User does not have privileges to see Ready Made Solutions.
-			return;
-		}
-
-		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
-
-		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
-
-		function addTemplatesOnFetchSuccess( data ) {
-			data.templates.forEach( addTemplateToCategoryList );
-			initSearch( 'template-search-input', 'frm-searchable-template frm-ready-made-solution' );
-		}
-
-		function addTemplateToCategoryList( template ) {
-			categoryList.appendChild( getReadyMadeSolution( template ) );
-		}
-
-		function getReadyMadeSolution( template ) {
-			const image = tag( 'img' );
-			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
-			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
-			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
-
-			const imageWrapper = div({ child: image });
-			const href = frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key;
-
-			return tag(
-				'li',
-				{
-					className: 'frm-searchable-template frm-ready-made-solution frm-selectable',
-					data: {
-						href: href
-					},
-					children: [
-						imageWrapper,
-						div({
-							className: 'frm-solution-details',
-							children: [
-								span({
-									className: 'frm-meta-tag',
-									text: __( 'Ready Made Solution', 'formidable' )
-								}),
-								tag( 'h3', template.name ),
-								a({
-									text: __( 'See all applications', 'formidable' ),
-									href: frmGlobal.applicationsUrl
-								})
-							]
-						}),
-						div({
-							className: 'frm-hover-icons',
-							child: a({
-								child: svg({ href: '#frm_plus_icon' }),
-								href: href
-							})
-						})
-					]
-				}
-			);
-		}
 	}
 
 	function offsetModalY( $modal, amount ) {
@@ -8708,26 +8695,8 @@ function frmAdminBuildJS() {
 	}
 
 	/* Templates */
-
-	function showFreeTemplatesForm() {
-		loadApiEmailForm();
-	}
-
 	function showActiveCampaignForm() {
 		loadApiEmailForm();
-	}
-
-	function loadApiEmailForm() {
-		const formContainer = document.getElementById( 'frmapi-email-form' );
-		jQuery.ajax({
-			dataType: 'json',
-			url: formContainer.getAttribute( 'data-url' ),
-			success: function( json ) {
-				var form = json.renderedHtml;
-				form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
-				formContainer.innerHTML = form;
-			}
-		});
 	}
 
 	function handleApiFormError( inputId, errorId, type, message ) {
@@ -8747,431 +8716,18 @@ function frmAdminBuildJS() {
 		handleApiFormError( '#frm_leave_email', '#frm_leave_email_error', type );
 	}
 
-	function initNewFormModal() {
-		var installFormTrigger,
-			activeHoverIcons,
-			$modal,
-			handleConfirmEmailAddressError,
-			firstLockedTemplate,
-			isShowFreeTemplatesFormFirst,
-			url,
-			urlParams;
-
-		url       = new URL( window.location.href );
-		urlParams = url.searchParams;
-
-		isShowFreeTemplatesFormFirst = urlParams.get( 'free-templates' );
-
-		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
-		$modal = initModal( '#frm_new_form_modal', '600px' );
-
-		if ( false === $modal ) {
-			return;
-		}
-
-		setTimeout(
-			function() {
-				$modal.get( 0 ).querySelector( '.postbox' ).style.display = 'block'; // Fixes pro issue #3508, prevent a conflict that hides the postbox in modal.
-			},
-			0
-		);
-
-		installFormTrigger = document.createElement( 'a' );
-		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
-		document.body.appendChild( installFormTrigger );
-
-		jQuery( '.frm-install-template' ).on( 'click', function( event ) {
-			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
-				nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' ),
-				oldName;
-
-			$h3Clone.find( 'svg, .frm-plan-required-tag' ).remove();
-			oldName = $h3Clone.html().trim();
-
-			event.preventDefault();
-
-			document.getElementById( 'frm_template_name' ).value = oldName;
-			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.textContent = nameLabel.getAttribute( 'data-form' );
-			descLabel.textContent = descLabel.getAttribute( 'data-form' );
-			$modal.dialog( 'open' );
-		});
-
-		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
-
-		jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-			var $li, link, iframe,
-				container = document.getElementById( 'frm-preview-block' );
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-			link = $li.attr( 'data-preview' );
-
-			if ( link.indexOf( ajaxurl ) > -1 ) {
-				iframe = document.createElement( 'iframe' );
-				iframe.src = link;
-				iframe.height = '400';
-				iframe.width = '100%';
-				container.innerHTML = '';
-				container.appendChild( iframe );
-			} else {
-				frmApiPreview( container, link );
-			}
-
-			jQuery( '#frm-preview-title' ).text( getStrippedTemplateName( $li ) );
-			$modal.attr( 'frm-page', 'preview' );
-			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
-		});
-
-		jQuery( document ).on( 'click', 'li.frm-ready-made-solution[data-href]', function() {
-			window.location = this.getAttribute( 'data-href' );
-		});
-
-		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
-			var $li, name, link, action;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-
-			if ( $li.is( '[data-href]' ) ) {
-				window.location = $li.attr( 'data-href' );
-				return;
-			}
-
-			if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-				name = link = '';
-				action = 'frm_install_form';
-			} else if ( $li.is( '[data-rel]' ) ) {
-				name = getStrippedTemplateName( $li );
-				link = $li.attr( 'data-rel' );
-				action = 'frm_install_template';
-			} else {
-				return;
-			}
-
-			transitionToAddDetails( $modal, name, link, action );
-		});
-
-		// Welcome page modals.
-		jQuery( document ).on( 'click', '.frm-create-blank-form', function( event ) {
-			event.preventDefault();
-			jQuery( '.frm-trigger-new-form-modal' ).trigger( 'click' );
-			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
-
-			// Close the modal with the cancel button.
-			jQuery( '.frm-modal-cancel.frm-back-to-all-templates' ).on( 'click', function() {
-				jQuery( '.ui-widget-overlay' ).trigger( 'click' );
-			});
-		});
-
-		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {
-			var $hoverIcons, $trigger,
-				$li = jQuery( this ).closest( 'li' ),
-				triggerClass = $li.hasClass( 'frm-locked-template' ) ? 'frm-unlock-form' : 'frm-create-form';
-
-			$hoverIcons = $li.find( '.frm-hover-icons' );
-			if ( ! $hoverIcons.length ) {
-				$li.trigger( 'mouseover' );
-				$hoverIcons = $li.find( '.frm-hover-icons' );
-				$hoverIcons.hide();
-			}
-
-			$trigger = $hoverIcons.find( '.' + triggerClass );
-			$trigger.trigger( 'click' );
-		});
-
-		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
-			var $li,
-				trigger;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( 'li' );
-			$li.addClass( 'frm-deleting' );
-			trigger = document.createElement( 'a' );
-			trigger.setAttribute( 'href', '#' );
-			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
-			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
-			jQuery( trigger ).on( 'click', trashTemplate );
-			trigger.click();
-			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
-		});
-
-		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
-			var $li,
-				activePage;
-
-			event.preventDefault();
-
-			$li = jQuery( this ).closest( '.frm-locked-template' );
-
-			if ( $li.hasClass( 'frm-free-template' ) ) {
-				showFreeTemplatesForm();
-
-				$modal.attr( 'frm-page', 'email' );
-
-				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
-				$li.append( installFormTrigger );
-				return;
-			}
-
-			if ( $modal.hasClass( 'frm-expired' ) ) {
-				activePage = 'renew';
-			} else {
-				activePage = 'upgrade';
-			}
-
-			$modal.attr( 'frm-page', activePage );
-		});
-
-		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop', function() {
-			jQuery( this )
-				.closest( '.accordion-section-content' ).css( 'overflow', 'visible' )
-				.closest( '.accordion-section' ).css( 'z-index', 1 );
-		});
-
-		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + .frm-dropdown-menu .frm-build-template', function() {
-			var name = this.getAttribute( 'data-fullname' ),
-				link = this.getAttribute( 'data-formid' ),
-				action = 'frm_build_template';
-			transitionToAddDetails( $modal, name, link, action );
-		});
-
-		handleConfirmEmailAddressError = function( type, message ) {
-			handleApiFormError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
-		};
-
-		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
-			var code = document.getElementById( 'frm_code_from_email' ).value.trim();
-
-			event.preventDefault();
-
-			if ( '' === code ) {
-				handleConfirmEmailAddressError( 'empty' );
-				return;
-			}
-
-			jQuery.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				dataType: 'json',
-				data: {
-					action: 'template_api_signup',
-					nonce: frmGlobal.nonce,
-					code: code,
-					key: $modal.attr( 'frm-this-form' )
-				},
-				success: function( response ) {
-					if ( response.success ) {
-						if ( isShowFreeTemplatesFormFirst ) {
-							// Remove free-templates param from URL then reload page.
-							urlParams.delete( 'free-templates' );
-							url.search = urlParams.toString();
-							window.location.href = url.toString();
-
-							return;
-						}
-
-						if ( typeof response.data !== 'undefined' && typeof response.data.url !== 'undefined' ) {
-							installFormTrigger.setAttribute( 'rel', response.data.url );
-							installFormTrigger.click();
-							$modal.attr( 'frm-page', 'details' );
-
-							const hookName = 'frm_new_form_modal_form';
-							wp.hooks.doAction( hookName, $modal );
-
-							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-
-							if ( typeof response.data.urlByKey !== 'undefined' ) {
-								updateTemplateModalFreeUrls( response.data.urlByKey );
-							}
-						}
-					} else {
-						if ( Array.isArray( response.data ) && response.data.length ) {
-							handleConfirmEmailAddressError( 'custom', response.data[0].message );
-						} else {
-							handleConfirmEmailAddressError( 'wrong-code' );
-						}
-
-						jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
-					}
-				}
-			});
-		});
-
-		jQuery( document ).on( 'click', '#frm-change-email-address', function() {
-			$modal.attr( 'frm-page', 'email' );
-		});
-
-		jQuery( document ).on( 'click', '#frm-resend-code', function() {
-			document.getElementById( 'frm_code_from_email' ).value = '';
-			jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
-			document.getElementById( 'frm-add-my-email-address' ).click();
-		});
-
-		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
-			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
-			$modal.attr( 'frm-page', 'create' );
-		});
-
-		jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
-			var $trigger;
-
-			event.preventDefault();
-
-			$trigger = activeHoverIcons.find( '.frm-create-form' );
-			if ( $trigger.closest( '.frm-selectable' ).hasClass( 'frm-locked-template' ) ) {
-				$trigger = activeHoverIcons.find( '.frm-unlock-form' );
-			}
-
-			$trigger.trigger( 'click' );
-		});
-
-		jQuery( document ).on( 'click', '.frm-submit-new-template', function( event ) {
-			var button;
-			event.preventDefault();
-			button = document.getElementById( 'frm-new-template' ).querySelector( 'button' );
-			if ( null !== button ) {
-				button.click();
-			}
-		});
-
-		if ( urlParams.get( 'triggerNewFormModal' ) ) {
-			triggerNewFormModal();
-
-			if ( isShowFreeTemplatesFormFirst ) {
-				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template' ).eq( 0 );
-
-				if ( firstLockedTemplate.length ) {
-					showFreeTemplatesForm();
-
-					$modal.attr( 'frm-page', 'email' );
-					$modal.attr( 'frm-this-form', firstLockedTemplate.attr( 'data-key' ) );
-
-					firstLockedTemplate.append( installFormTrigger );
-				}
-
-				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
-				$modalBackButton = $modal.find( '.frm-modal-back' );
-				$modalBackButton.hide();
-				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
-					$modalBackButton.show();
-					$modal.dialog( 'close' );
-				});
-			}
-		}
-
-		initSearch( 'template-search-input', 'control-section accordion-section' );
-	}
-
-	function initSearch( inputID, itemClass ) {
-		const searchInput = document.getElementById( inputID );
-
-		if ( itemClass === 'control-section accordion-section' ) {
-			itemClass = 'frm-selectable frm-searchable-template';
-
-			const handleTemplateSearch = () => {
-				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
-					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' ) || ( searchInput.value === '' && category.querySelector( '#frm-template-drop' ) );
-					if ( found ) {
-						setTemplateCount( category );
-					}
-					category.classList.toggle( 'frm_hidden', ! found );
-				});
-			};
-
-			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
-
-		} else {
-			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
-				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
-					let innerText = '';
-					innerText = item.querySelector( 'h3' ).innerText;
-					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
-				});
-			}
-			frmDom.search.init( searchInput, itemClass );
-		}
-
-	}
-
-	function updateTemplateModalFreeUrls( urlByKey ) {
-		jQuery( '#frm_new_form_modal' ).find( '.frm-selectable[data-key]' ).each( function() {
-			var $template = jQuery( this ),
-				key = $template.attr( 'data-key' );
-			if ( 'undefined' !== typeof urlByKey[ key ]) {
-				$template.removeClass( 'frm-locked-template' );
-				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
-				$template.attr( 'data-rel', urlByKey[ key ]);
+	function loadApiEmailForm() {
+		const formContainer = document.getElementById( 'frmapi-email-form' );
+		jQuery.ajax({
+			dataType: 'json',
+			url: formContainer.getAttribute( 'data-url' ),
+			success: function( json ) {
+				var form = json.renderedHtml;
+				form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
+				formContainer.innerHTML = form;
 			}
 		});
 	}
-
-	function transitionToAddDetails( $modal, name, link, action ) {
-		var nameLabel = document.getElementById( 'frm_new_name' ),
-			descLabel = document.getElementById( 'frm_new_desc' ),
-			type = [ 'frm_install_template', 'frm_install_form' ].indexOf( action ) >= 0 ? 'form' : 'template',
-			templateNameInput = document.getElementById( 'frm_template_name' );
-
-		templateNameInput.value = name;
-		document.getElementById( 'frm_link' ).value = link;
-		document.getElementById( 'frm_action_type' ).value = action;
-		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
-		if ( descLabel !== null ) {
-			descLabel.textContent = descLabel.getAttribute( 'data-' + type );
-		}
-
-		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
-
-		$modal.attr( 'frm-page', 'details' );
-
-		const hookName = 'frm_new_form_modal_form';
-		wp.hooks.doAction( hookName, $modal );
-
-		if ( '' === name ) {
-			templateNameInput.focus();
-		}
-	}
-
-	function getStrippedTemplateName( $li ) {
-		var $clone = $li.find( 'h3' ).clone();
-		$clone.find( 'svg, .frm-plan-required-tag, .frm-new-pill' ).remove();
-		return $clone.html().trim();
-	}
-
-	function setTemplateCount( category, searchableTemplates ) {
-		var count,
-			templateIndex,
-			availableCounter,
-			availableCount;
-
-		if ( typeof searchableTemplates === 'undefined' ) {
-			searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden):not(.frm-deleting)' );
-		}
-
-		count = searchableTemplates.length;
-		category.querySelector( '.frm-template-count' ).textContent = count;
-
-		jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-		jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
-
-		availableCounter = category.querySelector( '.frm-available-templates-count' );
-		if ( availableCounter !== null ) {
-			availableCount = 0;
-			for ( templateIndex in searchableTemplates ) {
-				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-					availableCount++;
-				}
-			}
-
-			availableCounter.textContent = availableCount;
-		}
-	}
-
 	function initSelectionAutocomplete() {
 		frmDom.autocomplete.initSelectionAutocomplete();
 	}
@@ -9179,27 +8735,6 @@ function frmAdminBuildJS() {
 	function nextInstallStep( thisStep ) {
 		thisStep.classList.add( 'frm_grey' );
 		thisStep.nextElementSibling.classList.remove( 'frm_grey' );
-	}
-
-	function frmApiPreview( cont, link ) {
-		cont.innerHTML = '<div class="frm-wait"></div>';
-		jQuery.ajax({
-			dataType: 'json',
-			url: link,
-			success: function( json ) {
-				var form = json.renderedHtml;
-				form = form.replace( /<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-				form = form.replace( /<link\b[^>]*(jquery-ui.min.css)[^>]*>/gi, '' );
-				form = form.replace( ' frm_logic_form ', ' ' );
-				form = form.replace( '<form ', '<form onsubmit="event.preventDefault();" ' );
-				cont.innerHTML = '<div class="frm-wait" id="frm-remove-me"></div><div class="frm-fade" id="frm-show-me">' +
-				form + '</div>';
-				setTimeout( function() {
-					document.getElementById( 'frm-remove-me' ).style.display = 'none';
-					document.getElementById( 'frm-show-me' ).style.opacity = '1';
-				}, 300 );
-			}
-		});
 	}
 
 	function installTemplateFieldset( e ) {
@@ -9827,8 +9362,8 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Listen for click events for an API-loaded email collection form.
-	 * This is used for the free templates flow of the new form modal.
-	 * It is also used for the Active Campaign sign-up form in the inbox page (when there are no messages).
+	 *
+	 * This is used for the Active Campaign sign-up form in the inbox page (when there are no messages).
 	 */
 	function initAddMyEmailAddress() {
 		jQuery( document ).on(
@@ -9840,9 +9375,19 @@ function frmAdminBuildJS() {
 			}
 		);
 
+<<<<<<< HEAD
 		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
 		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
 		if ( emptyInbox && leaveEmailIput ) {
+=======
+		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
+		if ( emptyInbox ) {
+			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
+			leaveEmailModal.classList.remove( 'frm_hidden' );
+			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
+
+			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+>>>>>>> master
 			leaveEmailIput.addEventListener(
 				'keyup',
 				event => {
@@ -9887,6 +9432,7 @@ function frmAdminBuildJS() {
 				const spinner = span({ className: 'frm-wait frm_spinner' });
 				spinner.style.visibility = 'visible';
 				spinner.style.float      = 'none';
+				spinner.style.width      = 'unset';
 				emailWrapper.parentElement.insertBefore(
 					spinner,
 					emailWrapper.nextElementSibling
@@ -9913,16 +9459,10 @@ function frmAdminBuildJS() {
 			}
 
 			// Handle successful form submission.
-			// If the new form modal exists, handle the free templates form.
-			const modal = document.getElementById( 'frm_new_form_modal' );
-			if ( modal ) {
-				modal.setAttribute( 'frm-page', 'code' );
-			} else {
-				// If no modal exists handle the Active Campaign form on the inbox page.
-				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-					document.createTextNode( 'Thank you for signing up!' )
-				);
-			}
+			// handle the Active Campaign form on the inbox page.
+			document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
+				span({ text: __( 'Thank you for signing up!', 'formidable' ) })
+			);
 		});
 	}
 
@@ -9942,6 +9482,32 @@ function frmAdminBuildJS() {
 		bodyContent.appendChild( footerLinks );
 		footerLinks.classList.remove( 'frm_hidden' );
 	}
+
+	/**
+	 * Apply zebra striping to a table while ignoring empty rows.
+	 *
+	 * @param {string} tableSelector The CSS selector for the table.
+	 * @param {string} emptyRowClass The class name used to identify empty rows.
+	 */
+	function applyZebraStriping( tableSelector, emptyRowClass ) {
+		// Get all non-empty table rows within the specified table
+		const rows = document.querySelectorAll( `${tableSelector} tr${emptyRowClass ? `:not(.${emptyRowClass})` : ''}` );
+		if ( rows.length < 1 ) {
+			return;
+		}
+
+		let isOdd = true;
+		rows.forEach( row => {
+			// Clean old "frm-odd" or "frm-even" classes and add the appropriate new class
+			row.classList.remove( 'frm-odd', 'frm-even' );
+			row.classList.add( isOdd ? 'frm-odd' : 'frm-even' );
+
+			isOdd = ! isOdd;
+		});
+
+		const tables = document.querySelectorAll( tableSelector );
+		tables.forEach( table => table.classList.add( 'frm-zebra-striping' ) );
+	};
 
 	return {
 		init: function() {
@@ -9996,8 +9562,6 @@ function frmAdminBuildJS() {
 				// Solution install page
 				frmAdminBuild.solutionInit();
 			} else {
-				// New form selection page
-				initNewFormModal();
 				initSelectionAutocomplete();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
@@ -10064,7 +9628,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm_new_form_modal #template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
@@ -10146,6 +9710,8 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
+
+			addFormNameModalEvents();
 
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );
@@ -10314,6 +9880,8 @@ function frmAdminBuildJS() {
 			});
 
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
+
+			addFormNameModalEvents();
 
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
@@ -10793,10 +10361,13 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		infoModal: infoModal,
-		initModal: initModal,
-		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
-		addRadioCheckboxOpt: addRadioCheckboxOpt
+		applyZebraStriping,
+		initModal,
+		infoModal,
+		offsetModalY,
+		adjustConditionalLogicOptionOrders,
+		addRadioCheckboxOpt,
+		installNewForm
 	};
 }
 

@@ -57,22 +57,18 @@ class FrmTipsHelper {
 
 		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip">
+		<span class="frm_pro_tip">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
 				<span class="frm-tip-info">
 					<?php echo esc_html( $tip['tip'] ); ?>
 				</span>
-				<span class="frm-tip-cta">
-					<?php echo esc_html( $tip['call'] ); ?>
-				</span>
-			<?php } else { ?>
-				<span class="frm-tip-cta">
-					<?php echo esc_html( $tip['tip'] ); ?>
-				</span>
 			<?php } ?>
-		</a>
+			<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm-tip-cta">
+				<?php echo esc_html( $tip['call'] ? $tip['call'] : $tip['tip'] ); ?>
+			</a>
+		</span>
 		<?php
 
 		if ( 'p' === $html ) {
@@ -409,5 +405,51 @@ class FrmTipsHelper {
 		$random = rand( 0, count( $tips ) - 1 );
 
 		return $tips[ $random ];
+	}
+
+	/**
+	 * Displays a call-to-action section in the admin area.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *     An array of arguments to configure the call-to-action section.
+	 *
+	 *     @type string $title       The title of the section.
+	 *     @type string $description The description of the section.
+	 *     @type string $link_text   The text for the link.
+	 *     @type string $link_url    The URL for the link.
+	 *     @type string $role        The required user role to view the section. Default 'administrator'.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function show_admin_cta( $args ) {
+		$role = ! empty( $args['role'] ) ? $args['role'] : 'administrator';
+
+		if ( ! current_user_can( $role ) ) {
+			return; // Return early if the user doesn't have the required capability
+		}
+
+		$defaults = array(
+			'title'       => '',
+			'description' => '',
+			'link_text'   => '',
+			'link_url'    => '#',
+			'class'       => '',
+			'id'          => '',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$attributes = array(
+			'class' => trim( 'frm-cta frm-flex frm-p-sm ' . $args['class'] ),
+		);
+
+		if ( $args['id'] ) {
+			$attributes['id'] = $args['id'];
+		}
+
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
 	}
 }

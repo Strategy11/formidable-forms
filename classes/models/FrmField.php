@@ -443,6 +443,12 @@ class FrmField {
 		self::preserve_format_option_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
+			if ( 'dropdown' === $values['type'] ) {
+				// To avoid conflicts with security plugins the value "dropdown" is sent for select fields.
+				// This is because "select" gets matched for SQL injection attempts.
+				$values['type'] = 'select';
+			}
+
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {

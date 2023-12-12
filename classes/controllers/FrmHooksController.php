@@ -198,6 +198,9 @@ class FrmHooksController {
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
 
+		// From Templates.
+		FrmFormTemplatesController::load_admin_hooks();
+
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
@@ -236,17 +239,21 @@ class FrmHooksController {
 
 		// Forms Controller.
 		add_action( 'wp_ajax_frm_save_form', 'FrmFormsController::route' );
+		add_action( 'wp_ajax_frm_rename_form', 'FrmFormsController::rename_form' );
 		add_action( 'wp_ajax_frm_get_default_html', 'FrmFormsController::get_email_html' );
 		add_action( 'wp_ajax_frm_get_shortcode_opts', 'FrmFormsController::get_shortcode_opts' );
 		add_action( 'wp_ajax_frm_forms_preview', 'FrmFormsController::preview' );
 		add_action( 'wp_ajax_nopriv_frm_forms_preview', 'FrmFormsController::preview' );
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
-		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 		add_action( 'wp_ajax_frm_create_page_with_shortcode', 'FrmFormsController::create_page_with_shortcode' );
 		add_action( 'wp_ajax_get_page_dropdown', 'FrmFormsController::get_page_dropdown' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
+
+		// Form Templates Controller.
+		add_action( 'wp_ajax_frm_add_or_remove_favorite_template', 'FrmFormTemplatesController::ajax_add_or_remove_favorite' );
+		add_action( 'wp_ajax_frm_create_template', 'FrmFormTemplatesController::ajax_create_template' );
 
 		// Inbox.
 		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );
