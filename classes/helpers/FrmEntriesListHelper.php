@@ -15,7 +15,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @return void
-	 * @param array $args
 	 */
 	public function prepare_items() {
 		$this->set_per_page();
