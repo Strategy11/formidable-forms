@@ -17,10 +17,10 @@ jobs:
           php-version: '7.4'
           coverage: none
           ini-values: display_errors = on, error_reporting = E_ALL
-          tools: phpstan, composer
+          tools: composer
 
       - name: "💽  Installing Composer Packages"
         run: composer install
 
       - name: "🧪 Test"
-        run: phpstan analyze ./
+        run: vendor/bin/phpstan analyze ./ --memory-limit=1G

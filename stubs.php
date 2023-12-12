@@ -21,6 +21,56 @@ namespace {
 	define( 'WP_IMPORTING', false );
 	define( 'ICL_PLUGIN_INACTIVE', false );
 
+	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
+	}
+	class FrmProSettings extends FrmSettings {
+	}
+	class FrmProApplicationsHelper {
+		public static function get_custom_applications_capability() {}
+	}
+	class FrmProFileImport {
+		public static function import_attachment( $val, $field ) {
+		}
+	}
+	class FrmProAppHelper {
+		public static function get_settings() {
+		}
+	}
+	class FrmProEntryMetaHelper {
+		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
+		}
+	}
+	class FrmProFormActionsController {
+	}
+	class FrmViewsLayout {
+	}
+	class FrmProDisplaysHelper {
+		public static function get_shortcodes( $content, $form_id ) {
+		}
+	}
+	class FrmProAddonsController {
+	}
+	class FrmProDb {
+		public static $plug_version;
+	}
+	class FrmProStylesController extends FrmStylesController {
+	}
+	class FrmProPost {
+	}
+	class FrmProEntriesController {
+		public static function show_entry_shortcode( $atts ) {
+		}
+	}
+	class FrmProFormsHelper {
+		public static function &post_type( $form ) {
+		}
+	}
+	class FrmProEntry {
+	}
+	class FrmProEntryFormatter extends FrmEntryFormatter {
+	}
+	class FrmProEntriesHelper {
+	}
 	class FrmProFieldsHelper {
 		/**
 		 * @param array  $args
@@ -30,6 +80,8 @@ namespace {
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
 		}
 	}
+	class FrmViewsAppHelper {
+	}
 	class FrmProCreditCardsController {
 		/**
 		 * @param array  $field
@@ -38,6 +90,13 @@ namespace {
 		 * @return void
 		 */
 		public static function show_in_form( $field, $field_name, $atts ) {
+		}
+	}
+	class FrmProAppController {
+		/**
+		 * @return bool
+		 */
+		public static function has_combo_js_file() {
 		}
 	}
 	class Akismet {
