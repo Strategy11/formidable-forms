@@ -17,11 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php
-			$page_description = sprintf(
-				// Translators: 1: Menu name
-				esc_html__( 'Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ),
-				FrmAppHelper::get_menu_name()
-			);
+			if ( FrmAppHelper::is_formidable_branding() ) {
+				$page_description = esc_html__( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' );
+			} else {
+				$page_description = sprintf(
+					// Translators: 1: Menu name
+					esc_html__( 'Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ),
+					FrmAppHelper::get_menu_name()
+				);
+			}
 			echo esc_html( apply_filters( 'frm_upload_instructions1', $page_description ) );
 			?>
 		</p>
@@ -32,11 +36,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p>
 				<label>
 					<?php
-					$file_section_title = sprintf(
-						// Translators: 1: Menu name
-						__( 'Choose a %1$s XML file', 'formidable' ),
-						FrmAppHelper::get_menu_name()
-					);
+					if ( FrmAppHelper::is_formidable_branding() ) {
+						$file_section_title = esc_html__( 'Choose a Formidable XML file', 'formidable' );
+					} else {
+						$file_section_title = sprintf(
+							// Translators: 1: Menu name
+							esc_html__( 'Choose a %1$s XML file', 'formidable' ),
+							FrmAppHelper::get_menu_name()
+						);
+					}
 					echo esc_html( apply_filters( 'frm_upload_instructions2', $file_section_title ) );
 					?>
 					(<?php
