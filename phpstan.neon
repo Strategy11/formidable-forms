@@ -4,9 +4,6 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
-	scanDirectories:
-		- ../formidable-pro
-		- ../formidable-views
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
