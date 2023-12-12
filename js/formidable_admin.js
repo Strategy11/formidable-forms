@@ -10278,7 +10278,7 @@ function frmAdminBuildJS() {
 		settingsInit: function() {
 			const $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 
-			let formSettings, $loggedIn, singleEntryType, $editable;
+			let formSettings;
 
 			// BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
@@ -10376,45 +10376,6 @@ function frmAdminBuildJS() {
 
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
-			$loggedIn = document.getElementById( 'logged_in' );
-			jQuery( $loggedIn ).on( 'change', function() {
-				if ( this.checked ) {
-					visible( '.hide_logged_in' );
-				} else {
-					invisible( '.hide_logged_in' );
-				}
-			});
-
-			document.getElementById( 'frm_single_entry_type' ).addEventListener( 'change', function() {
-				singleEntryType = document.getElementById( `frm-${this.value}-toggle` );
-
-				Array.prototype.forEach.call( document.getElementsByClassName( 'single-entry-type-dependency' ), ( selector ) => {
-					selector.classList.add('frm_hidden');
-				} );
-
-				if ( ! singleEntryType ) {
-					return;
-				}
-				singleEntryType.classList.remove('frm_hidden');
-			});
-
-			jQuery( '.hide_save_draft' ).hide();
-
-			var $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
-			triggerChange( $saveDraft );
-
-			//If Allow editing is checked/unchecked
-			$editable = document.getElementById( 'editable' );
-			jQuery( $editable ).on( 'change', function() {
-				if ( this.checked ) {
-					jQuery( '.hide_editable' ).fadeIn( 'slow' );
-					triggerChange( document.getElementById( 'edit_action' ) );
-				} else {
-					jQuery( '.hide_editable' ).fadeOut( 'slow' );
-					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
-				}
-			});
-
 			//If File Protection is checked/unchecked
 			jQuery( document ).on( 'change', '#protect_files', function() {
 				if ( this.checked ) {
@@ -10435,6 +10396,35 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 
 			initOnSubmitAction();
+
+			if ( ! document.getElementById( 'permissions_settings_settings' ) ) {
+				return;
+			}
+
+			let singleEntryType;
+
+			document.getElementById( 'frm_single_entry_type' ).addEventListener( 'change', function() {
+				singleEntryType = document.getElementById( `frm-${this.value}-toggle` );
+
+				Array.prototype.forEach.call( document.getElementsByClassName( 'single-entry-type-dependency' ), ( selector ) => {
+					selector.classList.add( 'frm_hidden' );
+				});
+
+				if ( ! singleEntryType ) {
+					return;
+				}
+				singleEntryType.classList.remove( 'frm_hidden' );
+			});
+
+			// jQuery event trigger for backward compability.
+			triggerChange( jQuery( document.getElementById( 'save_draft' ) ) );
+
+			// From update of x.x script doesn't need custom js to toggle, We keep the jQuery event trigger for backward compability.
+			document.getElementById( 'editable' ).addEventListener( 'change', function() {
+				if ( this.checked ) {
+					triggerChange( document.getElementById( 'edit_action' ) );
+				}
+			});
 		},
 
 		panelInit: function() {
