@@ -9476,6 +9476,32 @@ function frmAdminBuildJS() {
 		footerLinks.classList.remove( 'frm_hidden' );
 	}
 
+	/**
+	 * Apply zebra striping to a table while ignoring empty rows.
+	 *
+	 * @param {string} tableSelector The CSS selector for the table.
+	 * @param {string} emptyRowClass The class name used to identify empty rows.
+	 */
+	function applyZebraStriping( tableSelector, emptyRowClass ) {
+		// Get all non-empty table rows within the specified table
+		const rows = document.querySelectorAll( `${tableSelector} tr${emptyRowClass ? `:not(.${emptyRowClass})` : ''}` );
+		if ( rows.length < 1 ) {
+			return;
+		}
+
+		let isOdd = true;
+		rows.forEach( row => {
+			// Clean old "frm-odd" or "frm-even" classes and add the appropriate new class
+			row.classList.remove( 'frm-odd', 'frm-even' );
+			row.classList.add( isOdd ? 'frm-odd' : 'frm-even' );
+
+			isOdd = ! isOdd;
+		});
+
+		const tables = document.querySelectorAll( tableSelector );
+		tables.forEach( table => table.classList.add( 'frm-zebra-striping' ) );
+	};
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -10315,6 +10341,7 @@ function frmAdminBuildJS() {
 			}
 		},
 
+		applyZebraStriping,
 		initModal,
 		infoModal,
 		offsetModalY,
