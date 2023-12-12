@@ -10805,10 +10805,10 @@ function frmAdminBuildJS() {
 			}
 		},
 
-		applyZebraStriping: applyZebraStriping,
-		infoModal: infoModal,
-		adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
-		addRadioCheckboxOpt: addRadioCheckboxOpt
+		applyZebraStriping,
+		infoModal,
+		adjustConditionalLogicOptionOrders,
+		addRadioCheckboxOpt
 	};
 }
 
