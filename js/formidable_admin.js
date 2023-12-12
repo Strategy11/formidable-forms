@@ -10415,16 +10415,19 @@ function frmAdminBuildJS() {
 			});
 
 			document.getElementById( 'frm_single_entry_type' ).addEventListener( 'change', function() {
-				singleEntryType = document.getElementById( `frm-${this.value}-toggle` );
+				singleEntryType = document.getElementsByClassName( `frm-${this.value}-toggle` );
 
 				Array.prototype.forEach.call( document.getElementsByClassName( 'single-entry-type-dependency' ), ( selector ) => {
 					selector.classList.add( 'frm_hidden' );
 				});
 
-				if ( ! singleEntryType ) {
+				if ( ! singleEntryType.length ) {
 					return;
 				}
-				singleEntryType.classList.remove( 'frm_hidden' );
+
+				Array.prototype.forEach.call( singleEntryType, ( selector ) => {
+					selector.classList.remove( 'frm_hidden' );
+				});
 			});
 
 			// jQuery event trigger for backward compability.
