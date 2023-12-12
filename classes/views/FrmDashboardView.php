@@ -191,7 +191,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	public function get_counters( $echo = true ) {
 		return FrmAppHelper::clip(
@@ -207,7 +207,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	public function get_license_management( $echo = true ) {
 		return FrmAppHelper::clip(
@@ -223,7 +223,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	public function get_inbox( $echo = true ) {
 		return FrmAppHelper::clip(
@@ -240,7 +240,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	private function get_pro_features( $echo = true ) {
 		return FrmAppHelper::clip(
@@ -256,7 +256,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	public function get_payments( $echo = true ) {
 		return FrmAppHelper::clip(
@@ -272,7 +272,7 @@ class FrmDashboardView {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return void|string Echo or return the widgets's HTML
+	 * @return string Echo or return the widgets's HTML
 	 */
 	public function get_youtube_video( $echo = true ) {
 		return FrmAppHelper::clip(

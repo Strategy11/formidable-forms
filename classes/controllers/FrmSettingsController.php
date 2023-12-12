@@ -13,15 +13,6 @@ class FrmSettingsController {
 	}
 
 	/**
-	 * Lite license copy.
-	 * Used in FrmDashboardController & self::license_box
-	 *
-	 * @return string
-	 */
-	public static function copy_for_lite_license() {
-		return __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' );
-	}
-	/**
 	 * Include license box template on demand.
 	 *
 	 * @return void

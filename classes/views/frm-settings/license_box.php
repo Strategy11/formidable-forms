@@ -17,7 +17,7 @@ $is_welcome = FrmAppHelper::is_admin_page( 'formidable-welcome' );
 
 	<div id="frm-using-lite" class="frm-show-unauthorized">
 		<p>
-			<?php echo esc_html( FrmSettingsController::copy_for_lite_license() ); ?> 🙂
+			<?php echo esc_html( FrmAppHelper::copy_for_lite_license() ); ?> 🙂
 		</p>
 		<p>
 				<?php

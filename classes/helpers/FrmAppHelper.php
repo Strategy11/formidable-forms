@@ -4029,4 +4029,14 @@ class FrmAppHelper {
 
 		wp_send_json_success();
 	}
+
+	/**
+	 * Lite license copy.
+	 * Used in FrmDashboardController & FrmSettingsController
+	 *
+	 * @return string
+	 */
+	public static function copy_for_lite_license() {
+		return __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' );
+	}
 }

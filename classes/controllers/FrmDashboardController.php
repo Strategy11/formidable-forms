@@ -238,7 +238,7 @@ class FrmDashboardController {
 		if ( class_exists( 'FrmProDashboardController' ) ) {
 			return FrmProDashboardController::view_args_license();
 		}
-		$copy    = FrmSettingsController::copy_for_lite_license() . ' 🙂';
+		$copy    = FrmAppHelper::copy_for_lite_license() . ' 🙂';
 		$buttons = array(
 			array(
 				'label'  => esc_html__( 'Connect Account', 'formidable' ),
@@ -255,7 +255,10 @@ class FrmDashboardController {
 		);
 		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			// Manage PRO versions without PRO dashboard functionality.
-			$copy = 'Formidable Pro ' . FrmProAddonsController::get_readable_license_type();
+			$license_type = FrmProAddonsController::get_readable_license_type();
+			if ( 'lite' !== strtolower( $license_type ) ) {
+				$copy = 'Formidable Pro ' . $license_type;
+			}
 		}
 		return array(
 			'heading' => 'License Key',
