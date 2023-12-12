@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version     = 98; // Version of the database we are moving to.
+	public static $db_version     = 100; // Version of the database we are moving to.
 	public static $pro_db_version = 37; //deprecated
 	public static $font_version   = 7;
 
@@ -18,7 +18,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.5.4';
+	public static $plug_version = '6.6';
 
 	/**
 	 * @var bool
@@ -1690,7 +1690,7 @@ class FrmAppHelper {
 
 		if ( ! array_key_exists( 'frm_edit_displays', $pro_cap ) && is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) {
 			// For backward compatibility, add the Add/Edit Views permission if Pro is not up to date.
-			// This was added in x.x. Remove this in the future.
+			// This was added in 6.5.4. Remove this in the future.
 			$pro_cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
 		}
 
@@ -2416,7 +2416,7 @@ class FrmAppHelper {
 	/**
 	 * If the string is still too long because there may not have been any spaces, force truncate.
 	 *
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param string $sub    Current substring.
 	 * @param int    $length The length limit.
@@ -3121,6 +3121,8 @@ class FrmAppHelper {
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
 				'saving'             => '', // Deprecated in 6.0.
 				'saved'              => '', // Deprecated in 6.0.
+				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
+				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 			);
 			/**
 			 * @param array $admin_script_strings

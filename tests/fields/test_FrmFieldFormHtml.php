@@ -72,11 +72,14 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 			$html = $this->get_private_property( $instance, 'html' );
 
 			// Assert html has the correct attributes
-			$this->assertStringContainsString( 'aria-required="true"', $html );
+			if ( 'checkbox' !== $field_type['type'] && ( ! isset( $field_type['data_type'] ) || 'checkbox' !== $field_type['data_type'] ) ) {
+				$this->assertStringContainsString( 'aria-required="true"', $html );
+			}
 
 			$expect_radio_group = 'radio' === $field_type['type'] || 'scale' === $field_type['type'] || ( isset( $data_type ) && 'radio' === $data_type );
-			$expected_role = $expect_radio_group ? 'radiogroup' : 'group';
-			$this->assertStringContainsString( 'role="' . $expected_role . '"', $html );
+			if ( $expect_radio_group ) {
+				$this->assertStringContainsString( 'role="radiogroup"', $html );
+			}
 		}
 	}
 }

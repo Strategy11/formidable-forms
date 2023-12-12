@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="plugin-card-top">
 					<h2>
 						<?php
-						echo esc_html( $addon['title'] );
+						echo esc_html( ! empty( $addon['display_name'] ) ? $addon['display_name'] : $addon['title'] );
 
 						if ( ! empty( $addon['is_new'] ) ) {
 							FrmAppHelper::show_pill_text();

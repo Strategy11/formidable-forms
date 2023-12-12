@@ -64,3 +64,4 @@ parameters:
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
 		- '#callback of function spl_autoload_register expects#'
+		- '#customer\_id\_error\_message#'

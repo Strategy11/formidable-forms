@@ -40,6 +40,7 @@ zip -r $zipname $destination \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
+	-x "*/js/*.js.map" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/composer.lock" \

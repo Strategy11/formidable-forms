@@ -52,6 +52,7 @@ class FrmStrpLiteSubscriptionHelper {
 			'time_interval'  => $atts['action']->post_content['interval'],
 			'status'         => 'active',
 			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'test'           => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
 		$frm_sub = new FrmTransLiteSubscription();

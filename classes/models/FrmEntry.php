@@ -582,7 +582,7 @@ class FrmEntry {
 	 */
 	public static function getRecordCount( $where = '' ) {
 		global $wpdb;
-		$table_join = $wpdb->prefix . 'frm_items it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id';
+		$table_join = $wpdb->prefix . 'frm_items it JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id';
 
 		if ( is_numeric( $where ) ) {
 			$table_join = 'frm_items';
