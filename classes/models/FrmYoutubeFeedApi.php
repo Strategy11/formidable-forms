@@ -109,6 +109,6 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 */
 	private function get_feed_by_api_endpoint( $api_endpoint, $cache_key ) {
 		$this->init_api_options( $api_endpoint, $cache_key );
-		return $this->get_api_info( $api_endpoint, $cache_key );
+		return $this->get_api_info();
 	}
 }
