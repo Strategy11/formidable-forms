@@ -34,8 +34,9 @@ wp.domReady( () => {
 			return;
 		}
 
-		// Set initial 'data-show' attribute to 'false' if not already set.
-		showEmptyFieldsButton.dataset.show = showEmptyFieldsButton.dataset.show || 'false';
+		if ( ! showEmptyFieldsButton.dataset.show ) {
+			showEmptyFieldsButton.dataset.show = 'false';
+		}
 
 		onClickPreventDefault( showEmptyFieldsButton, () => {
 			// Toggle button state and update table striping
