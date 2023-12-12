@@ -2,7 +2,7 @@
 /**
  * In-plugin summary emails controller
  *
- * @since x.x
+ * @since 6.7
  * @package Formidable
  */
 

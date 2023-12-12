@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for managing form templates in the admin area.
  *
- * @since x.x
+ * @since 6.7
  */
 class FrmFormTemplatesHelper {
 
@@ -46,7 +46,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo attributes for a given template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the API request is expired or not.
@@ -78,7 +78,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Add classes for a given template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @return string
@@ -101,7 +101,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Add info about the required plan for this template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @param array $attributes The template attributes.
@@ -124,7 +124,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo attributes for the link to view a template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @return void
@@ -152,7 +152,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Show the CTA to upgrade or renew.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $args {
 	 *    @type string $upgrade_link Upgrade link URL.

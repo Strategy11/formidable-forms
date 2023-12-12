@@ -410,7 +410,7 @@ class FrmTipsHelper {
 	/**
 	 * Displays a call-to-action section in the admin area.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $args {
 	 *     An array of arguments to configure the call-to-action section.

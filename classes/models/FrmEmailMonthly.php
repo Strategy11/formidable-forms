@@ -2,7 +2,7 @@
 /**
  * Monthly summary email class
  *
- * @since x.x
+ * @since 6.7
  * @package Formidable
  */
 

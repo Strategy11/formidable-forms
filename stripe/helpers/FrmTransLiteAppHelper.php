@@ -284,7 +284,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Gets amount and currency from payment object or amount.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param string|float|object|array $payment Payment object, payment array or amount.
 	 * @return array Return the array with the first element is the amount, the second one is the currency value.

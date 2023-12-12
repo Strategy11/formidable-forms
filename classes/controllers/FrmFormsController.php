@@ -1690,7 +1690,7 @@ class FrmFormsController {
 	 *
 	 * Handles the AJAX request for renaming a form.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
