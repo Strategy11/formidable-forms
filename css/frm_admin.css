@@ -4197,18 +4197,35 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 .frm-alt-table {
+	position: relative;
 	width:100%;
 	border-collapse:collapse;
 	margin-top:0.5em;
 	font-size:15px;
 }
 
+/* Before `applyZebraStriping` is executed, an empty space is displayed */
+.frm-alt-table:not(.frm-zebra-striping)::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #fff;
+}
+
 .frm-alt-table th {
 	width:200px;
 }
 
-.frm-alt-table tr {
+.frm-alt-table tr,
+.frm-alt-table tr.frm-odd {
 	background-color:transparent;
+}
+
+.frm-alt-table tr.frm-even {
+	background-color: var(--sidebar-color);
 }
 
 .frm-alt-table th,
@@ -4217,10 +4234,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	vertical-align:top;
 	text-align:left;
 	padding:20px;
-}
-
-.frm-alt-table tr:nth-child(even) {
-	background-color: var(--sidebar-color);
 }
 
 .frm-alt-table h3 {
