@@ -55,7 +55,6 @@
 		"eslint-plugin-jsx-a11y": "^6.7.1",
 		"eslint-plugin-react": "^7.20.6",
 		"serialize-javascript": "^6.0.1",
-		"terser-webpack-plugin": "^5.3.9",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1"
