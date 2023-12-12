@@ -285,7 +285,7 @@ class FrmFormsHelper {
 			$post_values = $values;
 		} else {
 			$values      = array();
-			$post_values = isset( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$post_values = ! empty( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$defaults = array(
@@ -757,7 +757,7 @@ BEFORE_HTML;
 				$replace_with = $form->name;
 			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
-			} elseif ( $code === 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+			} elseif ( $code === 'entry_key' && ! empty( $_GET ) && isset( $_GET['entry'] ) ) {
 				$replace_with = FrmAppHelper::simple_get( 'entry' );
 			} else {
 				$replace_with = '';
@@ -943,9 +943,9 @@ BEFORE_HTML;
 		} elseif ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
 			$form = $form->parent_form_id;
-		} elseif ( is_array( $form ) && isset( $form['parent_form_id'] ) && $form['parent_form_id'] ) {
+		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
-		} elseif ( is_array( $form ) && isset( $form['custom_style'] ) ) {
+		} elseif ( is_array( $form ) && ! empty( $form['custom_style'] ) ) {
 			$style = $form['custom_style'];
 		}
 

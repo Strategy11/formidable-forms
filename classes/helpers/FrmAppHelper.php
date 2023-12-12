@@ -953,7 +953,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function remove_get_action() {
-		if ( ! isset( $_GET ) ) {
+		if ( empty( $_GET ) ) {
 			return;
 		}
 
@@ -3498,6 +3498,16 @@ class FrmAppHelper {
 		 * @param array  $args            The arguments of images_dropdown() method.
 		 */
 		return apply_filters( 'frm_images_dropdown_input_attrs', $input_attrs_str, $args );
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function get_images_dropdown_atts( $option, $args ) {
+		$image        = self::get_images_dropdown_option_image( $option, $args );
+		$classes      = self::get_images_dropdown_option_classes( $option, $args );
+		$custom_attrs = self::get_images_dropdown_option_html_attrs( $option, $args );
+		return compact( 'image', 'classes', 'custom_attrs' );
 	}
 
 	/**

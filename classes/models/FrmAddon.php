@@ -619,7 +619,7 @@ class FrmAddon {
 
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
-				if ( isset( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
+				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
 					$response['status'] = $license_data['license'];
 				}
 			} else {
@@ -744,7 +744,7 @@ class FrmAddon {
 				} else {
 					$message = $json_res;
 				}
-			} elseif ( isset( $resp['response'] ) && isset( $resp['response']['code'] ) ) {
+			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
 				$resp['body'] = wp_strip_all_tags( $resp['body'] );
 
 				$message = sprintf(

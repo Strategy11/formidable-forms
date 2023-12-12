@@ -277,7 +277,7 @@ class FrmForm {
 			return $new_values;
 		}
 
-		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
+		$options = ! empty( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
 		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;

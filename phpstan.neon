@@ -4,6 +4,8 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
+	scanFiles:
+		- deprecated/FrmDeprecated.php
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -24,7 +26,6 @@ parameters:
 		- '#Function (apply_filters)+ invoked with#'
 		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
 		- '#Possibly invalid array key type#'
-		- '#always exists and is not nullable.#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
@@ -34,10 +35,9 @@ parameters:
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
 		- '#Call to an undefined static method#'
-		- '#on an unknown class (Elementor|FrmDeprecated)#'
+		- '#on an unknown class (Elementor)#'
 		- '#get_mailer\(\) expects#'
 		- '#only iterables are supported#'
-		- '#outside of class scope.#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'

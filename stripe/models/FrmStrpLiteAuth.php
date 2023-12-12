@@ -71,7 +71,7 @@ class FrmStrpLiteAuth {
 		ob_end_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
-		if ( $intent_is_processing && isset( $filter ) ) {
+		if ( $intent_is_processing ) {
 			remove_filter( 'frm_content', $filter );
 		}
 
