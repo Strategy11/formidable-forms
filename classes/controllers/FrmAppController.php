@@ -1083,7 +1083,7 @@ class FrmAppController {
 	/**
 	 * Check if the footer links should be shown.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return bool
 	 */
@@ -1098,7 +1098,7 @@ class FrmAppController {
 		/**
 		 * Filter whether to show the Formidable footer links.
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 *
 		 * @param bool $show_footer_links
 		 * @return bool
@@ -1109,7 +1109,7 @@ class FrmAppController {
 	/**
 	 * Show an error modal and terminate the script execution.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $error_args Arguments that control the behavior of the error modal.
 	 *

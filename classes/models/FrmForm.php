@@ -391,7 +391,7 @@ class FrmForm {
 	/**
 	 * Resets the 'max' option of a field when changing paragraph field type to other field types like text, email etc.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $field
 	 * @param array $values

@@ -32,7 +32,7 @@ class FrmCronController {
 	/**
 	 * Schedules cron events.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 */
 	public static function schedule_events() {
 		$events = self::get_events();
