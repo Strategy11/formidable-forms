@@ -23,4 +23,4 @@ jobs:
         run: composer install
 
       - name: "🧪 Test"
-        run: vendor/bin/phpstan analyze ./ --memory-limit=1G
+        run: vendor/bin/phpstan analyze ./ --memory-limit=2G
