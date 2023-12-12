@@ -111,9 +111,6 @@ namespace {
 	}
 	class FrmProDashboardView {
 	}
-	/**
-	 * @return void
-	 */
 	function load_formidable_pro() {
 	}
 	/**
