@@ -688,6 +688,10 @@ legend.frm_hidden{
 	text-align:center;
 }
 
+.with_frm_style.frm_center_submit .frm_flex.frm_submit {
+	justify-content: center;
+}
+
 .with_frm_style .frm_inline_success .frm_submit{
 	display: flex;
 	flex-direction: row;
@@ -772,6 +776,15 @@ legend.frm_hidden{
 	-moz-animation:    spin 2s linear infinite;
 	-o-animation:      spin 2s linear infinite;
 	animation:         spin 2s linear infinite;
+}
+
+.with_frm_style .frm_submit.frm_flex {
+	align-items: center;
+	gap: 2%;
+}
+
+.with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
+	order: -1;
 }
 
 <?php
