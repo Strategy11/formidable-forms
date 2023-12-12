@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p><?php echo esc_html( $info ); ?></p>
 <?php } ?>
 <p>
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ); ?>" class="button-primary frm-button-primary">
-		<?php esc_html_e( 'Add New Form', 'formidable' ); ?>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&return_page=forms' ) ); ?>" class="button-primary frm-button-primary">
+		<?php esc_html_e( 'Create New Form', 'formidable' ); ?>
 	</a>
 </p>
 </div>

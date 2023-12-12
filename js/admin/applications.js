@@ -260,7 +260,7 @@
 	function createApplicationCard( data ) {
 		const isTemplate = ! data.termId;
 		const card = div({
-			className: 'frm-application-card',
+			className: 'frm-application-card frm-card-item',
 			children: [
 				getCardHeader(),
 				div({ className: 'frm-flex' })

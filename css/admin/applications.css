@@ -48,13 +48,9 @@
 }
 
 .frm-application-card {
-	border-radius: var(--small-radius);
-	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
-	padding: 10px 0;
-	display: flex;
 	flex-direction: column;
-	box-shadow: var(--box-shadow-sm);
+	gap: 0;
 }
 
 .frm-application-template-card {
