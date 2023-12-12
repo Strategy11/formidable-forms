@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-counter-card-wrapper frm-payments-placeholder frm-full-width">
 	<div class="frm-dashboard-widget frm-counter-card frm-animate">
-		<div class="frm-flex-box frm-justify-between frm-vertical-align-middle">
+		<div class="frm-flex-box frm-justify-between frm-items-center">
 			<div>
 				<h4><?php echo esc_html( $template['counters'][0]['heading'] ); ?></h4>
 				<p><?php echo esc_html( $template['placeholder']['copy'] ); ?></p>

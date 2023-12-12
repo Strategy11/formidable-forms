@@ -255,8 +255,7 @@ class FrmDashboardController {
 		);
 		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			// Manage PRO versions without PRO dashboard functionality.
-			$copy    = 'Formidable Pro ' . FrmProAddonsController::get_readable_license_type();
-			$buttons = array();
+			$copy = 'Formidable Pro ' . FrmProAddonsController::get_readable_license_type();
 		}
 		return array(
 			'heading' => 'License Key',
