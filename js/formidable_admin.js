@@ -10403,6 +10403,17 @@ function frmAdminBuildJS() {
 
 			let singleEntryType;
 
+			document.getElementById( 'single_entry' ).addEventListener( 'change', function() {
+				if ( this.checked ) {
+					document.getElementById( 'frm_single_entry_type' ).dispatchEvent( new Event( 'change' ) );
+					return;
+				}
+
+				Array.prototype.forEach.call( document.getElementsByClassName( 'single-entry-type-dependency' ), ( selector ) => {
+					selector.classList.add( 'frm_hidden' );
+				});
+			});
+
 			document.getElementById( 'frm_single_entry_type' ).addEventListener( 'change', function() {
 				singleEntryType = document.getElementById( `frm-${this.value}-toggle` );
 
