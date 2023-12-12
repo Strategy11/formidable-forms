@@ -62,6 +62,10 @@ class FrmAppController {
 			}
 		}
 
+		if ( self::is_grey_page() ) {
+			$classes .= ' frm-grey-body ';
+		}
+
 		if ( FrmAppHelper::is_full_screen() ) {
 			$full_screen_on = self::get_full_screen_setting();
 			$add_class = '';
@@ -137,8 +141,6 @@ class FrmAppController {
 			'formidable-styles2',
 			'formidable-inbox',
 			'formidable-welcome',
-			'formidable-applications',
-			'formidable-dashboard',
 			FrmFormTemplatesController::PAGE_SLUG,
 		);
 
@@ -153,13 +155,7 @@ class FrmAppController {
 			}
 		}
 
-		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$is_white_page = in_array( $get_page, $white_pages, true );
-
-		if ( ! $is_white_page ) {
-			$screen        = get_current_screen();
-			$is_white_page = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
-		}
+		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page();
 
 		/**
 		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
@@ -171,6 +167,40 @@ class FrmAppController {
 		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
 
 		return $is_white_page;
+	}
+
+	/**
+	 * Add a grey bg instead of white.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_grey_page() {
+		$grey_pages = array(
+			'formidable-applications',
+			'formidable-dashboard',
+		);
+
+		$is_grey_page = self::is_page_in_list( $grey_pages );
+		return apply_filters( 'frm_is_grey_page', $is_grey_page );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $pages A list of page names to check.
+	 * @return bool
+	 */
+	private static function is_page_in_list( $pages ) {
+		$get_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$in_pages = in_array( $get_page, $pages, true );
+
+		if ( ! $in_pages ) {
+			$screen   = get_current_screen();
+			$in_pages = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
+		}
+		return $in_pages;
 	}
 
 	/**

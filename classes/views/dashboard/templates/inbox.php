@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="frm-tabs-container">
 		<div class="frm-tabs-slide-track frm-flex-box">
-			<div class="frm-active" data-mdb-perfect-scrollbar data-mdb-suppress-scroll-x="true">
+			<div class="frm-active frm-scrollbar-wrapper">
 				<div>
-					<div id="frm_empty_inbox" class="<?php echo esc_attr( $subscribe_inbox_classnames ); ?>"> 
+					<div id="frm_empty_inbox" class="<?php echo esc_attr( $subscribe_inbox_classnames ); ?>">
 						<?php
 							FrmAppController::api_email_form(
 								'subscribe',
@@ -29,9 +29,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<?php foreach ( $template['unread'] as $key => $message ) : ?>
-						<div class="frm-inbox-message-container" data-message="<?php echo esc_attr( $key ); ?>" >
+						<div class="frm-inbox-message-container frm-flex-col" data-message="<?php echo esc_attr( $key ); ?>" >
 							<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-								<div>
+								<div class="frm-flex-col">
 									<span>
 										<?php
 										printf(
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										);
 										?>
 									</span>
-									<h4><?php echo esc_html( $message['subject'] ); ?></h4>
+									<h3><?php echo esc_html( $message['subject'] ); ?></h3>
 								</div>
 								<a href="#" class="frm_inbox_dismiss">Dismiss</a>
 							</div>
@@ -53,12 +53,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			</div>
 
-			<div data-mdb-perfect-scrollbar ata-mdb-suppress-scroll-x='true'>
+			<div class="frm-scrollbar-wrapper">
 				<div class="frm-dismissed-inbox-messages">
 				<?php foreach ( $template['dismissed'] as $key => $message ) : ?>
-					<div class="frm-inbox-message-container">
+					<div class="frm-inbox-message-container frm-flex-col">
 						<div class="frm-inbox-message-heading frm-flex-box frm-justify-between">
-							<div>
+							<div class="frm-flex-col">
 								<span>
 									<?php
 									printf(
@@ -68,9 +68,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 									);
 									?>
 								</span>
-								<h4>
+								<h3>
 									<?php echo esc_html( $message['subject'] ); ?>
-								</h4>
+								</h3>
 							</div>
 						</div>
 						<p><?php echo wp_kses_post( $message['message'] ); ?></p>

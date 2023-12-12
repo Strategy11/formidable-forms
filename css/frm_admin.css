@@ -117,9 +117,12 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 
 .post-type-frm_display .wrap > #posts-filter,
 .wrap.frm-with-margin,
-#frm_top_bar + .wrap,
 .frm_wrap > .wrap {
 	margin: var(--gap-sm) var(--gap-md) var(--gap-md);
+}
+
+#frm_top_bar + .wrap {
+	margin: var(--gap-xl);
 }
 
 .frm-full-screen #wpbody-content > .wrap {
@@ -228,6 +231,14 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 
 .frm-white-body .wrap #post-body {
 	padding: 0 20px;
+}
+
+.frm-grey-body #wpbody {
+	background: var(--grey-100);
+}
+
+.frm-grey-body #frm_top_bar {
+	background: #fff;
 }
 
 .post-type-frm_display .tablenav,
@@ -1597,7 +1608,7 @@ input.frm_insert_in_template {
 }
 
 .frm-p-0 {
-	padding: 0;
+	padding: 0 !important;
 }
 
 .frm-p-1 {
@@ -1612,6 +1623,11 @@ input.frm_insert_in_template {
 .frm-p-6,
 .frm-p-md {
 	padding: var(--gap-md) !important;
+}
+
+.frm-px-0 {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .frm-py-0 {
@@ -1680,17 +1696,6 @@ input.frm_insert_in_template {
 	width: 100% !important;
 }
 
-.frm-flex-box {
-	display: flex;
-	gap: var(--gap-sm);
-}
-
-.frm-flex-center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 .frm-gap-xs {
 	gap: var(--gap-xs);
 }
@@ -1701,10 +1706,6 @@ input.frm_insert_in_template {
 
 .frm-gap-md {
 	gap: var(--gap-md);
-}
-
-.frm-justify-between {
-	justify-content: space-between;
 }
 
 .frm-transition-ease {
@@ -1752,10 +1753,18 @@ input.frm_insert_in_template {
 	flex-direction: column;
 }
 
+.frm-flex-full {
+	flex: 1;
+}
+
 .frm-flex-center {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.frm-shrink-0 {
+	flex-shrink: 0;
 }
 
 .frm-gap-0 {
@@ -8188,6 +8197,7 @@ button.frm_choose_image_box,
 .frm_wrap textarea,
 .frm_wrap input[type="tel"],
 .frm_wrap input[type="text"],
+.frm_wrap input[type="email"]
 .frm_wrap input[type=search],
 .frm_wrap input[type="number"],
 .frm_wrap input[type="date"],
@@ -8392,6 +8402,7 @@ button.frm_choose_image_box,
 }
 
 .frm-scrollbar-wrapper {
+	overflow-x: hidden;
 	overflow-y: auto; /* Enable scrolling */
 	-ms-overflow-style: none; /* For IE and Edge */
 	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */

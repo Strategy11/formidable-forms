@@ -1,4 +1,3 @@
-import PerfectScrollbar from 'perfect-scrollbar';
 export class FrmTabsNavigator {
 
 	constructor( wrapper ) {
@@ -22,7 +21,6 @@ export class FrmTabsNavigator {
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 		});
-		this.initSlideScrollbar();
 	}
 
 	onNavClick( event, index ) {
@@ -36,12 +34,6 @@ export class FrmTabsNavigator {
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) ) ;
 		this.slideTrackLine.style.transform = `translateX(${activeNav.offsetLeft}px)`;
 		this.slideTrackLine.style.width = activeNav.offsetWidth + 'px';
-	}
-
-	initSlideScrollbar() {
-		this.slides.forEach( slide => {
-			new PerfectScrollbar( slide );
-		});
 	}
 
 	changeSlide( index ) {

@@ -76,8 +76,7 @@ class FrmDashboardController {
 		$dashboard_view = new FrmDashboardView(
 			array(
 				'counters' => array(
-					'template-type' => '',
-					'counters'      => self::view_args_counters( $latest_available_form, $counters_value ),
+					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
 				'license'  => self::view_args_license(),
 				'inbox'    => self::view_args_inbox(),
@@ -92,7 +91,6 @@ class FrmDashboardController {
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
 				'payments' => array(
-					'template-type'    => 'full-width',
 					'show-placeholder' => empty( $total_payments ),
 					'placeholder'      => array(
 						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
@@ -104,7 +102,7 @@ class FrmDashboardController {
 					),
 					'counters'         => array(
 						array(
-							'heading' => esc_html__( 'Total earnings', 'formidable' ),
+							'heading' => esc_html__( 'Total Earnings', 'formidable' ),
 							'type'    => 'currency',
 							'items'   => $total_payments,
 						),
