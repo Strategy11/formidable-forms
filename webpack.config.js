@@ -3,6 +3,7 @@
  */
 const webpack = require( 'webpack' );
 const path = require( 'path' );
+const terser = require('terser-webpack-plugin');
 
 // Webpack configuration.
 const config = {
@@ -19,6 +20,18 @@ const config = {
 		formidable_blocks: './js/src/blocks.js',
 		formidable_overlay: './js/src/overlay.js',
 		'form-templates': './js/src/form-templates/index.js'
+	},
+	optimization: {
+		minimizer: [
+			new terser({
+				extractComments: false,
+				terserOptions: {
+					format: {
+						comments: false,
+					},
+				},
+			})
+		],
 	},
 	output: {
 		filename: '[name].js',
