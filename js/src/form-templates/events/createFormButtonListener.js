@@ -28,7 +28,7 @@ function addCreateFormButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onCreateFormButtonClick = ( event ) => {
+const onCreateFormButtonClick = () => {
 	const { createFormButton, newTemplateForm, newTemplateNameInput, newTemplateActionInput } = getElements();
 	const { installNewForm } = window.frmAdminBuild;
 

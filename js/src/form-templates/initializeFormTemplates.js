@@ -16,22 +16,18 @@ function initializeFormTemplates() {
 	// Initializes essential DOM elements
 	initializeElements();
 
-	// Initialize application state
 	initializeAppState();
 
-	// Add application templates
 	maybeAddApplicationTemplates();
 
 	// Set up the initial view, including any required DOM manipulations for proper presentation
 	setupInitialView();
 
-	// Initialize the modal dialog
 	initializeModal();
 
 	// Generate a categorized list of templates
 	buildCategorizedTemplates();
 
-	// Attach event listeners for user interactions
 	addEventListeners();
 }
 

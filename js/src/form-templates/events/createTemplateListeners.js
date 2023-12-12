@@ -42,7 +42,7 @@ function addCreateTemplateEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onShowCreateTemplateModalButtonClick = ( event ) => {
+const onShowCreateTemplateModalButtonClick = () => {
 	const { selectedCategory } = getAppState();
 	if ( ! isCustomCategory( selectedCategory ) ) {
 		return;
@@ -58,7 +58,7 @@ const onShowCreateTemplateModalButtonClick = ( event ) => {
  * @param {Event} event The change event object.
  * @return {void}
  */
-const onFormsSelectChange = ( event ) => {
+const onFormsSelectChange = () => {
 	const { createTemplateFormsDropdown: formsSelect } = getElements();
 	const formId = formsSelect.value;
 
@@ -112,7 +112,7 @@ const toggleDisableModalElements = ( shouldDisable ) => {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onCreateTemplateButtonClick = ( event ) => {
+const onCreateTemplateButtonClick = () => {
 	const { installNewForm } = window.frmAdminBuild;
 	const actionName = 'frm_create_template';
 	const {

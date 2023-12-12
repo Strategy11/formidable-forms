@@ -25,7 +25,7 @@ function addEmptyStateButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onEmptyStateButtonClick = ( event ) => {
+const onEmptyStateButtonClick = () => {
 	const { selectedCategory } = getAppState();
 	if ( isCustomCategory( selectedCategory ) ) {
 		return;

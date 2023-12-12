@@ -60,7 +60,7 @@ function createTemplateItem( template ) {
 		`${thumbnailBaseURL}/placeholder.svg`;
 
 	return tag( 'li', {
-		className: `${PREFIX}-application-item frm-card-item`,
+		className: 'frm-card-item',
 		data: {
 			href: `${applicationsUrl}&triggerViewApplicationModal=1&template=${key}`,
 			'frm-search-text': name.toLowerCase()

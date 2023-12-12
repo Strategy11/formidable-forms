@@ -35,7 +35,7 @@ function addSaveCodeButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onSaveCodeButtonClick = async( event ) => {
+const onSaveCodeButtonClick = async() => {
 	const { codeFromEmailModalInput } = getElements();
 	const code = codeFromEmailModalInput.value.trim();
 
@@ -106,7 +106,7 @@ const onSaveCodeButtonClick = async( event ) => {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onBackButton = ( event ) => {
+const onBackButton = () => {
 	const { leaveEmailModal, codeFromEmailModal } = getElements();
 	hide( codeFromEmailModal );
 	show( leaveEmailModal );
@@ -119,7 +119,7 @@ const onBackButton = ( event ) => {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onResendCode = ( event ) => {
+const onResendCode = () => {
 	const { codeFromEmailModalInput, leaveEmailModalGetCodeButton: getCodeButton } = getElements();
 	codeFromEmailModalInput.value = '';
 	hideElements( document.querySelectorAll( '#frm_code_from_email_options, #frm_code_from_email_error' ) );
