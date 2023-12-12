@@ -2,8 +2,10 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getAppState, setAppStateProperty, initSearch } from '../shared';
+import { getAppState, setAppStateProperty } from '../shared';
 import { showSearchState, displaySearchElements } from '../ui';
+
+const { init: initSearch } = window.frmDom.search;
 
 /**
  * Adds search-related event listeners by calling the 'initSearch' function.

@@ -3,7 +3,7 @@
  */
 import { addApplicationTemplatesElement, createApplicationTemplates } from '../elements';
 import { addApplicationTemplateEvents } from '../events';
-import { doJsonFetch, canAccessApplicationDashboard } from '../shared';
+import { canAccessApplicationDashboard } from '../shared';
 
 /**
  * Adds application templates if the user has dashboard access.
@@ -15,6 +15,8 @@ export function maybeAddApplicationTemplates() {
 	if ( ! canAccessApplicationDashboard ) {
 		return;
 	}
+
+	const { doJsonFetch } = frmDom.ajax;
 
 	doJsonFetch( 'get_applications_data&view=templates' ).then( setupApplicationTemplates );
 }

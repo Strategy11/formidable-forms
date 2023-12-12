@@ -6,8 +6,10 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, applicationsUrl, tag, div, span, a, img } from '../shared';
+import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, applicationsUrl } from '../shared';
 import { addElements, getElements } from './elements';
+
+const { tag, div, span, a, img } = window.frmDom;
 
 // Application templates element
 let applicationTemplates;

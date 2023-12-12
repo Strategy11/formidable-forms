@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getAppState, setAppStateProperty, doJsonPost } from '../shared';
+import { PREFIX, getAppState, setAppStateProperty } from '../shared';
 import { showFavoritesEmptyState } from '../ui';
 import {
 	hide,
@@ -143,6 +143,8 @@ const onFavoriteButtonClick = ( event ) => {
  */
 function updateFavoriteTemplate( id, operation, isCustom ) {
 	const formData = new FormData();
+	const { doJsonPost } = frmDom.ajax;
+
 	formData.append( 'template_id', id );
 	formData.append( 'operation', operation );
 	formData.append( 'is_custom_template', isCustom );

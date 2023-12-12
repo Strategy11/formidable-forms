@@ -6,7 +6,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, tag, div, a, img } from '../shared';
+import { PLUGIN_URL, PREFIX, HIDDEN_CLASS } from '../shared';
+
+const { tag, div, a, img } = window.frmDom
 
 /**
  * Create and return the Empty State HTML element.

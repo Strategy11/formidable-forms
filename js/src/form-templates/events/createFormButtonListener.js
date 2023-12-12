@@ -8,7 +8,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { getElements } from '../elements';
 import { onClickPreventDefault } from '../utils';
-import { installNewForm } from '../shared';
 
 /**
  * Manages event handling for the "Create a blank form" button.
@@ -31,6 +30,7 @@ function addCreateFormButtonEvents() {
  */
 const onCreateFormButtonClick = ( event ) => {
 	const { createFormButton, newTemplateForm, newTemplateNameInput, newTemplateActionInput } = getElements();
+	const { installNewForm } = window.frmAdminBuild;
 
 	newTemplateNameInput.value = '';
 	newTemplateActionInput.value = 'frm_install_form';

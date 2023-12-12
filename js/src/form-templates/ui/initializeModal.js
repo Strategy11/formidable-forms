@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { addElements, getElements } from '../elements';
-import { initModal, offsetModalY, hasQueryParam, MODAL_SIZES } from '../shared';
+import { hasQueryParam, MODAL_SIZES } from '../shared';
 import { showLeaveEmailModal } from './';
 
 let modalWidget = null;
@@ -13,6 +13,8 @@ let modalWidget = null;
  * @return {void}
  */
 export async function initializeModal() {
+	const { initModal, offsetModalY } = window.frmAdminBuild;
+
 	modalWidget = initModal( '#frm-form-templates-modal', MODAL_SIZES.GENERAL );
 
 	// Set the vertical offset for the modal

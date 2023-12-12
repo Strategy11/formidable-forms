@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
 */
 import { getElements } from '../elements';
-import { getAppState, installNewForm } from '../shared';
+import { getAppState } from '../shared';
 import { showCreateTemplateModal } from '../ui';
 import { isCustomCategory, onClickPreventDefault } from '../utils';
 
@@ -113,6 +113,7 @@ const toggleDisableModalElements = ( shouldDisable ) => {
  * @return {void}
  */
 const onCreateTemplateButtonClick = ( event ) => {
+	const { installNewForm } = window.frmAdminBuild;
 	const actionName = 'frm_create_template';
 	const {
 		newTemplateForm,

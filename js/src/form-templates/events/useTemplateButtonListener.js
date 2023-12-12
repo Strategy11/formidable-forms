@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, setAppStateProperty, installNewForm } from '../shared';
+import { PREFIX, setAppStateProperty } from '../shared';
 import { showLockedTemplateModal } from '../ui/';
 import { isCustomTemplate, isLockedTemplate } from '../utils';
 
@@ -53,6 +53,7 @@ const onUseTemplateButtonClick = ( event ) => {
 
 	// Prepare for new template installation
 	const { newTemplateForm, newTemplateNameInput, newTemplateDescriptionInput, newTemplateLinkInput, newTemplateActionInput } = getElements();
+	const { installNewForm } = window.frmAdminBuild;
 	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
 	const templateDescription = template.querySelector( '.frm-form-templates-item-description' ).textContent.trim();
 	const actionName = 'frm_install_template';
