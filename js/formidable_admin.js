@@ -9375,19 +9375,14 @@ function frmAdminBuildJS() {
 			}
 		);
 
-<<<<<<< HEAD
 		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
 		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+
 		if ( emptyInbox && leaveEmailIput ) {
-=======
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
-			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
->>>>>>> master
 			leaveEmailIput.addEventListener(
 				'keyup',
 				event => {
