@@ -383,6 +383,7 @@ class FrmStrpLiteLinkController {
 				'action_id'  => $action->ID,
 				'receipt_id' => $intent_id,
 				'sub_id'     => '',
+				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
 	}

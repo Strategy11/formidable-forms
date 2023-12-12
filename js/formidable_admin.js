@@ -1453,22 +1453,34 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldControlsDropdown() {
-		var dropdown, trigger, ul;
+		const dropdown = span({ className: 'dropdown' });
+		const trigger  = a({
+			className: 'frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle',
+			children: [
+				span({
+					child: svg({ href: '#frm_thick_more_vert_icon' })
+				}),
+				span({
+					className: 'screen-reader-text',
+					text: __( 'Toggle More Options Dropdown', 'formidable' )
+				})
+			]
+		});
 
-		dropdown = document.createElement( 'span' );
-		dropdown.classList.add( 'dropdown' );
-
-		trigger = document.createElement( 'a' );
-		trigger.classList.add( 'frm_bstooltip', 'frm-hover-icon', 'frm-dropdown-toggle', 'dropdown-toggle' );
-		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
-		trigger.setAttribute( 'data-toggle', 'dropdown' );
-		trigger.setAttribute( 'data-container', 'body' );
+		frmDom.setAttributes(
+			trigger,
+			{
+				'title': __( 'More Options', 'formidable' ),
+				'data-toggle': 'dropdown',
+				'data-container': 'body'
+			}
+		);
 		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
-		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
-		ul = document.createElement( 'div' );
-		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu', 'dropdown-menu-right' );
+		const ul = div({
+			className: 'frm-dropdown-menu dropdown-menu dropdown-menu-right'
+		});
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 
@@ -9993,6 +10005,8 @@ function frmAdminBuildJS() {
 				});
 			}
 
+			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
+
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			if ( $advInfo.length > 0 || jQuery( '.frm_field_list' ).length > 0 ) {
 				// only load on the form, form settings, and view settings pages
@@ -10281,7 +10295,6 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_add_posttax_row', addPosttaxRow );
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
-			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
 			jQuery( '#frm-show-groups, #frm-hide-groups' ).on( 'click', toggleActionGroups );
 			initiateMultiselect();

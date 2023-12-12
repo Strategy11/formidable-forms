@@ -105,7 +105,7 @@ class FrmHoneypot extends FrmValidate {
 			$input_attrs['autocomplete'] = 'false';
 		}
 		?>
-			<div class="<?php echo esc_attr( $class_name ); ?>" <?php echo in_array( $honeypot, array( true, 'strict' ), true ) ? '' : 'aria-hidden="true"'; ?>>
+			<div class="<?php echo esc_attr( $class_name ); ?>">
 				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
 					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
 				</label>

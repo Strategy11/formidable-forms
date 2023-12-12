@@ -282,6 +282,31 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Gets amount and currency from payment object or amount.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|float|object|array $payment Payment object, payment array or amount.
+	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 */
+	public static function get_amount_and_currency_from_payment( $payment ) {
+		$currency = '';
+		$amount   = $payment;
+
+		if ( is_object( $payment ) || is_array( $payment ) ) {
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
+			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
+		}
+
+		return array( $amount, $currency );
+	}
+
+	/**
 	 * @param array $currency
 	 * @param float $amount
 	 * @return void
@@ -447,5 +472,21 @@ class FrmTransLiteAppHelper {
 		self::$should_fallback_to_paypal = false !== $option;
 
 		return self::$should_fallback_to_paypal;
+	}
+
+	/**
+	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
+	 * Old payments will just output an empty string.
+	 *
+	 * @since 6.6
+	 *
+	 * @param stdClass $payment
+	 * @return string
+	 */
+	public static function get_test_mode_display_string( $payment ) {
+		if ( ! isset( $payment->test ) ) {
+			return '';
+		}
+		return $payment->test ? __( 'Test', 'formidable' ) : __( 'Live', 'formidable' );
 	}
 }
