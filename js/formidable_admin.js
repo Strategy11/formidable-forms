@@ -10401,13 +10401,6 @@ function frmAdminBuildJS() {
 			jQuery( '.hide_save_draft' ).hide();
 
 			var $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
-			$saveDraft.on( 'change', function() {
-				if ( this.checked ) {
-					jQuery( '.hide_save_draft' ).fadeIn( 'slow' );
-				} else {
-					jQuery( '.hide_save_draft' ).fadeOut( 'slow' );
-				}
-			});
 			triggerChange( $saveDraft );
 
 			//If Allow editing is checked/unchecked
