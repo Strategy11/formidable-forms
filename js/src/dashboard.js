@@ -16,10 +16,6 @@ class FrmDashboard {
 			}
 		};
 
-		if ( 'undefined' !== typeof window.frmAdminBuild ) {
-			window.frmAdminBuild.initNewFormModal();
-		}
-
 		this.initInbox();
 		this.initIntroWidgetAnimation();
 		this.initCounters();

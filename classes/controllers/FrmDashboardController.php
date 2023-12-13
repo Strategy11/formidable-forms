@@ -55,7 +55,8 @@ class FrmDashboardController {
 	 */
 	public static function admin_init() {
 		if ( self::is_dashboard_page() ) {
-			remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
+			add_filter( 'frm_show_footer_links', '__return_false' );
+			add_filter( 'screen_options_show_screen', '__return_false' );
 			return;
 		}
 	}
@@ -70,10 +71,10 @@ class FrmDashboardController {
 		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
 			'forms'   => FrmFormsController::get_forms_count(),
-			'entries' => FrmEntriesController::get_entries_count(),
+			'entries' => FrmEntry::get_entries_count(),
 		);
 
-		$dashboard_view = new FrmDashboardView(
+		$dashboard_view = new FrmDashboardHelper(
 			array(
 				'counters' => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
@@ -81,9 +82,9 @@ class FrmDashboardController {
 				'license'  => self::view_args_license(),
 				'inbox'    => self::view_args_inbox(),
 				'entries'  => array(
-					'widget-heading'   => esc_html__( 'Latest Entries', 'formidable' ),
+					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
 					'cta'              => array(
-						'label' => esc_html__( 'View all entries', 'formidable' ),
+						'label' => __( 'View all entries', 'formidable' ),
 						'link'  => admin_url( 'admin.php?page=formidable-entries' ),
 					),
 					'show-placeholder' => 0 < (int) $counters_value['entries'] ? false : true,
@@ -93,16 +94,16 @@ class FrmDashboardController {
 				'payments' => array(
 					'show-placeholder' => empty( $total_payments ),
 					'placeholder'      => array(
-						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
+						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
 							'classname' => 'frm-trigger-new-form-modal',
 							'link'      => admin_url( 'admin.php?page=formidable' ),
-							'label'     => esc_html__( 'Create a Payment Form', 'formidable' ),
+							'label'     => __( 'Create a Payment Form', 'formidable' ),
 						),
 					),
 					'counters'         => array(
 						array(
-							'heading' => esc_html__( 'Total Earnings', 'formidable' ),
+							'heading' => __( 'Total Earnings', 'formidable' ),
 							'type'    => 'currency',
 							'items'   => $total_payments,
 						),
@@ -115,10 +116,10 @@ class FrmDashboardController {
 	}
 
 	/**
-	 * Init top counters widgets view args used to construct FrmDashboardView.
+	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
-	 * @param object|false $latest_available_form. If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
-	 * @param array $counters_value. The counter values for "Total Forms" & "Total Entries"
+	 * @param object|false $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param array $counters_value The counter values for "Total Forms" & "Total Entries"
 	 *
 	 * @return array
 	 */
@@ -126,11 +127,11 @@ class FrmDashboardController {
 		$add_entry_cta_link = false !== $latest_available_form && isset( $latest_available_form->id ) ? admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ) : '';
 
 		$lite_counters = array(
-			self::view_args_build_counter( esc_html__( 'Total Forms', 'formidable' ), array(), $counters_value['forms'] ),
+			self::view_args_build_counter( __( 'Total Forms', 'formidable' ), array(), $counters_value['forms'] ),
 			self::view_args_build_counter(
-				esc_html__( 'Total Entries', 'formidable' ),
+				__( 'Total Entries', 'formidable' ),
 				self::view_args_build_cta(
-					esc_html__( 'Add Entry', 'formidable' ),
+					__( 'Add Entry', 'formidable' ),
 					$add_entry_cta_link,
 					self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
 				),
@@ -140,16 +141,16 @@ class FrmDashboardController {
 
 		$pro_counters_placeholder = array(
 			self::view_args_build_counter(
-				esc_html__( 'All Views', 'formidable' ),
+				__( 'All Views', 'formidable' ),
 				self::view_args_build_cta(
-					esc_html__( 'Learn More', 'formidable' ),
+					__( 'Learn More', 'formidable' ),
 					admin_url( 'admin.php?page=formidable-views' )
 				),
 			),
 			self::view_args_build_counter(
-				esc_html__( 'Installed Apps', 'formidable' ),
+				__( 'Installed Apps', 'formidable' ),
 				self::view_args_build_cta(
-					esc_html__( 'Learn More', 'formidable' ),
+					__( 'Learn More', 'formidable' ),
 					admin_url( 'admin.php?page=formidable-applications' )
 				),
 			),
@@ -205,7 +206,7 @@ class FrmDashboardController {
 	}
 
 	/**
-	 * Init total earnings widget view args to construct FrmDashboardView.
+	 * Init total earnings widget view args to FrmDashboardHelper.
 	 *
 	 * @return array
 	 */
@@ -239,13 +240,13 @@ class FrmDashboardController {
 		$copy    = FrmAppHelper::copy_for_lite_license() . ' 🙂';
 		$buttons = array(
 			array(
-				'label'  => esc_html__( 'Connect Account', 'formidable' ),
+				'label'  => __( 'Connect Account', 'formidable' ),
 				'link'   => FrmAddonsController::connect_link(),
 				'action' => 'default',
 				'type'   => 'primary',
 			),
 			array(
-				'label'  => esc_html__( 'Get Formidable PRO', 'formidable' ),
+				'label'  => __( 'Get Formidable PRO', 'formidable' ),
 				'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
 				'action' => 'default',
 				'type'   => 'secondary',
@@ -276,16 +277,16 @@ class FrmDashboardController {
 		if ( ! $forms_count ) {
 			$copy = sprintf(
 				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
+				__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
 				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
 				'</b></a>'
 			);
 			return array(
 				'background' => 'entries-placeholder',
-				'heading'    => esc_html__( 'You Have No Entries Yet', 'formidable' ),
+				'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
 				'copy'       => $copy,
 				'button'     => array(
-					'label'     => esc_html__( 'Add New Form', 'formidable' ),
+					'label'     => __( 'Add New Form', 'formidable' ),
 					'link'      => admin_url( 'admin.php?page=formidable' ),
 					'classname' => 'frm-trigger-new-form-modal',
 				),
@@ -294,7 +295,7 @@ class FrmDashboardController {
 
 		$copy = sprintf(
 			/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-			esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
+			__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
 			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
 			'</b></a>'
 		);
@@ -378,13 +379,13 @@ class FrmDashboardController {
 		if ( $form_id ) {
 			self::get_columns_for_form( $form_id, $columns );
 		} else {
-			$columns[ $form_id . '_form_id' ] = esc_html__( 'Form', 'formidable' );
-			$columns[ $form_id . '_name' ]    = esc_html__( 'Name', 'formidable' );
-			$columns[ $form_id . '_user_id' ] = esc_html__( 'Author', 'formidable' );
+			$columns[ $form_id . '_form_id' ] = __( 'Form', 'formidable' );
+			$columns[ $form_id . '_name' ]    = __( 'Name', 'formidable' );
+			$columns[ $form_id . '_user_id' ] = __( 'Author', 'formidable' );
 		}
 
-		$columns[ $form_id . '_created_at' ] = esc_html__( 'Created on', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Updated on', 'formidable' );
+		$columns[ $form_id . '_created_at' ] = __( 'Created on', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = __( 'Updated on', 'formidable' );
 
 		return $columns;
 

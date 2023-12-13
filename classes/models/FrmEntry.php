@@ -1087,4 +1087,20 @@ class FrmEntry {
 
 		return (int) $entry_id;
 	}
+
+	/**
+	 * Get entries count.
+	 *
+	 * @since 6.x
+	 *
+	 * @return int
+	 */
+	public static function get_entries_count() {
+		$args = array(
+			'or'               => 1,
+			'parent_form_id'   => null,
+			'parent_form_id <' => 1,
+		);
+		return self::getRecordCount( $args );
+	}
 }

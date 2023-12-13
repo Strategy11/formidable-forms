@@ -3,72 +3,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmDashboardView {
+class FrmDashboardHelper {
 
 	/**
 	 * The dashboard default view args
 	 *
 	 * @var array
 	 */
-	private $view = array(
-		'counters' => array(
-			'template-type' => '',
-			'counters'      => array( array() ),
-		),
-		'license'  => array(
-			'heading'        => '',
-			'copy'           => '',
-			'license-status' => array(
-				'status'      => '',
-				'status-copy' => '',
-			),
-			'buttons'        => array(
-				array(
-					'label' => '',
-					'link'  => '',
-				),
-				array(
-					'label' => '',
-					'link'  => '',
-				),
-			),
-		),
-		'entries'  => array(
-			'widget-heading'   => 'Latest Entries',
-			'show-placeholder' => true,
-			'placeholder'      => array(
-				'background' => 'entries-placeholder',
-				'heading'    => 'You Have No Entries Yet',
-				'copy'       => 'See the <a href="#">form documentation</a> for instructions on publishin your form',
-				'button'     => array(
-					'label' => 'Add New Form',
-					'link'  => '#',
-				),
-			),
-		),
-		'inbox'    => array(
-			'unread'    => array(),
-			'dismissed' => array(),
-		),
-		'video'    => array(
-			'id' => null,
-		),
-		'payments' => array(
-			'template-type' => 'full-width',
-			'counters'      => array(
-				array(
-					'heading' => 'Total earnings',
-					'type'    => 'currency',
-					'items'   => array(
-						array(
-							'counter_label' => '$',
-							'counter'       => '0',
-						),
-					),
-				),
-			),
-		),
-	);
+	private $view = array();
 
 	/**
 	 * Init all dashboard's widgets view args.
@@ -109,8 +51,8 @@ class FrmDashboardView {
 	 * @return void|string Echo or return the widget's HTML
 	 */
 	public function get_main_widget( $echo = true ) {
-		if ( is_callable( 'FrmProDashboardView::get_main_widget' ) ) {
-			return FrmProDashboardView::get_main_widget( $this->view['entries'], $echo );
+		if ( is_callable( 'FrmProDashboardHelper::get_main_widget' ) ) {
+			return FrmProDashboardHelper::get_main_widget( $this->view['entries'], $echo );
 		}
 		if ( false === $echo ) {
 			return self::load_entries_template( $this->view['entries'] );
@@ -126,8 +68,8 @@ class FrmDashboardView {
 	 * @return string The widget's HTML
 	 */
 	public function get_bottom_widget( $echo = true ) {
-		if ( is_callable( 'FrmProDashboardView::get_bottom_widget' ) ) {
-			return FrmProDashboardView::get_bottom_widget( $this->view['entries'], $echo );
+		if ( is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) ) {
+			return FrmProDashboardHelper::get_bottom_widget( $this->view['entries'], $echo );
 		}
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return '';
@@ -378,8 +320,8 @@ class FrmDashboardView {
 	 * @return string HTML template
 	 */
 	private function load_license_management_template( $template ) {
-		if ( is_callable( 'FrmProDashboardView::load_license_management' ) ) {
-			return FrmProDashboardView::load_license_management( $template );
+		if ( is_callable( 'FrmProDashboardHelper::load_license_management' ) ) {
+			return FrmProDashboardHelper::load_license_management( $template );
 		}
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/license-management.php';
