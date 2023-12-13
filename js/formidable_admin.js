@@ -9375,13 +9375,14 @@ function frmAdminBuildJS() {
 			}
 		);
 
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
+		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
+		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+
+		if ( emptyInbox && leaveEmailIput ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
-			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
 			leaveEmailIput.addEventListener(
 				'keyup',
 				event => {
@@ -9548,7 +9549,7 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
-			} else if ( document.getElementById( 'frm_inbox_page' ) !== null ) {
+			} else if ( document.getElementById( 'frm_inbox_page' ) !== null || null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
 				// Inbox page
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
@@ -10132,7 +10133,9 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
 				var message = this.parentNode.parentNode,
 					key = message.getAttribute( 'data-message' ),
-					href = this.getAttribute( 'href' );
+					href = this.getAttribute( 'href' ),
+					dismissedMessage = message.cloneNode( true );
+					dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
 
 				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
 					return;
@@ -10151,6 +10154,15 @@ function frmAdminBuildJS() {
 						return true;
 					}
 					fadeOut( message, function() {
+						if ( null !== dismissedMessagesWrapper ) {
+							dismissedMessage.classList.remove( 'frm-fade' );
+							dismissedMessage.querySelector( '.frm-inbox-message-heading' ).removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+							dismissedMessagesWrapper.append( dismissedMessage );
+						}
+						if ( 0 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length - 1 ) {
+							document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
+							message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+						}
 						message.parentNode.removeChild( message );
 					});
 				});
