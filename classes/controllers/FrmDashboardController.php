@@ -33,32 +33,34 @@ class FrmDashboardController {
 	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
-		if ( ! self::is_dashboard_page() ) {
-			return;
-		}
+	}
+
+	/**
+	 * Triggered from FrmAppController::load_page() with admin_init
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_page() {
+		self::remove_admin_notices_on_dashboard();
+		self::load_assets();
+
 		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
+		add_filter( 'frm_show_footer_links', '__return_false' );
+		remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 	}
 
 	/**
-	 * Load controller hooks.
+	 * Register and enqueue dashboard assets.
+	 *
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	public static function load_hooks() {
-		add_action( 'admin_init', 'FrmDashboardController::admin_init' );
-	}
-
-	/**
-	 * Init admin_init hook callback.
-	 *
-	 * @return void
-	 */
-	public static function admin_init() {
-		if ( self::is_dashboard_page() ) {
-			add_filter( 'frm_show_footer_links', '__return_false' );
-			add_filter( 'screen_options_show_screen', '__return_false' );
-			return;
-		}
+	public static function load_assets() {
+		self::register_assets();
+		self::enqueue_assets();
 	}
 
 	/**
@@ -96,9 +98,8 @@ class FrmDashboardController {
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
-							'classname' => 'frm-trigger-new-form-modal',
-							'link'      => admin_url( 'admin.php?page=formidable' ),
-							'label'     => __( 'Create a Payment Form', 'formidable' ),
+							'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
 						),
 					),
 					'counters'         => array(
@@ -276,28 +277,27 @@ class FrmDashboardController {
 
 		if ( ! $forms_count ) {
 			$copy = sprintf(
-				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-				__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
-				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
-				'</b></a>'
+				/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
+				__( 'See the %1$sform documentation%2$s for instructions on publishing your form', 'formidable' ),
+				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+				'</a>'
 			);
 			return array(
 				'background' => 'entries-placeholder',
 				'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
 				'copy'       => $copy,
 				'button'     => array(
-					'label'     => __( 'Add New Form', 'formidable' ),
-					'link'      => admin_url( 'admin.php?page=formidable' ),
-					'classname' => 'frm-trigger-new-form-modal',
+					'label' => esc_html__( 'Add New Form', 'formidable' ),
+					'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
 				),
 			);
 		}
 
 		$copy = sprintf(
-			/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-			__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
-			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
-			'</b></a>'
+			/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
+			__( 'See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you\'ll see it here.', 'formidable' ),
+			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+			'</a>'
 		);
 		return array(
 			'background' => 'entries-placeholder',
@@ -385,10 +385,8 @@ class FrmDashboardController {
 		}
 
 		$columns[ $form_id . '_created_at' ] = __( 'Created on', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = __( 'Updated on', 'formidable' );
 
 		return $columns;
-
 	}
 
 	/**

@@ -522,7 +522,7 @@ class FrmFormTemplatesController {
 		}
 		$special_categories['all-templates']  = array(
 			'name'  => __( 'All Templates', 'formidable' ),
-			'count' => count( self::$templates ),
+			'count' => self::get_template_count(),
 		);
 		$special_categories['free-templates'] = array(
 			'name'  => __( 'Free Templates', 'formidable' ),
@@ -681,7 +681,7 @@ class FrmFormTemplatesController {
 	private static function get_js_variables() {
 		$js_variables = array(
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
-			'templatesCount'          => count( self::$templates ),
+			'templatesCount'          => self::get_template_count(),
 			'favoritesCount'          => array(
 				'total'   => self::get_favorite_templates_count(),
 				'default' => count( self::$favorite_templates['default'] ),
@@ -735,6 +735,21 @@ class FrmFormTemplatesController {
 	 */
 	public static function get_templates() {
 		return self::$templates;
+	}
+
+	/**
+	 * Get the total number of templates.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	public static function get_template_count() {
+		if ( empty( self::$templates ) ) {
+			self::$form_template_api = new FrmFormTemplateApi();
+			self::retrieve_and_set_templates();
+		}
+		return count( self::$templates );
 	}
 
 	/**

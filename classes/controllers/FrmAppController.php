@@ -553,7 +553,7 @@ class FrmAppController {
 			self::admin_js();
 		}
 
-		FrmDashboardController::remove_admin_notices_on_dashboard();
+		self::trigger_page_load_hooks();
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
@@ -572,6 +572,29 @@ class FrmAppController {
 		}
 
 		self::maybe_add_ip_warning();
+	}
+
+	/**
+	 * Get the current page and check for a possible function to trigger.
+	 * If a class name matches the page name, and the class has a load_page() method, trigger it.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function trigger_page_load_hooks() {
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable-' ) !== 0 ) {
+			// Only trigger hooks on Formidable pages.
+			return;
+		}
+
+		$page  = str_replace( array( 'formidable-', '-' ), array( '', ' ' ), $page );
+		$page  = str_replace( ' ', '', ucwords( $page ) );
+		$class = 'Frm' . $page . 'Controller';
+		if ( class_exists( $class ) && method_exists( $class, 'load_page' ) ) {
+			call_user_func( array( $class, 'load_page' ) );
+		}
 	}
 
 	/**
@@ -642,9 +665,6 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
-		FrmDashboardController::register_assets();
-		FrmDashboardController::enqueue_assets();
-
 		if ( class_exists( 'FrmOverlayController' ) ) {
 			// This should always exist.
 			// But it may not have loaded properly when updating the plugin.
@@ -675,11 +695,6 @@ class FrmAppController {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 		unset( $is_valid_page );
-
-		if ( 'formidable-applications' === $page ) {
-			FrmApplicationsController::load_assets();
-			return;
-		}
 
 		$dependencies = array(
 			'formidable_admin_global',

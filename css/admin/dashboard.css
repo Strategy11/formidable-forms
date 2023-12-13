@@ -292,6 +292,9 @@
 .frm-widget-placeholder {
 	width: 100%;
 	position: relative;
+	display: flex;
+	align-items: center;
+    justify-content: center;
 }
 
 .frm-widget-placeholder[data-background="chart-placeholder"] {
@@ -308,29 +311,13 @@
 }
 
 .frm-widget-placeholder > div {
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	margin: auto;
 	max-width: 337px;
-	height: 130px;
 	text-align: center;
-}
-
-.frm-widget-placeholder > div h4 {
-	color: #282F36;
-	font-size: var(--text-md);
-	font-weight: 700;
-}
-
-.frm-widget-placeholder > div p {
-	margin-top: var( --gap-sm );
-	margin-bottom: var( --gap-md );
 }
 /* END Chart Placeholder */
 
 /* Pro Features List */
 .frm-pro-features-list {
-	box-sizing: border-box;
 	padding: var(--gap-xl) var(--gap-2xl);
 	position: relative;
 }
@@ -347,39 +334,22 @@
     border-top-left-radius: var(--small-radius);
 }
 
-.frm-dashboard-container .frm-pro-features-list h2 {
+.frm_wrap .frm-dashboard-container .frm-pro-features-list h2 {
+	font-size: 24px;
+	font-weight: 600;
 	max-width: 382px;
+	margin-bottom: var(--gap-md);
 }
 
 .frm-pro-features-list ul {
-	padding: 0px;
-	margin: 0px 0px 15px 0px;
+	padding: 0;
+	margin: 0 0 var(--gap-lg);
 }
 
-.frm-pro-features-list ul > li {
-	display: block;
-	margin-right: 24px;
-}
-
-.frm-pro-features-list ul > li ul li {
-	position: relative;
-	display: block;
-	padding-left: 24px;
-	margin-bottom: 12px;
-	color: var(--grey-500);
-	font-weight: 400;
-	font-size: var(--text-sm);
-	line-height: 24px;
-}
-
-.frm-pro-features-list ul > li ul li:before {
-	content: url( '../../images/dashboard/checkmark.svg' );
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 24px;
-	height: 24px;
+.frm-pro-features-list li {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
 }
 /* END Pro Features List */
 

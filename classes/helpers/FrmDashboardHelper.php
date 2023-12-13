@@ -187,7 +187,8 @@ class FrmDashboardHelper {
 	private function get_pro_features( $echo = true ) {
 		return FrmAppHelper::clip(
 			function() {
-				echo wp_kses_post( $this->load_pro_features_template() );
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo FrmAppHelper::kses( $this->load_pro_features_template(), 'all' );
 			},
 			$echo
 		);
@@ -270,6 +271,23 @@ class FrmDashboardHelper {
 	 * @return string HTML template
 	 */
 	private function load_pro_features_template() {
+		$features = array(
+			sprintf(
+				/* translators: %d: number of form templates */
+				__( '%d+ Form Templates', 'formidable' ),
+				FrmFormTemplatesController::get_template_count()
+			),
+			__( 'Calculated Fields and Math', 'formidable' ),
+			__( 'Quizzes', 'formidable' ),
+			__( 'Save and Continue', 'formidable' ),
+			__( 'Smart Forms with Conditional Logic', 'formidable' ),
+			__( 'Ecommerce Pricing Fields', 'formidable' ),
+			__( 'Advanced Fields', 'formidable' ),
+			__( 'Schedule Forms & Limit Responses', 'formidable' ),
+			__( 'Display Form Data with Views', 'formidable' ),
+			__( 'And much more...', 'formidable' ),
+		);
+
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/pro-features-list.php';
 		return ob_get_clean();
