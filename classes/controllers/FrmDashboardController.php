@@ -48,7 +48,7 @@ class FrmDashboardController {
 
 		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
 		add_filter( 'frm_show_footer_links', '__return_false' );
-		remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
+		add_filter( 'screen_options_show_screen', '__return_false' );
 	}
 
 	/**
