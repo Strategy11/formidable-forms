@@ -4497,6 +4497,10 @@ li.frm_field_box > ul.frm_grid_container {
 	padding: 10px;
 }
 
+#form_show_entry_page.frm_wrap .postbox {
+	overflow: hidden;
+}
+
 .frm_image_option_container .frm_image_placeholder_icon svg{
 	height: 150px;
 }
