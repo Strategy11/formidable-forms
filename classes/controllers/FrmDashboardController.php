@@ -33,31 +33,34 @@ class FrmDashboardController {
 	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
-		if ( ! self::is_dashboard_page() ) {
-			return;
-		}
+	}
+
+	/**
+	 * Triggered from FrmAppController::load_page() with admin_init
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_page() {
+		self::remove_admin_notices_on_dashboard();
+		self::load_assets();
+
 		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
+		add_filter( 'frm_show_footer_links', '__return_false' );
+		remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 	}
 
 	/**
-	 * Load controller hooks.
+	 * Register and enqueue dashboard assets.
+	 *
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	public static function load_hooks() {
-		add_action( 'admin_init', 'FrmDashboardController::admin_init' );
-	}
-
-	/**
-	 * Init admin_init hook callback.
-	 *
-	 * @return void
-	 */
-	public static function admin_init() {
-		if ( self::is_dashboard_page() ) {
-			remove_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
-			return;
-		}
+	public static function load_assets() {
+		self::register_assets();
+		self::enqueue_assets();
 	}
 
 	/**
@@ -382,10 +385,8 @@ class FrmDashboardController {
 		}
 
 		$columns[ $form_id . '_created_at' ] = esc_html__( 'Created on', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Updated on', 'formidable' );
 
 		return $columns;
-
 	}
 
 	/**

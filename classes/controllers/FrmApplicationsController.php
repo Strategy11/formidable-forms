@@ -162,6 +162,17 @@ class FrmApplicationsController {
 	}
 
 	/**
+	 * @usedby FrmAppController::admin_init().
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_page() {
+		self::load_assets();
+	}
+
+	/**
 	 * @return void
 	 */
 	public static function load_assets() {
