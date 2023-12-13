@@ -14,8 +14,7 @@ class FrmInboxController {
 	 * @return void
 	 */
 	public static function menu() {
-		$unread = self::get_notice_count();
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Inbox', 'formidable' ), __( 'Inbox', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-inbox', 'FrmInboxController::inbox' );
+		_deprecated_function( __METHOD__, '6.7.1' );
 	}
 
 	/**
