@@ -95,9 +95,8 @@ class FrmDashboardController {
 					'placeholder'      => array(
 						'copy' => esc_html__( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
-							'classname' => 'frm-trigger-new-form-modal',
-							'link'      => admin_url( 'admin.php?page=formidable' ),
-							'label'     => esc_html__( 'Create a Payment Form', 'formidable' ),
+							'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
 						),
 					),
 					'counters'         => array(
@@ -275,28 +274,27 @@ class FrmDashboardController {
 
 		if ( ! $forms_count ) {
 			$copy = sprintf(
-				/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishin your form', 'formidable' ),
-				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
-				'</b></a>'
+				/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
+				esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form', 'formidable' ),
+				'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+				'</a>'
 			);
 			return array(
 				'background' => 'entries-placeholder',
 				'heading'    => esc_html__( 'You Have No Entries Yet', 'formidable' ),
 				'copy'       => $copy,
 				'button'     => array(
-					'label'     => esc_html__( 'Add New Form', 'formidable' ),
-					'link'      => admin_url( 'admin.php?page=formidable' ),
-					'classname' => 'frm-trigger-new-form-modal',
+					'label' => esc_html__( 'Add New Form', 'formidable' ),
+					'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
 				),
 			);
 		}
 
 		$copy = sprintf(
-			/* translators: %1$s: HTML start of a & b tag, %2$s: HTML close b & a tag */
-			esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form. once vou nave at least one entry you\'ll see it here.', 'formidable' ),
-			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '"><b>',
-			'</b></a>'
+			/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
+			esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you\'ll see it here.', 'formidable' ),
+			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+			'</a>'
 		);
 		return array(
 			'background' => 'entries-placeholder',
