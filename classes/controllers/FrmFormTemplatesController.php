@@ -138,6 +138,8 @@ class FrmFormTemplatesController {
 	 * @since 6.7
 	 */
 	public static function load_admin_hooks() {
+		self::init_template_resources();
+
 		add_action( 'admin_menu', __CLASS__ . '::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
 		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
 		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
@@ -167,8 +169,6 @@ class FrmFormTemplatesController {
 			self::PAGE_SLUG,
 			array( __CLASS__, 'render' )
 		);
-
-		self::init_template_resources();
 	}
 
 	/**
