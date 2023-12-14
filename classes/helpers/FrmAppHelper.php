@@ -1706,7 +1706,7 @@ class FrmAppHelper {
 	 */
 	private static function get_lite_capabilities() {
 		return array(
-			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_view_forms'      => __( 'View Forms List', 'formidable' ),
 			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
 			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
 			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
