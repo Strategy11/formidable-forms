@@ -9,7 +9,7 @@ class FrmDashboard {
 			ajax: {
 				action: 'dashboard_ajax_action',
 				dashboardActions: {
-					welcomeBanner: 'welcome-banner-cookie',
+					welcomeBanner: 'welcome-banner-has-closed',
 					checkEmailIfSubscribed: 'email-has-subscribed',
 					saveSubscribedEmail: 'save-subscribed-email'
 				}

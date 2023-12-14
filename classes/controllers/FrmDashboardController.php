@@ -301,7 +301,7 @@ class FrmDashboardController {
 		);
 		return array(
 			'background' => 'entries-placeholder',
-			'heading'    => 'You Have No Entries Yet',
+			'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
 			'copy'       => $copy,
 			'button'     => null,
 		);
@@ -350,11 +350,9 @@ class FrmDashboardController {
 
 		switch ( $dashboard_action ) {
 
-			case 'welcome-banner-cookie':
-				if ( true === self::ajax_set_cookie_banner( FrmAppHelper::get_post_param( 'banner_has_closed' ) ) ) {
-					wp_send_json_success();
-				}
-				wp_send_json_error();
+			case 'welcome-banner-has-closed':
+				self::add_welcome_closed_banner_user_id();
+				wp_send_json_success();
 				break;
 
 			case 'save-subscribed-email':
@@ -395,16 +393,11 @@ class FrmDashboardController {
 	 * @return boolean
 	 */
 	public static function welcome_banner_has_closed() {
-		if ( isset( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) {
-			list( $cookie_value, $expiration_time ) = explode( '|', sanitize_text_field( wp_unslash( $_COOKIE[ self::$banner_closed_cookie_name ] ) ) );
-			if ( 1 === (int) $cookie_value ) {
-				// Refresh welcome banner cookie if it will expire in less 45 days.
-				if ( (int) $expiration_time < time() + ( 45 * 24 * 60 * 60 ) ) {
-					self::ajax_set_cookie_banner( 1 );
-				}
-				return true;
-			}
-			return false;
+		$user_id                = get_current_user_id();
+		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
+
+		if ( ! empty( $banner_closed_by_users ) && false !== array_search( $user_id, $banner_closed_by_users, true ) ) {
+			return true;
 		}
 		return false;
 	}
@@ -519,13 +512,20 @@ class FrmDashboardController {
 	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		$options           = self::get_dashboard_options();
 		if ( false === array_search( $email, $subscribed_emails, true ) ) {
-			$subscribed_emails[]                = $email;
-			$options['inbox-subscribed-emails'] = $subscribed_emails;
-			self::update_dashboard_options( $options );
+			$subscribed_emails[] = $email;
+			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
 			return;
 		}
+	}
+
+	/**
+	 * Get list of users' ids that have closed the welcome banner.
+	 *
+	 * @return array
+	 */
+	private static function get_closed_welcome_banner_user_ids() {
+		return self::get_dashboard_options( 'closed-welcome-banner-user-ids' );
 	}
 
 	/**
@@ -534,43 +534,51 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function get_subscribed_emails() {
-		$options = self::get_dashboard_options();
-		if ( ! isset( $options['inbox-subscribed-emails'] ) ) {
-			return array();
-		}
-		return $options['inbox-subscribed-emails'];
+		return self::get_dashboard_options( 'inbox-subscribed-emails' );
 	}
 
 	/**
 	 * Get the dashboard options from db.
 	 *
+	 * @param string|null $option_name The dashboard option name. If null it will return all dashboard options.
 	 * @return array
 	 */
-	private static function get_dashboard_options() {
-		return get_option( self::$option_meta_name, array() );
+	private static function get_dashboard_options( $option_name = null ) {
+		$options = get_option( self::$option_meta_name, array() );
+		if ( null !== $option_name && ! isset( $options[ $option_name ] ) ) {
+			return array();
+		}
+		if ( null !== $option_name ) {
+			return $options[ $option_name ];
+		}
+		return $options;
 	}
 
 	/**
 	 * Update the dashboard options to db.
 	 *
+	 * @param array $data
+	 * @param string $option_name
+	 *
 	 * @return void
 	 */
-	private static function update_dashboard_options( $data ) {
-		update_option( self::$option_meta_name, $data, 'no' );
+	private static function update_dashboard_options( $data, $option_name ) {
+		$options                 = self::get_dashboard_options();
+		$options[ $option_name ] = $data;
+		update_option( self::$option_meta_name, $options, 'no' );
 	}
 
 	/**
-	 * When the welcome banner is closed, we save its status into a cookie.
-	 * Cookie name: self::$banner_closed_cookie_name.
+	 * Save user id to closed banner list.
 	 *
 	 * @return boolean
 	 */
-	private static function ajax_set_cookie_banner( $banner_has_closed ) {
-		if ( 1 === (int) $banner_has_closed ) {
-			$expiration_time = time() + ( 400 * 24 * 60 * 60 ); // 400 days. Maximum expiration time allowed by Chrome.
-			setcookie( self::$banner_closed_cookie_name, 1 . '|' . $expiration_time, $expiration_time );
-			return true;
+	private static function add_welcome_closed_banner_user_id() {
+		$users_list = self::get_closed_welcome_banner_user_ids();
+		$user_id    = get_current_user_id();
+		if ( false === array_search( $user_id, $users_list, true ) ) {
+			$users_list[] = $user_id;
+			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
 		}
-		return false;
 	}
 }
