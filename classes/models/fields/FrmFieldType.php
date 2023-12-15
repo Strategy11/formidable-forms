@@ -1344,6 +1344,10 @@ DEFAULT_HTML;
 			}
 		}
 
+		if ( ! $atts['entry']->user_id || ! user_can( $atts['entry']->user_id, 'frm_edit_entries' ) ) {
+			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+		}
+
 		return $value;
 	}
 
