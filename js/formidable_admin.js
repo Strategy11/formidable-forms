@@ -2570,7 +2570,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
+			let msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
@@ -2859,7 +2859,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		return fields;
+		return wp.hooks.applyFilters( 'frm_admin_get_field_list', fields, fieldType, allFields );
 	}
 
 	function popProductFields( field ) {
@@ -2933,7 +2933,7 @@ function frmAdminBuildJS() {
 	 * If the element doesn't exist, use a blank value.
 	 */
 	function getPossibleValue( id ) {
-		field = document.getElementById( id );
+		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
 		} else {
