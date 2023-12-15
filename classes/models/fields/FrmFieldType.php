@@ -1344,11 +1344,27 @@ DEFAULT_HTML;
 			}
 		}
 
-		if ( ! $atts['entry']->user_id || ! user_can( $atts['entry']->user_id, 'frm_edit_entries' ) ) {
+		if ( $this->should_strip_most_html( $atts['entry'] ) ) {
 			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
 		}
 
 		return $value;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $entry
+	 * @return bool
+	 */
+	protected function should_strip_most_html( $entry ) {
+		if ( ! $entry->user_id || ! user_can( $entry->user_id, 'frm_edit_entries' ) ) {
+			return true;
+		}
+		if ( $entry->updated_by ) {
+			return ! user_can( $entry->updated_by, 'frm_edit_entries' );
+		}
+		return false;
 	}
 
 	protected function fill_default_atts( &$atts ) {
