@@ -5701,6 +5701,11 @@ function frmAdminBuildJS() {
 			''
 		);
 
+		if ( clean !== html ) {
+			// Clean it until nothing changes, in case the stripped result is now unsafe.
+			return purifyHtml( clean );
+		}
+
 		return clean;
 	}
 
