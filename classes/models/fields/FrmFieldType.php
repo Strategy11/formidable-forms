@@ -1344,7 +1344,7 @@ DEFAULT_HTML;
 			}
 		}
 
-		if ( $this->should_strip_most_html( $atts['entry'] ) ) {
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && $this->should_strip_most_html( $atts['entry'] ) ) {
 			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
 		}
 
