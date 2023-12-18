@@ -261,11 +261,11 @@
 		}
 
 		if ( firstNameID !== '' ) {
-			firstFieldContainer = document.getElementById( 'frm_field_' + firstNameID + '_container' );
+			firstFieldContainer = document.querySelector( '#frm_field_' + firstNameID + '_container, .frm_field_' + firstNameID + '_container' );
 			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
-				firstField = $form.find( '#frm_field_' + firstNameID + '_container input, input[name="item_meta[' + firstNameID + ']"]' );
+				firstField = $form.find( '#frm_field_' + firstNameID + '_container input, input[name="item_meta[' + firstNameID + ']"], .frm_field_' + firstNameID + '_container input' );
 				if ( firstField.length && firstField.val() ) {
 					cardObject.name = firstField.val();
 				}
@@ -273,11 +273,11 @@
 		}
 
 		if ( lastNameID !== '' ) {
-			lastFieldContainer = document.getElementById( 'frm_field_' + lastNameID + '_container' );
+			lastFieldContainer = document.querySelector( '#frm_field_' + lastNameID + '_container, .frm_field_' + lastNameID + '_container' );
 			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
 			} else {
-				lastField = $form.find( '#frm_field_' + lastNameID + '_container input, input[name="item_meta[' + lastNameID + ']"]' );
+				lastField = $form.find( '#frm_field_' + lastNameID + '_container input, input[name="item_meta[' + lastNameID + ']"], .frm_field_' + lastNameID + '_container input' );
 				if ( lastField.length && lastField.val() ) {
 					cardObject.name = cardObject.name + ' ' + lastField.val();
 				}
