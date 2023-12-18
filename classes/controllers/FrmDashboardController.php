@@ -134,7 +134,7 @@ class FrmDashboardController {
 				self::view_args_build_cta(
 					__( 'Add Entry', 'formidable' ),
 					$add_entry_cta_link,
-					self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form ),
+					self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form )
 				),
 				$counters_value['entries'],
 			),
