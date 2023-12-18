@@ -1822,6 +1822,7 @@ class FrmFormsController {
 
 				if ( 'forms_permanently_deleted' === $message ) {
 					$count = FrmAppHelper::get_param( 'forms_deleted', 0, 'get', 'absint' );
+					/* translators: %1$s: Number of forms */
 					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 					self::display_forms_list( array(), $message, '' );
 					return;
