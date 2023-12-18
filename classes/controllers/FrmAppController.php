@@ -549,7 +549,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_init() {
-		if ( FrmAppHelper::get_param( 'delete_all' ) ) {
+		if ( FrmAppHelper::get_param( 'delete_all' ) && FrmAppHelper::is_admin_page( 'formidable' ) && 'trash' === FrmAppHelper::get_param( 'form_type' ) ) {
 			FrmFormsController::delete_all();
 		}
 
