@@ -1,3 +1,5 @@
+import { FrmAnimate } from '../common/utilities/animation';
+
 export class FrmOverlay {
 
 	constructor() {
@@ -108,12 +110,10 @@ export class FrmOverlay {
 	}
 
 	initOverlayIntroAnimation( delay ) {
-		const overlayWrapper = document.querySelector( '.frm-overlay--wrapper' );
-		if ( overlayWrapper ) {
-			setTimeout( () => {
-				overlayWrapper.classList.add( 'frm-active' );
-			}, delay );
-		}
+		setTimeout( () => {
+			const elements = document.querySelectorAll( '.frm-overlay--hero-image, .frm-overlay--heading, .frm-overlay--copy, .frm-overlay--cta a' );
+			new FrmAnimate( elements, 'cascade-3d' ).cascadeFadeIn( 0.07 );
+		}, delay );
 	}
 
 	buildOverlay() {

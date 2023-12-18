@@ -2996,30 +2996,9 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Count and return total forms.
-	 *
-	 * @since 6.x
-	 * @return int
-	 */
-	public static function get_forms_count() {
-
-		$args = array(
-			array(
-				'or'               => 1,
-				'parent_form_id'   => null,
-				'parent_form_id <' => 1,
-			),
-			'is_template' => 0,
-			'status !'    => 'trash',
-		);
-
-		return FrmDb::get_count( 'frm_forms', $args );
-	}
-
-	/**
 	 * Get the latest form available.
 	 *
-	 * @since 6.x
+	 * @since x.x
 	 * @return object
 	 */
 	public static function get_latest_form() {

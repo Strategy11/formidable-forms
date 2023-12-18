@@ -4,8 +4,9 @@
 import { getElements } from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
-import { fadeIn, onClickPreventDefault } from '../utils';
+import { onClickPreventDefault } from '../utils';
 import { resetSearchInput } from './';
+import { FrmAnimate } from '../../common/utilities/animation';
 
 /**
  * Manages event handling for sidebar category links.
@@ -29,8 +30,10 @@ function addCategoryEvents() {
  * @param {Event} event The click event object.
  */
 const onCategoryClick = ( event ) => {
-	const clickedCategory = event.currentTarget;
+	const clickedCategory     = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
+	const { bodyContent }     = getElements();
+	const bodyContentAnimate  = new FrmAnimate( bodyContent );
 	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getAppState();
 
 	// If the selected category hasn't changed, return early
@@ -63,8 +66,7 @@ const onCategoryClick = ( event ) => {
 	showSelectedCategory( selectedCategory );
 
 	// Smoothly display the updated UI elements
-	const { bodyContent } = getElements();
-	fadeIn( bodyContent );
+	bodyContentAnimate.fadeIn();
 };
 
 /**

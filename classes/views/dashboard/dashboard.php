@@ -22,24 +22,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php $dashboard_view->get_welcome_banner(); ?>
 		<div class="frm-flex-full frm-flex-box frm-flex-col">
 			<?php $dashboard_view->get_counters(); ?>
-			<div class="frm-dashboard-widget frm-card-item frm-px-0 frm-animate">
+			<div class="frm-dashboard-widget frm-card-item frm-px-0">
 				<?php $dashboard_view->get_main_widget(); ?>
 			</div>
 			<?php $dashboard_view->get_payments(); ?>
-			<div class="frm-dashboard-widget frm-card-item frm-p-0 frm-animate">
+			<div class="frm-dashboard-widget frm-card-item frm-px-0">
 				<?php $dashboard_view->get_bottom_widget(); ?>
 			</div>
 		</div>
 		<div class="frm-flex-box frm-flex-col">
-			<div class="frm-dashboard-widget frm-card-item frm-license-widget frm-animate">
+			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
 			<?php if ( '' !== $dashboard_view->get_youtube_video( false ) ) : ?>
-				<div class="frm-dashboard-widget frm-card-item frm-yt-widget frm-animate">
+				<div class="frm-dashboard-widget frm-card-item frm-yt-widget">
 					<?php $dashboard_view->get_youtube_video(); ?>
 				</div>
 			<?php endif; ?>
-			<div class="frm-dashboard-widget frm-card-item frm-inbox-widget frm-px-0 frm-animate">
+			<div class="frm-dashboard-widget frm-card-item frm-inbox-widget frm-px-0">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>
 		</div>

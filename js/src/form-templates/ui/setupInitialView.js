@@ -3,8 +3,9 @@
  */
 import { getElements } from '../elements';
 import { HIDE_JS_CLASS, getAppState, hasQueryParam } from '../shared';
-import { show, hide, hideElements, fadeIn } from '../utils';
+import { show, hide, hideElements } from '../utils';
 import { showHeaderCancelButton } from './';
+import { FrmAnimate } from '../../common/utilities/animation';
 
 /**
  * Sets up the initial view, performing any required
@@ -21,6 +22,8 @@ function setupInitialView() {
 		availableTemplatesCategory,
 		freeTemplatesCategory
 	} = getElements();
+
+	const bodyContentAnimate = new FrmAnimate( bodyContent );
 
 	// Clear the value in the search input
 	searchInput.value = '';
@@ -49,7 +52,7 @@ function setupInitialView() {
 	// Smoothly display the updated UI elements
 	bodyContent.classList.remove( HIDE_JS_CLASS );
 	sidebar.classList.remove( HIDE_JS_CLASS );
-	fadeIn( bodyContent );
+	bodyContentAnimate.fadeIn();
 	show( sidebar );
 
 	// Show the "Cancel" button in the header if the 'return_page' query param is present

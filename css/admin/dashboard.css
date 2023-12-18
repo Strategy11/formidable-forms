@@ -1,14 +1,3 @@
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
 
 .frm-white-body #wpbody-content {
 	/* clear float - fix the full auto height with frm-dashboard-container */
@@ -30,10 +19,7 @@
 }
 
 .frm-dashboard-container .frm-dashboard-widget {
-	transform: translateY( 0px );
-	opacity: 1.0;
-	transition: 0.35s transform, 0.35s opacity linear;
-	will-change: transform;
+	opacity: 0.0;
 	position: relative;
 	flex-direction: column;
 	padding-left: var(--gap-md);
@@ -86,19 +72,6 @@
 	border-radius: var(--small-radius);
 }
 
-.frm-dashboard-container .frm-dashboard-widget > * {
-	transition: 0.3s opacity linear;
-	transition-delay: 0.1s;
-}
-
-.frm-dashboard-container .frm-dashboard-widget.frm-animate {
-	transform: translateY( 7px );
-	opacity: 0.0;
-}
-
-.frm-dashboard-container .frm-dashboard-widget.frm-animate > * {
-	opacity: 0.0;
-}
 
 .frm-dashboard-banner {
 	width: 100%;

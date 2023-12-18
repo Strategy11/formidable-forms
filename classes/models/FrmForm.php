@@ -1159,6 +1159,27 @@ class FrmForm {
 	}
 
 	/**
+	 * Count and return total forms.
+	 *
+	 * @since x.x
+	 * @return int
+	 */
+	public static function get_forms_count() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return FrmDb::get_count( 'frm_forms', $args );
+	}
+
+	/**
 	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
 	 *

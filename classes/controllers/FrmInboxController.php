@@ -61,7 +61,7 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since 6.x
+	 * @since x.x
 	 *
 	 * @return array
 	 */

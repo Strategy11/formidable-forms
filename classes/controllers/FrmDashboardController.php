@@ -72,7 +72,7 @@ class FrmDashboardController {
 		$latest_available_form = FrmFormsController::get_latest_form();
 		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
-			'forms'   => FrmFormsController::get_forms_count(),
+			'forms'   => FrmForm::get_forms_count(),
 			'entries' => FrmEntry::get_entries_count(),
 		);
 
@@ -169,8 +169,9 @@ class FrmDashboardController {
 	/**
 	 * Build view args for counter widget.
 	 *
-	 * @param string $heading,
-	 * @param array $cta,
+	 * @param string $heading
+	 * @param array $cta
+	 * @param int $value
 	 * @param string $type
 	 *
 	 * @return array
@@ -192,8 +193,8 @@ class FrmDashboardController {
 	/**
 	 * Build view args for cta.
 	 *
-	 * @param string $title,
-	 * @param string $link,
+	 * @param string $title
+	 * @param string $link
 	 * @param boolean $display
 	 *
 	 * @return array

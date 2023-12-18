@@ -1010,7 +1010,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) && ( ! isset( $args['display-bottom-headers'] ) || false !== $args['display-bottom-headers'] )) { ?>
+			<?php if ( $this->has_min_items( 1 ) && ( ! isset( $args['display-bottom-headers'] ) || false !== $args['display-bottom-headers'] ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
