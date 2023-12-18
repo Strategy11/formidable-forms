@@ -618,21 +618,29 @@ class FrmFieldsController {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
-		if ( FrmField::get_option( $field, 'autocom' ) && ( ! is_callable( 'FrmProAppHelper::use_chosen_js' ) || FrmProAppHelper::use_chosen_js() ) ) {
-			$use_placeholder = '';
-		} else {
-			$use_placeholder = $placeholder;
+		$use_placeholder = $placeholder;
+		$autocomplete    = FrmField::get_option( $field, 'autocom' );
+
+		if ( $autocomplete ) {
+			$use_chosen = ! is_callable( 'FrmProAppHelper::use_chosen_js' ) || FrmProAppHelper::use_chosen_js();
+			if ( $use_chosen ) {
+				$use_placeholder = '';
+			}
 		}
 
 		if ( $placeholder !== '' ) {
-			FrmHtmlHelper::echo_dropdown_option(
-				$use_placeholder,
-				false,
-				array(
-					'class' => 'frm-select-placeholder',
-					'value' => '',
-				)
+			$placeholder_attributes = array(
+				'class'            => 'frm-select-placeholder',
+				'value'            => '',
+				'data-placeholder' => 'true',
 			);
+
+			if ( $autocomplete && empty( $use_chosen ) ) {
+				// This is required for Slim Select.
+				$placeholder_attributes['data-placeholder'] = 'true';
+			}
+
+			FrmHtmlHelper::echo_dropdown_option( $use_placeholder, false, $placeholder_attributes );
 			return true;
 		}
 
