@@ -230,7 +230,7 @@ class FrmDashboardHelper {
 							'frameborder'     => true,
 							'allowfullscreen' => true,
 						),
-					),
+					)
 				);
 			},
 			$echo
