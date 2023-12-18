@@ -403,7 +403,7 @@ class FrmDashboardHelper {
 				'display-top-nav'        => false,
 				'display-bottom-nav'     => false,
 				'display-bottom-headers' => false,
-			),
+			)
 		);
 		return ob_get_clean();
 	}
