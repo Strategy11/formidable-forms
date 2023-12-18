@@ -2996,27 +2996,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Get the latest form available.
-	 *
-	 * @since x.x
-	 * @return object
-	 */
-	public static function get_latest_form() {
-
-		$args = array(
-			array(
-				'or'               => 1,
-				'parent_form_id'   => null,
-				'parent_form_id <' => 1,
-			),
-			'is_template' => 0,
-			'status !'    => 'trash',
-		);
-
-		return FrmForm::getAll( $args, 'created_at desc', 1 );
-	}
-
-	/**
 	 * @deprecated 4.0
 	 */
 	public static function new_form( $values = array() ) {

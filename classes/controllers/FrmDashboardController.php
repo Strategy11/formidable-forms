@@ -69,7 +69,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function route() {
-		$latest_available_form = FrmFormsController::get_latest_form();
+		$latest_available_form = FrmForm::get_latest_form();
 		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
 			'forms'   => FrmForm::get_forms_count(),
