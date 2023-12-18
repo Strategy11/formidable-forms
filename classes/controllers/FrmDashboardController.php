@@ -136,7 +136,7 @@ class FrmDashboardController {
 					$add_entry_cta_link,
 					self::display_counter_cta( 'entries', $counters_value['entries'], $latest_available_form )
 				),
-				$counters_value['entries'],
+				$counters_value['entries']
 			),
 		);
 
@@ -146,14 +146,14 @@ class FrmDashboardController {
 				self::view_args_build_cta(
 					__( 'Learn More', 'formidable' ),
 					admin_url( 'admin.php?page=formidable-views' )
-				),
+				)
 			),
 			self::view_args_build_counter(
 				__( 'Installed Apps', 'formidable' ),
 				self::view_args_build_cta(
 					__( 'Learn More', 'formidable' ),
 					admin_url( 'admin.php?page=formidable-applications' )
-				),
+				)
 			),
 		);
 
