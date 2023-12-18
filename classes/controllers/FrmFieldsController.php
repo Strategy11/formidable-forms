@@ -618,12 +618,21 @@ class FrmFieldsController {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
+		if ( FrmField::get_option( $field, 'autocom' ) && ( ! is_callable( 'FrmProAppHelper::use_chosen_js' ) || FrmProAppHelper::use_chosen_js() ) ) {
+			$use_placeholder = '';
+		} else {
+			$use_placeholder = $placeholder;
+		}
+
 		if ( $placeholder !== '' ) {
-			?>
-			<option class="frm-select-placeholder" value="">
-				<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
-			</option>
-			<?php
+			FrmHtmlHelper::echo_dropdown_option(
+				$use_placeholder,
+				false,
+				array(
+					'class' => 'frm-select-placeholder',
+					'value' => '',
+				)
+			);
 			return true;
 		}
 
