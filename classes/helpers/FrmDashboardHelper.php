@@ -15,7 +15,75 @@ class FrmDashboardHelper {
 	/**
 	 * Init all dashboard's widgets view args.
 	 *
-	 * @param array $data.
+	 * @param array $data {
+	 *    An array of view args required to construct dashboard view.
+	 *
+	 *    @type array $counters Array of counters.
+	 *        @type string $counters['counters'][]['heading']
+	 *        @type int    $counters['counters'][]['counter']
+	 *        @type string $counters['counters'][]['type'] The counter template type: default|currency.
+	 *        @type array  $counters['counters'][]['cta']
+	 *            @type string  $counters['counters'][]['cta']['title']
+	 *            @type string  $counters['counters'][]['cta']['link']
+	 *            @type boolean $counters['counters'][]['cta']['display'] If true a CTA will be displayed instead of the counter.
+	 *    @type array $license Array of license args
+	 *        @type string $license['heading']
+	 *        @type string $license['copy']
+	 *        @type array  $license['buttons']
+	 *            @type string $license['buttons'][]['label']
+	 *            @type string $license['buttons'][]['link']
+	 *            @type string $license['buttons'][]['type'] primary|secondary
+	 *            @type string $license['buttons'][]['action'] open-license-modal|default
+	 *    @type array $inbox Array of inbox args
+	 *        @type array $inbox['unread']
+	 *            @type string $inbox['unread'][]['message']
+	 *            @type string $inbox['unread'][]['subject']
+	 *            @type string $inbox['unread'][]['icon']
+	 *            @type string $inbox['unread'][]['cta']
+	 *            @type string $inbox['unread'][]['expires']
+	 *            @type array  $inbox['unread'][]['who']
+	 *            @type int    $inbox['unread'][]['starts']
+	 *            @type int    $inbox['unread'][]['created']
+	 *        @type array $inbox['dismissed']
+	 *            @type string $inbox['dismissed'][]['message']
+	 *            @type string $inbox['dismissed'][]['subject']
+	 *            @type string $inbox['dismissed'][]['icon']
+	 *            @type string $inbox['dismissed'][]['cta']
+	 *            @type string $inbox['dismissed'][]['expires']
+	 *            @type array  $inbox['dismissed'][]['who']
+	 *            @type int    $inbox['dismissed'][]['starts']
+	 *            @type int    $inbox['dismissed'][]['created']
+	 *        @type int   $inbox['user']
+	 *    @type array $entries Array of entries args
+	 *        @type string $entries['widget-heading']
+	 *        @type array  $entries['cta']
+	 *            @type string $entries['cta']['label']
+	 *            @type string $entries['cta']['link']
+	 *        @type bool   $entries['show-placeholder']
+	 *        @type int    $entries['count']
+	 *        @type array  $entries['placeholder']
+	 *            @type string     $entries['placeholder']['background']
+	 *            @type string     $entries['placeholder']['heading']
+	 *            @type string     $entries['placeholder']['copy']
+	 *            @type null|array $entries['placeholder']['button']
+	 *                @type string $entries['placeholder']['button']['label']
+	 *                @type string $entries['placeholder']['button']['link']
+	 *    @type array $payments Array of payments args
+	 *        @type boolean $payments['show-placeholder']
+	 *        @type array   $payments['placeholder']
+	 *            @type string $payments['placeholder']['copy']
+	 *            @type array  $payments['placeholder']['cta']
+	 *                @type string $payments['placeholder']['cta']['link']
+	 *                @type string $payments['placeholder']['cta']['label']
+	 *        @type array   $payments['counters']
+	 *            @type string $payments['counters'][]['heading']
+	 *            @type string $payments['counters'][]['type'] currency|default
+	 *            @type array  $payments['counters'][]['items']
+	 *                @type string $payments['counters'][]['items'][]['counter_label']
+	 *                @type int    $payments['counters'][]['items'][]['counter']
+	 *    @type array $video Array of video args
+	 *        @type string $video['id'] YouTube video ID
+	 * }
 	 *
 	 * @return void
 	 */
