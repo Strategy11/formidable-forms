@@ -229,7 +229,9 @@
 			settings = frm_stripe_vars.settings,
 			firstNameID = '',
 			lastNameID = '',
-			getNameFieldValue;
+			getNameFieldValue,
+			queryForNameFieldIsFound,
+			subFieldEl;
 
 		/**
 		 * Gets first, middle or last name from the given field.
@@ -247,7 +249,7 @@
 				return '';
 			}
 
-			const subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -260,12 +262,16 @@
 			lastNameID  = settings[ i ].last_name;
 		}
 
+		queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
+
 		if ( firstNameID !== '' ) {
-			firstFieldContainer = document.querySelector( '#frm_field_' + firstNameID + '_container, .frm_field_' + firstNameID + '_container' );
+			firstFieldContainer = queryForNameFieldIsFound ? window.frmProForm.queryForNameField( firstNameID, 'container' ) : document.querySelector( '#frm_field_' + firstNameID + '_container' );
+
 			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
-				firstField = $form.find( '#frm_field_' + firstNameID + '_container input, input[name="item_meta[' + firstNameID + ']"], .frm_field_' + firstNameID + '_container input' );
+				firstField = queryForNameFieldIsFound ? firstField = window.frmProForm.queryForNameField( firstNameID, 'field', $form ) : $form.find( '#frm_field_' + firstNameID + '_container input, input[name="item_meta[' + firstNameID + ']"]' );
+
 				if ( firstField.length && firstField.val() ) {
 					cardObject.name = firstField.val();
 				}
@@ -273,11 +279,13 @@
 		}
 
 		if ( lastNameID !== '' ) {
-			lastFieldContainer = document.querySelector( '#frm_field_' + lastNameID + '_container, .frm_field_' + lastNameID + '_container' );
+			lastFieldContainer = queryForNameFieldIsFound ? window.frmProForm.queryForNameField( lastNameID, 'container' ) : document.getElementById( 'frm_field_' + lastNameID + '_container' );
+
 			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
 			} else {
-				lastField = $form.find( '#frm_field_' + lastNameID + '_container input, input[name="item_meta[' + lastNameID + ']"], .frm_field_' + lastNameID + '_container input' );
+				lastField = queryForNameFieldIsFound ? window.frmProForm.queryForNameField( lastNameID, 'field', $form ) : $form.find( '#frm_field_' + lastNameID + '_container input, input[name="item_meta[' + lastNameID + ']"], .frm_field_' + lastNameID + '_container input' );
+
 				if ( lastField.length && lastField.val() ) {
 					cardObject.name = cardObject.name + ' ' + lastField.val();
 				}
