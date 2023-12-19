@@ -79,7 +79,7 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed $_data
+	 * @param mixed  $_data
 	 * @param string $_action
 	 * @param object $_args
 	 *
@@ -375,7 +375,8 @@ class FrmAddon {
 
 		if ( isset( $version_info->new_version ) && ! empty( $version_info->new_version ) ) {
 			$this->clear_old_plugin_version( $version_info );
-			if ( $version_info === false ) { // was cleared with timeout
+			if ( $version_info === false ) {
+				// Was cleared with timeout.
 				$transient = false;
 			} else {
 				$this->maybe_use_beta_url( $version_info );
@@ -417,7 +418,8 @@ class FrmAddon {
 	private function clear_old_plugin_version( &$version_info ) {
 		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
-			$version_info = false; // Cache is expired
+			// Cache is expired.
+			$version_info = false;
 			$api          = new FrmFormApi( $this->license );
 			$api->reset_cached();
 		}
@@ -754,7 +756,7 @@ class FrmAddon {
 					$resp['response']['message'] . ' ' . $resp['body']
 				);
 			}
-		}
+		}//end if
 
 		return $message;
 	}

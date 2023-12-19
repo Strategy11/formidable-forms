@@ -41,7 +41,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param string $param
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	private function _set( $param, $atts ) {
 		if ( isset( $atts[ $param ] ) ) {

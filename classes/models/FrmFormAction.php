@@ -122,12 +122,12 @@ class FrmFormAction {
 	 * @param string $id_base Optional Base ID for the widget, lower case,
 	 * if left empty a portion of the widget's class name will be used. Has to be unique.
 	 * @param string $name Name for the widget displayed on the configuration page.
-	 * @param array $action_options Optional Passed to wp_register_sidebar_widget().
-	 *   - description: shown on the configuration page.
-	 *   - classname.
-	 * @param array $control_options Optional Passed to wp_register_widget_control().
-	 *   - width: required if more than 250px.
-	 *   - height: currently not used but may be needed in the future.
+	 * @param array  $action_options Optional Passed to wp_register_sidebar_widget().
+	 *    - description: shown on the configuration page.
+	 *    - classname.
+	 * @param array  $control_options Optional Passed to wp_register_widget_control().
+	 *    - width: required if more than 250px.
+	 *    - height: currently not used but may be needed in the future.
 	 */
 	public function __construct( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -401,7 +401,7 @@ class FrmFormAction {
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
-		}
+		}//end if
 
 		return $action;
 	}
@@ -479,7 +479,7 @@ class FrmFormAction {
 			$action_ids[] = $this->save_settings( $instance );
 
 			$this->updated = true;
-		}
+		}//end foreach
 
 		return $action_ids;
 	}
@@ -862,7 +862,7 @@ class FrmFormAction {
 			}
 
 			$met[ $stop ] = $stop;
-		}
+		}//end foreach
 
 		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
 			$stop = ( $notification['conditions']['send_stop'] == 'send' );
@@ -908,7 +908,7 @@ class FrmFormAction {
 	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
-	 * @param int $field_id
+	 * @param int    $field_id
 	 *
 	 * @return array|bool|mixed|string
 	 */

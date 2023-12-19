@@ -64,7 +64,7 @@ class FrmFormsHelper {
 	/**
 	 * @param string $class
 	 * @param string $param
-	 * @param array $add_html
+	 * @param array  $add_html
 	 *
 	 * @since 2.0.6
 	 */
@@ -98,7 +98,8 @@ class FrmFormsHelper {
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
 			$args['frm_action'] = 'edit';
 		} elseif ( FrmAppHelper::is_style_editor_page() ) {
-			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
+			// Avoid passing style into form switcher on style page.
+			unset( $args['id'] );
 			$query_args = array(
 				'page' => 'formidable-styles',
 			);
@@ -191,7 +192,7 @@ class FrmFormsHelper {
 					</li>
 					<?php
 					unset( $form );
-				}
+				}//end foreach
 				?>
 			</ul>
 		</div>
@@ -370,7 +371,7 @@ class FrmFormsHelper {
 			}
 
 			unset( $var, $default );
-		}
+		}//end foreach
 
 		return $values;
 	}
@@ -717,12 +718,12 @@ BEFORE_HTML;
 
 					// There is already an end section here, so there is no need to create one.
 					$open = false;
-			}
+			}//end switch
 			$prev_order = $field->field_order;
 
 			$last_field = $field;
 			unset( $field );
-		}
+		}//end foreach
 
 		self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $last_field );
 	}
@@ -909,7 +910,8 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$fields = array_reverse( $fields ); // start from the fields closest to the submit button
+		// Start from the fields closest to the submit button.
+		$fields = array_reverse( $fields );
 		foreach ( $fields as $field ) {
 			$type      = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
 			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
@@ -1079,7 +1081,7 @@ BEFORE_HTML;
 			}
 
 			$actions['trash'] = self::delete_trash_info( $form_id, $form->status );
-		}
+		}//end if
 
 		return $actions;
 	}
@@ -1723,7 +1725,7 @@ BEFORE_HTML;
 			$new_shortcode .= ' sanitize_url=1]';
 
 			$query = str_replace( $shortcode, $new_shortcode, $query );
-		}
+		}//end foreach
 
 		if ( $query === $original_query ) {
 			return $url;

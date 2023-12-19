@@ -245,9 +245,13 @@ class FrmStylesHelper {
 		$return      = '#';
 
 		foreach ( $color_parts as $color ) {
-			$color  = hexdec( $color ); // Convert to decimal
-			$color  = max( 0, min( 255, $color + $steps ) ); // Adjust color
-			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
+			// Convert to decimal.
+			$color = hexdec( $color );
+			// Adjust color.
+			$color = max( 0, min( 255, $color + $steps ) );
+
+			// Make two char hex code.
+			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT );
 		}
 
 		return $return;
@@ -355,7 +359,7 @@ class FrmStylesHelper {
 		} else {
 			$settings                = $style->post_content;
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
-		}
+		}//end if
 
 		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
@@ -553,8 +557,9 @@ class FrmStylesHelper {
 	 * @return int
 	 */
 	public static function get_form_count_for_style( $style_id, $is_default ) {
-		$serialized      = serialize( array( 'custom_style' => (string) $style_id ) );
-		$substring       = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
+		// Chop off the "a:1:{" from the front and the "}" from the back.
+		$substring       = substr( $serialized, 5, -1 );
 		$number_of_forms = FrmDb::get_count(
 			'frm_forms',
 			array(

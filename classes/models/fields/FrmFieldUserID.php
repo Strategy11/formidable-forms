@@ -100,7 +100,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
@@ -119,8 +119,8 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return int
 	 */

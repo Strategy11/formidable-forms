@@ -101,7 +101,7 @@ class FrmTransLiteAppController {
 				if ( $last_payment ) {
 					$log_message .= 'on payment #' . $last_payment->id;
 				}
-			}
+			}//end if
 
 			FrmTransLiteLog::log_message( 'Stripe Cron Message', $log_message );
 
@@ -113,7 +113,7 @@ class FrmTransLiteAppController {
 			);
 
 			unset( $sub );
-		}
+		}//end foreach
 	}
 
 	/**

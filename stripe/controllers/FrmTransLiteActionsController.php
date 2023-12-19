@@ -431,7 +431,8 @@ class FrmTransLiteActionsController {
 			 */
 			function() use ( $entry_id, &$destroy_callback ) {
 				FrmEntry::destroy( $entry_id );
-				remove_action( 'frm_entry_form', $destroy_callback ); // Only call this once.
+				// Only call this once.
+				remove_action( 'frm_entry_form', $destroy_callback );
 			};
 		add_action( 'frm_entry_form', $destroy_callback );
 

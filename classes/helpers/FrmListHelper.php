@@ -15,7 +15,7 @@ class FrmListHelper {
 
 	/**
 	 * @since 4.07
-	 * @var array|bool
+	 * @var int|bool
 	 */
 	public $total_items = false;
 
@@ -379,7 +379,7 @@ class FrmListHelper {
 			$two = '';
 		} else {
 			$two = '2';
-		}
+		}//end if
 
 		if ( empty( $this->_actions ) ) {
 			return;
@@ -548,7 +548,7 @@ class FrmListHelper {
 	 * @access protected
 	 *
 	 * @param string $option
-	 * @param int $default
+	 * @param int    $default
 	 *
 	 * @return int
 	 */
@@ -976,7 +976,7 @@ class FrmListHelper {
 				$column_display_name = '';
 			}
 			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
+		}//end foreach
 	}
 
 	/**
@@ -1159,7 +1159,7 @@ class FrmListHelper {
 				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
-		}
+		}//end foreach
 	}
 
 	/**

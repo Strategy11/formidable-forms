@@ -99,4 +99,4 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			);
 		}
 	}
-}
+}//end if

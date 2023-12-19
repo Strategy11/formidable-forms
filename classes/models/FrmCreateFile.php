@@ -209,7 +209,8 @@ class FrmCreateFile {
 		$credentials['private_key'] = defined( 'FTP_PRIKEY' ) ? FTP_PRIKEY : '';
 
 		// Sanitize the hostname, Some people might pass in odd-data.
-		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] ); // Strip any schemes off.
+		// Strip any schemes off.
+		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] );
 
 		if ( strpos( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );

@@ -43,8 +43,8 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @param int $entry_id
-	 * @param int $field_id
+	 * @param int          $entry_id
+	 * @param int          $field_id
 	 * @param string       $meta_key   Deprecated.
 	 * @param array|string $meta_value
 	 *
@@ -140,7 +140,7 @@ class FrmEntryMeta {
 				// if value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
 			}
-		}
+		}//end foreach
 
 		if ( empty( $prev_values ) ) {
 			return;
@@ -276,8 +276,8 @@ class FrmEntryMeta {
 
 	/**
 	 * @param string|int $field_id
-	 * @param string $order
-	 * @param string $limit
+	 * @param string     $order
+	 * @param string     $limit
 	 * @param array      $args
 	 * @param array      $query
 	 */
@@ -366,8 +366,8 @@ class FrmEntryMeta {
 
 	/**
 	 * @param string|array $where
-	 * @param string $order_by
-	 * @param string $limit
+	 * @param string       $order_by
+	 * @param string       $limit
 	 */
 	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
 		global $wpdb;
@@ -418,7 +418,7 @@ class FrmEntryMeta {
 				if ( $is_draft ) {
 					$where['e.is_draft'] = $is_draft;
 				}
-			}
+			}//end if
 
 			if ( ! empty( $args['user_id'] ) ) {
 				$where['e.user_id'] = $args['user_id'];
@@ -430,7 +430,7 @@ class FrmEntryMeta {
 			}
 
 			return;
-		}
+		}//end if
 
 		$draft_where = '';
 		$user_where  = '';
@@ -492,7 +492,7 @@ class FrmEntryMeta {
 				$search = '%' . $search . '%';
 			}
 			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
+		}//end if
 
 		$results = $wpdb->get_col( $query, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		FrmDb::set_cache( $cache_key, $results, 'frm_entry' );

@@ -80,7 +80,7 @@ class FrmStrpLiteEventsController {
 			if ( ! $is_partial_refund ) {
 				$run_triggers = true;
 			}
-		}
+		}//end if
 
 		if ( $run_triggers && $payment && $payment->action_id ) {
 			FrmTransLiteActionsController::trigger_payment_status_change(

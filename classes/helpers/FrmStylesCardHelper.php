@@ -229,7 +229,7 @@ class FrmStylesCardHelper {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
-		}
+		}//end if
 
 		$this->is_new_template = ! empty( $style['is_new'] );
 

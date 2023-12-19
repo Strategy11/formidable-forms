@@ -153,7 +153,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * @param string $column
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function set_field_column( $column, $value ) {
 		if ( is_object( $this->field ) ) {
@@ -250,7 +250,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param string $name
-	 * @param array $field
+	 * @param array  $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -307,7 +307,8 @@ DEFAULT_HTML;
 			'label_position' => true,
 			'invalid'        => false,
 			'size'           => false,
-			'clear_on_focus' => false, // Shows the placeholder option.
+			// Shows the placeholder option.
+			'clear_on_focus' => false,
 			'css'            => true,
 			'conf_field'     => false,
 			'max'            => true,
@@ -432,10 +433,10 @@ DEFAULT_HTML;
 	public function echo_field_default_setting_attributes( $field ) {}
 
 	/**
-	 * @param array $field
+	 * @param array  $field
 	 * @param object $field_obj
-	 * @param array $default_value_types
-	 * @param array $display
+	 * @param array  $default_value_types
+	 * @param array  $display
 	 *
 	 * @return void
 	 */
@@ -833,7 +834,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string
@@ -956,7 +957,8 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
-		unset( $args['form'] ); // lighten up on memory usage
+		// Lighten up on memory usage.
+		unset( $args['form'] );
 
 		ob_start();
 		include( $include_file );
@@ -1256,7 +1258,7 @@ DEFAULT_HTML;
 	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
 	 *
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	public function is_not_unique( $value, $entry_id ) {
@@ -1296,7 +1298,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
@@ -1338,7 +1340,7 @@ DEFAULT_HTML;
 	/**
 	 *
 	 * @param string|array $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return string
 	 */
@@ -1369,7 +1371,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array|string
 	 */
@@ -1381,7 +1383,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param string $value
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */

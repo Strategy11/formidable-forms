@@ -240,7 +240,8 @@ class FrmCSVExportHelper {
 
 	private static function field_headings( $col ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $col );
-		if ( ! empty( $field_type_obj->is_combo_field ) ) { // This is combo field.
+		if ( ! empty( $field_type_obj->is_combo_field ) ) {
+			// This is combo field.
 			return $field_type_obj->get_export_headings();
 		}
 
@@ -269,8 +270,9 @@ class FrmCSVExportHelper {
 
 		foreach ( self::$fields as $col ) {
 			if ( self::is_the_child_of_a_repeater( $col ) ) {
-				$repeater_id                           = $col->field_options['in_section'];
-				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+				$repeater_id = $col->field_options['in_section'];
+				// Set a placeholder to maintain order for repeater fields.
+				$headings[ 'repeater' . $repeater_id ] = array();
 
 				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
 					$fields_by_repeater_id[ $repeater_id ] = array();
@@ -328,7 +330,7 @@ class FrmCSVExportHelper {
 
 			$headings = $flat;
 			unset( $flat );
-		}
+		}//end if
 
 		if ( self::$comment_count ) {
 			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
@@ -440,11 +442,11 @@ class FrmCSVExportHelper {
 
 				// Add the repeated values.
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
-			}
+			}//end foreach
 
 			self::$entry->metas                              = self::fill_missing_repeater_metas( self::$entry->metas, $entries );
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
-		}
+		}//end if
 
 		// add the embedded form id
 		if ( ! isset( $entries[ self::$entry->parent_item_id ]->embedded_fields ) ) {
@@ -537,7 +539,7 @@ class FrmCSVExportHelper {
 			$row[ $col->id ] = $field_value;
 
 			unset( $col, $field_value );
-		}
+		}//end foreach
 	}
 
 	/**
@@ -643,7 +645,7 @@ class FrmCSVExportHelper {
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
-		}
+		}//end foreach
 		if ( $echo ) {
 			echo "\n";
 		} else {

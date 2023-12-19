@@ -7,7 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="frm_page_container">
-	<?php // The embed button expects that the form ID is available as a #form_id field. ?>
+	<?php
+	// The embed button expects that the form ID is available as a #form_id field.
+	?>
 	<input type="hidden" id="form_id" value="<?php echo absint( $form->id ); ?>" />
 
 	<?php
@@ -24,7 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'FrmFormsController::form_publish_button',
 					array(
 						'values' => array(
-							'form_key' => $form->form_key, // Pass this so that the Preview dropdown works.
+							// Pass this so that the Preview dropdown works.
+							'form_key' => $form->form_key,
 						),
 					),
 				),
@@ -35,9 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm_styler_wrapper" class="columns-2">
 		<?php
 		$view_file = 'list' === $view ? 'list' : 'edit';
-		include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
+		// Render view based on type (either _styles-list.php or _styles-edit.php).
+		include $style_views_path . '_styles-' . $view_file . '.php';
 
-		include $style_views_path . '_style-preview-container.php'; // Render preview container.
+		// Render preview container.
+		include $style_views_path . '_style-preview-container.php';
 		?>
 	</div>
 </div>

@@ -181,7 +181,7 @@ class FrmXMLHelper {
 			}
 
 			unset( $term, $t );
-		}
+		}//end foreach
 
 		return $imported;
 	}
@@ -256,7 +256,7 @@ class FrmXMLHelper {
 			do_action( 'frm_after_import_form', $form_id, $form );
 
 			unset( $form, $item );
-		}
+		}//end foreach
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
 
@@ -381,8 +381,8 @@ class FrmXMLHelper {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $form_id
-	 * @param int $parent_form_id
+	 * @param int   $form_id
+	 * @param int   $parent_form_id
 	 * @param array $child_forms
 	 */
 	private static function track_imported_child_forms( $form_id, $parent_form_id, &$child_forms ) {
@@ -453,17 +453,20 @@ class FrmXMLHelper {
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
 
-					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); // Unset old field id.
-					unset( $form_fields[ $f['field_key'] ] ); // Unset old field key.
+					// Unset old field id.
+					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] );
+
+					// Unset old field key.
+					unset( $form_fields[ $f['field_key'] ] );
 				} else {
 					// If no matching field id or key in this form, create the field.
 					self::create_imported_field( $f, $imported );
-				}
+				}//end if
 			} else {
 
 				self::create_imported_field( $f, $imported );
-			}
-		}
+			}//end if
+		}//end foreach
 
 		if ( $keys_by_original_field_id ) {
 			self::maybe_update_field_ids( $form_id, $keys_by_original_field_id );
@@ -527,7 +530,7 @@ class FrmXMLHelper {
 	 * Update the current in_section value at the beginning of the field loop
 	 *
 	 * @since 2.0.25
-	 * @param int $in_section
+	 * @param int   $in_section
 	 * @param array $f
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
@@ -703,11 +706,13 @@ class FrmXMLHelper {
 				continue;
 			}
 
-			$field_object       = (object) $field;
-			$field_object->type = 'file'; // Fake the file type as FrmProImport::import_attachment checks for file type.
+			$field_object = (object) $field;
+			// Fake the file type as FrmProImport::import_attachment checks for file type.
+			$field_object->type = 'file';
 
 			$image_id = FrmProFileImport::import_attachment( $option['src'], $field_object );
-			unset( $field['options'][ $key ]['src'] ); // Remove the src from options as it isn't required after import.
+			// Remove the src from options as it isn't required after import.
+			unset( $field['options'][ $key ]['src'] );
 
 			if ( is_numeric( $image_id ) ) {
 				$field['options'][ $key ]['image'] = $image_id;
@@ -721,7 +726,7 @@ class FrmXMLHelper {
 	 * Fix field ids for fields that already exist prior to import.
 	 *
 	 * @since 4.07
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $keys_by_original_field_id
 	 */
 	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
@@ -793,7 +798,7 @@ class FrmXMLHelper {
 				// Set to default
 				$form['options']['custom_style'] = 1;
 			}
-		}
+		}//end if
 	}
 
 	/**
@@ -883,7 +888,7 @@ class FrmXMLHelper {
 				}
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
-			}
+			}//end if
 
 			if ( ! is_numeric( $post_id ) ) {
 				continue;
@@ -916,7 +921,7 @@ class FrmXMLHelper {
 			do_action( 'frm_after_import_view', $post_id, $post );
 
 			unset( $post );
-		}
+		}//end foreach
 
 		if ( $posts_with_shortcodes && $view_ids ) {
 			self::maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids );
@@ -1148,9 +1153,9 @@ class FrmXMLHelper {
 							unset( $mk, $mv );
 						}
 					}
-				}
-			}
-		}
+				}//end if
+			}//end if
+		}//end if
 
 		if ( ! is_array( $m['value'] ) ) {
 			$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
@@ -1194,7 +1199,7 @@ class FrmXMLHelper {
 
 			$post['tax_input'][ $taxonomy ][] = $name;
 			unset( $name );
-		}
+		}//end foreach
 	}
 
 	/**
@@ -1250,11 +1255,11 @@ class FrmXMLHelper {
 				case 'frm_param':
 					add_rewrite_endpoint( $v, EP_PERMALINK | EP_PAGES );
 					break;
-			}
+			}//end switch
 
 			update_post_meta( $post_id, $k, $v );
 			unset( $k, $v );
-		}
+		}//end foreach
 	}
 
 	/**
@@ -1316,7 +1321,7 @@ class FrmXMLHelper {
 			return;
 		} elseif ( ! $result ) {
 			return;
-		}
+		}//end if
 
 		if ( ! is_array( $result ) ) {
 			$message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
@@ -1827,7 +1832,7 @@ class FrmXMLHelper {
 				$imported['imported']['actions'] ++;
 			}
 			unset( $new_notification );
-		}
+		}//end foreach
 
 		self::remove_deprecated_notification_settings( $form_id, $form_options );
 	}
@@ -1838,7 +1843,7 @@ class FrmXMLHelper {
 	 * @since 2.05
 	 *
 	 * @param int|string $form_id
-	 * @param array $form_options
+	 * @param array      $form_options
 	 */
 	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
 		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
@@ -1883,8 +1888,8 @@ class FrmXMLHelper {
 				self::setup_new_notification( $new_notification, $notification, $atts );
 
 				$notifications[] = $new_notification;
-			}
-		}
+			}//end foreach
+		}//end if
 	}
 
 	private static function format_email_data( &$atts, $notification ) {
@@ -2037,7 +2042,7 @@ class FrmXMLHelper {
 
 			$notifications[] = $new_notification2;
 			unset( $new_notification2 );
-		}
+		}//end if
 	}
 
 	/**

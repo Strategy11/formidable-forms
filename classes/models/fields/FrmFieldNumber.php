@@ -106,7 +106,8 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	private function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
-			return; // Don't need to check if value is invalid before.
+			// Don't need to check if value is invalid before.
+			return;
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );

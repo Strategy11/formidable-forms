@@ -365,7 +365,7 @@ class FrmSolution {
 				$class .= ' frm_grey disabled';
 			}
 			$steps[ $k ]['button_class'] = $class;
-		}
+		}//end foreach
 
 		return $steps;
 	}
@@ -577,7 +577,7 @@ class FrmSolution {
 			} else {
 				echo '</form>';
 			}
-		}
+		}//end if
 
 		$this->step_bottom( $step );
 	}

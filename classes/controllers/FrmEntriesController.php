@@ -208,7 +208,8 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
-			return; // Don't continue if there's no previous value.
+			// Don't continue if there's no previous value.
+			return;
 		}
 
 		foreach ( $meta_value as $mk => $mv ) {
@@ -657,7 +658,8 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
-			'child_array'     => false, // return embedded fields as nested array
+			// Return embedded fields as nested array.
+			'child_array'     => false,
 			'line_breaks'     => true,
 			'array_separator' => ', ',
 		);

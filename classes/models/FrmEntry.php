@@ -21,7 +21,7 @@ class FrmEntry {
 	/**
 	 * Create a new entry with some differences depending on type
 	 *
-	 * @param array $values
+	 * @param array  $values
 	 * @param string $type
 	 *
 	 * @return int | boolean $entry_id
@@ -117,7 +117,7 @@ class FrmEntry {
 			if ( $is_duplicate ) {
 				break;
 			}
-		}
+		}//end foreach
 
 		$frm_vars['checking_duplicates'] = false;
 
@@ -151,7 +151,7 @@ class FrmEntry {
 	 * @since 2.0.23
 	 *
 	 * @param array $values
-	 * @param int $duplicate_entry_time
+	 * @param int   $duplicate_entry_time
 	 *
 	 * @return bool
 	 */
@@ -213,7 +213,7 @@ class FrmEntry {
 	/**
 	 * Update an entry (not via XML)
 	 *
-	 * @param int $id
+	 * @param int   $id
 	 * @param array $values
 	 *
 	 * @return boolean|int $update_results
@@ -229,7 +229,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $id
+	 * @param int   $id
 	 * @param array $values
 	 *
 	 * @return boolean|int $query_results
@@ -261,7 +261,8 @@ class FrmEntry {
 		global $wpdb;
 		$id = (int) $id;
 
-		$entry = self::getOne( $id, true ); // Item meta is required for conditional logic in actions with 'delete' events.
+		// Item meta is required for conditional logic in actions with 'delete' events.
+		$entry = self::getOne( $id, true );
 		if ( ! $entry ) {
 			$result = false;
 			return $result;
@@ -388,7 +389,8 @@ class FrmEntry {
 		}
 
 		FrmAppHelper::unserialize_or_decode( $entry->description );
-		$entry = wp_unslash( $entry ); // TODO: Remove slashes on input only, not output.
+		// TODO: Remove slashes on input only, not output.
+		$entry = wp_unslash( $entry );
 	}
 
 	/**
@@ -499,7 +501,7 @@ class FrmEntry {
 			unset( $query );
 
 			FrmDb::set_cache( $cache_key, $entries, 'frm_entry' );
-		}
+		}//end if
 
 		if ( ! $meta || ! $entries ) {
 			self::prepare_entries( $entries );
@@ -618,7 +620,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
+	 * @param array  $values
 	 * @param string $type
 	 *
 	 * @return array $new_values
@@ -884,7 +886,7 @@ class FrmEntry {
 	 * @since 2.0.16
 	 *
 	 * @param array $values
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return void
 	 */
 	private static function maybe_add_entry_metas( $values, $entry_id ) {
@@ -914,7 +916,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @param array $values
 	 * @param array $new_values
 	 */
@@ -933,7 +935,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 * @param array $new_values
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 */
 	private static function after_insert_entry_in_database( $values, $new_values, $entry_id ) {
 
@@ -951,8 +953,8 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $id
-	 * @param array $values
+	 * @param int    $id
+	 * @param array  $values
 	 * @param string $update_type
 	 *
 	 * @return boolean $update
@@ -978,7 +980,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $id
+	 * @param int   $id
 	 * @param array $values
 	 *
 	 * @return array $new_values
@@ -1021,9 +1023,9 @@ class FrmEntry {
 	 * @since 2.0.16
 	 *
 	 * @param boolean|int $query_results
-	 * @param int $id
-	 * @param array $values
-	 * @param array $new_values
+	 * @param int         $id
+	 * @param array       $values
+	 * @param array       $new_values
 	 */
 	private static function after_update_entry( $query_results, $id, $values, $new_values ) {
 		if ( $query_results ) {
@@ -1067,7 +1069,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $id
+	 * @param int   $id
 	 * @param array $values
 	 *
 	 * @return int | boolean $updated

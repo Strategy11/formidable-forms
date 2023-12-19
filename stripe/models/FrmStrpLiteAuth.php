@@ -351,8 +351,8 @@ class FrmStrpLiteAuth {
 				}
 
 				FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'amount' => $amount ) );
-			}
-		}
+			}//end foreach
+		}//end foreach
 	}
 
 	/**
@@ -465,7 +465,7 @@ class FrmStrpLiteAuth {
 				'id'     => $intent->client_secret,
 				'action' => $action->ID,
 			);
-		}
+		}//end foreach
 
 		return $intents;
 	}
@@ -481,7 +481,8 @@ class FrmStrpLiteAuth {
 	private static function create_intent( $action ) {
 		$amount = $action->post_content['amount'];
 		if ( $amount == '000' ) {
-			$amount = 100; // Create the intent when the form loads.
+			// Create the intent when the form loads.
+			$amount = 100;
 		}
 
 		if ( 'recurring' === $action->post_content['type'] ) {

@@ -80,7 +80,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
 							</a>
 						</p>
-					<?php } ?>
+						<?php
+					}//end if
+					?>
 				</div>
 			</div>
 		</div>

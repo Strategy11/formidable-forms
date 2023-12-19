@@ -61,8 +61,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * @since 6.5.4
 	 *
-	 * @param array      $s_query
-	 * @param bool       $join_form_in_query
+	 * @param array $s_query
+	 * @param bool  $join_form_in_query
 	 *
 	 * @return array
 	 */
@@ -327,7 +327,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$r .= '</td>';
 			}
 			unset( $val );
-		}
+		}//end foreach
 		$r .= '</tr>';
 
 		return $r;
@@ -404,7 +404,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				 * @param array $args Contains `item` and `col_name`.
 				 */
 				$val = apply_filters( 'frm_entries_column_value', $val, compact( 'item', 'col_name' ) );
-		}
+		}//end switch
 
 		return $val;
 	}
@@ -429,7 +429,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
-	 * @param false $val
+	 * @param false  $val
 	 *
 	 * @return void
 	 */

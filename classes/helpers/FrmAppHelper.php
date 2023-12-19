@@ -445,7 +445,8 @@ class FrmAppHelper {
 
 			$key = self::get_server_value( $key );
 			foreach ( explode( ',', $key ) as $ip ) {
-				$ip = trim( $ip ); // Just to be safe.
+				// Just to be safe.
+				$ip = trim( $ip );
 
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
 					return sanitize_text_field( $ip );
@@ -699,8 +700,10 @@ class FrmAppHelper {
 			'&quot;'  => '"',
 			'&#034;'  => '"',
 			'&#x22;'  => '"',
-			'&lt; '   => '< ', // The space preserves the HTML.
-			'&#060; ' => '< ', // The space preserves the HTML.
+			// The space preserves the HTML.
+			'&lt; '   => '< ',
+			// The space preserves the HTML.
+			'&#060; ' => '< ',
 			'&gt;'    => '>',
 			'&#062;'  => '>',
 			'&amp;'   => '&',
@@ -729,7 +732,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $value
+	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults.
 	 *
 	 * @return string
@@ -1622,9 +1625,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string        $field_name
-	 * @param string|array  $capability
-	 * @param string        $multiple 'single' and 'multiple'.
+	 * @param string       $field_name
+	 * @param string|array $capability
+	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
@@ -1639,7 +1642,7 @@ class FrmAppHelper {
 	/**
 	 * @since 4.07
 	 * @param array|string $selected
-	 * @param string $current
+	 * @param string       $current
 	 */
 	private static function selected( $selected, $current ) {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
@@ -2096,7 +2099,7 @@ class FrmAppHelper {
 			} while ( in_array( $key_check, $similar_keys, true ) );
 
 			$key = $key_check;
-		}
+		}//end if
 
 		return $key;
 	}
@@ -2142,7 +2145,9 @@ class FrmAppHelper {
 	 */
 	private static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
-		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+
+		// We want to have at least 2 characters in the slug.
+		$min_slug_value = 37;
 		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 	}
 
@@ -2173,12 +2178,12 @@ class FrmAppHelper {
 	/**
 	 * Editing a Form or Entry
 	 *
-	 * @param object $record
-	 * @param string $table
-	 * @param array  $fields
-	 * @param bool   $default
-	 * @param array  $post_values
-	 * @param array  $args
+	 * @param object       $record
+	 * @param string       $table
+	 * @param array|string $fields
+	 * @param bool         $default
+	 * @param array        $post_values
+	 * @param array        $args
 	 *
 	 * @return bool|array
 	 */
@@ -2254,7 +2259,7 @@ class FrmAppHelper {
 			} else {
 				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 			}
-		}
+		}//end if
 
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
 		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
@@ -2747,10 +2752,10 @@ class FrmAppHelper {
 				}
 
 				unset( $this_val, $n );
-			}
+			}//end foreach
 
 			unset( $last, $jv );
-		}
+		}//end foreach
 
 		return $vars;
 	}
@@ -3142,8 +3147,13 @@ class FrmAppHelper {
 				'select_a_field'     => __( 'Select a Field', 'formidable' ),
 				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
-				'saving'             => '', // Deprecated in 6.0.
-				'saved'              => '', // Deprecated in 6.0.
+
+				// Deprecated in 6.0.
+				'saving'             => '',
+
+				// Deprecated in 6.0.
+				'saved'              => '',
+
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 			);
@@ -3156,7 +3166,7 @@ class FrmAppHelper {
 			if ( ! $data ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
-		}
+		}//end if
 	}
 
 	/**

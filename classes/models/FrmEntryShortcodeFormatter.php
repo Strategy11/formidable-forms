@@ -60,7 +60,7 @@ class FrmEntryShortcodeFormatter {
 	 * FrmEntryShortcodeFormatter constructor
 	 *
 	 * @param int|string $form_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $form_id, $atts ) {
 		if ( ! $form_id ) {
@@ -253,7 +253,7 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param mixed $value
+	 * @param mixed    $value
 	 *
 	 * @return string
 	 */
@@ -304,7 +304,7 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param string $value
+	 * @param string   $value
 	 *
 	 * @return void
 	 */

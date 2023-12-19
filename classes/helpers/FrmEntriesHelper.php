@@ -61,7 +61,7 @@ class FrmEntriesHelper {
 			if ( ! $form || ! isset( $form->id ) ) {
 				$form = FrmForm::getOne( $field->form_id );
 			}
-		}
+		}//end foreach
 
 		FrmAppHelper::unserialize_or_decode( $form->options );
 		if ( is_array( $form->options ) ) {
@@ -104,7 +104,7 @@ class FrmEntriesHelper {
 	 *
 	 * @param object  $field - this is passed by reference since it is an object.
 	 * @param boolean $reset
-	 * @param array $args
+	 * @param array   $args
 	 *
 	 * @return string|array $new_value
 	 */
@@ -128,7 +128,7 @@ class FrmEntriesHelper {
 	 * @since 2.01.0
 	 *
 	 * @param object $field
-	 * @param array $args
+	 * @param array  $args
 	 *
 	 * @return boolean $value_is_posted
 	 */
@@ -261,8 +261,8 @@ class FrmEntriesHelper {
 	 * Prepare the saved value for display
 	 *
 	 * @param array|string $value
-	 * @param object $field
-	 * @param array $atts
+	 * @param object       $field
+	 * @param array        $atts
 	 *
 	 * @return string
 	 */
@@ -402,9 +402,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object $field
+	 * @param object       $field
 	 * @param string|array $value
-	 * @param array $args
+	 * @param array        $args
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
@@ -443,9 +443,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object $field
+	 * @param object       $field
 	 * @param string|array $value
-	 * @param array $args
+	 * @param array        $args
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
 		if ( ! $args['parent_field_id'] ) {
@@ -477,8 +477,8 @@ class FrmEntriesHelper {
 	 *
 	 * @param string|array $value
 	 * @param string|array $other_vals (usually of posted values).
-	 * @param object $field
-	 * @param array $args
+	 * @param object       $field
+	 * @param array        $args
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
 		// Checkboxes and multi-select dropdowns.
@@ -522,8 +522,8 @@ class FrmEntriesHelper {
 				}
 			} elseif ( $field->options[ $other_key ] == $value ) {
 				$value = $other_vals;
-			}
-		}
+			}//end if
+		}//end if
 	}
 
 	/**
@@ -600,7 +600,8 @@ class FrmEntriesHelper {
 		// finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
 		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-		preg_match_all( $pattern, $u_agent, $matches ); // get the matching numbers
+		// Get the matching numbers.
+		preg_match_all( $pattern, $u_agent, $matches );
 
 		// see how many we have
 		$i = count( $matches['browser'] );
@@ -657,7 +658,7 @@ class FrmEntriesHelper {
 			</a>
 		</div>
 			<?php
-		}
+		}//end foreach
 	}
 
 	/**
@@ -799,10 +800,12 @@ class FrmEntriesHelper {
 		}
 
 		if ( empty( $status ) ) {
-			return self::SUBMITTED_ENTRY_STATUS; // If the status is empty, let's default to 0.
+			// If the status is empty, let's default to 0.
+			return self::SUBMITTED_ENTRY_STATUS;
 		}
 
-		return self::DRAFT_ENTRY_STATUS; // If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
+		// If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
+		return self::DRAFT_ENTRY_STATUS;
 	}
 
 	/**

@@ -145,8 +145,8 @@ class FrmApplicationTemplate {
 					$value = substr( $value, 0, -9 );
 				}
 				$application[ $key ] = $value;
-			}
-		}
+			}//end if
+		}//end foreach
 
 		$application['hasLiteThumbnail'] = in_array( $application['key'], self::$keys_with_images, true );
 

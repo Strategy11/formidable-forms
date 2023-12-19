@@ -211,7 +211,7 @@ class FrmForm {
 			if ( $new_val !== $value ) {
 				$new_values[ $key ] = $new_val;
 			}
-		}
+		}//end foreach
 
 		if ( ! empty( $new_values ) ) {
 			FrmField::update( $field['id'], $new_values );
@@ -351,7 +351,8 @@ class FrmForm {
 
 			// Updating the form.
 			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
-			unset( $update_options['custom_html'] ); // don't check for POST html
+			// Don't check for POST html.
+			unset( $update_options['custom_html'] );
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
 			foreach ( $update_options as $opt => $default ) {
@@ -382,7 +383,7 @@ class FrmForm {
 			FrmField::update( $field_id, $new_field );
 
 			FrmField::delete_form_transient( $field->form_id );
-		}
+		}//end foreach
 		self::clear_form_cache();
 
 		return $values;
@@ -455,7 +456,8 @@ class FrmForm {
 		if ( false !== strpos( $value, '<' ) ) {
 			$value = self::normalize_calc_spaces( $value );
 		}
-		$allow = array( '<= ', ' >=' ); // Allow <= and >=
+		// Allow <= and >=.
+		$allow = array( '<= ', ' >=' );
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
 		$value = strip_tags( $value );

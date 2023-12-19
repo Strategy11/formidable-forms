@@ -63,6 +63,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				</label>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </div>

@@ -115,7 +115,7 @@ class FrmXMLController {
 				'message' => $message,
 			);
 
-		}
+		}//end if
 
 		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
 
@@ -230,7 +230,7 @@ class FrmXMLController {
 					'post_content' => sprintf( $shortcode, $item_key ),
 				)
 			);
-		}
+		}//end foreach
 
 		return $page_ids;
 	}
@@ -296,7 +296,7 @@ class FrmXMLController {
 
 	/**
 	 * @param string[] $errors
-	 * @param string $message
+	 * @param string   $message
 	 *
 	 * @return void
 	 */
@@ -437,7 +437,7 @@ class FrmXMLController {
 
 	/**
 	 * @param string[] $type
-	 * @param array $args
+	 * @param array    $args
 	 *
 	 * @psalm-param array{ids?: mixed} $args
 	 *
@@ -538,11 +538,11 @@ class FrmXMLController {
 					} else {
 						$where['pm.meta_value'] = $args['ids'];
 					}
-			}
+			}//end switch
 
 			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
 			unset( $tb_type );
-		}
+		}//end foreach
 
 		$filename = self::get_file_name( $args, $type, $records );
 
@@ -605,7 +605,7 @@ class FrmXMLController {
 				$sitename .= '.';
 			}
 			$filename = $sitename . 'formidable.' . gmdate( 'Y-m-d' ) . '.xml';
-		}
+		}//end if
 
 		/**
 		 * @since 5.3
@@ -644,7 +644,8 @@ class FrmXMLController {
 			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
-		set_time_limit( 0 ); // Remove time limit to execute this function.
+		// Remove time limit to execute this function.
+		set_time_limit( 0 );
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();
@@ -701,7 +702,7 @@ class FrmXMLController {
 	 * @since 2.0.19
 	 * @since 5.0.16 function went from private to public.
 	 *
-	 * @param int $form_id
+	 * @param int    $form_id
 	 * @param object $form
 	 *
 	 * @return array $csv_fields

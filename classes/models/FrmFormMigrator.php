@@ -243,7 +243,7 @@ abstract class FrmFormMigrator {
 				// set the new field_order as it would have changed
 				$field_order    = $new_field['current_order'];
 			}
-		}
+		}//end foreach
 	}
 
 	protected function prepare_field( $field, &$new_field ) {
@@ -393,7 +393,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $form
 	 */
 	protected function create_fields( $form_id, &$form ) {
@@ -521,7 +521,7 @@ abstract class FrmFormMigrator {
 	 * Replace 3rd-party form provider tags/shortcodes with our own Tags.
 	 *
 	 * @param string $string String to process the smart tag in.
-	 * @param array $fields List of fields for the form.
+	 * @param array  $fields List of fields for the form.
 	 *
 	 * @return string
 	 */

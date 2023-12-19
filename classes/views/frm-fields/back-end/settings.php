@@ -172,7 +172,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
 			</div>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<?php $field_obj->show_after_default( compact( 'field', 'display' ) ); ?>
 
@@ -245,7 +247,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</option>
 				</select>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<?php
 		if ( $display['format'] ) {
@@ -289,7 +293,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<?php } ?>
 				</select>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<p class="frm6 frm_form_field">
 			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
@@ -321,7 +327,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } else { ?>
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<table class="form-table frm-mt-0">
 			<?php $field_obj->show_options( $field, $display, $values ); ?>
@@ -384,7 +392,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				?>
 			</div>
 		</div>
-	<?php } ?>
+		<?php
+	}//end if
+	?>
 
 	<?php do_action( 'frm_after_field_options', compact( 'field', 'display', 'values' ) ); ?>
 

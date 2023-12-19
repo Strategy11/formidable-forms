@@ -217,7 +217,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $recipients
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return array
 	 */
@@ -386,14 +386,17 @@ class FrmEmail {
 		$this->message = $this->settings['email_message'];
 
 		if ( ! $this->is_plain_text ) {
-			$this->message = html_entity_decode( $this->message ); // The decode is to support [default-html] shortcodes.
+			// The decode is to support [default-html] shortcodes.
+			$this->message = html_entity_decode( $this->message );
 		}
 
 		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 
 		$prev_mail_body = $this->message;
-		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
-		$mail_body      = FrmEntriesHelper::replace_default_message(
+
+		// Make a copy to prevent changes by reference.
+		$pass_entry = clone $this->entry;
+		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
 				'id'         => $this->entry->id,
@@ -631,7 +634,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $value
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return string
 	 */
@@ -705,7 +708,7 @@ class FrmEmail {
 			}
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );
-		}
+		}//end foreach
 
 		return $recipients;
 	}
@@ -855,8 +858,8 @@ class FrmEmail {
 
 				// Remove phone number from to addresses
 				unset( $this->to[ $key ] );
-			}
-		}
+			}//end if
+		}//end foreach
 	}
 
 	/**

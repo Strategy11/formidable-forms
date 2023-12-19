@@ -365,7 +365,7 @@ class FrmAddonsController {
 
 			$transient->checked[ $folder ] = $wp_version;
 
-		}
+		}//end foreach
 
 		return $transient;
 	}
@@ -447,7 +447,7 @@ class FrmAddonsController {
 					);
 				}
 			}
-		}
+		}//end foreach
 
 		return $version_info;
 	}
@@ -488,7 +488,7 @@ class FrmAddonsController {
 				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
 				'class' => 'frm-activate-addon',
 			);
-		}
+		}//end if
 
 		return $link;
 	}
@@ -526,7 +526,7 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array $addons
+	 * @param array  $addons
 	 * @param object $license The FrmAddon object.
 	 *
 	 * @return array
@@ -606,7 +606,7 @@ class FrmAddonsController {
 
 			self::set_addon_status( $addon );
 			$addons[ $id ] = $addon;
-		}
+		}//end foreach
 	}
 
 	/**
@@ -1248,7 +1248,7 @@ class FrmAddonsController {
 	 *
 	 * @since 4.09
 	 *
-	 * @param string $plugin
+	 * @param string       $plugin
 	 * @param array|string $upgrade_link_args
 	 * @return void
 	 */
@@ -1471,7 +1471,7 @@ class FrmAddonsController {
 	 * @codeCoverageIgnore
 	 *
 	 * @param boolean $return
-	 * @param string $package
+	 * @param string  $package
 	 *
 	 * @return boolean
 	 */

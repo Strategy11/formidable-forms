@@ -155,7 +155,9 @@ class FrmStrpLiteConnectHelper {
 			return 'Unable to build headers for post. Is your pro license configured properly?';
 		}
 
-		$timeout = 45; // (seconds) default timeout is 5. we want a bit more time to work with.
+		// (Seconds) default timeout is 5. we want a bit more time to work with.
+		$timeout = 45;
+
 		self::try_to_extend_server_timeout( $timeout );
 
 		$args     = compact( 'body', 'headers', 'timeout' );
@@ -431,7 +433,8 @@ class FrmStrpLiteConnectHelper {
 			'frm_strp_connect_mode' => $mode,
 		);
 
-		delete_option( 'frm_stripe_lite_last_verify_attempt' ); // Clear the transient so it doesn't fail.
+		// Clear the transient so it doesn't fail.
+		delete_option( 'frm_stripe_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -501,8 +504,10 @@ class FrmStrpLiteConnectHelper {
 
 		$site_url = home_url();
 		$site_url = self::maybe_fix_wpml_url( $site_url );
-		$site_url = preg_replace( '#^https?://#', '', $site_url ); // remove protocol from url (our url cannot include the colon).
-		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );    // Remove port from url (mostly helpful in development).
+		// Remove protocol from url (our url cannot include the colon).
+		$site_url = preg_replace( '#^https?://#', '', $site_url );
+		// Remove port from url (mostly helpful in development).
+		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );
 		$site_url = self::strip_lang_from_url( $site_url );
 
 		// $password is either a Pro license or a uuid (See FrmUsage::uuid).

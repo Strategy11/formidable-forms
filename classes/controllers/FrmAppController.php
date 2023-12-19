@@ -67,7 +67,9 @@ class FrmAppController {
 			$add_class = '';
 			if ( $full_screen_on ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
-				wp_enqueue_style( 'wp-edit-post' ); // Load the CSS for .is-fullscreen-mode.
+
+				// Load the CSS for .is-fullscreen-mode.
+				wp_enqueue_style( 'wp-edit-post' );
 			}
 			$classes .= apply_filters( 'frm_admin_full_screen_class', $add_class );
 		}
@@ -181,8 +183,8 @@ class FrmAppController {
 
 	/**
 	 * @param int|object $form
-	 * @param bool $show_nav
-	 * @param string $title
+	 * @param bool       $show_nav
+	 * @param string     $title
 	 *
 	 * @psalm-param 'hide'|'show' $title
 	 *
@@ -516,7 +518,8 @@ class FrmAppController {
 			FrmStylesController::save_style();
 		}
 
-		new FrmPersonalData(); // register personal data hooks
+		// Register personal data hooks.
+		new FrmPersonalData();
 
 		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {
 			self::network_upgrade_site();
@@ -659,7 +662,8 @@ class FrmAppController {
 			'bootstrap_tooltip',
 			'bootstrap-multiselect',
 			'wp-i18n',
-			'wp-hooks', // Required in WP versions older than 5.7
+			// Required in WP versions older than 5.7
+			'wp-hooks',
 			'formidable_dom',
 			'formidable_embed',
 		);
@@ -737,7 +741,7 @@ class FrmAppController {
 			if ( $post_type === 'frm_display' ) {
 				self::enqueue_legacy_views_assets();
 			}
-		}
+		}//end if
 
 	}
 

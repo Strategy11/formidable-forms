@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
@@ -176,7 +176,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param string $index
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return array
 	 */
@@ -339,7 +339,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param array $array
+	 * @param array    $array
 	 *
 	 * @return bool
 	 */
