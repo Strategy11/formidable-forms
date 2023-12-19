@@ -336,7 +336,7 @@ class FrmEntry {
 	/**
 	 * If $entry is numeric, get the entry object
 	 *
-	 * @param int|object $entry by reference
+	 * @param int|object $entry By reference.
 	 *
 	 * @since 2.0.9
 	 */
@@ -662,7 +662,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0
 	 *
-	 * @param array $values The POST values by reference
+	 * @param array $values The POST values by reference.
 	 */
 	public static function sanitize_entry_post( &$values ) {
 		$sanitize_method = array(
@@ -915,6 +915,7 @@ class FrmEntry {
 	 * @since 2.0.16
 	 *
 	 * @param int $entry_id
+	 * @param array $values
 	 * @param array $new_values
 	 */
 	private static function after_entry_created_actions( $entry_id, $values, $new_values ) {

@@ -15,6 +15,7 @@ class FrmListHelper {
 
 	/**
 	 * @since 4.07
+	 * @var array|bool
 	 */
 	public $total_items = false;
 
@@ -190,11 +191,9 @@ class FrmListHelper {
 	/**
 	 * An internal method that sets all the necessary pagination arguments
 	 *
-	 * @param array $args An associative array with information about the pagination
+	 * @param array $args An associative array with information about the pagination.
 	 *
 	 * @access protected
-	 *
-	 * @param array|string $args
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -268,8 +267,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access public
 	 *
-	 * @param string $text The search button text
-	 * @param string $input_id The search input id
+	 * @param string $text     The search button text.
+	 * @param string $input_id The search input id.
 	 */
 	public function search_box( $text, $input_id ) {
 		if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) {
@@ -466,8 +465,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access protected
 	 *
-	 * @param array $actions The list of actions
-	 * @param bool $always_visible Whether the actions should be always visible
+	 * @param array $actions        The list of actions.
+	 * @param bool  $always_visible Whether the actions should be always visible.
 	 *
 	 * @return string
 	 */
@@ -904,7 +903,7 @@ class FrmListHelper {
 	 *
 	 * @staticvar int $cb_counter
 	 *
-	 * @param bool $with_id Whether to set the id attribute or not
+	 * @param bool $with_id Whether to set the id attribute or not.
 	 */
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
@@ -1110,7 +1109,7 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access public
 	 *
-	 * @param object $item The current item
+	 * @param object $item The current item.
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';
@@ -1124,7 +1123,7 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access protected
 	 *
-	 * @param object $item The current item
+	 * @param object $item The current item.
 	 */
 	protected function single_row_columns( $item ) {
 		list( $columns, $hidden,, $primary ) = $this->get_column_info();

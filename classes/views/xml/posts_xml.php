@@ -3,6 +3,8 @@
  * Generate the XML for export for posts and form actions.
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+ *
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

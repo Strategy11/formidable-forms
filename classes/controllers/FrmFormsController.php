@@ -383,7 +383,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.5.2
 	 *
-	 * @param WP_Post $page
+	 * @param WP_Post $page The page object.
 	 * @return void
 	 */
 	private static function set_post_global( $page ) {
@@ -559,7 +559,7 @@ class FrmFormsController {
 
 		$params = FrmForm::list_page_params();
 
-		//check nonce url
+		// Check nonce url.
 		check_admin_referer( $status . '_form_' . $params['id'] );
 
 		$count = 0;
@@ -1893,7 +1893,9 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/reports-info.php';
 	}
 
-	/* FRONT-END FORMS */
+	/**
+	 * FRONT-END FORMS.
+	 */
 	public static function admin_bar_css() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
 			return;
@@ -3048,7 +3050,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.2
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function create_page_with_shortcode() {
 		if ( ! current_user_can( 'publish_posts' ) ) {
@@ -3108,7 +3110,7 @@ class FrmFormsController {
 	/**
 	 * Get page dropdown for AJAX request for embedding form in an existing page.
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function get_page_dropdown() {
 		if ( ! current_user_can( 'publish_posts' ) ) {

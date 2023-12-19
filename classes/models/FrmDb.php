@@ -473,7 +473,7 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $term The value to escape
+	 * @param string $term The value to escape.
 	 *
 	 * @return string The escaped value
 	 */
@@ -651,10 +651,10 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $cache_key The unique name for this cache
-	 * @param string $group The name of the cache group
-	 * @param string $query If blank, don't run a db call
-	 * @param string $type The wpdb function to use with this query
+	 * @param string $cache_key The unique name for this cache.
+	 * @param string $group     The name of the cache group.
+	 * @param string $query     If blank, don't run a db call.
+	 * @param string $type      The wpdb function to use with this query.
 	 *
 	 * @return mixed $results The cache or query results
 	 */
@@ -728,7 +728,7 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $group The name of the cache group
+	 * @param string $group The name of the cache group.
 	 */
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );

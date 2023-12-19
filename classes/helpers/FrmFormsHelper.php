@@ -202,7 +202,7 @@ class FrmFormsHelper {
 	 * @since 3.05
 	 * @deprecated 4.0
 	 *
-	 * @param array $values - The form array
+	 * @param array $values The form array.
 	 */
 	public static function builder_submit_button( $values ) {
 		FrmDeprecated::builder_submit_button( $values );
@@ -261,6 +261,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param array $atts {
+	 *     The success message details.
+	 *
 	 *     @type string   $message
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
@@ -670,6 +672,8 @@ BEFORE_HTML;
 	 *
 	 * @since 2.0
 	 *
+	 * @param object  $form
+	 * @param array   $fields
 	 * @param boolean $reset_fields
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
@@ -766,10 +770,10 @@ BEFORE_HTML;
 			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
 		}
 
-		//replace [form_key]
+		// Replace [form_key].
 		$html = str_replace( '[form_key]', $form->form_key, $html );
 
-		//replace [frmurl]
+		// Replace [frmurl].
 		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
 		if ( strpos( $html, '[button_label]' ) ) {
@@ -880,7 +884,7 @@ BEFORE_HTML;
 	/**
 	 * Returns appropriate class if form has top labels
 	 *
-	 * @param $form
+	 * @param array $form
 	 *
 	 * @return string
 	 */
@@ -891,7 +895,7 @@ BEFORE_HTML;
 	/**
 	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
-	 * @param $form
+	 * @param array $form
 	 *
 	 * @return bool
 	 */
@@ -920,8 +924,8 @@ BEFORE_HTML;
 	/**
 	 * Check if a field's label position is set to "top"
 	 *
-	 * @param $field
-	 * @param $form
+	 * @param array              $field
+	 * @param object|string|bool $form
 	 *
 	 * @return bool
 	 */
@@ -961,7 +965,7 @@ BEFORE_HTML;
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
-	 * @param array $args - includes img, errors
+	 * @param array $args Includes img, errors.
 	 *
 	 * @since 2.0.6
 	 */
@@ -989,7 +993,7 @@ BEFORE_HTML;
 	 * The image was removed from the styling settings, but it may still be set with a hook
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
-	 * @param array $args - includes img, errors, and show_img
+	 * @param array $args Includes img, errors, and show_img.
 	 *
 	 * @since 2.0.6
 	 */

@@ -82,7 +82,7 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 */
 	private static function prepare_field_default_value( &$field ) {
-		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
+		// If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array.
 		$return_array = FrmField::is_field_with_multiple_values( $field );
 
 		/**
@@ -102,7 +102,7 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0.13
 	 *
-	 * @param object $field - this is passed by reference since it is an object
+	 * @param object  $field - this is passed by reference since it is an object.
 	 * @param boolean $reset
 	 * @param array $args
 	 *
@@ -476,7 +476,7 @@ class FrmEntriesHelper {
 	 * @since 2.0
 	 *
 	 * @param string|array $value
-	 * @param string|array $other_vals (usually of posted values)
+	 * @param string|array $other_vals (usually of posted values).
 	 * @param object $field
 	 * @param array $args
 	 */
@@ -606,8 +606,8 @@ class FrmEntriesHelper {
 		$i = count( $matches['browser'] );
 
 		if ( $i > 1 ) {
-			//we will have two since we are not using 'other' argument yet
-			//see if version is before or after the name
+			// We will have two since we are not using 'other' argument yet
+			// see if version is before or after the name.
 			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
 				$version = $matches['version'][0];
 			} else {

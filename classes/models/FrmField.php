@@ -493,7 +493,7 @@ class FrmField {
 	 *
 	 * @since 2.0.8
 	 *
-	 * @param $values array - pass by reference
+	 * @param array $values Pass by reference.
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -596,8 +596,8 @@ class FrmField {
 	/**
 	 * Get the field type by key or id
 	 *
-	 * @param int|string $id The field id or key
-	 * @param mixed      $col The name of the column in the fields database table
+	 * @param int|string $id  The field id or key.
+	 * @param mixed      $col The name of the column in the fields database table.
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -711,7 +711,7 @@ class FrmField {
 	 * If repeating fields should be included, adjust $where accordingly
 	 *
 	 * @param string $inc_repeat
-	 * @param array $where - pass by reference
+	 * @param array  $where      Pass by reference.
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat == 'include' ) {
@@ -1150,7 +1150,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
-	 * @param string $is_type Options include radio, checkbox, text
+	 * @param string       $is_type Options include radio, checkbox, text.
 	 *
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */

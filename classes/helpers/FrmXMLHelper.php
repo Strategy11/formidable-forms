@@ -440,7 +440,7 @@ class FrmXMLHelper {
 
 					unset( $form_fields[ $f['id'] ] );
 
-					//unset old field key
+					// Unset old field key.
 					if ( isset( $form_fields[ $f['field_key'] ] ) ) {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
@@ -453,10 +453,10 @@ class FrmXMLHelper {
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
 
-					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
-					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
+					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); // Unset old field id.
+					unset( $form_fields[ $f['field_key'] ] ); // Unset old field key.
 				} else {
-					// if no matching field id or key in this form, create the field
+					// If no matching field id or key in this form, create the field.
 					self::create_imported_field( $f, $imported );
 				}
 			} else {
@@ -1109,7 +1109,7 @@ class FrmXMLHelper {
 			'value' => (string) $meta->meta_value,
 		);
 
-		//switch old form and field ids to new ones
+		// Switch old form and field ids to new ones.
 		if ( 'frm_form_id' === $m['key'] && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
 			$m['value'] = $imported['forms'][ (int) $m['value'] ];
 		} else {
@@ -1166,8 +1166,8 @@ class FrmXMLHelper {
 	/**
 	 * Add terms to post
 	 *
-	 * @param array $post by reference
-	 * @param object $item The XML object data
+	 * @param array  $post By reference.
+	 * @param object $item The XML object data.
 	 */
 	private static function populate_taxonomies( &$post, $item ) {
 		foreach ( $item->category as $c ) {
@@ -1286,7 +1286,9 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * @param mixed  $result
 	 * @param string $message
+	 * @param array  $errors
 	 */
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
@@ -1653,7 +1655,11 @@ class FrmXMLHelper {
 	/**
 	 * Migrate post settings to form action
 	 *
+	 * @param array  $form_options
+	 * @param int    $form_id
 	 * @param string $post_type
+	 * @param array  $imported
+	 * @param bool   $switch
 	 */
 	private static function migrate_post_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
 		if ( ! isset( $form_options['create_post'] ) || ! $form_options['create_post'] ) {
@@ -1733,9 +1739,9 @@ class FrmXMLHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param array $post_content - check for old field IDs
-	 * @param array $basic_fields - fields with string or int saved
-	 * @param array $array_fields - fields with arrays saved
+	 * @param array $post_content Check for old field IDs.
+	 * @param array $basic_fields Fields with string or int saved.
+	 * @param array $array_fields Fields with arrays saved.
 	 *
 	 * @return string $post_content - new field IDs
 	 */
@@ -1976,7 +1982,7 @@ class FrmXMLHelper {
 	/**
 	 * Switch field IDs in pre-2.0 email conditional logic
 	 *
-	 * @param $post_content array, pass by reference
+	 * @param array $post_content Pass by reference.
 	 */
 	private static function switch_email_condition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic

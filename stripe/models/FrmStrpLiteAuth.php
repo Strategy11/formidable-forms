@@ -588,6 +588,8 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The form and entry details.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 * }

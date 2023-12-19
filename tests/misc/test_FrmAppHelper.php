@@ -498,6 +498,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @param string $output
 	 * @param string $substring
 	 * @param string $message
 	 */
@@ -506,6 +507,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @param string $output
 	 * @param string $substring
 	 * @param string $message
 	 */
@@ -705,7 +707,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @covers FrmAppHelper::add_dismissable_warning_message
-	*/
+	 */
 	public function test_add_dismissable_warning_message() {
 		// Test with missing message and option parameters.
 		FrmAppHelper::add_dismissable_warning_message();

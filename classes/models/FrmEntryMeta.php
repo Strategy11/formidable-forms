@@ -45,7 +45,7 @@ class FrmEntryMeta {
 	/**
 	 * @param int $entry_id
 	 * @param int $field_id
-	 * @param string $meta_key deprecated
+	 * @param string       $meta_key   Deprecated.
 	 * @param array|string $meta_value
 	 *
 	 * @return bool|false|int
@@ -275,8 +275,11 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * @param string|int $field_id
 	 * @param string $order
 	 * @param string $limit
+	 * @param array      $args
+	 * @param array      $query
 	 */
 	private static function meta_field_query( $field_id, $order, $limit, $args, array &$query ) {
 		global $wpdb;

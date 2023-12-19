@@ -163,7 +163,9 @@ class FrmStylesCardHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param array $style API style data {
+	 * @param array $style {
+	 *     API style data.
+	 *
 	 *     @type array  $settings
 	 *     @type string $name
 	 *     @type string $slug

@@ -89,11 +89,11 @@ class FrmTransLiteAppController {
 					$status = $last_payment->status;
 					self::update_sub_for_new_payment( $sub, $last_payment );
 				} elseif ( $last_payment->expire_date < gmdate( 'Y-m-d' ) ) {
-					// the payment has expired, and no new payment was made
+					// The payment has expired, and no new payment was made.
 					$status = 'failed';
 					self::add_one_fail( $sub );
 				} else {
-					// don't run any triggers
+					// Don't run any triggers.
 					$last_payment = false;
 				}
 

@@ -305,7 +305,6 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param $action
 	 * @param object $action
 	 *
 	 * @return void
@@ -608,7 +607,7 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param $form_id
+	 * @param int $form_id
 	 *
 	 * @return array
 	 */

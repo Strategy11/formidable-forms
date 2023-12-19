@@ -10,6 +10,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 4.07
+	 * @var int
 	 */
 	public $total_items = 0;
 
@@ -409,9 +410,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $view_link
-	 * @param array $actions
+	 * @param array  $actions
 	 * @param object $item
+	 * @param string $view_link
 	 *
 	 * @return void
 	 */
@@ -427,6 +428,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param false $val
 	 *
 	 * @return void

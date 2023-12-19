@@ -179,6 +179,7 @@ class FrmAppController {
 	}
 
 	/**
+	 * @param int|object $form
 	 * @param bool $show_nav
 	 * @param string $title
 	 *
@@ -1044,7 +1045,7 @@ class FrmAppController {
 		$frmdb = new FrmMigrate();
 		$frmdb->uninstall();
 
-		//disable the plugin and redirect after uninstall so the tables don't get added right back
+		// Disable the plugin and redirect after uninstall so the tables don't get added right back.
 		$plugins = array( FrmAppHelper::plugin_folder() . '/formidable.php', 'formidable-pro/formidable-pro.php' );
 		deactivate_plugins( $plugins, false, false );
 		echo esc_url_raw( admin_url( 'plugins.php?deactivate=true' ) );

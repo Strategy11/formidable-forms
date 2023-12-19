@@ -140,7 +140,7 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
-			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			'who'     => 'all', // Use 'free', 'personal', 'business', 'elite', 'grandfathered'.
 			'type'    => '',
 		);
 

@@ -158,8 +158,6 @@ class FrmUsage {
 	 *
 	 * @since 3.06.04
 	 *
-	 * @return array
-	 *
 	 * @param FrmSettings $settings_list
 	 * @return array
 	 */

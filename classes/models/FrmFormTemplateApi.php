@@ -93,7 +93,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the code from the email sent for the API
+	 * @param string $code the code from the email sent for the API.
 	 *
 	 * @return void
 	 */

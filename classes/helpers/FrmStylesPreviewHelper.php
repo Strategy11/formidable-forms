@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesPreviewHelper {
 
 	/**
-	 * @param int $form_id
+	 * @var int $form_id
 	 */
 	private $form_id;
 

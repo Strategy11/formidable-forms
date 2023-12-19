@@ -93,7 +93,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return string
 	 */
@@ -107,7 +107,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $type string
+	 * @param string $type
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
@@ -136,7 +136,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $column
+	 * @param string $column
 	 *
 	 * @return string|array
 	 */
@@ -170,8 +170,9 @@ abstract class FrmFieldType {
 		return $this->field;
 	}
 
-	/** Field HTML **/
-
+	/**
+	 * Field HTML
+	 */
 	public function default_html() {
 		if ( ! $this->has_html ) {
 			return '';
@@ -374,7 +375,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
@@ -576,7 +578,7 @@ DEFAULT_HTML;
 	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
 	 *
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_extra_field_choices( $args ) {
 		return;
@@ -610,7 +612,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	protected function auto_width_setting( $args ) {
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
@@ -620,8 +622,9 @@ DEFAULT_HTML;
 		}
 	}
 
-	/** New field **/
-
+	/**
+	 * New field
+	 */
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
@@ -775,7 +778,15 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @param array $args {
+	 *    Details about the field to show.
+	 *
+	 *    @type array $field
+	 *    @type array $errors
+	 *    @type object $form
+	 *    @type object $form_action
+	 * }
+	 *
 	 * @return void
 	 */
 	public function show_field( $args ) {
@@ -1369,7 +1380,7 @@ DEFAULT_HTML;
 	/** Importing **/
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 * @param array $atts
 	 *
 	 * @return mixed
@@ -1379,8 +1390,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */
@@ -1393,12 +1404,14 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param $value
-	 * @param $atts
+	 * @param string|array $value
+	 * @param array        $atts {
+	 *     Details about the field to show.
 	 *
-	 * @internal param array $meta_value
-	 * @internal param object $field
-	 * @internal param array $saved_entries
+	 *     @type array $meta_value
+	 *     @type object $field
+	 *     @type array $saved_entries
+	 * }
 	 *
 	 * @return array $new_value
 	 */
@@ -1415,7 +1428,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 *
 	 * @return array
 	 */
@@ -1454,8 +1467,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $defaults
+	 * @param array|string $value
+	 * @param array        $defaults
 	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {

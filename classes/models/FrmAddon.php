@@ -339,7 +339,7 @@ class FrmAddon {
 		}
 
 		if ( $this->is_current_version( $transient ) ) {
-			//make sure it doesn't show there is an update if plugin is up-to-date
+			// Make sure it doesn't show there is an update if plugin is up-to-date.
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
@@ -364,7 +364,7 @@ class FrmAddon {
 	 *
 	 * @since 3.04.03
 	 *
-	 * @param object $transient - the current plugin info saved for update
+	 * @param object $transient The current plugin info saved for update.
 	 */
 	private function prepare_update_details( &$transient ) {
 		$version_info = $transient;
@@ -483,7 +483,7 @@ class FrmAddon {
 	/**
 	 * Has this been checked too recently?
 	 *
-	 * @param string $time ie. '1 day'
+	 * @param string $time ie. '1 day'.
 	 * @return bool
 	 */
 	private function checked_recently( $time ) {

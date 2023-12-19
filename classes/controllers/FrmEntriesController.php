@@ -36,7 +36,9 @@ class FrmEntriesController {
 		}
 	}
 
-	/* Display in Back End */
+	/**
+	 * Display in Back End.
+	 */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
@@ -189,7 +191,7 @@ class FrmEntriesController {
 		}
 
 		global $frm_vars;
-		//add a check so we don't create a loop
+		// Add a check so we don't create a loop.
 		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
@@ -442,7 +444,9 @@ class FrmEntriesController {
 		}
 	}
 
-	/* Back End CRUD */
+	/**
+	 * Back End CRUD.
+	 */
 	public static function show( $id = 0 ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
 
@@ -624,7 +628,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return array|string
 	 */

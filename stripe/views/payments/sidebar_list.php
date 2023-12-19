@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		foreach ( $payments as $payment ) {
 			if ( empty( $payment->status ) && ! empty( $payment->completed ) ) {
-				$payment->status = 'complete'; // PayPal fallback
+				$payment->status = 'complete'; // PayPal fallback.
 			}
 
 			if ( $payment->status === 'complete' ) {

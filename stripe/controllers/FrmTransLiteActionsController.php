@@ -217,7 +217,7 @@ class FrmTransLiteActionsController {
 		}
 
 		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] == '[' && substr( $amount, -1 ) == ']' ) {
-			// make sure we don't use a field id as the amount
+			// Make sure we don't use a field id as the amount.
 			$amount = 0;
 		}
 

@@ -207,8 +207,9 @@ class FrmFieldsController {
 		wp_die();
 	}
 
-	/* Field Options */
-
+	/**
+	 * Field Options.
+	 */
 	public static function import_options() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );

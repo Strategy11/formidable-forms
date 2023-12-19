@@ -91,7 +91,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 */
 	public function __construct( $atts ) {
 		$this->init_entry( $atts );

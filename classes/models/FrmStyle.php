@@ -4,8 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
-	public $number = false; // Unique ID number of the current instance.
-	public $id = 0; // the id of the post
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @var int
+	 */
+	public $number = false;
+
+	/**
+	 * The id of the post.
+	 *
+	 * @var int|string
+	 */
+	public $id = 0;
 
 	/**
 	 * @param int|string $id The id of the stylsheet or 'default'
@@ -133,7 +144,7 @@ class FrmStyle {
 	 *
 	 * @since 5.3.2
 	 *
-	 * @param string $color_val, The color value, by reference.
+	 * @param string $color_val The color value, by reference.
 	 * @return void
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) {
@@ -651,13 +662,13 @@ class FrmStyle {
 			'field_margin'       => '20px',
 			'field_weight'       => 'normal',
 			'text_color'         => '555555',
-			//'border_color_hv'   => 'cccccc',
+			// 'border_color_hv'   => 'cccccc',
 			'border_color'       => 'BFC3C8',
 			'field_border_width' => '1px',
 			'field_border_style' => 'solid',
 
 			'bg_color'                 => 'ffffff',
-			//'bg_color_hv'       => 'ffffff',
+			// 'bg_color_hv'       => 'ffffff',
 			'remove_box_shadow'        => '',
 			'bg_color_active'          => 'ffffff',
 			'border_color_active'      => '66afe9',

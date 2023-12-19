@@ -132,7 +132,8 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @param string $note
+	 * @param array|string $meta_value
+	 * @param string       $note
 	 *
 	 * @return array
 	 */
@@ -179,7 +180,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Allow entry values, default values, and other shortcodes
 	 *
-	 * @param array $atts - Includes value (required), form, entry
+	 * @param array $atts Includes value (required), form, entry.
 	 * @return string|int
 	 */
 	public static function process_shortcodes( $atts ) {

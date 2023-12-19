@@ -76,7 +76,7 @@ class FrmSettings {
 	}
 
 	private function translate_settings( $settings ) {
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) { // Workaround for W3 total cache conflict.
 			return unserialize( serialize( $settings ) );
 		}
 
@@ -88,7 +88,7 @@ class FrmSettings {
 		}
 
 		// If unserializing didn't work
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) { // Workaround for W3 total cache conflict.
 			$settings = unserialize( serialize( $settings ) );
 		} else {
 			$settings = $this;

@@ -114,8 +114,8 @@ namespace {
 	function load_formidable_pro() {
 	}
 	/**
-	* @return WPMailSMTP\Core
-	*/
+	 * @return WPMailSMTP\Core
+	 */
 	function wp_mail_smtp() {
 	}
 	/**

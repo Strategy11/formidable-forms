@@ -349,7 +349,7 @@ class FrmForm {
 				}
 			}
 
-			//updating the form
+			// Updating the form.
 			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
 			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
@@ -528,7 +528,7 @@ class FrmForm {
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
-	 * @param object $form - The form object
+	 * @param object $form The form object.
 	 */
 	public static function translatable_strings( $form ) {
 		$strings = array(
@@ -547,6 +547,7 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int    $id
 	 * @param string $status
 	 *
 	 * @return int|boolean
@@ -817,7 +818,7 @@ class FrmForm {
 		} else {
 			global $wpdb;
 
-			// the query has already been prepared if this is not an array
+			// The query has already been prepared if this is not an array.
 			$query   = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit );
 			$results = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
@@ -965,7 +966,7 @@ class FrmForm {
 		}
 
 		if ( $form->id == $values['posted_form_id'] ) {
-			//if there are two forms on the same page, make sure not to submit both
+			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
 				if ( $var == 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );

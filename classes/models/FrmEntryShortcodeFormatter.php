@@ -87,7 +87,6 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param $form_id
 	 * @param int|string $form_id
 	 *
 	 * @return void

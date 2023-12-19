@@ -145,7 +145,7 @@ class FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
-	 * @param object $license_plugin The FrmAddon object
+	 * @param object $license_plugin The FrmAddon object.
 	 * @param array $addons
 	 *
 	 * @return array

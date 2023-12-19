@@ -226,6 +226,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param array $args
 	 *
 	 * @return void

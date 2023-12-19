@@ -273,8 +273,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	* Set the current user to 1
-	*/
+	 * Set the current user to 1
+	 */
 	public function set_current_user_to_1() {
 		$this->set_user_by_role( 'administrator' );
 	}
@@ -487,7 +487,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$defaults = array( 'ids' => false );
 		$args = wp_parse_args( $xml_args, $defaults );
 
-		//make sure ids are numeric
+		// Make sure ids are numeric.
 		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
@@ -504,7 +504,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 			switch ( $tb_type ) {
 				case 'forms':
-					//add forms
+					// Add forms.
 					if ( $args['ids'] ) {
 						$where[] = array(
 							'or' => 1,
@@ -523,7 +523,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					}
 					break;
 				case 'items':
-					//$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
+					// $join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
 					if ( $args['ids'] ) {
 						$where[ $table . '.form_id' ] = $args['ids'];
 					}

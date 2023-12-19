@@ -4,9 +4,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version     = 100; // Version of the database we are moving to.
-	public static $pro_db_version = 37; //deprecated
-	public static $font_version   = 7;
+	/**
+	 * Version of the database we are moving to.
+	 *
+	 * @var int
+	 */
+	public static $db_version = 100;
+
+	/**
+	 * Deprecated.
+	 *
+	 * @var int
+	 */
+	public static $pro_db_version = 37;
+
+	/**
+	 * @var float
+	 */
+	public static $font_version = 7;
 
 	/**
 	 * @var bool $added_gmt_offset_filter
@@ -265,7 +280,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $page The name of the page to check
+	 * @param string $page The name of the page to check.
 	 *
 	 * @return boolean
 	 */
@@ -367,7 +382,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param mixed  $value - value to check
+	 * @param mixed  $value Value to check.
 	 * @param string $empty
 	 *
 	 * @return boolean
@@ -715,7 +730,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param string $value
-	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @param array|string $allowed 'all' for everything included as defaults.
 	 *
 	 * @return string
 	 */
@@ -1239,6 +1254,8 @@ class FrmAppHelper {
 	 *
 	 * @since 3.0
 	 * @param array $atts {
+	 *     Details about the button.
+	 *
 	 *     @type array  $link_hook    Custom link hook, calls do_action and exits early.
 	 *     @type string $new_link     Href value, default #.
 	 *     @type string $class        Custom class names, space separated.
@@ -1384,7 +1401,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $value The value to compare
+	 * @param string $value The value to compare.
 	 *
 	 * @return boolean True or False
 	 */
@@ -1611,7 +1628,7 @@ class FrmAppHelper {
 	/**
 	 * @param string        $field_name
 	 * @param string|array  $capability
-	 * @param string        $multiple 'single' and 'multiple'
+	 * @param string        $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
@@ -2160,7 +2177,12 @@ class FrmAppHelper {
 	/**
 	 * Editing a Form or Entry
 	 *
+	 * @param object $record
 	 * @param string $table
+	 * @param array  $fields
+	 * @param bool   $default
+	 * @param array  $post_values
+	 * @param array  $args
 	 *
 	 * @return bool|array
 	 */
@@ -2286,7 +2308,10 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param object $record
 	 * @param string $table
+	 * @param array  $post_values
+	 * @param array  $values
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
 		if ( $table == 'entries' ) {
@@ -2489,10 +2514,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Gets the time ago in words
+	 * Gets the time ago in words.
 	 *
-	 * @param int $from in seconds
-	 * @param int|string $to in seconds
+	 * @param int        $from In seconds.
+	 * @param int|string $to   In seconds.
 	 *
 	 * @return string $time_ago
 	 */
@@ -2657,14 +2682,20 @@ class FrmAppHelper {
 	// Pagination Methods.
 
 	/**
+	 * @param integer $r_count
 	 * @param integer $current_p
+	 * @param integer $p_size
+	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
 		return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
 	}
 
 	/**
+	 * @param integer $r_count
 	 * @param integer $current_p
+	 * @param integer $p_size
+	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
 		if ( $current_p == 1 ) {
@@ -2982,10 +3013,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Echo The javascript to open and highlight the Formidable menu
+	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $post_type The name of the post type that may need to be highlighted
-	 * echo The javascript to open and highlight the Formidable menu
+	 * @param string $post_type The name of the post type that may need to be highlighted.
+	 * @return void
 	 */
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
@@ -3173,7 +3206,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param float $min_version The version the add-on requires
+	 * @param float $min_version The version the add-on requires.
 	 */
 	public static function min_version_notice( $min_version ) {
 		$frm_version = self::plugin_version();
@@ -3669,7 +3702,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param string       $value
-	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @param array|string $allowed 'all' for everything included as defaults.
 	 * @return string
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {

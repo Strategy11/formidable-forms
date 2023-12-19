@@ -126,6 +126,7 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $type
 	 * @param string $property
 	 */
 	public static function field_has_property( $type, $property ) {

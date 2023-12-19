@@ -390,7 +390,7 @@ class FrmAddonsController {
 	 *
 	 * @since 3.05
 	 *
-	 * @param string $plugin - the folder/filename.php for a plugin
+	 * @param string $plugin The folder/filename.php for a plugin.
 	 *
 	 * @return bool - True if installed
 	 */
@@ -456,7 +456,7 @@ class FrmAddonsController {
 	 * Get the action link for an addon that isn't active.
 	 *
 	 * @since 3.06.03
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
@@ -495,7 +495,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.09
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array|false
 	 */
 	protected static function get_addon( $plugin ) {
@@ -527,7 +527,7 @@ class FrmAddonsController {
 	 * @since 3.04.03
 	 *
 	 * @param array $addons
-	 * @param object $license The FrmAddon object
+	 * @param object $license The FrmAddon object.
 	 *
 	 * @return array
 	 */
@@ -1110,7 +1110,7 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.02
 	 *
-	 * @param string $installed The plugin folder name with file name
+	 * @param string $installed The plugin folder name with file name.
 	 */
 	protected static function maybe_activate_addon( $installed ) {
 		if ( ! $installed ) {
@@ -1278,10 +1278,12 @@ class FrmAddonsController {
 	 * @since 4.09.01
 	 *
 	 * @param array $atts {
-	 *    @type array $addon
-	 *    @type string|false $license_type
-	 *    @type string $plan_required
-	 *    @type string $upgrade_link
+	 *     Button attributes.
+	 *
+	 *     @type array $addon
+	 *     @type string|false $license_type
+	 *     @type string $plan_required
+	 *     @type string $upgrade_link
 	 * }
 	 * @return void
 	 */

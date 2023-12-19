@@ -17,7 +17,7 @@ class FrmXMLController {
 	 */
 	public static function add_default_templates() {
 		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
-			// XML import is not enabled on your server
+			// XML import is not enabled on your server.
 			return;
 		}
 
@@ -174,8 +174,8 @@ class FrmXMLController {
 	/**
 	 * @since 4.06.02
 	 *
+	 * @param array  $form
 	 * @param string $value
-	 * @param array $form
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
 		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
@@ -363,7 +363,7 @@ class FrmXMLController {
 			return;
 		}
 
-		//add_filter('upload_mimes', 'FrmXMLController::allow_mime');
+		// add_filter('upload_mimes', 'FrmXMLController::allow_mime');
 
 		$export_format = array(
 			'xml' => array(
@@ -436,6 +436,7 @@ class FrmXMLController {
 	}
 
 	/**
+	 * @param string[] $type
 	 * @param array $args
 	 *
 	 * @psalm-param array{ids?: mixed} $args
@@ -477,7 +478,7 @@ class FrmXMLController {
 
 			switch ( $tb_type ) {
 				case 'forms':
-					//add forms
+					// Add forms.
 					if ( $args['ids'] ) {
 						$where[] = array(
 							'or'                       => 1,
@@ -575,9 +576,9 @@ class FrmXMLController {
 	 *
 	 * @since 3.06
 	 *
+	 * @param array $args
 	 * @param array $type
 	 * @param array $records
-	 * @param array $args
 	 *
 	 * @return string
 	 */
@@ -643,7 +644,7 @@ class FrmXMLController {
 			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
-		set_time_limit( 0 ); //Remove time limit to execute this function
+		set_time_limit( 0 ); // Remove time limit to execute this function.
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();

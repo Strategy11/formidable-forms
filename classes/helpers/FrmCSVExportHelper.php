@@ -434,11 +434,11 @@ class FrmCSVExportHelper {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
 				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					// if the data is here, it should be an array but if this field has collected data
-					// both while inside and outside of the repeating section, it's possible this is a string
+					// both while inside and outside of the repeating section, it's possible this is a string.
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = (array) $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ];
 				}
 
-				//add the repeated values
+				// Add the repeated values.
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
 			}
 
@@ -662,7 +662,7 @@ class FrmCSVExportHelper {
 			case 'macintosh':
 				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
 				// Reference:
-				//   - http://www.alanwood.net/demos/macroman.html
+				// http://www.alanwood.net/demos/macroman.html.
 				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff );
 				break;
 			case 'ISO-8859-1':

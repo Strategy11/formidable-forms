@@ -355,9 +355,9 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param array  $actions
+	 * @param object $item
 	 * @param string $edit_link
-	 * @param array $actions
-	 * @param stdClass $item
 	 *
 	 * @return void
 	 */
@@ -383,8 +383,10 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param array  $actions
 	 * @param string $edit_link
-	 * @param stdClass $item
+	 * @param string $mode
 	 *
 	 * @return string
 	 */
@@ -414,6 +416,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 *
 	 * @return void
@@ -425,6 +428,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 *
 	 * @return void

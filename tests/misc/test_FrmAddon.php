@@ -22,7 +22,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$this->assertEquals( 'signature', $this->addon->plugin_slug );
 		$this->assertEquals( 'edd_signature_license_', $this->addon->option_name );
 
-		//TODO: Test this line: $this->license = $this->get_license();
+		// TODO: Test this line: $this->license = $this->get_license();
 	}
 
 	/**

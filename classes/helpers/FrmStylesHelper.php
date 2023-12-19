@@ -121,14 +121,14 @@ class FrmStylesHelper {
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
 		if ( 'arrow' === $type && is_numeric( $key ) ) {
-			//frm_arrowup6_icon
+			// frm_arrowup6_icon.
 			$arrow = array(
 				'-' => 'down',
 				'+' => 'up',
 			);
 			$class = 'frm_arrow' . $arrow[ $icon ];
 		} else {
-			//frm_minus1_icon
+			// frm_minus1_icon.
 			$key   = str_replace( 'p', '', $key );
 			$plus  = array(
 				'-' => 'minus',
@@ -219,8 +219,8 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @param $hex string - The original color in hex format #ffffff
-	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
+	 * @param string $hex   string  The original color in hex format #ffffff.
+	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
 	 *
 	 * @since 2.3
 	 */
@@ -279,7 +279,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private static function fill_hex( &$color ) {
 		if ( 3 === strlen( $color ) ) {
