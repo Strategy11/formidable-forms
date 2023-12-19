@@ -677,7 +677,7 @@ class FrmForm {
 	public static function scheduled_delete( $delete_timestamp = '' ) {
 		global $wpdb;
 
-		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, options' );
+		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
 
 		if ( ! $trash_forms ) {
 			return 0;
@@ -692,7 +692,9 @@ class FrmForm {
 			FrmAppHelper::unserialize_or_decode( $form->options );
 			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
 				self::destroy( $form->id );
-				$count ++;
+				if ( empty( $form->parent_form_id ) ) {
+					$count ++;
+				}
 			}
 
 			unset( $form );
