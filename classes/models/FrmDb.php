@@ -745,7 +745,7 @@ class FrmDb {
 	/**
 	 * Checks if a DB column exists.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param string $table Table name without `$wpdb->prefix`.
 	 * @param string $column Column name.

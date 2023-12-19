@@ -283,7 +283,8 @@ class FrmFormsController {
 		$message = 'form_duplicate_error';
 
 		if ( $form ) {
-			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) );
+			$new_template = FrmAppHelper::simple_get( 'new_template' ) ? '&new_template=true' : '';
+			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) . $new_template );
 			$message = 'form_duplicated';
 		}
 
@@ -642,13 +643,18 @@ class FrmFormsController {
 			}
 		}
 
-		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		if ( $count ) {
+			/* translators: %1$s: Number of forms */
+			return sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		}
 
-		return $message;
+		return '';
 	}
 
-	private static function delete_all() {
+	/**
+	 * @since x.x Function went from private to public
+	 */
+	public static function delete_all() {
 		// Check nonce url.
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
 		if ( $permission_error !== false ) {
@@ -657,12 +663,13 @@ class FrmFormsController {
 			return;
 		}
 
-		$count   = FrmForm::scheduled_delete( time() );
+		$count = FrmForm::scheduled_delete( time() );
+		$url   = remove_query_arg( array( 'delete_all' ) );
 
-		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		$url  .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
 
-		self::display_forms_list( array(), $message );
+		wp_safe_redirect( $url );
+		die();
 	}
 
 	/**
@@ -702,41 +709,8 @@ class FrmFormsController {
 		self::create_default_email_action( $form_id );
 
 		$response = array(
-			'redirect' => FrmForm::get_edit_link( $form_id ),
+			'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
 		);
-
-		echo wp_json_encode( $response );
-		wp_die();
-	}
-
-	/**
-	 * Create a custom template from a form
-	 *
-	 * @since 3.06
-	 */
-	public static function build_template() {
-		global $wpdb;
-
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
-		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
-		if ( ! $new_form_id ) {
-			$response = array(
-				'message' => __( 'There was an error creating a template.', 'formidable' ),
-			);
-		} else {
-			$new_values    = self::get_modal_values();
-			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $new_form_id ) );
-			if ( $query_results ) {
-				FrmForm::clear_form_cache();
-			}
-
-			$response = array(
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
-			);
-		}
 
 		echo wp_json_encode( $response );
 		wp_die();
@@ -747,7 +721,7 @@ class FrmFormsController {
 	 *
 	 * @since 4.0
 	 */
-	private static function get_modal_values() {
+	public static function get_modal_values() {
 		$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
 		$desc = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
 
@@ -970,137 +944,6 @@ class FrmFormsController {
 		}
 
 		return $save;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public static function expired() {
-		global $frm_expired;
-		return $frm_expired;
-	}
-
-	/**
-	 * Get data from api before rendering it so that we can flag the modal as expired
-	 *
-	 * @return void
-	 */
-	public static function before_list_templates() {
-		global $frm_templates;
-		global $frm_expired;
-		global $frm_license_type;
-
-		$api           = new FrmFormTemplateApi();
-		$frm_templates = $api->get_api_info();
-		$expired       = false;
-		$license_type  = '';
-		if ( isset( $frm_templates['error'] ) ) {
-			$error        = $frm_templates['error']['message'];
-			$error        = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-			$expired      = 'expired' === $frm_templates['error']['code'];
-			$license_type = isset( $frm_templates['error']['type'] ) ? $frm_templates['error']['type'] : '';
-			unset( $frm_templates['error'] );
-		}
-
-		$frm_expired      = $expired;
-		$frm_license_type = $license_type;
-	}
-
-	/**
-	 * @return void
-	 */
-	public static function list_templates() {
-		global $frm_templates;
-		global $frm_license_type;
-
-		$templates             = $frm_templates;
-		$custom_templates      = array();
-		$templates_by_category = array();
-
-		self::add_user_templates( $custom_templates );
-
-		foreach ( $templates as $template ) {
-			if ( ! isset( $template['categories'] ) ) {
-				continue;
-			}
-
-			foreach ( $template['categories'] as $category ) {
-				if ( ! isset( $templates_by_category[ $category ] ) ) {
-					$templates_by_category[ $category ] = array();
-				}
-
-				$templates_by_category[ $category ][] = $template;
-			}
-		}
-		unset( $template );
-
-		// Subcategories that are included elsewhere.
-		$redundant_cats = array( 'PayPal', 'Stripe', 'Twilio' );
-
-		$categories = array_keys( $templates_by_category );
-		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
-		$categories = array_diff( $categories, $redundant_cats );
-		sort( $categories );
-
-		array_walk(
-			$custom_templates,
-			function( &$template ) {
-				$template['custom'] = true;
-			}
-		);
-
-		$my_templates_translation = __( 'My Templates', 'formidable' );
-		$categories               = array_merge( array( $my_templates_translation ), $categories );
-		$pricing                  = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-		$license_type             = $frm_license_type;
-		$args                     = compact( 'pricing', 'license_type' );
-		$where                    = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms                    = FrmForm::get_published_forms( $where );
-		$view_path                = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
-
-		$templates_by_category[ $my_templates_translation ] = $custom_templates;
-
-		unset( $pricing, $license_type, $where );
-		wp_enqueue_script( 'accordion' ); // register accordion for template groups
-		require $view_path . 'list-templates.php';
-	}
-
-	/**
-	 * @since 4.03.01
-	 */
-	private static function get_template_categories( $templates ) {
-		$categories = array();
-		foreach ( $templates as $template ) {
-			if ( isset( $template['categories'] ) ) {
-				$categories = array_merge( $categories, $template['categories'] );
-			}
-		}
-		$exclude_cats = FrmFormsHelper::ignore_template_categories();
-		$categories = array_unique( $categories );
-		$categories = array_diff( $categories, $exclude_cats );
-		sort( $categories );
-		return $categories;
-	}
-
-	private static function add_user_templates( &$templates ) {
-		$user_templates = array(
-			'is_template'      => 1,
-			'default_template' => 0,
-		);
-		$user_templates = FrmForm::getAll( $user_templates, 'name' );
-		foreach ( $user_templates as $template ) {
-			$template = array(
-				'id'          => $template->id,
-				'name'        => $template->name,
-				'key'         => $template->form_key,
-				'description' => $template->description,
-				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ) ),
-				'released'    => $template->created_at,
-				'installed'   => 1,
-			);
-			array_unshift( $templates, $template );
-			unset( $template );
-		}
 	}
 
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
@@ -1815,7 +1658,6 @@ class FrmFormsController {
 			case 'trash':
 			case 'untrash':
 			case 'destroy':
-			case 'delete_all':
 			case 'settings':
 			case 'update_settings':
 				return self::$action( $vars );
@@ -1847,10 +1689,43 @@ class FrmFormsController {
 					return;
 				}
 
+				if ( 'forms_permanently_deleted' === $message ) {
+					$count = FrmAppHelper::get_param( 'forms_deleted', 0, 'get', 'absint' );
+					/* translators: %1$s: Number of forms */
+					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+					self::display_forms_list( array(), $message, '' );
+					return;
+				}
+
 				self::display_forms_list();
 
 				return;
 		}
+	}
+
+	/**
+	 * Rename a form.
+	 *
+	 * Handles the AJAX request for renaming a form.
+	 *
+	 * @since 6.7
+	 *
+	 * @return void
+	 */
+	public static function rename_form() {
+		// Check permission and nonce
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
+
+		// Update the form name and form key.
+		$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
+
+		wp_send_json_success( compact( 'form_key' ) );
 	}
 
 	public static function json_error( $errors ) {
@@ -3184,5 +3059,45 @@ class FrmFormsController {
 	 */
 	public static function add_new() {
 		_deprecated_function( __FUNCTION__, '4.08' );
+	}
+
+	/**
+	 * Create a custom template from a form
+	 *
+	 * @since 3.06
+	 * @deprecated x.x
+	 */
+	public static function build_template() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function expired() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return FrmAddonsController::is_license_expired();
+	}
+
+	/**
+	 * Get data from api before rendering it so that we can flag the modal as expired
+	 *
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function before_list_templates() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function list_templates() {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }

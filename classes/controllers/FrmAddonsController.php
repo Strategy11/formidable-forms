@@ -298,7 +298,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
-	 * @since x.x This is public.
+	 * @since 6.7 This is public.
 	 *
 	 * @return array|false
 	 */

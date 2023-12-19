@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.6';
+	public static $plug_version = '6.7';
 
 	/**
 	 * @var bool
@@ -1269,17 +1269,13 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( empty( $atts['new_link'] ) && empty( $atts['trigger_new_form_modal'] ) && empty( $atts['class'] ) ) {
+		if ( empty( $atts['new_link'] ) && empty( $atts['create_form'] ) && empty( $atts['class'] ) ) {
 			// Do not render a button if none of these attributes are set.
 			return;
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
 		$class = 'button button-primary frm-button-primary';
-
-		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
-			$class .= ' frm-trigger-new-form-modal';
-		}
 
 		if ( ! empty( $atts['class'] ) ) {
 			$class .= ' ' . $atts['class'];
@@ -1721,7 +1717,7 @@ class FrmAppHelper {
 	 */
 	private static function get_lite_capabilities() {
 		return array(
-			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_view_forms'      => __( 'View Forms List', 'formidable' ),
 			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
 			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
 			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),

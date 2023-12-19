@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 
 			<div class="columns-2">
-				<div class="frm-right-panel">
+				<div class="frm-right-panel frm-scrollbar-wrapper">
 					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' ); ?>
 				</div>
 

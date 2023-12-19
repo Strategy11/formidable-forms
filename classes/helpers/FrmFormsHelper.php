@@ -421,18 +421,18 @@ class FrmFormsHelper {
 	 * @param string $loc
 	 */
 	public static function get_default_html( $loc ) {
-		if ( $loc == 'submit' ) {
+		if ( $loc === 'submit' ) {
 			$draft_link   = self::get_draft_link();
 			$start_over   = self::get_start_over_shortcode();
 			$default_html = <<<SUBMIT_HTML
-<div class="frm_submit">
-[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+<div class="frm_submit frm_flex">
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
+[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 $draft_link
 $start_over
 </div>
 SUBMIT_HTML;
-		} elseif ( $loc == 'before' ) {
+		} elseif ( $loc === 'before' ) {
 			$default_html = <<<BEFORE_HTML
 <legend class="frm_screen_reader">[form_name]</legend>
 [if form_name]<h3 class="frm_form_title">[form_name]</h3>[/if form_name]
@@ -1188,7 +1188,7 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 */
-	private static function delete_trash_links( $id ) {
+	public static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
 		$base_url     = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
 
@@ -1306,24 +1306,29 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param array $categories
+	 * Renders a template icon based on the given categories.
+	 *
+	 * @param array $categories The categories to render the icon for.
 	 * @param array $atts {
-	 *     @type string  $html 'span' or 'div'.
-	 *     @type boolean $bg   Whether to add a bg color or not.
+	 *     Optional. An array of attributes for rendering.
+	 *     @type string  $html 'span' or 'div'. Default 'span'.
+	 *     @type boolean $bg   Whether to add a background color or not. Default false.
 	 * }
 	 *
 	 * @return void
 	 */
 	public static function template_icon( $categories, $atts = array() ) {
+		// Define defaults.
 		$defaults = array(
-			'html' => 'span',
-			'bg'   => false,
+			'bg'   => true,
 		);
 		$atts = array_merge( $defaults, $atts );
 
+		// Filter out ignored categories.
 		$ignore     = self::ignore_template_categories();
 		$categories = array_diff( $categories, $ignore );
 
+		// Define icons mapping.
 		$icons = array(
 			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
 			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
@@ -1355,50 +1360,49 @@ BEFORE_HTML;
 			''                    => array( 'align_right' ),
 		);
 
-		$icons[ __( 'My Templates', 'formidable' ) ] = array( 'user', 'var(--orange)' );
-
+		// Determine the icon to be used.
 		$icon = $icons[''];
-
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
 		} elseif ( ! empty( $categories ) ) {
-			foreach ( $icons as $cat => $icon ) {
-				if ( ! in_array( $cat, $categories ) ) {
-					unset( $icons[ $cat ] );
-				}
-			}
+			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon = reset( $icons );
 		}
 
-		$bg = isset( $icon[1] ) ? $icon[1] : '';
+		// Prepare variables for output.
+		$icon_name = $icon[0];
+		$bg_color  = isset( $icon[1] ) ? $icon[1] : '';
 
-		if ( $atts['html'] === 'div' ) {
-			echo '<div class="frm-category-icon frm-icon-wrapper" role="button"';
-		} else {
-			echo '<span class="frm-inner-circle"';
+		// Render the icon.
+		echo '<span class="frm-category-icon frm-icon-wrapper"';
+		if ( $bg_color && $atts['bg'] ) {
+			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
-		echo empty( $bg ) || empty( $atts['bg'] ) ? '' : ' style="background-color:' . esc_attr( $bg ) . '"';
 		echo '>';
-
-		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon[0] . '_icon' );
-		echo '<span class="frm_hidden">';
-		FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
+			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
-		echo '</' . esc_attr( $atts['html'] ) . '>';
 	}
 
 	/**
+	 * Retrieves the list of template categories to ignore.
+	 *
 	 * @since 4.03.01
 	 *
-	 * @return array<string>
+	 * @return string[] Array of categories to ignore.
 	 */
 	public static function ignore_template_categories() {
 		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
+	 * Get template install link.
+	 *
 	 * @since 4.02
+	 *
+	 * @param array $template Template details.
+	 * @param array $args Additional arguments.
+	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
 		$defaults = array(
@@ -1436,7 +1440,6 @@ BEFORE_HTML;
 	 * @since 4.02.02
 	 *
 	 * @param array $args
-	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
@@ -1444,29 +1447,23 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$included = $args['license_type'] === strtolower( $args['plan_required'] );
+		$plans         = array( 'free', 'personal', 'business', 'elite' );
+		$license_type  = strtolower( $args['license_type'] );
+		$plan_required = strtolower( $args['plan_required'] );
+		$included      = $license_type === $plan_required;
 
-		$plans = array( 'free', 'personal', 'business', 'elite' );
-		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans, true ) ) {
+		if ( $included || ! in_array( $plan_required, $plans, true ) ) {
 			return $included;
 		}
 
 		foreach ( $plans as $plan ) {
-			if ( $included || $plan === $args['license_type'] ) {
+			if ( $included || $plan === $license_type ) {
 				break;
 			}
-			$included = $plan === strtolower( $args['plan_required'] );
+			$included = $plan === $plan_required;
 		}
 
 		return $included;
-	}
-
-	/**
-	 * @since 4.02
-	 */
-	public static function template_install_html( $link, $class = '' ) {
-		$link['class'] .= ' ' . $class;
-		echo '<a ' . esc_attr( $link['href'] ) . '="' . esc_url( $link['url'] ) . '" class="' . esc_attr( $link['class'] ) . ' " aria-label="' . esc_attr( $link['label'] ) . '"' . ( $link['atts'] ? ' target="_blank" rel="noopener"' : '' ) . '>';
 	}
 
 	/**
@@ -1676,32 +1673,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * Check an array of templates, determine how many the logged in user can use
-	 *
-	 * @param array $templates
-	 * @param array $args
-	 * @return int
-	 */
-	public static function available_count( $templates, $args ) {
-		return array_reduce(
-			$templates,
-			function( $total, $template ) use ( $args ) {
-				if ( ! empty( $template['url'] ) ) {
-					return $total + 1;
-				}
-
-				$args['plan_required'] = self::get_plan_required( $template );
-				if ( self::plan_is_allowed( $args ) ) {
-					return $total + 1;
-				}
-
-				return $total;
-			},
-			0
-		);
-	}
-
-	/**
 	 * Make sure the field shortcodes in a url always add the sanitize_url=1 option if nothing is defined.
 	 * This is to prevent some field characters like ', @, and | from being stripped from the redirect URL.
 	 *
@@ -1771,5 +1742,43 @@ BEFORE_HTML;
 	 */
 	public static function should_use_pro_for_ajax_submit() {
 		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProFormsHelper::lite_supports_ajax_submit' );
+	}
+
+	/**
+	 * Outputs the appropriate button text in the publish box.
+	 *
+	 * @return void
+	 */
+	public static function publish_box_button_text() {
+		$is_new_template = FrmAppHelper::simple_get( 'new_template' );
+		$action          = FrmAppHelper::simple_get( 'frm_action' );
+
+		if ( ( 'edit' === $action || 'settings' === $action ) && $is_new_template ) {
+			esc_html_e( 'Save', 'formidable' );
+		} else {
+			esc_html_e( 'Update', 'formidable' );
+		}
+	}
+
+	/**
+	 * @since 4.02
+	 * @deprecated x.x
+	 */
+	public static function template_install_html( $link, $class = '' ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @deprecated x.x
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return 0;
 	}
 }

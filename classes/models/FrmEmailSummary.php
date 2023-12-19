@@ -2,7 +2,7 @@
 /**
  * Summary email base class
  *
- * @since x.x
+ * @since 6.7
  * @package Formidable
  */
 
@@ -40,7 +40,7 @@ abstract class FrmEmailSummary {
 		/**
 		 * Enables HTML for summary emails.
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 *
 		 * @param bool $enable Set to `true` to enable.
 		 */
@@ -81,7 +81,7 @@ abstract class FrmEmailSummary {
 		/**
 		 * Filters the summary email content args.
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 *
 		 * @param array $args        Content args.
 		 * @param array $filter_args Contains `email_obj`: summary email object.
