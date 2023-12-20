@@ -559,4 +559,32 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		return in_array( $part, $allowed, true ) ? $part : 'auto';
 	}
 
+	/**
+	 * If the names are being used on the CC fields,
+	 * make sure it doesn't prevent the submission if Stripe has approved.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 * @param array    $values
+	 * @return array
+	 */
+	public static function remove_cc_validation( $errors, $field, $values ) {
+		$has_processed = isset( $_POST[ 'frmintent' . $field->form_id ] );
+		if ( ! $has_processed ) {
+			return $errors;
+		}
+
+		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
+	}
 }
