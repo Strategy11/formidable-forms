@@ -653,7 +653,7 @@ class FrmAppHelper {
 		self::sanitize_value( 'wp_kses_post', $value );
 		self::decode_specialchars( $value );
 
-		if ( ! is_user_logged_in() || ! current_user_can( 'frm_edit_entries' ) ) {
+		if ( ! current_user_can( 'frm_edit_entries' ) ) {
 			self::sanitize_value( self::class . '::strip_most_html', $value );
 		}
 	}
