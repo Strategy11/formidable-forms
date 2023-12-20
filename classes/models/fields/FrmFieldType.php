@@ -1344,11 +1344,36 @@ DEFAULT_HTML;
 			}
 		}
 
-		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && $this->should_strip_most_html( $atts['entry'] ) ) {
+		if ( ! isset( $atts['entry'] ) && isset( $atts['entry_id'] ) ) {
+			$atts['entry'] = FrmEntry::getOne( $atts['entry_id'] );
+		}
+
+		if ( $this->should_strip_most_html_from_display_value( $atts ) ) {
 			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
 		}
 
 		return $value;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $atts
+	 * @return bool
+	 */
+	protected function should_strip_most_html_from_display_value( $atts ) {
+		if ( ! empty( $atts['keepjs'] ) ) {
+			// Always keep JS if the option is set.
+			return false;
+		}
+
+		$field_type = is_array( $this->field ) ? $this->field['type'] : $this->field->type;
+		if ( 'star' === $field_type ) {
+			// To support star rating SVGs, leave the display value alone.
+			return false;
+		}
+
+		return isset( $atts['entry'] ) && is_object( $atts['entry'] ) && $this->should_strip_most_html( $atts['entry'] );
 	}
 
 	/**
