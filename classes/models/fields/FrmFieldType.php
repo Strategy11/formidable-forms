@@ -1367,8 +1367,7 @@ DEFAULT_HTML;
 			return false;
 		}
 
-		$field_type = is_array( $this->field ) ? $this->field['type'] : $this->field->type;
-		if ( 'star' === $field_type ) {
+		if ( 'star' === FrmField::get_field_type( $this->field ) ) {
 			// To support star rating SVGs, leave the display value alone.
 			return false;
 		}
