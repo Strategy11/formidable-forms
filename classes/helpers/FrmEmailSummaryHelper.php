@@ -399,7 +399,7 @@ class FrmEmailSummaryHelper {
 	public static function section_heading_with_icon( $icon, $text ) {
 		?>
 		<h2 style="<?php echo esc_attr( self::get_heading2_style() ); ?>">
-			<img style="vertical-align: bottom;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" />
+			<img style="vertical-align: bottom; height: 24px; width: auto;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" />
 			<span style="display: inline-block; vertical-align: text-bottom;"><?php echo esc_html( $text ); ?></span>
 		</h2>
 		<?php
