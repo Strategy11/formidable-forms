@@ -114,17 +114,14 @@ class FrmDashboardHelper {
 	/**
 	 * The dashboard widget that will show right below counters.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return void|string Echo or return the widget's HTML
+	 * @return void
 	 */
-	public function get_main_widget( $echo = true ) {
+	public function get_main_widget() {
 		if ( is_callable( 'FrmProDashboardHelper::get_main_widget' ) ) {
-			return FrmProDashboardHelper::get_main_widget( $this->view['entries'], $echo );
+			FrmProDashboardHelper::get_main_widget( $this->view['entries'] );
+			return;
 		}
-		if ( false === $echo ) {
-			return self::load_entries_template( $this->view['entries'] );
-		}
+
 		echo wp_kses_post( self::load_entries_template( $this->view['entries'] ) );
 	}
 
@@ -133,221 +130,76 @@ class FrmDashboardHelper {
 	 *
 	 * @param boolean $echo
 	 *
-	 * @return string The widget's HTML
+	 * @return void
 	 */
-	public function get_bottom_widget( $echo = true ) {
+	public function get_bottom_widget() {
 		if ( is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) ) {
-			return FrmProDashboardHelper::get_bottom_widget( $this->view['entries'], $echo );
+			echo '<div class="frm-dashboard-widget frm-card-item frm-px-0">';
+			FrmProDashboardHelper::get_bottom_widget( $this->view['entries'] );
+			echo '</div>';
+		} elseif ( ! FrmAppHelper::pro_is_installed() ) {
+			$this->get_pro_features();
 		}
-		return $this->get_pro_features( $echo );
-	}
-
-	/**
-	 * Check whether the bottom widget will be visible.
-	 *
-	 * @return boolean
-	 */
-	public function display_bottom_widget() {
-		if ( ! is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) && FrmAppHelper::pro_is_installed() ) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Dashboard - kses args for svg.
-	 *
-	 * @return array
-	 */
-	private static function wp_svg_kses_args() {
-		$kses_defaults = wp_kses_allowed_html( 'post' );
-		$svg_args      = array(
-			'svg'   => array(
-				'class'           => true,
-				'aria-hidden'     => true,
-				'aria-labelledby' => true,
-				'role'            => true,
-				'xmlns'           => true,
-				'width'           => true,
-				'height'          => true,
-				'viewbox'         => true,
-			),
-			'use'   => array(
-				'xlink:href' => true,
-			),
-			'g'     => array( 'fill' => true ),
-			'title' => array( 'title' => true ),
-			'path'  => array(
-				'd'    => true,
-				'fill' => true,
-			),
-		);
-
-		return array_merge( $kses_defaults, $svg_args );
 	}
 
 	/**
 	 * Dashboard - welcome banner template.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return void|string Echo or return the widget's HTML
+	 * @return void
 	 */
-	public function get_welcome_banner( $echo = true ) {
+	public function get_welcome_banner() {
 		if ( true === FrmDashboardController::welcome_banner_has_closed() || FrmForm::get_forms_count() ) {
 			return;
 		}
-		return FrmAppHelper::clip(
-			function() {
-				echo wp_kses( $this->load_welcome_template(), self::wp_svg_kses_args() );
-			},
-			$echo
-		);
+
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/notification-banner.php';
 	}
 
 	/**
 	 * Dashboard - top counters card widgets template.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
+	 * @return void
 	 */
-	public function get_counters( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				echo wp_kses_post( $this->load_counters_template( $this->view['counters'] ) );
-			},
-			$echo
-		);
+	public function get_counters() {
+		$this->load_counters_template( $this->view['counters'] );
 	}
 
 	/**
 	 * Dashboard -license management widget template.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
+	 * @return void
 	 */
-	public function get_license_management( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				echo wp_kses_post( $this->load_license_management_template( $this->view['license'] ) );
-			},
-			$echo
-		);
+	public function get_license_management() {
+		$template = $this->view['license'];
+		if ( is_callable( 'FrmProDashboardHelper::load_license_management' ) ) {
+			FrmProDashboardHelper::load_license_management( $template );
+			return;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/license-management.php';
 	}
 
 	/**
 	 * Dashboard - inbox widget template.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
+	 * @return void
 	 */
-	public function get_inbox( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				// needs kses input
-				echo $this->load_inbox_template( $this->view['inbox'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			},
-			$echo
-		);
+	public function get_inbox() {
+		$template = $this->view['inbox'];
+
+		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
+		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
+		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
+
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/inbox.php';
 	}
 
 	/**
 	 * Dashboard - pro features list widget template.
 	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
+	 * @return void
 	 */
-	private function get_pro_features( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo FrmAppHelper::kses( $this->load_pro_features_template(), 'all' );
-			},
-			$echo
-		);
-	}
-
-	/**
-	 * Dashboard - total earnings widget template.
-	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
-	 */
-	public function get_payments( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				echo wp_kses_post( $this->load_payments_template( $this->view['payments'] ) );
-			},
-			$echo
-		);
-	}
-
-	/**
-	 * Dashboard - YouTube video widget template.
-	 *
-	 * @param boolean $echo
-	 *
-	 * @return string Echo or return the widgets's HTML
-	 */
-	public function get_youtube_video( $echo = true ) {
-		return FrmAppHelper::clip(
-			function() {
-				echo wp_kses(
-					$this->load_youtube_video_template( $this->view['video'] ),
-					array(
-						'iframe' => array(
-							'src'             => true,
-							'title'           => true,
-							'alow'            => true,
-							'frameborder'     => true,
-							'allowfullscreen' => true,
-						),
-					)
-				);
-			},
-			$echo
-		);
-	}
-
-	/**
-	 * Dashboard - load placeholder template.
-	 *
-	 * @param array $template
-	 *
-	 * @return string Placeholder HTML template
-	 */
-	public static function load_placeholder_template( $template ) {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/widget-placeholder.php';
-		return ob_get_clean();
-	}
-
-	/**
-	 * Dashboard - load total earnings/payments template.
-	 *
-	 * @param array $template
-	 *
-	 * @return string HTML template
-	 */
-	private function load_payments_template( $template ) {
-		if ( true === $template['show-placeholder'] ) {
-			return $this->load_payments_placeholder( $template );
-		}
-
-		return $this->load_counters_template( $template );
-	}
-
-	/**
-	 * Dashboard - load pro features list template.
-	 *
-	 * @return string HTML template
-	 */
-	private function load_pro_features_template() {
+	private function get_pro_features() {
 		$features = array(
 			sprintf(
 				/* translators: %d: number of form templates */
@@ -365,33 +217,63 @@ class FrmDashboardHelper {
 			__( 'And much more...', 'formidable' ),
 		);
 
-		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/pro-features-list.php';
-		return ob_get_clean();
 	}
 
 	/**
-	 * Dashboard - load welcome banner's template.
+	 * Dashboard - total earnings widget template.
 	 *
-	 * @return string HTML template
+	 * @return void
 	 */
-	private function load_welcome_template() {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/notification-banner.php';
-		return ob_get_clean();
+	public function get_payments() {
+		$this->load_payments_template( $this->view['payments'] );
 	}
 
 	/**
-	 * Dashboard - load total earnings/payments placeholder template.
+	 * Dashboard - YouTube video widget template.
+	 *
+	 * @param string $classes The widget's classes
+	 *
+	 * @return void
+	 */
+	public function get_youtube_video( $classes ) {
+		$template = $this->view['video'];
+		if ( null === $template['id'] ) {
+			return;
+		}
+
+		echo '<div class="' . esc_attr( $classes ) . '">' .
+			'<iframe src="https://www.youtube.com/embed/' . esc_attr( $template['id'] ) . '" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' .
+			'</div>';
+	}
+
+	/**
+	 * Dashboard - load placeholder template.
 	 *
 	 * @param array $template
 	 *
-	 * @return string HTML template
+	 * @return string Placeholder HTML template
 	 */
-	private function load_payments_placeholder( $template ) {
+	public static function load_placeholder_template( $template ) {
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/payment-placeholder.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/widget-placeholder.php';
 		return ob_get_clean();
+	}
+
+	/**
+	 * Dashboard - load total earnings/payments template or placeholder.
+	 *
+	 * @param array $template
+	 *
+	 * @return void
+	 */
+	private function load_payments_template( $template ) {
+		if ( true === $template['show-placeholder'] ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/payment-placeholder.php';
+			return;
+		}
+
+		$this->load_counters_template( $template );
 	}
 
 	/**
@@ -399,45 +281,10 @@ class FrmDashboardHelper {
 	 *
 	 * @param array $template
 	 *
-	 * @return string HTML template
+	 * @return void
 	 */
 	private function load_counters_template( $template ) {
-		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/counters.php';
-		return ob_get_clean();
-	}
-
-	/**
-	 * Dashboard - load license management template.
-	 *
-	 * @param array $template
-	 *
-	 * @return string HTML template
-	 */
-	private function load_license_management_template( $template ) {
-		if ( is_callable( 'FrmProDashboardHelper::load_license_management' ) ) {
-			return FrmProDashboardHelper::load_license_management( $template );
-		}
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/license-management.php';
-		return ob_get_clean();
-	}
-
-	/**
-	 * Dashboard - load inbox template.
-	 *
-	 * @param array $template
-	 *
-	 * @return string HTML template
-	 */
-	private function load_inbox_template( $template ) {
-		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
-		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
-		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
-
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/inbox.php';
-		return ob_get_clean();
 	}
 
 	/**
@@ -483,19 +330,5 @@ class FrmDashboardHelper {
 			)
 		);
 		return ob_get_clean();
-	}
-
-	/**
-	 * Dashboard - load YouTube video template
-	 *
-	 * @param array $template
-	 *
-	 * @return string
-	 */
-	private function load_youtube_video_template( $template ) {
-		if ( null === $template['id'] ) {
-			return '';
-		}
-		return '<iframe src="https://www.youtube.com/embed/' . $template['id'] . '" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 	}
 }

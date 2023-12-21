@@ -26,21 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php $dashboard_view->get_main_widget(); ?>
 			</div>
 			<?php $dashboard_view->get_payments(); ?>
-			<?php if ( true === $dashboard_view->display_bottom_widget() ) : ?>
-				<div class="frm-dashboard-widget frm-card-item frm-px-0 <?php echo esc_attr( FrmAppHelper::set_classname_for_lite_only( 'frm-p-0' ) ); ?>">
-					<?php $dashboard_view->get_bottom_widget(); ?>
-				</div>
-			<?php endif; ?>
+			<?php $dashboard_view->get_bottom_widget(); ?>
 		</div>
 		<div class="frm-flex-box frm-flex-col">
 			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
-			<?php if ( '' !== $dashboard_view->get_youtube_video( false ) ) : ?>
-				<div class="frm-dashboard-widget frm-card-item frm-yt-widget">
-					<?php $dashboard_view->get_youtube_video(); ?>
-				</div>
-			<?php endif; ?>
+			<?php $dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' ); ?>
 			<div class="frm-dashboard-widget frm-card-item frm-inbox-widget frm-px-0">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>

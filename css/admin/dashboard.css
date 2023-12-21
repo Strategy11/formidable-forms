@@ -223,7 +223,7 @@
 /* END Counter Card */
 
 /* License Management */
-.frm-dashboard-container .frm-dashboard-license-management h4 {
+.frm-dashboard-container .frm-dashboard-license-management h3 {
 	margin-bottom: var( --gap-xs );
 }
 
