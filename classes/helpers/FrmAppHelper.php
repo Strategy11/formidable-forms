@@ -648,17 +648,25 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param mixed $value
+	 * @return void
 	 */
 	public static function sanitize_with_html( &$value ) {
-		self::sanitize_value( 'wp_kses_post', $value );
-		self::decode_specialchars( $value );
-
-		if ( ! current_user_can( 'frm_edit_entries' ) ) {
+		if ( current_user_can( 'frm_edit_entries' ) ) {
+			// Only strip unsafe HTML like scripts for a privileged user submitting a form.
+			self::sanitize_value( 'wp_kses_post', $value );
+		} else {
 			self::sanitize_value( self::class . '::strip_most_html', $value );
 		}
+		self::decode_specialchars( $value );
 	}
 
 	/**
+	 * Allow only a small set of very basic HTML for unprivileged users.
+	 *
+	 * @since x.x
+	 *
 	 * @param string $value
 	 */
 	public static function strip_most_html( $value ) {
