@@ -1591,6 +1591,11 @@ input.frm_insert_in_template {
 	margin-left: auto;
 }
 
+.frm-mx-xs {
+	margin-left: var(--gap-xs) !important;
+	margin-right: var(--gap-xs) !important;
+}
+
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;
@@ -2396,10 +2401,6 @@ h2.frm-h2 + .howto {
 .frm-addons .addon-status {
 	float: left;
 	padding-top: 4px;
-}
-
-.frm-addon-active .button {
-	visibility: hidden;
 }
 
 .frm-save-and-reload-options {

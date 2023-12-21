@@ -8482,20 +8482,20 @@ function frmAdminBuildJS() {
 	/* Addons page */
 	function installMultipleAddons( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_multiple_addons' );
+		toggleAddonState( this, 'frm_multiple_addons' );
 	}
 
 	function activateAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_activate_addon' );
+		toggleAddonState( this, 'frm_activate_addon' );
 	}
 
 	function installAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_install_addon' );
+		toggleAddonState( this, 'frm_install_addon' );
 	}
 
-	function installOrActivate( clicked, action ) {
+	function toggleAddonState( clicked, action ) {
 		let button, plugin, el, message;
 
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
@@ -10347,7 +10347,8 @@ function frmAdminBuildJS() {
 		offsetModalY,
 		adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt,
-		installNewForm
+		installNewForm,
+		toggleAddonState
 	};
 }
 

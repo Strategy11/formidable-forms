@@ -935,6 +935,49 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Deactivate a specified plugin.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin
+	 * @param bool   $silent
+	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 */
+	protected static function deactivate_plugin( $plugin, $silent = false ) {
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return deactivate_plugins( $plugin, $silent );
+	}
+
+	/**
+	 * Uninstall a specified plugin.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin
+	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 */
+	protected static function uninstall_plugin( $plugin ) {
+		if ( ! current_user_can( 'delete_plugins' ) ) {
+			return new WP_Error( 'uninstall_failed', __( 'Current user cannot delete plugins.', 'formidable' ) );
+		}
+
+		if ( ! function_exists( 'delete_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		self::deactivate_plugin( $plugin, true ); // Deactivate plugin before uninstalling.
+		$result = delete_plugins( array( $plugin ) );
+
+		if ( is_wp_error( $result ) ) {
+			return $result; // Return the error from delete_plugins.
+		}
+
+		return null; // Success.
+	}
+
+	/**
 	 * @since 5.0.10
 	 *
 	 * @return string
@@ -1055,21 +1098,115 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since 3.06.03
+	 * Handle the AJAX request to activate an add-on.
+	 *
+	 * @since x.x
 	 *
 	 * @return void
 	 */
 	public static function ajax_activate_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'activate' );
+			},
+			'self::get_addon_activation_response'
+		);
+	}
 
+	/**
+	 * Handle the AJAX request to deactivate an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_deactivate_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'deactivate' );
+			},
+			'self::get_addon_activation_response'
+		);
+	}
+
+	/**
+	 * Handle the AJAX request to uninstall an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_uninstall_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'uninstall' );
+			},
+			'self::get_addon_activation_response'
+		);
+	}
+
+	/**
+	 * Process a specific action (activate, deactivate, uninstall) on an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @param callable $action_callback The specific add-on action to be executed.
+	 * @param callable $response_callback The response handling callback.
+	 * @return void
+	 */
+	private static function process_addon_action( $action_callback, $response_callback ) {
 		self::install_addon_permissions();
-
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		self::maybe_activate_addon( $plugin );
+		call_user_func( $action_callback, $plugin );
 
-		echo json_encode( self::get_addon_activation_response() );
+		echo json_encode( call_user_func( $response_callback ) );
 		wp_die();
+	}
+
+	/**
+	 * Attempt to perform a specific action (activate, deactivate, uninstall) on an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $installed The plugin folder name with file name
+	 * @param string $action The action type ('activate', 'deactivate', 'uninstall')
+	 * @return void|array
+	 */
+	protected static function handle_addon_action( $installed, $action ) {
+		if ( ! $installed || ! $action ) {
+			return;
+		}
+
+		$result = null;
+		switch ( $action ) {
+			case 'activate':
+				$result = self::activate_plugin( $installed );
+				break;
+			case 'deactivate':
+				$result = self::deactivate_plugin( $installed );
+				break;
+			case 'uninstall':
+				$result = self::uninstall_plugin( $installed );
+				break;
+		}
+
+		if ( is_wp_error( $result ) ) {
+			// Ignore the invalid header message that shows with nested plugins.
+			if ( $result->get_error_code() !== 'no_plugin_header' ) {
+				if ( wp_doing_ajax() ) {
+					echo json_encode( array( 'error' => $result->get_error_message() ) );
+					wp_die();
+				}
+				return array(
+					'message' => $result->get_error_message(),
+					'success' => false,
+				);
+			}
+		}
+
+		return $result;
 	}
 
 	/**
@@ -1105,32 +1242,6 @@ class FrmAddonsController {
 		}
 
 		return '';
-	}
-
-	/**
-	 * @since 3.04.02
-	 *
-	 * @param string $installed The plugin folder name with file name
-	 */
-	protected static function maybe_activate_addon( $installed ) {
-		if ( ! $installed ) {
-			return;
-		}
-
-		$activate = self::activate_plugin( $installed );
-		if ( is_wp_error( $activate ) ) {
-			// Ignore the invalid header message that shows with nested plugins.
-			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
-				if ( wp_doing_ajax() ) {
-					echo json_encode( array( 'error' => $activate->get_error_message() ) );
-					wp_die();
-				}
-				return array(
-					'message' => $activate->get_error_message(),
-					'success' => false,
-				);
-			}
-		}
 	}
 
 	/**
