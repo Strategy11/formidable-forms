@@ -145,7 +145,7 @@ class FrmDashboardHelper {
 	/**
 	 * Check whether the bottom widget will be visible.
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function display_bottom_widget() {
 		if ( ! is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) && FrmAppHelper::pro_is_installed() ) {
