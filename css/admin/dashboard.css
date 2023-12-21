@@ -178,17 +178,22 @@
 
 .frm-dashboard-container.frm-flex-box {
 	max-width: 1480px;
-	margin: 0 auto;
+	width: calc( 100% - var(--gap-md) * 2 );
 	padding-bottom: var(--gap-2xl);
 	box-sizing: border-box;
 	gap: var(--gap-md);
 	flex-wrap: wrap;
 }
-
+#frm_top_bar + .wrap.frm-dashboard-container {
+	margin-left: auto;
+	margin-right: auto;
+}
 .frm-dashboard-container > .frm-flex-box {
 	row-gap: var(--gap-md);
 }
-
+.frm-dashboard-container > div:first-child {
+	overflow: hidden;
+}
 .frm-dashboard-container > div:last-child {
 	width: max(29%, var(--big-sidebar));
 }
@@ -218,11 +223,11 @@
 /* END Counter Card */
 
 /* License Management */
-.frm-dashboard-container .frm-dashboard-license-management h3 {
+.frm-dashboard-container .frm-dashboard-license-management h4 {
 	margin-bottom: var( --gap-xs );
 }
 
-.frm-dashboard-container .frm-dashboard-license-management > div {
+.frm-dashboard-container .frm-dashboard-license-management > div:not(.frm-dashboard-license-options) {
 	margin-top: var( --gap-sm );
 }
 /* END License Management */

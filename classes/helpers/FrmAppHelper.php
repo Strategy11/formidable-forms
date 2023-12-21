@@ -4039,4 +4039,16 @@ class FrmAppHelper {
 	public static function copy_for_lite_license() {
 		return __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' );
 	}
+
+	/**
+	 * Assigns a classname exclusively when the LITE version is installed
+	 *
+	 * @return string
+	 */
+	public static function set_classname_for_lite_only( $classname ) {
+		if ( self::pro_is_installed() ) {
+			return '';
+		}
+		return $classname;
+	}
 }

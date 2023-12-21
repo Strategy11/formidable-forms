@@ -139,10 +139,19 @@ class FrmDashboardHelper {
 		if ( is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) ) {
 			return FrmProDashboardHelper::get_bottom_widget( $this->view['entries'], $echo );
 		}
-		if ( FrmAppHelper::pro_is_installed() ) {
-			return '';
-		}
 		return $this->get_pro_features( $echo );
+	}
+
+	/**
+	 * Check whether the bottom widget will be visible.
+	 *
+	 * @return void
+	 */
+	public function display_bottom_widget() {
+		if ( ! is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) && FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

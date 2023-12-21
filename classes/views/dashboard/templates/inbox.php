@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php
 										FrmAppController::api_email_form(
 											'subscribe',
-											__( 'You don\'t have any messages', 'formidable' ),
+											__( 'You don\'t have any new messages', 'formidable' ),
 											__( 'Get the details about new updates, tips, sales, and more. We\'ll keep you in the loop.', 'formidable' )
 										);
 									?>
