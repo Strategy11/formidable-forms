@@ -1333,6 +1333,11 @@ DEFAULT_HTML;
 	 */
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
+
+		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+		}
+
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -1344,14 +1349,6 @@ DEFAULT_HTML;
 			}
 		}
 
-		if ( ! isset( $atts['entry'] ) && isset( $atts['entry_id'] ) ) {
-			$atts['entry'] = FrmEntry::getOne( $atts['entry_id'] );
-		}
-
-		if ( $this->should_strip_most_html_from_display_value( $atts ) ) {
-			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
-		}
-
 		return $value;
 	}
 
@@ -1361,18 +1358,19 @@ DEFAULT_HTML;
 	 * @param array $atts
 	 * @return bool
 	 */
-	protected function should_strip_most_html_from_display_value( $atts ) {
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
 		if ( ! empty( $atts['keepjs'] ) ) {
 			// Always keep JS if the option is set.
 			return false;
 		}
 
-		if ( 'star' === FrmField::get_field_type( $this->field ) ) {
-			// To support star rating SVGs, leave the display value alone.
-			return false;
+		if ( ! empty( $atts['entry'] ) ) {
+			$entry = $atts['entry'];
+		} elseif ( ! empty( $atts['entry_id'] ) ) {
+			$entry = FrmEntry::getOne( $atts['entry_id'] );
 		}
 
-		return isset( $atts['entry'] ) && is_object( $atts['entry'] ) && $this->should_strip_most_html( $atts['entry'] );
+		return ! empty( $entry ) && is_object( $entry ) && $this->should_strip_most_html( $entry );
 	}
 
 	/**
@@ -1391,6 +1389,10 @@ DEFAULT_HTML;
 		return false;
 	}
 
+	/**
+	 * @param array $atts
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep' => ', ',
