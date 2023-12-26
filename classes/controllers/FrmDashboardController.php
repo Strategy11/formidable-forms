@@ -10,7 +10,7 @@ class FrmDashboardController {
 	 *
 	 * @var string Handle name used for wp_register_script|wp_register_style
 	 */
-	public static $assets_handle_name = 'formidable-dashboard';
+	public static $page_slug = 'formidable-dashboard';
 
 	/**
 	 * Welcome banner cookie name. When welcome banner is closed we store its status into a cookie.
@@ -27,12 +27,83 @@ class FrmDashboardController {
 	private static $option_meta_name = 'frm-dashboard-options';
 
 	/**
+	 * Option name used to store the time when auto redirected for welcome.
+	 *
+	 * @var string
+	 */
+	public static $redirect_meta_name = 'frm_activation_redirect';
+
+	/**
+	 * Register all of the hooks related to the welcome screen functionality
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public static function load_admin_hooks() {
+		add_action( 'admin_init', __CLASS__ . '::redirect' );
+		add_action( 'admin_menu', __CLASS__ . '::menu', 9 );
+	}
+
+	/**
 	 * Register Dashboard page tp Formidable admin menu.
 	 *
 	 * @return void
 	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+	}
+
+	/**
+	 * Performs a safe (local) redirect to the welcome screen
+	 * when the plugin is activated
+	 *
+	 * @return void
+	 */
+	public static function redirect() {
+		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( $current_page === self::$page_slug ) {
+			// Prevent endless loop.
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) {
+			// Only do this for single site installs.
+			return;
+		}
+
+		// Check if we should consider redirection.
+		if ( ! self::is_dashboard_page() ) {
+			return;
+		}
+
+		set_transient( self::$redirect_meta_name, 'no', 60 );
+
+		// Prevent redirect with every activation.
+		if ( self::already_redirected() ) {
+			return;
+		}
+
+		// Initial install.
+		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=' . self::$page_slug ) ) );
+		exit;
+	}
+
+	/**
+	 * Don't redirect every time the plugin is activated.
+	 *
+	 * @return bool
+	 */
+	private static function already_redirected() {
+		$redirect_option = 'frm_welcome_redirect';
+		$last_redirect   = get_option( $redirect_option );
+		if ( $last_redirect ) {
+			return true;
+		}
+
+		update_option( $redirect_option, FrmAppHelper::plugin_version(), 'no' );
+		return false;
 	}
 
 	/**
@@ -432,8 +503,8 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function register_assets() {
-		wp_register_script( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
-		wp_register_style( self::$assets_handle_name, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+		wp_register_script( self::$page_slug, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
+		wp_register_style( self::$page_slug, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
 	}
 
 	/**
@@ -447,8 +518,8 @@ class FrmDashboardController {
 			return;
 		}
 
-		wp_enqueue_style( self::$assets_handle_name );
-		wp_enqueue_script( self::$assets_handle_name );
+		wp_enqueue_style( self::$page_slug );
+		wp_enqueue_script( self::$page_slug );
 	}
 
 	/**

@@ -140,7 +140,6 @@ class FrmAppController {
 			'formidable-styles',
 			'formidable-styles2',
 			'formidable-inbox',
-			'formidable-welcome',
 			FrmFormTemplatesController::PAGE_SLUG,
 		);
 

@@ -145,9 +145,6 @@ class FrmHooksController {
 		}
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
-		// Dashboard Controller
-		add_action( 'admin_menu', 'FrmDashboardController::menu', 9 );
-
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
@@ -200,10 +197,10 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
-		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();
 	}
 
