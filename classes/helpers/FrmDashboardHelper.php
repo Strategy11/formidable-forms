@@ -122,7 +122,7 @@ class FrmDashboardHelper {
 			return;
 		}
 
-		echo wp_kses_post( self::load_entries_template( $this->view['entries'] ) );
+		self::load_entries_template( $this->view['entries'] );
 	}
 
 	/**
