@@ -2050,11 +2050,7 @@ form .frm_blank_field label {
 }
 
 .frm-license-input span {
-	position: absolute;
-	right: 0;
-	top: 5px;
-	padding: 0 10px;
-	font-size: 15px;
+	font-size: var(--text-sm);
 }
 
 .frm-license-input .frmsvg {
@@ -7383,7 +7379,7 @@ ul.frm_two_col {
 .settings-lite-cta a,
 .settings-lite-cta ul,
 .settings-lite-cta {
-	color: #666;
+	color: var(--grey-500);
 	font-size: var(--text-md);
 	box-shadow: none !important;
 }
