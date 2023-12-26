@@ -7,10 +7,15 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var el = {
-		licenseBox: document.getElementById( 'frm_license_top' ),
-		messageBox: document.getElementsByClassName( 'frm_pro_license_msg' )[0],
-		btn: document.getElementById( 'frm-settings-connect-btn' ),
-		reset: document.getElementById( 'frm_reconnect_link' )
+		messageBox: null,
+		btn: null,
+		reset: null,
+
+		setElements: function() {
+			el.messageBox = document.querySelector( '.frm_pro_license_msg' );
+			el.btn = document.getElementById( 'frm-settings-connect-btn' );
+			el.reset = document.getElementById( 'frm_reconnect_link' );
+		}
 	};
 
 	/**
@@ -28,6 +33,8 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		 * @since 4.03
 		 */
 		init: function() {
+			el.setElements();
+
 			$( document.getElementById( 'frm_deauthorize_link' ) ).on( 'click', app.deauthorize );
 			$( '.frm_authorize_link' ).on( 'click', app.authorize );
 			if ( el.reset !== null ) {
@@ -131,7 +138,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						btn.classList.remove( 'frm_loading_button' );
 
 						if ( msg.success === true ) {
-							el.licenseBox.classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
+							app.showAuthorized( true );
 						}
 
 						app.showMessage( msg );
@@ -189,6 +196,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		},
 
 		showProgress: function( msg ) {
+			if ( el.messageBox === null ) {
+				// In case the message box was added after page load.
+				el.setElements();
+			}
 			var messageBox = el.messageBox;
 			if ( msg.success === true ) {
 				messageBox.classList.remove( 'frm_error_style' );
@@ -202,30 +213,54 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		},
 
 		showMessage: function( msg ) {
+			if ( el.messageBox === null ) {
+				// In case the message box was added after page load.
+				el.setElements();
+			}
 			var messageBox = el.messageBox;
 
 			if ( msg.success === true ) {
-				var d = el.licenseBox;
-				d.className = d.className.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
-				messageBox.classList.remove( 'frm_error_style' );
-				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
-			} else {
-				messageBox.classList.add( 'frm_error_style' );
-				messageBox.classList.remove( 'frm_message', 'frm_updated_message' );
+				app.showAuthorized( true );
+				app.showInlineSuccess();
 			}
+			app.showProgress( msg );
 
-			messageBox.classList.remove( 'frm_hidden' );
-			messageBox.innerHTML = msg.message;
 			if ( msg.message !== '' ) {
 				setTimeout( function() {
 					messageBox.innerHTML = '';
 					messageBox.classList.add( 'frm_hidden' );
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
-				var refreshPage = document.querySelectorAll( '#frm-welcome' );
-				if ( refreshPage.length > 0 ) {
-					window.location.reload();
+				var refreshPage = document.querySelector( '.frm-admin-page-dashboard' );
+				if ( refreshPage ) {
+					setTimeout( function() {
+						window.location.reload();
+					}, 1000 );
 				}
+			}
+		},
+
+		showAuthorized: function( show ) {
+			const from = show ? 'unauthorized' : 'authorized';
+			const to = show ? 'authorized' : 'unauthorized';
+			let container = document.querySelectorAll( '.frm_' + from + '_box' );
+			if ( container.length ) {
+				// Replace all authorized boxes with unauthorized boxes.
+				container.forEach( function( box ) {
+					box.className = box.className.replace( 'frm_' + from + '_box', 'frm_' + to + '_box' );
+				});
+			}
+		},
+
+		/**
+		 * Use the data-success element to replace the element content.
+		 */
+		showInlineSuccess: function() {
+			const successElement = document.querySelectorAll( '.frm-confirm-msg [data-success]' );
+			if ( successElement.length ) {
+				successElement.forEach( function( element ) {
+					element.innerHTML = element.getAttribute( 'data-success' );
+				});
 			}
 		},
 
@@ -275,9 +310,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function() {
-					el.licenseBox.className = el.licenseBox.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
+					app.showAuthorized( false );
 					input.value = '';
-					link.innerHTML = '';
+					link.replaceWith( 'Disconnected' );
+
 				}
 			});
 			return false;
