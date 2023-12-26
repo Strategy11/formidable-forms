@@ -119,7 +119,7 @@ class FrmSettingsController {
 					'class'    => 'FrmAddonsController',
 					'function' => 'license_settings',
 					'name'     => __( 'Plugin Licenses', 'formidable' ),
-					'icon'     => 'frm_icon_font frm_keyalt_icon',
+					'icon'     => 'frm_icon_font frm_key_icon',
 					'ajax'     => true,
 				);
 			}

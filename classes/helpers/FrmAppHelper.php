@@ -1010,12 +1010,14 @@ class FrmAppHelper {
 
 		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
 
-		// Replace icons that have been removed.
+		// Replace icons that have been removed or renamed.
 		$deprecated = array(
-			'frm_clone_solid_icon' => 'frm_clone_icon',
+			'frm_clone_solid_icon'  => 'frm_clone_icon',
+			'frm_keyalt_icon'       => 'frm_key_icon',
+			'frm_keyalt_solid_icon' => 'frm_key_solid_icon',
 		);
 		if ( isset( $deprecated[ $icon ] ) ) {
-			$icon = $deprecated[ $icon ];
+			$icon  = $deprecated[ $icon ];
 			$class = str_replace( $icon, $deprecated[ $icon ], $class );
 		}
 
