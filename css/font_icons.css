@@ -397,15 +397,6 @@ a.frm_icon_font:hover{
 .frm_calculator_icon:before {
 	content: "\f1ec";
 }
-.frm_key_icon:before {
-	content: "\f084";
-}
-.frm_keyalt_solid_icon:before {
-	content: "\e986";
-}
-.frm_keyalt_icon:before {
-	content: "\e987";
-}
 .frm_keyboard_icon:before {
 	content: "\e924";
 }
