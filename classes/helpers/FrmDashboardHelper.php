@@ -252,12 +252,10 @@ class FrmDashboardHelper {
 	 *
 	 * @param array $template
 	 *
-	 * @return string Placeholder HTML template
+	 * @return void
 	 */
 	public static function load_placeholder_template( $template ) {
-		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/widget-placeholder.php';
-		return ob_get_clean();
 	}
 
 	/**
@@ -292,21 +290,22 @@ class FrmDashboardHelper {
 	 *
 	 * @param array $template
 	 *
-	 * @return string HTML template
+	 * @return void
 	 */
 	public static function load_entries_template( $template ) {
 		if ( true === $template['show-placeholder'] ) {
-			return self::load_placeholder_template( $template );
+			self::load_placeholder_template( $template );
+			return;
 		}
 
-		$widget_heading = '<div class="frm-flex-box frm-justify-between"><h2 class="frm-widget-heading">' . $template['widget-heading'] . '</h2><a class="frm-widget-cta" href="' . $template['cta']['link'] . '">' . $template['cta']['label'] . '</a></div>';
-		return $widget_heading . self::load_entries_list_template();
+		echo '<div class="frm-flex-box frm-justify-between"><h2 class="frm-widget-heading">' . esc_html( $template['widget-heading'] ) . '</h2><a class="frm-widget-cta" href="' . esc_url( $template['cta']['link'] ) . '">' . esc_html( $template['cta']['label'] ) . '</a></div>';
+		self::load_entries_list_template();
 	}
 
 	/**
 	 * Dashboard - load the entries list template.
 	 *
-	 * @return string HTML template
+	 * @return void
 	 */
 	private static function load_entries_list_template() {
 		add_filter(
@@ -321,7 +320,6 @@ class FrmDashboardHelper {
 		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
 		$wp_list_table->prepare_items();
 
-		ob_start();
 		$wp_list_table->display(
 			array(
 				'display-top-nav'        => false,
@@ -329,6 +327,6 @@ class FrmDashboardHelper {
 				'display-bottom-headers' => false,
 			)
 		);
-		return ob_get_clean();
+
 	}
 }
