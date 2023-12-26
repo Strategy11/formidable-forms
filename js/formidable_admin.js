@@ -200,7 +200,12 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				// In case the message box was added after page load.
 				el.setElements();
 			}
+
 			var messageBox = el.messageBox;
+			if ( messageBox === null ) {
+				return;
+			}
+
 			if ( msg.success === true ) {
 				messageBox.classList.remove( 'frm_error_style' );
 				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
