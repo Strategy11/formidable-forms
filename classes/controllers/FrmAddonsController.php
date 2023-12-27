@@ -1255,6 +1255,7 @@ class FrmAddonsController {
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		if ( is_callable( 'FrmProAddonsController::conditional_action_button' ) ) {
 			FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			return;
 		}
 
 		$addon        = self::get_addon( $plugin );
@@ -1290,6 +1291,7 @@ class FrmAddonsController {
 	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
 			FrmProAddonsController::show_conditional_action_button( $atts );
+			return;
 		}
 
 		self::addon_upgrade_link( $atts['addon'], $atts['upgrade_link'] );

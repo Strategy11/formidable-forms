@@ -363,8 +363,6 @@ class FrmXMLController {
 			return;
 		}
 
-		// add_filter('upload_mimes', 'FrmXMLController::allow_mime');
-
 		$export_format = array(
 			'xml' => array(
 				'name'    => 'XML',

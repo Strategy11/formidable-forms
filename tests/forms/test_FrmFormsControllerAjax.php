@@ -47,7 +47,6 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			'id' => $form_id,
 			'action' => 'update',
 			'frm_save_form' => wp_create_nonce( 'frm_save_form_nonce' ),
-			// '_wp_http_referer' =>
 			'status' => 'published',
 			'new_status' => '',
 			'name' => $form->name,
