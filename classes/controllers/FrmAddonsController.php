@@ -1109,7 +1109,7 @@ class FrmAddonsController {
 			function( $plugin ) {
 				return self::handle_addon_action( $plugin, 'activate' );
 			},
-			array( 'self', 'get_addon_activation_response' )
+			array( 'FrmAddonsController', 'get_addon_activation_response' )
 		);
 	}
 
