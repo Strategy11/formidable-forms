@@ -439,7 +439,7 @@ class FrmDashboardController {
 	 * Handle the entries list. Called via add_filter.
 	 * Hook name: manage_formidable_page_formidable-dashboard_columns.
 	 *
-	 * @param array $columns.
+	 * @param array $columns An associative array of column headings.
 	 * @return array
 	 */
 	public static function entries_columns( $columns = array() ) {

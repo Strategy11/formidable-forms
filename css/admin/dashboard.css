@@ -79,7 +79,7 @@
 	box-sizing: border-box;
 	position: relative;
 	overflow: hidden;
-	background: var(--primary-700);
+	background: #4199FD;
 	border-radius: var(--small-radius);
 }
 

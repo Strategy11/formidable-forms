@@ -48,16 +48,7 @@ class FrmInboxController {
 	 * @return void
 	 */
 	public static function inbox() {
-		FrmAppHelper::include_svg();
-		self::add_tracking_request();
-		self::add_free_template_message();
-
-		$inbox    = new FrmInbox();
-		$messages = $inbox->get_messages( 'filter' );
-		$messages = array_reverse( $messages );
-		$user     = wp_get_current_user();
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/inbox/list.php' );
+		_deprecated_function( __METHOD__, '6.7.1' );
 	}
 
 	/**

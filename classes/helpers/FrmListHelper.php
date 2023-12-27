@@ -993,7 +993,7 @@ class FrmListHelper {
 		if ( $singular ) {
 			$tbody_params['data-wp-lists'] = 'list:' . $singular;
 		}
-		if ( ! isset( $args['display-top-nav'] ) || false !== $args['display-top-nav'] ) {
+		if ( $this->should_display( $args, 'display-top-nav' ) ) {
 			$this->display_tablenav( 'top' );
 		}
 		?>
@@ -1010,7 +1010,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) && ( ! isset( $args['display-bottom-headers'] ) || false !== $args['display-bottom-headers'] ) ) { ?>
+			<?php if ( $this->has_min_items( 1 ) && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
@@ -1019,9 +1019,21 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
-		if ( ! isset( $args['display-bottom-nav'] ) || false !== $args['display-bottom-nav'] ) {
+		if ( $this->should_display( $args, 'display-bottom-nav' ) ) {
 			$this->display_tablenav( 'bottom' );
 		}
+	}
+
+	/**
+	 * Determines if a particular feature or element should be displayed.
+	 *
+	 * @param array $args An associative array of arguments.
+	 * @param string $settings The specific setting key to check within the arguments array.
+	 *
+	 * @return bool Returns true if the setting is not set or if it is not false; otherwise, returns false.
+	 */
+	protected function should_display( $args, $settings ) {
+		return ! isset( $args[ $settings ] ) || false !== $args[ $settings ];
 	}
 
 	/**

@@ -6,7 +6,7 @@ import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
 import { onClickPreventDefault } from '../utils';
 import { resetSearchInput } from './';
-import { FrmAnimate } from '../../common/utilities/animation';
+import { FrmAnimate } from '../utils';
 
 /**
  * Manages event handling for sidebar category links.
