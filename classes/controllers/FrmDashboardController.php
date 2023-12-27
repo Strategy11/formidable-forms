@@ -157,7 +157,7 @@ class FrmDashboardController {
 				'entries'  => array(
 					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
 					'cta'              => array(
-						'label' => __( 'View all entries', 'formidable' ),
+						'label' => __( 'View All Entries', 'formidable' ),
 						'link'  => admin_url( 'admin.php?page=formidable-entries' ),
 					),
 					'show-placeholder' => 0 < (int) $counters_value['entries'] ? false : true,
