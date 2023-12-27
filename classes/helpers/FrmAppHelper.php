@@ -3112,6 +3112,8 @@ class FrmAppHelper {
 				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'            => __( 'Install', 'formidable' ),
 				'active'             => __( 'Active', 'formidable' ),
+				'installed'          => __( 'Installed', 'formidable' ),
+				'not_installed'      => __( 'Not Installed', 'formidable' ),
 				'select_a_field'     => __( 'Select a Field', 'formidable' ),
 				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),

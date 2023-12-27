@@ -1003,7 +1003,7 @@ class FrmAddonsController {
 		if ( is_array( $installed ) && isset( $installed['message'] ) ) {
 			return $installed;
 		}
-		self::maybe_activate_addon( $installed );
+		self::handle_addon_action( $installed, 'activate' );
 	}
 
 	/**
@@ -1114,6 +1114,15 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @since 3.04.02
+	 *
+	 * @param string $installed The plugin folder name with file name
+	 */
+	protected static function maybe_activate_addon( $installed ) {
+		self::ajax_activate_addon();
+	}
+
+	/**
 	 * Handle the AJAX request to deactivate an add-on.
 	 *
 	 * @since x.x
@@ -1124,8 +1133,7 @@ class FrmAddonsController {
 		self::process_addon_action(
 			function( $plugin ) {
 				return self::handle_addon_action( $plugin, 'deactivate' );
-			},
-			'self::get_addon_activation_response'
+			}
 		);
 	}
 
@@ -1140,8 +1148,7 @@ class FrmAddonsController {
 		self::process_addon_action(
 			function( $plugin ) {
 				return self::handle_addon_action( $plugin, 'uninstall' );
-			},
-			'self::get_addon_activation_response'
+			}
 		);
 	}
 
@@ -1151,17 +1158,22 @@ class FrmAddonsController {
 	 * @since x.x
 	 *
 	 * @param callable $action_callback The specific add-on action to be executed.
-	 * @param callable $response_callback The response handling callback.
+	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
 	 * @return void
 	 */
-	private static function process_addon_action( $action_callback, $response_callback ) {
+	private static function process_addon_action( $action_callback, $response_callback = null ) {
 		self::install_addon_permissions();
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		call_user_func( $action_callback, $plugin );
 
-		echo json_encode( call_user_func( $response_callback ) );
+		if ( is_callable( $response_callback ) ) {
+			echo json_encode( call_user_func( $response_callback ) );
+		} else {
+			echo json_encode( array( 'success' => true ) );
+		}
+
 		wp_die();
 	}
 

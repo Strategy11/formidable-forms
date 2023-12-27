@@ -8535,7 +8535,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 
-				afterAddonInstall( response, button, message, el, saveAndReload );
+				afterAddonInstall( response, button, message, el, saveAndReload, action );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -8583,7 +8583,7 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function afterAddonInstall( response, button, message, el, saveAndReload ) {
+	function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
 		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 		addonStatuses.forEach(
 			addonStatus => {
@@ -8594,7 +8594,6 @@ function frmAdminBuildJS() {
 
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
-		message.text( frm_admin_js.active ); // eslint-disable-line camelcase
 
 		document.querySelectorAll( '.frm-oneclick' ).forEach(
 			oneClick => {
@@ -8607,7 +8606,16 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
-		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed' ).addClass( 'frm-addon-active' );
+		const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+		const actionMap = {
+			'frm_activate_addon': { class: 'frm-addon-active', message: frmAdminJs.active },
+			'frm_deactivate_addon': { class: 'frm-addon-installed', message: frmAdminJs.installed },
+			'frm_uninstall_addon': { class: 'frm-addon-not-installed', message: frmAdminJs.not_installed }
+		};
+		actionMap.frm_install_addon = actionMap.frm_activate_addon;
+
+		message.text( actionMap[action].message );
+		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed frm-addon-active' ).addClass( actionMap[action].class );
 		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages

@@ -1,7 +1,7 @@
 /**
  * Add-Ons Page Script.
  *
- * Handles ... on the Add-Ons admin page.
+ * Script for handling addon interactions on the Add-Ons page.
  */
 
 wp.domReady( () => {
@@ -10,13 +10,14 @@ wp.domReady( () => {
 	 * Internal dependencies
 	 */
 	const { toggleAddonState } = window.frmAdminBuild;
-	const { onClickPreventDefault } = frmDom.util;
 
-	document.querySelectorAll( '.frm-uninstall-addon' ).forEach( uninstallButton => {
-		onClickPreventDefault( uninstallButton,	() => toggleAddonState( uninstallButton, 'frm_uninstall_addon' ) );
-	});
-
-	document.querySelectorAll( '.frm-deactivate-addon' ).forEach( deactivateButton => {
-		onClickPreventDefault( deactivateButton, () => toggleAddonState( deactivateButton, 'frm_deactivate_addon' ) );
+	document.addEventListener( 'click', ( event ) => {
+		if ( event.target.matches( '.frm-uninstall-addon' ) ) {
+			event.preventDefault();
+			toggleAddonState( event.target, 'frm_uninstall_addon' );
+		} else if ( event.target.matches( '.frm-deactivate-addon' ) ) {
+			event.preventDefault();
+			toggleAddonState( event.target, 'frm_deactivate_addon' );
+		}
 	});
 });
