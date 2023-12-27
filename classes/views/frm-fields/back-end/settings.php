@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
 	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
 
-	<div class="frm-sub-label alignright">
-		(ID <?php echo esc_html( $field['id'] ); ?>)
-	</div>
 	<h3 aria-expanded="true">
 		<?php
 		printf(
@@ -18,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $type_name )
 		);
 		?>
+		<span class="frm-sub-label frm-text-sm">
+			(ID <?php echo esc_html( $field['id'] ); ?>)
+		</span>
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me" role="group">
