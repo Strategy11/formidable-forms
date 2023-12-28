@@ -19,7 +19,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Updates template array with additional details and URL.
 	 *
-	 * @param array  &$template Template data.
+	 * @param array  $template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
 	 */
@@ -104,6 +104,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 * @param bool  $expired Whether the license is expired.
 	 * @param array $attributes The template attributes.
 	 * @return void
 	 */
@@ -155,6 +156,8 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $args {
+	 *    Arguments for the CTA.
+	 *
 	 *    @type string $upgrade_link Upgrade link URL.
 	 *    @type string $renew_link Renew link URL.
 	 * }

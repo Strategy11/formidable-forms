@@ -4,6 +4,7 @@
  * This page is shown when a Formidable plugin is activated.
  *
  * @since 4.06.02
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,6 +21,7 @@ class FrmSolution {
 	 * Hidden welcome page slug.
 	 *
 	 * @since 4.06.02
+	 * @var string
 	 */
 	protected $page = '';
 
@@ -176,7 +178,7 @@ class FrmSolution {
 		return admin_url( 'index.php?page=' . $this->page );
 	}
 
-	/*
+	/**
 	 * Add page to global settings.
 	 */
 	public function add_settings( $sections ) {
@@ -363,7 +365,7 @@ class FrmSolution {
 				$class .= ' frm_grey disabled';
 			}
 			$steps[ $k ]['button_class'] = $class;
-		}
+		}//end foreach
 
 		return $steps;
 	}
@@ -575,7 +577,7 @@ class FrmSolution {
 			} else {
 				echo '</form>';
 			}
-		}
+		}//end if
 
 		$this->step_bottom( $step );
 	}
@@ -595,7 +597,9 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array  $options
 	 * @param string $importing
+	 * @param string $xml
 	 *
 	 * @psalm-param 'form'|'view' $importing
 	 *

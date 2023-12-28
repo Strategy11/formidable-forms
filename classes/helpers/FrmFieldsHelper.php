@@ -126,7 +126,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $values
+	 * @param array  $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -155,7 +155,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $field_array
+	 * @param array  $field_array
 	 */
 	private static function fill_cleared_strings( $field, array &$field_array ) {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -182,7 +182,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param string $setting
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
 		if ( ! isset( $_POST['field_options'][ $setting ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -205,7 +205,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $values The field array is needed for hooks
+	 * @param array  $values The field array is needed for hooks.
 	 *
 	 * @return array
 	 */
@@ -238,9 +238,9 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $field_array
+	 * @param array  $field_array
 	 * @param object $field
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	private static function prepare_field_options_for_display( &$field_array, $field, $atts ) {
 		$field_obj   = FrmFieldFactory::get_field_object( $field );
@@ -276,8 +276,8 @@ class FrmFieldsHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param $field
-	 * @param $error
+	 * @param object|array|int $field
+	 * @param string           $error
 	 *
 	 * @return string
 	 */
@@ -334,10 +334,10 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param array $fields
-	 * @param array $errors
+	 * @param array  $fields
+	 * @param array  $errors
 	 * @param object $form
-	 * @param $form_action
+	 * @param object $form_action
 	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
@@ -349,7 +349,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $atts
+	 * @param array        $atts
 	 * @param string|array $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
@@ -609,7 +609,7 @@ class FrmFieldsHelper {
 			$length = strlen( $hide_opt );
 			$substr = substr( $observed_value, 0, $length );
 			$m      = 0 === strcasecmp( $substr, $hide_opt );
-		}
+		}//end if
 
 		return $m;
 	}
@@ -675,7 +675,7 @@ class FrmFieldsHelper {
 					break;
 				}
 			}
-		}
+		}//end if
 
 		return $m;
 	}
@@ -821,7 +821,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array $atts - includes entry object
+	 * @param array  $atts  Includes entry object.
 	 * @param string $value
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
@@ -835,7 +835,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
@@ -872,7 +872,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
@@ -890,7 +890,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return null|string
 	 */
@@ -997,7 +997,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param $atts array Includes value, field, and atts
+	 * @param array $atts Includes value, field, and atts.
 	 */
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
@@ -1165,7 +1165,7 @@ class FrmFieldsHelper {
 			}
 
 			return $other_val;
-		}
+		}//end if
 
 		// For checkboxes
 		if ( $field['type'] === 'checkbox' && is_array( $field['value'] ) ) {
@@ -1199,7 +1199,7 @@ class FrmFieldsHelper {
 			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
 				$other_val = reset( $field['value'] );
 			}
-		}
+		}//end if
 
 		return $other_val;
 	}
@@ -1210,9 +1210,9 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.6
 	 *
-	 * @param array $args should include field, opt_key and field name
+	 * @param array   $args Should include field, opt_key and field name.
 	 * @param boolean $other_opt
-	 * @param string $checked
+	 * @param string  $checked
 	 *
 	 * @return array $other_args
 	 */
@@ -1222,7 +1222,7 @@ class FrmFieldsHelper {
 			'value' => '',
 		);
 
-		//Check if this is an "Other" option
+		// Check if this is an "Other" option.
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
 			return $other_args;
 		}
@@ -1256,13 +1256,13 @@ class FrmFieldsHelper {
 	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
-		//Set up name for other field
+		// Set up name for other field
 		$other_args['name'] = str_replace( '[]', '', $args['field_name'] );
 		$other_args['name'] = preg_replace( '/\[' . $args['field']['id'] . '\]$/', '', $other_args['name'] );
 		$other_args['name'] = $other_args['name'] . '[other][' . $args['field']['id'] . ']';
 
-		//Converts item_meta[field_id] => item_meta[other][field_id] and
-		//item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
+		// Converts item_meta[field_id] => item_meta[other][field_id] and
+		// item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
 		if ( FrmField::is_field_with_multiple_values( $args['field'] ) ) {
 			$other_args['name'] .= '[' . $args['opt_key'] . ']';
 		}
@@ -1303,7 +1303,7 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param $args array
+	 * @param array $args
 	 *
 	 * @since 2.0.6
 	 */
@@ -1340,8 +1340,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.08
 	 *
-	 * @param string $type - field type
-	 * @param string $html_id
+	 * @param string         $type    Field type.
+	 * @param string         $html_id
 	 * @param string|boolean $opt_key
 	 *
 	 * @return string $other_id
@@ -1391,7 +1391,7 @@ class FrmFieldsHelper {
 			$replace[]      = 'field_id=\"' . $old . '\"';
 			$replace_with[] = 'field_id=\"' . $new . '\"';
 			unset( $old, $new );
-		}
+		}//end foreach
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
 				if ( is_string( $v ) ) {
@@ -1855,7 +1855,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.03.05
 	 *
-	 * @param int $selector_field_id
+	 * @param int   $selector_field_id
 	 * @param array $selector_args
 	 */
 	public static function display_field_value_selector( $selector_field_id, $selector_args ) {

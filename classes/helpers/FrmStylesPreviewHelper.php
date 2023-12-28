@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesPreviewHelper {
 
 	/**
-	 * @param int $form_id
+	 * @var int $form_id
 	 */
 	private $form_id;
 
@@ -48,8 +48,11 @@ class FrmStylesPreviewHelper {
 	 * @return void
 	 */
 	public function adjust_form_for_preview() {
-		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
-		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
+		// Don't bother including the antispam token in the preview as the form isn't submitted.
+		add_filter( 'frm_run_antispam', '__return_false', 99 );
+
+		// We don't need the honeypot in the preview so leave it out.
+		add_filter( 'frm_run_honeypot', '__return_false' );
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 		$this->add_a_div_class_for_default_label_positions();
@@ -148,7 +151,6 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
 	 * @return string
 	 */
 	public function get_html_for_form_preview() {

@@ -365,7 +365,7 @@ class FrmAddonsController {
 
 			$transient->checked[ $folder ] = $wp_version;
 
-		}
+		}//end foreach
 
 		return $transient;
 	}
@@ -390,7 +390,7 @@ class FrmAddonsController {
 	 *
 	 * @since 3.05
 	 *
-	 * @param string $plugin - the folder/filename.php for a plugin
+	 * @param string $plugin The folder/filename.php for a plugin.
 	 *
 	 * @return bool - True if installed
 	 */
@@ -447,7 +447,7 @@ class FrmAddonsController {
 					);
 				}
 			}
-		}
+		}//end foreach
 
 		return $version_info;
 	}
@@ -456,7 +456,7 @@ class FrmAddonsController {
 	 * Get the action link for an addon that isn't active.
 	 *
 	 * @since 3.06.03
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
@@ -488,14 +488,14 @@ class FrmAddonsController {
 				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
 				'class' => 'frm-activate-addon',
 			);
-		}
+		}//end if
 
 		return $link;
 	}
 
 	/**
 	 * @since 4.09
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array|false
 	 */
 	protected static function get_addon( $plugin ) {
@@ -526,8 +526,8 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array $addons
-	 * @param object $license The FrmAddon object
+	 * @param array  $addons
+	 * @param object $license The FrmAddon object.
 	 *
 	 * @return array
 	 */
@@ -606,7 +606,7 @@ class FrmAddonsController {
 
 			self::set_addon_status( $addon );
 			$addons[ $id ] = $addon;
-		}
+		}//end foreach
 	}
 
 	/**
@@ -967,14 +967,17 @@ class FrmAddonsController {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		self::deactivate_plugin( $plugin, true ); // Deactivate plugin before uninstalling.
+		self::deactivate_plugin( $plugin, true );
+		// Deactivate plugin before uninstalling.
 		$result = delete_plugins( array( $plugin ) );
 
 		if ( is_wp_error( $result ) ) {
-			return $result; // Return the error from delete_plugins.
+			return $result;
+			// Return the error from delete_plugins.
 		}
 
-		return null; // Success.
+		return null;
+		// Success.
 	}
 
 	/**
@@ -983,7 +986,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	protected static function get_current_plugin() {
-		if ( ! isset( self::$plugin ) ) {
+		if ( empty( self::$plugin ) ) {
 			self::$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
 		}
 		return self::$plugin;
@@ -1157,7 +1160,7 @@ class FrmAddonsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param callable $action_callback The specific add-on action to be executed.
+	 * @param callable      $action_callback The specific add-on action to be executed.
 	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
 	 * @return void
 	 */
@@ -1369,13 +1372,16 @@ class FrmAddonsController {
 	/**
 	 * Render a conditional action button for a specified plugin
 	 *
-	 * @param string $plugin
-	 * @param array|string $upgrade_link_args
 	 * @since 4.09
+	 *
+	 * @param string       $plugin
+	 * @param array|string $upgrade_link_args
+	 * @return void
 	 */
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		if ( is_callable( 'FrmProAddonsController::conditional_action_button' ) ) {
-			return FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			return;
 		}
 
 		$addon        = self::get_addon( $plugin );
@@ -1398,14 +1404,20 @@ class FrmAddonsController {
 	 *
 	 * @since 4.09.01
 	 *
-	 * @param array $addon
-	 * @param string|false $license_type
-	 * @param string $plan_required
-	 * @param string $upgrade_link
+	 * @param array $atts {
+	 *     Button attributes.
+	 *
+	 *     @type array $addon
+	 *     @type string|false $license_type
+	 *     @type string $plan_required
+	 *     @type string $upgrade_link
+	 * }
+	 * @return void
 	 */
 	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
-			return FrmProAddonsController::show_conditional_action_button( $atts );
+			FrmProAddonsController::show_conditional_action_button( $atts );
+			return;
 		}
 
 		self::addon_upgrade_link( $atts['addon'], $atts['upgrade_link'] );
@@ -1587,7 +1599,7 @@ class FrmAddonsController {
 	 * @codeCoverageIgnore
 	 *
 	 * @param boolean $return
-	 * @param string $package
+	 * @param string  $package
 	 *
 	 * @return boolean
 	 */

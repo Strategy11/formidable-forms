@@ -11,7 +11,8 @@ class FrmTransLiteAction extends FrmFormAction {
 			// This is 99 in the Payments submodule but Stripe Lite only supports a single action.
 			'limit'    => 1,
 			'active'   => true,
-			'priority' => 45, // After user registration.
+			// After user registration.
+			'priority' => 45,
 			'event'    => array( 'create' ),
 			'color'    => 'var(--green)',
 		);

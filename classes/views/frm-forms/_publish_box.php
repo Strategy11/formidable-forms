@@ -38,7 +38,9 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 				<?php } ?>
 			</ul>
 		</div>
-	<?php } ?>
+		<?php
+	}//end if
+	?>
 </div>
 
 <a id="frm-embed-action" href="#" role="button" class="frm_submit_form frm-button-tertiary frm_button_submit">

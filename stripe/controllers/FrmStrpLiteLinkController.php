@@ -333,6 +333,8 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The details needs to create a payment.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 *     @type WP_Post  $action

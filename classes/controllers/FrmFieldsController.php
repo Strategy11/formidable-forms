@@ -73,7 +73,7 @@ class FrmFieldsController {
 	/**
 	 * Set up and create a new field
 	 *
-	 * @param string $field_type
+	 * @param string  $field_type
 	 * @param integer $form_id
 	 *
 	 * @return array|bool
@@ -141,8 +141,8 @@ class FrmFieldsController {
 	 * @since 3.0
 	 *
 	 * @param int|array|object $field_object
-	 * @param array $values
-	 * @param int $form_id
+	 * @param array            $values
+	 * @param int              $form_id
 	 */
 	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
 		global $frm_vars;
@@ -207,8 +207,9 @@ class FrmFieldsController {
 		wp_die();
 	}
 
-	/* Field Options */
-
+	/**
+	 * Field Options.
+	 */
 	public static function import_options() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -405,7 +406,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $settings
+	 * @param array  $settings
 	 * @param object $field_info
 	 *
 	 * @return array
@@ -915,9 +916,9 @@ class FrmFieldsController {
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 *
-	 * @param int $field_id
+	 * @param int   $field_id
 	 * @param array $values
-	 * @param int $form_id
+	 * @param int   $form_id
 	 *
 	 * @return array
 	 */

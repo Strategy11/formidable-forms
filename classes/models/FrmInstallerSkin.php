@@ -2,6 +2,7 @@
 /**
  * @since 3.04.02
  *
+ * @package     Formidable
  * @subpackage  Upgrader Skin
  */
 

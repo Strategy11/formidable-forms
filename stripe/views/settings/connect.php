@@ -31,5 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php FrmStrpLiteConnectHelper::stripe_icon(); ?> &nbsp;
 			<?php esc_html_e( 'Connect to Stripe', 'formidable' ); ?>
 		</a>
-	<?php } ?>
+		<?php
+	}//end if
+	?>
 </div>

@@ -21,7 +21,9 @@ $include_info = $is_active_style;
 				FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 			}
 			?>
-			<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
+			<?php
+			// The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here.
+			?>
 			<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
 			<?php if ( $include_info ) { ?>
 				<span class="frm-style-card-info">

@@ -94,7 +94,7 @@ if ( $display['conf_field'] ) {
 	</div>
 	<div class="clear"></div>
 	<?php
-}
+}//end if
 
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
 

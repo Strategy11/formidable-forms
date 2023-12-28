@@ -86,6 +86,8 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					<div class="frm_error" role="alert"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </fieldset>

@@ -25,7 +25,7 @@ class FrmDb {
 	/**
 	 * Change array into format $wpdb->prepare can use
 	 *
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $starts_with
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
@@ -51,10 +51,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $base_where
 	 * @param string $where
-	 * @param array $values
+	 * @param array  $values
 	 */
 	public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
 		$condition = ' AND';
@@ -85,14 +85,14 @@ class FrmDb {
 			} else {
 				self::interpret_array_to_sql( $key, $value, $where, $values );
 			}
-		}
+		}//end foreach
 	}
 
 	/**
-	 * @param string $key
+	 * @param string       $key
 	 * @param string|array $value
-	 * @param string $where
-	 * @param array $values
+	 * @param string       $where
+	 * @param array        $values
 	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
@@ -160,7 +160,7 @@ class FrmDb {
 			self::add_query_placeholder( $key, $value, $where );
 
 			$values[] = $value;
-		}
+		}//end if
 	}
 
 	/**
@@ -168,13 +168,14 @@ class FrmDb {
 	 *
 	 * @since 2.02.05
 	 *
-	 * @param string $key
+	 * @param string     $key
 	 * @param int|string $value
-	 * @param string $where
+	 * @param string     $where
 	 */
 	private static function add_query_placeholder( $key, $value, &$where ) {
 		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
-			$value = $value + 0; // switch string to number
+			// Switch string to number.
+			$value = $value + 0;
 			$where .= is_float( $value ) ? '%f' : '%d';
 		} else {
 			$where .= '%s';
@@ -183,8 +184,8 @@ class FrmDb {
 
 	/**
 	 * @param string $table
-	 * @param array $where
-	 * @param array $args
+	 * @param array  $where
+	 * @param array  $args
 	 *
 	 * @return int
 	 */
@@ -196,9 +197,9 @@ class FrmDb {
 
 	/**
 	 * @param string $table
-	 * @param array $where
+	 * @param array  $where
 	 * @param string $field
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $limit
 	 * @param string $type
 	 *
@@ -225,8 +226,8 @@ class FrmDb {
 	 *
 	 * @since 2.03.07
 	 *
-	 * @param array $where
-	 * @param array $args
+	 * @param array  $where
+	 * @param array  $args
 	 * @param string $field
 	 * @param string $type
 	 *
@@ -246,9 +247,9 @@ class FrmDb {
 
 	/**
 	 * @param string $table
-	 * @param array $where
+	 * @param array  $where
 	 * @param string $field
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $limit
 	 *
 	 * @return mixed
@@ -261,9 +262,9 @@ class FrmDb {
 	 * @since 2.0
 	 *
 	 * @param string $table
-	 * @param array $where
+	 * @param array  $where
 	 * @param string $fields
-	 * @param array $args
+	 * @param array  $args
 	 *
 	 * @return mixed
 	 */
@@ -279,9 +280,9 @@ class FrmDb {
 	 * @since 2.0
 	 *
 	 * @param string $table
-	 * @param array $where
+	 * @param array  $where
 	 * @param string $fields
-	 * @param array $args
+	 * @param array  $args
 	 *
 	 * @return mixed
 	 */
@@ -318,7 +319,8 @@ class FrmDb {
 
 		// > and < need a little more work since we don't want them switched to >= and <=
 		if ( $where_is == '>' || $where_is == '<' ) {
-			return ' ' . $where_is . '-'; // the - indicates that the = should not be added later
+			// The - indicates that the = should not be added later.
+			return ' ' . $where_is . '-';
 		}
 
 		// fallback to = if the query is none of these
@@ -402,7 +404,7 @@ class FrmDb {
 	 *
 	 * @param string $columns
 	 * @param string $table
-	 * @param array $where
+	 * @param array  $where
 	 *
 	 * @return mixed
 	 */
@@ -425,8 +427,8 @@ class FrmDb {
 	 *
 	 * @param string $columns
 	 * @param string $table
-	 * @param mixed $where
-	 * @param array $args
+	 * @param mixed  $where
+	 * @param array  $args
 	 *
 	 * @return string
 	 */
@@ -473,7 +475,7 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $term The value to escape
+	 * @param string $term The value to escape.
 	 *
 	 * @return string The escaped value
 	 */
@@ -596,7 +598,7 @@ class FrmDb {
 	/**
 	 * Prepare and save settings in styles and actions
 	 *
-	 * @param array $settings
+	 * @param array  $settings
 	 * @param string $group
 	 *
 	 * @since 2.05.06
@@ -651,10 +653,10 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $cache_key The unique name for this cache
-	 * @param string $group The name of the cache group
-	 * @param string $query If blank, don't run a db call
-	 * @param string $type The wpdb function to use with this query
+	 * @param string $cache_key The unique name for this cache.
+	 * @param string $group     The name of the cache group.
+	 * @param string $query     If blank, don't run a db call.
+	 * @param string $type      The wpdb function to use with this query.
 	 *
 	 * @return mixed $results The cache or query results
 	 */
@@ -728,7 +730,7 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param string $group The name of the cache group
+	 * @param string $group The name of the cache group.
 	 */
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );

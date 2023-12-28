@@ -69,21 +69,21 @@ class FrmFieldUserID extends FrmFieldType {
 			return array();
 		}
 
-		// make sure we have a user ID
+		// Make sure we have a user ID.
 		if ( ! is_numeric( $args['value'] ) ) {
 			$args['value'] = FrmAppHelper::get_user_id_param( $args['value'] );
 			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 		}
 
-		//add user id to post variables to be saved with entry
+		// Add user id to post variables to be saved with entry.
 		$_POST['frm_user_id'] = $args['value'];
 
 		return array();
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts array
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return false|mixed|string
 	 */
@@ -100,7 +100,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
@@ -119,8 +119,8 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return int
 	 */
