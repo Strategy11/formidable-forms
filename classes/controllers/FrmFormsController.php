@@ -310,6 +310,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public static function show_page_preview() {
 		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -532,13 +534,17 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Set the page content for the theme preview page
+	 * Set the page content for the theme preview page.
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $content
+	 * @return string
 	 */
 	public static function preview_content( $content ) {
 		if ( in_the_loop() ) {
-			$content = self::show_page_preview();
+			self::show_page_preview();
+			$content = ''; // Clear the content for the page we're using.
 		}
 
 		return $content;
