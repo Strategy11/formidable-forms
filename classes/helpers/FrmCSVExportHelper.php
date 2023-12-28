@@ -240,7 +240,8 @@ class FrmCSVExportHelper {
 
 	private static function field_headings( $col ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $col );
-		if ( ! empty( $field_type_obj->is_combo_field ) ) { // This is combo field.
+		if ( ! empty( $field_type_obj->is_combo_field ) ) {
+			// This is combo field.
 			return $field_type_obj->get_export_headings();
 		}
 
@@ -269,8 +270,9 @@ class FrmCSVExportHelper {
 
 		foreach ( self::$fields as $col ) {
 			if ( self::is_the_child_of_a_repeater( $col ) ) {
-				$repeater_id                           = $col->field_options['in_section'];
-				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+				$repeater_id = $col->field_options['in_section'];
+				// Set a placeholder to maintain order for repeater fields.
+				$headings[ 'repeater' . $repeater_id ] = array();
 
 				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
 					$fields_by_repeater_id[ $repeater_id ] = array();
@@ -328,7 +330,7 @@ class FrmCSVExportHelper {
 
 			$headings = $flat;
 			unset( $flat );
-		}
+		}//end if
 
 		if ( self::$comment_count ) {
 			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
@@ -434,17 +436,17 @@ class FrmCSVExportHelper {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
 				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					// if the data is here, it should be an array but if this field has collected data
-					// both while inside and outside of the repeating section, it's possible this is a string
+					// both while inside and outside of the repeating section, it's possible this is a string.
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = (array) $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ];
 				}
 
-				//add the repeated values
+				// Add the repeated values.
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
-			}
+			}//end foreach
 
 			self::$entry->metas                              = self::fill_missing_repeater_metas( self::$entry->metas, $entries );
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
-		}
+		}//end if
 
 		// add the embedded form id
 		if ( ! isset( $entries[ self::$entry->parent_item_id ]->embedded_fields ) ) {
@@ -537,7 +539,7 @@ class FrmCSVExportHelper {
 			$row[ $col->id ] = $field_value;
 
 			unset( $col, $field_value );
-		}
+		}//end foreach
 	}
 
 	/**
@@ -643,7 +645,7 @@ class FrmCSVExportHelper {
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
-		}
+		}//end foreach
 		if ( $echo ) {
 			echo "\n";
 		} else {
@@ -662,7 +664,7 @@ class FrmCSVExportHelper {
 			case 'macintosh':
 				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
 				// Reference:
-				//   - http://www.alanwood.net/demos/macroman.html
+				// http://www.alanwood.net/demos/macroman.html.
 				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff );
 				break;
 			case 'ISO-8859-1':

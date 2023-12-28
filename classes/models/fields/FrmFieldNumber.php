@@ -68,7 +68,7 @@ class FrmFieldNumber extends FrmFieldType {
 
 		$this->remove_commas_from_number( $args );
 
-		//validate the number format
+		// Validate the number format.
 		if ( ! is_numeric( $args['value'] ) && '' !== $args['value'] ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
@@ -106,7 +106,8 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	private function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
-			return; // Don't need to check if value is invalid before.
+			// Don't need to check if value is invalid before.
+			return;
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );

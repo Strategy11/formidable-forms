@@ -13,8 +13,9 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->assertTrue( true );
 	}
 
-	/* Back-end tests */
-
+	/**
+	 * Back-end tests
+	 */
 	public function test_menu() {
 		$this->set_admin_screen();
 		$this->set_user_by_role( 'administrator' );

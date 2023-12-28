@@ -39,7 +39,7 @@ foreach ( $type as $tb_type ) {
 	}
 
 	unset( $item_ids, $records[ $tb_type ], $tb_type );
-}
+}//end foreach
 
 /**
  * @since 5.3

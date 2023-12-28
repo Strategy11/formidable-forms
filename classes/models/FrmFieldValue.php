@@ -103,7 +103,8 @@ class FrmFieldValue {
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
-		unset( $atts['class'] ); // This class shouldn't affect values.
+		// This class shouldn't affect values.
+		unset( $atts['class'] );
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
@@ -251,7 +252,7 @@ class FrmFieldValue {
 					)
 				);
 			}
-		}
+		}//end if
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters(

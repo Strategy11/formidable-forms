@@ -230,7 +230,7 @@ class FrmFormsController {
 			}
 
 			return self::get_edit_vars( $id, array(), $message );
-		}
+		}//end if
 	}
 
 	/**
@@ -362,6 +362,11 @@ class FrmFormsController {
 		}
 
 		$random_page = reset( $random_page );
+		if ( ! is_a( $random_page, 'WP_Post' ) ) {
+			// The return type can also be int.
+			return;
+		}
+
 		query_posts(
 			array(
 				'post_type' => 'page',
@@ -379,7 +384,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.5.2
 	 *
-	 * @param WP_Post $post
+	 * @param WP_Post $page The page object.
 	 * @return void
 	 */
 	private static function set_post_global( $page ) {
@@ -555,7 +560,7 @@ class FrmFormsController {
 
 		$params = FrmForm::list_page_params();
 
-		//check nonce url
+		// Check nonce url.
 		check_admin_referer( $status . '_form_' . $params['id'] );
 
 		$count = 0;
@@ -1213,7 +1218,7 @@ class FrmFormsController {
 			}
 
 			$sections[ $key ] = $section;
-		}
+		}//end foreach
 
 		return $sections;
 	}
@@ -1639,7 +1644,7 @@ class FrmFormsController {
 				// Override the action for this page.
 				$action = 'delete_all';
 			}
-		}
+		}//end if
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
@@ -1695,7 +1700,7 @@ class FrmFormsController {
 				self::display_forms_list();
 
 				return;
-		}
+		}//end switch
 	}
 
 	/**
@@ -1763,7 +1768,9 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/reports-info.php';
 	}
 
-	/* FRONT-END FORMS */
+	/**
+	 * FRONT-END FORMS.
+	 */
 	public static function admin_bar_css() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
 			return;
@@ -1953,7 +1960,8 @@ class FrmFormsController {
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
 
-		if ( ! empty( $id ) ) { // form id or key is set
+		if ( ! empty( $id ) ) {
+			// Form id or key is set.
 			$form = FrmForm::getOne( $id );
 			if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
 				$form = false;
@@ -2027,7 +2035,7 @@ class FrmFormsController {
 					)
 				);
 			}
-		}
+		}//end if
 	}
 
 	/**
@@ -2229,7 +2237,8 @@ class FrmFormsController {
 			$action_type = FrmOnSubmitHelper::get_action_type( $action );
 
 			if ( 'redirect' === $action_type ) {
-				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
+				if ( $has_redirect ) {
+					// Do not process because we run the first redirect action only.
 					continue;
 				}
 			}
@@ -2244,7 +2253,7 @@ class FrmFormsController {
 
 			$met_actions[] = $action;
 			unset( $action );
-		}
+		}//end foreach
 
 		$args['event'] = $event;
 
@@ -2435,7 +2444,7 @@ class FrmFormsController {
 			}
 
 			$post = $old_post;
-		}
+		}//end if
 	}
 
 	/**
@@ -2458,12 +2467,14 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
+		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
+			// Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
 		}
 
-		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) {
+			// Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
 				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
@@ -2471,7 +2482,8 @@ class FrmFormsController {
 			}
 
 			wp_redirect( esc_url_raw( $success_url ) );
-			die(); // do not use wp_die or redirect fails
+			// Do not use wp_die or redirect fails.
+			die();
 		}
 
 		// Redirect with a delay.
@@ -2564,7 +2576,8 @@ class FrmFormsController {
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script>';
-		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
+		if ( empty( $args['doing_ajax'] ) ) {
+			// Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
 		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2579,7 +2592,7 @@ class FrmFormsController {
 	 *
 	 * @param string $success_url
 	 * @param string $success_msg
-	 * @param array $args
+	 * @param array  $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
@@ -2918,7 +2931,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.2
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function create_page_with_shortcode() {
 		if ( ! current_user_can( 'publish_posts' ) ) {
@@ -2965,8 +2978,7 @@ class FrmFormsController {
 	/**
 	 * @since 5.3
 	 *
-	 * @param string $content
-	 * @param int    $form_id
+	 * @param int $form_id
 	 * @return string
 	 */
 	private static function get_page_shortcode_content_for_form( $form_id ) {
@@ -2979,7 +2991,7 @@ class FrmFormsController {
 	/**
 	 * Get page dropdown for AJAX request for embedding form in an existing page.
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function get_page_dropdown() {
 		if ( ! current_user_can( 'publish_posts' ) ) {

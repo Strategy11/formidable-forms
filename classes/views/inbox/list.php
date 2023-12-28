@@ -56,7 +56,7 @@ foreach ( $messages as $key => $message ) {
 		</footer>
 	</section>
 	<?php
-}
+}//end foreach
 if ( $has_messages ) {
 	?>
 	<div style="margin:20px"><?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?></div>

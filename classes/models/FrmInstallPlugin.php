@@ -8,7 +8,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmInstallPlugin {
 
-	protected $plugin_file; // format: folder/filename.php
+	/**
+	 * Format: folder/filename.php.
+	 *
+	 * @var string
+	 */
+	protected $plugin_file;
+
+	/**
+	 * @var string
+	 */
 	protected $plugin_slug;
 
 	public function __construct( $atts ) {

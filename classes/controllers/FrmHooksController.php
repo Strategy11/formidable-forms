@@ -176,7 +176,8 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
 		add_action( 'plugins_loaded', 'FrmStylesController::plugins_loaded' );
 		add_action( 'admin_init', 'FrmStylesController::admin_init' );
-		add_action( 'wp_default_styles', 'FrmStylesController::disable_conflicting_wp_admin_css', 11 ); // Use 11 so it happens after add_action( 'wp_default_styles', 'wp_default_styles' ); where edit.css is added.
+		// Use 11 so it happens after add_action( 'wp_default_styles', 'wp_default_styles' ); where edit.css is added.
+		add_action( 'wp_default_styles', 'FrmStylesController::disable_conflicting_wp_admin_css', 11 );
 
 		// XML Controller.
 		add_action( 'admin_menu', 'FrmXMLController::menu', 41 );
@@ -187,7 +188,8 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
 		// Applications Controller.
-		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 ); // Use the same priority as styles so Applications appear directly under Styles.
+		// Use the same priority as styles so Applications appear directly under Styles.
+		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 );
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
@@ -276,7 +278,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
 
 		// Submit with AJAX.
-		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 ); // Trigger before process_entry.
+		// Trigger before process_entry.
+		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 );
 	}
 
 	/**

@@ -66,7 +66,8 @@ class FrmUsage {
 
 		$snap = array(
 			'uuid'           => $this->uuid(),
-			'admin_email'    => '', // Let's keep it anonymous.
+			// Let's keep it anonymous.
+			'admin_email'    => '',
 			'wp_version'     => $wp_version,
 			'php_version'    => phpversion(),
 			'mysql_version'  => $wpdb->db_version(),
@@ -157,8 +158,6 @@ class FrmUsage {
 	 * Include the permissions settings for each capability.
 	 *
 	 * @since 3.06.04
-	 *
-	 * @return array
 	 *
 	 * @param FrmSettings $settings_list
 	 * @return array

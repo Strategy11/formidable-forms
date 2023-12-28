@@ -41,7 +41,7 @@ if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
 	?>
 </div>
 	<?php
-}
+}//end if
 
 if ( isset( $include_extra_container ) ) {
 	?>

@@ -46,7 +46,7 @@ class FrmFormState {
 	 * @return bool true if just initialized.
 	 */
 	private static function maybe_initialize() {
-		if ( ! isset( self::$instance ) ) {
+		if ( empty( self::$instance ) ) {
 			self::$instance = new self();
 			return true;
 		}

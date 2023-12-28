@@ -38,7 +38,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 		</ul>
 	</div>
 	<?php
-}
+}//end if
 
 if ( ! empty( $warnings ) && is_array( $warnings ) ) {
 	?>

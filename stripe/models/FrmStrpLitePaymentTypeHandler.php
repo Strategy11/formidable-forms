@@ -69,7 +69,8 @@ class FrmStrpLitePaymentTypeHandler {
 
 		if ( ! is_array( $payment_method_types ) ) {
 			_doing_it_wrong( __FUNCTION__, 'Payment method types should be an array or the string "automatic". All other values are invalid.', '3.1' );
-			$payment_method_types = array(); // Fallback to automatic when an invalid value is used.
+			// Fallback to automatic when an invalid value is used.
+			$payment_method_types = array();
 		}
 
 		return $payment_method_types;

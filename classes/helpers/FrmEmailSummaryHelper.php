@@ -65,7 +65,8 @@ class FrmEmailSummaryHelper {
 		$options = get_option( self::$option_name );
 		if ( ! $options ) {
 			$default_options = array(
-				'last_' . self::MONTHLY => self::get_date_from_today( '-' . self::DELAY_AFTER_UPGRADE . ' days' ), // Do not send email within 15 days after updating.
+				// Do not send email within 15 days after updating.
+				'last_' . self::MONTHLY => self::get_date_from_today( '-' . self::DELAY_AFTER_UPGRADE . ' days' ),
 				'last_' . self::YEARLY  => '',
 				'renewal_date'          => '',
 			);
@@ -293,7 +294,8 @@ class FrmEmailSummaryHelper {
 		return FrmDb::get_count(
 			'frm_items',
 			array(
-				'created_at >' => $from_date, // The `=` is added after `>` in the query.
+				// The `=` is added after `>` in the query.
+				'created_at >' => $from_date,
 				'created_at <' => $to_date . ' 23:59:59',
 				'is_draft'     => 0,
 			)
@@ -344,7 +346,8 @@ class FrmEmailSummaryHelper {
 
 		$displayed_value = round( $diff * 100 );
 		if ( ! $displayed_value ) {
-			$displayed_value = $diff > 0 ? 1 : -1; // Do not show 0 value.
+			// Do not show 0 value.
+			$displayed_value = $diff > 0 ? 1 : -1;
 		}
 
 		printf(
@@ -408,7 +411,7 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Gets Formidable URL with tracking params.
 	 *
-	 * @param string $url  The URL.
+	 * @param string       $url  The URL.
 	 * @param string|array $args Custom tracking args if is array, or `utm_content` if is string.
 	 * @return string
 	 */

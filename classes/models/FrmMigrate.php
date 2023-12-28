@@ -43,7 +43,7 @@ class FrmMigrate {
 			$this->create_tables();
 			$this->migrate_data( $old_db_version );
 
-			/***** SAVE DB VERSION *****/
+			// SAVE DB VERSION.
 			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 
 			if ( ! $old_db_version ) {

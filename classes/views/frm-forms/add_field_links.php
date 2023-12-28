@@ -102,10 +102,10 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 		<?php
 	} else {
 		FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
-	}
+	}//end if
 
 	unset( $field_key, $field_type, $field_label );
-}
+}//end foreach
 ?>
 			</ul>
 			<div class="clear"></div>
@@ -127,7 +127,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 		</div>
 		<?php do_action( 'frm_extra_form_instructions' ); ?>
 
-		<div id="frm-options-panel" class="frm-p-6 tabs-panel frm_hidden">
+		<div id="frm-options-panel" class="tabs-panel frm_hidden">
 			<div class="frm-single-settings">
 				<div class="frm-embed-field-placeholder">
 					<div class="frm-embed-message">

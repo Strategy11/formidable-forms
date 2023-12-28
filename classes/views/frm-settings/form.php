@@ -57,7 +57,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 										do_action( 'frm_' . $section['anchor'] . '_form', $frm_settings );
 										?>
 									</div>
-								<?php } ?>
+									<?php
+								}//end foreach
+								?>
 				</div>
 			</div>
 		</div>

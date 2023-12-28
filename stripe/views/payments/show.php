@@ -128,12 +128,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 										?>
 									</table>
 									<br/>
-								<?php } ?>
+									<?php
+								}//end foreach
+								?>
 
 								</td>
 							</tr>
 								<?php
-							}
+							}//end if
 							?>
 						</tbody>
 						</table>

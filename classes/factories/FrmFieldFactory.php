@@ -13,7 +13,7 @@ class FrmFieldFactory {
 	 *
 	 * @since 2.03.05
 	 *
-	 * @param int $field_id
+	 * @param int   $field_id
 	 * @param array $args
 	 *
 	 * @return FrmFieldValueSelector
@@ -65,7 +65,7 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param string $field_type
+	 * @param string           $field_type
 	 * @param int|array|object $field
 	 *
 	 * @return stdClass
@@ -126,6 +126,7 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $type
 	 * @param string $property
 	 */
 	public static function field_has_property( $type, $property ) {

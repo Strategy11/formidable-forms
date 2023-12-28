@@ -48,10 +48,10 @@ class FrmCreateFile {
 		if ( $this->has_permission ) {
 			$dirs_exist = true;
 
-			// Create the directories if need be
+			// Create the directories if need be.
 			$this->create_directories( $dirs_exist );
 
-			// only write the file if the folders exist
+			// Only write the file if the folders exist.
 			if ( $dirs_exist ) {
 				global $wp_filesystem;
 				$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
@@ -82,7 +82,7 @@ class FrmCreateFile {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $file_names And array of file paths
+	 * @param array $file_names And array of file paths.
 	 *
 	 * @return void
 	 */
@@ -204,12 +204,13 @@ class FrmCreateFile {
 		$credentials['username'] = defined( 'FTP_USER' ) ? FTP_USER : $credentials['username'];
 		$credentials['password'] = defined( 'FTP_PASS' ) ? FTP_PASS : '';
 
-		// Check to see if we are setting the public/private keys for ssh
+		// Check to see if we are setting the public/private keys for ssh.
 		$credentials['public_key']  = defined( 'FTP_PUBKEY' ) ? FTP_PUBKEY : '';
 		$credentials['private_key'] = defined( 'FTP_PRIKEY' ) ? FTP_PRIKEY : '';
 
-		// Sanitize the hostname, Some people might pass in odd-data:
-		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] ); //Strip any schemes off
+		// Sanitize the hostname, Some people might pass in odd-data.
+		// Strip any schemes off.
+		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] );
 
 		if ( strpos( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
@@ -223,10 +224,10 @@ class FrmCreateFile {
 		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
 			$credentials['connection_type'] = 'ssh';
 		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
-			//Only the FTP Extension understands SSL
+			// Only the FTP Extension understands SSL.
 			$credentials['connection_type'] = 'ftps';
 		} elseif ( ! isset( $credentials['connection_type'] ) ) {
-			//All else fails (And it's not defaulted to something else saved), Default to FTP
+			// All else fails (And it's not defaulted to something else saved), Default to FTP.
 			$credentials['connection_type'] = 'ftp';
 		}
 
@@ -235,7 +236,7 @@ class FrmCreateFile {
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
 			if ( ! empty( $stored_credentials['port'] ) ) {
-				//save port as part of hostname to simplify above code.
+				// Save port as part of hostname to simplify above code.
 				$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
 			}
 

@@ -119,11 +119,11 @@ class FrmSettingsController {
 					'class'    => 'FrmAddonsController',
 					'function' => 'license_settings',
 					'name'     => __( 'Plugin Licenses', 'formidable' ),
-					'icon'     => 'frm_icon_font frm_keyalt_icon',
+					'icon'     => 'frmfont frm_key_icon',
 					'ajax'     => true,
 				);
 			}
-		}
+		}//end if
 
 		/**
 		 * @param array<array> $sections
@@ -159,7 +159,7 @@ class FrmSettingsController {
 			}
 
 			$sections[ $key ] = $section;
-		}
+		}//end foreach
 
 		return $sections;
 	}
@@ -203,7 +203,7 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string $more_html
+	 * @param string      $more_html
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {

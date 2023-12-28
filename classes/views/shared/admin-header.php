@@ -38,7 +38,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	</div>
 	<ul class="frm_form_nav"></ul>
 		<?php
-	}
+	}//end if
 
 	if ( isset( $atts['nav'] ) ) {
 		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

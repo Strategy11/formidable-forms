@@ -3,7 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-// add post action
+/**
+ * Add post action.
+ */
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_wordpress_icon frm-inverse frm_show_upgrade' );
@@ -13,7 +15,9 @@ class FrmDefPostAction extends FrmFormAction {
 	}
 }
 
-// add register action
+/**
+ * Add register action.
+ */
 class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops           = FrmFormAction::default_action_opts( 'frm_register_icon frm_show_upgrade' );
@@ -23,7 +27,9 @@ class FrmDefRegAction extends FrmFormAction {
 	}
 }
 
-// add paypal action
+/**
+ * Add paypal action.
+ */
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_paypal_icon frm-inverse frm_show_upgrade' );
@@ -33,7 +39,9 @@ class FrmDefPayPalAction extends FrmFormAction {
 	}
 }
 
-// add quiz action
+/**
+ * Add quiz action.
+ */
 class FrmDefQuizAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops           = FrmFormAction::default_action_opts( 'frm_percent_icon frm_quiz_icon frm_show_upgrade' );
@@ -42,7 +50,9 @@ class FrmDefQuizAction extends FrmFormAction {
 	}
 }
 
-// add quiz outcome action
+/**
+ * Add quiz outcome action.
+ */
 class FrmDefQuizOutcomeAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops           = FrmFormAction::default_action_opts( 'frm_check1_icon frm_quiz_icon frm_show_upgrade' );
@@ -51,7 +61,9 @@ class FrmDefQuizOutcomeAction extends FrmFormAction {
 	}
 }
 
-// add aweber action
+/**
+ * Add aweber action.
+ */
 class FrmDefAweberAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_aweber_icon frm_show_upgrade' );
@@ -60,7 +72,9 @@ class FrmDefAweberAction extends FrmFormAction {
 	}
 }
 
-// add mailchimp action
+/**
+ * Add mailchimp action.
+ */
 class FrmDefMlcmpAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_mailchimp_icon frm_show_upgrade frm-inverse' );
@@ -70,7 +84,9 @@ class FrmDefMlcmpAction extends FrmFormAction {
 	}
 }
 
-// add zapier action
+/**
+ * Add zapier action.
+ */
 class FrmDefZapierAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_zapier_icon frm_show_upgrade' );
@@ -79,7 +95,9 @@ class FrmDefZapierAction extends FrmFormAction {
 	}
 }
 
-// add twilio action
+/**
+ * Add twilio action.
+ */
 class FrmDefTwilioAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_sms_icon frm_show_upgrade' );
@@ -158,7 +176,9 @@ class FrmDefApiAction extends FrmFormAction {
 	}
 }
 
-// add google sheets
+/**
+ * Add google sheets.
+ */
 class FrmDefGoogleSpreadsheetAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_googlesheets_icon frm_show_upgrade' );

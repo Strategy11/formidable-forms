@@ -80,7 +80,7 @@ class FrmStrpLiteEventsController {
 			if ( ! $is_partial_refund ) {
 				$run_triggers = true;
 			}
-		}
+		}//end if
 
 		if ( $run_triggers && $payment && $payment->action_id ) {
 			FrmTransLiteActionsController::trigger_payment_status_change(
@@ -258,7 +258,7 @@ class FrmStrpLiteEventsController {
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
 		if ( ! $sub ) {
-			// If this isn't an existing subscription, it must be a charge for another site/plugin
+			// If this isn't an existing subscription, it must be a charge for another site/plugin.
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
 			echo json_encode(
 				array(
