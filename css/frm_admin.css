@@ -2413,6 +2413,7 @@ h2.frm-h2 + .howto {
 .frm-addon-installed .frm-deactivate-addon,
 .frm-addon-active  .frm-activate-addon,
 .frm-addon-active  .frm-install-addon,
+.frm-addon-active .frm-uninstall-addon,
 .plugin-card-pro.frm-addon-active .button {
 	display: none !important;
 }
