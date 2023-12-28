@@ -281,7 +281,7 @@ legend.frm_hidden{
 .frm_form_fields_error_style,
 .with_frm_style .frm-card-element.StripeElement,
 .with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .-single .chosen-single{
+.with_frm_style .chosen-container-single .chosen-single{
 	background-image:none !important;
 }
 <?php } ?>
