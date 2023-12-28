@@ -1119,7 +1119,7 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.02
 	 *
-	 * @param string $installed The plugin folder name with file name
+	 * @param string $installed The plugin folder name with file name.
 	 */
 	protected static function maybe_activate_addon( $installed ) {
 		self::ajax_activate_addon();
@@ -1185,8 +1185,8 @@ class FrmAddonsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $installed The plugin folder name with file name
-	 * @param string $action The action type ('activate', 'deactivate', 'uninstall')
+	 * @param string $installed The plugin folder name with file name.
+	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
 	 * @return void|array
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
