@@ -26,7 +26,6 @@ namespace {
 	class FrmProSettings extends FrmSettings {
 	}
 	class FrmProApplicationsHelper {
-		public static function get_required_templates_capability() {}
 		public static function get_custom_applications_capability() {}
 	}
 	class FrmProFileImport {
@@ -115,8 +114,8 @@ namespace {
 	function load_formidable_pro() {
 	}
 	/**
-	* @return WPMailSMTP\Core
-	*/
+	 * @return WPMailSMTP\Core
+	 */
 	function wp_mail_smtp() {
 	}
 	/**

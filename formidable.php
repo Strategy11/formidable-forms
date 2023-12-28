@@ -1,13 +1,15 @@
 <?php
-/*
-Plugin Name: Formidable Forms
-Description: Quickly and easily create drag-and-drop forms
-Version: 6.7
-Plugin URI: https://formidableforms.com/
-Author URI: https://formidableforms.com/
-Author: Strategy11 Form Builder Team
-Text Domain: formidable
-*/
+/**
+ * Plugin Name: Formidable Forms
+ * Description: Quickly and easily create drag-and-drop forms
+ * Version: 6.7
+ * Plugin URI: https://formidableforms.com/
+ * Author URI: https://formidableforms.com/
+ * Author: Strategy11 Form Builder Team
+ * Text Domain: formidable
+ *
+ * @package Formidable
+ */
 
 /*
 	Copyright 2010  Formidable Forms
@@ -48,19 +50,19 @@ function load_formidable_forms() {
 	FrmHooksController::trigger_load_hook();
 }
 
-// if __autoload is active, put it on the spl_autoload stack
+// If __autoload is active, put it on the spl_autoload stack.
 if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions(), true ) ) {
 	spl_autoload_register( '__autoload' );
 }
 
-// Add the autoloader
+// Add the autoloader.
 spl_autoload_register( 'frm_forms_autoloader' );
 
 /**
  * @return void
  */
 function frm_forms_autoloader( $class_name ) {
-	// Only load Frm classes here
+	// Only load Frm classes here.
 	if ( ! preg_match( '/^Frm.+$/', $class_name ) || preg_match( '/^FrmPro.+$/', $class_name ) ) {
 		return;
 	}

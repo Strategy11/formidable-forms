@@ -140,7 +140,8 @@ class FrmFormTemplatesController {
 	public static function load_admin_hooks() {
 		self::init_template_resources();
 
-		add_action( 'admin_menu', __CLASS__ . '::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
+		// Use the same priority as Applications so Form Templates appear directly under Applications.
+		add_action( 'admin_menu', __CLASS__ . '::menu', 14 );
 		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
 		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
 
@@ -241,7 +242,7 @@ class FrmFormTemplatesController {
 			if ( $expired ) {
 				$view_parts[] = 'modals/renew-account-modal.php';
 			}
-		}
+		}//end if
 
 		// Check if the current page is the form builder page.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -488,8 +489,10 @@ class FrmFormTemplatesController {
 
 			// Mark the template as favorite if it's in the favorite templates list.
 			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'], true );
-		}
-		unset( $template ); // Unset the reference `$template` variable.
+		}//end foreach
+
+		// Unset the reference `$template` variable.
+		unset( $template );
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
@@ -517,7 +520,8 @@ class FrmFormTemplatesController {
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
 				'name'  => __( 'Available Templates', 'formidable' ),
-				'count' => 0, // Assigned via JavaScript.
+				// Assigned via JavaScript.
+				'count' => 0,
 			);
 		}
 		$special_categories['all-templates']  = array(
@@ -526,7 +530,8 @@ class FrmFormTemplatesController {
 		);
 		$special_categories['free-templates'] = array(
 			'name'  => __( 'Free Templates', 'formidable' ),
-			'count' => 0, // Assigned via JavaScript.
+			// Assigned via JavaScript.
+			'count' => 0,
 		);
 
 		self::$categories = array_merge(
@@ -644,7 +649,8 @@ class FrmFormTemplatesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array(
 			'wp-i18n',
-			'wp-hooks', // This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			// This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			'wp-hooks',
 			'formidable_dom',
 		);
 

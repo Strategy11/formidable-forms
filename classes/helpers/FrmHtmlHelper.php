@@ -17,7 +17,9 @@ class FrmHtmlHelper {
 	 * @param string $id
 	 * @param string $name
 	 * @param array  $args {
-	 *     @param bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
+	 *     Any extra arguments.
+	 *
+	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
 	 * @return string|void

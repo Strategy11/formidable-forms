@@ -5,16 +5,68 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormAction {
 
-	public $id_base;         // Root id for all actions of this type.
-	public $name;            // Name for this action type.
-	public $option_name;
-	public $action_options;  // Option array passed to wp_register_sidebar_widget()
-	public $control_options; // Option array passed to wp_register_widget_control()
+	/**
+	 * Root id for all actions of this type.
+	 *
+	 * @var string
+	 */
+	public $id_base;
 
-	public $form_id;         // The ID of the form to evaluate
-	public $number = false;  // Unique ID number of the current instance.
-	public $id = '';         // Unique ID string of the current instance (id_base-number)
-	public $updated = false; // Set true when we update the data after a POST submit - makes sure we don't do it twice.
+	/**
+	 * Name for this action type.
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * Name of the option used to store the settings for this action type.
+	 *
+	 * @var string
+	 */
+	public $option_name;
+
+	/**
+	 * Option array passed to wp_register_sidebar_widget().
+	 *
+	 * @var array
+	 */
+	public $action_options;
+
+	/**
+	 * Option array passed to wp_register_widget_control().
+	 *
+	 * @var array
+	 */
+	public $control_options;
+
+	/**
+	 * The ID of the form to evaluate.
+	 *
+	 * @var int
+	 */
+	public $form_id;
+
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @var int
+	 */
+	public $number = false;
+
+	/**
+	 * Unique ID string of the current instance (id_base-number).
+	 *
+	 * @var string
+	 */
+	public $id = '';
+
+	/**
+	 * Set true when we update the data after a POST submit - makes sure we don't do it twice.
+	 *
+	 * @var bool
+	 */
+	public $updated = false;
 
 	// Member functions that you must over-ride.
 
@@ -23,8 +75,8 @@ class FrmFormAction {
 	 * The newly calculated value of $instance should be returned.
 	 * If "false" is returned, the instance won't be saved/updated.
 	 *
-	 * @param array $new_instance New settings for this instance as input by the user via form()
-	 * @param array $old_instance Old settings for this instance
+	 * @param array $new_instance New settings for this instance as input by the user via form().
+	 * @param array $old_instance Old settings for this instance.
 	 *
 	 * @return array Settings to save or bool false to cancel saving
 	 */
@@ -35,7 +87,7 @@ class FrmFormAction {
 	/**
 	 * Echo the settings update form
 	 *
-	 * @param WP_Post $instance Current settings
+	 * @param WP_Post $instance Current settings.
 	 * @param array   $args
 	 */
 	public function form( $instance, $args = array() ) {
@@ -70,12 +122,12 @@ class FrmFormAction {
 	 * @param string $id_base Optional Base ID for the widget, lower case,
 	 * if left empty a portion of the widget's class name will be used. Has to be unique.
 	 * @param string $name Name for the widget displayed on the configuration page.
-	 * @param array $action_options Optional Passed to wp_register_sidebar_widget()
-	 *   - description: shown on the configuration page
-	 *   - classname
-	 * @param array $control_options Optional Passed to wp_register_widget_control()
-	 *   - width: required if more than 250px
-	 *   - height: currently not used but may be needed in the future
+	 * @param array  $action_options Optional Passed to wp_register_sidebar_widget().
+	 *    - description: shown on the configuration page.
+	 *    - classname.
+	 * @param array  $control_options Optional Passed to wp_register_widget_control().
+	 *    - width: required if more than 250px.
+	 *    - height: currently not used but may be needed in the future.
 	 */
 	public function __construct( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -137,7 +189,7 @@ class FrmFormAction {
 	/**
 	 * Help to switch old field id by new field id for duplicate form
 	 *
-	 * @param  string $action id of the field that needs to be switched
+	 * @param string $action id of the field that needs to be switched.
 	 *
 	 * @return string
 	 */
@@ -178,7 +230,7 @@ class FrmFormAction {
 	 *
 	 * This function should be used in form() methods to create name attributes for fields to be saved by update()
 	 *
-	 * @param string $field_name Field name
+	 * @param string $field_name Field name.
 	 *
 	 * @return string Name attribute for $field_name
 	 */
@@ -195,7 +247,7 @@ class FrmFormAction {
 	 *
 	 * This function should be used in form() methods to create id attributes for fields to be saved by update()
 	 *
-	 * @param string $field_name Field name
+	 * @param string $field_name Field name.
 	 *
 	 * @return string ID attribute for $field_name
 	 */
@@ -272,7 +324,8 @@ class FrmFormAction {
 		}
 	}
 
-	/* Check if imported action should be created or updated
+	/**
+	 * Check if imported action should be created or updated.
 	 *
 	 * @since 2.0
 	 *
@@ -348,7 +401,7 @@ class FrmFormAction {
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
-		}
+		}//end if
 
 		return $action;
 	}
@@ -413,7 +466,6 @@ class FrmFormAction {
 			 * @param array $instance The current widget instance's settings.
 			 * @param array $new_instance Array of new widget settings.
 			 * @param array $old_instance Array of old widget settings.
-			 * @param WP_Widget $this The current widget instance.
 			 */
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
@@ -427,7 +479,7 @@ class FrmFormAction {
 			$action_ids[] = $this->save_settings( $instance );
 
 			$this->updated = true;
-		}
+		}//end foreach
 
 		return $action_ids;
 	}
@@ -810,7 +862,7 @@ class FrmFormAction {
 			}
 
 			$met[ $stop ] = $stop;
-		}
+		}//end foreach
 
 		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
 			$stop = ( $notification['conditions']['send_stop'] == 'send' );
@@ -856,7 +908,7 @@ class FrmFormAction {
 	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
-	 * @param int $field_id
+	 * @param int    $field_id
 	 *
 	 * @return array|bool|mixed|string
 	 */

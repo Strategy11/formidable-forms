@@ -196,7 +196,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 									?>
 								</td>
 							</tr>
-						<?php } ?>
+							<?php
+						}//end foreach
+						?>
 					</tbody>
 				</table>
 			</div>

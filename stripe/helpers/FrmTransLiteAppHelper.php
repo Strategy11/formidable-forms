@@ -132,7 +132,8 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @param string $note
+	 * @param array|string $meta_value
+	 * @param string       $note
 	 *
 	 * @return array
 	 */
@@ -147,7 +148,7 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param string $option
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
@@ -179,7 +180,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Allow entry values, default values, and other shortcodes
 	 *
-	 * @param array $atts - Includes value (required), form, entry
+	 * @param array $atts Includes value (required), form, entry.
 	 * @return string|int
 	 */
 	public static function process_shortcodes( $atts ) {
@@ -249,7 +250,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param string $value
-	 * @param int $number
+	 * @param int    $number
 	 * @return string
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {

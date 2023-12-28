@@ -71,7 +71,7 @@ class FrmStrpLiteAuth {
 		ob_end_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
-		if ( $intent_is_processing && isset( $filter ) ) {
+		if ( $intent_is_processing ) {
 			remove_filter( 'frm_content', $filter );
 		}
 
@@ -351,8 +351,8 @@ class FrmStrpLiteAuth {
 				}
 
 				FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'amount' => $amount ) );
-			}
-		}
+			}//end foreach
+		}//end foreach
 	}
 
 	/**
@@ -465,7 +465,7 @@ class FrmStrpLiteAuth {
 				'id'     => $intent->client_secret,
 				'action' => $action->ID,
 			);
-		}
+		}//end foreach
 
 		return $intents;
 	}
@@ -481,7 +481,8 @@ class FrmStrpLiteAuth {
 	private static function create_intent( $action ) {
 		$amount = $action->post_content['amount'];
 		if ( $amount == '000' ) {
-			$amount = 100; // Create the intent when the form loads.
+			// Create the intent when the form loads.
+			$amount = 100;
 		}
 
 		if ( 'recurring' === $action->post_content['type'] ) {
@@ -588,6 +589,8 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The form and entry details.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 * }

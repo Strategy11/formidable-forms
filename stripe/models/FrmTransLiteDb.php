@@ -91,7 +91,7 @@ class FrmTransLiteDb {
 
 		dbDelta( $sql );
 
-		/***** SAVE DB VERSION *****/
+		// SAVE DB VERSION.
 		update_option( $this->db_opt_name, $this->db_version );
 
 		$this->migrate_data( $old_db_version );

@@ -344,8 +344,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 		<?php } ?>
 }
 		<?php
-	}
-}
+	}//end if
+}//end if
 ?>
 
 .<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,

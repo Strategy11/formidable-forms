@@ -15,7 +15,8 @@ class FrmEntriesAJAXSubmitController {
 	 * @return void
 	 */
 	public static function ajax_create() {
-		self::fix_woocommerce_conflict(); // This is called before we exit early to cover the conflict in Pro as well.
+		// This is called before we exit early to cover the conflict in Pro as well.
+		self::fix_woocommerce_conflict();
 
 		if ( is_callable( 'FrmProEntriesController::ajax_create' ) ) {
 			// Let Pro handle AJAX Submit if it's available.
@@ -100,7 +101,7 @@ class FrmEntriesAJAXSubmitController {
 					'class'    => FrmFormsHelper::form_error_class(),
 				)
 			);
-		}
+		}//end if
 
 		$response = self::check_for_failed_form_submission( $response, $form->id );
 

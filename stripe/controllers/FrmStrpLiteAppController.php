@@ -179,7 +179,8 @@ class FrmStrpLiteAppController {
 		global $frm_vars;
 		$frm_vars['created_entries'][ $form_id ]['errors'] = $errors;
 
-		$_POST[ 'frm_page_order_' . $form_id ] = true; // Set to true to get FrmProFieldsHelper::get_page_with_error() run
+		// Set to true to get FrmProFieldsHelper::get_page_with_error() run.
+		$_POST[ 'frm_page_order_' . $form_id ] = true;
 
 		if ( ! $save_draft ) {
 			// If draft saving is not on, delete the entry.

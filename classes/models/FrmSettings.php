@@ -76,7 +76,8 @@ class FrmSettings {
 	}
 
 	private function translate_settings( $settings ) {
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) {
+			// Workaround for W3 total cache conflict.
 			return unserialize( serialize( $settings ) );
 		}
 
@@ -88,7 +89,8 @@ class FrmSettings {
 		}
 
 		// If unserializing didn't work
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) {
+			// Workaround for W3 total cache conflict.
 			$settings = unserialize( serialize( $settings ) );
 		} else {
 			$settings = $this;
@@ -128,7 +130,8 @@ class FrmSettings {
 
 			'email_to'         => '[admin_email]',
 			'no_ips'           => 0,
-			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
+			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
+			'custom_header_ip' => false,
 			'tracking'         => FrmAppHelper::pro_is_installed(),
 			'summary_emails'   => 1,
 			'summary_emails_recipients' => '[admin_email]',

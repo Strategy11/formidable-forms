@@ -241,7 +241,7 @@ class FrmFormActionsController {
 			if ( $requires && 'free' !== $requires ) {
 				$data['data-requires'] = $requires;
 			}
-		}
+		}//end if
 
 		// HTML to include on the icon.
 		$icon_atts = array();
@@ -543,7 +543,7 @@ class FrmFormActionsController {
 			$action_priority[ $action->ID ] = $link_settings[ $action->post_excerpt ]->action_options['priority'];
 
 			unset( $action );
-		}
+		}//end foreach
 
 		if ( ! empty( $stored_actions ) ) {
 			asort( $action_priority );

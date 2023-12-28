@@ -14,7 +14,8 @@ $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
 $sidebar_params    = array(
 	'id'    => 'frm_style_sidebar',
-	'class' => 'frm-right-panel frm-p-6 frm_wrap', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	// Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	'class' => 'frm-right-panel frm-p-6 frm_wrap',
 );
 $toggle_input_html = array();
 if ( $globally_disabled ) {
@@ -38,7 +39,9 @@ if ( $globally_disabled ) {
 		$trigger_params['data-image']   = 'styles-upsell.svg';
 	}
 	?>
-	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
+	<?php
+	// This form isn't visible. It's just used for assigning the selected style id to the target form.
+	?>
 	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $enabled ? $active_style->ID : 0 ); ?>" />
 		<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />

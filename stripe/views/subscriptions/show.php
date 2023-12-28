@@ -105,7 +105,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</td>
 								</tr>
 									<?php
-								}
+								}//end if
 								?>
 							</tbody>
 						</table>

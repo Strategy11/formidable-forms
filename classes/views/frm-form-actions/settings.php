@@ -71,11 +71,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</a>
 					</li>
 				<?php
-			}
+			}//end foreach
 			?>
 		</ul>
 		<?php
-	}
+	}//end foreach
 	?>
 	<div class="clear"></div>
 	<a href="#" id="frm-show-groups">

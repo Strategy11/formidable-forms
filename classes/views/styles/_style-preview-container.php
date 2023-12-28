@@ -21,7 +21,10 @@ if ( $sample_form_is_on ) {
 		// If a $message, $warnings, or $notes variable are not empty, it will be rendered here.
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 		?>
-		<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
+		<?php
+		// If Pro is not active, this will show an upsell.
+		FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' );
+		?>
 		<div id="frm_broken_styles_warning" class="frm_warning_style">
 			<?php esc_html_e( 'One or more of your style settings may contain invalid characters that break form styling.', 'formidable' ); ?>
 		</div>
@@ -31,7 +34,9 @@ if ( $sample_form_is_on ) {
 			echo $target_form_preview_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
-		<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this and is hidden by default. ?>
+		<?php
+		// Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this and is hidden by default.
+		?>
 		<div id="frm_sample_form">
 			<?php
 			$frm_settings = FrmAppHelper::get_settings();

@@ -26,7 +26,7 @@ abstract class FrmValidate {
 	 * @return object $form
 	 */
 	protected function get_form() {
-		if ( ! isset( $this->form ) ) {
+		if ( empty( $this->form ) ) {
 			$this->form = FrmForm::getOne( $this->form_id );
 		}
 		return $this->form;

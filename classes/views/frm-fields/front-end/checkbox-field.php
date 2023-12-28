@@ -34,7 +34,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		 */
 		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field' ) );
 
-		$checked = ''; // init
+		// init.
+		$checked = '';
+
 		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 			// Let the checked state of 'Other' fields be determined solely by FrmFieldsHelper::prepare_other_input as below.
 			// Without this check, one 'Other' field being checked leads to making all 'Other' fields checked on submit error
@@ -86,5 +88,5 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?></div>
 <?php
 		++$option_index;
-	}
-}
+	}//end foreach
+}//end if

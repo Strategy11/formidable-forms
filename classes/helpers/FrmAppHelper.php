@@ -4,9 +4,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version     = 100; // Version of the database we are moving to.
-	public static $pro_db_version = 37; //deprecated
-	public static $font_version   = 7;
+	/**
+	 * Version of the database we are moving to.
+	 *
+	 * @var int
+	 */
+	public static $db_version = 100;
+
+	/**
+	 * Deprecated.
+	 *
+	 * @var int
+	 */
+	public static $pro_db_version = 37;
+
+	/**
+	 * @var float
+	 */
+	public static $font_version = 7;
 
 	/**
 	 * @var bool $added_gmt_offset_filter
@@ -27,8 +42,6 @@ class FrmAppHelper {
 
 	/**
 	 * @since 1.07.02
-	 *
-	 * @param none
 	 *
 	 * @return string The version of this plugin
 	 */
@@ -267,7 +280,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $page The name of the page to check
+	 * @param string $page The name of the page to check.
 	 *
 	 * @return boolean
 	 */
@@ -314,8 +327,6 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_preview_page() {
@@ -329,8 +340,6 @@ class FrmAppHelper {
 	 * Check for ajax except the form preview page
 	 *
 	 * @since 2.0
-	 *
-	 * @param None
 	 *
 	 * @return boolean
 	 */
@@ -373,8 +382,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param mixed $value - value to check
-	 * @param string
+	 * @param mixed  $value Value to check.
+	 * @param string $empty
 	 *
 	 * @return boolean
 	 */
@@ -436,7 +445,8 @@ class FrmAppHelper {
 
 			$key = self::get_server_value( $key );
 			foreach ( explode( ',', $key ) as $ip ) {
-				$ip = trim( $ip ); // Just to be safe.
+				// Just to be safe.
+				$ip = trim( $ip );
 
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
 					return sanitize_text_field( $ip );
@@ -690,8 +700,10 @@ class FrmAppHelper {
 			'&quot;'  => '"',
 			'&#034;'  => '"',
 			'&#x22;'  => '"',
-			'&lt; '   => '< ', // The space preserves the HTML.
-			'&#060; ' => '< ', // The space preserves the HTML.
+			// The space preserves the HTML.
+			'&lt; '   => '< ',
+			// The space preserves the HTML.
+			'&#060; ' => '< ',
 			'&gt;'    => '>',
 			'&#062;'  => '>',
 			'&amp;'   => '&',
@@ -720,8 +732,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $value
-	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @param string       $value
+	 * @param array|string $allowed 'all' for everything included as defaults.
 	 *
 	 * @return string
 	 */
@@ -959,7 +971,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function remove_get_action() {
-		if ( ! isset( $_GET ) ) {
+		if ( empty( $_GET ) ) {
 			return;
 		}
 
@@ -1247,6 +1259,8 @@ class FrmAppHelper {
 	 *
 	 * @since 3.0
 	 * @param array $atts {
+	 *     Details about the button.
+	 *
 	 *     @type array  $link_hook    Custom link hook, calls do_action and exits early.
 	 *     @type string $new_link     Href value, default #.
 	 *     @type string $class        Custom class names, space separated.
@@ -1388,7 +1402,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $value The value to compare
+	 * @param string $value The value to compare.
 	 *
 	 * @return boolean True or False
 	 */
@@ -1613,9 +1627,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string        $field_name
-	 * @param string|array  $capability
-	 * @param string        $multiple 'single' and 'multiple'
+	 * @param string       $field_name
+	 * @param string|array $capability
+	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
@@ -1630,7 +1644,7 @@ class FrmAppHelper {
 	/**
 	 * @since 4.07
 	 * @param array|string $selected
-	 * @param string $current
+	 * @param string       $current
 	 */
 	private static function selected( $selected, $current ) {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
@@ -2087,7 +2101,7 @@ class FrmAppHelper {
 			} while ( in_array( $key_check, $similar_keys, true ) );
 
 			$key = $key_check;
-		}
+		}//end if
 
 		return $key;
 	}
@@ -2133,7 +2147,9 @@ class FrmAppHelper {
 	 */
 	private static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
-		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+
+		// We want to have at least 2 characters in the slug.
+		$min_slug_value = 37;
 		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 	}
 
@@ -2164,7 +2180,12 @@ class FrmAppHelper {
 	/**
 	 * Editing a Form or Entry
 	 *
-	 * @param string $table
+	 * @param object       $record
+	 * @param string       $table
+	 * @param array|string $fields
+	 * @param bool         $default
+	 * @param array        $post_values
+	 * @param array        $args
 	 *
 	 * @return bool|array
 	 */
@@ -2240,7 +2261,7 @@ class FrmAppHelper {
 			} else {
 				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 			}
-		}
+		}//end if
 
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
 		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
@@ -2290,7 +2311,10 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param object $record
 	 * @param string $table
+	 * @param array  $post_values
+	 * @param array  $values
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
 		if ( $table == 'entries' ) {
@@ -2493,10 +2517,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Gets the time ago in words
+	 * Gets the time ago in words.
 	 *
-	 * @param int $from in seconds
-	 * @param int|string $to in seconds
+	 * @param int        $from In seconds.
+	 * @param int|string $to   In seconds.
 	 *
 	 * @return string $time_ago
 	 */
@@ -2661,14 +2685,20 @@ class FrmAppHelper {
 	// Pagination Methods.
 
 	/**
+	 * @param integer $r_count
 	 * @param integer $current_p
+	 * @param integer $p_size
+	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
 		return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
 	}
 
 	/**
+	 * @param integer $r_count
 	 * @param integer $current_p
+	 * @param integer $p_size
+	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
 		if ( $current_p == 1 ) {
@@ -2724,10 +2754,10 @@ class FrmAppHelper {
 				}
 
 				unset( $this_val, $n );
-			}
+			}//end foreach
 
 			unset( $last, $jv );
-		}
+		}//end foreach
 
 		return $vars;
 	}
@@ -2986,10 +3016,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Echo The javascript to open and highlight the Formidable menu
+	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $post_type The name of the post type that may need to be highlighted
-	 * echo The javascript to open and highlight the Formidable menu
+	 * @param string $post_type The name of the post type that may need to be highlighted.
+	 * @return void
 	 */
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
@@ -3117,8 +3149,13 @@ class FrmAppHelper {
 				'select_a_field'     => __( 'Select a Field', 'formidable' ),
 				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
-				'saving'             => '', // Deprecated in 6.0.
-				'saved'              => '', // Deprecated in 6.0.
+
+				// Deprecated in 6.0.
+				'saving'             => '',
+
+				// Deprecated in 6.0.
+				'saved'              => '',
+
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 			);
@@ -3131,7 +3168,7 @@ class FrmAppHelper {
 			if ( ! $data ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
-		}
+		}//end if
 	}
 
 	/**
@@ -3177,7 +3214,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param float $min_version The version the add-on requires
+	 * @param float $min_version The version the add-on requires.
 	 */
 	public static function min_version_notice( $min_version ) {
 		$frm_version = self::plugin_version();
@@ -3505,6 +3542,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since x.x
+	 */
+	public static function get_images_dropdown_atts( $option, $args ) {
+		$image        = self::get_images_dropdown_option_image( $option, $args );
+		$classes      = self::get_images_dropdown_option_classes( $option, $args );
+		$custom_attrs = self::get_images_dropdown_option_html_attrs( $option, $args );
+		return compact( 'image', 'classes', 'custom_attrs' );
+	}
+
+	/**
 	 * Gets the image of each option in images_dropdown() method.
 	 *
 	 * @since 5.0.04
@@ -3663,7 +3710,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param string       $value
-	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @param array|string $allowed 'all' for everything included as defaults.
 	 * @return string
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
@@ -3711,7 +3758,7 @@ class FrmAppHelper {
 	/**
 	 * @since 5.0.17
 	 *
-	 * @param string
+	 * @param string $feature
 	 * @return bool
 	 */
 	public static function show_new_feature( $feature ) {
