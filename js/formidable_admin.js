@@ -4977,7 +4977,11 @@ function frmAdminBuildJS() {
 		var link, lookupBlock,
 			fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
-		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
+		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID );
+		if ( ! link ) {
+			return;
+		}
+		link = link.parentNode;
 
 		if ( this.value === 'text' ) {
 			lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
