@@ -349,14 +349,15 @@ class FrmEntryFormatter {
 		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format' );
+		$unset = array( 'id', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
 			}
 		}
 
-		$this->atts = $atts;
+		$this->atts          = $atts;
+		$this->atts['entry'] = $this->entry;
 	}
 
 	/**
