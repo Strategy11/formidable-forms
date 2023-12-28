@@ -20,6 +20,16 @@ class FrmAddon {
 	public $license;
 	protected $get_beta = false;
 
+	/**
+	 * This is used to flag other add ons not to send a request.
+	 * We only want to send a single API request per HTTP request.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $sent_mothership_request = false;
+
 	public function __construct() {
 
 		if ( empty( $this->plugin_slug ) ) {
@@ -465,6 +475,10 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
+		if ( self::$sent_mothership_request ) {
+			return;
+		}
+
 		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
@@ -474,6 +488,7 @@ class FrmAddon {
 			return;
 		}
 
+		self::$sent_mothership_request = true;
 		$this->update_last_checked();
 
 		$response = $this->get_license_status();
