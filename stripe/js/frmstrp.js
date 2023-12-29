@@ -146,8 +146,7 @@
 		}
 
 		function getReturnUrl() {
-			// var url = new URL( frm_stripe_vars.ajax );
-			var url = new URL( 'http://localhost:10004/wp-admin/admin-ajax.php' );
+			var url = new URL( frm_stripe_vars.ajax );
 
 			url.searchParams.append( 'action', 'frmstrplinkreturn' );
 			return url.toString();
