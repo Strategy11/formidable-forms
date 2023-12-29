@@ -472,7 +472,8 @@ class FrmFormsController {
 
 				<?php
 				// Checks to see whether it needs a sidebar.
-				if ( empty( $withcomments ) && ! is_single() ) {
+				/** @psalm-suppress UndefinedVariable */
+				if ( empty( $withcomments ) && ! is_single() ) { // phpstan-ignore-line
 					?>
 				#page { background: url("<?php bloginfo( 'stylesheet_directory' ); ?>/images/kubrickbg-<?php bloginfo( 'text_direction' ); ?>.jpg") repeat-y top; border: none; }
 			<?php } else { // No sidebar. ?>
