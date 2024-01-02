@@ -84,6 +84,10 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 			'total' => array(),
 		);
 
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return $data;
+		}
+
 		$where = array(
 			'created_at >' => $from_date,
 			'created_at <' => $to_date . ' 23:59:59',
