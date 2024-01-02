@@ -571,7 +571,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
-		$has_processed = isset( $_POST[ 'frmintent' . $field->form_id ] );
+		$has_processed = isset( $_POST[ 'frmintent' . $field->form_id ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! $has_processed ) {
 			return $errors;
 		}
