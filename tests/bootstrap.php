@@ -1,7 +1,7 @@
 <?php
 
-// disable xdebug backtrace
 if ( function_exists( 'xdebug_disable' ) ) {
+	// Disable xdebug backtrace.
 	xdebug_disable();
 }
 

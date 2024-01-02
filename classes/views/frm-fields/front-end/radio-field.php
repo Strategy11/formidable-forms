@@ -69,5 +69,5 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		unset( $other_opt, $other_args );
 		?></div>
 <?php
-	}
-}
+	}//end foreach
+}//end if

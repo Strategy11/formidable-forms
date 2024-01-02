@@ -107,8 +107,10 @@ class FrmAntiSpam extends FrmValidate {
 		$valid_token_times_before = apply_filters(
 			'frm_form_token_check_before_today',
 			array(
-				( 2 * DAY_IN_SECONDS ), // Two days ago.
-				( 1 * DAY_IN_SECONDS ), // One day ago.
+				// Two days ago.
+				( 2 * DAY_IN_SECONDS ),
+				// One day ago.
+				( 1 * DAY_IN_SECONDS ),
 			)
 		);
 
@@ -117,7 +119,8 @@ class FrmAntiSpam extends FrmValidate {
 		$valid_token_times_after = apply_filters(
 			'frm_form_token_check_after_today',
 			array(
-				( 45 * MINUTE_IN_SECONDS ), // Add in 45 minutes past today to catch some midnight edge cases.
+				// Add in 45 minutes past today to catch some midnight edge cases.
+				( 45 * MINUTE_IN_SECONDS ),
 			)
 		);
 

@@ -66,6 +66,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *    The plan details.
+	 *
 	 *    @type WP_Post $action
 	 *    @type string  $amount
 	 * }
@@ -86,7 +88,7 @@ class FrmStrpLiteSubscriptionHelper {
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
 		if ( ! $plan_id ) {
-			// the amount has already been formatted, so add the decimal back in
+			// The amount has already been formatted, so add the decimal back in.
 			$amount                         = $action->post_content['amount'];
 			$action->post_content['amount'] = number_format( ( $amount / 100 ), 2, '.', '' );
 			$plan_opts                      = self::prepare_plan_options( $action->post_content );

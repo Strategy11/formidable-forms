@@ -190,13 +190,13 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 					'compare' => -1,
 				);
 			}
-		}
+		}//end if
 	}
 
 	/**
 	 * Gets formatted price.
 	 *
-	 * @param float $amount Amount.
+	 * @param float        $amount Amount.
 	 * @param string|array $currency Currency string value or array.
 	 * @return string
 	 */
@@ -217,11 +217,13 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 */
 	public function get_compare_diff( $current, $prev ) {
 		if ( ! $current && ! $prev ) {
-			return 0; // No comparison if both are zero.
+			// No comparison if both are zero.
+			return 0;
 		}
 
 		if ( ! $prev ) {
-			return 1; // Increase 100%;
+			// Increase 100%;
+			return 1;
 		}
 
 		return ( $current - $prev ) / $prev;

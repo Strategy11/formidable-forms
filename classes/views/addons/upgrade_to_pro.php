@@ -71,8 +71,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</span>
 						</td>
 					</tr>
-				<?php } ?>
-			<?php } ?>
+					<?php
+				}//end foreach
+				?>
+				<?php
+			}//end foreach
+			?>
 		</tbody>
 	</table>
 

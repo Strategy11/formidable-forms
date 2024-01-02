@@ -10,13 +10,22 @@
 	<exclude-pattern>deprecated/*</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
+	<exclude-pattern>stubs.php</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-		<exclude name="Squiz.Commenting" />
+		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+		<exclude name="Squiz.Commenting.VariableComment.Missing" />
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.PHP.YodaConditions" />
@@ -53,10 +62,7 @@
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+	<rule ref="WordPress.DB.PreparedSQL">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
@@ -65,13 +71,10 @@
 	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
+	<rule ref="Squiz.Commenting">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 

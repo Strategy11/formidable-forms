@@ -243,7 +243,7 @@ abstract class FrmFormMigrator {
 				// set the new field_order as it would have changed
 				$field_order    = $new_field['current_order'];
 			}
-		}
+		}//end foreach
 	}
 
 	protected function prepare_field( $field, &$new_field ) {
@@ -337,7 +337,7 @@ abstract class FrmFormMigrator {
 	 * Add the new form to the database and return AJAX data.å
 	 *
 	 * @param array $form Form to import.
-	 * @param array $upgrade_omit No field alternative
+	 * @param array $upgrade_omit No field alternative.
 	 */
 	protected function add_form( $form, $upgrade_omit = array() ) {
 
@@ -393,7 +393,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $form
 	 */
 	protected function create_fields( $form_id, &$form ) {
@@ -417,7 +417,9 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
+	 * @param array $action
 	 * @param array $form
+	 * @param int   $form_id
 	 */
 	protected function save_action( $action, $form, $form_id ) {
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
@@ -445,8 +447,8 @@ abstract class FrmFormMigrator {
 	 * future we can alert users if they try to import a form that has already
 	 * been imported.
 	 *
-	 * @param int $source_id Imported plugin form ID
-	 * @param int $new_form_id Formidable form ID
+	 * @param int $source_id Imported plugin form ID.
+	 * @param int $new_form_id Formidable form ID.
 	 */
 	protected function track_import( $source_id, $new_form_id ) {
 
@@ -465,7 +467,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param int $source_id Imported plugin form ID
+	 * @param int $source_id Imported plugin form ID.
 	 *
 	 * @return int the ID of the created form or 0
 	 */
@@ -519,7 +521,7 @@ abstract class FrmFormMigrator {
 	 * Replace 3rd-party form provider tags/shortcodes with our own Tags.
 	 *
 	 * @param string $string String to process the smart tag in.
-	 * @param array $fields List of fields for the form.
+	 * @param array  $fields List of fields for the form.
 	 *
 	 * @return string
 	 */

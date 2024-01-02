@@ -32,7 +32,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			'action'    => 'frm_insert_field',
 			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'form_id'   => $this->form_id,
-			'field_type'     => 'text', //create text field
+			'field_type'     => 'text', // Create text field.
 		);
 
 		try {
@@ -90,7 +90,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertTrue( isset( $frm_duplicate_ids[ $original_field->id ] ), 'No id saved for duplicated field.' );
 		$newest_field_id = $frm_duplicate_ids[ $original_field->id ];
 
-		// make sure the field exists
+		// Make sure the field exists.
 		$field = FrmField::getOne( $newest_field_id );
 		$this->assertTrue( is_object( $field ), 'Field id ' . $newest_field_id . ' does not exist' );
 		$this->assertEquals( $format, $field->field_options['format'] );
@@ -98,7 +98,9 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		self::check_in_section_variable( $field, 0 );
 	}
 
-	// Get a field object by key
+	/**
+	 * Get a field object by key.
+	 */
 	protected function get_field_by_key( $field_key ) {
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
 		$field = FrmField::getOne( $divider_field_id );
@@ -108,18 +110,24 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	}
 
-	// Check in_section variable prior to duplication
+	/**
+	 * Check in_section variable prior to duplication.
+	 */
 	protected function check_field_prior_to_duplication( $field ) {
 		$this->assertTrue( isset( $field->field_options['in_section'] ), 'The in_section variable is not set correctly on import.' );
 	}
 
-	// Check if a field is created correctly
+	/**
+	 * Check if a field is created correctly.
+	 */
 	protected function check_if_field_id_is_created_correctly( $newest_field_id ) {
 		$this->assertTrue( is_numeric( $newest_field_id ) );
 		$this->assertNotEmpty( $newest_field_id );
 	}
 
-	// Check for a specific in section value
+	/**
+	 * Check for a specific in section value.
+	 */
 	protected function check_in_section_variable( $field, $expected ) {
 		$message = 'The in_section variable is not set correctly when a ' . $field->type . ' field is duplicated.';
 		$this->assertTrue( isset( $field->field_options['in_section'] ), $message );

@@ -78,8 +78,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$uid = $f->id;
 				}
 				unset( $f );
-			}
-		}
+			}//end foreach
+		}//end if
 		?>
 		</ul>
 	</div>
@@ -177,7 +177,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</ul>
 	</div>
 		<?php
-	}
+	}//end if
 	?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
@@ -252,8 +252,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 
 				unset( $code );
-			}
-		}
+			}//end foreach
+		}//end foreach
 		?>
 		</ul>
 	</div>

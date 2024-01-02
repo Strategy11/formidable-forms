@@ -15,6 +15,7 @@ class FrmListHelper {
 
 	/**
 	 * @since 4.07
+	 * @var int|bool
 	 */
 	public $total_items = false;
 
@@ -190,11 +191,9 @@ class FrmListHelper {
 	/**
 	 * An internal method that sets all the necessary pagination arguments
 	 *
-	 * @param array $args An associative array with information about the pagination
+	 * @param array $args An associative array with information about the pagination.
 	 *
 	 * @access protected
-	 *
-	 * @param array|string $args
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -268,8 +267,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access public
 	 *
-	 * @param string $text The search button text
-	 * @param string $input_id The search input id
+	 * @param string $text     The search button text.
+	 * @param string $input_id The search input id.
 	 */
 	public function search_box( $text, $input_id ) {
 		if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) {
@@ -380,7 +379,7 @@ class FrmListHelper {
 			$two = '';
 		} else {
 			$two = '2';
-		}
+		}//end if
 
 		if ( empty( $this->_actions ) ) {
 			return;
@@ -466,8 +465,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access protected
 	 *
-	 * @param array $actions The list of actions
-	 * @param bool $always_visible Whether the actions should be always visible
+	 * @param array $actions        The list of actions.
+	 * @param bool  $always_visible Whether the actions should be always visible.
 	 *
 	 * @return string
 	 */
@@ -549,7 +548,7 @@ class FrmListHelper {
 	 * @access protected
 	 *
 	 * @param string $option
-	 * @param int $default
+	 * @param int    $default
 	 *
 	 * @return int
 	 */
@@ -833,7 +832,7 @@ class FrmListHelper {
 	 */
 	protected function get_column_info() {
 		// $_column_headers is already set / cached
-		if ( isset( $this->_column_headers ) && is_array( $this->_column_headers ) ) {
+		if ( is_array( $this->_column_headers ) ) {
 			// Back-compat for list tables that have been manually setting $_column_headers for horse reasons.
 			// In 4.3, we added a fourth argument for primary column.
 			$column_headers = array( array(), array(), array(), $this->get_primary_column_name() );
@@ -904,7 +903,7 @@ class FrmListHelper {
 	 *
 	 * @staticvar int $cb_counter
 	 *
-	 * @param bool $with_id Whether to set the id attribute or not
+	 * @param bool $with_id Whether to set the id attribute or not.
 	 */
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
@@ -977,7 +976,7 @@ class FrmListHelper {
 				$column_display_name = '';
 			}
 			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
+		}//end foreach
 	}
 
 	/**
@@ -1110,7 +1109,7 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access public
 	 *
-	 * @param object $item The current item
+	 * @param object $item The current item.
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';
@@ -1124,7 +1123,7 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 * @access protected
 	 *
-	 * @param object $item The current item
+	 * @param object $item The current item.
 	 */
 	protected function single_row_columns( $item ) {
 		list( $columns, $hidden,, $primary ) = $this->get_column_info();
@@ -1160,7 +1159,7 @@ class FrmListHelper {
 				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
-		}
+		}//end foreach
 	}
 
 	/**

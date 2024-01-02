@@ -142,8 +142,9 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		self::add_customer_name( $atts, $payment_info );
 
-		$customer       = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
-		self::$customer = $customer; // Set for later use.
+		$customer = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
+		// Set for later use.
+		self::$customer = $customer;
 
 		return $customer;
 	}
@@ -266,8 +267,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function before_save_settings( $settings, $action ) {
-		$settings['currency']    = strtolower( $settings['currency'] );
-		$settings['stripe_link'] = 1; // In Lite Stripe link is always used.
+		$settings['currency'] = strtolower( $settings['currency'] );
+
+		// In Lite Stripe link is always used.
+		$settings['stripe_link'] = 1;
 		$settings                = self::create_plans( $settings );
 		$form_id                 = absint( $action['menu_order'] );
 

@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
@@ -176,7 +176,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param string $index
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return array
 	 */
@@ -284,8 +284,9 @@ class FrmEntryValues {
 		 *
 		 * @since 5.5.1
 		 *
-		 * @param array $referrer
-		 * @param array @entry_description
+		 * @param array  $referrer
+		 * @param array  $entry_description
+		 * @param object $entry
 		 */
 		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
@@ -338,7 +339,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param array $array
+	 * @param array    $array
 	 *
 	 * @return bool
 	 */

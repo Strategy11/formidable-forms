@@ -211,7 +211,7 @@ class FrmForm {
 			if ( $new_val !== $value ) {
 				$new_values[ $key ] = $new_val;
 			}
-		}
+		}//end foreach
 
 		if ( ! empty( $new_values ) ) {
 			FrmField::update( $field['id'], $new_values );
@@ -277,7 +277,7 @@ class FrmForm {
 			return $new_values;
 		}
 
-		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
+		$options = ! empty( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
 		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;
@@ -349,9 +349,10 @@ class FrmForm {
 				}
 			}
 
-			//updating the form
+			// Updating the form.
 			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
-			unset( $update_options['custom_html'] ); // don't check for POST html
+			// Don't check for POST html.
+			unset( $update_options['custom_html'] );
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
 			foreach ( $update_options as $opt => $default ) {
@@ -382,7 +383,7 @@ class FrmForm {
 			FrmField::update( $field_id, $new_field );
 
 			FrmField::delete_form_transient( $field->form_id );
-		}
+		}//end foreach
 		self::clear_form_cache();
 
 		return $values;
@@ -455,7 +456,8 @@ class FrmForm {
 		if ( false !== strpos( $value, '<' ) ) {
 			$value = self::normalize_calc_spaces( $value );
 		}
-		$allow = array( '<= ', ' >=' ); // Allow <= and >=
+		// Allow <= and >=.
+		$allow = array( '<= ', ' >=' );
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
 		$value = strip_tags( $value );
@@ -528,7 +530,7 @@ class FrmForm {
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
-	 * @param object $form - The form object
+	 * @param object $form The form object.
 	 */
 	public static function translatable_strings( $form ) {
 		$strings = array(
@@ -547,6 +549,7 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int    $id
 	 * @param string $status
 	 *
 	 * @return int|boolean
@@ -819,7 +822,7 @@ class FrmForm {
 		} else {
 			global $wpdb;
 
-			// the query has already been prepared if this is not an array
+			// The query has already been prepared if this is not an array.
 			$query   = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit );
 			$results = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
@@ -967,7 +970,7 @@ class FrmForm {
 		}
 
 		if ( $form->id == $values['posted_form_id'] ) {
-			//if there are two forms on the same page, make sure not to submit both
+			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
 				if ( $var == 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );

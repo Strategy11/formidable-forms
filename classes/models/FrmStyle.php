@@ -4,11 +4,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
-	public $number = false; // Unique ID number of the current instance.
-	public $id = 0; // the id of the post
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @var int
+	 */
+	public $number = false;
 
 	/**
-	 * @param int|string $id The id of the stylsheet or 'default'
+	 * The id of the post.
+	 *
+	 * @var int|string
+	 */
+	public $id = 0;
+
+	/**
+	 * @param int|string $id The id of the stylsheet or 'default'.
 	 */
 	public function __construct( $id = 0 ) {
 		$this->id = $id;
@@ -21,7 +32,8 @@ class FrmStyle {
 		$this->id = 0;
 
 		$max_slug_value = 2147483647;
-		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+		// We want to have at least 2 characters in the slug.
+		$min_slug_value = 37;
 		$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 
 		$style = array(
@@ -121,7 +133,7 @@ class FrmStyle {
 			}
 
 			$action_ids[] = $this->save( $new_instance );
-		}
+		}//end foreach
 
 		$this->save_settings();
 
@@ -133,7 +145,7 @@ class FrmStyle {
 	 *
 	 * @since 5.3.2
 	 *
-	 * @param string $color_val, The color value, by reference.
+	 * @param string $color_val The color value, by reference.
 	 * @return void
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) {
@@ -142,7 +154,8 @@ class FrmStyle {
 		}
 
 		$color_val = trim( $color_val );
-		$color_val = ltrim( $color_val, '(' ); // Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
+		// Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
+		$color_val = ltrim( $color_val, '(' );
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
@@ -154,8 +167,9 @@ class FrmStyle {
 		$color_val  = rtrim( $color_val, ')' );
 		$color_val .= ')';
 
-		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
-		$color_rgba            = trim( $color_rgba, '()' ); // Remove any excessive braces from the rgba like rgba((.
+		$color_rgba = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		// Remove any excessive braces from the rgba like rgba((.
+		$color_rgba            = trim( $color_rgba, '()' );
 		$length_of_color_codes = strpos( $color_val, '(' );
 		$new_color_values      = array();
 
@@ -184,10 +198,10 @@ class FrmStyle {
 				} else {
 					$new_value = floatval( $value );
 				}
-			}
+			}//end if
 
 			$new_color_values[] = null === $new_value ? $value : $new_value;
-		}
+		}//end foreach
 
 		// add more 0s and 1 (if alpha position) if needed.
 		$missing_values = $length_of_color_codes - count( $new_color_values );
@@ -204,7 +218,8 @@ class FrmStyle {
 
 		$new_color = implode( ',', $new_color_values );
 		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
-		$prefix    = rtrim( $prefix, '(' ) . '('; // Limit the number of opening braces after rgb/rgba. There should only be one.
+		// Limit the number of opening braces after rgb/rgba. There should only be one.
+		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
@@ -651,13 +666,13 @@ class FrmStyle {
 			'field_margin'       => '20px',
 			'field_weight'       => 'normal',
 			'text_color'         => '555555',
-			//'border_color_hv'   => 'cccccc',
+			// 'border_color_hv'   => 'cccccc',
 			'border_color'       => 'BFC3C8',
 			'field_border_width' => '1px',
 			'field_border_style' => 'solid',
 
 			'bg_color'                 => 'ffffff',
-			//'bg_color_hv'       => 'ffffff',
+			// 'bg_color_hv'       => 'ffffff',
 			'remove_box_shadow'        => '',
 			'bg_color_active'          => 'ffffff',
 			'border_color_active'      => '66afe9',

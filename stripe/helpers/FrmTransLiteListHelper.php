@@ -205,7 +205,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$form_ids              = $this->get_form_ids();
 		$args                  = compact( 'form_ids', 'date_format' );
-		$this->valid_entry_ids = array_keys( $form_ids ); // $form_ids is indexed by entry ID.
+		// $form_ids is indexed by entry ID.
+		$this->valid_entry_ids = array_keys( $form_ids );
 
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" ';
@@ -226,7 +227,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param array $args
+	 * @param object $item
+	 * @param array  $args
 	 *
 	 * @return void
 	 */
@@ -245,7 +247,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	protected function get_column_info() {
 		$column_info = parent::get_column_info();
-		unset( $column_info[0]['cb'] ); // Remove the checkbox column.
+		// Remove the checkbox column.
+		unset( $column_info[0]['cb'] );
 		return $column_info;
 	}
 
