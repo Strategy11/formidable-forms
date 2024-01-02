@@ -39,6 +39,10 @@
 	</rule>
 	<rule ref="Squiz.Scope.StaticThisUsage" />
 
+	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
+		<exclude-pattern>classes/views/frm-forms/preview/header.php</exclude-pattern>
+	</rule>
+
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
 		<exclude-pattern>classes/views/*</exclude-pattern>

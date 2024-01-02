@@ -519,7 +519,8 @@ class FrmFormsController {
 	public static function preview_content( $content ) {
 		if ( in_the_loop() ) {
 			self::show_page_preview();
-			$content = ''; // Clear the content for the page we're using.
+			// Clear the content for the page we're using.
+			$content = '';
 		}
 
 		return $content;
