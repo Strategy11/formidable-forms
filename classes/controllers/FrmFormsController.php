@@ -455,56 +455,12 @@ class FrmFormsController {
 		}
 
 		if ( 'header' === $template ) {
-			?>
-			<!DOCTYPE html>
-			<html <?php language_attributes(); ?>>
-			<head>
-			<link rel="profile" href="https://gmpg.org/xfn/11" />
-			<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
-
-			<title><?php echo wp_get_document_title(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></title>
-
-			<link rel="stylesheet" href="<?php bloginfo( 'stylesheet_url' ); ?>" type="text/css" media="screen" />
-			<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
-
-			<?php
-			wp_head();
-			?>
-			</head>
-			<body <?php body_class(); ?>>
-			<div id="page">
-				<div id="header" role="banner">
-					<div id="headerimg">
-						<h1><a href="<?php echo esc_url( home_url() ); ?>/"><?php bloginfo( 'name' ); ?></a></h1>
-						<div class="description"><?php bloginfo( 'description' ); ?></div>
-					</div>
-				</div>
-				<hr />
-			<?php
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/header.php';
 			return;
 		}
 
 		if ( 'footer' === $template ) {
-			wp_footer();
-			?>
-				<hr />
-				<div id="footer" role="contentinfo">
-					<p>
-						<?php
-						printf(
-							/* translators: 1: Site name, 2: WordPress */
-							esc_html__( '%1$s is proudly powered by %2$s', 'formidable' ),
-							esc_html( get_bloginfo( 'name' ) ),
-							'<a href="https://wordpress.org/">WordPress</a>'
-						);
-						?>
-					</p>
-				</div>
-			</div>
-			<?php wp_footer(); ?>
-			</body>
-			</html>
-			<?php
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/footer.php';
 		}
 	}
 
