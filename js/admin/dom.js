@@ -516,6 +516,7 @@
 				if ( height ) {
 					settings.height = height;
 				}
+				console.log( settings );
 
 				tinymce.init( settings );
 			}

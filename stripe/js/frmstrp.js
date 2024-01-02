@@ -231,7 +231,6 @@
 			firstNameID = '',
 			lastNameID = '',
 			getNameFieldValue,
-			queryForNameFieldIsFound,
 			subFieldEl;
 
 		/**
@@ -264,7 +263,7 @@
 		}
 
 		function getNameFieldItem( fieldID, type, $form ) {
-			queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
+			var queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
 
 			if ( type === 'container' ) {
 				return queryForNameFieldIsFound ?
