@@ -1,4 +1,13 @@
 == Changelog ==
+= 6.7.1 =
+* New: Formidable branding has been removed on the import page when white labelling is enabled.
+* New: The permission to view forms has been renamed to "View Forms List" to remove ambiguity.
+* Fix: A failed to open stream warning would get logged when calling include(modal.php) on some admin pages.
+* Fix: A styling issue has been fixed with checkboxes in the screen options panel for responsive mobile widths.
+* Fix: A redirect will now happen after emptying form trash to avoid emptying form trash again when refreshing the page.
+* Fix: Fewer requests will now be made at once when checking for license status in add ons.
+* Fix: Repeater forms are no longer included in the deleted form count when emptying form trash.
+
 = 6.7 =
 * New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
 * New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
