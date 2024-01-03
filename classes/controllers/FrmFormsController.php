@@ -311,6 +311,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public static function show_page_preview() {
 		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -431,15 +433,57 @@ class FrmFormsController {
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
 		if ( have_posts() ) {
 			the_post();
-			get_header( '' );
+			self::get_template( 'header' );
+
 			// add some generic class names to the container to add some natural padding to the content.
 			// .entry-content catches the WordPress TwentyTwenty theme.
 			// .container catches Customizr content.
 			echo '<div class="container entry-content">';
 			the_content();
 			echo '</div>';
-			get_footer();
+
+			self::get_template( 'footer' );
 		}
+	}
+
+	/**
+	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
+	 * and renders required html fragements calling required functions.
+	 *
+	 * @since x.x
+	 * @param string $template
+	 * @return void
+	 */
+	private static function get_template( $template ) {
+		if ( self::should_try_getting_template( $template ) ) {
+			call_user_func( 'get_' . $template );
+			return;
+		}
+
+		if ( 'header' === $template ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/header.php';
+			return;
+		}
+
+		if ( 'footer' === $template ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/footer.php';
+		}
+	}
+
+	/**
+	 * Returns true if calling a template function doesn't trigger deprecation warnings.
+	 *
+	 * @since x.x
+	 * @param string $template
+	 * @return bool
+	 */
+	private static function should_try_getting_template( $template ) {
+		$stylesheet_path = get_stylesheet_directory();
+		$template_path   = get_template_directory();
+		$is_child_theme  = $stylesheet_path !== $template_path;
+		$template_name   = $template . '.php';
+
+		return file_exists( $stylesheet_path . '/' . $template_name ) || $is_child_theme && file_exists( $template_path . '/' . $template_name );
 	}
 
 	/**
@@ -465,13 +509,18 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Set the page content for the theme preview page
+	 * Set the page content for the theme preview page.
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $content
+	 * @return string
 	 */
 	public static function preview_content( $content ) {
 		if ( in_the_loop() ) {
-			$content = self::show_page_preview();
+			self::show_page_preview();
+			// Clear the content for the page we're using.
+			$content = '';
 		}
 
 		return $content;
