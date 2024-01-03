@@ -153,7 +153,6 @@ class test_FrmFieldType extends FrmUnitTest {
 				'value'    => '<p>Here</p>',
 				'expected' => '<p>Here</p>',
 			),
-			
 		);
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
