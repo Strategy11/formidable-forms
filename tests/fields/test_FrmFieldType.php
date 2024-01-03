@@ -135,6 +135,31 @@ class test_FrmFieldType extends FrmUnitTest {
 			$frm_field_type->sanitize_value( $value['value'] );
 			$this->assertEquals( $value['expected'], $value['value'] );
 		}
+
+		$this->use_frm_role( 'loggedout' );
+		$values = array(
+			array(
+				'type'     => 'default',
+				'value'    => '<script></script>test',
+				'expected' => 'test',
+			),
+			array(
+				'type'     => 'textarea',
+				'value'    => '<div class="here"></div>',
+				'expected' => '',
+			),
+			array(
+				'type'     => 'textarea',
+				'value'    => '<p>Here</p>',
+				'expected' => '<p>Here</p>',
+			),
+			
+		);
+		foreach ( $values as $value ) {
+			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
+			$frm_field_type->sanitize_value( $value['value'] );
+			$this->assertEquals( $value['expected'], $value['value'] );
+		}
 	}
 
 	/**
