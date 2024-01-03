@@ -15,14 +15,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
-		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ); ?></p>
+		<p class="howto">
+			<?php
+			if ( FrmAppHelper::is_formidable_branding() ) {
+				$page_description = esc_html__( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' );
+			} else {
+				$page_description = sprintf(
+					// Translators: 1: Menu name
+					esc_html__( 'Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ),
+					FrmAppHelper::get_menu_name()
+				);
+			}
+			echo esc_html( apply_filters( 'frm_upload_instructions1', $page_description ) );
+			?>
+		</p>
 		<br/>
 		<form enctype="multipart/form-data" method="post" class="frm-fields">
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
 				<label>
-					<?php echo esc_html( apply_filters( 'frm_upload_instructions2', __( 'Choose a Formidable XML file', 'formidable' ) ) ); ?>
+					<?php
+					if ( FrmAppHelper::is_formidable_branding() ) {
+						$file_section_title = esc_html__( 'Choose a Formidable XML file', 'formidable' );
+					} else {
+						$file_section_title = sprintf(
+							// Translators: 1: Menu name
+							esc_html__( 'Choose a %1$s XML file', 'formidable' ),
+							FrmAppHelper::get_menu_name()
+						);
+					}
+					echo esc_html( apply_filters( 'frm_upload_instructions2', $file_section_title ) );
+					?>
 					(<?php
 					/* translators: %s: File size */
 					echo esc_html( sprintf( __( 'Maximum size: %s', 'formidable' ), ini_get( 'upload_max_filesize' ) ) );
@@ -172,7 +196,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 									?>
 								</td>
 							</tr>
-						<?php } ?>
+							<?php
+						}//end foreach
+						?>
 					</tbody>
 				</table>
 			</div>

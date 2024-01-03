@@ -64,7 +64,7 @@ class FrmFormsHelper {
 	/**
 	 * @param string $class
 	 * @param string $param
-	 * @param array $add_html
+	 * @param array  $add_html
 	 *
 	 * @since 2.0.6
 	 */
@@ -98,7 +98,8 @@ class FrmFormsHelper {
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
 			$args['frm_action'] = 'edit';
 		} elseif ( FrmAppHelper::is_style_editor_page() ) {
-			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
+			// Avoid passing style into form switcher on style page.
+			unset( $args['id'] );
 			$query_args = array(
 				'page' => 'formidable-styles',
 			);
@@ -191,7 +192,7 @@ class FrmFormsHelper {
 					</li>
 					<?php
 					unset( $form );
-				}
+				}//end foreach
 				?>
 			</ul>
 		</div>
@@ -202,7 +203,7 @@ class FrmFormsHelper {
 	 * @since 3.05
 	 * @deprecated 4.0
 	 *
-	 * @param array $values - The form array
+	 * @param array $values The form array.
 	 */
 	public static function builder_submit_button( $values ) {
 		FrmDeprecated::builder_submit_button( $values );
@@ -261,6 +262,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param array $atts {
+	 *     The success message details.
+	 *
 	 *     @type string   $message
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
@@ -285,7 +288,7 @@ class FrmFormsHelper {
 			$post_values = $values;
 		} else {
 			$values      = array();
-			$post_values = isset( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$post_values = ! empty( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$defaults = array(
@@ -368,7 +371,7 @@ class FrmFormsHelper {
 			}
 
 			unset( $var, $default );
-		}
+		}//end foreach
 
 		return $values;
 	}
@@ -670,6 +673,8 @@ BEFORE_HTML;
 	 *
 	 * @since 2.0
 	 *
+	 * @param object  $form
+	 * @param array   $fields
 	 * @param boolean $reset_fields
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
@@ -713,12 +718,12 @@ BEFORE_HTML;
 
 					// There is already an end section here, so there is no need to create one.
 					$open = false;
-			}
+			}//end switch
 			$prev_order = $field->field_order;
 
 			$last_field = $field;
 			unset( $field );
-		}
+		}//end foreach
 
 		self::maybe_create_end_section( $open, $reset_fields, $add_order, $end_section_values, $last_field );
 	}
@@ -757,7 +762,7 @@ BEFORE_HTML;
 				$replace_with = $form->name;
 			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
-			} elseif ( $code === 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+			} elseif ( $code === 'entry_key' && ! empty( $_GET ) && isset( $_GET['entry'] ) ) {
 				$replace_with = FrmAppHelper::simple_get( 'entry' );
 			} else {
 				$replace_with = '';
@@ -766,10 +771,10 @@ BEFORE_HTML;
 			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
 		}
 
-		//replace [form_key]
+		// Replace [form_key].
 		$html = str_replace( '[form_key]', $form->form_key, $html );
 
-		//replace [frmurl]
+		// Replace [frmurl].
 		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
 		if ( strpos( $html, '[button_label]' ) ) {
@@ -880,7 +885,7 @@ BEFORE_HTML;
 	/**
 	 * Returns appropriate class if form has top labels
 	 *
-	 * @param $form
+	 * @param array $form
 	 *
 	 * @return string
 	 */
@@ -891,7 +896,7 @@ BEFORE_HTML;
 	/**
 	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
-	 * @param $form
+	 * @param array $form
 	 *
 	 * @return bool
 	 */
@@ -905,7 +910,8 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$fields = array_reverse( $fields ); // start from the fields closest to the submit button
+		// Start from the fields closest to the submit button.
+		$fields = array_reverse( $fields );
 		foreach ( $fields as $field ) {
 			$type      = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
 			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
@@ -920,8 +926,8 @@ BEFORE_HTML;
 	/**
 	 * Check if a field's label position is set to "top"
 	 *
-	 * @param $field
-	 * @param $form
+	 * @param array              $field
+	 * @param object|string|bool $form
 	 *
 	 * @return bool
 	 */
@@ -943,9 +949,9 @@ BEFORE_HTML;
 		} elseif ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
 			$form = $form->parent_form_id;
-		} elseif ( is_array( $form ) && isset( $form['parent_form_id'] ) && $form['parent_form_id'] ) {
+		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
-		} elseif ( is_array( $form ) && isset( $form['custom_style'] ) ) {
+		} elseif ( is_array( $form ) && ! empty( $form['custom_style'] ) ) {
 			$style = $form['custom_style'];
 		}
 
@@ -961,7 +967,7 @@ BEFORE_HTML;
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
-	 * @param array $args - includes img, errors
+	 * @param array $args Includes img, errors.
 	 *
 	 * @since 2.0.6
 	 */
@@ -989,7 +995,7 @@ BEFORE_HTML;
 	 * The image was removed from the styling settings, but it may still be set with a hook
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
-	 * @param array $args - includes img, errors, and show_img
+	 * @param array $args Includes img, errors, and show_img.
 	 *
 	 * @since 2.0.6
 	 */
@@ -1075,7 +1081,7 @@ BEFORE_HTML;
 			}
 
 			$actions['trash'] = self::delete_trash_info( $form_id, $form->status );
-		}
+		}//end if
 
 		return $actions;
 	}
@@ -1101,7 +1107,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed data
+	 * @param mixed $data
 	 * @return int
 	 */
 	private static function get_form_id_from_data( $data ) {
@@ -1719,7 +1725,7 @@ BEFORE_HTML;
 			$new_shortcode .= ' sanitize_url=1]';
 
 			$query = str_replace( $shortcode, $new_shortcode, $query );
-		}
+		}//end foreach
 
 		if ( $query === $original_query ) {
 			return $url;
@@ -1758,23 +1764,23 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.02
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 */
 	public static function template_install_html( $link, $class = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
 	 * Check an array of templates, determine how many the logged in user can use
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @param array $templates
 	 * @param array $args
 	 * @return int
 	 */
 	public static function available_count( $templates, $args ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 		return 0;
 	}
 }

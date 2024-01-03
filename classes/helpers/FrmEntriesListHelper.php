@@ -10,6 +10,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 4.07
+	 * @var int
 	 */
 	public $total_items = 0;
 
@@ -60,8 +61,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * @since 6.5.4
 	 *
-	 * @param array      $s_query
-	 * @param bool       $join_form_in_query
+	 * @param array $s_query
+	 * @param bool  $join_form_in_query
 	 *
 	 * @return array
 	 */
@@ -326,7 +327,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$r .= '</td>';
 			}
 			unset( $val );
-		}
+		}//end foreach
 		$r .= '</tr>';
 
 		return $r;
@@ -403,15 +404,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 				 * @param array $args Contains `item` and `col_name`.
 				 */
 				$val = apply_filters( 'frm_entries_column_value', $val, compact( 'item', 'col_name' ) );
-		}
+		}//end switch
 
 		return $val;
 	}
 
 	/**
-	 * @param string $view_link
-	 * @param array $actions
+	 * @param array  $actions
 	 * @param object $item
+	 * @param string $view_link
 	 *
 	 * @return void
 	 */
@@ -427,7 +428,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param false $val
+	 * @param object $item
+	 * @param false  $val
 	 *
 	 * @return void
 	 */

@@ -112,9 +112,13 @@ class FrmEntryValidate {
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
 		$defaults = array(
 			'id'              => $posted_field->id,
-			'parent_field_id' => '', // the id of the repeat or embed form
-			'key_pointer'     => '', // the pointer in the posted array
-			'exclude'         => array(), // exclude these field types from validation
+			// The id of the repeat or embed form.
+			'parent_field_id' => '',
+			// The pointer in the posted array.
+			'key_pointer'     => '',
+			// Exclude these field types from validation.
+			'exclude'         => array(),
+
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
@@ -159,6 +163,10 @@ class FrmEntryValidate {
 
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
+
+		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
+			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
+		}
 	}
 
 	/**
@@ -166,7 +174,8 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param object $field Field object.
+	 * @param string|array $value Field value.
+	 * @param object       $field Field object.
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
 		$item_name = false;
@@ -290,8 +299,8 @@ class FrmEntryValidate {
 	 * Check for spam
 	 *
 	 * @param boolean $exclude
-	 * @param array $values
-	 * @param array $errors by reference
+	 * @param array   $values
+	 * @param array   $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
@@ -558,7 +567,8 @@ class FrmEntryValidate {
 	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
 			if ( ! $datas['missing_keys'] ) {
-				return; // Found all info.
+				// Found all info.
+				return;
 			}
 
 			if ( is_array( $value ) ) {
@@ -575,7 +585,7 @@ class FrmEntryValidate {
 					unset( $datas['missing_keys'][ $key_index ] );
 				}
 			}
-		}
+		}//end foreach
 	}
 
 	/**
@@ -682,12 +692,14 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function should_really_skip_field( $field_data, $values ) {
-		if ( empty( $field_data->options ) ) { // This is skipped field types.
+		if ( empty( $field_data->options ) ) {
+			// This is skipped field types.
 			return true;
 		}
 
 		FrmAppHelper::unserialize_or_decode( $field_data->options );
-		if ( ! $field_data->options ) { // Check if an error happens when unserializing, or empty options.
+		if ( ! $field_data->options ) {
+			// Check if an error happens when unserializing, or empty options.
 			return true;
 		}
 
@@ -771,7 +783,8 @@ class FrmEntryValidate {
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
-			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
+			if ( ! is_numeric( $field_id ) ) {
+				// Maybe `other`.
 				continue;
 			}
 
@@ -811,10 +824,10 @@ class FrmEntryValidate {
 
 					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
 				}
-			}
+			}//end foreach
 
 			unset( $values['item_meta'][ $field_id ] );
-		}
+		}//end foreach
 
 		return $form_ids;
 	}

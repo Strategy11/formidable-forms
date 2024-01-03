@@ -92,7 +92,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</div>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </div>
 </div>

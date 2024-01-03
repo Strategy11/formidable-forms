@@ -65,6 +65,9 @@
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-xl: 0px 9.41489px 11.2979px -1.88298px rgba(16, 24, 40, 0.08), 0px 3.76596px 3.76596px -1.88298px rgba(16, 24, 40, 0.03);
+
+	/* Override front-end CSS */
+	--check-label-color: var(--grey-700);
 }
 
 @font-face {
@@ -4452,6 +4455,10 @@ li.frm_field_box > ul.frm_grid_container {
 	padding: 10px;
 }
 
+#form_show_entry_page.frm_wrap .postbox {
+	overflow: hidden;
+}
+
 .frm_image_option_container .frm_image_placeholder_icon svg{
 	height: 150px;
 }
@@ -4784,7 +4791,7 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 
 .frm_on_label,
 .frm_off_label {
-	color: #444444;
+	color: var(--grey-700);
 }
 
 .frm_toggle {
@@ -4796,7 +4803,7 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 }
 
 .frm_toggle_block {
-	display: inline-flex;
+	display: inline-flex !important;
     gap: var(--gap-sm);
 	align-items: center;
 }
@@ -5723,12 +5730,19 @@ table td, .form-table tr td {
 	box-shadow: none;
 }
 
-.frm_reply_to_container,
-.frm_bcc_cc_container {
+p.frm_bcc_cc_container,
+p.frm_reply_to_container {
 	float: right;
-	margin: -4px 0 0;
 	z-index: 1;
 	position: relative;
+}
+
+p.frm_bcc_cc_container {
+	margin: 14px 0 0;
+}
+
+p.frm_reply_to_container {
+	margin: -4px 0 0;
 }
 
 .frm_email_row .frm_cancel1_icon:before {
@@ -8419,8 +8433,8 @@ button.frm_choose_image_box,
 	left: 5px;
 }
 
-.rtl .frm_reply_to_container,
-.rtl .frm_bcc_cc_container {
+.rtl p.frm_reply_to_container,
+.rtl p.frm_bcc_cc_container {
 	float: left;
 }
 
@@ -8770,6 +8784,13 @@ Responsive Design
 
 	#wp-content-media-buttons a.frm_insert_form {
 		padding: 0 var(--gap-sm);
+	}
+
+	.frm-white-body input[type="checkbox"]:checked::before,
+	.frm_wrap input[type="checkbox"]:checked::before {
+		width: 1.2rem;
+		height: 1.2rem;
+		margin: 0.125rem;
 	}
 }
 

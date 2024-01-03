@@ -294,7 +294,7 @@ class FrmFormsListHelper extends FrmListHelper {
 						$val = call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 					break;
-			}
+			}//end switch
 
 			if ( isset( $val ) ) {
 				$r .= "<td $attributes>";
@@ -302,7 +302,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				$r .= '</td>';
 			}
 			unset( $val );
-		}
+		}//end foreach
 		$r .= '</tr>';
 
 		return $r;
@@ -321,8 +321,9 @@ class FrmFormsListHelper extends FrmListHelper {
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
-		$val  = str_replace( '&nbsp;', '', $val ); // Remove the space hard coded in Landing pages.
-		$val  = '<div>' . $val . '</div>';
+		// Remove the space hard coded in Landing pages.
+		$val = str_replace( '&nbsp;', '', $val );
+		$val = '<div>' . $val . '</div>';
 		return $val;
 	}
 
@@ -355,9 +356,9 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param array  $actions
+	 * @param object $item
 	 * @param string $edit_link
-	 * @param array $actions
-	 * @param stdClass $item
 	 *
 	 * @return void
 	 */
@@ -383,8 +384,10 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param array  $actions
 	 * @param string $edit_link
-	 * @param stdClass $item
+	 * @param string $mode
 	 *
 	 * @return string
 	 */
@@ -414,6 +417,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 *
 	 * @return void
@@ -425,6 +429,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 *
 	 * @return void

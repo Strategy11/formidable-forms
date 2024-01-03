@@ -2617,7 +2617,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
+			let msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
@@ -2906,7 +2906,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		return fields;
+		return wp.hooks.applyFilters( 'frm_admin_get_field_list', fields, fieldType, allFields );
 	}
 
 	function popProductFields( field ) {
@@ -2980,7 +2980,7 @@ function frmAdminBuildJS() {
 	 * If the element doesn't exist, use a blank value.
 	 */
 	function getPossibleValue( id ) {
-		field = document.getElementById( id );
+		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
 		} else {
@@ -3020,7 +3020,7 @@ function frmAdminBuildJS() {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
 		} else {
-			changes.innerHTML = newValue;
+			changes.innerHTML = purifyHtml( newValue );
 
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
@@ -5024,7 +5024,11 @@ function frmAdminBuildJS() {
 		var link, lookupBlock,
 			fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
-		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
+		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID );
+		if ( ! link ) {
+			return;
+		}
+		link = link.parentNode;
 
 		if ( this.value === 'text' ) {
 			lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
@@ -5747,6 +5751,11 @@ function frmAdminBuildJS() {
 			},
 			''
 		);
+
+		if ( clean !== html ) {
+			// Clean it until nothing changes, in case the stripped result is now unsafe.
+			return purifyHtml( clean );
+		}
 
 		return clean;
 	}

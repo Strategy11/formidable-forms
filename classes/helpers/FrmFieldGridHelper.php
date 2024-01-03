@@ -200,7 +200,7 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	public function sync_list_size() {
-		if ( ! isset( $this->field ) ) {
+		if ( empty( $this->field ) ) {
 			return;
 		}
 

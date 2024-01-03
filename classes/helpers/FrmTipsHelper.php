@@ -27,8 +27,8 @@ class FrmTipsHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param array $tip {
-	 *     Tip args
+	 * @param array  $tip {
+	 *      Tip args.
 	 *
 	 *     @type array  $link Tip link data. See the first parameter of {@see FrmAppHelper::admin_upgrade_link()} for more details.
 	 *     @type string $page The based link of the tip. If this is empty, `https://formidableforms.com/lite-upgrade/` will
@@ -410,7 +410,7 @@ class FrmTipsHelper {
 	/**
 	 * Displays a call-to-action section in the admin area.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $args {
 	 *     An array of arguments to configure the call-to-action section.
@@ -428,7 +428,8 @@ class FrmTipsHelper {
 		$role = ! empty( $args['role'] ) ? $args['role'] : 'administrator';
 
 		if ( ! current_user_can( $role ) ) {
-			return; // Return early if the user doesn't have the required capability
+			// Return early if the user doesn't have the required capability.
+			return;
 		}
 
 		$defaults = array(

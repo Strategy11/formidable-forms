@@ -75,7 +75,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Remove the "for" attribute for captcha
 	 *
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string

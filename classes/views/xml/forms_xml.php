@@ -56,5 +56,5 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 	</form>
 <?php
 		unset( $fields );
-	}
-}
+	}//end foreach
+}//end while

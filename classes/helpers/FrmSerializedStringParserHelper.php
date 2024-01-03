@@ -105,7 +105,7 @@ class FrmSerializedStringParserHelper {
 				// Treat a serialized object or anything unexpected as Null.
 				$val = null;
 				break;
-		}
+		}//end switch
 
 		return $val;
 	}

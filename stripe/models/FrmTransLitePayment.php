@@ -72,7 +72,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	/**
 	 * Gets payments statistic data.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
@@ -90,6 +90,9 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 		}
 		if ( null !== $to_date ) {
 			$where['created_at <'] = $to_date . ' 23:59:59';
+		}
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return $data;
 		}
 
 		// Do not collect test payment, this is a new feature of Stripe lite.
@@ -119,7 +122,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	/**
 	 * Gets payment total data.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param object[] $payments Array of payment objects.
 	 * @return array Return array of total amount for each currency.

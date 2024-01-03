@@ -65,7 +65,7 @@ class FrmTableHTMLGenerator {
 	 * FrmTableHTMLGenerator constructor.
 	 *
 	 * @param string $type
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	public function __construct( $type, $atts = array() ) {
 
@@ -176,7 +176,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Determine if setting is for a color, e.g. text color, background color, or border color
 	 *
-	 * @param string $setting_key name of setting
+	 * @param string $setting_key Name of setting.
 	 *
 	 * @since 2.05
 	 *

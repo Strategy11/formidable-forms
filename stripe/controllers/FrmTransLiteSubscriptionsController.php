@@ -114,7 +114,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			}
 		} else {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
-		}
+		}//end if
 
 		echo esc_html( $message );
 		wp_die();

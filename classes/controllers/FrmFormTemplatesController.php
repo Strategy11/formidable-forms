@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class FrmFormTemplatesController.
  * Handles the Form Templates page in the admin area.
  *
- * @since x.x
+ * @since 6.7
  */
 class FrmFormTemplatesController {
 
@@ -135,10 +135,13 @@ class FrmFormTemplatesController {
 	/**
 	 * Initialize hooks for template page only.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_menu', __CLASS__ . '::menu', 14 ); // Use the same priority as Applications so Form Templates appear directly under Applications.
+		self::init_template_resources();
+
+		// Use the same priority as Applications so Form Templates appear directly under Applications.
+		add_action( 'admin_menu', __CLASS__ . '::menu', 14 );
 		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
 		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
 
@@ -152,7 +155,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Add Form Templates menu item to sidebar and define index page.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -167,8 +170,6 @@ class FrmFormTemplatesController {
 			self::PAGE_SLUG,
 			array( __CLASS__, 'render' )
 		);
-
-		self::init_template_resources();
 	}
 
 	/**
@@ -177,7 +178,7 @@ class FrmFormTemplatesController {
 	 * Sets up template data, fetches relevant information, determines which blocks to render,
 	 * and includes the view file for displaying the Form Templates page.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -206,7 +207,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Renders a modal component in the WordPress admin area.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -241,7 +242,7 @@ class FrmFormTemplatesController {
 			if ( $expired ) {
 				$view_parts[] = 'modals/renew-account-modal.php';
 			}
-		}
+		}//end if
 
 		// Check if the current page is the form builder page.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -264,7 +265,7 @@ class FrmFormTemplatesController {
 	 * - Formats custom templates
 	 * - Updates global variables to reflect the current state
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -281,7 +282,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Initialize favorite templates from WordPress options.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -307,7 +308,7 @@ class FrmFormTemplatesController {
 	 * Manages the $favorite_templates by using WordPress options to
 	 * add or remove templates from the favorites list.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -347,7 +348,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Create a custom template from a form.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -387,7 +388,7 @@ class FrmFormTemplatesController {
 	 *
 	 * Retrieves the custom templates, formats them, and assigns them to the class property.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -436,7 +437,7 @@ class FrmFormTemplatesController {
 	 * Gets the templates from the API and assigns them to the class property.
 	 * Also handles any errors returned from the API.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -453,7 +454,7 @@ class FrmFormTemplatesController {
 	 * Iterates through templates to organize categories, performs filtering, sorting,
 	 * and adds special categories.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -488,8 +489,10 @@ class FrmFormTemplatesController {
 
 			// Mark the template as favorite if it's in the favorite templates list.
 			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'], true );
-		}
-		unset( $template ); // Unset the reference `$template` variable.
+		}//end foreach
+
+		// Unset the reference `$template` variable.
+		unset( $template );
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
@@ -517,7 +520,8 @@ class FrmFormTemplatesController {
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
 				'name'  => __( 'Available Templates', 'formidable' ),
-				'count' => 0, // Assigned via JavaScript.
+				// Assigned via JavaScript.
+				'count' => 0,
 			);
 		}
 		$special_categories['all-templates']  = array(
@@ -526,7 +530,8 @@ class FrmFormTemplatesController {
 		);
 		$special_categories['free-templates'] = array(
 			'name'  => __( 'Free Templates', 'formidable' ),
-			'count' => 0, // Assigned via JavaScript.
+			// Assigned via JavaScript.
+			'count' => 0,
 		);
 
 		self::$categories = array_merge(
@@ -541,7 +546,7 @@ class FrmFormTemplatesController {
 	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
 	 * the `featured_templates` class property.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -557,7 +562,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the total count of favorite templates.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return int
 	 */
@@ -571,7 +576,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Initializes essential resources.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -599,7 +604,7 @@ class FrmFormTemplatesController {
 	 * It's hidden by default and will show when the user clicks on 'Create Form' from
 	 * another place in Formidable Forms.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -613,7 +618,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Append 'new_template' query parameter to navigation links if it exists in the URL.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $nav_items Navigation items.
 	 * @param array $nav_args Additional navigation arguments.
@@ -635,7 +640,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Enqueues "Form Templates" scripts and styles.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -644,7 +649,8 @@ class FrmFormTemplatesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array(
 			'wp-i18n',
-			'wp-hooks', // This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			// This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			'wp-hooks',
 			'formidable_dom',
 		);
 
@@ -664,7 +670,7 @@ class FrmFormTemplatesController {
 		/**
 		 * Fires after "Form Templates" enqueue assets.
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 */
 		do_action( 'frm_form_templates_enqueue_assets' );
 
@@ -674,7 +680,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get "Form Templates" JS variables as an array.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array
 	 */
@@ -694,7 +700,7 @@ class FrmFormTemplatesController {
 		/**
 		 * Filters `js_variables` passed to the "Form Templates".
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 *
 		 * @param array $js_variables Array of js_variables passed to "Form Templates".
 		 */
@@ -706,7 +712,7 @@ class FrmFormTemplatesController {
 	 *
 	 * Avoid extra scripts loading on "Form Templates" page that aren't needed.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -718,7 +724,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Check if the current page is the form templates page.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return bool True if the current page is the form templates page, false otherwise.
 	 */
@@ -729,7 +735,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the list of templates.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array A list of templates.
 	 */
@@ -755,7 +761,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the published forms based on applied filters.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array An array of published forms.
 	 */
@@ -767,7 +773,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the list of featured templates.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array A list of featured templates.
 	 */
@@ -778,7 +784,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the list of categories.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array A list of categories.
 	 */
@@ -789,7 +795,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the user's favorite form templates.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array The IDs of the user's favorite form templates.
 	 */
@@ -800,7 +806,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the list of custom templates.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return array A list of custom templates.
 	 */
@@ -811,7 +817,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the license type.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return string The license type.
 	 */
@@ -822,7 +828,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Checks if the API request was expired.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return bool True if the API request was expired, false otherwise.
 	 */
@@ -833,7 +839,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the path to form templates views.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return string Path to views.
 	 */
@@ -844,7 +850,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the upgrade link.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return string URL for upgrading accounts.
 	 */
@@ -855,7 +861,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the renewal link.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return string URL for renewing accounts.
 	 */

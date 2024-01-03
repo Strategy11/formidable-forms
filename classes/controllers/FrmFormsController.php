@@ -230,7 +230,7 @@ class FrmFormsController {
 			}
 
 			return self::get_edit_vars( $id, array(), $message );
-		}
+		}//end if
 	}
 
 	/**
@@ -311,6 +311,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public static function show_page_preview() {
 		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -362,6 +364,11 @@ class FrmFormsController {
 		}
 
 		$random_page = reset( $random_page );
+		if ( ! is_a( $random_page, 'WP_Post' ) ) {
+			// The return type can also be int.
+			return;
+		}
+
 		query_posts(
 			array(
 				'post_type' => 'page',
@@ -379,7 +386,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.5.2
 	 *
-	 * @param WP_Post $post
+	 * @param WP_Post $page The page object.
 	 * @return void
 	 */
 	private static function set_post_global( $page ) {
@@ -426,15 +433,57 @@ class FrmFormsController {
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
 		if ( have_posts() ) {
 			the_post();
-			get_header( '' );
+			self::get_template( 'header' );
+
 			// add some generic class names to the container to add some natural padding to the content.
 			// .entry-content catches the WordPress TwentyTwenty theme.
 			// .container catches Customizr content.
 			echo '<div class="container entry-content">';
 			the_content();
 			echo '</div>';
-			get_footer();
+
+			self::get_template( 'footer' );
 		}
+	}
+
+	/**
+	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
+	 * and renders required html fragements calling required functions.
+	 *
+	 * @since 6.7.1
+	 * @param string $template
+	 * @return void
+	 */
+	private static function get_template( $template ) {
+		if ( self::should_try_getting_template( $template ) ) {
+			call_user_func( 'get_' . $template );
+			return;
+		}
+
+		if ( 'header' === $template ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/header.php';
+			return;
+		}
+
+		if ( 'footer' === $template ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/preview/footer.php';
+		}
+	}
+
+	/**
+	 * Returns true if calling a template function doesn't trigger deprecation warnings.
+	 *
+	 * @since 6.7.1
+	 * @param string $template
+	 * @return bool
+	 */
+	private static function should_try_getting_template( $template ) {
+		$stylesheet_path = get_stylesheet_directory();
+		$template_path   = get_template_directory();
+		$is_child_theme  = $stylesheet_path !== $template_path;
+		$template_name   = $template . '.php';
+
+		return file_exists( $stylesheet_path . '/' . $template_name ) || $is_child_theme && file_exists( $template_path . '/' . $template_name );
 	}
 
 	/**
@@ -460,13 +509,18 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Set the page content for the theme preview page
+	 * Set the page content for the theme preview page.
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $content
+	 * @return string
 	 */
 	public static function preview_content( $content ) {
 		if ( in_the_loop() ) {
-			$content = self::show_page_preview();
+			self::show_page_preview();
+			// Clear the content for the page we're using.
+			$content = '';
 		}
 
 		return $content;
@@ -555,7 +609,7 @@ class FrmFormsController {
 
 		$params = FrmForm::list_page_params();
 
-		//check nonce url
+		// Check nonce url.
 		check_admin_referer( $status . '_form_' . $params['id'] );
 
 		$count = 0;
@@ -638,13 +692,18 @@ class FrmFormsController {
 			}
 		}
 
-		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		if ( $count ) {
+			/* translators: %1$s: Number of forms */
+			return sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		}
 
-		return $message;
+		return '';
 	}
 
-	private static function delete_all() {
+	/**
+	 * @since 6.7.1 Function went from private to public.
+	 */
+	public static function delete_all() {
 		// Check nonce url.
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
 		if ( $permission_error !== false ) {
@@ -653,12 +712,13 @@ class FrmFormsController {
 			return;
 		}
 
-		$count   = FrmForm::scheduled_delete( time() );
+		$count = FrmForm::scheduled_delete( time() );
+		$url   = remove_query_arg( array( 'delete_all' ) );
 
-		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		$url  .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
 
-		self::display_forms_list( array(), $message );
+		wp_safe_redirect( $url );
+		die();
 	}
 
 	/**
@@ -1207,7 +1267,7 @@ class FrmFormsController {
 			}
 
 			$sections[ $key ] = $section;
-		}
+		}//end foreach
 
 		return $sections;
 	}
@@ -1633,7 +1693,7 @@ class FrmFormsController {
 				// Override the action for this page.
 				$action = 'delete_all';
 			}
-		}
+		}//end if
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
@@ -1647,7 +1707,6 @@ class FrmFormsController {
 			case 'trash':
 			case 'untrash':
 			case 'destroy':
-			case 'delete_all':
 			case 'settings':
 			case 'update_settings':
 				return self::$action( $vars );
@@ -1679,10 +1738,18 @@ class FrmFormsController {
 					return;
 				}
 
+				if ( 'forms_permanently_deleted' === $message ) {
+					$count = FrmAppHelper::get_param( 'forms_deleted', 0, 'get', 'absint' );
+					/* translators: %1$s: Number of forms */
+					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+					self::display_forms_list( array(), $message, '' );
+					return;
+				}
+
 				self::display_forms_list();
 
 				return;
-		}
+		}//end switch
 	}
 
 	/**
@@ -1690,7 +1757,7 @@ class FrmFormsController {
 	 *
 	 * Handles the AJAX request for renaming a form.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return void
 	 */
@@ -1750,7 +1817,9 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/reports-info.php';
 	}
 
-	/* FRONT-END FORMS */
+	/**
+	 * FRONT-END FORMS.
+	 */
 	public static function admin_bar_css() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
 			return;
@@ -1940,7 +2009,8 @@ class FrmFormsController {
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
 
-		if ( ! empty( $id ) ) { // form id or key is set
+		if ( ! empty( $id ) ) {
+			// Form id or key is set.
 			$form = FrmForm::getOne( $id );
 			if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
 				$form = false;
@@ -2014,7 +2084,7 @@ class FrmFormsController {
 					)
 				);
 			}
-		}
+		}//end if
 	}
 
 	/**
@@ -2216,7 +2286,8 @@ class FrmFormsController {
 			$action_type = FrmOnSubmitHelper::get_action_type( $action );
 
 			if ( 'redirect' === $action_type ) {
-				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
+				if ( $has_redirect ) {
+					// Do not process because we run the first redirect action only.
 					continue;
 				}
 			}
@@ -2231,7 +2302,7 @@ class FrmFormsController {
 
 			$met_actions[] = $action;
 			unset( $action );
-		}
+		}//end foreach
 
 		$args['event'] = $event;
 
@@ -2422,7 +2493,7 @@ class FrmFormsController {
 			}
 
 			$post = $old_post;
-		}
+		}//end if
 	}
 
 	/**
@@ -2445,12 +2516,14 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
+		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
+			// Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
 		}
 
-		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) {
+			// Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
 				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
@@ -2458,7 +2531,8 @@ class FrmFormsController {
 			}
 
 			wp_redirect( esc_url_raw( $success_url ) );
-			die(); // do not use wp_die or redirect fails
+			// Do not use wp_die or redirect fails.
+			die();
 		}
 
 		// Redirect with a delay.
@@ -2551,7 +2625,8 @@ class FrmFormsController {
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script>';
-		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
+		if ( empty( $args['doing_ajax'] ) ) {
+			// Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
 		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2566,7 +2641,7 @@ class FrmFormsController {
 	 *
 	 * @param string $success_url
 	 * @param string $success_msg
-	 * @param array $args
+	 * @param array  $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
@@ -2905,7 +2980,7 @@ class FrmFormsController {
 	 *
 	 * @since 5.2
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function create_page_with_shortcode() {
 		if ( ! current_user_can( 'publish_posts' ) ) {
@@ -2952,8 +3027,7 @@ class FrmFormsController {
 	/**
 	 * @since 5.3
 	 *
-	 * @param string $content
-	 * @param int    $form_id
+	 * @param int $form_id
 	 * @return string
 	 */
 	private static function get_page_shortcode_content_for_form( $form_id ) {
@@ -2966,7 +3040,7 @@ class FrmFormsController {
 	/**
 	 * Get page dropdown for AJAX request for embedding form in an existing page.
 	 *
-	 * @return never
+	 * @return void
 	 */
 	public static function get_page_dropdown() {
 		if ( ! current_user_can( 'publish_posts' ) ) {
@@ -3046,39 +3120,39 @@ class FrmFormsController {
 	 * Create a custom template from a form
 	 *
 	 * @since 3.06
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 */
 	public static function build_template() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return bool
 	 */
 	public static function expired() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 		return FrmAddonsController::is_license_expired();
 	}
 
 	/**
 	 * Get data from api before rendering it so that we can flag the modal as expired
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return void
 	 */
 	public static function before_list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return void
 	 */
 	public static function list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 }

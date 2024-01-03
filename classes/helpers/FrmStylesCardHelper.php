@@ -163,7 +163,9 @@ class FrmStylesCardHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param array $style API style data {
+	 * @param array $style {
+	 *     API style data.
+	 *
 	 *     @type array  $settings
 	 *     @type string $name
 	 *     @type string $slug
@@ -227,7 +229,7 @@ class FrmStylesCardHelper {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
-		}
+		}//end if
 
 		$this->is_new_template = ! empty( $style['is_new'] );
 

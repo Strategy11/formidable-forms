@@ -30,5 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="frm-form-templates-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
 			<span class="frm-form-templates-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
 		</li>
-	<?php } ?>
+		<?php
+	}//end foreach
+	?>
 </ul>

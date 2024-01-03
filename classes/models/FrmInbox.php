@@ -15,7 +15,7 @@ class FrmInbox extends FrmFormApi {
 	private static $messages = false;
 
 	/**
-	 * @param array
+	 * @var array
 	 */
 	private static $banner_messages;
 
@@ -140,7 +140,8 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
-			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			// Use 'free', 'personal', 'business', 'elite', 'grandfathered'.
+			'who'     => 'all',
 			'type'    => '',
 		);
 

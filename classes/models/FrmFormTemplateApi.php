@@ -93,7 +93,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the code from the email sent for the API
+	 * @param string $code the code from the email sent for the API.
 	 *
 	 * @return void
 	 */
@@ -137,7 +137,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the base64 encoded code
+	 * @param string $code The base64 encoded code.
 	 *
 	 * @return void
 	 */
@@ -173,7 +173,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 			}
 
 			$data['url'] = $data['urlByKey'][ $key ];
-		}
+		}//end if
 
 		wp_send_json_success( $data );
 	}

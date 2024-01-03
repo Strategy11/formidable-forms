@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="misc-pub-section">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_keyalt_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_key_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>

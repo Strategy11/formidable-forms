@@ -3,6 +3,8 @@
  * Generate the XML for export for posts and form actions.
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+ *
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,7 +16,8 @@ if ( ! $item_ids ) {
 }
 
 global $wp_query;
-$wp_query->in_the_loop = true; // Fake being in the loop.
+// Fake being in the loop.
+$wp_query->in_the_loop = true;
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
@@ -87,8 +90,8 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		?>
 	</view>
 <?php
-	}
-}
+	}//end foreach
+}//end while
 
 if ( empty( $taxonomies ) ) {
 	return;

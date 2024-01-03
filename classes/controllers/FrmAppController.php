@@ -71,7 +71,9 @@ class FrmAppController {
 			$add_class = '';
 			if ( $full_screen_on ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
-				wp_enqueue_style( 'wp-edit-post' ); // Load the CSS for .is-fullscreen-mode.
+
+				// Load the CSS for .is-fullscreen-mode.
+				wp_enqueue_style( 'wp-edit-post' );
 			}
 			$classes .= apply_filters( 'frm_admin_full_screen_class', $add_class );
 		}
@@ -210,8 +212,9 @@ class FrmAppController {
 	}
 
 	/**
-	 * @param bool $show_nav
-	 * @param string $title
+	 * @param int|object $form
+	 * @param bool       $show_nav
+	 * @param string     $title
 	 *
 	 * @psalm-param 'hide'|'show' $title
 	 *
@@ -532,6 +535,10 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_init() {
+		if ( FrmAppHelper::get_param( 'delete_all' ) && FrmAppHelper::is_admin_page( 'formidable' ) && 'trash' === FrmAppHelper::get_param( 'form_type' ) ) {
+			FrmFormsController::delete_all();
+		}
+
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && 'duplicate' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			FrmFormsController::duplicate();
 		}
@@ -541,7 +548,8 @@ class FrmAppController {
 			FrmStylesController::save_style();
 		}
 
-		new FrmPersonalData(); // register personal data hooks
+		// Register personal data hooks.
+		new FrmPersonalData();
 
 		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {
 			self::network_upgrade_site();
@@ -704,7 +712,8 @@ class FrmAppController {
 			'bootstrap_tooltip',
 			'bootstrap-multiselect',
 			'wp-i18n',
-			'wp-hooks', // Required in WP versions older than 5.7
+			// Required in WP versions older than 5.7
+			'wp-hooks',
 			'formidable_dom',
 			'formidable_embed',
 		);
@@ -782,7 +791,7 @@ class FrmAppController {
 			if ( $post_type === 'frm_display' ) {
 				self::enqueue_legacy_views_assets();
 			}
-		}
+		}//end if
 
 	}
 
@@ -1052,7 +1061,7 @@ class FrmAppController {
 		$frmdb = new FrmMigrate();
 		$frmdb->uninstall();
 
-		//disable the plugin and redirect after uninstall so the tables don't get added right back
+		// Disable the plugin and redirect after uninstall so the tables don't get added right back.
 		$plugins = array( FrmAppHelper::plugin_folder() . '/formidable.php', 'formidable-pro/formidable-pro.php' );
 		deactivate_plugins( $plugins, false, false );
 		echo esc_url_raw( admin_url( 'plugins.php?deactivate=true' ) );
@@ -1133,7 +1142,7 @@ class FrmAppController {
 	/**
 	 * Check if the footer links should be shown.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @return bool
 	 */
@@ -1148,7 +1157,7 @@ class FrmAppController {
 		/**
 		 * Filter whether to show the Formidable footer links.
 		 *
-		 * @since x.x
+		 * @since 6.7
 		 *
 		 * @param bool $show_footer_links
 		 * @return bool
@@ -1159,7 +1168,7 @@ class FrmAppController {
 	/**
 	 * Show an error modal and terminate the script execution.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $error_args Arguments that control the behavior of the error modal.
 	 *

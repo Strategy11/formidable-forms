@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for managing form templates in the admin area.
  *
- * @since x.x
+ * @since 6.7
  */
 class FrmFormTemplatesHelper {
 
 	/**
 	 * Updates template array with additional details and URL.
 	 *
-	 * @param array  &$template Template data.
+	 * @param array  $template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
 	 */
@@ -46,7 +46,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo attributes for a given template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the API request is expired or not.
@@ -78,7 +78,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Add classes for a given template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @return string
@@ -101,9 +101,10 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Add info about the required plan for this template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 * @param bool  $expired Whether the license is expired.
 	 * @param array $attributes The template attributes.
 	 * @return void
 	 */
@@ -124,7 +125,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo attributes for the link to view a template.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $template The template data.
 	 * @return void
@@ -152,9 +153,11 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Show the CTA to upgrade or renew.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 *
 	 * @param array $args {
+	 *    Arguments for the CTA.
+	 *
 	 *    @type string $upgrade_link Upgrade link URL.
 	 *    @type string $renew_link Renew link URL.
 	 * }

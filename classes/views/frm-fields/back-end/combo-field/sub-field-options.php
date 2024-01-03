@@ -106,8 +106,8 @@ $labels    = $this->get_built_in_option_labels();
 				</p>
 				<?php
 				break;
-		}
-	}
+		}//end switch
+	}//end foreach
 	?>
 	<div class="frm12"></div>
 </div><!-- End .frm_sub_field_options -->

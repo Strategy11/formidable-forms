@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.4.2
 Requires PHP: 5.6
-Stable tag: 6.7
+Stable tag: 6.7.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,10 +442,25 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.7.1 =
+* Security: Form input from unprivileged users will now be sanitized more with strict rules and filtered more on display, allowing only a few basic HTML tags (p, i, b, strong and br) with no support for attributes. The allowed tags can be modified using a new frm_allowed_form_input_html filter.
+* Security: Additional sanitizing has been added when making live form builder updates to avoid malicious changes from privileged users.
+* New: Formidable branding has been removed on the import page when white labelling is enabled.
+* New: The permission to view forms has been renamed to "View Forms List" to remove ambiguity.
+* Fix: A failed to open stream warning would get logged when calling include(modal.php) on some admin pages.
+* Fix: A styling issue has been fixed with checkboxes in the screen options panel for responsive mobile widths.
+* Fix: A redirect will now happen after emptying form trash to avoid emptying form trash again when refreshing the page.
+* Fix: Fewer requests will now be made at once when checking for license status in add ons.
+* Fix: Repeater forms are no longer included in the deleted form count when emptying form trash.
+* Fix: A cannot read properties of null JavaScript TypeError would get logged when switching between Product field types.
+* Fix: A passing null to parameter #3 deprecated warning would get logged when previewing a form in-theme.
+* Fix: File theme without header.php and footer.php deprecated messages were getting logged when previewing in-theme using the Twenty Twenty Three theme.
+* Fix: A payments table does not exist database error would get logged when creating email summaries for sites without payments configured.
+* Fix: Required credit card fields were failing validation when using for Stripe actions included with this plugin.
+
 = 6.7 =
 * New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
 * New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
-* New: A new dashboard landing page has been added with form and payment stats.
 * New: Error handling has been improved when trying to edit a form in trash or a form that does not exist.
 * New: The query for getting entry count has been optimized, significantly reducing the time it takes to count entries.
 * New: Default submit button HTML has been updated for new forms. Forms with the previous HTML would trigger the Previous button when the Enter key was pressed. Forms with the new layout have corrected this and will trigger the Next button instead when the Enter key is pressed.

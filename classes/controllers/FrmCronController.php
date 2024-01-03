@@ -3,6 +3,8 @@
  * Cron controller
  *
  * @since 6.3.2
+ *
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,12 +34,14 @@ class FrmCronController {
 	/**
 	 * Schedules cron events.
 	 *
-	 * @since x.x
+	 * @since 6.7
 	 */
 	public static function schedule_events() {
 		$events = self::get_events();
-		unset( $events['formidable_send_usage'] ); // This is scheduled in another place.
-		unset( $events['frm_payment_cron'] ); // This is scheduled in another place.
+
+		// These are scheduled in another place.
+		unset( $events['formidable_send_usage'] );
+		unset( $events['frm_payment_cron'] );
 
 		foreach ( $events as $event => $recurrence ) {
 			if ( ! wp_next_scheduled( $event ) ) {
