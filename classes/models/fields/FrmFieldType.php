@@ -1366,7 +1366,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.7.1
 	 *
 	 * @param array $atts
 	 * @return bool
@@ -1387,7 +1387,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.7.1
 	 *
 	 * @param stdClass $entry
 	 * @return bool
