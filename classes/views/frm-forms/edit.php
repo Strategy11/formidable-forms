@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_builder_page" class="frm_wrap">
 	<div class="frm_page_container">
+	<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
 
 	<?php
 	FrmAppHelper::get_admin_header(

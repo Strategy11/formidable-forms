@@ -20,6 +20,8 @@ class FrmFieldHTML extends FrmFieldType {
 	 */
 	protected $has_input = false;
 
+	private static $included_adv_box = false;
+
 	/**
 	 * @since 4.0
 	 *

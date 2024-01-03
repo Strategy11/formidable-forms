@@ -854,7 +854,7 @@ p.frm_has_shortcodes {
 	box-sizing: border-box;
 }
 
-#form_settings_page #frm_adv_info {
+#form_settings_page #frm_adv_info, #frm_builder_page #frm_adv_info {
 	display: none;
 	top: 0;
 	width: 310px;
@@ -863,6 +863,12 @@ p.frm_has_shortcodes {
 	overflow-y: scroll;
 	z-index: 100;
 }
+
+/* #frm_builder_page #frm_adv_info, #frm_builder_page .frmsvg.frm-show-box{
+	margin-top: -30px;
+	position: relative;
+	margin-left: auto;
+} */
 
 #form_global_settings .columns-2 .frm-right-panel,
 #form_settings_page .columns-2 .frm-right-panel,
