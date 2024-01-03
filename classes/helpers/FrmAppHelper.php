@@ -653,7 +653,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function sanitize_with_html( &$value ) {
-		if ( current_user_can( 'frm_edit_entries' ) ) {
+		if ( current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' ) ) {
 			// Only strip unsafe HTML like scripts for a privileged user submitting a form.
 			self::sanitize_value( 'wp_kses_post', $value );
 		} else {

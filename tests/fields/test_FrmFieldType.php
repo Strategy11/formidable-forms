@@ -37,6 +37,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::sanitize_value
 	 */
 	public function test_sanitize_value() {
+		$this->set_current_user_to_1();
 		$frm_field_type = new FrmFieldDefault();
 
 		$values = array(
