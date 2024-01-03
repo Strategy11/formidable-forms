@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7';
+	public static $plug_version = '6.7.1';
 
 	/**
 	 * @var bool
@@ -675,7 +675,7 @@ class FrmAppHelper {
 	/**
 	 * Allow only a small set of very basic HTML for unprivileged users.
 	 *
-	 * @since x.x
+	 * @since 6.7.1
 	 *
 	 * @param string $value
 	 */
@@ -689,7 +689,7 @@ class FrmAppHelper {
 		);
 
 		/**
-		 * @since x.x
+		 * @since 6.7.1
 		 *
 		 * @param array $allowed_html
 		 */
@@ -3576,7 +3576,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.7.1
 	 */
 	public static function get_images_dropdown_atts( $option, $args ) {
 		$image        = self::get_images_dropdown_option_image( $option, $args );

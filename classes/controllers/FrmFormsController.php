@@ -450,7 +450,7 @@ class FrmFormsController {
 	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
 	 * and renders required html fragements calling required functions.
 	 *
-	 * @since x.x
+	 * @since 6.7.1
 	 * @param string $template
 	 * @return void
 	 */
@@ -473,7 +473,7 @@ class FrmFormsController {
 	/**
 	 * Returns true if calling a template function doesn't trigger deprecation warnings.
 	 *
-	 * @since x.x
+	 * @since 6.7.1
 	 * @param string $template
 	 * @return bool
 	 */
@@ -701,7 +701,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x Function went from private to public
+	 * @since 6.7.1 Function went from private to public.
 	 */
 	public static function delete_all() {
 		// Check nonce url.
@@ -3120,39 +3120,39 @@ class FrmFormsController {
 	 * Create a custom template from a form
 	 *
 	 * @since 3.06
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 */
 	public static function build_template() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return bool
 	 */
 	public static function expired() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 		return FrmAddonsController::is_license_expired();
 	}
 
 	/**
 	 * Get data from api before rendering it so that we can flag the modal as expired
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return void
 	 */
 	public static function before_list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @return void
 	 */
 	public static function list_templates() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 }

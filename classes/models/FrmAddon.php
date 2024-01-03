@@ -24,7 +24,7 @@ class FrmAddon {
 	 * This is used to flag other add ons not to send a request.
 	 * We only want to send a single API request per HTTP request.
 	 *
-	 * @since x.x
+	 * @since 6.7.1
 	 *
 	 * @var bool
 	 */
