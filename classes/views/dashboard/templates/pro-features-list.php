@@ -3,7 +3,9 @@
  * @since x.x
  *
  * @var array $features The list of pro features.
+ * @package Formidable
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

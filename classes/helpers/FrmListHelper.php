@@ -1026,7 +1026,7 @@ class FrmListHelper {
 	/**
 	 * Determines if a particular feature or element should be displayed.
 	 *
-	 * @param array $args An associative array of arguments.
+	 * @param array  $args An associative array of arguments.
 	 * @param string $settings The specific setting key to check within the arguments array.
 	 *
 	 * @return bool Returns true if the setting is not set or if it is not false; otherwise, returns false.
