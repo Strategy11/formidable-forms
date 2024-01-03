@@ -1380,11 +1380,11 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( ! $entry->user_id || ! user_can( $entry->user_id, 'frm_edit_entries' ) ) {
+		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
 			return true;
 		}
 		if ( $entry->updated_by ) {
-			return ! user_can( $entry->updated_by, 'frm_edit_entries' );
+			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
 		}
 		return false;
 	}
