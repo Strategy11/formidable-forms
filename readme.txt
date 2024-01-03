@@ -454,7 +454,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: A passing null to parameter #3 deprecated warning would get logged when previewing a form in-theme.
 * Fix: File theme without header.php and footer.php deprecated messages were getting logged when previewing in-theme using the Twenty Twenty Three theme.
 * Fix: A payments table does not exist database error would get logged when creating email summaries for sites without payments configured.
-* Fix: Requied credit card fields were failing validation when using for Stripe actions included with this plugin.
+* Fix: Required credit card fields were failing validation when using for Stripe actions included with this plugin.
 
 = 6.7 =
 * New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
