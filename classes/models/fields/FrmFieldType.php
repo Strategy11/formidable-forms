@@ -1346,6 +1346,11 @@ DEFAULT_HTML;
 	 */
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
+
+		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+		}
+
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -1360,6 +1365,47 @@ DEFAULT_HTML;
 		return $value;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param array $atts
+	 * @return bool
+	 */
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		if ( ! empty( $atts['keepjs'] ) ) {
+			// Always keep JS if the option is set.
+			return false;
+		}
+
+		if ( ! empty( $atts['entry'] ) ) {
+			$entry = $atts['entry'];
+		} elseif ( ! empty( $atts['entry_id'] ) ) {
+			$entry = FrmEntry::getOne( $atts['entry_id'] );
+		}
+
+		return ! empty( $entry ) && is_object( $entry ) && $this->should_strip_most_html( $entry );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $entry
+	 * @return bool
+	 */
+	protected function should_strip_most_html( $entry ) {
+		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
+			return true;
+		}
+		if ( $entry->updated_by ) {
+			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
+		}
+		return false;
+	}
+
+	/**
+	 * @param array $atts
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep' => ', ',

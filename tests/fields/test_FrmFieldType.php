@@ -37,6 +37,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::sanitize_value
 	 */
 	public function test_sanitize_value() {
+		$this->set_current_user_to_1();
 		$frm_field_type = new FrmFieldDefault();
 
 		$values = array(
@@ -127,6 +128,30 @@ class test_FrmFieldType extends FrmUnitTest {
 					'2',
 					'0',
 				),
+			),
+		);
+		foreach ( $values as $value ) {
+			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
+			$frm_field_type->sanitize_value( $value['value'] );
+			$this->assertEquals( $value['expected'], $value['value'] );
+		}
+
+		$this->use_frm_role( 'loggedout' );
+		$values = array(
+			array(
+				'type'     => 'default',
+				'value'    => '<script></script>test',
+				'expected' => 'test',
+			),
+			array(
+				'type'     => 'textarea',
+				'value'    => '<div class="here"></div>',
+				'expected' => '',
+			),
+			array(
+				'type'     => 'textarea',
+				'value'    => '<p>Here</p>',
+				'expected' => '<p>Here</p>',
 			),
 		);
 		foreach ( $values as $value ) {
