@@ -128,8 +128,6 @@ class FrmDashboardHelper {
 	/**
 	 * The dashboard widget that will show on the bottom.
 	 *
-	 * @param boolean $echo
-	 *
 	 * @return void
 	 */
 	public function get_bottom_widget() {
@@ -232,7 +230,7 @@ class FrmDashboardHelper {
 	/**
 	 * Dashboard - YouTube video widget template.
 	 *
-	 * @param string $classes The widget's classes
+	 * @param string $classes The widget's classes.
 	 *
 	 * @return void
 	 */

@@ -191,7 +191,7 @@ class FrmDashboardController {
 	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
 	 * @param object|false $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
-	 * @param array $counters_value The counter values for "Total Forms" & "Total Entries"
+	 * @param array        $counters_value The counter values for "Total Forms" & "Total Entries".
 	 *
 	 * @return array
 	 */
@@ -241,8 +241,8 @@ class FrmDashboardController {
 	 * Build view args for counter widget.
 	 *
 	 * @param string $heading
-	 * @param array $cta
-	 * @param int $value
+	 * @param array  $cta
+	 * @param int    $value
 	 * @param string $type
 	 *
 	 * @return array
@@ -264,8 +264,8 @@ class FrmDashboardController {
 	/**
 	 * Build view args for cta.
 	 *
-	 * @param string $title
-	 * @param string $link
+	 * @param string  $title
+	 * @param string  $link
 	 * @param boolean $display
 	 *
 	 * @return array
@@ -382,8 +382,8 @@ class FrmDashboardController {
 	/**
 	 * A function to handle the counters cta from the top: Total Forms, Total Entries, All Views, Installed Apps.
 	 *
-	 * @param string $counter_type
-	 * @param int $counter_value
+	 * @param string       $counter_type
+	 * @param int          $counter_value
 	 * @param object|false $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
 	 * @return array
 	 */
@@ -579,7 +579,7 @@ class FrmDashboardController {
 	 * Save subscribed user's email to dashboard options.
 	 * Used for Inbox widget - email subscribe.
 	 *
-	 * @param string $email.
+	 * @param string $email The user email address.
 	 * @return void
 	 */
 	private static function save_subscribed_email( $email ) {
@@ -629,7 +629,7 @@ class FrmDashboardController {
 	/**
 	 * Update the dashboard options to db.
 	 *
-	 * @param array $data
+	 * @param array  $data
 	 * @param string $option_name
 	 *
 	 * @return void
@@ -643,7 +643,7 @@ class FrmDashboardController {
 	/**
 	 * Save user id to closed banner list.
 	 *
-	 * @return boolean
+	 * @return void
 	 */
 	private static function add_welcome_closed_banner_user_id() {
 		$users_list = self::get_closed_welcome_banner_user_ids();

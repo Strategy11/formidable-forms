@@ -47,8 +47,6 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	/**
 	 * Build the YouTube API URL.
 	 *
-	 * @param string $api_endpoint
-	 *
 	 * @return string
 	 */
 	protected function api_url() {
@@ -67,7 +65,7 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	/**
 	 * Init api options: cache key and url endpoint.
 	 *
-	 * @return string
+	 * @return void
 	 */
 	private function init_api_options( $endpoint = null, $cache_key = null ) {
 		$this->cache_key           = $this->cache_keys['welcome-video'];
@@ -102,7 +100,7 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	/**
 	 * Makes request to YouTube feed API. Gets data from specified endpoint. After request is done, it will store data to wp cache.
 	 *
-	 * @param string $api_endpoint. The YouTube API endpoint.
+	 * @param string $api_endpoint The YouTube API endpoint.
 	 * @param string $cache_key The cache key used to store data to wp cache.
 	 *
 	 * @return array
