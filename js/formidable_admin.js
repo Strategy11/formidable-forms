@@ -227,6 +227,12 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			if ( msg.success === true ) {
 				app.showAuthorized( true );
 				app.showInlineSuccess();
+
+				/**
+				 * Triggers the after license is authorized action for a confirmation/success modal.
+				 * @param {Object} msg An object containing message data received from Authorize request.
+				 */
+				wp.hooks.doAction( 'frmAdmin.afterLicenseAuthorizeSuccess', { msg });
 			}
 			app.showProgress( msg );
 
