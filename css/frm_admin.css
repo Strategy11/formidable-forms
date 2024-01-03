@@ -5775,12 +5775,19 @@ table td, .form-table tr td {
 	box-shadow: none;
 }
 
-.frm_reply_to_container,
-.frm_bcc_cc_container {
+p.frm_bcc_cc_container,
+p.frm_reply_to_container {
 	float: right;
-	margin: -4px 0 0;
 	z-index: 1;
 	position: relative;
+}
+
+p.frm_bcc_cc_container {
+	margin: 14px 0 0;
+}
+
+p.frm_reply_to_container {
+	margin: -4px 0 0;
 }
 
 .frm_email_row .frm_cancel1_icon:before {
@@ -8469,8 +8476,8 @@ button.frm_choose_image_box,
 	left: 5px;
 }
 
-.rtl .frm_reply_to_container,
-.rtl .frm_bcc_cc_container {
+.rtl p.frm_reply_to_container,
+.rtl p.frm_bcc_cc_container {
 	float: left;
 }
 
