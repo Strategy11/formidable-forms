@@ -6945,20 +6945,21 @@ function frmAdminBuildJS() {
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
+		hideShortcodes(); // Hide all open shortcode boxes when switching between fields in builder.
 
-		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId );
+		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 	}
 
-	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId ) {
+	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
 		if ( ! shouldAddShortcodesModalTriggerIcon( fieldType ) ) {
 			return;
 		}
 
-		hideShortcodes(); // Hide all open shortcode boxes when switching between fields in builder.
 		const parentClass = '#frm-single-settings-' + fieldId;
 		if ( document.querySelector( parentClass + ' .frm-show-box' ) ) {
 			return;
 		}
+		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
 		jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon frm_has_shortcodes"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
 	}
 
@@ -7854,7 +7855,7 @@ function frmAdminBuildJS() {
 
 	function maybeShowModal( input ) {
 		var moreIcon;
-		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) || input.closest( '.frm_has_shortcodes' ) ) {
+		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
 			hideShortcodes();
 			moreIcon = getIconForInput( input );
 			if ( moreIcon.tagName === 'use' ) {
