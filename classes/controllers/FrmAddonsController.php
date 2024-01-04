@@ -1200,7 +1200,7 @@ class FrmAddonsController {
 				$result = self::activate_plugin( $installed );
 				break;
 			case 'deactivate':
-				$result = self::deactivate_plugin( $installed );
+				self::deactivate_plugin( $installed );
 				break;
 			case 'uninstall':
 				$result = self::uninstall_plugin( $installed );
