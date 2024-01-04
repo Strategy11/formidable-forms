@@ -332,10 +332,6 @@ function frmAdminBuildJS() {
 		element[0].style.display = '';
 	}
 
-	function hideElement( element ) {
-		element[0].style.display = 'none';
-	}
-
 	function empty( $obj ) {
 		if ( $obj !== null ) {
 			while ( $obj.firstChild ) {
