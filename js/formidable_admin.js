@@ -6958,12 +6958,31 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const parentClass = '#frm-single-settings-' + fieldId;
-		if ( document.querySelector( parentClass + ' .frm-show-box' ) ) {
+		const fieldSettingsContainer = '#frm-single-settings-' + fieldId;
+		if ( document.querySelector( fieldSettingsContainer + ' .frm-show-box' ) ) {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
-		jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
+
+		const wrapTextareaWithIconContainer = fieldSettingsContainer => {
+			const textarea = document.querySelector( fieldSettingsContainer + ' textarea' );
+			const wrapperSpan = span({ className: 'frm-with-right-icon' });
+			textarea.parentNode.insertBefore( wrapperSpan, textarea );
+			wrapperSpan.appendChild( textarea );
+			wrapperSpan.insertBefore( createModalTriggerIcon(), textarea );
+		}
+
+		const createModalTriggerIcon = () => {
+			const modalTriggerIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			modalTriggerIcon.className.baseVal = 'frmsvg frm-show-box';
+			const useElement = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+			useElement.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon');
+			modalTriggerIcon.appendChild(useElement);
+
+			return modalTriggerIcon;
+		}
+
+		wrapTextareaWithIconContainer( fieldSettingsContainer );
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
