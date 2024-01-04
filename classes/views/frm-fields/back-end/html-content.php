@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$e_args  = array(
 		'textarea_name' => 'field_options[description_' . absint( $field['id'] ) . ']',
 		'textarea_rows' => 8,
-		'editor_class'  => 'frm_has_shortcodes'
 	);
 	$html_id = 'frm_description_' . absint( $field['id'] );
 	wp_editor( $field['description'], $html_id, $e_args );
