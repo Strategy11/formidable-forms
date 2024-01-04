@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="">
+<p>
 	<label>
 		<?php esc_html_e( 'Content', 'formidable' ); ?>
 	</label>
@@ -17,4 +17,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$html_id = 'frm_description_' . absint( $field['id'] );
 	wp_editor( $field['description'], $html_id, $e_args );
 	?>
-</div>
+</p>
