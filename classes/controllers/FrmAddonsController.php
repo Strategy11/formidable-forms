@@ -1211,8 +1211,7 @@ class FrmAddonsController {
 			// Ignore the invalid header message that shows with nested plugins.
 			if ( $result->get_error_code() !== 'no_plugin_header' ) {
 				if ( wp_doing_ajax() ) {
-					echo json_encode( array( 'error' => $result->get_error_message() ) );
-					wp_die();
+					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
 				}
 				return array(
 					'message' => $result->get_error_message(),
