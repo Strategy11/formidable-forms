@@ -566,7 +566,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * If the names are being used on the CC fields,
 	 * make sure it doesn't prevent the submission if Stripe has approved.
 	 *
-	 * @since x.x
+	 * @since 6.7.1
 	 *
 	 * @param array    $errors
 	 * @param stdClass $field

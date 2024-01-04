@@ -163,6 +163,10 @@ class FrmEntryValidate {
 
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
+
+		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
+			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
+		}
 	}
 
 	/**
