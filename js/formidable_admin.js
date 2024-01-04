@@ -6863,15 +6863,26 @@ function frmAdminBuildJS() {
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
-		if ( fieldType === 'html' ) {
-			const parentClass = '#frm-single-settings-' + fieldId;
-			if ( document.querySelector( parentClass + ' .frm-show-box' ) ) {
-				document.querySelector( '#frm_description_' + fieldId ).focus();
-				return;
-			}
-			jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon frm_has_shortcodes"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
-			document.querySelector( '#frm_description_' + fieldId ).focus();
+
+		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId );
+	}
+
+	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId ) {
+		if ( ! shouldAddShortcodesModalTriggerIcon( fieldType ) ) {
+			return;
 		}
+
+		hideShortcodes(); // Hide all open shortcode boxes when switching between fields in builder.
+		const parentClass = '#frm-single-settings-' + fieldId;
+		if ( document.querySelector( parentClass + ' .frm-show-box' ) ) {
+			return;
+		}
+		jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon frm_has_shortcodes"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
+	}
+
+	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
+		const fieldsWithShortcodesBox = [ 'html' ];
+		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
 	function setupTinyMceEventHandlers( editor ) {
