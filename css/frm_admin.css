@@ -864,12 +864,6 @@ p.frm_has_shortcodes {
 	z-index: 100;
 }
 
-/* #frm_builder_page #frm_adv_info, #frm_builder_page .frmsvg.frm-show-box{
-	margin-top: -30px;
-	position: relative;
-	margin-left: auto;
-} */
-
 #form_global_settings .columns-2 .frm-right-panel,
 #form_settings_page .columns-2 .frm-right-panel,
 #frm-form-templates-page .frm-right-panel {

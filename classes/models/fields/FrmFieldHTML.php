@@ -20,12 +20,10 @@ class FrmFieldHTML extends FrmFieldType {
 	 */
 	protected $has_input = false;
 
-	private static $included_adv_box = false;
-
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args Includes 'field', 'display', and 'values'.
+	 * @param array $args - Includes 'field', 'display', and 'values'
 	 *
 	 * @return void
 	 */

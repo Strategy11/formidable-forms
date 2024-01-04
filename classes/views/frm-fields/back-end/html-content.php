@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<p class="">
+<p>
 	<label>
 		<?php esc_html_e( 'Content', 'formidable' ); ?>
 	</label>
