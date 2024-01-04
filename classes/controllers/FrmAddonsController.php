@@ -947,7 +947,7 @@ class FrmAddonsController {
 		if ( ! function_exists( 'deactivate_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		return deactivate_plugins( $plugin, $silent );
+		deactivate_plugins( $plugin, $silent );
 	}
 
 	/**
