@@ -8614,6 +8614,15 @@ function frmAdminBuildJS() {
 		};
 		actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
+		const messageElement = message[0];
+		messageElement.textContent = actionMap[action].message;
+
+		const buttonElement = button[0];
+		const parentElement = buttonElement.parentElement;
+		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
+		parentElement.classList.add( actionMap[action].class );
+		buttonElement.classList.remove( 'frm_loading_button' );
+
 		message.text( actionMap[action].message );
 		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed frm-addon-active' ).addClass( actionMap[action].class );
 		button.removeClass( 'frm_loading_button' );

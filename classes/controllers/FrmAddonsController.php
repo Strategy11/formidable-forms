@@ -941,7 +941,7 @@ class FrmAddonsController {
 	 *
 	 * @param string $plugin
 	 * @param bool   $silent
-	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 * @return void
 	 */
 	protected static function deactivate_plugin( $plugin, $silent = false ) {
 		if ( ! function_exists( 'deactivate_plugins' ) ) {
