@@ -156,7 +156,7 @@ class FrmAppController {
 			}
 		}
 
-		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page();
+		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || self::is_views_page();
 
 		/**
 		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
@@ -188,6 +188,18 @@ class FrmAppController {
 	}
 
 	/**
+	 * Check if Views is an active page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_views_page() {
+		$screen = get_current_screen();
+		return $screen && strpos( $screen->id, 'frm_display' ) !== false;
+	}
+
+	/**
 	 * @since x.x
 	 *
 	 * @param array $pages A list of page names to check.
@@ -195,13 +207,7 @@ class FrmAppController {
 	 */
 	private static function is_page_in_list( $pages ) {
 		$get_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$in_pages = in_array( $get_page, $pages, true );
-
-		if ( ! $in_pages ) {
-			$screen   = get_current_screen();
-			$in_pages = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
-		}
-		return $in_pages;
+		return in_array( $get_page, $pages, true );
 	}
 
 	/**
