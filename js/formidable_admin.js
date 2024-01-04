@@ -326,6 +326,9 @@ function frmAdminBuildJS() {
 	var s;
 
 	function showElement( element ) {
+		if ( ! element[0] ) {
+			return;
+		}
 		element[0].style.display = '';
 	}
 
@@ -783,7 +786,7 @@ function frmAdminBuildJS() {
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
 
-		if ( this.id === 'frm_insert_fields_tab' ) {
+		if ( this.id === 'frm_insert_fields_tab' && ! document.getElementById( 'frm_builder_page' ) ) {
 			clearSettingsBox();
 		}
 		return false;
@@ -10084,7 +10087,7 @@ function frmAdminBuildJS() {
 						return;
 					}
 
-					if ( settingsPage !== null ) {
+					if ( settingsPage !== null || builderPage ) {
 						/* form settings page */
 						htmlTab = jQuery( '#frm_html_tab' );
 						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
