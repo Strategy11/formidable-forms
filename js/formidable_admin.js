@@ -326,7 +326,7 @@ function frmAdminBuildJS() {
 	var s;
 
 	function showElement( element ) {
-		if ( !element[0] ) {
+		if ( ! element[0]) {
 			return;
 		}
 		element[0].style.display = '';
