@@ -6970,17 +6970,17 @@ function frmAdminBuildJS() {
 			textarea.parentNode.insertBefore( wrapperSpan, textarea );
 			wrapperSpan.appendChild( textarea );
 			wrapperSpan.insertBefore( createModalTriggerIcon(), textarea );
-		}
+		};
 
 		const createModalTriggerIcon = () => {
-			const modalTriggerIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			const modalTriggerIcon = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 			modalTriggerIcon.className.baseVal = 'frmsvg frm-show-box';
-			const useElement = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-			useElement.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon');
-			modalTriggerIcon.appendChild(useElement);
+			const useElement = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
+			useElement.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
+			modalTriggerIcon.appendChild( useElement );
 
 			return modalTriggerIcon;
-		}
+		};
 
 		wrapTextareaWithIconContainer( fieldSettingsContainer );
 	}
