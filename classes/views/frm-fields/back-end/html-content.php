@@ -3,7 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <p>
 	<label>
 		<?php esc_html_e( 'Content', 'formidable' ); ?>
