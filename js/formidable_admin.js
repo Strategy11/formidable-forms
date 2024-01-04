@@ -6963,7 +6963,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
-		jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon frm_has_shortcodes"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
+		jQuery( parentClass + ' textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
