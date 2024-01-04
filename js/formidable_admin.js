@@ -8608,9 +8608,9 @@ function frmAdminBuildJS() {
 		// Proceed with CSS changes
 		const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 		const actionMap = {
-			'frm_activate_addon': { class: 'frm-addon-active', message: frmAdminJs.active },
-			'frm_deactivate_addon': { class: 'frm-addon-installed', message: frmAdminJs.installed },
-			'frm_uninstall_addon': { class: 'frm-addon-not-installed', message: frmAdminJs.not_installed }
+			frm_activate_addon: { class: 'frm-addon-active', message: frmAdminJs.active },
+			frm_deactivate_addon: { class: 'frm-addon-installed', message: frmAdminJs.installed },
+			frm_uninstall_addon: { class: 'frm-addon-not-installed', message: frmAdminJs.not_installed }
 		};
 		actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
