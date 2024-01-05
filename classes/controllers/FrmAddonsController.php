@@ -925,7 +925,7 @@ class FrmAddonsController {
 	 * @param string $redirect
 	 * @param bool   $network_wide
 	 * @param bool   $silent
-	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 * @return true|WP_Error True on success, WP_Error on invalid file.
 	 */
 	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
 		if ( ! function_exists( 'activate_plugin' ) ) {
@@ -968,16 +968,13 @@ class FrmAddonsController {
 		}
 
 		self::deactivate_plugin( $plugin, true );
-		// Deactivate plugin before uninstalling.
 		$result = delete_plugins( array( $plugin ) );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
-			// Return the error from delete_plugins.
 		}
 
 		return null;
-		// Success.
 	}
 
 	/**
