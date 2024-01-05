@@ -956,7 +956,7 @@ class FrmAddonsController {
 	 * @since x.x
 	 *
 	 * @param string $plugin
-	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 * @return true|WP_Error True on success, WP_Error on invalid file.
 	 */
 	protected static function uninstall_plugin( $plugin ) {
 		if ( ! current_user_can( 'delete_plugins' ) ) {
@@ -974,7 +974,7 @@ class FrmAddonsController {
 			return $result;
 		}
 
-		return null;
+		return true;
 	}
 
 	/**
