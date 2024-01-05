@@ -1169,12 +1169,11 @@ class FrmAddonsController {
 		call_user_func( $action_callback, $plugin );
 
 		if ( is_callable( $response_callback ) ) {
-			echo json_encode( call_user_func( $response_callback ) );
-		} else {
-			echo json_encode( array( 'success' => true ) );
+			wp_send_json_success( call_user_func( $response_callback ) );
+			return;
 		}
 
-		wp_die();
+		wp_send_json_success();
 	}
 
 	/**
