@@ -33,8 +33,8 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
-		$modal_addon = self::get_addon_info( 185013 );
-		$charts_addon = self::get_addon_info( 185013 ); // TODO: change addon ID.
+		$modal_addon  = self::get_addon_info( 185013 );
+		$charts_addon = self::get_addon_info( 28248560 );
 
 		$script_vars = array(
 			'forms' => self::get_forms_options(),
