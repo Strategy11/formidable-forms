@@ -63,4 +63,4 @@ parameters:
 		- '#of method FrmFieldName::\_\_construct#'
 		- '#callback of function spl_autoload_register expects#'
 		- '#customer\_id\_error\_message#'
-		- '#Offset 'custom_style' on#'
+		- "#Offset 'custom_style' on#"
