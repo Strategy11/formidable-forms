@@ -443,7 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 6.7.2 =
-* Fix: The setting to disable Formidable styling on a form was not working and the Formidable styling would still getting applied.
+* Fix: The setting to disable Formidable styling on a form was not working and the Formidable styling would still get applied.
 
 = 6.7.1 =
 * Security: Form input from unprivileged users will now be sanitized more with strict rules and filtered more on display, allowing only a few basic HTML tags (p, i, b, strong and br) with no support for attributes. The allowed tags can be modified using a new frm_allowed_form_input_html filter.
