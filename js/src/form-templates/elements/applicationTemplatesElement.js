@@ -71,11 +71,11 @@ function createTemplateItem( template ) {
 				child: img({ src: thumbnailURL })
 			}),
 			div({
-				className: `${PREFIX}-item-body frm-gap-0`,
+				className: `${PREFIX}-item-body`,
 				children: [
 					span({
 						text: __( 'Ready Made Solution', 'formidable' ),
-						className: 'frm-meta-tag frm-font-semibold frm-rounded-sm'
+						className: 'frm-meta-tag frm-orange-tag frm-text-xs'
 					}),
 					tag( 'h3', {
 						text: name,
@@ -83,7 +83,7 @@ function createTemplateItem( template ) {
 					}),
 					a({
 						text: __( 'See all applications', 'formidable' ),
-						className: 'frm-text-xs frm-font-semibold frm-mt-auto',
+						className: 'frm-text-xs frm-font-semibold',
 						href: applicationsUrl
 					})
 				]

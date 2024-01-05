@@ -2797,27 +2797,38 @@ body.frm-body-with-open-modal {
 	float: left;
 }
 
-.frm-plan-required-tag {
-	margin-left: 5px;
-	transform: translateY(-1px);
+.frm-meta-tag,
+.frm-meta-tag:hover {
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	font-weight: 600;
+	display: inline-flex;
+	background-color: #D9EBFF;
+	gap: 2px;
+}
+
+.frm-meta-tag.frm-grey-tag,
+.frm-meta-tag.frm-grey-tag:hover {
+	background-color: var(--sidebar-hover);
+	color: var(--grey-900);
+}
+
+.frm-meta-tag.frm-red-tag,
+.frm-meta-tag.frm-red-tag:hover {
 	background: #FDE6DE;
 	color: #F15A24;
 }
 
-.frm-ready-made-solution .frm-meta-tag {
-	width: fit-content;
-	background: #FDE6DE;
-	color: #F15A24;
+.frm-meta-tag.frm-orange-tag,
+.frm-meta-tag.frm-orange-tag:hover {
+    background-color: #FEF7F4;
+	color: var(--orange);
 }
 
-.frm-meta-tag {
-	font-size: 10px;
-	padding: 4px 6px;
-	border-radius: 4px;
-	text-transform: uppercase;
-	font-weight: normal;
-	display: inline-block;
-	line-height: 12px;
+.frm-meta-tag.frm-green-tag,
+.frm-meta-tag.frm-green-tag:hover {
+	background-color: var(--success-500);
+	color: #fff;
 }
 
 #frm-create-footer {
@@ -9359,14 +9370,6 @@ Responsive Design
 	color: var(--grey-700);
 }
 
-.frm-cta-tag {
-	color: #fff;
-	font-weight: 600;
-	padding: var(--gap-2xs) var(--gap-xs);
-	border-radius: var(--small-radius);
-	background-color: var(--success-500);
-}
-
 .frm-right-panel .inside .frm_pro_tip,
 .frm_pro_tip {
 	color: var(--grey-700);
@@ -9472,13 +9475,6 @@ Responsive Design
 #frm-field-group-message .frm-field-group-message-text {
 	gap: 10px;
 	color: var(--grey-800);
-}
-
-#frm-field-group-message .frm-shift-key {
-	padding: var(--gap-2xs) var(--gap-xs);
-	background-color: #D9EBFF;
-	border-radius: var(--small-radius);
-	gap: 2px;
 }
 
 #frm-field-group-message-dismiss {
