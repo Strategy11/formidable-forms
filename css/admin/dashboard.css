@@ -227,7 +227,7 @@
 	margin-bottom: var( --gap-xs );
 }
 
-.frm-dashboard-container .frm-dashboard-license-management > div:not(.frm-dashboard-license-options) {
+.frm-dashboard-container .frm-dashboard-license-management:not(.frm_authorized_box) > div:not(:first-child) {
 	margin-top: var( --gap-sm );
 }
 /* END License Management */
@@ -235,6 +235,7 @@
 /* Entries Widget */
 .frm-white-body .frm-dashboard-widget table.wp-list-table {
 	margin-bottom: 0px;
+	table-layout: auto;
 }
 
 .frm-white-body .frm-dashboard-widget table.wp-list-table .row-actions{
@@ -446,10 +447,10 @@ div.frm-inbox-subscribe:not(.frm_hidden) {
 	opacity: 0.0;
 	transition: 0.25s opacity linear;
 	position: relative;
-	height: 100%;
+	height: auto;
+	max-height: 612px;
 	overflow: hidden;
 	box-sizing: border-box;
-	height: max(612px, auto);
 }
 
 .frm-tabs-slide-track > div > div {
