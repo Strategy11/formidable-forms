@@ -2774,6 +2774,18 @@ body.frm-body-with-open-modal {
 	display: inline-block;
 	line-height: 12px;
 }
+.frm-lt-green-tag {
+	background: #D1FAE5;
+    color: #065F46;
+}
+.frm-orange-tag {
+	color: #B54708;
+	background: #FEF0C7;
+}
+.frm-red-tag {
+	color: #B42318;
+	background: #FEE4E2;
+}
 
 #frm-create-footer {
     padding: 15px 20px;

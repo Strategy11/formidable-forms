@@ -6,6 +6,7 @@
 
 .frm-dashboard-wrapper {
 	min-height: 100vh;
+	overflow: hidden;
 }
 
 .frm-dashboard-container h3,
