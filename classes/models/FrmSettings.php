@@ -96,7 +96,7 @@ class FrmSettings {
 			$settings = $this;
 		}
 
-		update_option( $this->option_name, $settings );
+		update_option( $this->option_name, $settings, 'no' );
 		set_transient( $this->option_name, $settings );
 
 		return $settings;
