@@ -29,14 +29,17 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
-	--error-300: #FECDCA;
-	--error-500: #F04438;
 	--error-700: #B42318;
+	--error-500: #F04438;
+	--error-300: #FECDCA;
+	--error-100: #FEE4E2;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
+	--success-800: #065F46;
 	--success-500: #12b76a;
+	--success-100: #D1FAE5;
 	--success-25: #f6fef9;
 	--border-radius: 35px;
 	--small-radius: 8px;
@@ -2815,8 +2818,8 @@ body.frm-body-with-open-modal {
 
 .frm-meta-tag.frm-red-tag,
 .frm-meta-tag.frm-red-tag:hover {
-	background: #FDE6DE;
-	color: #F15A24;
+	background: var(--error-100);
+	color: var(--error-700);
 }
 
 .frm-meta-tag.frm-orange-tag,
@@ -2829,6 +2832,12 @@ body.frm-body-with-open-modal {
 .frm-meta-tag.frm-green-tag:hover {
 	background-color: var(--success-500);
 	color: #fff;
+}
+
+.frm-meta-tag.frm-lt-green-tag,
+.frm-meta-tag.frm-lt-green-tag:hover {
+	background-color: var(--success-100);
+	color: var(--success-800);
 }
 
 #frm-create-footer {
