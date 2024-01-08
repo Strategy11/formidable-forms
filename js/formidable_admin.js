@@ -185,6 +185,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				input.value = '•••••••••••••••••••';
 			}
 
+			wp.hooks.doAction( 'frm_after_authorize', msg );
 			app.showMessage( msg );
 		},
 
