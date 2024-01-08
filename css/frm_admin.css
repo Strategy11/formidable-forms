@@ -8200,6 +8200,11 @@ button.frm_choose_image_box,
 	color: var(--grey-500);
 }
 
+.frm_wrap .frm-button-primary.frm-disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
 #postcustomstuff table td > div {
 	/* To override some inline css in add-on */
 	padding-top: 0 !important;
