@@ -117,7 +117,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function get_main_widget() {
-		if ( is_callable( 'FrmProDashboardHelper::get_main_widget' ) ) {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProDashboardHelper::get_main_widget' ) ) {
 			FrmProDashboardHelper::get_main_widget( $this->view['entries'] );
 			return;
 		}
@@ -131,7 +131,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function get_bottom_widget() {
-		if ( is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) ) {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProDashboardHelper::get_bottom_widget' ) ) {
 			echo '<div class="frm-dashboard-widget frm-card-item frm-px-0">';
 			FrmProDashboardHelper::get_bottom_widget( $this->view['entries'] );
 			echo '</div>';
