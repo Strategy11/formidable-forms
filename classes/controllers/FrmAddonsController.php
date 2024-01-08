@@ -1158,7 +1158,7 @@ class FrmAddonsController {
 		$auth = get_option( 'frm_connect_token' );
 		if ( empty( $auth ) ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth );
+			update_option( 'frm_connect_token', $auth, 'no' );
 		}
 		$link = FrmAppHelper::admin_upgrade_link( 'connect', 'api-connect' );
 		$args = array(
