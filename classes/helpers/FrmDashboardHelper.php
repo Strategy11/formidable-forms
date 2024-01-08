@@ -189,7 +189,7 @@ class FrmDashboardHelper {
 		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
 		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
 
-		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/inbox.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/inbox/list.php';
 	}
 
 	/**
