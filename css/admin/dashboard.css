@@ -225,6 +225,9 @@
 
 /* License Management */
 .frm-dashboard-container .frm-dashboard-license-management h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
 	margin-bottom: var( --gap-xs );
 }
 
