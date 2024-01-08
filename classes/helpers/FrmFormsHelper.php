@@ -938,8 +938,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|string|boolean $form
-	 *
+	 * @param object|array|string|boolean $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
