@@ -59,7 +59,7 @@ class FrmSettings {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		$settings = get_transient( $this->option_name );
+		$settings = get_option( $this->option_name );
 
 		if ( ! is_object( $settings ) ) {
 			$settings = $this->translate_settings( $settings );
@@ -81,23 +81,10 @@ class FrmSettings {
 			return unserialize( serialize( $settings ) );
 		}
 
-		$settings = get_option( $this->option_name );
-		if ( is_object( $settings ) ) {
-			set_transient( $this->option_name, $settings );
+		// If unserializing didn't work.
+		$settings = $this;
 
-			return $settings;
-		}
-
-		// If unserializing didn't work
-		if ( $settings ) {
-			// Workaround for W3 total cache conflict.
-			$settings = unserialize( serialize( $settings ) );
-		} else {
-			$settings = $this;
-		}
-
-		update_option( $this->option_name, $settings, 'no' );
-		set_transient( $this->option_name, $settings );
+		update_option( $this->option_name, $settings, 'yes' );
 
 		return $settings;
 	}
