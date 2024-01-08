@@ -82,4 +82,56 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$link = compact( 'categories' );
 		$this->assertEquals( $expected, FrmFormsHelper::get_plan_required( $link ) );
 	}
+
+	/**
+	 * @covers FrmFormsHelper::get_form_style
+	 */
+	public function test_get_form_style() {
+		// Test null and 'default' form values.
+		$this->assertEquals( '1', FrmFormsHelper::get_form_style( null ) );
+		$this->assertEquals( '1', FrmFormsHelper::get_form_style( 'default' ) );
+
+		// Test object form values.
+		// Test "disable Formidable styling" first.
+		$form = $this->create_form_with_custom_style_value( '0' );
+		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+
+		$form = $this->create_form_with_custom_style_value( '' );
+		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+
+		// Create a style and test a custom style value as well.
+		$frm_style = new FrmStyle();
+		$style_id = $this->factory->post->create(
+			array(
+				'post_type'    => 'frm_styles',
+				'post_content' => FrmAppHelper::prepare_and_encode( $frm_style->get_defaults() ),
+			)
+		);
+
+		$form = $this->create_form_with_custom_style_value( $style_id );
+		$this->assertEquals( $style_id, FrmFormsHelper::get_form_style( $form ) );
+
+		// Test array form values.
+		$form = $form->options;
+		$this->assertEquals( $style_id, FrmFormsHelper::get_form_style( $form ) );
+
+		unset( $form['custom_style'] );
+		$this->assertEquals( '1', FrmFormsHelper::get_form_style( $form ) );
+
+		$form['custom_style'] = '';
+		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+
+		$form['custom_style'] = '0';
+		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+	}
+
+	private function create_form_with_custom_style_value( $custom_style ) {
+		return $this->factory->form->create_and_get(
+			array(
+				'options' => array(
+					'custom_style' => $custom_style,
+				),
+			)
+		);
+	}
 }
