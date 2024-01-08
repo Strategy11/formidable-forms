@@ -130,7 +130,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			array(
 				'options' => array(
 					'custom_style' => $custom_style,
-				)
+				),
 			)
 		);
 	}
