@@ -4117,9 +4117,21 @@ class FrmAppHelper {
 	 * Lite license copy.
 	 * Used in FrmDashboardController & FrmSettingsController
 	 *
+	 * @since x.x
+	 *
 	 * @return string
 	 */
 	public static function copy_for_lite_license() {
-		return __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' );
+		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' )  . ' 🙂';
+
+		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
+			// Manage PRO versions without PRO dashboard functionality.
+			$license_type = FrmProAddonsController::get_readable_license_type();
+			if ( 'lite' !== strtolower( $license_type ) ) {
+				$message = 'Formidable Pro ' . $license_type;
+			}
+		}
+
+		return apply_filters( 'frm_license_type_text', $message );
 	}
 }

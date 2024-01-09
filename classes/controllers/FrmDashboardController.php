@@ -310,32 +310,11 @@ class FrmDashboardController {
 		if ( class_exists( 'FrmProDashboardController' ) ) {
 			return FrmProDashboardController::view_args_license();
 		}
-		$copy    = FrmAppHelper::copy_for_lite_license() . ' 🙂';
-		$buttons = array(
-			array(
-				'label'  => __( 'Connect Account', 'formidable' ),
-				'link'   => FrmAddonsController::connect_link(),
-				'action' => 'default',
-				'type'   => 'primary',
-			),
-			array(
-				'label'  => __( 'Get Formidable PRO', 'formidable' ),
-				'link'   => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
-				'action' => 'default',
-				'type'   => 'secondary',
-			),
-		);
-		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
-			// Manage PRO versions without PRO dashboard functionality.
-			$license_type = FrmProAddonsController::get_readable_license_type();
-			if ( 'lite' !== strtolower( $license_type ) ) {
-				$copy = 'Formidable Pro ' . $license_type;
-			}
-		}
+
 		return array(
 			'heading' => 'License Key',
-			'copy'    => $copy,
-			'buttons' => $buttons,
+			'copy'    => FrmAppHelper::copy_for_lite_license(),
+			'buttons' => FrmDashboardHelper::get_license_buttons(),
 		);
 	}
 

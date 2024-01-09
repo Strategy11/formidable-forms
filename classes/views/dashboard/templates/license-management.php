@@ -10,10 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-flex-box">
 			<?php foreach ( $template['buttons'] as $button ) : ?>
 				<?php
-					$extra_classname       = 'open-license-modal' === $button['action'] ? 'frm-dashboard-open-license-modal' : '';
-					$button_type_classname = 'primary' === $button['type'] ? 'frm-button-primary' : 'frm-button-secondary';
+					$extra_classname = ! empty( $button['classes'] ) ? $button['classes'] : 'frm-button-secondary';
 				?>
-				<a href="<?php echo esc_url( $button['link'] ); ?>" class="<?php echo esc_attr( $extra_classname ) . ' ' . esc_attr( $button_type_classname ); ?>">
+				<a href="<?php echo esc_url( $button['link'] ); ?>" class="<?php echo esc_attr( $extra_classname ); ?>">
 					<?php echo esc_attr( $button['label'] ); ?>
 				</a>
 			<?php endforeach; ?>

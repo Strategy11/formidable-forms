@@ -86,9 +86,10 @@
 
 .frm-dashboard-banner .frm-dashboard-banner-close {
 	position: absolute;
-	top: 16px; right: 16px;
-	width: 24px;
-	height: 24px;
+	top: var(--gap-md);
+	right: var(--gap-md);
+	width: var(--h-xs);
+	height: var(--h-xs);
 	cursor: pointer;
 	z-index: 3;
 }
@@ -131,7 +132,7 @@
 }
 
 .frm-dashboard-banner .frm-vertical-line {
-	height: 24px;
+	height: var(--h-xs);
 	opacity: 0.4;
 }
 
@@ -224,15 +225,16 @@
 /* END Counter Card */
 
 /* License Management */
+.frm-dashboard-license-management {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-xs);
+}
+
 .frm-dashboard-container .frm-dashboard-license-management h3 {
 	display: flex;
 	align-items: center;
 	gap: var(--gap-xs);
-	margin-bottom: var( --gap-xs );
-}
-
-.frm-dashboard-container .frm-dashboard-license-management:not(.frm_authorized_box) > div:not(:first-child) {
-	margin-top: var( --gap-sm );
 }
 /* END License Management */
 

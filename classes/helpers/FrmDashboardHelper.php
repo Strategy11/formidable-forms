@@ -33,7 +33,6 @@ class FrmDashboardHelper {
 	 *            @type string $license['buttons'][]['label']
 	 *            @type string $license['buttons'][]['link']
 	 *            @type string $license['buttons'][]['type'] primary|secondary
-	 *            @type string $license['buttons'][]['action'] open-license-modal|default
 	 *    @type array $inbox Array of inbox args
 	 *        @type array $inbox['unread']
 	 *            @type string $inbox['unread'][]['message']
@@ -175,6 +174,28 @@ class FrmDashboardHelper {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/license-management.php';
+	}
+
+	/**
+	 * Dashboard - license buttons for Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_license_buttons() {
+		return array(
+			array(
+				'label'   => __( 'Connect Account', 'formidable' ),
+				'link'    => FrmAddonsController::connect_link(),
+				'classes' => 'frm-button-primary frm-show-unauthorized',
+			),
+			array(
+				'label'   => __( 'Get Formidable PRO', 'formidable' ),
+				'link'    => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
+				'classes' => 'frm-button-secondary frm-show-unauthorized',
+			),
+		);
 	}
 
 	/**
