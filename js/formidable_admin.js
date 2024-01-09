@@ -2974,7 +2974,7 @@ function frmAdminBuildJS() {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
 		} else {
-			changes.innerHTML = newValue;
+			changes.innerHTML = purifyHtml( newValue );
 
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
@@ -4978,7 +4978,11 @@ function frmAdminBuildJS() {
 		var link, lookupBlock,
 			fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
-		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
+		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID );
+		if ( ! link ) {
+			return;
+		}
+		link = link.parentNode;
 
 		if ( this.value === 'text' ) {
 			lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
@@ -5701,6 +5705,11 @@ function frmAdminBuildJS() {
 			},
 			''
 		);
+
+		if ( clean !== html ) {
+			// Clean it until nothing changes, in case the stripped result is now unsafe.
+			return purifyHtml( clean );
+		}
 
 		return clean;
 	}

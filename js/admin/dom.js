@@ -798,7 +798,8 @@
 		span: [ 'class' ],
 		strong: [],
 		svg: [ 'class' ],
-		use: []
+		use: [],
+		a: [ 'href', 'class' ]
 	};
 
 	function cleanNode( node ) {

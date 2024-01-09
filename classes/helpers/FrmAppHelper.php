@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7';
+	public static $plug_version = '6.7.2';
 
 	/**
 	 * @var bool
@@ -658,10 +658,44 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param mixed $value
+	 * @return void
 	 */
 	public static function sanitize_with_html( &$value ) {
-		self::sanitize_value( 'wp_kses_post', $value );
+		if ( current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' ) ) {
+			// Only strip unsafe HTML like scripts for a privileged user submitting a form.
+			self::sanitize_value( 'wp_kses_post', $value );
+		} else {
+			self::sanitize_value( self::class . '::strip_most_html', $value );
+		}
 		self::decode_specialchars( $value );
+	}
+
+	/**
+	 * Allow only a small set of very basic HTML for unprivileged users.
+	 *
+	 * @since 6.7.1
+	 *
+	 * @param string $value
+	 */
+	public static function strip_most_html( $value ) {
+		$allowed_html = array(
+			'b'      => array(),
+			'br'     => array(),
+			'strong' => array(),
+			'p'      => array(),
+			'i'      => array(),
+		);
+
+		/**
+		 * @since 6.7.1
+		 *
+		 * @param array $allowed_html
+		 */
+		$allowed_html = apply_filters( 'frm_allowed_form_input_html', $allowed_html );
+
+		return wp_kses( $value, $allowed_html );
 	}
 
 	/**
@@ -3544,7 +3578,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.7.1
 	 */
 	public static function get_images_dropdown_atts( $option, $args ) {
 		$image        = self::get_images_dropdown_option_image( $option, $args );
