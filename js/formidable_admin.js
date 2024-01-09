@@ -8626,15 +8626,12 @@ function frmAdminBuildJS() {
 		const messageElement = message[0];
 		messageElement.textContent = actionMap[action].message;
 
-		const buttonElement = button[0];
-		const parentElement = buttonElement.parentElement;
+		const parentElement = el[0].parentElement;
 		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
 		parentElement.classList.add( actionMap[action].class );
-		buttonElement.classList.remove( 'frm_loading_button' );
 
-		message.text( actionMap[action].message );
-		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed frm-addon-active' ).addClass( actionMap[action].class );
-		button.removeClass( 'frm_loading_button' );
+		const buttonElement = button[0];
+		buttonElement.classList.remove( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
 		const refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
