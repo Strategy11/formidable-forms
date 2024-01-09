@@ -177,13 +177,40 @@ class FrmDashboardHelper {
 	}
 
 	/**
+	 * Show buttons to in the license key box.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $buttons        A list of buttons to show.
+	 * @param string $button_classes Used from the global settings page.
+	 *
+	 * @return void
+	 */
+	public static function show_connect_links( $buttons = array(), $button_classes = '' ) {
+		if ( empty( $buttons ) ) {
+			$buttons = self::get_license_buttons();
+		}
+
+		foreach ( $buttons as $i => $button ) {
+			$add_classes = ! empty( $button['classes'] ) ? ' ' . $button['classes'] : ' frm-button-secondary';
+			?>
+			<a href="<?php echo esc_url( $button['link'] ); ?>" target="_blank"
+				class="<?php echo esc_attr( $button_classes . $add_classes ); ?>"
+				>
+				<?php echo esc_html( $button['label'] ); ?>
+			</a>
+			<?php
+		}
+	}
+
+	/**
 	 * Dashboard - license buttons for Lite.
 	 *
 	 * @since x.x
 	 *
 	 * @return array
 	 */
-	public function get_license_buttons() {
+	public static function get_license_buttons() {
 		return array(
 			array(
 				'label'   => __( 'Connect Account', 'formidable' ),

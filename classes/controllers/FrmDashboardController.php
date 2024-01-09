@@ -152,7 +152,7 @@ class FrmDashboardController {
 				'counters' => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
-				'license'  => self::view_args_license(),
+				'license'  => array(),
 				'inbox'    => self::view_args_inbox(),
 				'entries'  => array(
 					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
@@ -299,23 +299,6 @@ class FrmDashboardController {
 		}
 
 		return $prepared_data;
-	}
-
-	/**
-	 * Init the view args for LITE license.
-	 *
-	 * @return array
-	 */
-	private static function view_args_license() {
-		if ( class_exists( 'FrmProDashboardController' ) ) {
-			return FrmProDashboardController::view_args_license();
-		}
-
-		return array(
-			'heading' => 'License Key',
-			'copy'    => FrmAppHelper::copy_for_lite_license(),
-			'buttons' => FrmDashboardHelper::get_license_buttons(),
-		);
 	}
 
 	/**
