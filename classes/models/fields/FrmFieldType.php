@@ -93,7 +93,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return string
 	 */
@@ -107,7 +107,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $type string
+	 * @param string $type
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
@@ -136,7 +136,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $column
+	 * @param string $column
 	 *
 	 * @return string|array
 	 */
@@ -153,7 +153,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * @param string $column
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function set_field_column( $column, $value ) {
 		if ( is_object( $this->field ) ) {
@@ -170,8 +170,9 @@ abstract class FrmFieldType {
 		return $this->field;
 	}
 
-	/** Field HTML **/
-
+	/**
+	 * Field HTML
+	 */
 	public function default_html() {
 		if ( ! $this->has_html ) {
 			return '';
@@ -249,7 +250,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param string $name
-	 * @param array $field
+	 * @param array  $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -306,7 +307,8 @@ DEFAULT_HTML;
 			'label_position' => true,
 			'invalid'        => false,
 			'size'           => false,
-			'clear_on_focus' => false, // Shows the placeholder option.
+			// Shows the placeholder option.
+			'clear_on_focus' => false,
 			'css'            => true,
 			'conf_field'     => false,
 			'max'            => true,
@@ -374,7 +376,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
@@ -430,10 +433,10 @@ DEFAULT_HTML;
 	public function echo_field_default_setting_attributes( $field ) {}
 
 	/**
-	 * @param array $field
+	 * @param array  $field
 	 * @param object $field_obj
-	 * @param array $default_value_types
-	 * @param array $display
+	 * @param array  $default_value_types
+	 * @param array  $display
 	 *
 	 * @return void
 	 */
@@ -576,7 +579,7 @@ DEFAULT_HTML;
 	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
 	 *
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_extra_field_choices( $args ) {
 		return;
@@ -610,7 +613,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	protected function auto_width_setting( $args ) {
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
@@ -620,8 +623,9 @@ DEFAULT_HTML;
 		}
 	}
 
-	/** New field **/
-
+	/**
+	 * New field
+	 */
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
@@ -775,7 +779,15 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @param array $args {
+	 *    Details about the field to show.
+	 *
+	 *    @type array $field
+	 *    @type array $errors
+	 *    @type object $form
+	 *    @type object $form_action
+	 * }
+	 *
 	 * @return void
 	 */
 	public function show_field( $args ) {
@@ -822,7 +834,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string
@@ -945,7 +957,8 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
-		unset( $args['form'] ); // lighten up on memory usage
+		// Lighten up on memory usage.
+		unset( $args['form'] );
 
 		ob_start();
 		include( $include_file );
@@ -1245,7 +1258,7 @@ DEFAULT_HTML;
 	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
 	 *
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	public function is_not_unique( $value, $entry_id ) {
@@ -1285,7 +1298,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
@@ -1327,12 +1340,17 @@ DEFAULT_HTML;
 	/**
 	 *
 	 * @param string|array $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return string
 	 */
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
+
+		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+		}
+
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -1347,6 +1365,47 @@ DEFAULT_HTML;
 		return $value;
 	}
 
+	/**
+	 * @since 6.7.1
+	 *
+	 * @param array $atts
+	 * @return bool
+	 */
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		if ( ! empty( $atts['keepjs'] ) ) {
+			// Always keep JS if the option is set.
+			return false;
+		}
+
+		if ( ! empty( $atts['entry'] ) ) {
+			$entry = $atts['entry'];
+		} elseif ( ! empty( $atts['entry_id'] ) ) {
+			$entry = FrmEntry::getOne( $atts['entry_id'] );
+		}
+
+		return ! empty( $entry ) && is_object( $entry ) && $this->should_strip_most_html( $entry );
+	}
+
+	/**
+	 * @since 6.7.1
+	 *
+	 * @param stdClass $entry
+	 * @return bool
+	 */
+	protected function should_strip_most_html( $entry ) {
+		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
+			return true;
+		}
+		if ( $entry->updated_by ) {
+			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
+		}
+		return false;
+	}
+
+	/**
+	 * @param array $atts
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep' => ', ',
@@ -1358,7 +1417,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array|string
 	 */
@@ -1369,8 +1428,8 @@ DEFAULT_HTML;
 	/** Importing **/
 
 	/**
-	 * @param $value
-	 * @param array $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */
@@ -1379,8 +1438,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */
@@ -1393,12 +1452,14 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param $value
-	 * @param $atts
+	 * @param string|array $value
+	 * @param array        $atts {
+	 *     Details about the field to show.
 	 *
-	 * @internal param array $meta_value
-	 * @internal param object $field
-	 * @internal param array $saved_entries
+	 *     @type array $meta_value
+	 *     @type object $field
+	 *     @type array $saved_entries
+	 * }
 	 *
 	 * @return array $new_value
 	 */
@@ -1415,7 +1476,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 *
 	 * @return array
 	 */
@@ -1454,8 +1515,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $defaults
+	 * @param array|string $value
+	 * @param array        $defaults
 	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {

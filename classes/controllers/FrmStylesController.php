@@ -201,7 +201,7 @@ class FrmStylesController {
 			if ( $frm_settings->load_style === 'all' ) {
 				$frm_vars['css_loaded'] = true;
 			}
-		}
+		}//end if
 		unset( $css );
 
 		add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
@@ -402,7 +402,8 @@ class FrmStylesController {
 			// Fallback to any form.
 			$where = array(
 				'status'         => 'published',
-				'parent_form_id' => array( null, 0 ), // Make sure it's not a repeater.
+				// Make sure it's not a repeater.
+				'parent_form_id' => array( null, 0 ),
 			);
 			$form_id = FrmDb::get_var( 'frm_forms', $where, 'id' );
 		}
@@ -490,7 +491,8 @@ class FrmStylesController {
 			$style_id = 1;
 		}
 
-		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
+		// We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
+		$form->options['custom_style'] = (string) $style_id;
 
 		global $wpdb;
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
@@ -542,18 +544,19 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $active_style
-	 * @param array<WP_Post>   $styles
 	 * @param stdClass         $form
 	 * @param WP_Post          $default_style
 	 * @return void
 	 */
 	private static function render_style_page( $active_style, $form, $default_style ) {
 		$style_views_path = self::get_views_path();
-		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
-		$frm_style        = new FrmStyle( $active_style->ID );
+		// Edit, list (default), new_style.
+		$view      = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' );
+		$frm_style = new FrmStyle( $active_style->ID );
 
 		if ( 'new_style' !== $view && ! FrmAppHelper::simple_get( 'form' ) && ! FrmAppHelper::simple_get( 'style_id' ) ) {
-			$view = 'edit'; // Have the Appearance > Forms link fallback to the edit view. Otherwise we want to use 'list' as the default.
+			// Have the Appearance > Forms link fallback to the edit view. Otherwise we want to use 'list' as the default.
+			$view = 'edit';
 		}
 
 		if ( in_array( $view, array( 'edit', 'new_style', 'duplicate' ), true ) ) {
@@ -662,7 +665,8 @@ class FrmStylesController {
 		$id = $frm_style->update( $post_id );
 		if ( ! $post_id && $id ) {
 			self::maybe_redirect_after_save( $id );
-			$post_id = reset( $id ); // Set the post id to the new style so it will be loaded for editing.
+			// Set the post id to the new style so it will be loaded for editing.
+			$post_id = reset( $id );
 		}
 
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
@@ -896,7 +900,8 @@ class FrmStylesController {
 		global $wpdb;
 		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_post_content ), $where );
 
-		$frm_style->save_settings(); // Save the settings after resetting to default or the old style will still appear.
+		// Save the settings after resetting to default or the old style will still appear.
+		$frm_style->save_settings();
 
 		$data = array(
 			'style' => FrmStylesCardHelper::get_style_param_for_card( $frm_style->get_new() ),
@@ -917,8 +922,10 @@ class FrmStylesController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frm_style = new FrmStyle();
-		$defaults  = array(); // Intentionally avoid defaults here so nothing gets removed from our style.
-		$style     = '';
+
+		// Intentionally avoid defaults here so nothing gets removed from our style.
+		$defaults = array();
+		$style    = '';
 
 		echo '<style type="text/css">';
 		include FrmAppHelper::plugin_path() . '/css/_single_theme.css.php';

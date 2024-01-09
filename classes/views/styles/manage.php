@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
 				<?php
-			}
+			}//end if
 			?>
 		</tbody>
 	</table>

@@ -96,7 +96,7 @@ class FrmStrpLiteSettings {
 	 * @return void
 	 */
 	public function store() {
-		// Save the posted value in the database
+		// Save the posted value in the database.
 		update_option( 'frm_' . $this->param() . '_options', $this->settings );
 	}
 

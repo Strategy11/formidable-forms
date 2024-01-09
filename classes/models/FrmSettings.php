@@ -42,6 +42,8 @@ class FrmSettings {
 	public $custom_header_ip;
 	public $current_form = 0;
 	public $tracking;
+	public $summary_emails;
+	public $summary_emails_recipients;
 
 	public $currency;
 
@@ -74,7 +76,8 @@ class FrmSettings {
 	}
 
 	private function translate_settings( $settings ) {
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) {
+			// Workaround for W3 total cache conflict.
 			return unserialize( serialize( $settings ) );
 		}
 
@@ -86,7 +89,8 @@ class FrmSettings {
 		}
 
 		// If unserializing didn't work
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) {
+			// Workaround for W3 total cache conflict.
 			$settings = unserialize( serialize( $settings ) );
 		} else {
 			$settings = $this;
@@ -126,8 +130,11 @@ class FrmSettings {
 
 			'email_to'         => '[admin_email]',
 			'no_ips'           => 0,
-			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
+			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
+			'custom_header_ip' => false,
 			'tracking'         => FrmAppHelper::pro_is_installed(),
+			'summary_emails'   => 1,
+			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
@@ -357,7 +364,7 @@ class FrmSettings {
 		$this->custom_css       = $params['frm_custom_css'];
 		$this->currency         = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}

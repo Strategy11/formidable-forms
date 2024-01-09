@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.3.2
+Tested up to: 6.4.2
 Requires PHP: 5.6
-Stable tag: 6.5.4
+Stable tag: 6.7.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,54 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.7.2 =
+* Fix: The setting to disable Formidable styling on a form was not working and the Formidable styling would still get applied.
+
+= 6.7.1 =
+* Security: Form input from unprivileged users will now be sanitized more with strict rules and filtered more on display, allowing only a few basic HTML tags (p, i, b, strong and br) with no support for attributes. The allowed tags can be modified using a new frm_allowed_form_input_html filter.
+* Security: Additional sanitizing has been added when making live form builder updates to avoid malicious changes from privileged users.
+* New: Formidable branding has been removed on the import page when white labelling is enabled.
+* New: The permission to view forms has been renamed to "View Forms List" to remove ambiguity.
+* Fix: A failed to open stream warning would get logged when calling include(modal.php) on some admin pages.
+* Fix: A styling issue has been fixed with checkboxes in the screen options panel for responsive mobile widths.
+* Fix: A redirect will now happen after emptying form trash to avoid emptying form trash again when refreshing the page.
+* Fix: Fewer requests will now be made at once when checking for license status in add ons.
+* Fix: Repeater forms are no longer included in the deleted form count when emptying form trash.
+* Fix: A cannot read properties of null JavaScript TypeError would get logged when switching between Product field types.
+* Fix: A passing null to parameter #3 deprecated warning would get logged when previewing a form in-theme.
+* Fix: File theme without header.php and footer.php deprecated messages were getting logged when previewing in-theme using the Twenty Twenty Three theme.
+* Fix: A payments table does not exist database error would get logged when creating email summaries for sites without payments configured.
+* Fix: Required credit card fields were failing validation when using for Stripe actions included with this plugin.
+
+= 6.7 =
+* New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
+* New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
+* New: Error handling has been improved when trying to edit a form in trash or a form that does not exist.
+* New: The query for getting entry count has been optimized, significantly reducing the time it takes to count entries.
+* New: Default submit button HTML has been updated for new forms. Forms with the previous HTML would trigger the Previous button when the Enter key was pressed. Forms with the new layout have corrected this and will trigger the Next button instead when the Enter key is pressed.
+* New: Dropdown fields will now pass a different type value in POST requests to avoid conflicts with security tools that block requests containing the word "select".
+* Fix: Zebra stripe styling on the View Entry page would sometimes repeat the same background color when hidden empty rows were hidden.
+* Fix: The default maximum value of 5 used for row count in a Paragraph field would carry to other field type settings after changing field type, acting as a 5 character limit. This is now cleared when changing field types from Paragraph to another field.
+* Fix: A styling issue has been fixed that was causing the WordPress sidebar to overlap on top of admin page content when using specific user preferences.
+* Fix: The form search was broken on some databases when comparing a datetime value to a non-date value.
+* Fix: The pirate forms importer style has been updated to look better.
+* Fix: A fatal error on the welcome page has been fixed.
+
+= 6.6 =
+* New: Database indexes have been added to entry and entry meta tables to help significantly optimize some database queries, including queries used for reports.
+* New: Honeypot field containers will no longer include an aria-hidden attribute. This was causing issues with Accessibility testing tools including Google PageSight.
+* New: [frm-entry-links] shortcodes now support a new drafts=all option, and drafts=2 and drafts=3 options for filtering for in-progress and abandoned entries. It also now supports comma separated values like drafts="2,3" to include both in-progress and abandoned entries.
+* New: Checkbox groups will no longer use an aria-required attribute on the group element. This was causing accessibility errors in axe DevTools and Google PageSpeed.
+* New: The more options icon in the form builder now has screen reader text for improved accessibility.
+* New: A new test flag colum has been added for payments for more accurate payment tracking.
+* Fix: A fix has been added to help avoid warnings and error messages when form data is sent in an unexpected format.
+* Fix: Name fields would not properly reset to their default values when using a start over button or when the field was conditionally shown.
+* Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
+* Fix: The checkbox was in the wrong position on the edit entry admin page for checkbox options displayed as images.
+* Fix: The submit button would be disabled and spin after pressing the back button and reloading a form.
+* Fix: The Other option text input would be hidden on load when a checkbox field had an Other option as its default value.
+* Fix: User journeys would display as Array, Array and trigger Array to string conversion warnings after deactivating the User Flow add on.
+
 = 6.5.4 =
 * New: A database query has been optimized when checking for entries in a timeframe.
 * New: The honeypot class name will no longer change as often to help prevent issues with visible honeypot fields.

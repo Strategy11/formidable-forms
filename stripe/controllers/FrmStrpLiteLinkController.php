@@ -333,6 +333,8 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The details needs to create a payment.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 *     @type WP_Post  $action
@@ -383,6 +385,7 @@ class FrmStrpLiteLinkController {
 				'action_id'  => $action->ID,
 				'receipt_id' => $intent_id,
 				'sub_id'     => '',
+				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
 	}

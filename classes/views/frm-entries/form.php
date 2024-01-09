@@ -124,7 +124,7 @@ if ( FrmForm::show_submit( $form ) ) {
 	 * @since 5.5.1
 	 */
 	do_action( 'frm_after_submit_btn', compact( 'form' ) );
-}
+}//end if
 ?>
 </div>
 </fieldset>

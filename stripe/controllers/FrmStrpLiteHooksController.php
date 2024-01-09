@@ -46,6 +46,7 @@ class FrmStrpLiteHooksController {
 		);
 
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
+		add_filter( 'frm_validate_credit_card_field_entry', 'FrmStrpLiteActionsController::remove_cc_validation', 20, 3 );
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
@@ -92,7 +93,7 @@ class FrmStrpLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 		add_action( 'wp_ajax_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 
-		// Stripe Lite
+		// Stripe Lite.
 		add_action( 'wp_ajax_nopriv_frm_strp_lite_verify', 'FrmStrpLiteConnectHelper::verify' );
 	}
 }

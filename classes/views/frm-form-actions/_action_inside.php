@@ -47,7 +47,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 		</select>
 	</p>
 	<?php
-}
+}//end if
 
 ?>
 </div>
@@ -102,7 +102,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 	</h3>
 	<?php
 	unset( $params );
-}
+}//end if
 
 // Show link to install logs.
 if ( $use_logging ) {

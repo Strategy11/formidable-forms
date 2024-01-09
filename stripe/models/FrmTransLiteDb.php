@@ -8,7 +8,7 @@ class FrmTransLiteDb {
 	/**
 	 * @var int
 	 */
-	public $db_version = 5;
+	public $db_version = 6;
 
 	/**
 	 * @var string
@@ -60,6 +60,7 @@ class FrmTransLiteDb {
 				expire_date date default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
@@ -83,13 +84,14 @@ class FrmTransLiteDb {
 				status varchar(100) default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
 
 		dbDelta( $sql );
 
-		/***** SAVE DB VERSION *****/
+		// SAVE DB VERSION.
 		update_option( $this->db_opt_name, $this->db_version );
 
 		$this->migrate_data( $old_db_version );
@@ -292,6 +294,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
+	 * This migration checks for PayPal payments and sets a status value based on the completed status.
+	 *
 	 * @return void
 	 */
 	private function migrate_to_4() {

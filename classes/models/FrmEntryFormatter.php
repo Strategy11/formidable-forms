@@ -91,7 +91,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 */
 	public function __construct( $atts ) {
 		$this->init_entry( $atts );
@@ -349,14 +349,15 @@ class FrmEntryFormatter {
 		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format' );
+		$unset = array( 'id', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
 			}
 		}
 
-		$this->atts = $atts;
+		$this->atts          = $atts;
+		$this->atts['entry'] = $this->entry;
 	}
 
 	/**
@@ -515,7 +516,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param array $output
+	 * @param array         $output
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
@@ -537,7 +538,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param string $label
-	 * @param mixed $display_value
+	 * @param mixed  $display_value
 	 * @param string $content
 	 */
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
@@ -556,7 +557,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_field_value_to_content( $field_value, &$content ) {
 		if ( $this->is_extra_field( $field_value ) ) {
@@ -573,7 +574,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_row_for_extra_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -593,7 +594,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_row_for_standard_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -614,7 +615,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_html_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_html_display_value_for_extra_fields( $field_value, $display_value );
@@ -633,7 +634,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
@@ -678,7 +679,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param mixed $display_value
+	 * @param mixed         $display_value
 	 */
 	protected function prepare_html_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value();
@@ -690,7 +691,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param mixed $display_value
+	 * @param mixed         $display_value
 	 */
 	protected function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value() . "\r\n";
@@ -702,7 +703,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
@@ -821,7 +822,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param array $value_args
+	 * @param array  $value_args
 	 *   $value_args = [
 	 *     'label' => (string) The label. Required
 	 *     'value' => (mixed) The value to add. Required
@@ -853,7 +854,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param mixed $display_value
+	 * @param mixed  $display_value
 	 * @param string $field_type
 	 *
 	 * @return mixed|string

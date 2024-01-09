@@ -57,7 +57,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 
 		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params );
 		unset( $option_params );
-	}
+	}//end foreach
 	?>
 	</select>
 	<?php
@@ -76,4 +76,4 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 			)
 		);
 	}
-}
+}//end if

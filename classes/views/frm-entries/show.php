@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="wrap frm-with-margin frm_form_fields">
 				<div class="postbox">
-					<a href="#" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable' ); ?>">
+					<a href="#" id="frm-entry-show-empty-fields" class="alignright frm-pre-hndle" data-frmtoggle=".frm-empty-row" data-toggletext="<?php esc_attr_e( 'Hide empty fields', 'formidable' ); ?>">
 						<?php esc_html_e( 'Show empty fields', 'formidable' ); ?>
 					</a>
 					<h3 class="hndle">

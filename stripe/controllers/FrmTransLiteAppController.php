@@ -16,6 +16,20 @@ class FrmTransLiteAppController {
 	}
 
 	/**
+	 * This is called on the frm_after_install hook that is called when Lite migrations have run.
+	 *
+	 * @return void
+	 */
+	public static function on_after_install() {
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return;
+		}
+
+		$db = new FrmTransLiteDb();
+		$db->upgrade();
+	}
+
+	/**
 	 * Schedule the payment cron if it is not already scheduled.
 	 *
 	 * @return void
@@ -75,11 +89,11 @@ class FrmTransLiteAppController {
 					$status = $last_payment->status;
 					self::update_sub_for_new_payment( $sub, $last_payment );
 				} elseif ( $last_payment->expire_date < gmdate( 'Y-m-d' ) ) {
-					// the payment has expired, and no new payment was made
+					// The payment has expired, and no new payment was made.
 					$status = 'failed';
 					self::add_one_fail( $sub );
 				} else {
-					// don't run any triggers
+					// Don't run any triggers.
 					$last_payment = false;
 				}
 
@@ -87,7 +101,7 @@ class FrmTransLiteAppController {
 				if ( $last_payment ) {
 					$log_message .= 'on payment #' . $last_payment->id;
 				}
-			}
+			}//end if
 
 			FrmTransLiteLog::log_message( 'Stripe Cron Message', $log_message );
 
@@ -99,7 +113,7 @@ class FrmTransLiteAppController {
 			);
 
 			unset( $sub );
-		}
+		}//end foreach
 	}
 
 	/**

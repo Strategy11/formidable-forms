@@ -43,8 +43,9 @@ class FrmTransLiteHooksController {
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
+		add_action( 'frm_after_install', 'FrmTransLiteAppController::on_after_install' );
 
-		// Filters
+		// Filters.
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
 
 		if ( defined( 'DOING_AJAX' ) ) {

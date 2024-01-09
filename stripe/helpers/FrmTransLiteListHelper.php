@@ -205,7 +205,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$form_ids              = $this->get_form_ids();
 		$args                  = compact( 'form_ids', 'date_format' );
-		$this->valid_entry_ids = array_keys( $form_ids ); // $form_ids is indexed by entry ID.
+		// $form_ids is indexed by entry ID.
+		$this->valid_entry_ids = array_keys( $form_ids );
 
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" ';
@@ -226,7 +227,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param array $args
+	 * @param object $item
+	 * @param array  $args
 	 *
 	 * @return void
 	 */
@@ -245,7 +247,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	protected function get_column_info() {
 		$column_info = parent::get_column_info();
-		unset( $column_info[0]['cb'] ); // Remove the checkbox column.
+		// Remove the checkbox column.
+		unset( $column_info[0]['cb'] );
 		return $column_info;
 	}
 
@@ -374,7 +377,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
-			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable-payments' ) . '</a>';
+			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
 		}
 
 		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>';
@@ -532,5 +535,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 				return 'PayPal';
 		}
 		return $item->paysys;
+	}
+
+	/**
+	 * Display 'Test' or 'Live' in a mode column if the value is known.
+	 * Old payment entries will have a NULL 'test' column value.
+	 *
+	 * @since 6.6
+	 *
+	 * @param stdClass $item Payment or Subscription object.
+	 * @return string
+	 */
+	private function get_mode_column( $item ) {
+		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
 	}
 }

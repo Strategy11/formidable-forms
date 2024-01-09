@@ -423,7 +423,7 @@ class FrmField {
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
 			unset( $field );
-		}
+		}//end foreach
 	}
 
 	public static function update( $id, $values ) {
@@ -443,6 +443,12 @@ class FrmField {
 		self::preserve_format_option_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
+			if ( 'dropdown' === $values['type'] ) {
+				// To avoid conflicts with security plugins the value "dropdown" is sent for select fields.
+				// This is because "select" gets matched for SQL injection attempts.
+				$values['type'] = 'select';
+			}
+
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
@@ -493,7 +499,7 @@ class FrmField {
 	 *
 	 * @since 2.0.8
 	 *
-	 * @param $values array - pass by reference
+	 * @param array $values Pass by reference.
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -548,7 +554,7 @@ class FrmField {
 
 	/**
 	 * @param string|int $id The field id or key.
-	 * @param bool $filter When true, run the frm_field filter.
+	 * @param bool       $filter When true, run the frm_field filter.
 	 */
 	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
@@ -596,8 +602,8 @@ class FrmField {
 	/**
 	 * Get the field type by key or id
 	 *
-	 * @param int|string The field id or key
-	 * @param mixed $col The name of the column in the fields database table
+	 * @param int|string $id  The field id or key.
+	 * @param mixed      $col The name of the column in the fields database table.
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -650,7 +656,7 @@ class FrmField {
 			}
 
 			return wp_unslash( $fields );
-		}
+		}//end if
 
 		self::$use_cache = false;
 
@@ -711,7 +717,7 @@ class FrmField {
 	 * If repeating fields should be included, adjust $where accordingly
 	 *
 	 * @param string $inc_repeat
-	 * @param array $where - pass by reference
+	 * @param array  $where      Pass by reference.
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat == 'include' ) {
@@ -966,7 +972,8 @@ class FrmField {
 		$original_type = self::get_option( $field, 'original_type' );
 
 		if ( ! empty( $original_type ) && $original_type != $field_type ) {
-			$field_type = $original_type; // check the original type for arrays
+			// Check the original type for arrays.
+			$field_type = $original_type;
 		}
 
 		return $field_type;
@@ -1150,7 +1157,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
-	 * @param string $is_type Options include radio, checkbox, text
+	 * @param string       $is_type Options include radio, checkbox, text.
 	 *
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */
