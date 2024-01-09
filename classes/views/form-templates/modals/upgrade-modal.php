@@ -51,7 +51,7 @@ $plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
 					esc_html__( 'Lite users get %1$s50%% OFF%2$s regular price.', 'formidable' ),
-					'<span class="frm-cta-tag">',
+					'<span class="frm-meta-tag frm-green-tag">',
 					'</span>'
 				);
 				?>
