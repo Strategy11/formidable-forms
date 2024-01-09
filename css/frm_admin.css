@@ -4198,7 +4198,7 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 /* Before `applyZebraStriping` is executed, an empty space is displayed */
-.frm-alt-table:not(.frm-zebra-striping)::before {
+#form_show_entry_page .frm-alt-table:not(.frm-zebra-striping)::before {
 	content: '';
 	position: absolute;
 	top: 0;
