@@ -169,7 +169,7 @@
 			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
-			if ( 'card_error' === error.type ) {
+			if ( 'card_error' === error.type || 'invalid_request_error' === error.type ) {
 				cardErrors = object.querySelector( '.frm-card-errors' );
 				if ( cardErrors ) {
 					cardErrors.textContent = error.message;

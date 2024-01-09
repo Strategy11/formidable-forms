@@ -249,6 +249,7 @@ class FrmStrpLiteLinkController {
 		}
 
 		if ( 'succeeded' !== $setup_intent->status ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'payment_failed' );
 			die();
 		}
@@ -258,7 +259,13 @@ class FrmStrpLiteLinkController {
 		$new_payment_values        = array();
 
 		if ( $customer_has_been_charged ) {
-			$charge                           = $subscription->latest_invoice->charge;
+			$charge = $subscription->latest_invoice->charge;
+
+			if ( 'failed' === $charge->status ) {
+				FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
+				$redirect_helper->handle_error( 'payment_failed' );
+			}
+
 			$new_payment_values['receipt_id'] = $charge->id;
 			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
 

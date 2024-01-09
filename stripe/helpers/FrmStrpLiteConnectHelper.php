@@ -755,8 +755,9 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
-		$data     = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id' ) );
-		$canceled = false !== $data;
+		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
+		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
+		$canceled             = false !== $data;
 		return $canceled;
 	}
 
