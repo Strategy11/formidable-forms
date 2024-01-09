@@ -108,7 +108,7 @@ class FrmHooksController {
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		// Summary emails.
-		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
+		//add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
