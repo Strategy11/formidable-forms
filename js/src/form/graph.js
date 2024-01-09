@@ -23,11 +23,11 @@ import FormidableIcon from '../common/components/icon';
 		</Notice>
 	);
 
-	const blockName = formidable_form_selector.name + ' ' + __( 'Graph', 'formidable' );
+	const blockName = __( 'Formidable Chart', 'formidable' );
 
 	registerBlockType( 'frm-charts/graph', {
 		title: blockName,
-		description: __( 'Display a graph', 'formidable' ),
+		description: __( 'Display a chart or graph', 'formidable' ),
 		icon: FormidableIcon,
 		category: 'design',
 
@@ -53,7 +53,7 @@ import FormidableIcon from '../common/components/icon';
 								/>
 							) : (
 								<UpgradeNotice
-									text={ __( 'This site does not have Formidable Charts.', 'formidable' ) }
+									text={ __( 'This site does not have Formidable Charts installed.', 'formidable' ) }
 									buttonText={ __( 'Upgrade Formidable Forms', 'formidable' ) }
 									link={ formidable_form_selector.link }
 								/>
