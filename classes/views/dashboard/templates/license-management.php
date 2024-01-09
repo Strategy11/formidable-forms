@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<span>
 		<?php echo esc_html( FrmAppHelper::copy_for_lite_license() ); ?>
 	</span>
-	<div class="frm-flex-box">
+	<div class="frm-flex-box frm-gap-xs">
 		<?php FrmDashboardHelper::show_connect_links(); ?>
 	</div>
 </div>
