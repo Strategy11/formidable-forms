@@ -515,4 +515,22 @@ class FrmEmailSummaryHelper {
 		}
 		return FrmAppHelper::get_localized_date( 'Y-m-d', gmdate( 'Y-m-d H:i:s', strtotime( $date_diff ) ) );
 	}
+
+	/**
+	 * Maybe remove recipients from setting from API.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $recipients Recipients.
+	 */
+	public static function maybe_remove_recipients_from_api( &$recipients ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
+		if ( empty( $addons['no_emails'] ) ) {
+			return;
+		}
+
+		$skip_emails = explode( ',', $addons['no_emails'] );
+		$recipients  = array_diff( $recipients, $skip_emails );
+	}
 }

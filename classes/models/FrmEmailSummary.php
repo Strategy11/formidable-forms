@@ -55,6 +55,7 @@ abstract class FrmEmailSummary {
 	protected function get_recipients() {
 		$recipients = FrmAppHelper::get_settings()->summary_emails_recipients;
 		$recipients = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $recipients );
+		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
 		return $recipients;
 	}
 
@@ -130,9 +131,13 @@ abstract class FrmEmailSummary {
 	 */
 	public function send() {
 		$recipients = $this->get_recipients();
-		$content    = $this->get_content();
-		$subject    = $this->get_subject();
-		$headers    = $this->get_headers();
+		if ( ! $recipients ) {
+			return true; // Return true to not try to send this email on the next day.
+		}
+
+		$content = $this->get_content();
+		$subject = $this->get_subject();
+		$headers = $this->get_headers();
 
 		$sent = wp_mail( $recipients, $subject, $content, $headers );
 		if ( ! $sent ) {
