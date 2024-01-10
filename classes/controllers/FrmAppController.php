@@ -743,6 +743,10 @@ class FrmAppController {
 			}
 		}//end if
 
+		if ( 'formidable-addons' === $page ) {
+			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
+			wp_enqueue_script( 'formidable_addons' );
+		}
 	}
 
 	/**

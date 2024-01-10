@@ -294,6 +294,7 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
+	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
@@ -2540,11 +2541,11 @@ function frmAdminBuildJS() {
 		var slug = jQuery( '#param' ).val(),
 			msg;
 		slug = slug.trim().toLowerCase();
-		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) { // eslint-disable-line camelcase
-			msg = frm_admin_js.slug_is_reserved; // eslint-disable-line camelcase
+		if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( slug ) ) {
+			msg = frmAdminJs.slug_is_reserved;
 			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' ); // eslint-disable-line camelcase
+			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>', 'div' );
 			infoModal( msg );
 		}
 	}
@@ -2559,7 +2560,7 @@ function frmAdminBuildJS() {
 			unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) { // eslint-disable-line camelcase
+			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[1]) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -2570,10 +2571,10 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			let msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
+			let msg =  frmAdminJs.param_is_reserved;
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>';
 
 			infoModal( msg );
 		}
@@ -2618,7 +2619,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + '\n\n'; // eslint-disable-line camelcase
+			msg = frmAdminJs.unmatched_parens + '\n\n';
 			return msg;
 		}
 
@@ -2656,7 +2657,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + '\n\n'; // eslint-disable-line camelcase
+			msg = frmAdminJs.text_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -2689,7 +2690,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + '\n\n'; // eslint-disable-line camelcase
+			msg += frmAdminJs.view_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -3093,7 +3094,7 @@ function frmAdminBuildJS() {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
 			if ( $unqDetail.val() === '' ) {
-				$unqDetail.val( frm_admin_js.default_unique ); // eslint-disable-line camelcase
+				$unqDetail.val( frmAdminJs.default_unique );
 			}
 		} else {
 			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
@@ -3116,7 +3117,7 @@ function frmAdminBuildJS() {
 			//Add default validation message if empty
 			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
-				valMsg.val( frm_admin_js.default_conf ); // eslint-disable-line camelcase
+				valMsg.val( frmAdminJs.default_conf );
 			}
 
 			setConfirmationFieldDescriptions( fieldId );
@@ -3141,17 +3142,17 @@ function frmAdminBuildJS() {
 
 		var fieldDescription = document.getElementById( 'field_description_' + fieldId );
 		var hiddenDescName = 'field_options[description_' + fieldId + ']';
-		var newValue = frm_admin_js['enter_' + fieldType]; // eslint-disable-line camelcase
+		var newValue = frmAdminJs['enter_' + fieldType];
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
 		var confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
 		var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
-		var newConfValue = frm_admin_js['confirm_' + fieldType]; // eslint-disable-line camelcase
+		var newConfValue = frmAdminJs['confirm_' + fieldType];
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
 	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {
-		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) { // eslint-disable-line camelcase
+		if ( descriptionDiv.innerHTML === frmAdminJs.desc ) {
 
 			// Set the visible description value and the hidden description value
 			descriptionDiv.innerHTML = newValue;
@@ -3545,7 +3546,7 @@ function frmAdminBuildJS() {
 	 */
 	function maybeClearOptText() {
 		/*jshint validthis:true */
-		if ( this.value === frm_admin_js.new_option ) { // eslint-disable-line camelcase
+		if ( this.value === frmAdminJs.new_option ) {
 			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
@@ -3558,7 +3559,7 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirmMsg = frm_admin_js.conf_delete, // eslint-disable-line camelcase
+		var confirmMsg = frmAdminJs.conf_delete,
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
@@ -3584,7 +3585,7 @@ function frmAdminBuildJS() {
 
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirmMsg = frm_admin_js.conf_delete_sec; // eslint-disable-line camelcase
+			confirmMsg = frmAdminJs.conf_delete_sec;
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4851,7 +4852,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) { // eslint-disable-line camelcase
+		if ( '' !== this.value || frmAdminJs.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
 			this.setAttribute( 'data-value-on-focus', this.value );
 		}
 	}
@@ -5238,7 +5239,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			infoModal( frm_admin_js.repeat_limit_min ); // eslint-disable-line camelcase
+			infoModal( frmAdminJs.repeat_limit_min );
 			this.value = '';
 		}
 	}
@@ -5247,7 +5248,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			infoModal( frm_admin_js.checkbox_limit ); // eslint-disable-line camelcase
+			infoModal( frmAdminJs.checkbox_limit );
 			this.value = '';
 		}
 	}
@@ -5727,7 +5728,7 @@ function frmAdminBuildJS() {
 			labelImage = img({ src: imageUrl, alt: originalLabel });
 		} else {
 			labelImage           = div({ className: 'frm_empty_url' });
-			labelImage.innerHTML = frm_admin_js.image_placeholder_icon; // eslint-disable-line camelcase
+			labelImage.innerHTML = frmAdminJs.image_placeholder_icon;
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
@@ -7084,7 +7085,7 @@ function frmAdminBuildJS() {
 	}
 
 	function onlyOneActionMessage() {
-		infoModal( frm_admin_js.only_one_action ); // eslint-disable-line camelcase
+		infoModal( frmAdminJs.only_one_action );
 	}
 
 	function addFormLogicRow() {
@@ -7187,7 +7188,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( frm_admin_js.field_already_used ); // eslint-disable-line camelcase
+				infoModal( frmAdminJs.field_already_used );
 				return false;
 			}
 		});
@@ -7633,7 +7634,7 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).textContent = frm_admin_js.private_label; // eslint-disable-line camelcase
+			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked    = true;
 		}
@@ -7822,7 +7823,7 @@ function frmAdminBuildJS() {
 		idKey = document.getElementById( idKey );
 		field = idKey.options[idKey.selectedIndex].value;
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
-		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field ); // eslint-disable-line camelcase
+		result.setAttribute( 'data-code', code + frmAdminJs.conditional_text + '[/if ' + field );
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
@@ -8491,20 +8492,20 @@ function frmAdminBuildJS() {
 	/* Addons page */
 	function installMultipleAddons( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_multiple_addons' );
+		toggleAddonState( this, 'frm_multiple_addons' );
 	}
 
 	function activateAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_activate_addon' );
+		toggleAddonState( this, 'frm_activate_addon' );
 	}
 
 	function installAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_install_addon' );
+		toggleAddonState( this, 'frm_install_addon' );
 	}
 
-	function installOrActivate( clicked, action ) {
+	function toggleAddonState( clicked, action ) {
 		let button, plugin, el, message;
 
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
@@ -8544,7 +8545,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 
-				afterAddonInstall( response, button, message, el, saveAndReload );
+				afterAddonInstall( response, button, message, el, saveAndReload, action );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -8571,7 +8572,7 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: 'frm_install_addon',
-				nonce: frm_admin_js.nonce, // eslint-disable-line camelcase
+				nonce: frmAdminJs.nonce,
 				plugin: plugin,
 				hostname: el.find( '#hostname' ).val(),
 				username: el.find( '#username' ).val(),
@@ -8592,7 +8593,7 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function afterAddonInstall( response, button, message, el, saveAndReload ) {
+	function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
 		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 		addonStatuses.forEach(
 			addonStatus => {
@@ -8603,7 +8604,6 @@ function frmAdminBuildJS() {
 
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
-		message.text( frm_admin_js.active ); // eslint-disable-line camelcase
 
 		document.querySelectorAll( '.frm-oneclick' ).forEach(
 			oneClick => {
@@ -8616,8 +8616,22 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
-		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed' ).addClass( 'frm-addon-active' );
-		button.removeClass( 'frm_loading_button' );
+		const actionMap = {
+			frm_activate_addon: { class: 'frm-addon-active', message: frmAdminJs.active },
+			frm_deactivate_addon: { class: 'frm-addon-installed', message: frmAdminJs.installed },
+			frm_uninstall_addon: { class: 'frm-addon-not-installed', message: frmAdminJs.not_installed }
+		};
+		actionMap.frm_install_addon = actionMap.frm_activate_addon;
+
+		const messageElement = message[0];
+		messageElement.textContent = actionMap[action].message;
+
+		const parentElement = el[0].parentElement;
+		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
+		parentElement.classList.add( actionMap[action].class );
+
+		const buttonElement = button[0];
+		buttonElement.classList.remove( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
 		const refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
@@ -9939,7 +9953,7 @@ function frmAdminBuildJS() {
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
 				if ( this.checked ) {
-					if ( confirm( frm_admin_js.no_save_warning ) !== true ) { // eslint-disable-line camelcase
+					if ( confirm( frmAdminJs.no_save_warning ) !== true ) {
 						// Uncheck box if user hits "Cancel"
 						jQuery( this ).attr( 'checked', false );
 					}
@@ -10356,7 +10370,8 @@ function frmAdminBuildJS() {
 		offsetModalY,
 		adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt,
-		installNewForm
+		installNewForm,
+		toggleAddonState
 	};
 }
 
