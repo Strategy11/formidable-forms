@@ -6944,7 +6944,6 @@ function frmAdminBuildJS() {
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
-		hideShortcodes(); // Hide all open shortcode boxes when switching between fields in builder.
 
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 	}
@@ -9551,6 +9550,29 @@ function frmAdminBuildJS() {
 		tables.forEach( table => table.classList.add( 'frm-zebra-striping' ) );
 	};
 
+	function maybeHideShortcodes( e ) {
+		e.stopPropagation();
+
+		if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
+			return;
+		}
+
+		const sidebar = document.getElementById( 'frm_adv_info' );
+		if ( ! sidebar ) {
+			return;
+		}
+
+		if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
+			return;
+		}
+
+		const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
+		if ( ! isChild && sidebar.display !== 'none' ) {
+			hideShortcodes( sidebar );
+		}
+	}
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -9731,6 +9753,8 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
+			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
+
 			let loadFieldId, $builderForm, builderArea;
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
@@ -9953,28 +9977,7 @@ function frmAdminBuildJS() {
 			);
 
 			// Close shortcode modal on click.
-			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
-				e.stopPropagation();
-
-				if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
-					return;
-				}
-
-				const sidebar = document.getElementById( 'frm_adv_info' );
-				if ( ! sidebar ) {
-					return;
-				}
-
-				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
-					return;
-				}
-
-				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
-
-				if ( ! isChild && sidebar.display !== 'none' ) {
-					hideShortcodes( sidebar );
-				}
-			});
+			formSettings.on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
