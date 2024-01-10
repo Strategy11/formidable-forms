@@ -270,7 +270,7 @@
 		 * @param {object|null}      $form
 		 * @returns {HTMLElement|null}
 		 */
-		function getNameFieldItem( fieldID, type, $form ) {
+		function getNameFieldItem( fieldID, type, $form = null ) {
 			var queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
 
 			if ( type === 'container' ) {
@@ -290,7 +290,7 @@
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField ) {
+				if ( firstField && firstField.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
@@ -302,7 +302,7 @@
 				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField ) {
+				if ( lastField && lastField.value ) {
 					cardObject.name = cardObject.name + ' ' + lastField.value;
 				}
 			}
