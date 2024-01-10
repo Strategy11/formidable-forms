@@ -262,7 +262,15 @@
 			lastNameID  = settings[ i ].last_name;
 		}
 
-		function getNameFieldItem( fieldID, type, $form ) {
+		/**
+		 * Returns a name field container or element.
+		 *
+		 * @param {Number}           fieldID
+		 * @param {string}           type   Either 'container' or 'field'
+		 * @param {object|null}      $form
+		 * @returns {HTMLElement|null}
+		 */
+		function getNameFieldItem( fieldID, type, $form = null ) {
 			var queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
 
 			if ( type === 'container' ) {
@@ -270,9 +278,10 @@
 				window.frmProForm.queryForNameField( fieldID, 'container' ) :
 				document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
 			}
+
 			return queryForNameFieldIsFound ?
-			window.frmProForm.queryForNameField( fieldID, 'field', $form ) :
-			$form.find( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+			window.frmProForm.queryForNameField( fieldID, 'field', $form[0]) :
+			$form[0].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
 		}
 
 		if ( firstNameID !== '' ) {
@@ -281,8 +290,8 @@
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField.length && firstField.val() ) {
-					cardObject.name = firstField.val();
+				if ( firstField && firstField.value ) {
+					cardObject.name = firstField.value;
 				}
 			}
 		}
@@ -293,8 +302,8 @@
 				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField.length && lastField.val() ) {
-					cardObject.name = cardObject.name + ' ' + lastField.val();
+				if ( lastField && lastField.value ) {
+					cardObject.name = cardObject.name + ' ' + lastField.value;
 				}
 			}
 		}
