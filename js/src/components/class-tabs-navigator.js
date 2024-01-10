@@ -1,4 +1,4 @@
-export class FrmTabsNavigator {
+export class frmTabsNavigator {
 
 	constructor( wrapper ) {
 		if ( 'undefined' === typeof wrapper ) {

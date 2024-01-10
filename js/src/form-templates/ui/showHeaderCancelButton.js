@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { FrmAnimate } from '../../common/utilities/animation';
+import { frmAnimate } from '../utils';
 
 /**
  * Display the "Cancel" button in the header.
@@ -11,5 +11,5 @@ import { FrmAnimate } from '../../common/utilities/animation';
  */
 export function showHeaderCancelButton() {
 	const { headerCancelButton } = getElements();
-	new FrmAnimate( headerCancelButton ).fadeIn();
+	new frmAnimate( headerCancelButton ).fadeIn();
 };

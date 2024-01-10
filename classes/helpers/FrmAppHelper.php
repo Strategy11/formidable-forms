@@ -4122,7 +4122,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function copy_for_lite_license() {
-		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' )  . ' 🙂';
+		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
 
 		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
 			// Manage PRO versions without PRO dashboard functionality.

@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { getElements } from '../elements';
 import { CURRENT_CLASS, getAppStateProperty } from '../shared';
-import { showElements, show, hideElements, hide, isVisible, FrmAnimate } from '../utils';
+import { showElements, show, hideElements, hide, isVisible, frmAnimate } from '../utils';
 import { showSearchEmptyState, updatePageTitle } from '.';
 
 /**
@@ -19,7 +19,7 @@ import { showSearchEmptyState, updatePageTitle } from '.';
  */
 export function showSearchState( notEmptySearchText ) {
 	const { bodyContent, bodyContentChildren, pageTitle, templatesList, applicationTemplates } = getElements();
-	const bodyContentAnimate = new FrmAnimate( bodyContent );
+	const bodyContentAnimate = new frmAnimate( bodyContent );
 
 	// Remove highlighting from the currently selected category if the search text is not empty
 	if ( notEmptySearchText ) {

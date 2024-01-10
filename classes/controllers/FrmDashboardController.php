@@ -523,18 +523,21 @@ class FrmDashboardController {
 	 * @return string The YouTube video ID.
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
-		$youtube_api   = new FrmYoutubeFeedApi();
-		$welcome_video = $youtube_api->get_welcome_video();
-		$latest_video  = $youtube_api->get_latest_video();
+		$youtube_api    = new FrmYoutubeFeedApi();
+		$welcome_video  = $youtube_api->get_welcome_video();
+		$featured_video = $youtube_api->get_featured_video();
 
-		if ( 0 === (int) $entries_count && false === $welcome_video && false === $latest_video ) {
+		if ( 0 === (int) $entries_count && false === $welcome_video && false === $featured_video ) {
 			return null;
 		}
 		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
-			return $welcome_video['video-id'];
+			return isset( $welcome_video['video-id'] ) ? $welcome_video['video-id'] : null;
 		}
-		return $latest_video[0]['video-id'];
-
+		// We might receive the most recent video feed as the featured selection.
+		if ( isset( $featured_video[0] ) ) {
+			return $featured_video[0]['video-id'];
+		}
+		return isset( $featured_video['video-id'] ) ? $featured_video['video-id'] : null;
 	}
 
 	/**

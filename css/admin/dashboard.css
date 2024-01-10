@@ -41,14 +41,10 @@
 .frm-dashboard-container .frm-dashboard-widget h2.frm-widget-heading {
 	font-size: var(--text-md);
 	font-weight: 600;
-	position: relative;
-	z-index: 22;
 }
 
 .frm-dashboard-container .frm-dashboard-widget .frm-widget-cta {
 	font-weight: 500;
-	position: relative;
-	z-index: 22;
 }
 
 .frm-dashboard-container .frm-dashboard-widget .frm-widget-cta,

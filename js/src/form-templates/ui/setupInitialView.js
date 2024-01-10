@@ -3,9 +3,8 @@
  */
 import { getElements } from '../elements';
 import { HIDE_JS_CLASS, getAppState, hasQueryParam } from '../shared';
-import { show, hide, hideElements } from '../utils';
+import { show, hide, hideElements, frmAnimate } from '../utils';
 import { showHeaderCancelButton } from './';
-import { FrmAnimate } from '../../common/utilities/animation';
 
 /**
  * Sets up the initial view, performing any required
@@ -23,7 +22,7 @@ function setupInitialView() {
 		freeTemplatesCategory
 	} = getElements();
 
-	const bodyContentAnimate = new FrmAnimate( bodyContent );
+	const bodyContentAnimate = new frmAnimate( bodyContent );
 
 	// Clear the value in the search input
 	searchInput.value = '';

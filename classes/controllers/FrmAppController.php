@@ -156,7 +156,7 @@ class FrmAppController {
 			}
 		}
 
-		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || self::is_views_page();
+		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || FrmAppHelper::is_view_builder_page();
 
 		/**
 		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
@@ -185,18 +185,6 @@ class FrmAppController {
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );
 		return apply_filters( 'frm_is_grey_page', $is_grey_page );
-	}
-
-	/**
-	 * Check if Views is an active page.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool
-	 */
-	private static function is_views_page() {
-		$screen = get_current_screen();
-		return $screen && strpos( $screen->id, 'frm_display' ) !== false;
 	}
 
 	/**

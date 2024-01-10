@@ -1,7 +1,7 @@
-export class FrmAnimate {
+export class frmAnimate {
 
 	/**
-	 * Construct FrmAnimate
+	 * Construct frmAnimate
 	 *
 	 * @param {Element|Element[]} elements
 	 * @param {'default'|'cascade'|'cascade-3d'} type - The animation type: default | cascade | cascade-3d
@@ -19,7 +19,7 @@ export class FrmAnimate {
 	/**
 	 * Init animation - fadeIn.
 	 * Requires this.type = 'default';
-	 * ex: new FrmAnimate( elements ).fadeIn();
+	 * ex: new frmAnimate( elements ).fadeIn();
 	 */
 	fadeIn() {
 		this.applyStyleToElements( element => {
@@ -35,8 +35,8 @@ export class FrmAnimate {
 	/**
 	 * Init animation - cascadeFadeIn.
 	 * Requires this.type = 'cascade'|'cascade-3d';
-	 * ex: new FrmAnimate( elements, 'cascade' ).cascadeFadeIn();
-	 *     new FrmAnimate( elements, 'cascade-3d' ).cascadeFadeIn();
+	 * ex: new frmAnimate( elements, 'cascade' ).cascadeFadeIn();
+	 *     new frmAnimate( elements, 'cascade-3d' ).cascadeFadeIn();
 	 *
 	 * @param {float} delay - The transition delay value.
 	 *
@@ -51,10 +51,10 @@ export class FrmAnimate {
 	}
 
 	initOnceInAllInstances() {
-		if ( true === FrmAnimate.init ) {
+		if ( true === frmAnimate.init ) {
 			return;
 		}
-		FrmAnimate.init = true;
+		frmAnimate.init = true;
 		this.loadCssFile();
 	}
 

@@ -1,8 +1,8 @@
-import { FrmTabsNavigator } from './components/class-tabs-navigator';
-import { FrmCounter } from './components/class-counter';
-import { FrmAnimate } from './common/utilities/animation';
+import { frmTabsNavigator } from './components/class-tabs-navigator';
+import { frmCounter } from './components/class-counter';
+import { frmAnimate } from './common/utilities/animation';
 
-class FrmDashboard {
+class frmDashboard {
 
 	constructor() {
 
@@ -16,7 +16,7 @@ class FrmDashboard {
 				}
 			}
 		};
-		this.widgetsAnimate = new FrmAnimate( document.querySelectorAll( '.frm-dashboard-widget' ), 'cascade' );
+		this.widgetsAnimate = new frmAnimate( document.querySelectorAll( '.frm-dashboard-widget' ), 'cascade' );
 	}
 
 	init() {
@@ -28,7 +28,7 @@ class FrmDashboard {
 	}
 
 	initInbox() {
-		new FrmTabsNavigator( '.frm-inbox-wrapper' );
+		new frmTabsNavigator( '.frm-inbox-wrapper' );
 		const userEmailInput  = document.querySelector( '#frm_leave_email' );
 		const subscribeButton = document.querySelector( '#frm-add-my-email-address' );
 
@@ -39,7 +39,7 @@ class FrmDashboard {
 
 	initCounters() {
 		const counters = document.querySelectorAll( '.frm-counter' );
-		counters.forEach( counter => new FrmCounter( counter ) );
+		counters.forEach( counter => new frmCounter( counter ) );
 	}
 
 	initCloseWelcomeBanner() {
@@ -87,7 +87,7 @@ class FrmDashboard {
 		}).then( result => result.json() );
 	}
 }
-const frmDashboard = new FrmDashboard();
+const frmDashboardClass = new frmDashboard();
 document.addEventListener( 'DOMContentLoaded', () => {
-	frmDashboard.init();
+	frmDashboardClass.init();
 });

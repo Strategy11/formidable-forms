@@ -87,26 +87,11 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function __construct( $data ) {
-		if ( isset( $data['counters'] ) ) {
-			$this->view['counters'] = $data['counters'];
-		}
-		if ( isset( $data['license'] ) ) {
-			$this->view['license'] = $data['license'];
-		}
-		if ( isset( $data['payments'] ) ) {
-			$this->view['payments'] = $data['payments'];
-		}
-		if ( isset( $data['entries'] ) ) {
-			$this->view['entries'] = $data['entries'];
-		}
-		if ( isset( $data['inbox'] ) ) {
-			$this->view['inbox'] = $data['inbox'];
-		}
-		if ( isset( $data['video'] ) ) {
-			$this->view['video'] = $data['video'];
-		}
-		if ( isset( $data['payments'] ) ) {
-			$this->view['payments'] = $data['payments'];
+		$sections = array( 'counters', 'license', 'payments', 'entries', 'inbox', 'video', 'payments' );
+		foreach ( $sections as $section ) {
+			if ( isset( $data[ $section ] ) ) {
+				$this->view[ $section ] = $data[ $section ];
+			}
 		}
 	}
 
@@ -289,7 +274,7 @@ class FrmDashboardHelper {
 		}
 
 		echo '<div class="' . esc_attr( $classes ) . '">' .
-			'<iframe src="https://www.youtube.com/embed/' . esc_attr( $template['id'] ) . '" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>' .
+			'<iframe src="https://www.youtube.com/embed/' . esc_attr( $template['id'] ) . '" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe>' .
 			'</div>';
 	}
 

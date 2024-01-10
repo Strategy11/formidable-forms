@@ -1,7 +1,7 @@
-export class FrmCounter {
+export class frmCounter {
 
 	/**
-	 * Init FrmCounter
+	 * Init frmCounter
 	 *
 	 * @param {Element} element
 	 * @param {object} options

@@ -19,8 +19,9 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 * @var array
 	 */
 	private $api_endpoints = array(
-		'welcome-video' => 'get-welcome-video',
-		'latest-video'  => 'get-latest-video',
+		'welcome-video'  => 'get-welcome-video',
+		'latest-video'   => 'get-latest-video',
+		'featured-video' => 'get-featured-video',
 	);
 
 	/**
@@ -36,8 +37,9 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 * @var array
 	 */
 	private $cache_keys = array(
-		'welcome-video' => 'frm-welcome-video',
-		'latest-video'  => 'frm-latest-video',
+		'welcome-video'  => 'frm-welcome-video',
+		'latest-video'   => 'frm-latest-video',
+		'featured-video' => 'frm-featured-video',
 	);
 
 	public function __construct() {
@@ -95,6 +97,15 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 */
 	public function get_welcome_video() {
 		return $this->get_feed_by_api_endpoint( $this->api_endpoints['welcome-video'], $this->cache_keys['welcome-video'] );
+	}
+
+	/**
+	 * Get the featured YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
+	 *
+	 * @return array
+	 */
+	public function get_featured_video() {
+		return $this->get_feed_by_api_endpoint( $this->api_endpoints['featured-video'], $this->cache_keys['featured-video'] );
 	}
 
 	/**

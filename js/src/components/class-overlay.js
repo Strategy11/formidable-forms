@@ -1,6 +1,6 @@
-import { FrmAnimate } from '../common/utilities/animation';
+import { frmAnimate } from '../common/utilities/animation';
 
-export class FrmOverlay {
+export class frmOverlay {
 
 	constructor() {
 		this.body = document.body;
@@ -112,7 +112,7 @@ export class FrmOverlay {
 	initOverlayIntroAnimation( delay ) {
 		setTimeout( () => {
 			const elements = document.querySelectorAll( '.frm-overlay--hero-image, .frm-overlay--heading, .frm-overlay--copy, .frm-overlay--cta a' );
-			new FrmAnimate( elements, 'cascade-3d' ).cascadeFadeIn( 0.07 );
+			new frmAnimate( elements, 'cascade-3d' ).cascadeFadeIn( 0.07 );
 		}, delay );
 	}
 
