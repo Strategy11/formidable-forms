@@ -233,7 +233,8 @@ legend.frm_hidden{
 .frm_form_fields_error_style,
 .with_frm_style .frm-card-element.StripeElement,
 .with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single{
+.with_frm_style .chosen-container-single .chosen-single,
+.with_frm_style .frm_slimselect.ss-main {
 	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;

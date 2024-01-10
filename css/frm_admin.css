@@ -1608,6 +1608,11 @@ input.frm_insert_in_template {
 	margin-left: auto;
 }
 
+.frm-mx-xs {
+	margin-left: var(--gap-xs) !important;
+	margin-right: var(--gap-xs) !important;
+}
+
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;
@@ -2359,8 +2364,20 @@ h2.frm-h2 + .howto {
 	padding-top: 4px;
 }
 
-.frm-addon-active .button {
-	visibility: hidden;
+.frm-addon-not-installed .frm-activate-addon,
+.frm-addon-not-installed .frm-deactivate-addon,
+.frm-addon-not-installed .frm-uninstall-addon,
+.frm-addon-installed .frm-install-addon,
+.frm-addon-installed .frm-deactivate-addon,
+.frm-addon-active  .frm-activate-addon,
+.frm-addon-active  .frm-install-addon,
+.frm-addon-active .frm-uninstall-addon,
+.plugin-card-pro.frm-addon-active .button {
+	display: none !important;
+}
+
+#frm-addons-page .frm-addon-button {
+	opacity: 1 !important;
 }
 
 .frm-save-and-reload-options {
