@@ -2973,7 +2973,7 @@ function frmAdminBuildJS() {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
 		} else {
-			changes.innerHTML = newValue;
+			changes.innerHTML = purifyHtml( newValue );
 
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
@@ -4424,7 +4424,7 @@ function frmAdminBuildJS() {
 		text.innerHTML = sprintf(
 			/* translators: %1$s: Start span HTML, %2$s: end span HTML */
 			frm_admin_js.holdShiftMsg, // eslint-disable-line camelcase
-			'<span class="frm-shift-key frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
+			'<span class="frm-meta-tag frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
 			'</span>'
 		);
 
@@ -4977,7 +4977,11 @@ function frmAdminBuildJS() {
 		var link, lookupBlock,
 			fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
-		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
+		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID );
+		if ( ! link ) {
+			return;
+		}
+		link = link.parentNode;
 
 		if ( this.value === 'text' ) {
 			lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
@@ -5700,6 +5704,11 @@ function frmAdminBuildJS() {
 			},
 			''
 		);
+
+		if ( clean !== html ) {
+			// Clean it until nothing changes, in case the stripped result is now unsafe.
+			return purifyHtml( clean );
+		}
 
 		return clean;
 	}

@@ -253,8 +253,6 @@ p.frm-form-templates-item-description {
 }
 
 #frm-form-templates-applications .frm-meta-tag {
-	color: var(--orange);
-	background-color: #FEF7F4;
 	max-width: max-content;
 }
 

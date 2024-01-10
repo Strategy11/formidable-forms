@@ -938,8 +938,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|string|boolean $form
-	 *
+	 * @param object|array|string|boolean $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -951,7 +950,7 @@ BEFORE_HTML;
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
-		} elseif ( is_array( $form ) && ! empty( $form['custom_style'] ) ) {
+		} elseif ( is_array( $form ) && isset( $form['custom_style'] ) ) {
 			$style = $form['custom_style'];
 		}
 
@@ -1764,23 +1763,23 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.02
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 */
 	public static function template_install_html( $link, $class = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
 	 * Check an array of templates, determine how many the logged in user can use
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.7
 	 *
 	 * @param array $templates
 	 * @param array $args
 	 * @return int
 	 */
 	public static function available_count( $templates, $args ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.7' );
 		return 0;
 	}
 }

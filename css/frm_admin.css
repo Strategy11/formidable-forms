@@ -29,14 +29,17 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
-	--error-300: #FECDCA;
-	--error-500: #F04438;
 	--error-700: #B42318;
+	--error-500: #F04438;
+	--error-300: #FECDCA;
+	--error-100: #FEE4E2;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
+	--success-800: #065F46;
 	--success-500: #12b76a;
+	--success-100: #D1FAE5;
 	--success-25: #f6fef9;
 	--border-radius: 35px;
 	--small-radius: 8px;
@@ -2797,27 +2800,44 @@ body.frm-body-with-open-modal {
 	float: left;
 }
 
-.frm-plan-required-tag {
-	margin-left: 5px;
-	transform: translateY(-1px);
-	background: #FDE6DE;
-	color: #F15A24;
+.frm-meta-tag,
+.frm-meta-tag:hover {
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	font-weight: 600;
+	display: inline-flex;
+	background-color: #D9EBFF;
+	gap: 2px;
 }
 
-.frm-ready-made-solution .frm-meta-tag {
-	width: fit-content;
-	background: #FDE6DE;
-	color: #F15A24;
+.frm-meta-tag.frm-grey-tag,
+.frm-meta-tag.frm-grey-tag:hover {
+	background-color: var(--sidebar-hover);
+	color: var(--grey-900);
 }
 
-.frm-meta-tag {
-	font-size: 10px;
-	padding: 4px 6px;
-	border-radius: 4px;
-	text-transform: uppercase;
-	font-weight: normal;
-	display: inline-block;
-	line-height: 12px;
+.frm-meta-tag.frm-red-tag,
+.frm-meta-tag.frm-red-tag:hover {
+	background: var(--error-100);
+	color: var(--error-700);
+}
+
+.frm-meta-tag.frm-orange-tag,
+.frm-meta-tag.frm-orange-tag:hover {
+    background-color: #FEF7F4;
+	color: var(--orange);
+}
+
+.frm-meta-tag.frm-green-tag,
+.frm-meta-tag.frm-green-tag:hover {
+	background-color: var(--success-500);
+	color: #fff;
+}
+
+.frm-meta-tag.frm-lt-green-tag,
+.frm-meta-tag.frm-lt-green-tag:hover {
+	background-color: var(--success-100);
+	color: var(--success-800);
 }
 
 #frm-create-footer {
@@ -4178,7 +4198,7 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 /* Before `applyZebraStriping` is executed, an empty space is displayed */
-.frm-alt-table:not(.frm-zebra-striping)::before {
+#form_show_entry_page .frm-alt-table:not(.frm-zebra-striping)::before {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -5775,12 +5795,19 @@ table td, .form-table tr td {
 	box-shadow: none;
 }
 
-.frm_reply_to_container,
-.frm_bcc_cc_container {
+p.frm_bcc_cc_container,
+p.frm_reply_to_container {
 	float: right;
-	margin: -4px 0 0;
 	z-index: 1;
 	position: relative;
+}
+
+p.frm_bcc_cc_container {
+	margin: 14px 0 0;
+}
+
+p.frm_reply_to_container {
+	margin: -4px 0 0;
 }
 
 .frm_email_row .frm_cancel1_icon:before {
@@ -8469,8 +8496,8 @@ button.frm_choose_image_box,
 	left: 5px;
 }
 
-.rtl .frm_reply_to_container,
-.rtl .frm_bcc_cc_container {
+.rtl p.frm_reply_to_container,
+.rtl p.frm_bcc_cc_container {
 	float: left;
 }
 
@@ -8820,6 +8847,13 @@ Responsive Design
 
 	#wp-content-media-buttons a.frm_insert_form {
 		padding: 0 var(--gap-sm);
+	}
+
+	.frm-white-body input[type="checkbox"]:checked::before,
+	.frm_wrap input[type="checkbox"]:checked::before {
+		width: 1.2rem;
+		height: 1.2rem;
+		margin: 0.125rem;
 	}
 }
 
@@ -9345,14 +9379,6 @@ Responsive Design
 	color: var(--grey-700);
 }
 
-.frm-cta-tag {
-	color: #fff;
-	font-weight: 600;
-	padding: var(--gap-2xs) var(--gap-xs);
-	border-radius: var(--small-radius);
-	background-color: var(--success-500);
-}
-
 .frm-right-panel .inside .frm_pro_tip,
 .frm_pro_tip {
 	color: var(--grey-700);
@@ -9458,13 +9484,6 @@ Responsive Design
 #frm-field-group-message .frm-field-group-message-text {
 	gap: 10px;
 	color: var(--grey-800);
-}
-
-#frm-field-group-message .frm-shift-key {
-	padding: var(--gap-2xs) var(--gap-xs);
-	background-color: #D9EBFF;
-	border-radius: var(--small-radius);
-	gap: 2px;
 }
 
 #frm-field-group-message-dismiss {
