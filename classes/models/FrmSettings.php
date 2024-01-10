@@ -133,7 +133,7 @@ class FrmSettings {
 			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
 			'custom_header_ip' => false,
 			'tracking'         => FrmAppHelper::pro_is_installed(),
-			'summary_emails'   => 1,
+			'summary_emails'   => get_current_blog_id() === get_main_site_id(), // Only enable this by default for the main site.
 			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
