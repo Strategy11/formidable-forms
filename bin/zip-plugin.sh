@@ -47,6 +47,7 @@ zip -r $zipname $destination \
 	-x "*/formidableforms.css" \
 	-x "*/js/src/*" \
 	-x "*/assets/src/*" \
+	-x "*/blocks-src/*" \
 	-x "*/js/frm.min.js" \
 	-x "formidable/js/frmstrp.min.js" \
 	-x "formidable/stripe/js/frmstrp.js" \
