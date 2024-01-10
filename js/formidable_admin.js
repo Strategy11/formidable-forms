@@ -6979,6 +6979,7 @@ function frmAdminBuildJS() {
 		};
 
 		wrapTextareaWithIconContainer( fieldSettingsContainer );
+		document.getElementById( 'frm-html-tags' ).style.display = 'none';
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
