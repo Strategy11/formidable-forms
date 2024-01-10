@@ -62,5 +62,5 @@ parameters:
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
 		- '#callback of function spl_autoload_register expects#'
-		- '#customer\_id\_error\_message#'
+		- '#customer_id_error_message#'
 		- "#Offset 'custom_style' on#"
