@@ -28,15 +28,18 @@ import FormidableIcon from '../common/components/icon';
 	registerBlockType( 'frm-charts/graph', {
 		title: blockName,
 		description: __( 'Display a chart or graph', 'formidable' ),
-		icon: FormidableIcon,
+		icon: (
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 23">
+				<path stroke="#282F36" strokeLinecap="round" strokeWidth="2.5" d="M23 2v19m-7-7.5V21M9 10.8V21m-7-2.9V21"/>
+			</svg>
+		),
 		category: 'design',
 
-		edit: ( { setAttributes, attributes } ) => {
+		edit: () => {
 			const imageWrapperStyles = {
 				padding: '38px',
-				textAlign: 'center',
-				backgroundColor: '#f2f4f7',
-				marginTop: '24px'
+				margin: '0 auto',
+				maxWidth: '600px'
 			};
 
 			return (
@@ -49,7 +52,7 @@ import FormidableIcon from '../common/components/icon';
 								<UpgradeNotice
 									text={ __( 'This site does not have Formidable Charts active.', 'formidable' ) }
 									buttonText={ __( 'Install Formidable Charts', 'formidable' ) }
-									link={ formidable_form_selector.modalAddon.link }
+									link={ formidable_form_selector.chartsAddon.link }
 								/>
 							) : (
 								<UpgradeNotice

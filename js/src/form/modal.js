@@ -19,11 +19,7 @@ const UpgradeNotice = ( { text, buttonText, link } ) => (
 registerBlockType( 'frm-modal/modal', {
 	title: formidable_form_selector.name + ' ' + __( 'Modal', 'formidable' ),
 	description: __( 'Display a modal', 'formidable' ),
-	icon: (
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 23">
-			<path stroke="#282F36" strokeLinecap="round" strokeWidth="2.5" d="M23 2v19m-7-7.5V21M9 10.8V21m-7-2.9V21"/>
-		</svg>
-	),
+	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [
 		'modal',
