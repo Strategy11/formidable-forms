@@ -67,8 +67,8 @@
 
 /* Card title */
 .frm-application-card h3 {
-	display: inline-flex;
-	max-width: 100%;
+	display: flex;
+	width: 100%;
 	align-items: center;
 	flex-wrap: nowrap;
 	gap: var(--gap-xs);
