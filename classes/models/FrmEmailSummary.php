@@ -132,7 +132,8 @@ abstract class FrmEmailSummary {
 	public function send() {
 		$recipients = $this->get_recipients();
 		if ( ! $recipients ) {
-			return true; // Return true to not try to send this email on the next day.
+			// Return true to not try to send this email on the next day.
+			return true;
 		}
 
 		$content = $this->get_content();

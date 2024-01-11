@@ -338,7 +338,8 @@ class FrmMigrate {
 
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( empty( $frm_settings->summary_emails ) || '[admin_email]' !== $frm_settings->summary_emails_recipients ) {
-			return; // User changed it.
+			// User changed it.
+			return;
 		}
 
 		$frm_settings->summary_emails = 0;

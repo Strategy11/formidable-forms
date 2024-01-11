@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- don't need to escape for plain-text email.
 $frm_settings = FrmAppHelper::get_settings();
 
 echo '%%INNER_CONTENT%%';
@@ -23,3 +24,4 @@ echo "\r\n\r\n";
 
 // translators: Unsubscribe URL.
 printf( __( 'Unsubscribe: %s', 'formidable' ), esc_url_raw( $args['unsubscribe_url'] ) );
+//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
