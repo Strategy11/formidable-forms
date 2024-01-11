@@ -9489,7 +9489,7 @@ function frmAdminBuildJS() {
 	 */
 	function addAdminFooterLinks() {
 		const footerLinks = document.querySelector( '.frm-admin-footer-links' );
-		const container = document.querySelector( '.frm_page_container' ) ?? document.querySelector( '#wpbody-content' );
+		const container = document.querySelector( '.frm_page_container' ) ?? document.getElementById( 'wpbody-content' );
 
 		if ( ! footerLinks || ! container ) {
 			return;
