@@ -301,7 +301,7 @@
 			});
 
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();

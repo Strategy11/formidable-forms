@@ -3867,7 +3867,7 @@ class FrmAppHelper {
 		if ( null === $text ) {
 			$text = __( 'NEW', 'formidable' );
 		}
-		echo '<span class="frm-new-pill">' . esc_html( $text ) . '</span>';
+		echo '<span class="frm-meta-tag frm-new-pill">' . esc_html( $text ) . '</span>';
 	}
 
 	/**
