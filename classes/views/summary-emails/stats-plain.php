@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- don't need to escape for plain-text email.
+//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.Security.EscapeOutput.UnsafePrintingFunction -- don't need to escape for plain-text email.
 echo $args['subject'];
 
 echo "\r\n\r\n";
@@ -61,4 +61,4 @@ if ( ! empty( $args['out_of_date_plugins'] ) ) {
 	_e( 'Please go to your Plugins page to update them.', 'formidable' );
 	echo "\r\n\r\n";
 }
-//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.Security.EscapeOutput.UnsafePrintingFunction
