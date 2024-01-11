@@ -238,7 +238,7 @@ class FrmFormsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param int $id
+	 * @param int $form_id
 	 * @return void
 	 */
 	private static function remove_draft_option_from_all_fields( $form_id ) {
