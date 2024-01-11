@@ -285,11 +285,11 @@
 
 		function getCardHeader() {
 			const titleWrapper = tag(
-				'h4',
+				'h3',
 				{
 					children: [
 						svg({ href: '#frm_lock_icon' }),
-						document.createTextNode( data.name )
+						span({ className: 'frm-inner-text', text: data.name })
 					]
 				}
 			);
