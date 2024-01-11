@@ -719,6 +719,7 @@ DEFAULT_HTML;
 			'step'               => 1,
 			'format'             => '',
 			'placeholder'        => '',
+			'draft'              => 0,
 		);
 		$field_opts = $this->extra_field_opts();
 		$opts       = array_merge( $opts, $field_opts );
@@ -813,6 +814,11 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function prepare_field_html( $args ) {
+		if ( FrmField::get_option( $this->field, 'draft' ) ) {
+			// A draft field is never shown on the front-end.
+			return '';
+		}
+
 		$args = $this->fill_display_field_values( $args );
 		if ( $this->has_html ) {
 			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );

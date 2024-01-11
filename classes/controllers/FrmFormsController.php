@@ -213,6 +213,24 @@ class FrmFormsController {
 		if ( count( $errors ) > 0 ) {
 			return self::get_edit_vars( $id, $errors );
 		} else {
+			$draft_field_rows = FrmDb::get_results(
+				'frm_fields',
+				array(
+					'form_id'            => $id,
+					'field_options LIKE' => 's:5:"draft";i:1;',
+				),
+				'id, field_options'
+			);
+			foreach ( $draft_field_rows as $row ) {
+				FrmAppHelper::unserialize_or_decode( $row->field_options );
+				if ( ! is_array( $row->field_options ) || empty( $row->field_options['draft'] ) ) {
+					continue;
+				}
+
+				$row->field_options['draft'] = 0;
+				FrmField::update( $row->id, array( 'field_options' => $row->field_options ) );
+			}
+
 			FrmForm::update( $id, $values );
 			$message = __( 'Form was successfully updated.', 'formidable' );
 

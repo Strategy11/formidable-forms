@@ -5,7 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-single-settings frm_hidden frm-fields frm-type-<?php echo esc_attr( $field['type'] ); ?>" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
-	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
+	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>" />
+
+	<?php // Always set 0 to unset draft on form update. ?>
+	<input type="hidden" name="field_options[draft_<?php echo esc_attr( $field['id'] ); ?>]" value="0" />
 
 	<h3 aria-expanded="true">
 		<?php
