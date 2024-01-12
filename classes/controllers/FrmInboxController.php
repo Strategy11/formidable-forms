@@ -62,7 +62,7 @@ class FrmInboxController {
 
 		$inbox              = new FrmInbox();
 		$unread_messages    = $inbox->get_messages();
-		$dismissed_messages = $inbox->get_messages();
+		$dismissed_messages = $unread_messages;
 
 		$inbox->filter_messages( $unread_messages, 'filter' );
 		$inbox->filter_messages( $dismissed_messages, 'dismissed' );
