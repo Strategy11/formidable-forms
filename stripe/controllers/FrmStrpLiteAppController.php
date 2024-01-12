@@ -103,7 +103,7 @@ class FrmStrpLiteAppController {
 	 * @return array
 	 */
 	public static function maybe_add_payment_error( $errors, $params ) {
-		if ( ! $params['posted_form_id'] ) {
+		if ( intval( $params['posted_form_id'] ) !== intval( $params['form_id'] ) ) {
 			return self::maybe_add_payment_error_on_redirect( $errors, (int) $params['form_id'] );
 		}
 		return $errors;
@@ -148,9 +148,9 @@ class FrmStrpLiteAppController {
 
 		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
 		if ( $is_setup_intent ) {
-			$errors[ 'field' . $cc_field_id ] = $intent->last_setup_error->message;
+			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';
 		} else {
-			$errors[ 'field' . $cc_field_id ] = $intent->last_payment_error->message;
+			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_payment_error ) ? $intent->last_payment_error->message : '';
 		}
 
 		if ( ! $errors[ 'field' . $cc_field_id ] ) {
