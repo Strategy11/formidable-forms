@@ -819,6 +819,9 @@
 			const use = node.querySelector( 'use' );
 			if ( use ) {
 				svgArgs.href = use.getAttribute( 'xlink:href' );
+				if ( ! svgArgs.href ) {
+					svgArgs.href = use.getAttribute( 'href' );
+				}
 			}
 			return svg( svgArgs );
 		}
