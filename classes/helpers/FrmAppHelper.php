@@ -634,13 +634,22 @@ class FrmAppHelper {
 		return $value;
 	}
 
-	public static function sanitize_value( $sanitize, &$value ) {
+	/**
+	 * @since x.x The args param was added.
+	 *
+	 * @param callable     $sanitize The sanitize function to call.
+	 * @param array|string $value    The value to sanitize.
+	 * @param array        $args     Arguments to pass to the sanitize function (if any).
+	 */
+	public static function sanitize_value( $sanitize, &$value, $args = array() ) {
 		if ( ! empty( $sanitize ) ) {
 			if ( is_array( $value ) ) {
 				$temp_values = $value;
 				foreach ( $temp_values as $k => $v ) {
-					self::sanitize_value( $sanitize, $value[ $k ] );
+					self::sanitize_value( $sanitize, $value[ $k ], $args );
 				}
+			} elseif ( $args ) {
+				$value = call_user_func( $sanitize, $value, $args );
 			} else {
 				$value = call_user_func( $sanitize, $value );
 			}
@@ -673,13 +682,33 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Check for HTML tags used in a string.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $string
+	 * @return array
+	 */
+	public static function get_tags_used_in_string( $string ) {
+		$tag_pattern = '/<\s*([a-zA-Z]+)[^>]*>|<\/\s*([a-zA-Z]+)\s*>/';
+		preg_match_all( $tag_pattern, $string, $matches );
+
+		$tags        = array_filter( array_merge( $matches[1], $matches[2] ) );
+		$unique_tags = array_unique( $tags );
+
+		return array_values( $unique_tags );
+	}
+
+	/**
 	 * Allow only a small set of very basic HTML for unprivileged users.
 	 *
 	 * @since 6.7.1
 	 *
 	 * @param string $value
+	 * @param array  $args Maybe include "additional_allowed_tags" array.
+	 * @return string
 	 */
-	public static function strip_most_html( $value ) {
+	public static function strip_most_html( $value, $args = array() ) {
 		$allowed_html = array(
 			'b'      => array(),
 			'br'     => array(),
@@ -690,6 +719,10 @@ class FrmAppHelper {
 			'ol'     => array(),
 			'li'     => array(),
 		);
+
+		if ( ! empty( $args['additional_allowed_tags'] ) && is_array( $args['additional_allowed_tags'] ) ) {
+			$allowed_html = array_merge( $allowed_html, $args['additional_allowed_tags'] );
+		}
 
 		/**
 		 * @since 6.7.1

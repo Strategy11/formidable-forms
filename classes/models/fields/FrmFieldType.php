@@ -1347,10 +1347,7 @@ DEFAULT_HTML;
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
 
-		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
-			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
-		}
-
+		$value = $this->maybe_strip_most_html( $value, $atts );
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -1362,6 +1359,29 @@ DEFAULT_HTML;
 			}
 		}
 
+		return $value;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array|string $value
+	 * @param array        $atts
+	 * @return string|array
+	 */
+	private function maybe_strip_most_html( $value, $atts ) {
+		if ( ! $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			return $value;
+		}
+
+		$args = array();
+
+		// Do not strip any tags used in "sep" options on display.
+		if ( ! empty( $atts['sep'] ) ) {
+			$args['additional_allowed_tags'] = array_fill_keys( FrmAppHelper::get_tags_used_in_string( $atts['sep'] ), array() );
+		}
+
+		FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value, $args );
 		return $value;
 	}
 
