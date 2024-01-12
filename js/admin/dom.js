@@ -813,10 +813,14 @@
 		const tagType = node.tagName.toLowerCase();
 
 		if ( 'svg' === tagType ) {
-			return svg({
-				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+			const svgArgs = {
 				classList: Array.from( node.classList )
-			});
+			};
+			const use = node.querySelector( 'use' );
+			if ( use ) {
+				svgArgs.href = use.getAttribute( 'xlink:href' );
+			}
+			return svg( svgArgs );
 		}
 
 		const newNode = document.createElement( tagType );
