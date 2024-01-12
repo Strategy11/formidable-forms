@@ -426,7 +426,7 @@ class FrmStrpLiteAuth {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
-		if ( is_array( $details ) ) { 
+		if ( is_array( $details ) ) {
 			$payment        = $details['payment'];
 			$intent         = $details['intent'];
 			$payment_failed = self::payment_failed( $payment, $intent );

@@ -281,7 +281,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
 			$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $trial_end );
-		}
+		}//end if
 
 		$new_payment_values['sub_id'] = FrmStrpLiteSubscriptionHelper::create_new_subscription( $atts );
 
