@@ -109,7 +109,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p id="frm_csv_data_export" class="xml_opts">
 				<label><?php esc_html_e( 'Include the following in the export file', 'formidable' ); ?></label>
 				<?php foreach ( $export_types as $t => $type ) { ?>
-					<label class="frm_inline_label frm-<?php echo esc_attr( sanitize_title( $type ) ); ?>">
+					<label class="frm_inline_label frm-<?php echo esc_attr( sanitize_title( $t ) ); ?>">
 						<input type="checkbox" name="type[]" value="<?php echo esc_attr( $t ); ?>"/>
 						<?php echo esc_html( $type ); ?>
 					</label> &nbsp;
