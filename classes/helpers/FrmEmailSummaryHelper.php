@@ -530,7 +530,7 @@ class FrmEmailSummaryHelper {
 			return;
 		}
 
-		$skip_emails = explode( ',', $addons['no_emails'] );
+		$skip_emails = is_string( $addons['no_emails'] ) ? explode( ',', $addons['no_emails'] ) : (array) $addons['no_emails'];
 		$recipients  = array_diff( $recipients, $skip_emails );
 	}
 }
