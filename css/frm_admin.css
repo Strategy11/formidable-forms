@@ -7188,9 +7188,9 @@ i.frm-show-inline-modal {
 	padding-top: 10px;
 }
 
-#wpwrap .frm-search .frm_search_icon {
-	padding-left: 18px;
-	padding-right: 12px;
+.frm-search .frm_search_icon {
+	padding-left: 18px !important;
+	padding-right: 12px !important;
 }
 
 .frm-search input[name="s"],
@@ -7208,8 +7208,8 @@ i.frm-show-inline-modal {
 	padding: var(--gap-xs);
 }
 
-#wpwrap .frm-search input[type="search"],
-#wpwrap .frm-search input[type="text"] {
+.frm-search input[type="search"],
+.frm-search input[type="text"] {
 	padding-left: var(--gap-xl) !important;
 }
 
