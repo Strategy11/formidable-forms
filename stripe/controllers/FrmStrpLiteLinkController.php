@@ -260,14 +260,18 @@ class FrmStrpLiteLinkController {
 
 		if ( $customer_has_been_charged ) {
 			$charge = $subscription->latest_invoice->charge;
+			$new_payment_values['receipt_id'] = $charge->id;
 
 			if ( 'failed' === $charge->status ) {
 				FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
-				$redirect_helper->handle_error( 'payment_failed' );
+
+				$new_payment_values['receipt_id'] = $charge->id;
+				$frm_payment->update( $payment->id, $new_payment_values );
+
+				$redirect_helper->handle_error( 'payment_failed', $charge->id );
 			}
 
-			$new_payment_values['receipt_id'] = $charge->id;
-			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {

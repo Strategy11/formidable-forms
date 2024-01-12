@@ -125,12 +125,13 @@ class FrmStrpLiteAppController {
 			return $errors;
 		}
 
-		$entry   = $details['entry'];
-		$intent  = $details['intent'];
-		$payment = $details['payment'];
+		$entry          = $details['entry'];
+		$intent         = $details['intent'];
+		$payment        = $details['payment'];
+		$payment_failed = FrmStrpLiteAuth::payment_failed( $payment, $intent );
 
 		// Only add the payment error if the intent is incomplete.
-		if ( ! in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true ) ) {
+		if ( ! $payment_failed ) {
 			return $errors;
 		}
 
@@ -150,6 +151,10 @@ class FrmStrpLiteAppController {
 			$errors[ 'field' . $cc_field_id ] = $intent->last_setup_error->message;
 		} else {
 			$errors[ 'field' . $cc_field_id ] = $intent->last_payment_error->message;
+		}
+
+		if ( ! $errors[ 'field' . $cc_field_id ] ) {
+			$errors[ 'field' . $cc_field_id ] = 'Payment was not successfully processed.';
 		}
 
 		global $frm_vars;
