@@ -42,7 +42,7 @@ if ( $args['top_forms'] ) {
 	echo "\r\n\r\n";
 
 	foreach ( $args['top_forms'] as $index => $top_form ) {
-		echo wp_unslash( $top_form->form_name ) . ': ';
+		echo $top_form->form_name . ': ';
 		// translators: submission count.
 		printf( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ), intval( number_format_i18n( $top_form->items_count ) ) );
 		echo "\r\n";

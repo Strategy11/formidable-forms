@@ -313,7 +313,7 @@ class FrmEmailSummaryHelper {
 	public static function get_top_forms( $from_date, $to_date, $limit = 5 ) {
 		global $wpdb;
 
-		return $wpdb->get_results(
+		$result = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
 						FROM {$wpdb->prefix}frm_items AS it INNER JOIN {$wpdb->prefix}frm_forms AS fr ON it.form_id = fr.id
@@ -324,6 +324,13 @@ class FrmEmailSummaryHelper {
 				intval( $limit )
 			)
 		);
+
+		// Remove slashes from form name.
+		foreach ( $result as &$value ) {
+			$value->form_name = wp_unslash( $value->form_name );
+		}
+
+		return $result;
 	}
 
 	/**
