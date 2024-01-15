@@ -1395,7 +1395,7 @@ DEFAULT_HTML;
 	protected function should_strip_most_html( $entry ) {
 		if ( $entry->updated_by ) {
 			// Stop stripping HTML on display when the entry has been updated by a privileged user.
-			return ! $this->user_id_is_privileged( $entry->updated_by, 'frm_edit_entries' );
+			return ! $this->user_id_is_privileged( $entry->updated_by );
 		}
 		if ( ! $entry->user_id || ! $this->user_id_is_privileged( $entry->user_id ) ) {
 			return true;
