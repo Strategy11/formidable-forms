@@ -1387,20 +1387,21 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Only allow medium-risk HTML tags like a and img when an entry is created by or edited by a privileged user.
+	 *
 	 * @since 6.7.1
 	 *
 	 * @param stdClass $entry
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( $entry->updated_by ) {
-			// Stop stripping HTML on display when the entry has been updated by a privileged user.
-			return ! $this->user_id_is_privileged( $entry->updated_by );
+		if ( $entry->updated_by && $this->user_id_is_privileged( $entry->updated_by ) ) {
+			return false;
 		}
-		if ( ! $entry->user_id || ! $this->user_id_is_privileged( $entry->user_id ) ) {
-			return true;
+		if ( $entry->user_id && $this->user_id_is_privileged( $entry->user_id ) ) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
