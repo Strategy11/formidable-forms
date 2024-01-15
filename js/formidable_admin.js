@@ -1932,9 +1932,12 @@ function frmAdminBuildJS() {
 
 		let nextElement = thisField;
 		addHtmlToField( nextElement );
-		while ( nextElement.nextElementSibling && field.length < 15 ) {
-			addHtmlToField( nextElement.nextElementSibling );
-			nextElement = nextElement.nextElementSibling;
+
+		let nextField = getNextField( nextElement );
+		while ( nextField && field.length < 15 ) {
+			addHtmlToField( nextField );
+			nextElement = nextField;
+			nextField = getNextField( nextField );
 		}
 
 		jQuery.ajax({
@@ -1948,6 +1951,20 @@ function frmAdminBuildJS() {
 			},
 			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
 		});
+	}
+
+	function getNextField( field ) {
+		if ( field.nextElementSibling ) {
+			return field.nextElementSibling;
+		}
+		if ( ! field.parentNode ) {
+			return false;
+		}
+		const fieldBox = field.parentNode.closest( '.frm_field_box' );
+		if ( ! fieldBox || ! fieldBox.nextElementSibling ) {
+			return false;
+		}
+		return fieldBox.nextElementSibling.querySelector( '.form-field' );
 	}
 
 	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
