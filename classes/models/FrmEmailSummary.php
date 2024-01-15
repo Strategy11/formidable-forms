@@ -74,10 +74,15 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets email content.
 	 *
-	 * @return string
+	 * @since x.x This can return `false` to skip sending email.
+	 *
+	 * @return string|false
 	 */
 	protected function get_content() {
 		$args = $this->get_content_args();
+		if ( false === $args ) {
+			return false;
+		}
 
 		/**
 		 * Filters the summary email content args.
@@ -112,7 +117,9 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets content args.
 	 *
-	 * @return array
+	 * @since x.x This can return `false` to skip sending email.
+	 *
+	 * @return array|false
 	 */
 	protected function get_content_args() {
 		return array(
@@ -137,6 +144,9 @@ abstract class FrmEmailSummary {
 		}
 
 		$content = $this->get_content();
+		if ( false === $content ) {
+			return true;
+		}
 		$subject = $this->get_subject();
 		$headers = $this->get_headers();
 
