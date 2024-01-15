@@ -686,6 +686,9 @@ class FrmAppHelper {
 			'strong' => array(),
 			'p'      => array(),
 			'i'      => array(),
+			'ul'     => array(),
+			'ol'     => array(),
+			'li'     => array(),
 		);
 
 		/**
