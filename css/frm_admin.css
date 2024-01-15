@@ -2851,6 +2851,7 @@ body.frm-body-with-open-modal {
 	color: #fff;
 }
 
+.frm-entry-status-0,
 .frm-meta-tag.frm-lt-green-tag,
 .frm-meta-tag.frm-lt-green-tag:hover {
 	background-color: var(--success-100);
@@ -2861,6 +2862,17 @@ body.frm-body-with-open-modal {
 	background-color: var(--success-500);
 	vertical-align: text-bottom;
 }
+
+/* Start entry statuses */
+.frm-entry-status {
+	font-weight: 500;
+}
+
+.frm-entry-status-1 {
+	color: #7A4D05;
+	background: #FFF2D2;
+}
+/* End entry statuses */
 
 #frm-create-footer {
     padding: 15px 20px;
@@ -4163,25 +4175,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	max-width: 100%;
 	font-size: inherit;
 }
-
-/* Start entry statuses */
-.frm-entry-status {
-    padding: var(--gap-2xs) var(--gap-xs);
-	align-items: center;
-    border-radius: var(--small-radius);
-	text-transform: uppercase;
-}
-
-.frm-entry-status-0 {
-	color: #1E561F;
-	background: #D5F2DC;
-}
-
-.frm-entry-status-1 {
-	color: #7A4D05;
-	background: #FFF2D2;
-}
-/* End entry statuses */
 
 #frm-options-panel {
 	padding: 0 var(--gap-sm);
