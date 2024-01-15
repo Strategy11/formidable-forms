@@ -42,12 +42,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</div>
 
-	<?php if ( ! empty( $field['draft'] ) ) { ?>
-		<div class="frm_note_style">
-			This field is unsaved and will not appear in the form builder until this builder is saved.
-		</div>
-	<?php } ?>
-
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">

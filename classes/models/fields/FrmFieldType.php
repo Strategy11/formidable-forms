@@ -83,6 +83,11 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
+	 * @var bool|null Whether or not draft fields should be hidden on the front end.
+	 */
+	private static $should_hide_draft_fields;
+
+	/**
 	 * @param object|array|int $field
 	 * @param string           $type
 	 */
@@ -814,7 +819,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function prepare_field_html( $args ) {
-		if ( FrmField::get_option( $this->field, 'draft' ) ) {
+		if ( FrmField::get_option( $this->field, 'draft' ) && $this->should_hide_draft_field() ) {
 			// A draft field is never shown on the front-end.
 			return '';
 		}
@@ -837,6 +842,20 @@ DEFAULT_HTML;
 		}
 
 		return $html;
+	}
+
+	/**
+	 * A draft field can be previewed on the preview page for a user who can edit forms.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function should_hide_draft_field() {
+		if ( ! isset( self::$should_hide_draft_fields ) ) {
+			self::$should_hide_draft_fields = ! FrmAppHelper::is_preview_page() || ! current_user_can( 'frm_edit_forms' );
+		}
+		return self::$should_hide_draft_fields;
 	}
 
 	/**
