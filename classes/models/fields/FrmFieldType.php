@@ -1393,13 +1393,24 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
+		if ( $entry->updated_by ) {
+			// Stop stripping HTML on display when the entry has been updated by a privileged user.
+			return ! $this->user_id_is_privileged( $entry->updated_by, 'frm_edit_entries' );
+		}
+		if ( ! $entry->user_id || ! $this->user_id_is_privileged( $entry->user_id ) ) {
 			return true;
 		}
-		if ( $entry->updated_by ) {
-			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
-		}
 		return false;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string|int $user_id
+	 * @return bool
+	 */
+	private function user_id_is_privileged( $user_id ) {
+		return user_can( $user_id, 'administrator' ) || user_can( $user_id, 'frm_edit_entries' );
 	}
 
 	/**
