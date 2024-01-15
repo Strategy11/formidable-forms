@@ -2434,6 +2434,7 @@ function frmAdminBuildJS() {
 			toggled = false,
 			$parentSection;
 
+		fieldUpdated();
 		setupSortable( section );
 
 		if ( 'quantity' === type ) {
