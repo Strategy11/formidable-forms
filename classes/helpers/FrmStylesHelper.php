@@ -446,8 +446,23 @@ class FrmStylesHelper {
 			$color = str_replace( ')', ',1)', $color );
 		} elseif ( strpos( $color, '#' ) === false ) {
 			// If a color looks like a hex code without the #, prepend the #.
-			// A color looks like a hex code if it does not contain the substrings "rgb", "rgba", or "hsl".
-			$is_hex = false === strpos( $color, 'rgba(' ) && false === strpos( $color, 'hsl(' );
+			// A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+
+			$non_hex_substrings = array(
+				'rgba(',
+				'hsl(',
+				'hsla(',
+				'hwb(',
+			);
+
+			$is_hex = true;
+			foreach ( $non_hex_substrings as $substring ) {
+				if ( false !== strpos( $color, $substring ) ) {
+					$is_hex = false;
+					break;
+				}
+			}
+
 			if ( $is_hex ) {
 				$color = '#' . $color;
 			}
