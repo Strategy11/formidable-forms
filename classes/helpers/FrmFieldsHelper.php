@@ -2120,6 +2120,11 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * This is called when loading the form builder.
+	 * Any unsaved draft fields get added to a hidden draft_fields input on load.
+	 *
+	 * @since x.x
+	 *
 	 * @param string|int $form_id
 	 * @return array
 	 */
@@ -2128,11 +2133,12 @@ class FrmFieldsHelper {
 			'frm_fields',
 			array(
 				'form_id'            => $form_id,
-				'field_options LIKE' => 's:5:"draft";i:1;',
+				'field_options LIKE' => 's:5:"draft";i:1;', // Do a soft check for fields that look like drafts only.
 			),
 			'id, field_options'
 		);
 		$draft_field_ids = array();
+		// Unserialzie field options and confirm that fields are actually draft.
 		foreach ( $draft_field_rows as $row ) {
 			FrmAppHelper::unserialize_or_decode( $row->field_options );
 			if ( ! is_array( $row->field_options ) || empty( $row->field_options['draft'] ) ) {
