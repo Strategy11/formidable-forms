@@ -365,7 +365,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
 				$val = sprintf(
-					'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
+					'<span class="frm-meta-tag frm-entry-status frm-entry-status-%s">%s</span>',
 					sanitize_html_class( $item->is_draft ),
 					esc_html( $entry_status )
 				);
