@@ -35,9 +35,9 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	/**
-	* @covers FrmFormsController::update
-	* without ajax
-	*/
+	 * @covers FrmFormsController::update
+	 * without ajax
+	 */
 	public function test_form_update_no_ajax() {
 		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run with --filter test_form_update_no_ajax' );
@@ -67,7 +67,6 @@ class test_FrmFormsController extends FrmUnitTest {
 			'id' => $form_id,
 			'action' => 'update',
 			'frm_save_form' => wp_create_nonce( 'frm_save_form_nonce' ),
-			//'_wp_http_referer' =>
 			'status' => 'published',
 			'new_status' => '',
 			'name' => $form->name,
@@ -105,7 +104,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		}
 	}
 
-	// Make sure DOING_AJAX is false
+	/**
+	 * Make sure DOING_AJAX is false.
+	 */
 	private function _check_doing_ajax() {
 		if ( defined( 'DOING_AJAX' ) ) {
 			$doing_ajax = true;

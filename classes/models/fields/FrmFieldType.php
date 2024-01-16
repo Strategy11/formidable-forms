@@ -93,7 +93,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return string
 	 */
@@ -107,7 +107,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $type string
+	 * @param string $type
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
@@ -136,7 +136,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $column
+	 * @param string $column
 	 *
 	 * @return string|array
 	 */
@@ -153,7 +153,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * @param string $column
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function set_field_column( $column, $value ) {
 		if ( is_object( $this->field ) ) {
@@ -170,8 +170,9 @@ abstract class FrmFieldType {
 		return $this->field;
 	}
 
-	/** Field HTML **/
-
+	/**
+	 * Field HTML
+	 */
 	public function default_html() {
 		if ( ! $this->has_html ) {
 			return '';
@@ -249,7 +250,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param string $name
-	 * @param array $field
+	 * @param array  $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -306,7 +307,8 @@ DEFAULT_HTML;
 			'label_position' => true,
 			'invalid'        => false,
 			'size'           => false,
-			'clear_on_focus' => false, // Shows the placeholder option.
+			// Shows the placeholder option.
+			'clear_on_focus' => false,
 			'css'            => true,
 			'conf_field'     => false,
 			'max'            => true,
@@ -374,7 +376,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
@@ -430,10 +433,10 @@ DEFAULT_HTML;
 	public function echo_field_default_setting_attributes( $field ) {}
 
 	/**
-	 * @param array $field
+	 * @param array  $field
 	 * @param object $field_obj
-	 * @param array $default_value_types
-	 * @param array $display
+	 * @param array  $default_value_types
+	 * @param array  $display
 	 *
 	 * @return void
 	 */
@@ -576,7 +579,7 @@ DEFAULT_HTML;
 	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
 	 *
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_extra_field_choices( $args ) {
 		return;
@@ -610,7 +613,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	protected function auto_width_setting( $args ) {
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
@@ -620,8 +623,9 @@ DEFAULT_HTML;
 		}
 	}
 
-	/** New field **/
-
+	/**
+	 * New field
+	 */
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
@@ -665,11 +669,21 @@ DEFAULT_HTML;
 		return $invalid;
 	}
 
+	/**
+	 * Get the default field name when a field is inserted into a form.
+	 *
+	 * @return string
+	 */
 	protected function get_new_field_name() {
-		$name = __( 'Untitled', 'formidable' );
+		$name       = __( 'Untitled', 'formidable' );
+		$fields     = FrmField::field_selection();
+		$pro_fields = FrmField::pro_field_selection();
 
-		$fields = FrmField::field_selection();
-		$fields = array_merge( $fields, FrmField::pro_field_selection() );
+		// As the credit card field is in Lite now, we want the name from the Lite array.
+		// The pro key would is still set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
 			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
@@ -678,10 +692,16 @@ DEFAULT_HTML;
 		return $name;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function new_field_settings() {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_default_field_options() {
 		$opts       = array(
 			'size'               => '',
@@ -711,6 +731,9 @@ DEFAULT_HTML;
 		return apply_filters( 'frm_default_field_options', $opts, $filter_args );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array();
 	}
@@ -756,7 +779,16 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args ($field, $errors, $form, $form_action)
+	 * @param array $args {
+	 *    Details about the field to show.
+	 *
+	 *    @type array $field
+	 *    @type array $errors
+	 *    @type object $form
+	 *    @type object $form_action
+	 * }
+	 *
+	 * @return void
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
@@ -767,6 +799,9 @@ DEFAULT_HTML;
 		$this->get_field_scripts_hook( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function get_field_scripts_hook( $args ) {
 		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
@@ -799,7 +834,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string
@@ -828,6 +863,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string $align
+	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
 		if ( 'inline' === $align ) {
@@ -837,6 +875,9 @@ DEFAULT_HTML;
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_label_class() {
 		return ' frm_primary_label';
 	}
@@ -845,6 +886,8 @@ DEFAULT_HTML;
 	 * Add classes to the input for output
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function add_input_class() {
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
@@ -866,6 +909,8 @@ DEFAULT_HTML;
 	 * Add extra classes on front-end input
 	 *
 	 * @since 3.02
+	 *
+	 * @return string
 	 */
 	protected function get_input_class() {
 		return '';
@@ -891,6 +936,9 @@ DEFAULT_HTML;
 		return $input;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_front_form_file() {
 		return '';
 	}
@@ -909,7 +957,8 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
-		unset( $args['form'] ); // lighten up on memory usage
+		// Lighten up on memory usage.
+		unset( $args['form'] );
 
 		ob_start();
 		include( $include_file );
@@ -919,6 +968,9 @@ DEFAULT_HTML;
 		return $hidden . $input_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
@@ -964,6 +1016,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -1204,7 +1258,7 @@ DEFAULT_HTML;
 	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
 	 *
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	public function is_not_unique( $value, $entry_id ) {
@@ -1244,7 +1298,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
@@ -1286,12 +1340,17 @@ DEFAULT_HTML;
 	/**
 	 *
 	 * @param string|array $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return string
 	 */
 	public function get_display_value( $value, $atts = array() ) {
 		$this->fill_default_atts( $atts );
+
+		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+		}
+
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
@@ -1306,6 +1365,63 @@ DEFAULT_HTML;
 		return $value;
 	}
 
+	/**
+	 * @since 6.7.1
+	 *
+	 * @param array $atts
+	 * @return bool
+	 */
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		if ( ! empty( $atts['keepjs'] ) ) {
+			// Always keep JS if the option is set.
+			return false;
+		}
+
+		if ( ! empty( $atts['entry'] ) ) {
+			$entry = $atts['entry'];
+		} elseif ( ! empty( $atts['entry_id'] ) ) {
+			$entry = FrmEntry::getOne( $atts['entry_id'] );
+		}
+
+		return ! empty( $entry ) && is_object( $entry ) && $this->should_strip_most_html( $entry );
+	}
+
+	/**
+	 * Only allow medium-risk HTML tags like a and img when an entry is created by or edited by a privileged user.
+	 *
+	 * @since 6.7.1
+	 *
+	 * @param stdClass $entry
+	 * @return bool
+	 */
+	protected function should_strip_most_html( $entry ) {
+		if ( $entry->updated_by && $this->user_id_is_privileged( $entry->updated_by ) ) {
+			return false;
+		}
+		if ( $entry->user_id && $this->user_id_is_privileged( $entry->user_id ) ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Check if a user is allowed to save additional HTML (like a and img tags).
+	 * HTML is stripped more strictly for users that are not logged in, or users that
+	 * do not have access to editing entries in the back end.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $user_id
+	 * @return bool
+	 */
+	private function user_id_is_privileged( $user_id ) {
+		return user_can( $user_id, 'administrator' ) || user_can( $user_id, 'frm_edit_entries' );
+	}
+
+	/**
+	 * @param array $atts
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep' => ', ',
@@ -1317,7 +1433,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array|string
 	 */
@@ -1328,8 +1444,8 @@ DEFAULT_HTML;
 	/** Importing **/
 
 	/**
-	 * @param $value
-	 * @param array $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */
@@ -1338,8 +1454,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return mixed
 	 */
@@ -1352,12 +1468,14 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param $value
-	 * @param $atts
+	 * @param string|array $value
+	 * @param array        $atts {
+	 *     Details about the field to show.
 	 *
-	 * @internal param array $meta_value
-	 * @internal param object $field
-	 * @internal param array $saved_entries
+	 *     @type array $meta_value
+	 *     @type object $field
+	 *     @type array $saved_entries
+	 * }
 	 *
 	 * @return array $new_value
 	 */
@@ -1374,7 +1492,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 *
 	 * @return array
 	 */
@@ -1413,8 +1531,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $defaults
+	 * @param array|string $value
+	 * @param array        $defaults
 	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {

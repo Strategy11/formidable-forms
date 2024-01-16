@@ -4,6 +4,8 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
+	scanFiles:
+		- deprecated/FrmDeprecated.php
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -21,10 +23,9 @@ parameters:
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
-		- '#Function (remove_filter|remove_action|apply_filters)+ invoked with#'
+		- '#Function (apply_filters)+ invoked with#'
 		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
 		- '#Possibly invalid array key type#'
-		- '#always exists and is not nullable.#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
@@ -34,17 +35,14 @@ parameters:
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
 		- '#Call to an undefined static method#'
-		- '#on an unknown class (Elementor|FrmDeprecated)#'
+		- '#on an unknown class (Elementor)#'
 		- '#get_mailer\(\) expects#'
 		- '#only iterables are supported#'
-		- '#outside of class scope.#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#PHPDoc tag @param (references unknown parameter:|has invalid valu)+#'
 		- '#has no return type specified#'
 		- '#with no type specified#'
-		- '#is not nullable.#'
 		- '#in isset\(\) does not exist.#'
 		- '#has no type specified.#'
 		- '#has invalid return type#'
@@ -57,5 +55,12 @@ parameters:
 		- '#should always throw an exception or terminate script execution but#'
 		- '#always exists and is always falsy#'
 		- '#has an unused use#'
+		- '#AllowDynamicProperties does not exist#'
+		- '#Variable \$customer_id_error_message in empty\(\) is never defined#'
+		- "#Offset '(stripe_link|change_field)' on string in#"
+		- '#Result of static method FrmTransLiteCRUDController::show#'
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
+		- '#callback of function spl_autoload_register expects#'
+		- '#customer_id_error_message#'
+		- "#Offset 'custom_style' on#"

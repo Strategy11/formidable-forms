@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
 	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>"/>
 
-	<div class="frm-sub-label alignright">
-		(ID <?php echo esc_html( $field['id'] ); ?>)
-	</div>
 	<h3 aria-expanded="true">
 		<?php
 		printf(
@@ -18,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $type_name )
 		);
 		?>
+		<span class="frm-sub-label frm-text-sm">
+			(ID <?php echo esc_html( $field['id'] ); ?>)
+		</span>
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me" role="group">
@@ -33,7 +33,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</span>
 			</div>
-		<?php } ?>
+			<?php
+		}
+		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+				FrmStrpLiteAppHelper::not_connected_warning();
+			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
+				?>
+				<div class="frm_warning_style frm-with-icon">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<span>
+						<?php
+						/* translators: %1$s: Link HTML, %2$s: End link */
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						?>
+					</span>
+				</div>
+				<?php
+			}
+		}
+		?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -153,7 +172,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
 			</div>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<?php $field_obj->show_after_default( compact( 'field', 'display' ) ); ?>
 
@@ -226,7 +247,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</option>
 				</select>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<?php
 		if ( $display['format'] ) {
@@ -270,7 +293,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<?php } ?>
 				</select>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<p class="frm6 frm_form_field">
 			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
@@ -286,18 +311,25 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				</label>
 				<select name="field_options[type_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
-						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+						<?php
+						// We need to avoid the word "select" in POST requests.
+						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
+						$type_option_value = 'select' === $fkey ? 'dropdown' : $fkey;
+						?>
+						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?>
 						</option>
 						<?php
-						unset( $fkey, $ftype );
+						unset( $fkey, $ftype, $type_option_value );
 					}
 					?>
 				</select>
 			</p>
 		<?php } else { ?>
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<table class="form-table frm-mt-0">
 			<?php $field_obj->show_options( $field, $display, $values ); ?>
@@ -360,7 +392,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				?>
 			</div>
 		</div>
-	<?php } ?>
+		<?php
+	}//end if
+	?>
 
 	<?php do_action( 'frm_after_field_options', compact( 'field', 'display', 'values' ) ); ?>
 

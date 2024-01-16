@@ -145,8 +145,8 @@ class FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
-	 * @param object $license_plugin The FrmAddon object
-	 * @param array $addons
+	 * @param object $license_plugin The FrmAddon object.
+	 * @param array  $addons
 	 *
 	 * @return array
 	 */
@@ -193,7 +193,8 @@ class FrmFormApi {
 		FrmAppHelper::filter_gmt_offset();
 
 		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
-			return false; // Cache is expired
+			// Cache is expired.
+			return false;
 		}
 
 		$version     = FrmAppHelper::plugin_version();

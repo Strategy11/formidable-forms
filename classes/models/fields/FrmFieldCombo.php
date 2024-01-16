@@ -74,7 +74,7 @@ class FrmFieldCombo extends FrmFieldType {
 					$defaults
 				);
 			}
-		}
+		}//end foreach
 	}
 
 	/**
@@ -113,7 +113,8 @@ class FrmFieldCombo extends FrmFieldType {
 			}
 
 			foreach ( $sub_field['options'] as $option ) {
-				if ( 'default_value' === $option ) { // We parse default value from field column.
+				if ( 'default_value' === $option ) {
+					// We parse default value from field column.
 					continue;
 				}
 
@@ -182,7 +183,8 @@ class FrmFieldCombo extends FrmFieldType {
 			return $default_value;
 		}
 
-		return json_decode( $default_value, true ); // We store default value as JSON string in db.
+		// We store default value as JSON string in db.
+		return json_decode( $default_value, true );
 	}
 
 	/**
@@ -207,7 +209,8 @@ class FrmFieldCombo extends FrmFieldType {
 		$settings = array(
 			'description'    => false,
 			'default'        => false,
-			'clear_on_focus' => false, // Don't use the regular placeholder option.
+			// Don't use the regular placeholder option.
+			'clear_on_focus' => false,
 			'logic'          => true,
 			'visibility'     => true,
 		);
@@ -375,7 +378,8 @@ class FrmFieldCombo extends FrmFieldType {
 			$field['input_class'] = esc_attr( $classes );
 		}
 
-		$field['default_value'] = ''; // fake it to avoid printing frm-val attribute.
+		// Fake it to avoid printing frm-val attribute.
+		$field['default_value'] = '';
 
 		do_action( 'frm_field_input_html', $field );
 

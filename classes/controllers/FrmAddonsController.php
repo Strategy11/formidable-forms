@@ -298,10 +298,11 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 * @since 6.7 This is public.
 	 *
 	 * @return array|false
 	 */
-	protected static function get_primary_license_info() {
+	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
@@ -352,18 +353,19 @@ class FrmAddonsController {
 				continue;
 			}
 
-			$wp_plugin  = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
-			$wp_version = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$wp_plugin    = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
+			$wp_version   = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$plugin->slug = explode( '/', $folder )[0];
 
 			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
-				$slug                           = explode( '/', $folder );
-				$plugin->slug                   = $slug[0];
 				$transient->response[ $folder ] = $plugin;
+			} else {
+				$transient->no_update[ $folder ] = $plugin;
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
 
-		}
+		}//end foreach
 
 		return $transient;
 	}
@@ -388,7 +390,7 @@ class FrmAddonsController {
 	 *
 	 * @since 3.05
 	 *
-	 * @param string $plugin - the folder/filename.php for a plugin
+	 * @param string $plugin The folder/filename.php for a plugin.
 	 *
 	 * @return bool - True if installed
 	 */
@@ -445,7 +447,7 @@ class FrmAddonsController {
 					);
 				}
 			}
-		}
+		}//end foreach
 
 		return $version_info;
 	}
@@ -454,7 +456,7 @@ class FrmAddonsController {
 	 * Get the action link for an addon that isn't active.
 	 *
 	 * @since 3.06.03
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
@@ -486,14 +488,14 @@ class FrmAddonsController {
 				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
 				'class' => 'frm-activate-addon',
 			);
-		}
+		}//end if
 
 		return $link;
 	}
 
 	/**
 	 * @since 4.09
-	 * @param string $plugin The plugin slug
+	 * @param string $plugin The plugin slug.
 	 * @return array|false
 	 */
 	protected static function get_addon( $plugin ) {
@@ -524,8 +526,8 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array $addons
-	 * @param object $license The FrmAddon object
+	 * @param array  $addons
+	 * @param object $license The FrmAddon object.
 	 *
 	 * @return array
 	 */
@@ -604,7 +606,7 @@ class FrmAddonsController {
 
 			self::set_addon_status( $addon );
 			$addons[ $id ] = $addon;
-		}
+		}//end foreach
 	}
 
 	/**
@@ -933,12 +935,55 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Deactivate a specified plugin.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin
+	 * @param bool   $silent
+	 * @return void
+	 */
+	protected static function deactivate_plugin( $plugin, $silent = false ) {
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		deactivate_plugins( $plugin, $silent );
+	}
+
+	/**
+	 * Uninstall a specified plugin.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin
+	 * @return true|WP_Error True on success, WP_Error on invalid file.
+	 */
+	protected static function uninstall_plugin( $plugin ) {
+		if ( ! current_user_can( 'delete_plugins' ) ) {
+			return new WP_Error( 'uninstall_failed', __( 'Current user cannot delete plugins.', 'formidable' ) );
+		}
+
+		if ( ! function_exists( 'delete_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		self::deactivate_plugin( $plugin, true );
+		$result = delete_plugins( array( $plugin ) );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return true;
+	}
+
+	/**
 	 * @since 5.0.10
 	 *
 	 * @return string
 	 */
 	protected static function get_current_plugin() {
-		if ( ! isset( self::$plugin ) ) {
+		if ( empty( self::$plugin ) ) {
 			self::$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
 		}
 		return self::$plugin;
@@ -958,7 +1003,7 @@ class FrmAddonsController {
 		if ( is_array( $installed ) && isset( $installed['message'] ) ) {
 			return $installed;
 		}
-		self::maybe_activate_addon( $installed );
+		self::handle_addon_action( $installed, 'activate' );
 	}
 
 	/**
@@ -1024,8 +1069,6 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	protected static function install_addon() {
-		FrmAppHelper::permission_check( 'install_plugins' );
-
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 		$download_url = self::get_current_plugin();
@@ -1055,21 +1098,125 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since 3.06.03
+	 * Handle the AJAX request to activate an add-on.
+	 *
+	 * @since x.x
 	 *
 	 * @return void
 	 */
 	public static function ajax_activate_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'activate' );
+			},
+			array( 'FrmAddonsController', 'get_addon_activation_response' )
+		);
+	}
 
+	/**
+	 * @since 3.04.02
+	 *
+	 * @param string $installed The plugin folder name with file name.
+	 */
+	protected static function maybe_activate_addon( $installed ) {
+		self::ajax_activate_addon();
+	}
+
+	/**
+	 * Handle the AJAX request to deactivate an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_deactivate_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'deactivate' );
+			}
+		);
+	}
+
+	/**
+	 * Handle the AJAX request to uninstall an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_uninstall_addon() {
+		self::process_addon_action(
+			function( $plugin ) {
+				return self::handle_addon_action( $plugin, 'uninstall' );
+			}
+		);
+	}
+
+	/**
+	 * Process a specific action (activate, deactivate, uninstall) on an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @param callable      $action_callback The specific add-on action to be executed.
+	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
+	 * @return void
+	 */
+	private static function process_addon_action( $action_callback, $response_callback = null ) {
 		self::install_addon_permissions();
-
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		self::maybe_activate_addon( $plugin );
+		call_user_func( $action_callback, $plugin );
 
-		echo json_encode( self::get_addon_activation_response() );
-		wp_die();
+		if ( is_callable( $response_callback ) ) {
+			wp_send_json_success( call_user_func( $response_callback ) );
+			return;
+		}
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Attempt to perform a specific action (activate, deactivate, uninstall) on an add-on.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $installed The plugin folder name with file name.
+	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
+	 * @return void|array
+	 */
+	protected static function handle_addon_action( $installed, $action ) {
+		if ( ! $installed || ! $action ) {
+			return;
+		}
+
+		$result = null;
+		switch ( $action ) {
+			case 'activate':
+				$result = self::activate_plugin( $installed );
+				break;
+			case 'deactivate':
+				self::deactivate_plugin( $installed );
+				break;
+			case 'uninstall':
+				$result = self::uninstall_plugin( $installed );
+				break;
+		}
+
+		if ( is_wp_error( $result ) ) {
+			// Ignore the invalid header message that shows with nested plugins.
+			if ( $result->get_error_code() !== 'no_plugin_header' ) {
+				if ( wp_doing_ajax() ) {
+					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
+				}
+				return array(
+					'message' => $result->get_error_message(),
+					'success' => false,
+				);
+			}
+		}
+
+		return $result;
 	}
 
 	/**
@@ -1108,32 +1255,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since 3.04.02
-	 *
-	 * @param string $installed The plugin folder name with file name
-	 */
-	protected static function maybe_activate_addon( $installed ) {
-		if ( ! $installed ) {
-			return;
-		}
-
-		$activate = self::activate_plugin( $installed );
-		if ( is_wp_error( $activate ) ) {
-			// Ignore the invalid header message that shows with nested plugins.
-			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
-				if ( wp_doing_ajax() ) {
-					echo json_encode( array( 'error' => $activate->get_error_message() ) );
-					wp_die();
-				}
-				return array(
-					'message' => $activate->get_error_message(),
-					'success' => false,
-				);
-			}
-		}
-	}
-
-	/**
 	 * Run security checks before installing
 	 *
 	 * @since 3.04.02
@@ -1158,7 +1279,7 @@ class FrmAddonsController {
 		$auth = get_option( 'frm_connect_token' );
 		if ( empty( $auth ) ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth );
+			update_option( 'frm_connect_token', $auth, 'no' );
 		}
 		$link = FrmAppHelper::admin_upgrade_link( 'connect', 'api-connect' );
 		$args = array(
@@ -1180,15 +1301,11 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
-		if ( ! current_user_can( 'activate_plugins' ) ) {
-			return false;
-		}
-
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
-		if ( empty( $post_auth ) || empty( $post_url ) ) {
+		if ( ! $post_auth || ! $post_url ) {
 			return false;
 		}
 
@@ -1250,18 +1367,31 @@ class FrmAddonsController {
 	/**
 	 * Render a conditional action button for a specified plugin
 	 *
-	 * @param string $plugin
-	 * @param array|string $upgrade_link_args
 	 * @since 4.09
+	 *
+	 * @param string       $plugin
+	 * @param array|string $upgrade_link_args
+	 * @return void
 	 */
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		if ( is_callable( 'FrmProAddonsController::conditional_action_button' ) ) {
-			return FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			FrmProAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+			return;
 		}
 
 		$addon        = self::get_addon( $plugin );
 		$upgrade_link = FrmAppHelper::admin_upgrade_link( $upgrade_link_args );
-		self::addon_upgrade_link( $addon, $upgrade_link );
+
+		if ( ! is_array( $upgrade_link_args ) ) {
+			// A string $upgrade_link_args is used for the utm-medium value when calling
+			// FrmAppHelper::admin_upgrade_link above.
+			// For self::addon_upgrade_link, we'll pass just an empty array with the link key (set below).
+			$upgrade_link_args = array();
+		}
+
+		$upgrade_link_args['link'] = $upgrade_link;
+
+		self::addon_upgrade_link( $addon, $upgrade_link_args );
 	}
 
 	/**
@@ -1269,14 +1399,20 @@ class FrmAddonsController {
 	 *
 	 * @since 4.09.01
 	 *
-	 * @param array $addon
-	 * @param string|false $license_type
-	 * @param string $plan_required
-	 * @param string $upgrade_link
+	 * @param array $atts {
+	 *     Button attributes.
+	 *
+	 *     @type array $addon
+	 *     @type string|false $license_type
+	 *     @type string $plan_required
+	 *     @type string $upgrade_link
+	 * }
+	 * @return void
 	 */
 	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
-			return FrmProAddonsController::show_conditional_action_button( $atts );
+			FrmProAddonsController::show_conditional_action_button( $atts );
+			return;
 		}
 
 		self::addon_upgrade_link( $atts['addon'], $atts['upgrade_link'] );
@@ -1285,11 +1421,15 @@ class FrmAddonsController {
 	/**
 	 * @since 4.09.01
 	 *
-	 * @param array|false $addon
+	 * @param array|false  $addon
+	 * @param string|array $upgrade_link
 	 *
 	 * @return void
 	 */
 	protected static function addon_upgrade_link( $addon, $upgrade_link ) {
+		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
+		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
+
 		if ( $addon ) {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
 		}
@@ -1298,8 +1438,13 @@ class FrmAddonsController {
 			// Solutions will go to a separate page.
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );
 		}
+
+		$class = ! empty( $atts['class'] ) ? $atts['class'] : '';
+		if ( strpos( $class, 'frm-button' ) === false ) {
+			$class .= ' frm-button-secondary frm-button-sm';
+		}
 		?>
-		<a class="install-now button frm-button-secondary frm-button-sm" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 			<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 		</a>
 		<?php
@@ -1358,7 +1503,7 @@ class FrmAddonsController {
 	/**
 	 * Gets required plan for an addon.
 	 *
-	 * @since x.x
+	 * @since 6.4.2
 	 *
 	 * @return string Empty string if no plan is required for active license.
 	 */
@@ -1449,7 +1594,7 @@ class FrmAddonsController {
 	 * @codeCoverageIgnore
 	 *
 	 * @param boolean $return
-	 * @param string $package
+	 * @param string  $package
 	 *
 	 * @return boolean
 	 */

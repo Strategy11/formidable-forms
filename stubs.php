@@ -19,13 +19,13 @@ namespace {
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
 	define( 'WP_IMPORTING', false );
+	define( 'ICL_PLUGIN_INACTIVE', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
 	class FrmProSettings extends FrmSettings {
 	}
 	class FrmProApplicationsHelper {
-		public static function get_required_templates_capability() {}
 		public static function get_custom_applications_capability() {}
 	}
 	class FrmProFileImport {
@@ -71,7 +71,33 @@ namespace {
 	}
 	class FrmProEntriesHelper {
 	}
+	class FrmProFieldsHelper {
+		/**
+		 * @param array  $args
+		 * @param string $value
+		 * @return void
+		 */
+		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
+	}
 	class FrmViewsAppHelper {
+	}
+	class FrmProCreditCardsController {
+		/**
+		 * @param array  $field
+		 * @param string $field_name
+		 * @param array  $atts
+		 * @return void
+		 */
+		public static function show_in_form( $field, $field_name, $atts ) {
+		}
+	}
+	class FrmProAppController {
+		/**
+		 * @return bool
+		 */
+		public static function has_combo_js_file() {
+		}
 	}
 	class Akismet {
 	}
@@ -79,14 +105,17 @@ namespace {
 		public function __construct( $exceptions = null ) {
 		}
 	}
+	class FrmPaymentsController {
+		public static $db_opt_name = 'frm_pay_db_version';
+	}
 	/**
 	 * @return void
 	 */
 	function load_formidable_pro() {
 	}
 	/**
-	* @return WPMailSMTP\Core
-	*/
+	 * @return WPMailSMTP\Core
+	 */
 	function wp_mail_smtp() {
 	}
 	/**

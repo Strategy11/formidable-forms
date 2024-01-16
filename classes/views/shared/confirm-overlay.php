@@ -10,17 +10,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 			<div class="inside">
-				<div class="cta-inside frmcenter">
+				<div class="cta-inside frm-flex-col frm-items-center">
 					<p class="frm-confirm-msg">
 						<?php esc_html_e( 'Are you sure?', 'formidable' ); ?>
 					</p>
-					<br/>
-					<a href="#" class="button button-secondary frm-button-secondary dismiss" style="margin:0 20px;">
-						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
-					</a>
-					<a href="#" id="frm-confirmed-click" class="button button-primary frm-button-primary dismiss">
-						<?php esc_html_e( 'Confirm', 'formidable' ); ?>
-					</a>
+
+					<div class="frm-flex-box frm-gap-sm frm-justify-center">
+						<a href="#" class="button button-secondary frm-button-secondary dismiss">
+							<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+						</a>
+						<a href="#" id="frm-confirmed-click" class="button button-primary frm-button-primary dismiss">
+							<?php esc_html_e( 'Confirm', 'formidable' ); ?>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -2,18 +2,30 @@
 <ruleset name="Formidable Forms">
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
+	<!-- This is required to run PHPCS in PHP 8 -->
+	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
+	<exclude-pattern>stubs.php</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-		<exclude name="Squiz.Commenting" />
+		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+		<exclude name="Squiz.Commenting.VariableComment.Missing" />
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.PHP.YodaConditions" />
@@ -26,6 +38,10 @@
 		</properties>
 	</rule>
 	<rule ref="Squiz.Scope.StaticThisUsage" />
+
+	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
+		<exclude-pattern>classes/views/frm-forms/preview/header.php</exclude-pattern>
+	</rule>
 
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
@@ -50,10 +66,7 @@
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+	<rule ref="WordPress.DB.PreparedSQL">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
@@ -62,13 +75,10 @@
 	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
+	<rule ref="Squiz.Commenting">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 

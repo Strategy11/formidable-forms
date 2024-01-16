@@ -119,11 +119,11 @@ class FrmSettingsController {
 					'class'    => 'FrmAddonsController',
 					'function' => 'license_settings',
 					'name'     => __( 'Plugin Licenses', 'formidable' ),
-					'icon'     => 'frm_icon_font frm_keyalt_icon',
+					'icon'     => 'frmfont frm_key_icon',
 					'ajax'     => true,
 				);
 			}
-		}
+		}//end if
 
 		/**
 		 * @param array<array> $sections
@@ -159,7 +159,7 @@ class FrmSettingsController {
 			}
 
 			$sections[ $key ] = $section;
-		}
+		}//end foreach
 
 		return $sections;
 	}
@@ -185,15 +185,36 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Render the general global settings section.
+	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function general_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
+		$uploads      = wp_upload_dir();
+		$target_path  = $uploads['basedir'] . '/formidable/css';
 
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php';
+	}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php' );
+	/**
+	 * Render the global currency selector if Pro is up to date.
+	 *
+	 * @param FrmSettings $frm_settings
+	 * @param string      $more_html
+	 * @return void
+	 */
+	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
+			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
+			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
+			return;
+		}
+
+		$currencies = FrmCurrencyHelper::get_currencies();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/_currency.php';
 	}
 
 	/**
@@ -248,7 +269,13 @@ class FrmSettingsController {
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
-			wp_die( esc_html( $frm_settings->admin_permission ) );
+			$error_args = array(
+				'title' => __( 'Verification failed', 'formidable' ),
+				'body'  => $frm_settings->admin_permission,
+				'cancel_text' => __( 'Cancel', 'formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$errors  = array();

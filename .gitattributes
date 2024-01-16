@@ -19,6 +19,7 @@ codesniffer.xml export-ignore
 composer.lock export-ignore
 composer.json export-ignore
 /js/src/ export-ignore
+/js/*.js.map export-ignore
 /js/jquery/jquery.editinplace.js export-ignore
 node_modules export-ignore
 package-lock.json export-ignore
@@ -31,3 +32,4 @@ phpstan.neon export-ignore
 readme.md export-ignore
 tests export-ignore
 webpack.config.js export-ignore
+/stripe/js/frmstrp.js export-ignore

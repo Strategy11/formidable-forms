@@ -373,7 +373,7 @@
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );
 
-			function handleSearch() {
+			function handleSearch( event ) {
 				const searchText = input.value.toLowerCase();
 				const notEmptySearchText = searchText !== '';
 				const items = Array.from( document.getElementsByClassName( targetClassName ) );
@@ -381,7 +381,7 @@
 				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
 				if ( 'function' === typeof handleSearchResult ) {
-					handleSearchResult({ foundSomething, notEmptySearchText });
+					handleSearchResult({ foundSomething, notEmptySearchText }, event );
 				}
 
 				function toggleSearchClassesForItem( item ) {
@@ -423,7 +423,7 @@
 				event.preventDefault();
 				callback( event );
 			};
-			element.addEventListener( 'click', listener );
+			element?.addEventListener( 'click', listener );
 		},
 
 		/**
@@ -798,7 +798,8 @@
 		span: [ 'class' ],
 		strong: [],
 		svg: [ 'class' ],
-		use: []
+		use: [],
+		a: [ 'href', 'class' ]
 	};
 
 	function cleanNode( node ) {
@@ -812,10 +813,17 @@
 		const tagType = node.tagName.toLowerCase();
 
 		if ( 'svg' === tagType ) {
-			return svg({
-				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+			const svgArgs = {
 				classList: Array.from( node.classList )
-			});
+			};
+			const use = node.querySelector( 'use' );
+			if ( use ) {
+				svgArgs.href = use.getAttribute( 'xlink:href' );
+				if ( ! svgArgs.href ) {
+					svgArgs.href = use.getAttribute( 'href' );
+				}
+			}
+			return svg( svgArgs );
 		}
 
 		const newNode = document.createElement( tagType );

@@ -18,7 +18,7 @@ const UpgradeNotice = ( { text, buttonText, link } ) => (
 
 registerBlockType( 'frm-modal/modal', {
 	title: formidable_form_selector.name + ' ' + __( 'Modal', 'formidable' ),
-	description: __( 'Display a Calculator Form', 'formidable' ),
+	description: __( 'Display a modal', 'formidable' ),
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [

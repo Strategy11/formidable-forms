@@ -36,7 +36,9 @@ class FrmEntriesController {
 		}
 	}
 
-	/* Display in Back End */
+	/**
+	 * Display in Back End.
+	 */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
@@ -189,7 +191,7 @@ class FrmEntriesController {
 		}
 
 		global $frm_vars;
-		//add a check so we don't create a loop
+		// Add a check so we don't create a loop.
 		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
@@ -206,7 +208,8 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
-			return; // Don't continue if there's no previous value.
+			// Don't continue if there's no previous value.
+			return;
 		}
 
 		foreach ( $meta_value as $mk => $mv ) {
@@ -442,7 +445,9 @@ class FrmEntriesController {
 		}
 	}
 
-	/* Back End CRUD */
+	/**
+	 * Back End CRUD.
+	 */
 	public static function show( $id = 0 ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
 
@@ -483,7 +488,13 @@ class FrmEntriesController {
 	public static function destroy() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
-			wp_die( esc_html( $permission_error ) );
+			$error_args = array(
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $permission_error,
+				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$params = FrmForm::get_admin_params();
@@ -618,7 +629,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return array|string
 	 */
@@ -647,7 +658,8 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
-			'child_array'     => false, // return embedded fields as nested array
+			// Return embedded fields as nested array.
+			'child_array'     => false,
 			'line_breaks'     => true,
 			'array_separator' => ', ',
 		);

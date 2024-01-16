@@ -11,7 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</a>
 			<div class="inside">
 
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_locked', array( 'aria-hidden' => 'true' ) ); ?>
+				<div class="frm-circled-icon frm-flex-center frm-mb-sm">
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon frm_locked', array( 'aria-hidden' => 'true' ) ); ?>
+				</div>
+
 				<h2>
 					<?php
 					printf(
@@ -50,11 +53,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php if ( $is_pro ) { ?>
 						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" data-default="<?php echo esc_url( $default_link ); ?>">
 							<?php
-							printf(
-								/* translators: %s: Plan name */
-								esc_html__( 'Upgrade to %s', 'formidable' ),
-								'<span class="license-level">Pro</span>'
-							);
+							if ( FrmAddonsController::is_license_expired() ) {
+								esc_html_e( 'Renew', 'formidable' );
+							} else {
+								printf(
+									/* translators: %s: Plan name */
+									esc_html__( 'Upgrade to %s', 'formidable' ),
+									'<span class="license-level">Pro</span>'
+								);
+							}
 							?>
 						</a>
 					<?php } else { ?>
@@ -73,7 +80,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
 							</a>
 						</p>
-					<?php } ?>
+						<?php
+					}//end if
+					?>
 				</div>
 			</div>
 		</div>

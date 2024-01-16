@@ -69,9 +69,11 @@ input:-webkit-autofill {
 <?php } ?>
 }
 
-form input.frm_verify{
-	position:absolute;
-	left:-3000px;
+form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
+	overflow: hidden;
+	width: 0;
+	height: 0;
+	position: absolute;
 }
 
 .with_frm_style fieldset{
@@ -231,14 +233,12 @@ legend.frm_hidden{
 .frm_form_fields_error_style,
 .with_frm_style .frm-card-element.StripeElement,
 .with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single{
+.with_frm_style .chosen-container-single .chosen-single,
+.with_frm_style .frm_slimselect.ss-main {
 	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-<?php if ( ! empty( $important ) ) { ?>
-	background-image:none !important;
-<?php } ?>
 	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
@@ -265,6 +265,37 @@ legend.frm_hidden{
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( ! empty( $important ) ) { ?>
+.with_frm_style input[type=text],
+.with_frm_style input[type=password],
+.with_frm_style input[type=email],
+.with_frm_style input[type=number],
+.with_frm_style input[type=url],
+.with_frm_style input[type=tel],
+.with_frm_style input[type=phone],
+.with_frm_style input[type=search],
+.with_frm_style textarea,
+.frm_form_fields_style,
+.with_frm_style .frm_scroll_box .frm_opt_container,
+.frm_form_fields_active_style,
+.frm_form_fields_error_style,
+.with_frm_style .frm-card-element.StripeElement,
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single{
+	background-image:none !important;
+}
+<?php } ?>
+
+.with_frm_style select option {
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style select option.frm-select-placeholder {
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
@@ -288,8 +319,8 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
+	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
@@ -341,7 +372,7 @@ legend.frm_hidden{
 	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
 	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
-	background-position-y: center;
+	background-position-y: calc(50% + 3px);
 }
 
 .with_frm_style input[disabled],
@@ -658,6 +689,10 @@ legend.frm_hidden{
 	text-align:center;
 }
 
+.with_frm_style.frm_center_submit .frm_flex.frm_submit {
+	justify-content: center;
+}
+
 .with_frm_style .frm_inline_success .frm_submit{
 	display: flex;
 	flex-direction: row;
@@ -742,6 +777,15 @@ legend.frm_hidden{
 	-moz-animation:    spin 2s linear infinite;
 	-o-animation:      spin 2s linear infinite;
 	animation:         spin 2s linear infinite;
+}
+
+.with_frm_style .frm_submit.frm_flex {
+	align-items: center;
+	gap: 2%;
+}
+
+.with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
+	order: -1;
 }
 
 <?php
@@ -880,7 +924,7 @@ a.frm_save_draft{
 
 .with_frm_style .frm_radio input[type=radio],
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.with_frm_style .frm_scale input[type=radio],	
+.with_frm_style .frm_scale input[type=radio],
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
 	-webkit-appearance: none;

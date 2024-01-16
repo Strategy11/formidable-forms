@@ -9,15 +9,6 @@ class FrmField {
 	public static $transient_size = 200;
 
 	public static function field_selection() {
-		$frm_settings   = FrmAppHelper::get_settings();
-		$active_captcha = $frm_settings->active_captcha;
-		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'Captcha';
-		} elseif ( $active_captcha === 'recaptcha' ) {
-			$captcha_name = 'reCAPTCHA';
-		} else {
-			$captcha_name = 'hCaptcha';
-		}
 		$fields = array(
 			'text'     => array(
 				'name' => __( 'Text', 'formidable' ),
@@ -72,12 +63,37 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
-				'name' => $captcha_name,
+				'name' => self::get_captcha_field_name(),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
+			),
+			'credit_card' => array(
+				'name'  => __( 'Payment', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
 		);
 
+		/**
+		 * @param array $fields
+		 */
 		return apply_filters( 'frm_available_fields', $fields );
+	}
+
+	/**
+	 * Get the name of the Captcha field based on the global Captcha setting.
+	 *
+	 * @return string
+	 */
+	private static function get_captcha_field_name() {
+		$frm_settings   = FrmAppHelper::get_settings();
+		$active_captcha = $frm_settings->active_captcha;
+		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
+			$captcha_name = 'Captcha';
+		} elseif ( $active_captcha === 'recaptcha' ) {
+			$captcha_name = 'reCAPTCHA';
+		} else {
+			$captcha_name = 'hCaptcha';
+		}
+		return $captcha_name;
 	}
 
 	public static function pro_field_selection() {
@@ -167,10 +183,11 @@ class FrmField {
 				'name' => __( 'Tags', 'formidable' ),
 				'icon' => 'frm_icon_font frm_price_tags_icon',
 			),
+			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
+			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
 			'credit_card'    => array(
-				'name'  => __( 'Credit Card', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_credit_card_icon frm_show_upgrade',
-				'addon' => 'stripe',
+				'name'  => '',
+				'icon'  => '',
 			),
 			'address'        => array(
 				'name' => __( 'Address', 'formidable' ),
@@ -238,6 +255,13 @@ class FrmField {
 		return array_merge( $pro_field_selection, self::field_selection() );
 	}
 
+	/**
+	 * Create a field.
+	 *
+	 * @param array $values
+	 * @param bool  $return
+	 * @return int|false
+	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 
@@ -277,25 +301,23 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
-		$new_id        = 0;
-		if ( $query_results ) {
-			self::delete_form_transient( $new_values['form_id'] );
-			$new_id = $wpdb->insert_id;
+
+		if ( ! $query_results ) {
+			return false;
 		}
+
+		self::delete_form_transient( $new_values['form_id'] );
+		$new_id = $wpdb->insert_id;
 
 		if ( ! $return ) {
 			return false;
 		}
 
-		if ( $query_results ) {
-			if ( isset( $values['id'] ) ) {
-				$frm_duplicate_ids[ $values['id'] ] = $new_id;
-			}
-
-			return $new_id;
-		} else {
-			return false;
+		if ( isset( $values['id'] ) ) {
+			$frm_duplicate_ids[ $values['id'] ] = $new_id;
 		}
+
+		return $new_id;
 	}
 
 	/**
@@ -401,7 +423,7 @@ class FrmField {
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
 			unset( $field );
-		}
+		}//end foreach
 	}
 
 	public static function update( $id, $values ) {
@@ -421,6 +443,12 @@ class FrmField {
 		self::preserve_format_option_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
+			if ( 'dropdown' === $values['type'] ) {
+				// To avoid conflicts with security plugins the value "dropdown" is sent for select fields.
+				// This is because "select" gets matched for SQL injection attempts.
+				$values['type'] = 'select';
+			}
+
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
@@ -471,7 +499,7 @@ class FrmField {
 	 *
 	 * @since 2.0.8
 	 *
-	 * @param $values array - pass by reference
+	 * @param array $values Pass by reference.
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -526,7 +554,7 @@ class FrmField {
 
 	/**
 	 * @param string|int $id The field id or key.
-	 * @param bool $filter When true, run the frm_field filter.
+	 * @param bool       $filter When true, run the frm_field filter.
 	 */
 	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
@@ -574,8 +602,8 @@ class FrmField {
 	/**
 	 * Get the field type by key or id
 	 *
-	 * @param int|string The field id or key
-	 * @param mixed $col The name of the column in the fields database table
+	 * @param int|string $id  The field id or key.
+	 * @param mixed      $col The name of the column in the fields database table.
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -628,7 +656,7 @@ class FrmField {
 			}
 
 			return wp_unslash( $fields );
-		}
+		}//end if
 
 		self::$use_cache = false;
 
@@ -689,7 +717,7 @@ class FrmField {
 	 * If repeating fields should be included, adjust $where accordingly
 	 *
 	 * @param string $inc_repeat
-	 * @param array $where - pass by reference
+	 * @param array  $where      Pass by reference.
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat == 'include' ) {
@@ -944,7 +972,8 @@ class FrmField {
 		$original_type = self::get_option( $field, 'original_type' );
 
 		if ( ! empty( $original_type ) && $original_type != $field_type ) {
-			$field_type = $original_type; // check the original type for arrays
+			// Check the original type for arrays.
+			$field_type = $original_type;
 		}
 
 		return $field_type;
@@ -1128,7 +1157,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
-	 * @param string $is_type Options include radio, checkbox, text
+	 * @param string       $is_type Options include radio, checkbox, text.
 	 *
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */

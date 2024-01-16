@@ -75,7 +75,8 @@ class FrmPluginSearch {
 
 		$inject    = (array) $this->get_plugin_data();
 		$overrides = array(
-			'plugin-search'       => true, // Helps to determine if that an injected card.
+			// Helps to determine if that an injected card.
+			'plugin-search'     => true,
 			'name'                => sprintf(
 				/* translators: Formidable addon name */
 				esc_html_x( 'Formidable %s', 'Formidable Addon Name', 'formidable' ),
@@ -125,9 +126,9 @@ class FrmPluginSearch {
 
 			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 
-			$matches = ! empty( array_intersect( $addon_terms, $normalized_term ) );
+			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
-			if ( $matches ) {
+			if ( count( $matched_terms ) === count( $normalized_term ) ) {
 				$matching_addon = $addon_id;
 				break;
 			}
@@ -332,7 +333,7 @@ class FrmPluginSearch {
 				target="_blank"
 				data-addon="' . esc_attr( $plugin['addon'] ) . '"
 				>' . esc_html__( 'Learn more', 'formidable' ) . '</a>';
-		}
+		}//end if
 
 		// Dismiss link.
 		$dismiss = add_query_arg( array( 'frm-dismiss' => $plugin['id'] ) );

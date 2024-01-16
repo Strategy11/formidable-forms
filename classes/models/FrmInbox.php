@@ -15,7 +15,7 @@ class FrmInbox extends FrmFormApi {
 	private static $messages = false;
 
 	/**
-	 * @param array
+	 * @var array
 	 */
 	private static $banner_messages;
 
@@ -48,7 +48,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param false|string $filter
+	 * @param false|array $filter
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
@@ -140,7 +140,8 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
-			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			// Use 'free', 'personal', 'business', 'elite', 'grandfathered'.
+			'who'     => 'all',
 			'type'    => '',
 		);
 

@@ -20,6 +20,16 @@ class FrmAddon {
 	public $license;
 	protected $get_beta = false;
 
+	/**
+	 * This is used to flag other add ons not to send a request.
+	 * We only want to send a single API request per HTTP request.
+	 *
+	 * @since 6.7.1
+	 *
+	 * @var bool
+	 */
+	private static $sent_mothership_request = false;
+
 	public function __construct() {
 
 		if ( empty( $this->plugin_slug ) ) {
@@ -79,7 +89,7 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed $_data
+	 * @param mixed  $_data
 	 * @param string $_action
 	 * @param object $_args
 	 *
@@ -220,7 +230,7 @@ class FrmAddon {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array error
+	 * @param array $error
 	 */
 	public function maybe_clear_license( $error ) {
 		if ( $error['code'] === 'disabled' && $error['license'] === $this->license ) {
@@ -339,7 +349,7 @@ class FrmAddon {
 		}
 
 		if ( $this->is_current_version( $transient ) ) {
-			//make sure it doesn't show there is an update if plugin is up-to-date
+			// Make sure it doesn't show there is an update if plugin is up-to-date.
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
@@ -364,7 +374,7 @@ class FrmAddon {
 	 *
 	 * @since 3.04.03
 	 *
-	 * @param object $transient - the current plugin info saved for update
+	 * @param object $transient The current plugin info saved for update.
 	 */
 	private function prepare_update_details( &$transient ) {
 		$version_info = $transient;
@@ -375,7 +385,8 @@ class FrmAddon {
 
 		if ( isset( $version_info->new_version ) && ! empty( $version_info->new_version ) ) {
 			$this->clear_old_plugin_version( $version_info );
-			if ( $version_info === false ) { // was cleared with timeout
+			if ( $version_info === false ) {
+				// Was cleared with timeout.
 				$transient = false;
 			} else {
 				$this->maybe_use_beta_url( $version_info );
@@ -417,7 +428,8 @@ class FrmAddon {
 	private function clear_old_plugin_version( &$version_info ) {
 		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
-			$version_info = false; // Cache is expired
+			// Cache is expired.
+			$version_info = false;
 			$api          = new FrmFormApi( $this->license );
 			$api->reset_cached();
 		}
@@ -463,6 +475,10 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
+		if ( self::$sent_mothership_request ) {
+			return;
+		}
+
 		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
@@ -472,6 +488,7 @@ class FrmAddon {
 			return;
 		}
 
+		self::$sent_mothership_request = true;
 		$this->update_last_checked();
 
 		$response = $this->get_license_status();
@@ -483,7 +500,7 @@ class FrmAddon {
 	/**
 	 * Has this been checked too recently?
 	 *
-	 * @param string $time ie. '1 day'
+	 * @param string $time ie. '1 day'.
 	 * @return bool
 	 */
 	private function checked_recently( $time ) {
@@ -619,7 +636,7 @@ class FrmAddon {
 
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
-				if ( isset( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
+				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
 					$response['status'] = $license_data['license'];
 				}
 			} else {
@@ -744,7 +761,7 @@ class FrmAddon {
 				} else {
 					$message = $json_res;
 				}
-			} elseif ( isset( $resp['response'] ) && isset( $resp['response']['code'] ) ) {
+			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
 				$resp['body'] = wp_strip_all_tags( $resp['body'] );
 
 				$message = sprintf(
@@ -754,7 +771,7 @@ class FrmAddon {
 					$resp['response']['message'] . ' ' . $resp['body']
 				);
 			}
-		}
+		}//end if
 
 		return $message;
 	}

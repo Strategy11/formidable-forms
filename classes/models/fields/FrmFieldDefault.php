@@ -15,7 +15,7 @@ class FrmFieldDefault extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	/**
-	 * @param $type string
+	 * @param string $type
 	 *
 	 * @return void
 	 */
