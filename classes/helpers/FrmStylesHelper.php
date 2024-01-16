@@ -444,8 +444,13 @@ class FrmStylesHelper {
 		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
-			$color = '#' . $color;
+		} elseif ( strpos( $color, '#' ) === false ) {
+			// If a color looks like a hex code without the #, prepend the #.
+			// A color looks like a hex code if it does not contain the substrings "rgb", "rgba", or "hsl".
+			$is_hex = false === strpos( $color, 'rgba(' ) && false === strpos( $color, 'hsl(' );
+			if ( $is_hex ) {
+				$color = '#' . $color;
+			}
 		}
 	}
 
