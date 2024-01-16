@@ -314,7 +314,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$html = $field_object->prepare_field_html( $args );
 		$this->assertEquals( '', $html );
 
-		// Test a draft field on a preview page for a privileged user (the GTML should not be empty).
+		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).
 		$reflectionClass = new ReflectionClass( 'FrmFieldType' );
 		$reflectionProperty = $reflectionClass->getProperty('should_hide_draft_fields');
 		$reflectionProperty->setAccessible( true );
