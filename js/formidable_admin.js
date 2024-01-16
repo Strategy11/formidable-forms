@@ -2435,7 +2435,7 @@ function frmAdminBuildJS() {
 		addFieldIdToDraftFieldsInput( field );
 
 		let toggled = false;
-			
+
 		fieldUpdated();
 		setupSortable( section );
 
