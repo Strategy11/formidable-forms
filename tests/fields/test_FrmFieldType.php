@@ -315,10 +315,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertEquals( '', $html );
 
 		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).
-		$reflectionClass = new ReflectionClass( 'FrmFieldType' );
-		$reflectionProperty = $reflectionClass->getProperty('should_hide_draft_fields');
-		$reflectionProperty->setAccessible( true );
-		$reflectionProperty->setValue( null, null );
+		$this->reset_should_hide_draft_fields_flag();
 
 		$this->use_frm_role( 'administrator' );
 		add_filter(
@@ -335,6 +332,19 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$html = $field_object->prepare_field_html( $args );
 		$this->make_text_field_html_assertions( $html, $field );
+	}
+
+	/**
+	 * This value is determined once per request and memoized.
+	 * This needs to be reset in test_prepare_field_html so the check can happen again.
+	 *
+	 * @return void
+	 */
+	private function reset_should_hide_draft_fields_flag() {
+		$reflection_class    = new ReflectionClass( 'FrmFieldType' );
+		$reflection_property = $reflection_class->getProperty( 'should_hide_draft_fields' );
+		$reflection_property->setAccessible( true );
+		$reflection_property->setValue( null, null );
 	}
 
 	/**

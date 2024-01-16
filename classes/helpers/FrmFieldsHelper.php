@@ -2132,8 +2132,9 @@ class FrmFieldsHelper {
 		$draft_field_rows = FrmDb::get_results(
 			'frm_fields',
 			array(
-				'form_id'            => $form_id,
-				'field_options LIKE' => 's:5:"draft";i:1;', // Do a soft check for fields that look like drafts only.
+				'form_id' => $form_id,
+				// Do a soft check for fields that look like drafts only.
+				'field_options LIKE' => 's:5:"draft";i:1;',
 			),
 			'id, field_options'
 		);
