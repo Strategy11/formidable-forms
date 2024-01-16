@@ -236,6 +236,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Remove the draft flag from any new fields from this current session.
+	 *
 	 * @since x.x
 	 *
 	 * @param int $form_id
@@ -244,11 +246,13 @@ class FrmFormsController {
 	private static function maybe_remove_draft_option_from_fields( $form_id ) {
 		$draft_field_ids_csv = FrmAppHelper::get_post_param( 'draft_fields', '', 'sanitize_text_field' );
 		if ( ! $draft_field_ids_csv ) {
+			// If the draft_fields input is empty there are no new fields in the session.
 			return;
 		}
 
 		$draft_field_ids = array_filter( explode( ',', $draft_field_ids_csv ), 'is_numeric' );
 		if ( ! $draft_field_ids ) {
+			// Exit early if the draft fields input is invalid. It should be a CSV of integer values.
 			return;
 		}
 
