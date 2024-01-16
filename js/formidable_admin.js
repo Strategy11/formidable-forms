@@ -2432,6 +2432,8 @@ function frmAdminBuildJS() {
 		const $thisSection = jQuery( section );
 		const type         = field.getAttribute( 'data-type' );
 
+		addFieldIdToDraftFieldsInput( field );
+
 		let toggled = false;
 			
 		fieldUpdated();
@@ -2498,6 +2500,27 @@ function frmAdminBuildJS() {
 		addedEvent.frmType    = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
+	}
+
+	/**
+	 * @param {HTMLElement} field
+	 * @returns {void}
+	 */
+	function addFieldIdToDraftFieldsInput( field ) {
+		if ( ! field.dataset.fid ) {
+			return;
+		}
+
+		const draftInput = document.getElementById( 'draft_fields' );
+		if ( ! draftInput ) {
+			return;
+		}
+
+		if ( '' === draftInput.value ) {
+			draftInput.value = field.dataset.fid;
+		} else {
+			draftInput.value += ',' + field.dataset.fid;
+		}
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {

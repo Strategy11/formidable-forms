@@ -2120,6 +2120,31 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @param string|int $form_id
+	 * @return array
+	 */
+	public static function get_all_draft_field_ids( $form_id ) {
+		$draft_field_rows = FrmDb::get_results(
+			'frm_fields',
+			array(
+				'form_id'            => $form_id,
+				'field_options LIKE' => 's:5:"draft";i:1;',
+			),
+			'id, field_options'
+		);
+		$draft_field_ids = array();
+		foreach ( $draft_field_rows as $row ) {
+			FrmAppHelper::unserialize_or_decode( $row->field_options );
+			if ( ! is_array( $row->field_options ) || empty( $row->field_options['draft'] ) ) {
+				continue;
+			}
+
+			$draft_field_ids[] = $row->id;
+		}
+		return $draft_field_ids;
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {

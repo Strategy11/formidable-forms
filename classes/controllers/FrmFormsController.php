@@ -213,7 +213,7 @@ class FrmFormsController {
 		if ( count( $errors ) > 0 ) {
 			return self::get_edit_vars( $id, $errors );
 		} else {
-			self::remove_draft_option_from_all_fields( $id );
+			self::maybe_remove_draft_option_from_fields( $id );
 
 			FrmForm::update( $id, $values );
 			$message = __( 'Form was successfully updated.', 'formidable' );
@@ -241,10 +241,21 @@ class FrmFormsController {
 	 * @param int $form_id
 	 * @return void
 	 */
-	private static function remove_draft_option_from_all_fields( $form_id ) {
+	private static function maybe_remove_draft_option_from_fields( $form_id ) {
+		$draft_field_ids_csv = FrmAppHelper::get_post_param( 'draft_fields', '', 'sanitize_text_field' );
+		if ( ! $draft_field_ids_csv ) {
+			return;
+		}
+
+		$draft_field_ids = array_filter( explode( ',', $draft_field_ids_csv ), 'is_numeric' );
+		if ( ! $draft_field_ids ) {
+			return;
+		}
+
 		$draft_field_rows = FrmDb::get_results(
 			'frm_fields',
 			array(
+				'id'                 => $draft_field_ids,
 				'form_id'            => $form_id,
 				'field_options LIKE' => 's:5:"draft";i:1;',
 			),
@@ -1102,9 +1113,9 @@ class FrmFormsController {
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
-		} else {
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}
+
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php';
 	}
 
 	public static function update_form_builder_fields( $fields, $form ) {

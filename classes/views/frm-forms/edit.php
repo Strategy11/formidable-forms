@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<div class="columns-2">
-	<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php' ); ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php'; ?>
 	<div id="post-body-content">
 
 	<div class="frm_form_builder with_frm_style">
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 
 		<form method="post">
-			<?php require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php' ); ?>
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/form.php'; ?>
 		</form>
 
 	</div>
