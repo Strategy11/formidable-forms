@@ -9390,13 +9390,13 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			const parts = input.value.replace( '.', ':' ).split( ':' );
+			const parts = input.value.split( ':' );
 			let newValue = parts[0] + ':' + parts[1];
 
 			if ( 'sec' === unit ) {
 				newValue += ( ':' + ( parts[2] ? parts[2] : '00' ) );
 			} else if ( 'millisec' === unit ) {
-				newValue += ( ':' + ( parts[2] ? parts[2] : '00' ) + '.' + ( parts[3] ? parts[3] : '000' ) );
+				newValue += ( ':' + ( parts[2] ? parts[2] : '00' ) + ':' + ( parts[3] ? parts[3] : '000' ) );
 			}
 
 			input.value = newValue;
