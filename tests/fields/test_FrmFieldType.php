@@ -277,4 +277,77 @@ class test_FrmFieldType extends FrmUnitTest {
 			$this->assertEquals( $expected, $actual );
 		}
 	}
+
+	/**
+	 * @covers FrmFieldType::prepare_field_html
+	 */
+	public function test_prepare_field_html() {
+		$form    = $this->factory->form->create_and_get();
+		$form_id = $form->id;
+
+		// Test a basic text field.
+		$field        = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+			)
+		);
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
+
+		$args = array(
+			'errors' => array(),
+			'form'   => FrmForm::getOne( $form_id ),
+		);
+		$html = $field_object->prepare_field_html( $args );
+
+		$this->make_text_field_html_assertions( $html, $field );
+
+		// Test a draft field (the HTML should be nothing).
+		$field->field_options['draft'] = 1;
+		FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
+
+		$field        = FrmField::getOne( $field->id );
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
+
+		$html = $field_object->prepare_field_html( $args );
+		$this->assertEquals( '', $html );
+
+
+		$reflectionClass = new ReflectionClass( 'FrmFieldType' );
+		$reflectionProperty = $reflectionClass->getProperty('should_hide_draft_fields');
+		$reflectionProperty->setAccessible( true );
+		$reflectionProperty->setValue( null, null );
+
+		// Test a draft field on a preview page for a privileged user (the GTML should not be empty).
+		$this->use_frm_role( 'administrator' );
+		add_filter(
+			'user_has_cap',
+			function( $caps ) {
+				$caps['frm_edit_forms'] = true;
+				return $caps;
+			}
+		);
+
+		global $pagenow;
+		$pagenow = 'admin-ajax.php';
+		$_GET['action'] = 'frm_forms_preview';
+
+		$html = $field_object->prepare_field_html( $args );
+		$this->make_text_field_html_assertions( $html, $field );
+	}
+
+	/**
+	 * @param string   $html
+	 * @param stdClass $field
+	 * @return void
+	 */
+	private function make_text_field_html_assertions( $html, $field ) {
+		$this->assertStringContainsString( 'id="frm_field_' . $field->id . '_container"', $html );
+		$this->assertStringContainsString( 'class="frm_form_field form-field', $html );
+		$this->assertStringContainsString( '<input type="text"', $html );
+		$this->assertStringContainsString( 'name="item_meta[' . $field->id . ']"', $html );
+		$this->assertStringContainsString( 'id="field_' . $field->field_key . '"', $html );
+	}
 }
