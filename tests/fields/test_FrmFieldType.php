@@ -327,7 +327,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		);
 
 		global $pagenow;
-		$pagenow = 'admin-ajax.php';
+		$pagenow = 'admin-ajax.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$_GET['action'] = 'frm_forms_preview';
 
 		$html = $field_object->prepare_field_html( $args );
