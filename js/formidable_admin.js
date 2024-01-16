@@ -1957,14 +1957,7 @@ function frmAdminBuildJS() {
 		if ( field.nextElementSibling ) {
 			return field.nextElementSibling;
 		}
-		if ( ! field.parentNode ) {
-			return false;
-		}
-		const fieldBox = field.parentNode.closest( '.frm_field_box' );
-		if ( ! fieldBox || ! fieldBox.nextElementSibling ) {
-			return false;
-		}
-		return fieldBox.nextElementSibling.querySelector( '.form-field' );
+		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
 	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
