@@ -78,7 +78,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 		// Confirm field is an array with type and form id keys.
 		$this->assertIsArray( $new_field );
 		$this->assertArrayHasKey( 'type', $new_field );
-		$this->assertEquals( 'text', $new_field['type'] ); 
+		$this->assertEquals( 'text', $new_field['type'] );
 		$this->assertArrayHasKey( 'form_id', $new_field );
 		$this->assertEquals( $form_id, $new_field['form_id'] );
 
