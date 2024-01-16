@@ -67,4 +67,23 @@ class test_FrmFieldsController extends FrmUnitTest {
 			$error_body
 		);
 	}
+
+	/**
+	 * @covers FrmFieldsController::include_new_field
+	 */
+	public function test_include_new_field() {
+		$form_id   = $this->factory->form->create();
+		$new_field = FrmFieldsController::include_new_field( 'text', $form_id );
+
+		// Confirm field is an array with type and form id keys.
+		$this->assertIsArray( $new_field );
+		$this->assertArrayHasKey( 'type', $new_field );
+		$this->assertEquals( 'text', $new_field['type'] ); 
+		$this->assertArrayHasKey( 'form_id', $new_field );
+		$this->assertEquals( $form_id, $new_field['form_id'] );
+
+		// Confirm new fields are flagged as "draft".
+		$this->assertArrayHasKey( 'draft', $new_field );
+		$this->assertEquals( 1, $new_field['draft'] );
+	}
 }
