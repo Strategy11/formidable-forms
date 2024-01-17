@@ -524,8 +524,8 @@ class FrmDashboardController {
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
 		$youtube_api    = new FrmYoutubeFeedApi();
-		$welcome_video  = $youtube_api->get_welcome_video();
-		$featured_video = $youtube_api->get_featured_video();
+		$welcome_video  = $youtube_api->get_video();
+		$featured_video = $youtube_api->get_video( 'featured' );
 
 		if ( 0 === (int) $entries_count && false === $welcome_video && false === $featured_video ) {
 			return null;

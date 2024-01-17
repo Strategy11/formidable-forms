@@ -19,9 +19,9 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 * @var array
 	 */
 	private $api_endpoints = array(
-		'welcome-video'  => 'get-welcome-video',
-		'latest-video'   => 'get-latest-video',
-		'featured-video' => 'get-featured-video',
+		'welcome'  => 'get-welcome-video',
+		'latest'   => 'get-latest-video',
+		'featured' => 'get-featured-video',
 	);
 
 	/**
@@ -37,9 +37,9 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 * @var array
 	 */
 	private $cache_keys = array(
-		'welcome-video'  => 'frm-welcome-video',
-		'latest-video'   => 'frm-latest-video',
-		'featured-video' => 'frm-featured-video',
+		'welcome'  => 'frm-welcome-video',
+		'latest'   => 'frm-latest-video',
+		'featured' => 'frm-featured-video',
 	);
 
 	public function __construct() {
@@ -70,42 +70,26 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 * @return void
 	 */
 	private function init_api_options( $endpoint = null, $cache_key = null ) {
-		$this->cache_key           = $this->cache_keys['welcome-video'];
-		$this->api_active_endpoint = $this->api_endpoints['welcome-video'];
+		$this->cache_key           = $this->cache_keys['welcome'];
+		$this->api_active_endpoint = $this->api_endpoints['welcome'];
 
-		if ( null !== $endpoint ) {
+		if ( $endpoint ) {
 			$this->api_active_endpoint = $endpoint;
 		}
-		if ( null !== $cache_key ) {
+		if ( $cache_key ) {
 			$this->cache_key = $cache_key;
 		}
 	}
 
 	/**
-	 * Get the latest YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
+	 * Get the YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
+	 *
+	 * @param string $type The video type that will be fetched: welcome-video|featured-video|latest-video.
 	 *
 	 * @return array
 	 */
-	public function get_latest_video() {
-		return $this->get_feed_by_api_endpoint( $this->api_endpoints['latest-video'], $this->cache_keys['latest-video'] );
-	}
-
-	/**
-	 * Get the welcome YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
-	 *
-	 * @return array
-	 */
-	public function get_welcome_video() {
-		return $this->get_feed_by_api_endpoint( $this->api_endpoints['welcome-video'], $this->cache_keys['welcome-video'] );
-	}
-
-	/**
-	 * Get the featured YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
-	 *
-	 * @return array
-	 */
-	public function get_featured_video() {
-		return $this->get_feed_by_api_endpoint( $this->api_endpoints['featured-video'], $this->cache_keys['featured-video'] );
+	public function get_video( $type = 'welcome' ) {
+		return $this->get_feed_by_api_endpoint( $this->api_endpoints[ $type ], $this->cache_keys[ $type ] );
 	}
 
 	/**

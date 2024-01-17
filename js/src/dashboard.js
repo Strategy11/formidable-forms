@@ -46,7 +46,7 @@ class frmDashboard {
 		const closeButton = document.querySelector( '.frm-dashboard-banner-close' );
 		const dashboardBanner = document.querySelector( '.frm-dashboard-banner' );
 
-		if ( null === closeButton || null === dashboardBanner ) {
+		if ( ! closeButton || ! dashboardBanner ) {
 			return;
 		}
 
