@@ -444,29 +444,35 @@ class FrmStylesHelper {
 		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false ) {
-			// If a color looks like a hex code without the #, prepend the #.
-			// A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
+			$color = '#' . $color;
+		}
+	}
 
-			$non_hex_substrings = array(
-				'rgba(',
-				'hsl(',
-				'hsla(',
-				'hwb(',
-			);
+	/**
+	 * If a color looks like a hex code without the #, prepend the #.
+	 * A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color
+	 * @return bool
+	 */
+	private static function is_hex( $color ) {
+		$non_hex_substrings = array(
+			'rgba(',
+			'hsl(',
+			'hsla(',
+			'hwb(',
+		);
 
-			$is_hex = true;
-			foreach ( $non_hex_substrings as $substring ) {
-				if ( false !== strpos( $color, $substring ) ) {
-					$is_hex = false;
-					break;
-				}
-			}
-
-			if ( $is_hex ) {
-				$color = '#' . $color;
+		foreach ( $non_hex_substrings as $substring ) {
+			if ( false !== strpos( $color, $substring ) ) {
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	/**
