@@ -34,7 +34,7 @@ $include_info = $is_active_style;
 				</span>
 			<?php } ?>
 			<?php if ( ! empty( $is_new_template ) ) { ?>
-				<span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
+				<span class="frm-meta-tag frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
 			<?php } ?>
 		</div>
 		<div class="frm-style-card-preview">

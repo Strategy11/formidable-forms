@@ -1387,19 +1387,35 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Only allow medium-risk HTML tags like a and img when an entry is created by or edited by a privileged user.
+	 *
 	 * @since 6.7.1
 	 *
 	 * @param stdClass $entry
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
-			return true;
+		if ( $entry->updated_by && $this->user_id_is_privileged( $entry->updated_by ) ) {
+			return false;
 		}
-		if ( $entry->updated_by ) {
-			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
+		if ( $entry->user_id && $this->user_id_is_privileged( $entry->user_id ) ) {
+			return false;
 		}
-		return false;
+		return true;
+	}
+
+	/**
+	 * Check if a user is allowed to save additional HTML (like a and img tags).
+	 * HTML is stripped more strictly for users that are not logged in, or users that
+	 * do not have access to editing entries in the back end.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $user_id
+	 * @return bool
+	 */
+	private function user_id_is_privileged( $user_id ) {
+		return user_can( $user_id, 'administrator' ) || user_can( $user_id, 'frm_edit_entries' );
 	}
 
 	/**

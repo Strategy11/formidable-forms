@@ -444,9 +444,35 @@ class FrmStylesHelper {
 		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
+		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
+	}
+
+	/**
+	 * If a color looks like a hex code without the #, prepend the #.
+	 * A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color
+	 * @return bool
+	 */
+	private static function is_hex( $color ) {
+		$non_hex_substrings = array(
+			'rgba(',
+			'hsl(',
+			'hsla(',
+			'hwb(',
+		);
+
+		foreach ( $non_hex_substrings as $substring ) {
+			if ( false !== strpos( $color, $substring ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
