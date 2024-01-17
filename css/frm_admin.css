@@ -5223,7 +5223,7 @@ label.frm-example-icon {
 }
 
 /* Import/Export */
-.frm-lite .xml_opts .frm-items {
+.frm-lite .xml_opts .frm-export-xml-items {
 	display: none;
 }
 
