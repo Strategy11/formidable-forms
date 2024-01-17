@@ -1959,7 +1959,7 @@ class FrmAppHelper {
 	 * Updates value to empty string if it is null and being passed to a string function.
 	 *
 	 * @since x.x
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @param string $function
 	 * @return mixed
 	 */
