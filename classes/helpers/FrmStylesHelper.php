@@ -219,6 +219,64 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $hsl
+	 * @return string|null Null if it fails to parse the HSL string.
+	 */
+	private static function hsl_to_hex( $hsl ) {
+		// Extract HSL components from the color string.
+		preg_match( '/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/', $hsl, $matches );
+
+		if ( count( $matches ) !== 4 ) {
+			// Invalid HSL string format.
+			return null;
+		}
+
+		// Extract HSL values.
+		$h = (int) $matches[1];
+		$s = (int) $matches[2] / 100;
+		$l = (int) $matches[3] / 100;
+
+		// Calculate RGB values.
+		$c = (1 - abs(2 * $l - 1)) * $s;
+		$x = $c * (1 - abs((($h / 60) % 2) - 1));
+		$m = $l - $c / 2;
+
+		$r = $g = $b = 0;
+
+		if ( $h >= 0 && $h < 60 ) {
+			$r = $c;
+			$g = $x;
+		} elseif ( $h >= 60 && $h < 120 ) {
+			$r = $x;
+			$g = $c;
+		} elseif ( $h >= 120 && $h < 180 ) {
+			$g = $c;
+			$b = $x;
+		} elseif ( $h >= 180 && $h < 240 ) {
+			$g = $x;
+			$b = $c;
+		} elseif ( $h >= 240 && $h < 300 ) {
+			$r = $x;
+			$b = $c;
+		} elseif ( $h >= 300 && $h < 360 ) {
+			$r = $c;
+			$b = $x;
+		}//end if
+
+		// Convert RGB to 8-bit values
+		$r = round( ( $r + $m ) * 255 );
+		$g = round( ( $g + $m ) * 255 );
+		$b = round( ( $b + $m ) * 255 );
+
+		// Convert RGB to hex
+		$hex = sprintf( "%02x%02x%02x", $r, $g, $b );
+
+		return $hex;
+	}
+
+	/**
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
 	 *
@@ -266,6 +324,15 @@ class FrmStylesHelper {
 	public static function get_color_brightness( $color ) {
 		if ( 0 === strpos( $color, 'rgb' ) ) {
 			$color = self::rgb_to_hex( $color );
+		}
+
+		if ( 0 === strpos( $color, 'hsl' ) ) {
+			$hsl_to_hex = self::hsl_to_hex( $color );
+			if ( is_null( $hsl_to_hex ) ) {
+				// Fallback if we cannot convert the HSL value.
+				return 0;
+			}
+			$color = $hsl_to_hex;
 		}
 
 		self::fill_hex( $color );
