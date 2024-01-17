@@ -239,11 +239,12 @@ class FrmStylesHelper {
 		$l = (int) $matches[3] / 100;
 
 		// Calculate RGB values.
-		$c = (1 - abs(2 * $l - 1)) * $s;
-		$x = $c * (1 - abs((($h / 60) % 2) - 1));
+		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
+		$x = $c * ( 1 - abs( ( ( $h / 60 ) % 2 ) - 1 ) );
 		$m = $l - $c / 2;
-
-		$r = $g = $b = 0;
+		$r = 0;
+		$g = 0;
+		$b = 0;
 
 		if ( $h >= 0 && $h < 60 ) {
 			$r = $c;
@@ -271,7 +272,7 @@ class FrmStylesHelper {
 		$b = round( ( $b + $m ) * 255 );
 
 		// Convert RGB to hex
-		$hex = sprintf( "%02x%02x%02x", $r, $g, $b );
+		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
 
 		return $hex;
 	}

@@ -215,7 +215,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 * @param string $color
 	 * @return void
 	 */
-	private function assert_color_brightness( $expected, $color ) {	
+	private function assert_color_brightness( $expected, $color ) {
 		$this->assertEquals( $expected, FrmStylesHelper::get_color_brightness( $color ) );
 	}
 }
