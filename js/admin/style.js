@@ -76,7 +76,9 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		setTimeout( addHamburgerMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+		// Add a timeout so Pro has a chance to add a filter first.
+		// 0 does not always work in Google Chrome, so use 1.
+		setTimeout( addHamburgerMenusToCards, 1 );
 		initDatepickerSample();
 
 		const enableToggle              = document.getElementById( 'frm_enable_styling' );
