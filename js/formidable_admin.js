@@ -37,6 +37,11 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 			$( document.getElementById( 'frm_deauthorize_link' ) ).on( 'click', app.deauthorize );
 			$( '.frm_authorize_link' ).on( 'click', app.authorize );
+			// Handles FF dashboard Authorize & Reauthorize events.
+			// Atach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
+			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_deauthorize_link', app.deauthorize );
+			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_reconnect_link', app.reauthorize );
+
 			if ( el.reset !== null ) {
 				$( el.reset ).on( 'click', app.reauthorize );
 			}
@@ -324,6 +329,11 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					app.showAuthorized( false );
 					input.value = '';
 					link.replaceWith( 'Disconnected' );
+
+					/**
+					 * Triggers the after license is deauthorized sruccess action.
+					 */
+					wp.hooks.doAction( 'frmAdmin.afterLicenseDeauthorizeSuccess', {});
 
 				}
 			});
