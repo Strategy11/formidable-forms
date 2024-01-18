@@ -1567,26 +1567,6 @@ function frmAdminBuildJS() {
 		return section;
 	}
 
-	// Get the form ID where a field is dropped
-	function getFormIdForFieldPlacement( section ) {
-		var formId = '';
-
-		if ( typeof section[0] !== 'undefined' ) {
-			var sDivide = section.children( '.start_divider' );
-			sDivide.children( '.edit_field_type_end_divider' ).appendTo( sDivide );
-			if ( typeof section.attr( 'data-formid' ) !== 'undefined' ) {
-				var fieldId = section.attr( 'data-fid' );
-				formId = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
-			}
-		}
-
-		if ( typeof formId === 'undefined' || formId === '' ) {
-			formId = thisFormId;
-		}
-
-		return formId;
-	}
-
 	// Get the section ID where a field is dropped
 	function getSectionIdForFieldPlacement( section ) {
 		var sectionId = 0;
@@ -1615,28 +1595,12 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const fieldId        = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		const section        = getSectionForFieldPlacement( currentItem );
-		const formId         = getFormIdForFieldPlacement( section );
-		const sectionId      = getSectionIdForFieldPlacement( section );
-		const previousFormId = previousSection ? getFormIdForFieldPlacement( jQuery( previousSection.parentNode ) ) : 0;
+		const fieldId   = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
+		const section   = getSectionForFieldPlacement( currentItem );
+		const sectionId = getSectionIdForFieldPlacement( section );
 
-		jQuery.ajax({
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_update_field_after_move',
-				form_id: formId,
-				field: fieldId,
-				section_id: sectionId,
-				previous_form_id: previousFormId,
-				nonce: frmGlobal.nonce
-			},
-			success: function() {
-				toggleSectionHolder();
-				updateInSectionValue( fieldId, sectionId );
-			}
-		});
+		toggleSectionHolder();
+		updateInSectionValue( fieldId, sectionId );
 	}
 
 	// Update the in_section field value
@@ -1662,7 +1626,6 @@ function frmAdminBuildJS() {
 		const $placeholder = jQuery( loading );
 		const currentItem  = jQuery( placeholder );
 		const section      = getSectionForFieldPlacement( currentItem );
-		const formId       = getFormIdForFieldPlacement( section );
 		const sectionId    = getSectionIdForFieldPlacement( section );
 
 		placeholder.parentNode.insertBefore( loading, placeholder );
@@ -1676,12 +1639,12 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
-				form_id: formId,
+				form_id: thisFormId,
 				field_type: fieldType,
-				section_id: sectionId,
 				nonce: frmGlobal.nonce,
 				has_break: hasBreak
 			},
@@ -2002,15 +1965,13 @@ function frmAdminBuildJS() {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
-		const formId = thisFormId;
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
-				form_id: formId,
+				form_id: thisFormId,
 				field_type: fieldType,
-				section_id: 0,
 				nonce: frmGlobal.nonce,
 				has_break: hasBreak
 			},
