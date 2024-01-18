@@ -240,7 +240,7 @@ class FrmStylesHelper {
 
 		// Calculate RGB values.
 		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
-		$x = $c * ( 1 - abs( ( ( $h / 60 ) % 2 ) - 1 ) );
+		$x = $c * ( 1 - abs( ( (int) ( $h / 60 ) % 2 ) - 1 ) );
 		$m = $l - $c / 2;
 		$r = 0;
 		$g = 0;
