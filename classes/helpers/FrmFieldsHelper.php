@@ -2162,7 +2162,6 @@ class FrmFieldsHelper {
 	 * @since x.x
 	 *
 	 * @param string|int $form_id
-	 * @param array      $field_ids
 	 * @return array
 	 */
 	public static function get_all_draft_field_ids( $form_id ) {
