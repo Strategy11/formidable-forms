@@ -12,39 +12,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-//phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.Security.EscapeOutput.UnsafePrintingFunction -- don't need to escape for plain-text email.
-echo $args['subject'];
+FrmEmailSummaryHelper::plain_text_echo( $args['subject'] );
 
 echo "\r\n\r\n";
 
-echo FrmAppHelper::get_formatted_time( $args['from_date'] ) . ' - ' . FrmAppHelper::get_formatted_time( $args['to_date'] ) . ' - ' . esc_url_raw( $args['site_url'] );
+FrmEmailSummaryHelper::plain_text_echo( FrmAppHelper::get_formatted_time( $args['from_date'] ) . ' - ' . FrmAppHelper::get_formatted_time( $args['to_date'] ) . ' - ' . esc_url_raw( $args['site_url'] ) );
 
 echo "\r\n\r\n";
 
-_e( 'Statistics', 'formidable' );
+FrmEmailSummaryHelper::plain_text_echo( __( 'Statistics', 'formidable' ) );
 
 echo "\r\n\r\n";
 
 foreach ( $args['stats'] as $key => $stat ) {
-	echo $stat['label'] . ': ' . ( isset( $stat['display'] ) ? $stat['display'] : intval( $stat['count'] ) ) . "\r\n";
+	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( isset( $stat['display'] ) ? $stat['display'] : intval( $stat['count'] ) ) . "\r\n" );
 }
 
 echo "\r\n";
 
 if ( ! empty( $args['dashboard_url'] ) ) {
-	_e( 'Go to Dashboard:', 'formidable' );
+	FrmEmailSummaryHelper::plain_text_echo( __( 'Go to Dashboard:', 'formidable' ) );
 	echo ' ' . esc_url_raw( $args['dashboard_url'] ) . "\r\n\r\n";
 }
 
 if ( $args['top_forms'] ) {
-	echo $args['top_forms_label'];
+	FrmEmailSummaryHelper::plain_text_echo( $args['top_forms_label'] );
 
 	echo "\r\n\r\n";
 
 	foreach ( $args['top_forms'] as $index => $top_form ) {
-		echo $top_form->form_name . ': ';
+		FrmEmailSummaryHelper::plain_text_echo( $top_form->form_name );
+		echo ': ';
+
 		// translators: submission count.
-		printf( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ), intval( number_format_i18n( $top_form->items_count ) ) );
+		$submissions_count = sprintf( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ), intval( number_format_i18n( $top_form->items_count ) ) );
+		FrmEmailSummaryHelper::plain_text_echo( $submissions_count );
+		unset( $submissions_count );
 		echo "\r\n";
 	}
 
@@ -52,13 +55,14 @@ if ( $args['top_forms'] ) {
 }
 
 if ( ! empty( $args['out_of_date_plugins'] ) ) {
-	printf(
-		// translators: the list of out-of-date plugins.
-		__( 'The following plugins are out of date: %s', 'formidable' ),
-		implode( ', ', $args['out_of_date_plugins'] )
+	FrmEmailSummaryHelper::plain_text_echo(
+		sprintf(
+			// translators: the list of out-of-date plugins.
+			__( 'The following plugins are out of date: %s', 'formidable' ),
+			implode( ', ', $args['out_of_date_plugins'] )
+		)
 	);
 	echo "\r\n";
-	_e( 'Please go to your Plugins page to update them.', 'formidable' );
+	FrmEmailSummaryHelper::plain_text_echo( __( 'Please go to your Plugins page to update them.', 'formidable' ) );
 	echo "\r\n\r\n";
 }
-//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.Security.EscapeOutput.UnsafePrintingFunction

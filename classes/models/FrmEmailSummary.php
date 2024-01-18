@@ -44,7 +44,7 @@ abstract class FrmEmailSummary {
 		 *
 		 * @param bool $enable Set to `true` to enable.
 		 */
-		$this->is_html = apply_filters( 'frm_html_summary_emails', true );
+		$this->is_html = apply_filters( 'frm_html_summary_emails', false );
 	}
 
 	/**
