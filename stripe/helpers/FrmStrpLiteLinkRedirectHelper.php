@@ -46,9 +46,10 @@ class FrmStrpLiteLinkRedirectHelper {
 
 	/**
 	 * @param string $error_code
+	 * @param string $charge_id
 	 * @return void
 	 */
-	public function handle_error( $error_code ) {
+	public function handle_error( $error_code, $charge_id = '' ) {
 		if ( ! empty( $this->entry_id ) ) {
 			$referer = FrmStrpLiteAuth::get_referer_url( $this->entry_id );
 		}
@@ -57,8 +58,16 @@ class FrmStrpLiteLinkRedirectHelper {
 			$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
 
+		$args = array(
+			'frm_link_error' => $error_code,
+		);
+
+		if ( $charge_id ) {
+			$args['charge'] = $charge_id;
+		}
+
 		$this->add_intent_info_and_redirect(
-			add_query_arg( array( 'frm_link_error' => $error_code ), $referer )
+			add_query_arg( $args, $referer )
 		);
 	}
 

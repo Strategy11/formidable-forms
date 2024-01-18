@@ -5216,6 +5216,10 @@ label.frm-example-icon {
 }
 
 /* Import/Export */
+.frm-lite .xml_opts .frm-export-xml-items {
+	display: none;
+}
+
 .csv_opts #frm_csv_col_sep {
 	width: 45px;
 }

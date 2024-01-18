@@ -249,6 +249,7 @@ class FrmStrpLiteLinkController {
 		}
 
 		if ( 'succeeded' !== $setup_intent->status ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'payment_failed' );
 			die();
 		}
@@ -258,9 +259,19 @@ class FrmStrpLiteLinkController {
 		$new_payment_values        = array();
 
 		if ( $customer_has_been_charged ) {
-			$charge                           = $subscription->latest_invoice->charge;
+			$charge = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
-			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+
+			if ( 'failed' === $charge->status ) {
+				FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
+
+				$new_payment_values['receipt_id'] = $charge->id;
+				$frm_payment->update( $payment->id, $new_payment_values );
+
+				$redirect_helper->handle_error( 'payment_failed', $charge->id );
+			}
+
+			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
@@ -270,7 +281,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
 			$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $trial_end );
-		}
+		}//end if
 
 		$new_payment_values['sub_id'] = FrmStrpLiteSubscriptionHelper::create_new_subscription( $atts );
 
