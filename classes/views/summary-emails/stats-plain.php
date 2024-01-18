@@ -66,4 +66,3 @@ if ( ! empty( $args['out_of_date_plugins'] ) ) {
 	FrmEmailSummaryHelper::plain_text_echo( __( 'Please go to your Plugins page to update them.', 'formidable' ) );
 	echo "\r\n\r\n";
 }
-//phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.Security.EscapeOutput.UnsafePrintingFunction

@@ -542,10 +542,11 @@ class FrmEmailSummaryHelper {
 	}
 
 	/**
+	 * Echos string in plain text email.
+	 *
 	 * @since x.x
 	 *
-	 * @param string $string
-	 * @return void
+	 * @param string $string string.
 	 */
 	public static function plain_text_echo( $string ) {
 		echo wp_strip_all_tags( $string ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
