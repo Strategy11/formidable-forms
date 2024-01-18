@@ -225,6 +225,9 @@ class FrmStylesHelper {
 	 * @return string|null Null if it fails to parse the HSL string.
 	 */
 	private static function hsl_to_hex( $hsl ) {
+		// Convert hsla to hsl.
+		$hsl = preg_replace( '/hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*([\d.]+)\)/', 'hsl($1, $2%, $3%)', $hsl );
+
 		// Extract HSL components from the color string.
 		preg_match( '/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/', $hsl, $matches );
 

@@ -196,11 +196,18 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assert_color_brightness( $blue_brightness, '0000ff' );
 
 		// Test rgb colors.
-		$this->assert_color_brightness( $white_brightness, 'rgb( 255, 255, 255 )' );
-		$this->assert_color_brightness( $black_brightness, 'rgb( 0, 0, 0 )' );
-		$this->assert_color_brightness( $red_brightness, 'rgb( 255, 0, 0 )' );
-		$this->assert_color_brightness( $green_brightness, 'rgb( 0, 255, 0 )' );
-		$this->assert_color_brightness( $blue_brightness, 'rgb( 0, 0, 255 )' );
+		$this->assert_color_brightness( $white_brightness, 'rgb(255, 255, 255)' );
+		$this->assert_color_brightness( $black_brightness, 'rgb(0, 0, 0)' );
+		$this->assert_color_brightness( $red_brightness, 'rgb(255, 0, 0)' );
+		$this->assert_color_brightness( $green_brightness, 'rgb(0, 255, 0)' );
+		$this->assert_color_brightness( $blue_brightness, 'rgb(0, 0, 255)' );
+
+		// Test rgba.
+		$this->assert_color_brightness( $white_brightness, 'rgba(255, 255, 255, 1)' );
+		$this->assert_color_brightness( $black_brightness, 'rgba(0, 0, 0, 1)' );
+		$this->assert_color_brightness( $red_brightness, 'rgba(255, 0, 0, 1)' );
+		$this->assert_color_brightness( $green_brightness, 'rgba(0, 255, 0,1 )' );
+		$this->assert_color_brightness( $blue_brightness, 'rgba(0, 0, 255, 1)' );
 
 		// Test hsl colors.
 		$this->assert_color_brightness( $white_brightness, 'hsl(0, 0%, 100%)' );
@@ -208,7 +215,13 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assert_color_brightness( $red_brightness, 'hsl(0, 100%, 50%)' );
 		$this->assert_color_brightness( $green_brightness, 'hsl(120, 100%, 50%)' );
 		$this->assert_color_brightness( $blue_brightness, 'hsl(240, 100%, 50%)' );
-		
+
+		// Test hsla colors.
+		$this->assert_color_brightness( $white_brightness, 'hsla(0, 0%, 100%, 1)' );
+		$this->assert_color_brightness( $black_brightness, 'hsla(0, 0%, 0%, 1)' );
+		$this->assert_color_brightness( $red_brightness, 'hsla(0, 100%, 50%, 1)' );
+		$this->assert_color_brightness( $green_brightness, 'hsla(120, 100%, 50%, 1)' );
+		$this->assert_color_brightness( $blue_brightness, 'hsla(240, 100%, 50%, 1)' );
 	}
 
 	/**
