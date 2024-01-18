@@ -2432,7 +2432,7 @@ function frmAdminBuildJS() {
 		const $thisSection = jQuery( section );
 		const type         = field.getAttribute( 'data-type' );
 
-		addFieldIdToDraftFieldsInput( field );
+		checkHtmlForNewFields( msg );
 
 		let toggled = false;
 
@@ -2503,6 +2503,18 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Since multiple new fields may get added when a new field is inserted, check the HTML.
+	 *
+	 * @param {string} html
+	 * @returns {void}
+	 */
+	function checkHtmlForNewFields( html ) {
+		const element = div();
+		element.innerHTML = html;
+		element.querySelectorAll( '.form-field' ).forEach( addFieldIdToDraftFieldsInput );
+	}
+
+	/**
 	 * @param {HTMLElement} field
 	 * @returns {void}
 	 */
@@ -2519,7 +2531,10 @@ function frmAdminBuildJS() {
 		if ( '' === draftInput.value ) {
 			draftInput.value = field.dataset.fid;
 		} else {
-			draftInput.value += ',' + field.dataset.fid;
+			const split = draftInput.value.split( ',' );
+			if ( ! split.includes( field.dataset.fid ) ) {
+				draftInput.value += ',' + field.dataset.fid;
+			}
 		}
 	}
 

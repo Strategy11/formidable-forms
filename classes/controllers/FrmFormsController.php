@@ -256,21 +256,8 @@ class FrmFormsController {
 			return;
 		}
 
-		$draft_field_rows = FrmDb::get_results(
-			'frm_fields',
-			array(
-				'id'                 => $draft_field_ids,
-				'form_id'            => $form_id,
-				'field_options LIKE' => 's:5:"draft";i:1;',
-			),
-			'id, field_options'
-		);
+		$draft_field_rows = FrmFieldsHelper::get_draft_field_results( $form_id, $draft_field_ids );
 		foreach ( $draft_field_rows as $row ) {
-			FrmAppHelper::unserialize_or_decode( $row->field_options );
-			if ( ! is_array( $row->field_options ) || empty( $row->field_options['draft'] ) ) {
-				continue;
-			}
-
 			$row->field_options['draft'] = 0;
 			FrmField::update( $row->id, array( 'field_options' => $row->field_options ) );
 		}
