@@ -2167,17 +2167,7 @@ class FrmFieldsHelper {
 	 */
 	public static function get_all_draft_field_ids( $form_id ) {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
-		$draft_field_ids  = array();
-		// Unserialzie field options and confirm that fields are actually draft.
-		foreach ( $draft_field_rows as $row ) {
-			FrmAppHelper::unserialize_or_decode( $row->field_options );
-			if ( ! is_array( $row->field_options ) || empty( $row->field_options['draft'] ) ) {
-				continue;
-			}
-
-			$draft_field_ids[] = $row->id;
-		}
-		return $draft_field_ids;
+		return wp_list_pluck( $draft_field_rows, 'id' );
 	}
 
 	/**
