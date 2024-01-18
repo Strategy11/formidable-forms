@@ -9499,13 +9499,13 @@ function frmAdminBuildJS() {
 	 */
 	function addAdminFooterLinks() {
 		const footerLinks = document.querySelector( '.frm-admin-footer-links' );
-		const bodyContent = document.querySelector( '#wpbody-content' );
+		const container = document.querySelector( '.frm_page_container' ) ?? document.getElementById( 'wpbody-content' );
 
-		if ( ! footerLinks || ! bodyContent ) {
+		if ( ! footerLinks || ! container ) {
 			return;
 		}
 
-		bodyContent.appendChild( footerLinks );
+		container.appendChild( footerLinks );
 		footerLinks.classList.remove( 'frm_hidden' );
 	}
 
