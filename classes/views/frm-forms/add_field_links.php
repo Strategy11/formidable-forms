@@ -139,6 +139,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 				<input type="hidden" name="frm_action" value="update" />
 				<input type="hidden" name="action" value="update" />
 				<input type="hidden" name="id" id="form_id" value="<?php echo esc_attr( $values['id'] ); ?>" />
+				<input type="hidden" name="draft_fields" id="draft_fields" value="<?php echo esc_attr( implode( ',', FrmFieldsHelper::get_all_draft_field_ids( $values['id'] ) ) ); ?>" />
 				<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
 				<input type="hidden" id="frm-end-form-marker" name="frm_end" value="1" />
 

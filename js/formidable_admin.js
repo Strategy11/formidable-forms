@@ -2436,15 +2436,18 @@ function frmAdminBuildJS() {
 	}
 
 	function afterAddField( msg, addFocus ) {
-		var regex = /id="(\S+)"/,
-			match = regex.exec( msg ),
-			field = document.getElementById( match[1]),
-			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider',
-			$thisSection = jQuery( section ),
-			type = field.getAttribute( 'data-type' ),
-			toggled = false,
-			$parentSection;
+		const regex        = /id="(\S+)"/;
+		const match        = regex.exec( msg );
+		const field        = document.getElementById( match[1]);
+		const section      = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider';
+		const $thisSection = jQuery( section );
+		const type         = field.getAttribute( 'data-type' );
 
+		checkHtmlForNewFields( msg );
+
+		let toggled = false;
+
+		fieldUpdated();
 		setupSortable( section );
 
 		if ( 'quantity' === type ) {
@@ -2461,7 +2464,7 @@ function frmAdminBuildJS() {
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 		} else {
-			$parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
+			const $parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
 			if ( $parentSection.length ) {
 				toggleOneSectionHolder( $parentSection );
 				toggled = true;
@@ -2508,6 +2511,42 @@ function frmAdminBuildJS() {
 		addedEvent.frmType    = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
+	}
+
+	/**
+	 * Since multiple new fields may get added when a new field is inserted, check the HTML.
+	 *
+	 * @param {string} html
+	 * @returns {void}
+	 */
+	function checkHtmlForNewFields( html ) {
+		const element = div();
+		element.innerHTML = html;
+		element.querySelectorAll( '.form-field' ).forEach( addFieldIdToDraftFieldsInput );
+	}
+
+	/**
+	 * @param {HTMLElement} field
+	 * @returns {void}
+	 */
+	function addFieldIdToDraftFieldsInput( field ) {
+		if ( ! field.dataset.fid ) {
+			return;
+		}
+
+		const draftInput = document.getElementById( 'draft_fields' );
+		if ( ! draftInput ) {
+			return;
+		}
+
+		if ( '' === draftInput.value ) {
+			draftInput.value = field.dataset.fid;
+		} else {
+			const split = draftInput.value.split( ',' );
+			if ( ! split.includes( field.dataset.fid ) ) {
+				draftInput.value += ',' + field.dataset.fid;
+			}
+		}
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {

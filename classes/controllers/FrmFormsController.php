@@ -213,6 +213,8 @@ class FrmFormsController {
 		if ( count( $errors ) > 0 ) {
 			return self::get_edit_vars( $id, $errors );
 		} else {
+			self::maybe_remove_draft_option_from_fields( $id );
+
 			FrmForm::update( $id, $values );
 			$message = __( 'Form was successfully updated.', 'formidable' );
 
@@ -231,6 +233,34 @@ class FrmFormsController {
 
 			return self::get_edit_vars( $id, array(), $message );
 		}//end if
+	}
+
+	/**
+	 * Remove the draft flag from any new fields from this current session.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return void
+	 */
+	private static function maybe_remove_draft_option_from_fields( $form_id ) {
+		$draft_field_ids_csv = FrmAppHelper::get_post_param( 'draft_fields', '', 'sanitize_text_field' );
+		if ( ! $draft_field_ids_csv ) {
+			// If the draft_fields input is empty there are no new fields in the session.
+			return;
+		}
+
+		$draft_field_ids = array_filter( explode( ',', $draft_field_ids_csv ), 'is_numeric' );
+		if ( ! $draft_field_ids ) {
+			// Exit early if the draft fields input is invalid. It should be a CSV of integer values.
+			return;
+		}
+
+		$draft_field_rows = FrmFieldsHelper::get_draft_field_results( $form_id, $draft_field_ids );
+		foreach ( $draft_field_rows as $row ) {
+			$row->field_options['draft'] = 0;
+			FrmField::update( $row->id, array( 'field_options' => $row->field_options ) );
+		}
 	}
 
 	/**
@@ -1074,9 +1104,9 @@ class FrmFormsController {
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
-		} else {
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}
+
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php';
 	}
 
 	public static function update_form_builder_fields( $fields, $form ) {

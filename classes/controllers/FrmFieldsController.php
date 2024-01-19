@@ -81,6 +81,9 @@ class FrmFieldsController {
 	public static function include_new_field( $field_type, $form_id ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
+		// When a new field is added to the form, flag it as draft and hide it from the front-end.
+		$field_values['field_options']['draft'] = 1;
+
 		/**
 		 * @param array $field_values
 		 */
