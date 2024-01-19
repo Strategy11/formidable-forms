@@ -9551,7 +9551,9 @@ function frmAdminBuildJS() {
 	};
 
 	function maybeHideShortcodes( e ) {
-		e.stopPropagation();
+		if ( ! document.getElementById( 'frm_builder_page' ) ) {
+			e.stopPropagation();
+		}
 
 		if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
 			return;
