@@ -1601,11 +1601,12 @@ function frmAdminBuildJS() {
 	/**
 	 * Update a field after it is dragged and dropped into, out of, or between sections
 	 *
-	 * @param {Object} currentItem
-	 * @param {Object} previousSection
+	 * @param {Object}  currentItem
+	 * @param {Object}  previousSection
+	 * @param {boolean} confirm
 	 * @returns {void}
 	 */
-	function updateFieldAfterMovingBetweenSections( currentItem, previousSection ) {
+	function updateFieldAfterMovingBetweenSections( currentItem, previousSection, confirm = false ) {
 		if ( ! currentItem.hasClass( 'form-field' ) ) {
 			// currentItem is a field group. Call for children recursively.
 			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
@@ -1631,12 +1632,65 @@ function frmAdminBuildJS() {
 				field: fieldId,
 				section_id: sectionId,
 				previous_form_id: previousFormId,
+				confirm: confirm ? 1 : 0,
 				nonce: frmGlobal.nonce
 			},
-			success: function() {
+			success: function( response ) {
+				if ( ! confirm && false === response?.success && 'confirm' === response.data?.action ) {
+					const getConfirmMoveRepeaterFieldConfirmButton = () => {
+						const button = frmDom.modal.footerButton({
+							text: __( 'Confirm', 'formidable' ),
+							buttonType: 'primary'
+						});
+						button.addEventListener(
+							'click',
+							() => updateFieldAfterMovingBetweenSections( currentItem, previousSection, true )
+						);
+						return button;
+					};
+
+					const modal = frmDom.modal.maybeCreateModal(
+						'frm_confirm_move_repeater_field',
+						{
+							title: __( 'Are you sure you want to move this field?', 'formidable' ),
+							content: getConfirmMoveRepeaterFieldModalContent(),
+							footer: getConfirmMoveRepeaterFieldModalFooter( getConfirmMoveRepeaterFieldConfirmButton )
+						}
+					);
+					modal.classList.add( 'frm_common_modal' );
+					return;
+				}
+
 				toggleSectionHolder();
 				updateInSectionValue( fieldId, sectionId );
 			}
+		});
+	}
+
+	/**
+	 * @returns {HTMLElement}
+	 */
+	function getConfirmMoveRepeaterFieldModalContent() {
+		const content = div({
+			text: 'When a field is moved to a repeater, or from a repeater, entry meta will no longer be associated with the field.'
+		});
+		content.style.padding = '0 24px 12px';
+		return content;
+	}
+
+	/**
+	 * @param {function} confirmButtonFunction
+	 * @returns {HTMLElement}
+	 */
+	function getConfirmMoveRepeaterFieldModalFooter( confirmButtonFunction ) {
+		return div({
+			children: [
+				confirmButtonFunction(),
+				frmDom.modal.footerButton({
+					text: __( 'Cancel', 'formidable' ),
+					buttonType: 'cancel'
+				})
+			]
 		});
 	}
 
