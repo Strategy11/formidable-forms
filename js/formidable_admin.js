@@ -1073,27 +1073,39 @@ function frmAdminBuildJS() {
 		const previousSection         = ui.helper.get( 0 ).closest( 'ul.start_divider' );
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
-		if ( draggable.classList.contains( 'frm-new-field' ) ) {
-			insertNewFieldByDragging( draggable.id );
-		} else {
-			moveFieldThatAlreadyExists( draggable, placeholder );
-		}
-
 		const previousSectionId = previousSection ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 		const newSectionId      = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 
-		placeholder.remove();
-		ui.helper.remove();
-
-		const $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
-		maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields );
-		maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
-
-		if ( previousSectionId !== newSectionId ) {
-			updateFieldAfterMovingBetweenSections( jQuery( draggable ), previousSection );
+		if ( draggable.classList.contains( 'frm-new-field' ) ) {
+			insertNewFieldByDragging( draggable.id );
+		} else if ( previousSectionId === newSectionId ) {
+			moveFieldThatAlreadyExists( draggable, placeholder );
+		} else if ( previousSectionId !== newSectionId ) {
+			updateFieldAfterMovingBetweenSections(
+				jQuery( draggable ),
+				previousSection,
+				false,
+				newSection,
+				function() {
+					moveFieldThatAlreadyExists( draggable, placeholder );
+					afterDrop();
+				},
+				function() {
+					afterDrop();
+				}
+			);
 		}
 
-		debouncedSyncAfterDragAndDrop();
+		function afterDrop() {
+			placeholder.remove();
+			ui.helper.remove();
+
+			const $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
+			maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields );
+			maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
+	
+			debouncedSyncAfterDragAndDrop();
+		}
 	}
 
 	/**
@@ -1601,24 +1613,27 @@ function frmAdminBuildJS() {
 	/**
 	 * Update a field after it is dragged and dropped into, out of, or between sections
 	 *
-	 * @param {Object}  currentItem
-	 * @param {Object}  previousSection
-	 * @param {boolean} confirm
+	 * @param {Object}      currentItem
+	 * @param {Object}      previousSection
+	 * @param {boolean}     confirm
+	 * @param {HTMLElement} currentSection
+	 * @param {function}    successCallback
+	 * @param {function}    cancelCallback
 	 * @returns {void}
 	 */
-	function updateFieldAfterMovingBetweenSections( currentItem, previousSection, confirm = false ) {
+	function updateFieldAfterMovingBetweenSections( currentItem, previousSection, confirm, currentSection, successCallback, cancelCallback ) {
 		if ( ! currentItem.hasClass( 'form-field' ) ) {
 			// currentItem is a field group. Call for children recursively.
 			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
 				function() {
-					updateFieldAfterMovingBetweenSections( jQuery( this ), previousSection );
+					updateFieldAfterMovingBetweenSections( jQuery( this ), previousSection, confirm, currentSection, successCallback, cancelCallback );
 				}
 			);
 			return;
 		}
 
 		const fieldId        = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		const section        = getSectionForFieldPlacement( currentItem );
+		const section        = currentSection;
 		const formId         = getFormIdForFieldPlacement( section );
 		const sectionId      = getSectionIdForFieldPlacement( section );
 		const previousFormId = previousSection ? getFormIdForFieldPlacement( jQuery( previousSection.parentNode ) ) : 0;
@@ -1644,22 +1659,40 @@ function frmAdminBuildJS() {
 						});
 						button.addEventListener(
 							'click',
-							() => updateFieldAfterMovingBetweenSections( currentItem, previousSection, true )
+							() => updateFieldAfterMovingBetweenSections( currentItem, previousSection, true, currentSection, successCallback, cancelCallback )
 						);
 						return button;
 					};
 
-					const modal = frmDom.modal.maybeCreateModal(
+					let modal;
+
+					const getConfirmMoveRepeaterFieldCancelButton = () => {
+						const button = frmDom.modal.footerButton({
+							text: __( 'Cancel', 'formidable' ),
+							buttonType: 'cancel'
+						});
+						button.classList.add( 'dismiss' );
+						frmDom.util.onClickPreventDefault( button, () => {
+							cancelCallback();
+							jQuery( modal ).dialog( 'close' );
+						} );
+						return button;
+					};
+
+					console.log( 'confirm' );
+					modal = frmDom.modal.maybeCreateModal(
 						'frm_confirm_move_repeater_field',
 						{
 							title: __( 'Are you sure you want to move this field?', 'formidable' ),
 							content: getConfirmMoveRepeaterFieldModalContent(),
-							footer: getConfirmMoveRepeaterFieldModalFooter( getConfirmMoveRepeaterFieldConfirmButton )
+							footer: getConfirmMoveRepeaterFieldModalFooter( getConfirmMoveRepeaterFieldConfirmButton, getConfirmMoveRepeaterFieldCancelButton )
 						}
 					);
 					modal.classList.add( 'frm_common_modal' );
 					return;
 				}
+
+				successCallback();
 
 				toggleSectionHolder();
 				updateInSectionValue( fieldId, sectionId );
@@ -1682,14 +1715,11 @@ function frmAdminBuildJS() {
 	 * @param {function} confirmButtonFunction
 	 * @returns {HTMLElement}
 	 */
-	function getConfirmMoveRepeaterFieldModalFooter( confirmButtonFunction ) {
+	function getConfirmMoveRepeaterFieldModalFooter( confirmButtonFunction, cancelButtonFunction ) {
 		return div({
 			children: [
 				confirmButtonFunction(),
-				frmDom.modal.footerButton({
-					text: __( 'Cancel', 'formidable' ),
-					buttonType: 'cancel'
-				})
+				cancelButtonFunction()
 			]
 		});
 	}
