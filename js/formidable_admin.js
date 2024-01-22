@@ -317,6 +317,10 @@ function frmAdminBuildJS() {
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop, postBodyContent, $postBodyContent;
 
+	const dragState = {
+		dragging: false
+	};
+
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
 	}
@@ -956,6 +960,8 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStart( event, ui ) {
+		dragState.dragging = true;
+
 		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
 
@@ -1058,6 +1064,14 @@ function frmAdminBuildJS() {
 	}
 
 	function handleFieldDrop( _, ui ) {
+		if ( ! dragState.dragging ) {
+			// dragState.dragging is set to true on drag start.
+			// The deactivate event gets called for every droppable. This check to make sure it happens once.
+			return;
+		}
+
+		dragState.dragging = false;
+
 		const draggable = ui.draggable[0];
 		const placeholder = document.getElementById( 'frm_drag_placeholder' );
 
