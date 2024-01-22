@@ -8596,11 +8596,12 @@ function frmAdminBuildJS() {
 			success: function( response ) {
 				let saveAndReload;
 
-				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
-					if ( 'undefined' !== typeof response.saveAndReload ) {
-						saveAndReload = response.saveAndReload;
+				if ( 'string' !== typeof response && 'string' === typeof response?.data.message ) {
+					const { message: dataMessage, saveAndReload: dataSaveAndReload } = response.data;
+					if ( 'undefined' !== typeof dataSaveAndReload ) {
+						saveAndReload = dataSaveAndReload;
 					}
-					response = response.message;
+					response = dataMessage;
 				}
 
 				const error = extractErrorFromAddOnResponse( response );
@@ -8688,7 +8689,9 @@ function frmAdminBuildJS() {
 		actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
 		const messageElement = message[0];
-		messageElement.textContent = actionMap[action].message;
+		if ( messageElement ) {
+			messageElement.textContent = actionMap[action].message;
+		}
 
 		const parentElement = el[0].parentElement;
 		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
