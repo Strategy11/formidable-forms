@@ -7149,7 +7149,12 @@ function frmAdminBuildJS() {
 	}
 
 	function onlyOneActionMessage() {
-		infoModal( frmAdminJs.only_one_action );
+		let message = frmAdminJs.only_one_action;
+		if ( this.classList.contains( 'frm_on_submit_action' ) ) {
+			message = message.replace( 'one', 99 );
+		}
+
+		infoModal( message );
 	}
 
 	function addFormLogicRow() {
