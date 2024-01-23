@@ -9555,7 +9555,7 @@ function frmAdminBuildJS() {
 			e.stopPropagation();
 		}
 
-		if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
+		if ( e.target.classList.contains( 'frm-show-box' )  || ( e.target.parentElement && e.target.parentElement.classList.contains( 'frm-show-box' ) ) ) {
 			return;
 		}
 
@@ -9564,13 +9564,13 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
+		if ( sidebar.dataset.fills === e.target.id && typeof e.target.id !== 'undefined' ) {
 			return;
 		}
 
-		const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+		const isChild = e.target .closest( '#frm_adv_info' );
 
-		if ( ! isChild && sidebar.display !== 'none' ) {
+		if ( ! isChild && sidebar.style.display !== 'none' ) {
 			hideShortcodes( sidebar );
 		}
 	}
