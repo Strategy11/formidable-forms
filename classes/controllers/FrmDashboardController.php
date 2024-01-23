@@ -76,7 +76,7 @@ class FrmDashboardController {
 			return;
 		}
 
-		set_transient( self::$redirect_meta_name, 'no', 60 );
+		set_transient( self::REDIRECT_META_NAME, 'no', 60 );
 
 		// Prevent redirect with every activation.
 		if ( self::already_redirected() ) {
