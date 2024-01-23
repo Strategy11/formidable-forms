@@ -2156,9 +2156,12 @@ function frmAdminBuildJS() {
 		const newOptsContainer  = document.getElementById( `frm_field_${newFieldId}_opts` );
 		const origOptsContainer = document.getElementById( `frm_field_${originalFieldId}_opts` );
 
-		if ( ! newOptsContainer || ! origOptsContainer ) {
+		if ( ! newOptsContainer || ! origOptsContainer || ! newOptsContainer.dataset.key || ! origOptsContainer.dataset.key ) {
 			return;
 		}
+
+		const newFieldKey = newOptsContainer.dataset.key;
+		const origFieldKey = origOptsContainer.dataset.key;
 
 		const numberOfNewFieldOptions  = newOptsContainer.getElementsByTagName( 'li' ).length;
 		const numberOfOrigFieldOptions = origOptsContainer.getElementsByTagName( 'li' ).length;
@@ -2167,20 +2170,43 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const differenceInOpts = numberOfOrigFieldOptions - numberOfNewFieldOptions;
-		const origOpts         = origOptsContainer.querySelectorAll( 'li' );
-		const optsToCopy = Array.from( origOpts ).slice( Math.max( 0, origOpts.length - differenceInOpts ) );
-		optsToCopy.forEach ( ( li ) => {
+		const origOpts             = origOptsContainer.querySelectorAll( 'li' );
+		newOptsContainer.innerHTML = '';
+
+		let regex;
+		const tempDiv = document.createElement( 'div' );
+
+		origOpts.forEach ( li => {
 			let elementString = li.outerHTML;
-			const regex = new RegExp( originalFieldId, 'g' );
+			regex = new RegExp( originalFieldId, 'g' );
 			elementString = elementString.replace( regex, newFieldId );
-			const tempDiv = document.createElement( 'div' );
+			regex = new RegExp( origFieldKey, 'g' );
+			elementString = elementString.replace( regex, newFieldKey );
 			tempDiv.innerHTML = elementString;
 			const newOpt = tempDiv.firstChild;
 			const input = li.querySelector( `.field_${originalFieldId}_option` );
-			newOpt.querySelector( `.field_${newFieldId}_option` ).innerHTML = input.innerHTML;
+			newOpt.querySelector( `.field_${newFieldId}_option` ).value = input.value;
 			newOptsContainer.append( newOpt );
 		});
+
+		const origOptsPreview = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const newOptsPreview  = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+
+		if ( ! origOptsPreview || ! newOptsPreview ) {
+			return;
+		}
+
+		newOptsPreview.innerHTML = '';
+		for ( const child of origOptsPreview.children ) {
+			let elementHTML = child.outerHTML;
+			regex = new RegExp( originalFieldId, 'g' );
+			elementHTML = elementHTML.replace( regex, newFieldId );
+			regex = new RegExp( origFieldKey, 'g' );
+			elementHTML = elementHTML.replace( regex, newFieldKey );
+			tempDiv.innerHTML = elementHTML;
+			const newOpt = tempDiv.firstChild;
+			newOptsPreview.append( newOpt );
+		}
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
