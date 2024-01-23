@@ -2143,11 +2143,44 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
+				maybeDuplicateUnsavedOptions( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 			}
 		});
 		return false;
+	}
+
+	function maybeDuplicateUnsavedOptions( originalFieldId, newFieldHtml ) {
+		const newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
+		const newOptsContainer  = document.getElementById( `frm_field_${newFieldId}_opts` );
+		const origOptsContainer = document.getElementById( `frm_field_${originalFieldId}_opts` );
+
+		if ( ! newOptsContainer || ! origOptsContainer ) {
+			return;
+		}
+
+		const numberOfNewFieldOptions  = newOptsContainer.getElementsByTagName( 'li' ).length;
+		const numberOfOrigFieldOptions = origOptsContainer.getElementsByTagName( 'li' ).length;
+
+		if ( numberOfOrigFieldOptions === numberOfNewFieldOptions ) {
+			return;
+		}
+
+		const differenceInOpts = numberOfOrigFieldOptions - numberOfNewFieldOptions;
+		const origOpts         = origOptsContainer.querySelectorAll( 'li' );
+		const optsToCopy = Array.from( origOpts ).slice( Math.max( 0, origOpts.length - differenceInOpts ) );
+		optsToCopy.forEach ( ( li ) => {
+			let elementString = li.outerHTML;
+			const regex = new RegExp( originalFieldId, 'g' );
+			elementString = elementString.replace( regex, newFieldId );
+			const tempDiv = document.createElement( 'div' );
+			tempDiv.innerHTML = elementString;
+			const newOpt = tempDiv.firstChild;
+			const input = li.querySelector( `.field_${originalFieldId}_option` );
+			newOpt.querySelector( `.field_${newFieldId}_option` ).innerHTML = input.innerHTML;
+			newOptsContainer.append( newOpt );
+		});
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
