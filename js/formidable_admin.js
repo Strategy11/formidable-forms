@@ -9555,7 +9555,7 @@ function frmAdminBuildJS() {
 			e.stopPropagation();
 		}
 
-		if ( e.target.classList.contains( 'frm-show-box' )  || ( e.target.parentElement && e.target.parentElement.classList.contains( 'frm-show-box' ) ) ) {
+		if ( e.target.classList.contains( 'frm-show-box' ) || ( e.target.parentElement && e.target.parentElement.classList.contains( 'frm-show-box' ) ) ) {
 			return;
 		}
 
