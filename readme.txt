@@ -445,7 +445,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.8 =
 * New: New fields will no longer appear on the front end until the form builder is saved. This way a form can be used without partial incomplete changes while a form is being worked on.
 * New: An HSL color value can now be used in the visual styler. Previously these values would be prepended by # and PHP warnings would cause styles to break.
-* New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately.
+* New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately. This can be reverted to the previous behaviour using add_filter( 'frm_stripe_cancel_subscription_at_period_end', '__return_false' );.
 * Fix: On some sites, while using Google Chrome, some style card menu options would be missing. This includes the option to Delete a style or to Set a style as default.
 * Fix: Long forms loaded with AJAX were loading in smaller batches than intended, usually pulling only a few fields at a time. This has been restored to the intended batch size of 15 fields at a time.
 * Fix: A styling issue in some search search inputs has been fixed.
