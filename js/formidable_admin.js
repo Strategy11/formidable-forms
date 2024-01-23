@@ -8594,14 +8594,15 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				let saveAndReload;
 
-				if ( 'string' !== typeof response && 'string' === typeof response?.data.message ) {
-					const { message: dataMessage, saveAndReload: dataSaveAndReload } = response.data;
-					if ( 'undefined' !== typeof dataSaveAndReload ) {
-						saveAndReload = dataSaveAndReload;
+				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
+					if ( 'undefined' !== typeof response.saveAndReload ) {
+						saveAndReload = response.saveAndReload;
 					}
-					response = dataMessage;
+					response = response.message;
 				}
 
 				const error = extractErrorFromAddOnResponse( response );
@@ -8644,6 +8645,8 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				const error = extractErrorFromAddOnResponse( response );
 				if ( error ) {
 					addonError( error, el, proceed );
