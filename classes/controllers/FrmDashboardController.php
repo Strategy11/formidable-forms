@@ -6,6 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDashboardController {
 
 	/**
+	 * Option name used to store the time when auto redirected for welcome.
+	 */
+	const REDIRECT_META_NAME = 'frm_activation_redirect';
+
+	/**
 	 * Handle name used for registering controller scripts and style.
 	 *
 	 * @var string Handle name used for wp_register_script|wp_register_style
@@ -25,13 +30,6 @@ class FrmDashboardController {
 	 * @var string
 	 */
 	private static $option_meta_name = 'frm-dashboard-options';
-
-	/**
-	 * Option name used to store the time when auto redirected for welcome.
-	 *
-	 * @var string
-	 */
-	public static $redirect_meta_name = 'frm_activation_redirect';
 
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
@@ -160,7 +158,7 @@ class FrmDashboardController {
 						'label' => __( 'View All Entries', 'formidable' ),
 						'link'  => admin_url( 'admin.php?page=formidable-entries' ),
 					),
-					'show-placeholder' => 0 < (int) $counters_value['entries'] ? false : true,
+					'show-placeholder' => 0 >= (int) $counters_value['entries'],
 					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
@@ -442,10 +440,7 @@ class FrmDashboardController {
 	 * @return boolean
 	 */
 	public static function is_dashboard_page() {
-		if ( FrmAppHelper::is_admin_page( 'formidable-dashboard' ) ) {
-			return true;
-		}
-		return false;
+		return FrmAppHelper::is_admin_page( 'formidable-dashboard' );
 	}
 
 	/**
@@ -456,7 +451,7 @@ class FrmDashboardController {
 	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		return false !== array_search( $email, $subscribed_emails, true ) ? true : false;
+		return false !== in_array( $email, $subscribed_emails, true );
 	}
 
 	/**
@@ -476,7 +471,7 @@ class FrmDashboardController {
 	 */
 	public static function enqueue_assets() {
 
-		if ( false === self::is_dashboard_page() ) {
+		if ( ! self::is_dashboard_page() ) {
 			return;
 		}
 
@@ -499,10 +494,10 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function inbox_prepare_messages( $data ) {
-		foreach ( $data as $key => &$messages ) {
+		foreach ( $data as $key => $messages ) {
 			if ( in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
-				foreach ( $messages as &$message ) {
-					$message['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
+				foreach ( $messages as $key_msg => $message ) {
+					$data[ $key ][ $key_msg ]['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
 				}
 			}
 		}
@@ -520,7 +515,7 @@ class FrmDashboardController {
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
 	 * @param int $entries_count The total entries available.
-	 * @return string The YouTube video ID.
+	 * @return string|null The YouTube video ID.
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
 		$youtube_api    = new FrmYoutubeFeedApi();
@@ -552,7 +547,6 @@ class FrmDashboardController {
 		if ( false === array_search( $email, $subscribed_emails, true ) ) {
 			$subscribed_emails[] = $email;
 			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
-			return;
 		}
 	}
 

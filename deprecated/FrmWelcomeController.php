@@ -24,11 +24,11 @@ class FrmWelcomeController {
 	 * Performs a safe (local) redirect to the welcome screen
 	 * when the plugin is activated
 	 *
-	 * @deprecated 6.7
+	 * @deprecated x.x
 	 * @return void
 	 */
 	public static function redirect() {
-		_deprecated_function( __METHOD__, '6.7' );
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 
 	/**

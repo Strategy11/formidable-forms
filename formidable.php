@@ -135,8 +135,8 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  * @return void
  */
 function frm_maybe_install() {
-	if ( get_transient( FrmDashboardController::$redirect_meta_name ) !== 'no' ) {
-		set_transient( FrmDashboardController::$redirect_meta_name, FrmDashboardController::$page_slug, 60 );
+	if ( get_transient( FrmDashboardController::REDIRECT_META_NAME ) !== 'no' ) {
+		set_transient( FrmDashboardController::REDIRECT_META_NAME, FrmDashboardController::$page_slug, 60 );
 	}
 
 	FrmAppController::handle_activation();

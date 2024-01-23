@@ -272,10 +272,7 @@ class FrmDashboardHelper {
 		if ( null === $template['id'] ) {
 			return;
 		}
-
-		echo '<div class="' . esc_attr( $classes ) . '">' .
-			'<iframe src="https://www.youtube.com/embed/' . esc_attr( $template['id'] ) . '" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowfullscreen></iframe>' .
-			'</div>';
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
 	}
 
 	/**
@@ -329,8 +326,7 @@ class FrmDashboardHelper {
 			return;
 		}
 
-		echo '<div class="frm-flex-box frm-justify-between"><h2 class="frm-widget-heading">' . esc_html( $template['widget-heading'] ) . '</h2><a class="frm-widget-cta" href="' . esc_url( $template['cta']['link'] ) . '">' . esc_html( $template['cta']['label'] ) . '</a></div>';
-		self::load_entries_list_template();
+		self::load_entries_list_template( $template );
 	}
 
 	/**
@@ -338,7 +334,7 @@ class FrmDashboardHelper {
 	 *
 	 * @return void
 	 */
-	private static function load_entries_list_template() {
+	private static function load_entries_list_template( $template ) {
 		add_filter(
 			'formidable_page_formidable_entries_per_page',
 			function() {
@@ -351,13 +347,6 @@ class FrmDashboardHelper {
 		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
 		$wp_list_table->prepare_items();
 
-		$wp_list_table->display(
-			array(
-				'display-top-nav'        => false,
-				'display-bottom-nav'     => false,
-				'display-bottom-headers' => false,
-			)
-		);
-
+		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/entries-list.php';
 	}
 }

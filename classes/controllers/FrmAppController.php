@@ -184,6 +184,15 @@ class FrmAppController {
 		);
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );
+
+		/**
+		 * Filter to change FF wrapper background to grey.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $is_grey_page
+		 * @return bool
+		 */
 		return apply_filters( 'frm_is_grey_page', $is_grey_page );
 	}
 
