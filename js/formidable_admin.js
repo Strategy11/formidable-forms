@@ -2166,21 +2166,14 @@ function frmAdminBuildJS() {
 
 		const args = { originalFieldId, originalFieldKey, newFieldId, newFieldKey };
 
-		const origOpts = origOptsContainer.querySelectorAll( 'li' );
+		copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args );
 
-		copyUnsavedDeleteOptions( origOpts, newOptsContainer, args );
-
-		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
-		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
-
-		if ( ! originalFieldOpts || ! newFieldOpts ) {
-			return;
-		}
-
-		copyUnsavedOptions( newFieldOpts, originalFieldOpts, args )
+		copyUnsavedOptions( args )
 	}
 
-	function copyUnsavedDeleteOptions( origOpts, newOptsContainer, args ) {
+	function copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args ) {
+		const origOpts = origOptsContainer.querySelectorAll( 'li' );
+
 		const { originalFieldId, newFieldId } = args;
 
 		for ( li of origOpts ) {
@@ -2203,7 +2196,16 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function copyUnsavedOptions( newFieldOpts, originalFieldOpts, args ) {
+	function copyUnsavedOptions( args ) {
+		const { originalFieldId, newFieldId } = args;
+
+		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+
+		if ( ! originalFieldOpts || ! newFieldOpts ) {
+			return;
+		}
+
 		newFieldOpts.innerHTML = '';
 		for ( const child of originalFieldOpts.children ) {
 			const newOpt = replaceElementAttribute( child, args );
