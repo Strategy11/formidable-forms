@@ -2154,8 +2154,8 @@ function frmAdminBuildJS() {
 	/**
 	 * Duplicates field options that are not saved after being modified to the new field.
 	 *
-	 * @param {Number} originalFieldId 
-	 * @param {string} newFieldHtml 
+	 * @param {Number} originalFieldId
+	 * @param {string} newFieldHtml
 	 * @returns {void}
 	 */
 	function maybeDuplicateUnsavedOptions( originalFieldId, newFieldHtml ) {
@@ -2175,15 +2175,15 @@ function frmAdminBuildJS() {
 
 		copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args );
 
-		copyUnsavedOptions( args )
+		copyUnsavedOptions( args );
 	}
 
 	/**
 	 * Syncs the options editing elements used to add,modify or delete options in the field options area.
 	 *
-	 * @param {HTMLElement} origOptsContainer 
-	 * @param {HTMLElement} newOptsContainer 
-	 * @param {object} args 
+	 * @param {HTMLElement} origOptsContainer
+	 * @param {HTMLElement} newOptsContainer
+	 * @param {object} args
 	 * @returns {void}
 	 */
 	function copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args ) {
@@ -2218,7 +2218,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Syncs the options in the form preview area.
 	 *
-	 * @param {object} args 
+	 * @param {object} args
 	 * @returns {void}
 	 */
 	function copyUnsavedOptions( args ) {
