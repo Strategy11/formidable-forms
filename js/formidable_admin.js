@@ -2184,22 +2184,22 @@ function frmAdminBuildJS() {
 		const { originalFieldId, newFieldId } = args;
 
 		for ( li of origOpts ) {
-			const newOpt           = replaceElementAttribute( li, args );
+			const newOptLi         = replaceElementAttribute( li, args );
 			const originalOptValue = li.querySelector( `.field_${originalFieldId}_option` );
-			const newOptValue      = newOpt.querySelector( `.field_${newFieldId}_option` );
+			const newOptValue      = newOptLi.querySelector( `.field_${newFieldId}_option` );
 
 			if ( newOptValue && originalOptValue ) {
 				newOptValue.value = originalOptValue.value;
 			}
 
-			const newOptKey      = newOpt.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` );
+			const newOptKey      = newOptLi.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` );
 			const originalOptKey = li.querySelector( `#field_key_${originalFieldId}-${li.dataset.optkey}` );
 
 			if ( newOptKey && originalOptKey ) {
 				newOptKey.value = originalOptKey.value;
 			}
 
-			newOptsContainer.append( newOpt );
+			newOptsContainer.append( newOptLi );
 		}
 	}
 
@@ -2214,11 +2214,11 @@ function frmAdminBuildJS() {
 	function replaceElementAttribute( element, args ) {
 		const { originalFieldId, originalFieldKey, newFieldId, newFieldKey } = args;
 
-		const tempDiv     = document.createElement( 'div' );
 		let regex         = new RegExp( originalFieldId, 'g' );
 		let elementString = element.outerHTML.replace( regex, newFieldId );
 		regex             = new RegExp( originalFieldKey, 'g' );
 		elementString     = elementString.replace( regex, newFieldKey );
+		const tempDiv     = document.createElement( 'div' );
 		tempDiv.innerHTML = elementString;
 
 		return  tempDiv.firstChild;
