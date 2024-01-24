@@ -6968,13 +6968,11 @@ function frmAdminBuildJS() {
 		};
 
 		const createModalTriggerIcon = () => {
-			const modalTriggerIcon = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
-			modalTriggerIcon.className.baseVal = 'frmsvg frm-show-box';
-			const useElement = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
-			useElement.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
-			modalTriggerIcon.appendChild( useElement );
+			const moreIcon = frmDom.svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm', 'frm-show-box' ] });
+			moreIcon.firstElementChild.removeAttribute( 'href' );
+			moreIcon.firstElementChild.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', '#frm_more_horiz_solid_icon' );
 
-			return modalTriggerIcon;
+			return moreIcon;
 		};
 
 		wrapTextareaWithIconContainer( fieldSettingsContainer );
