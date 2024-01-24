@@ -2166,26 +2166,37 @@ function frmAdminBuildJS() {
 		const origOpts             = origOptsContainer.querySelectorAll( 'li' );
 		newOptsContainer.innerHTML = '';
 
+		const args = { originalFieldId, originalFieldKey, newFieldId, newFieldKey };
+
 		origOpts.forEach ( li => {
-			const newOpt = replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, li );
+			const newOpt = replaceElementAttribute( li, args );
+			const input  = li.querySelector( `.field_${originalFieldId}_option` );
+			newOpt.querySelector( `.field_${newFieldId}_option` ).value = input.value;
 			newOptsContainer.append( newOpt );
 		});
 
-		const origOptsPreview = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
-		const newOptsPreview  = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const newFieldOpts  = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
 
-		if ( ! origOptsPreview || ! newOptsPreview ) {
+		if ( ! originalFieldOpts || ! newFieldOpts ) {
 			return;
 		}
 
-		newOptsPreview.innerHTML = '';
-		for ( const child of origOptsPreview.children ) {
-			const newOpt = replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, child );
-			newOptsPreview.append( newOpt );
+		copyUnsavedOptions( newFieldOpts, originalFieldOpts, args )
+
+	}
+
+	function copyUnsavedOptions( newFieldOpts, originalFieldOpts, args ) {
+		newFieldOpts.innerHTML = '';
+		for ( const child of originalFieldOpts.children ) {
+			const newOpt = replaceElementAttribute( child, args );
+			newFieldOpts.append( newOpt );
 		}
 	}
 
-	function replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, element ) {
+	function replaceElementAttribute( element, args ) {
+		const { originalFieldId, originalFieldKey, newFieldId, newFieldKey } = args;
+
 		const tempDiv     = document.createElement( 'div' );
 		let regex         = new RegExp( originalFieldId, 'g' );
 		let elementString = element.outerHTML.replace( regex, newFieldId );
