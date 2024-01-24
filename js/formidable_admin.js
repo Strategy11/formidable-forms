@@ -2160,32 +2160,14 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const newFieldKey = newOptsContainer.dataset.key;
-		const origFieldKey = origOptsContainer.dataset.key;
-
-		const numberOfNewFieldOptions  = newOptsContainer.getElementsByTagName( 'li' ).length;
-		const numberOfOrigFieldOptions = origOptsContainer.getElementsByTagName( 'li' ).length;
-
-		if ( numberOfOrigFieldOptions === numberOfNewFieldOptions ) {
-			return;
-		}
+		const newFieldKey      = newOptsContainer.dataset.key;
+		const originalFieldKey = origOptsContainer.dataset.key;
 
 		const origOpts             = origOptsContainer.querySelectorAll( 'li' );
 		newOptsContainer.innerHTML = '';
 
-		let regex;
-		const tempDiv = document.createElement( 'div' );
-
 		origOpts.forEach ( li => {
-			let elementString = li.outerHTML;
-			regex = new RegExp( originalFieldId, 'g' );
-			elementString = elementString.replace( regex, newFieldId );
-			regex = new RegExp( origFieldKey, 'g' );
-			elementString = elementString.replace( regex, newFieldKey );
-			tempDiv.innerHTML = elementString;
-			const newOpt = tempDiv.firstChild;
-			const input = li.querySelector( `.field_${originalFieldId}_option` );
-			newOpt.querySelector( `.field_${newFieldId}_option` ).value = input.value;
+			const newOpt = replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, li );
 			newOptsContainer.append( newOpt );
 		});
 
@@ -2198,15 +2180,20 @@ function frmAdminBuildJS() {
 
 		newOptsPreview.innerHTML = '';
 		for ( const child of origOptsPreview.children ) {
-			let elementHTML = child.outerHTML;
-			regex = new RegExp( originalFieldId, 'g' );
-			elementHTML = elementHTML.replace( regex, newFieldId );
-			regex = new RegExp( origFieldKey, 'g' );
-			elementHTML = elementHTML.replace( regex, newFieldKey );
-			tempDiv.innerHTML = elementHTML;
-			const newOpt = tempDiv.firstChild;
+			const newOpt = replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, child );
 			newOptsPreview.append( newOpt );
 		}
+	}
+
+	function replaceElementAttribute( originalFieldId, originalFieldKey, newFieldId, newFieldKey, element ) {
+		const tempDiv     = document.createElement( 'div' );
+		let regex         = new RegExp( originalFieldId, 'g' );
+		let elementString = element.outerHTML.replace( regex, newFieldId );
+		regex             = new RegExp( originalFieldKey, 'g' );
+		elementString     = elementString.replace( regex, newFieldKey );
+		tempDiv.innerHTML = elementString;
+
+		return  tempDiv.firstChild;
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
