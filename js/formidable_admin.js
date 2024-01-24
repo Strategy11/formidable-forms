@@ -9568,7 +9568,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const isChild = e.target .closest( '#frm_adv_info' );
+		const isChild = e.target.closest( '#frm_adv_info' );
 
 		if ( ! isChild && sidebar.style.display !== 'none' ) {
 			hideShortcodes( sidebar );
