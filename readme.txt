@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 6.8 =
+* New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
 * New: New fields will no longer appear on the front end until the form builder is saved. This way a form can be used without partial incomplete changes while a form is being worked on.
 * New: An HSL color value can now be used in the visual styler. Previously these values would be prepended by # and PHP warnings would cause styles to break.
 * New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately. This can be reverted to the previous behaviour using add_filter( 'frm_stripe_cancel_subscription_at_period_end', '__return_false' );.
