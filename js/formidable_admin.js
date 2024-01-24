@@ -2159,22 +2159,16 @@ function frmAdminBuildJS() {
 		if ( ! newOptsContainer || ! origOptsContainer || ! newOptsContainer.dataset.key || ! origOptsContainer.dataset.key ) {
 			return;
 		}
+		newOptsContainer.innerHTML = '';
 
 		const newFieldKey      = newOptsContainer.dataset.key;
 		const originalFieldKey = origOptsContainer.dataset.key;
 
-		const origOpts             = origOptsContainer.querySelectorAll( 'li' );
-		newOptsContainer.innerHTML = '';
-
 		const args = { originalFieldId, originalFieldKey, newFieldId, newFieldKey };
 
-		origOpts.forEach ( li => {
-			const newOpt = replaceElementAttribute( li, args );
-			const input  = li.querySelector( `.field_${originalFieldId}_option` );
-			newOpt.querySelector( `.field_${newFieldId}_option` ).value = input.value;
-			newOpt.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` ).value = li.querySelector( `#field_key_${originalFieldId}-${li.dataset.optkey}` ).value;
-			newOptsContainer.append( newOpt );
-		});
+		const origOpts = origOptsContainer.querySelectorAll( 'li' );
+
+		copyUnsavedDeleteOptions( origOpts, newOptsContainer, args );
 
 		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
 		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
@@ -2184,7 +2178,29 @@ function frmAdminBuildJS() {
 		}
 
 		copyUnsavedOptions( newFieldOpts, originalFieldOpts, args )
+	}
 
+	function copyUnsavedDeleteOptions( origOpts, newOptsContainer, args ) {
+		const { originalFieldId, newFieldId } = args;
+
+		for ( li of origOpts ) {
+			const newOpt           = replaceElementAttribute( li, args );
+			const originalOptValue = li.querySelector( `.field_${originalFieldId}_option` );
+			const newOptValue      = newOpt.querySelector( `.field_${newFieldId}_option` );
+
+			if ( newOptValue && originalOptValue ) {
+				newOptValue.value = originalOptValue.value;
+			}
+
+			const newOptKey      = newOpt.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` );
+			const originalOptKey = li.querySelector( `#field_key_${originalFieldId}-${li.dataset.optkey}` );
+
+			if ( newOptKey && originalOptKey ) {
+				newOptKey.value = originalOptKey.value;
+			}
+
+			newOptsContainer.append( newOpt );
+		}
 	}
 
 	function copyUnsavedOptions( newFieldOpts, originalFieldOpts, args ) {
