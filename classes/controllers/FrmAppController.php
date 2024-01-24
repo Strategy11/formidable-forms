@@ -138,9 +138,9 @@ class FrmAppController {
 			'formidable-styles',
 			'formidable-styles2',
 			'formidable-inbox',
-			'formidable-welcome',
 			'formidable-applications',
 			FrmFormTemplatesController::PAGE_SLUG,
+			FrmOnboardingWizardController::PAGE_SLUG,
 		);
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {

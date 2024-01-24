@@ -164,7 +164,7 @@ class FrmSolution {
 			return;
 		}
 
-		delete_transient( 'frm_activation_redirect' );
+		delete_transient( FrmOnboardingWizardController::REDIRECTION_SETTINGS['TRANSIENT_NAME'] );
 
 		// Initial install.
 		wp_safe_redirect( $this->settings_link() );
@@ -673,7 +673,7 @@ class FrmSolution {
 	 * @return bool
 	 */
 	protected function is_current_plugin() {
-		$to_redirect = get_transient( 'frm_activation_redirect' );
+		$to_redirect = get_transient( FrmOnboardingWizardController::REDIRECTION_SETTINGS['TRANSIENT_NAME'] );
 		return $to_redirect === $this->plugin_slug && empty( $this->is_complete() );
 	}
 
