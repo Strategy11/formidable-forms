@@ -12,24 +12,13 @@ class FrmDashboardController {
 
 	/**
 	 * Handle name used for registering controller scripts and style.
-	 *
-	 * @var string Handle name used for wp_register_script|wp_register_style
 	 */
-	public static $page_slug = 'formidable-dashboard';
-
-	/**
-	 * Welcome banner cookie name. When welcome banner is closed we store its status into a cookie.
-	 *
-	 * @var string
-	 */
-	private static $banner_closed_cookie_name = 'frm-welcome-banner-closed';
+	const PAGE_SLUG = 'formidable-dashboard';
 
 	/**
 	 * Option name used to store the dashboard options into db options table.
-	 *
-	 * @var string
 	 */
-	private static $option_meta_name = 'frm-dashboard-options';
+	const OPTION_META_NAME = 'frm-dashboard-options';
 
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
@@ -60,7 +49,7 @@ class FrmDashboardController {
 	 */
 	public static function redirect() {
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( $current_page === self::$page_slug ) {
+		if ( $current_page === self::PAGE_SLUG ) {
 			// Prevent endless loop.
 			return;
 		}
@@ -84,7 +73,7 @@ class FrmDashboardController {
 		}
 
 		// Initial install.
-		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=' . self::$page_slug ) ) );
+		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) ) );
 		exit;
 	}
 
@@ -420,7 +409,7 @@ class FrmDashboardController {
 	}
 
 	/**
-	 * Check if user has closed the welcome banner. The status of banner is saved in a cookie: self::$banner_closed_cookie_name.
+	 * Check if user has closed the welcome banner. The status of banner is saved in db options.
 	 *
 	 * @return boolean
 	 */
@@ -460,8 +449,8 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function register_assets() {
-		wp_register_script( self::$page_slug, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
-		wp_register_style( self::$page_slug, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+		wp_register_script( self::PAGE_SLUG, FrmAppHelper::plugin_url() . '/js/formidable_dashboard.js', array( 'formidable_admin' ), FrmAppHelper::plugin_version(), true );
+		wp_register_style( self::PAGE_SLUG, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
 	}
 
 	/**
@@ -475,8 +464,8 @@ class FrmDashboardController {
 			return;
 		}
 
-		wp_enqueue_style( self::$page_slug );
-		wp_enqueue_script( self::$page_slug );
+		wp_enqueue_style( self::PAGE_SLUG );
+		wp_enqueue_script( self::PAGE_SLUG );
 	}
 
 	/**
@@ -575,7 +564,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function get_dashboard_options( $option_name = null ) {
-		$options = get_option( self::$option_meta_name, array() );
+		$options = get_option( self::OPTION_META_NAME, array() );
 		if ( null !== $option_name && ! isset( $options[ $option_name ] ) ) {
 			return array();
 		}
@@ -596,7 +585,7 @@ class FrmDashboardController {
 	private static function update_dashboard_options( $data, $option_name ) {
 		$options                 = self::get_dashboard_options();
 		$options[ $option_name ] = $data;
-		update_option( self::$option_meta_name, $options, 'no' );
+		update_option( self::OPTION_META_NAME, $options, 'no' );
 	}
 
 	/**

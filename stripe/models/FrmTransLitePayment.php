@@ -84,15 +84,16 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 			'total' => array(),
 		);
 
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return $data;
+		}
+
 		$where = array();
 		if ( null !== $from_date ) {
 			$where['created_at >'] = $from_date;
 		}
 		if ( null !== $to_date ) {
 			$where['created_at <'] = $to_date . ' 23:59:59';
-		}
-		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
-			return $data;
 		}
 
 		// Do not collect test payment, this is a new feature of Stripe lite.

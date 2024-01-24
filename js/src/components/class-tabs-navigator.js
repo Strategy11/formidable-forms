@@ -4,8 +4,14 @@ export class frmTabsNavigator {
 		if ( 'undefined' === typeof wrapper ) {
 			return;
 		}
+
+		this.wrapper = document.querySelector( wrapper );
+
+		if ( null === this.wrapper ) {
+			return;
+		}
+
 		this.flexboxSlidesGap = '16px';
-		this.wrapper          = document.querySelector( wrapper );
 		this.navs             = this.wrapper.querySelectorAll( '.frm-tabs-navs ul > li' );
 		this.slideTrackLine   = this.wrapper.querySelector( '.frm-tabs-active-underline' );
 		this.slideTrack       = this.wrapper.querySelector( '.frm-tabs-slide-track' );
@@ -15,7 +21,7 @@ export class frmTabsNavigator {
 	}
 
 	init() {
-		if ( null === this.wrapper || null === this.navs || null === this.trackLine || null === this.slideTrack || null === this.slides ) {
+		if ( null === this.wrapper || ! this.navs.length || null === this.trackLine || null === this.slideTrack || ! this.slides.length ) {
 			return;
 		}
 		this.navs.forEach( ( nav, index ) => {

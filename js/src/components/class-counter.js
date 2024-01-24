@@ -12,11 +12,7 @@ export class frmCounter {
 			return;
 		}
 
-		this.template = 'default';
-		if ( element.dataset.type ) {
-			this.template = element.dataset.type;
-		}
-
+		this.template        = element.dataset.type || 'default';
 		this.element         = element;
 		this.value           = parseInt( element.dataset.counter, 10 );
 		this.activeCounter   = 0;

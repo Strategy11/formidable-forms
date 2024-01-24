@@ -62,7 +62,7 @@ export class frmAnimate {
 		if ( ! window.frmGlobal ) {
 			return '';
 		}
-		return window.frmGlobal.url + '/css/' + this.cssFilePath  ;
+		return window.frmGlobal.url + '/css/' + this.cssFilePath;
 	}
 
 	loadCssFile() {

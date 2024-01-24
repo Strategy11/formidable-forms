@@ -10239,7 +10239,7 @@ function frmAdminBuildJS() {
 							dismissedMessage.querySelector( '.frm-inbox-message-heading' ).removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
 							dismissedMessagesWrapper.append( dismissedMessage );
 						}
-						if ( 0 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length - 1 ) {
+						if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
 							document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
 							message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
 						}
