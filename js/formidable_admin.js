@@ -2151,6 +2151,13 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	/**
+	 * Duplicates field options that are not saved after being modified to the new field.
+	 *
+	 * @param {Number} originalFieldId 
+	 * @param {string} newFieldHtml 
+	 * @returns {void}
+	 */
 	function maybeDuplicateUnsavedOptions( originalFieldId, newFieldHtml ) {
 		const newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
 		const newOptsContainer  = document.getElementById( `frm_field_${newFieldId}_opts` );
@@ -2171,12 +2178,24 @@ function frmAdminBuildJS() {
 		copyUnsavedOptions( args )
 	}
 
+	/**
+	 * Syncs the options editing elements used to add,modify or delete options in the field options area.
+	 *
+	 * @param {HTMLElement} origOptsContainer 
+	 * @param {HTMLElement} newOptsContainer 
+	 * @param {object} args 
+	 * @returns {void}
+	 */
 	function copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args ) {
-		const origOpts = origOptsContainer.querySelectorAll( 'li' );
+		const originalOpts = origOptsContainer.querySelectorAll( 'li' );
+
+		if ( ! originalOpts ) {
+			return;
+		}
 
 		const { originalFieldId, newFieldId } = args;
 
-		for ( li of origOpts ) {
+		for ( li of originalOpts ) {
 			const newOptLi         = replaceElementAttribute( li, args );
 			const originalOptValue = li.querySelector( `.field_${originalFieldId}_option` );
 			const newOptValue      = newOptLi.querySelector( `.field_${newFieldId}_option` );
@@ -2196,6 +2215,12 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Syncs the options in the form preview area.
+	 *
+	 * @param {object} args 
+	 * @returns {void}
+	 */
 	function copyUnsavedOptions( args ) {
 		const { originalFieldId, newFieldId } = args;
 
