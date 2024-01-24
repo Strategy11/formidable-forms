@@ -8594,6 +8594,8 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				let saveAndReload;
 
 				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
@@ -8643,6 +8645,8 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				const error = extractErrorFromAddOnResponse( response );
 				if ( error ) {
 					addonError( error, el, proceed );
@@ -8688,7 +8692,9 @@ function frmAdminBuildJS() {
 		actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
 		const messageElement = message[0];
-		messageElement.textContent = actionMap[action].message;
+		if ( messageElement ) {
+			messageElement.textContent = actionMap[action].message;
+		}
 
 		const parentElement = el[0].parentElement;
 		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
