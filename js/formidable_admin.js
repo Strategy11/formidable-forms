@@ -2172,11 +2172,12 @@ function frmAdminBuildJS() {
 			const newOpt = replaceElementAttribute( li, args );
 			const input  = li.querySelector( `.field_${originalFieldId}_option` );
 			newOpt.querySelector( `.field_${newFieldId}_option` ).value = input.value;
+			newOpt.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` ).value = li.querySelector( `#field_key_${originalFieldId}-${li.dataset.optkey}` ).value;
 			newOptsContainer.append( newOpt );
 		});
 
 		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
-		const newFieldOpts  = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
 
 		if ( ! originalFieldOpts || ! newFieldOpts ) {
 			return;
