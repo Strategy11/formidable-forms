@@ -135,8 +135,12 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  * @return void
  */
 function frm_maybe_install() {
-	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
-		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
+	if ( get_transient( FrmOnboardingWizardController::REDIRECTION_SETTINGS['TRANSIENT_NAME'] ) !== 'no' ) {
+		set_transient(
+			FrmOnboardingWizardController::REDIRECTION_SETTINGS['TRANSIENT_NAME'],
+			FrmOnboardingWizardController::REDIRECTION_SETTINGS['TRANSIENT_VALUE'],
+			60
+		);
 	}
 
 	FrmAppController::handle_activation();
