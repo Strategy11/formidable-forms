@@ -275,7 +275,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			const successElement = document.querySelectorAll( '.frm-confirm-msg [data-success]' );
 			if ( successElement.length ) {
 				successElement.forEach( function( element ) {
-					element.innerHTML = purifyHtml( element.getAttribute( 'data-success' ) );
+					element.innerHTML = frmAdminBuild.purifyHtml( element.getAttribute( 'data-success' ) );
 				});
 			}
 		},
@@ -10440,7 +10440,8 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt,
 		installNewForm,
-		toggleAddonState
+		toggleAddonState,
+		purifyHtml
 	};
 }
 
