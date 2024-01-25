@@ -7155,7 +7155,7 @@ function frmAdminBuildJS() {
 		if ( 'undefined' !== typeof limit ) {
 			limit = parseInt( limit );
 			if ( limit > 1 ) {
-				message = message.replace( 'one', limit ).replace( 'Please edit the existing form action.', '', limit ).trim();
+				message = message.replace( __( 'one', 'formidable' ), limit ).replace( __( 'Please edit the existing form action.', 'formidable' ), '', limit ).trim();
 			}
 		}
 
