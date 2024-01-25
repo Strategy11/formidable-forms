@@ -6968,11 +6968,7 @@ function frmAdminBuildJS() {
 		};
 
 		const createModalTriggerIcon = () => {
-			const moreIcon = frmDom.svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm', 'frm-show-box' ] });
-			moreIcon.firstElementChild.removeAttribute( 'href' );
-			moreIcon.firstElementChild.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', '#frm_more_horiz_solid_icon' );
-
-			return moreIcon;
+			return frmDom.svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm-show-box' ] });
 		};
 
 		wrapTextareaWithIconContainer( fieldSettingsContainer );
@@ -7876,6 +7872,7 @@ function frmAdminBuildJS() {
 			moreIcon = getIconForInput( input );
 			if ( moreIcon.tagName === 'use' ) {
 				moreIcon = moreIcon.firstElementChild;
+
 				if ( moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ).indexOf( 'frm_close_icon' ) === -1 ) {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
@@ -7905,6 +7902,11 @@ function frmAdminBuildJS() {
 		}
 		if ( moreIcon.tagName === 'use' ) {
 			classes = moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
+
+			if ( null === classes ) {
+				// If the deprecated xlink:href is not defined, check for href.
+				classes = moreIcon.getAttribute( 'href' );
+			}
 		}
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
