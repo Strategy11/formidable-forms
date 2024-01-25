@@ -984,15 +984,17 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @access public
+	 * @param array $args
 	 */
-	public function display() {
+	public function display( $args = array() ) {
 		$singular     = $this->_args['singular'];
 		$tbody_params = array();
 		if ( $singular ) {
 			$tbody_params['data-wp-lists'] = 'list:' . $singular;
 		}
-
-		$this->display_tablenav( 'top' );
+		if ( $this->should_display( $args, 'display-top-nav' ) ) {
+			$this->display_tablenav( 'top' );
+		}
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
@@ -1007,7 +1009,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) ) { ?>
+			<?php if ( $this->has_min_items( 1 ) && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
@@ -1016,7 +1018,21 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
-		$this->display_tablenav( 'bottom' );
+		if ( $this->should_display( $args, 'display-bottom-nav' ) ) {
+			$this->display_tablenav( 'bottom' );
+		}
+	}
+
+	/**
+	 * Determines if a particular feature or element should be displayed.
+	 *
+	 * @param array  $args An associative array of arguments.
+	 * @param string $settings The specific setting key to check within the arguments array.
+	 *
+	 * @return bool Returns true if the setting is not set or if it is not false; otherwise, returns false.
+	 */
+	protected function should_display( $args, $settings ) {
+		return ! isset( $args[ $settings ] ) || false !== $args[ $settings ];
 	}
 
 	/**

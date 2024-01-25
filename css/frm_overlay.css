@@ -62,29 +62,5 @@ body.admin-bar:not(.frm-full-screen) .frm-overlay--close {
 .frm-overlay--heading,
 .frm-overlay--copy,
 .frm-overlay--cta a {
-	opacity:0.0;
-	transform: matrix3d( 1,0,0,0,0,1,0,-0.00095,0,0,1,0,0,0,0,1 ) translateY( 15px ) scale3d( 0.92, 0.92, 1 );
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--hero-image,
-.frm-overlay--wrapper.frm-active .frm-overlay--heading,
-.frm-overlay--wrapper.frm-active .frm-overlay--copy,
-.frm-overlay--wrapper.frm-active .frm-overlay--cta a {
-	opacity:1;
-	transform: matrix3d( 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 ) translateY( 0px ) scale3d( 1, 1, 1 );
-	transition: 0.35s transform, 0.5s opacity linear;
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--hero-image {
-	transition-delay: 0.05s;
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--heading {
-	transition-delay: 0.05s;
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--copy {
-	transition-delay: 0.1s;
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--cta a:nth-child(1) {
-	transition-delay: 0.15s;
-}
-.frm-overlay--wrapper.frm-active .frm-overlay--cta a:nth-child(2) {
-	transition-delay: 0.2s;
+	opacity: 0.0;
 }
