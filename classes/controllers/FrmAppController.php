@@ -173,7 +173,7 @@ class FrmAppController {
 	/**
 	 * Add a grey bg instead of white.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return bool
 	 */
@@ -188,7 +188,7 @@ class FrmAppController {
 		/**
 		 * Filter to change FF wrapper background to grey.
 		 *
-		 * @since x.x
+		 * @since 6.8
 		 *
 		 * @param bool $is_grey_page
 		 * @return bool
@@ -197,7 +197,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param array $pages A list of page names to check.
 	 * @return bool
@@ -588,7 +588,7 @@ class FrmAppController {
 	 * Get the current page and check for a possible function to trigger.
 	 * If a class name matches the page name, and the class has a load_page() method, trigger it.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */

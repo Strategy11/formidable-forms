@@ -4122,7 +4122,7 @@ class FrmAppHelper {
 	 * Lite license copy.
 	 * Used in FrmDashboardController & FrmSettingsController
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return string
 	 */

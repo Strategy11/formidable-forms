@@ -746,7 +746,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Get the total number of templates.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return int
 	 */

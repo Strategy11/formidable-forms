@@ -34,7 +34,7 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return array
 	 */

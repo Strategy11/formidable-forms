@@ -111,7 +111,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		/**
 		 * Allows updating form ids used to query fields for displaying options with in the Payment action.
 		 *
-		 * @since x.x
+		 * @since 6.8
 		 *
 		 * @param int|int[] $form_ids
 		 * @param int $form_id

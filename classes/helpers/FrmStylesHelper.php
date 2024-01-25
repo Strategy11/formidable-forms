@@ -219,7 +219,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $hsl
 	 * @return string|null Null if it fails to parse the HSL string.
@@ -524,7 +524,7 @@ class FrmStylesHelper {
 	 * If a color looks like a hex code without the #, prepend the #.
 	 * A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $color
 	 * @return bool

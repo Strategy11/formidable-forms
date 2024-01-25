@@ -164,7 +164,7 @@ class FrmDashboardHelper {
 	/**
 	 * Show buttons to in the license key box.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param array  $buttons        A list of buttons to show.
 	 * @param string $button_classes Used from the global settings page.
@@ -191,7 +191,7 @@ class FrmDashboardHelper {
 	/**
 	 * Dashboard - license buttons for Lite.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return array
 	 */

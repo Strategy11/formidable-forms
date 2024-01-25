@@ -69,7 +69,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Gets addon info.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param int $addon_id Addon ID.
 	 * @return array|false
