@@ -10,15 +10,6 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
-	 *
-	 * @return void
-	 */
-	public static function menu() {
-		_deprecated_function( __METHOD__, '6.7.1' );
-	}
-
-	/**
-	 * @since 4.05
 	 */
 	public static function get_notice_count() {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
@@ -40,15 +31,6 @@ class FrmInboxController {
 		echo '<button class="frm-button-secondary" id="frm-dismiss-inbox" type="button">' .
 			esc_html__( 'Dismiss All', 'formidable' ) .
 			'</button>';
-	}
-
-	/**
-	 * @since 4.05
-	 *
-	 * @return void
-	 */
-	public static function inbox() {
-		_deprecated_function( __METHOD__, '6.7.1' );
 	}
 
 	/**
@@ -151,4 +133,25 @@ class FrmInboxController {
 			)
 		);
 	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function menu() {
+		_deprecated_function( __METHOD__, '6.8' );
+	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function inbox() {
+		_deprecated_function( __METHOD__, '6.8' );
+	}
+
 }
