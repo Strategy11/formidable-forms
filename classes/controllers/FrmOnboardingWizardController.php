@@ -35,18 +35,28 @@ class FrmOnboardingWizardController {
 	 *
 	 * @var string REQUIRED_CAPABILITY The capability required to access the Onboarding Wizard.
 	 */
-	const REQUIRED_CAPABILITY = 'read';
+	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
 	/**
-	 * Associative array containing the settings for managing the redirection to the Onboarding Wizard page.
+	 * Transient name used for managing redirection to the Onboarding Wizard page.
 	 *
-	 * @var array REDIRECTION_SETTINGS Contains keys 'TRANSIENT_NAME', 'TRANSIENT_VALUE', and 'REDIRECT_STATUS_OPTION' for redirection management.
+	 * @var string TRANSIENT_NAME Transient name for redirection management.
 	 */
-	const REDIRECTION_SETTINGS = array(
-		'TRANSIENT_NAME'         => 'frm_activation_redirect',
-		'TRANSIENT_VALUE'        => 'formidable-welcome',
-		'REDIRECT_STATUS_OPTION' => 'frm_welcome_redirect',
-	);
+	const TRANSIENT_NAME = 'frm_activation_redirect';
+
+	/**
+	 * Transient value associated with the redirection to the Onboarding Wizard page.
+	 *
+	 * @var string TRANSIENT_VALUE Transient value for redirection management.
+	 */
+	const TRANSIENT_VALUE = 'formidable-welcome';
+
+	/**
+	 * Option name for storing the redirect status for the Onboarding Wizard page.
+	 *
+	 * @var string REDIRECT_STATUS_OPTION Option name for redirect status.
+	 */
+	const REDIRECT_STATUS_OPTION = 'frm_welcome_redirect';
 
 	/**
 	 * The type of license received from the API.
@@ -61,6 +71,13 @@ class FrmOnboardingWizardController {
 	 * @var string $view_path Path to the Onboarding Wizard views.
 	 */
 	private static $view_path = '';
+
+	/**
+	 * Path to views.
+	 *
+	 * @var string $view_path Path to the Onboarding Wizard views.
+	 */
+	private static $page_url = '';
 
 	/**
 	 * Upgrade URL.
@@ -82,17 +99,82 @@ class FrmOnboardingWizardController {
 	 * @since x.x
 	 */
 	public static function load_admin_hooks() {
+		self::initialize_properties();
+
 		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
 
-		if ( self::is_onboarding_wizard_page() ) {
+		if ( ! self::is_onboarding_wizard_page() ) {
 			return;
 		}
 
 		add_action( 'admin_menu', __CLASS__ . '::menu' );
 		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
-		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes' );
+		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 		add_filter( 'frm_show_footer_links', '__return_false' );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
+	}
+
+	/**
+	 * Initializes class properties with essential values for operation.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function initialize_properties() {
+		self::$view_path    = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
+		self::$page_url     = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
+		self::$license_type = FrmAddonsController::license_type();
+
+		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'onboarding-wizard',
+				'content' => 'upgrade',
+			)
+		);
+
+		self::$renew_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'onboarding-wizard',
+				'content' => 'renew',
+			)
+		);
+	}
+
+	/**
+	 * Performs a safe (local) redirect to the welcome screen
+	 * when the plugin is activated
+	 *
+	 * @return void
+	 */
+	public static function do_admin_redirects() {
+		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+
+		// Prevent endless loop.
+		if ( $current_page === self::PAGE_SLUG ) {
+			return;
+		}
+
+		// Only do this for single site installs.
+		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+
+		// Check if we should consider redirection.
+		if ( ! self::is_onboarding_wizard_displayed() ) {
+			return;
+		}
+
+		set_transient( self::TRANSIENT_NAME, 'no', 60 );
+
+		// Prevent redirect with every activation.
+		if ( self::has_already_redirected() ) {
+			return;
+		}
+
+		// Initial install.
+		wp_safe_redirect( esc_url( self::$page_url ) );
+		exit;
 	}
 
 	/**
@@ -134,14 +216,14 @@ class FrmOnboardingWizardController {
 	/**
 	 * Adds custom classes to the existing string of admin body classes.
 	 *
-	 * Appends a custom class to the existing array of admin body classes to set the admin interface to full screen mode.
+	 * This function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
 	 *
 	 * @since x.x
 	 *
 	 * @param string $classes Existing body classes.
-	 * @return string Updated list of body classes including the newly added classes.
+	 * @return string Updated list of body classes, including the newly added classes.
 	 */
-	public function add_admin_body_classes( $classes ) {
+	public static function add_admin_body_classes( $classes ) {
 		return $classes . ' frm-admin-full-screen';
 	}
 
@@ -253,16 +335,27 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
+	 * Validates if the Onboarding Wizard page is being displayed.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
+	 */
+	public static function is_onboarding_wizard_displayed() {
+		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
+	}
+
+	/**
 	 * Checks if the plugin has already performed a redirect to avoid repeated redirections.
 	 *
 	 * @return bool Returns true if already redirected, otherwise false.
 	 */
 	private static function has_already_redirected() {
-		if ( get_option( self::REDIRECTION_SETTINGS['REDIRECT_STATUS_OPTION'] ) ) {
+		if ( get_option( self::REDIRECT_STATUS_OPTION ) ) {
 			return true;
 		}
 
-		update_option( self::REDIRECTION_SETTINGS['REDIRECT_STATUS_OPTION'], FrmAppHelper::plugin_version(), 'no' );
+		update_option( self::REDIRECT_STATUS_OPTION, FrmAppHelper::plugin_version(), 'no' );
 		return false;
 	}
 
@@ -286,6 +379,17 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_view_path() {
 		return self::$view_path;
+	}
+
+	/**
+	 * Get the path to the Onboarding Wizard views.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Path to views.
+	 */
+	public static function get_page_url() {
+		return self::$page_url;
 	}
 
 	/**

@@ -3,3 +3,64 @@
  *
  * This file includes all CSS rules specifically for the Onboarding Wizard page.
  */
+
+/**
+ * Page General Styles
+ *
+ * Defines the basic typography and layout styles for the Onboarding Wizard page.
+ */
+html.wp-toolbar {
+	padding: 0;
+}
+
+#frm-onboarding-wizard-page {
+	position: relative;
+	background: radial-gradient(108.84% 99.12% at 50% 0.88%, rgba(217, 217, 217, 0.8) 0%, rgba(217, 217, 217, 0) 75.72%);
+	overflow: hidden;
+}
+
+#frm-onboarding-wizard-page * {
+	box-sizing: border-box;
+}
+
+.frm-onboarding-bg {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.frm-onboarding-container {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	z-index: 2;
+}
+
+.frm-onboardin-item {
+	background-color: #fff;
+	border-radius: var(--small-radius);
+	padding: var(--gap-lg);
+	box-shadow: var(--box-shadow-sm);
+}
+
+.frm-onboarding-logo {
+	max-width: 185px;
+}
+
+.frm-onboarding-title {
+	font-size: var(--text-xl) !important;
+	font-weight: 600 !important;
+	margin-bottom: var(--gap-sm);
+}
+
+/**
+ * Welcome Step Styles
+ *
+ * Provides styles for when the Onboarding Wizard page is displayed Welcome step.
+ */
+#frm-onboarding-welcome-step {
+	max-width: 445px;
+}
