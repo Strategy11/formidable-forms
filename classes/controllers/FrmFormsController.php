@@ -250,7 +250,7 @@ class FrmFormsController {
 	/**
 	 * Remove the draft flag from any new fields from this current session.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param int $form_id
 	 * @return void

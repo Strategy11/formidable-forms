@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7.2';
+	public static $plug_version = '6.8';
 
 	/**
 	 * @var bool
@@ -4122,7 +4122,7 @@ class FrmAppHelper {
 	 * Lite license copy.
 	 * Used in FrmDashboardController & FrmSettingsController
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return string
 	 */

@@ -329,7 +329,7 @@ class FrmMigrate {
 	/**
 	 * Disables summary email for multisite (not the main site) if recipient setting isn't changed.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 */
 	private function migrate_to_101() {
 		if ( ! is_multisite() || get_main_site_id() === get_current_blog_id() ) {

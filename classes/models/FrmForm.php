@@ -1166,7 +1166,7 @@ class FrmForm {
 	/**
 	 * Get the latest form available.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 * @return object
 	 */
 	public static function get_latest_form() {
@@ -1187,7 +1187,7 @@ class FrmForm {
 	/**
 	 * Count and return total forms.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 * @return int
 	 */
 	public static function get_forms_count() {

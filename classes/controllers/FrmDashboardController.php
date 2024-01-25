@@ -96,7 +96,7 @@ class FrmDashboardController {
 	/**
 	 * Triggered from FrmAppController::load_page() with admin_init
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */
@@ -112,7 +112,7 @@ class FrmDashboardController {
 	/**
 	 * Register and enqueue dashboard assets.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */

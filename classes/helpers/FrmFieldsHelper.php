@@ -2120,7 +2120,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string|int $form_id
 	 * @param array      $field_ids If this is not empty, the results will be filtered by field id.
@@ -2159,7 +2159,7 @@ class FrmFieldsHelper {
 	 * This is called when loading the form builder.
 	 * Any unsaved draft fields get added to a hidden draft_fields input on load.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string|int $form_id
 	 * @return array

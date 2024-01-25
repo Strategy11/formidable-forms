@@ -526,7 +526,7 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Maybe remove recipients from setting from API.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param array $recipients Recipients.
 	 */
@@ -544,7 +544,7 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Echos string in plain text email.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $string string.
 	 */

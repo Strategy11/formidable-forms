@@ -74,7 +74,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets email content.
 	 *
-	 * @since x.x This can return `false` to skip sending email.
+	 * @since 6.8 This can return `false` to skip sending email.
 	 *
 	 * @return string|false
 	 */
@@ -117,7 +117,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets content args.
 	 *
-	 * @since x.x This can return `false` to skip sending email.
+	 * @since 6.8 This can return `false` to skip sending email.
 	 *
 	 * @return array|false
 	 */

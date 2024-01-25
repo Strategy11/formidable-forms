@@ -1094,7 +1094,7 @@ class FrmEntry {
 	/**
 	 * Get entries count.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return int
 	 */

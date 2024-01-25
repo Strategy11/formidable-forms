@@ -164,7 +164,7 @@ class FrmApplicationsController {
 	/**
 	 * @usedby FrmAppController::admin_init().
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */
