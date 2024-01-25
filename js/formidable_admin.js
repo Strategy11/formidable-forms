@@ -7150,8 +7150,13 @@ function frmAdminBuildJS() {
 
 	function onlyOneActionMessage() {
 		let message = frmAdminJs.only_one_action;
-		if ( this.classList.contains( 'frm_on_submit_action' ) ) {
-			message = message.replace( 'one', 99 );
+		let limit   = this.dataset.limit;
+
+		if ( 'undefined' !== typeof limit ) {
+			limit = parseInt( limit );
+			if ( limit > 1 ) {
+				message = message.replace( 'one', limit );
+			}
 		}
 
 		infoModal( message );
