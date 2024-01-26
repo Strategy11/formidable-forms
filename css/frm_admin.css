@@ -1754,7 +1754,7 @@ input.frm_insert_in_template {
 }
 
 .frm-justify-center {
-	justify-content: center;
+	justify-content: center !important;
 }
 
 .frm-justify-between {
@@ -2376,12 +2376,45 @@ h2.frm-h2 + .howto {
 	margin-top: 0;
 }
 
+/* Card Components */
 .frm-card {
 	width: 100%;
 	border-radius: 10px;
 	border: 1px solid var(--grey-300);
 	opacity: 1;
 	transition: opacity 1s;
+}
+
+.frm-card-box {
+	background-color: #fff;
+	border-radius: var(--small-radius);
+	padding: var(--gap-lg);
+	box-shadow: var(--box-shadow-sm);
+}
+
+.frm-card-box-header  {
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-card-box-content > :last-child {
+	margin-bottom: 0;
+}
+
+.frm-card-box-footer {
+	display: flex;
+	justify-content: end;
+	gap: var(--gap-sm);
+	margin-top: var(--gap-lg);
+}
+
+.frm-card-box-title {
+	font-size: var(--text-xl) !important;
+	font-weight: 600 !important;
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-card-box-text {
+	margin-top: 0 !important;
 }
 
 .frm-fade {

@@ -15,7 +15,6 @@ html.wp-toolbar {
 
 #frm-onboarding-wizard-page {
 	position: relative;
-	background: radial-gradient(108.84% 99.12% at 50% 0.88%, rgba(217, 217, 217, 0.8) 0%, rgba(217, 217, 217, 0) 75.72%);
 	overflow: hidden;
 }
 
@@ -34,26 +33,12 @@ html.wp-toolbar {
 
 .frm-onboarding-container {
 	position: relative;
-	width: 100vw;
 	height: 100vh;
 	z-index: 2;
 }
 
-.frm-onboardin-item {
-	background-color: #fff;
-	border-radius: var(--small-radius);
-	padding: var(--gap-lg);
-	box-shadow: var(--box-shadow-sm);
-}
-
 .frm-onboarding-logo {
 	max-width: 185px;
-}
-
-.frm-onboarding-title {
-	font-size: var(--text-xl) !important;
-	font-weight: 600 !important;
-	margin-bottom: var(--gap-sm);
 }
 
 /**
