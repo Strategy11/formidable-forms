@@ -242,6 +242,13 @@ class FrmOnboardingWizardController {
 		$upgrade_link = self::get_upgrade_link();
 		$renew_link   = self::get_renew_link();
 		$license_type = self::get_license_type();
+		$user         = wp_get_current_user();
+
+		// Note: Add step parts in onrder.
+		$step_parts = array(
+			'welcome' => 'steps/welcome-step.php',
+			'email'   => 'steps/email-step.php',
+		);
 
 		// Render the view.
 		include $view_path . 'index.php';

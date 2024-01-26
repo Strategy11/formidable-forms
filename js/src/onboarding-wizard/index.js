@@ -7,6 +7,7 @@ import domReady from '@wordpress/dom-ready';
  * Internal dependencies
  */
 import { getAppState, setAppState } from './shared';
+import initializeOnboardingWizard from './initializeOnboardingWizard';
 
 domReady( () => {
 	/**

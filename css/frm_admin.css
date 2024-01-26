@@ -1651,6 +1651,11 @@ input.frm_insert_in_template {
 	padding-left: var(--gap-md) !important;
 }
 
+.frm-px-lg {
+	padding-right: var(--gap-lg) !important;
+	padding-left: var(--gap-lg) !important;
+}
+
 .frm-text-xs {
 	font-size: var(--text-xs) !important;
 }
@@ -2393,6 +2398,8 @@ h2.frm-h2 + .howto {
 }
 
 .frm-card-box-header  {
+	display: flex;
+	justify-content: center;
 	margin-bottom: var(--gap-xs);
 }
 

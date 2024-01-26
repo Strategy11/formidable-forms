@@ -37,8 +37,12 @@ html.wp-toolbar {
 	z-index: 2;
 }
 
-.frm-onboarding-logo {
-	max-width: 185px;
+.frm-card-box {
+	max-width: 500px;
+}
+
+.frm-fields input[type="email"] {
+	width: 100%;
 }
 
 /**
@@ -48,4 +52,8 @@ html.wp-toolbar {
  */
 #frm-onboarding-welcome-step {
 	max-width: 445px;
+}
+
+.frm-onboarding-logo {
+	max-width: 185px;
 }
