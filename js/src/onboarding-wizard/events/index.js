@@ -13,5 +13,3 @@ export function addEventListeners() {
 	addStepButtonsEvents();
 	addGetEmailButtonEvents();
 }
-
-export { onSkipButtonClick } from './stepButtonsListener';

@@ -37,14 +37,6 @@ html.wp-toolbar {
 	z-index: 2;
 }
 
-.frm-card-box {
-	max-width: 500px;
-}
-
-.frm-fields input[type="email"] {
-	width: 100%;
-}
-
 /**
  * Welcome Step Styles
  *
