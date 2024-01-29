@@ -13,7 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<div id="frm-fake-page" class="frm_hidden">
-		<button type="button" id="frm-show-rootline" class="frm_button"><?php esc_html_e( 'Show progress bar', 'formidable' ); ?></button>
+		<?php
+		/**
+		 * @since x.x
+		 */
+		do_action( 'frm_before_builder_fake_page' );
+		?>
 
 		<div class="frm-page-break">
 			<div class="frm-collapse-page button frm-button-secondary frm-button-sm">
