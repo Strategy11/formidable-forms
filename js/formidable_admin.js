@@ -10349,6 +10349,7 @@ function frmAdminBuildJS() {
 
 			document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
 				el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
+				el.setAttribute( 'role', 'button' );
 				el.addEventListener( 'click', ( event ) => {
 					el.setAttribute( 'aria-expanded', event.target.parentElement.classList.contains( 'open' ) );
 				});
