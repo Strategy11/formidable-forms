@@ -9902,6 +9902,8 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
+			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
+
 			initBulkOptionsOverlay();
 			hideEmptyEle();
 			maybeHideQuantityProductFieldOption();
