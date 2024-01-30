@@ -4,6 +4,7 @@
 import { initializeAppState } from './shared';
 import { initializeElements } from './elements';
 import { addEventListeners } from './events';
+import { setupInitialView } from './ui';
 
 /**
  * Initializes Onboarding Wizard.
@@ -11,8 +12,14 @@ import { addEventListeners } from './events';
  * @return {void}
  */
 function initializeOnboardingWizard() {
+	// Initializes essential DOM elements
 	initializeElements();
+
 	initializeAppState();
+
+	// Set up the initial view, including any required DOM manipulations for proper presentation
+	setupInitialView();
+
 	addEventListeners();
 }
 

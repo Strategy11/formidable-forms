@@ -11,11 +11,14 @@ import { PREFIX } from '../shared';
 function getDOMElements() {
 	// Body Elements
 	const bodyElements = {
-		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` )
+		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+		pageBackground: document.getElementById( `${PREFIX}-bg` )
 	};
 
 	// Welcome Step Elements
-	const welcomeStep = {};
+	const welcomeStep = {
+		welcomeStep: document.getElementById( `${PREFIX}-welcome-step` )
+	};
 
 	// Default Email Address Step Elements
 	const emailStep = {

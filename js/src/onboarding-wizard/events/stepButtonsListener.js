@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { onClickPreventDefault, fadeIn, hide } from '../utils';
+import { onClickPreventDefault, fadeIn, hide, frmAnimate, show } from '../utils';
 
 /**
  * Manages event handling for the step buttons.
@@ -27,9 +27,13 @@ function addStepButtonsEvents() {
  */
 const onSkipButtonClick = () => {
 	const currentStep = document.querySelector( '[data-current-step]' );
+	const nextStep = currentStep.nextElementSibling;
 
 	hide( currentStep );
-	fadeIn( currentStep.nextElementSibling );
+	show( nextStep );
+
+	const nextStepAnimate = new frmAnimate( nextStep );
+	nextStepAnimate.fadeIn();
 };
 
 export default addStepButtonsEvents;

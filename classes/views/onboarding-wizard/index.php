@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm-onboarding-wizard-page" class="frm_wrap">
-	<div class="frm-onboarding-bg frm-fadein-up-back">
-		<img class="frm-w-full" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/onboarding-wizard/bg.png" alt="<?php esc_attr_e( 'Background Image', 'formidable' ); ?>" />
+	<div id="frm-onboarding-bg">
+		<?php require $view_path . 'onboarding-svg-bg.php'; ?>
 	</div>
 
 	<div class="frm-onboarding-container frm-flex-box frm-justify-center frm-items-center">

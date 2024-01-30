@@ -2375,7 +2375,7 @@ h2.frm-h2 + .howto {
 	top: 0;
 	left: 0;
 	right: 0;
-	height: 8px;
+	height: var(--gap-xs);
 	background-color: var(--primary-25);
 }
 
@@ -2392,6 +2392,10 @@ h2.frm-h2 + .howto {
 	display: flex;
 	justify-content: center;
 	margin-bottom: var(--gap-xs);
+}
+
+.frm-card-box.frm-has-progress-bar .frm-card-box-header {
+	margin-top: var(--gap-xs);
 }
 
 .frm-card-box-content > :last-child {
