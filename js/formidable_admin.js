@@ -7148,14 +7148,16 @@ function frmAdminBuildJS() {
 		return jQuery( '.frm_single_' + type + '_settings' ).length;
 	}
 
-	function onlyOneActionMessage() {
+	function actionLimitMessage() {
 		let message = frmAdminJs.only_one_action;
 		let limit   = this.dataset.limit;
 
 		if ( 'undefined' !== typeof limit ) {
 			limit = parseInt( limit );
 			if ( limit > 1 ) {
-				message = message.replace( __( 'one', 'formidable' ), limit ).replace( __( 'Please edit the existing form action.', 'formidable' ), '', limit ).trim();
+				message  = message.replace( __( 'one', 'formidable' ), limit ).trim();
+			} else {
+				message += ' ' + frmAdminJs.edit_action_text;
 			}
 		}
 
@@ -9974,7 +9976,7 @@ function frmAdminBuildJS() {
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
-			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
+			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
