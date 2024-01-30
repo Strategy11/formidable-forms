@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-welcome-step" class="frm-card-box frmcenter" data-step-name="welcome" data-current-step>
+<section id="frm-onboarding-welcome-step" class="frm-card-box frmcenter frm_hidden" data-step-name="welcome" data-current-step>
 	<div class="frm-card-box-header">
 		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard', 'formidable' ); ?>" />
 	</div>

@@ -14,11 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php require $view_path . 'onboarding-svg-bg.php'; ?>
 	</div>
 
-	<div class="frm-onboarding-container frm-flex-box frm-justify-center frm-items-center">
+	<div class="frm-onboarding-container frm-flex-col frm-justify-center frm-items-center">
 		<?php
 		foreach ( $step_parts as $step => $file ) {
 			require $view_path . $file;
 		}
 		?>
+
+		<a class="frm-onboarding-return-dashboard" href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ) ); ?>">
+			<?php esc_html_e( 'Return to the Dashboard', 'formidable' ); ?>
+		</a>
 	</div>
 </div>

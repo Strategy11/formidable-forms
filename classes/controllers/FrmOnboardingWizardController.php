@@ -248,6 +248,7 @@ class FrmOnboardingWizardController {
 		$step_parts = array(
 			'welcome' => 'steps/welcome-step.php',
 			'email'   => 'steps/email-step.php',
+			'email'   => 'steps/install-addons-step.php',
 		);
 
 		// Render the view.

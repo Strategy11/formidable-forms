@@ -36,8 +36,18 @@ html.wp-toolbar {
 
 .frm-onboarding-container {
 	position: relative;
-	height: 100vh;
+	min-height: 100vh;
 	z-index: 2;
+}
+
+a.frm-onboarding-return-dashboard {
+	color: var(--grey-400);
+	font-weight: 500;
+	margin-top: var(--gap-xl)
+}
+
+a.frm-onboarding-return-dashboard:hover {
+	color: var(--grey-500);
 }
 
 /**
@@ -51,4 +61,22 @@ html.wp-toolbar {
 
 .frm-onboarding-logo {
 	max-width: 185px;
+}
+
+/**
+ * Install Formidable Add-ons Step Styles
+ *
+ * Provides styles for when the Onboarding Wizard page is displayed Install Formidable Add-ons step.
+ */
+.frm-cta-green .frm-banner-title {
+	color: var(--success-900);
+}
+
+.frm-cta-green .frm-banner-text,
+.frm-cta-green .frm-banner-text a {
+	color: var(--success-800);
+}
+
+.frm-cta-green .frm-banner-text a {
+	text-decoration: underline;
 }

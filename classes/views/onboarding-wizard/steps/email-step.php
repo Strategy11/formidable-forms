@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-flex-center">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_email_icon' ); ?>
 		</div>
 	</div>
 
