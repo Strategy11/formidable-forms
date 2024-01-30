@@ -124,9 +124,12 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 
 .post-type-frm_display .wrap > #posts-filter,
 .wrap.frm-with-margin,
-#frm_top_bar + .wrap,
 .frm_wrap > .wrap {
 	margin: var(--gap-sm) var(--gap-md) var(--gap-md);
+}
+
+#frm_top_bar + .wrap {
+	margin: var(--gap-xl);
 }
 
 .frm-full-screen #wpbody-content > .wrap {
@@ -235,6 +238,14 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 
 .frm-white-body .wrap #post-body {
 	padding: 0 20px;
+}
+
+.frm-grey-body #wpbody {
+	background: var(--grey-100);
+}
+
+.frm-grey-body #frm_top_bar {
+	background: #fff;
 }
 
 .post-type-frm_display .tablenav,
@@ -1622,7 +1633,7 @@ input.frm_insert_in_template {
 }
 
 .frm-p-0 {
-	padding: 0;
+	padding: 0 !important;
 }
 
 .frm-p-1 {
@@ -1637,6 +1648,11 @@ input.frm_insert_in_template {
 .frm-p-6,
 .frm-p-md {
 	padding: var(--gap-md) !important;
+}
+
+.frm-px-0 {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .frm-py-0 {
@@ -1742,10 +1758,18 @@ input.frm_insert_in_template {
 	flex-direction: column;
 }
 
+.frm-flex-full {
+	flex: 1;
+}
+
 .frm-flex-center {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.frm-shrink-0 {
+	flex-shrink: 0;
 }
 
 .frm-gap-0 {
@@ -1817,71 +1841,6 @@ input.frm_insert_in_template {
 	z-index: -1;
 }
 
-.frm-fadein {
-	animation: fadeIn 400ms ease-in-out forwards;
-}
-
-.frm-fadein-up {
-	animation: fadeInUp 230ms ease-in-out forwards;
-}
-
-.frm-fadein-up-back {
-	animation: fadeInUpBack 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.frm-fadein-down-short {
-	animation: fadeInDownShort 300ms ease-out forwards;
-}
-
-@keyframes fadeIn {
-
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
-@keyframes fadeInUp {
-
-	0% {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes fadeInUpBack {
-
-	0% {
-		opacity: 0;
-		transform: translateY(32px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes fadeInDownShort {
-
-	0% {
-		opacity: 0.4;
-		transform: translateY(-2px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
 /* End Generic Classes, Start Forced Generic Classes */
 
 .frm-fields p > label.frm_hidden,
@@ -2018,7 +1977,8 @@ a.frm_hidden,
 .post-type-frm_display .frm_form_field > label,
 #new_fields .frm_primary_label,
 #form_global_settings .frm_primary_label,
-#frm_form_editor_container .frm_primary_label {
+#frm_form_editor_container .frm_primary_label,
+#permissions_settings_settings .frm_primary_label {
 	color: var(--grey-700);
 	margin: 0 0 3px;
 	padding: 0;
@@ -2139,11 +2099,7 @@ form .frm_blank_field label {
 }
 
 .frm-license-input span {
-	position: absolute;
-	right: 0;
-	top: 5px;
-	padding: 0 10px;
-	font-size: 15px;
+	font-size: var(--text-sm);
 }
 
 .frm-license-input .frmsvg {
@@ -7557,14 +7513,14 @@ ul .frm_col_two {
 	float: right;
 }
 
-.frm_two_col li {
-	float: left;
-	width: 48%;
-	margin-right: 4%;
+ul.frm_two_col {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--gap-sm);
 }
 
-.frm_two_col li:nth-child(2n+2) {
-	margin-right: 0;
+.frm_two_col li {
+	margin-bottom: 0;
 }
 
 .frm-info-modal a,
@@ -7574,7 +7530,7 @@ ul .frm_col_two {
 .settings-lite-cta a,
 .settings-lite-cta ul,
 .settings-lite-cta {
-	color: #666;
+	color: var(--grey-500);
 	font-size: var(--text-md);
 	box-shadow: none !important;
 }
@@ -8298,6 +8254,7 @@ button.frm_choose_image_box,
 .frm_wrap textarea,
 .frm_wrap input[type="tel"],
 .frm_wrap input[type="text"],
+.frm_wrap input[type="email"]
 .frm_wrap input[type=search],
 .frm_wrap input[type="number"],
 .frm_wrap input[type="date"],
@@ -8367,6 +8324,11 @@ button.frm_choose_image_box,
 .frm_wrap textarea[readonly],
 .frm_wrap input::placeholder {
 	color: var(--grey-500);
+}
+
+.frm_wrap .frm-button-primary.frm-disabled {
+	opacity: 0.5;
+	cursor: default;
 }
 
 #postcustomstuff table td > div {
@@ -8504,6 +8466,7 @@ button.frm_choose_image_box,
 }
 
 .frm-scrollbar-wrapper {
+	overflow-x: hidden;
 	overflow-y: auto; /* Enable scrolling */
 	-ms-overflow-style: none; /* For IE and Edge */
 	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
@@ -9624,12 +9587,14 @@ Responsive Design
 /* Start card layout */
 .frm-card-item {
 	display: flex;
-	gap: 10px;
 	border: 1px solid var(--grey-200);
 	border-radius: var(--small-radius);
 	padding: var(--gap-sm);
 	box-shadow: var(--box-shadow-xs);
 	background: #FFFFFF;
+}
+.frm-card-item:not(.frm-counter-card) {
+	gap: 10px;
 }
 /* End card layout */
 

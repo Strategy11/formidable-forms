@@ -23,6 +23,9 @@ class FrmAddonsController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
+		// remove default created subpage, make the page with highest priority as default.
+		remove_submenu_page( 'formidable', 'formidable' );
+
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
@@ -937,7 +940,7 @@ class FrmAddonsController {
 	/**
 	 * Deactivate a specified plugin.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $plugin
 	 * @param bool   $silent
@@ -953,7 +956,7 @@ class FrmAddonsController {
 	/**
 	 * Uninstall a specified plugin.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $plugin
 	 * @return true|WP_Error True on success, WP_Error on invalid file.
@@ -1100,7 +1103,7 @@ class FrmAddonsController {
 	/**
 	 * Handle the AJAX request to activate an add-on.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */
@@ -1125,7 +1128,7 @@ class FrmAddonsController {
 	/**
 	 * Handle the AJAX request to deactivate an add-on.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */
@@ -1140,7 +1143,7 @@ class FrmAddonsController {
 	/**
 	 * Handle the AJAX request to uninstall an add-on.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return void
 	 */
@@ -1155,7 +1158,7 @@ class FrmAddonsController {
 	/**
 	 * Process a specific action (activate, deactivate, uninstall) on an add-on.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param callable      $action_callback The specific add-on action to be executed.
 	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
@@ -1179,7 +1182,7 @@ class FrmAddonsController {
 	/**
 	 * Attempt to perform a specific action (activate, deactivate, uninstall) on an add-on.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').

@@ -313,7 +313,7 @@ class FrmEmailSummaryHelper {
 	public static function get_top_forms( $from_date, $to_date, $limit = 5 ) {
 		global $wpdb;
 
-		return $wpdb->get_results(
+		$result = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
 						FROM {$wpdb->prefix}frm_items AS it INNER JOIN {$wpdb->prefix}frm_forms AS fr ON it.form_id = fr.id
@@ -324,6 +324,13 @@ class FrmEmailSummaryHelper {
 				intval( $limit )
 			)
 		);
+
+		// Remove slashes from form name.
+		foreach ( $result as &$value ) {
+			$value->form_name = wp_unslash( $value->form_name );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -514,5 +521,34 @@ class FrmEmailSummaryHelper {
 			return FrmAppHelper::get_localized_date( 'Y-m-d', gmdate( 'Y-m-d H:i:s' ) );
 		}
 		return FrmAppHelper::get_localized_date( 'Y-m-d', gmdate( 'Y-m-d H:i:s', strtotime( $date_diff ) ) );
+	}
+
+	/**
+	 * Maybe remove recipients from setting from API.
+	 *
+	 * @since 6.8
+	 *
+	 * @param array $recipients Recipients.
+	 */
+	public static function maybe_remove_recipients_from_api( &$recipients ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
+		if ( empty( $addons['no_emails'] ) ) {
+			return;
+		}
+
+		$skip_emails = is_string( $addons['no_emails'] ) ? explode( ',', $addons['no_emails'] ) : (array) $addons['no_emails'];
+		$recipients  = array_diff( $recipients, $skip_emails );
+	}
+
+	/**
+	 * Echos string in plain text email.
+	 *
+	 * @since 6.8
+	 *
+	 * @param string $string string.
+	 */
+	public static function plain_text_echo( $string ) {
+		echo wp_strip_all_tags( $string ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }

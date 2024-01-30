@@ -21,4 +21,16 @@ class FrmEmailYearly extends FrmEmailStats {
 	protected function get_top_forms_label() {
 		return __( 'Top forms this year', 'formidable' );
 	}
+
+	/**
+	 * @since 6.8
+	 */
+	protected function get_content_args() {
+		// Do not send yearly email if there is no entries this year.
+		if ( ! FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date ) ) {
+			return false;
+		}
+
+		return parent::get_content_args();
+	}
 }
