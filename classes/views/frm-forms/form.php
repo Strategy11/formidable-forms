@@ -16,8 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		/**
 		 * @since x.x
+		 *
+		 * @param array $form_array Processed form array.
 		 */
-		do_action( 'frm_before_builder_fake_page' );
+		do_action( 'frm_before_builder_fake_page', $values );
 		?>
 
 		<div class="frm-page-break">
