@@ -7155,7 +7155,7 @@ function frmAdminBuildJS() {
 		if ( 'undefined' !== typeof limit ) {
 			limit = parseInt( limit );
 			if ( limit > 1 ) {
-				message  = message.replace( __( 'one', 'formidable' ), limit ).trim();
+				message  = message.replace( 1, limit ).trim();
 			} else {
 				message += ' ' + frmAdminJs.edit_action_text;
 			}
