@@ -181,8 +181,11 @@ class FrmAppHelper {
 	 * @return bool True if the menu icon is the logo, false otherwise.
 	 */
 	public static function is_formidable_branding() {
-		$menu_icon = self::get_menu_icon_class();
+		if ( ! self::pro_is_installed() ) {
+			return true;
+		}
 
+		$menu_icon = self::get_menu_icon_class();
 		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
 	}
 
