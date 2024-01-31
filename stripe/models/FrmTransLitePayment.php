@@ -78,7 +78,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 * @param string $to_date   To date.
 	 * @return array            Contains `count` and `total`.
 	 */
-	public function get_payments_stats( $from_date, $to_date ) {
+	public function get_payments_stats( $from_date = null, $to_date = null ) {
 		$data = array(
 			'count' => 0,
 			'total' => array(),
@@ -88,10 +88,13 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 			return $data;
 		}
 
-		$where = array(
-			'created_at >' => $from_date,
-			'created_at <' => $to_date . ' 23:59:59',
-		);
+		$where = array();
+		if ( null !== $from_date ) {
+			$where['created_at >'] = $from_date;
+		}
+		if ( null !== $to_date ) {
+			$where['created_at <'] = $to_date . ' 23:59:59';
+		}
 
 		// Do not collect test payment, this is a new feature of Stripe lite.
 		if ( 6 <= get_option( $this->db_opt_name ) ) {

@@ -21,14 +21,6 @@
 	position: relative;
 }
 
-.frm-admin-page-applications #frm_top_bar {
-	background: #fff;
-}
-
-.frm-admin-page-applications #wpbody {
-	background: var(--sidebar-color);
-}
-
 .frm-admin-page-applications #wpcontent {
 	padding-left: 0;
 }

@@ -10,18 +10,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
-	 *
-	 * @return void
 	 */
-	public static function menu() {
-		$unread = self::get_notice_count();
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Inbox', 'formidable' ), __( 'Inbox', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-inbox', 'FrmInboxController::inbox' );
-	}
-
-	/**
-	 * @since 4.05
-	 */
-	private static function get_notice_count() {
+	public static function get_notice_count() {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
 		$inbox = new FrmInbox();
@@ -44,21 +34,26 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since 4.05
+	 * @since 6.8
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public static function inbox() {
-		FrmAppHelper::include_svg();
+	public static function get_inbox_messages() {
 		self::add_tracking_request();
 		self::add_free_template_message();
 
-		$inbox    = new FrmInbox();
-		$messages = $inbox->get_messages( 'filter' );
-		$messages = array_reverse( $messages );
-		$user     = wp_get_current_user();
+		$inbox              = new FrmInbox();
+		$unread_messages    = $inbox->get_messages();
+		$dismissed_messages = $unread_messages;
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/inbox/list.php' );
+		$inbox->filter_messages( $unread_messages, 'filter' );
+		$inbox->filter_messages( $dismissed_messages, 'dismissed' );
+
+		return array(
+			'unread'    => array_reverse( $unread_messages ),
+			'dismissed' => array_reverse( $dismissed_messages ),
+			'user'      => wp_get_current_user(),
+		);
 	}
 
 	/**
@@ -138,4 +133,25 @@ class FrmInboxController {
 			)
 		);
 	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function menu() {
+		_deprecated_function( __METHOD__, '6.8' );
+	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function inbox() {
+		_deprecated_function( __METHOD__, '6.8' );
+	}
+
 }

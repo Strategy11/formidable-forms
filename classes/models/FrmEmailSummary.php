@@ -55,6 +55,7 @@ abstract class FrmEmailSummary {
 	protected function get_recipients() {
 		$recipients = FrmAppHelper::get_settings()->summary_emails_recipients;
 		$recipients = str_replace( '[admin_email]', get_bloginfo( 'admin_email' ), $recipients );
+		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
 		return $recipients;
 	}
 
@@ -73,10 +74,15 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets email content.
 	 *
-	 * @return string
+	 * @since 6.8 This can return `false` to skip sending email.
+	 *
+	 * @return string|false
 	 */
 	protected function get_content() {
 		$args = $this->get_content_args();
+		if ( false === $args ) {
+			return false;
+		}
 
 		/**
 		 * Filters the summary email content args.
@@ -111,7 +117,9 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets content args.
 	 *
-	 * @return array
+	 * @since 6.8 This can return `false` to skip sending email.
+	 *
+	 * @return array|false
 	 */
 	protected function get_content_args() {
 		return array(
@@ -130,9 +138,17 @@ abstract class FrmEmailSummary {
 	 */
 	public function send() {
 		$recipients = $this->get_recipients();
-		$content    = $this->get_content();
-		$subject    = $this->get_subject();
-		$headers    = $this->get_headers();
+		if ( ! $recipients ) {
+			// Return true to not try to send this email on the next day.
+			return true;
+		}
+
+		$content = $this->get_content();
+		if ( false === $content ) {
+			return true;
+		}
+		$subject = $this->get_subject();
+		$headers = $this->get_headers();
 
 		$sent = wp_mail( $recipients, $subject, $content, $headers );
 		if ( ! $sent ) {

@@ -108,9 +108,8 @@ namespace {
 	class FrmPaymentsController {
 		public static $db_opt_name = 'frm_pay_db_version';
 	}
-	/**
-	 * @return void
-	 */
+	class FrmProDashboardHelper {
+	}
 	function load_formidable_pro() {
 	}
 	/**

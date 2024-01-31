@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.7.2
+ * Version: 6.8
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -78,7 +78,7 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
+	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater', 'FrmWelcomeController' );
 	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
 
@@ -135,8 +135,8 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  * @return void
  */
 function frm_maybe_install() {
-	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
-		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
+	if ( get_transient( FrmDashboardController::REDIRECT_META_NAME ) !== 'no' ) {
+		set_transient( FrmDashboardController::REDIRECT_META_NAME, FrmDashboardController::PAGE_SLUG, 60 );
 	}
 
 	FrmAppController::handle_activation();

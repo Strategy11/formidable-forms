@@ -157,6 +157,18 @@ class FrmFormsController {
 
 	public static function update_settings() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+
+		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			$error_args = array(
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $frm_settings->admin_permission,
+				'cancel_text' => __( 'Cancel', 'formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
+		}
 
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
@@ -238,7 +250,7 @@ class FrmFormsController {
 	/**
 	 * Remove the draft flag from any new fields from this current session.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param int $form_id
 	 * @return void

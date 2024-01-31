@@ -847,7 +847,7 @@ DEFAULT_HTML;
 	/**
 	 * A draft field can be previewed on the preview page for a user who can edit forms.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return bool
 	 */
@@ -1434,7 +1434,7 @@ DEFAULT_HTML;
 	 * HTML is stripped more strictly for users that are not logged in, or users that
 	 * do not have access to editing entries in the back end.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string|int $user_id
 	 * @return bool

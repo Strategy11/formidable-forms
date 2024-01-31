@@ -9,7 +9,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 100;
+	public static $db_version = 101;
 
 	/**
 	 * Deprecated.
@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7.2';
+	public static $plug_version = '6.8';
 
 	/**
 	 * @var bool
@@ -4118,5 +4118,27 @@ class FrmAppHelper {
 		}
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Lite license copy.
+	 * Used in FrmDashboardController & FrmSettingsController
+	 *
+	 * @since 6.8
+	 *
+	 * @return string
+	 */
+	public static function copy_for_lite_license() {
+		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
+
+		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
+			// Manage PRO versions without PRO dashboard functionality.
+			$license_type = FrmProAddonsController::get_readable_license_type();
+			if ( 'lite' !== strtolower( $license_type ) ) {
+				$message = 'Formidable Pro ' . $license_type;
+			}
+		}
+
+		return apply_filters( 'frm_license_type_text', $message );
 	}
 }

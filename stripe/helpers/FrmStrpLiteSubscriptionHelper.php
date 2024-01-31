@@ -178,7 +178,7 @@ class FrmStrpLiteSubscriptionHelper {
 	/**
 	 * When this is filtered and returns false, the subscription will be canceled immediately instead.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return bool
 	 */
