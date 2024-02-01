@@ -10346,14 +10346,6 @@ function frmAdminBuildJS() {
 			$previewWrapper.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 
 			wp.hooks.doAction( 'frm_style_editor_init' );
-
-			document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
-				el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
-				el.setAttribute( 'role', 'button' );
-				el.addEventListener( 'click', ( event ) => {
-					el.setAttribute( 'aria-expanded', event.target.parentElement.classList.contains( 'open' ) );
-				});
-			});
 		},
 
 		customCSSInit: function() {
