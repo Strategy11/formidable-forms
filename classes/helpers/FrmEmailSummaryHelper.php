@@ -531,28 +531,14 @@ class FrmEmailSummaryHelper {
 	 * @param array $recipients Recipients.
 	 */
 	public static function maybe_remove_recipients_from_api( &$recipients ) {
-		$skip_emails = self::api_emails_to_skip();
-		if ( empty( $skip_emails ) ) {
-			return;
-		}
-		$recipients = array_diff( $recipients, $skip_emails );
-	}
-
-	/**
-	 * Checks if API email summary is on.
-	 *
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	private static function api_emails_to_skip() {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 		if ( empty( $addons['no_emails'] ) ) {
-			return false;
+			return;
 		}
 
-		return is_string( $addons['no_emails'] ) ? explode( ',', $addons['no_emails'] ) : (array) $addons['no_emails'];
+		$skip_emails = is_string( $addons['no_emails'] ) ? explode( ',', $addons['no_emails'] ) : (array) $addons['no_emails'];
+		$recipients  = array_diff( $recipients, $skip_emails );
 	}
 
 	/**
