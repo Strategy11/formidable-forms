@@ -545,7 +545,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @return array
 	 */
-	public static function api_emails_to_skip() {
+	private static function api_emails_to_skip() {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 		if ( empty( $addons['no_emails'] ) ) {
