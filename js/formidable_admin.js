@@ -2557,6 +2557,7 @@ function frmAdminBuildJS() {
 
 	function deselectFields( preventFieldGroups ) {
 		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
+		jQuery( '.frm-show-field-settings.selected' ).removeClass( 'selected' );
 		if ( ! preventFieldGroups ) {
 			unselectFieldGroups();
 		}
