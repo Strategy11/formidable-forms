@@ -174,18 +174,19 @@ class FrmAppHelper {
 
 	/**
 	 * Determine if the current branding is set to 'formidable'.
-	 *
-	 * Checks the menu title, retrieved through get_menu_name,
-	 * and verifies if it matches the 'formidable' branding.
+	 * Checks the menu icon, and verifies if it matches the formidable branding.
 	 *
 	 * @since 6.4.2
 	 *
-	 * @return bool True if the menu title is 'formidable', false otherwise.
+	 * @return bool True if the menu icon is the logo, false otherwise.
 	 */
 	public static function is_formidable_branding() {
-		$menu_title = self::get_menu_name();
+		if ( ! self::pro_is_installed() ) {
+			return true;
+		}
 
-		return 'formidable' === strtolower( trim( $menu_title ) );
+		$menu_icon = self::get_menu_icon_class();
+		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
 	}
 
 	/**

@@ -24,9 +24,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
-<p class="frm_summary_emails_recipients_wrapper <?php echo ! $frm_settings->summary_emails ? 'frm_hidden' : ''; ?>">
-	<label for="frm_summary_emails_recipients"><?php esc_html_e( 'Recipients', 'formidable' ); ?></label>
+<p class="frm_summary_emails_recipients_wrapper frm_indent_opt <?php echo ! $frm_settings->summary_emails ? 'frm_hidden' : ''; ?>">
+	<label for="frm_summary_emails_recipients"><?php esc_html_e( 'Summary email recipients', 'formidable' ); ?></label>
 	<input type="text" name="frm_summary_emails_recipients" id="frm_summary_emails_recipients" value="<?php echo esc_attr( $frm_settings->summary_emails_recipients ); ?>" />
+	<?php if ( FrmAppHelper::is_formidable_branding() && in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) ) { ?>
+		<span>
+			<?php
+			printf(
+				/* translators: %1$s the opening link tag, %2$s the closing link tag */
+				esc_html__( 'Summary emails can be disabled across multiple sites from %1$sFormidableForms.com%2$s.', 'formidable' ),
+				'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'misc-settings', 'account/profile/' ) ) . '" target="_blank" rel="noopener">',
+				'</a>'
+			);
+			?>
+		</span>
+	<?php } ?>
 </p>
 
 <!-- Deprecated settings can only be switched away from the default -->
