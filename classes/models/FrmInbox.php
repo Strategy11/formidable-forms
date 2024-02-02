@@ -210,7 +210,18 @@ class FrmInbox extends FrmFormApi {
 		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
 			return true;
 		}
-		return in_array( $this->get_user_type(), $who, true );
+		if ( in_array( $this->get_user_type(), $who, true ) ) {
+			return true;
+		}
+		/**
+		 * Allow for other special inbox cases in other add-ons.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $is_for_user
+		 * @param array $message
+		 */
+		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $message );
 	}
 
 	private function get_user_type() {
