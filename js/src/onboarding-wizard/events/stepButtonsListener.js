@@ -2,7 +2,8 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { onClickPreventDefault, fadeIn, hide, frmAnimate, show } from '../utils';
+import { PREFIX } from '../shared';
+import { onClickPreventDefault, hide, frmAnimate, show } from '../utils';
 
 /**
  * Manages event handling for the step buttons.
@@ -29,11 +30,18 @@ const onSkipButtonClick = () => {
 	const currentStep = document.querySelector( '[data-current-step]' );
 	const nextStep = currentStep.nextElementSibling;
 
+	currentStep.removeAttribute( 'data-current-step' );
+	nextStep.setAttribute( 'data-current-step', '' );
+
 	hide( currentStep );
 	show( nextStep );
 
-	const nextStepAnimate = new frmAnimate( nextStep );
-	nextStepAnimate.fadeIn();
+	if ( nextStep.id === `${PREFIX}-success-step` ) {
+		const { returnToDashboard } = getElements();
+		hide( returnToDashboard );
+	}
+
+	new frmAnimate( nextStep ).fadeIn();
 };
 
 export default addStepButtonsEvents;

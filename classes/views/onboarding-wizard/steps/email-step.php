@@ -1,6 +1,6 @@
 <?php
 /**
- * Onboarding Wizard - Welcome Step.
+ * Onboarding Wizard - Default Email Address Step.
  *
  * @package Formidable
  */

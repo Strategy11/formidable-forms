@@ -41,6 +41,7 @@
 	--success-800: #065F46;
 	--success-500: #12b76a;
 	--success-100: #D1FAE5;
+	--success-50: #ECFDF3;
 	--success-25: #f6fef9;
 	--border-radius: 35px;
 	--small-radius: 8px;
@@ -1583,6 +1584,10 @@ input.frm_insert_in_template {
 
 .frm-mt-lg {
 	margin-top: var(--gap-lg) !important;
+}
+
+.frm-mt-2xl {
+	margin-top: var(--gap-2xl) !important;
 }
 
 .frm-mt-auto {
@@ -8015,6 +8020,10 @@ body[class*=formidable-payments] .ui-widget-overlay {
 	background-color: var(--primary-25);
 }
 
+.frm-circled-icon-green {
+	background-color: var(--success-50);
+}
+
 .frm-circled-icon .frmsvg {
 	width: 21px;
 	height: 24px;
@@ -8024,7 +8033,9 @@ body[class*=formidable-payments] .ui-widget-overlay {
 	color: var(--primary-500);
  }
 
-
+.frm-circled-icon-green .frmsvg use {
+	color: var(--success-500);
+}
 
 .frm-upgrade-message img {
 	max-width: 100%;

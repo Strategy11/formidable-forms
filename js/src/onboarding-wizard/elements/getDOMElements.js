@@ -12,7 +12,9 @@ function getDOMElements() {
 	// Body Elements
 	const bodyElements = {
 		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
-		pageBackground: document.getElementById( `${PREFIX}-bg` )
+		pageBackground: document.getElementById( `${PREFIX}-bg` ),
+		returnToDashboard: document.getElementById( `${PREFIX}-return-dashboard` ),
+		container: document.getElementById( `${PREFIX}-container` )
 	};
 
 	// Welcome Step Elements
@@ -25,10 +27,16 @@ function getDOMElements() {
 		getEmailButton: document.getElementById( `${PREFIX}-get-email-btn` )
 	};
 
+	// Success Step Elements
+	const successStep = {
+		successStep: document.getElementById( `${PREFIX}-success-step` )
+	};
+
 	return {
 		...bodyElements,
 		...welcomeStep,
-		...emailStep
+		...emailStep,
+		...successStep
 	};
 }
 

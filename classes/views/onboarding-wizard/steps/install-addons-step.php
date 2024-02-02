@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-install-addons-step" class="frm-card-box frm-has-progress-bar" data-step-name="install-addons">
+<section id="frm-onboarding-install-addons-step" class="frm-card-box frm-has-progress-bar frm_hidden" data-step-name="install-addons">
 	<span class="frm-card-box-progress-bar">
 		<span data-step="2" data-total-step="3"></span>
 	</span>

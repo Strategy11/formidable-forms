@@ -2,8 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState } from '../shared';
-import { show, hide, hideElements, frmAnimate } from '../utils';
+import { frmAnimate } from '../utils';
 
 /**
  * Sets up the initial view, performing any required
@@ -12,13 +11,10 @@ import { show, hide, hideElements, frmAnimate } from '../utils';
  * @return {void}
  */
 function setupInitialView() {
-	const { pageBackground, welcomeStep } = getElements();
-
-	const pageBackgroundAnimate = new frmAnimate( pageBackground );
-	const welcomeStepAnimate = new frmAnimate( welcomeStep );
-
-	pageBackgroundAnimate.fadeIn();
-	welcomeStepAnimate.fadeIn();
+	// Smoothly display the page
+	const { pageBackground, container } = getElements();
+	new frmAnimate( pageBackground ).fadeIn();
+	new frmAnimate( container ).fadeIn();
 }
 
 export default setupInitialView;

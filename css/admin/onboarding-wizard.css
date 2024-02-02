@@ -31,22 +31,24 @@ html.wp-toolbar {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	opacity: 0;
 	z-index: 1;
 }
 
-.frm-onboarding-container {
+#frm-onboarding-container {
 	position: relative;
 	min-height: 100vh;
+	opacity: 0;
 	z-index: 2;
 }
 
-a.frm-onboarding-return-dashboard {
+#frm-onboarding-return-dashboard {
 	color: var(--grey-400);
 	font-weight: 500;
-	margin-top: var(--gap-xl)
+	margin-top: var(--gap-xl);
 }
 
-a.frm-onboarding-return-dashboard:hover {
+#frm-onboarding-return-dashboard:hover {
 	color: var(--grey-500);
 }
 
