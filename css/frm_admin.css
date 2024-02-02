@@ -6,6 +6,7 @@
 	--grey-900: #101828;
 	--grey-800: #1D2939;
 	--grey-700: #344054;
+	--grey-600: #475467;
 	--grey-500: #667085; /* Roughly 65% opacity */
 	--grey-400: #98A2B3;
 	--grey-300: #D0D5DD;
@@ -2401,7 +2402,7 @@ h2.frm-h2 + .howto {
 .frm-card-box-header  {
 	display: flex;
 	justify-content: center;
-	margin-bottom: var(--gap-xs);
+	margin-bottom: var(--gap-sm);
 }
 
 .frm-card-box.frm-has-progress-bar .frm-card-box-header {
@@ -2426,6 +2427,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-card-box-text {
+	color: var(--grey-600) !important;
 	margin-top: 0 !important;
 }
 
@@ -8020,6 +8022,11 @@ body[class*=formidable-payments] .ui-widget-overlay {
 	background-color: var(--primary-25);
 }
 
+.frm-circled-icon-large {
+	width: 80px;
+	height: 80px;
+}
+
 .frm-circled-icon-green {
 	background-color: var(--success-50);
 }
@@ -8027,6 +8034,10 @@ body[class*=formidable-payments] .ui-widget-overlay {
 .frm-circled-icon .frmsvg {
 	width: 21px;
 	height: 24px;
+}
+
+.frm-circled-icon-large .frmsvg {
+	width: 24px;
 }
 
 .frm-circled-icon .frmsvg use {

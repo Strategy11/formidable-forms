@@ -10,13 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-email-step" class="frm-card-box frm-has-progress-bar frm_hidden" data-step-name="email">
+<section id="frm-onboarding-email-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="email">
 	<span class="frm-card-box-progress-bar">
 		<span data-step="1" data-total-step="3"></span>
 	</span>
 
 	<div class="frm-card-box-header">
-		<div class="frm-circled-icon frm-flex-center">
+		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_email_icon' ); ?>
 		</div>
 	</div>

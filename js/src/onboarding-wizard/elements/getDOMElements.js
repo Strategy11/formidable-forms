@@ -11,15 +11,21 @@ import { PREFIX } from '../shared';
 function getDOMElements() {
 	// Body Elements
 	const bodyElements = {
-		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+		onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
 		pageBackground: document.getElementById( `${PREFIX}-bg` ),
-		returnToDashboard: document.getElementById( `${PREFIX}-return-dashboard` ),
-		container: document.getElementById( `${PREFIX}-container` )
+		container: document.getElementById( `${PREFIX}-container` ),
+		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` )
 	};
 
 	// Welcome Step Elements
 	const welcomeStep = {
-		welcomeStep: document.getElementById( `${PREFIX}-welcome-step` )
+		welcomeStep: document.getElementById( `${PREFIX}-welcome-step` ),
+		skipConnectAccountButton: document.getElementById( `${PREFIX}-skip-connect-account` )
+	};
+
+	// License Management Step Elements
+	const licenseManagementStep = {
+		licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` )
 	};
 
 	// Default Email Address Step Elements
@@ -34,6 +40,7 @@ function getDOMElements() {
 
 	return {
 		...bodyElements,
+		...licenseManagementStep,
 		...welcomeStep,
 		...emailStep,
 		...successStep

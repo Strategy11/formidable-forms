@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX } from '../shared';
+import { CURRENT_CLASS, PREFIX } from '../shared';
 import { onClickPreventDefault, hide, frmAnimate, show } from '../utils';
 
 /**
@@ -27,21 +27,21 @@ function addStepButtonsEvents() {
  * @return {void}
  */
 const onSkipButtonClick = () => {
-	const currentStep = document.querySelector( '[data-current-step]' );
-	const nextStep = currentStep.nextElementSibling;
-
-	currentStep.removeAttribute( 'data-current-step' );
-	nextStep.setAttribute( 'data-current-step', '' );
-
+	// Find and update current step
+	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
+	currentStep.classList.remove( CURRENT_CLASS );
 	hide( currentStep );
+
+	// Move to and display next step
+	const nextStep = currentStep.nextElementSibling;
+	nextStep.classList.add( CURRENT_CLASS );
 	show( nextStep );
-
-	if ( nextStep.id === `${PREFIX}-success-step` ) {
-		const { returnToDashboard } = getElements();
-		hide( returnToDashboard );
-	}
-
 	new frmAnimate( nextStep ).fadeIn();
+
+	// Update onboarding wizard's current step
+	const { stepName } = nextStep.dataset;
+	const { onboardingWizardPage } = getElements();
+	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
 };
 
 export default addStepButtonsEvents;

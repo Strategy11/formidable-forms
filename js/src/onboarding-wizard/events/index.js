@@ -1,6 +1,7 @@
 /**
  * Internal dependencies
  */
+import addSkipConnectAccountButtonEvents from './skipConnectAccountButtonListener';
 import addStepButtonsEvents from './stepButtonsListener';
 import addGetEmailButtonEvents from './getEmailButtonListener';
 
@@ -10,6 +11,7 @@ import addGetEmailButtonEvents from './getEmailButtonListener';
  * @return {void}
  */
 export function addEventListeners() {
+	addSkipConnectAccountButtonEvents();
 	addStepButtonsEvents();
 	addGetEmailButtonEvents();
 }

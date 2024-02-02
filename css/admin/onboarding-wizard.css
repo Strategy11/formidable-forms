@@ -52,6 +52,11 @@ html.wp-toolbar {
 	color: var(--grey-500);
 }
 
+#frm-onboarding-wizard-page[data-current-step="welcome"] #frm-onboarding-return-dashboard,
+#frm-onboarding-wizard-page[data-current-step="success"] #frm-onboarding-return-dashboard {
+	display: none;
+}
+
 /**
  * Welcome Step Styles
  *

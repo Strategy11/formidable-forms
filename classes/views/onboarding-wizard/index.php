@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-onboarding-wizard-page" class="frm_wrap">
+<div id="frm-onboarding-wizard-page" class="frm_wrap" data-current-step="welcome">
 	<div id="frm-onboarding-bg">
 		<?php require $view_path . 'onboarding-svg-bg.php'; ?>
 	</div>
