@@ -219,9 +219,10 @@ class FrmInbox extends FrmFormApi {
 		 * @since x.x
 		 *
 		 * @param bool  $is_for_user
+		 * @param array $who
 		 * @param array $message
 		 */
-		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $message );
+		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $who, $message );
 	}
 
 	private function get_user_type() {
