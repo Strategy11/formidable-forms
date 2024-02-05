@@ -1248,7 +1248,8 @@
 			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
 			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', ( event ) => {
-				el.setAttribute( 'aria-expanded', event.target.parentElement.classList.contains( 'open' ) );
+				event.stopPropagation();
+				frmAdminBuild.maybeCollapseSettings.call( el, 'open' );
 			});
 		});
 	}

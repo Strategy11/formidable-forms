@@ -5238,9 +5238,9 @@ function frmAdminBuildJS() {
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
-	function maybeCollapseSettings() {
+	function maybeCollapseSettings( toggleClass = 'frm-collapsed' ) {
 		/*jshint validthis:true */
-		this.classList.toggle( 'frm-collapsed' );
+		this.parentElement.classList.toggle( toggleClass );
 
 		// Toggles the "aria-expanded" attribute
 		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
@@ -10511,7 +10511,8 @@ function frmAdminBuildJS() {
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
-		purifyHtml
+		purifyHtml,
+		maybeCollapseSettings
 	};
 }
 
