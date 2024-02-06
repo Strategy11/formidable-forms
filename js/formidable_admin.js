@@ -5238,7 +5238,7 @@ function frmAdminBuildJS() {
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
-	function maybeCollapseSettings( toggleClass = 'frm-collapsed', toggleParentClass = false ) {
+	function maybeCollapseSettings( event, toggleClass = 'frm-collapsed', toggleParentClass = false ) {
 		const toggleElement = toggleParentClass ? this.parentElement : this;
 		/*jshint validthis:true */
 		toggleElement.classList.toggle( toggleClass );
