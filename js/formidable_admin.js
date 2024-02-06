@@ -5238,9 +5238,10 @@ function frmAdminBuildJS() {
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
-	function maybeCollapseSettings( toggleClass = 'frm-collapsed' ) {
+	function maybeCollapseSettings( toggleClass = 'frm-collapsed', toggleParentClass = false ) {
+		const toggleElement = toggleParentClass ? this.parentElement : this;
 		/*jshint validthis:true */
-		this.parentElement.classList.toggle( toggleClass );
+		toggleElement.classList.toggle( toggleClass );
 
 		// Toggles the "aria-expanded" attribute
 		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;

@@ -1249,7 +1249,7 @@
 			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', ( event ) => {
 				event.stopPropagation();
-				frmAdminBuild.maybeCollapseSettings.call( el, 'open' );
+				frmAdminBuild.maybeCollapseSettings.call( el, 'open', true );
 			});
 		});
 	}
