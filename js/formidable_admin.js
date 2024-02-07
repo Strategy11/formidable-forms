@@ -707,7 +707,7 @@ function frmAdminBuildJS() {
 				show = '';
 				hide = '';
 			}
-		} else if ( id.indexOf( 'frm_postmeta_' ) === 0 ) {
+		} else if ( id && id.indexOf( 'frm_postmeta_' ) === 0 ) {
 			if ( jQuery( '#frm_postmeta_rows .frm_postmeta_row' ).length < 2 ) {
 				show = '.frm_add_postmeta_row.button';
 			}
