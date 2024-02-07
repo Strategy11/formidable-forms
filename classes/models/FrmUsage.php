@@ -18,7 +18,7 @@ class FrmUsage {
 			return;
 		}
 
-		$ep   = 'aHR0cHM6Ly9mcm0tdXNlci10cmFja2luZy5oZXJva3VhcHAuY29tL3NuYXBzaG90';
+		$ep   = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
