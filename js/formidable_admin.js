@@ -6997,6 +6997,8 @@ function frmAdminBuildJS() {
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
+
+		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 	}
 
 	function setupTinyMceEventHandlers( editor ) {
