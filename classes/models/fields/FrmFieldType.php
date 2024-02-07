@@ -1420,7 +1420,8 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( $entry->updated_by && $this->user_id_is_privileged( $entry->updated_by ) ) {
+		// $entry->updated_by may not always be set.
+		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
 		if ( $entry->user_id && $this->user_id_is_privileged( $entry->user_id ) ) {
