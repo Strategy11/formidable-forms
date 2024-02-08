@@ -1296,6 +1296,11 @@ body.frm-hidden-overflow {
 	display: inline-block;
 }
 
+.no-js.wp-core-ui .frm-search .button.hide-if-no-js,
+.js.wp-core-ui .frm-search .button.hide-if-js {
+	display: none;
+}
+
 .frm-button-tertiary {
 	border-color: transparent;
 	color: var(--primary-500);
