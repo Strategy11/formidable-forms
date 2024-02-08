@@ -31,6 +31,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</div>
 		</div>
+
+		<?php
+		/**
+		 * @since x.x
+		 *
+		 * @param array $form_array Processed form array.
+		 */
+		do_action( 'frm_after_builder_fake_page', $values );
+		?>
 	</div>
 
 	<ul id="frm-show-fields" class="frm_sorting inside">
