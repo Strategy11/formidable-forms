@@ -9704,3 +9704,23 @@ Responsive Design
 	filter: brightness(0) saturate(0%) invert(72%);
 }
 /* End Option Box */
+
+/* Start Form Error */
+.frm-form-error:not(.frm_hidden) {
+	display: flex;
+}
+
+.frm-form-error {
+	gap: calc(var(--gap-xs) + var(--gap-2xs));
+}
+
+.frm-form-error span {
+	display: none;
+	color: var(--error-500);
+}
+
+.frm-form-error[frm-error="empty"] span[frm-error="empty"],
+.frm-form-error[frm-error="invalid"] span[frm-error="invalid"],
+.frm-form-error[frm-error="custom"] span[frm-error="custom"] {
+	display: inline-block;
+}

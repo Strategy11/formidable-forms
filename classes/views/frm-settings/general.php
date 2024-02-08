@@ -35,6 +35,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 
+<p class="frm_form_field">
+	<label class="frm_left_label" for="frm_default_email">
+		<?php esc_html_e( 'Default Email Address', 'formidable' ); ?>
+	</label>
+	<input class="frm_with_left_label" type="text" name="frm_default_email" id="frm_default_email" value="<?php echo esc_attr( $frm_settings->default_email ); ?>" />
+</p>
+
 <?php
 ob_start();
 

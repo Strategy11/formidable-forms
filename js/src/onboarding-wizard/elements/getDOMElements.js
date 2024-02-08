@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { PREFIX } from '../shared';
+import { PREFIX, WELCOME_STEP_ID } from '../shared';
 
 /**
  * Return essential DOM elements.
@@ -19,7 +19,7 @@ function getDOMElements() {
 
 	// Welcome Step Elements
 	const welcomeStep = {
-		welcomeStep: document.getElementById( `${PREFIX}-welcome-step` ),
+		welcomeStep: document.getElementById( WELCOME_STEP_ID ),
 		skipConnectAccountButton: document.getElementById( `${PREFIX}-skip-connect-account` )
 	};
 
@@ -30,7 +30,10 @@ function getDOMElements() {
 
 	// Default Email Address Step Elements
 	const emailStep = {
-		getEmailButton: document.getElementById( `${PREFIX}-get-email-btn` )
+		setupEmailStepButton: document.getElementById( `${PREFIX}-setup-email-step-button` ),
+		defaultEmailField: document.getElementById( `${PREFIX}-default-email-field` ),
+		subscribeCheckbox: document.getElementById( `${PREFIX}-subscribe` ),
+		allowTrackingCheckbox: document.getElementById( `${PREFIX}-allow-tracking` )
 	};
 
 	// Success Step Elements

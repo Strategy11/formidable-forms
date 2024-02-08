@@ -248,13 +248,35 @@ class FrmOnboardingWizardController {
 		$step_parts = array(
 			'welcome'            => 'steps/welcome-step.php',
 			'license-management' => 'steps/license-management-step.php',
-			'email'              => 'steps/email-step.php',
+			'default-email'      => 'steps/default-email-step.php',
 			'install-addons'     => 'steps/install-addons-step.php',
 			'success'            => 'steps/success-step.php',
 		);
 
 		// Render the view.
 		include $view_path . 'index.php';
+	}
+
+
+	/**
+	 * Handle AJAX request to setup the "Default Email Address" step.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_setup_email_step() {
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data.
+		$default_email       = FrmAppHelper::get_post_param( 'is_subscribed', '', 'sanitize_text_field' );
+		$is_subscribed       = FrmAppHelper::get_post_param( 'is_subscribed', '', 'rest_sanitize_boolean' );
+		$is_allowed_tracking = FrmAppHelper::get_post_param( 'allow_tracking', '', 'rest_sanitize_boolean' );
+
+		// Send response.
+		wp_send_json_success();
 	}
 
 	/**

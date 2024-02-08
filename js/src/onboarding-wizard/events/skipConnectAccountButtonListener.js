@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX } from '../shared';
+import { PREFIX, WELCOME_STEP_ID } from '../shared';
 import { onClickPreventDefault } from '../utils';
 
 /**
@@ -30,7 +30,7 @@ const onSkipConnectAccountButtonClick = () => {
 	licenseManagementStep.remove();
 
 	// Calculate and set the width for each step's progress bar
-	const steps = Array.from( document.querySelectorAll( `.${PREFIX}-step` ) ).filter( step => step.id !== `${PREFIX}-welcome-step` );
+	const steps = Array.from( document.querySelectorAll( `.${PREFIX}-step` ) ).filter( step => step.id !== WELCOME_STEP_ID );
 	steps.forEach( ( step, index ) => {
 		// Calculate width percentage based on the current step index (add 1 since index is 0-based) and total steps length
 		const widthPercentage = ( ( index + 1 ) / steps.length ) * 100;

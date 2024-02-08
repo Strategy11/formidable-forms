@@ -45,6 +45,7 @@ class FrmSettings {
 	public $summary_emails;
 	public $summary_emails_recipients;
 
+	public $default_email;
 	public $currency;
 
 	/**
@@ -159,6 +160,11 @@ class FrmSettings {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
 			}
+		}
+
+		if ( ! isset( $this->default_email ) ) {
+			$user                = wp_get_current_user();
+			$this->default_email = $user->user_email;
 		}
 
 		if ( ! isset( $this->currency ) ) {
@@ -350,6 +356,7 @@ class FrmSettings {
 		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
 		$this->load_style       = $params['frm_load_style'];
 		$this->custom_css       = $params['frm_custom_css'];
+		$this->currency         = $params['frm_default_email'];
 		$this->currency         = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );

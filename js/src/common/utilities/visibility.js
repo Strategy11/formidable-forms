@@ -41,6 +41,6 @@ export const hide = element => element?.classList.add( HIDDEN_CLASS );
  * @return {boolean} Returns true if the element is visible, otherwise false.
  */
 export const isVisible = element => {
-	const styles = window.getComputedStyle(element);
-    return styles.getPropertyValue('display') !== 'none';
+	const styles = window.getComputedStyle( element );
+    return styles.getPropertyValue( 'display' ) !== 'none';
 };

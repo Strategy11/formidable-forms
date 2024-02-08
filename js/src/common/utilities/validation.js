@@ -14,4 +14,4 @@ export const isValidEmail = email =>
  * @param {any} element Element to be checked.
  * @return {boolean} True if it's an HTMLElement, otherwise false.
  */
-const isHTMLElement = element => element instanceof HTMLElement || console.warn( 'Invalid argument: Element must be an instance of HTMLElement' ) || false;
+export const isHTMLElement = element => element instanceof HTMLElement || console.warn( 'Invalid argument: Element must be an instance of HTMLElement' ) || false;
