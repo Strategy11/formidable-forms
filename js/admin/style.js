@@ -1247,9 +1247,15 @@
 		document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
 			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
 			el.setAttribute( 'role', 'button' );
-			el.addEventListener( 'click', ( event ) => {
+			el.addEventListener( 'click', event => {
 				event.stopPropagation();
 				frmAdminBuild.maybeCollapseSettings.call( el, event, 'open', true );
+			});
+			el.addEventListener( 'keydown', event => {
+				if ( event.key === ' ' ) {
+					event.preventDefault();
+					frmAdminBuild.maybeCollapseSettings.call( el, event, 'open', true );
+				}
 			});
 		});
 	}
