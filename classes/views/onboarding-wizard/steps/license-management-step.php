@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-content frm-fields">
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'License Management', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text frm-px-lg frmcenter"><?php esc_html_e( 'To get started, please activate your license by following the simple steps below.', 'formidable' ); ?></p>
+		<p class="frm-card-box-text frmcenter"><?php esc_html_e( 'To get started, please activate your license by following the simple steps below.', 'formidable' ); ?></p>
 
 		<div class="frm_form_field frm-mt-lg">
 			<p>

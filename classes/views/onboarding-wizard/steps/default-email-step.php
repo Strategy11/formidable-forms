@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-content frm-fields">
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Default Email Address', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text frm-px-lg frmcenter"><?php esc_html_e( 'Subscribe to our mailing list so you know first when we release new features!', 'formidable' ); ?></p>
+		<p class="frm-card-box-text frmcenter"><?php esc_html_e( 'Subscribe to our mailing list so you know first when we release new features!', 'formidable' ); ?></p>
 
 		<div class="frm_form_field frm-mt-lg">
 			<p>

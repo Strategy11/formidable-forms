@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-content frm-fields">
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text frm-px-lg frmcenter"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
+		<p class="frm-card-box-text frmcenter"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
 
 		<div class="frm-mt-md">
 			<label for="frm-onboarding-stripe-payments-addon" class="frm-option-box frm-disabled">

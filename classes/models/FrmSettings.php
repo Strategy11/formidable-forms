@@ -392,6 +392,31 @@ class FrmSettings {
 	}
 
 	/**
+	 * Updates a single setting with specified sanitization.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key The setting key to update.
+	 * @param mixed  $value The new value for the setting.
+	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_single_setting( $key, $value, $sanitize ) {
+		if ( ! property_exists( $this, $key ) || ! is_callable( $sanitize ) ) {
+			// Setting does not exist or sanitization function name is not callable.
+			return false;
+		}
+
+		// Sanitize the value using the specified sanitization method by name.
+		$sanitized_value = call_user_func( $sanitize, $value );
+
+		// Update the property value.
+		$this->{$key} = $sanitized_value;
+
+		return true;
+	}
+
+	/**
 	 * @return void
 	 */
 	public function store() {

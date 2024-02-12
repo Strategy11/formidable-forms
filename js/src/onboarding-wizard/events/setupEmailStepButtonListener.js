@@ -39,7 +39,7 @@ const onSetupEmailStepButtonClick = async() => {
 	const { subscribeCheckbox, allowTrackingCheckbox } = getElements();
 	formData.append( 'default_email', email );
 	formData.append( 'is_subscribed', subscribeCheckbox.checked );
-	formData.append( 'is_allowed_tracking', allowTrackingCheckbox.checked );
+	formData.append( 'is_tracking_allowed', allowTrackingCheckbox.checked );
 
 	// Send the POST request
 	const { doJsonPost } = frmDom.ajax;

@@ -246,11 +246,12 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in onrder.
 		$step_parts = array(
-			'welcome'            => 'steps/welcome-step.php',
-			'license-management' => 'steps/license-management-step.php',
-			'default-email'      => 'steps/default-email-step.php',
-			'install-addons'     => 'steps/install-addons-step.php',
-			'success'            => 'steps/success-step.php',
+			'welcome'                => 'steps/welcome-step.php',
+			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
+			'license-management'     => 'steps/license-management-step.php',
+			'default-email'          => 'steps/default-email-step.php',
+			'install-addons'         => 'steps/install-addons-step.php',
+			'success'                => 'steps/success-step.php',
 		);
 
 		// Render the view.
@@ -271,9 +272,14 @@ class FrmOnboardingWizardController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data.
-		$default_email       = FrmAppHelper::get_post_param( 'is_subscribed', '', 'sanitize_text_field' );
+		$default_email       = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
 		$is_subscribed       = FrmAppHelper::get_post_param( 'is_subscribed', '', 'rest_sanitize_boolean' );
-		$is_allowed_tracking = FrmAppHelper::get_post_param( 'allow_tracking', '', 'rest_sanitize_boolean' );
+		$is_tracking_allowed = FrmAppHelper::get_post_param( 'is_tracking_allowed', '', 'rest_sanitize_boolean' );
+
+		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings->update_single_setting( 'default_email', $default_email, 'sanitize_text_field' );
+		$frm_settings->update_single_setting( 'tracking', $is_tracking_allowed, 'rest_sanitize_boolean' );
+		$frm_settings->store();
 
 		// Send response.
 		wp_send_json_success();

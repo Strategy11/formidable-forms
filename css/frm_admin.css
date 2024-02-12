@@ -1553,6 +1553,10 @@ input.frm_insert_in_template {
 }
 
 /* Generic Classes */
+.frm-text-grey-900 {
+	color: var(--grey-900);
+}
+
 .frm_no_margin, /* deprecated */
 .frm-m-0 {
 	margin: 0 !important;
@@ -1686,11 +1690,6 @@ input.frm_insert_in_template {
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
-}
-
-.frm-px-lg {
-	padding-right: var(--gap-lg) !important;
-	padding-left: var(--gap-lg) !important;
 }
 
 .frm-text-xs {
@@ -2427,6 +2426,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-card-box-text {
+	font-size: var(--text-md) !important;
 	color: var(--grey-600) !important;
 	margin-top: 0 !important;
 }
@@ -9724,3 +9724,25 @@ Responsive Design
 .frm-form-error[frm-error="custom"] span[frm-error="custom"] {
 	display: inline-block;
 }
+
+/* Start Box Styles */
+.frm-box {
+	padding: var(--gap-sm);
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+}
+/* End Box Styles */
+
+/* Start External Link Styles */
+.frm-link-with-external-icon {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-2xs);
+	font-size: var(--text-xs);
+}
+
+.frm-link-with-external-icon .frmsvg {
+	width: 16px;
+	height: 16px;
+}
+/* End External Link Styles */
