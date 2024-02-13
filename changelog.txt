@@ -1,4 +1,10 @@
 == Changelog ==
+= 6.8.1 =
+* New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
+* Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
+* Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
+* Fix: The action limit error message would always show the action limit as one.
+
 = 6.8 =
 * Security: Nonce validation was missing when saving changes on the form settings page.
 * New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
