@@ -10382,9 +10382,13 @@ function frmAdminBuildJS() {
 
 			jQuery( '#frm-dismissable-cta .dismiss' ).on( 'click', function( event ) {
 				event.preventDefault();
-				jQuery.post( ajaxurl, {
-					action: 'frm_lite_settings_upgrade'
-				});
+				jQuery.post(
+					ajaxurl,
+					{
+						action: 'frm_lite_settings_upgrade',
+						nonce: frmGlobal.nonce
+					}
+				);
 				jQuery( '.settings-lite-cta' ).remove();
 			});
 
