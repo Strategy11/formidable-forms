@@ -5241,14 +5241,10 @@ function frmAdminBuildJS() {
 	function maybeCollapseSettings( event, toggleClass = 'frm-collapsed', toggleParentClass = false ) {
 		const toggleElement = toggleParentClass ? this.parentElement : this;
 		/*jshint validthis:true */
-		let expanded = toggleElement.classList.toggle( toggleClass );
-
-		if ( toggleClass === 'open' ) {
-			expanded = ! expanded;
-		}
+		const expanded = toggleElement.classList.toggle( toggleClass );
 
 		// Toggles the "aria-expanded" attribute
-		this.setAttribute( 'aria-expanded', ! expanded );
+		this.setAttribute( 'aria-expanded', toggleClass === 'open' ? expanded : ! expanded );
 	}
 
 	function clickLabel() {
