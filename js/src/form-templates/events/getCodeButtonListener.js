@@ -24,7 +24,7 @@ function addGetCodeButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onGetCodeButtonClick = async() => {
+export const onGetCodeButtonClick = async() => {
 	const { leaveEmailModalInput } = getElements();
 	const email = leaveEmailModalInput.value.trim();
 

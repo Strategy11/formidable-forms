@@ -273,7 +273,6 @@ class FrmOnboardingWizardController {
 
 		// Get posted data.
 		$default_email       = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
-		$is_subscribed       = FrmAppHelper::get_post_param( 'is_subscribed', '', 'rest_sanitize_boolean' );
 		$is_tracking_allowed = FrmAppHelper::get_post_param( 'is_tracking_allowed', '', 'rest_sanitize_boolean' );
 
 		$frm_settings = FrmAppHelper::get_settings();

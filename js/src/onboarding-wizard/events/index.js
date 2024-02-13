@@ -15,3 +15,5 @@ export function addEventListeners() {
 	addStepButtonsEvents();
 	setupEmailStepButtonEvents();
 }
+
+export { onSkipButtonClick } from './stepButtonsListener';

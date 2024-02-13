@@ -4,6 +4,7 @@
 import { getElements } from '../elements';
 import { showEmailAddressError } from '../ui';
 import { isValidEmail, onClickPreventDefault } from '../utils';
+import { onSkipButtonClick } from './stepButtonsListener';
 
 /**
  * Manages event handling for the "Next Step" button in the email setup step.
@@ -34,16 +35,29 @@ const onSetupEmailStepButtonClick = async() => {
 		return;
 	}
 
+	const { subscribeCheckbox, allowTrackingCheckbox } = getElements();
+
+	// Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
+	if ( subscribeCheckbox.checked ) {
+		// Assign default email to 'leave email' input if provided; otherwise, use administrator's email
+		if ( email ) {
+			const emailInput = document.getElementById( 'frm_leave_email' );
+			emailInput.value = email;
+		}
+
+		frmAdminBuild.addMyEmailAddress();
+	}
+
 	// Prepare FormData for the POST request
 	const formData = new FormData();
-	const { subscribeCheckbox, allowTrackingCheckbox } = getElements();
 	formData.append( 'default_email', email );
-	formData.append( 'is_subscribed', subscribeCheckbox.checked );
 	formData.append( 'is_tracking_allowed', allowTrackingCheckbox.checked );
 
 	// Send the POST request
 	const { doJsonPost } = frmDom.ajax;
-	return doJsonPost( 'onboarding_setup_email_step', formData );
+	doJsonPost( 'onboarding_setup_email_step', formData ).then( () =>{
+		onSkipButtonClick();
+	});
 };
 
 export default addSetupEmailStepButtonEvents;

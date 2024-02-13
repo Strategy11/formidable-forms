@@ -44,6 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span><?php esc_html_e( 'Help make Formidable Forms better by anonymously sharing information about your usage', 'formidable' ); ?></span>
 			</label>
 		</div>
+
+		<?php FrmAppController::api_email_form( 'freetemplates' ); ?>
 	</div>
 
 	<div class="frm-card-box-footer">

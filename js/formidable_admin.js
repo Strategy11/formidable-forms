@@ -10511,7 +10511,9 @@ function frmAdminBuildJS() {
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
-		purifyHtml
+		purifyHtml,
+		showActiveCampaignForm,
+		addMyEmailAddress
 	};
 }
 

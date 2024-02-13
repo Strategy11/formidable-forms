@@ -26,7 +26,7 @@ function addStepButtonsEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onSkipButtonClick = () => {
+export const onSkipButtonClick = () => {
 	// Find and update current step
 	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
 	currentStep.classList.remove( CURRENT_CLASS );
