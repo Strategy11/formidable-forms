@@ -7238,6 +7238,12 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				let logicRowContainerID = jQuery( html ).attr( 'id' );
+				while ( document.getElementById( logicRowContainerID ) ) {
+					html = updateLogicRowHTML( html, id, logicRowContainerID );
+					logicRowContainerID = jQuery( html ).attr( 'id' )
+				}
+
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					$logicRow.append( html );
@@ -7246,6 +7252,18 @@ function frmAdminBuildJS() {
 			}
 		});
 		return false;
+	}
+
+	function updateLogicRowHTML( html, id, newLogicRowID ) {
+		const logicRowNumberToReplace = parseInt( newLogicRowID.split( '_' ).pop() );
+		const newLogicRowNumber  = logicRowNumberToReplace + 1;
+
+		html = html
+		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
+		.replaceAll( `[${logicRowNumberToReplace}]`, `[${newLogicRowNumber}]`)
+		.replaceAll( ",'" + logicRowNumberToReplace + "',", ",'" + newLogicRowNumber + "',");
+
+		return html;
 	}
 
 	function toggleSubmitLogic() {
