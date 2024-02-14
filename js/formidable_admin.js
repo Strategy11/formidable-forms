@@ -8,12 +8,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 	var el = {
 		messageBox: null,
-		btn: null,
 		reset: null,
 
 		setElements: function() {
 			el.messageBox = document.querySelector( '.frm_pro_license_msg' );
-			el.btn = document.getElementById( 'frm-settings-connect-btn' );
 			el.reset = document.getElementById( 'frm_reconnect_link' );
 		}
 	};
@@ -44,118 +42,6 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 			if ( el.reset !== null ) {
 				$( el.reset ).on( 'click', app.reauthorize );
-			}
-
-			$( el.btn ).on( 'click', function( e ) {
-				e.preventDefault();
-				app.gotoUpgradeUrl();
-			});
-
-			window.addEventListener( 'message', function( msg ) {
-				if ( msg.origin.replace( /\/$/, '' ) !== frmGlobal.app_url.replace( /\/$/, '' ) ) {
-					return;
-				}
-
-				if ( ! msg.data || 'object' !== typeof msg.data ) {
-					console.error( 'Messages from "' + frmGlobal.app_url + '" must contain an api key string.' );
-					return;
-				}
-
-				app.updateForm( msg.data );
-			});
-		},
-
-		/**
-		 * Go to upgrade url.
-		 *
-		 * @since 4.03
-		 */
-		gotoUpgradeUrl: function() {
-			var w = window.open( frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0' );
-			w.focus();
-		},
-
-		updateForm: function( response ) {
-
-			// Start spinner.
-			var btn = el.btn;
-			btn.classList.add( 'frm_loading_button' );
-
-			if ( response.url !== '' ) {
-				app.showProgress({
-					success: true,
-					message: 'Installing...'
-				});
-				var fallback = setTimeout( function() {
-					app.showProgress({
-						success: true,
-						message: 'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
-					});
-				}, 10000 );
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					dataType: 'json',
-					data: {
-						action: 'frm_connect',
-						plugin: response.url,
-						nonce: frmGlobal.nonce
-					},
-					success: function() {
-						clearTimeout( fallback );
-						app.activateKey( response );
-					},
-					error: function( xhr, textStatus, e ) {
-						clearTimeout( fallback );
-						btn.classList.remove( 'frm_loading_button' );
-						app.showMessage({
-							success: false,
-							message: e
-						});
-					}
-				});
-			} else if ( response.key !== '' ) {
-				app.activateKey( response );
-			}
-		},
-
-		activateKey: function( response ) {
-			var btn = el.btn;
-			if ( response.key === '' ) {
-				btn.classList.remove( 'frm_loading_button' );
-			} else {
-				app.showProgress({
-					success: true,
-					message: 'Activating...'
-				});
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					dataType: 'json',
-					data: {
-						action: 'frm_addon_activate',
-						license: response.key,
-						plugin: 'formidable_pro',
-						wpmu: 0,
-						nonce: frmGlobal.nonce
-					},
-					success: function( msg ) {
-						btn.classList.remove( 'frm_loading_button' );
-
-						if ( msg.success === true ) {
-							app.showAuthorized( true );
-						}
-
-						app.showMessage( msg );
-					},
-					error: function( xhr, textStatus, e ) {
-						btn.classList.remove( 'frm_loading_button' );
-						app.showMessage({
-							success: false,
-							message: e
-						});
-					}
-				});
 			}
 		},
 
