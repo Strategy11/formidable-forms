@@ -7254,9 +7254,19 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	/**
+	 * Update a conditional logic row html so that it does not lead to duplicated HTML elements in the page.
+	 *
+	 * @since 6.x
+	 *
+	 * @param {String} html
+	 * @param {Number} id
+	 * @param {String} newLogicRowID
+	 * @returns {String}
+	 */
 	function updateLogicRowHTML( html, id, newLogicRowID ) {
 		const logicRowNumberToReplace = parseInt( newLogicRowID.split( '_' ).pop() );
-		const newLogicRowNumber  = logicRowNumberToReplace + 1;
+		const newLogicRowNumber       = logicRowNumberToReplace + 1;
 
 		html = html
 		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
