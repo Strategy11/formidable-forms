@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 6.8
+Stable tag: 6.8.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.8.1 =
+* Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
+* New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
+* Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
+* Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
+* Fix: The action limit error message would always show the action limit as one.
+
 = 6.8 =
 * Security: Nonce validation was missing when saving changes on the form settings page.
 * New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
