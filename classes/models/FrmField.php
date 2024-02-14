@@ -232,6 +232,10 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_total_icon',
 				'section' => 'pricing',
 			),
+			'submit' => array(
+				'name' => __( 'Submit button', 'formidable' ),
+				'icon' => 'frm_icon_font frm_total_icon',
+			),
 		);
 
 		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
