@@ -7241,7 +7241,7 @@ function frmAdminBuildJS() {
 				let logicRowContainerID = jQuery( html ).attr( 'id' );
 				while ( document.getElementById( logicRowContainerID ) ) {
 					html = updateLogicRowHTML( html, id, logicRowContainerID );
-					logicRowContainerID = jQuery( html ).attr( 'id' )
+					logicRowContainerID = jQuery( html ).attr( 'id' );
 				}
 
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
@@ -7270,8 +7270,8 @@ function frmAdminBuildJS() {
 
 		html = html
 		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
-		.replaceAll( `[${logicRowNumberToReplace}]`, `[${newLogicRowNumber}]`)
-		.replaceAll( ",'" + logicRowNumberToReplace + "',", ",'" + newLogicRowNumber + "',");
+		.replaceAll( `[${logicRowNumberToReplace}]`, `[${newLogicRowNumber}]` )
+		.replaceAll( ',\'' + logicRowNumberToReplace + ',\'' , ',\''  + newLogicRowNumber + ',\'' );
 
 		return html;
 	}
