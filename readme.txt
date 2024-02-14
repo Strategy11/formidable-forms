@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 6.8.1 =
+* Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
 * New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
 * Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
 * Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
