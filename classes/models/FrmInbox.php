@@ -216,7 +216,7 @@ class FrmInbox extends FrmFormApi {
 		/**
 		 * Allow for other special inbox cases in other add-ons.
 		 *
-		 * @since x.x
+		 * @since 6.8.1
 		 *
 		 * @param bool  $is_for_user
 		 * @param array $who
