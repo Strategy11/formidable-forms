@@ -7271,7 +7271,7 @@ function frmAdminBuildJS() {
 		html = html
 		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
 		.replaceAll( `[${logicRowNumberToReplace}]`, `[${newLogicRowNumber}]` )
-		.replaceAll( ',\'' + logicRowNumberToReplace + ',\'' , ',\''  + newLogicRowNumber + ',\'' );
+		.replaceAll( ',\'' + logicRowNumberToReplace + ',\'', ',\''  + newLogicRowNumber + ',\'' );
 
 		return html;
 	}
