@@ -783,7 +783,7 @@ function frmAdminBuildJS() {
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
 
-		 // clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
+		// clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
 		if ( this.id === 'frm_insert_fields_tab' && ! builderPage ) {
 			clearSettingsBox();
 		}
