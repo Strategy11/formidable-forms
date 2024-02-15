@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 6.8.1
+Stable tag: 6.8.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.8.2 =
+* Fix: The process of connecting an account to formidableforms.com would fail in some web browsers.
+
 = 6.8.1 =
 * Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
 * New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.

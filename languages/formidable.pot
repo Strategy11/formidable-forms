@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.8.1\n"
+"Project-Id-Version: Formidable Forms 6.8.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-14T18:36:10+00:00\n"
+"POT-Creation-Date: 2024-02-15T14:29:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
@@ -412,7 +412,7 @@ msgstr ""
 #: classes/views/shared/confirm-overlay.php:20
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:68
 #: js/admin/style.js:939
-#: js/formidable_admin.js:4218
+#: js/formidable_admin.js:4104
 msgid "Cancel"
 msgstr ""
 
@@ -1234,7 +1234,7 @@ msgstr ""
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:319
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:6739
+#: js/formidable_admin.js:6625
 msgid "Activate"
 msgstr ""
 
@@ -1321,7 +1321,7 @@ msgid "Field Colors"
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:948
-#: js/formidable_admin.js:2424
+#: js/formidable_admin.js:2310
 msgid "Field Settings"
 msgstr ""
 
@@ -2458,7 +2458,7 @@ msgstr ""
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 #: stripe/views/subscriptions/show.php:129
-#: js/formidable_admin.js:2452
+#: js/formidable_admin.js:2338
 msgid "Delete"
 msgstr ""
 
@@ -3930,7 +3930,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1758
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
-#: js/formidable_admin.js:4223
+#: js/formidable_admin.js:4109
 msgid "Save"
 msgstr ""
 
@@ -5277,7 +5277,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:71
-#: js/formidable_admin.js:8819
+#: js/formidable_admin.js:8705
 msgid "Close"
 msgstr ""
 
@@ -5860,7 +5860,7 @@ msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:32
 #: js/admin/style.js:678
-#: js/formidable_admin.js:2458
+#: js/formidable_admin.js:2344
 msgid "Duplicate"
 msgstr ""
 
@@ -6005,14 +6005,14 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:36
-#: js/formidable_admin.js:1536
-#: js/formidable_admin.js:1541
-#: js/formidable_admin.js:2383
+#: js/formidable_admin.js:1422
+#: js/formidable_admin.js:1427
+#: js/formidable_admin.js:2269
 msgid "More Options"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:38
-#: js/formidable_admin.js:1528
+#: js/formidable_admin.js:1414
 msgid "Toggle More Options Dropdown"
 msgstr ""
 
@@ -7924,64 +7924,64 @@ msgstr ""
 msgid "Style has been reset successfully"
 msgstr ""
 
-#: js/formidable_admin.js:1487
+#: js/formidable_admin.js:1373
 msgid "Set Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:1494
+#: js/formidable_admin.js:1380
 msgid "Move Field Group"
 msgstr ""
 
-#: js/formidable_admin.js:2452
+#: js/formidable_admin.js:2338
 msgid "Delete Group"
 msgstr ""
 
-#: js/formidable_admin.js:2458
+#: js/formidable_admin.js:2344
 msgid "Duplicate Group"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3678
+#: js/formidable_admin.js:3564
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
 msgstr ""
 
-#: js/formidable_admin.js:3916
+#: js/formidable_admin.js:3802
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:3939
+#: js/formidable_admin.js:3825
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:3949
+#: js/formidable_admin.js:3835
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:4203
+#: js/formidable_admin.js:4089
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:4207
+#: js/formidable_admin.js:4093
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:4660
+#: js/formidable_admin.js:4546
 msgid "Merge into row"
 msgstr ""
 
-#: js/formidable_admin.js:5959
+#: js/formidable_admin.js:5845
 msgid "Duplicate option value \"%s\" detected"
 msgstr ""
 
-#: js/formidable_admin.js:8804
+#: js/formidable_admin.js:8690
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:8973
+#: js/formidable_admin.js:8859
 msgid "Unable to install template"
 msgstr ""
 
-#: js/formidable_admin.js:9620
+#: js/formidable_admin.js:9506
 msgid "Thank you for signing up!"
 msgstr ""
 
