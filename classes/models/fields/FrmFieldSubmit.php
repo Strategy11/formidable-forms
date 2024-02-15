@@ -35,9 +35,10 @@ DEFAULT_HTML;
 		$settings = array(
 			'required'       => false,
 			'visibility'     => false,
-			'label_position' => true,
-			'options'        => true,
+			'label_position' => false,
+			'options'        => false,
 			'default'        => false,
+			'description'    => false,
 		);
 
 		return $settings;
