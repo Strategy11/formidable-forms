@@ -111,7 +111,7 @@ foreach ( (array) $terms as $term ) {
 	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
 	$term_parent = ! empty( $term->parent ) ? '<term_parent>' . esc_html( $term->parent ) . '</term_parent>' : '';
 	?>
-	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><?php echo $term_parent; ?><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
+	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><?php echo $term_parent; ?><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
