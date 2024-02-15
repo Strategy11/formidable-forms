@@ -321,6 +321,7 @@ function frmAdminBuildJS() {
 
 	const currentURL = new URL( window.location.href );
 	const urlParams = currentURL.searchParams;
+	const builderPage = document.getElementById( 'frm_builder_page' );
 
 	// Global settings
 	var s;
@@ -782,7 +783,8 @@ function frmAdminBuildJS() {
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
 
-		if ( this.id === 'frm_insert_fields_tab' && ! document.getElementById( 'frm_builder_page' ) ) {
+		 // clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
+		if ( this.id === 'frm_insert_fields_tab' && ! builderPage ) {
 			clearSettingsBox();
 		}
 		return false;
@@ -1398,7 +1400,7 @@ function frmAdminBuildJS() {
 			controls.setAttribute( 'role', 'group' );
 			controls.setAttribute( 'tabindex', 0 );
 			setFieldControlsHtml( controls );
-			document.getElementById( 'frm_builder_page' ).appendChild( controls );
+			builderPage.appendChild( controls );
 		}
 
 		$row.append( controls );
@@ -2225,7 +2227,7 @@ function frmAdminBuildJS() {
 
 	function checkForMultiselectKeysOnMouseMove( event ) {
 		var keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
-		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
+		jQuery( builderPage ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
 		checkForActiveHoverTarget( event );
 	}
 
@@ -4898,7 +4900,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldIds = [];
-		rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' );
+		rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		rowLength = rows.length;
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			row = rows[ rowIndex ];
@@ -5472,7 +5474,7 @@ function frmAdminBuildJS() {
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
-			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
+			rows = builderPage.querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length;
 
 		fieldOptions = wp.hooks.applyFilters( 'frm_conditional_logic_field_options', getFieldOptions( fieldId ), { type, fieldId });
@@ -6953,26 +6955,25 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const fieldSettingsContainer = '#frm-single-settings-' + fieldId;
-		if ( document.querySelector( fieldSettingsContainer + ' .frm-show-box' ) ) {
+		const fieldSettingsSelector = '#frm-single-settings-' + fieldId;
+		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
 
-		const wrapTextareaWithIconContainer = fieldSettingsContainer => {
-			const textarea = document.querySelector( fieldSettingsContainer + ' textarea' );
+		const wrapTextareaWithIconContainer = () => {
+			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
 			const wrapperSpan = span({ className: 'frm-with-right-icon' });
 			textarea.parentNode.insertBefore( wrapperSpan, textarea );
+			wrapperSpan.appendChild( createModalTriggerIcon() );
 			wrapperSpan.appendChild( textarea );
-			wrapperSpan.insertBefore( createModalTriggerIcon(), textarea );
 		};
 
 		const createModalTriggerIcon = () => {
 			return frmDom.svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm-show-box' ] });
 		};
 
-		wrapTextareaWithIconContainer( fieldSettingsContainer );
-		document.getElementById( 'frm-html-tags' ).style.display = 'none';
+		wrapTextareaWithIconContainer();
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
@@ -9551,7 +9552,7 @@ function frmAdminBuildJS() {
 	};
 
 	function maybeHideShortcodes( e ) {
-		if ( ! document.getElementById( 'frm_builder_page' ) ) {
+		if ( ! builderPage ) {
 			e.stopPropagation();
 		}
 
@@ -10094,7 +10095,6 @@ function frmAdminBuildJS() {
 			settingsPage = document.getElementById( 'form_settings_page' );
 			viewPage = document.body.classList.contains( 'post-type-frm_display' );
 			insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
-			builderPage = document.getElementById( 'frm_builder_page' );
 
 			if ( settingsPage !== null || viewPage || builderPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
