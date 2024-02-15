@@ -15,7 +15,7 @@ class test_FrmFormApi extends FrmUnitTest {
 				'license' => 'license_123',
 				'code'    => 'expired',
 				'message' => $message,
-			)
+			),
 		);
 		$error   = $api->get_error_from_response( $addons );
 		$this->assertEquals( array( $message ), $error );
