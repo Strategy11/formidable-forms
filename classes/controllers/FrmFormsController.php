@@ -135,6 +135,19 @@ class FrmFormsController {
 		}
 	}
 
+	private static function create_submit_button_field( $form ) {
+		FrmForm::maybe_get_form( $form );
+
+		FrmField::create(
+			array(
+				'name'        => __( 'Submit', 'formidable' ),
+				'field_order' => 9999,
+				'form_id'     => $form->id,
+				'field_options' => array(),
+			)
+		);
+	}
+
 	public static function edit( $values = false ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -784,6 +797,7 @@ class FrmFormsController {
 		 */
 		do_action( 'frm_build_new_form', $form_id );
 
+		self::create_submit_button_field( $form_id );
 		self::create_default_on_submit_action( $form_id );
 		self::create_default_email_action( $form_id );
 
