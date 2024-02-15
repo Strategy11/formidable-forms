@@ -138,12 +138,20 @@ class FrmFormsController {
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
 
+		if ( FrmSubmitButtonController::get_submit_field( $form->id ) ) {
+			// Do not create submit button field if it exists.
+			return;
+		}
+
 		FrmField::create(
 			array(
+				'type'        => FrmSubmitButtonController::FIELD_TYPE,
 				'name'        => __( 'Submit', 'formidable' ),
 				'field_order' => 9999,
 				'form_id'     => $form->id,
 				'field_options' => array(),
+				'description'   => '',
+				'default_value' => '',
 			)
 		);
 	}
