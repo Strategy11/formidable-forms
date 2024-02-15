@@ -1338,6 +1338,7 @@ class FrmAppHelper {
 			'tosearch'    => '',
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
+			'value'       => false,
 		);
 		$atts = array_merge( $defaults, $atts );
 
@@ -1352,19 +1353,26 @@ class FrmAppHelper {
 
 		$input_id = $atts['input_id'] . '-search-input';
 
+		$input_atts = array(
+			'type'          => 'search',
+			'id'            => $input_id,
+			'name'          => 's',
+			'value'         => is_string( $atts['value'] ) ? $atts['value'] : ( isset( $_REQUEST['s'] ) ? wp_unslash( $_REQUEST['s'] ) : '' ),
+			'placeholder'   => $atts['placeholder'],
+			'class'         => $class,
+			'data-tosearch' => $atts['tosearch'],
+		);
+
+		if ( ! empty( $atts['tosearch'] ) ) {
+			$input_atts['autocomplete'] = 'off';
+		}
 		?>
 		<p class="frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			<span class="frmfont frm_search_icon"></span>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
-				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
-				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"
-				<?php if ( ! empty( $atts['tosearch'] ) ) { ?>
-				autocomplete="off"
-				<?php } ?>
-				/>
+			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
 				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
