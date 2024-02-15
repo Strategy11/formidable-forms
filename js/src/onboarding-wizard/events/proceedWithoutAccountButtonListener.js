@@ -10,11 +10,11 @@ import { onClickPreventDefault } from '../utils';
  *
  * @return {void}
  */
-function addSkipConnectAccountButtonEvents() {
-	const { skipConnectAccountButton } = getElements();
+function addProceedWithoutAccountButtonEvents() {
+	const { proceedWithoutAccountButton } = getElements();
 
 	// Attach click event listeners to each skip buttons
-	onClickPreventDefault( skipConnectAccountButton, onSkipConnectAccountButtonClick );
+	onClickPreventDefault( proceedWithoutAccountButton, onProceedWithoutAccountButtonClick );
 }
 
 /**
@@ -24,10 +24,11 @@ function addSkipConnectAccountButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onSkipConnectAccountButtonClick = () => {
+const onProceedWithoutAccountButtonClick = () => {
 	// Remove the "License Management" step by clicking on the "Proceed without Account" button
-	const { licenseManagementStep } = getElements();
+	const { licenseManagementStep, installFormidableProStep } = getElements();
 	licenseManagementStep.remove();
+	installFormidableProStep.remove();
 
 	// Calculate and set the width for each step's progress bar
 	const steps = Array.from( document.querySelectorAll( `.${PREFIX}-step` ) ).filter( step => step.id !== WELCOME_STEP_ID );
@@ -43,4 +44,4 @@ const onSkipConnectAccountButtonClick = () => {
 	});
 };
 
-export default addSkipConnectAccountButtonEvents;
+export default addProceedWithoutAccountButtonEvents;

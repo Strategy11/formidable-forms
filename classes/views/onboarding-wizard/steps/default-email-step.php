@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
 			<?php esc_html_e( 'Skip', 'formidable' ); ?>
 		</a>
-		<a href="#" id="frm-onboarding-setup-email-step-button" class="button button-primary frm-button-primary frm-onboarding-next-step" role="button">
+		<a href="#" id="frm-onboarding-setup-email-step-button" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Next Step', 'formidable' ); ?>
 		</a>
 	</div>

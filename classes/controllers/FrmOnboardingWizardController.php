@@ -59,11 +59,11 @@ class FrmOnboardingWizardController {
 	const REDIRECT_STATUS_OPTION = 'frm_welcome_redirect';
 
 	/**
-	 * The type of license received from the API.
+	 * Holds the URL to access the Onboarding Wizard's page.
 	 *
-	 * @var string $license_type License type received from the API.
+	 * @var string $page_url Used for redirection or linking.
 	 */
-	private static $license_type = '';
+	private static $page_url = '';
 
 	/**
 	 * Path to views.
@@ -73,11 +73,11 @@ class FrmOnboardingWizardController {
 	private static $view_path = '';
 
 	/**
-	 * Path to views.
+	 * The type of license received from the API.
 	 *
-	 * @var string $view_path Path to the Onboarding Wizard views.
+	 * @var string $license_type License type received from the API.
 	 */
-	private static $page_url = '';
+	private static $license_type = '';
 
 	/**
 	 * Upgrade URL.
@@ -94,13 +94,19 @@ class FrmOnboardingWizardController {
 	private static $renew_link = '';
 
 	/**
+	 * Holds a list of add-ons available for installation.
+	 *
+	 * @var array $available_addons List of add-ons available for installation.
+	 */
+	private static $available_addons = array();
+
+	/**
 	 * Initialize hooks for template page only.
 	 *
 	 * @since x.x
 	 */
 	public static function load_admin_hooks() {
-		self::initialize_properties();
-
+		self::set_page_url();
 		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
 
 		if ( ! self::is_onboarding_wizard_page() ) {
@@ -108,37 +114,21 @@ class FrmOnboardingWizardController {
 		}
 
 		add_action( 'admin_menu', __CLASS__ . '::menu' );
+		add_action( 'admin_init', __CLASS__ . '::assign_properties' );
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
 		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
+
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 		add_filter( 'frm_show_footer_links', '__return_false' );
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
 	}
 
 	/**
-	 * Initializes class properties with essential values for operation.
-	 *
-	 * @since x.x
+	 * Set the URL to access the Onboarding Wizard's page.
 	 *
 	 * @return void
 	 */
-	private static function initialize_properties() {
-		self::$view_path    = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
-		self::$page_url     = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
-		self::$license_type = FrmAddonsController::license_type();
-
-		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'onboarding-wizard',
-				'content' => 'upgrade',
-			)
-		);
-
-		self::$renew_link = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'onboarding-wizard',
-				'content' => 'renew',
-			)
-		);
+	private static function set_page_url() {
+		self::$page_url = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
 	}
 
 	/**
@@ -178,6 +168,34 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
+	 * Initializes class properties with essential values for operation.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function assign_properties() {
+		self::$view_path    = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
+		self::$license_type = FrmAddonsController::license_type();
+
+		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'onboarding-wizard',
+				'content' => 'upgrade',
+			)
+		);
+
+		self::$renew_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'onboarding-wizard',
+				'content' => 'renew',
+			)
+		);
+
+		self::set_available_addons();
+	}
+
+	/**
 	 * Add Onboarding Wizard menu item to sidebar and define index page.
 	 *
 	 * @since x.x
@@ -202,32 +220,6 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Remove the Onboarding Wizard submenu page from the formidable parent menu
-	 * since it is not necessary to show that link there.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function remove_menu() {
-		remove_submenu_page( 'formidable', self::PAGE_SLUG );
-	}
-
-	/**
-	 * Adds custom classes to the existing string of admin body classes.
-	 *
-	 * This function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $classes Existing body classes.
-	 * @return string Updated list of body classes, including the newly added classes.
-	 */
-	public static function add_admin_body_classes( $classes ) {
-		return $classes . ' frm-admin-full-screen';
-	}
-
-	/**
 	 * Renders the Onboarding Wizard page in the WordPress admin area.
 	 *
 	 * @since x.x
@@ -239,6 +231,7 @@ class FrmOnboardingWizardController {
 		FrmAppHelper::include_svg();
 
 		$view_path    = self::get_view_path();
+		$available_addons       = self::get_addons();
 		$upgrade_link = self::get_upgrade_link();
 		$renew_link   = self::get_renew_link();
 		$license_type = self::get_license_type();
@@ -361,6 +354,32 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
+	 * Remove the Onboarding Wizard submenu page from the formidable parent menu
+	 * since it is not necessary to show that link there.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function remove_menu() {
+		remove_submenu_page( 'formidable', self::PAGE_SLUG );
+	}
+
+	/**
+	 * Adds custom classes to the existing string of admin body classes.
+	 *
+	 * This function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $classes Existing body classes.
+	 * @return string Updated list of body classes, including the newly added classes.
+	 */
+	public static function add_admin_body_classes( $classes ) {
+		return $classes . ' frm-admin-full-screen';
+	}
+
+	/**
 	 * Check if the current page is the Onboarding Wizard page.
 	 *
 	 * @since x.x
@@ -397,14 +416,45 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Get the license type.
+	 * Set the list of add-ons available for installation.
 	 *
 	 * @since x.x
 	 *
-	 * @return string The license type.
+	 * @return void
 	 */
-	public static function get_license_type() {
-		return self::$license_type;
+	private static function set_available_addons() {
+		self::$available_addons['stripe-payments'] = array(
+			'title'       => esc_html__( 'Stripe Payments', 'formidable' ),
+			'is-checked' => true,
+			'is-disabled' => true,
+		);
+		self::$available_addons['visual-styler'] = array(
+			'title'       => esc_html__( 'Visual Styler', 'formidable' ),
+			'is-checked' => true,
+			'is-disabled' => true,
+		);
+		self::$available_addons['save-entries'] = array(
+			'title'       => esc_html__( 'Save Entries', 'formidable' ),
+			'is-checked' => true,
+			'is-disabled' => true,
+		);
+		self::$available_addons['smtp'] = array(
+			'title'       => esc_html__( 'SMTP', 'formidable' ),
+			'plugin-slug' => 'wp-mail-smtp/wp_mail_smtp.php',
+			'is-checked' => true,
+			'is-vendor'   => true,
+		);
+	}
+
+	/**
+	 * Get the path to the Onboarding Wizard views.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Path to views.
+	 */
+	public static function get_page_url() {
+		return self::$page_url;
 	}
 
 	/**
@@ -419,14 +469,14 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Get the path to the Onboarding Wizard views.
+	 * Get the license type.
 	 *
 	 * @since x.x
 	 *
-	 * @return string Path to views.
+	 * @return string The license type.
 	 */
-	public static function get_page_url() {
-		return self::$page_url;
+	public static function get_license_type() {
+		return self::$license_type;
 	}
 
 	/**
@@ -449,5 +499,16 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_renew_link() {
 		return self::$renew_link;
+	}
+
+	/**
+	 * Get the list of add-ons available for installation.
+	 *
+	 * @since x.x
+	 *
+	 * @return array A list of add-ons.
+	 */
+	public static function get_addons() {
+		return self::$available_addons;
 	}
 }

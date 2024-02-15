@@ -4,7 +4,7 @@
 import { getElements } from '../elements';
 import { showEmailAddressError } from '../ui';
 import { isValidEmail, onClickPreventDefault } from '../utils';
-import { onSkipButtonClick } from './stepButtonsListener';
+import { navigateToNextStep } from './';
 
 /**
  * Manages event handling for the "Next Step" button in the email setup step.
@@ -56,7 +56,7 @@ const onSetupEmailStepButtonClick = async() => {
 	// Send the POST request
 	const { doJsonPost } = frmDom.ajax;
 	doJsonPost( 'onboarding_setup_email_step', formData ).then( () =>{
-		onSkipButtonClick();
+		navigateToNextStep();
 	});
 };
 

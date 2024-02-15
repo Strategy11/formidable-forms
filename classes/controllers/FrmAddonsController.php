@@ -1527,6 +1527,48 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Handles the AJAX request to install a plugin.
+	 *
+	 * @since x.x
+	 */
+	public static function ajax_install_plugin() {
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( 'install_plugins' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Get posted data.
+		$plugin_slug = FrmAppHelper::get_post_param( 'plugin_slug', '', 'sanitize_text_field' );
+
+		// Include necessary files for plugin installation.
+		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-ajax-upgrader-skin.php';
+		require_once ABSPATH . 'wp-admin/includes/class-automatic-upgrader-skin.php';
+
+		// Set up the Plugin Upgrader.
+		$upgrader = new Plugin_Upgrader( new WP_Ajax_Upgrader_Skin() );
+
+		// Install the plugin.
+		$result = $upgrader->install( $plugin_slug );
+
+		// Check for errors and respond accordingly.
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+
+		// Optionally, activate the plugin.
+		$activate = activate_plugin( $upgrader->plugin_info() );
+
+		if ( is_wp_error( $activate ) ) {
+			wp_send_json_error( $activate->get_error_message() );
+		}
+
+		// Send a success response.
+		wp_send_json_success( __( 'Plugin installed and activated successfully.', 'formidable' ) );
+	}
+
+	/**
 	 * @since 4.06.02
 	 *
 	 * @deprecated 4.09.01

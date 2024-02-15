@@ -14,13 +14,18 @@ function getDOMElements() {
 		onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
 		pageBackground: document.getElementById( `${PREFIX}-bg` ),
 		container: document.getElementById( `${PREFIX}-container` ),
-		skipButtons: document.querySelectorAll( `.${PREFIX}-skip-step` )
+		skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` )
 	};
 
 	// Welcome Step Elements
 	const welcomeStep = {
 		welcomeStep: document.getElementById( WELCOME_STEP_ID ),
-		skipConnectAccountButton: document.getElementById( `${PREFIX}-skip-connect-account` )
+		proceedWithoutAccountButton: document.getElementById( `${PREFIX}-proceed-without-account` )
+	};
+
+	// Install Formidable PRO Step Elements
+	const installFormidableProStep = {
+		installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` )
 	};
 
 	// License Management Step Elements
@@ -36,6 +41,11 @@ function getDOMElements() {
 		allowTrackingCheckbox: document.getElementById( `${PREFIX}-allow-tracking` )
 	};
 
+	// Install Formidable Add-ons Step Elements
+	const installAddonsStep = {
+		installAddonsButton: document.getElementById( `${PREFIX}-install-addons-button` )
+	};
+
 	// Success Step Elements
 	const successStep = {
 		successStep: document.getElementById( `${PREFIX}-success-step` )
@@ -43,9 +53,11 @@ function getDOMElements() {
 
 	return {
 		...bodyElements,
+		...installFormidableProStep,
 		...licenseManagementStep,
 		...welcomeStep,
 		...emailStep,
+		...installAddonsStep,
 		...successStep
 	};
 }

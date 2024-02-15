@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-welcome-step" class="frm-onboarding-step frm-card-box frmcenter frm-current" data-step-name="welcome">
+<section id="frm-onboarding-welcome-step" class="frm-onboarding-step frm-card-box frmcenter frm-current frm_hidden" data-step-name="welcome">
 	<div class="frm-card-box-header">
 		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard Logo', 'formidable' ); ?>" />
 	</div>
@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-footer frm-justify-center">
-		<a href="#" id="frm-onboarding-skip-connect-account" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
+		<a href="#" id="frm-onboarding-proceed-without-account" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
 			<?php esc_html_e( 'Proceed without Account', 'formidable' ); ?>
 		</a>
-		<a href="#" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary frm-onboarding-next-step" target="_blank" rel="noopener">
+		<a href="#" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Connect Account', 'formidable' ); ?>
 		</a>
 	</div>
