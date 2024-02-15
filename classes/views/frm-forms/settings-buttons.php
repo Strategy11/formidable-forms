@@ -17,9 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</td>
 	</tr>
 	<tr>
-		<td><label for="frm_submit_button_text"><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?></label></td>
-		<td>
-			<input id="frm_submit_button_text" type="text" name="options[submit_value]" value="<?php echo esc_attr( $values['submit_value'] ); ?>" />
+		<td colspan="2">
+			The submit button settings are moved to the Submit button in the form builder.
+<!--			TODO: Remove this, and update the message -->
+<!--			<input id="frm_submit_button_text" type="text" name="options[submit_value]" value="--><?php //echo esc_attr( $values['submit_value'] ); ?><!--" />-->
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_button_options', $values ); ?>
