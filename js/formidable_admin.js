@@ -5238,13 +5238,13 @@ function frmAdminBuildJS() {
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
-	function maybeCollapseSettings( event, toggleClass = 'frm-collapsed', toggleParentClass = false ) {
-		const toggleElement = toggleParentClass ? this.parentElement : this;
+	function maybeCollapseSettings() {
 		/*jshint validthis:true */
-		const expanded = toggleElement.classList.toggle( toggleClass );
+		this.classList.toggle( 'frm-collapsed' );
 
 		// Toggles the "aria-expanded" attribute
-		this.setAttribute( 'aria-expanded', toggleClass === 'open' ? expanded : ! expanded );
+		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
+		this.setAttribute( 'aria-expanded', ! expanded );
 	}
 
 	function clickLabel() {
@@ -10511,8 +10511,7 @@ function frmAdminBuildJS() {
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
-		purifyHtml,
-		maybeCollapseSettings
+		purifyHtml
 	};
 }
 

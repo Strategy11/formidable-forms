@@ -1249,15 +1249,20 @@
 			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', event => {
 				event.stopPropagation();
-				frmAdminBuild.maybeCollapseSettings.call( el, event, 'open', true );
+				maybeCollapseSettings( el );
 			});
 			el.addEventListener( 'keydown', event => {
 				if ( event.key === ' ' ) {
 					event.preventDefault();
-					frmAdminBuild.maybeCollapseSettings.call( el, event, 'open', true );
+					maybeCollapseSettings( el );
 				}
 			});
 		});
+	}
+
+	function maybeCollapseSettings( target ) {
+		const expanded = target.parentElement.classList.toggle( 'open' );
+		target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**
