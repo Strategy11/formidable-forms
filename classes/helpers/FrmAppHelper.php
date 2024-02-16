@@ -1357,11 +1357,17 @@ class FrmAppHelper {
 			'type'          => 'search',
 			'id'            => $input_id,
 			'name'          => 's',
-			'value'         => is_string( $atts['value'] ) ? $atts['value'] : ( isset( $_REQUEST['s'] ) ? wp_unslash( $_REQUEST['s'] ) : '' ),
 			'placeholder'   => $atts['placeholder'],
 			'class'         => $class,
 			'data-tosearch' => $atts['tosearch'],
 		);
+
+		if ( is_string( $atts['value'] ) ) {
+			$input_atts['value'] = $atts['value'];
+		} elseif ( isset( $_REQUEST['s'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$input_atts['value'] = wp_unslash( $_REQUEST['s'] );
+		}
 
 		if ( ! empty( $atts['tosearch'] ) ) {
 			$input_atts['autocomplete'] = 'off';
