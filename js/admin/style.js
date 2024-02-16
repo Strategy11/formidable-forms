@@ -1260,7 +1260,7 @@
 	}
 
 	/**
-	 * @param {HTMLElement} target
+	 * @param {Event} event
 	 */
 	function maybeCollapseSettings( event ) {
 		let expanded;
