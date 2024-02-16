@@ -156,7 +156,7 @@
 					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-				nonSelectedText: '',
+				nonSelectedText: __( '— Select —', 'formidable' ),
 				// Prevent the dropdown from showing "All Selected" when every option is checked.
 				allSelectedText: '',
 				// This is 3 by default. We want to show more options before it starts showing a count.
