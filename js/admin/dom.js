@@ -147,6 +147,8 @@
 			let labelledBy = id ? jQuery( '#for_' + id ) : false;
 			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 
+			// Set empty title attributes so that none of the dropdown options include title attributes.
+			$select.find( 'option' ).attr( 'title', ' ' );
 			$select.multiselect({
 				templates: {
 					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
