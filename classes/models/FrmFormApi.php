@@ -258,7 +258,12 @@ class FrmFormApi {
 		}
 		$errors = array();
 		if ( isset( $addons['error'] ) ) {
-			$errors[] = $addons['error']['message'];
+			if ( is_string( $addons['error'] ) ) {
+				$errors[] = $addons['error'];
+			} elseif ( ! empty( $addons['error']['message'] ) ) {
+				$errors[] = $addons['error']['message'];
+			}
+
 			do_action( 'frm_license_error', $addons['error'] );
 		}
 

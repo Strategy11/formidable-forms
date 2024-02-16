@@ -694,7 +694,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check if a payment failed.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param object $payment
 	 * @param object $intent

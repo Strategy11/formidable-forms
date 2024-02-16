@@ -231,7 +231,14 @@ class FrmFormsListHelper extends FrmListHelper {
 		$action_links = $this->row_actions( $actions );
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox_label_text = sprintf(
+			// translators: Form title
+			__( 'Select %s', 'formidable' ),
+			! empty( $item->name ) ? $item->name : __( '(no title)', 'formidable' )
+		);
+
+		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . $checkbox_label_text . '</span></label>';
 
 		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 

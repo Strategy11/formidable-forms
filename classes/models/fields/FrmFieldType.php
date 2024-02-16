@@ -847,7 +847,7 @@ DEFAULT_HTML;
 	/**
 	 * A draft field can be previewed on the preview page for a user who can edit forms.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @return bool
 	 */
@@ -1420,10 +1420,12 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( $entry->updated_by && $this->user_id_is_privileged( $entry->updated_by ) ) {
+		// In old versions of Pro, updated_by and user_id may both be missing.
+		// This is because $entry may be an stdClass created in FrmProSummaryValues::base_entry.
+		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
-		if ( $entry->user_id && $this->user_id_is_privileged( $entry->user_id ) ) {
+		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
 			return false;
 		}
 		return true;
@@ -1434,7 +1436,7 @@ DEFAULT_HTML;
 	 * HTML is stripped more strictly for users that are not logged in, or users that
 	 * do not have access to editing entries in the back end.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param string|int $user_id
 	 * @return bool

@@ -33,7 +33,8 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
-		$modal_addon = self::get_modal_addon_info();
+		$modal_addon  = self::get_addon_info( 185013 );
+		$charts_addon = self::get_addon_info( 28248560 );
 
 		$script_vars = array(
 			'forms' => self::get_forms_options(),
@@ -44,6 +45,11 @@ class FrmSimpleBlocksController {
 			'modalAddon' => array(
 				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
+			),
+			'chartsAddon' => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ),
+				'hasAccess' => ! empty( $charts_addon['url'] ),
+				'installed' => class_exists( 'FrmChartsAppController' ),
 			),
 		);
 
@@ -61,16 +67,16 @@ class FrmSimpleBlocksController {
 	}
 
 	/**
-	 * Gets the modal addon info.
+	 * Gets addon info.
 	 *
-	 * @since 6.3.2
+	 * @since 6.8
 	 *
+	 * @param int $addon_id Addon ID.
 	 * @return array|false
 	 */
-	private static function get_modal_addon_info() {
-		$api      = new FrmFormApi();
-		$addons   = $api->get_api_info();
-		$addon_id = 185013;
+	private static function get_addon_info( $addon_id ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
 
 		if ( ! is_array( $addons ) || ! array_key_exists( $addon_id, $addons ) ) {
 			return false;

@@ -1164,6 +1164,48 @@ class FrmForm {
 	}
 
 	/**
+	 * Get the latest form available.
+	 *
+	 * @since 6.8
+	 * @return object
+	 */
+	public static function get_latest_form() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return self::getAll( $args, 'created_at desc', 1 );
+	}
+
+	/**
+	 * Count and return total forms.
+	 *
+	 * @since 6.8
+	 * @return int
+	 */
+	public static function get_forms_count() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return FrmDb::get_count( 'frm_forms', $args );
+	}
+
+	/**
 	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
 	 *

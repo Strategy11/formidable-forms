@@ -256,7 +256,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -324,6 +324,26 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Disables summary email for multisite (not the main site) if recipient setting isn't changed.
+	 *
+	 * @since 6.8
+	 */
+	private function migrate_to_101() {
+		if ( ! is_multisite() || get_main_site_id() === get_current_blog_id() ) {
+			return;
+		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->summary_emails ) || '[admin_email]' !== $frm_settings->summary_emails_recipients ) {
+			// User changed it.
+			return;
+		}
+
+		$frm_settings->summary_emails = 0;
+		$frm_settings->store();
 	}
 
 	/**

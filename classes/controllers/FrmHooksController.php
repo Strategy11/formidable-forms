@@ -162,9 +162,6 @@ class FrmHooksController {
 		// Forms Model.
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
-		// Inbox Controller.
-		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
-
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
@@ -202,10 +199,10 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
-		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();
 	}
 
@@ -278,6 +275,9 @@ class FrmHooksController {
 
 		// Templates API.
 		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
+
+		// Dashboard Controller.
+		add_action( 'wp_ajax_dashboard_ajax_action', 'FrmDashboardController::ajax_requests' );
 
 		// Submit with AJAX.
 		// Trigger before process_entry.

@@ -362,6 +362,7 @@ class FrmSettingsController {
 	 * @since 3.04.02
 	 */
 	public static function settings_cta_dismiss() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
 		update_option( 'frm_lite_settings_upgrade', time(), 'no' );

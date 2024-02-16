@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
-					printf( esc_html__( 'Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					printf( esc_html__( 'Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s.', 'formidable' ), '<a href="?page=formidable-settings&t=captcha_settings" target="_blank">', '</a>' );
 					?>
 				</span>
 			</div>
