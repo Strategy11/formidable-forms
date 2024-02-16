@@ -1248,13 +1248,12 @@
 			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
 			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', event => {
-				// event.stopPropagation();
-				updateAriaExpandedAtt( el );
+				maybeCollapseSettings( event );
 			});
 			el.addEventListener( 'keydown', event => {
 				if ( event.key === ' ' ) {
 					event.preventDefault();
-					updateAriaExpandedAtt( el );
+					maybeCollapseSettings( event );
 				}
 			});
 		});
@@ -1263,8 +1262,16 @@
 	/**
 	 * @param {HTMLElement} target
 	 */
-	function updateAriaExpandedAtt( target ) {
-		target.setAttribute( 'aria-expanded', target.parentElement.classList.contains( 'open' ) );
+	function maybeCollapseSettings( event ) {
+		let expanded;
+		if ( event.type === 'keydown' ) {
+			expanded = event.target.parentElement.classList.toggle( 'open' );
+			event.target.parentElement.querySelector( '.accordion-section-content' ).style.display = expanded ? 'block' : 'none';
+		} else {
+			expanded = event.target.parentElement.classList.contains( 'open' );
+		}
+
+		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**
