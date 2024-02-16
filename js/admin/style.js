@@ -1248,21 +1248,23 @@
 			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
 			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', event => {
-				event.stopPropagation();
-				maybeCollapseSettings( el );
+				// event.stopPropagation();
+				updateAriaExpandedAtt( el );
 			});
 			el.addEventListener( 'keydown', event => {
 				if ( event.key === ' ' ) {
 					event.preventDefault();
-					maybeCollapseSettings( el );
+					updateAriaExpandedAtt( el );
 				}
 			});
 		});
 	}
 
-	function maybeCollapseSettings( target ) {
-		const expanded = target.parentElement.classList.toggle( 'open' );
-		target.setAttribute( 'aria-expanded', expanded );
+	/**
+	 * @param {HTMLElement} target
+	 */
+	function updateAriaExpandedAtt( target ) {
+		target.setAttribute( 'aria-expanded', target.parentElement.classList.contains( 'open' ) );
 	}
 
 	/**
