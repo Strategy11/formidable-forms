@@ -155,6 +155,10 @@
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: '',
+				// Prevent the dropdown from showing "All Selected" when every option is checked.
+				allSelectedText: '',
+				// This is 3 by default. We want to show more options before it starts showing a count.
+				numberDisplayed: 8,
 				onDropdownShown: function( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
