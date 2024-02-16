@@ -1264,11 +1264,12 @@
 	 */
 	function maybeCollapseSettings( event ) {
 		let expanded;
+		const sectionParent = event.target.parentElement;
 		if ( event.type === 'keydown' ) {
-			expanded = event.target.parentElement.classList.toggle( 'open' );
-			event.target.parentElement.querySelector( '.accordion-section-content' ).style.display = expanded ? 'block' : 'none';
+			expanded = sectionParent.classList.toggle( 'open' );
+			sectionParent.querySelector( '.accordion-section-content' ).style.display = expanded ? 'block' : 'none';
 		} else {
-			expanded = event.target.parentElement.classList.contains( 'open' );
+			expanded = sectionParent.classList.contains( 'open' );
 		}
 
 		event.target.setAttribute( 'aria-expanded', expanded );
