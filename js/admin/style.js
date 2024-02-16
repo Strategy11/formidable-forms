@@ -1267,7 +1267,7 @@
 		const sectionParent = event.target.parentElement;
 		if ( event.type === 'keydown' ) {
 			expanded = sectionParent.classList.toggle( 'open' );
-			sectionParent.querySelector( '.accordion-section-content' ).style.display = expanded ? 'block' : 'none';
+			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle to keep consistency with click
 		} else {
 			expanded = sectionParent.classList.contains( 'open' );
 		}
