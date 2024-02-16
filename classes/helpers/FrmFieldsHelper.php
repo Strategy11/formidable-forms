@@ -1939,6 +1939,10 @@ class FrmFieldsHelper {
 			'data-requires' => $requires,
 		);
 
+		if ( ! empty( $field_type['hide'] ) ) {
+			$li_params['class'] .= ' frm_hidden';
+		}
+
 		if ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
