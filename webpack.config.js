@@ -18,6 +18,7 @@ const config = {
 	entry: {
 		formidable_blocks: './js/src/blocks.js',
 		formidable_overlay: './js/src/overlay.js',
+		formidable_dashboard: './js/src/dashboard.js',
 		'form-templates': './js/src/form-templates/index.js'
 	},
 	output: {

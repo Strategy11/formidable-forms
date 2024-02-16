@@ -9,7 +9,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 100;
+	public static $db_version = 101;
 
 	/**
 	 * Deprecated.
@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7.1';
+	public static $plug_version = '6.8.2';
 
 	/**
 	 * @var bool
@@ -174,18 +174,19 @@ class FrmAppHelper {
 
 	/**
 	 * Determine if the current branding is set to 'formidable'.
-	 *
-	 * Checks the menu title, retrieved through get_menu_name,
-	 * and verifies if it matches the 'formidable' branding.
+	 * Checks the menu icon, and verifies if it matches the formidable branding.
 	 *
 	 * @since 6.4.2
 	 *
-	 * @return bool True if the menu title is 'formidable', false otherwise.
+	 * @return bool True if the menu icon is the logo, false otherwise.
 	 */
 	public static function is_formidable_branding() {
-		$menu_title = self::get_menu_name();
+		if ( ! self::pro_is_installed() ) {
+			return true;
+		}
 
-		return 'formidable' === strtolower( trim( $menu_title ) );
+		$menu_icon = self::get_menu_icon_class();
+		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
 	}
 
 	/**
@@ -686,6 +687,9 @@ class FrmAppHelper {
 			'strong' => array(),
 			'p'      => array(),
 			'i'      => array(),
+			'ul'     => array(),
+			'ol'     => array(),
+			'li'     => array(),
 		);
 
 		/**
@@ -3169,7 +3173,9 @@ class FrmAppHelper {
 				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
 				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'    => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				/* translators: %d is the number of allowed actions per form */
+				'only_one_action'    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
+				'edit_action_text'   => __( 'Please edit the existing form action.', 'formidable' ),
 				'unsafe_params'      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
@@ -3180,6 +3186,8 @@ class FrmAppHelper {
 				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'            => __( 'Install', 'formidable' ),
 				'active'             => __( 'Active', 'formidable' ),
+				'installed'          => __( 'Installed', 'formidable' ),
+				'not_installed'      => __( 'Not Installed', 'formidable' ),
 				'select_a_field'     => __( 'Select a Field', 'formidable' ),
 				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
@@ -3867,7 +3875,7 @@ class FrmAppHelper {
 		if ( null === $text ) {
 			$text = __( 'NEW', 'formidable' );
 		}
-		echo '<span class="frm-new-pill">' . esc_html( $text ) . '</span>';
+		echo '<span class="frm-meta-tag frm-new-pill">' . esc_html( $text ) . '</span>';
 	}
 
 	/**
@@ -4111,5 +4119,27 @@ class FrmAppHelper {
 		}
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Lite license copy.
+	 * Used in FrmDashboardController & FrmSettingsController
+	 *
+	 * @since 6.8
+	 *
+	 * @return string
+	 */
+	public static function copy_for_lite_license() {
+		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
+
+		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
+			// Manage PRO versions without PRO dashboard functionality.
+			$license_type = FrmProAddonsController::get_readable_license_type();
+			if ( 'lite' !== strtolower( $license_type ) ) {
+				$message = 'Formidable Pro ' . $license_type;
+			}
+		}
+
+		return apply_filters( 'frm_license_type_text', $message );
 	}
 }

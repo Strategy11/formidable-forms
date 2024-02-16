@@ -162,9 +162,6 @@ class FrmHooksController {
 		// Forms Model.
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
-		// Inbox Controller.
-		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
-
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
@@ -202,10 +199,10 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
-		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();
 	}
 
@@ -221,8 +218,10 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
 		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
 		add_action( 'wp_ajax_frm_activate_addon', 'FrmAddonsController::ajax_activate_addon' );
+		add_action( 'wp_ajax_frm_deactivate_addon', 'FrmAddonsController::ajax_deactivate_addon' );
 		add_action( 'wp_ajax_frm_connect', 'FrmAddonsController::connect_pro' );
 		add_action( 'wp_ajax_frm_install_addon', 'FrmAddonsController::ajax_install_addon' );
+		add_action( 'wp_ajax_frm_uninstall_addon', 'FrmAddonsController::ajax_uninstall_addon' );
 
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
@@ -276,6 +275,9 @@ class FrmHooksController {
 
 		// Templates API.
 		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
+
+		// Dashboard Controller.
+		add_action( 'wp_ajax_dashboard_ajax_action', 'FrmDashboardController::ajax_requests' );
 
 		// Submit with AJAX.
 		// Trigger before process_entry.

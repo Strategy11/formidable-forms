@@ -7,10 +7,13 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var el = {
-		licenseBox: document.getElementById( 'frm_license_top' ),
-		messageBox: document.getElementsByClassName( 'frm_pro_license_msg' )[0],
-		btn: document.getElementById( 'frm-settings-connect-btn' ),
-		reset: document.getElementById( 'frm_reconnect_link' )
+		messageBox: null,
+		reset: null,
+
+		setElements: function() {
+			el.messageBox = document.querySelector( '.frm_pro_license_msg' );
+			el.reset = document.getElementById( 'frm_reconnect_link' );
+		}
 	};
 
 	/**
@@ -28,122 +31,17 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		 * @since 4.03
 		 */
 		init: function() {
+			el.setElements();
+
 			$( document.getElementById( 'frm_deauthorize_link' ) ).on( 'click', app.deauthorize );
 			$( '.frm_authorize_link' ).on( 'click', app.authorize );
+			// Handles FF dashboard Authorize & Reauthorize events.
+			// Atach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
+			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_deauthorize_link', app.deauthorize );
+			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_reconnect_link', app.reauthorize );
+
 			if ( el.reset !== null ) {
 				$( el.reset ).on( 'click', app.reauthorize );
-			}
-
-			$( el.btn ).on( 'click', function( e ) {
-				e.preventDefault();
-				app.gotoUpgradeUrl();
-			});
-
-			window.addEventListener( 'message', function( msg ) {
-				if ( msg.origin.replace( /\/$/, '' ) !== frmGlobal.app_url.replace( /\/$/, '' ) ) {
-					return;
-				}
-
-				if ( ! msg.data || 'object' !== typeof msg.data ) {
-					console.error( 'Messages from "' + frmGlobal.app_url + '" must contain an api key string.' );
-					return;
-				}
-
-				app.updateForm( msg.data );
-			});
-		},
-
-		/**
-		 * Go to upgrade url.
-		 *
-		 * @since 4.03
-		 */
-		gotoUpgradeUrl: function() {
-			var w = window.open( frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0' );
-			w.focus();
-		},
-
-		updateForm: function( response ) {
-
-			// Start spinner.
-			var btn = el.btn;
-			btn.classList.add( 'frm_loading_button' );
-
-			if ( response.url !== '' ) {
-				app.showProgress({
-					success: true,
-					message: 'Installing...'
-				});
-				var fallback = setTimeout( function() {
-					app.showProgress({
-						success: true,
-						message: 'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
-					});
-				}, 10000 );
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					dataType: 'json',
-					data: {
-						action: 'frm_connect',
-						plugin: response.url,
-						nonce: frmGlobal.nonce
-					},
-					success: function() {
-						clearTimeout( fallback );
-						app.activateKey( response );
-					},
-					error: function( xhr, textStatus, e ) {
-						clearTimeout( fallback );
-						btn.classList.remove( 'frm_loading_button' );
-						app.showMessage({
-							success: false,
-							message: e
-						});
-					}
-				});
-			} else if ( response.key !== '' ) {
-				app.activateKey( response );
-			}
-		},
-
-		activateKey: function( response ) {
-			var btn = el.btn;
-			if ( response.key === '' ) {
-				btn.classList.remove( 'frm_loading_button' );
-			} else {
-				app.showProgress({
-					success: true,
-					message: 'Activating...'
-				});
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					dataType: 'json',
-					data: {
-						action: 'frm_addon_activate',
-						license: response.key,
-						plugin: 'formidable_pro',
-						wpmu: 0,
-						nonce: frmGlobal.nonce
-					},
-					success: function( msg ) {
-						btn.classList.remove( 'frm_loading_button' );
-
-						if ( msg.success === true ) {
-							el.licenseBox.classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
-						}
-
-						app.showMessage( msg );
-					},
-					error: function( xhr, textStatus, e ) {
-						btn.classList.remove( 'frm_loading_button' );
-						app.showMessage({
-							success: false,
-							message: e
-						});
-					}
-				});
 			}
 		},
 
@@ -185,11 +83,21 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				input.value = '•••••••••••••••••••';
 			}
 
+			wp.hooks.doAction( 'frm_after_authorize', msg );
 			app.showMessage( msg );
 		},
 
 		showProgress: function( msg ) {
+			if ( el.messageBox === null ) {
+				// In case the message box was added after page load.
+				el.setElements();
+			}
+
 			var messageBox = el.messageBox;
+			if ( messageBox === null ) {
+				return;
+			}
+
 			if ( msg.success === true ) {
 				messageBox.classList.remove( 'frm_error_style' );
 				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
@@ -202,30 +110,60 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		},
 
 		showMessage: function( msg ) {
+			if ( el.messageBox === null ) {
+				// In case the message box was added after page load.
+				el.setElements();
+			}
 			var messageBox = el.messageBox;
 
 			if ( msg.success === true ) {
-				var d = el.licenseBox;
-				d.className = d.className.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
-				messageBox.classList.remove( 'frm_error_style' );
-				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
-			} else {
-				messageBox.classList.add( 'frm_error_style' );
-				messageBox.classList.remove( 'frm_message', 'frm_updated_message' );
-			}
+				app.showAuthorized( true );
+				app.showInlineSuccess();
 
-			messageBox.classList.remove( 'frm_hidden' );
-			messageBox.innerHTML = msg.message;
+				/**
+				 * Triggers the after license is authorized action for a confirmation/success modal.
+				 * @param {Object} msg An object containing message data received from Authorize request.
+				 */
+				wp.hooks.doAction( 'frmAdmin.afterLicenseAuthorizeSuccess', { msg });
+			}
+			app.showProgress( msg );
+
 			if ( msg.message !== '' ) {
 				setTimeout( function() {
 					messageBox.innerHTML = '';
 					messageBox.classList.add( 'frm_hidden' );
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
-				var refreshPage = document.querySelectorAll( '#frm-welcome' );
-				if ( refreshPage.length > 0 ) {
-					window.location.reload();
+				var refreshPage = document.querySelector( '.frm-admin-page-dashboard' );
+				if ( refreshPage ) {
+					setTimeout( function() {
+						window.location.reload();
+					}, 1000 );
 				}
+			}
+		},
+
+		showAuthorized: function( show ) {
+			const from = show ? 'unauthorized' : 'authorized';
+			const to = show ? 'authorized' : 'unauthorized';
+			let container = document.querySelectorAll( '.frm_' + from + '_box' );
+			if ( container.length ) {
+				// Replace all authorized boxes with unauthorized boxes.
+				container.forEach( function( box ) {
+					box.className = box.className.replace( 'frm_' + from + '_box', 'frm_' + to + '_box' );
+				});
+			}
+		},
+
+		/**
+		 * Use the data-success element to replace the element content.
+		 */
+		showInlineSuccess: function() {
+			const successElement = document.querySelectorAll( '.frm-confirm-msg [data-success]' );
+			if ( successElement.length ) {
+				successElement.forEach( function( element ) {
+					element.innerHTML = frmAdminBuild.purifyHtml( element.getAttribute( 'data-success' ) );
+				});
 			}
 		},
 
@@ -275,9 +213,15 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function() {
-					el.licenseBox.className = el.licenseBox.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
+					app.showAuthorized( false );
 					input.value = '';
-					link.innerHTML = '';
+					link.replaceWith( 'Disconnected' );
+
+					/**
+					 * Triggers the after license is deauthorized sruccess action.
+					 */
+					wp.hooks.doAction( 'frmAdmin.afterLicenseDeauthorizeSuccess', {});
+
 				}
 			});
 			return false;
@@ -294,6 +238,7 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
+	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
@@ -314,6 +259,10 @@ function frmAdminBuildJS() {
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop, postBodyContent, $postBodyContent;
+
+	const dragState = {
+		dragging: false
+	};
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -955,6 +904,8 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStart( event, ui ) {
+		dragState.dragging = true;
+
 		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
 
@@ -1057,6 +1008,14 @@ function frmAdminBuildJS() {
 	}
 
 	function handleFieldDrop( _, ui ) {
+		if ( ! dragState.dragging ) {
+			// dragState.dragging is set to true on drag start.
+			// The deactivate event gets called for every droppable. This check to make sure it happens once.
+			return;
+		}
+
+		dragState.dragging = false;
+
 		const draggable = ui.draggable[0];
 		const placeholder = document.getElementById( 'frm_drag_placeholder' );
 
@@ -1932,9 +1891,12 @@ function frmAdminBuildJS() {
 
 		let nextElement = thisField;
 		addHtmlToField( nextElement );
-		while ( nextElement.nextElementSibling && field.length < 15 ) {
-			addHtmlToField( nextElement.nextElementSibling );
-			nextElement = nextElement.nextElementSibling;
+
+		let nextField = getNextField( nextElement );
+		while ( nextField && field.length < 15 ) {
+			addHtmlToField( nextField );
+			nextElement = nextField;
+			nextField = getNextField( nextField );
 		}
 
 		jQuery.ajax({
@@ -1948,6 +1910,13 @@ function frmAdminBuildJS() {
 			},
 			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
 		});
+	}
+
+	function getNextField( field ) {
+		if ( field.nextElementSibling ) {
+			return field.nextElementSibling;
+		}
+		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
 	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
@@ -2425,15 +2394,18 @@ function frmAdminBuildJS() {
 	}
 
 	function afterAddField( msg, addFocus ) {
-		var regex = /id="(\S+)"/,
-			match = regex.exec( msg ),
-			field = document.getElementById( match[1]),
-			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider',
-			$thisSection = jQuery( section ),
-			type = field.getAttribute( 'data-type' ),
-			toggled = false,
-			$parentSection;
+		const regex        = /id="(\S+)"/;
+		const match        = regex.exec( msg );
+		const field        = document.getElementById( match[1]);
+		const section      = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider';
+		const $thisSection = jQuery( section );
+		const type         = field.getAttribute( 'data-type' );
 
+		checkHtmlForNewFields( msg );
+
+		let toggled = false;
+
+		fieldUpdated();
 		setupSortable( section );
 
 		if ( 'quantity' === type ) {
@@ -2450,7 +2422,7 @@ function frmAdminBuildJS() {
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 		} else {
-			$parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
+			const $parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
 			if ( $parentSection.length ) {
 				toggleOneSectionHolder( $parentSection );
 				toggled = true;
@@ -2499,6 +2471,42 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( addedEvent );
 	}
 
+	/**
+	 * Since multiple new fields may get added when a new field is inserted, check the HTML.
+	 *
+	 * @param {string} html
+	 * @returns {void}
+	 */
+	function checkHtmlForNewFields( html ) {
+		const element = div();
+		element.innerHTML = html;
+		element.querySelectorAll( '.form-field' ).forEach( addFieldIdToDraftFieldsInput );
+	}
+
+	/**
+	 * @param {HTMLElement} field
+	 * @returns {void}
+	 */
+	function addFieldIdToDraftFieldsInput( field ) {
+		if ( ! field.dataset.fid ) {
+			return;
+		}
+
+		const draftInput = document.getElementById( 'draft_fields' );
+		if ( ! draftInput ) {
+			return;
+		}
+
+		if ( '' === draftInput.value ) {
+			draftInput.value = field.dataset.fid;
+		} else {
+			const split = draftInput.value.split( ',' );
+			if ( ! split.includes( field.dataset.fid ) ) {
+				draftInput.value += ',' + field.dataset.fid;
+			}
+		}
+	}
+
 	function clearSettingsBox( preventFieldGroups ) {
 		jQuery( '#new_fields .frm-single-settings' ).addClass( 'frm_hidden' );
 		jQuery( '#frm-options-panel > .frm-single-settings' ).removeClass( 'frm_hidden' );
@@ -2541,11 +2549,11 @@ function frmAdminBuildJS() {
 		var slug = jQuery( '#param' ).val(),
 			msg;
 		slug = slug.trim().toLowerCase();
-		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) { // eslint-disable-line camelcase
-			msg = frm_admin_js.slug_is_reserved; // eslint-disable-line camelcase
+		if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( slug ) ) {
+			msg = frmAdminJs.slug_is_reserved;
 			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' ); // eslint-disable-line camelcase
+			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>', 'div' );
 			infoModal( msg );
 		}
 	}
@@ -2560,7 +2568,7 @@ function frmAdminBuildJS() {
 			unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) { // eslint-disable-line camelcase
+			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[1]) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -2571,10 +2579,10 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			let msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
+			let msg =  frmAdminJs.param_is_reserved;
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>';
 
 			infoModal( msg );
 		}
@@ -2619,7 +2627,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + '\n\n'; // eslint-disable-line camelcase
+			msg = frmAdminJs.unmatched_parens + '\n\n';
 			return msg;
 		}
 
@@ -2657,7 +2665,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + '\n\n'; // eslint-disable-line camelcase
+			msg = frmAdminJs.text_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -2690,7 +2698,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + '\n\n'; // eslint-disable-line camelcase
+			msg += frmAdminJs.view_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -3094,7 +3102,7 @@ function frmAdminBuildJS() {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
 			if ( $unqDetail.val() === '' ) {
-				$unqDetail.val( frm_admin_js.default_unique ); // eslint-disable-line camelcase
+				$unqDetail.val( frmAdminJs.default_unique );
 			}
 		} else {
 			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
@@ -3117,7 +3125,7 @@ function frmAdminBuildJS() {
 			//Add default validation message if empty
 			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
-				valMsg.val( frm_admin_js.default_conf ); // eslint-disable-line camelcase
+				valMsg.val( frmAdminJs.default_conf );
 			}
 
 			setConfirmationFieldDescriptions( fieldId );
@@ -3142,17 +3150,17 @@ function frmAdminBuildJS() {
 
 		var fieldDescription = document.getElementById( 'field_description_' + fieldId );
 		var hiddenDescName = 'field_options[description_' + fieldId + ']';
-		var newValue = frm_admin_js['enter_' + fieldType]; // eslint-disable-line camelcase
+		var newValue = frmAdminJs['enter_' + fieldType];
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
 		var confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
 		var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
-		var newConfValue = frm_admin_js['confirm_' + fieldType]; // eslint-disable-line camelcase
+		var newConfValue = frmAdminJs['confirm_' + fieldType];
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
 	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {
-		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) { // eslint-disable-line camelcase
+		if ( descriptionDiv.innerHTML === frmAdminJs.desc ) {
 
 			// Set the visible description value and the hidden description value
 			descriptionDiv.innerHTML = newValue;
@@ -3546,7 +3554,7 @@ function frmAdminBuildJS() {
 	 */
 	function maybeClearOptText() {
 		/*jshint validthis:true */
-		if ( this.value === frm_admin_js.new_option ) { // eslint-disable-line camelcase
+		if ( this.value === frmAdminJs.new_option ) {
 			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
@@ -3559,7 +3567,7 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirmMsg = frm_admin_js.conf_delete, // eslint-disable-line camelcase
+		var confirmMsg = frmAdminJs.conf_delete,
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
@@ -3585,7 +3593,7 @@ function frmAdminBuildJS() {
 
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirmMsg = frm_admin_js.conf_delete_sec; // eslint-disable-line camelcase
+			confirmMsg = frmAdminJs.conf_delete_sec;
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4425,7 +4433,7 @@ function frmAdminBuildJS() {
 		text.innerHTML = sprintf(
 			/* translators: %1$s: Start span HTML, %2$s: end span HTML */
 			frm_admin_js.holdShiftMsg, // eslint-disable-line camelcase
-			'<span class="frm-shift-key frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
+			'<span class="frm-meta-tag frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
 			'</span>'
 		);
 
@@ -4852,7 +4860,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) { // eslint-disable-line camelcase
+		if ( '' !== this.value || frmAdminJs.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
 			this.setAttribute( 'data-value-on-focus', this.value );
 		}
 	}
@@ -5239,7 +5247,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			infoModal( frm_admin_js.repeat_limit_min ); // eslint-disable-line camelcase
+			infoModal( frmAdminJs.repeat_limit_min );
 			this.value = '';
 		}
 	}
@@ -5248,7 +5256,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			infoModal( frm_admin_js.checkbox_limit ); // eslint-disable-line camelcase
+			infoModal( frmAdminJs.checkbox_limit );
 			this.value = '';
 		}
 	}
@@ -5728,7 +5736,7 @@ function frmAdminBuildJS() {
 			labelImage = img({ src: imageUrl, alt: originalLabel });
 		} else {
 			labelImage           = div({ className: 'frm_empty_url' });
-			labelImage.innerHTML = frm_admin_js.image_placeholder_icon; // eslint-disable-line camelcase
+			labelImage.innerHTML = frmAdminJs.image_placeholder_icon;
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
@@ -7117,8 +7125,20 @@ function frmAdminBuildJS() {
 		return jQuery( '.frm_single_' + type + '_settings' ).length;
 	}
 
-	function onlyOneActionMessage() {
-		infoModal( frm_admin_js.only_one_action ); // eslint-disable-line camelcase
+	function actionLimitMessage() {
+		let message = frmAdminJs.only_one_action;
+		let limit   = this.dataset.limit;
+
+		if ( 'undefined' !== typeof limit ) {
+			limit = parseInt( limit );
+			if ( limit > 1 ) {
+				message  = message.replace( 1, limit ).trim();
+			} else {
+				message += ' ' + frmAdminJs.edit_action_text;
+			}
+		}
+
+		infoModal( message );
 	}
 
 	function addFormLogicRow() {
@@ -7221,7 +7241,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( frm_admin_js.field_already_used ); // eslint-disable-line camelcase
+				infoModal( frmAdminJs.field_already_used );
 				return false;
 			}
 		});
@@ -7667,7 +7687,7 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).textContent = frm_admin_js.private_label; // eslint-disable-line camelcase
+			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked    = true;
 		}
@@ -7856,7 +7876,7 @@ function frmAdminBuildJS() {
 		idKey = document.getElementById( idKey );
 		field = idKey.options[idKey.selectedIndex].value;
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
-		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field ); // eslint-disable-line camelcase
+		result.setAttribute( 'data-code', code + frmAdminJs.conditional_text + '[/if ' + field );
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
@@ -8537,20 +8557,20 @@ function frmAdminBuildJS() {
 	/* Addons page */
 	function installMultipleAddons( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_multiple_addons' );
+		toggleAddonState( this, 'frm_multiple_addons' );
 	}
 
 	function activateAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_activate_addon' );
+		toggleAddonState( this, 'frm_activate_addon' );
 	}
 
 	function installAddon( e ) {
 		e.preventDefault();
-		installOrActivate( this, 'frm_install_addon' );
+		toggleAddonState( this, 'frm_install_addon' );
 	}
 
-	function installOrActivate( clicked, action ) {
+	function toggleAddonState( clicked, action ) {
 		let button, plugin, el, message;
 
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
@@ -8575,6 +8595,8 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				let saveAndReload;
 
 				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
@@ -8590,7 +8612,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 
-				afterAddonInstall( response, button, message, el, saveAndReload );
+				afterAddonInstall( response, button, message, el, saveAndReload, action );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -8617,13 +8639,15 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: 'frm_install_addon',
-				nonce: frm_admin_js.nonce, // eslint-disable-line camelcase
+				nonce: frmAdminJs.nonce,
 				plugin: plugin,
 				hostname: el.find( '#hostname' ).val(),
 				username: el.find( '#username' ).val(),
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
+				response = response?.data ?? response;
+
 				const error = extractErrorFromAddOnResponse( response );
 				if ( error ) {
 					addonError( error, el, proceed );
@@ -8638,7 +8662,7 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function afterAddonInstall( response, button, message, el, saveAndReload ) {
+	function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
 		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 		addonStatuses.forEach(
 			addonStatus => {
@@ -8649,7 +8673,6 @@ function frmAdminBuildJS() {
 
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
-		message.text( frm_admin_js.active ); // eslint-disable-line camelcase
 
 		document.querySelectorAll( '.frm-oneclick' ).forEach(
 			oneClick => {
@@ -8662,8 +8685,24 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
-		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed' ).addClass( 'frm-addon-active' );
-		button.removeClass( 'frm_loading_button' );
+		const actionMap = {
+			frm_activate_addon: { class: 'frm-addon-active', message: frmAdminJs.active },
+			frm_deactivate_addon: { class: 'frm-addon-installed', message: frmAdminJs.installed },
+			frm_uninstall_addon: { class: 'frm-addon-not-installed', message: frmAdminJs.not_installed }
+		};
+		actionMap.frm_install_addon = actionMap.frm_activate_addon;
+
+		const messageElement = message[0];
+		if ( messageElement ) {
+			messageElement.textContent = actionMap[action].message;
+		}
+
+		const parentElement = el[0].parentElement;
+		parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
+		parentElement.classList.add( actionMap[action].class );
+
+		const buttonElement = button[0];
+		buttonElement.classList.remove( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
 		const refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
@@ -9430,13 +9469,14 @@ function frmAdminBuildJS() {
 			}
 		);
 
-		const emptyInbox = document.getElementById( 'frm_empty_inbox' );
-		if ( emptyInbox ) {
+		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
+		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+
+		if ( emptyInbox && leaveEmailIput ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
-			const leaveEmailIput = document.getElementById( 'frm_leave_email' );
 			leaveEmailIput.addEventListener(
 				'keyup',
 				event => {
@@ -9521,13 +9561,13 @@ function frmAdminBuildJS() {
 	 */
 	function addAdminFooterLinks() {
 		const footerLinks = document.querySelector( '.frm-admin-footer-links' );
-		const bodyContent = document.querySelector( '#wpbody-content' );
+		const container = document.querySelector( '.frm_page_container' ) ?? document.getElementById( 'wpbody-content' );
 
-		if ( ! footerLinks || ! bodyContent ) {
+		if ( ! footerLinks || ! container ) {
 			return;
 		}
 
-		bodyContent.appendChild( footerLinks );
+		container.appendChild( footerLinks );
 		footerLinks.classList.remove( 'frm_hidden' );
 	}
 
@@ -9628,7 +9668,7 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
-			} else if ( document.getElementById( 'frm_inbox_page' ) !== null ) {
+			} else if ( document.getElementById( 'frm_inbox_page' ) !== null || null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
 				// Inbox page
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
@@ -9959,7 +9999,7 @@ function frmAdminBuildJS() {
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
-			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
+			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
@@ -9991,7 +10031,7 @@ function frmAdminBuildJS() {
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
 				if ( this.checked ) {
-					if ( confirm( frm_admin_js.no_save_warning ) !== true ) { // eslint-disable-line camelcase
+					if ( confirm( frmAdminJs.no_save_warning ) !== true ) {
 						// Uncheck box if user hits "Cancel"
 						jQuery( this ).attr( 'checked', false );
 					}
@@ -10193,7 +10233,9 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
 				var message = this.parentNode.parentNode,
 					key = message.getAttribute( 'data-message' ),
-					href = this.getAttribute( 'href' );
+					href = this.getAttribute( 'href' ),
+					dismissedMessage = message.cloneNode( true );
+					dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
 
 				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
 					return;
@@ -10212,6 +10254,15 @@ function frmAdminBuildJS() {
 						return true;
 					}
 					fadeOut( message, function() {
+						if ( null !== dismissedMessagesWrapper ) {
+							dismissedMessage.classList.remove( 'frm-fade' );
+							dismissedMessage.querySelector( '.frm-inbox-message-heading' ).removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+							dismissedMessagesWrapper.append( dismissedMessage );
+						}
+						if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
+							document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
+							message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+						}
 						message.parentNode.removeChild( message );
 					});
 				});
@@ -10269,9 +10320,13 @@ function frmAdminBuildJS() {
 
 			jQuery( '#frm-dismissable-cta .dismiss' ).on( 'click', function( event ) {
 				event.preventDefault();
-				jQuery.post( ajaxurl, {
-					action: 'frm_lite_settings_upgrade'
-				});
+				jQuery.post(
+					ajaxurl,
+					{
+						action: 'frm_lite_settings_upgrade',
+						nonce: frmGlobal.nonce
+					}
+				);
 				jQuery( '.settings-lite-cta' ).remove();
 			});
 
@@ -10408,7 +10463,9 @@ function frmAdminBuildJS() {
 		offsetModalY,
 		adjustConditionalLogicOptionOrders,
 		addRadioCheckboxOpt,
-		installNewForm
+		installNewForm,
+		toggleAddonState,
+		purifyHtml
 	};
 }
 

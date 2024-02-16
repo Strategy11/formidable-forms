@@ -426,10 +426,16 @@ class FrmStrpLiteAuth {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
-		if ( is_array( $details ) && ! self::intent_has_failed_status( $details['intent'] ) ) {
+		if ( is_array( $details ) ) {
+			$payment        = $details['payment'];
+			$intent         = $details['intent'];
+			$payment_failed = self::payment_failed( $payment, $intent );
+
 			// Exit early if the request params are set.
 			// This way an extra payment intent isn't created for Stripe Link.
-			return $intents;
+			if ( ! $payment_failed ) {
+				return $intents;
+			}
 		}
 
 		if ( ! FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' ) ) {
@@ -683,5 +689,27 @@ class FrmStrpLiteAuth {
 	 */
 	private static function intent_has_failed_status( $intent ) {
 		return in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true );
+	}
+
+	/**
+	 * Check if a payment failed.
+	 *
+	 * @since 6.8
+	 *
+	 * @param object $payment
+	 * @param object $intent
+	 * @return bool
+	 */
+	public static function payment_failed( $payment, $intent ) {
+		if ( self::intent_has_failed_status( $intent ) ) {
+			return true;
+		}
+
+		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
+		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
+			return true;
+		}
+
+		return false;
 	}
 }

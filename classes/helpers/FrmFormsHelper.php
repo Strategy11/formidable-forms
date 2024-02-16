@@ -938,8 +938,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|string|boolean $form
-	 *
+	 * @param object|array|string|boolean $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -951,7 +950,7 @@ BEFORE_HTML;
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
-		} elseif ( is_array( $form ) && ! empty( $form['custom_style'] ) ) {
+		} elseif ( is_array( $form ) && isset( $form['custom_style'] ) ) {
 			$style = $form['custom_style'];
 		}
 

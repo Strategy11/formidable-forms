@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p class="howto">
-	<?php esc_html_e( 'Select a style for this form and set your button text.', 'formidable' ); ?>
+	<?php esc_html_e( 'Set your button text.', 'formidable' ); ?>
 </p>
 
 <input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />

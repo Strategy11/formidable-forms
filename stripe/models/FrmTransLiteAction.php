@@ -104,13 +104,28 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return array
 	 */
 	public function get_field_options( $form_id ) {
+
+		$form_id  = absint( $form_id );
+		$form_ids = $form_id;
+
+		/**
+		 * Allows updating form ids used to query fields for displaying options with in the Payment action.
+		 *
+		 * @since 6.8
+		 *
+		 * @param int|int[] $form_ids
+		 * @param int $form_id
+		 */
+		$form_ids = apply_filters( 'frm_trans_action_get_field_options_form_id', $form_ids, $form_id );
+
 		$form_fields = FrmField::getAll(
 			array(
-				'fi.form_id'  => absint( $form_id ),
+				'fi.form_id'  => $form_ids,
 				'fi.type not' => array( 'divider', 'end_divider', 'html', 'break', 'captcha', 'rte', 'form' ),
 			),
 			'field_order'
 		);
+
 		return $form_fields;
 	}
 

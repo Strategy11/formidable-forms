@@ -83,6 +83,11 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
+	 * @var bool|null Whether or not draft fields should be hidden on the front end.
+	 */
+	private static $should_hide_draft_fields;
+
+	/**
 	 * @param object|array|int $field
 	 * @param string           $type
 	 */
@@ -719,6 +724,7 @@ DEFAULT_HTML;
 			'step'               => 1,
 			'format'             => '',
 			'placeholder'        => '',
+			'draft'              => 0,
 		);
 		$field_opts = $this->extra_field_opts();
 		$opts       = array_merge( $opts, $field_opts );
@@ -813,6 +819,11 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function prepare_field_html( $args ) {
+		if ( FrmField::get_option( $this->field, 'draft' ) && $this->should_hide_draft_field() ) {
+			// A draft field is never shown on the front-end.
+			return '';
+		}
+
 		$args = $this->fill_display_field_values( $args );
 		if ( $this->has_html ) {
 			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
@@ -831,6 +842,20 @@ DEFAULT_HTML;
 		}
 
 		return $html;
+	}
+
+	/**
+	 * A draft field can be previewed on the preview page for a user who can edit forms.
+	 *
+	 * @since 6.8
+	 *
+	 * @return bool
+	 */
+	private function should_hide_draft_field() {
+		if ( ! isset( self::$should_hide_draft_fields ) ) {
+			self::$should_hide_draft_fields = ! FrmAppHelper::is_preview_page() || ! current_user_can( 'frm_edit_forms' );
+		}
+		return self::$should_hide_draft_fields;
 	}
 
 	/**
@@ -1387,19 +1412,37 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Only allow medium-risk HTML tags like a and img when an entry is created by or edited by a privileged user.
+	 *
 	 * @since 6.7.1
 	 *
 	 * @param stdClass $entry
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
-		if ( ! $entry->user_id || ( ! user_can( $entry->user_id, 'frm_edit_entries' ) && ! user_can( $entry->user_id, 'administrator' ) ) ) {
-			return true;
+		// In old versions of Pro, updated_by and user_id may both be missing.
+		// This is because $entry may be an stdClass created in FrmProSummaryValues::base_entry.
+		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
+			return false;
 		}
-		if ( $entry->updated_by ) {
-			return ! user_can( $entry->updated_by, 'frm_edit_entries' ) && ! user_can( $entry->updated_by, 'administrator' );
+		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
+			return false;
 		}
-		return false;
+		return true;
+	}
+
+	/**
+	 * Check if a user is allowed to save additional HTML (like a and img tags).
+	 * HTML is stripped more strictly for users that are not logged in, or users that
+	 * do not have access to editing entries in the back end.
+	 *
+	 * @since 6.8
+	 *
+	 * @param string|int $user_id
+	 * @return bool
+	 */
+	private function user_id_is_privileged( $user_id ) {
+		return user_can( $user_id, 'administrator' ) || user_can( $user_id, 'frm_edit_entries' );
 	}
 
 	/**

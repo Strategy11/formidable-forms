@@ -59,7 +59,7 @@ class FrmSettings {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		$settings = get_transient( $this->option_name );
+		$settings = get_option( $this->option_name );
 
 		if ( ! is_object( $settings ) ) {
 			$settings = $this->translate_settings( $settings );
@@ -81,23 +81,10 @@ class FrmSettings {
 			return unserialize( serialize( $settings ) );
 		}
 
-		$settings = get_option( $this->option_name );
-		if ( is_object( $settings ) ) {
-			set_transient( $this->option_name, $settings );
+		// If unserializing didn't work.
+		$settings = $this;
 
-			return $settings;
-		}
-
-		// If unserializing didn't work
-		if ( $settings ) {
-			// Workaround for W3 total cache conflict.
-			$settings = unserialize( serialize( $settings ) );
-		} else {
-			$settings = $this;
-		}
-
-		update_option( $this->option_name, $settings );
-		set_transient( $this->option_name, $settings );
+		update_option( $this->option_name, $settings, 'yes' );
 
 		return $settings;
 	}
@@ -133,7 +120,8 @@ class FrmSettings {
 			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
 			'custom_header_ip' => false,
 			'tracking'         => FrmAppHelper::pro_is_installed(),
-			'summary_emails'   => 1,
+			// Only enable this by default for the main site.
+			'summary_emails'   => get_current_blog_id() === get_main_site_id(),
 			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.

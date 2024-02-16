@@ -2120,6 +2120,56 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 6.8
+	 *
+	 * @param string|int $form_id
+	 * @param array      $field_ids If this is not empty, the results will be filtered by field id.
+	 * @return array
+	 */
+	public static function get_draft_field_results( $form_id, $field_ids = array() ) {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
+			$form_ids       = array_merge( array( $form_id ), $child_form_ids );
+		} else {
+			$form_ids = array( $form_id );
+		}
+
+		$where = array(
+			'form_id' => $form_ids,
+			// Do a soft check for fields that look like drafts only.
+			'field_options LIKE' => 's:5:"draft";i:1;',
+		);
+
+		if ( $field_ids ) {
+			$where['id'] = $field_ids;
+		}
+
+		$rows = FrmDb::get_results( 'frm_fields', $where, 'id, field_options' );
+
+		return array_filter(
+			$rows,
+			function( $row ) {
+				FrmAppHelper::unserialize_or_decode( $row->field_options );
+				return is_array( $row->field_options ) && ! empty( $row->field_options['draft'] );
+			}
+		);
+	}
+
+	/**
+	 * This is called when loading the form builder.
+	 * Any unsaved draft fields get added to a hidden draft_fields input on load.
+	 *
+	 * @since 6.8
+	 *
+	 * @param string|int $form_id
+	 * @return array
+	 */
+	public static function get_all_draft_field_ids( $form_id ) {
+		$draft_field_rows = self::get_draft_field_results( $form_id );
+		return wp_list_pluck( $draft_field_rows, 'id' );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {

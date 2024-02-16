@@ -1,3 +1,3 @@
 export * from './visibility';
-export * from './animationEffects';
+export * from './animation';
 export * from './requestQueue';

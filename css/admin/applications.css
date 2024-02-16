@@ -21,14 +21,6 @@
 	position: relative;
 }
 
-.frm-admin-page-applications #frm_top_bar {
-	background: #fff;
-}
-
-.frm-admin-page-applications #wpbody {
-	background: var(--sidebar-color);
-}
-
 .frm-admin-page-applications #wpcontent {
 	padding-left: 0;
 }
@@ -61,27 +53,36 @@
 	box-shadow: var(--box-shadow-lg);
 }
 
-.frm-application-template-card:hover h4 {
+.frm-application-template-card:hover h3 {
 	color: var(--primary-500);
 }
 
 /* Card title */
-.frm-application-card h4 {
-	display: inline-block;
-	max-width: 100%;
+.frm-application-card h3 {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: var(--gap-xs);
+	margin: 0;
+	font-size: var(--text-sm) !important;
+	font-weight: 500;
+}
+
+.frm-application-card h3 .frmsvg {
+	width: 11px;
+	height: 13px;
+}
+
+.frm-application-card h3 .frm-inner-text {
+	max-width: calc( 100% - 50px );
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.frm-application-card h3 .frm-meta-tag {
 	margin: 0;
-}
-
-.frm-locked-application-template h4 {
-	opacity: 0.85;
-	max-width: calc( 100% - 30px );
-}
-
-.frm-application-card h4 .frmsvg {
-	margin-right: var(--gap-xs);
 }
 
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
@@ -106,17 +107,13 @@
 
 /* Card description */
 .frm-application-card > div:first-child > div {
-	font-size: 12px;
-}
-
-.frm-application-card > div {
-	padding: 0 10px;
+	font-size: var(--text-xs);
 }
 
 .frm-application-item-count {
-	font-size: 11px;
-	color: var(--medium-grey);
-	margin-top: 4px;
+	font-size: var(--text-xs);
+	color: var(--grey-500);
+	margin-top: var(--gap-xs);
 }
 
 #frm_view_application_modal .frm_warning_style {
@@ -183,10 +180,6 @@
 
 .frm-admin-page-applications #frm_bs_dropdown .install-now {
 	vertical-align: bottom;
-}
-
-.frm-application-card svg + h4 {
-	margin-left: 10px;
 }
 
 #frm_application_category_filter {

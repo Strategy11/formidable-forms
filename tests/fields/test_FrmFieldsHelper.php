@@ -193,4 +193,77 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 			$this->assertEquals( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
 		}
 	}
+
+	/**
+	 * Covers FrmFieldsHelper::get_draft_field_results
+	 */
+	public function test_get_draft_field_results() {
+		$form_id = $this->factory->form->create();
+		$this->assertEquals( array(), FrmFieldsHelper::get_draft_field_results( $form_id ) );
+
+		$draft_field_options = array(
+			'form_id'       => $form_id,
+			'type'          => 'text',
+			'field_options' => array(
+				'draft' => 1,
+			),
+		);
+		$draft_field_id = $this->factory->field->create( $draft_field_options );
+
+		// Test a single draft field.
+		$results = FrmFieldsHelper::get_draft_field_results( $form_id );
+		$ids     = wp_list_pluck( $results, 'id' );
+		$this->assertEquals( array( $draft_field_id ), $ids );
+
+		// Test with two draft fields.
+		$draft_field_id2 = $this->factory->field->create( $draft_field_options );
+		$results = FrmFieldsHelper::get_draft_field_results( $form_id );
+		$ids     = wp_list_pluck( $results, 'id' );
+		$this->assertEquals( array( $draft_field_id, $draft_field_id2 ), $ids );
+
+		// Test the $field_ids parameter. If this is not empty, we only want o query for these IDs.
+		$results = FrmFieldsHelper::get_draft_field_results( $form_id, array( $draft_field_id2 ) );
+		$ids     = wp_list_pluck( $results, 'id' );
+		$this->assertEquals( array( $draft_field_id2 ), $ids );
+	}
+
+	/**
+	 * Test the "sep" option for checkbox field shortcodes.
+	 *
+	 * @covers FrmFormsHelper::replace_content_shortcodes
+	 */
+	public function test_sep_option() {
+		$form           = $this->factory->form->create_and_get();
+		$form_id        = $form->id;
+		$checkbox_field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'checkbox',
+				'options' => array(
+					'Option 1',
+					'Option 2',
+				),
+			)
+		);
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+		$entry_data['item_meta'][ $checkbox_field->id ] = array(
+			'Option 1',
+			'Option 2',
+		);
+		$entry   = $this->factory->entry->create_and_get( $entry_data );
+
+		$shortcode  = '[' . $checkbox_field->id . ' sep="</div><div>"]';
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
+		$this->assertEquals(
+			implode( '</div><div>', array( 'Option 1', 'Option 2' ) ),
+			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
+		);
+
+		$shortcode  = '[' . $checkbox_field->id . ' sep=", "]';
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
+		$this->assertEquals(
+			'Option 1, Option 2',
+			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
+		);
+	}
 }

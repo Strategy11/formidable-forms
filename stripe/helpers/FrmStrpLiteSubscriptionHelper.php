@@ -174,4 +174,18 @@ class FrmStrpLiteSubscriptionHelper {
 		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
 		return $subscription;
 	}
+
+	/**
+	 * When this is filtered and returns false, the subscription will be canceled immediately instead.
+	 *
+	 * @since 6.8
+	 *
+	 * @return bool
+	 */
+	public static function should_cancel_at_period_end() {
+		/**
+		 * @param bool $cancel_at_period_end
+		 */
+		return (bool) apply_filters( 'frm_stripe_cancel_subscription_at_period_end', true );
+	}
 }
