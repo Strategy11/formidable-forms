@@ -79,6 +79,12 @@ class FrmFormApi {
 			return $addons;
 		}
 
+		if ( $this->is_running() ) {
+			return array();
+		}
+
+		$this->set_running();
+
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
 		if ( class_exists( 'FrmProDb' ) ) {
@@ -120,8 +126,47 @@ class FrmFormApi {
 		}
 
 		$this->set_cached( $addons );
+		$this->done_running();
 
 		return $addons;
+	}
+
+	/**
+	 * Prevent multiple requests from running at the same time.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	protected function is_running() {
+		return get_transient( $this->transient_key );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_running() {
+		set_transient( $this->transient_key, true, 2 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function done_running() {
+		delete_transient( $this->transient_key );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function transient_key() {
+		return strtolower( __CLASS__ ) . '_request_lock';
 	}
 
 	/**

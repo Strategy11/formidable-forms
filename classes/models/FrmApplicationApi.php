@@ -19,6 +19,11 @@ class FrmApplicationApi extends FrmFormApi {
 	protected $new_days = 60;
 
 	/**
+	 * @var string $cache_timeout
+	 */
+	protected $cache_timeout = '+12 hours';
+
+	/**
 	 * @return string
 	 */
 	protected function api_url() {
