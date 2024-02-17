@@ -1284,7 +1284,7 @@ class FrmAddonsController {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}
-		$link = FrmAppHelper::admin_upgrade_link( 'connect', 'api-connect' );
+		$link = 'https://formidableforms.com/api-connect/';
 		$args = array(
 			'v'       => 2,
 			'siteurl' => FrmAppHelper::site_url(),
