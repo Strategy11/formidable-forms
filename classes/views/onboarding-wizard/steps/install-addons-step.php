@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="install-addons">
+<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frmcenter frm_hidden" data-step-name="install-addons">
 	<span class="frm-card-box-progress-bar"><span></span></span>
 
 	<div class="frm-card-box-header">
@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-content frm-fields">
-		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text frmcenter"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
+		<h2 class="frm-card-box-title"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
+		<p class="frm-card-box-text"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
 
 		<div class="frm-mt-md">
 			<?php foreach ( $available_addons as $key => $addon ) { ?>
@@ -32,21 +32,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php } ?>
 		</div>
 
-		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
-			<span class="frm-banner-title frm-font-semibold frm-flex">
-				<?php esc_html_e( 'Get access to 40 more add-ons', 'formidable' ); ?>
-			</span>
-			<span class="frm-banner-text frm-text-xs">
-				<?php
-				printf(
-					/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
-					esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
-					'<a href="' . esc_url( $upgrade_link ) . '" target="_blank">',
-					'</a>'
-				);
-				?>
-			</span>
-		</div>
+		<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+			<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
+				<span class="frm-banner-title frm-font-semibold frm-flex">
+					<?php esc_html_e( 'Get access to 40 more add-ons', 'formidable' ); ?>
+				</span>
+				<span class="frm-banner-text frm-text-xs">
+					<?php
+					printf(
+						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
+						esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
+						'<a href="' . esc_url( $upgrade_link ) . '" target="_blank">',
+						'</a>'
+					);
+					?>
+				</span>
+			</div>
+		<?php } ?>
 	</div>
 
 	<div class="frm-card-box-footer">

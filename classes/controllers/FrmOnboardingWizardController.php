@@ -423,33 +423,71 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	private static function set_available_addons() {
+		$is_pro_installed = FrmAppHelper::pro_is_installed();
+
+		if ( $is_pro_installed ) {
+			self::$available_addons['spam-protection'] = array(
+				'title'       => esc_html__( 'Spam Protection', 'formidable' ),
+				'is-checked'  => true,
+				'is-disabled' => true,
+			);
+		}
 		self::$available_addons['stripe-payments'] = array(
 			'title'       => esc_html__( 'Stripe Payments', 'formidable' ),
 			'is-checked'  => true,
 			'is-disabled' => true,
 		);
-		self::$available_addons['visual-styler'] = array(
-			'title'       => esc_html__( 'Visual Styler', 'formidable' ),
-			'is-checked'  => true,
-			'is-disabled' => true,
-		);
-		self::$available_addons['save-entries'] = array(
-			'title'       => esc_html__( 'Save Entries', 'formidable' ),
-			'is-checked'  => true,
-			'is-disabled' => true,
-		);
-		self::$available_addons['smtp'] = array(
-			'title'       => esc_html__( 'SMTP', 'formidable' ),
-			'plugin-slug' => 'wp-mail-smtp',
-			'is-checked'  => true,
-			'is-vendor'   => true,
-		);
-		if ( class_exists( 'GFForms' ) ) {
-			self::$available_addons['gravity-forms-migrator'] = array(
-				'title'       => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
-				'plugin-slug' => 'formidable-gravity-forms-importer',
+		if ( ! $is_pro_installed ) {
+			self::$available_addons['visual-styler'] = array(
+				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
 				'is-checked'  => true,
-				'is-vendor'   => true,
+				'is-disabled' => true,
+			);
+			self::$available_addons['save-entries'] = array(
+				'title'       => esc_html__( 'Save Entries', 'formidable' ),
+				'is-checked'  => true,
+				'is-disabled' => true,
+			);
+			self::$available_addons['wp-mail-smtp'] = array(
+				'title'      => esc_html__( 'SMTP', 'formidable' ),
+				'rel'        => 'wp-mail-smtp',
+				'is-checked' => true,
+				'is-vendor'  => true,
+			);
+		}
+		if ( $is_pro_installed ) {
+			self::$available_addons['formidable-mailchimp'] = array(
+				'title'      => esc_html__( 'Mailchimp', 'formidable' ),
+				'rel'        => FrmAddonsController::get_addon( 'mailchimp' )['url'],
+				'is-checked' => true,
+			);
+			self::$available_addons['formidable-registration'] = array(
+				'title'      => esc_html__( 'User Registration', 'formidable' ),
+				'rel'        => FrmAddonsController::get_addon( 'registration' )['url'],
+				'is-checked' => true,
+			);
+			self::$available_addons['formidable-api'] = array(
+				'title'      => esc_html__( 'Form Rest API', 'formidable' ),
+				'rel'        => FrmAddonsController::get_addon( 'api' )['url'],
+				'is-checked' => false,
+			);
+			self::$available_addons['formidable-acf'] = array(
+				'title'      => esc_html__( 'ACF Forms', 'formidable' ),
+				'rel'        => FrmAddonsController::get_addon( 'acf' )['url'],
+				'is-checked' => false,
+			);
+			self::$available_addons['formidable-signature'] = array(
+				'title'      => esc_html__( 'Signature Forms', 'formidable' ),
+				'rel'        => FrmAddonsController::get_addon( 'signature' )['url'],
+				'is-checked' => false,
+			);
+		}//end if
+		if ( class_exists( 'GFForms' ) ) {
+			self::$available_addons['formidable-gravity-forms-importer'] = array(
+				'title'      => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
+				'rel'        => 'formidable-gravity-forms-importer',
+				'is-checked' => true,
+				'is-vendor'  => true,
 			);
 		}
 	}

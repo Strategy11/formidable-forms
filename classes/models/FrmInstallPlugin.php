@@ -78,7 +78,7 @@ class FrmInstallPlugin {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data.
-		$plugin_slug = FrmAppHelper::get_post_param( 'plugin_slug', '', 'sanitize_text_field' );
+		$plugin_slug = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
 
 		// Include necessary files for plugin installation.
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';

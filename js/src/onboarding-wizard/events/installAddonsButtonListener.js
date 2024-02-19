@@ -26,36 +26,38 @@ function addInstallAddonsButtonEvents() {
  * @return {void}
  */
 const onInstallAddonsButtonClick = async( event ) => {
-	const addons = document.querySelectorAll( '.frm-option-box:not(.frm-disabled)' );
+	const addons = document.querySelectorAll( '.frm-option-box.frm-checked:not(.frm-disabled)' );
 
 	const installAddonsButton = event.currentTarget;
 	installAddonsButton.classList.add( 'frm_loading_button' );
 
-	// Wait for all addon installations to complete
-	await Promise.all( Array.from( addons ).map( addon =>
-		addToRequestQueue( () => installAddon( addon.dataset ) )
-	) );
+	for ( const addon of addons ) {
+		try {
+			await addToRequestQueue( () => installAddon( addon.getAttribute( 'rel' ), addon.dataset ) );
+		} catch ( error ) {
+			console.error( 'An error occurred:', error );
+		}
+	}
 
 	installAddonsButton.classList.remove( 'frm_loading_button' );
 	navigateToNextStep();
 };
 
 /**
- * Install an add-on.
- *
- * Prepares and sends a POST request to install an add-on or plugin
- * based on the provided pluginSlug and isVendor flag
+ * Installs an add-on or plugin based on the provided plugin name and vendor status.
  *
  * @private
- * @param {Object} data An object containing the pluginSlug and isVendor flag.
- * @return {Promise<any>} A promise that resolves when the POST request is completed.
+ * @param {string} plugin The unique identifier or name of the plugin or add-on to be installed.
+ * @param {Object} options An object containing additional options for the installation.
+ * @param {boolean} options.isVendor Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
+ * @returns {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
  */
-async function installAddon({ pluginSlug, isVendor}) {
+async function installAddon( plugin, {isVendor}) {
 	// Prepare FormData for the POST request
 	const formData = new FormData();
 	formData.append( 'action', isVendor ? 'frm_install_plugin' : 'frm_install_addon' );
 	formData.append( 'nonce', nonce );
-	formData.append( 'plugin_slug', pluginSlug );
+	formData.append( 'plugin', plugin );
 
 	try {
 		// Perform the POST request

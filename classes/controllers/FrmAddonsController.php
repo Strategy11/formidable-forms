@@ -501,7 +501,7 @@ class FrmAddonsController {
 	 * @param string $plugin The plugin slug.
 	 * @return array|false
 	 */
-	protected static function get_addon( $plugin ) {
+	public static function get_addon( $plugin ) {
 		$addons = self::get_api_addons();
 		self::prepare_addons( $addons );
 		foreach ( $addons as $addon ) {

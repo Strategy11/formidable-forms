@@ -9677,17 +9677,21 @@ Responsive Design
 	align-items: center;
 	font-size: 14px;
 	font-weight: 500;
-	background: var(--primary-25);
+	background-color: #fff;
 	padding: 12px var(--gap-sm);
-	border: 1px solid var(--primary-200);
+	border: 1px solid var(--grey-200);
 	border-radius: var(--small-radius);
 	margin-bottom: var(--gap-xs);
+	transition: background-color 150ms ease-out;
 	cursor: pointer;
 }
 
+.frm-option-box.frm-checked:not(.frm-disabled) {
+	background-color: var(--primary-25);
+	border-color: var(--primary-200);
+}
+
 .frm-option-box.frm-disabled {
-	background-color: #fff;
-	border-color: var(--grey-200);
 	cursor: default;
 }
 

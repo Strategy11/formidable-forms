@@ -32,11 +32,14 @@ class FrmOnboardingWizardHelper {
 			'class' => 'frm-option-box',
 		);
 
-		if ( ! empty( $addon['is-disabled'] ) ) {
-			$attributes['class']    .= ' frm-disabled';
+		if ( ! empty( $addon['is-checked'] ) ) {
+			$attributes['class'] .= ' frm-checked';
 		}
-		if ( ! empty( $addon['plugin-slug'] ) ) {
-			$attributes['data-plugin-slug'] = $addon['plugin-slug'];
+		if ( ! empty( $addon['is-disabled'] ) ) {
+			$attributes['class'] .= ' frm-disabled';
+		}
+		if ( ! empty( $addon['rel'] ) ) {
+			$attributes['rel'] = $addon['rel'];
 		}
 		if ( ! empty( $addon['is-vendor'] ) ) {
 			$attributes['data-is-vendor'] = 'true';

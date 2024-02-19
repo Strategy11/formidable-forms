@@ -8,6 +8,7 @@ import addProceedWithoutAccountButtonEvents from './proceedWithoutAccountButtonL
 import addStepButtonsEvents from './skipStepButtonListener';
 import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
+import { addOptionBoxEvents } from '../../common/events';
 
 /**
  * Navigates to the next step in a sequence.
@@ -45,4 +46,5 @@ export function addEventListeners() {
 	addStepButtonsEvents();
 	addSetupEmailStepButtonEvents();
 	addInstallAddonsButtonEvents();
+	addOptionBoxEvents();
 }
