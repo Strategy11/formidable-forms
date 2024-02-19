@@ -139,7 +139,7 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function is_running() {
-		return get_transient( $this->transient_key );
+		return get_transient( $this->transient_key() );
 	}
 
 	/**
@@ -148,7 +148,7 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_running() {
-		set_transient( $this->transient_key, true, 2 * MINUTE_IN_SECONDS );
+		set_transient( $this->transient_key(), true, 2 * MINUTE_IN_SECONDS );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function done_running() {
-		delete_transient( $this->transient_key );
+		delete_transient( $this->transient_key() );
 	}
 
 	/**

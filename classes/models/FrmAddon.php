@@ -22,13 +22,13 @@ class FrmAddon {
 
 	/**
 	 * This is used to flag other add ons not to send a request.
-	 * We only want to send a single API request per HTTP request.
+	 * We only want to send a single API request per page load.
 	 *
-	 * @since 6.7.1
+	 * @since x.x
 	 *
-	 * @var bool
+	 * @var string
 	 */
-	private static $sent_mothership_request = false;
+	private $transient_lock_key = 'frm_activate_request_lock';
 
 	public function __construct() {
 
@@ -475,20 +475,15 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( self::$sent_mothership_request ) {
-			return;
-		}
-
 		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
 		// Only check weekly.
-		if ( $this->checked_recently( '7 days' ) ) {
+		if ( $this->checked_recently( '7 days' ) || $this->is_running() ) {
 			return;
 		}
 
-		self::$sent_mothership_request = true;
 		$this->update_last_checked();
 
 		$response = $this->get_license_status();
@@ -620,6 +615,8 @@ class FrmAddon {
 	}
 
 	private function get_license_status() {
+		$this->set_running();
+
 		$response = array(
 			'status' => 'missing',
 			'error'  => true,
@@ -646,6 +643,7 @@ class FrmAddon {
 			$response['status'] = $e->getMessage();
 		}
 
+		$this->done_running();
 		return $response;
 	}
 
@@ -784,5 +782,45 @@ class FrmAddon {
 		$updates->no_update    = array();
 		$updates->checked      = array();
 		set_site_transient( 'update_plugins', $updates );
+	}
+
+	/**
+	 * Set the transient key for the lock. It should be unique to the license.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	protected function lock_key() {
+		return $this->transient_lock_key . '_' . $this->license;
+	}
+
+	/**
+	 * Prevent multiple requests from running at the same time.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	protected function is_running() {
+		return get_transient( $this->lock_key() );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_running() {
+		set_transient( $this->lock_key(), true, 2 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function done_running() {
+		delete_transient( $this->lock_key() );
 	}
 }
