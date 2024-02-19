@@ -68,4 +68,19 @@ class FrmFieldHTML extends FrmFieldType {
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-html.php';
 	}
+
+	/**
+	 * Overwrite FrmFieldType::get_display_value.
+	 * An HTML field is not populated from user input.
+	 * It does not need to be passed through FrmAppHelper::strip_most_html.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|array $value
+	 * @param array        $atts
+	 * @return string
+	 */
+	public function get_display_value( $value, $atts = array() ) {
+		return $value;
+	}
 }
