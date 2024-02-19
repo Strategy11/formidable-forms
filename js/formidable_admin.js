@@ -7270,8 +7270,8 @@ function frmAdminBuildJS() {
 
 		html = html
 		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
-		.replaceAll( `[${logicRowNumberToReplace}][hide_opt]`, `[${newLogicRowNumber}][hide_opt]` )
-		.replaceAll( ',\'' + logicRowNumberToReplace + ',\'', ',\''  + newLogicRowNumber + ',\'' );
+		.replaceAll( `[conditions][${logicRowNumberToReplace}]`, `[conditions][${newLogicRowNumber}]` )
+		.replaceAll( id + '\',\'' + logicRowNumberToReplace + '\'', id + '\',\''  + newLogicRowNumber + '\'' );
 
 		return html;
 	}
