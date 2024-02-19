@@ -1243,6 +1243,36 @@
 
 			radio.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
+
+		document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
+			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
+			el.setAttribute( 'role', 'button' );
+			el.addEventListener( 'click', event => {
+				maybeCollapseSettings( event );
+			});
+			el.addEventListener( 'keydown', event => {
+				if ( event.key === ' ' ) {
+					event.preventDefault();
+					maybeCollapseSettings( event );
+				}
+			});
+		});
+	}
+
+	/**
+	 * @param {Event} event
+	 */
+	function maybeCollapseSettings( event ) {
+		let expanded;
+		const sectionParent = event.target.parentElement;
+		if ( event.type === 'keydown' ) {
+			expanded = sectionParent.classList.toggle( 'open' );
+			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
+		} else {
+			expanded = sectionParent.classList.contains( 'open' );
+		}
+
+		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**
