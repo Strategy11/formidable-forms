@@ -270,16 +270,16 @@ function frmAdminBuildJS() {
 
 	const currentURL = new URL( window.location.href );
 	const urlParams = currentURL.searchParams;
+	const builderPage = document.getElementById( 'frm_builder_page' );
 
 	// Global settings
 	var s;
 
 	function showElement( element ) {
+		if ( ! element[0]) {
+			return;
+		}
 		element[0].style.display = '';
-	}
-
-	function hideElement( element ) {
-		element[0].style.display = 'none';
 	}
 
 	function empty( $obj ) {
@@ -732,7 +732,8 @@ function frmAdminBuildJS() {
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
 
-		if ( this.id === 'frm_insert_fields_tab' ) {
+		// clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
+		if ( this.id === 'frm_insert_fields_tab' && ! this.closest( '#frm_adv_info' ) ) {
 			clearSettingsBox();
 		}
 		return false;
@@ -1358,7 +1359,7 @@ function frmAdminBuildJS() {
 			controls.setAttribute( 'role', 'group' );
 			controls.setAttribute( 'tabindex', 0 );
 			setFieldControlsHtml( controls );
-			document.getElementById( 'frm_builder_page' ).appendChild( controls );
+			builderPage.appendChild( controls );
 		}
 
 		$row.append( controls );
@@ -2195,7 +2196,7 @@ function frmAdminBuildJS() {
 
 	function checkForMultiselectKeysOnMouseMove( event ) {
 		var keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
-		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
+		jQuery( builderPage ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
 		checkForActiveHoverTarget( event );
 	}
 
@@ -4907,7 +4908,7 @@ function frmAdminBuildJS() {
 		}
 
 		fieldIds = [];
-		rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' );
+		rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		rowLength = rows.length;
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			row = rows[ rowIndex ];
@@ -5481,7 +5482,7 @@ function frmAdminBuildJS() {
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
-			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
+			rows = builderPage.querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length;
 
 		fieldOptions = wp.hooks.applyFilters( 'frm_conditional_logic_field_options', getFieldOptions( fieldId ), { type, fieldId });
@@ -6953,6 +6954,39 @@ function frmAdminBuildJS() {
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
+
+		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+	}
+
+	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
+		if ( ! shouldAddShortcodesModalTriggerIcon( fieldType ) ) {
+			return;
+		}
+
+		const fieldSettingsSelector = '#frm-single-settings-' + fieldId;
+		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
+			return;
+		}
+		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
+
+		const wrapTextareaWithIconContainer = () => {
+			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
+			const wrapperSpan = span({ className: 'frm-with-right-icon' });
+			textarea.parentNode.insertBefore( wrapperSpan, textarea );
+			wrapperSpan.appendChild( createModalTriggerIcon() );
+			wrapperSpan.appendChild( textarea );
+		};
+
+		const createModalTriggerIcon = () => {
+			return frmDom.svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm-show-box' ] });
+		};
+
+		wrapTextareaWithIconContainer();
+	}
+
+	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
+		const fieldsWithShortcodesBox = [ 'html' ];
+		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
 	function setupTinyMceEventHandlers( editor ) {
@@ -7859,6 +7893,7 @@ function frmAdminBuildJS() {
 			moreIcon = getIconForInput( input );
 			if ( moreIcon.tagName === 'use' ) {
 				moreIcon = moreIcon.firstElementChild;
+
 				if ( moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ).indexOf( 'frm_close_icon' ) === -1 ) {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
@@ -7888,6 +7923,11 @@ function frmAdminBuildJS() {
 		}
 		if ( moreIcon.tagName === 'use' ) {
 			classes = moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
+
+			if ( null === classes ) {
+				// If the deprecated xlink:href is not defined, check for href.
+				classes = moreIcon.getAttribute( 'href' );
+			}
 		}
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
@@ -7907,7 +7947,13 @@ function frmAdminBuildJS() {
 			box.style.display = 'block';
 
 			if ( moreIcon.tagName === 'use' ) {
-				moreIcon.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_close_icon' );
+				if ( moreIcon.hasAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) ) {
+					moreIcon.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_close_icon' );
+				} else {
+					const newMoreIcon = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
+					newMoreIcon.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_close_icon' );
+					moreIcon.parentNode.replaceChild( newMoreIcon, moreIcon );
+				}
 			} else {
 				moreIcon.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
 			}
@@ -9551,6 +9597,31 @@ function frmAdminBuildJS() {
 		tables.forEach( table => table.classList.add( 'frm-zebra-striping' ) );
 	};
 
+	function maybeHideShortcodes( e ) {
+		if ( ! builderPage ) {
+			e.stopPropagation();
+		}
+
+		if ( e.target.classList.contains( 'frm-show-box' ) || ( e.target.parentElement && e.target.parentElement.classList.contains( 'frm-show-box' ) ) ) {
+			return;
+		}
+
+		const sidebar = document.getElementById( 'frm_adv_info' );
+		if ( ! sidebar ) {
+			return;
+		}
+
+		if ( sidebar.dataset.fills === e.target.id && typeof e.target.id !== 'undefined' ) {
+			return;
+		}
+
+		const isChild = e.target.closest( '#frm_adv_info' );
+
+		if ( ! isChild && sidebar.style.display !== 'none' ) {
+			hideShortcodes( sidebar );
+		}
+	}
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -9731,6 +9802,8 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
+			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
+
 			let loadFieldId, $builderForm, builderArea;
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
@@ -9953,28 +10026,7 @@ function frmAdminBuildJS() {
 			);
 
 			// Close shortcode modal on click.
-			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
-				e.stopPropagation();
-
-				if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
-					return;
-				}
-
-				const sidebar = document.getElementById( 'frm_adv_info' );
-				if ( ! sidebar ) {
-					return;
-				}
-
-				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
-					return;
-				}
-
-				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
-
-				if ( ! isChild && sidebar.display !== 'none' ) {
-					hideShortcodes( sidebar );
-				}
-			});
+			formSettings.on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
@@ -10090,7 +10142,7 @@ function frmAdminBuildJS() {
 			viewPage = document.body.classList.contains( 'post-type-frm_display' );
 			insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
 
-			if ( settingsPage !== null || viewPage ) {
+			if ( settingsPage !== null || viewPage || builderPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
 				var htmlTab;
 				e.stopPropagation();
@@ -10102,7 +10154,7 @@ function frmAdminBuildJS() {
 						return;
 					}
 
-					if ( settingsPage !== null ) {
+					if ( settingsPage !== null || builderPage ) {
 						/* form settings page */
 						htmlTab = jQuery( '#frm_html_tab' );
 						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
