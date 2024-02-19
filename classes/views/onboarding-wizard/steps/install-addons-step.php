@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar " data-step-name="install-addons">
+<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="install-addons">
 	<span class="frm-card-box-progress-bar"><span></span></span>
 
 	<div class="frm-card-box-header">
@@ -30,11 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input <?php FrmOnboardingWizardHelper::add_addon_input_attributes( $key, $addon ); ?>/>
 				</label>
 			<?php } ?>
-
-			<label for="frm-onboarding-smtp-addon" class="frm-option-box" data-plugin-slug="gravity-forms-migrator">
-				<span><?php esc_html_e( 'Gravity Forms Migrator', 'formidable' ); ?></span>
-				<input type="checkbox" name="frm-onboarding-smtp-addon" id="frm-onboarding-smtp-addon" checked />
-			</label>
 		</div>
 
 		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
@@ -59,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Skip', 'formidable' ); ?>
 		</a>
 		<a href="#" id="frm-onboarding-install-addons-button" class="button button-primary frm-button-primary" role="button">
-			<?php esc_html_e( 'Install & Finish setup', 'formidable' ); ?>
+			<?php esc_html_e( 'Install & Finish Setup', 'formidable' ); ?>
 		</a>
 	</div>
 </section>

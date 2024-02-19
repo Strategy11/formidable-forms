@@ -425,25 +425,33 @@ class FrmOnboardingWizardController {
 	private static function set_available_addons() {
 		self::$available_addons['stripe-payments'] = array(
 			'title'       => esc_html__( 'Stripe Payments', 'formidable' ),
-			'is-checked' => true,
+			'is-checked'  => true,
 			'is-disabled' => true,
 		);
 		self::$available_addons['visual-styler'] = array(
 			'title'       => esc_html__( 'Visual Styler', 'formidable' ),
-			'is-checked' => true,
+			'is-checked'  => true,
 			'is-disabled' => true,
 		);
 		self::$available_addons['save-entries'] = array(
 			'title'       => esc_html__( 'Save Entries', 'formidable' ),
-			'is-checked' => true,
+			'is-checked'  => true,
 			'is-disabled' => true,
 		);
 		self::$available_addons['smtp'] = array(
 			'title'       => esc_html__( 'SMTP', 'formidable' ),
-			'plugin-slug' => 'wp-mail-smtp/wp_mail_smtp.php',
-			'is-checked' => true,
+			'plugin-slug' => 'wp-mail-smtp',
+			'is-checked'  => true,
 			'is-vendor'   => true,
 		);
+		if ( class_exists( 'GFForms' ) ) {
+			self::$available_addons['gravity-forms-migrator'] = array(
+				'title'       => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
+				'plugin-slug' => 'formidable-gravity-forms-importer',
+				'is-checked'  => true,
+				'is-vendor'   => true,
+			);
+		}
 	}
 
 	/**

@@ -1,10 +1,10 @@
 /**
  * Internal dependencies
  */
+import { navigateToNextStep } from '.';
 import { getElements } from '../elements';
 import { showEmailAddressError } from '../ui';
 import { isValidEmail, onClickPreventDefault } from '../utils';
-import { navigateToNextStep } from './';
 
 /**
  * Manages event handling for the "Next Step" button in the email setup step.

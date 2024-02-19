@@ -39,7 +39,7 @@ class FrmOnboardingWizardHelper {
 			$attributes['data-plugin-slug'] = $addon['plugin-slug'];
 		}
 		if ( ! empty( $addon['is-vendor'] ) ) {
-			$attributes['data-is-vendor'] = '1';
+			$attributes['data-is-vendor'] = 'true';
 		}
 
 		FrmAppHelper::array_to_html_params( $attributes, true );
