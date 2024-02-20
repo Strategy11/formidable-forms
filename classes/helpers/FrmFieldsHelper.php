@@ -362,11 +362,12 @@ class FrmFieldsHelper {
 		 *
 		 * @param array<string> $substrings_to_replace_with_field_name
 		 * @param array         $args {
-		 *     @type string $msg   The current error message before the substrings are replaced.
-		 *     @type string $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
+		 *     @type string       $msg   The current error message before the substrings are replaced.
+		 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
+		 *     @type array|object $field The field with the error.
 		 * }
 		 */
-		$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings_to_replace_with_field_name, compact( 'msg', 'error' ) );
+		$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings_to_replace_with_field_name, compact( 'msg', 'error', 'field' ) );
 
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings_to_replace_with_field_name = $filtered_substrings;
