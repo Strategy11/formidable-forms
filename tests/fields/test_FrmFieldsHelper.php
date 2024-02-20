@@ -269,7 +269,6 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 
 	/**
 	 * @covers FrmFieldsHelper::get_error_msg
-	 * @group mike
 	 */
 	public function test_get_error_msg() {
 		$form_id = $this->factory->form->create();
