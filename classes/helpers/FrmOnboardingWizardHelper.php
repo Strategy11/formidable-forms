@@ -22,7 +22,7 @@ class FrmOnboardingWizardHelper {
 	 * @since x.x
 	 *
 	 * @param string $addon_key The key of addon.
-	 * @param string $addon     The array of addon's information.
+	 * @param array  $addon     The array of addon's information.
 	 * @return void
 	 */
 	public static function add_addon_label_attributes( $addon_key, $addon ) {
@@ -54,7 +54,7 @@ class FrmOnboardingWizardHelper {
 	 * @since x.x
 	 *
 	 * @param string $addon_key The key of addon.
-	 * @param string $addon     The array of addon's information.
+	 * @param array  $addon     The array of addon's information.
 	 * @return void
 	 */
 	public static function add_addon_input_attributes( $addon_key, $addon ) {
