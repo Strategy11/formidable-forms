@@ -364,13 +364,11 @@ class FrmFieldsHelper {
 	 * @param array|object $field
 	 */
 	private static function maybe_replace_substrings_with_field_name( $msg, $error, $field ) {
-		$field_name            = is_array( $field ) ? $field['name'] : $field->name;
-		$field_name            = FrmAppHelper::maybe_kses( $field_name );
-		$substrings_to_replace = array( '[field_name]' );
+		$field_name = is_array( $field ) ? $field['name'] : $field->name;
+		$field_name = FrmAppHelper::maybe_kses( $field_name );
+		$substrings = self::get_substrings_to_replace_with_field_name( $field_name, compact( 'msg', 'error', 'field' ) );
 
-		if ( $field_name ) {
-			array_push( $substrings_to_replace, 'This value', 'This field' );
-		} else {
+		if ( ! $field_name ) {
 			if ( 'unique_msg' === $error ) {
 				$field_name = __( 'This value', 'formidable' );
 			} else {
@@ -378,25 +376,7 @@ class FrmFieldsHelper {
 			}
 		}
 
-		/**
-		 * @since x.x
-		 *
-		 * @param array<string> $substrings_to_replace
-		 * @param array         $args {
-		 *     @type string       $msg   The current error message before the substrings are replaced.
-		 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
-		 *     @type array|object $field The field with the error.
-		 * }
-		 */
-		$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings_to_replace, compact( 'msg', 'error', 'field' ) );
-
-		if ( is_array( $filtered_substrings ) ) {
-			$substrings_to_replace = $filtered_substrings;
-		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
-		}
-
-		foreach ( $substrings_to_replace as $substring ) {
+		foreach ( $substrings as $substring ) {
 			if ( false !== strpos( $msg, $substring ) ) {
 				$msg = str_replace( $substring, $field_name, $msg );
 			}
@@ -406,10 +386,37 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $field_name
+	 * @param array  $filter_args {
+	 *     @type string       $msg   The current error message before the substrings are replaced.
+	 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
+	 *     @type array|object $field The field with the error.
+	 * }
 	 * @return array
 	 */
-	private static function get_substrings_to_replace_with_field_name() {
+	private static function get_substrings_to_replace_with_field_name( $field_name, $filter_args ) {
+		$substrings = array( '[field_name]' );
+		if ( $field_name ) {
+			array_push( $substrings, 'This value', 'This field' );
+		}
 
+		/**
+		 * @since x.x
+		 *
+		 * @param array<string> $substrings
+		 * @param array         $filter_args
+		 */
+		$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings, $filter_args );
+
+		if ( is_array( $filtered_substrings ) ) {
+			$substrings = $filtered_substrings;
+		} else {
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
+		}
+
+		return $substrings;
 	}
 
 	public static function get_form_fields( $form_id, $error = array() ) {
