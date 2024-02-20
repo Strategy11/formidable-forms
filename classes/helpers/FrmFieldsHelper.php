@@ -352,34 +352,45 @@ class FrmFieldsHelper {
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
 		$msg = do_shortcode( $msg );
 
-		if ( trim( $field_name ) ) {
+		$substrings_to_replace_with_field_name = array(
+			'[field_name]',
+		);
+
+		$use_name_value = FrmAppHelper::maybe_kses( $field_name );
+		if ( $use_name_value ) {
+			array_push(
+				$substrings_to_replace_with_field_name,
+				'This value',
+				'This field'
+			);
+		} else {
+			$use_name_value                        = __( 'This field', 'formidable' );
 			$substrings_to_replace_with_field_name = array(
 				'[field_name]',
-				'This value',
-				'This field',
 			);
-			/**
-			 * @since x.x
-			 *
-			 * @param array<string> $substrings_to_replace_with_field_name
-			 * @param array         $args {
-			 *     @type string       $msg   The current error message before the substrings are replaced.
-			 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
-			 *     @type array|object $field The field with the error.
-			 * }
-			 */
-			$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings_to_replace_with_field_name, compact( 'msg', 'error', 'field' ) );
+		}
 
-			if ( is_array( $filtered_substrings ) ) {
-				$substrings_to_replace_with_field_name = $filtered_substrings;
-			} else {
-				_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
-			}
+		/**
+		 * @since x.x
+		 *
+		 * @param array<string> $substrings_to_replace_with_field_name
+		 * @param array         $args {
+		 *     @type string       $msg   The current error message before the substrings are replaced.
+		 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
+		 *     @type array|object $field The field with the error.
+		 * }
+		 */
+		$filtered_substrings = apply_filters( 'frm_error_substrings_to_replace_with_field_name', $substrings_to_replace_with_field_name, compact( 'msg', 'error', 'field' ) );
 
-			foreach ( $substrings_to_replace_with_field_name as $substring ) {
-				if ( false !== strpos( $msg, $substring ) ) {
-					$msg = str_replace( $substring, FrmAppHelper::maybe_kses( $field_name ), $msg );
-				}
+		if ( is_array( $filtered_substrings ) ) {
+			$substrings_to_replace_with_field_name = $filtered_substrings;
+		} else {
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
+		}
+
+		foreach ( $substrings_to_replace_with_field_name as $substring ) {
+			if ( false !== strpos( $msg, $substring ) ) {
+				$msg = str_replace( $substring, $use_name_value, $msg );
 			}
 		}
 
