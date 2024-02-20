@@ -324,19 +324,18 @@ class FrmFieldsHelper {
 	public static function get_error_msg( $field, $error ) {
 		$frm_settings     = FrmAppHelper::get_settings();
 		$default_settings = $frm_settings->default_options();
-		$field_name       = is_array( $field ) ? $field['name'] : $field->name;
 
 		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
 			'unique_msg' => array(
 				'full' => self::default_unique_msg(),
 				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s must be unique', 'formidable' ), $field_name ),
+				'part' => sprintf( __( '%s must be unique', 'formidable' ), '[field_name]' ),
 			),
 			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
 				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s is invalid', 'formidable' ), $field_name ),
+				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
 			),
 			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
@@ -352,12 +351,27 @@ class FrmFieldsHelper {
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
 		$msg = do_shortcode( $msg );
 
+		$msg = self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
+
+		return $msg;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string       $msg
+	 * @param string       $error
+	 * @param array|object $field
+	 */
+	private static function maybe_replace_substrings_with_field_name( $msg, $error, $field ) {
+		$field_name = is_array( $field ) ? $field['name'] : $field->name;
+		$field_name = FrmAppHelper::maybe_kses( $field_name );
+
 		$substrings_to_replace_with_field_name = array(
 			'[field_name]',
 		);
 
-		$use_name_value = FrmAppHelper::maybe_kses( $field_name );
-		if ( $use_name_value ) {
+		if ( $field_name ) {
 			array_push(
 				$substrings_to_replace_with_field_name,
 				'This value',
@@ -365,9 +379,9 @@ class FrmFieldsHelper {
 			);
 		} else {
 			if ( 'unique_msg' === $error ) {
-				$use_name_value = __( 'This value', 'formidable' );
+				$field_name = __( 'This value', 'formidable' );
 			} else {
-				$use_name_value = __( 'This field', 'formidable' );
+				$field_name = __( 'This field', 'formidable' );
 			}
 			$substrings_to_replace_with_field_name = array(
 				'[field_name]',
@@ -394,11 +408,18 @@ class FrmFieldsHelper {
 
 		foreach ( $substrings_to_replace_with_field_name as $substring ) {
 			if ( false !== strpos( $msg, $substring ) ) {
-				$msg = str_replace( $substring, $use_name_value, $msg );
+				$msg = str_replace( $substring, $field_name, $msg );
 			}
 		}
 
 		return $msg;
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_substrings_to_replace_with_field_name() {
+
 	}
 
 	public static function get_form_fields( $form_id, $error = array() ) {
