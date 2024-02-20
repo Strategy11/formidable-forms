@@ -648,17 +648,6 @@ DEFAULT_HTML;
 		return array_merge( $field, $field_options );
 	}
 
-	protected function default_unique_msg() {
-		if ( is_object( $this->field ) && ! FrmField::is_option_true( $this->field, 'unique' ) ) {
-			$message = '';
-		} else {
-			$frm_settings = FrmAppHelper::get_settings();
-			$message      = $frm_settings->unique_msg;
-		}
-
-		return $message;
-	}
-
 	/**
 	 * @return string
 	 */
@@ -708,7 +697,7 @@ DEFAULT_HTML;
 			'blank'              => FrmFieldsHelper::default_blank_msg(),
 			'required_indicator' => '*',
 			'invalid'            => $this->default_invalid_msg(),
-			'unique_msg'         => $this->default_unique_msg(),
+			'unique_msg'         => '',
 			'separate_value'     => 0,
 			'clear_on_focus'     => 0,
 			'classes'            => '',
@@ -1584,5 +1573,15 @@ DEFAULT_HTML;
 			FrmAppHelper::unserialize_or_decode( $value );
 		}
 		return $value;
+	}
+
+	/**
+	 * @deprecated x.x
+	 */
+	protected function default_unique_msg() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		$frm_settings = FrmAppHelper::get_settings();
+		$message      = $frm_settings->unique_msg;
+		return $message;
 	}
 }

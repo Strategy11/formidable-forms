@@ -108,7 +108,8 @@ class FrmSettings {
 			'success_msg'      => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
 			// translators: %s: [field_name] shortcode.
 			'blank_msg'        => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
-			'unique_msg'       => __( 'This value must be unique.', 'formidable' ),
+			// translators: %s: [field_name] shortcode.
+			'unique_msg'       => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
 			'invalid_msg'      => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
 			'failed_msg'       => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
 			'submit_value'     => __( 'Submit', 'formidable' ),
