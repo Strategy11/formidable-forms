@@ -364,7 +364,11 @@ class FrmFieldsHelper {
 				'This field'
 			);
 		} else {
-			$use_name_value                        = __( 'This field', 'formidable' );
+			if ( 'unique_msg' === $error ) {
+				$use_name_value = __( 'This value', 'formidable' );
+			} else {
+				$use_name_value = __( 'This field', 'formidable' );
+			}
 			$substrings_to_replace_with_field_name = array(
 				'[field_name]',
 			);

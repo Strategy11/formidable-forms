@@ -266,4 +266,40 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
 		);
 	}
+
+	/**
+	 * @covers FrmFieldsHelper::get_error_msg
+	 */
+	public function test_get_error_msg() {
+		$form_id = $this->factory->form->create();
+
+		// Test a field with no name. We should see "This field" (or "This value" for unique validation).
+		$field = $this->factory->field->create_and_get(
+			array(
+				'name'          => '',
+				'form_id'       => $form_id,
+				'type'          => 'text',
+				'field_options' => array(
+					'blank'      => '[field_name] cannot be blank',
+					'unique_msg' => '[field_name] must be unique',
+				),
+			)
+		);
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+		$this->assertEquals( 'This field cannot be blank', $error_message );
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
+		$this->assertEquals( 'This value must be unique', $error_message );
+
+		// Test with a field name.
+		$field->name = 'My example field';
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+		$this->assertEquals( 'My example field cannot be blank', $error_message );
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
+		$this->assertEquals( 'My example field must be unique', $error_message );
+
+	}
 }
