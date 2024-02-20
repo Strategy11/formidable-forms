@@ -383,9 +383,6 @@ class FrmFieldsHelper {
 			} else {
 				$field_name = __( 'This field', 'formidable' );
 			}
-			$substrings_to_replace_with_field_name = array(
-				'[field_name]',
-			);
 		}
 
 		/**
