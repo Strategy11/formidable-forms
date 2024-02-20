@@ -750,6 +750,9 @@ class FrmStyle {
 			'progress_border_size'     => '2px',
 			'progress_size'            => '24px',
 
+			'ranking_bg_color_active'     => 'rgba(128, 187, 254, 0.04)',
+			'ranking_border_color_active' => 'rgb(128, 187, 254)',
+
 			'custom_css' => '',
 		);
 

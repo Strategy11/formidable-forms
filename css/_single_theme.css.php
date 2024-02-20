@@ -235,13 +235,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php } ?>
 }
 .<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option:hover,
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option,
 .<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option.ui-sortable-helper {
 	border-color:<?php echo esc_html( $ranking_border_color_active . $important ); ?>;
 }
 .<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option:hover:after,
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option:after,
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option.ui-sortable-helper {
+.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option.ui-sortable-helper:after {
 	background-color:<?php echo esc_html( $ranking_bg_color_active . $important ); ?>;
 }
 

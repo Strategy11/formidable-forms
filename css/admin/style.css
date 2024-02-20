@@ -164,9 +164,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 	/*
 	When a background image is set the children in the fieldset have a z-index of 1.\
-	Set to 2 so the floating buttons get priority when clicking if they overlap a form element.
+	The Ranking Field contains elements with a higher z-index of 2.
+	Set to 3 so the floating buttons get priority when clicking if they overlap a form element.
 	*/
-	z-index: 2;
+	z-index: 3;
 }
 
 #frm_style_preview .frm_floating_style_button.frm_hidden {
