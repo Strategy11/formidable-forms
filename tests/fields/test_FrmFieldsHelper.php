@@ -301,5 +301,14 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
 		$this->assertEquals( 'My example field must be unique', $error_message );
 
+		// Test that "This field" and "This value" are automatically replaced.
+		$field->field_options['blank']      = 'This field cannot be blank';
+		$field->field_options['unique_msg'] = 'This value must be unique';
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+		$this->assertEquals( 'My example field cannot be blank', $error_message );
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
+		$this->assertEquals( 'My example field must be unique', $error_message );
 	}
 }
