@@ -4,11 +4,11 @@
 import { getElements } from '../elements';
 import { CURRENT_CLASS, PREFIX } from '../shared';
 import { hide, frmAnimate, show } from '../utils';
+import { addOptionBoxEvents } from '../../common/events';
 import addProceedWithoutAccountButtonEvents from './proceedWithoutAccountButtonListener';
 import addStepButtonsEvents from './skipStepButtonListener';
 import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
-import { addOptionBoxEvents } from '../../common/events';
 
 /**
  * Navigates to the next step in a sequence.
@@ -42,9 +42,17 @@ export const navigateToNextStep = () => {
  * @return {void}
  */
 export function addEventListeners() {
+	// Add event handling for the "Proceed without Account" button
 	addProceedWithoutAccountButtonEvents();
+
+	// Add event handling for the "Skip" step button
 	addStepButtonsEvents();
+
+	// Add event handling for the "Next Step" button in the "Default Email Address" step
 	addSetupEmailStepButtonEvents();
+
+	// Add event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step
 	addInstallAddonsButtonEvents();
+	// Add event handling for an option-box
 	addOptionBoxEvents();
 }

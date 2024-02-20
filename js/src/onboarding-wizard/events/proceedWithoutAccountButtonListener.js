@@ -1,6 +1,7 @@
 /**
  * Internal dependencies
  */
+import { navigateToNextStep } from '.';
 import { getElements } from '../elements';
 import { PREFIX, WELCOME_STEP_ID } from '../shared';
 import { onClickPreventDefault } from '../utils';
@@ -42,6 +43,8 @@ const onProceedWithoutAccountButtonClick = () => {
 			progressBar.style.width = `${widthPercentage}%`;
 		}
 	});
+
+	navigateToNextStep();
 };
 
 export default addProceedWithoutAccountButtonEvents;

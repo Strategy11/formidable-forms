@@ -309,7 +309,7 @@ class FrmDashboardController {
 				'copy'       => $copy,
 				'button'     => array(
 					'label' => esc_html__( 'Add New Form', 'formidable' ),
-					'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+					'link'  => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
 				),
 			);
 		}

@@ -7,7 +7,7 @@ import { showEmailAddressError } from '../ui';
 import { isValidEmail, onClickPreventDefault } from '../utils';
 
 /**
- * Manages event handling for the "Next Step" button in the email setup step.
+ * Manages event handling for the "Next Step" button in the "Default Email Address" step.
  *
  * @return {void}
  */

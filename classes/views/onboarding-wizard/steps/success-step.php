@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-footer frm-justify-center frm-mt-2xl">
-		<a href="#" id="frm-form-templates-create-form" class="button button-secondary frm-button-secondary">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ) ); ?>" class="button button-secondary frm-button-secondary">
 			<?php esc_html_e( 'Create a Form', 'formidable' ); ?>
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ) ); ?>" class="button button-primary frm-button-primary">

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-footer frm-justify-center">
-		<a href="#" id="frm-onboarding-proceed-without-account" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
+		<a href="#" id="frm-onboarding-proceed-without-account" class="button button-secondary frm-button-secondary" role="button">
 			<?php esc_html_e( 'Proceed without Account', 'formidable' ); ?>
 		</a>
 		<a href="#" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary" target="_blank" rel="noopener">

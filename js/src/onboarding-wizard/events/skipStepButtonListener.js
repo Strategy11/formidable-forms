@@ -6,7 +6,7 @@ import { getElements } from '../elements';
 import { onClickPreventDefault } from '../utils';
 
 /**
- * Manages event handling for the step buttons.
+ * Manages event handling for the "Skip" step button.
  *
  * @return {void}
  */
@@ -20,7 +20,7 @@ function addSkipStepButtonEvents() {
 }
 
 /**
- * Handles the click event on a skip button.
+ * Handles the click event on a "Skip" step button.
  *
  * @private
  * @param {Event} event The click event object.
