@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" id="frm-onboarding-proceed-without-account" class="button button-secondary frm-button-secondary" role="button">
 			<?php esc_html_e( 'Proceed without Account', 'formidable' ); ?>
 		</a>
-		<a href="#" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
+		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Connect Account', 'formidable' ); ?>
 		</a>
 	</div>

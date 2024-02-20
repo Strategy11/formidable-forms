@@ -23,7 +23,7 @@ function getDOMElements() {
 		proceedWithoutAccountButton: document.getElementById( `${PREFIX}-proceed-without-account` )
 	};
 
-	// Install Formidable PRO Step Elements
+	// Install Formidable Pro Step Elements
 	const installFormidableProStep = {
 		installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` )
 	};

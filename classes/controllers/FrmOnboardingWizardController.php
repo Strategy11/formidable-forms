@@ -268,9 +268,12 @@ class FrmOnboardingWizardController {
 		$default_email       = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
 		$is_tracking_allowed = FrmAppHelper::get_post_param( 'is_tracking_allowed', '', 'rest_sanitize_boolean' );
 
+		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
 		$frm_settings->update_single_setting( 'default_email', $default_email, 'sanitize_text_field' );
 		$frm_settings->update_single_setting( 'tracking', $is_tracking_allowed, 'rest_sanitize_boolean' );
+		// Remove the action to avoid the PHP error during AJAX call.
+		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
 		// Send response.

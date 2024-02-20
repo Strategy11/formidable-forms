@@ -1,6 +1,6 @@
 <?php
 /**
- * Onboarding Wizard - Install Formidable PRO Step.
+ * Onboarding Wizard - Install Formidable Pro Step.
  *
  * @package Formidable
  */
@@ -15,13 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_key_icon' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_download_icon' ); ?>
 		</div>
 	</div>
 
 	<div class="frm-card-box-content">
-		<h2 class="frm-card-box-title"><?php esc_html_e( 'Install Formidable PRO', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text"><?php esc_html_e( 'Formidable Forms needs to install the Formidable Forms Pro plugin on your website, so you can access the premium features.', 'formidable' ); ?></p>
+		<h2 class="frm-card-box-title"><?php esc_html_e( 'Install Formidable Pro', 'formidable' ); ?></h2>
+		<p class="frm-card-box-text"><?php esc_html_e( 'It’s time to install Formidable Forms Pro, to get access to the premium features.', 'formidable' ); ?></p>
 
 		<div class="frm-box frm-flex frm-justify-between frm-items-center frm-mt-md frm-mb-xs">
 			<span class="frm-text-grey-900 frm-font-medium"><?php esc_html_e( '1. Download PRO', 'formidable' ); ?></span>
