@@ -7238,7 +7238,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				html = wp.hooks.applyFilters( 'frm_after_add_form_logic_row', html, { id } );
+				html = wp.hooks.applyFilters( 'frm_after_add_form_logic_row', html, id );
 
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
