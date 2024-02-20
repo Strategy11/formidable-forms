@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.8';
+	public static $plug_version = '6.8.2';
 
 	/**
 	 * @var bool
@@ -174,18 +174,19 @@ class FrmAppHelper {
 
 	/**
 	 * Determine if the current branding is set to 'formidable'.
-	 *
-	 * Checks the menu title, retrieved through get_menu_name,
-	 * and verifies if it matches the 'formidable' branding.
+	 * Checks the menu icon, and verifies if it matches the formidable branding.
 	 *
 	 * @since 6.4.2
 	 *
-	 * @return bool True if the menu title is 'formidable', false otherwise.
+	 * @return bool True if the menu icon is the logo, false otherwise.
 	 */
 	public static function is_formidable_branding() {
-		$menu_title = self::get_menu_name();
+		if ( ! self::pro_is_installed() ) {
+			return true;
+		}
 
-		return 'formidable' === strtolower( trim( $menu_title ) );
+		$menu_icon = self::get_menu_icon_class();
+		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
 	}
 
 	/**
@@ -1337,6 +1338,7 @@ class FrmAppHelper {
 			'tosearch'    => '',
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
+			'value'       => false,
 		);
 		$atts = array_merge( $defaults, $atts );
 
@@ -1351,19 +1353,32 @@ class FrmAppHelper {
 
 		$input_id = $atts['input_id'] . '-search-input';
 
+		$input_atts = array(
+			'type'          => 'search',
+			'id'            => $input_id,
+			'name'          => 's',
+			'placeholder'   => $atts['placeholder'],
+			'class'         => $class,
+			'data-tosearch' => $atts['tosearch'],
+		);
+
+		if ( is_string( $atts['value'] ) ) {
+			$input_atts['value'] = $atts['value'];
+		} elseif ( isset( $_REQUEST['s'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$input_atts['value'] = wp_unslash( $_REQUEST['s'] );
+		}
+
+		if ( ! empty( $atts['tosearch'] ) ) {
+			$input_atts['autocomplete'] = 'off';
+		}
 		?>
 		<p class="frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			<span class="frmfont frm_search_icon"></span>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
-				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
-				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"
-				<?php if ( ! empty( $atts['tosearch'] ) ) { ?>
-				autocomplete="off"
-				<?php } ?>
-				/>
+			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
 				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
@@ -3172,7 +3187,9 @@ class FrmAppHelper {
 				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
 				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'    => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				/* translators: %d is the number of allowed actions per form */
+				'only_one_action'    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
+				'edit_action_text'   => __( 'Please edit the existing form action.', 'formidable' ),
 				'unsafe_params'      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),

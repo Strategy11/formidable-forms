@@ -147,6 +147,8 @@
 			let labelledBy = id ? jQuery( '#for_' + id ) : false;
 			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 
+			// Set empty title attributes so that none of the dropdown options include title attributes.
+			$select.find( 'option' ).attr( 'title', ' ' );
 			$select.multiselect({
 				templates: {
 					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
@@ -154,7 +156,14 @@
 					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-				nonSelectedText: '',
+				nonSelectedText: __( '— Select —', 'formidable' ),
+				// Prevent the dropdown from showing "All Selected" when every option is checked.
+				allSelectedText: '',
+				// This is 3 by default. We want to show more options before it starts showing a count.
+				numberDisplayed: 8,
+				onInitialized: function( _, $container ) {
+					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
+				},
 				onDropdownShown: function( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {

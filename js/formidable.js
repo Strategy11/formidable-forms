@@ -705,7 +705,7 @@ function frmFrontFormJS() {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
-					triggerCustomEvent( object, 'frmSubmitEvent' );
+					triggerCustomEvent( object, 'frmSubmitEvent', { content: response.content });
 					return;
 				}
 
