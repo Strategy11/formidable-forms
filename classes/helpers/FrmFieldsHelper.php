@@ -1889,9 +1889,10 @@ class FrmFieldsHelper {
 	public static function show_add_field_buttons( $args ) {
 		$field_key    = $args['field_key'];
 		$field_type   = $args['field_type'];
+		$field_badge  = isset( $field_type['badge'] ) ? '<span class="frm-meta-tag frm-text-xs frm-lt-green-tag">' . $field_type['badge'] . '</span>' : '';
 		$field_label  = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
 		$field_name   = FrmFormsHelper::get_field_link_name( $field_type );
-		$field_label .= ' <span>' . $field_name . '</span>';
+		$field_label .= ' <span>' . $field_name . '</span>' . $field_badge;
 
 		// If the individual field isn't allowed, disable it.
 		$run_filter             = true;
@@ -1901,6 +1902,7 @@ class FrmFieldsHelper {
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
+		$dynamic_message        = isset( $field_type['dynamic-message'] ) ? FrmAppHelper::kses( $field_type['dynamic-message'], array( 'a', 'img', 'span' ) ) : '';
 
 		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
@@ -1929,14 +1931,15 @@ class FrmFieldsHelper {
 		}
 
 		$li_params = array(
-			'class'         => 'frmbutton frm6 ' . $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ),
-			'id'            => $field_key,
-			'data-upgrade'  => $upgrade_label,
-			'data-link'     => $link,
-			'data-medium'   => 'builder',
-			'data-oneclick' => $install_data,
-			'data-content'  => $field_key,
-			'data-requires' => $requires,
+			'class'                => 'frmbutton frm6 ' . $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ),
+			'id'                   => $field_key,
+			'data-upgrade'         => $upgrade_label,
+			'data-link'            => $link,
+			'data-medium'          => 'builder',
+			'data-oneclick'        => $install_data,
+			'data-content'         => $field_key,
+			'data-requires'        => $requires,
+			'data-dynamic-message' => $dynamic_message,
 		);
 
 		if ( $upgrade_message ) {

@@ -5575,13 +5575,13 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
-			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
 				hasImageOptions = imagesAsOptions( fieldId ),
 				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
+				type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) ),
 				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
 				isProduct = isProductField( fieldId );
 
@@ -5662,16 +5662,29 @@ function frmAdminBuildJS() {
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
 
+		if ( 'ranking' === type ) {
+			inputType = 'hidden';
+		}
+
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		this.getSingle = function() {
+			if ( 'ranking' === type ) {
+				return '<div class="frm_' + type + ' ' + type + ' ' + classes + ' frm-ranking-field-option frm-flex-box frm-justify-between frm-items-center" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><span><select class="frm-ranking-position"><option value="0">&mdash;</option></select><input type="' + inputType +
+				'" name="item_meta[' + fieldId + '][]' +
+				'" value="' + purifyHtml( opt.saved ) + '" data-field-type="' + type + '" id="' + id + '"' + '> ' + purifyHtml( opt.label ) +
+				'</span><svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg></div>';
+			}
+
+			return '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
+		};
 
-		return single;
+		return this.getSingle();
 	}
 
 	function fillDropdownOpts( field, atts ) {
@@ -6713,17 +6726,19 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const oneclickMessage = container.querySelector( '.frm-oneclick' );
-		const upgradeMessage  = container.querySelector( '.frm-upgrade-message' );
-		const showLink        = container.querySelector( '.frm-upgrade-link' );
-		const button          = container.querySelector( '.frm-oneclick-button' );
-		const addonStatus     = container.querySelector( '.frm-addon-status' );
+		const oneclickMessage          = container.querySelector( '.frm-oneclick' );
+		const upgradeMessage           = container.querySelector( '.frm-upgrade-message' );
+		const showLink                 = container.querySelector( '.frm-upgrade-link' );
+		const button                   = container.querySelector( '.frm-oneclick-button' );
+		const addonStatus              = container.querySelector( '.frm-addon-status' );
+		const dynamicMessageContainer  = container.querySelector( '.frm-dynamic-message' );
 
 		let oneclick   = link.getAttribute( 'data-oneclick' );
 		let newMessage = link.getAttribute( 'data-message' );
 		let showIt  = 'block';
 		let showMsg = 'block';
 		let hideIt  = 'none';
+		const dynamicMessage = link.getAttribute( 'data-dynamic-message' );
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
@@ -6747,6 +6762,11 @@ function frmAdminBuildJS() {
 			newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
 		}
 
+		if ( dynamicMessage ) {
+			dynamicMessageContainer.innerHTML     = dynamicMessage;
+			dynamicMessageContainer.style.display = 'block';
+		}
+
 		upgradeMessage.innerHTML = newMessage;
 
 		// Either set the link or use the default.
@@ -6754,7 +6774,7 @@ function frmAdminBuildJS() {
 
 		addonStatus.style.display = 'none';
 
-		oneclickMessage.style.display = hideIt;
+		oneclickMessage.style.display = ! dynamicMessage ? hideIt : 'none';
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
@@ -7205,20 +7225,8 @@ function frmAdminBuildJS() {
 		return jQuery( '.frm_single_' + type + '_settings' ).length;
 	}
 
-	function actionLimitMessage() {
-		let message = frmAdminJs.only_one_action;
-		let limit   = this.dataset.limit;
-
-		if ( 'undefined' !== typeof limit ) {
-			limit = parseInt( limit );
-			if ( limit > 1 ) {
-				message  = message.replace( 1, limit ).trim();
-			} else {
-				message += ' ' + frmAdminJs.edit_action_text;
-			}
-		}
-
-		infoModal( message );
+	function onlyOneActionMessage() {
+		infoModal( frmAdminJs.only_one_action );
 	}
 
 	function addFormLogicRow() {
@@ -10040,7 +10048,7 @@ function frmAdminBuildJS() {
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
-			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
+			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );

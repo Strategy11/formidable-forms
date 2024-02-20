@@ -1657,7 +1657,9 @@ input.frm_insert_in_template {
 .frm-pb-md {
 	padding-bottom: var(--gap-md) !important;
 }
-
+.frm-pb-sm {
+	padding-bottom: var(--gap-sm) !important;
+}
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
@@ -3436,7 +3438,9 @@ a.frm_option_icon:hover::before {
 .progress-bars-style .accordion-section-title:before{
 	content: "\e939" !important;
 }
-
+.ranking-fields-style .accordion-section-title:before{
+	content: "\e948" !important;
+}
 #frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
 	padding: 15px 20px;
@@ -7798,7 +7802,9 @@ li.frm_noallow.button.frm_show_upgrade {
 #frm_upgrade_modal_image {
 	max-width: 200px;
 }
-
+#frm_upgrade_modal .frm-dynamic-message img {
+	width: 100%;
+}
 .frm-tab-message {
 	max-width: 600px;
 	margin: 20px auto;

@@ -1886,7 +1886,8 @@ function frmFrontFormJS() {
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent
+		triggerCustomEvent: triggerCustomEvent,
+		documentOn
 	};
 }
 frmFrontForm = frmFrontFormJS();

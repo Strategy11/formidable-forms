@@ -104,6 +104,13 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_upload_icon',
 				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
 			),
+			'ranking'  => array(
+				'name'            => __( 'Ranking', 'formidable' ),
+				'icon'            => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'dynamic-message' => '<span class="frm-pb-sm frm-block">The Surveys add-on is not installed. Do you want to install the add-on now?</span>
+					<img src="' . esc_attr( $images_url ) . 'ranking-field.svg" alt="Ranking Field" />',
+				'addon'           => 'surveys',
+			),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
