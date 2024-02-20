@@ -106,7 +106,8 @@ class FrmSettings {
 			're_multi' => 1,
 
 			'success_msg'      => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
-			'blank_msg'        => __( 'This field cannot be blank.', 'formidable' ),
+			// translators: %s: [field_name] shortcode.
+			'blank_msg'        => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
 			'unique_msg'       => __( 'This value must be unique.', 'formidable' ),
 			'invalid_msg'      => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
 			'failed_msg'       => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),

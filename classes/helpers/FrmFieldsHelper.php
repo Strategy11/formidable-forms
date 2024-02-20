@@ -158,24 +158,48 @@ class FrmFieldsHelper {
 	 * @param array  $field_array
 	 */
 	private static function fill_cleared_strings( $field, array &$field_array ) {
-		$frm_settings = FrmAppHelper::get_settings();
-
 		if ( '' == $field_array['blank'] && '1' === $field_array['required'] ) {
-			$field_array['blank'] = $frm_settings->blank_msg;
+			$field_array['blank'] = self::default_blank_msg();
 		}
 
 		if ( '' === $field_array['invalid'] ) {
 			if ( 'captcha' === $field->type ) {
+				$frm_settings           = FrmAppHelper::get_settings();
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
-				/* translators: %s: Field name */
-				$field_array['invalid'] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
+				$field_array['invalid'] = self::default_invalid_msg();
 			}
 		}
 
 		if ( '' == $field_array['custom_html'] ) {
 			$field_array['custom_html'] = self::get_default_html( $field->type );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function default_invalid_msg() {
+		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function default_blank_msg() {
+		$frm_settings  = FrmAppHelper::get_settings();
+		$blank_message = $frm_settings->blank_msg;
+
+		if ( false !== strpos( $blank_message, 'This field' ) ) {
+			$blank_message = str_replace( 'This field', '[field_name]', $blank_message );
+		}
+
+		return $blank_message;
 	}
 
 	/**
@@ -276,8 +300,8 @@ class FrmFieldsHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param object|array|int $field
-	 * @param string           $error
+	 * @param object|array $field
+	 * @param string       $error
 	 *
 	 * @return string
 	 */
@@ -311,6 +335,12 @@ class FrmFieldsHelper {
 		$msg = FrmField::get_option( $field, $error );
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
 		$msg = do_shortcode( $msg );
+
+		if ( false !== strpos( $msg, '[field_name]' ) ) {
+			$msg = str_replace( '[field_name]', FrmAppHelper::maybe_kses( $field_name ), $msg );
+		} elseif ( false !== strpos( $msg, 'This field' ) ) {
+			$msg = str_replace( 'This field', FrmAppHelper::maybe_kses( $field_name ), $msg );
+		}
 
 		return $msg;
 	}

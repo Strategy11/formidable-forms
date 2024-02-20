@@ -640,9 +640,6 @@ DEFAULT_HTML;
 			'options'       => '',
 			'default_value' => '',
 			'required'      => false,
-			'blank'         => $frm_settings->blank_msg,
-			'unique_msg'    => $this->default_unique_msg(),
-			'invalid'       => $this->default_invalid_msg(),
 			'field_options' => $this->get_default_field_options(),
 		);
 
@@ -662,16 +659,11 @@ DEFAULT_HTML;
 		return $message;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function default_invalid_msg() {
-		$field_name = $this->get_field_column( 'name' );
-		if ( $field_name == '' ) {
-			$invalid = __( 'This field is invalid', 'formidable' );
-		} else {
-			/* translators: %s: The field name. */
-			$invalid = sprintf( __( '%s is invalid', 'formidable' ), $field_name );
-		}
-
-		return $invalid;
+		return FrmFieldsHelper::default_invalid_msg();
 	}
 
 	/**
@@ -708,13 +700,15 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_default_field_options() {
-		$opts       = array(
+		$frm_settings = FrmAppHelper::get_settings();
+		$opts         = array(
 			'size'               => '',
 			'max'                => '',
 			'label'              => '',
-			'blank'              => '',
+			'blank'              => FrmFieldsHelper::default_blank_msg(),
 			'required_indicator' => '*',
-			'invalid'            => '',
+			'invalid'            => $this->default_invalid_msg(),
+			'unique_msg'         => $this->default_unique_msg(),
 			'separate_value'     => 0,
 			'clear_on_focus'     => 0,
 			'classes'            => '',
@@ -726,10 +720,9 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts = $this->extra_field_opts();
-		$opts       = array_merge( $opts, $field_opts );
-
-		$filter_args = array(
+		$field_opts   = $this->extra_field_opts();
+		$opts         = array_merge( $opts, $field_opts );
+		$filter_args  = array(
 			'field' => $this->field,
 			'type'  => $this->type,
 		);
