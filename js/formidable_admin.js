@@ -7238,11 +7238,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				let logicRowContainerID = jQuery( html ).attr( 'id' );
-				while ( document.getElementById( logicRowContainerID ) ) {
-					html = updateLogicRowHTML( html, id, logicRowContainerID );
-					logicRowContainerID = jQuery( html ).attr( 'id' );
-				}
+				html = wp.hooks.applyFilters( 'frm_after_add_form_logic_row', html, { id } );
 
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
@@ -7252,28 +7248,6 @@ function frmAdminBuildJS() {
 			}
 		});
 		return false;
-	}
-
-	/**
-	 * Update a conditional logic row html so that it does not lead to duplicated HTML elements in the page.
-	 *
-	 * @since 6.x
-	 *
-	 * @param {String} html
-	 * @param {Number} id
-	 * @param {String} newLogicRowID
-	 * @returns {String}
-	 */
-	function updateLogicRowHTML( html, id, newLogicRowID ) {
-		const logicRowNumberToReplace = parseInt( newLogicRowID.split( '_' ).pop() );
-		const newLogicRowNumber       = logicRowNumberToReplace + 1;
-
-		html = html
-		.replaceAll( `_${id}_${logicRowNumberToReplace}`, `_${id}_${newLogicRowNumber}` )
-		.replaceAll( `[conditions][${logicRowNumberToReplace}]`, `[conditions][${newLogicRowNumber}]` )
-		.replaceAll( id + '\',\'' + logicRowNumberToReplace + '\'', id + '\',\''  + newLogicRowNumber + '\'' );
-
-		return html;
 	}
 
 	function toggleSubmitLogic() {
