@@ -70,17 +70,16 @@ class FrmFieldHTML extends FrmFieldType {
 	}
 
 	/**
-	 * Overwrite FrmFieldType::get_display_value.
+	 * Overwrite FrmFieldType::should_strip_most_html_before_preparing_display_value.
 	 * An HTML field is not populated from user input.
 	 * It does not need to be passed through FrmAppHelper::strip_most_html.
 	 *
 	 * @since x.x
 	 *
-	 * @param string|array $value
-	 * @param array        $atts
-	 * @return string
+	 * @param array $atts
+	 * @return bool
 	 */
-	public function get_display_value( $value, $atts = array() ) {
-		return $value;
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		return false;
 	}
 }
