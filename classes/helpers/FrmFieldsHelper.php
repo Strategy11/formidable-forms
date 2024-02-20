@@ -368,6 +368,7 @@ class FrmFieldsHelper {
 		$field_name = FrmAppHelper::maybe_kses( $field_name );
 		$substrings = self::get_substrings_to_replace_with_field_name( $field_name, compact( 'msg', 'error', 'field' ) );
 
+		// Use the "This value"/"This field" placeholder strings if field name is empty.
 		if ( ! $field_name ) {
 			if ( 'unique_msg' === $error ) {
 				$field_name = __( 'This value', 'formidable' );
