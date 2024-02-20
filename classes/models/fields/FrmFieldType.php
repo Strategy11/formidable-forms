@@ -649,13 +649,6 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return string
-	 */
-	protected function default_invalid_msg() {
-		return FrmFieldsHelper::default_invalid_msg();
-	}
-
-	/**
 	 * Get the default field name when a field is inserted into a form.
 	 *
 	 * @return string
@@ -696,7 +689,7 @@ DEFAULT_HTML;
 			'label'              => '',
 			'blank'              => FrmFieldsHelper::default_blank_msg(),
 			'required_indicator' => '*',
-			'invalid'            => $this->default_invalid_msg(),
+			'invalid'            => '',
 			'unique_msg'         => '',
 			'separate_value'     => 0,
 			'clear_on_focus'     => 0,
@@ -1577,11 +1570,23 @@ DEFAULT_HTML;
 
 	/**
 	 * @deprecated x.x
+	 *
+	 * @return string
 	 */
 	protected function default_unique_msg() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_unique_msg' );
 		$frm_settings = FrmAppHelper::get_settings();
 		$message      = $frm_settings->unique_msg;
 		return $message;
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return string
+	 */
+	protected function default_invalid_msg() {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_invalid_msg' );
+		return FrmFieldsHelper::default_invalid_msg();
 	}
 }
