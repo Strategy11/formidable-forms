@@ -171,7 +171,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Get the organized categories for validation.
 		$categories = $this->controller::get_categories();
 
-		print_r( $categories );
 		// Ensure the organized categories are structured correctly.
 		$this->assertIsArray( $categories, 'Organized categories should be an array.' );
 		foreach ( $categories as $slug => $category ) {
