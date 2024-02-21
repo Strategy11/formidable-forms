@@ -1,4 +1,4 @@
-const HIDDEN_CLASS = 'frm_hidden';
+import { HIDDEN_CLASS } from '../constants';
 
 /**
  * Shows specified elements by removing the hidden class.

@@ -19,12 +19,12 @@ import addInstallAddonsButtonEvents from './installAddonsButtonListener';
  * @return {void}
  */
 export const navigateToNextStep = () => {
-	// Find and update current step
+	// Find and hide current step
 	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
 	currentStep.classList.remove( CURRENT_CLASS );
 	hide( currentStep );
 
-	// Move to and display next step
+	// Display next step
 	const nextStep = currentStep.nextElementSibling;
 	nextStep.classList.add( CURRENT_CLASS );
 	show( nextStep );
