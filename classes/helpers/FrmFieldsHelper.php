@@ -378,6 +378,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param string $field_name
 	 * @param array  $filter_args {
+	 *     Filter arguments.
+	 *
 	 *     @type string       $msg   The current error message before the substrings are replaced.
 	 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
 	 *     @type array|object $field The field with the error.
