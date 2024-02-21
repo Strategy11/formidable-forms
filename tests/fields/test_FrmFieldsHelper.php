@@ -230,7 +230,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	/**
 	 * Test the "sep" option for checkbox field shortcodes.
 	 *
-	 * @covers FrmFormsHelper::replace_content_shortcodes
+	 * @covers FrmFieldsHelper::replace_content_shortcodes
 	 */
 	public function test_sep_option() {
 		$form           = $this->factory->form->create_and_get();
