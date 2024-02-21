@@ -192,7 +192,7 @@ class FrmXMLHelper {
 	private static function get_term_parent_id( $t ) {
 		$parent = (string) $t->term_parent;
 		if ( ! empty( $parent ) ) {
-			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
+			$parent = term_exists( (int) $t->term_parent, (string) $t->term_taxonomy );
 			if ( $parent ) {
 				$parent = $parent['term_id'];
 			} else {
