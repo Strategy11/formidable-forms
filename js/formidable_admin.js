@@ -6970,7 +6970,7 @@ function frmAdminBuildJS() {
 		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
+			const textarea = document.querySelector( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
 			const wrapperSpan = span({ className: 'frm-with-right-icon' });
 			textarea.parentNode.insertBefore( wrapperSpan, textarea );
 			wrapperSpan.appendChild( createModalTriggerIcon() );
