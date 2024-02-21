@@ -6967,7 +6967,7 @@ function frmAdminBuildJS() {
 		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
 			return;
 		}
-		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
+		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
 			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
@@ -6985,7 +6985,7 @@ function frmAdminBuildJS() {
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
-		const fieldsWithShortcodesBox = [ 'html' ];
+		const fieldsWithShortcodesBox = [ 'html', 'ai' ];
 		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
