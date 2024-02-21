@@ -1,6 +1,7 @@
 /**
  * Internal dependencies
  */
+import { PREFIX } from '../shared';
 import { showFormError } from '../utils';
 
 /**
@@ -10,5 +11,5 @@ import { showFormError } from '../utils';
  * @return {void}
  */
 export const showEmailAddressError = type => {
-	showFormError( '#frm-onboarding-default-email-field', '#frm-onboarding-email-step-error', type );
+	showFormError( `#${PREFIX}-default-email-field`, `#${PREFIX}-email-step-error`, type );
 };

@@ -25,7 +25,9 @@ function getDOMElements() {
 
 	// Install Formidable Pro Step Elements
 	const installFormidableProStep = {
-		installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` )
+		installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` ),
+		checkProInstallationButton: document.getElementById( `${PREFIX}-check-pro-installation-button` ),
+		checkProInstallationError: document.getElementById( `${PREFIX}-check-pro-installation-error` )
 	};
 
 	// License Management Step Elements

@@ -228,6 +228,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_uninstall_addon', 'FrmAddonsController::ajax_uninstall_addon' );
 		// Plugin.
 		add_action( 'wp_ajax_frm_install_plugin', 'FrmInstallPlugin::ajax_install_plugin' );
+		add_action( 'wp_ajax_frm_check_plugin_activation', 'FrmInstallPlugin::ajax_check_plugin_activation' );
 
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );

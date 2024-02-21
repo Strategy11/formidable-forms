@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frmcenter frm_hidden" data-step-name="install-addons">
+<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="install-addons">
 	<span class="frm-card-box-progress-bar"><span></span></span>
 
 	<div class="frm-card-box-header">
@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-content frm-fields">
-		<h2 class="frm-card-box-title"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
+		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
+		<p class="frm-card-box-text frmcenter"><?php esc_html_e( 'A list with add-ons we think you will love. All of our add-ons can be installed from the Add-ons page.', 'formidable' ); ?></p>
 
 		<div class="frm-mt-md">
 			<?php foreach ( $available_addons as $key => $addon ) { ?>

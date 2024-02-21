@@ -9,6 +9,7 @@ import addProceedWithoutAccountButtonEvents from './proceedWithoutAccountButtonL
 import addStepButtonsEvents from './skipStepButtonListener';
 import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
+import addCheckProInstallationButtonEvents from './checkProInstallationListener';
 
 /**
  * Navigates to the next step in a sequence.
@@ -55,4 +56,7 @@ export function addEventListeners() {
 	addInstallAddonsButtonEvents();
 	// Add event handling for an option-box
 	addOptionBoxEvents();
+
+	// Add event handling for the "Continue" button in the "Install Formidable Pro" step
+	addCheckProInstallationButtonEvents();
 }

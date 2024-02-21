@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="frm-box frm-flex frm-justify-between frm-items-center frm-mt-md frm-mb-xs">
 			<span class="frm-text-grey-900 frm-font-medium"><?php esc_html_e( '1. Download PRO', 'formidable' ); ?></span>
-			<a class="frm-link-with-external-icon" href="#" target="_blank">
+			<a href="<?php echo esc_url( 'https://formidableforms.com/account/?utm_source=WordPress&utm_medium=onboarding-wizard&utm_campaign=liteplugin&utm_content=download-pro' ); ?>" class="frm-link-with-external-icon" target="_blank">
 				<span class="frm-font-semibold"><?php esc_html_e( 'Download', 'formidable' ); ?></span>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_up_right' ); ?>
 			</a>
@@ -33,18 +33,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="frm-box frm-flex frm-justify-between frm-items-center">
 			<span class="frm-text-grey-900 frm-font-medium"><?php esc_html_e( '2. Install on your website', 'formidable' ); ?></span>
-			<a class="frm-link-with-external-icon" href="#" target="_blank">
+			<a href="<?php echo esc_url( admin_url( 'plugin-install.php' ) ); ?>" class="frm-link-with-external-icon" target="_blank">
 				<span class="frm-font-semibold"><?php esc_html_e( 'Upload Plugin', 'formidable' ); ?></span>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_up_right' ); ?>
 			</a>
 		</div>
+
+		<!-- Error Handleing -->
+		<span id="frm-onboarding-check-pro-installation-error" class="frm-validation-error frm-mt-xs frm_hidden">
+			<span><?php esc_html_e( 'Formidable Pro is currently inactive!', 'formidable' ); ?></span>
+		</span>
 	</div>
 
 	<div class="frm-card-box-footer">
 		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
 			<?php esc_html_e( 'Skip', 'formidable' ); ?>
 		</a>
-		<a href="#" id="frm-onboarding-install-formidable-pro-button" class="button button-primary frm-button-primary" role="button">
+		<a href="#" id="frm-onboarding-check-pro-installation-button" class="button button-primary frm-button-primary" role="button">
 			<?php esc_html_e( 'Continue', 'formidable' ); ?>
 		</a>
 	</div>

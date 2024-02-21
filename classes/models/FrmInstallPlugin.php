@@ -71,6 +71,8 @@ class FrmInstallPlugin {
 	 * Handles the AJAX request to install a plugin.
 	 *
 	 * @since x.x
+	 *
+	 * @return void
 	 */
 	public static function ajax_install_plugin() {
 		// Check permission and nonce.
@@ -115,5 +117,28 @@ class FrmInstallPlugin {
 
 		// Send a success response.
 		wp_send_json_success( __( 'Plugin installed and activated successfully.', 'formidable' ) );
+	}
+
+	/**
+	 * Checks plugin activation status via AJAX.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_check_plugin_activation() {
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( 'install_plugins' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		// Retrieve plugin identifier.
+		$plugin_path = FrmAppHelper::get_post_param( 'plugin_path', '', 'sanitize_text_field' );
+
+		// Respond based on plugin status.
+		if ( is_plugin_active( $plugin_path ) ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error();
+		}
 	}
 }
