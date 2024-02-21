@@ -194,11 +194,7 @@ class FrmFieldsHelper {
 	public static function default_unique_msg() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$unique_message = $frm_settings->unique_msg;
-
-		if ( false !== strpos( $unique_message, 'This value' ) ) {
-			$unique_message = str_replace( 'This value', '[field_name]', $unique_message );
-		}
-
+		$unique_message = str_replace( 'This value', '[field_name]', $unique_message );
 		return $unique_message;
 	}
 
@@ -210,11 +206,7 @@ class FrmFieldsHelper {
 	public static function default_blank_msg() {
 		$frm_settings  = FrmAppHelper::get_settings();
 		$blank_message = $frm_settings->blank_msg;
-
-		if ( false !== strpos( $blank_message, 'This field' ) ) {
-			$blank_message = str_replace( 'This field', '[field_name]', $blank_message );
-		}
-
+		$blank_message = str_replace( 'This field', '[field_name]', $blank_message );
 		return $blank_message;
 	}
 
@@ -377,12 +369,7 @@ class FrmFieldsHelper {
 			}
 		}
 
-		foreach ( $substrings as $substring ) {
-			if ( false !== strpos( $msg, $substring ) ) {
-				$msg = str_replace( $substring, $field_name, $msg );
-			}
-		}
-
+		$msg = str_replace( $substrings, $field_name, $msg );
 		return $msg;
 	}
 

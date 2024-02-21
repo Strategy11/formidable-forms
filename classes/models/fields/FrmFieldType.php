@@ -682,8 +682,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_default_field_options() {
-		$frm_settings = FrmAppHelper::get_settings();
-		$opts         = array(
+		$opts        = array(
 			'size'               => '',
 			'max'                => '',
 			'label'              => '',
@@ -702,9 +701,9 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts   = $this->extra_field_opts();
-		$opts         = array_merge( $opts, $field_opts );
-		$filter_args  = array(
+		$field_opts  = $this->extra_field_opts();
+		$opts        = array_merge( $opts, $field_opts );
+		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
 		);
