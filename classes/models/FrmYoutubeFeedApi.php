@@ -11,7 +11,7 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 *
 	 * @var string
 	 */
-	private static $base_api_url = 'http://ff.local/wp-json/s11-sites/v1/youtube-feed/';
+	private static $base_api_url = 'https://formidableforms.com/wp-json/s11-sites/v1/youtube-feed/';
 
 	/**
 	 * The cache key names.
