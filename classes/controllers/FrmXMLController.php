@@ -553,6 +553,28 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Returns an array that has parent term slugs for the terms provided.
+	 *
+	 * @since x.x
+	 * @param array $terms
+	 * @return array
+	 */
+	public function get_parent_terms_slugs( $terms ) {
+		$parent_term_ids = implode( ',', array_filter( wp_list_pluck( $terms, 'parent' ) ) );
+		$parent_slugs    = array();
+
+		if ( $parent_term_ids ) {
+			global $wpdb;
+			$results = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, slug FROM {$wpdb->prefix}terms WHERE term_id IN (%s)", $parent_term_ids ) );
+			foreach ( $results as $result ) {
+				$parent_slugs[ $result->term_id ] = $result->slug;
+			}
+		}
+
+		return $parent_slugs;
+	}
+
+	/**
 	 * @return void
 	 */
 	private static function prepare_types_array( &$type ) {

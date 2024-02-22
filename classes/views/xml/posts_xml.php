@@ -102,16 +102,7 @@ if ( empty( $frm_inc_tax ) ) {
 	$frm_inc_tax = array();
 }
 
-$parent_term_ids = implode( ',', array_filter( wp_list_pluck( $terms, 'parent' ) ) );
-$parent_slugs    = array();
-
-if ( $parent_term_ids ) {
-	global $wpdb;
-	$results = $wpdb->get_results( "SELECT term_id, slug FROM {$wpdb->prefix}terms WHERE term_id IN ($parent_term_ids)" );
-	foreach ( $results as $result ) {
-		$parent_slugs[ $result->term_id ] = $result->slug;
-	}
-}
+$parent_slugs = FrmXmlController::get_parent_terms_slugs( $terms );
 
 foreach ( (array) $terms as $term ) {
 	if ( in_array( $term->term_id, $frm_inc_tax, true ) ) {
