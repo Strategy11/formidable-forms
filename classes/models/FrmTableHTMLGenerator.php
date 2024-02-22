@@ -289,10 +289,8 @@ class FrmTableHTMLGenerator {
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
-		$td_style_with_limited_width = rtrim( $this->td_style, '"' ) . ' width: 50%;"';
-
-		$label = '<th' . $td_style_with_limited_width . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $td_style_with_limited_width . '>' . wp_kses_post( $value ) . '</td>';
+		$label = '<th' . rtrim( $this->td_style, '"' ) . ' width: 50%;"' . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
