@@ -102,7 +102,7 @@ if ( empty( $frm_inc_tax ) ) {
 	$frm_inc_tax = array();
 }
 
-$parent_slugs = FrmXmlController::get_parent_terms_slugs( $terms );
+$parent_slugs = FrmXMLController::get_parent_terms_slugs( $terms );
 
 foreach ( (array) $terms as $term ) {
 	if ( in_array( $term->term_id, $frm_inc_tax, true ) ) {
