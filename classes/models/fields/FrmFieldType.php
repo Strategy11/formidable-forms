@@ -640,38 +640,12 @@ DEFAULT_HTML;
 			'options'       => '',
 			'default_value' => '',
 			'required'      => false,
-			'blank'         => $frm_settings->blank_msg,
-			'unique_msg'    => $this->default_unique_msg(),
-			'invalid'       => $this->default_invalid_msg(),
 			'field_options' => $this->get_default_field_options(),
 		);
 
 		$field_options = $this->new_field_settings();
 
 		return array_merge( $field, $field_options );
-	}
-
-	protected function default_unique_msg() {
-		if ( is_object( $this->field ) && ! FrmField::is_option_true( $this->field, 'unique' ) ) {
-			$message = '';
-		} else {
-			$frm_settings = FrmAppHelper::get_settings();
-			$message      = $frm_settings->unique_msg;
-		}
-
-		return $message;
-	}
-
-	protected function default_invalid_msg() {
-		$field_name = $this->get_field_column( 'name' );
-		if ( $field_name == '' ) {
-			$invalid = __( 'This field is invalid', 'formidable' );
-		} else {
-			/* translators: %s: The field name. */
-			$invalid = sprintf( __( '%s is invalid', 'formidable' ), $field_name );
-		}
-
-		return $invalid;
 	}
 
 	/**
@@ -708,13 +682,14 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_default_field_options() {
-		$opts       = array(
+		$opts        = array(
 			'size'               => '',
 			'max'                => '',
 			'label'              => '',
-			'blank'              => '',
+			'blank'              => FrmFieldsHelper::default_blank_msg(),
 			'required_indicator' => '*',
 			'invalid'            => '',
+			'unique_msg'         => '',
 			'separate_value'     => 0,
 			'clear_on_focus'     => 0,
 			'classes'            => '',
@@ -726,9 +701,8 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts = $this->extra_field_opts();
-		$opts       = array_merge( $opts, $field_opts );
-
+		$field_opts  = $this->extra_field_opts();
+		$opts        = array_merge( $opts, $field_opts );
 		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
@@ -1591,5 +1565,27 @@ DEFAULT_HTML;
 			FrmAppHelper::unserialize_or_decode( $value );
 		}
 		return $value;
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return string
+	 */
+	protected function default_unique_msg() {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_unique_msg' );
+		$frm_settings = FrmAppHelper::get_settings();
+		$message      = $frm_settings->unique_msg;
+		return $message;
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return string
+	 */
+	protected function default_invalid_msg() {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_invalid_msg' );
+		return FrmFieldsHelper::default_invalid_msg();
 	}
 }

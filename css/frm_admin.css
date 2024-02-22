@@ -868,7 +868,7 @@ p.frm_has_shortcodes {
 	box-sizing: border-box;
 }
 
-#form_settings_page #frm_adv_info {
+#form_settings_page #frm_adv_info, #frm_builder_page #frm_adv_info {
 	display: none;
 	top: 0;
 	width: 310px;
@@ -985,7 +985,7 @@ p.frm_has_shortcodes {
 	margin: 0 -4px;
 }
 
-.frm_form_settings span.frm-with-right-icon {
+.frm_form_settings span.frm-with-right-icon, #frm_builder_page span.frm-with-right-icon {
 	display: block;
 }
 
@@ -7091,7 +7091,7 @@ i.frm-show-inline-modal,
 	top: 0;
 }
 
-.frm_form_settings .wp-editor-container .frm-with-right-icon .frmsvg {
+.frm_form_settings .wp-editor-container .frm-with-right-icon .frmsvg,  #frm_builder_page .wp-editor-container .frm-with-right-icon .frmsvg {
 	top: auto;
 	bottom: 0;
 }
