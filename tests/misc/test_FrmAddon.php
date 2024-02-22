@@ -47,10 +47,11 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::is_time_to_auto_activate
-	 * @covers FrmAddon::set_auto_activate_time
+	 * @covers FrmAddon::checked_recently
+	 * @covers FrmAddon::last_checked
+	 * @covers FrmAddon::update_last_checked
 	 */
-	public function test_is_time_to_auto_activate() {
+	public function test_checked_recently() {
 		$times = array(
 			array(
 				'time'     => time(),
@@ -70,14 +71,19 @@ class test_FrmAddon extends FrmUnitTest {
 			),
 		);
 
-		$this->run_private_method( array( $this->addon, 'set_auto_activate_time' ) );
-		$should_run = $this->run_private_method( array( $this->addon, 'is_time_to_auto_activate' ) );
-		$this->assertFalse( $should_run, 'Time was set via set_auto_activate_time' );
-		$option_name = $this->addon->option_name . 'last_activate';
+		$this->run_private_method( array( $this->addon, 'update_last_checked' ) );
+		$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
+		$this->assertFalse( $should_run, 'Time was set via update_last_checked' );
+		$option_name = $this->run_private_method( array( $this->addon, 'transient_key' ) );
 
 		foreach ( $times as $time ) {
-			update_option( $option_name, $time['time'] );
-			$should_run = $this->run_private_method( array( $this->addon, 'is_time_to_auto_activate' ) );
+			if ( is_multisite() ) {
+				update_site_option( $option_name, $time['time'] );
+			} else {
+				update_option( $option_name, $time['time'] );
+			}
+
+			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ) );
 			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
 
 		}
