@@ -472,6 +472,11 @@ class FrmAddon {
 			return;
 		}
 
+		if ( $this->get_defined_license() ) {
+			// Don't check if the license is defined in wp-config.php since we can't remove it.
+			return;
+		}
+
 		// Only check weekly.
 		if ( $this->checked_recently( '7 days', 'valid' ) || $this->is_running() ) {
 			return;
