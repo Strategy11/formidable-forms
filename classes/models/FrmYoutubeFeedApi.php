@@ -34,7 +34,7 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	/**
 	 * Get the YouTube video. It gets the data from cache, if cache is no available it will make a new request to YouTube API.
 	 *
-	 * @param string $type The video type that will be fetched: welcome-video|featured-video|latest-video.
+	 * @param string $type The video type that will be fetched: welcome|featured|latest.
 	 *
 	 * @return array
 	 */
