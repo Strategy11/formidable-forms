@@ -652,6 +652,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected function set_private_property( $object, $property, $value ) {
 		$p = $this->get_accessible_property( $object, $property );
+		if ( ! is_object( $object ) && ! is_null( $object ) ) {
+			// Avoid passing a non-object, non-null value to setValue.
+			// Otherwise a ReflectionProperty::setValue() with a 1st argument which is not null or an object message will get logged.
+			$object = null;
+		}
 		$p->setValue( $object, $value );
 	}
 
