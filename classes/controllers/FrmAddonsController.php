@@ -290,8 +290,8 @@ class FrmAddonsController {
 			return false;
 		}
 
-		$rate_limited_or_blocked = ! empty( $version_info['response_code'] ) && in_array( (int) $version_info['response_code'], array( 403, 429 ), true );
-		if ( $rate_limited_or_blocked ) {
+		$rate_limited = ! empty( $version_info['response_code'] ) && 429 === (int) $version_info['response_code'];
+		if ( $rate_limited ) {
 			// Do not return false positives for rate limited responses.
 			return false;
 		}
