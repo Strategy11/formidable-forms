@@ -206,7 +206,7 @@ class FrmFormApi {
 		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
-				if ( is_array( $addon ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -258,9 +258,6 @@ class FrmFormApi {
 		}
 
 		$values = json_decode( $cache['value'], true );
-		if ( isset( $values['response_code'] ) ) {
-			unset( $values['response_code'] );
-		}
 
 		return $values;
 	}
