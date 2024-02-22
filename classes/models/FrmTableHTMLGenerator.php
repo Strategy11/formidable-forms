@@ -299,12 +299,12 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
-		$row = '<tr ' . $this->add_props_to_inline_style( 'display:flex;', $this->tr_style() );
+		$row = '<tr' . $this->add_props_to_inline_style( 'display:flex;', $this->tr_style() );
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
-		$label = '<th ' . $this->add_props_to_inline_style( 'min-width:50%;max-width: 50%;', $this->td_style ) . ' >' . wp_kses_post( $label ) . '</th>';
-		$value = '<td ' . $this->add_props_to_inline_style( 'width: 100%;', $this->td_style ) . ' >' . wp_kses_post( $value ) . '</td>';
+		$label = '<th' . $this->add_props_to_inline_style( 'min-width:50%;max-width: 50%;', $this->td_style ) . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td' . $this->add_props_to_inline_style( 'width: 100%;', $this->td_style ) . '>' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
