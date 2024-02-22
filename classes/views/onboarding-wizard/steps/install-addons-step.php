@@ -35,7 +35,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 			<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
 				<span class="frm-banner-title frm-font-semibold frm-flex">
-					<?php esc_html_e( 'Get access to 40 more add-ons', 'formidable' ); ?>
+					<?php
+					printf(
+						/* translators: %s: The count of add-ons */
+						esc_html__( 'Get access to %s more add-ons', 'formidable' ),
+						esc_html( $addons_count )
+					);
+					?>
 				</span>
 				<span class="frm-banner-text frm-text-xs">
 					<?php
@@ -48,7 +54,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</span>
 			</div>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 	</div>
 
 	<div class="frm-card-box-footer">

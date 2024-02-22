@@ -13,13 +13,13 @@ import addCheckProInstallationButtonEvents from './checkProInstallationListener'
 
 /**
  * Navigates to the given step in the onboarding sequence.
- * It updates the UI to show the target step and optionally updates the URL and history state.
+ * Optionally updates the browser's history state to include the current step.
  *
  * @param {string} stepName The name of the step to navigate to.
- * @param {boolean} [updateHistory=true] Specifies whether to update the browser's history and URL.
+ * @param {string} [updateMethod='pushState'] Specifies the method to update the browser's history and URL. Accepts 'pushState' or 'replaceState'. If omitted, defaults to 'pushState'.
  * @return {void}
  */
-export const navigateToStep = ( stepName, updateHistory = true ) => {
+export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 	// Find the target step element
 	const targetStep = document.querySelector( `.${PREFIX}-step[data-step-name="${stepName}"]` );
 	if ( ! targetStep ) {
@@ -42,8 +42,8 @@ export const navigateToStep = ( stepName, updateHistory = true ) => {
 	const { onboardingWizardPage } = getElements();
 	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
 
-	// Update the URL query parameter, with control over history update
-	setQueryParam( 'step', stepName, updateHistory );
+	// Update the URL query parameter, with control over history update method
+	setQueryParam( 'step', stepName, updateMethod );
 };
 
 /**
@@ -73,7 +73,8 @@ export const navigateToNextStep = () => {
  */
 window.addEventListener( 'popstate', ( event ) => {
 	const stepName = event.state?.step || getQueryParam( 'step' );
-    navigateToStep( stepName, false ); // Navigate without pushing a new state
+	// Navigate to the specified step without adding to browser history
+    navigateToStep( stepName, 'replaceState' );
 });
 
 /**

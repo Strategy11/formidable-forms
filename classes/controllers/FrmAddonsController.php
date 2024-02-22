@@ -95,7 +95,7 @@ class FrmAddonsController {
 	/**
 	 * @return array
 	 */
-	protected static function get_api_addons() {
+	public static function get_api_addons() {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 

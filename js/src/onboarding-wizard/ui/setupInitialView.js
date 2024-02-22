@@ -3,6 +3,7 @@
  */
 import { getElements } from '../elements';
 import { navigateToStep } from '../events';
+import { INITIAL_STEP } from '../shared';
 import { frmAnimate, getQueryParam, hasQueryParam } from '../utils';
 
 /**
@@ -13,8 +14,9 @@ import { frmAnimate, getQueryParam, hasQueryParam } from '../utils';
 function setupInitialView() {
 	// On initial page load, check if there's a 'step' query parameter and navigate to the corresponding step
 	if ( hasQueryParam( 'step' ) ) {
-		const initialStepName = getQueryParam( 'step' );
-		navigateToStep( initialStepName, false ); // Navigate without pushing a new state
+		const initialStepName = getQueryParam( 'step' ) || INITIAL_STEP;
+		// Navigate to the initial step without adding to browser history
+		navigateToStep( initialStepName, 'replaceState' );
 	}
 
 	// Smoothly display the page

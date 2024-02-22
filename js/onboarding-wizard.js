@@ -404,6 +404,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   removeQueryParam: () => (/* binding */ removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* binding */ setQueryParam)
 /* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
  * Initializes URL and URLSearchParams objects from the current window's location
  */
@@ -437,19 +441,16 @@ var removeQueryParam = function removeQueryParam(paramName) {
  *
  * @param {string} paramName The name of the query parameter to set.
  * @param {string} paramValue The value to set for the query parameter.
- * @param {boolean} updateHistory Indicates whether to update the browser's history state.
- * @param {Object} stateObj An optional object representing the state to be pushed to the history. Defaults to null.
+ * @param {string} [updateMethod='pushState'] The method to use for updating the history state. Accepts 'pushState' or 'replaceState'.
  * @return {string} The updated URL string.
  */
 var setQueryParam = function setQueryParam(paramName, paramValue) {
-  var updateHistory = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  var stateObj = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var updateMethod = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'pushState';
   urlParams.set(paramName, paramValue);
   url.search = urlParams.toString();
-  if (updateHistory) {
-    window.history.pushState({
-      step: paramValue
-    }, '', url);
+  if (['pushState', 'replaceState'].includes(updateMethod)) {
+    var state = _defineProperty({}, paramName, paramValue);
+    window.history[updateMethod](state, '', url);
   }
   return url.toString();
 };
@@ -857,14 +858,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Navigates to the given step in the onboarding sequence.
- * It updates the UI to show the target step and optionally updates the URL and history state.
+ * Optionally updates the browser's history state to include the current step.
  *
  * @param {string} stepName The name of the step to navigate to.
- * @param {boolean} [updateHistory=true] Specifies whether to update the browser's history and URL.
+ * @param {string} [updateMethod='pushState'] Specifies the method to update the browser's history and URL. Accepts 'pushState' or 'replaceState'. If omitted, defaults to 'pushState'.
  * @return {void}
  */
 var navigateToStep = function navigateToStep(stepName) {
-  var updateHistory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var updateMethod = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'pushState';
   // Find the target step element
   var targetStep = document.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-step[data-step-name=\"").concat(stepName, "\"]"));
   if (!targetStep) {
@@ -888,8 +889,8 @@ var navigateToStep = function navigateToStep(stepName) {
     onboardingWizardPage = _getElements.onboardingWizardPage;
   onboardingWizardPage.setAttribute('data-current-step', stepName);
 
-  // Update the URL query parameter, with control over history update
-  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.setQueryParam)('step', stepName, updateHistory);
+  // Update the URL query parameter, with control over history update method
+  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.setQueryParam)('step', stepName, updateMethod);
 };
 
 /**
@@ -918,7 +919,8 @@ var navigateToNextStep = function navigateToNextStep() {
 window.addEventListener('popstate', function (event) {
   var _event$state;
   var stepName = ((_event$state = event.state) === null || _event$state === void 0 ? void 0 : _event$state.step) || (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step');
-  navigateToStep(stepName, false); // Navigate without pushing a new state
+  // Navigate to the specified step without adding to browser history
+  navigateToStep(stepName, 'replaceState');
 });
 
 /**
@@ -1459,11 +1461,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CURRENT_CLASS: () => (/* binding */ CURRENT_CLASS),
 /* harmony export */   HIDDEN_CLASS: () => (/* binding */ HIDDEN_CLASS),
 /* harmony export */   HIDE_JS_CLASS: () => (/* binding */ HIDE_JS_CLASS),
+/* harmony export */   INITIAL_STEP: () => (/* binding */ INITIAL_STEP),
 /* harmony export */   PREFIX: () => (/* binding */ PREFIX),
 /* harmony export */   WELCOME_STEP_ID: () => (/* binding */ WELCOME_STEP_ID),
 /* harmony export */   nonce: () => (/* binding */ nonce)
 /* harmony export */ });
 var nonce = window.frmGlobal.nonce;
+
+var INITIAL_STEP = window.frmOnboardingWizardVars.INITIAL_STEP;
 
 var PREFIX = 'frm-onboarding';
 var HIDDEN_CLASS = 'frm_hidden';
@@ -1484,6 +1489,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CURRENT_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.CURRENT_CLASS),
 /* harmony export */   HIDDEN_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.HIDDEN_CLASS),
 /* harmony export */   HIDE_JS_CLASS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS),
+/* harmony export */   INITIAL_STEP: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.INITIAL_STEP),
 /* harmony export */   PREFIX: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.PREFIX),
 /* harmony export */   WELCOME_STEP_ID: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.WELCOME_STEP_ID),
 /* harmony export */   getAppState: () => (/* reexport safe */ _appState__WEBPACK_IMPORTED_MODULE_1__.getAppState),
@@ -1530,10 +1536,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/onboarding-wizard/elements/index.js");
 /* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../events */ "./js/src/onboarding-wizard/events/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/onboarding-wizard/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -1545,17 +1553,18 @@ __webpack_require__.r(__webpack_exports__);
  */
 function setupInitialView() {
   // On initial page load, check if there's a 'step' query parameter and navigate to the corresponding step
-  if ((0,_utils__WEBPACK_IMPORTED_MODULE_2__.hasQueryParam)('step')) {
-    var initialStepName = (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step');
-    (0,_events__WEBPACK_IMPORTED_MODULE_1__.navigateToStep)(initialStepName, false); // Navigate without pushing a new state
+  if ((0,_utils__WEBPACK_IMPORTED_MODULE_3__.hasQueryParam)('step')) {
+    var initialStepName = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.getQueryParam)('step') || _shared__WEBPACK_IMPORTED_MODULE_2__.INITIAL_STEP;
+    // Navigate to the initial step without adding to browser history
+    (0,_events__WEBPACK_IMPORTED_MODULE_1__.navigateToStep)(initialStepName, 'replaceState');
   }
 
   // Smoothly display the page
   var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
     pageBackground = _getElements.pageBackground,
     container = _getElements.container;
-  new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(pageBackground).fadeIn();
-  new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(container).fadeIn();
+  new _utils__WEBPACK_IMPORTED_MODULE_3__.frmAnimate(pageBackground).fadeIn();
+  new _utils__WEBPACK_IMPORTED_MODULE_3__.frmAnimate(container).fadeIn();
 
   /**
    * Initializes the "Default Email Address" step in the Onboarding Wizard.

@@ -1,4 +1,5 @@
 export const { nonce } = window.frmGlobal;
+export const { INITIAL_STEP } =  window.frmOnboardingWizardVars;
 
 export const PREFIX = 'frm-onboarding';
 export const HIDDEN_CLASS = 'frm_hidden';

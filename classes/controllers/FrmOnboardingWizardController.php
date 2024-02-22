@@ -244,6 +244,7 @@ class FrmOnboardingWizardController {
 		$renew_link   = self::get_renew_link();
 		$license_type = self::get_license_type();
 		$user         = wp_get_current_user();
+		$addons_count = count( FrmAddonsController::get_api_addons() );
 
 		// Note: Add step parts in onrder.
 		$step_parts = array(
@@ -337,7 +338,7 @@ class FrmOnboardingWizardController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
-			'upgradeLink' => self::$upgrade_link,
+			'INITIAL_STEP' => self::INITIAL_STEP,
 		);
 
 		/**

@@ -2204,6 +2204,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   removeQueryParam: () => (/* binding */ removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* binding */ setQueryParam)
 /* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /**
  * Initializes URL and URLSearchParams objects from the current window's location
  */
@@ -2237,19 +2241,16 @@ var removeQueryParam = function removeQueryParam(paramName) {
  *
  * @param {string} paramName The name of the query parameter to set.
  * @param {string} paramValue The value to set for the query parameter.
- * @param {boolean} updateHistory Indicates whether to update the browser's history state.
- * @param {Object} stateObj An optional object representing the state to be pushed to the history. Defaults to null.
+ * @param {string} [updateMethod='pushState'] The method to use for updating the history state. Accepts 'pushState' or 'replaceState'.
  * @return {string} The updated URL string.
  */
 var setQueryParam = function setQueryParam(paramName, paramValue) {
-  var updateHistory = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  var stateObj = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var updateMethod = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'pushState';
   urlParams.set(paramName, paramValue);
   url.search = urlParams.toString();
-  if (updateHistory) {
-    window.history.pushState({
-      step: paramValue
-    }, '', url);
+  if (['pushState', 'replaceState'].includes(updateMethod)) {
+    var state = _defineProperty({}, paramName, paramValue);
+    window.history[updateMethod](state, '', url);
   }
   return url.toString();
 };
