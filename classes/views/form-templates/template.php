@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+if ( ! is_array( $template ) ) {
+	return;
+}
+
 if ( ! empty( $template['message'] ) ) {
 	?>
 	<li class="frm_error_style inline">
@@ -18,10 +22,6 @@ if ( ! empty( $template['message'] ) ) {
 		?>
 	</li>
 	<?php
-	return;
-}
-
-if ( ! is_array( $template ) ) {
 	return;
 }
 
