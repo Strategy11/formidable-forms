@@ -80,8 +80,8 @@ class FrmFormApi {
 		}
 
 		if ( $this->is_running() ) {
-			// Use the expired cache if we can while we wait.
-			return $this->get_cached( 'expired' );
+			// If there's no saved cache, we'll need to wait for the current request to finish.
+			return array();
 		}
 
 		$this->set_running();
@@ -233,18 +233,17 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
-	 * @since x.x Added $allow_expired.
 	 *
-	 * @param string $cache_type 'current' or 'expired'.
 	 * @return array|bool
 	 */
-	protected function get_cached( $cache_type = 'current' ) {
+	protected function get_cached() {
 		$cache = $this->get_cached_option();
 		if ( empty( $cache ) ) {
 			return false;
 		}
 
-		if ( $cache_type === 'current' ) {
+		// If the api call is running, we can use the expired cache.
+		if ( ! $this->is_running() ) {
 			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
 				// Cache is expired.
 				return false;
@@ -259,8 +258,8 @@ class FrmFormApi {
 		}
 
 		$values = json_decode( $cache['value'], true );
-		if ( isset( $addons['response_code'] ) ) {
-			unset( $addons['response_code'] );
+		if ( isset( $values['response_code'] ) ) {
+			unset( $values['response_code'] );
 		}
 
 		return $values;
@@ -289,17 +288,8 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
-		$timeout = $this->cache_timeout;
-		if ( isset( $addons['response_code'] ) ) {
-			if ( 429 === $addons['response_code'] ) {
-				// If the last check was a a rate limit, we'll need to check again sooner.
-				$timeout = '+5 minutes';
-			}
-			unset( $addons['response_code'] );
-		}
-
 		$data = array(
-			'timeout' => strtotime( $timeout, time() ),
+			'timeout' => strtotime( $this->get_cache_timeout( $addons ), time() ),
 			'value'   => wp_json_encode( $addons ),
 			'version' => FrmAppHelper::plugin_version(),
 		);
@@ -309,6 +299,23 @@ class FrmFormApi {
 		} else {
 			update_option( $this->cache_key, $data, 'no' );
 		}
+	}
+
+	/**
+	 * If the last check was a a rate limit, we'll need to check again sooner.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addons
+	 *
+	 * @return string
+	 */
+	protected function get_cache_timeout( $addons ) {
+		$timeout = $this->cache_timeout;
+		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
+			$timeout = '+5 minutes';
+		}
+		return $timeout;
 	}
 
 	/**
