@@ -275,6 +275,20 @@ class FrmTableHTMLGenerator {
 	}
 
 	/**
+	 * Appends inline css props to existing style string of style="prop:value" format
+	 *
+	 * @since x.x
+	 *
+	 * @param string $props
+	 * @param string $style
+	 *
+	 * @return string
+	 */
+	private function add_props_to_inline_style( $props, $style ) {
+		return rtrim( $style, '"' ) . $props . '"';
+	}
+
+	/**
 	 * Generate a two cell row for an HTML table
 	 *
 	 * @since 2.04
@@ -285,12 +299,12 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
-		$row = '<tr' . $this->tr_style();
+		$row = '<tr ' . $this->add_props_to_inline_style( 'display:flex;', $this->tr_style() );
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
-		$label = '<th' . rtrim( $this->td_style, '"' ) . ' width: 50%;"' . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
+		$label = '<th ' . $this->add_props_to_inline_style( 'min-width:50%;max-width: 50%;', $this->td_style ) . ' >' . wp_kses_post( $label ) . '</th>';
+		$value = '<td ' . $this->add_props_to_inline_style( 'width: 100%;', $this->td_style ) . ' >' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
