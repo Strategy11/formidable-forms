@@ -2,32 +2,19 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { CURRENT_CLASS, PREFIX } from '../shared';
-import { frmAnimate, getQueryParam, hasQueryParam, hide, show } from '../utils';
+import { navigateToStep } from '../events';
+import { frmAnimate, getQueryParam, hasQueryParam } from '../utils';
 
 /**
- * Sets up the initial view, performing any required
- * DOM manipulations for proper element presentation.
+ * Sets up the initial view, performing any required DOM manipulations for proper element presentation.
  *
  * @return {void}
  */
 function setupInitialView() {
-	// Display a specific step based on the 'step' query parameter, if it exists
+	// On initial page load, check if there's a 'step' query parameter and navigate to the corresponding step
 	if ( hasQueryParam( 'step' ) ) {
-		const stepElement = document.querySelector( `.${PREFIX}-step[data-step-name="${getQueryParam( 'step' )}"]` );
-		// Proceed only if the step element is found
-		if ( stepElement ) {
-			const { welcomeStep, onboardingWizardPage } = getElements();
-
-			// Transition from the "Welcome" step to the targeted step
-			welcomeStep.classList.remove( CURRENT_CLASS );
-			hide( welcomeStep );
-			stepElement.classList.add( CURRENT_CLASS );
-			show( stepElement );
-
-			// Update the onboarding wizard's current step attribute
-			onboardingWizardPage.setAttribute( 'data-current-step', getQueryParam( 'step' ) );
-		}
+		const initialStepName = getQueryParam( 'step' );
+		navigateToStep( initialStepName, false ); // Navigate without pushing a new state
 	}
 
 	// Smoothly display the page

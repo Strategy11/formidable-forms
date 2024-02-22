@@ -59,6 +59,13 @@ class FrmOnboardingWizardController {
 	const REDIRECT_STATUS_OPTION = 'frm_welcome_redirect';
 
 	/**
+	 * Defines the initial step for redirection within the application flow.
+	 *
+	 * @var string INITIAL_STEP The default step where the application redirects at the start.
+	 */
+	const INITIAL_STEP = 'welcome';
+
+	/**
 	 * Holds the URL to access the Onboarding Wizard's page.
 	 *
 	 * @var string $page_url Used for redirection or linking.
@@ -162,8 +169,9 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		// Initial install.
-		wp_safe_redirect( esc_url( self::$page_url ) );
+		// Redirect to the onboarding wizard's initial step.
+		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
+		wp_safe_redirect( esc_url_raw( $page_url ) );
 		exit;
 	}
 

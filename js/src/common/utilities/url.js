@@ -25,15 +25,22 @@ export const removeQueryParam = ( paramName ) => {
 };
 
 /**
- * Sets the value of a query parameter in the current URL and returns the updated URL string.
+ * Sets the value of a query parameter in the current URL and optionally updates the browser's history state.
  *
  * @param {string} paramName The name of the query parameter to set.
  * @param {string} paramValue The value to set for the query parameter.
+ * @param {boolean} updateHistory Indicates whether to update the browser's history state.
+ * @param {Object} stateObj An optional object representing the state to be pushed to the history. Defaults to null.
  * @return {string} The updated URL string.
  */
-export const setQueryParam = ( paramName, paramValue ) => {
+export const setQueryParam = ( paramName, paramValue, updateHistory = true, stateObj = null ) => {
 	urlParams.set( paramName, paramValue );
 	url.search = urlParams.toString();
+
+	if ( updateHistory ) {
+        window.history.pushState({ step: paramValue }, '', url );
+    }
+
 	return url.toString();
 };
 

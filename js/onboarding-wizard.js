@@ -433,15 +433,24 @@ var removeQueryParam = function removeQueryParam(paramName) {
 };
 
 /**
- * Sets the value of a query parameter in the current URL and returns the updated URL string.
+ * Sets the value of a query parameter in the current URL and optionally updates the browser's history state.
  *
  * @param {string} paramName The name of the query parameter to set.
  * @param {string} paramValue The value to set for the query parameter.
+ * @param {boolean} updateHistory Indicates whether to update the browser's history state.
+ * @param {Object} stateObj An optional object representing the state to be pushed to the history. Defaults to null.
  * @return {string} The updated URL string.
  */
 var setQueryParam = function setQueryParam(paramName, paramValue) {
+  var updateHistory = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var stateObj = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   urlParams.set(paramName, paramValue);
   url.search = urlParams.toString();
+  if (updateHistory) {
+    window.history.pushState({
+      step: paramValue
+    }, '', url);
+  }
   return url.toString();
 };
 
@@ -821,7 +830,8 @@ var onCheckProInstallationButtonClick = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addEventListeners: () => (/* binding */ addEventListeners),
-/* harmony export */   navigateToNextStep: () => (/* binding */ navigateToNextStep)
+/* harmony export */   navigateToNextStep: () => (/* binding */ navigateToNextStep),
+/* harmony export */   navigateToStep: () => (/* binding */ navigateToStep)
 /* harmony export */ });
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/onboarding-wizard/elements/index.js");
 /* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/onboarding-wizard/shared/index.js");
@@ -846,31 +856,70 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Navigates to the next step in a sequence.
+ * Navigates to the given step in the onboarding sequence.
+ * It updates the UI to show the target step and optionally updates the URL and history state.
  *
- * Hiding the current step and displaying the next one.
- *
- * @param {Event} event The click event object.
+ * @param {string} stepName The name of the step to navigate to.
+ * @param {boolean} [updateHistory=true] Specifies whether to update the browser's history and URL.
  * @return {void}
  */
-var navigateToNextStep = function navigateToNextStep() {
-  // Find and hide current step
+var navigateToStep = function navigateToStep(stepName) {
+  var updateHistory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  // Find the target step element
+  var targetStep = document.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-step[data-step-name=\"").concat(stepName, "\"]"));
+  if (!targetStep) {
+    return;
+  }
+
+  // Find and hide the current step element
   var currentStep = document.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-step.").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS));
-  currentStep.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
-  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(currentStep);
+  if (currentStep) {
+    currentStep.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
+    (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(currentStep);
+  }
 
-  // Display next step
-  var nextStep = currentStep.nextElementSibling;
-  nextStep.classList.add(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
-  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.show)(nextStep);
-  new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(nextStep).fadeIn();
+  // Display the target step element
+  targetStep.classList.add(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
+  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.show)(targetStep);
+  new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(targetStep).fadeIn();
 
-  // Update onboarding wizard's current step
-  var stepName = nextStep.dataset.stepName;
+  // Update the onboarding wizard's current step attribute
   var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
     onboardingWizardPage = _getElements.onboardingWizardPage;
   onboardingWizardPage.setAttribute('data-current-step', stepName);
+
+  // Update the URL query parameter, with control over history update
+  (0,_utils__WEBPACK_IMPORTED_MODULE_2__.setQueryParam)('step', stepName, updateHistory);
 };
+
+/**
+ * Navigates to the next step in the sequence.
+ *
+ * The function assumes steps are sequentially ordered in the DOM.
+ *
+ * @return {void}
+ */
+var navigateToNextStep = function navigateToNextStep() {
+  var currentStep = document.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-step.").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS));
+  var nextStep = currentStep === null || currentStep === void 0 ? void 0 : currentStep.nextElementSibling;
+  if (!nextStep) {
+    return;
+  }
+  var stepName = nextStep.dataset.stepName;
+  navigateToStep(stepName);
+};
+
+/**
+ * Responds to browser navigation events (back/forward) by updating the UI to match the step indicated in the URL or history state.
+ *
+ * @param {PopStateEvent} event The event object associated with the navigation action.
+ * @return {void}
+ */
+window.addEventListener('popstate', function (event) {
+  var _event$state;
+  var stepName = ((_event$state = event.state) === null || _event$state === void 0 ? void 0 : _event$state.step) || (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step');
+  navigateToStep(stepName, false); // Navigate without pushing a new state
+});
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -1480,7 +1529,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/onboarding-wizard/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/onboarding-wizard/shared/index.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../events */ "./js/src/onboarding-wizard/events/index.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
 /**
  * Internal dependencies
@@ -1490,36 +1539,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Sets up the initial view, performing any required
- * DOM manipulations for proper element presentation.
+ * Sets up the initial view, performing any required DOM manipulations for proper element presentation.
  *
  * @return {void}
  */
 function setupInitialView() {
-  // Display a specific step based on the 'step' query parameter, if it exists
+  // On initial page load, check if there's a 'step' query parameter and navigate to the corresponding step
   if ((0,_utils__WEBPACK_IMPORTED_MODULE_2__.hasQueryParam)('step')) {
-    var stepElement = document.querySelector(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-step[data-step-name=\"").concat((0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step'), "\"]"));
-    // Proceed only if the step element is found
-    if (stepElement) {
-      var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
-        welcomeStep = _getElements.welcomeStep,
-        onboardingWizardPage = _getElements.onboardingWizardPage;
-
-      // Transition from the "Welcome" step to the targeted step
-      welcomeStep.classList.remove(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
-      (0,_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(welcomeStep);
-      stepElement.classList.add(_shared__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
-      (0,_utils__WEBPACK_IMPORTED_MODULE_2__.show)(stepElement);
-
-      // Update the onboarding wizard's current step attribute
-      onboardingWizardPage.setAttribute('data-current-step', (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step'));
-    }
+    var initialStepName = (0,_utils__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)('step');
+    (0,_events__WEBPACK_IMPORTED_MODULE_1__.navigateToStep)(initialStepName, false); // Navigate without pushing a new state
   }
 
   // Smoothly display the page
-  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
-    pageBackground = _getElements2.pageBackground,
-    container = _getElements2.container;
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
+    pageBackground = _getElements.pageBackground,
+    container = _getElements.container;
   new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(pageBackground).fadeIn();
   new _utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(container).fadeIn();
 

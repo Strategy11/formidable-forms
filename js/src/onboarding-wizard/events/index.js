@@ -3,7 +3,7 @@
  */
 import { getElements } from '../elements';
 import { CURRENT_CLASS, PREFIX } from '../shared';
-import { hide, frmAnimate, show } from '../utils';
+import { hide, frmAnimate, show, setQueryParam, getQueryParam } from '../utils';
 import { addOptionBoxEvents } from '../../common/events';
 import addProceedWithoutAccountButtonEvents from './proceedWithoutAccountButtonListener';
 import addStepButtonsEvents from './skipStepButtonListener';
@@ -12,30 +12,69 @@ import addInstallAddonsButtonEvents from './installAddonsButtonListener';
 import addCheckProInstallationButtonEvents from './checkProInstallationListener';
 
 /**
- * Navigates to the next step in a sequence.
+ * Navigates to the given step in the onboarding sequence.
+ * It updates the UI to show the target step and optionally updates the URL and history state.
  *
- * Hiding the current step and displaying the next one.
+ * @param {string} stepName The name of the step to navigate to.
+ * @param {boolean} [updateHistory=true] Specifies whether to update the browser's history and URL.
+ * @return {void}
+ */
+export const navigateToStep = ( stepName, updateHistory = true ) => {
+	// Find the target step element
+	const targetStep = document.querySelector( `.${PREFIX}-step[data-step-name="${stepName}"]` );
+	if ( ! targetStep ) {
+		return;
+	}
+
+	// Find and hide the current step element
+	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
+	if ( currentStep ) {
+		currentStep.classList.remove( CURRENT_CLASS );
+		hide( currentStep );
+	}
+
+	// Display the target step element
+	targetStep.classList.add( CURRENT_CLASS );
+	show( targetStep );
+	new frmAnimate( targetStep ).fadeIn();
+
+	// Update the onboarding wizard's current step attribute
+	const { onboardingWizardPage } = getElements();
+	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
+
+	// Update the URL query parameter, with control over history update
+	setQueryParam( 'step', stepName, updateHistory );
+};
+
+/**
+ * Navigates to the next step in the sequence.
  *
- * @param {Event} event The click event object.
+ * The function assumes steps are sequentially ordered in the DOM.
+ *
  * @return {void}
  */
 export const navigateToNextStep = () => {
-	// Find and hide current step
 	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
-	currentStep.classList.remove( CURRENT_CLASS );
-	hide( currentStep );
+	const nextStep = currentStep?.nextElementSibling;
 
-	// Display next step
-	const nextStep = currentStep.nextElementSibling;
-	nextStep.classList.add( CURRENT_CLASS );
-	show( nextStep );
-	new frmAnimate( nextStep ).fadeIn();
+	if ( ! nextStep ) {
+		return;
+	}
 
-	// Update onboarding wizard's current step
 	const { stepName } = nextStep.dataset;
-	const { onboardingWizardPage } = getElements();
-	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
+	navigateToStep( stepName );
 };
+
+/**
+ * Responds to browser navigation events (back/forward) by updating the UI to match the step indicated in the URL or history state.
+ *
+ * @param {PopStateEvent} event The event object associated with the navigation action.
+ * @return {void}
+ */
+window.addEventListener( 'popstate', ( event ) => {
+	const stepName = event.state?.step || getQueryParam( 'step' );
+    navigateToStep( stepName, false ); // Navigate without pushing a new state
+});
 
 /**
  * Attaches event listeners for handling user interactions.
