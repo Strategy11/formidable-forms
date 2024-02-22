@@ -258,9 +258,6 @@ class FrmFormApi {
 		}
 
 		$values = json_decode( $cache['value'], true );
-		if ( isset( $values['response_code'] ) ) {
-			unset( $values['response_code'] );
-		}
 
 		return $values;
 	}
