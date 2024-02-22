@@ -80,7 +80,8 @@ class FrmFormApi {
 		}
 
 		if ( $this->is_running() ) {
-			return array();
+			// Use the expired cache if we can while we wait.
+			return $this->get_cached( 'expired' );
 		}
 
 		$this->set_running();
@@ -106,6 +107,8 @@ class FrmFormApi {
 		if ( ! is_array( $addons ) ) {
 			$addons = array();
 		}
+
+		$addons['response_code'] = wp_remote_retrieve_response_code( $response );
 
 		foreach ( $addons as $k => $addon ) {
 			if ( ! is_array( $addon ) ) {
@@ -230,26 +233,52 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
-	 * @return array
+	 * @since x.x Added $allow_expired.
+	 *
+	 * @param string $cache_type 'current' or 'expired'.
+	 * @return array|bool
 	 */
-	protected function get_cached() {
-		$cache = get_option( $this->cache_key );
-
-		FrmAppHelper::filter_gmt_offset();
-
-		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
-			// Cache is expired.
+	protected function get_cached( $cache_type = 'current' ) {
+		$cache = $this->get_cached_option();
+		if ( empty( $cache ) ) {
 			return false;
 		}
 
-		$version     = FrmAppHelper::plugin_version();
-		$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
-		if ( ! $for_current ) {
-			// Force a new check.
-			return false;
+		if ( $cache_type === 'current' ) {
+			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
+				// Cache is expired.
+				return false;
+			}
+
+			$version     = FrmAppHelper::plugin_version();
+			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+			if ( ! $for_current ) {
+				// Force a new check.
+				return false;
+			}
 		}
 
-		return json_decode( $cache['value'], true );
+		$values = json_decode( $cache['value'], true );
+		if ( isset( $addons['response_code'] ) ) {
+			unset( $addons['response_code'] );
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Get the cache for the network if multisite.
+	 *
+	 * @since x.x
+	 *
+	 * @return mixed
+	 */
+	protected function get_cached_option() {
+		if ( is_multisite() ) {
+			return get_site_option( $this->cache_key );
+		}
+
+		return get_option( $this->cache_key );
 	}
 
 	/**
@@ -260,15 +289,26 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
-		FrmAppHelper::filter_gmt_offset();
+		$timeout = $this->cache_timeout;
+		if ( isset( $addons['response_code'] ) ) {
+			if ( 429 === $addons['response_code'] ) {
+				// If the last check was a a rate limit, we'll need to check again sooner.
+				$timeout = '+5 minutes';
+			}
+			unset( $addons['response_code'] );
+		}
 
 		$data = array(
-			'timeout' => strtotime( $this->cache_timeout, current_time( 'timestamp' ) ),
-			'value'   => json_encode( $addons ),
+			'timeout' => strtotime( $timeout, time() ),
+			'value'   => wp_json_encode( $addons ),
 			'version' => FrmAppHelper::plugin_version(),
 		);
 
-		update_option( $this->cache_key, $data, 'no' );
+		if ( is_multisite() ) {
+			update_site_option( $this->cache_key, $data );
+		} else {
+			update_option( $this->cache_key, $data, 'no' );
+		}
 	}
 
 	/**
@@ -277,7 +317,11 @@ class FrmFormApi {
 	 * @return void
 	 */
 	public function reset_cached() {
-		delete_option( $this->cache_key );
+		if ( is_multisite() ) {
+			delete_site_option( $this->cache_key );
+		} else {
+			delete_option( $this->cache_key );
+		}
 	}
 
 	/**
