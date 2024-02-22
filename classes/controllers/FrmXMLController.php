@@ -563,12 +563,14 @@ class FrmXMLController {
 		$parent_term_ids = implode( ',', array_filter( wp_list_pluck( $terms, 'parent' ) ) );
 		$parent_slugs    = array();
 
-		if ( $parent_term_ids ) {
-			global $wpdb;
-			$results = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, slug FROM {$wpdb->prefix}terms WHERE term_id IN (%s)", $parent_term_ids ) );
-			foreach ( $results as $result ) {
-				$parent_slugs[ $result->term_id ] = $result->slug;
-			}
+		if ( ! $parent_term_ids ) {
+			return $parent_slugs;
+		}
+
+		global $wpdb;
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, slug FROM {$wpdb->prefix}terms WHERE term_id IN (%s)", $parent_term_ids ) );
+		foreach ( $results as $result ) {
+			$parent_slugs[ $result->term_id ] = $result->slug;
 		}
 
 		return $parent_slugs;
