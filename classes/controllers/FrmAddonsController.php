@@ -283,6 +283,11 @@ class FrmAddonsController {
 			return false;
 		}
 
+		$expires = isset( $version_info['error']['expires'] ) ? $version_info['error']['expires'] : 0;
+		if ( empty( $expires ) || $expires > time() ) {
+			return false;
+		}
+
 		return $version_info['error'];
 	}
 
