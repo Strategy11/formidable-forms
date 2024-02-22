@@ -106,7 +106,7 @@ $parent_slugs = FrmXMLController::get_parent_terms_slugs( $terms );
 
 foreach ( (array) $terms as $term ) {
 	if ( in_array( $term->term_id, $frm_inc_tax, true ) ) {
-		return;
+		continue;
 	}
 
 	$frm_inc_tax[] = $term->term_id;
