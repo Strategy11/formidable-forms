@@ -559,7 +559,7 @@ class FrmXMLController {
 	 * @param array $terms
 	 * @return array
 	 */
-	public function get_parent_terms_slugs( $terms ) {
+	public static function get_parent_terms_slugs( $terms ) {
 		$parent_term_ids = implode( ',', array_filter( wp_list_pluck( $terms, 'parent' ) ) );
 		$parent_slugs    = array();
 
