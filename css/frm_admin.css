@@ -1276,6 +1276,7 @@ body.frm-hidden-overflow {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 #frm-form-button button,
+.frm-form-button button,
 .frm-preview-buttons button,
 .frm-button-red,
 .frm-button-tertiary {
@@ -1406,6 +1407,7 @@ body.frm-hidden-overflow {
 
 .frm-white-body #search-submit,
 #frm-form-button .frm_button_submit,
+.frm-form-button .frm_button_submit,
 .frm-white-body .frm-preview-buttons button,
 .frm-white-body .button:not(.frm-button-primary),
 .wp-core-ui.frm-white-body .button-secondary,

@@ -19,12 +19,12 @@ class FrmFieldSubmit extends FrmFieldType {
 
 	protected $has_for_label = false;
 
+	protected $has_input = false;
+
 	public function default_html() {
 		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field">
-	<h3 class="frm_pos_[label_position]">[field_name]</h3>
-	[if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-    [input]
+	[input]
 </div>
 DEFAULT_HTML;
 
@@ -66,7 +66,7 @@ DEFAULT_HTML;
 	}
 
 	protected function include_form_builder_file() {
-		// return FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/field-summary.php';
+		 return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-submit.php';
 	}
 
 	protected function get_excluded_ids() {
@@ -83,9 +83,7 @@ DEFAULT_HTML;
 		}
 	}
 
-	public function front_field_input( $args, $shortcode_atts ) {
-		var_dump( 'Front field input' );
-
-		return parent::front_field_input( $args, $shortcode_atts );
+	public function include_front_form_file() {
+		return $this->include_form_builder_file();
 	}
 }
