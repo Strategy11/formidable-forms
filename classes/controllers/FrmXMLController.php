@@ -567,8 +567,7 @@ class FrmXMLController {
 			return $parent_slugs;
 		}
 
-		global $wpdb;
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, slug FROM {$wpdb->prefix}terms WHERE term_id IN (%s)", $parent_term_ids ) );
+		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids  ), 'term_id, slug' );
 		foreach ( $results as $result ) {
 			$parent_slugs[ $result->term_id ] = $result->slug;
 		}
