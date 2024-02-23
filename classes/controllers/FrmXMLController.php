@@ -567,7 +567,7 @@ class FrmXMLController {
 			return $parent_slugs;
 		}
 
-		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids  ), 'term_id, slug' );
+		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
 		foreach ( $results as $result ) {
 			$parent_slugs[ $result->term_id ] = $result->slug;
 		}
