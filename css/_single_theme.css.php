@@ -210,6 +210,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm-star-group.focused,
+.<?php echo esc_html( $style_class ); ?> .frm_range_container.focused,
 .<?php echo esc_html( $style_class ); ?> .frm_dropzone.dz-clickable button:focus,
 .<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
