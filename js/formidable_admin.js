@@ -1723,6 +1723,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
+		if ( 'submit' === draggable.dataset.ftype ) {
+			return false;
+		}
+
 		if ( droppable.closest( '.frm-sortable-helper' ) ) {
 			// Do not allow drop into draggable.
 			return false;
