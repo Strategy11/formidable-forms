@@ -236,10 +236,6 @@ class FrmAddon {
 		delete_option( $this->option_name . 'key' );
 		delete_site_option( $this->transient_key() );
 		delete_option( $this->transient_key() );
-
-		// Cleanup option that has been removed.
-		delete_option( $this->option_name . 'last_activate' );
-
 		$this->delete_cache();
 	}
 
@@ -288,6 +284,9 @@ class FrmAddon {
 	 */
 	protected function delete_cache() {
 		delete_transient( 'frm_api_licence' );
+
+		// Cleanup option that has been removed.
+		delete_option( $this->option_name . 'last_activate' );
 
 		$api = new FrmFormApi( $this->license );
 		$api->reset_cached();

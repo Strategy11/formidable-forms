@@ -271,7 +271,10 @@ class FrmFormApi {
 	 */
 	protected function get_cached_option() {
 		if ( is_multisite() ) {
-			return get_site_option( $this->cache_key );
+			$cached = get_site_option( $this->cache_key );
+			if ( $cached ) {
+				return $cached;
+			}
 		}
 
 		return get_option( $this->cache_key );
