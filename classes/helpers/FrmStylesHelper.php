@@ -185,7 +185,23 @@ class FrmStylesHelper {
 		<?php
 	}
 
+	/**
+	 * Convert a hex color to RGB.
+	 *
+	 * @param string $hex Hex color value.
+	 * @return string RGB value without the rgb() wrapper.
+	 */
 	public static function hex2rgb( $hex ) {
+		if ( 0 === strpos( $hex, 'rgb' ) ) {
+			$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $hex );
+			$rgb = explode( ',', $rgb );
+			if ( 4 === count( $rgb ) ) {
+				// Drop the alpha. The function is expected to only return r,g,b as a CSV.
+				array_pop( $rgb );
+			}
+			return implode( ',', $rgb );
+		}
+
 		$hex = str_replace( '#', '', $hex );
 
 		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );

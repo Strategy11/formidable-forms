@@ -259,7 +259,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	echo esc_html( $important );
 	?>
 	;
+	<?php if ( '' !== $submit_border_width ) : ?>
 	border-width:<?php echo esc_html( $submit_border_width ); ?>;
+	<?php endif; ?>
 	border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
 	border-style:solid;
 	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
