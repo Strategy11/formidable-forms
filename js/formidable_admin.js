@@ -7128,23 +7128,30 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).data( 'emailkey' ),
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
 			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
+			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' ),
+			newRowID =  getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
+			placeholder = div({
+				id: 'frm_logic_' + id + '_' + newRowID,
+				className: 'frm_logic_row frm_hidden'
+			});
+	
+		document.getElementById( 'frm_logic_row_' + id ).appendChild( placeholder );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
 				email_id: id,
 				form_id: formId,
-				meta_name: getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
+				meta_name: newRowID,
 				type: type,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				html = wp.hooks.applyFilters( 'frm_action_logic_row_html', html, id );
-
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					$logicRow.append( html );
+					var tempDiv   = document.createElement( 'div' );
+					tempDiv.innerHTML = html;
+					document.getElementById( 'frm_logic_row_' + id ).replaceChild( tempDiv.childNodes[0], placeholder );
 					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
 				});
 			}
