@@ -7133,9 +7133,10 @@ function frmAdminBuildJS() {
 			placeholder = div({
 				id: 'frm_logic_' + id + '_' + newRowID,
 				className: 'frm_logic_row frm_hidden'
-			});
+			}),
+			logicRowsContainer = document.getElementById( 'frm_logic_row_' + id );
 	
-		document.getElementById( 'frm_logic_row_' + id ).appendChild( placeholder );
+		logicRowsContainer.appendChild( placeholder );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -7148,10 +7149,10 @@ function frmAdminBuildJS() {
 			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
-					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
+					var $logicRow = jQuery( logicRowsContainer );
 					var tempDiv   = document.createElement( 'div' );
 					tempDiv.innerHTML = html;
-					document.getElementById( 'frm_logic_row_' + id ).replaceChild( tempDiv.childNodes[0], placeholder );
+					logicRowsContainer.replaceChild( tempDiv.childNodes[0], placeholder );
 					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
 				});
 			}
