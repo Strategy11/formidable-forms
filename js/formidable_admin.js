@@ -7135,7 +7135,7 @@ function frmAdminBuildJS() {
 				className: 'frm_logic_row frm_hidden'
 			}),
 			logicRowsContainer = document.getElementById( 'frm_logic_row_' + id );
-	
+
 		logicRowsContainer.appendChild( placeholder );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
