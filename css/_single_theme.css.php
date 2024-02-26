@@ -265,8 +265,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
 	cursor:pointer;
 	font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	text-shadow:none;
 	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
@@ -274,8 +272,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	box-sizing:border-box;
 	-ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
-	-moz-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
-	-webkit-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ); ?>;

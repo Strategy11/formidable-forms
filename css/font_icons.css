@@ -64,7 +64,6 @@ a.frm_icon_font:hover{
 .frm_icon_font:focus,
 .frm_dashicon_font:focus{
 	box-shadow:none;
-	-webkit-box-shadow:none;
 }
 
 .frmfont:active,
