@@ -7128,13 +7128,13 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).data( 'emailkey' ),
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
 			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' ),
+			logicRowsContainer = document.getElementById( 'frm_logic_row_' + id ),
+			logicRows = logicRowsContainer.querySelectorAll( '.frm_logic_row' ),
 			newRowID =  getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
 			placeholder = div({
 				id: 'frm_logic_' + id + '_' + newRowID,
 				className: 'frm_logic_row frm_hidden'
-			}),
-			logicRowsContainer = document.getElementById( 'frm_logic_row_' + id );
+			});
 
 		logicRowsContainer.appendChild( placeholder );
 		jQuery.ajax({
