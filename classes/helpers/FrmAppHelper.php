@@ -251,6 +251,17 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Check if the Pro plugin is installed, whether authorized or not.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function pro_is_included() {
+		return function_exists( 'load_formidable_pro' );
+	}
+
+	/**
 	 * @since 4.06.02
 	 */
 	public static function pro_is_connected() {
