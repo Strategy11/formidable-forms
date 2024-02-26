@@ -65,7 +65,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			'#ffffff'           => '255,255,255',
 			'262626'            => '38,38,38',
 			'rgb(255,255,255)'  => '255,255,255',
-			'rgba(211,77,40,1)' => '211,77,40'
+			'rgba(211,77,40,1)' => '211,77,40',
 		);
 
 		foreach ( $colors as $hex => $rgb ) {
