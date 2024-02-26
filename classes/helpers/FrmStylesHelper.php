@@ -186,7 +186,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Convert a hex color to a RGB CSV (without the rgb()/rgba() wrapper).
+	 * Convert a color setting to a RGB CSV (without the rgb()/rgba() wrapper).
 	 *
 	 * @since 2.0
 	 *
