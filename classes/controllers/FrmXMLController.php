@@ -560,17 +560,15 @@ class FrmXMLController {
 	 * @return array
 	 */
 	public static function get_parent_terms_slugs( $terms ) {
-		$parent_term_ids = implode( ',', array_filter( wp_list_pluck( $terms, 'parent' ) ) );
+		$parent_term_ids = array_filter( wp_list_pluck( $terms, 'parent' ) );
 		$parent_slugs    = array();
 
 		if ( ! $parent_term_ids ) {
 			return $parent_slugs;
 		}
 
-		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
-		foreach ( $results as $result ) {
-			$parent_slugs[ $result->term_id ] = $result->slug;
-		}
+		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
+		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
 
 		return $parent_slugs;
 	}
