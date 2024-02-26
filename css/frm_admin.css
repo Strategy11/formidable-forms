@@ -561,7 +561,6 @@ ul.frm_form_nav > li {
 .frm_form_nav a:active,
 .frm_form_nav a:focus {
 	outline: none;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
@@ -4021,8 +4020,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	line-height: var(--leading);
 	border: 0 none;
 	outline: none;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -4257,11 +4254,7 @@ label input[type="checkbox"], label input[type="radio"] {
 	line-height: inherit;
 	width: auto;
 	height: auto !important;
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
 	border-radius: 0;
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
 	box-sizing: content-box;
 }
 
@@ -4281,8 +4274,6 @@ label input[type="checkbox"], label input[type="radio"] {
 	margin: 1px 0 0;
 	border: 1px solid #dfdfdf;
 	border-top: none;
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
 	border-radius: 0;
 	float: none !important;
 }
