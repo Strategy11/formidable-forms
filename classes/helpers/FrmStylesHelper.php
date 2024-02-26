@@ -214,7 +214,7 @@ class FrmStylesHelper {
 		$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $rgb );
 		$rgb = explode( ',', $rgb );
 		if ( 4 === count( $rgb ) ) {
-			// Drop the alpha. The function is expected to only return r,g,b as a CSV.
+			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
 		}
 		return $rgb;
