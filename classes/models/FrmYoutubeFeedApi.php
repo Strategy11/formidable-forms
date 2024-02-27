@@ -18,7 +18,7 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 *
 	 * @var string
 	 */
-	protected $cache_key = 'frm-yt-videos';
+	protected $cache_key = 'frm_yt_videos';
 
 	public function __construct() {
 		// Don't load license key or dynamic cache key.
