@@ -40,6 +40,13 @@ class FrmAddon {
 	 */
 	private $transient_lock_key = 'frm_activate_request_lock';
 
+	/**
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $should_clear_cache = true;
+
 	public function __construct() {
 
 		if ( empty( $this->plugin_slug ) ) {
@@ -234,13 +241,39 @@ class FrmAddon {
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
-		delete_site_option( $this->transient_key() );
-		delete_option( $this->transient_key() );
-		$this->delete_cache();
+
+		if ( $this->should_clear_cache ) {
+			delete_site_option( $this->transient_key() );
+			delete_option( $this->transient_key() );
+			$this->delete_cache();
+			$this->should_clear_cache = true;
+		}
+	}
+
+	/**
+	 * Don't save an invalid license.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool $is_valid If license activation was successful.
+	 *
+	 * @return void
+	 */
+	protected function maybe_set_active( $is_valid ) {
+		update_option( $this->option_name . 'active', $is_valid );
+		if ( $is_valid ) {
+			$this->set_active( $is_valid );
+			return;
+		}
+
+		// Don't save the license if it's invalid.
+		$this->should_clear_cache = false;
+		$this->clear_license();
+		delete_option( $this->option_name . 'key' );
+		$this->license = '';
 	}
 
 	public function set_active( $is_active ) {
-		update_option( $this->option_name . 'active', $is_active );
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
 		$this->update_pro_capabilities();
@@ -608,7 +641,7 @@ class FrmAddon {
 				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
-			$this->set_active( $is_valid );
+			$this->maybe_set_active( $is_valid );
 		}
 
 		$this->update_last_checked();
