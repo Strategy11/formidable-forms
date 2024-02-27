@@ -1729,6 +1729,12 @@ function frmAdminBuildJS() {
 		}
 
 		if ( 'frm-show-fields' === droppable.id ) {
+			// Check if the drag placeholder is right below the Submit button row, return false.
+			const placeholder = document.getElementById( 'frm_drag_placeholder' );
+			if ( placeholder && placeholder.previousElementSibling && placeholder.previousElementSibling.querySelector( '.edit_field_type_submit' ) ) {
+				return false;
+			}
+
 			// Everything can be dropped into the main list of fields.
 			return true;
 		}
