@@ -234,7 +234,7 @@ class FrmEntriesHelper {
 			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
 
 			if ( $child_values ) {
-				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ), '', $child_entries_limit );
+				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
 			}
 		}
 
