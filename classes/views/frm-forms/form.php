@@ -61,11 +61,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<p id="frm-form-button">
-		<button class="frm_button_submit" disabled="disabled">
-			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
-		</button>
-	</p>
+	<?php if ( FrmAppHelper::is_admin_page() ) : ?>
+		<?php FrmSubmitButtonController::show_submit_in_form_builder( $form ); ?>
+	<?php else : ?>
+		<p id="frm-form-button">
+			<button class="frm_button_submit" disabled="disabled">
+				<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+			</button>
+		</p>
+	<?php endif; ?>
 
 	<div class="frm_no_fields">
 
