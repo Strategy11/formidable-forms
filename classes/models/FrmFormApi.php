@@ -142,6 +142,9 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function is_running() {
+		if ( $this->run_as_multisite() ) {
+			return get_site_transient( $this->transient_key() );
+		}
 		return get_transient( $this->transient_key() );
 	}
 
@@ -151,7 +154,13 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_running() {
-		set_transient( $this->transient_key(), true, 2 * MINUTE_IN_SECONDS );
+		$expires = 2 * MINUTE_IN_SECONDS;
+		if ( $this->run_as_multisite() ) {
+			set_site_transient( $this->transient_key(), true, $expires );
+			return;
+		}
+
+		set_transient( $this->transient_key(), true, $expires );
 	}
 
 	/**
@@ -160,7 +169,22 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function done_running() {
+		if ( $this->run_as_multisite() ) {
+			delete_site_transient( $this->transient_key() );
+		}
 		delete_transient( $this->transient_key() );
+	}
+
+	/**
+	 * Only allow one site in the network to make the api request at a time.
+	 * If there is a license for the request, run individually.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	protected function run_as_multisite() {
+		return is_multisite() && empty( $this->license );
 	}
 
 	/**
