@@ -285,6 +285,9 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	private function add_props_to_inline_style( $props, $style ) {
+		if ( empty( $style ) ) {
+			return 'style="' . $props . '"';
+		}
 		return rtrim( $style, '"' ) . $props . '"';
 	}
 
