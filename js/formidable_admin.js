@@ -5847,24 +5847,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function setStarValues() {
-		/*jshint validthis:true */
-		var fieldID = this.id.replace( 'radio_maxnum_', '' );
-		var container = jQuery( '#field_' + fieldID + '_inner_container .frm-star-group' );
-		var fieldKey = document.getElementsByName( 'field_options[field_key_' + fieldID + ']' )[0].value;
-		container.html( '' );
-
-		var min = 1;
-		var max = this.value;
-		if ( min > max ) {
-			max = min;
-		}
-
-		for ( var i = min; i <= max; i++ ) {
-			container.append( '<input type="hidden" name="field_options[options_' + fieldID + '][' + i + ']" value="' + i + '"><input type="radio" name="item_meta[' + fieldID + ']" id="field_' + fieldKey + '-' + i + '" value="' + i + '" /><label for="field_' + fieldKey + '-' + i + '" class="star-rating"></label>' );
-		}
-	}
-
 	function getFieldValues() {
 		/*jshint validthis:true */
 		var isTaxonomy,
@@ -7158,6 +7140,8 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				html = wp.hooks.applyFilters( 'frm_action_logic_row_html', html, id );
+
 				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					$logicRow.append( html );
@@ -9849,7 +9833,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
-			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );

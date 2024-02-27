@@ -656,6 +656,7 @@ class FrmFormTemplatesController {
 
 		// Enqueue styles that needed.
 		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( 'formidable-grids' );
 
 		// Register and enqueue "Form Templates" style.

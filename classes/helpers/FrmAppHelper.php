@@ -251,6 +251,17 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Check if the Pro plugin is installed, whether authorized or not.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function pro_is_included() {
+		return function_exists( 'load_formidable_pro' );
+	}
+
+	/**
 	 * @since 4.06.02
 	 */
 	public static function pro_is_connected() {
@@ -3152,7 +3163,6 @@ class FrmAppHelper {
 		}
 
 		if ( $location === 'admin' ) {
-			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
 				'desc'               => __( '(Click to add description)', 'formidable' ),
 				'blank'              => __( '(Blank)', 'formidable' ),
@@ -3168,7 +3178,7 @@ class FrmAppHelper {
 				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'     => $frm_settings->unique_msg,
+				'default_unique'     => FrmFieldsHelper::default_unique_msg(),
 				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
 				'enter_email'        => __( 'Enter Email', 'formidable' ),
 				'confirm_email'      => __( 'Confirm Email', 'formidable' ),

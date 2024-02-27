@@ -677,6 +677,9 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
+		// Register component assets early to ensure they can be enqueued later in controllers.
+		wp_register_style( 'formidable-animations', $plugin_url . '/css/admin/animations.css', array(), $version );
+
 		if ( class_exists( 'FrmOverlayController' ) ) {
 			// This should always exist.
 			// But it may not have loaded properly when updating the plugin.
@@ -760,6 +763,7 @@ class FrmAppController {
 			wp_enqueue_script( 'formidable_embed' );
 			FrmAppHelper::localize_script( 'admin' );
 
+			wp_enqueue_style( 'formidable-animations' );
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
