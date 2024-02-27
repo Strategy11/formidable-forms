@@ -6009,10 +6009,6 @@ a.frm_action_icon:hover {
 	top: 2px;
 }
 
-.edit_field_type_submit .frm-field-action-icons .frm-field-id {
-	max-width: none;
-}
-
 .frm-field-action-icons > a {
 	font-size: var(--text-md);
 	width: 17px;
@@ -6044,11 +6040,6 @@ a.frm_action_icon:hover {
 
 .frm-move {
 	cursor: grab;
-}
-
-.edit_field_type_submit .frm-move,
-.edit_field_type_submit .frm-show-hover > .dropdown {
-	display: none;
 }
 
 span.howto {
