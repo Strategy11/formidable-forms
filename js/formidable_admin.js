@@ -6985,7 +6985,8 @@ function frmAdminBuildJS() {
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
-		const fieldsWithShortcodesBox = [ 'html', 'ai' ];
+		const fieldsWithShortcodesBox = wp.hooks.applyFilters( 'frm_fields_with_shortcode_popup', [ 'html' ] );
+
 		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
