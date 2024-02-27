@@ -214,19 +214,19 @@ class FrmEntriesHelper {
 			return '';
 		}
 
-		/**
-		 * This filter allows updating the limit of child entries in entry list page. The default is 5.
-		 *
-		 * @since x.x
-		 * @param array $args {
-		 *    @type object $field
-		 *    @type array  $atts
-		 * }
-		 */
-		$child_entries_limit = apply_filters( 'frm_child_entries_limit', 5, compact( 'field', 'atts' ) );
-
 		// This is an embeded form.
 		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+			/**
+			 * This filter allows updating the limit of child entries in entry list page. The default is 5.
+			 *
+			 * @since x.x
+			 * @param array $args {
+			 *    @type object $field
+			 *    @type array  $atts
+			 * }
+			 */
+			$child_entries_limit = apply_filters( 'frm_repeater_entries_limit', 5, compact( 'field', 'atts' ) );
+
 			// This is a repeating section.
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', $child_entries_limit, true );
 		} else {
