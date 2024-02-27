@@ -218,7 +218,7 @@ class FrmEntriesHelper {
 		 * This filter allows updating the limit of child entries in entry list page. The default is 5.
 		 *
 		 * @since x.x
-		 * @param array {
+		 * @param array $args {
 		 *    @type object $field
 		 *    @type array  $atts
 		 * }
