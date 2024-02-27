@@ -138,4 +138,33 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 			array( $options )
 		);
 	}
+
+	/**
+	 * @covers FrmEmailSummaryHelper::maybe_remove_recipients_from_api
+	 */
+	public function test_maybe_remove_recipients_from_api() {
+		add_filter(
+			'pre_http_request',
+			function( $pre, $parsed_args, $url ) {
+				if ( strpos( $url, 'formidableforms.com' ) === false ) {
+					return $pre;
+				}
+		
+				return array(
+					'response' => array( 'code' => 200, 'message' => 'Fake response' ),
+					'body'     => json_encode( array( 'no_emails' => 'test@example.com' ) ),
+				);
+			},
+			10,
+			3
+		);
+
+		$recipients = 'test@example.com';
+		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
+		$this->assertEquals( '', $recipients );
+
+		$recipients = 'test@example.com,recipient2@example.com';
+		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
+		$this->assertEquals( 'recipient2@example.com', $recipients );
+	}
 }
