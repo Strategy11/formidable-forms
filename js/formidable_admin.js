@@ -814,7 +814,7 @@ function frmAdminBuildJS() {
 		const droppable = getDroppableForOnDragOver( event.target );
 		const draggable = ui.draggable[0];
 
-		if ( ! allowDrop( draggable, droppable ) ) {
+		if ( ! allowDrop( draggable, droppable, event ) ) {
 			droppable.classList.remove( 'frm-over-droppable' );
 			jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
 			return;
@@ -938,8 +938,7 @@ function frmAdminBuildJS() {
 		const droppable = getDroppableTarget();
 
 		let placeholder = document.getElementById( 'frm_drag_placeholder' );
-
-		if ( ! allowDrop( draggable, droppable ) ) {
+		if ( ! allowDrop( draggable, droppable, event ) ) {
 			if ( placeholder ) {
 				placeholder.remove();
 			}
@@ -1712,12 +1711,21 @@ function frmAdminBuildJS() {
 		return ++autoId;
 	}
 
-	// Don't allow page break, embed form, or section inside section field
-	// Don't allow page breaks inside of field groups.
-	// Don't allow field groups with sections inside of sections.
-	// Don't allow field groups in field groups.
-	// Don't allow hidden fields inside of field groups but allow them in sections.
-	function allowDrop( draggable, droppable ) {
+	/**
+	 * Determine if a draggable element can be droppable into a droppable element.
+	 *
+	 * Don't allow page break, embed form, or section inside section field
+	 * Don't allow page breaks inside of field groups.
+	 * Don't allow field groups with sections inside of sections.
+	 * Don't allow field groups in field groups.
+	 * Don't allow hidden fields inside of field groups but allow them in sections.
+	 *
+	 * @param {HTMLElement} draggable
+	 * @param {HTMLElement} droppable
+	 * @param {Event} event
+	 * @returns 
+	 */
+	function allowDrop( draggable, droppable, event ) {
 		if ( false === droppable ) {
 			// Don't show drop placeholder if dragging somewhere off of the droppable area.
 			return false;
@@ -1729,9 +1737,9 @@ function frmAdminBuildJS() {
 		}
 
 		if ( 'frm-show-fields' === droppable.id ) {
-			// Check if the drag placeholder is right below the Submit button row, return false.
-			const placeholder = document.getElementById( 'frm_drag_placeholder' );
-			if ( placeholder && placeholder.previousElementSibling && placeholder.previousElementSibling.querySelector( '.edit_field_type_submit' ) ) {
+			const draggableIndex    = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
+			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
+			if ( draggableIndex > submitButtonIndex ) {
 				return false;
 			}
 
