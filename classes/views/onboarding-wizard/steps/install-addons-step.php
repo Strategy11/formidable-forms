@@ -10,9 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="install-addons">
-	<span class="frm-card-box-progress-bar"><span></span></span>
-
+<section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_puzzle_icon' ); ?>

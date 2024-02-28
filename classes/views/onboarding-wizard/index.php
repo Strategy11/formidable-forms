@@ -25,4 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Return to the Dashboard', 'formidable' ); ?>
 		</a>
 	</div>
+
+	<?php if ( $license_key ) { ?>
+		<input type="hidden" id="frm-license-key" name="frm-license-key" value="<?php echo esc_attr( $license_key ); ?>">
+	<?php } ?>
 </div>

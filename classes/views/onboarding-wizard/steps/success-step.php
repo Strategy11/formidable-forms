@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section id="frm-onboarding-success-step" class="frm-onboarding-step frm-card-box frmcenter frm_hidden" data-step-name="success">
+<section id="frm-onboarding-success-step" class="frm-onboarding-step frm-card-box frmcenter frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-circled-icon-green frm-flex-center">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>

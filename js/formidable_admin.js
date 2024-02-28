@@ -10449,7 +10449,7 @@ function frmAdminBuildJS() {
 		installNewForm,
 		toggleAddonState,
 		purifyHtml,
-		showActiveCampaignForm,
+		loadApiEmailForm,
 		addMyEmailAddress
 	};
 }

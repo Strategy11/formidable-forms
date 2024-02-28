@@ -1,15 +1,39 @@
 /**
  * Internal dependencies
  */
+import addSkipStepButtonEvents from './skipStepButtonListener';
+import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
+import addInstallAddonsButtonEvents from './installAddonsButtonListener';
+import addCheckProInstallationButtonEvents from './checkProInstallationListener';
+import addSaveLicenseButtonEvents from './saveLicenseButtonListener';
 import { getElements } from '../elements';
 import { CURRENT_CLASS, PREFIX } from '../shared';
 import { hide, frmAnimate, show, setQueryParam, getQueryParam } from '../utils';
 import { addOptionBoxEvents } from '../../common/events';
-import addProceedWithoutAccountButtonEvents from './proceedWithoutAccountButtonListener';
-import addStepButtonsEvents from './skipStepButtonListener';
-import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
-import addInstallAddonsButtonEvents from './installAddonsButtonListener';
-import addCheckProInstallationButtonEvents from './checkProInstallationListener';
+
+/**
+ * Attaches event listeners for handling user interactions.
+ *
+ * @return {void}
+ */
+export function addEventListeners() {
+	// Add event handling for the "Skip" step button
+	addSkipStepButtonEvents();
+
+	// Add event handling for the "Next Step" button in the "Default Email Address" step
+	addSetupEmailStepButtonEvents();
+
+	// Add event handling for the "Active & continue" button in the "License Management" step.
+	addSaveLicenseButtonEvents();
+
+	// Add event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step
+	addInstallAddonsButtonEvents();
+	// Add event handling for an option-box
+	addOptionBoxEvents();
+
+	// Add event handling for the "Continue" button in the "Install Formidable Pro" step
+	addCheckProInstallationButtonEvents();
+}
 
 /**
  * Navigates to the given step in the onboarding sequence.
@@ -76,27 +100,3 @@ window.addEventListener( 'popstate', ( event ) => {
 	// Navigate to the specified step without adding to browser history
     navigateToStep( stepName, 'replaceState' );
 });
-
-/**
- * Attaches event listeners for handling user interactions.
- *
- * @return {void}
- */
-export function addEventListeners() {
-	// Add event handling for the "Proceed without Account" button
-	addProceedWithoutAccountButtonEvents();
-
-	// Add event handling for the "Skip" step button
-	addStepButtonsEvents();
-
-	// Add event handling for the "Next Step" button in the "Default Email Address" step
-	addSetupEmailStepButtonEvents();
-
-	// Add event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step
-	addInstallAddonsButtonEvents();
-	// Add event handling for an option-box
-	addOptionBoxEvents();
-
-	// Add event handling for the "Continue" button in the "Install Formidable Pro" step
-	addCheckProInstallationButtonEvents();
-}

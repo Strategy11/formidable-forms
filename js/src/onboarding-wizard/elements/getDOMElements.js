@@ -14,13 +14,13 @@ function getDOMElements() {
 		onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
 		pageBackground: document.getElementById( `${PREFIX}-bg` ),
 		container: document.getElementById( `${PREFIX}-container` ),
-		skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` )
+		skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+		hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' )
 	};
 
 	// Welcome Step Elements
 	const welcomeStep = {
-		welcomeStep: document.getElementById( WELCOME_STEP_ID ),
-		proceedWithoutAccountButton: document.getElementById( `${PREFIX}-proceed-without-account` )
+		welcomeStep: document.getElementById( WELCOME_STEP_ID )
 	};
 
 	// Install Formidable Pro Step Elements
@@ -32,7 +32,9 @@ function getDOMElements() {
 
 	// License Management Step Elements
 	const licenseManagementStep = {
-		licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` )
+		licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` ),
+		licenseKeyInput: document.getElementById( 'edd_formidable_pro_license_key' ),
+		saveLicenseButton: document.getElementById( `${PREFIX}-save-license-button` )
 	};
 
 	// Default Email Address Step Elements

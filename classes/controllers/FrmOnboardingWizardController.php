@@ -73,6 +73,13 @@ class FrmOnboardingWizardController {
 	private static $page_url = '';
 
 	/**
+	 * Holds a list of add-ons available for installation.
+	 *
+	 * @var array $available_addons List of add-ons available for installation.
+	 */
+	private static $available_addons = array();
+
+	/**
 	 * Path to views.
 	 *
 	 * @var string $view_path Path to the Onboarding Wizard views.
@@ -80,32 +87,11 @@ class FrmOnboardingWizardController {
 	private static $view_path = '';
 
 	/**
-	 * The type of license received from the API.
-	 *
-	 * @var string $license_type License type received from the API.
-	 */
-	private static $license_type = '';
-
-	/**
 	 * Upgrade URL.
 	 *
 	 * @var string $upgrade_link URL for upgrading accounts.
 	 */
 	private static $upgrade_link = '';
-
-	/**
-	 * Renew URL.
-	 *
-	 * @var string $renew_link URL for renewing accounts.
-	 */
-	private static $renew_link = '';
-
-	/**
-	 * Holds a list of add-ons available for installation.
-	 *
-	 * @var array $available_addons List of add-ons available for installation.
-	 */
-	private static $available_addons = array();
 
 	/**
 	 * Initialize hooks for template page only.
@@ -127,15 +113,6 @@ class FrmOnboardingWizardController {
 
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 		add_filter( 'frm_show_footer_links', '__return_false' );
-	}
-
-	/**
-	 * Set the URL to access the Onboarding Wizard's page.
-	 *
-	 * @return void
-	 */
-	private static function set_page_url() {
-		self::$page_url = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
 	}
 
 	/**
@@ -184,19 +161,11 @@ class FrmOnboardingWizardController {
 	 */
 	public static function assign_properties() {
 		self::$view_path    = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
-		self::$license_type = FrmAddonsController::license_type();
 
 		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
 				'medium'  => 'onboarding-wizard',
 				'content' => 'upgrade',
-			)
-		);
-
-		self::$renew_link = FrmAppHelper::admin_upgrade_link(
-			array(
-				'medium'  => 'onboarding-wizard',
-				'content' => 'renew',
 			)
 		);
 
@@ -238,20 +207,19 @@ class FrmOnboardingWizardController {
 		// Include SVG images for icons.
 		FrmAppHelper::include_svg();
 
-		$view_path    = self::get_view_path();
-		$available_addons       = self::get_addons();
-		$upgrade_link = self::get_upgrade_link();
-		$renew_link   = self::get_renew_link();
-		$license_type = self::get_license_type();
-		$user         = wp_get_current_user();
-		$addons_count = count( FrmAddonsController::get_api_addons() );
+		$view_path        = self::get_view_path();
+		$available_addons = self::get_addons();
+		$upgrade_link     = self::get_upgrade_link();
+		$user             = wp_get_current_user();
+		$addons_count     = count( FrmAddonsController::get_api_addons() );
+		$license_key      = base64_decode( rawurldecode( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) ) );
 
 		// Note: Add step parts in onrder.
 		$step_parts = array(
 			'welcome'                => 'steps/welcome-step.php',
 			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
 			'license-management'     => 'steps/license-management-step.php',
-			'default-email'          => 'steps/default-email-step.php',
+			'default-email-address'  => 'steps/default-email-address-step.php',
 			'install-addons'         => 'steps/install-addons-step.php',
 			'success'                => 'steps/success-step.php',
 		);
@@ -338,7 +306,8 @@ class FrmOnboardingWizardController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
-			'INITIAL_STEP' => self::INITIAL_STEP,
+			'INITIAL_STEP'   => self::INITIAL_STEP,
+			'proIsIncluded' => FrmAppHelper::pro_is_included(),
 		);
 
 		/**
@@ -428,6 +397,37 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
+	 * Get the path to the Onboarding Wizard views.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Path to views.
+	 */
+	public static function get_page_url() {
+		return self::$page_url;
+	}
+
+	/**
+	 * Set the URL to access the Onboarding Wizard's page.
+	 *
+	 * @return void
+	 */
+	private static function set_page_url() {
+		self::$page_url = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
+	}
+
+	/**
+	 * Get the list of add-ons available for installation.
+	 *
+	 * @since x.x
+	 *
+	 * @return array A list of add-ons.
+	 */
+	public static function get_addons() {
+		return self::$available_addons;
+	}
+
+	/**
 	 * Set the list of add-ons available for installation.
 	 *
 	 * @since x.x
@@ -435,9 +435,9 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	private static function set_available_addons() {
-		$is_pro_installed = FrmAppHelper::pro_is_installed();
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
-		if ( $is_pro_installed ) {
+		if ( $pro_is_installed ) {
 			self::$available_addons['spam-protection'] = array(
 				'title'       => esc_html__( 'Spam Protection', 'formidable' ),
 				'is-checked'  => true,
@@ -449,7 +449,7 @@ class FrmOnboardingWizardController {
 			'is-checked'  => true,
 			'is-disabled' => true,
 		);
-		if ( ! $is_pro_installed ) {
+		if ( ! $pro_is_installed ) {
 			self::$available_addons['visual-styler'] = array(
 				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
 				'is-checked'  => true,
@@ -467,7 +467,7 @@ class FrmOnboardingWizardController {
 				'is-vendor'  => true,
 			);
 		}
-		if ( $is_pro_installed ) {
+		if ( $pro_is_installed ) {
 			self::$available_addons['formidable-mailchimp'] = array(
 				'title'      => esc_html__( 'Mailchimp', 'formidable' ),
 				'rel'        => FrmAddonsController::get_addon( 'mailchimp' )['url'],
@@ -511,30 +511,8 @@ class FrmOnboardingWizardController {
 	 *
 	 * @return string Path to views.
 	 */
-	public static function get_page_url() {
-		return self::$page_url;
-	}
-
-	/**
-	 * Get the path to the Onboarding Wizard views.
-	 *
-	 * @since x.x
-	 *
-	 * @return string Path to views.
-	 */
 	public static function get_view_path() {
 		return self::$view_path;
-	}
-
-	/**
-	 * Get the license type.
-	 *
-	 * @since x.x
-	 *
-	 * @return string The license type.
-	 */
-	public static function get_license_type() {
-		return self::$license_type;
 	}
 
 	/**
@@ -546,27 +524,5 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_upgrade_link() {
 		return self::$upgrade_link;
-	}
-
-	/**
-	 * Get the renewal link.
-	 *
-	 * @since x.x
-	 *
-	 * @return string URL for renewing accounts.
-	 */
-	public static function get_renew_link() {
-		return self::$renew_link;
-	}
-
-	/**
-	 * Get the list of add-ons available for installation.
-	 *
-	 * @since x.x
-	 *
-	 * @return array A list of add-ons.
-	 */
-	public static function get_addons() {
-		return self::$available_addons;
 	}
 }
