@@ -124,4 +124,4 @@ foreach ( (array) $terms as $term ) {
 	}
 	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
 	echo '</term>';
-} //end foreach
+}//end foreach
