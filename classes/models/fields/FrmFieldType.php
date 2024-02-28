@@ -1439,7 +1439,16 @@ DEFAULT_HTML;
 	 * @return array|string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
-		return $value;
+		/**
+		 * Allows updating display value for fields from classes not extending this class. Override this method in child classes otherwise.
+		 *
+		 * @since x.x
+		 *
+		 * @param array|string $value
+		 * @param object $field
+		 * @param array $atts
+		 */
+		return apply_filters( 'frm_prepare_display_value', $value, $this->field, $atts );
 	}
 
 	/** Importing **/
