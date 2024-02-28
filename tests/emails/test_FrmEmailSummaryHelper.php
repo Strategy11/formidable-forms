@@ -143,13 +143,17 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 	 * @covers FrmEmailSummaryHelper::maybe_remove_recipients_from_api
 	 */
 	public function test_maybe_remove_recipients_from_api() {
+		// Clear the cache so our fake response gets used.
+		$api = new FrmFormApi();
+		delete_option( $api->get_cache_key() );
+
 		add_filter(
 			'pre_http_request',
 			function( $pre, $parsed_args, $url ) {
 				if ( strpos( $url, 'formidableforms.com' ) === false ) {
 					return $pre;
 				}
-		
+
 				return array(
 					'response' => array( 'code' => 200, 'message' => 'Fake response' ),
 					'body'     => json_encode( array( 'no_emails' => 'test@example.com' ) ),
