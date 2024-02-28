@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $frm_settings      = FrmAppHelper::get_settings();
 $globally_disabled = 'none' === $frm_settings->load_style;
-$enabled           = 0 !== (int) $form->options['custom_style'] && ! $globally_disabled;
+$enabled           = ( ! is_array( $form->options ) || 0 !== (int) $form->options['custom_style'] ) && ! $globally_disabled;
 $card_helper       = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
 $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
