@@ -1739,18 +1739,20 @@ function frmAdminBuildJS() {
 		}
 
 		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
+		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && !! draggable.querySelector( '.edit_field_type_submit' );
 
 		if ( 'frm-show-fields' === droppable.id ) {
 			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
-			if ( isSubmitBtn ) {
+
+			if ( isSubmitBtn || containSubmitBtn ) {
 				// Do not allow dropping submit button to above position.
 				const lastRowIndex = droppable.childElementCount - 1;
 				return draggableIndex > lastRowIndex;
-			} else {
-				// Do not allow dropping other fields to below submit button.
-				const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
-				return draggableIndex <= submitButtonIndex;
 			}
+
+			// Do not allow dropping other fields to below submit button.
+			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
+			return draggableIndex <= submitButtonIndex;
 		}
 
 		if ( isSubmitBtn ) {
