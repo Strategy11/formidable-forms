@@ -6949,10 +6949,10 @@ function frmAdminBuildJS() {
 		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
 			return;
 		}
-		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
+		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
+			const textarea = document.querySelector( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
 			const wrapperSpan = span({ className: 'frm-with-right-icon' });
 			textarea.parentNode.insertBefore( wrapperSpan, textarea );
 			wrapperSpan.appendChild( createModalTriggerIcon() );
@@ -6967,7 +6967,8 @@ function frmAdminBuildJS() {
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
-		const fieldsWithShortcodesBox = [ 'html' ];
+		const fieldsWithShortcodesBox = wp.hooks.applyFilters( 'frm_fields_with_shortcode_popup', [ 'html' ]);
+
 		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
