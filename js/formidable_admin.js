@@ -1719,11 +1719,13 @@ function frmAdminBuildJS() {
 	 * Don't allow field groups with sections inside of sections.
 	 * Don't allow field groups in field groups.
 	 * Don't allow hidden fields inside of field groups but allow them in sections.
+	 * Don't allow any fields below the submit button field.
+	 * Don't allow submit button field above any fields.
 	 *
 	 * @param {HTMLElement} draggable
 	 * @param {HTMLElement} droppable
 	 * @param {Event} event
-	 * @returns 
+	 * @returns {Boolean}
 	 */
 	function allowDrop( draggable, droppable, event ) {
 		if ( false === droppable ) {
@@ -1736,15 +1738,17 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		if ( 'frm-show-fields' === droppable.id ) {
-			const draggableIndex    = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
-			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
-			if ( draggableIndex > submitButtonIndex ) {
-				return false;
-			}
+		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
 
-			// Everything can be dropped into the main list of fields.
-			return true;
+		if ( 'frm-show-fields' === droppable.id ) {
+			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
+			if ( isSubmitBtn ) {
+				const lastRowIndex = droppable.childElementCount - 1;
+				return draggableIndex > lastRowIndex;
+			} else {
+				const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
+				return draggableIndex <= submitButtonIndex;
+			}
 		}
 
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
