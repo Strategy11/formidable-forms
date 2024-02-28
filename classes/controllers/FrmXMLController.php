@@ -560,7 +560,7 @@ class FrmXMLController {
 	 * @return array
 	 */
 	public static function get_parent_terms_slugs( $terms ) {
-		$parent_term_ids = array_filter( wp_list_pluck( $terms, 'parent' ) );
+		$parent_term_ids = array_filter( array_unique( wp_list_pluck( $terms, 'parent' ) ) );
 		$parent_slugs    = array();
 
 		if ( ! $parent_term_ids ) {
