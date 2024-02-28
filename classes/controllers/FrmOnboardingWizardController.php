@@ -208,7 +208,7 @@ class FrmOnboardingWizardController {
 		FrmAppHelper::include_svg();
 
 		$view_path        = self::get_view_path();
-		$available_addons = self::get_addons();
+		$available_addons = self::get_available_addons();
 		$upgrade_link     = self::get_upgrade_link();
 		$user             = wp_get_current_user();
 		$addons_count     = count( FrmAddonsController::get_api_addons() );
@@ -423,7 +423,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @return array A list of add-ons.
 	 */
-	public static function get_addons() {
+	public static function get_available_addons() {
 		return self::$available_addons;
 	}
 
