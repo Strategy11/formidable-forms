@@ -71,7 +71,7 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
 			FrmSubmitButtonController::FIELD_TYPE => array(
-				'name' => __( 'Submit Button', 'formidable' ),
+				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
 			),
 		);

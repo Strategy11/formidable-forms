@@ -31,6 +31,14 @@ DEFAULT_HTML;
 		return $default_html;
 	}
 
+	protected function get_new_field_name() {
+		$form = FrmForm::getOne( $this->field->form_id );
+		if ( $form && isset( $form->options['submit_value'] ) ) {
+			return $form->options['submit_value'];
+		}
+		return parent::get_new_field_name();
+	}
+
 	protected function field_settings_for_type() {
 		$settings = array(
 			'required'       => false,
@@ -55,18 +63,11 @@ DEFAULT_HTML;
 	}
 
 	protected function extra_field_opts() {
-		return array_merge(
-			parent::extra_field_opts(),
-			array(
-				'exclude_fields' => '',
-				'include_extras' => array(),
-				'label'          => 'none',
-			)
-		);
+		return array();
 	}
 
 	protected function include_form_builder_file() {
-		 return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-submit.php';
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-submit.php';
 	}
 
 	protected function get_excluded_ids() {
@@ -81,6 +82,10 @@ DEFAULT_HTML;
 		} else {
 			return array();
 		}
+	}
+
+	public function show_label_on_form_builder() {
+		// Do nothing.
 	}
 
 	public function include_front_form_file() {
