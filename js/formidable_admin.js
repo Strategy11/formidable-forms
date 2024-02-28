@@ -6949,10 +6949,10 @@ function frmAdminBuildJS() {
 		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
 			return;
 		}
-		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
+		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
+			const textarea = document.querySelector( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
 			const wrapperSpan = span({ className: 'frm-with-right-icon' });
 			textarea.parentNode.insertBefore( wrapperSpan, textarea );
 			wrapperSpan.appendChild( createModalTriggerIcon() );
@@ -6967,7 +6967,8 @@ function frmAdminBuildJS() {
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
-		const fieldsWithShortcodesBox = [ 'html' ];
+		const fieldsWithShortcodesBox = wp.hooks.applyFilters( 'frm_fields_with_shortcode_popup', [ 'html' ]);
+
 		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
@@ -7125,27 +7126,35 @@ function frmAdminBuildJS() {
 
 	function addFormLogicRow() {
 		/*jshint validthis:true */
-		var id = jQuery( this ).data( 'emailkey' ),
-			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
-			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
+		const id                 = jQuery( this ).data( 'emailkey' );
+		const type               = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
+		const formId             = document.getElementById( 'form_id' ).value;
+		const logicRowsContainer = document.getElementById( 'frm_logic_row_' + id );
+		const logicRows          = logicRowsContainer.querySelectorAll( '.frm_logic_row' );
+		const newRowID           = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
+		const placeholder        = div({
+			id: 'frm_logic_' + id + '_' + newRowID,
+			className: 'frm_logic_row frm_hidden'
+		});
+
+		logicRowsContainer.appendChild( placeholder );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
 				email_id: id,
 				form_id: formId,
-				meta_name: getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
+				meta_name: newRowID,
 				type: type,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				html = wp.hooks.applyFilters( 'frm_action_logic_row_html', html, id );
+				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', () => {
+					placeholder.insertAdjacentHTML( 'beforebegin', html );
+					placeholder.remove();
 
-				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
-					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					$logicRow.append( html );
-					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
+					// Show conditional logic options after "Add Conditional Logic" is clicked.
+					jQuery( logicRowsContainer ).parent( '.frm_logic_rows' ).fadeIn( 'slow' );
 				});
 			}
 		});
