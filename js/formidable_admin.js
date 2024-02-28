@@ -2012,7 +2012,14 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
-				$newFields.append( replaceWith );
+
+				const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
+				if ( ! submitField ) {
+					$newFields.append( replaceWith );
+				} else {
+					jQuery( submitField.closest( '.frm_field_box:not(.form_field)' ) ).before( replaceWith );
+				}
+
 				afterAddField( msg, true );
 
 				replaceWith.each(
