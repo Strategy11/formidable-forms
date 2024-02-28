@@ -1743,12 +1743,19 @@ function frmAdminBuildJS() {
 		if ( 'frm-show-fields' === droppable.id ) {
 			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
 			if ( isSubmitBtn ) {
+				// Do not allow dropping submit button to above position.
 				const lastRowIndex = droppable.childElementCount - 1;
 				return draggableIndex > lastRowIndex;
 			} else {
+				// Do not allow dropping other fields to below submit button.
 				const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
 				return draggableIndex <= submitButtonIndex;
 			}
+		}
+
+		if ( isSubmitBtn ) {
+			// Only allow dropping submit button into the last row.
+			return droppable.parentElement.matches( '#frm-show-fields > li:last-child' );
 		}
 
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
