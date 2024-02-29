@@ -155,7 +155,10 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 				}
 
 				return array(
-					'response' => array( 'code' => 200, 'message' => 'Fake response' ),
+					'response' => array(
+						'code'    => 200,
+						'message' => 'Fake response',
+					),
 					'body'     => json_encode( array( 'no_emails' => 'test@example.com' ) ),
 				);
 			},
