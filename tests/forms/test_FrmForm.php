@@ -217,7 +217,8 @@ class test_FrmForm extends FrmUnitTest {
 		// Test to make sure a form with no options column value still has an array $form->options value.
 		$form_id = $this->create_a_form_with_an_empty_options_column();
 		$form    = FrmForm::getOne( $form_id );
-		$this->assertEquals( array(), $form->options );
+		$this->assertIsArray( $form->options );
+		$this->assertArrayHasKey( 'custom_style', $form->options );
 
 		// Test a regular form. $form->options should be an array and it should not be empty.
 		$form = FrmForm::getOne( 'contact-with-email' );
