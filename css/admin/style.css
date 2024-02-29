@@ -163,7 +163,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	font-weight: 400;
 
 	/*
-	When a background image is set the children in the fieldset have a z-index of 1.\
+	When a background image is set the children in the fieldset have a z-index of 1.
 	The Ranking Field contains elements with a higher z-index of 2.
 	Set to 3 so the floating buttons get priority when clicking if they overlap a form element.
 	*/
