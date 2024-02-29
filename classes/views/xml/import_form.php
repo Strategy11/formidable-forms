@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>)
 				</label>
 				<br/>
-				<input type="file" name="frm_import_file" size="25" />
+				<input type="file" name="frm_import_file" size="25" accept="<?php echo esc_attr( implode( ', ', FrmXMLHelper::get_supported_upload_file_types() ) ); ?>" />
 			</p>
 
 			<?php do_action( 'frm_csv_opts', $forms ); ?>
