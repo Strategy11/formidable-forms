@@ -1642,6 +1642,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			jQuery( document ).trigger( 'frmOnFormSubmit', [ object, e ]);
+
 			if ( invisibleRecaptcha.length ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );

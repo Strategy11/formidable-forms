@@ -248,7 +248,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	appearance: none; /* Hide the default icon */
 }
 
-#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year) {
+#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year):not(.frm-ranking-position) {
 	/*
 	The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
 	Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.

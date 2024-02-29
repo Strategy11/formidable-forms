@@ -272,11 +272,6 @@ legend.frm_hidden{
 	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
 	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
-	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
-	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
-	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
 	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
 	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;

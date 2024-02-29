@@ -1193,7 +1193,7 @@ class FrmStylesController {
 	}
 
 	public static function do_accordion_sections( $screen, $context, $object ) {
-		return do_accordion_sections( $screen, $context, $object );
+		return FrmStylesHelper::do_accordion_sections( $screen, $context, $object );
 	}
 
 	/**
