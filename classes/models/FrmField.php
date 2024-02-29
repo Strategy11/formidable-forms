@@ -300,6 +300,8 @@ class FrmField {
 	}
 
 	/**
+	 * Consider a field new for 90 days after the release date.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $type
@@ -307,7 +309,9 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		if ( 'ranking' === $type ) {
-			return true;
+			$ranking_release_date       = '2024-03-12';
+			$three_months_after_release = gmdate( 'Y-m-d', strtotime( $ranking_release_date . ' + 90 days' ) );
+			return gmdate( 'Y-m-d' ) < $three_months_after_release;
 		}
 		return false;
 	}
