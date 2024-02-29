@@ -6737,7 +6737,6 @@ function frmAdminBuildJS() {
 		let showIt  = 'block';
 		let showMsg = 'block';
 		let hideIt  = 'none';
-		const dynamicMessage = link.getAttribute( 'data-dynamic-message' );
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
@@ -6777,7 +6776,7 @@ function frmAdminBuildJS() {
 
 		addonStatus.style.display = 'none';
 
-		oneclickMessage.style.display = ! dynamicMessage ? hideIt : 'none';
+		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
