@@ -477,17 +477,32 @@ class FrmXMLHelper {
 		}
 	}
 
-	private static function update_field_options_with_defaults( $field ) {
-		$defaults               = self::default_field_options( $field['type'] );
-		$field['field_options'] = array_merge( $defaults, $field['field_options'] );
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_array
+	 * @return array
+	 */
+	private static function update_field_options_with_defaults( $field_array ) {
+		$defaults               = self::default_field_options( $field_array['type'] );
+		$field_array['field_options'] = array_merge( $defaults, $field_array['field_options'] );
 
-		return $field;
+		return $field_array;
 	}
 
-	private static function do_after_field_imported_action( $field, $old_field_id, $form_fields ) {
-		$field = self::update_field_options_with_defaults( $field );
-		$field['id'] = $old_field_id;
-		do_action( 'frm_after_field_is_imported', $field, $form_fields[ $field['field_key'] ]);
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_array
+	 * @param int   $old_field_id
+	 * @param array $form_fields
+	 *
+	 * @return void
+	 */
+	private static function do_after_field_imported_action( $field_array, $old_field_id, $form_fields ) {
+		$field_array       = self::update_field_options_with_defaults( $field_array );
+		$field_array['id'] = $old_field_id;
+		do_action( 'frm_after_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ] );
 	}
 
 	private static function fill_field( $field, $form_id ) {
