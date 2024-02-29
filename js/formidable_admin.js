@@ -6952,11 +6952,13 @@ function frmAdminBuildJS() {
 		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textarea = document.querySelector( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
-			const wrapperSpan = span({ className: 'frm-with-right-icon' });
-			textarea.parentNode.insertBefore( wrapperSpan, textarea );
-			wrapperSpan.appendChild( createModalTriggerIcon() );
-			wrapperSpan.appendChild( textarea );
+			const textareas = document.querySelectorAll( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
+			textareas.forEach( textarea => {
+				const wrapperSpan = span({ className: 'frm-with-right-icon' });
+				textarea.parentNode.insertBefore( wrapperSpan, textarea );
+				wrapperSpan.appendChild( createModalTriggerIcon() );
+				wrapperSpan.appendChild( textarea );
+			})
 		};
 
 		const createModalTriggerIcon = () => {
