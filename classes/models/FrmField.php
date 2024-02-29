@@ -110,6 +110,7 @@ class FrmField {
 				'dynamic-message' => '<span class="frm-pb-sm frm-block">The Surveys add-on is not installed. Do you want to install the add-on now?</span>
 					<img src="' . esc_attr( $images_url ) . 'ranking-field.svg" alt="Ranking Field" />',
 				'addon'           => 'surveys',
+				'is_new'          => true,
 			),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),

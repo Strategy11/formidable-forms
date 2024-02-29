@@ -1889,10 +1889,15 @@ class FrmFieldsHelper {
 	public static function show_add_field_buttons( $args ) {
 		$field_key    = $args['field_key'];
 		$field_type   = $args['field_type'];
-		$field_badge  = isset( $field_type['badge'] ) ? '<span class="frm-meta-tag frm-text-xs frm-lt-green-tag">' . $field_type['badge'] . '</span>' : '';
 		$field_label  = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
 		$field_name   = FrmFormsHelper::get_field_link_name( $field_type );
-		$field_label .= ' <span>' . $field_name . '</span>' . $field_badge;
+		$field_label .= ' <span>' . $field_name . '</span>';
+
+		if ( ! empty( $field_type['is_new'] ) ) {
+			ob_start();
+			FrmAppHelper::show_pill_text();
+			$field_label .= ob_get_clean();
+		}
 
 		// If the individual field isn't allowed, disable it.
 		$run_filter             = true;
