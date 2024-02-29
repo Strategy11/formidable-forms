@@ -985,7 +985,7 @@ p.frm_has_shortcodes {
 }
 
 .frm_form_settings span.frm-with-right-icon,
-#frm_builder_page .wp-editor-container span.frm-with-right-icon:not(.frm_hidden) {
+#frm_builder_page .frm_has_shortcodes span.frm-with-right-icon:not(.frm_hidden) {
 	display: block;
 }
 
