@@ -395,8 +395,13 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Limited form object.
+	 * @return void
 	 */
 	private static function save_migrated_success_actions( $form ) {
+		// Options may be an empty string.
+		if ( ! is_array( $form->options ) ) {
+			$form->options = array();
+		}
 		$form->options['on_submit_migrated'] = 1;
 		FrmForm::update( $form->id, array( 'options' => $form->options ) );
 	}
