@@ -14,6 +14,7 @@ function getDOMElements() {
 		onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
 		pageBackground: document.getElementById( `${PREFIX}-bg` ),
 		container: document.getElementById( `${PREFIX}-container` ),
+		steps: document.querySelectorAll( `.${PREFIX}-step` ),
 		skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
 		hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' )
 	};

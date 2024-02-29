@@ -403,7 +403,7 @@ class FrmSettings {
 	 * @param string $sanitize The name of the sanitization function to apply to the new value.
 	 * @return bool True on success, false on failure.
 	 */
-	public function update_single_setting( $key, $value, $sanitize ) {
+	public function update_setting( $key, $value, $sanitize ) {
 		if ( ! property_exists( $this, $key ) || ! is_callable( $sanitize ) ) {
 			// Setting does not exist or sanitization function name is not callable.
 			return false;

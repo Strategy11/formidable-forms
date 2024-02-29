@@ -7,7 +7,7 @@ import { nonce } from '../shared';
 import { addToRequestQueue, onClickPreventDefault } from '../utils';
 
 /**
- * Manages event handling for the "Install & Finish Setup" button.
+ * Manages event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.
  *
  * @return {void}
  */
@@ -19,7 +19,7 @@ function addInstallAddonsButtonEvents() {
 }
 
 /**
- * Handles the click event on the "Install & Finish Setup" button.
+ * Handles the click event on the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.
  *
  * @private
  * @param {Event} event The click event object.

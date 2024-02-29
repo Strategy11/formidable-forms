@@ -4,7 +4,7 @@
 import addSkipStepButtonEvents from './skipStepButtonListener';
 import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
-import addCheckProInstallationButtonEvents from './checkProInstallationListener';
+import addCheckProInstallationButtonEvents from './checkProInstallationButtonListener';
 import addSaveLicenseButtonEvents from './saveLicenseButtonListener';
 import { getElements } from '../elements';
 import { CURRENT_CLASS, PREFIX } from '../shared';

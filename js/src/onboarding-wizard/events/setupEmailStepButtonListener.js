@@ -19,7 +19,7 @@ function addSetupEmailStepButtonEvents() {
 }
 
 /**
- * Handles the click event on the "Next Step" button during email setup.
+ * Handles the click event on the "Next Step" button in the "Default Email Address" step.
  *
  * @private
  * @param {Event} event The click event object.

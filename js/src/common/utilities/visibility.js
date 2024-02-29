@@ -42,5 +42,5 @@ export const hide = element => element?.classList.add( HIDDEN_CLASS );
  */
 export const isVisible = element => {
 	const styles = window.getComputedStyle( element );
-    return styles.getPropertyValue( 'display' ) !== 'none';
+	return styles.getPropertyValue( 'display' ) !== 'none';
 };

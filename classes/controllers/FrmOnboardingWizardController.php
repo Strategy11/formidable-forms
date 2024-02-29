@@ -116,8 +116,7 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Performs a safe (local) redirect to the welcome screen
-	 * when the plugin is activated
+	 * Performs a safe redirect to the welcome screen when the plugin is activated.
 	 *
 	 * @return void
 	 */
@@ -214,7 +213,7 @@ class FrmOnboardingWizardController {
 		$addons_count     = count( FrmAddonsController::get_api_addons() );
 		$license_key      = base64_decode( rawurldecode( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) ) );
 
-		// Note: Add step parts in onrder.
+		// Note: Add step parts in order.
 		$step_parts = array(
 			'welcome'                => 'steps/welcome-step.php',
 			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
@@ -247,9 +246,9 @@ class FrmOnboardingWizardController {
 
 		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
-		$frm_settings->update_single_setting( 'default_email', $default_email, 'sanitize_text_field' );
-		$frm_settings->update_single_setting( 'tracking', $is_tracking_allowed, 'rest_sanitize_boolean' );
-		// Remove the action to avoid the PHP error during AJAX call.
+		$frm_settings->update_setting( 'default_email', $default_email, 'sanitize_text_field' );
+		$frm_settings->update_setting( 'tracking', $is_tracking_allowed, 'rest_sanitize_boolean' );
+		// Remove the 'FrmProSettingsController::store' action to avoid PHP errors during AJAX call.
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
@@ -349,7 +348,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Adds custom classes to the existing string of admin body classes.
 	 *
-	 * This function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
+	 * The function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
 	 *
 	 * @since x.x
 	 *

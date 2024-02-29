@@ -18,7 +18,7 @@ function addSaveLicenseButtonEvents() {
 }
 
 /**
- * Handles the click event on the "Active & continue" button in the "License Management" setup.
+ * Handles the click event on the "Active & continue" button in the "License Management" step.
  *
  * @private
  * @param {Event} event The click event object.

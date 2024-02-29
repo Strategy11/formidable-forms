@@ -114,8 +114,8 @@ function clearOnboardingQueryParams() {
  * @return {void}
  */
 function enhanceStepsWithProgress() {
-	const steps = Array.from( document.querySelectorAll( `.${PREFIX}-step` ) ).filter( step => step.id !== WELCOME_STEP_ID );
-	addProgressToCardBoxes( steps );
+	const { steps } = getElements();
+	addProgressToCardBoxes([ ...steps ].filter( step => step.id !== WELCOME_STEP_ID ) );
 }
 
 /**
@@ -132,7 +132,7 @@ function fadeInPageElements() {
 
 /**
  * Loads the email form from the server for the "Default Email Address" step in the Onboarding Wizard.
- * This typically involves making a server request to fetch the form and injecting it into the appropriate part of the DOM.
+ * This involves making a server request to fetch the form and then injecting it into the appropriate part of the DOM.
  *
  * @private
  * @return {void}
