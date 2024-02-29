@@ -104,14 +104,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_upload_icon',
 				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
 			),
-			'ranking'  => array(
-				'name'            => __( 'Ranking', 'formidable' ),
-				'icon'            => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'dynamic-message' => '<span class="frm-pb-sm frm-block">The Surveys add-on is not installed. Do you want to install the add-on now?</span>
-					<img src="' . esc_attr( $images_url ) . 'ranking-field.svg" alt="Ranking Field" />',
-				'addon'           => 'surveys',
-				'is_new'          => true,
-			),
+			'ranking'  => array(),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
@@ -242,6 +235,19 @@ class FrmField {
 			),
 		);
 
+		if ( self::include_ranking_fields() ) {
+			$fields['ranking'] = array(
+				'name'            => __( 'Ranking', 'formidable' ),
+				'icon'            => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'dynamic-message' => '<span class="frm-pb-sm frm-block">The Surveys add-on is not installed. Do you want to install the add-on now?</span>
+					<img src="' . esc_attr( $images_url ) . 'ranking-field.svg" alt="Ranking Field" />',
+				'addon'           => 'surveys',
+				'is_new'          => self::field_is_new( 'ranking' ),
+			);
+		} else {
+			unset( $fields['ranking'] );
+		}
+
 		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
 			unset( $fields['ai'] );
 		}
@@ -253,6 +259,57 @@ class FrmField {
 		}
 
 		return apply_filters( 'frm_pro_available_fields', $fields );
+	}
+
+	/**
+	 * Check if we should show ranking fields in the builder.
+	 * This is based on the active version coming from our API data.
+	 * If Surveys v1.1 is not released yet, we don't want to display ranking fields yet.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function include_ranking_fields() {
+		if ( class_exists( 'FrmSurveys\models\fields\Ranking' ) ) {
+			// Always return true if Ranking fields exist.
+			return true;
+		}
+
+		$api     = new FrmFormApi();
+		$addons  = $api->get_api_info();
+		$surveys = wp_list_filter(
+			$addons,
+			array(
+				'plugin' => 'formidable-surveys/formidable-surveys.php',
+			)
+		);
+		if ( ! $surveys ) {
+			return false;
+		}
+
+		$surveys = reset( $surveys );
+		if ( empty ( $surveys['new_version'] ) ) {
+			return false;
+		}
+
+		$api_version      = $surveys['new_version'];
+		$expected_version = '1.1';
+
+		return version_compare( $api_version, $expected_version, '>=' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $type
+	 * @return bool
+	 */
+	private static function field_is_new( $type ) {
+		if ( 'ranking' === $type ) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
