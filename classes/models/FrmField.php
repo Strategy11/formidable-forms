@@ -279,25 +279,14 @@ class FrmField {
 		$plugin           = 'formidable-surveys/formidable-surveys.php';
 		$expected_version = '1.1';
 
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		$plugins = get_plugins();
-		if ( isset( $plugins[ $plugin ] ) && ! empty( $plugins[ $plugin ]['Version'] ) ) {
-			$installed_version = $plugins[ $plugin ]['Version'];
-			if ( version_compare( $installed_version, $expected_version, '>=' ) ) {
-				return true;
-			}
+		$installed_version = self::get_installed_version( $plugin );
+		if ( $installed_version && version_compare( $installed_version, $expected_version, '>=' ) ) {
+			return true;
 		}
 
 		$api     = new FrmFormApi();
 		$addons  = $api->get_api_info();
-		$surveys = wp_list_filter(
-			$addons,
-			array(
-				'plugin' => $plugin,
-			)
-		);
+		$surveys = wp_list_filter( $addons, array( 'plugin' => $plugin ) );
 		if ( ! $surveys ) {
 			return false;
 		}
@@ -310,6 +299,24 @@ class FrmField {
 		$api_version = $surveys['new_version'];
 
 		return version_compare( $api_version, $expected_version, '>=' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $plugin
+	 * @return string|false String version. False if the plugin is not installed.
+	 */
+	private static function get_installed_version( $plugin ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins = get_plugins();
+		if ( isset( $plugins[ $plugin ] ) && ! empty( $plugins[ $plugin ]['Version'] ) ) {
+			return $plugins[ $plugin ]['Version'];
+		}
+
+		return false;
 	}
 
 	/**
