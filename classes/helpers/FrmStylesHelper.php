@@ -769,9 +769,11 @@ class FrmStylesHelper {
 						?>
 						<li class="control-section accordion-section <?php echo esc_attr( $hidden_class ); ?> <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
 							<h3 class="accordion-section-title hndle" tabindex="0">
-								<?php FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id ); ?>
-								<?php echo esc_html( $box['title'] ); ?>
-								<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
+								<?php
+								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
+								echo esc_html( $box['title'] );
+								FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
+								?>
 							</h3>
 							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
 								<div class="inside">
