@@ -1907,7 +1907,7 @@ class FrmFieldsHelper {
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
-		$dynamic_message        = isset( $field_type['dynamic-message'] ) ? FrmAppHelper::kses( $field_type['dynamic-message'], array( 'a', 'img', 'span' ) ) : '';
+		$image                  = isset( $field_type['upsell_image'] ) ? $field_type['upsell_image'] : '';
 
 		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
@@ -1936,16 +1936,19 @@ class FrmFieldsHelper {
 		}
 
 		$li_params = array(
-			'class'                => 'frmbutton frm6 ' . $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ),
-			'id'                   => $field_key,
-			'data-upgrade'         => $upgrade_label,
-			'data-link'            => $link,
-			'data-medium'          => 'builder',
-			'data-oneclick'        => $install_data,
-			'data-content'         => $field_key,
-			'data-requires'        => $requires,
-			'data-dynamic-message' => $dynamic_message,
+			'class'         => 'frmbutton frm6 ' . $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ),
+			'id'            => $field_key,
+			'data-upgrade'  => $upgrade_label,
+			'data-link'     => $link,
+			'data-medium'   => 'builder',
+			'data-oneclick' => $install_data,
+			'data-content'  => $field_key,
+			'data-requires' => $requires,
 		);
+
+		if ( ! empty( $field_type['upsell_image'] ) ) {
+			$li_params['data-upsell-image'] = $field_type['upsell_image'];
+		}
 
 		if ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;

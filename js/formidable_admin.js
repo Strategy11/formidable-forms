@@ -6726,12 +6726,11 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const oneclickMessage          = container.querySelector( '.frm-oneclick' );
-		const upgradeMessage           = container.querySelector( '.frm-upgrade-message' );
-		const showLink                 = container.querySelector( '.frm-upgrade-link' );
-		const button                   = container.querySelector( '.frm-oneclick-button' );
-		const addonStatus              = container.querySelector( '.frm-addon-status' );
-		const dynamicMessageContainer  = container.querySelector( '.frm-dynamic-message' );
+		const oneclickMessage = container.querySelector( '.frm-oneclick' );
+		const upgradeMessage  = container.querySelector( '.frm-upgrade-message' );
+		const showLink        = container.querySelector( '.frm-upgrade-link' );
+		const button          = container.querySelector( '.frm-oneclick-button' );
+		const addonStatus     = container.querySelector( '.frm-addon-status' );
 
 		let oneclick   = link.getAttribute( 'data-oneclick' );
 		let newMessage = link.getAttribute( 'data-message' );
@@ -6762,12 +6761,16 @@ function frmAdminBuildJS() {
 			newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
 		}
 
-		if ( dynamicMessage ) {
-			dynamicMessageContainer.innerHTML     = dynamicMessage;
-			dynamicMessageContainer.style.display = 'block';
-		}
-
 		upgradeMessage.innerHTML = newMessage;
+
+		if ( link.dataset.upsellImage ) {
+			upgradeMessage.appendChild(
+				img({
+					src: link.dataset.upsellImage,
+					alt: link.dataset.upgrade
+				})
+			);
+		}
 
 		// Either set the link or use the default.
 		showLink.href = getShowLinkHrefValue( link, showLink );

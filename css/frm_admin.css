@@ -7739,7 +7739,8 @@ li.frm_noallow.button.frm_show_upgrade {
 #frm_upgrade_modal_image {
 	max-width: 200px;
 }
-#frm_upgrade_modal .frm-dynamic-message img {
+#frm_upgrade_modal .frm-upgrade-message img {
+	margin-top: 10px;
 	width: 100%;
 }
 .frm-tab-message {

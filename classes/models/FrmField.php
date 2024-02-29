@@ -237,12 +237,12 @@ class FrmField {
 
 		if ( self::include_ranking_fields() ) {
 			$fields['ranking'] = array(
-				'name'            => __( 'Ranking', 'formidable' ),
-				'icon'            => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'dynamic-message' => '<span class="frm-pb-sm frm-block">The Surveys add-on is not installed. Do you want to install the add-on now?</span>
-					<img src="' . esc_attr( $images_url ) . 'ranking-field.svg" alt="Ranking Field" />',
-				'addon'           => 'surveys',
-				'is_new'          => self::field_is_new( 'ranking' ),
+				'name'         => __( 'Ranking', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
+				'upsell_image' => $images_url . 'ranking-field.svg',
+				'addon'        => 'surveys',
+				'is_new'       => self::field_is_new( 'ranking' ),
 			);
 		} else {
 			unset( $fields['ranking'] );
@@ -276,12 +276,26 @@ class FrmField {
 			return true;
 		}
 
+		$plugin           = 'formidable-surveys/formidable-surveys.php';
+		$expected_version = '1.1';
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins = get_plugins();
+		if ( isset( $plugins[ $plugin ] ) && ! empty( $plugins[ $plugin ]['Version'] ) ) {
+			$installed_version = $plugins[ $plugin ]['Version'];
+			if ( version_compare( $installed_version, $expected_version, '>=' ) ) {
+				return true;
+			}
+		}
+
 		$api     = new FrmFormApi();
 		$addons  = $api->get_api_info();
 		$surveys = wp_list_filter(
 			$addons,
 			array(
-				'plugin' => 'formidable-surveys/formidable-surveys.php',
+				'plugin' => $plugin,
 			)
 		);
 		if ( ! $surveys ) {
@@ -293,8 +307,7 @@ class FrmField {
 			return false;
 		}
 
-		$api_version      = $surveys['new_version'];
-		$expected_version = '1.1';
+		$api_version = $surveys['new_version'];
 
 		return version_compare( $api_version, $expected_version, '>=' );
 	}
