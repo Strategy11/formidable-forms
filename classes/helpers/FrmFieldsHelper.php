@@ -1907,7 +1907,6 @@ class FrmFieldsHelper {
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
-		$image                  = isset( $field_type['upsell_image'] ) ? $field_type['upsell_image'] : '';
 
 		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
