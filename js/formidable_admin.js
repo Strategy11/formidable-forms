@@ -6958,7 +6958,7 @@ function frmAdminBuildJS() {
 				textarea.parentNode.insertBefore( wrapperSpan, textarea );
 				wrapperSpan.appendChild( createModalTriggerIcon() );
 				wrapperSpan.appendChild( textarea );
-			})
+			});
 		};
 
 		const createModalTriggerIcon = () => {
