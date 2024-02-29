@@ -984,7 +984,7 @@ p.frm_has_shortcodes {
 	margin: 0 -4px;
 }
 
-.frm_form_settings span.frm-with-right-icon, #frm_builder_page span.frm-with-right-icon {
+.frm_form_settings span.frm-with-right-icon, #frm_builder_page span.frm-with-right-icon:not(.frm_hidden) {
 	display: block;
 }
 
