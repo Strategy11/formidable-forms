@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	?>
-	<?php if ( 'ranking' !== $default_type ) : ?>
+	<?php if ( in_array( $default_type, array( 'radio', 'checkbox' ), true ) ) : ?>
 		<input type="<?php echo esc_attr( $default_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" <?php echo ( isset( $checked ) && $checked ? 'checked="checked"' : '' ); ?> value="<?php echo esc_attr( $field_val ); ?>"/>
 	<?php endif; ?>
 
