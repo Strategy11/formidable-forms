@@ -57,7 +57,20 @@ DEFAULT_HTML;
 	 */
 	public function show_extra_field_choices( $args ) {
 		$field = $args['field'];
-		// include( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/summary-options.php' );
+
+		// Fallback for deprecated hook.
+		if ( has_action( 'frm_add_form_button_options' ) ) {
+			_doing_it_wrong(
+				'frm_add_form_button_options',
+				__( 'This hook was deprecated. Button options are moved to the Submit field. You can add custom options by overridding field class.', 'formidable' ),
+				FrmAppHelper::$plug_version
+			);
+
+			$values = FrmFormsHelper::setup_edit_vars( array(), FrmForm::getOne( $field['form_id'] ) );
+			echo '<table>';
+			do_action( 'frm_add_form_button_options', $values );
+			echo '</table>';
+		}
 
 		parent::show_extra_field_choices( $args );
 	}
