@@ -5657,7 +5657,8 @@ function frmAdminBuildJS() {
 	}
 
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
-		var other, single,
+		var other,
+			single = '',
 			isOther = opt.key.indexOf( 'other' ) !== -1,
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
@@ -5674,9 +5675,9 @@ function frmAdminBuildJS() {
 			 * @param {string} classes The option clasnames.
 			 * @param {string} id      The input id attribute.
 			 */
-			single = wp.hooks.applyFilters( 'frm_admin.build_single_option_template', { opt, type, fieldId, classes, id });
+			single = wp.hooks.applyFilters( 'frm_admin.build_single_option_template', single, { opt, type, fieldId, classes, id });
 
-			if ( 'undefined' !== typeof single ) {
+			if ( '' !== single ) {
 				return single;
 			}
 
