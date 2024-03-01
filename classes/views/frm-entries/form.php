@@ -95,7 +95,7 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-if ( FrmForm::show_submit( $form ) ) {
+if ( FrmForm::show_submit( $form ) && ! FrmSubmitButtonController::has_submit_field_on_current_page( $values ) ) {
 	/**
 	 * @since 5.5.1
 	 */

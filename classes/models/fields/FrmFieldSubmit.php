@@ -47,6 +47,7 @@ DEFAULT_HTML;
 			'options'        => false,
 			'default'        => false,
 			'description'    => false,
+			'logic'          => true,
 		);
 
 		return $settings;
@@ -97,7 +98,14 @@ DEFAULT_HTML;
 		// Do nothing.
 	}
 
-	public function include_front_form_file() {
-		return $this->include_form_builder_file();
+	public function front_field_input( $args, $shortcode_atts ) {
+		$form  = FrmForm::getOne( $this->field['form_id'] );
+		$submit = $this->field['name'];
+		$form_action = 'create'; // TODO.
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms' );
+
+		ob_start();
+		FrmFormsHelper::get_custom_submit( $values['submit_html'], $form, $submit, $form_action, $values );
+		return ob_get_clean();
 	}
 }

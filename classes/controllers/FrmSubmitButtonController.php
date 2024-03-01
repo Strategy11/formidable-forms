@@ -18,4 +18,24 @@ class FrmSubmitButtonController {
 
 		return reset( $fields );
 	}
+
+	/**
+	 * Checks if there is submit button field on the current page.
+	 *
+	 * @param array $values Prepared form values.
+	 * @return bool
+	 */
+	public static function has_submit_field_on_current_page( $values ) {
+		if ( empty( $values['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $values['fields'] as $field ) {
+			if ( self::FIELD_TYPE === $field['type'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

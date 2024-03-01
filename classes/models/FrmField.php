@@ -931,7 +931,7 @@ class FrmField {
 	}
 
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary' );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', 'submit' );
 	}
 
 	/**
