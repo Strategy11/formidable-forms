@@ -7,12 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="howto">
 	<?php
 	$captcha_name = $captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCaptcha';
-	if ( $captcha === 'recaptcha' ) {
+	if ( 'recaptcha' === $captcha ) {
 		$captcha_name = 'reCAPTCHA';
 		$captcha_api  = 'https://www.google.com/recaptcha/';
-	} else {
+	} elseif ( 'hcaptcha' === $captcha ) {
 		$captcha_name = 'hCaptcha';
 		$captcha_api  = 'https://www.hcaptcha.com/signup-interstitial';
+	} else {
+		$captcha_name = 'Turnstile';
+		$captcha_api  = '';
 	}
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
