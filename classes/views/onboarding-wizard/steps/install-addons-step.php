@@ -24,7 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-mt-md">
 			<?php foreach ( $available_addons as $key => $addon ) { ?>
 				<label <?php FrmOnboardingWizardHelper::add_addon_label_attributes( $key, $addon ); ?>>
-					<span><?php echo esc_html( $addon['title'] ); ?></span>
+					<span class="frm-flex-center frm-gap-xs">
+						<?php echo esc_html( $addon['title'] ); ?>
+						<?php if ( ! empty( $addon['help-text'] ) ) { ?>
+							<span class="frm_help" data-original-title="<?php echo esc_attr( $addon['help-text'] ); ?>">
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_info_icon' ); ?>
+							</span>
+						<?php } ?>
+					</span>
 					<input <?php FrmOnboardingWizardHelper::add_addon_input_attributes( $key, $addon ); ?>/>
 				</label>
 			<?php } ?>

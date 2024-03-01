@@ -57,6 +57,19 @@ html.wp-toolbar {
 	display: none;
 }
 
+/* NOTE: The changes below were implemented to align with the distinct tooltip style observed in the "Install Formidable Add-ons" step */
+/* TODO: Assess the necessity of these customizations. Please seek approval from Steph for these modifications */
+.tooltip-inner {
+	max-width: 295px;
+	background-color: #545F6E;
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: var(--small-radius);
+}
+
+.bs-tooltip-top .arrow::before {
+	border-top-color: #545F6E;
+}
+
 /**
  * Welcome Step Styles
  *

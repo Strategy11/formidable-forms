@@ -9678,7 +9678,7 @@ Responsive Design
 	border: 1px solid var(--grey-200);
 	border-radius: var(--small-radius);
 	margin-bottom: var(--gap-xs);
-	transition: background-color 150ms ease-out;
+	transition: background-color 100ms ease-out;
 	cursor: pointer;
 }
 
@@ -9702,6 +9702,11 @@ Responsive Design
 
 .frm-option-box.frm-disabled input[type="checkbox"]::before {
 	filter: brightness(0) saturate(0%) invert(72%);
+}
+
+.frm-option-box .frm_help .frmsvg {
+	width: 12px;
+	height: 12px;
 }
 /* End Option Box */
 
