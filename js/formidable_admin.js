@@ -5581,10 +5581,10 @@ function frmAdminBuildJS() {
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
 				hasImageOptions = imagesAsOptions( fieldId ),
 				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
-				type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) ),
 				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
 				isProduct = isProductField( fieldId );
 
+			type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) );
 			for ( i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
@@ -5662,18 +5662,22 @@ function frmAdminBuildJS() {
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
 
-		if ( 'ranking' === type ) {
-			inputType = 'hidden';
-		}
-
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		this.getSingle = function() {
-			if ( 'ranking' === type ) {
-				return '<div class="frm_' + type + ' ' + type + ' ' + classes + ' frm-ranking-field-option frm-flex-box frm-justify-between frm-items-center" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><span><select class="frm-ranking-position"><option value="0">&mdash;</option></select><input type="' + inputType +
-				'" name="item_meta[' + fieldId + '][]' +
-				'" value="' + purifyHtml( opt.saved ) + '" data-field-type="' + type + '" id="' + id + '"' + '> ' + purifyHtml( opt.label ) +
-				'</span><svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg></div>';
+
+			/**
+			 * Get single option template.
+			 * @param {Object} option  Object containing the option data.
+			 * @param {string} type    The field type.
+			 * @param {string} fieldId The field id.
+			 * @param {string} classes The option clasnames.
+			 * @param {string} id      The input id attribute.
+			 */
+			single = wp.hooks.applyFilters( 'frm_admin.build_single_option_template', { opt, type, fieldId, classes, id });
+
+			if ( 'undefined' !== typeof single ) {
+				return single;
 			}
 
 			return '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +

@@ -419,9 +419,9 @@ class FrmFieldsHelper {
 		}
 
 		$base_name = 'default_value_' . $field['id'];
-		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
-		$default_type = self::get_default_value_type( $field );
+		$default_type          = self::get_default_value_type( $field );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );

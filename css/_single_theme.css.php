@@ -234,14 +234,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
 }
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option:hover,
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option.ui-sortable-helper {
-	border-color:<?php echo esc_html( $ranking_border_color_active . $important ); ?>;
-}
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option:hover:after,
-.<?php echo esc_html( $style_class ); ?> .frm-ranking-field-option.frm-ranking-draggable-option.ui-sortable-helper:after {
-	background-color:<?php echo esc_html( $ranking_bg_color_active . $important ); ?>;
-}
 
 <?php if ( ! $submit_style ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
