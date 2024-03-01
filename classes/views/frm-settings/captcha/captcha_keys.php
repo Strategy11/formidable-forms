@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$captcha_api  = 'https://www.hcaptcha.com/signup-interstitial';
 	} else {
 		$captcha_name = 'Turnstile';
-		$captcha_api  = '';
+		$captcha_api  = 'https://www.cloudflare.com/products/turnstile/';
 	}
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
