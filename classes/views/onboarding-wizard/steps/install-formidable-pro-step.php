@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-footer">
-		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
+		<a href="#" id="frm-onboarding-skip-pro-installation-button" class="button button-secondary frm-button-secondary" role="button">
 			<?php esc_html_e( 'Skip', 'formidable' ); ?>
 		</a>
 		<a href="#" id="frm-onboarding-check-pro-installation-button" class="button button-primary frm-button-primary" role="button">

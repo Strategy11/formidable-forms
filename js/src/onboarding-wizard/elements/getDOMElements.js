@@ -28,6 +28,7 @@ function getDOMElements() {
 	const installFormidableProStep = {
 		installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` ),
 		checkProInstallationButton: document.getElementById( `${PREFIX}-check-pro-installation-button` ),
+		skipProInstallationButton: document.getElementById( `${PREFIX}-skip-pro-installation-button` ),
 		checkProInstallationError: document.getElementById( `${PREFIX}-check-pro-installation-error` )
 	};
 

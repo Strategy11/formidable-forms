@@ -46,6 +46,8 @@ const onSetupEmailStepButtonClick = async() => {
 		}
 
 		frmAdminBuild.addMyEmailAddress();
+		// Avoid replacing `#frm_leave_email_wrapper` content with a success message after email setup to prevent errors during modifications.
+		wp.hooks.addFilter( 'frm_thank_you_on_signup', 'frmOnboardingWizard', () => false );
 	}
 
 	// Prepare FormData for the POST request

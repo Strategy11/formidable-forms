@@ -5,6 +5,7 @@ import addSkipStepButtonEvents from './skipStepButtonListener';
 import addSetupEmailStepButtonEvents from './setupEmailStepButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
 import addCheckProInstallationButtonEvents from './checkProInstallationButtonListener';
+import addSkipProInstallationButtonEvents from './skipProInstallationButtonListener';
 import addSaveLicenseButtonEvents from './saveLicenseButtonListener';
 import { getElements } from '../elements';
 import { CURRENT_CLASS, PREFIX } from '../shared';
@@ -31,8 +32,9 @@ export function addEventListeners() {
 	// Add event handling for an option-box
 	addOptionBoxEvents();
 
-	// Add event handling for the "Continue" button in the "Install Formidable Pro" step
+	// Add event handling for the "Continue" and "Skip" buttons in the "Install Formidable Pro" step
 	addCheckProInstallationButtonEvents();
+	addSkipProInstallationButtonEvents();
 }
 
 /**
