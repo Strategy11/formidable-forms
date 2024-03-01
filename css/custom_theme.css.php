@@ -264,24 +264,6 @@ legend.frm_hidden{
 	font-weight:var(--field-weight);
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
-.with_frm_style .frm-ranking-field-container .frm-ranking-field-option {
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
-	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
-	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
-	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
-	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
-	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;
-	font-weight:var(--field-weight);
-	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
-}
-.with_frm_style .frm-ranking-field-container .frm-ranking-field-option:before {
-	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
-	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-}
 
 <?php if ( ! empty( $important ) ) { ?>
 .with_frm_style input[type=text],
