@@ -276,10 +276,23 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.0.01
+	 *
+	 * @return bool
 	 */
 	public static function is_license_expired() {
 		$version_info = self::get_primary_license_info();
 		if ( ! isset( $version_info['error'] ) ) {
+			return false;
+		}
+
+		$expires = isset( $version_info['error']['expires'] ) ? $version_info['error']['expires'] : 0;
+		if ( empty( $expires ) || $expires > time() ) {
+			return false;
+		}
+
+		$rate_limited = ! empty( $version_info['response_code'] ) && 429 === (int) $version_info['response_code'];
+		if ( $rate_limited ) {
+			// Do not return false positives for rate limited responses.
 			return false;
 		}
 
