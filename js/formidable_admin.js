@@ -6730,19 +6730,17 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const oneclickMessage          = container.querySelector( '.frm-oneclick' );
-		const upgradeMessage           = container.querySelector( '.frm-upgrade-message' );
-		const showLink                 = container.querySelector( '.frm-upgrade-link' );
-		const button                   = container.querySelector( '.frm-oneclick-button' );
-		const addonStatus              = container.querySelector( '.frm-addon-status' );
-		const dynamicMessageContainer  = container.querySelector( '.frm-dynamic-message' );
+		const oneclickMessage = container.querySelector( '.frm-oneclick' );
+		const upgradeMessage  = container.querySelector( '.frm-upgrade-message' );
+		const showLink        = container.querySelector( '.frm-upgrade-link' );
+		const button          = container.querySelector( '.frm-oneclick-button' );
+		const addonStatus     = container.querySelector( '.frm-addon-status' );
 
 		let oneclick   = link.getAttribute( 'data-oneclick' );
 		let newMessage = link.getAttribute( 'data-message' );
 		let showIt  = 'block';
 		let showMsg = 'block';
 		let hideIt  = 'none';
-		const dynamicMessage = link.getAttribute( 'data-dynamic-message' );
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
@@ -6766,19 +6764,23 @@ function frmAdminBuildJS() {
 			newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
 		}
 
-		if ( dynamicMessage ) {
-			dynamicMessageContainer.innerHTML     = dynamicMessage;
-			dynamicMessageContainer.style.display = 'block';
-		}
-
 		upgradeMessage.innerHTML = newMessage;
+
+		if ( link.dataset.upsellImage ) {
+			upgradeMessage.appendChild(
+				img({
+					src: link.dataset.upsellImage,
+					alt: link.dataset.upgrade
+				})
+			);
+		}
 
 		// Either set the link or use the default.
 		showLink.href = getShowLinkHrefValue( link, showLink );
 
 		addonStatus.style.display = 'none';
 
-		oneclickMessage.style.display = ! dynamicMessage ? hideIt : 'none';
+		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
