@@ -278,11 +278,8 @@ class FrmField {
 
 		$plugin           = 'formidable-surveys/formidable-surveys.php';
 		$expected_version = '1.1';
-		if ( self::installed_plugin_meets_version( $plugin, $expected_version ) ) {
-			return true;
-		}
 
-		return self::api_version_meets_version( $plugin, $expected_version );
+		return self::installed_plugin_meets_version( $plugin, $expected_version ) || self::api_meets_version( $plugin, $expected_version );
 	}
 
 	/**
@@ -321,7 +318,7 @@ class FrmField {
 	 * @param string $expected_version
 	 * @return bool
 	 */
-	private static function api_version_meets_version( $plugin, $expected_version ) {
+	private static function api_meets_version( $plugin, $expected_version ) {
 		$api     = new FrmFormApi();
 		$addons  = $api->get_api_info();
 		$matches = wp_list_filter( $addons, array( 'plugin' => $plugin ) );
