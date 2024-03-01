@@ -327,7 +327,7 @@ class FrmField {
 		}
 
 		$match = reset( $matches );
-		if ( empty ( $match['new_version'] ) ) {
+		if ( empty( $match['new_version'] ) ) {
 			return false;
 		}
 
