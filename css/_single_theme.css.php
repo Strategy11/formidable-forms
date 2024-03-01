@@ -313,14 +313,14 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	outline: none;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:hover,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:active,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:focus,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
-.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:focus{
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_show_loader.frm_prev_page,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_show_loader.frm_prev_page:hover,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_show_loader.frm_prev_page:active,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_show_loader.frm_prev_page:focus,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_show_loader.frm_button_submit,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_show_loader.frm_button_submit:hover,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_show_loader.frm_button_submit:active,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_show_loader.frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ); ?>;
 	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
 }

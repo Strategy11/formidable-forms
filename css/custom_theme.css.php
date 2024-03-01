@@ -730,28 +730,28 @@ legend.frm_hidden{
 	visibility:visible !important;
 }
 
-.with_frm_style .frm_loading_prev .frm_prev_page,
-.with_frm_style .frm_loading_form .frm_button_submit {
+.with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page,
+.with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit {
 	position: relative;
 	opacity: .8;
 	color: transparent !important;
 	text-shadow: none !important;
 }
 
-.with_frm_style .frm_loading_prev .frm_prev_page:hover,
-.with_frm_style .frm_loading_prev .frm_prev_page:active,
-.with_frm_style .frm_loading_prev .frm_prev_page:focus,
-.with_frm_style .frm_loading_form .frm_button_submit:hover,
-.with_frm_style .frm_loading_form .frm_button_submit:active,
-.with_frm_style .frm_loading_form .frm_button_submit:focus {
+.with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page:hover,
+.with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page:active,
+.with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page:focus,
+.with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit:hover,
+.with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit:active,
+.with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit:focus {
 	cursor: not-allowed;
 	color: transparent;
 	outline: none !important;
 	box-shadow: none;
 }
 
-.with_frm_style .frm_loading_prev .frm_prev_page::before,
-.with_frm_style .frm_loading_form .frm_button_submit:before {
+.with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page::before,
+.with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit:before {
 	content: '';
 	display: inline-block;
 	position: absolute;
