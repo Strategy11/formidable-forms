@@ -2017,7 +2017,7 @@ function frmAdminBuildJS() {
 				if ( ! submitField ) {
 					$newFields.append( replaceWith );
 				} else {
-					jQuery( submitField.closest( '.frm_field_box:not(.form_field)' ) ).before( replaceWith );
+					jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
 				}
 
 				afterAddField( msg, true );
