@@ -18,6 +18,7 @@ changelog.txt export-ignore
 codesniffer.xml export-ignore
 composer.lock export-ignore
 composer.json export-ignore
+crowdin.yml export-ignore
 /js/src/ export-ignore
 /js/*.js.map export-ignore
 /js/jquery/jquery.editinplace.js export-ignore
