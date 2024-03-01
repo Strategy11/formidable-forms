@@ -102,18 +102,28 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$captcha_size  = $this->captcha_size( $frm_settings );
 		$allow_mutiple = $frm_settings->re_multi;
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+		if ( 'recaptcha' === $frm_settings->active_captcha ) {
 			$site_key          = $frm_settings->pubkey;
 			$recaptcha_options = ' data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
-		} else {
+		} elseif ( 'hcaptcha' === $frm_settings->active_captcha ) {
 			$site_key = $frm_settings->hcaptcha_pubkey;
+		} else {
+			$site_key = $frm_settings->turnstile_pubkey;
 		}
 
 		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"';
-		$html .= ! empty( $recaptcha_options ) ? $recaptcha_options : '';
-		if ( $captcha_size === 'invisible' && ! $allow_mutiple ) {
+		if ( ! empty( $recaptcha_options ) ) {
+			$html .= $recaptcha_options;
+		}
+
+		if ( 'recaptcha' === $frm_settings->active_captcha && $captcha_size === 'invisible' && ! $allow_mutiple ) {
 			$html .= ' data-callback="frmAfterRecaptcha"';
 		}
+
+		if ( 'turnstile' === $frm_settings->active_captcha ) {
+			$html .= ' data-callback="frmAfterTurnstile"';
+		}
+
 		$html .= '></div>';
 
 		return $html;
@@ -129,17 +139,25 @@ class FrmFieldCaptcha extends FrmFieldType {
 		wp_enqueue_script( 'captcha-api' );
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function api_url() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+		if ( 'recaptcha' === $frm_settings->active_captcha ) {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
 
-		return $this->hcaptcha_api_url();
+		if ( 'hcaptcha' === $frm_settings->active_captcha ) {
+			return $this->hcaptcha_api_url();
+		}
+
+		return $this->turnstile_api_url();
 	}
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 * @return string
 	 */
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
@@ -150,15 +168,23 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
-		if ( ! empty( $lang ) ) {
+		if ( $lang ) {
 			$api_js_url .= '&hl=' . $lang;
 		}
 
+		/**
+		 * @param string $api_js_url
+		 */
 		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 
 		return $api_js_url;
 	}
 
+	/**
+	 * @since 6.0
+	 *
+	 * @return string
+	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
 
@@ -170,6 +196,26 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * @param string $api_js_url
 		 */
 		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
+
+		return $api_js_url;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function turnstile_api_url() {
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+
+		/**
+		 * Allows updating hcaptcha js api url.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $api_js_url
+		 */
+		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
 
 		return $api_js_url;
 	}
@@ -199,7 +245,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return 'g-recaptcha'|'h-captcha'
 	 */
 	protected function captcha_class( $frm_settings ) {
-		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
+		if ( 'recaptcha' === $frm_settings->active_captcha ) {
+			return 'g-recaptcha';
+		}
+
+		if ( 'hcaptcha' === $frm_settings->active_captcha ) {
+			return 'h-captcha';
+		}
+
+		return 'cf-turnstile';
 	}
 
 	protected function allow_multiple( $frm_settings ) {
@@ -290,17 +344,30 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['g-recaptcha-response'] ) && ! isset( $_POST['h-captcha-response'] ) ) {
-			// There was no captcha submitted.
-			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( 'recaptcha' === $frm_settings->active_captcha ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$missing_token = ! isset( $_POST['g-recaptcha-response'] );
+		} elseif ( 'hcaptcha' === $frm_settings->active_captcha ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$missing_token = ! isset( $_POST['h-captcha-response'] );
+		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$missing_token = ! isset( $_POST['frm-turnstile-response'] );
+		}
+
+		if ( $missing_token ) {
+			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form (Lite)', 'formidable' ) );
 		}
 
 		return $this->validate_against_api( $args );
 	}
 
 	/**
+	 * Check if the active captcha type's public key is set.
+	 *
 	 * @since 4.07
+	 *
 	 * @return bool
 	 */
 	public static function should_show_captcha() {
@@ -309,7 +376,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return ! empty( $frm_settings->pubkey );
 		}
 
-		return ! empty( $frm_settings->hcaptcha_pubkey );
+		if ( $frm_settings->active_captcha === 'hcaptcha' ) {
+			return ! empty( $frm_settings->hcaptcha_pubkey );
+		}
+
+		return ! empty( $frm_settings->turnstile_pubkey );
 	}
 
 	/**

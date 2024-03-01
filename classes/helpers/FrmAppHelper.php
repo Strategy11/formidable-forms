@@ -3157,6 +3157,12 @@ class FrmAppHelper {
 			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
 		);
 
+		/*
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( 'turnstile' === $frm_settings->active_captcha && ! empty( $frm_settings->turnstile_pubkey ) ) {
+			$script_strings['turnstilePubkey'] = $frm_settings->turnstile_pubkey;
+		}*/
+
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
 		if ( ! $data ) {
 			wp_localize_script( 'formidable', 'frm_js', $script_strings );

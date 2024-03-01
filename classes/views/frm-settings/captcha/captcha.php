@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $active_captcha      = $frm_settings->active_captcha;
 $recaptcha_is_active = $active_captcha === 'recaptcha';
+$hcaptcha_is_active  = $active_captcha === 'hcaptcha';
 $turnstile_is_active = $active_captcha === 'turnstile';
 ?>
 <p class="frm_primary_label">
@@ -91,7 +92,7 @@ $turnstile_is_active = $active_captcha === 'turnstile';
 	</p>
 </div>
 
-<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? 'frm_hidden' : '' ); ?>">
+<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $hcaptcha_is_active ? '' : 'frm_hidden' ); ?>">
 	<h3><?php esc_html_e( 'hCaptcha Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'hcaptcha';
@@ -99,7 +100,7 @@ $turnstile_is_active = $active_captcha === 'turnstile';
 	?>
 </div>
 
-<div id="turnstile_settings" class="frm_grid_container <?php echo esc_attr( $turnstile_is_active ? 'frm_hidden' : '' ); ?>">
+<div id="turnstile_settings" class="frm_grid_container <?php echo esc_attr( $turnstile_is_active ? '' : 'frm_hidden' ); ?>">
 	<h3><?php esc_html_e( 'Turnstile Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'turnstile';

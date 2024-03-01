@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="howto">
 	<?php
-	$captcha_name = $captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCaptcha';
 	if ( 'recaptcha' === $captcha ) {
 		$captcha_name = 'reCAPTCHA';
 		$captcha_api  = 'https://www.google.com/recaptcha/';
@@ -17,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$captcha_name = 'Turnstile';
 		$captcha_api  = 'https://www.cloudflare.com/products/turnstile/';
 	}
+
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
 		esc_html__( '%1$s requires a Site and Private API key. Sign up for a %2$sfree %1$s key%3$s.', 'formidable' ),
@@ -30,9 +30,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( $captcha === 'recaptcha' ) {
 	$prefix = '';
 	$title  = __( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' );
-} else {
+} elseif ( 'hcaptcha' === $captcha ) {
 	$prefix = 'hcaptcha_';
 	$title  = __( 'hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA.', 'formidable' );
+} else {
+	$prefix = 'turnstile_';
+	$title  = 'Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs.';
 }
 ?>
 <p class="frm6 frm_form_field">
