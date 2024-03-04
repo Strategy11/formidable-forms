@@ -137,15 +137,19 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * Get the URL for the script JS that is loaded on the front end.
+	 *
 	 * @return string
 	 */
 	protected function api_url() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( 'recaptcha' === $frm_settings->active_captcha ) {
+		$active_mode  = $frm_settings->active_captcha;
+
+		if ( 'recaptcha' === $active_mode ) {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
 
-		if ( 'hcaptcha' === $frm_settings->active_captcha ) {
+		if ( 'hcaptcha' === $active_mode ) {
 			return $this->hcaptcha_api_url();
 		}
 
