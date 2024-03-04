@@ -17,9 +17,10 @@ class FrmCaptchaFactory {
 	 * @return FrmFieldCaptchaSettings
 	 */
 	public static function get_settings_object( $captcha_type = 'active' ) {
+		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( 'active' === $captcha_type ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$class        = self::get_settings_class( $frm_settings->active_captcha );
+			$class = self::get_settings_class( $frm_settings->active_captcha );
 		} else {
 			$class = self::get_settings_class( $captcha_type );
 		}
