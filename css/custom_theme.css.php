@@ -750,6 +750,10 @@ legend.frm_hidden{
 	box-shadow: none;
 }
 
+.with_frm_style .frm_prev_page[disabled] {
+	opacity: 0.5;
+}
+
 .with_frm_style .frm_loading_prev .frm_show_loader.frm_prev_page::before,
 .with_frm_style .frm_loading_form .frm_show_loader.frm_button_submit:before {
 	content: '';
