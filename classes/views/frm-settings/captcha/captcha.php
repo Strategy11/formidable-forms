@@ -2,10 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$active_captcha      = $frm_settings->active_captcha;
-$recaptcha_is_active = $active_captcha === 'recaptcha';
-$hcaptcha_is_active  = $active_captcha === 'hcaptcha';
-$turnstile_is_active = $active_captcha === 'turnstile';
 ?>
 <p class="frm_primary_label">
 	<?php esc_html_e( 'Select Captcha Type', 'formidable' ); ?>
@@ -33,7 +29,7 @@ $turnstile_is_active = $active_captcha === 'turnstile';
 	<span><?php esc_html_e( 'Changing the captcha type here will replace it in all any forms where it is used.', 'formidable' ); ?></span>
 </div>
 
-<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? '' : 'frm_hidden' ); ?>">
+<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( 'recaptcha' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
 	<h3><?php esc_html_e( 'reCAPTCHA Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'recaptcha';
@@ -92,7 +88,7 @@ $turnstile_is_active = $active_captcha === 'turnstile';
 	</p>
 </div>
 
-<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $hcaptcha_is_active ? '' : 'frm_hidden' ); ?>">
+<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( 'hcaptcha' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
 	<h3><?php esc_html_e( 'hCaptcha Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'hcaptcha';
@@ -100,7 +96,7 @@ $turnstile_is_active = $active_captcha === 'turnstile';
 	?>
 </div>
 
-<div id="turnstile_settings" class="frm_grid_container <?php echo esc_attr( $turnstile_is_active ? '' : 'frm_hidden' ); ?>">
+<div id="turnstile_settings" class="frm_grid_container <?php echo esc_attr( 'turnstile' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
 	<h3><?php esc_html_e( 'Turnstile Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'turnstile';
