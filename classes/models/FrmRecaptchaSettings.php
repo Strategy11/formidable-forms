@@ -92,6 +92,8 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Show the Captcha field size setting if the captcha is visible.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool

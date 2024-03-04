@@ -141,6 +141,9 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Determine if we should show Captcha Size in field settings.
+	 * This is only applicable for a visible reCAPTCHA field.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -150,6 +153,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Determine if we should show a theme dropdown for our Captcha field.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
