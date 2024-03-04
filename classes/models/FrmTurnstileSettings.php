@@ -9,13 +9,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @since x.x
+	 *
+	 * @return void
 	 */
-	public function __construct( $frm_settings ) {
-		$this->frm_settings = $frm_settings;
-		$this->secret       = $frm_settings->turnstile_privkey;
-		$this->token_field  = 'frm-turnstile-response';
-		$this->endpoint     = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+	protected function set_token_field() {
+		$this->token_field = 'frm-turnstile-response';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_endpoint() {
+		$this->endpoint = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 	}
 
 	/**

@@ -47,9 +47,32 @@ class FrmFieldCaptchaSettings {
 	 */
 	public function __construct( $frm_settings ) {
 		$this->frm_settings = $frm_settings;
-		$this->secret       = '';
-		$this->token_field  = '';
-		$this->endpoint     = '';
+		$this->set_secret();
+		$this->set_token_field();
+		$this->set_endpoint();
+	}
+
+	protected function set_secret() {
+		$key = $this->get_key_for_privkey();
+		$this->secret = ! empty( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_token_field() {
+		$this->token_field = '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_endpoint() {
+		$this->endpoint = '';
 	}
 
 	/**
@@ -113,8 +136,26 @@ class FrmFieldCaptchaSettings {
 	 *
 	 * @return string
 	 */
+	protected function get_key_for_privkey() {
+		return $this->get_settings_prefix() . 'privkey';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function get_key_for_pubkey() {
+		return $this->get_settings_prefix() . 'pubkey';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	public function get_pubkey() {
-		$key = $this->get_settings_prefix() . 'pubkey';
+		$key = $this->get_key_for_pubkey();
 		return isset( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
 	}
 

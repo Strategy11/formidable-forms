@@ -9,13 +9,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @since x.x
+	 *
+	 * @return void
 	 */
-	public function __construct( $frm_settings ) {
-		$this->frm_settings = $frm_settings;
-		$this->secret       = $frm_settings->privkey;
-		$this->token_field  = 'g-recaptcha-response';
-		$this->endpoint     = 'https://www.google.com/recaptcha/api/siteverify';
+	protected function set_token_field() {
+		$this->token_field = 'g-recaptcha-response';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function set_endpoint() {
+		$this->endpoint = 'https://www.google.com/recaptcha/api/siteverify';
 	}
 
 	/**
