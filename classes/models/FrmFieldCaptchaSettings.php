@@ -9,33 +9,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldCaptchaSettings {
 
 	/**
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * @since 6.0
+	 *
 	 * @var string
 	 */
 	public $secret;
 
 	/**
+	 * @since 6.0
+	 *
 	 * @var string
 	 */
 	public $token_field;
 
 	/**
+	 * @since 6.0
+	 *
 	 * @var string
 	 */
 	public $endpoint;
 
 	public function __construct( $frm_settings ) {
-		if ( 'recaptcha' === $frm_settings->active_captcha ) {
-			$this->secret      = $frm_settings->privkey;
-			$this->token_field = 'g-recaptcha-response';
-			$this->endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
-		} elseif ( 'hcaptha' === $frm_settings->active_captcha ) {
-			$this->secret      = $frm_settings->hcaptcha_privkey;
-			$this->token_field = 'h-captcha-response';
-			$this->endpoint    = 'https://hcaptcha.com/siteverify';
-		} else {
-			$this->secret      = $frm_settings->turnstile_privkey;
-			$this->token_field = 'frm-turnstile-response';
-			$this->endpoint    = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-		}
+		$this->name        = '';
+		$this->secret      = '';
+		$this->token_field = '';
+		$this->endpoint    = '';
 	}
 }

@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 
 	public function __construct( $frm_settings ) {
+		$this->name        = 'Turnstile';
 		$this->secret      = $frm_settings->turnstile_privkey;
 		$this->token_field = 'frm-turnstile-response';
 		$this->endpoint    = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';

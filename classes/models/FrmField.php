@@ -87,15 +87,11 @@ class FrmField {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
 		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'Captcha';
-		} elseif ( $active_captcha === 'recaptcha' ) {
-			$captcha_name = 'reCAPTCHA';
-		} elseif ( 'hcaptcha' === $active_captcha ) {
-			$captcha_name = 'hCaptcha';
-		} else {
-			$captcha_name = 'Turnstile';
+			return 'Captcha';
 		}
-		return $captcha_name;
+
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->name;
 	}
 
 	public static function pro_field_selection() {
