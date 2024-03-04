@@ -90,4 +90,31 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 		// for reverse compatibility
 		return $field['captcha_size'] === 'default' ? 'normal' : $field['captcha_size'];
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_size() {
+		return ! $this->captcha_is_invisible();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_theme() {
+		return ! $this->captcha_is_invisible();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function captcha_is_invisible() {
+		return in_array( $this->frm_settings->re_type, array( 'invisible', 'v3' ), true );
+	}
 }

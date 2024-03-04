@@ -83,4 +83,26 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 
 		return $attributes;
 	}
+
+	/**
+	 * Turnstile supports "Dark", "Lite" and "Auto" themes.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_theme() {
+		return true;
+	}
+
+	/**
+	 * Turnstile supports an "Auto" theme option so show it.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_theme_auto_option() {
+		return true;
+	}
 }

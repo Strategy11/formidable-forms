@@ -139,4 +139,31 @@ class FrmFieldCaptchaSettings {
 	public function add_front_end_element_attributes( $attributes, $field ) {
 		return $attributes;
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_size() {
+		return false;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_theme() {
+		return false;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_show_captcha_theme_auto_option() {
+		return false;
+	}
 }

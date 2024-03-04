@@ -42,18 +42,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$frm_settings                          = FrmAppHelper::get_settings();
-		$should_show_captcha_size              = false;
-		$should_show_captcha_theme             = false;
-		$should_show_captcha_theme_auto_option = false;
-
-		if ( 'recaptcha' === $frm_settings->active_captcha && ! in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
-			$should_show_captcha_size  = true;
-			$should_show_captcha_theme = true;
-		} elseif ( 'turnstile' === $frm_settings->active_captcha ) {
-			$should_show_captcha_theme             = true;
-			$should_show_captcha_theme_auto_option = true;
-		}
+		$settings                              = FrmCaptchaFactory::get_settings_object();
+		$should_show_captcha_size              = $settings->should_show_captcha_size();
+		$should_show_captcha_theme             = $settings->should_show_captcha_theme();
+		$should_show_captcha_theme_auto_option = $settings->should_show_captcha_theme_auto_option();
 
 		return array(
 			'required'                  => false,
