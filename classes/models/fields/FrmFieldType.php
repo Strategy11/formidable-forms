@@ -319,6 +319,7 @@ DEFAULT_HTML;
 			'max'            => true,
 			'range'          => false,
 			'captcha_size'   => false,
+			'captcha_theme'  => false,
 			'format'         => false,
 			'show_image'     => false,
 			'default'        => true,

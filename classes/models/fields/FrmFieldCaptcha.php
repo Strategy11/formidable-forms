@@ -42,17 +42,13 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings                              = FrmCaptchaFactory::get_settings_object();
-		$should_show_captcha_size              = $settings->should_show_captcha_size();
-		$should_show_captcha_theme             = $settings->should_show_captcha_theme();
-		$should_show_captcha_theme_auto_option = $settings->should_show_captcha_theme_auto_option();
-
+		$settings = FrmCaptchaFactory::get_settings_object();
 		return array(
 			'required'                  => false,
 			'invalid'                   => true,
-			'captcha_size'              => $should_show_captcha_size,
-			'captcha_theme'             => $should_show_captcha_theme,
-			'captcha_theme_auto_option' => $should_show_captcha_theme_auto_option,
+			'captcha_size'              => $settings->should_show_captcha_size(),
+			'captcha_theme'             => $settings->should_show_captcha_theme(),
+			'captcha_theme_auto_option' => $settings->should_show_captcha_theme_auto_option(),
 			'default'                   => false,
 		);
 	}
