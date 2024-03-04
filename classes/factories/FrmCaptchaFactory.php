@@ -11,11 +11,17 @@ class FrmCaptchaFactory {
 	/**
 	 * @since x.x
 	 *
+	 * @param string $captcha_type Either 'active', 'recaptcha', 'hcaptcha' or 'turnstile'. If active, the global setting will be used.
 	 * @return FrmFieldCaptchaSettings
 	 */
-	public static function get_settings_object() {
-		$frm_settings = FrmAppHelper::get_settings();
-		$class        = self::get_settings_class( $frm_settings->active_captcha );
+	public static function get_settings_object( $captcha_type = 'active' ) {
+		if ( 'active' === $captcha_type ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			$class        = self::get_settings_class( $frm_settings->active_captcha );
+		} else {
+			$class = self::get_settings_class( $captcha_type );
+		}
+
 		$settings     = new $class( $frm_settings );
 		return $settings;
 	}

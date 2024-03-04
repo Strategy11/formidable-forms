@@ -6,16 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="howto">
 	<?php
-	if ( 'recaptcha' === $captcha ) {
-		$captcha_name = 'reCAPTCHA';
-		$captcha_api  = 'https://www.google.com/recaptcha/';
-	} elseif ( 'hcaptcha' === $captcha ) {
-		$captcha_name = 'hCaptcha';
-		$captcha_api  = 'https://www.hcaptcha.com/signup-interstitial';
-	} else {
-		$captcha_name = 'Turnstile';
-		$captcha_api  = 'https://www.cloudflare.com/products/turnstile/';
-	}
+	$settings     = FrmCaptchaFactory::get_settings_object( $captcha );
+	$captcha_name = $settings->get_name();
+	$captcha_api  = $settings->get_documentation_url();
+	$prefix       = $settings->get_settings_prefix();
+	$title        = $settings->get_site_key_tooltip();
 
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
@@ -26,18 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 </p>
-<?php
-if ( $captcha === 'recaptcha' ) {
-	$prefix = '';
-	$title  = __( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' );
-} elseif ( 'hcaptcha' === $captcha ) {
-	$prefix = 'hcaptcha_';
-	$title  = __( 'hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA.', 'formidable' );
-} else {
-	$prefix = 'turnstile_';
-	$title  = 'Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs.';
-}
-?>
 <p class="frm6 frm_form_field">
 	<label class="frm_help" for="frm_<?php echo esc_attr( $prefix ); ?>pubkey" title="<?php echo esc_attr( $title ); ?>">
 		<?php esc_html_e( 'Site Key', 'formidable' ); ?>

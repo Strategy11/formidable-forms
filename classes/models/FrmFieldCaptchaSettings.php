@@ -52,4 +52,35 @@ class FrmFieldCaptchaSettings {
 	public function get_element_class_name() {
 		return '';
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_documentation_url() {
+		return '';
+	}
+
+	/**
+	 * Get the prefix for the global setting.
+	 * reCAPTCHA fields just use pubkey/privkey.
+	 * But other captcha integrations use a prefix like hcaptcha_public/turnstile_privkey.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_settings_prefix() {
+		return '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_site_key_tooltip() {
+		return '';
+	}
 }
