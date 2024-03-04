@@ -97,34 +97,31 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return '';
 		}
 
-		$class_prefix  = $this->class_prefix( $frm_settings );
-		$captcha_class = $this->captcha_class( $frm_settings );
-		$captcha_size  = $this->captcha_size( $frm_settings );
-		$allow_mutiple = $frm_settings->re_multi;
+		$settings = FrmCaptchaFactory::get_settings_object();
+
+		$class_prefix   = $this->class_prefix( $frm_settings );
+		$captcha_class  = $this->captcha_class( $frm_settings );
+		$captcha_size   = $this->captcha_size( $frm_settings );
+		$div_attributes = array(
+			'id'           => $args['html_id'],
+			'class'        => $class_prefix . $captcha_class,
+			'data-sitekey' => $settings->get_pubkey(),
+		);
 
 		if ( 'recaptcha' === $frm_settings->active_captcha ) {
-			$site_key          = $frm_settings->pubkey;
-			$recaptcha_options = ' data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
-		} elseif ( 'hcaptcha' === $frm_settings->active_captcha ) {
-			$site_key = $frm_settings->hcaptcha_pubkey;
-		} else {
-			$site_key = $frm_settings->turnstile_pubkey;
-		}
+			$div_attributes['data-size']  = $captcha_size;
+			$div_attributes['data-theme'] = $this->field['captcha_theme'];
 
-		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"';
-		if ( ! empty( $recaptcha_options ) ) {
-			$html .= $recaptcha_options;
-		}
-
-		if ( 'recaptcha' === $frm_settings->active_captcha && $captcha_size === 'invisible' && ! $allow_mutiple ) {
-			$html .= ' data-callback="frmAfterRecaptcha"';
+			if ( $captcha_size === 'invisible' && ! $frm_settings->re_multi ) {
+				$div_attributes['data-callback'] = 'frmAfterRecaptcha';
+			}
 		}
 
 		if ( 'turnstile' === $frm_settings->active_captcha ) {
-			$html .= ' data-callback="frmAfterTurnstile"';
+			$div_attributes['data-callback'] = 'frmAfterTurnstile';
 		}
 
-		$html .= '></div>';
+		$html = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
 		return $html;
 	}

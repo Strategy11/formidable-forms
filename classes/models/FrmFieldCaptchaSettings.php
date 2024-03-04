@@ -96,10 +96,19 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * @since x.x
 	 *
+	 * @return string
+	 */
+	public function get_pubkey() {
+		$key = $this->get_settings_prefix() . 'pubkey';
+		return isset( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
+	}
+
+	/**
+	 * @since x.x
+	 *
 	 * @return bool
 	 */
 	public function has_pubkey() {
-		$key = $this->get_settings_prefix() . 'pubkey';
-		return ! empty(  $this->frm_settings->$key );
+		return ! empty( $this->get_pubkey() );
 	}
 }
