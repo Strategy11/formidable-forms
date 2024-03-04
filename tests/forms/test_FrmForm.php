@@ -208,4 +208,42 @@ class test_FrmForm extends FrmUnitTest {
 		$name      = FrmForm::getName( (string) $form_id );
 		$this->assertEquals( $form_name, $name );
 	}
+
+	/**
+	 * @covers FrmForm::getOne
+	 * @covers FrmForm::prepare_form_row_data
+	 */
+	public function test_getOne() {
+		// Test to make sure a form with no options column value still has an array $form->options value.
+		$form_id = $this->create_a_form_with_an_empty_options_column();
+		$form    = FrmForm::getOne( $form_id );
+		$this->assertIsArray( $form->options );
+		$this->assertArrayHasKey( 'custom_style', $form->options );
+
+		// Test a regular form. $form->options should be an array and it should not be empty.
+		$form = FrmForm::getOne( 'contact-with-email' );
+		$this->assertIsArray( $form->options );
+		$this->assertNotEmpty( $form->options );
+	}
+
+	/**
+	 * Create a form with no options column value.
+	 *
+	 * @return int
+	 */
+	private function create_a_form_with_an_empty_options_column() {
+		global $wpdb;
+		$form_id = $this->factory->form->create();
+		$wpdb->update(
+			$wpdb->prefix . 'frm_forms',
+			array(
+				'options' => '',
+			),
+			array(
+				'id' => $form_id,
+			)
+		);
+		FrmForm::clear_form_cache();
+		return $form_id;
+	}
 }
