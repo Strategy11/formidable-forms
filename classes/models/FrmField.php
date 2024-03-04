@@ -91,7 +91,7 @@ class FrmField {
 		}
 
 		$settings = FrmCaptchaFactory::get_settings_object();
-		return $settings->name;
+		return $settings->getName();
 	}
 
 	public static function pro_field_selection() {

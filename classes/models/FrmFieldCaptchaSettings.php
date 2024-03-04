@@ -9,13 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldCaptchaSettings {
 
 	/**
-	 * @since x.x
-	 *
-	 * @var string
-	 */
-	public $name;
-
-	/**
 	 * @since 6.0
 	 *
 	 * @var string
@@ -37,9 +30,17 @@ class FrmFieldCaptchaSettings {
 	public $endpoint;
 
 	public function __construct( $frm_settings ) {
-		$this->name        = '';
 		$this->secret      = '';
 		$this->token_field = '';
 		$this->endpoint    = '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function getName() {
+		return '';
 	}
 }

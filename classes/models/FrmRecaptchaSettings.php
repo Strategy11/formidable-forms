@@ -9,9 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
 	public function __construct( $frm_settings ) {
-		$this->name        = 'reCAPTCHA';
 		$this->secret      = $frm_settings->privkey;
 		$this->token_field = 'g-recaptcha-response';
 		$this->endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function getName() {
+		return 'reCAPTCHA';
 	}
 }
