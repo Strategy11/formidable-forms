@@ -300,6 +300,9 @@ DEFAULT_HTML;
 		return array_merge( $default_settings, $field_type_settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function default_field_settings() {
 		return array(
 			'type'           => $this->type,

@@ -66,8 +66,8 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
-		$captcha_size             = $this->get_captcha_size( $field );
-		$attributes['data-size']  = $captcha_size;
+		$attributes               = parent::add_front_end_element_attributes( $attributes, $field );
+		$captcha_size             = $attributes['data-size'];
 		$attributes['data-theme'] = $field['captcha_theme'];
 
 		if ( $captcha_size === 'invisible' && ! $this->frm_settings->re_multi ) {
@@ -83,12 +83,11 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @param array $field
 	 * @return string
 	 */
-	private function get_captcha_size( $field ) {
+	protected function get_captcha_size( $field ) {
 		if ( in_array( $this->frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
 			return 'invisible';
 		}
-		// for reverse compatibility
-		return $field['captcha_size'] === 'default' ? 'normal' : $field['captcha_size'];
+		return parent::get_captcha_size( $field );
 	}
 
 	/**

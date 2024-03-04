@@ -137,19 +137,29 @@ class FrmFieldCaptchaSettings {
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
+		$attributes['data-size'] = $this->get_captcha_size( $field );
 		return $attributes;
 	}
 
 	/**
-	 * Determine if we should show Captcha Size in field settings.
-	 * This is only applicable for a visible reCAPTCHA field.
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @return string
+	 */
+	protected function get_captcha_size( $field ) {
+		return $field['captcha_size'] === 'default' ? 'normal' : $field['captcha_size'];
+	}
+
+	/**
+	 * This is supported by all CAPTCHA types except for invisible reCAPTCHAs.
 	 *
 	 * @since x.x
 	 *
 	 * @return bool
 	 */
 	public function should_show_captcha_size() {
-		return false;
+		return true;
 	}
 
 	/**

@@ -75,6 +75,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
+		$attributes                  = parent::add_front_end_element_attributes( $attributes, $field );
 		$attributes['data-callback'] = 'frmAfterTurnstile';
 
 		if ( ! empty( $field['captcha_theme'] ) ) {
