@@ -61,11 +61,7 @@ class FrmSubmitButtonController {
 			return $form;
 		}
 
-		$form->options['submit_value']     = $submit_field->name;
-		$form->options['edit_value']       = FrmField::get_option( $submit_field, 'edit_text' );
-		$form->options['submit_align']     = FrmField::get_option( $submit_field, 'align' );
-		$form->options['start_over']       = FrmField::get_option( $submit_field, 'start_over' );
-		$form->options['start_over_label'] = FrmField::get_option( $submit_field, 'start_over_label' );
+		$form->options['submit_value'] = $submit_field->name;
 
 		return $form;
 	}
