@@ -9,6 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldCaptchaSettings {
 
 	/**
+	 * @param FrmSettings $settings
+	 */
+	public $frm_settings;
+
+	/**
 	 * @since 6.0
 	 *
 	 * @var string
@@ -29,10 +34,14 @@ class FrmFieldCaptchaSettings {
 	 */
 	public $endpoint;
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 */
 	public function __construct( $frm_settings ) {
-		$this->secret      = '';
-		$this->token_field = '';
-		$this->endpoint    = '';
+		$this->frm_settings = $frm_settings;
+		$this->secret       = '';
+		$this->token_field  = '';
+		$this->endpoint     = '';
 	}
 
 	/**
@@ -82,5 +91,15 @@ class FrmFieldCaptchaSettings {
 	 */
 	public function get_site_key_tooltip() {
 		return '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function has_pubkey() {
+		$key = $this->get_settings_prefix() . 'pubkey';
+		return ! empty(  $this->frm_settings->$key );
 	}
 }

@@ -8,10 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 */
 	public function __construct( $frm_settings ) {
-		$this->secret      = $frm_settings->privkey;
-		$this->token_field = 'g-recaptcha-response';
-		$this->endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
+		$this->frm_settings = $frm_settings;
+		$this->secret       = $frm_settings->privkey;
+		$this->token_field  = 'g-recaptcha-response';
+		$this->endpoint     = 'https://www.google.com/recaptcha/api/siteverify';
 	}
 
 	/**

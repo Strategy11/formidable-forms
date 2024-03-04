@@ -8,10 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 */
 	public function __construct( $frm_settings ) {
-		$this->secret      = $frm_settings->hcaptcha_privkey;
-		$this->token_field = 'h-captcha-response';
-		$this->endpoint    = 'https://hcaptcha.com/siteverify';
+		$this->frm_settings = $frm_settings;
+		$this->secret       = $frm_settings->hcaptcha_privkey;
+		$this->token_field  = 'h-captcha-response';
+		$this->endpoint     = 'https://hcaptcha.com/siteverify';
 	}
 
 	/**

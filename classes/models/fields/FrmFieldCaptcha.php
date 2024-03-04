@@ -376,16 +376,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return bool
 	 */
 	public static function should_show_captcha() {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			return ! empty( $frm_settings->pubkey );
-		}
-
-		if ( $frm_settings->active_captcha === 'hcaptcha' ) {
-			return ! empty( $frm_settings->hcaptcha_pubkey );
-		}
-
-		return ! empty( $frm_settings->turnstile_pubkey );
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->has_pubkey();
 	}
 
 	/**
