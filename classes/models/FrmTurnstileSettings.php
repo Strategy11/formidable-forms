@@ -13,15 +13,6 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @return void
 	 */
-	protected function set_token_field() {
-		$this->token_field = 'cf-turnstile-response';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
 	protected function set_endpoint() {
 		$this->endpoint = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 	}

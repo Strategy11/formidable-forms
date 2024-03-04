@@ -13,15 +13,6 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @return void
 	 */
-	protected function set_token_field() {
-		$this->token_field = 'h-captcha-response';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
 	protected function set_endpoint() {
 		$this->endpoint = 'https://hcaptcha.com/siteverify';
 	}

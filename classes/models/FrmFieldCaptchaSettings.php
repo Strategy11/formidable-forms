@@ -70,7 +70,7 @@ class FrmFieldCaptchaSettings {
 	 * @return void
 	 */
 	protected function set_token_field() {
-		$this->token_field = '';
+		$this->token_field = $this->get_element_class_name() . '-response';
 	}
 
 	/**
