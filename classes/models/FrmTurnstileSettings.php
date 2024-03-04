@@ -70,7 +70,6 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @since x.x
 	 *
-	 * 
 	 * @param array $attributes
 	 * @param array $field
 	 * @return array

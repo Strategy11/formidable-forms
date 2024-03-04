@@ -132,11 +132,11 @@ class FrmFieldCaptchaSettings {
 	 *
 	 * @since x.x
 	 *
-	 * @param array  $attributes
-	 * @param string $captcha_size
+	 * @param array $attributes
+	 * @param array $field
 	 * @return array
 	 */
-	public function add_front_end_element_attributes( $attributes, $captcha_size ) {
+	public function add_front_end_element_attributes( $attributes, $field ) {
 		return $attributes;
 	}
 }
