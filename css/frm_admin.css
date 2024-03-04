@@ -4269,6 +4269,10 @@ label input[type="checkbox"], label input[type="radio"] {
 	width: 300px;
 }
 
+.turnstile_placeholder {
+	width: 300px;
+}
+
 .frm_sorting .frm_rte textarea {
 	width: 653px;
 	background: #fff;
