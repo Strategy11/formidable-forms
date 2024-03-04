@@ -52,12 +52,19 @@ class FrmFieldCaptchaSettings {
 		$this->set_endpoint();
 	}
 
+	/**
+	 * Set the private key to $this->secret.
+	 *
+	 * @return void
+	 */
 	protected function set_secret() {
 		$key = $this->get_key_for_privkey();
 		$this->secret = ! empty( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
 	}
 
 	/**
+	 * Set the string to use for $this->token_field.
+	 *
 	 * @since x.x
 	 *
 	 * @return void
@@ -123,6 +130,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the string to use for the tooltip on the Global settings page when hovering over the Site Key label.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -132,6 +141,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the key used in FrmSettings for the site secret used for validating a Captcha.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -141,6 +152,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the key used in FrmSettings for the site key used to initialize a Captcha on the front end.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -150,6 +163,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the site key to use for a Captcha on the front end.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -160,6 +175,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Check if the public key is not empty.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -191,13 +208,15 @@ class FrmFieldCaptchaSettings {
 	 * @since x.x
 	 *
 	 * @param array $field
-	 * @return string
+	 * @return string Either 'normal' or 'compact'.
 	 */
 	protected function get_captcha_size( $field ) {
 		return $field['captcha_size'] === 'default' ? 'normal' : $field['captcha_size'];
 	}
 
 	/**
+	 * Deternine if the Captcha Size setting should be shown in field settings.
+	 * This has options for "Normal" and "Compact".
 	 * This is supported by all CAPTCHA types except for invisible reCAPTCHAs.
 	 *
 	 * @since x.x
@@ -221,6 +240,9 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Determine if the "auto" option should be shown for a specific captcha type.
+	 * This is only applicable for Turnstile.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
