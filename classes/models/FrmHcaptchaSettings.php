@@ -19,7 +19,16 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @return string
 	 */
-	public function getName() {
+	public function get_name() {
 		return 'hCaptcha';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_element_class_name() {
+		return 'h-captcha';
 	}
 }

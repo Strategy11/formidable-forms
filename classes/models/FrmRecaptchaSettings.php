@@ -22,4 +22,14 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	public function getName() {
 		return 'reCAPTCHA';
 	}
+
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_element_class_name() {
+		return 'g-recaptcha';
+	}
 }

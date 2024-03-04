@@ -245,15 +245,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return 'g-recaptcha'|'h-captcha'
 	 */
 	protected function captcha_class( $frm_settings ) {
-		if ( 'recaptcha' === $frm_settings->active_captcha ) {
-			return 'g-recaptcha';
-		}
-
-		if ( 'hcaptcha' === $frm_settings->active_captcha ) {
-			return 'h-captcha';
-		}
-
-		return 'cf-turnstile';
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->get_element_class_name();
 	}
 
 	protected function allow_multiple( $frm_settings ) {
