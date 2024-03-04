@@ -91,7 +91,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @return string
 	 */
 	protected function get_captcha_size( $field ) {
-		if ( in_array( $this->frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
+		if ( $this->captcha_is_invisible() ) {
 			return 'invisible';
 		}
 		return parent::get_captcha_size( $field );
