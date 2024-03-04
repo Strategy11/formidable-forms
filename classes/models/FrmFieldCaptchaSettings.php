@@ -138,6 +138,11 @@ class FrmFieldCaptchaSettings {
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
 		$attributes['data-size'] = $this->get_captcha_size( $field );
+
+		if ( ! empty( $field['captcha_theme'] ) ) {
+			$attributes['data-theme'] = $field['captcha_theme'];
+		}
+
 		return $attributes;
 	}
 
@@ -164,13 +169,14 @@ class FrmFieldCaptchaSettings {
 
 	/**
 	 * Determine if we should show a theme dropdown for our Captcha field.
+	 * This is applicable for all Captcha types except for invisible reCAPTCHA.
 	 *
 	 * @since x.x
 	 *
 	 * @return bool
 	 */
 	public function should_show_captcha_theme() {
-		return false;
+		return true;
 	}
 
 	/**
