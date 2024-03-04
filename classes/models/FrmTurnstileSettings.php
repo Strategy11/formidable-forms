@@ -14,7 +14,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	 * @return void
 	 */
 	protected function set_token_field() {
-		$this->token_field = 'frm-turnstile-response';
+		$this->token_field = 'cf-turnstile-response';
 	}
 
 	/**

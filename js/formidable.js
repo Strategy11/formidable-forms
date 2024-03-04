@@ -1609,26 +1609,6 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterTurnstile: function( token ) {
-			var turnstile, fieldsContainer, input;
-
-			turnstile = document.querySelector( '.frm_form_fields  .cf-turnstile' );
-			if ( ! turnstile ) {
-				return;
-			}
-
-			fieldsContainer = turnstile.closest( '.frm_fields_container' );
-			if ( ! fieldsContainer ) {
-				return;
-			}
-
-			input = document.createElement( 'input' );
-			input.type = 'hidden';
-			input.setAttribute( 'name', 'frm-turnstile-response' );
-			input.setAttribute( 'value', token );
-			fieldsContainer.appendChild( input );
-		},
-
 		afterRecaptcha: function( token, formID ) {
 			var object = jQuery( '#frm_form_' + formID + '_container form' )[0];
 			frmFrontForm.submitFormNow( object );
@@ -1925,10 +1905,6 @@ function frmRecaptcha() {
 
 function frmAfterRecaptcha( token ) {
 	frmFrontForm.afterSingleRecaptcha( token );
-}
-
-function frmAfterTurnstile( token ) {
-	frmFrontForm.afterTurnstile( token );
 }
 
 function frmUpdateField( entryId, fieldId, value, message, num ) {
