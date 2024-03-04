@@ -90,8 +90,10 @@ class FrmField {
 			$captcha_name = 'Captcha';
 		} elseif ( $active_captcha === 'recaptcha' ) {
 			$captcha_name = 'reCAPTCHA';
-		} else {
+		} elseif ( 'hcaptcha' === $active_captcha ) {
 			$captcha_name = 'hCaptcha';
+		} else {
+			$captcha_name = 'Turnstile';
 		}
 		return $captcha_name;
 	}
