@@ -830,8 +830,7 @@ class FrmForm {
 		 *
 		 * @param stdClass $row
 		 */
-		$row = apply_filters( 'frm_form_object', $row );
-		return $row;
+		return apply_filters( 'frm_form_object', $row );
 	}
 
 	/**
