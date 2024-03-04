@@ -64,6 +64,9 @@ class FrmFieldCaptchaSettings {
 
 	/**
 	 * Set the string to use for $this->token_field.
+	 * This is consistent between the different CAPTCHA services.
+	 * The element class name is always the same as the key before "-response" in the $_POST value key.
+	 * For example (h-captcha-response, or cf-turnstile-response).
 	 *
 	 * @since x.x
 	 *
