@@ -344,23 +344,35 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( 'recaptcha' === $frm_settings->active_captcha ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$missing_token = ! isset( $_POST['g-recaptcha-response'] );
-		} elseif ( 'hcaptcha' === $frm_settings->active_captcha ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$missing_token = ! isset( $_POST['h-captcha-response'] );
-		} else {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$missing_token = ! isset( $_POST['frm-turnstile-response'] );
-		}
-
+		$missing_token = ! $this->post_data_includes_token();
 		if ( $missing_token ) {
-			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form (Lite)', 'formidable' ) );
+			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
 
 		return $this->validate_against_api( $args );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	protected function post_data_includes_token() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$map          = array(
+			'recaptcha' => 'g-recaptcha-response',
+			'hcaptcha'  => 'h-captcha-response',
+			'turnstile' => 'frm-turnstile-response',
+		);
+
+		if ( ! isset( $map[ $frm_settings->active_captcha ] ) ) {
+			return false;
+		}
+
+		$key = $map[ $frm_settings->active_captcha ];
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return ! empty( $_POST[ $key ] );
 	}
 
 	/**
