@@ -817,17 +817,20 @@ class FrmForm {
 	 */
 	private static function prepare_form_row_data( $row ) {
 		$row = wp_unslash( $row );
-		if ( is_object( $row ) && ! is_array( $row->options ) ) {
+		if ( ! is_object( $row ) ) {
+			return $row;
+		}
+
+		if ( ! is_array( $row->options ) ) {
 			$row->options = FrmFormsHelper::get_default_opts();
 		}
-		if ( is_object( $row ) ) {
-			/**
-			 * @since 4.03.02
-			 *
-			 * @param stdClass $row
-			 */
-			$row = apply_filters( 'frm_form_object', $row );
-		}
+
+		/**
+		 * @since 4.03.02
+		 *
+		 * @param stdClass $row
+		 */
+		$row = apply_filters( 'frm_form_object', $row );
 		return $row;
 	}
 
