@@ -22,8 +22,7 @@ class FrmCaptchaFactory {
 			$class = self::get_settings_class( $captcha_type );
 		}
 
-		$settings     = new $class( $frm_settings );
-		return $settings;
+		return new $class( $frm_settings );
 	}
 
 	/**

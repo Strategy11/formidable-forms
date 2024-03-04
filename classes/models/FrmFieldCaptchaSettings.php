@@ -9,11 +9,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldCaptchaSettings {
 
 	/**
+	 * The global settings object.
+	 *
 	 * @param FrmSettings $settings
 	 */
 	public $frm_settings;
 
 	/**
+	 * The private key used for validating the token.
+	 *
 	 * @since 6.0
 	 *
 	 * @var string
@@ -21,6 +25,8 @@ class FrmFieldCaptchaSettings {
 	public $secret;
 
 	/**
+	 * The key value to check in $_POST data with the token for validation.
+	 *
 	 * @since 6.0
 	 *
 	 * @var string
@@ -28,6 +34,8 @@ class FrmFieldCaptchaSettings {
 	public $token_field;
 
 	/**
+	 * The URL that is called when validating the token.
+	 *
 	 * @since 6.0
 	 *
 	 * @var string
@@ -45,6 +53,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the name of the CAPTCHA service.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -54,6 +64,8 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the class name used for the CAPTCHA element on the front end.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -63,6 +75,9 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Get the URL of the page to link to in global settings. This page should have
+	 * instructions on how to get site and secret keys.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
