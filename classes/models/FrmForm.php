@@ -820,7 +820,15 @@ class FrmForm {
 		if ( is_object( $row ) && ! is_array( $row->options ) ) {
 			$row->options = FrmFormsHelper::get_default_opts();
 		}
-		return apply_filters( 'frm_form_object', $row );
+		if ( is_object( $row ) ) {
+			/**
+			 * @since 4.03.02
+			 *
+			 * @param stdClass $row
+			 */
+			$row = apply_filters( 'frm_form_object', $row );
+		}
+		return $row;
 	}
 
 	/**
