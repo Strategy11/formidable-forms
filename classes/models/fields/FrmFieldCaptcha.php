@@ -313,7 +313,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
-		$missing_token = ! $this->post_data_includes_token();
+		$missing_token = ! self::post_data_includes_token();
 		if ( $missing_token ) {
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
@@ -326,12 +326,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 *
 	 * @return bool
 	 */
-	protected function post_data_includes_token() {
-		$settings     = FrmCaptchaFactory::get_settings_object();
-		$expected_key = $settings->token_field;
-
+	protected static function post_data_includes_token() {
+		$settings = FrmCaptchaFactory::get_settings_object();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return ! empty( $_POST[ $expected_key ] );
+		return ! empty( $_POST[ $settings->token_field ] );
 	}
 
 	/**
