@@ -47,10 +47,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$should_show_captcha_theme             = false;
 		$should_show_captcha_theme_auto_option = false;
 
-		if ( 'recaptcha' === $frm_settings->active_captcha && $frm_settings->re_type !== 'invisible' ) {
+		if ( 'recaptcha' === $frm_settings->active_captcha && ! in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
 			$should_show_captcha_size  = true;
 			$should_show_captcha_theme = true;
-		} else if ( 'turnstile' === $frm_settings->active_captcha ) {
+		} elseif ( 'turnstile' === $frm_settings->active_captcha ) {
 			$should_show_captcha_theme             = true;
 			$should_show_captcha_theme_auto_option = true;
 		}
