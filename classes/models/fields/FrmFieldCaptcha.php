@@ -351,21 +351,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return bool
 	 */
 	protected function post_data_includes_token() {
-		$frm_settings = FrmAppHelper::get_settings();
-		$map          = array(
-			'recaptcha' => 'g-recaptcha-response',
-			'hcaptcha'  => 'h-captcha-response',
-			'turnstile' => 'frm-turnstile-response',
-		);
-
-		if ( ! isset( $map[ $frm_settings->active_captcha ] ) ) {
-			return false;
-		}
-
-		$key = $map[ $frm_settings->active_captcha ];
+		$settings     = FrmCaptchaFactory::get_settings_object();
+		$expected_key = $settings->token_field;
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return ! empty( $_POST[ $key ] );
+		return ! empty( $_POST[ $expected_key ] );
 	}
 
 	/**
