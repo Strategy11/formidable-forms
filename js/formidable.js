@@ -1575,7 +1575,7 @@ function frmFrontFormJS() {
 				'click',
 				'input[type="submit"], .frm_prev_page, .frm_save_draft, .frm_button_submit',
 				function( event ) {
-					event.target.className = event.target.className + ' frm_show_loader';
+					event.target.className += ' frm_show_loader';
 				}
 			);
 		},
