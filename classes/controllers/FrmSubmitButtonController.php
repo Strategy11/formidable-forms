@@ -38,4 +38,35 @@ class FrmSubmitButtonController {
 
 		return false;
 	}
+
+	/**
+	 * Gets current action (create or update) from the global variable.
+	 *
+	 * @param int $form_id Form ID.
+	 * @return string
+	 */
+	public static function get_current_action_from_global_var( $form_id ) {
+		global $frm_vars;
+
+		if ( isset( $frm_vars['form_params'][ $form_id ]['action'] ) ) {
+			return $frm_vars['form_params'][ $form_id ]['action'];
+		}
+
+		return 'create';
+	}
+
+	public static function copy_submit_field_settings_to_form( $form ) {
+		$submit_field = self::get_submit_field( $form->id );
+		if ( ! $submit_field ) {
+			return $form;
+		}
+
+		$form->options['submit_value']     = $submit_field->name;
+		$form->options['edit_value']       = FrmField::get_option( $submit_field, 'edit_text' );
+		$form->options['submit_align']     = FrmField::get_option( $submit_field, 'align' );
+		$form->options['start_over']       = FrmField::get_option( $submit_field, 'start_over' );
+		$form->options['start_over_label'] = FrmField::get_option( $submit_field, 'start_over_label' );
+
+		return $form;
+	}
 }

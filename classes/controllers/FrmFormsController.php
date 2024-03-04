@@ -2028,6 +2028,8 @@ class FrmFormsController {
 			return __( 'Please select a valid form', 'formidable' );
 		}
 
+		$form = FrmSubmitButtonController::copy_submit_field_settings_to_form( $form );
+
 		if ( 'auto' === $title ) {
 			$title = ! empty( $form->options['show_title'] );
 		}

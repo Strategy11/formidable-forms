@@ -23,7 +23,7 @@ class FrmFieldSubmit extends FrmFieldType {
 
 	public function default_html() {
 		$default_html = <<<DEFAULT_HTML
-<div id="frm_field_[id]_container" class="frm_form_field form-field">
+<div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	[input]
 </div>
 DEFAULT_HTML;
@@ -99,10 +99,10 @@ DEFAULT_HTML;
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
-		$form  = FrmForm::getOne( $this->field['form_id'] );
-		$submit = $this->field['name'];
-		$form_action = 'create'; // TODO.
-		$values = FrmAppHelper::setup_edit_vars( $form, 'forms' );
+		$form        = FrmForm::getOne( $this->field['form_id'] );
+		$submit      = $this->field['name'];
+		$form_action = FrmSubmitButtonController::get_current_action_from_global_var( $form->id );
+		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
 
 		ob_start();
 		FrmFormsHelper::get_custom_submit( $values['submit_html'], $form, $submit, $form_action, $values );
