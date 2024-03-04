@@ -502,7 +502,16 @@ class FrmXMLHelper {
 	private static function do_after_field_imported_action( $field_array, $old_field_id, $form_fields ) {
 		$field_array       = self::update_field_options_with_defaults( $field_array );
 		$field_array['id'] = $old_field_id;
-		do_action( 'frm_after_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ] );
+
+		/**
+		 * Fires when an existing field is imported.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field_array
+		 * @param int   $field_id
+		 */
+		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ] );
 	}
 
 	private static function fill_field( $field, $form_id ) {
