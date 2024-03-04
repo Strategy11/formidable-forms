@@ -89,6 +89,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -97,31 +99,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return '';
 		}
 
-		$settings = FrmCaptchaFactory::get_settings_object();
-
-		$class_prefix   = $this->class_prefix( $frm_settings );
-		$captcha_class  = $this->captcha_class( $frm_settings );
-		$captcha_size   = $this->captcha_size( $frm_settings );
+		$settings       = FrmCaptchaFactory::get_settings_object();
 		$div_attributes = array(
 			'id'           => $args['html_id'],
-			'class'        => $class_prefix . $captcha_class,
+			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
 			'data-sitekey' => $settings->get_pubkey(),
 		);
-
-		if ( 'recaptcha' === $frm_settings->active_captcha ) {
-			$div_attributes['data-size']  = $captcha_size;
-			$div_attributes['data-theme'] = $this->field['captcha_theme'];
-
-			if ( $captcha_size === 'invisible' && ! $frm_settings->re_multi ) {
-				$div_attributes['data-callback'] = 'frmAfterRecaptcha';
-			}
-		}
-
-		if ( 'turnstile' === $frm_settings->active_captcha ) {
-			$div_attributes['data-callback'] = 'frmAfterTurnstile';
-		}
-
-		$html = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
+		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
+		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
 		return $html;
 	}
@@ -252,19 +237,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	protected function allow_multiple( $frm_settings ) {
 		return $frm_settings->re_multi;
-	}
-
-	/**
-	 * @return string
-	 *
-	 * @param FrmSettings $frm_settings
-	 */
-	protected function captcha_size( $frm_settings ) {
-		if ( in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
-			return 'invisible';
-		}
-		// for reverse compatibility
-		return $this->field['captcha_size'] === 'default' ? 'normal' : $this->field['captcha_size'];
 	}
 
 	/**
@@ -418,5 +390,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * @return string
+	 *
+	 * @param FrmSettings $frm_settings
+	 */
+	protected function captcha_size( $frm_settings ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return 'normal';
 	}
 }

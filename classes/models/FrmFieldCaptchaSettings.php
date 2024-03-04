@@ -111,4 +111,17 @@ class FrmFieldCaptchaSettings {
 	public function has_pubkey() {
 		return ! empty( $this->get_pubkey() );
 	}
+
+	/**
+	 * This can be used to add additional attributes to a front end Captcha element.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $attributes
+	 * @param string $captcha_size
+	 * @return array
+	 */
+	public function add_front_end_element_attributes( $attributes, $captcha_size ) {
+		return $attributes;
+	}
 }

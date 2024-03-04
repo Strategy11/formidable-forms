@@ -54,4 +54,39 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	public function get_site_key_tooltip() {
 		return __( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' );
 	}
+
+	/**
+	 * Add additional element attributes for reCAPTCHA.
+	 *
+	 * @since x.x
+	 *
+	 * 
+	 * @param array $attributes
+	 * @param array $field
+	 * @return array
+	 */
+	public function add_front_end_element_attributes( $attributes, $field ) {
+		$attributes['data-size']  = $this->get_captcha_size( $field );
+		$attributes['data-theme'] = $field['captcha_theme'];
+
+		if ( $captcha_size === 'invisible' && ! $this->frm_settings->re_multi ) {
+			$attributes['data-callback'] = 'frmAfterRecaptcha';
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @return string
+	 */
+	private function get_captcha_size( $field ) {
+		if ( in_array( $this->frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
+			return 'invisible';
+		}
+		// for reverse compatibility
+		return $field['captcha_size'] === 'default' ? 'normal' : $field['captcha_size'];
+	}
 }
