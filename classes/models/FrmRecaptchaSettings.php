@@ -66,7 +66,8 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
-		$attributes['data-size']  = $this->get_captcha_size( $field );
+		$captcha_size             = $this->get_captcha_size( $field );
+		$attributes['data-size']  = $captcha_size;
 		$attributes['data-theme'] = $field['captcha_theme'];
 
 		if ( $captcha_size === 'invisible' && ! $this->frm_settings->re_multi ) {
