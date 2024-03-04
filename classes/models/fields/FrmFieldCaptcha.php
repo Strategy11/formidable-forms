@@ -412,9 +412,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @param FrmSettings $frm_settings
 	 */
 	protected function send_api_check( $frm_settings ) {
-		$captcha_settings = new FrmFieldCaptchaSettings( $frm_settings );
-
-		$arg_array = array(
+		$captcha_settings = FrmCaptchaFactory::get_settings_object();
+		$arg_array        = array(
 			'body' => array(
 				'secret'   => $captcha_settings->secret,
 				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
