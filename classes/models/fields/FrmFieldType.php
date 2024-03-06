@@ -1571,24 +1571,24 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.8.3
 	 *
 	 * @return string
 	 */
 	protected function default_unique_msg() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_unique_msg' );
+		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_unique_msg' );
 		$frm_settings = FrmAppHelper::get_settings();
 		$message      = $frm_settings->unique_msg;
 		return $message;
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.8.3
 	 *
 	 * @return string
 	 */
 	protected function default_invalid_msg() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_invalid_msg' );
+		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_invalid_msg' );
 		return FrmFieldsHelper::default_invalid_msg();
 	}
 }

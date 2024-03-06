@@ -555,7 +555,7 @@ class FrmXMLController {
 	/**
 	 * Returns an array that has parent term slugs for the terms provided.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 * @param array $terms
 	 * @return array
 	 */

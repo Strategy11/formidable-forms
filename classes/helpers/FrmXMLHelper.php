@@ -2068,7 +2068,7 @@ class FrmXMLHelper {
 	 * Get the file types allowed for importing.
 	 * This is used in the "accept" attribute for the file upload input on the XML import page.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return array
 	 */

@@ -1195,7 +1195,7 @@ class FrmStylesController {
 	/**
 	 * Duplicate of WordPress do_accordion_section function, it adds an additional svg icon support.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return int
 	 */
