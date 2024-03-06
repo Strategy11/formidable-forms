@@ -9544,7 +9544,7 @@ function frmAdminBuildJS() {
 				// Handle successful form submission.
 				// handle the Active Campaign form on the inbox page.
 				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-					span({ text: __( 'Thank you for signing up!', 'formidable' ) })
+					span( __( 'Thank you for signing up!', 'formidable' ) )
 				);
 			}
 		});
