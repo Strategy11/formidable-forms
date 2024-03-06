@@ -102,15 +102,20 @@ if ( empty( $frm_inc_tax ) ) {
 	$frm_inc_tax = array();
 }
 
+$parent_slugs = FrmXMLController::get_parent_terms_slugs( $terms );
+
 foreach ( (array) $terms as $term ) {
 	if ( in_array( $term->term_id, $frm_inc_tax, true ) ) {
-		return;
+		continue;
 	}
 
 	$frm_inc_tax[] = $term->term_id;
 	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
+	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {
+		echo '<term_parent>' . esc_html( $parent_slugs[ $term->parent ] ) . '</term_parent>';
+	}
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -119,4 +124,4 @@ foreach ( (array) $terms as $term ) {
 	}
 	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
 	echo '</term>';
-}
+}//end foreach

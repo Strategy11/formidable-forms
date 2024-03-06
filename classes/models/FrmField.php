@@ -104,6 +104,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_upload_icon',
 				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
 			),
+			'ranking'  => array(),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
@@ -234,6 +235,19 @@ class FrmField {
 			),
 		);
 
+		if ( self::include_ranking_fields() ) {
+			$fields['ranking'] = array(
+				'name'         => __( 'Ranking', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
+				'upsell_image' => $images_url . 'ranking-field.svg',
+				'addon'        => 'surveys',
+				'is_new'       => self::field_is_new( 'ranking' ),
+			);
+		} else {
+			unset( $fields['ranking'] );
+		}
+
 		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
 			unset( $fields['ai'] );
 		}
@@ -245,6 +259,97 @@ class FrmField {
 		}
 
 		return apply_filters( 'frm_pro_available_fields', $fields );
+	}
+
+	/**
+	 * Check if we should show ranking fields in the builder.
+	 * This is based on the active version coming from our API data.
+	 * If Surveys v1.1 is not released yet, we don't want to display ranking fields yet.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	private static function include_ranking_fields() {
+		if ( class_exists( 'FrmSurveys\models\fields\Ranking' ) ) {
+			// Always return true if Ranking fields exist.
+			return true;
+		}
+
+		$plugin           = 'formidable-surveys/formidable-surveys.php';
+		$expected_version = '1.1';
+
+		return self::installed_plugin_meets_version( $plugin, $expected_version ) || self::api_meets_version( $plugin, $expected_version );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @param string $plugin
+	 * @param string $expected_version
+	 * @return bool
+	 */
+	private static function installed_plugin_meets_version( $plugin, $expected_version ) {
+		$installed_version = self::get_installed_version( $plugin );
+		return $installed_version && version_compare( $installed_version, $expected_version, '>=' );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @param string $plugin
+	 * @return string|false String version. False if the plugin is not installed.
+	 */
+	private static function get_installed_version( $plugin ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins = get_plugins();
+		if ( isset( $plugins[ $plugin ] ) && ! empty( $plugins[ $plugin ]['Version'] ) ) {
+			return $plugins[ $plugin ]['Version'];
+		}
+		return false;
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @param string $plugin
+	 * @param string $expected_version
+	 * @return bool
+	 */
+	private static function api_meets_version( $plugin, $expected_version ) {
+		$api     = new FrmFormApi();
+		$addons  = $api->get_api_info();
+		$matches = wp_list_filter( $addons, array( 'plugin' => $plugin ) );
+		if ( ! $matches ) {
+			return false;
+		}
+
+		$match = reset( $matches );
+		if ( empty( $match['new_version'] ) ) {
+			return false;
+		}
+
+		$api_version = $match['new_version'];
+		return version_compare( $api_version, $expected_version, '>=' );
+	}
+
+	/**
+	 * Consider a field new for 90 days after the release date.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param string $type
+	 * @return bool
+	 */
+	private static function field_is_new( $type ) {
+		if ( 'ranking' === $type ) {
+			$ranking_release_date       = '2024-03-12';
+			$three_months_after_release = gmdate( 'Y-m-d', strtotime( $ranking_release_date . ' + 90 days' ) );
+			return gmdate( 'Y-m-d' ) < $three_months_after_release;
+		}
+		return false;
 	}
 
 	/**

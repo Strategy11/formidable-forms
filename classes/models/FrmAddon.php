@@ -21,14 +21,31 @@ class FrmAddon {
 	protected $get_beta = false;
 
 	/**
-	 * This is used to flag other add ons not to send a request.
-	 * We only want to send a single API request per HTTP request.
+	 * This is used to decide whether the license checks should continue.
+	 * The point is to avoid license issues when a site url changes.
 	 *
-	 * @since 6.7.1
+	 * @since 6.8.3
+	 *
+	 * @var array
+	 */
+	private $save_response = array();
+
+	/**
+	 * This is used to flag other add ons not to send a request.
+	 * We only want to send a single API request per page load.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @var string
+	 */
+	private $transient_lock_key = 'frm_activate_request_lock';
+
+	/**
+	 * @since 6.8.3
 	 *
 	 * @var bool
 	 */
-	private static $sent_mothership_request = false;
+	protected $should_clear_cache = true;
 
 	public function __construct() {
 
@@ -181,9 +198,8 @@ class FrmAddon {
 	 */
 	public function activate_defined_license() {
 		$license = $this->get_defined_license();
-		if ( ! empty( $license ) && ! $this->is_active() && $this->is_time_to_auto_activate() ) {
+		if ( ! empty( $license ) && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
 			$response = $this->activate_license( $license );
-			$this->set_auto_activate_time();
 			if ( ! $response['success'] ) {
 				$license = '';
 			}
@@ -207,22 +223,6 @@ class FrmAddon {
 		update_option( $this->option_name . 'key', $license );
 	}
 
-	/**
-	 * If the license is in the config, limit the frequency of checks.
-	 * The license may be entered incorrectly, so we don't want to check on every page load.
-	 *
-	 * @since 2.04
-	 */
-	private function is_time_to_auto_activate() {
-		$last_try = get_option( $this->option_name . 'last_activate' );
-
-		return ( ! $last_try || $last_try < strtotime( '-1 day' ) );
-	}
-
-	private function set_auto_activate_time() {
-		update_option( $this->option_name . 'last_activate', time() );
-	}
-
 	public function is_active() {
 		return get_option( $this->option_name . 'active' );
 	}
@@ -241,13 +241,39 @@ class FrmAddon {
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
-		delete_site_option( $this->transient_key() );
-		delete_option( $this->transient_key() );
-		$this->delete_cache();
+
+		if ( $this->should_clear_cache ) {
+			delete_site_option( $this->transient_key() );
+			delete_option( $this->transient_key() );
+			$this->delete_cache();
+			$this->should_clear_cache = true;
+		}
+	}
+
+	/**
+	 * Don't save an invalid license.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param bool $is_valid If license activation was successful.
+	 *
+	 * @return void
+	 */
+	protected function maybe_set_active( $is_valid ) {
+		update_option( $this->option_name . 'active', $is_valid );
+		if ( $is_valid ) {
+			$this->set_active( $is_valid );
+			return;
+		}
+
+		// Don't save the license if it's invalid.
+		$this->should_clear_cache = false;
+		$this->clear_license();
+		delete_option( $this->option_name . 'key' );
+		$this->license = '';
 	}
 
 	public function set_active( $is_active ) {
-		update_option( $this->option_name . 'active', $is_active );
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
 		$this->update_pro_capabilities();
@@ -291,6 +317,9 @@ class FrmAddon {
 	 */
 	protected function delete_cache() {
 		delete_transient( 'frm_api_licence' );
+
+		// Cleanup option that has been removed.
+		delete_option( $this->option_name . 'last_activate' );
 
 		$api = new FrmFormApi( $this->license );
 		$api->reset_cached();
@@ -475,21 +504,19 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( self::$sent_mothership_request ) {
-			return;
-		}
-
 		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
-		// Only check weekly.
-		if ( $this->checked_recently( '7 days' ) ) {
+		if ( $this->get_defined_license() ) {
+			// Don't check if the license is defined in wp-config.php since we can't remove it.
 			return;
 		}
 
-		self::$sent_mothership_request = true;
-		$this->update_last_checked();
+		// Only check weekly.
+		if ( $this->checked_recently( '7 days', 'valid' ) || $this->is_running() ) {
+			return;
+		}
 
 		$response = $this->get_license_status();
 		if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
@@ -500,17 +527,34 @@ class FrmAddon {
 	/**
 	 * Has this been checked too recently?
 	 *
-	 * @param string $time ie. '1 day'.
+	 * @param string $time            ie. '1 day'.
+	 * @param string $required_status Return false if the last check does not match. ie 'valid'.
+	 *
 	 * @return bool
 	 */
-	private function checked_recently( $time ) {
+	private function checked_recently( $time, $required_status = '' ) {
 		$last_checked = $this->last_checked();
+		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
+		if ( $is_429 ) {
+			// If the last check was a a rate limit, we'll need to check again sooner.
+			$time            = '5 minutes';
+			$required_status = '';
+		}
+
+		if ( $required_status && ( ! isset( $last_checked['status'] ) || $last_checked['status'] !== $required_status ) ) {
+			// If the last check was invalid, we don't need to check again.
+			return true;
+		}
+
+		$checked_time = isset( $last_checked['time'] ) ? $last_checked['time'] : false;
 		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
-		return $last_checked && $last_checked > $time_ago;
+		return $checked_time && $checked_time > $time_ago;
 	}
 
 	/**
-	 * @return bool|string
+	 * @since 6.8.3 Switched to an array to store extra response info.
+	 *
+	 * @return array
 	 */
 	private function last_checked() {
 		if ( is_multisite() ) {
@@ -518,17 +562,22 @@ class FrmAddon {
 		} else {
 			$last_checked = get_option( $this->transient_key() );
 		}
-		return $last_checked;
+		if ( $last_checked && ! is_array( $last_checked ) ) {
+			// Get string into array for existing values.
+			$last_checked = array( 'time' => $last_checked );
+		}
+		return $last_checked ? (array) $last_checked : array();
 	}
 
 	/**
 	 * @return void
 	 */
 	private function update_last_checked() {
+		$this->save_response['time'] = gmdate( 'Y-m-d H:i:s' );
 		if ( is_multisite() ) {
-			update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
+			update_site_option( $this->transient_key(), $this->save_response );
 		} else {
-			update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
+			update_option( $this->transient_key(), $this->save_response );
 		}
 	}
 
@@ -592,7 +641,7 @@ class FrmAddon {
 				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
-			$this->set_active( $is_valid );
+			$this->maybe_set_active( $is_valid );
 		}
 
 		$this->update_last_checked();
@@ -620,6 +669,8 @@ class FrmAddon {
 	}
 
 	private function get_license_status() {
+		$this->set_running();
+
 		$response = array(
 			'status' => 'missing',
 			'error'  => true,
@@ -637,7 +688,8 @@ class FrmAddon {
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
 				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
-					$response['status'] = $license_data['license'];
+					$response['status']          = $license_data['license'];
+					$this->save_status['status'] = $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
@@ -646,6 +698,8 @@ class FrmAddon {
 			$response['status'] = $e->getMessage();
 		}
 
+		$this->update_last_checked();
+		$this->done_running();
 		return $response;
 	}
 
@@ -745,6 +799,8 @@ class FrmAddon {
 		);
 		$body = wp_remote_retrieve_body( $resp );
 
+		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
+
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
 			$link = FrmAppHelper::admin_upgrade_link( 'api', 'knowledgebase/why-cant-i-activate-formidable-pro/' );
@@ -784,5 +840,45 @@ class FrmAddon {
 		$updates->no_update    = array();
 		$updates->checked      = array();
 		set_site_transient( 'update_plugins', $updates );
+	}
+
+	/**
+	 * Set the transient key for the lock. It should be unique to the license.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	protected function lock_key() {
+		return $this->transient_lock_key . '_' . $this->license;
+	}
+
+	/**
+	 * Prevent multiple requests from running at the same time.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	protected function is_running() {
+		return get_transient( $this->lock_key() );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @return void
+	 */
+	protected function set_running() {
+		set_transient( $this->lock_key(), true, 2 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @return void
+	 */
+	protected function done_running() {
+		delete_transient( $this->lock_key() );
 	}
 }

@@ -205,7 +205,7 @@ class FrmStylesHelper {
 	/**
 	 * Remove the rgb()/rgba() wrapper from a RGB color and return its R, G and B values as an array.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $rgb    RGB value including the rgb() or rgba() wrapper.
 	 * @return array<string> including three numeric values for R, G, and B.
@@ -223,7 +223,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the R, G, and B array values from a Hex color code.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $hex    A hex color string.
 	 * @return array<string> Including three numeric values for R, G, and B.

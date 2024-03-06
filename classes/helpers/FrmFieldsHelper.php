@@ -177,7 +177,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -187,7 +187,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -199,7 +199,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -349,7 +349,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string       $msg
 	 * @param string       $error
@@ -374,7 +374,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $field_name
 	 * @param array  $filter_args {
@@ -393,7 +393,7 @@ class FrmFieldsHelper {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.8.3
 		 *
 		 * @param array<string> $substrings
 		 * @param array         $filter_args
@@ -403,7 +403,7 @@ class FrmFieldsHelper {
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings = $filtered_substrings;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
 		}
 
 		return $substrings;
@@ -513,9 +513,9 @@ class FrmFieldsHelper {
 		}
 
 		$base_name = 'default_value_' . $field['id'];
-		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
-		$default_type = self::get_default_value_type( $field );
+		$default_type          = self::get_default_value_type( $field );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
@@ -1987,6 +1987,12 @@ class FrmFieldsHelper {
 		$field_name   = FrmFormsHelper::get_field_link_name( $field_type );
 		$field_label .= ' <span>' . $field_name . '</span>';
 
+		if ( ! empty( $field_type['is_new'] ) ) {
+			ob_start();
+			FrmAppHelper::show_pill_text();
+			$field_label .= ob_get_clean();
+		}
+
 		// If the individual field isn't allowed, disable it.
 		$run_filter             = true;
 		$single_no_allow        = ' ';
@@ -2032,6 +2038,10 @@ class FrmFieldsHelper {
 			'data-content'  => $field_key,
 			'data-requires' => $requires,
 		);
+
+		if ( ! empty( $field_type['upsell_image'] ) ) {
+			$li_params['data-upsell-image'] = $field_type['upsell_image'];
+		}
 
 		if ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
