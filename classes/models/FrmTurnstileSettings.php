@@ -65,21 +65,6 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * Add additional element attributes for Turnstile.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $attributes
-	 * @param array $field
-	 * @return array
-	 */
-	public function add_front_end_element_attributes( $attributes, $field ) {
-		$attributes                  = parent::add_front_end_element_attributes( $attributes, $field );
-		$attributes['data-callback'] = 'frmAfterTurnstile';
-		return $attributes;
-	}
-
-	/**
 	 * Turnstile supports an "Auto" theme option so show it.
 	 *
 	 * @since x.x
