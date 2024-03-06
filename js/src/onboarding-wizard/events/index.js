@@ -100,5 +100,5 @@ export const navigateToNextStep = () => {
 window.addEventListener( 'popstate', ( event ) => {
 	const stepName = event.state?.step || getQueryParam( 'step' );
 	// Navigate to the specified step without adding to browser history
-    navigateToStep( stepName, 'replaceState' );
+	navigateToStep( stepName, 'replaceState' );
 });
