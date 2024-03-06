@@ -146,7 +146,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		$allow_mutiple = $frm_settings->re_multi;
 		if ( $allow_mutiple ) {
-			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
+			$api_js_url .= '&onload=frmCaptcha&render=explicit';
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
@@ -160,7 +160,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function hcaptcha_api_url() {
-		$api_js_url = 'https://js.hcaptcha.com/1/api.js?&onload=frmRecaptcha&render=explicit';
+		$api_js_url = 'https://js.hcaptcha.com/1/api.js?&onload=frmCaptcha&render=explicit';
 
 		/**
 		 * Allows updating hcaptcha js api url.

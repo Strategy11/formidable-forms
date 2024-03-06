@@ -1,4 +1,4 @@
-/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
+/* exported frmCaptcha, frmAfterRecaptcha, frmUpdateField */
 
 var frmFrontForm;
 
@@ -1572,7 +1572,7 @@ function frmFrontFormJS() {
 			setSelectPlaceholderColor();
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
-			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
+			jQuery( document ).on( 'elementor/popup/show', frmCaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
 			jQuery( document ).on(
@@ -1910,7 +1910,7 @@ function reCaptchaIsSelected() {
 	return !! document.querySelector( '.frm-g-recaptcha' );
 }
 
-function frmRecaptcha() {
+function frmCaptcha() {
 	var c, cl,
 		captchas = reCaptchaIsSelected() ? jQuery( '.frm-g-recaptcha' ) : jQuery( '.h-captcha' );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
