@@ -1526,6 +1526,9 @@ function frmFrontFormJS() {
 	 * Destroys the global hcaptcha object since it wouldn't otherwise render.
 	 */
 	function destroyhCaptcha() {
+		if ( ! window.hasOwnProperty( 'hcaptcha' ) ) {
+			return;
+		}
 		window.hcaptcha = null;
 	}
 
