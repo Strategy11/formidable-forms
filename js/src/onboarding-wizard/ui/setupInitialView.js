@@ -89,11 +89,11 @@ function handleLicenseKeyInput( hiddenLicenseKeyInput, installFormidableProStep,
 	licenseKeyInput.value = hiddenLicenseKeyInput.value;
 
 	if ( proIsIncluded ) {
-		installFormidableProStep.remove(); // Remove install step if Pro is installed
+		installFormidableProStep.remove(); // Remove install Pro step if Pro is installed
 		return STEPS.LICENSE_MANAGEMENT;
-	} else {
-		return STEPS.INSTALL_FORMIDABLE_PRO;
 	}
+
+	return STEPS.INSTALL_FORMIDABLE_PRO;
 }
 
 /**
