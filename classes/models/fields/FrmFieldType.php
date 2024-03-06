@@ -486,9 +486,12 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args
+	 * @return bool
 	 */
 	protected function should_continue_to_field_options( $args ) {
-		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ) );
+		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ), true );
 	}
 
 	/**

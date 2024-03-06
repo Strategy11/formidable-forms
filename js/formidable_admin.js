@@ -5462,7 +5462,6 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
-			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 
@@ -5472,6 +5471,7 @@ function frmAdminBuildJS() {
 				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
 				isProduct = isProductField( fieldId );
 
+			type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) );
 			for ( i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
@@ -5544,21 +5544,39 @@ function frmAdminBuildJS() {
 	}
 
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
-		var other, single,
+		var other,
+			single = '',
 			isOther = opt.key.indexOf( 'other' ) !== -1,
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		this.getSingle = function() {
+
+			/**
+			 * Get single option template.
+			 * @param {Object} option  Object containing the option data.
+			 * @param {string} type    The field type.
+			 * @param {string} fieldId The field id.
+			 * @param {string} classes The option clasnames.
+			 * @param {string} id      The input id attribute.
+			 */
+			single = wp.hooks.applyFilters( 'frm_admin.build_single_option_template', single, { opt, type, fieldId, classes, id });
+
+			if ( '' !== single ) {
+				return single;
+			}
+
+			return '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
+		};
 
-		return single;
+		return this.getSingle();
 	}
 
 	function fillDropdownOpts( field, atts ) {
@@ -6617,6 +6635,15 @@ function frmAdminBuildJS() {
 		}
 
 		upgradeMessage.innerHTML = newMessage;
+
+		if ( link.dataset.upsellImage ) {
+			upgradeMessage.appendChild(
+				img({
+					src: link.dataset.upsellImage,
+					alt: link.dataset.upgrade
+				})
+			);
+		}
 
 		// Either set the link or use the default.
 		showLink.href = getShowLinkHrefValue( link, showLink );
