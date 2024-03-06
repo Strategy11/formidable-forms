@@ -1522,6 +1522,10 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function resetHcaptcha() {
+		window.hcaptcha = null;
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1571,21 +1575,28 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
+			jQuery( document ).on(
+				'click',
+				'.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page, .frm_button_submit, .frm_rootline_show_hidden_steps_btn .frm_rootline_single',
+				resetHcaptcha
+			);
 		},
 
+		
 		getFieldId: function( field, fullID ) {
 			return getFieldId( field, fullID );
 		},
 
-		renderRecaptcha: function( captcha ) {
-			var formID, recaptchaID,
+		renderCaptcha: function( captcha ) {
+			var formID, captchaID,
 				size = captcha.getAttribute( 'data-size' ),
 				rendered = captcha.getAttribute( 'data-rid' ) !== null,
 				params = {
 					'sitekey': captcha.getAttribute( 'data-sitekey' ),
 					'size': size,
 					'theme': captcha.getAttribute( 'data-theme' )
-				};
+				},
+				activeCaptcha = reCaptchaIsSelected() ? grecaptcha : hcaptcha;
 
 			if ( rendered ) {
 				return;
@@ -1599,9 +1610,9 @@ function frmFrontFormJS() {
 				};
 			}
 
-			recaptchaID = grecaptcha.render( captcha.id, params );
+			captchaID = activeCaptcha.render( captcha.id, params );
 
-			captcha.setAttribute( 'data-rid', recaptchaID );
+			captcha.setAttribute( 'data-rid', captchaID );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -1895,11 +1906,15 @@ jQuery( document ).ready( function() {
 	frmFrontForm.init();
 });
 
+function reCaptchaIsSelected() {
+	return !! document.querySelector( '.frm-g-recaptcha' );
+}
+
 function frmRecaptcha() {
 	var c, cl,
-		captchas = jQuery( '.frm-g-recaptcha' );
+		captchas = reCaptchaIsSelected() ? jQuery( '.frm-g-recaptcha' ) : jQuery( '.h-captcha' );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderRecaptcha( captchas[c]);
+		frmFrontForm.renderCaptcha( captchas[c]);
 	}
 }
 

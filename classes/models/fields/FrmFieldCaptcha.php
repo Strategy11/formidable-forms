@@ -160,7 +160,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function hcaptcha_api_url() {
-		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
+		$api_js_url = 'https://js.hcaptcha.com/1/api.js?&onload=frmRecaptcha&render=explicit';
 
 		/**
 		 * Allows updating hcaptcha js api url.
