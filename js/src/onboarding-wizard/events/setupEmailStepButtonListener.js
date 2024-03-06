@@ -57,9 +57,7 @@ const onSetupEmailStepButtonClick = async() => {
 
 	// Send the POST request
 	const { doJsonPost } = frmDom.ajax;
-	doJsonPost( 'onboarding_setup_email_step', formData ).then( () =>{
-		navigateToNextStep();
-	});
+	doJsonPost( 'onboarding_setup_email_step', formData ).then( navigateToNextStep );
 };
 
 export default addSetupEmailStepButtonEvents;
