@@ -1522,6 +1522,9 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Resets the global hcaptcha object since it wouldn't otherwise render.
+	 */
 	function resethCaptcha() {
 		window.hcaptcha = null;
 	}
