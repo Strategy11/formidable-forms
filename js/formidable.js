@@ -1523,9 +1523,9 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Resets the global hcaptcha object since it wouldn't otherwise render.
+	 * Destroys the global hcaptcha object since it wouldn't otherwise render.
 	 */
-	function resethCaptcha() {
+	function destroyhCaptcha() {
 		window.hcaptcha = null;
 	}
 
@@ -1580,8 +1580,8 @@ function frmFrontFormJS() {
 			enableSubmitButtonOnBackButtonPress();
 			jQuery( document ).on(
 				'click',
-				'.frm-edit-page-btn.frm_page_back',
-				resethCaptcha
+				'.frm-edit-page-btn.frm_page_back, .frm_prev_page, .frm_button_submit:not(.frm_final_submit)',
+				destroyhCaptcha
 			);
 		},
 
