@@ -1522,7 +1522,7 @@ function frmFrontFormJS() {
 		});
 	}
 
-	function resetHcaptcha() {
+	function resethCaptcha() {
 		window.hcaptcha = null;
 	}
 
@@ -1577,8 +1577,8 @@ function frmFrontFormJS() {
 			enableSubmitButtonOnBackButtonPress();
 			jQuery( document ).on(
 				'click',
-				'.frm-show-form input[type="submit"], .frm-show-form input[name="frm_prev_page"], .frm_page_back, .frm_page_skip, .frm-show-form .frm_save_draft, .frm_prev_page, .frm_button_submit, .frm_rootline_show_hidden_steps_btn .frm_rootline_single',
-				resetHcaptcha
+				'.frm-edit-page-btn.frm_page_back',
+				resethCaptcha
 			);
 		},
 
