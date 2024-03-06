@@ -24,7 +24,7 @@ class FrmAddon {
 	 * This is used to decide whether the license checks should continue.
 	 * The point is to avoid license issues when a site url changes.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @var array
 	 */
@@ -34,14 +34,14 @@ class FrmAddon {
 	 * This is used to flag other add ons not to send a request.
 	 * We only want to send a single API request per page load.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @var string
 	 */
 	private $transient_lock_key = 'frm_activate_request_lock';
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @var bool
 	 */
@@ -253,7 +253,7 @@ class FrmAddon {
 	/**
 	 * Don't save an invalid license.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param bool $is_valid If license activation was successful.
 	 *
@@ -552,7 +552,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x Switched to an array to store extra response info.
+	 * @since 6.8.3 Switched to an array to store extra response info.
 	 *
 	 * @return array
 	 */
@@ -845,7 +845,7 @@ class FrmAddon {
 	/**
 	 * Set the transient key for the lock. It should be unique to the license.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */
@@ -856,7 +856,7 @@ class FrmAddon {
 	/**
 	 * Prevent multiple requests from running at the same time.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */
@@ -865,7 +865,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return void
 	 */
@@ -874,7 +874,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return void
 	 */

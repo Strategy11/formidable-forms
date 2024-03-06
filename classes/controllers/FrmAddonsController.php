@@ -1359,7 +1359,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return true|array
 	 */

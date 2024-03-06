@@ -177,7 +177,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -187,7 +187,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -199,7 +199,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -349,7 +349,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string       $msg
 	 * @param string       $error
@@ -374,7 +374,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $field_name
 	 * @param array  $filter_args {
@@ -393,7 +393,7 @@ class FrmFieldsHelper {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.8.3
 		 *
 		 * @param array<string> $substrings
 		 * @param array         $filter_args
@@ -403,7 +403,7 @@ class FrmFieldsHelper {
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings = $filtered_substrings;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
 		}
 
 		return $substrings;

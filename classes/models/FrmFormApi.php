@@ -137,7 +137,7 @@ class FrmFormApi {
 	/**
 	 * Prevent multiple requests from running at the same time.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */
@@ -149,7 +149,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return void
 	 */
@@ -164,7 +164,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return void
 	 */
@@ -179,7 +179,7 @@ class FrmFormApi {
 	 * Only allow one site in the network to make the api request at a time.
 	 * If there is a license for the request, run individually.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */
@@ -188,7 +188,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return string
 	 */
@@ -289,7 +289,7 @@ class FrmFormApi {
 	/**
 	 * Get the cache for the network if multisite.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return mixed
 	 */
@@ -328,7 +328,7 @@ class FrmFormApi {
 	/**
 	 * If the last check was a a rate limit, we'll need to check again sooner.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param array $addons
 	 *

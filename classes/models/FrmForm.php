@@ -810,7 +810,7 @@ class FrmForm {
 	/**
 	 * Make sure that if $row is an object, that $row->options is an array and not a string.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param stdClass|null $row The database row for a target form.
 	 * @return stdClass|null

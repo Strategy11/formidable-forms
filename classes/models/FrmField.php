@@ -266,7 +266,7 @@ class FrmField {
 	 * This is based on the active version coming from our API data.
 	 * If Surveys v1.1 is not released yet, we don't want to display ranking fields yet.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */
@@ -283,7 +283,7 @@ class FrmField {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $plugin
 	 * @param string $expected_version
@@ -295,7 +295,7 @@ class FrmField {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $plugin
 	 * @return string|false String version. False if the plugin is not installed.
@@ -312,7 +312,7 @@ class FrmField {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $plugin
 	 * @param string $expected_version
@@ -338,7 +338,7 @@ class FrmField {
 	/**
 	 * Consider a field new for 90 days after the release date.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param string $type
 	 * @return bool
