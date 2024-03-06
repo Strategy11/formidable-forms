@@ -1306,11 +1306,25 @@ body.frm-hidden-overflow {
 	color: var(--primary-500);
 }
 
+.frm-button-tertiary:focus {
+	outline: none;
+}
+
+.frm-button-tertiary.frm_loading_button::before {
+	border-right-color: var(--grey);
+	border-bottom-color: var(--grey);
+}
+
 .frm-button-red,
 .frm-button-red:focus {
-	color: #fff !important;
+	--primary-color: var(--error-500);
 	--primary-500: var(--error-500);
 	--primary-700: var(--error-700);
+}
+
+.frm-button-red:not(.frm-button-tertiary),
+.frm-button-red:not(.frm-button-tertiary):focus {
+	color: #fff !important;
 }
 
 .frm-white-body h2 .button,
@@ -2363,7 +2377,8 @@ h2.frm-h2 + .howto {
 	font-size: 15px;
 }
 
-.frm-addons .button {
+.frm-addons .button,
+.frm-addons .frm-button-tertiary {
 	float: right;
 }
 
@@ -2380,7 +2395,8 @@ h2.frm-h2 + .howto {
 .frm-addon-active  .frm-activate-addon,
 .frm-addon-active  .frm-install-addon,
 .frm-addon-active .frm-uninstall-addon,
-.plugin-card-pro.frm-addon-active .button {
+.plugin-card-pro.frm-addon-active .button,
+.plugin-card-pro.frm-addon-active .frm-button-tertiary {
 	display: none !important;
 }
 
