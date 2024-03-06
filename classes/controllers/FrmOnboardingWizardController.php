@@ -304,19 +304,10 @@ class FrmOnboardingWizardController {
 	 * @return array
 	 */
 	private static function get_js_variables() {
-		$js_variables = array(
+		return array(
 			'INITIAL_STEP'   => self::INITIAL_STEP,
 			'proIsIncluded' => FrmAppHelper::pro_is_included(),
 		);
-
-		/**
-		 * Filters `js_variables` passed to the Onboarding Wizard.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $js_variables Array of js_variables passed to the Onboarding Wizard.
-		 */
-		return apply_filters( 'frm_onboarding_wizard_js_variables', $js_variables );
 	}
 
 	/**
