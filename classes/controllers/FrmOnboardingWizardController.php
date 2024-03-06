@@ -464,35 +464,41 @@ class FrmOnboardingWizardController {
 			);
 		}//end if
 		if ( $pro_is_installed ) {
+			$mailchimp_addon    = FrmAddonsController::get_addon( 'mailchimp' );
+			$registration_addon = FrmAddonsController::get_addon( 'registration' );
+			$api_addon          = FrmAddonsController::get_addon( 'api' );
+			$acf_addon          = FrmAddonsController::get_addon( 'acf' );
+			$signature_addon    = FrmAddonsController::get_addon( 'signature' );
+
 			self::$available_addons['formidable-mailchimp'] = array(
 				'title'      => esc_html__( 'Mailchimp', 'formidable' ),
-				'rel'        => FrmAddonsController::get_addon( 'mailchimp' )['url'],
+				'rel'        => $mailchimp_addon['url'],
 				'is-checked' => true,
-				'help-text'  => esc_html__( 'Integrate forms with Mailchimp to grow your email list.', 'formidable' ),
+				'help-text'  => $mailchimp_addon['excerpt'],
 			);
 			self::$available_addons['formidable-registration'] = array(
 				'title'      => esc_html__( 'User Registration', 'formidable' ),
-				'rel'        => FrmAddonsController::get_addon( 'registration' )['url'],
+				'rel'        => $registration_addon['url'],
 				'is-checked' => true,
-				'help-text'  => esc_html__( 'Create user accounts on your site through form submissions.', 'formidable' ),
+				'help-text'  => $registration_addon['excerpt'],
 			);
 			self::$available_addons['formidable-api'] = array(
 				'title'      => esc_html__( 'Form Rest API', 'formidable' ),
-				'rel'        => FrmAddonsController::get_addon( 'api' )['url'],
+				'rel'        => $api_addon['url'],
 				'is-checked' => false,
-				'help-text'  => esc_html__( 'Access and manipulate form entries programmatically via API.', 'formidable' ),
+				'help-text'  => $api_addon['excerpt'],
 			);
 			self::$available_addons['formidable-acf'] = array(
 				'title'      => esc_html__( 'ACF Forms', 'formidable' ),
-				'rel'        => FrmAddonsController::get_addon( 'acf' )['url'],
+				'rel'        => $acf_addon['url'],
 				'is-checked' => false,
-				'help-text'  => esc_html__( 'Integrate with Advanced Custom Fields for more dynamic form fields.', 'formidable' ),
+				'help-text'  => $acf_addon['excerpt'],
 			);
 			self::$available_addons['formidable-signature'] = array(
 				'title'      => esc_html__( 'Signature Forms', 'formidable' ),
-				'rel'        => FrmAddonsController::get_addon( 'signature' )['url'],
+				'rel'        => $signature_addon['url'],
 				'is-checked' => false,
-				'help-text'  => esc_html__( 'Collect digital signatures directly within your forms.', 'formidable' ),
+				'help-text'  => $signature_addon['excerpt'],
 			);
 		}//end if
 		if ( class_exists( 'GFForms' ) ) {
