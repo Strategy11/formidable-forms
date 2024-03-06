@@ -32,25 +32,26 @@ const onCheckProInstallationButtonClick = async() => {
 	formData.append( 'nonce', nonce );
 	formData.append( 'plugin_path', 'formidable-pro/formidable-pro.php' );
 
+	let data;
+
 	try {
-		// Perform the POST request
 		const response = await fetch( ajaxurl, {
 			method: 'POST',
 			body: formData
 		});
-
-		// Parse the JSON response
-		const { success } = await response.json();
-
-		if ( success ) {
-			navigateToNextStep();
-		} else {
-			const { checkProInstallationError } = getElements();
-			show( checkProInstallationError );
-		}
+		data = await response.json();
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
+		return;
 	}
+
+	if ( data.success ) {
+		navigateToNextStep();
+		return;
+	}
+
+	const { checkProInstallationError } = getElements();
+	show( checkProInstallationError );
 };
 
 export default addCheckProInstallationButtonEvents;
