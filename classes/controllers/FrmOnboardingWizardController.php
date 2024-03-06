@@ -183,7 +183,7 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		$label = __( 'Onboardin Wizard', 'formidable' );
+		$label = __( 'Onboarding Wizard', 'formidable' );
 
 		add_submenu_page(
 			'formidable',
