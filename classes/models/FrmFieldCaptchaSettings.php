@@ -11,7 +11,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * The global settings object.
 	 *
-	 * @param FrmSettings $settings
+	 * @var FrmSettings
 	 */
 	public $frm_settings;
 
