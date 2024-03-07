@@ -1106,6 +1106,7 @@ class FrmFormsController {
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
+		FrmSubmitButtonController::maybe_create_submit_field( $form, $fields, $reset_fields );
 
 		if ( $reset_fields ) {
 			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );

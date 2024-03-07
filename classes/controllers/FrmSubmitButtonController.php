@@ -50,6 +50,35 @@ class FrmSubmitButtonController {
 		return 'create';
 	}
 
+	private static function get_submit_settings_from_form( $form ) {
+		return array(
+			'edit_text' => FrmForm::get_option(
+				array(
+					'form' => $form,
+					'option' => 'edit_value',
+				)
+			),
+			'align'     => FrmForm::get_option(
+				array(
+					'form' => $form,
+					'option' => 'submit_align',
+				)
+			),
+			'start_over' => FrmForm::get_option(
+				array(
+					'form' => $form,
+					'option' => 'start_over',
+				)
+			),
+			'start_over_label' => FrmForm::get_option(
+				array(
+					'form' => $form,
+					'option' => 'start_over_label',
+				)
+			),
+		);
+	}
+
 	public static function copy_submit_field_settings_to_form( $form ) {
 		$submit_field = self::get_submit_field( $form->id );
 		if ( ! $submit_field ) {
@@ -59,5 +88,36 @@ class FrmSubmitButtonController {
 		$form->options['submit_value'] = $submit_field->name;
 
 		return $form;
+	}
+
+	public static function maybe_create_submit_field( $form, $fields, &$reset_fields ) {
+		$has_submit_field = false;
+
+		foreach ( $fields as $field ) {
+			if ( self::FIELD_TYPE === $field->type ) {
+				$has_submit_field = true;
+				break;
+			}
+		}
+
+		if ( $has_submit_field ) {
+			return;
+		}
+
+		$field_data = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
+
+		$submit_settings = self::get_submit_settings_from_form( $form );
+		$field_data['field_options'] = $submit_settings + $field_data['field_options'];
+		$field_data['name']          = FrmForm::get_option(
+			array(
+				'form'    => $form,
+				'option'  => 'submit_value',
+				'default' => __( 'Submit', 'formidable' )
+			)
+		);
+
+		if ( FrmField::create( $field_data ) ) {
+			$reset_fields = true;
+		}
 	}
 }
