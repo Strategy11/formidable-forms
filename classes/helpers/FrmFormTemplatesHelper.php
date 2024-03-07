@@ -29,9 +29,11 @@ class FrmFormTemplatesHelper {
 		$template['is_custom']     = ! empty( $template['is_custom'] );
 		$template['plan_required'] = FrmFormsHelper::get_plan_required( $template );
 
-		$template['name'] = $template['is_custom']
-						? $template['name']
-						: preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
+		if ( ! empty( $template['name'] ) ) {
+			$template['name'] = $template['is_custom'] ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
+		} else {
+			$template['name'] = '';
+		}
 
 		$template['use_template'] = '#';
 		if ( $template['is_custom'] ) {

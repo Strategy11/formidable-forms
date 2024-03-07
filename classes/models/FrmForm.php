@@ -787,8 +787,7 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
-
-				return apply_filters( 'frm_form_object', wp_unslash( $cache ) );
+				return self::prepare_form_row_data( $cache );
 			}
 		}
 
@@ -805,7 +804,33 @@ class FrmForm {
 			FrmAppHelper::unserialize_or_decode( $results->options );
 		}
 
-		return apply_filters( 'frm_form_object', wp_unslash( $results ) );
+		return self::prepare_form_row_data( $results );
+	}
+
+	/**
+	 * Make sure that if $row is an object, that $row->options is an array and not a string.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param stdClass|null $row The database row for a target form.
+	 * @return stdClass|null
+	 */
+	private static function prepare_form_row_data( $row ) {
+		$row = wp_unslash( $row );
+		if ( ! is_object( $row ) ) {
+			return $row;
+		}
+
+		if ( ! is_array( $row->options ) ) {
+			$row->options = FrmFormsHelper::get_default_opts();
+		}
+
+		/**
+		 * @since 4.03.02
+		 *
+		 * @param stdClass $row
+		 */
+		return apply_filters( 'frm_form_object', $row );
 	}
 
 	/**

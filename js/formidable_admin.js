@@ -5462,7 +5462,6 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
-			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 
@@ -5472,6 +5471,7 @@ function frmAdminBuildJS() {
 				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
 				isProduct = isProductField( fieldId );
 
+			type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) );
 			for ( i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
@@ -5544,21 +5544,39 @@ function frmAdminBuildJS() {
 	}
 
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
-		var other, single,
+		var other,
+			single = '',
 			isOther = opt.key.indexOf( 'other' ) !== -1,
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		this.getSingle = function() {
+
+			/**
+			 * Get single option template.
+			 * @param {Object} option  Object containing the option data.
+			 * @param {string} type    The field type.
+			 * @param {string} fieldId The field id.
+			 * @param {string} classes The option clasnames.
+			 * @param {string} id      The input id attribute.
+			 */
+			single = wp.hooks.applyFilters( 'frm_admin.build_single_option_template', single, { opt, type, fieldId, classes, id });
+
+			if ( '' !== single ) {
+				return single;
+			}
+
+			return '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + inputType +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
+		};
 
-		return single;
+		return this.getSingle();
 	}
 
 	function fillDropdownOpts( field, atts ) {
@@ -6618,6 +6636,15 @@ function frmAdminBuildJS() {
 
 		upgradeMessage.innerHTML = newMessage;
 
+		if ( link.dataset.upsellImage ) {
+			upgradeMessage.appendChild(
+				img({
+					src: link.dataset.upsellImage,
+					alt: link.dataset.upgrade
+				})
+			);
+		}
+
 		// Either set the link or use the default.
 		showLink.href = getShowLinkHrefValue( link, showLink );
 
@@ -6949,14 +6976,16 @@ function frmAdminBuildJS() {
 		if ( document.querySelector( fieldSettingsSelector + ' .frm-show-box' ) ) {
 			return;
 		}
-		singleField.querySelector( '.wp-editor-container' ).classList.add( 'frm_has_shortcodes' );
+		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textarea = document.querySelector( fieldSettingsSelector + ' textarea' );
-			const wrapperSpan = span({ className: 'frm-with-right-icon' });
-			textarea.parentNode.insertBefore( wrapperSpan, textarea );
-			wrapperSpan.appendChild( createModalTriggerIcon() );
-			wrapperSpan.appendChild( textarea );
+			const textareas = document.querySelectorAll( fieldSettingsSelector + ' .frm_has_shortcodes textarea' );
+			textareas.forEach( textarea => {
+				const wrapperSpan = span({ className: 'frm-with-right-icon' });
+				textarea.parentNode.insertBefore( wrapperSpan, textarea );
+				wrapperSpan.appendChild( createModalTriggerIcon() );
+				wrapperSpan.appendChild( textarea );
+			});
 		};
 
 		const createModalTriggerIcon = () => {
@@ -6967,7 +6996,8 @@ function frmAdminBuildJS() {
 	}
 
 	function shouldAddShortcodesModalTriggerIcon( fieldType ) {
-		const fieldsWithShortcodesBox = [ 'html' ];
+		const fieldsWithShortcodesBox = wp.hooks.applyFilters( 'frm_fields_with_shortcode_popup', [ 'html' ]);
+
 		return fieldsWithShortcodesBox.includes( fieldType );
 	}
 
@@ -7125,27 +7155,35 @@ function frmAdminBuildJS() {
 
 	function addFormLogicRow() {
 		/*jshint validthis:true */
-		var id = jQuery( this ).data( 'emailkey' ),
-			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
-			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
+		const id                 = jQuery( this ).data( 'emailkey' );
+		const type               = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
+		const formId             = document.getElementById( 'form_id' ).value;
+		const logicRowsContainer = document.getElementById( 'frm_logic_row_' + id );
+		const logicRows          = logicRowsContainer.querySelectorAll( '.frm_logic_row' );
+		const newRowID           = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
+		const placeholder        = div({
+			id: 'frm_logic_' + id + '_' + newRowID,
+			className: 'frm_logic_row frm_hidden'
+		});
+
+		logicRowsContainer.appendChild( placeholder );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
 				email_id: id,
 				form_id: formId,
-				meta_name: getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
+				meta_name: newRowID,
 				type: type,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				html = wp.hooks.applyFilters( 'frm_action_logic_row_html', html, id );
+				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', () => {
+					placeholder.insertAdjacentHTML( 'beforebegin', html );
+					placeholder.remove();
 
-				jQuery( document.getElementById( 'logic_link_' + id ) ).fadeOut( 'slow', function() {
-					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					$logicRow.append( html );
-					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
+					// Show conditional logic options after "Add Conditional Logic" is clicked.
+					jQuery( logicRowsContainer ).parent( '.frm_logic_rows' ).fadeIn( 'slow' );
 				});
 			}
 		});

@@ -528,7 +528,8 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @since 6.8
 	 *
-	 * @param array $recipients Recipients.
+	 * @param string $recipients Recipients.
+	 * @return void
 	 */
 	public static function maybe_remove_recipients_from_api( &$recipients ) {
 		$api    = new FrmFormApi();
@@ -538,7 +539,10 @@ class FrmEmailSummaryHelper {
 		}
 
 		$skip_emails = is_string( $addons['no_emails'] ) ? explode( ',', $addons['no_emails'] ) : (array) $addons['no_emails'];
-		$recipients  = array_diff( $recipients, $skip_emails );
+
+		$recipients = array_map( 'trim', explode( ',', $recipients ) );
+		$recipients = array_diff( $recipients, $skip_emails );
+		$recipients = implode( ',', $recipients );
 	}
 
 	/**

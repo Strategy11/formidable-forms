@@ -1,4 +1,4 @@
-/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField, frmDeleteEntry, frmOnSubmit, frm_resend_email */
+/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
 
 var frmFrontForm;
 
@@ -1886,7 +1886,8 @@ function frmFrontFormJS() {
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent
+		triggerCustomEvent: triggerCustomEvent,
+		documentOn
 	};
 }
 frmFrontForm = frmFrontFormJS();
@@ -1925,51 +1926,6 @@ function frmUpdateField( entryId, fieldId, value, message, num ) {
 			} else {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
 			}
-		}
-	});
-}
-
-function frmDeleteEntry( entryId, prefix ) {
-	console.warn( 'DEPRECATED: function frmDeleteEntry in v2.0.13 use frmFrontForm.deleteEntry' );
-	jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entryId + '"></span>' );
-	jQuery.ajax({
-		type: 'POST',
-		url: frm_js.ajax_url, // eslint-disable-line camelcase
-		data: {
-			action: 'frm_entries_destroy',
-			entry: entryId,
-			nonce: frm_js.nonce // eslint-disable-line camelcase
-		},
-		success: function( html ) {
-			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
-				jQuery( document.getElementById( prefix + entryId ) ).fadeOut( 'slow' );
-			} else {
-				jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( html );
-			}
-		}
-	});
-}
-
-function frmOnSubmit( e ) {
-	console.warn( 'DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm' );
-	frmFrontForm.submitForm( e, this );
-}
-
-function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
-	var $link = jQuery( document.getElementById( 'frm_resend_email' ) );
-	console.warn( 'DEPRECATED: function frm_resend_email in v2.0' );
-	$link.append( '<span class="spinner" style="display:inline"></span>' );
-	jQuery.ajax({
-		type: 'POST',
-		url: frm_js.ajax_url, // eslint-disable-line camelcase
-		data: {
-			action: 'frm_entries_send_email',
-			entry_id: entryId,
-			form_id: formId,
-			nonce: frm_js.nonce // eslint-disable-line camelcase
-		},
-		success: function( msg ) {
-			$link.replaceWith( msg );
 		}
 	});
 }

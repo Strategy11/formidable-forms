@@ -8,11 +8,9 @@ export class frmAnimate {
 	 *
 	 */
 	constructor( elements, type = 'default' ) {
-		this.elements    = elements;
-		this.cssFilePath = 'admin/animations.css';
-		this.type        = type;
+		this.elements = elements;
+		this.type     = type;
 
-		this.initOnceInAllInstances();
 		this.prepareElements();
 	}
 
@@ -48,28 +46,6 @@ export class frmAnimate {
 				element.style.transitionDelay = ( index + 1 ) * delay + 's';
 			});
 		}, 200 );
-	}
-
-	initOnceInAllInstances() {
-		if ( true === frmAnimate.init ) {
-			return;
-		}
-		frmAnimate.init = true;
-		this.loadCssFile();
-	}
-
-	getCssFileUrl() {
-		if ( ! window.frmGlobal ) {
-			return '';
-		}
-		return window.frmGlobal.url + '/css/' + this.cssFilePath;
-	}
-
-	loadCssFile() {
-		const style = document.createElement( 'link' );
-		style.href  = this.getCssFileUrl();
-		style.rel   = 'stylesheet';
-		document.getElementsByTagName( 'head' )[0].appendChild( style );
 	}
 
 	prepareElements() {

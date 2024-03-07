@@ -464,6 +464,7 @@ class FrmDashboardController {
 			return;
 		}
 
+		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( self::PAGE_SLUG );
 		wp_enqueue_script( self::PAGE_SLUG );
 	}
