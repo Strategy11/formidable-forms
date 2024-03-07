@@ -300,6 +300,9 @@ DEFAULT_HTML;
 		return array_merge( $default_settings, $field_type_settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function default_field_settings() {
 		return array(
 			'type'           => $this->type,
@@ -319,6 +322,7 @@ DEFAULT_HTML;
 			'max'            => true,
 			'range'          => false,
 			'captcha_size'   => false,
+			'captcha_theme'  => false,
 			'format'         => false,
 			'show_image'     => false,
 			'default'        => true,
