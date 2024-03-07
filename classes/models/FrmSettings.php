@@ -31,9 +31,17 @@ class FrmSettings {
 	public $active_captcha;
 
 	/**
-	 * reCAPTCHA settings.
+	 * Settings for reCAPTCHA.
+	 */
+
+	/**
+	 * @var string|null
 	 */
 	public $pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $privkey;
 	public $re_lang;
 	public $re_type;
@@ -41,15 +49,31 @@ class FrmSettings {
 	public $re_multi;
 
 	/**
-	 * hCaptcha settings.
+	 * Settings for hCaptcha.
+	 */
+
+	/**
+	 * @var string
 	 */
 	public $hcaptcha_pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $hcaptcha_privkey;
 
 	/**
-	 * Turnstile settings.
+	 * Settings for Turnstile.
+	 */
+
+	/**
+	 * @var string
 	 */
 	public $turnstile_pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $turnstile_privkey;
 
 	public $no_ips;
