@@ -426,6 +426,22 @@ body.rtl .frm-style-card-separator {
 	opacity: 0.5;
 }
 
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:before,
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:after {
+	content: '' !important;
+}
+.formidable_page_formidable-styles .frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
+	transform: rotate(180deg);
+}
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title > .frmsvg:last-child {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	color: var(--grey);
+}
+
 @media only screen and (max-width: 782px) {
 	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
 	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {
