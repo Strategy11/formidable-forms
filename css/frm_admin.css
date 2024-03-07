@@ -3362,6 +3362,30 @@ a.frm_option_icon:hover::before {
 	background: #fff !important;
 }
 
+.frm-right-panel .accordion-section-title:before,
+.frm-right-panel .accordion-section-title:after {
+	content: "\e913" !important;
+	font-family: "s11-fp" !important;
+	font-size: 18px;
+	font-variant: normal;
+	text-rendering: auto;
+	vertical-align: text-top;
+}
+
+.frm-right-panel .accordion-section-title:after {
+	top: calc(50% - 10px) !important;
+}
+
+.frm-right-panel .open .accordion-section-title:after {
+	content: "\e62a" !important;
+}
+
+.frm-right-panel .accordion-section-title:before {
+	content: "\f1de" !important;
+	color: var(--grey);
+	font-size: 17px !important;
+}
+
 .frm-with-line:before,
 .accordion-section-content h4:before {
 	content: '';
@@ -3381,23 +3405,12 @@ a.frm_option_icon:hover::before {
 	margin: 0 10px 0 0;
 	color: var(--grey);
 }
-.frm-right-panel .accordion-section-title > .frmsvg:last-child {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	margin: auto;
-	color: var(--grey);
-}
 .frm-right-panel .accordion-section-title:hover > .frmsvg:first-child {
 	color: var(--grey-900);
 }
 
 .frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
 	transform: rotate(180deg);
-}
-.frm-right-panel .accordion-section-title:after{
-	content: '' !important;
 }
 #frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
