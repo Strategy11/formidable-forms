@@ -10533,11 +10533,6 @@ jQuery( document ).ready(
 	}
 );
 
-function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
-	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
-	jQuery( htmlTag ).remove();
-}
-
 function frm_show_div( div, value, showIf, classId ) { // eslint-disable-line camelcase
 	if ( value == showIf ) {
 		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
@@ -10553,25 +10548,6 @@ function frmCheckAll( checked, n ) {
 function frmCheckAllLevel( checked, n, level ) {
 	var $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
 	$kids.children( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
-}
-
-function frm_add_logic_row( id, formId ) { // eslint-disable-line camelcase
-	console.warn( 'DEPRECATED: function frm_add_logic_row in v2.0' );
-	jQuery.ajax({
-		type: 'POST',
-		url: ajaxurl,
-		data: {
-			action: 'frm_add_logic_row',
-			form_id: formId,
-			field_id: id,
-			meta_name: jQuery( '#frm_logic_row_' + id + ' > div' ).length,
-			nonce: frmGlobal.nonce
-		},
-		success: function( html ) {
-			jQuery( '#frm_logic_row_' + id ).append( html );
-		}
-	});
-	return false;
 }
 
 function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName ) {
