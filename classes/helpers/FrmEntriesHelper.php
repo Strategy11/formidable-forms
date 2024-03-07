@@ -214,35 +214,13 @@ class FrmEntriesHelper {
 			return '';
 		}
 
-		// This is an embeded form.
-		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
-			/**
-			 * This filter allows updating the limit of child entries in entry list page. The default is 5.
-			 *
-			 * @since x.x
-			 * @param array $args {
-			 *    @type object $field
-			 *    @type array  $atts
-			 * }
-			 */
-			$child_entries_limit = apply_filters( 'frm_repeater_entries_limit', 5, compact( 'field', 'atts' ) );
-
-			// This is a repeating section.
-			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', $child_entries_limit, true );
-		} else {
-			// Get all values for this field.
-			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
-
-			if ( $child_values ) {
-				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
-			}
-		}
-
-		$field_value = array();
+		$child_entries = self::get_display_value_child_entries( $entry, $field, $atts );
 
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;
@@ -266,6 +244,41 @@ class FrmEntriesHelper {
 		$val = implode( $sep, (array) $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
+	}
+
+	/**
+	 * @since x.x
+	 * @param stdClass $entry
+	 * @param stdClass $field
+	 * @param array    $atts
+	 *
+	 * @return array
+	 */
+	private static function get_display_value_child_entries( $entry, $field, $atts ) {
+		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+			/**
+			 * This filter allows updating the limit of child entries in entry list page. The default is 5.
+			 *
+			 * @since x.x
+			 * @param array $args {
+			 *    @type object $field
+			 *    @type array  $atts
+			 * }
+			 */
+			$child_entries_limit = apply_filters( 'frm_entries_list_repeater_display_limit', 5, compact( 'field', 'atts' ) );
+
+			// This is a repeating section.
+			return FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', $child_entries_limit, true );
+		}
+
+		// Get all values for this field.
+		$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+
+		if ( $child_values ) {
+			return FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
+		}
+
+		return array();
 	}
 
 	/**
