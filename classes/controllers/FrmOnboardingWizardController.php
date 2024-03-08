@@ -209,7 +209,6 @@ class FrmOnboardingWizardController {
 		$view_path        = self::get_view_path();
 		$available_addons = self::get_available_addons();
 		$upgrade_link     = self::get_upgrade_link();
-		$user             = wp_get_current_user();
 		$addons_count     = count( FrmAddonsController::get_api_addons() );
 		$license_key      = base64_decode( rawurldecode( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) ) );
 
