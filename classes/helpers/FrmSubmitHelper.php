@@ -1,12 +1,11 @@
 <?php
 /**
- * Submit button controller
+ * Submit helper
  *
  * @since x.x
  * @package Formidable
  */
-
-class FrmSubmitButtonController {
+class FrmSubmitHelper {
 
 	const FIELD_TYPE = 'submit';
 
@@ -18,6 +17,7 @@ class FrmSubmitButtonController {
 	 * Checks if there is submit button field on the current page.
 	 *
 	 * @param array $values Prepared form values.
+	 *
 	 * @return bool
 	 */
 	public static function has_submit_field_on_current_page( $values ) {
@@ -38,6 +38,7 @@ class FrmSubmitButtonController {
 	 * Gets current action (create or update) from the global variable.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return string
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
@@ -52,27 +53,27 @@ class FrmSubmitButtonController {
 
 	private static function get_submit_settings_from_form( $form ) {
 		return array(
-			'edit_text' => FrmForm::get_option(
+			'edit_text'        => FrmForm::get_option(
 				array(
-					'form' => $form,
+					'form'   => $form,
 					'option' => 'edit_value',
 				)
 			),
-			'align'     => FrmForm::get_option(
+			'align'            => FrmForm::get_option(
 				array(
-					'form' => $form,
+					'form'   => $form,
 					'option' => 'submit_align',
 				)
 			),
-			'start_over' => FrmForm::get_option(
+			'start_over'       => FrmForm::get_option(
 				array(
-					'form' => $form,
+					'form'   => $form,
 					'option' => 'start_over',
 				)
 			),
 			'start_over_label' => FrmForm::get_option(
 				array(
-					'form' => $form,
+					'form'   => $form,
 					'option' => 'start_over_label',
 				)
 			),
@@ -106,7 +107,7 @@ class FrmSubmitButtonController {
 
 		$field_data = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
 
-		$submit_settings = self::get_submit_settings_from_form( $form );
+		$submit_settings             = self::get_submit_settings_from_form( $form );
 		$field_data['field_options'] = $submit_settings + $field_data['field_options'];
 		$field_data['name']          = FrmForm::get_option(
 			array(
@@ -118,6 +119,16 @@ class FrmSubmitButtonController {
 
 		if ( FrmField::create( $field_data ) ) {
 			$reset_fields = true;
+		}
+	}
+
+	public static function remove_submit_field_from_list( &$fields ) {
+		foreach ( $fields as $key => $field ) {
+			if ( self::FIELD_TYPE === FrmField::get_field_type( $field ) ) {
+				unset( $fields[ $key ] );
+
+				return;
+			}
 		}
 	}
 }

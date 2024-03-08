@@ -1,4 +1,5 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -70,7 +71,7 @@ class FrmField {
 				'name'  => __( 'Payment', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
-			FrmSubmitButtonController::FIELD_TYPE => array(
+			FrmSubmitHelper::FIELD_TYPE => array(
 				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
 			),

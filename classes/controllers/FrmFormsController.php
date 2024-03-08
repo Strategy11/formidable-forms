@@ -1,4 +1,5 @@
 <?php
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -138,14 +139,14 @@ class FrmFormsController {
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
 
-		if ( FrmSubmitButtonController::get_submit_field( $form->id ) ) {
+		if ( FrmSubmitHelper::get_submit_field( $form->id ) ) {
 			// Do not create submit button field if it exists.
 			return;
 		}
 
 		FrmField::create(
 			array(
-				'type'        => FrmSubmitButtonController::FIELD_TYPE,
+				'type'        => FrmSubmitHelper::FIELD_TYPE,
 				'name'        => __( 'Submit', 'formidable' ),
 				'field_order' => 9999,
 				'form_id'     => $form->id,
@@ -1106,7 +1107,7 @@ class FrmFormsController {
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
-		FrmSubmitButtonController::maybe_create_submit_field( $form, $fields, $reset_fields );
+		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
 
 		if ( $reset_fields ) {
 			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );

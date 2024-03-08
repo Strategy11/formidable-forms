@@ -93,7 +93,7 @@ DEFAULT_HTML;
 	public function front_field_input( $args, $shortcode_atts ) {
 		$form        = FrmForm::getOne( $this->field['form_id'] );
 		$submit      = $this->field['name'];
-		$form_action = FrmSubmitButtonController::get_current_action_from_global_var( $form->id );
+		$form_action = FrmSubmitHelper::get_current_action_from_global_var( $form->id );
 		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
 
 		ob_start();
