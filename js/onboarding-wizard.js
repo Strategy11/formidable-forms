@@ -811,7 +811,7 @@ function addCheckProInstallationButtonEvents() {
  */
 var onCheckProInstallationButtonClick = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var formData, response, _yield$response$json, success, _getElements2, checkProInstallationError;
+    var formData, data, response, _getElements2, checkProInstallationError;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -831,25 +831,29 @@ var onCheckProInstallationButtonClick = /*#__PURE__*/function () {
           _context.next = 10;
           return response.json();
         case 10:
-          _yield$response$json = _context.sent;
-          success = _yield$response$json.success;
-          if (success) {
-            (0,___WEBPACK_IMPORTED_MODULE_0__.navigateToNextStep)();
-          } else {
-            _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(), checkProInstallationError = _getElements2.checkProInstallationError;
-            (0,_utils__WEBPACK_IMPORTED_MODULE_3__.show)(checkProInstallationError);
-          }
-          _context.next = 18;
+          data = _context.sent;
+          _context.next = 17;
           break;
-        case 15:
-          _context.prev = 15;
+        case 13:
+          _context.prev = 13;
           _context.t0 = _context["catch"](4);
           console.error('An error occurred:', _context.t0);
-        case 18:
+          return _context.abrupt("return");
+        case 17:
+          if (!data.success) {
+            _context.next = 20;
+            break;
+          }
+          (0,___WEBPACK_IMPORTED_MODULE_0__.navigateToNextStep)();
+          return _context.abrupt("return");
+        case 20:
+          _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(), checkProInstallationError = _getElements2.checkProInstallationError;
+          (0,_utils__WEBPACK_IMPORTED_MODULE_3__.show)(checkProInstallationError);
+        case 22:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[4, 15]]);
+    }, _callee, null, [[4, 13]]);
   }));
   return function onCheckProInstallationButtonClick() {
     return _ref.apply(this, arguments);
@@ -1313,9 +1317,7 @@ var onSetupEmailStepButtonClick = /*#__PURE__*/function () {
 
           // Send the POST request
           doJsonPost = frmDom.ajax.doJsonPost;
-          doJsonPost('onboarding_setup_email_step', formData).then(function () {
-            (0,___WEBPACK_IMPORTED_MODULE_0__.navigateToNextStep)();
-          });
+          doJsonPost('onboarding_setup_email_step', formData).then(___WEBPACK_IMPORTED_MODULE_0__.navigateToNextStep);
         case 12:
         case "end":
           return _context.stop();
@@ -1665,11 +1667,10 @@ function handleLicenseKeyInput(hiddenLicenseKeyInput, installFormidableProStep, 
     licenseKeyInput = _getElements2.licenseKeyInput;
   licenseKeyInput.value = hiddenLicenseKeyInput.value;
   if (_shared__WEBPACK_IMPORTED_MODULE_2__.proIsIncluded) {
-    installFormidableProStep.remove(); // Remove install step if Pro is installed
+    installFormidableProStep.remove(); // Remove install Pro step if Pro is installed
     return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.LICENSE_MANAGEMENT;
-  } else {
-    return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.INSTALL_FORMIDABLE_PRO;
   }
+  return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.INSTALL_FORMIDABLE_PRO;
 }
 
 /**
