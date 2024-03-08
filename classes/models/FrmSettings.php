@@ -165,8 +165,7 @@ class FrmSettings {
 		}
 
 		if ( ! isset( $this->default_email ) ) {
-			$user                = wp_get_current_user();
-			$this->default_email = $user->user_email;
+			$this->default_email = wp_get_current_user()->user_email;
 		}
 
 		if ( ! isset( $this->currency ) ) {
