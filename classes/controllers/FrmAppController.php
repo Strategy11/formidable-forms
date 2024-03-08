@@ -704,7 +704,7 @@ class FrmAppController {
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ) {
+		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() && ! FrmInbox::has_a_slidein_message() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 		unset( $is_valid_page );

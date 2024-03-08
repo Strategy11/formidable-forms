@@ -9505,3 +9505,21 @@ Responsive Design
 	border-color: #135e96;
 }
 /* End Pirate forms importer */
+
+/* Inbox slide-in */
+#frm_inbox_slide_in {
+	position: fixed;
+	bottom: 50px;
+	right: 50px;
+	min-width: 300px;
+	max-width: 380px;
+	flex-direction: column;
+	align-items: center;
+}
+#frm_inbox_slide_in .frm-button-primary {
+	margin: auto;
+}
+#frm_inbox_slide_in h4 {
+	margin: 0;
+}
+/* End Inbox slide-in */

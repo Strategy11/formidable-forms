@@ -9477,6 +9477,34 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * @return {void}
+	 */
+	function initInboxSlideIn() {
+		if ( 'object' === typeof frmGlobal.inboxSlideIn ) {
+			document.body.appendChild( getInboxSlideIn() );
+		}
+	}
+
+	/**
+	 * @return {HTMLElement}
+	 */
+	function getInboxSlideIn() {
+		const h3 = tag( 'h4' );
+		h3.innerHTML = purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const slideIn = div({
+			id: 'frm_inbox_slide_in',
+			className: 'frm-card-item',
+			children: [
+				h3,
+				span( frmGlobal.inboxSlideIn.message )
+			]
+		});
+		slideIn.insertAdjacentHTML( 'beforeend', purifyHtml( frmGlobal.inboxSlideIn.cta ) );
+		slideIn.querySelector( '.frm-button-secondary' )?.remove();
+		return slideIn;
+	}
+
+	/**
 	 * Listen for click events for an API-loaded email collection form.
 	 *
 	 * This is used for the Active Campaign sign-up form in the inbox page (when there are no messages).
@@ -9646,6 +9674,7 @@ function frmAdminBuildJS() {
 
 	return {
 		init: function() {
+			initInboxSlideIn();
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
 

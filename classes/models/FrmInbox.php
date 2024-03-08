@@ -410,4 +410,43 @@ class FrmInbox extends FrmFormApi {
 			}
 		);
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function has_a_slidein_message() {
+		return (bool) self::get_slidein_messages();
+	}
+
+	/**
+	 * Get the array used for frmGlobal.inboxSlideIn
+	 *
+	 * @since x.x
+	 *
+	 * @return array|false
+	 */
+	public static function get_inbox_slide_in_value_for_js() {
+		$messages = self::get_slidein_messages();
+		if ( ! $messages ) {
+			return false;
+		}
+
+		$message        = reset( $messages );
+		$keys_to_return = array(
+			'message',
+			'subject',
+			'cta',
+		);
+
+		return array_reduce(
+			$keys_to_return,
+			function( $total, $key ) use ( $message ) {
+				$total[ $key ] = $message[ $key ];
+				return $total;
+			},
+			array()
+		);
+	}
 }
