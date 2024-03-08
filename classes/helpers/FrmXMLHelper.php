@@ -455,7 +455,8 @@ class FrmXMLHelper {
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
 
-					self::do_after_field_imported_action( $f, $old_field_id, $form_fields );
+					$f['id'] = $old_field_id;
+					self::do_after_field_imported_action( $f, $form_fields );
 
 					// Unset old field id.
 					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] );
@@ -484,7 +485,7 @@ class FrmXMLHelper {
 	 * @return array
 	 */
 	private static function update_field_options_with_defaults( $field_array ) {
-		$defaults               = self::default_field_options( $field_array['type'] );
+		$defaults                     = self::default_field_options( $field_array['type'] );
 		$field_array['field_options'] = array_merge( $defaults, $field_array['field_options'] );
 
 		return $field_array;
@@ -494,15 +495,11 @@ class FrmXMLHelper {
 	 * @since x.x
 	 *
 	 * @param array $field_array
-	 * @param int   $old_field_id
 	 * @param array $form_fields
 	 *
 	 * @return void
 	 */
-	private static function do_after_field_imported_action( $field_array, $old_field_id, $form_fields ) {
-		$field_array       = self::update_field_options_with_defaults( $field_array );
-		$field_array['id'] = $old_field_id;
-
+	private static function do_after_field_imported_action( $field_array, $form_fields ) {
 		/**
 		 * Fires when an existing field is imported.
 		 *
