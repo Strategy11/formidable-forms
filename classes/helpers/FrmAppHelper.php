@@ -4166,4 +4166,14 @@ class FrmAppHelper {
 
 		return apply_filters( 'frm_license_type_text', $message );
 	}
+
+	/**
+	 * Removes scripts that are unnecessarily loaded across the pages!
+	 *
+	 * @since x.x
+	 */
+	public static function dequeue_extra_global_scripts() {
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
 }
