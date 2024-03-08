@@ -773,7 +773,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				'input'    => array( '&gt;', '&amp;' ),
 				'function' => 'htmlspecialchars_decode',
 				'expected' => array( '>', '&' ),
-			)
+			),
 		);
 		foreach ( $test_cases as $test_case ) {
 			$result = FrmAppHelper::recursive_function_map( $test_case['input'], $test_case['function'] );
