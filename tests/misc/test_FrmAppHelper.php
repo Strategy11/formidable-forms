@@ -753,4 +753,31 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$this->assertEquals( $assertion['expected'], $result );
 		}
 	}
+
+	/**
+	 * @covers FrmAppHelper::recursive_function_map
+	 */
+	public function test_recursive_function_map() {
+		$test_cases = array(
+			array(
+				'input'    => array( 'Apple', 'Banana', '', null ),
+				'function' => 'strlen',
+				'expected' => array( 5, 6, 0, 0 ),
+			),
+			array(
+				'input'    => array( '  Apple', '  Banana  ', '   ', null ),
+				'function' => 'trim',
+				'expected' => array( 'Apple', 'Banana', '', '' ),
+			),
+			array(
+				'input'    => array( '&gt;', '&amp;' ),
+				'function' => 'htmlspecialchars_decode',
+				'expected' => array( '>', '&' ),
+			)
+		);
+		foreach ( $test_cases as $test_case ) {
+			$result = FrmAppHelper::recursive_function_map( $test_case['input'], $test_case['function'] );
+			$this->assertEquals( $test_case['expected'], $result );
+		}
+	}
 }
