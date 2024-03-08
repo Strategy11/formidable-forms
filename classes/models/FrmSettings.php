@@ -409,11 +409,9 @@ class FrmSettings {
 			return false;
 		}
 
-		// Sanitize the value using the specified sanitization method by name.
-		$sanitized_value = call_user_func( $sanitize, $value );
-
 		// Update the property value.
-		$this->{$key} = $sanitized_value;
+		FrmAppHelper::sanitize_value( $sanitize, $value );
+		$this->{$key} = $value;
 
 		return true;
 	}
