@@ -172,6 +172,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * @param array  $messages
+	 * @param string $type
 	 * @return void
 	 */
 	public function filter_messages( &$messages, $type = 'unread' ) {
@@ -252,10 +254,9 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $key
-	 *
 	 * @since 4.05.02
 	 *
+	 * @param string $key
 	 * @return void
 	 */
 	public function mark_unread( $key ) {
@@ -320,7 +321,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	public function unread_html() {
-		$html = '';
+		$html  = '';
 		$count = count( $this->unread() );
 		if ( $count ) {
 			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
@@ -337,7 +338,6 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 *
 	 * @param string $key
-	 *
 	 * @return void
 	 */
 	public function remove( $key ) {
@@ -383,11 +383,30 @@ class FrmInbox extends FrmFormApi {
 	 * @return array
 	 */
 	private static function get_banner_messages() {
+		return self::get_messages_with_key( 'banner' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_slidein_messages() {
+		return self::get_messages_with_key( 'slidein' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $key The key we are checking for (ie. banner or slidein).
+	 * @return array
+	 */
+	private static function get_messages_with_key( $key ) {
 		$inbox = new self();
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
-			function( $message ) {
-				return ! empty( $message['banner'] );
+			function( $message ) use ( $key ) {
+				return ! empty( $message[ $key ] );
 			}
 		);
 	}
