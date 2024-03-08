@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+// TODO: Check if there is only submit field.
 if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
@@ -50,6 +51,7 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
+// TODO: Check if there is only submit field.
 if ( $values['fields'] ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
@@ -95,7 +97,7 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 }
 
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
+var_dump( $values );
 if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_current_page( $values ) ) {
 	/**
 	 * @since 5.5.1
