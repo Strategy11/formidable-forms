@@ -9,6 +9,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+if ( ! is_array( $template ) ) {
+	return;
+}
+
+if ( ! empty( $template['message'] ) ) {
+	?>
+	<li class="frm_error_style inline">
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo FrmAppHelper::kses( $template['message'], array( 'a', 'b', 'strong', 'br' ) );
+		?>
+	</li>
+	<?php
+	return;
+}
+
 FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_type );
 ?>
 <li <?php FrmFormTemplatesHelper::add_template_attributes( $template, $expired ); ?>>

@@ -220,10 +220,10 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
-		<?php if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' && $frm_settings->active_captcha === 'recaptcha' ) { ?>
+		<?php if ( $display['captcha_size'] ) { ?>
 			<p class="frm6 frm_first frm_form_field">
 				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
-					<?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?>
+					<?php esc_html_e( 'Captcha Size', 'formidable' ); ?>
 				</label>
 				<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>">
 					<option value="normal" <?php selected( $field['captcha_size'], 'normal' ); ?>>
@@ -234,9 +234,11 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</option>
 				</select>
 			</p>
+		<?php } ?>
+		<?php if ( $display['captcha_theme'] ) { ?>
 			<p class="frm6 frm_form_field">
 				<label for="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
-					<?php esc_html_e( 'reCAPTCHA Color', 'formidable' ); ?>
+					<?php esc_html_e( 'Captcha Theme', 'formidable' ); ?>
 				</label>
 				<select name="field_options[captcha_theme_<?php echo esc_attr( $field['id'] ); ?>]" id="captcha_theme_<?php echo esc_attr( $field['field_key'] ); ?>">
 					<option value="light" <?php selected( $field['captcha_theme'], 'light' ); ?>>
@@ -245,19 +247,22 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<option value="dark" <?php selected( $field['captcha_theme'], 'dark' ); ?>>
 						<?php esc_html_e( 'Dark', 'formidable' ); ?>
 					</option>
+					<?php if ( $display['captcha_theme_auto_option'] ) { ?>
+						<option value="auto" <?php selected( $field['captcha_theme'], 'auto' ); ?>>
+							<?php esc_html_e( 'Auto', 'formidable' ); ?>
+						</option>
+					<?php } ?>
 				</select>
 			</p>
-			<?php
-		}//end if
-		?>
+		<?php } ?>
 
 		<?php
 		if ( $display['format'] ) {
 			FrmFieldsController::show_format_option( $field );
 		}
-		?>
 
-		<?php do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) ); ?>
+		do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) );
+		?>
 
 		<?php if ( $display['required'] ) { ?>
 			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
