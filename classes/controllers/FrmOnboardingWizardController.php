@@ -291,6 +291,8 @@ class FrmOnboardingWizardController {
 		 * @since x.x
 		 */
 		do_action( 'frm_onboarding_wizard_enqueue_assets' );
+
+		self::dequeue_scripts();
 	}
 
 	/**
@@ -305,6 +307,20 @@ class FrmOnboardingWizardController {
 			'INITIAL_STEP'  => self::INITIAL_STEP,
 			'proIsIncluded' => FrmAppHelper::pro_is_included(),
 		);
+	}
+
+	/**
+	 * Dequeue scripts and styles on the Onboarding Wizard.
+	 *
+	 * Avoid extra scripts loading on the Onboarding Wizard page that aren't needed.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function dequeue_scripts() {
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
 
 	/**

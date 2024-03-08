@@ -187,6 +187,7 @@ class FrmHooksController {
 		// Applications Controller.
 		// Use the same priority as styles so Applications appear directly under Styles.
 		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 );
+		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		// CAPTCHA
