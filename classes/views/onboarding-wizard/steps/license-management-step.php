@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <section id="frm-onboarding-license-management-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
@@ -29,12 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="frm-card-box-footer">
-		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
-			<?php esc_html_e( 'Skip', 'formidable' ); ?>
-		</a>
-		<a href="#" id="frm-onboarding-save-license-button" data-plugin="formidable_pro" class="button button-primary frm-button-primary frm_authorize_link" role="button">
-			<?php esc_html_e( 'Activate & continue', 'formidable' ); ?>
-		</a>
-	</div>
+	<?php
+	FrmOnboardingWizardHelper::get_footer(
+		array(
+			'primary-button-text'   => esc_html__( 'Activate & continue', 'formidable' ),
+			'primary-button-id'     => 'frm-onboarding-save-license-button',
+			'primary-button-class'  => 'frm_authorize_link',
+			'primary-button-plugin' => 'formidable_pro',
+		)
+	);
+	?>
 </section>

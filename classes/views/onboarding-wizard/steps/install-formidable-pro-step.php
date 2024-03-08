@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <section id="frm-onboarding-install-formidable-pro-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frmcenter frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
@@ -43,12 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 
-	<div class="frm-card-box-footer">
-		<a href="#" id="frm-onboarding-skip-pro-installation-button" class="button button-secondary frm-button-secondary" role="button">
-			<?php esc_html_e( 'Skip', 'formidable' ); ?>
-		</a>
-		<a href="#" id="frm-onboarding-check-pro-installation-button" class="button button-primary frm-button-primary" role="button">
-			<?php esc_html_e( 'Continue', 'formidable' ); ?>
-		</a>
-	</div>
+	<?php
+	FrmOnboardingWizardHelper::get_footer(
+		array(
+			'primary-button-text'        => esc_html__( 'Continue', 'formidable' ),
+			'primary-button-id'          => 'frm-onboarding-check-pro-installation-button',
+			'secondary-button-id'        => 'frm-onboarding-skip-pro-installation-button',
+			'secondary-button-skip-step' => false,
+		)
+	);
+	?>
 </section>

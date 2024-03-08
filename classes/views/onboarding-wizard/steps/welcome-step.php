@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <section id="frm-onboarding-welcome-step" class="frm-onboarding-step frm-card-box frmcenter frm-current" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard Logo', 'formidable' ); ?>" />
@@ -20,12 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p class="frm-card-box-text"><?php esc_html_e( 'This quick setup wizard will help you configure the basic settings and get you started in 2 minutes.', 'formidable' ); ?></p>
 	</div>
 
-	<div class="frm-card-box-footer frm-justify-center">
-		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
-			<?php esc_html_e( 'Proceed without Account', 'formidable' ); ?>
-		</a>
-		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" id="frm-onboarding-connect-account" class="button button-primary frm-button-primary">
-			<?php esc_html_e( 'Connect Account', 'formidable' ); ?>
-		</a>
-	</div>
+	<?php
+	FrmOnboardingWizardHelper::get_footer(
+		array(
+			'footer-class'          => 'frm-justify-center',
+			'primary-button-text'   => esc_html__( 'Connect Account', 'formidable' ),
+			'primary-button-id'     => 'frm-onboarding-connect-account',
+			'primary-button-href'   => FrmAddonsController::connect_link(),
+			'primary-button-role'   => false,
+			'secondary-button-text' => esc_html__( 'Proceed without Account', 'formidable' ),
+		)
+	);
+	?>
 </section>

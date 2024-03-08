@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <section id="frm-onboarding-default-email-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
@@ -46,12 +45,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppController::api_email_form( 'freetemplates' ); ?>
 	</div>
 
-	<div class="frm-card-box-footer">
-		<a href="#" class="button button-secondary frm-button-secondary frm-onboarding-skip-step" role="button">
-			<?php esc_html_e( 'Skip', 'formidable' ); ?>
-		</a>
-		<a href="#" id="frm-onboarding-setup-email-step-button" class="button button-primary frm-button-primary" role="button">
-			<?php esc_html_e( 'Next Step', 'formidable' ); ?>
-		</a>
-	</div>
+	<?php FrmOnboardingWizardHelper::get_footer( array( 'primary-button-id' => 'frm-onboarding-setup-email-step-button' ) ); ?>
 </section>

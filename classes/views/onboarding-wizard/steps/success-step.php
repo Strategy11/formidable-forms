@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
 <section id="frm-onboarding-success-step" class="frm-onboarding-step frm-card-box frmcenter frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<div class="frm-circled-icon frm-circled-icon-large frm-circled-icon-green frm-flex-center">
@@ -22,12 +21,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p class="frm-card-box-text"><?php esc_html_e( 'Congratulations on completing the onboarding process! We hope you enjoy using Formidable Forms.', 'formidable' ); ?></p>
 	</div>
 
-	<div class="frm-card-box-footer frm-justify-center frm-mt-2xl">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ) ); ?>" class="button button-secondary frm-button-secondary">
-			<?php esc_html_e( 'Create a Form', 'formidable' ); ?>
-		</a>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ) ); ?>" class="button button-primary frm-button-primary">
-			<?php esc_html_e( 'Go to Dashboard', 'formidable' ); ?>
-		</a>
-	</div>
+	<?php
+	FrmOnboardingWizardHelper::get_footer(
+		array(
+			'footer-class' => 'frm-justify-center frm-mt-2xl',
+			'primary-button-text'        => esc_html__( 'Go to Dashboard', 'formidable' ),
+			'primary-button-href'        => admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ),
+			'primary-button-role'        => false,
+			'secondary-button-text'      => esc_html__( 'Create a Form', 'formidable' ),
+			'secondary-button-href'      => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
+			'secondary-button-role'      => false,
+			'secondary-button-skip-step' => false,
+		)
+	);
+	?>
 </section>
