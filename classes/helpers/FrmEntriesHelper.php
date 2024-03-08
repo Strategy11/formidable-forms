@@ -247,6 +247,8 @@ class FrmEntriesHelper {
 	}
 
 	/**
+	 * Returns child entries from repeater or embedded forms.
+	 *
 	 * @since x.x
 	 * @param stdClass $entry
 	 * @param stdClass $field
@@ -271,7 +273,7 @@ class FrmEntriesHelper {
 			return FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', $child_entries_limit, true );
 		}
 
-		// Get all values for this field.
+		// This is an embeded form. Get all values for this field.
 		$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
 
 		if ( $child_values ) {
