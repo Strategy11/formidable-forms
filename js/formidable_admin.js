@@ -9501,6 +9501,7 @@ function frmAdminBuildJS() {
 		});
 		slideIn.insertAdjacentHTML( 'beforeend', purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
+		jQuery( slideIn ).hide().fadeIn();
 		return slideIn;
 	}
 
