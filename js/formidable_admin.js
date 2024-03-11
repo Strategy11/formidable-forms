@@ -4720,6 +4720,16 @@ function frmAdminBuildJS() {
 		toggleSectionHolder();
 	}
 
+	/**
+	 * Checks if there is only submit field in the form builder.
+	 *
+	 * @return {Boolean}
+	 */
+	function hasOnlySubmitField() {
+		const li = document.querySelectorAll( '#frm-show-fields li' );
+		return li.length === 2 && li[1].classList.contains( 'edit_field_type_submit' );
+	}
+
 	function deleteField( fieldId ) {
 		jQuery.ajax({
 			type: 'POST',
@@ -4756,19 +4766,19 @@ function frmAdminBuildJS() {
 					$thisField.remove();
 					if ( type === 'break' ) {
 						renumberPageBreaks();
-					}
-					if ( type === 'product' ) {
+					} else if ( type === 'product' ) {
 						maybeHideQuantityProductFieldOption();
 						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
 						popAllProductFields();
 					}
+
 					if ( $adjacentFields.length ) {
 						syncLayoutClasses( $adjacentFields.first() );
 					} else {
 						$liWrapper.remove();
 					}
 
-					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
+					if ( jQuery( '#frm-show-fields li' ).length === 0 || hasOnlySubmitField() ) {
 						const formEditorContainer = document.getElementById( 'frm_form_editor_container' );
 						formEditorContainer.classList.remove( 'frm-has-fields' );
 						formEditorContainer.classList.add( 'frm-empty-fields' );
