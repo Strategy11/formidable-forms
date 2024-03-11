@@ -1728,7 +1728,9 @@ function frmFrontFormJS() {
 		},
 
 		addAjaxFormErrors: function( object ) {
-			var key, $fieldCont;
+			var key,
+				$fieldCont,
+				submitButton = document.querySelector( '.frm_button_submit' );
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
@@ -1744,6 +1746,9 @@ function frmFrontFormJS() {
 
 			scrollToFirstField( object );
 			checkForErrorsAndMaybeSetFocus();
+			if ( submitButton ) {
+				submitButton.classList.remove( 'frm_show_loader' );
+			}
 		},
 
 		checkFormErrors: function( object, action ) {
