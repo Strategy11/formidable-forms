@@ -131,4 +131,21 @@ class FrmSubmitHelper {
 			}
 		}
 	}
+
+	/**
+	 * Checks if the given fields array only contains the submit field.
+	 *
+	 * @param array $fields Array of fields.
+	 * @return object|false Return the last found submit field, or `false` if there is at least another field.
+	 */
+	public static function only_contains_submit_field( $fields ) {
+		$submit_field = false;
+		foreach ( $fields as $field ) {
+			if ( self::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
+				return false;
+			}
+			$submit_field = $field;
+		}
+		return $submit_field;
+	}
 }
