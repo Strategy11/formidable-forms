@@ -1136,7 +1136,7 @@ class FrmFormsController {
 		self::maybe_update_form_builder_message( $message );
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-		$has_fields    = isset( $values['fields'] ) && ! empty( $values['fields'] ); // TODO: Add submit field check.
+		$has_fields    = isset( $values['fields'] ) && ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
