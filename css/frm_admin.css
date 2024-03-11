@@ -9515,11 +9515,18 @@ Responsive Design
 	max-width: 380px;
 	flex-direction: column;
 	align-items: center;
+	z-index: 3; /* We want the pop up to appear aboe the video in the dashboard. */
+}
+#frm_inbox_slide_in img {
+	max-width: 100%;
 }
 #frm_inbox_slide_in .frm-button-primary {
 	margin: auto;
 }
-#frm_inbox_slide_in h4 {
+#frm_inbox_slide_in h3 {
 	margin: 0;
+}
+#frm_inbox_slide_in h3 + span {
+	margin-bottom: var(--gap-2xs);
 }
 /* End Inbox slide-in */

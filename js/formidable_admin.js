@@ -9489,15 +9489,22 @@ function frmAdminBuildJS() {
 	 * @return {HTMLElement}
 	 */
 	function getInboxSlideIn() {
-		const h3 = tag( 'h4' );
+		const h3 = tag( 'h3' );
 		h3.innerHTML = purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const messageSpan = span( frmGlobal.inboxSlideIn.slidein );
+		const children = [];
+
+		if ( frmGlobal.inboxSlideIn.image ) {
+			children.push(
+				img({ src: frmGlobal.inboxSlideIn.image })
+			);
+		}
+
+		children.push( h3, messageSpan );
 		const slideIn = div({
 			id: 'frm_inbox_slide_in',
 			className: 'frm-card-item',
-			children: [
-				h3,
-				span( frmGlobal.inboxSlideIn.message )
-			]
+			children
 		});
 		slideIn.insertAdjacentHTML( 'beforeend', purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();

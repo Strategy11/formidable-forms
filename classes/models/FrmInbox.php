@@ -435,9 +435,10 @@ class FrmInbox extends FrmFormApi {
 
 		$message        = reset( $messages );
 		$keys_to_return = array(
-			'message',
+			'slidein',
 			'subject',
 			'cta',
+			'image',
 		);
 
 		return array_reduce(
