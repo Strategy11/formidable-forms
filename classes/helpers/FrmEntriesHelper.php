@@ -243,7 +243,36 @@ class FrmEntriesHelper {
 		}
 		$val = implode( $sep, (array) $field_value );
 
+		$val = self::maybe_append_ellipses( $val, $entry, $field, $atts );
+
 		return FrmAppHelper::kses( $val, 'all' );
+	}
+
+	/**
+	 * Appends ellipses to the displayed value for a repeater field in entries list page, if it is truncated
+	 * and isn't already ending with ellipses.
+	 * @since x.x
+	 *
+	 * @param string $val
+	 * @param object $entry
+	 * @param object $field
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
+	private static function maybe_append_ellipses( $val, $entry, $field, $atts ) {
+		if ( substr( $val, -3 ) === '...' ) {
+			return $val;
+		}
+
+		$child_entries_limit    = apply_filters( 'frm_entries_list_repeater_display_limit', 5, compact( 'field', 'atts' ) );
+		$total_repeater_entries = FrmEntry::getRecordCount( array( 'it.parent_item_id' => $entry->id ) );
+
+		if ( $total_repeater_entries > $child_entries_limit ) {
+			$val .= ' ...';
+		}
+
+		return $val;
 	}
 
 	/**
