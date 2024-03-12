@@ -8710,7 +8710,7 @@ Responsive Design
 
 	#new_fields .frm_single_option select,
 	#new_fields .frm_single_option input[type=text] {
-		width: calc(100% - 83px);
+		width: calc(100% - 73px);
 	}
 
 	.frm_single_entry_page .frm_form_fields input[type=text],
