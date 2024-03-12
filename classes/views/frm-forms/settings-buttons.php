@@ -10,6 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
+	<tr>
+		<td colspan="2">
+			<?php esc_html_e( 'Page Turn Transitions setting is moved to the page break field settings in the form builder', 'formidable' ); ?>
+		</td>
+	</tr>
 	<?php do_action( 'frm_add_form_style_tab_options', $values ); ?>
 	<tr>
 		<td colspan="2">
@@ -18,9 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</tr>
 	<tr>
 		<td colspan="2">
-			The submit button settings are moved to the Submit button in the form builder.
-<!--			TODO: Remove this, and update the message -->
-<!--			<input id="frm_submit_button_text" type="text" name="options[submit_value]" value="--><?php //echo esc_attr( $values['submit_value'] ); ?><!--" />-->
+			<?php esc_html_e( 'The submit button settings are moved to the Submit button in the form builder.', 'formidable' ); ?>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_button_options', $values ); ?>
