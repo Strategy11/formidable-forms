@@ -221,21 +221,21 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field_id          = FrmAppHelper::get_param( 'field_id', '', 'post', 'absint' );
-		$field             = FrmField::getOne( $field_id );
-		$enable_import_for = array( 'radio', 'checkbox', 'select' );
+		$field_id        = FrmAppHelper::get_param( 'field_id', '', 'post', 'absint' );
+		$field           = FrmField::getOne( $field_id );
+		$bulk_edit_types = array( 'radio', 'checkbox', 'select' );
 
 		/**
 		 * Filter to add new fields that will support import_options/Bulk Edit Options.
 		 *
 		 * @since x.x
 		 *
-		 * @param array $enable_import_for
+		 * @param array $bulk_edit_types
 		 * @return array
 		 */
-		$enable_import_for = apply_filters( 'frm_field_enable_bulk_edit_options', $enable_import_for );
+		$bulk_edit_types = apply_filters( 'frm_bulk_edit_field_types', $bulk_edit_types );
 
-		if ( ! in_array( $field->type, $enable_import_for ) ) {
+		if ( ! in_array( $field->type, $bulk_edit_types, true ) ) {
 			return;
 		}
 
