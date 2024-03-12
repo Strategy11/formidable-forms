@@ -222,7 +222,8 @@ class FrmEntriesHelper {
 			$truncated = true;
 		}
 
-		array_pop( $child_entries ); // Remove the extra item since we used '$child_entries_limit + 1' when querying db.
+		// Remove the extra item since we used '$child_entries_limit + 1' when querying db.
+		array_pop( $child_entries );
 
 		if ( empty( $child_entries ) ) {
 			return '';
