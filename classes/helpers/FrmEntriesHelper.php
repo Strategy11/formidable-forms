@@ -251,6 +251,7 @@ class FrmEntriesHelper {
 	/**
 	 * Appends ellipses to the displayed value for a repeater field in entries list page, if it is truncated
 	 * and isn't already ending with ellipses.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $val
