@@ -19,6 +19,7 @@ class FrmAddon {
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
+	protected $save_status;
 
 	/**
 	 * This is used to decide whether the license checks should continue.

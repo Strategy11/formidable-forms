@@ -84,16 +84,7 @@ class FrmField {
 	 * @return string
 	 */
 	private static function get_captcha_field_name() {
-		$frm_settings   = FrmAppHelper::get_settings();
-		$active_captcha = $frm_settings->active_captcha;
-		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'Captcha';
-		} elseif ( $active_captcha === 'recaptcha' ) {
-			$captcha_name = 'reCAPTCHA';
-		} else {
-			$captcha_name = 'hCaptcha';
-		}
-		return $captcha_name;
+		return 'Captcha';
 	}
 
 	public static function pro_field_selection() {

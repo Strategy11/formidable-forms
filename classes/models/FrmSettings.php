@@ -29,14 +29,52 @@ class FrmSettings {
 	public $custom_style;
 
 	public $active_captcha;
-	public $hcaptcha_pubkey;
-	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for reCAPTCHA.
+	 */
+
+	/**
+	 * @var string|null
+	 */
 	public $pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $privkey;
 	public $re_lang;
 	public $re_type;
 	public $re_msg;
 	public $re_multi;
+
+	/**
+	 * Settings for hCaptcha.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $hcaptcha_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for Turnstile.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $turnstile_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $turnstile_privkey;
 
 	public $no_ips;
 	public $custom_header_ip;
@@ -235,15 +273,19 @@ class FrmSettings {
 			$this->active_captcha = 'recaptcha';
 		}
 
-		$privkey          = '';
-		$re_lang          = '';
+		$privkey = '';
+		$re_lang = '';
 
 		if ( ! isset( $this->hcaptcha_privkey ) ) {
 			$this->hcaptcha_privkey = '';
 		}
 
+		if ( ! isset( $this->turnstile_privkey ) ) {
+			$this->turnstile_privkey = '';
+		}
+
 		if ( ! isset( $this->pubkey ) ) {
-			// get the options from the database
+			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
 			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
 			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
@@ -339,20 +381,23 @@ class FrmSettings {
 	}
 
 	/**
+	 * @param array $params
 	 * @return void
 	 */
 	private function update_settings( $params ) {
-		$this->active_captcha   = $params['frm_active_captcha'];
-		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
-		$this->pubkey           = trim( $params['frm_pubkey'] );
-		$this->privkey          = trim( $params['frm_privkey'] );
-		$this->re_type          = $params['frm_re_type'];
-		$this->re_lang          = $params['frm_re_lang'];
-		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
-		$this->load_style       = $params['frm_load_style'];
-		$this->custom_css       = $params['frm_custom_css'];
-		$this->currency         = $params['frm_currency'];
+		$this->active_captcha    = $params['frm_active_captcha'];
+		$this->pubkey            = trim( $params['frm_pubkey'] );
+		$this->privkey           = trim( $params['frm_privkey'] );
+		$this->re_type           = $params['frm_re_type'];
+		$this->re_lang           = $params['frm_re_lang'];
+		$this->re_threshold      = floatval( $params['frm_re_threshold'] );
+		$this->hcaptcha_pubkey   = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
+		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );
+		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
+		$this->load_style        = $params['frm_load_style'];
+		$this->custom_css        = $params['frm_custom_css'];
+		$this->currency          = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
