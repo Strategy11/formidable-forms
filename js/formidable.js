@@ -1721,9 +1721,7 @@ function frmFrontFormJS() {
 		},
 
 		addAjaxFormErrors: function( object ) {
-			var key,
-				$fieldCont,
-				submitButton = document.querySelector( '.frm_button_submit' );
+			var key, $fieldCont;
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
