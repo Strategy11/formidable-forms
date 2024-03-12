@@ -4347,7 +4347,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm_image_preview_wrapper,
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
-	width: calc(100% - 73px);
+	width: calc(100% - 83px);
 }
 
 .frm-right-panel .frm_single_option a.frm_remove_tag,
