@@ -1571,13 +1571,6 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
-			documentOn(
-				'click',
-				'input[type="submit"], .frm_prev_page, .frm_save_draft, .frm_button_submit',
-				function( event ) {
-					event.target.className += ' frm_show_loader';
-				}
-			);
 		},
 
 		getFieldId: function( field, fullID ) {
@@ -1746,9 +1739,6 @@ function frmFrontFormJS() {
 
 			scrollToFirstField( object );
 			checkForErrorsAndMaybeSetFocus();
-			if ( submitButton ) {
-				submitButton.classList.remove( 'frm_show_loader' );
-			}
 		},
 
 		checkFormErrors: function( object, action ) {
