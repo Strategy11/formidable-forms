@@ -27,7 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</h2>
 				<div class="cta-inside">
-
 					<p class="frm-oneclick frm_hidden">
 						<?php esc_html_e( 'That add-on is not installed. Would you like to install it now?', 'formidable' ); ?>
 					</p>

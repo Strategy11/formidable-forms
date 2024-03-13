@@ -749,7 +749,6 @@ class FrmStyle {
 			'progress_border_color'    => 'E5E5E5',
 			'progress_border_size'     => '2px',
 			'progress_size'            => '24px',
-
 			'custom_css' => '',
 		);
 

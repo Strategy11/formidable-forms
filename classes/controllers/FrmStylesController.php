@@ -1192,8 +1192,80 @@ class FrmStylesController {
 		return $important;
 	}
 
-	public static function do_accordion_sections( $screen, $context, $object ) {
-		return do_accordion_sections( $screen, $context, $object );
+	/**
+	 * Duplicate of WordPress do_accordion_section function, it adds an additional svg icon support.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return int
+	 */
+	public static function do_accordion_sections( $screen, $context, $data_object ) {
+		global $wp_meta_boxes;
+
+		// the symbol id from icons.svg
+		$icon_ids = array(
+			'ranking-fields-style' => 'frm_chart_bar_icon',
+			'section-fields-style' => 'frm-form-title-style',
+		);
+
+		wp_enqueue_script( 'accordion' );
+
+		if ( empty( $screen ) ) {
+			$screen = get_current_screen();
+		} elseif ( is_string( $screen ) ) {
+			$screen = convert_to_screen( $screen );
+		}
+
+		$page = $screen->id;
+
+		?>
+		<div id="side-sortables" class="accordion-container">
+			<ul class="outer-border">
+		<?php
+		$i          = 0;
+		$first_open = false;
+
+		if ( isset( $wp_meta_boxes[ $page ][ $context ] ) ) {
+			foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
+				if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
+					foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
+						if ( false === $box || ! $box['title'] ) {
+							continue;
+						}
+
+						++$i;
+						$icon_id = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
+
+						$open_class = '';
+						if ( ! $first_open ) {
+							$first_open = true;
+							$open_class = 'open';
+						}
+						?>
+						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
+							<h3 class="accordion-section-title hndle" tabindex="0">
+								<?php
+								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
+								echo esc_html( $box['title'] );
+								FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
+								?>
+							</h3>
+							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
+								<div class="inside">
+									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
+								</div><!-- .inside -->
+							</div><!-- .accordion-section-content -->
+						</li><!-- .accordion-section -->
+						<?php
+					}//end foreach
+				}//end if
+			}//end foreach
+		}//end if
+		?>
+			</ul><!-- .outer-border -->
+		</div><!-- .accordion-container -->
+		<?php
+		return $i;
 	}
 
 	/**

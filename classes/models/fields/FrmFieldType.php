@@ -300,6 +300,9 @@ DEFAULT_HTML;
 		return array_merge( $default_settings, $field_type_settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function default_field_settings() {
 		return array(
 			'type'           => $this->type,
@@ -319,6 +322,7 @@ DEFAULT_HTML;
 			'max'            => true,
 			'range'          => false,
 			'captcha_size'   => false,
+			'captcha_theme'  => false,
 			'format'         => false,
 			'show_image'     => false,
 			'default'        => true,
@@ -486,9 +490,12 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args
+	 * @return bool
 	 */
 	protected function should_continue_to_field_options( $args ) {
-		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ) );
+		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ), true );
 	}
 
 	/**
@@ -1568,24 +1575,24 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.8.3
 	 *
 	 * @return string
 	 */
 	protected function default_unique_msg() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_unique_msg' );
+		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_unique_msg' );
 		$frm_settings = FrmAppHelper::get_settings();
 		$message      = $frm_settings->unique_msg;
 		return $message;
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.8.3
 	 *
 	 * @return string
 	 */
 	protected function default_invalid_msg() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldsHelper::default_invalid_msg' );
+		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_invalid_msg' );
 		return FrmFieldsHelper::default_invalid_msg();
 	}
 }

@@ -74,7 +74,7 @@ class FrmFieldHTML extends FrmFieldType {
 	 * An HTML field is not populated from user input.
 	 * It does not need to be passed through FrmAppHelper::strip_most_html.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @param array $atts
 	 * @return bool
