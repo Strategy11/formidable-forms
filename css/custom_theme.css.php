@@ -771,10 +771,6 @@ legend.frm_hidden{
 	animation: spin 2s linear infinite;
 }
 
-.with_frm_style .frm_prev_page[disabled] {
-	opacity: 0.5;
-}
-
 .with_frm_style .frm_submit.frm_flex {
 	align-items: center;
 	gap: 2%;
