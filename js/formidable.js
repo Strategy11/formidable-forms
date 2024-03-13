@@ -1941,7 +1941,6 @@ function getSelectedCaptchaElements() {
 }
 
 function frmAfterRecaptcha( token ) {
-	console.log('afterrecaptcha');
 	frmFrontForm.afterSingleRecaptcha( token );
 }
 
