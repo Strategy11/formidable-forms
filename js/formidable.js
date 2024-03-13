@@ -1601,7 +1601,8 @@ function frmFrontFormJS() {
 					'size': size,
 					'theme': captcha.getAttribute( 'data-theme' )
 				},
-				activeCaptcha = reCaptchaIsSelected() ? grecaptcha : hcaptcha;
+				activeCaptcha = getSelectedCaptcha(),
+				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
 
 			if ( rendered ) {
 				return;
@@ -1615,7 +1616,8 @@ function frmFrontFormJS() {
 				};
 			}
 
-			captchaID = activeCaptcha.render( captcha.id, params );
+
+			captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
@@ -1912,13 +1914,23 @@ jQuery( document ).ready( function() {
 	frmFrontForm.init();
 });
 
-function reCaptchaIsSelected() {
-	return !! document.querySelector( '.frm-g-recaptcha' );
+function getSelectedCaptcha() {
+	if ( document.querySelector( '.frm-g-recaptcha' ) ) {
+		return grecaptcha;
+	}
+	if ( document.querySelector( '.h-captcha' ) ) {
+		return hcaptcha;
+	}
+	return turnstile;
+}
+
+function getSelectedCaptchaElements() {
+	return jQuery( '.frm-g-recaptcha, .h-captcha, .cf-turnstile' );
 }
 
 function frmCaptcha() {
 	var c, cl,
-		captchas = reCaptchaIsSelected() ? jQuery( '.frm-g-recaptcha' ) : jQuery( '.h-captcha' );
+		captchas = getSelectedCaptchaElements();
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
 		frmFrontForm.renderCaptcha( captchas[c]);
 	}
