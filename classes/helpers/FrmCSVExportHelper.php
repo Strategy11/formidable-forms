@@ -115,7 +115,6 @@ class FrmCSVExportHelper {
 		self::set_has_parent_id( $atts['form'] );
 
 		$filename = self::generate_csv_filename( $atts['form'] );
-		unset( $atts['form'], $atts['form_cols'] );
 
 		if ( 'file' === self::$mode ) {
 			$filepath = get_temp_dir() . $filename;
@@ -151,10 +150,33 @@ class FrmCSVExportHelper {
 			self::prepare_next_csv_rows( $next_set );
 		}
 
+		self::do_frm_after_generate_csv_action( $atts );
+
+		unset( $atts['form'], $atts['form_cols'] );
+
 		if ( 'file' === self::$mode ) {
 			fclose( self::$fp );
 			return $filepath;
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	private static function do_frm_after_generate_csv_action( $atts ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param array $atts {
+		 *   @type object $form
+		 *   @type array  $entry_ids
+		 *   @type array  $form_cols
+		 * }
+		 */
+		do_action( 'frm_after_generate_csv', $atts );
 	}
 
 	/**
