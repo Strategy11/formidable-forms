@@ -68,7 +68,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 		$captcha_size = $attributes['data-size'];
 
 		if ( $captcha_size === 'invisible' && ! $this->frm_settings->re_multi ) {
-			$attributes['data-callback'] = 'frmAfterRecaptcha';
+			// $attributes['data-callback'] = 'frmAfterRecaptcha';
 		}
 
 		return $attributes;

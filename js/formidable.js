@@ -5,7 +5,7 @@ var frmFrontForm;
 function frmFrontFormJS() {
 	'use strict';
 
-	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, frmProForm, tinyMCE */
+	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	var action = '';
@@ -1623,6 +1623,7 @@ function frmFrontFormJS() {
 
 		afterSingleRecaptcha: function() {
 			var object = jQuery( '.frm-show-form .g-recaptcha' ).closest( 'form' )[0];
+			console.log('aftersinglerecaptcha');
 			frmFrontForm.submitFormNow( object );
 		},
 
@@ -1940,6 +1941,7 @@ function getSelectedCaptchaElements() {
 }
 
 function frmAfterRecaptcha( token ) {
+	console.log('afterrecaptcha');
 	frmFrontForm.afterSingleRecaptcha( token );
 }
 
