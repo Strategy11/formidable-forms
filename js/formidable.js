@@ -1582,8 +1582,7 @@ function frmFrontFormJS() {
 
 			enableSubmitButtonOnBackButtonPress();
 			jQuery( document ).on(
-				'click',
-				'.frm-edit-page-btn.frm_page_back, .frm_prev_page, .frm_button_submit:not(.frm_final_submit)',
+				'frmPageChanged',
 				destroyhCaptcha
 			);
 		},
