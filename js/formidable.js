@@ -1914,6 +1914,18 @@ jQuery( document ).ready( function() {
 	frmFrontForm.init();
 });
 
+function frmRecaptcha() {
+	console.warn( 'DEPRECATED: function frmRecaptcha in v6.x use frmCaptcha' );
+}
+
+function frmCaptcha() {
+	var c, cl,
+		captchas = getSelectedCaptchaElements();
+	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
+		frmFrontForm.renderCaptcha( captchas[c]);
+	}
+}
+
 function getSelectedCaptcha() {
 	if ( document.querySelector( '.frm-g-recaptcha' ) ) {
 		return grecaptcha;
@@ -1926,14 +1938,6 @@ function getSelectedCaptcha() {
 
 function getSelectedCaptchaElements() {
 	return jQuery( '.frm-g-recaptcha, .h-captcha, .cf-turnstile' );
-}
-
-function frmCaptcha() {
-	var c, cl,
-		captchas = getSelectedCaptchaElements();
-	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderCaptcha( captchas[c]);
-	}
 }
 
 function frmAfterRecaptcha( token ) {
