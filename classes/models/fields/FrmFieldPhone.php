@@ -43,6 +43,15 @@ class FrmFieldPhone extends FrmFieldType {
 	}
 
 	/**
+	 * @return array
+	 */
+	protected function extra_field_opts() {
+		return array(
+			'phone_type'    => 'none',
+		);
+	}
+
+	/**
 	 * @return string
 	 */
 	protected function html5_input_type() {

@@ -6392,6 +6392,19 @@ function frmAdminBuildJS() {
 		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
+		document.addEventListener( 'change', ( event ) => {
+			const element = event.target;
+			if ( ! element.classList.contains( 'frm_select_with_premium' ) ) {
+				return;
+			}
+
+			handleUpgradeClick( event );
+
+			const selectedOption = element.options[element.selectedIndex];
+			if ( selectedOption && selectedOption.dataset.upgrade ) {
+				element.value = element.dataset.selected;
+			}
+		});
 
 		function handleUpgradeClick( event ) {
 			let element, link, content;
@@ -6403,6 +6416,14 @@ function frmAdminBuildJS() {
 			}
 
 			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
+
+			// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
+			if ( element.classList.contains( 'frm_select_with_premium' ) ) {
+				const selectedOption = element.options[element.selectedIndex];
+				if ( selectedOption && selectedOption.dataset.upgrade ) {
+					element = selectedOption;
+				}
+			}
 
 			if ( ! element.dataset.upgrade ) {
 				let parent = element.closest( '[data-upgrade]' );

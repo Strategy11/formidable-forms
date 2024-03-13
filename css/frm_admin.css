@@ -299,6 +299,14 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	border: 1px solid var(--grey-300);
 }
 
+.frm_form_field.frm6_followed + p {
+	grid-column: span 6 / span 6;
+}
+
+.frm_form_field.frm-phone-type + p > label {
+	opacity: 0;
+}
+
 .frm-short-list {
 	overflow: auto;
 	max-height: 190px;
