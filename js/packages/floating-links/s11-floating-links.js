@@ -83,16 +83,24 @@ class S11FloatingLinks {
 	 * @return {HTMLElement}
 	 */
 	getInboxSlideIn() {
-		const h3          = frmDom.tag( 'h3' );
+		const h3          = frmDom.tag(
+			'h3',
+			{ id: 'frm_inbox_slidein_title' } 
+		);
 		h3.innerHTML      = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
-		const messageSpan = frmDom.span( frmGlobal.inboxSlideIn.slidein );
+		const messageSpan = frmDom.span({
+			id: 'frm_inbox_slidein_message',
+			text: frmGlobal.inboxSlideIn.slidein
+		});
 		const dismissIcon = frmDom.a({
 			className: 'dismiss frm_inbox_dismiss',
 			child: frmDom.svg({ href: '#frm_close_icon' })
 		});
+		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss', 'formidable' ) );
+		dismissIcon.setAttribute( 'role', 'button' );
 		const children    = frmAdminBuild.hooks.applyFilters(
 			'frm_inbox_slidein_children',
-			[ frmDom.span({ child: dismissIcon }), h3, messageSpan ]
+			[ h3, messageSpan, frmDom.span({ child: dismissIcon }) ]
 		);
 		const slideIn     = frmDom.div({
 			id: 'frm_inbox_slide_in',
@@ -103,6 +111,10 @@ class S11FloatingLinks {
 		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
 		this.updateSlideInCtaUtm( slideIn );
+		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
+			'aria-description',
+			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
+		);
 		this.slideIn = slideIn;
 		return slideIn;
 	}
