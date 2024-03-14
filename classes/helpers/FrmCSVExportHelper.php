@@ -150,7 +150,7 @@ class FrmCSVExportHelper {
 			self::prepare_next_csv_rows( $next_set );
 		}
 
-		self::do_frm_after_generate_csv_action( $atts );
+		self::after_generate_csv_action( $atts );
 
 		unset( $atts['form'], $atts['form_cols'] );
 
@@ -166,7 +166,7 @@ class FrmCSVExportHelper {
 	 * @param array $atts
 	 * @return void
 	 */
-	private static function do_frm_after_generate_csv_action( $atts ) {
+	private static function after_generate_csv_action( $atts ) {
 		/**
 		 * @since x.x
 		 *
