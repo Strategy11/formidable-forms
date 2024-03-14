@@ -10274,8 +10274,9 @@ function frmAdminBuildJS() {
 				if ( isInboxSlideIn ) {
 					message.classList.remove( 's11-fadein' );
 					message.classList.add( 's11-fadeout' );
+					message.addEventListener( 'animationend', () => message.remove(), { once: true });
 				}
-
+				
 				postAjax( data, function() {
 					if ( isInboxSlideIn ) {
 						return;
