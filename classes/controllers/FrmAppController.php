@@ -696,7 +696,7 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 
-		if ( self::should_show_floating_links() ){
+		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 
