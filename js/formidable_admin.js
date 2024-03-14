@@ -10276,33 +10276,36 @@ function frmAdminBuildJS() {
 					message.classList.add( 's11-fadeout' );
 					message.addEventListener( 'animationend', () => message.remove(), { once: true });
 				}
-				
-				postAjax( data, function() {
-					if ( isInboxSlideIn ) {
-						return;
-					}
 
-					if ( href !== '#' ) {
-						window.location = href;
-						return true;
-					}
-
-					fadeOut(
-						message,
-						() => {
-							if ( null !== dismissedMessagesWrapper ) {
-								dismissedMessage.classList.remove( 'frm-fade' );
-								dismissedMessage.querySelector( '.frm-inbox-message-heading' )?.removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
-								dismissedMessagesWrapper.append( dismissedMessage );
-							}
-							if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
-								document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-								message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
-							}
-							message.parentNode.removeChild( message );
+				postAjax(
+					data,
+					() => {
+						if ( isInboxSlideIn ) {
+							return;
 						}
-					);
-				});
+
+						if ( href !== '#' ) {
+							window.location = href;
+							return true;
+						}
+
+						fadeOut(
+							message,
+							() => {
+								if ( null !== dismissedMessagesWrapper ) {
+									dismissedMessage.classList.remove( 'frm-fade' );
+									dismissedMessage.querySelector( '.frm-inbox-message-heading' )?.removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+									dismissedMessagesWrapper.append( dismissedMessage );
+								}
+								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
+									document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
+									message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+								}
+								message.parentNode.removeChild( message );
+							}
+						);
+					}
+				);
 			});
 			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
 				data = {
