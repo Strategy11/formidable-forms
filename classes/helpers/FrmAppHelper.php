@@ -646,17 +646,33 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Sanitize a value in-place.
+	 * If $value is an array, the sanitize function will get called for each item.
+	 *
+	 * @param callable $sanitize
+	 * @param mixed    $value
+	 * @return void
+	 */
 	public static function sanitize_value( $sanitize, &$value ) {
-		if ( ! empty( $sanitize ) ) {
-			if ( is_array( $value ) ) {
-				$temp_values = $value;
-				foreach ( $temp_values as $k => $v ) {
-					self::sanitize_value( $sanitize, $value[ $k ] );
-				}
-			} else {
-				$value = call_user_func( $sanitize, $value );
-			}
+		if ( ! $sanitize ) {
+			return;
 		}
+
+		if ( is_object( $value ) ) {
+			$value = '';
+			return;
+		}
+
+		if ( is_array( $value ) ) {
+			$temp_values = $value;
+			foreach ( $temp_values as $k => $v ) {
+				self::sanitize_value( $sanitize, $value[ $k ] );
+			}
+			return;
+		}
+
+		$value = call_user_func( $sanitize, $value );
 	}
 
 	public static function sanitize_request( $sanitize_method, &$values ) {
