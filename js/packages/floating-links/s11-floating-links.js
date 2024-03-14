@@ -59,6 +59,70 @@ class S11FloatingLinks {
 
 		// Apply styles
 		this.setCSSVariables();
+
+		// Use a timeout to give time for Pro to add hooks.
+		setTimeout( () => this.setupInboxSlideIn(), 0 );
+	}
+
+	setupInboxSlideIn() {
+		if ( 'object' !== typeof frmGlobal.inboxSlideIn || ! window.frmDom || ! window.wp ) {
+			return;
+		}
+
+		const slideIn = this.getInboxSlideIn();
+		slideIn.classList.add( 's11-fadein' );
+		document.body.appendChild( slideIn );
+
+		// Make sure the events are set for dismissing the inbox message.
+		if ( ! document.getElementById( 'frm_inbox_page' ) && ! document.querySelector( '.frm-inbox-wrapper' ) ) {
+			frmAdminBuild.inboxInit();
+		}
+	}
+
+	/**
+	 * @return {HTMLElement}
+	 */
+	getInboxSlideIn() {
+		const h3          = frmDom.tag( 'h3' );
+		h3.innerHTML      = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const messageSpan = frmDom.span( frmGlobal.inboxSlideIn.slidein );
+		const dismissIcon = frmDom.a({
+			className: 'dismiss frm_inbox_dismiss',
+			child: frmDom.svg({ href: '#frm_close_icon' })
+		});
+		const children    = frmAdminBuild.hooks.applyFilters(
+			'frm_inbox_slidein_children',
+			[ frmDom.span({ child: dismissIcon }), h3, messageSpan ]
+		);
+		const slideIn     = frmDom.div({
+			id: 'frm_inbox_slide_in',
+			className: 'frm-card-item',
+			children
+		});
+		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );
+		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
+		slideIn.querySelector( '.frm-button-secondary' )?.remove();
+		this.updateSlideInCtaUtm( slideIn );
+		this.slideIn = slideIn;
+		return slideIn;
+	}
+
+	updateSlideInCtaUtm( slideIn ) {
+		slideIn.querySelectorAll( 'a[href]' ).forEach(
+			anchor => {
+				if ( '#' === anchor.href ) {
+					return;
+				}
+
+				const urlObj       = new URL( anchor.href );
+				const searchParams = new URLSearchParams( urlObj.search );
+
+				searchParams.set( 'utm_medium', 'slidein' );
+
+				urlObj.search = searchParams.toString();
+				anchor.href   = urlObj.toString();
+			}
+		);
 	}
 
 	/**
@@ -180,6 +244,10 @@ class S11FloatingLinks {
 	toggleFade( element ) {
 		if ( ! element ) {
 			return;
+		}
+
+		if ( this.slideIn && element !== this.slideIn ) {
+			this.toggleFade( this.slideIn );
 		}
 
 		element.classList.add( 's11-fading' );

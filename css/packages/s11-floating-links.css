@@ -163,3 +163,41 @@
 		height: 50px;
 	}
 }
+
+/* Inbox slide-in */
+#frm_inbox_slide_in {
+	position: fixed;
+	/* Use the same bottom/right values as floating links. */
+	bottom: 127px;
+	right: 48px;
+	min-width: 300px;
+	max-width: 380px;
+	flex-direction: column;
+	align-items: center;
+	z-index: 4; /* We want the pop up to appear above the license section in the dashboard. */
+	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18); /* Use the same box shadow as the floating liks */
+	padding: 40px 25px 30px 25px;
+}
+#frm_inbox_slide_in img {
+	max-width: 100%;
+}
+#frm_inbox_slide_in .frm-button-primary {
+	margin: auto;
+}
+#frm_inbox_slide_in h3 {
+	margin: 0;
+	font-weight: 600;
+}
+#frm_inbox_slide_in h3 + span {
+	margin-bottom: var(--gap-2xs);
+	text-align: center;
+}
+#frm_inbox_slide_in a.dismiss {
+	top: 10px;
+	right: 10px;
+	position: absolute;
+}
+#frm_inbox_slide_in a.dismiss svg {
+	color: var(--grey-400);
+}
+/* End Inbox slide-in */

@@ -704,7 +704,7 @@ class FrmAppController {
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() && ! FrmInbox::has_a_slidein_message() ) {
+		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ){//&& ! FrmInbox::has_a_slidein_message() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 		unset( $is_valid_page );
@@ -1282,5 +1282,10 @@ class FrmAppController {
 			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
 		);
 		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
+
+		/**
+		 * @since x.x
+		 */
+		do_action( 'frm_enqueue_floating_links' );
 	}
 }

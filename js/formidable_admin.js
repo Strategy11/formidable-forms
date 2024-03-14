@@ -9477,37 +9477,6 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @return {void}
-	 */
-	function initInboxSlideIn() {
-		if ( 'object' === typeof frmGlobal.inboxSlideIn ) {
-			document.body.appendChild( getInboxSlideIn() );
-		}
-	}
-
-	/**
-	 * @return {HTMLElement}
-	 */
-	function getInboxSlideIn() {
-		const h3          = tag( 'h3' );
-		h3.innerHTML      = purifyHtml( frmGlobal.inboxSlideIn.subject );
-		const messageSpan = span( frmGlobal.inboxSlideIn.slidein );
-		const children    = frmAdminBuild.hooks.applyFilters(
-			'frm_inbox_slidein_children',
-			[ h3, messageSpan ]
-		);
-		const slideIn = div({
-			id: 'frm_inbox_slide_in',
-			className: 'frm-card-item',
-			children
-		});
-		slideIn.insertAdjacentHTML( 'beforeend', purifyHtml( frmGlobal.inboxSlideIn.cta ) );
-		slideIn.querySelector( '.frm-button-secondary' )?.remove();
-		jQuery( slideIn ).hide().fadeIn();
-		return slideIn;
-	}
-
-	/**
 	 * Listen for click events for an API-loaded email collection form.
 	 *
 	 * This is used for the Active Campaign sign-up form in the inbox page (when there are no messages).
@@ -9677,7 +9646,6 @@ function frmAdminBuildJS() {
 
 	return {
 		init: function() {
-			initInboxSlideIn();
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
 
@@ -10284,11 +10252,11 @@ function frmAdminBuildJS() {
 
 		inboxInit: function() {
 			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
-				var message = this.parentNode.parentNode,
-					key = message.getAttribute( 'data-message' ),
-					href = this.getAttribute( 'href' ),
-					dismissedMessage = message.cloneNode( true );
-					dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
+				const message                  = this.parentNode.parentNode;
+				const key                      = message.getAttribute( 'data-message' );
+				const href                     = this.getAttribute( 'href' );
+				const dismissedMessage         = message.cloneNode( true );
+				const dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
 
 				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
 					return;
@@ -10298,18 +10266,30 @@ function frmAdminBuildJS() {
 
 				data = {
 					action: 'frm_inbox_dismiss',
-					key: key,
+					key,
 					nonce: frmGlobal.nonce
 				};
+
+				const isInboxSlideIn = 'frm_inbox_slide_in' === message.id;
+				if ( isInboxSlideIn ) {
+					message.classList.remove( 's11-fadein' );
+					message.classList.add( 's11-fadeout' );
+				}
+
 				postAjax( data, function() {
+					if ( isInboxSlideIn ) {
+						return;
+					}
+
 					if ( href !== '#' ) {
 						window.location = href;
 						return true;
 					}
+
 					fadeOut( message, function() {
 						if ( null !== dismissedMessagesWrapper ) {
 							dismissedMessage.classList.remove( 'frm-fade' );
-							dismissedMessage.querySelector( '.frm-inbox-message-heading' ).removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+							dismissedMessage.querySelector( '.frm-inbox-message-heading' )?.removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
 							dismissedMessagesWrapper.append( dismissedMessage );
 						}
 						if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
@@ -10320,7 +10300,7 @@ function frmAdminBuildJS() {
 					});
 				});
 			});
-			jQuery( '#frm-dismiss-inbox' ).on( 'click', function( e ) {
+			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
 				data = {
 					action: 'frm_inbox_dismiss',
 					key: 'all',
@@ -10334,7 +10314,7 @@ function frmAdminBuildJS() {
 				});
 			});
 
-			if ( ! document.getElementById( 'frm_empty_inbox' ).classList.contains( 'frm_hidden' ) ) {
+			if ( false === document.getElementById( 'frm_empty_inbox' )?.classList.contains( 'frm_hidden' ) ) {
 				showActiveCampaignForm();
 			}
 		},

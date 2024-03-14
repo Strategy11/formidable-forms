@@ -9505,30 +9505,3 @@ Responsive Design
 	border-color: #135e96;
 }
 /* End Pirate forms importer */
-
-/* Inbox slide-in */
-#frm_inbox_slide_in {
-	position: fixed;
-	/* Use the same bottom/right values as floating links. */
-	bottom: 48px;
-	right: 48px;
-	min-width: 300px;
-	max-width: 380px;
-	flex-direction: column;
-	align-items: center;
-	z-index: 3; /* We want the pop up to appear aboe the video in the dashboard. */
-	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18); /* Use the same box shadow as the floating liks */
-}
-#frm_inbox_slide_in img {
-	max-width: 100%;
-}
-#frm_inbox_slide_in .frm-button-primary {
-	margin: auto;
-}
-#frm_inbox_slide_in h3 {
-	margin: 0;
-}
-#frm_inbox_slide_in h3 + span {
-	margin-bottom: var(--gap-2xs);
-}
-/* End Inbox slide-in */

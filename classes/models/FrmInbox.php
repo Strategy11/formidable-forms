@@ -157,8 +157,8 @@ class FrmInbox extends FrmFormApi {
 	private function clean_messages() {
 		$removed = false;
 		foreach ( self::$messages as $t => $message ) {
-			$read      = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
 			$expired   = $this->is_expired( $message );
 			if ( $read || $expired || $dismissed ) {
 				unset( self::$messages[ $t ] );
@@ -195,7 +195,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function is_expired( $message ) {
-		return isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+		return ! empty( $message['expires'] ) && $message['expires'] < time();
 	}
 
 	/**
@@ -364,8 +364,41 @@ class FrmInbox extends FrmFormApi {
 			return false;
 		}
 		$message = end( self::$banner_messages );
+		$cta     = self::get_prepared_banner_cta( $message['cta'] );
+
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
 		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $cta
+	 * @return string
+	 */
+	private static function get_prepared_banner_cta( $cta ) {
+		$cta = str_replace( 'button-secondary', 'button-primary', $cta );
+
+		// Make sure that the CTA uses utm_medium=banner.
+		return preg_replace_callback(
+			'/href=("|\')(.*?)("|\')/',
+			/**
+			 * @param array $matches
+			 * @return string
+			 */
+			function ( $matches ) {
+				$url   = $matches[2];
+				$parts = parse_url( $url );
+				$query = array();
+				if ( isset( $parts['query'] ) ) {
+					parse_str( $parts['query'], $query );
+				}
+				$query['utm_medium'] = 'banner';
+				$parts['query']      = http_build_query( $query );
+				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+			},
+			$cta
+		);
 	}
 
 	/**
@@ -442,7 +475,7 @@ class FrmInbox extends FrmFormApi {
 		 */
 		$keys_to_return = apply_filters(
 			'frm_inbox_slidein_js_vars',
-			array( 'slidein', 'subject', 'cta' )
+			array( 'key', 'slidein', 'subject', 'cta' )
 		);
 
 		return array_reduce(
