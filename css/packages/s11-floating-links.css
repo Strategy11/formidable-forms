@@ -197,7 +197,10 @@
 	right: 10px;
 	position: absolute;
 }
+#frm_inbox_slide_in a.dismiss:focus {
+	box-shadow: none;
+}
 #frm_inbox_slide_in a.dismiss svg {
-	color: var(--grey-400);
+	color: var(--grey-800);
 }
 /* End Inbox slide-in */
