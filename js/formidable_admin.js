@@ -9489,18 +9489,13 @@ function frmAdminBuildJS() {
 	 * @return {HTMLElement}
 	 */
 	function getInboxSlideIn() {
-		const h3 = tag( 'h3' );
-		h3.innerHTML = purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const h3          = tag( 'h3' );
+		h3.innerHTML      = purifyHtml( frmGlobal.inboxSlideIn.subject );
 		const messageSpan = span( frmGlobal.inboxSlideIn.slidein );
-		const children = [];
-
-		if ( frmGlobal.inboxSlideIn.image ) {
-			children.push(
-				img({ src: frmGlobal.inboxSlideIn.image })
-			);
-		}
-
-		children.push( h3, messageSpan );
+		const children    = frmAdminBuild.hooks.applyFilters(
+			'frm_inbox_slidein_children',
+			[ h3, messageSpan ]
+		);
 		const slideIn = div({
 			id: 'frm_inbox_slide_in',
 			className: 'frm-card-item',

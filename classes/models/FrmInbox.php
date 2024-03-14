@@ -433,12 +433,16 @@ class FrmInbox extends FrmFormApi {
 			return false;
 		}
 
-		$message        = reset( $messages );
-		$keys_to_return = array(
-			'slidein',
-			'subject',
-			'cta',
-			'image',
+		$message = reset( $messages );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array $keys
+		 */
+		$keys_to_return = apply_filters(
+			'frm_inbox_slidein_js_vars',
+			array( 'slidein', 'subject', 'cta' )
 		);
 
 		return array_reduce(
