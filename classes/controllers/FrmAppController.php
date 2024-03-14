@@ -696,18 +696,9 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 
-		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-
-		// Enqueue Floating Links.
-		$is_valid_page =
-			FrmAppHelper::is_formidable_admin() &&
-			! FrmAppHelper::is_style_editor_page() &&
-			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
-			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ){//&& ! FrmInbox::has_a_slidein_message() ) {
+		if ( self::should_show_floating_links() ){
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
-		unset( $is_valid_page );
 
 		$dependencies = array(
 			'formidable_admin_global',
@@ -749,6 +740,7 @@ class FrmAppController {
 			);
 		}
 
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
@@ -804,6 +796,22 @@ class FrmAppController {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_show_floating_links() {
+		if ( ! FrmAppHelper::is_formidable_branding() ) {
+			return false;
+		}
+
+		return FrmAppHelper::is_formidable_admin() &&
+			! FrmAppHelper::is_style_editor_page() &&
+			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
+			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 	}
 
 	/**
