@@ -371,6 +371,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Make sure that the CTA uses utm_medium=banner.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $cta
@@ -378,12 +380,12 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private static function get_prepared_banner_cta( $cta ) {
 		$cta = str_replace( 'button-secondary', 'button-primary', $cta );
-
-		// Make sure that the CTA uses utm_medium=banner.
 		return preg_replace_callback(
 			'/href=("|\')(.*?)("|\')/',
 			/**
-			 * @param array $matches
+			 * Replace a single href attribute in the CTA.
+			 *
+			 * @param array $matches The regex results for a single match.
 			 * @return string
 			 */
 			function ( $matches ) {
@@ -413,6 +415,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Get all message with a "banner" mesage key defined.
+	 *
 	 * @return array
 	 */
 	private static function get_banner_messages() {
@@ -420,6 +424,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Get all messages with a "slidein" message key defined.
+	 *
 	 * @since x.x
 	 *
 	 * @return array
@@ -429,6 +435,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Get all messages with a $key message key defined.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $key The key we are checking for (ie. banner or slidein).
@@ -445,6 +453,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Check if there is at least one slidein message.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -469,6 +479,9 @@ class FrmInbox extends FrmFormApi {
 		$message = reset( $messages );
 
 		/**
+		 * Extend the keys in the global JS object.
+		 * This is used in Pro to include images.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $keys

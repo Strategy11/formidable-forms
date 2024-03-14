@@ -799,6 +799,9 @@ class FrmAppController {
 	}
 
 	/**
+	 * The floating links are not shown on every page.
+	 * They are also not shown if white labeling is being used.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -1292,6 +1295,9 @@ class FrmAppController {
 		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
 
 		/**
+		 * Prompt Pro to load additional floating links scripts.
+		 * This is used to include images in the Inbox SlideIn when Pro is active.
+		 *
 		 * @since x.x
 		 */
 		do_action( 'frm_enqueue_floating_links' );
