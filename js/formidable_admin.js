@@ -7933,12 +7933,31 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	function updateShortcodesPopupPosition( target ) {
+		let moreIcon;
+		if ( target instanceof Event ) {
+			const useElements = document.querySelectorAll( '.frm-single-settings .frm-show-box.frmsvg use' );
+			const openTrigger = Array.from( useElements ).find( use => use.getAttribute( 'href' ) === '#frm_close_icon' );
+			if ( 'undefined' === typeof openTrigger ) {
+				return;
+			}
+			moreIcon = openTrigger.parentElement;
+		} else {
+			moreIcon = target;
+		}
+
+		const moreIconPosition = moreIcon.getBoundingClientRect();
+		const shortCodesPopup  = document.getElementById( 'frm_adv_info' );
+		const parentPos        = shortCodesPopup.parentElement.getBoundingClientRect();
+
+		shortCodesPopup.style.top = ( moreIconPosition.top - parentPos.top + 32 ) + 'px';
+		shortCodesPopup.style.left = ( moreIconPosition.left - parentPos.left - 280 ) + 'px';
+	}
+
 	function showShortcodeBox( moreIcon, shouldFocus ) {
-		var pos = moreIcon.getBoundingClientRect(),
-			input = getInputForIcon( moreIcon ),
+		var input = getInputForIcon( moreIcon ),
 			box = document.getElementById( 'frm_adv_info' ),
-			classes = moreIcon.className,
-			parentPos = box.parentElement.getBoundingClientRect();
+			classes = moreIcon.className;
 
 		if ( moreIcon.tagName === 'svg' ) {
 			moreIcon = moreIcon.firstElementChild;
@@ -7955,8 +7974,7 @@ function frmAdminBuildJS() {
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
 		} else {
-			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
-			box.style.left = ( pos.left - parentPos.left - 280 ) + 'px';
+			updateShortcodesPopupPosition( moreIcon );
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
@@ -9981,6 +9999,7 @@ function frmAdminBuildJS() {
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
+			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 		},
 
 		settingsInit: function() {

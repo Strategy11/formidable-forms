@@ -1977,7 +1977,24 @@ class FrmAppHelper {
 				}
 			}
 		} else {
+			$value = self::maybe_update_value_if_null( $value, $function );
 			$value = call_user_func( $function, $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Updates value to empty string if it is null and being passed to a string function.
+	 *
+	 * @since x.x
+	 * @param mixed  $value
+	 * @param string $function
+	 * @return mixed
+	 */
+	private static function maybe_update_value_if_null( $value, $function ) {
+		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
+			$value = '';
 		}
 
 		return $value;
