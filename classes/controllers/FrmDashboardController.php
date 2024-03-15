@@ -392,10 +392,10 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	public static function entries_columns( $columns = array() ) {
-		$columns[ '0_form_id' ]    = esc_html__( 'Form', 'formidable' );
-		$columns[ '0_name' ]       = esc_html__( 'Name', 'formidable' );
-		$columns[ '0_user_id' ]    = esc_html__( 'Author', 'formidable' );
-		$columns[ '0_created_at' ] = esc_html__( 'Created on', 'formidable' );
+		$columns['0_form_id']    = esc_html__( 'Form', 'formidable' );
+		$columns['0_name']       = esc_html__( 'Name', 'formidable' );
+		$columns['0_user_id']    = esc_html__( 'Author', 'formidable' );
+		$columns['0_created_at'] = esc_html__( 'Created on', 'formidable' );
 		return $columns;
 	}
 
