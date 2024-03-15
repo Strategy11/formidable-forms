@@ -35,9 +35,21 @@ namespace {
 	class FrmProAppHelper {
 		public static function get_settings() {
 		}
+		public static function convert_date( $date_str, $from_format, $to_format ) {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
+		}
+		/**
+		 * @param object|string|int $field_id
+		 * @param array|string      $value
+		 * @param string|int|false  $entry_id
+		 * @return array|null|string|object
+		 */
+		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		}
+		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
 	}
 	class FrmProFormActionsController {
@@ -66,6 +78,12 @@ namespace {
 	}
 	class FrmProEntriesController {
 		public static function show_entry_shortcode( $atts ) {
+		}
+		/**
+		 * @param array $atts
+		 * @return string
+		 */
+		public static function entry_delete_link( $atts ) {
 		}
 	}
 	class FrmProFormsHelper {
@@ -107,6 +125,16 @@ namespace {
 		}
 	}
 	class Akismet {
+		/**
+		 * @param string $request
+		 * @param string $path
+		 * @param string $ip
+		 * @return array
+		 */
+		public static function http_post( $request, $path, $ip = null ) {
+		}
+		public static function get_user_roles( $user_id ) {
+		}
 	}
 	class PHPMailer {
 		public function __construct( $exceptions = null ) {

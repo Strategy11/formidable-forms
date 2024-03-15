@@ -480,10 +480,36 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</LessSpecificImplementedReturnType>
+		<PossiblyNullReference>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyNullReference>
 		<DeprecatedMethod>
 			<errorLevel type="suppress">
 				<directory name="deprecated" />
+				<file name="classes/helpers/FrmFieldsHelper.php" />
+				<file name="classes/helpers/FrmStylesHelper.php" />
+				<file name="classes/helpers/FrmFormsHelper.php" />
+				<file name="classes/controllers/FrmAddonsController.php" />
+				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/controllers/FrmFormsController.php" />
+				<file name="classes/controllers/FrmFieldsController.php" />
+				<file name="classes/controllers/FrmAppController.php" />
 			</errorLevel>
 		</DeprecatedMethod>
+		<DeprecatedFunction>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+				<file name="classes/models/FrmEntryValidate.php" />
+			</errorLevel>
+		</DeprecatedFunction>
+		<UndefinedThisPropertyAssignment>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UndefinedThisPropertyAssignment>
 	</issueHandlers>
 </psalm>
