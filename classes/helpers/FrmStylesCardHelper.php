@@ -396,7 +396,7 @@ class FrmStylesCardHelper {
 			 * @param int          $count Used for pagination.
 			 * @return void
 			 */
-			function( $style, $key ) use ( &$count ) {
+			function( $style, $key ) {
 				if ( ! is_numeric( $key ) ) {
 					// Skip active_sub/expires keys.
 					return;

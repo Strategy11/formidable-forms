@@ -42,6 +42,11 @@ namespace {
 		 */
 		public static function views_is_installed() {
 		}
+		/**
+		 * @return string
+		 */
+		public static function plugin_path() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
@@ -96,6 +101,13 @@ namespace {
 		}
 	}
 	class FrmProEntry {
+		/**
+		 * @param array|false $values
+		 * @param string      $location
+		 * @return array
+		 */
+		public static function mod_other_vals( $values = false, $location = 'front' ) {
+		}
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
@@ -179,11 +191,21 @@ namespace Elementor {
 	}
 
 	class Plugin {
+		/**
+		 * @return Plugin
+		 */
+		public static function instance() {
+		}
 	}
 }
 
 namespace WPMailSMTP {
 	class Options {
+	   /**
+		* @return Options
+		*/
+	   public static function init() {
+	   }
 	}
 	class Core {
 		/**

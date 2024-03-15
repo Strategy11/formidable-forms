@@ -58,21 +58,11 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</UndefinedGlobalVariable>
-		<UndefinedAttributeClass>
-			<errorLevel type="suppress">
-				<referencedClass name="AllowDynamicProperties"/>
-			</errorLevel>
-		</UndefinedAttributeClass>
 		<UndefinedVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
 			</errorLevel>
 		</UndefinedVariable>
-		<NullReference>
-			<errorLevel type="suppress">
-				<directory name="classes/views" />
-			</errorLevel>
-		</NullReference>
 		<InvalidScope>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
@@ -466,6 +456,7 @@
 				<file name="classes/controllers/FrmFieldsController.php" />
 				<file name="classes/controllers/FrmAppController.php" />
 				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/models/FrmEntryValidate.php" />
 			</errorLevel>
 		</DeprecatedMethod>
 		<DeprecatedFunction>
@@ -480,5 +471,13 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</UndefinedThisPropertyAssignment>
+		<UndefinedMethod>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+				<file name="classes/models/FrmFieldValueSelector.php" />
+				<file name="classes/controllers/FrmDashboardController.php" />
+
+			</errorLevel>
+		</UndefinedMethod>
 	</issueHandlers>
 </psalm>
