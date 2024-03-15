@@ -37,6 +37,11 @@ namespace {
 		}
 		public static function convert_date( $date_str, $from_format, $to_format ) {
 		}
+		/**
+		 * @return bool
+		 */
+		public static function views_is_installed() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
@@ -95,6 +100,8 @@ namespace {
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
 	class FrmProEntriesHelper {
+		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**

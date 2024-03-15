@@ -46,21 +46,11 @@
 				<referencedFunction name="__autoload" />
 			</errorLevel>
 		</UndefinedFunction>
-		<MissingFile>
-			<errorLevel type="suppress">
-				<file name="formidable.php" />
-			</errorLevel>
-		</MissingFile>
 		<InvalidParamDefault>
 			<errorLevel type="suppress">
 				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidParamDefault>
-		<MethodSignatureMustProvideReturnType>
-			<errorLevel type="suppress">
-				<file name="classes/widgets/FrmShowForm.php" />
-			</errorLevel>
-		</MethodSignatureMustProvideReturnType>
 		<!-- Add exceptions for classes/views files. -->
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
@@ -78,11 +68,6 @@
 				<directory name="classes/views" />
 			</errorLevel>
 		</UndefinedVariable>
-		<NonStaticSelfCall>
-			<errorLevel type="suppress">
-				<directory name="classes/views" />
-			</errorLevel>
-		</NonStaticSelfCall>
 		<NullReference>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
@@ -110,11 +95,6 @@
 				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</ParamNameMismatch>
-		<UndefinedAttributeClass>
-			<errorLevel type="suppress">
-				<referencedClass name="AllowDynamicProperties" />
-			</errorLevel>
-		</UndefinedAttributeClass>
 		<MissingParamType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -225,12 +205,6 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</InvalidScalarArgument>
-		<InvalidNullableReturnType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</InvalidNullableReturnType>
 		<PossiblyInvalidOperand>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -261,12 +235,6 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</InvalidOperand>
-		<InvalidFalsableReturnType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</InvalidFalsableReturnType>
 		<PossiblyInvalidPropertyFetch>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -497,6 +465,7 @@
 				<file name="classes/controllers/FrmFormsController.php" />
 				<file name="classes/controllers/FrmFieldsController.php" />
 				<file name="classes/controllers/FrmAppController.php" />
+				<file name="classes/helpers/FrmAppHelper.php" />
 			</errorLevel>
 		</DeprecatedMethod>
 		<DeprecatedFunction>
