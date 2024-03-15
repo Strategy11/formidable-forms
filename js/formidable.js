@@ -1623,7 +1623,6 @@ function frmFrontFormJS() {
 
 		afterSingleRecaptcha: function() {
 			var object = jQuery( '.frm-show-form .g-recaptcha' ).closest( 'form' )[0];
-			console.log('aftersinglerecaptcha');
 			frmFrontForm.submitFormNow( object );
 		},
 
