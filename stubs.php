@@ -114,6 +114,14 @@ namespace {
 	class FrmProEntriesHelper {
 		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
 		}
+		/**
+		 * @param object           $field
+		 * @param object           $entry
+		 * @param string|array|int $field_value
+		 * @return void
+		 */
+		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**
@@ -122,6 +130,12 @@ namespace {
 		 * @return void
 		 */
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
+		/**
+		 * @param object|array $field
+		 * @return bool
+		 */
+		public static function &is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -206,6 +220,14 @@ namespace WPMailSMTP {
 		*/
 	   public static function init() {
 	   }
+	   /**
+		 * @param string $group
+		 * @param string $key
+		 * @param bool   $strip_slashes
+		 * @return mixed|null
+		 */
+		public function get( $group, $key, $strip_slashes = true ) {
+		}
 	}
 	class Core {
 		/**

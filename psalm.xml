@@ -444,6 +444,11 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</PossiblyNullReference>
+		<PossiblyFalseIterator>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+			</errorLevel>
+		</PossiblyFalseIterator>
 		<DeprecatedMethod>
 			<errorLevel type="suppress">
 				<directory name="deprecated" />
@@ -476,7 +481,8 @@
 				<directory name="deprecated" />
 				<file name="classes/models/FrmFieldValueSelector.php" />
 				<file name="classes/controllers/FrmDashboardController.php" />
-
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmFormTemplateApi.php" />
 			</errorLevel>
 		</UndefinedMethod>
 	</issueHandlers>
