@@ -392,19 +392,10 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	public static function entries_columns( $columns = array() ) {
-
-		$form_id = FrmForm::get_current_form_id();
-
-		if ( $form_id ) {
-			self::get_columns_for_form( $form_id, $columns );
-		} else {
-			$columns[ $form_id . '_form_id' ] = __( 'Form', 'formidable' );
-			$columns[ $form_id . '_name' ]    = __( 'Name', 'formidable' );
-			$columns[ $form_id . '_user_id' ] = __( 'Author', 'formidable' );
-		}
-
-		$columns[ $form_id . '_created_at' ] = __( 'Created on', 'formidable' );
-
+		$columns[ '0_form_id' ]    = __( 'Form', 'formidable' );
+		$columns[ '0_name' ]       = __( 'Name', 'formidable' );
+		$columns[ '0_user_id' ]    = __( 'Author', 'formidable' );
+		$columns[ '0_created_at' ] = __( 'Created on', 'formidable' );
 		return $columns;
 	}
 

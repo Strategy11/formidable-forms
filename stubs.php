@@ -56,6 +56,13 @@ namespace {
 	class FrmProStylesController extends FrmStylesController {
 	}
 	class FrmProPost {
+		/**
+		 * @param array $field
+		 * @param array $args
+		 * @return string
+		 */
+		public static function get_category_dropdown( $field, $args ) {
+		}
 	}
 	class FrmProEntriesController {
 		public static function show_entry_shortcode( $atts ) {

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <psalm
-	errorLevel="7"
+	errorLevel="2"
+	findUnusedCode="false"
+	findUnusedBaselineEntry="true"
 	resolveFromConfigFile="true"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="https://getpsalm.org/schema/config"
@@ -105,6 +107,7 @@
 		<ParamNameMismatch>
 			<errorLevel type="suppress">
 				<file name="classes/views/frm-form-actions/email_action.php" />
+				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</ParamNameMismatch>
 		<UndefinedAttributeClass>
@@ -112,5 +115,375 @@
 				<referencedClass name="AllowDynamicProperties" />
 			</errorLevel>
 		</UndefinedAttributeClass>
+		<MissingParamType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</MissingParamType>
+		<PropertyNotSetInConstructor>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PropertyNotSetInConstructor>
+		<UnresolvableInclude>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</UnresolvableInclude>
+		<RiskyTruthyFalsyComparison>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RiskyTruthyFalsyComparison>
+		<MissingReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</MissingReturnType>
+		<InvalidArgument>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidArgument>
+		<PossiblyUndefinedVariable>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyUndefinedVariable>
+		<MissingClosureParamType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MissingClosureParamType>
+		<NullableReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</NullableReturnStatement>
+		<TypeDoesNotContainType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</TypeDoesNotContainType>
+		<InvalidReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidReturnStatement>
+		<InvalidArrayOffset>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidArrayOffset>
+		<PossiblyNullPropertyAssignment>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyNullPropertyAssignment>
+		<MissingPropertyType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</MissingPropertyType>
+		<TooManyArguments>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</TooManyArguments>
+		<PossiblyNullPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyNullPropertyFetch>
+		<InvalidScalarArgument>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidScalarArgument>
+		<InvalidNullableReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidNullableReturnType>
+		<PossiblyInvalidOperand>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidOperand>
+		<PossiblyInvalidIterator>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidIterator>
+		<ArgumentTypeCoercion>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</ArgumentTypeCoercion>
+		<PossiblyUndefinedArrayOffset>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyUndefinedArrayOffset>
+		<InvalidOperand>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidOperand>
+		<InvalidFalsableReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidFalsableReturnType>
+		<PossiblyInvalidPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidPropertyFetch>
+		<FalsableReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</FalsableReturnStatement>
+		<DocblockTypeContradiction>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</DocblockTypeContradiction>
+		<RedundantConditionGivenDocblockType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RedundantConditionGivenDocblockType>
+		<InvalidReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidReturnType>
+		<LessSpecificReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</LessSpecificReturnStatement>
+		<PossiblyInvalidPropertyAssignmentValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidPropertyAssignmentValue>
+		<ReferenceConstraintViolation>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</ReferenceConstraintViolation>
+		<InvalidPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</InvalidPropertyFetch>
+		<InvalidStringClass>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidStringClass>
+		<RedundantCondition>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RedundantCondition>
+		<PossiblyNullIterator>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyNullIterator>
+		<MoreSpecificImplementedParamType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MoreSpecificImplementedParamType>
+		<MissingClosureReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MissingClosureReturnType>
+		<PossiblyInvalidArrayAssignment>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidArrayAssignment>
+		<PossiblyInvalidArrayAccess>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidArrayAccess>
+		<ImplementedReturnTypeMismatch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</ImplementedReturnTypeMismatch>
+		<NonInvariantDocblockPropertyType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</NonInvariantDocblockPropertyType>
+		<RedundantCastGivenDocblockType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</RedundantCastGivenDocblockType>
+		<UndefinedPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UndefinedPropertyFetch>
+		<RiskyCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</RiskyCast>
+		<PossiblyInvalidPropertyAssignment>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidPropertyAssignment>
+		<PossiblyInvalidArgument>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+			</errorLevel>
+		</PossiblyInvalidArgument>
+		<PossiblyFalsePropertyAssignmentValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyFalsePropertyAssignmentValue>
+		<InvalidPropertyAssignmentValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidPropertyAssignmentValue>
+		<RedundantCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</RedundantCast>
+		<InvalidCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidCast>
+		<PropertyTypeCoercion>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PropertyTypeCoercion>
+		<DirectConstructorCall>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</DirectConstructorCall>
+		<NoValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</NoValue>
+		<UnsafeInstantiation>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UnsafeInstantiation>
+		<InvalidMethodCall>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidMethodCall>
+		<InvalidArrayAccess>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidArrayAccess>
+		<PossiblyFalseReference>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyFalseReference>
+		<LessSpecificImplementedReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</LessSpecificImplementedReturnType>
+		<DeprecatedMethod>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+			</errorLevel>
+		</DeprecatedMethod>
 	</issueHandlers>
 </psalm>
