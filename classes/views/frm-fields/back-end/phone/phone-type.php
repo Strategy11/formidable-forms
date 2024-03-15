@@ -25,9 +25,8 @@ $phone_type = FrmField::get_option( $field, 'phone_type' );
 	<select
 		name="field_options[phone_type_<?php echo esc_attr( $field_id ); ?>]"
 		id="phone_type_<?php echo esc_attr( $field_id ); ?>"
-		class="frm_phone_type_dropdown frm_select_with_premium"
+		class="frm_phone_type_dropdown frm_select_with_premium frm_select_with_dependency"
 		data-field-id="<?php echo intval( $field_id ); ?>"
-		data-selected="<?php echo esc_attr( $phone_type ); ?>"
 	>
 		<option value="none" <?php selected( $phone_type, 'none' ); ?>>
 			<?php esc_html_e( 'None', 'formidable' ); ?>
@@ -43,7 +42,7 @@ $phone_type = FrmField::get_option( $field, 'phone_type' );
 		>
 			<?php esc_html_e( 'International', 'formidable' ); ?>
 		</option>
-		<option value="custom" <?php selected( $phone_type, 'custom' ); ?>>
+		<option value="custom" data-dependency="#frm-phone-field-custom-format" <?php selected( $phone_type, 'custom' ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
 	</select>

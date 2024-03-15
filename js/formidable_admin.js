@@ -6394,15 +6394,8 @@ function frmAdminBuildJS() {
 		document.addEventListener( 'click', handleUpgradeClick );
 		document.addEventListener( 'change', ( event ) => {
 			const element = event.target;
-			if ( ! element.classList.contains( 'frm_select_with_premium' ) ) {
-				return;
-			}
-
-			handleUpgradeClick( event );
-
-			const selectedOption = element.options[element.selectedIndex];
-			if ( selectedOption && selectedOption.dataset.upgrade ) {
-				element.value = element.dataset.selected;
+			if ( element.tagName.toLowerCase() === 'select' && element.classList.contains( 'frm_select_with_premium' ) ) {
+				handleUpgradeClick( event );
 			}
 		});
 
@@ -6418,7 +6411,7 @@ function frmAdminBuildJS() {
 			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
 
 			// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
-			if ( element.classList.contains( 'frm_select_with_premium' ) ) {
+			if ( event.type === 'change' && element.classList.contains( 'frm_select_with_premium' ) ) {
 				const selectedOption = element.options[element.selectedIndex];
 				if ( selectedOption && selectedOption.dataset.upgrade ) {
 					element = selectedOption;
@@ -9683,6 +9676,43 @@ function frmAdminBuildJS() {
 		}
 	}
 
+
+	/**
+	 *
+	 *
+	 * @return {void}
+	 */
+	function initSelectDependencies() {
+		const selects = document.querySelectorAll( '.frm_select_with_dependency' );
+
+		selects.forEach( select => {
+			let dependency;
+			let selectedOption = select.options[select.selectedIndex];
+
+			if ( selectedOption.dataset.dependency ) {
+				const dependencyId = selectedOption.dataset.dependency;
+				dependency = document.querySelector( dependencyId );
+				dependency.classList.remove( 'frm_hidden' );
+			}
+
+			select.addEventListener( 'change', ( event ) => {
+				if ( dependency ) {
+					dependency.classList.add( 'frm_hidden' );
+					dependency = null;
+				}
+
+				selectedOption = select.options[select.selectedIndex];
+
+				if ( selectedOption.dataset.dependency ) {
+					const dependencyId = selectedOption.dataset.dependency;
+					dependency = document.querySelector( dependencyId );
+					dependency.classList.remove( 'frm_hidden' );
+				}
+			});
+		});
+	};
+
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -9745,6 +9775,7 @@ function frmAdminBuildJS() {
 			}
 
 			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
+			initSelectDependencies();
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			if ( $advInfo.length > 0 || jQuery( '.frm_field_list' ).length > 0 ) {
