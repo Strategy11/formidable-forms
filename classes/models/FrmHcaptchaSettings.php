@@ -65,20 +65,4 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	public function get_site_key_tooltip() {
 		return __( 'hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA.', 'formidable' );
 	}
-
-
-	/**
-	 * Add additional element attributes for reCAPTCHA.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $attributes
-	 * @param array $field
-	 * @return array
-	 */
-	public function add_front_end_element_attributes( $attributes, $field ) {
-		$attributes['data-callback'] = 'frmAfterRecaptcha';
-
-		return $attributes;
-	}
 }
