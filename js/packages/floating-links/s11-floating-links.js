@@ -48,7 +48,7 @@ class S11FloatingLinks {
 	initComponent() {
 		if ( document.querySelector( '.frm-review-notice' ) ) {
 			// Do not load if the review notice is being shown.
-		//	return;
+			return;
 		}
 
 		// Create and append elements
