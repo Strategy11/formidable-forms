@@ -64,3 +64,4 @@ parameters:
 		- '#callback of function spl_autoload_register expects#'
 		- '#customer_id_error_message#'
 		- "#Offset 'custom_style' on#"
+		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
