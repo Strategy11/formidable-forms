@@ -5,6 +5,11 @@
  * @since x.x
  * @package Formidable
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 class FrmSubmitHelper {
 
 	const FIELD_TYPE = 'submit';
