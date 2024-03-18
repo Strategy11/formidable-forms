@@ -731,7 +731,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_loading_prev .frm_prev_page,
-.with_frm_style .frm_loading_form .frm_button_submit:not(.frm_save_draft) {
+.with_frm_style .frm_loading_form .frm_button_submit {
 	position: relative;
 	opacity: .8;
 	color: transparent !important;
@@ -751,7 +751,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_loading_prev .frm_prev_page::before,
-.with_frm_style .frm_loading_form .frm_button_submit:not(.frm_save_draft):before {
+.with_frm_style .frm_loading_form .frm_button_submit:before {
 	content: '';
 	display: inline-block;
 	position: absolute;
