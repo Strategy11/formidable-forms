@@ -1915,6 +1915,7 @@ jQuery( document ).ready( function() {
 
 function frmRecaptcha() {
 	console.warn( 'DEPRECATED: function frmRecaptcha in v6.x use frmCaptcha' );
+	frmRecaptcha();
 }
 
 function frmCaptcha() {
@@ -1929,14 +1930,14 @@ function getSelectedCaptcha() {
 	if ( document.querySelector( '.frm-g-recaptcha' ) ) {
 		return grecaptcha;
 	}
-	if ( document.querySelector( '.h-captcha' ) ) {
+	if ( document.querySelector( '.frm-show-form .h-captcha' ) ) {
 		return hcaptcha;
 	}
 	return turnstile;
 }
 
 function getSelectedCaptchaElements() {
-	return jQuery( '.frm-g-recaptcha, .h-captcha, .cf-turnstile' );
+	return document.querySelectorAll( '.frm-g-recaptcha, .h-captcha, .cf-turnstile' );
 }
 
 function frmAfterRecaptcha( token ) {
