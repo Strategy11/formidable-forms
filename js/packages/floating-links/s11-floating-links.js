@@ -218,6 +218,10 @@ class S11FloatingLinks {
 			// Toggle the navigation menu element
 			this.toggleFade( this.navMenuElement );
 
+			if ( this.slideIn ) {
+				this.toggleFade( this.slideIn );
+			}
+
 			// Switch the icon of the icon button element
 			this.switchIconButton( closeIcon );
 		});
@@ -258,10 +262,6 @@ class S11FloatingLinks {
 			return;
 		}
 
-		if ( this.slideIn && element !== this.slideIn ) {
-			this.toggleFade( this.slideIn );
-		}
-
 		element.classList.add( 's11-fading' );
 		element.classList.toggle( 's11-fadein' );
 		element.classList.toggle( 's11-fadeout' );
@@ -282,6 +282,10 @@ class S11FloatingLinks {
 			if ( ! this.wrapperElement.contains( e.target ) && this.navMenuElement.classList.contains( 's11-fadein' ) ) {
 				// Toggle the navigation menu element
 				this.toggleFade( this.navMenuElement );
+
+				if ( this.slideIn ) {
+					this.toggleFade( this.slideIn );
+				}
 
 				// Switch the icon of the icon button element
 				this.switchIconButton( this.options.logoIcon.trim() );
@@ -309,15 +313,20 @@ class S11FloatingLinks {
 				if ( ! this.wrapperElement.classList.contains( 's11-fadein' ) ) {
 					this.toggleFade( this.wrapperElement );
 				}
-			} else {
+			} else if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) && ! this.inboxSlideInIsVisible() ) {
 				// When scrolling down hide the Floating Links
-				if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) ) {
-					this.toggleFade( this.wrapperElement );
-				}
+				this.toggleFade( this.wrapperElement );
 			}
 
 			this.lastScrollPosition = currentScrollPosition;
 		});
+	}
+
+	inboxSlideInIsVisible() {
+		if ( ! this.slideIn ) {
+			return false;
+		}
+		return null === this.wrapperElement.querySelector( '.s11-show-close-icon' );
 	}
 
 	/**
