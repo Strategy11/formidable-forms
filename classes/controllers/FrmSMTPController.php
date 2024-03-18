@@ -452,8 +452,6 @@ class FrmSMTPController {
 		?>
 <style>
 #frm-admin-smtp *, #frm-admin-smtp *::before, #frm-admin-smtpp *::after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 #frm-admin-smtp{
@@ -514,8 +512,6 @@ class FrmSMTPController {
 }
 #frm-admin-smtp .step,
 #frm-admin-smtp .screenshot .cont {
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 }
 #frm-admin-smtp .step {

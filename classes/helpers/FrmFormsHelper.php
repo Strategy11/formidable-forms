@@ -153,6 +153,8 @@ class FrmFormsHelper {
 							'input_id'    => 'dropform',
 							'placeholder' => __( 'Search Forms', 'formidable' ),
 							'tosearch'    => 'frm-dropdown-form',
+							// Specify a value to avoid the $_REQUEST['s'] default value.
+							'value'       => '',
 						)
 					);
 					?>

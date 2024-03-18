@@ -47,37 +47,47 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::is_time_to_auto_activate
-	 * @covers FrmAddon::set_auto_activate_time
+	 * @covers FrmAddon::checked_recently
+	 * @covers FrmAddon::last_checked
+	 * @covers FrmAddon::update_last_checked
 	 */
-	public function test_is_time_to_auto_activate() {
+	public function test_checked_recently() {
 		$times = array(
 			array(
 				'time'     => time(),
-				'expected' => false,
+				'expected' => true,
 			),
 			array(
 				'time'     => false,
-				'expected' => true,
+				'expected' => false,
 			),
 			array(
 				'time'     => strtotime( '-2 days' ),
-				'expected' => true,
+				'expected' => false,
 			),
 			array(
 				'time'     => strtotime( '-2 hours' ),
-				'expected' => false,
+				'expected' => true,
 			),
 		);
 
-		$this->run_private_method( array( $this->addon, 'set_auto_activate_time' ) );
-		$should_run = $this->run_private_method( array( $this->addon, 'is_time_to_auto_activate' ) );
-		$this->assertFalse( $should_run, 'Time was set via set_auto_activate_time' );
-		$option_name = $this->addon->option_name . 'last_activate';
+		$this->run_private_method( array( $this->addon, 'update_last_checked' ) );
+		$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
+		$this->assertTrue( $should_run, 'Time was set via update_last_checked' );
+		$option_name = $this->run_private_method( array( $this->addon, 'transient_key' ) );
 
 		foreach ( $times as $time ) {
-			update_option( $option_name, $time['time'] );
-			$should_run = $this->run_private_method( array( $this->addon, 'is_time_to_auto_activate' ) );
+			$save = array(
+				'time' => gmdate( 'Y-m-d H:i:s', $time['time'] ),
+			);
+
+			if ( is_multisite() ) {
+				update_site_option( $option_name, $save );
+			} else {
+				update_option( $option_name, $save );
+			}
+
+			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
 			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
 
 		}

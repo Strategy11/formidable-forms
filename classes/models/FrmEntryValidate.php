@@ -416,9 +416,8 @@ class FrmEntryValidate {
 	private static function check_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
 		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
 			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
-		} else {
-			return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
 		}
+		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
 	}
 
 	/**

@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.8.2';
+	public static $plug_version = '6.8.3';
 
 	/**
 	 * @var bool
@@ -248,6 +248,17 @@ class FrmAppHelper {
 
 	public static function pro_is_installed() {
 		return apply_filters( 'frm_pro_installed', false );
+	}
+
+	/**
+	 * Check if the Pro plugin is installed, whether authorized or not.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	public static function pro_is_included() {
+		return function_exists( 'load_formidable_pro' );
 	}
 
 	/**
@@ -635,17 +646,33 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Sanitize a value in-place.
+	 * If $value is an array, the sanitize function will get called for each item.
+	 *
+	 * @param callable $sanitize
+	 * @param mixed    $value
+	 * @return void
+	 */
 	public static function sanitize_value( $sanitize, &$value ) {
-		if ( ! empty( $sanitize ) ) {
-			if ( is_array( $value ) ) {
-				$temp_values = $value;
-				foreach ( $temp_values as $k => $v ) {
-					self::sanitize_value( $sanitize, $value[ $k ] );
-				}
-			} else {
-				$value = call_user_func( $sanitize, $value );
-			}
+		if ( ! $sanitize ) {
+			return;
 		}
+
+		if ( is_object( $value ) ) {
+			$value = '';
+			return;
+		}
+
+		if ( is_array( $value ) ) {
+			$temp_values = $value;
+			foreach ( $temp_values as $k => $v ) {
+				self::sanitize_value( $sanitize, $value[ $k ] );
+			}
+			return;
+		}
+
+		$value = call_user_func( $sanitize, $value );
 	}
 
 	public static function sanitize_request( $sanitize_method, &$values ) {
@@ -1338,6 +1365,7 @@ class FrmAppHelper {
 			'tosearch'    => '',
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
+			'value'       => false,
 		);
 		$atts = array_merge( $defaults, $atts );
 
@@ -1352,19 +1380,32 @@ class FrmAppHelper {
 
 		$input_id = $atts['input_id'] . '-search-input';
 
+		$input_atts = array(
+			'type'          => 'search',
+			'id'            => $input_id,
+			'name'          => 's',
+			'placeholder'   => $atts['placeholder'],
+			'class'         => $class,
+			'data-tosearch' => $atts['tosearch'],
+		);
+
+		if ( is_string( $atts['value'] ) ) {
+			$input_atts['value'] = $atts['value'];
+		} elseif ( isset( $_REQUEST['s'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$input_atts['value'] = wp_unslash( $_REQUEST['s'] );
+		}
+
+		if ( ! empty( $atts['tosearch'] ) ) {
+			$input_atts['autocomplete'] = 'off';
+		}
 		?>
 		<p class="frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			<span class="frmfont frm_search_icon"></span>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
-				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
-				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"
-				<?php if ( ! empty( $atts['tosearch'] ) ) { ?>
-				autocomplete="off"
-				<?php } ?>
-				/>
+			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
 				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
@@ -1952,7 +1993,24 @@ class FrmAppHelper {
 				}
 			}
 		} else {
+			$value = self::maybe_update_value_if_null( $value, $function );
 			$value = call_user_func( $function, $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Updates value to empty string if it is null and being passed to a string function.
+	 *
+	 * @since x.x
+	 * @param mixed  $value
+	 * @param string $function
+	 * @return mixed
+	 */
+	private static function maybe_update_value_if_null( $value, $function ) {
+		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
+			$value = '';
 		}
 
 		return $value;
@@ -3138,7 +3196,6 @@ class FrmAppHelper {
 		}
 
 		if ( $location === 'admin' ) {
-			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
 				'desc'               => __( '(Click to add description)', 'formidable' ),
 				'blank'              => __( '(Blank)', 'formidable' ),
@@ -3154,7 +3211,7 @@ class FrmAppHelper {
 				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'     => $frm_settings->unique_msg,
+				'default_unique'     => FrmFieldsHelper::default_unique_msg(),
 				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
 				'enter_email'        => __( 'Enter Email', 'formidable' ),
 				'confirm_email'      => __( 'Confirm Email', 'formidable' ),

@@ -276,10 +276,23 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.0.01
+	 *
+	 * @return bool
 	 */
 	public static function is_license_expired() {
 		$version_info = self::get_primary_license_info();
 		if ( ! isset( $version_info['error'] ) ) {
+			return false;
+		}
+
+		$expires = isset( $version_info['error']['expires'] ) ? $version_info['error']['expires'] : 0;
+		if ( empty( $expires ) || $expires > time() ) {
+			return false;
+		}
+
+		$rate_limited = ! empty( $version_info['response_code'] ) && 429 === (int) $version_info['response_code'];
+		if ( $rate_limited ) {
+			// Do not return false positives for rate limited responses.
 			return false;
 		}
 
@@ -890,38 +903,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Install Pro after connection with Formidable.
-	 *
-	 * @since 4.02.05
-	 *
-	 * @return void
-	 */
-	public static function connect_pro() {
-		FrmAppHelper::permission_check( 'install_plugins' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$url = self::get_current_plugin();
-		if ( FrmAppHelper::pro_is_installed() || empty( $url ) ) {
-			wp_die();
-		}
-
-		$response = array();
-
-		// It's already installed and active.
-		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
-		if ( is_wp_error( $active ) ) {
-			// The plugin was installed, but not active. Download it now.
-			self::ajax_install_addon();
-		} else {
-			$response['active']  = true;
-			$response['success'] = true;
-		}
-
-		echo json_encode( $response );
-		wp_die();
-	}
-
-	/**
 	 * @since 5.5.2
 	 *
 	 * @param string $plugin
@@ -994,6 +975,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @return void|array
 	 */
 	protected static function download_and_activate() {
 		if ( is_admin() ) {
@@ -1284,11 +1267,14 @@ class FrmAddonsController {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
 		$link = 'https://formidableforms.com/api-connect/';
 		$args = array(
 			'v'       => 2,
 			'siteurl' => FrmAppHelper::site_url(),
 			'url'     => get_rest_url(),
+			'inst'    => (int) FrmAppHelper::pro_is_included(),
+			'return'  => $page,
 			'token'   => $auth,
 			'l'       => self::get_pro_license(),
 		);
@@ -1308,7 +1294,10 @@ class FrmAddonsController {
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
-		if ( ! $post_auth || ! $post_url ) {
+		// The download link is not required if already installed.
+		$is_installed = FrmAppHelper::pro_is_included();
+		$file_missing = ! $is_installed && empty( $post_url );
+		if ( ! $post_auth || $file_missing ) {
 			return false;
 		}
 
@@ -1325,6 +1314,8 @@ class FrmAddonsController {
 	 * Install and/or activate the add-on file.
 	 *
 	 * @since 4.08
+	 *
+	 * @return array
 	 */
 	public static function install_addon_api() {
 		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
@@ -1337,9 +1328,9 @@ class FrmAddonsController {
 		// It's already installed and active.
 		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
-			// Download plugin now.
-			$response = self::download_and_activate();
-			if ( is_array( $response ) && isset( $response['success'] ) ) {
+			$response = self::maybe_download_and_activate();
+			if ( is_array( $response ) ) {
+				// The download failed.
 				return $response;
 			}
 		}
@@ -1365,6 +1356,29 @@ class FrmAddonsController {
 		return array(
 			'success' => true,
 		);
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @return true|array
+	 */
+	private static function maybe_download_and_activate() {
+		if ( ! self::$plugin ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The plugin download was not found.', 'formidable' ),
+			);
+		}
+
+		// Download plugin now.
+		$response = self::download_and_activate();
+		if ( is_array( $response ) && isset( $response['success'] ) ) {
+			// The download failed.
+			return $response;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1628,5 +1642,17 @@ class FrmAddonsController {
 	 */
 	public static function get_licenses() {
 		FrmDeprecated::get_licenses();
+	}
+
+	/**
+	 * @since 4.02.05
+	 * @deprecated 6.8.3
+	 *
+	 * @codeCoverageIgnore
+	 *
+	 * @return void
+	 */
+	public static function connect_pro() {
+		_deprecated_function( __METHOD__, '6.8.3' );
 	}
 }

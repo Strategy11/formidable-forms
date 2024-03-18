@@ -786,8 +786,6 @@ class FrmSolution {
 		?>
 <style>
 #frm-welcome *, #frm-welcome *::before, #frm-welcome  *::after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 #frm-welcome{
@@ -848,8 +846,6 @@ class FrmSolution {
 }
 #frm-welcome .step,
 #frm-welcome .screenshot .cont {
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 }
 #frm-welcome .step {

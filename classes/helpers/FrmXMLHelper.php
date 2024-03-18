@@ -2063,5 +2063,22 @@ class FrmXMLHelper {
 	public static function check_if_libxml_disable_entity_loader_exists() {
 		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
 	}
+
+	/**
+	 * Get the file types allowed for importing.
+	 * This is used in the "accept" attribute for the file upload input on the XML import page.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return array
+	 */
+	public static function get_supported_upload_file_types() {
+		$file_types = array( '.xml' );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			// CSV Importing is only available in Pro.
+			$file_types[] = '.csv';
+		}
+		return $file_types;
+	}
 }
 

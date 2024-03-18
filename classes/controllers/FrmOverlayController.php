@@ -178,6 +178,7 @@ class FrmOverlayController {
 	 * @return void
 	 */
 	private function enqueue_assets() {
+		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( self::$assets_handle_name );
 		wp_enqueue_script( self::$assets_handle_name );
 	}

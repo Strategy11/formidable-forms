@@ -185,14 +185,53 @@ class FrmStylesHelper {
 		<?php
 	}
 
-	public static function hex2rgb( $hex ) {
-		$hex = str_replace( '#', '', $hex );
-
-		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
-
-		$rgb = array( $r, $g, $b );
-
+	/**
+	 * Convert a color setting to a RGB CSV (without the rgb()/rgba() wrapper).
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $color Color setting value. This could be hex or rgb.
+	 * @return string RGB value without the rgb() wrapper.
+	 */
+	public static function hex2rgb( $color ) {
+		if ( 0 === strpos( $color, 'rgb' ) ) {
+			$rgb = self::get_rgb_array_from_rgb( $color );
+		} else {
+			$rgb = self::get_rgb_array_from_hex( $color );
+		}
 		return implode( ',', $rgb );
+	}
+
+	/**
+	 * Remove the rgb()/rgba() wrapper from a RGB color and return its R, G and B values as an array.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param string $rgb    RGB value including the rgb() or rgba() wrapper.
+	 * @return array<string> including three numeric values for R, G, and B.
+	 */
+	private static function get_rgb_array_from_rgb( $rgb ) {
+		$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $rgb );
+		$rgb = explode( ',', $rgb );
+		if ( 4 === count( $rgb ) ) {
+			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
+			array_pop( $rgb );
+		}
+		return $rgb;
+	}
+
+	/**
+	 * Get the R, G, and B array values from a Hex color code.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param string $hex    A hex color string.
+	 * @return array<string> Including three numeric values for R, G, and B.
+	 */
+	private static function get_rgb_array_from_hex( $hex ) {
+		$hex               = str_replace( '#', '', $hex );
+		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
+		return array( $r, $g, $b );
 	}
 
 	/**
@@ -207,11 +246,12 @@ class FrmStylesHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string $rgba
-	 * @return string
+	 * @param string $rgba Color setting value. This could be hex or rgb.
+	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
 		if ( strpos( $rgba, '#' ) === 0 ) {
+			// Color is already hex.
 			return $rgba;
 		}
 		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
