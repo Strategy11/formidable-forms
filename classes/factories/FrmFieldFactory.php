@@ -1,5 +1,4 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -98,15 +97,15 @@ class FrmFieldFactory {
 			'checkbox'    => 'FrmFieldCheckbox',
 			'number'      => 'FrmFieldNumber',
 			'phone'       => 'FrmFieldPhone',
-			'url'                       => 'FrmFieldUrl',
-			'website'                   => 'FrmFieldUrl',
-			'email'                     => 'FrmFieldEmail',
-			'user_id'                   => 'FrmFieldUserID',
-			'html'                      => 'FrmFieldHTML',
-			'hidden'                    => 'FrmFieldHidden',
-			'captcha'                   => 'FrmFieldCaptcha',
-			'name'                      => 'FrmFieldName',
-			'credit_card'               => 'FrmFieldCreditCard',
+			'url'         => 'FrmFieldUrl',
+			'website'     => 'FrmFieldUrl',
+			'email'       => 'FrmFieldEmail',
+			'user_id'     => 'FrmFieldUserID',
+			'html'        => 'FrmFieldHTML',
+			'hidden'      => 'FrmFieldHidden',
+			'captcha'     => 'FrmFieldCaptcha',
+			'name'        => 'FrmFieldName',
+			'credit_card' => 'FrmFieldCreditCard',
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
 		);

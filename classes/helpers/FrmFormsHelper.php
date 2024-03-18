@@ -479,7 +479,6 @@ BEFORE_HTML;
 		if ( FrmAppHelper::should_never_allow_unfiltered_html() ) {
 			$button = FrmAppHelper::kses_submit_button( $button );
 		}
-
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );

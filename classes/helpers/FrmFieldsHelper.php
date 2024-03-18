@@ -16,9 +16,7 @@ class FrmFieldsHelper {
 		global $wpdb;
 		$field_count = FrmDb::get_var(
 			'frm_fields',
-			array(
-				'form_id' => $form_id,
-			),
+			array( 'form_id' => $form_id ),
 			'field_order',
 			array( 'order_by' => 'field_order DESC' )
 		);
