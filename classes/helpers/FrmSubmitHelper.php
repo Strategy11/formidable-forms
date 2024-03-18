@@ -113,7 +113,7 @@ class FrmSubmitHelper {
 			array(
 				'form'    => $form,
 				'option'  => 'submit_value',
-				'default' => __( 'Submit', 'formidable' )
+				'default' => __( 'Submit', 'formidable' ),
 			)
 		);
 

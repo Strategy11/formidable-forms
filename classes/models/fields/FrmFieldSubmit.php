@@ -46,14 +46,14 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args - Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
 		$field = $args['field'];
 
 		// Fallback for deprecated hook.
 		if ( has_action( 'frm_add_form_button_options' ) ) {
-			_deprecated_hook( 'frm_add_form_button_options', FrmAppHelper::$plug_version );
+			_deprecated_hook( 'frm_add_form_button_options', esc_html( FrmAppHelper::$plug_version ) );
 
 			$values = FrmAppHelper::setup_edit_vars( FrmForm::getOne( $field['form_id'] ), 'forms' );
 			echo '<table>';
