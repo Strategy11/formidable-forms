@@ -46,6 +46,11 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	initComponent() {
+		if ( document.querySelector( '.frm-review-notice' ) ) {
+			// Do not load if the review notice is being shown.
+		//	return;
+		}
+
 		// Create and append elements
 		this.createWrapper();
 		this.createNavMenu();
@@ -92,15 +97,21 @@ class S11FloatingLinks {
 			id: 'frm_inbox_slidein_message',
 			text: frmGlobal.inboxSlideIn.slidein
 		});
-		const dismissIcon = frmDom.a({
-			className: 'dismiss frm_inbox_dismiss',
-			child: frmDom.svg({ href: '#frm_close_icon' })
-		});
+		const dismissIcon = frmDom.tag(
+			'button',
+			{
+				className: 'notice-dismiss frm_inbox_dismiss',
+				child: frmDom.span({
+					className: 'screen-reader-text',
+					text: wp.i18n.__( 'Dismiss this notice', 'formidable' )
+				})
+			}
+		);
 		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss', 'formidable' ) );
 		dismissIcon.setAttribute( 'role', 'button' );
 		const children    = frmAdminBuild.hooks.applyFilters(
 			'frm_inbox_slidein_children',
-			[ h3, messageSpan, frmDom.span({ child: dismissIcon }) ]
+			[ h3, messageSpan ]
 		);
 		const slideIn     = frmDom.div({
 			id: 'frm_inbox_slide_in',
@@ -111,6 +122,7 @@ class S11FloatingLinks {
 		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
 		this.updateSlideInCtaUtm( slideIn );
+		slideIn.appendChild( frmDom.span({ child: dismissIcon }) );
 		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
 			'aria-description',
 			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
@@ -324,7 +336,7 @@ class S11FloatingLinks {
 
 	inboxSlideInIsVisible() {
 		if ( ! this.slideIn ) {
-			return false;
+			return 'object' === typeof frmGlobal.inboxSlideIn;
 		}
 		return null === this.wrapperElement.querySelector( '.s11-show-close-icon' );
 	}
