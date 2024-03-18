@@ -15,8 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-content frm-mt-md">
-		<h2 class="frm-card-box-title frm-mb-sm"><?php esc_html_e( 'Welcome to Formidable Forms', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text"><?php esc_html_e( 'This quick setup wizard will help you configure the basic settings and get you started in 2 minutes.', 'formidable' ); ?></p>
+		<h2 class="frm-card-box-title frm-mb-sm"><?php esc_html_e( 'Welcome to Formidable Forms!', 'formidable' ); ?></h2>
+		<p class="frm-card-box-text">
+			<?php esc_html_e( 'This quick setup wizard will guide you through the basic settings and get you started in 2 minutes.', 'formidable' ); ?>
+		</p>
 	</div>
 
 	<?php

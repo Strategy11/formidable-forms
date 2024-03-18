@@ -18,7 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm-card-box-content frm-mt-sm">
 		<h2 class="frm-card-box-title"><?php esc_html_e( 'You\'re All Set!', 'formidable' ); ?></h2>
-		<p class="frm-card-box-text"><?php esc_html_e( 'Congratulations on completing the onboarding process! We hope you enjoy using Formidable Forms.', 'formidable' ); ?></p>
+		<p class="frm-card-box-text">
+			<?php esc_html_e( 'We\'re thrilled to have you and hope you love your experience with Formidable Forms', 'formidable' ); ?>
+		</p>
 	</div>
 
 	<?php
