@@ -2195,7 +2195,7 @@ function frmAdminBuildJS() {
 
 		const { originalFieldId, newFieldId } = args;
 
-		for ( li of originalOpts ) {
+		for ( let li of originalOpts ) {
 			const newOptLi         = replaceElementAttribute( li, args );
 			const originalOptValue = li.querySelector( `.field_${originalFieldId}_option` );
 			const newOptValue      = newOptLi.querySelector( `.field_${newFieldId}_option` );
@@ -2245,7 +2245,7 @@ function frmAdminBuildJS() {
 		let elementString = element.outerHTML.replace( regex, newFieldId );
 		regex             = new RegExp( originalFieldKey, 'g' );
 		elementString     = elementString.replace( regex, newFieldKey );
-		const tempDiv     = document.createElement( 'div' );
+		const tempDiv     = div();
 		tempDiv.innerHTML = elementString;
 
 		return  tempDiv.firstChild;
