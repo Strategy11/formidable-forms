@@ -18,7 +18,6 @@ class FrmFieldsHelper {
 			'frm_fields',
 			array(
 				'form_id' => $form_id,
-				'type !'  => 'submit',
 			),
 			'field_order',
 			array( 'order_by' => 'field_order DESC' )
@@ -35,6 +34,16 @@ class FrmFieldsHelper {
 				$values['field_options']['data_type'] = $setting;
 			} else {
 				$values['field_options'][ $setting ] = 1;
+			}
+		}
+
+		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
+		if ( $last_row_field_ids ) {
+			foreach ( $last_row_field_ids as $index => $last_row_field_id ) {
+				FrmField::update(
+					$last_row_field_id,
+					array( 'field_order' => $field_count + $index + 2 )
+				);
 			}
 		}
 

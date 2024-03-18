@@ -1640,7 +1640,8 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: sectionId,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
+				last_row_field_ids: getFieldIdsInSubmitRow()
 			},
 			success: function( msg ) {
 				let replaceWith;
@@ -1674,6 +1675,21 @@ function frmAdminBuildJS() {
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	function getFieldIdsInSubmitRow() {
+		const submitField = document.querySelector( '.edit_field_type_submit' );
+		if ( ! submitField ) {
+			return [];
+		}
+
+		const lastRowFields = submitField.parentNode.children;
+		const ids = [];
+		for ( let i = 0; i < lastRowFields.length; i++ ) {
+			ids.push( lastRowFields[ i ].dataset.fid );
+		}
+
+		return ids;
 	}
 
 	function moveFieldThatAlreadyExists( draggable, placeholder ) {
@@ -2007,7 +2023,8 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: 0,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
+				last_row_field_ids: getFieldIdsInSubmitRow()
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
