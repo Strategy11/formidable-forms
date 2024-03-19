@@ -2248,7 +2248,7 @@ function frmAdminBuildJS() {
 		const tempDiv     = div();
 		tempDiv.innerHTML = elementString;
 
-		return  tempDiv.firstChild;
+		return tempDiv.firstChild;
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
