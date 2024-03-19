@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</tr>
 	<tr>
 		<td colspan="2">
-			<?php esc_html_e( 'The submit button settings are moved to the Submit button in the form builder.', 'formidable' ); ?>
+			<?php esc_html_e( 'Submit button settings were moved to the Submit button in the form builder.', 'formidable' ); ?>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_button_options', $values ); ?>
