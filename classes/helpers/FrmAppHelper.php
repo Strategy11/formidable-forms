@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.8.2';
+	public static $plug_version = '6.8.3';
 
 	/**
 	 * @var bool
@@ -253,7 +253,7 @@ class FrmAppHelper {
 	/**
 	 * Check if the Pro plugin is installed, whether authorized or not.
 	 *
-	 * @since x.x
+	 * @since 6.8.3
 	 *
 	 * @return bool
 	 */

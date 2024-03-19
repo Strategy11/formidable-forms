@@ -17,6 +17,11 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected $new_days = 30;
 
 	/**
+	 * @var string $cache_timeout
+	 */
+	protected $cache_timeout = '+12 hours';
+
+	/**
 	 * @since 3.06
 	 *
 	 * @return void

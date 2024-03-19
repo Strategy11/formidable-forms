@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 6.8.2
+Stable tag: 6.8.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,20 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.8.3 =
+* New: HTML field descriptions now support the shortcode pop up used in email actions.
+* New: Exported posts from entries will now include <term_parent> tags when applicable.
+* New: The collapsible sections used in the visual styler are now more accessible, including new aria-expanded attributes.
+* New: Error messages should now be more descriptive. "This field" and "This value" strings will now be dynamically replaced with the name of the field. To partially revert this, a new frm_error_substrings_to_replace_with_field_name filter has been added as well.
+* Fix: Form objects with missing option data would trigger fatal errors during various actions, including when deleting the form.
+* Fix: HTML tags would get stripped of most HTML when displayed in a summary for a unprivileged or logged out user.
+* Fix: A Uncaught TypeError: Cannot access offset of type string on string error has been fixed when checking for add-on data.
+* Fix: License expired emails would get incorrectly sent for rate limited API requests.
+* Fix: Some color style settings would output invalid RGB values when using a RGB color as the style setting value.
+* API requests sent for retreiving add-on and template data will now happen less frequently.
+* A few old deprecated global JavaScript functions have been removed including frm_resend_email, frmOnSubmit, and frmDeleteEntry.
+* Some old CSS rules using -webkit- and -moz- prefixes have been removed, helping to reduce CSS file size.
+
 = 6.8.2 =
 * Fix: The process of connecting an account to formidableforms.com would fail in some web browsers.
 
