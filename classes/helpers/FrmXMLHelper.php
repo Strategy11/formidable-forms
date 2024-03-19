@@ -495,6 +495,7 @@ class FrmXMLHelper {
 	 *
 	 * @param array $field_array
 	 * @param array $form_fields
+	 * @param int   $old_field_id
 	 *
 	 * @return void
 	 */
