@@ -72,20 +72,6 @@ DEFAULT_HTML;
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-submit.php';
 	}
 
-	protected function get_excluded_ids() {
-		$ids = trim( FrmField::get_option( $this->field, 'exclude_fields' ) );
-		if ( ! empty( $ids ) ) {
-			$ids = explode( ',', $ids );
-			// trim to avoid mismatch - due to empty space - when doing in_array.
-			// array_filter to remove empty spaces caused by e.g. trailing comma.
-			$ids = array_filter( array_map( 'trim', $ids ) );
-
-			return $ids;
-		} else {
-			return array();
-		}
-	}
-
 	public function show_label_on_form_builder() {
 		// Do nothing.
 	}

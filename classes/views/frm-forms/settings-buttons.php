@@ -10,11 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
-	<tr>
-		<td colspan="2">
-			<?php esc_html_e( 'Page Turn Transitions setting is moved to the page break field settings in the form builder', 'formidable' ); ?>
-		</td>
-	</tr>
 	<?php do_action( 'frm_add_form_style_tab_options', $values ); ?>
 	<tr>
 		<td colspan="2">
