@@ -500,7 +500,8 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function do_after_field_imported_action( $field_array, $form_fields, $old_field_id ) {
-		$field_array['id'] = $form_fields[ $field_array['field_key'] ]; // Assign field array the update field's ID.
+		// Assign field array the update field's ID.
+		$field_array['id'] = $form_fields[ $field_array['field_key'] ];
 
 		/**
 		 * Fires when an existing field is imported.
