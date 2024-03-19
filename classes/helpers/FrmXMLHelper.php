@@ -455,8 +455,7 @@ class FrmXMLHelper {
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
 
-					$f['id'] = $old_field_id;
-					self::do_after_field_imported_action( $f, $form_fields );
+					self::do_after_field_imported_action( $f, $form_fields, $old_field_id );
 
 					// Unset old field id.
 					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] );
@@ -499,7 +498,9 @@ class FrmXMLHelper {
 	 *
 	 * @return void
 	 */
-	private static function do_after_field_imported_action( $field_array, $form_fields ) {
+	private static function do_after_field_imported_action( $field_array, $form_fields, $old_field_id ) {
+		$field_array['id'] = $form_fields[ $field_array['field_key'] ]; // Assign field array the update field's ID.
+
 		/**
 		 * Fires when an existing field is imported.
 		 *
@@ -507,8 +508,9 @@ class FrmXMLHelper {
 		 *
 		 * @param array $field_array
 		 * @param int   $field_id
+		 * @param int   $old_field_id
 		 */
-		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ] );
+		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ], $old_field_id );
 	}
 
 	private static function fill_field( $field, $form_id ) {
@@ -721,7 +723,7 @@ class FrmXMLHelper {
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
-			do_action( 'frm_after_field_is_imported', $f, $new_id );
+			do_action( 'frm_after_field_is_imported', $f, $new_id, 0 );
 		}
 	}
 
