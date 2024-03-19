@@ -725,7 +725,7 @@ class FrmXMLHelper {
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
-			do_action( 'frm_after_field_is_imported', $f, $new_id, 0 );
+			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
 	}
 
