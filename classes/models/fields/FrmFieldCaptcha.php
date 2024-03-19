@@ -153,7 +153,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		$allow_mutiple = $frm_settings->re_multi;
 		if ( $allow_mutiple ) {
-			$api_js_url .= '&onload=frmCaptcha&render=explicit';
+			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
@@ -195,7 +195,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function turnstile_api_url() {
-		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmCaptcha';
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile';
 
 		/**
 		 * Allows updating hcaptcha js api url.

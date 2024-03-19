@@ -1526,7 +1526,7 @@ function frmFrontFormJS() {
 	 * Destroys the global hcaptcha object since it wouldn't otherwise render.
 	 */
 	function destroyhCaptcha() {
-		if ( ! window.hasOwnProperty( 'hcaptcha' ) ) {
+		if ( ! window.hasOwnProperty( 'hcaptcha' ) || ! document.querySelector( '.h-captcha' ) ) {
 			return;
 		}
 		window.hcaptcha = null;
@@ -1591,7 +1591,7 @@ function frmFrontFormJS() {
 			return getFieldId( field, fullID );
 		},
 
-		renderCaptcha: function( captcha ) {
+		renderCaptcha: function( captcha, captchaSelector ) {
 			var formID, captchaID,
 				size = captcha.getAttribute( 'data-size' ),
 				rendered = captcha.getAttribute( 'data-rid' ) !== null,
@@ -1600,7 +1600,7 @@ function frmFrontFormJS() {
 					'size': size,
 					'theme': captcha.getAttribute( 'data-theme' )
 				},
-				activeCaptcha = getSelectedCaptcha(),
+				activeCaptcha = getSelectedCaptcha( captchaSelector ),
 				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
 
 			if ( rendered ) {
@@ -1914,30 +1914,29 @@ jQuery( document ).ready( function() {
 });
 
 function frmRecaptcha() {
-	console.warn( 'DEPRECATED: function frmRecaptcha in v6.x use frmCaptcha' );
-	frmRecaptcha();
+	frmCaptcha( '.frm-g-recaptcha' );
 }
 
-function frmCaptcha() {
+function frmTurnstile() {
+	frmCaptcha( '.cf-turnstile' );
+}
+
+function frmCaptcha( captchaSelector ) {
 	var c, cl,
-		captchas = getSelectedCaptchaElements();
+		captchas = document.querySelectorAll( captchaSelector );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderCaptcha( captchas[c]);
+		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
 }
 
-function getSelectedCaptcha() {
-	if ( document.querySelector( '.frm-g-recaptcha' ) ) {
+function getSelectedCaptcha( captchaSelector ) {
+	if ( captchaSelector === '.frm-g-recaptcha' ) {
 		return grecaptcha;
 	}
-	if ( document.querySelector( '.frm-show-form .h-captcha' ) ) {
-		return hcaptcha;
+	if ( document.querySelector( '.cf-turnstile' ) ) {
+		return turnstile;
 	}
-	return turnstile;
-}
-
-function getSelectedCaptchaElements() {
-	return document.querySelectorAll( '.frm-g-recaptcha, .h-captcha, .cf-turnstile' );
+	return hcaptcha;
 }
 
 function frmAfterRecaptcha( token ) {
