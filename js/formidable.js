@@ -1,4 +1,4 @@
-/* exported frmCaptcha, frmAfterRecaptcha, frmUpdateField */
+/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
 
 var frmFrontForm;
 
@@ -1523,7 +1523,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Destroys the global hcaptcha object since it wouldn't otherwise render.
+	 * Destroys the formidable generated global hcaptcha object since it wouldn't otherwise render.
 	 */
 	function destroyhCaptcha() {
 		if ( ! window.hasOwnProperty( 'hcaptcha' ) || ! document.querySelector( '.h-captcha' ) ) {
@@ -1578,7 +1578,7 @@ function frmFrontFormJS() {
 			setSelectPlaceholderColor();
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
-			jQuery( document ).on( 'elementor/popup/show', frmCaptcha );
+			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
 			jQuery( document ).on(
