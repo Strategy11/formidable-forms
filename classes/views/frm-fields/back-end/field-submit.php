@@ -8,6 +8,9 @@
  * @var array $field Field array.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 ?>
 <p class="frm-form-button">
 	<button id="field_label_<?php echo intval( $field['id'] ); ?>" class="frm_button_submit" disabled>
