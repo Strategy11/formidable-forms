@@ -195,7 +195,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function turnstile_api_url() {
-		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile';
 
 		/**
 		 * Allows updating hcaptcha js api url.
