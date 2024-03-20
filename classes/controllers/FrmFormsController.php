@@ -149,7 +149,7 @@ class FrmFormsController {
 				'name'        => __( 'Submit', 'formidable' ),
 				'field_order' => 9999,
 				'form_id'     => $form->id,
-				'field_options' => array(),
+				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
 				'default_value' => '',
 			)
