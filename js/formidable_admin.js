@@ -2087,11 +2087,112 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
+				maybeDuplicateUnsavedOptions( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 			}
 		});
 		return false;
+	}
+
+	/**
+	 * Duplicates field options that are not saved after being modified to the new field.
+	 *
+	 * @param {Number} originalFieldId
+	 * @param {string} newFieldHtml
+	 * @returns {void}
+	 */
+	function maybeDuplicateUnsavedOptions( originalFieldId, newFieldHtml ) {
+		const newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
+		const newOptsContainer  = document.getElementById( `frm_field_${newFieldId}_opts` );
+		const origOptsContainer = document.getElementById( `frm_field_${originalFieldId}_opts` );
+
+		if ( ! newOptsContainer || ! origOptsContainer || ! newOptsContainer.dataset.key || ! origOptsContainer.dataset.key ) {
+			return;
+		}
+		newOptsContainer.innerHTML = '';
+
+		const newFieldKey      = newOptsContainer.dataset.key;
+		const originalFieldKey = origOptsContainer.dataset.key;
+
+		const args = { originalFieldId, originalFieldKey, newFieldId, newFieldKey };
+
+		copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args );
+
+		copyUnsavedOptions( args );
+	}
+
+	/**
+	 * Syncs the options editing elements used to add,modify or delete options in the field options area.
+	 *
+	 * @param {HTMLElement} origOptsContainer
+	 * @param {HTMLElement} newOptsContainer
+	 * @param {object} args
+	 * @returns {void}
+	 */
+	function copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args ) {
+		const originalOpts = origOptsContainer.querySelectorAll( 'li' );
+
+		if ( ! originalOpts ) {
+			return;
+		}
+
+		const { originalFieldId, newFieldId } = args;
+
+		for ( let li of originalOpts ) {
+			const newOptLi         = replaceElementAttribute( li, args );
+			const originalOptValue = li.querySelector( `.field_${originalFieldId}_option` );
+			const newOptValue      = newOptLi.querySelector( `.field_${newFieldId}_option` );
+
+			if ( newOptValue && originalOptValue ) {
+				newOptValue.value = originalOptValue.value;
+			}
+
+			const newOptKey      = newOptLi.querySelector( `#field_key_${newFieldId}-${li.dataset.optkey}` );
+			const originalOptKey = li.querySelector( `#field_key_${originalFieldId}-${li.dataset.optkey}` );
+
+			if ( newOptKey && originalOptKey ) {
+				newOptKey.value = originalOptKey.value;
+			}
+
+			newOptsContainer.append( newOptLi );
+		}
+	}
+
+	/**
+	 * Syncs the options in the form preview area.
+	 *
+	 * @param {object} args
+	 * @returns {void}
+	 */
+	function copyUnsavedOptions( args ) {
+		const { originalFieldId, newFieldId } = args;
+
+		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+
+		if ( ! originalFieldOpts || ! newFieldOpts ) {
+			return;
+		}
+
+		newFieldOpts.innerHTML = '';
+		for ( const child of originalFieldOpts.children ) {
+			const newOpt = replaceElementAttribute( child, args );
+			newFieldOpts.append( newOpt );
+		}
+	}
+
+	function replaceElementAttribute( element, args ) {
+		const { originalFieldId, originalFieldKey, newFieldId, newFieldKey } = args;
+
+		let regex         = new RegExp( originalFieldId, 'g' );
+		let elementString = element.outerHTML.replace( regex, newFieldId );
+		regex             = new RegExp( originalFieldKey, 'g' );
+		elementString     = elementString.replace( regex, newFieldKey );
+		const tempDiv     = div();
+		tempDiv.innerHTML = elementString;
+
+		return tempDiv.firstChild;
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
