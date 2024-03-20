@@ -3,10 +3,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field_option_count = is_array( $args['field']['options'] ) ? count( $args['field']['options'] ) : 0;
-$display_format     = FrmField::get_option( $args['field'], 'image_options' );
+$field_option_count    = is_array( $args['field']['options'] ) ? count( $args['field']['options'] ) : 0;
+$display_format        = FrmField::get_option( $args['field'], 'image_options' );
+if ( $display_format === 'buttons' ) {
+	$should_hide_bulk_edit = FrmField::get_option( $args['field'], 'use_images_in_buttons' ) === '1';
+} else {
+	$should_hide_bulk_edit = $display_format === '1';
+}
 ?>
-<span class="frm-bulk-edit-link <?php echo $display_format === '1' ? 'frm_hidden' : ''; // Hide bulk edit for image buttons ?>">
+<span class="frm-bulk-edit-link <?php echo $should_hide_bulk_edit ? 'frm_hidden' : ''; ?>">
 	<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
 		<?php echo esc_html( $this->get_bulk_edit_string() ); ?>
 	</a>
