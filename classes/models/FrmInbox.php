@@ -391,6 +391,11 @@ class FrmInbox extends FrmFormApi {
 			function ( $matches ) {
 				$url   = $matches[2];
 				$parts = parse_url( $url );
+
+				if ( '#' === $url ) {
+					return 'href="#"';
+				}
+
 				$query = array();
 				if ( isset( $parts['query'] ) ) {
 					parse_str( $parts['query'], $query );
