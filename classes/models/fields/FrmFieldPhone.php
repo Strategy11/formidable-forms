@@ -38,7 +38,6 @@ class FrmFieldPhone extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
-			'format'         => true,
 		);
 	}
 
@@ -49,6 +48,43 @@ class FrmFieldPhone extends FrmFieldType {
 		return array(
 			'phone_type'    => 'none',
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
+	 * @return void
+	 */
+	public function show_primary_options( $args ) {
+		$field = $args['field'];
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/phone/phone-type.php';
+		FrmFieldsController::show_format_option( $field );
+
+		parent::show_primary_options( $args );
+	}
+
+	/**
+	 * Retrieves the HTML for an 'International' option in a dropdown.
+	 *
+	 * @since x.x
+	 *
+	 * @return void Outputs the HTML option tag directly.
+	 */
+	protected function get_international_option() {
+		?>
+		<option
+			value="international"
+			class="frm_show_upgrade frm_noallow"
+			data-upgrade="<?php esc_attr_e( 'International phone field', 'formidable' ); ?>"
+			data-medium="international-phone-field"
+			<?php selected( FrmField::get_option( $this->field, 'phone_type' ), 'international' ); ?>
+		>
+			<?php esc_html_e( 'International', 'formidable' ); ?>
+		</option>
+		<?php
 	}
 
 	/**

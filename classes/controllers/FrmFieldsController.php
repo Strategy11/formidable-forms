@@ -473,6 +473,10 @@ class FrmFieldsController {
 		if ( isset( $field['size'] ) && $field['size'] > 0 ) {
 			$class[] = 'auto_width';
 		}
+
+		if ( 'phone' === $field['type'] && isset( $field['phone_type'] ) && 'international' === $field['phone_type'] ) {
+			$class[] = 'frm-international-phone-input';
+		}
 	}
 
 	private static function add_html_size( $field, array &$add_html ) {

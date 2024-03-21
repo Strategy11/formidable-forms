@@ -2,10 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-$field_type = $field['type'];
 ?>
-<div class="frm-single-settings frm_hidden frm-fields frm-type-<?php echo esc_attr( $field_type ); ?>" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
+<div class="frm-single-settings frm_hidden frm-fields frm-type-<?php echo esc_attr( $field['type'] ); ?>" id="frm-single-settings-<?php echo esc_attr( $field['id'] ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>">
 	<input type="hidden" name="frm_fields_submitted[]" value="<?php echo esc_attr( $field['id'] ); ?>" />
 	<input type="hidden" name="field_options[field_order_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_order'] ); ?>" />
 
@@ -24,7 +22,7 @@ $field_type = $field['type'];
 
 	<div class="frm_grid_container frm-collapse-me" role="group">
 		<?php
-		if ( $field_type === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
+		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
@@ -37,7 +35,7 @@ $field_type = $field['type'];
 			</div>
 			<?php
 		}
-		if ( $field_type === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
+		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
@@ -207,7 +205,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		}
 
 		// Field Size
-		if ( $display['size'] && ! in_array( $field_type, array( 'select', 'data', 'time' ) ) ) {
+		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ) ) ) {
 			$display_max = $display['max'];
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
 		}
@@ -260,11 +258,6 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php
 		if ( $display['format'] ) {
-			// Adds the "phone_type" dropdown to the Format setting if it's the Phone field.
-			if ( 'phone' === $field_type ) {
-				include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/phone/phone-type.php';
-			}
-
 			FrmFieldsController::show_format_option( $field );
 		}
 
@@ -298,7 +291,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							<?php echo esc_html( $pos_label ); ?>
 						</option>
 					<?php } ?>
-					<?php if ( $field_type === 'divider' ) { ?>
+					<?php if ( $field['type'] === 'divider' ) { ?>
 						<option value="center" <?php selected( $field['label'], 'center' ); ?>>
 							<?php esc_html_e( 'Center', 'formidable' ); ?>
 						</option>
@@ -328,7 +321,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value = 'select' === $fkey ? 'dropdown' : $fkey;
 						?>
-						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo ( $fkey === $field_type ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?>
 						</option>
 						<?php
@@ -338,7 +331,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				</select>
 			</p>
 		<?php } else { ?>
-			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field_type ); ?>" />
+			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
 			<?php
 		}//end if
 		?>

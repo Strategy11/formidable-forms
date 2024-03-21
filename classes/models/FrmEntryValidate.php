@@ -222,8 +222,15 @@ class FrmEntryValidate {
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+			$phone_type = isset( $field->field_options['phone_type'] ) ? $field->field_options['phone_type'] : 'custom';
 
-			$pattern = self::phone_format( $field );
+			if ( $phone_type !== 'international' ) {
+				$pattern = self::phone_format( $field );
+			} else {
+				$sanitized_value = preg_replace( '/[^-+0-9() ]/', '', $value );
+				$pattern = '^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$';
+				$value = $sanitized_value;
+			}
 
 			if ( ! preg_match( $pattern, $value ) ) {
 				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
@@ -232,10 +239,21 @@ class FrmEntryValidate {
 	}
 
 	public static function phone_format( $field ) {
-		if ( FrmField::is_option_empty( $field, 'format' ) ) {
-			$pattern = self::default_phone_format();
-		} else {
-			$pattern = FrmField::get_option( $field, 'format' );
+		$phone_type = isset( $field['phone_type'] ) ? $field['phone_type'] : 'custom';
+		$pattern    = '';
+
+		switch ( $phone_type ) {
+			case 'international':
+				$pattern = '^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$';
+				break;
+
+			case 'none':
+				$pattern = self::default_phone_format();
+				break;
+
+			case 'custom':
+				$pattern = ! FrmField::is_option_empty( $field, 'format' ) ? FrmField::get_option( $field, 'format' ) : self::default_phone_format();
+				break;
 		}
 
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
