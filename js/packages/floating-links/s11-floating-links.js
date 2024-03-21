@@ -90,24 +90,18 @@ class S11FloatingLinks {
 	getInboxSlideIn() {
 		const h3          = frmDom.tag(
 			'h3',
-			{ id: 'frm_inbox_slidein_title' } 
+			{ id: 'frm_inbox_slidein_title' }
 		);
 		h3.innerHTML      = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
 		const messageSpan = frmDom.span({
 			id: 'frm_inbox_slidein_message',
 			text: frmGlobal.inboxSlideIn.slidein
 		});
-		const dismissIcon = frmDom.tag(
-			'button',
-			{
-				className: 'notice-dismiss frm_inbox_dismiss',
-				child: frmDom.span({
-					className: 'screen-reader-text',
-					text: wp.i18n.__( 'Dismiss this notice', 'formidable' )
-				})
-			}
-		);
-		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss', 'formidable' ) );
+		const dismissIcon = frmDom.a({
+			className: 'dismiss frm_inbox_dismiss',
+			child: frmDom.svg({ href: '#frm_close_icon' })
+		});
+		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss this notice', 'formidable' ) );
 		dismissIcon.setAttribute( 'role', 'button' );
 		const children    = frmAdminBuild.hooks.applyFilters(
 			'frm_inbox_slidein_children',
@@ -115,7 +109,7 @@ class S11FloatingLinks {
 		);
 		const slideIn     = frmDom.div({
 			id: 'frm_inbox_slide_in',
-			className: 'frm-card-item',
+			className: 'frm-card-item frm-dismissible',
 			children
 		});
 		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );

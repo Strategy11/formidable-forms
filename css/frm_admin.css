@@ -1514,6 +1514,18 @@ input.frm_insert_in_template {
 	font-weight: normal
 }
 
+.frm-dismissible a.dismiss:focus {
+	box-shadow: none;
+}
+.frm-dismissible a.dismiss {
+	top: 10px;
+	right: 10px;
+	position: absolute;
+}
+.frm-dismissible a.dismiss svg {
+	color: var(--grey-800);
+}
+
 /* Review request */
 .frm-review-notice.notice {
 	border: 1px solid #ddd;
@@ -1523,6 +1535,8 @@ input.frm_insert_in_template {
 	bottom: 0;
 	right: 0;
 	width: 400px;
+	padding-left: 30px !important;
+	padding-right: 30px !important;
 }
 
 .frm-review-notice.notice form,

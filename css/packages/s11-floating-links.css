@@ -192,10 +192,4 @@
 #frm_inbox_slide_in h3 + span {
 	text-align: center;
 }
-#frm_inbox_slide_in a.dismiss:focus {
-	box-shadow: none;
-}
-#frm_inbox_slide_in a.dismiss svg {
-	color: var(--grey-800);
-}
 /* End Inbox slide-in */
