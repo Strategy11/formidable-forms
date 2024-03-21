@@ -1565,6 +1565,10 @@ input.frm_insert_in_template {
 	margin-top: var(--gap-lg);
 }
 
+#frmapi-feedback [class^="frm__"] {
+	display: none;
+}
+
 .frm-review-notice .frm_error,
 .frm-review-notice label {
 	color: #444;

@@ -96,8 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			dataType: 'json',
 			url: frmcont.data( 'url' ),
 			success: ( json ) => {
-				const form = json.renderedHtml;
-				form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
+				const form = json.renderedHtml.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 				frmcont.html( form );
 			}
 		});
