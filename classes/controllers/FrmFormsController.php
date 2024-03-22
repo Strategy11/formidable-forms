@@ -135,6 +135,13 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Creates submit button field.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form Form object.
+	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
 
@@ -152,6 +159,7 @@ class FrmFormsController {
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
 				'default_value' => '',
+				'options'       => array(),
 			)
 		);
 	}

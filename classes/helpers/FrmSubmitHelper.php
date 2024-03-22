@@ -10,10 +10,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * Class FrmSubmitHelper
+ */
 class FrmSubmitHelper {
 
+	/**
+	 * Field type name.
+	 *
+	 * @var string
+	 */
 	const FIELD_TYPE = 'submit';
 
+	/**
+	 * Gets submit field object.
+	 *
+	 * @param int $form_id Form ID.
+	 * @return object
+	 */
 	public static function get_submit_field( $form_id ) {
 		return FrmField::get_all_types_in_form( $form_id, self::FIELD_TYPE, 1 );
 	}
@@ -22,7 +36,6 @@ class FrmSubmitHelper {
 	 * Checks if there is submit button field on the current page.
 	 *
 	 * @param array $values Prepared form values.
-	 *
 	 * @return bool
 	 */
 	public static function has_submit_field_on_current_page( $values ) {
@@ -43,7 +56,6 @@ class FrmSubmitHelper {
 	 * Gets current action (create or update) from the global variable.
 	 *
 	 * @param int $form_id Form ID.
-	 *
 	 * @return string
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
@@ -56,6 +68,12 @@ class FrmSubmitHelper {
 		return 'create';
 	}
 
+	/**
+	 * Gets submit button settings from form option.
+	 *
+	 * @param object $form Form object.
+	 * @return array
+	 */
 	private static function get_submit_settings_from_form( $form ) {
 		return array(
 			'edit_text'        => FrmForm::get_option(
@@ -85,6 +103,12 @@ class FrmSubmitHelper {
 		);
 	}
 
+	/**
+	 * Copies submit field settings to form options.
+	 *
+	 * @param object $form Form object.
+	 * @return object
+	 */
 	public static function copy_submit_field_settings_to_form( $form ) {
 		$submit_field = self::get_submit_field( $form->id );
 		if ( ! $submit_field ) {
@@ -96,6 +120,13 @@ class FrmSubmitHelper {
 		return $form;
 	}
 
+	/**
+	 * Maybe create a submit field for a form.
+	 *
+	 * @param object $form         Form object.
+	 * @param array  $fields       Array of fields.
+	 * @param bool   $reset_fields Flag to refresh fields after one is created or updated.
+	 */
 	public static function maybe_create_submit_field( $form, $fields, &$reset_fields ) {
 		$has_submit_field = false;
 
@@ -127,6 +158,11 @@ class FrmSubmitHelper {
 		}
 	}
 
+	/**
+	 * Removes submit field from the list of fields.
+	 *
+	 * @param array $fields Array of fields.
+	 */
 	public static function remove_submit_field_from_list( &$fields ) {
 		foreach ( $fields as $key => $field ) {
 			if ( self::FIELD_TYPE === FrmField::get_field_type( $field ) ) {

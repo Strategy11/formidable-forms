@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm-fake-page" class="frm_hidden">
 		<?php
 		/**
+		 * Fires before the fake page in form builder.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $form_array Processed form array.
@@ -34,6 +36,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		/**
+		 * Fires after the fake page in form builder.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $form_array Processed form array.

@@ -35,6 +35,7 @@ class FrmFieldsHelper {
 			}
 		}
 
+		// Increase the field order of submit field and fields in the same row.
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
 		if ( $last_row_field_ids ) {
 			foreach ( $last_row_field_ids as $index => $last_row_field_id ) {
