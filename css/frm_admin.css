@@ -1575,13 +1575,11 @@ input.frm_insert_in_template {
 }
 
 .frm-floating-success-message {
-	position: fixed !important;
-	bottom: 0;
-	right: 0;
+	position: fixed;
 	z-index: 999;
 	border-radius: 4px;
-	right: 10px !important;
-	bottom: 10px !important;
+	right: 10px;
+	bottom: 10px;
 }
 
 .frm-box-shadow-xxl {
