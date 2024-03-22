@@ -68,6 +68,7 @@
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-xl: 0px 9.41489px 11.2979px -1.88298px rgba(16, 24, 40, 0.08), 0px 3.76596px 3.76596px -1.88298px rgba(16, 24, 40, 0.03);
+	--box-shadow-xxl: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
 
 	/* Override front-end CSS */
 	--check-label-color: var(--grey-700);
@@ -1527,24 +1528,14 @@ input.frm_insert_in_template {
 }
 
 /* Review request */
-.frm-review-notice.notice {
-	border: 1px solid #ddd;
+.frm-review-notice {
 	text-align: center;
 	position: fixed !important;
 	z-index: 999;
 	bottom: 0;
 	right: 0;
 	width: 400px;
-	padding-left: 30px !important;
-	padding-right: 30px !important;
-}
-
-.frm-review-notice.notice form,
-.frm-review-notice.notice p {
-	font-size: var(--text-sm);
-	max-width: 600px;
-	margin-left: auto;
-	margin-right: auto;
+	box-shadow: var(--box-shadow-xxl) !important;
 }
 
 .frm-review-notice a {
@@ -1556,16 +1547,20 @@ input.frm_insert_in_template {
 	min-width: 100px;
 }
 
+.frm-review-notice p {
+	margin: 0 0 10px 0;
+}
+
 .frm-review-notice p > span {
 	font-size: 13px;
 	opacity: 0.75;
 }
 
-#frmapi-feedback {
+.frm-review-notice #frmapi-feedback {
 	margin-top: var(--gap-lg);
 }
 
-#frmapi-feedback [class^="frm__"] {
+.frm-review-notice #frmapi-feedback [class^="frm__"] {
 	display: none;
 }
 
@@ -1580,9 +1575,15 @@ input.frm_insert_in_template {
 }
 
 .frm-floating-success-message {
+	position: fixed;
+	z-index: 999;
 	border-radius: 4px;
-	right: 10px !important;
-	bottom: 10px !important;
+	right: 10px;
+	bottom: 10px;
+}
+
+.frm-box-shadow-xxl {
+	box-shadow: var(--box-shadow-xxl) !important;
 }
 
 /* Generic Classes */
@@ -2468,10 +2469,10 @@ h2.frm-h2 + .howto {
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
-#wpbody-content > .notice:not(.frm-review-notice),
+#wpbody-content > .notice,
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,
-.frm-white-body .notice:not(.frm-review-notice),
+.frm-white-body .notice,
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
@@ -2482,7 +2483,6 @@ h2.frm-h2 + .howto {
 }
 
 .frm-white-body .updated,
-.frm-white-body .notice,
 .frm-white-body .error {
 	margin: 0;
 	padding: 10px 20px;
@@ -9492,6 +9492,9 @@ Responsive Design
 }
 .frm-card-item:not(.frm-counter-card) {
 	gap: 10px;
+}
+.frm-compact-card-item {
+	padding: var(--gap-sm) 35px 10px 35px;
 }
 /* End card layout */
 
