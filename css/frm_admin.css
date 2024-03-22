@@ -1527,24 +1527,13 @@ input.frm_insert_in_template {
 }
 
 /* Review request */
-.frm-review-notice.notice {
-	border: 1px solid #ddd;
+.frm-review-notice {
 	text-align: center;
 	position: fixed !important;
 	z-index: 999;
 	bottom: 0;
 	right: 0;
 	width: 400px;
-	padding-left: 30px !important;
-	padding-right: 30px !important;
-}
-
-.frm-review-notice.notice form,
-.frm-review-notice.notice p {
-	font-size: var(--text-sm);
-	max-width: 600px;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 .frm-review-notice a {
@@ -1561,11 +1550,11 @@ input.frm_insert_in_template {
 	opacity: 0.75;
 }
 
-#frmapi-feedback {
+.frm-review-notice #frmapi-feedback {
 	margin-top: var(--gap-lg);
 }
 
-#frmapi-feedback [class^="frm__"] {
+.frm-review-notice #frmapi-feedback [class^="frm__"] {
 	display: none;
 }
 
@@ -1580,6 +1569,10 @@ input.frm_insert_in_template {
 }
 
 .frm-floating-success-message {
+	position: fixed !important;
+	bottom: 0;
+	right: 0;
+	z-index: 999;
 	border-radius: 4px;
 	right: 10px !important;
 	bottom: 10px !important;
@@ -2468,10 +2461,10 @@ h2.frm-h2 + .howto {
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
-#wpbody-content > .notice:not(.frm-review-notice),
+#wpbody-content > .notice,
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,
-.frm-white-body .notice:not(.frm-review-notice),
+.frm-white-body .notice,
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
@@ -2482,7 +2475,6 @@ h2.frm-h2 + .howto {
 }
 
 .frm-white-body .updated,
-.frm-white-body .notice,
 .frm-white-body .error {
 	margin: 0;
 	padding: 10px 20px;
