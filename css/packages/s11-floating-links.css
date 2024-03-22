@@ -33,7 +33,7 @@
 	background-color: #fff;
 	border: 1px solid #f2f4f7;
 	border-radius: 50%;
-	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
+	box-shadow: var(--box-shadow-xxl);
 	cursor: pointer;
 }
 
@@ -44,7 +44,7 @@
 	padding: 16px;
 	border: 1px solid #f2f4f7;
 	border-radius: 8px;
-	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
+	box-shadow: var(--box-shadow-xxl);
 }
 
 .s11-floating-links-nav-item {
@@ -175,7 +175,7 @@
 	flex-direction: column;
 	align-items: center;
 	z-index: 4; /* We want the pop up to appear above the license section in the dashboard. */
-	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18); /* Use the same box shadow as the floating liks */
+	box-shadow: var(--box-shadow-xxl);
 	padding-bottom: 0;
 }
 #frm_inbox_slide_in img {

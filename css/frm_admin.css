@@ -68,6 +68,7 @@
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-xl: 0px 9.41489px 11.2979px -1.88298px rgba(16, 24, 40, 0.08), 0px 3.76596px 3.76596px -1.88298px rgba(16, 24, 40, 0.03);
+	--box-shadow-xxl: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
 
 	/* Override front-end CSS */
 	--check-label-color: var(--grey-700);
@@ -1534,6 +1535,7 @@ input.frm_insert_in_template {
 	bottom: 0;
 	right: 0;
 	width: 400px;
+	box-shadow: var(--box-shadow-xxl) !important;
 }
 
 .frm-review-notice a {
