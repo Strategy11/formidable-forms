@@ -3153,6 +3153,7 @@ class FrmAppHelper {
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
+			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 

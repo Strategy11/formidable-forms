@@ -157,8 +157,8 @@ class FrmInbox extends FrmFormApi {
 	private function clean_messages() {
 		$removed = false;
 		foreach ( self::$messages as $t => $message ) {
-			$read      = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
 			$expired   = $this->is_expired( $message );
 			if ( $read || $expired || $dismissed ) {
 				unset( self::$messages[ $t ] );
@@ -172,6 +172,8 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * @param array  $messages
+	 * @param string $type
 	 * @return void
 	 */
 	public function filter_messages( &$messages, $type = 'unread' ) {
@@ -193,7 +195,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function is_expired( $message ) {
-		return isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+		return ! empty( $message['expires'] ) && $message['expires'] < time();
 	}
 
 	/**
@@ -252,10 +254,9 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $key
-	 *
 	 * @since 4.05.02
 	 *
+	 * @param string $key
 	 * @return void
 	 */
 	public function mark_unread( $key ) {
@@ -320,7 +321,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	public function unread_html() {
-		$html = '';
+		$html  = '';
 		$count = count( $this->unread() );
 		if ( $count ) {
 			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
@@ -337,7 +338,6 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 *
 	 * @param string $key
-	 *
 	 * @return void
 	 */
 	public function remove( $key ) {
@@ -364,8 +364,48 @@ class FrmInbox extends FrmFormApi {
 			return false;
 		}
 		$message = end( self::$banner_messages );
+		$cta     = self::get_prepared_banner_cta( $message['cta'] );
+
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
 		return true;
+	}
+
+	/**
+	 * Make sure that the CTA uses utm_medium=banner.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $cta
+	 * @return string
+	 */
+	private static function get_prepared_banner_cta( $cta ) {
+		$cta = str_replace( 'button-secondary', 'button-primary', $cta );
+		return preg_replace_callback(
+			'/href=("|\')(.*?)("|\')/',
+			/**
+			 * Replace a single href attribute in the CTA.
+			 *
+			 * @param array $matches The regex results for a single match.
+			 * @return string
+			 */
+			function ( $matches ) {
+				$url   = $matches[2];
+				$parts = parse_url( $url );
+
+				if ( '#' === $url ) {
+					return 'href="#"';
+				}
+
+				$query = array();
+				if ( isset( $parts['query'] ) ) {
+					parse_str( $parts['query'], $query );
+				}
+				$query['utm_medium'] = 'banner';
+				$parts['query']      = http_build_query( $query );
+				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+			},
+			$cta
+		);
 	}
 
 	/**
@@ -380,15 +420,89 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Get all message with a "banner" mesage key defined.
+	 *
 	 * @return array
 	 */
 	private static function get_banner_messages() {
+		return self::get_messages_with_key( 'banner' );
+	}
+
+	/**
+	 * Get all messages with a "slidein" message key defined.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_slidein_messages() {
+		return self::get_messages_with_key( 'slidein' );
+	}
+
+	/**
+	 * Get all messages with a $key message key defined.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key The key we are checking for (ie. banner or slidein).
+	 * @return array
+	 */
+	private static function get_messages_with_key( $key ) {
 		$inbox = new self();
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
-			function( $message ) {
-				return ! empty( $message['banner'] );
+			function( $message ) use ( $key ) {
+				return ! empty( $message[ $key ] );
 			}
+		);
+	}
+
+	/**
+	 * Check if there is at least one slidein message.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function has_a_slidein_message() {
+		return (bool) self::get_slidein_messages();
+	}
+
+	/**
+	 * Get the array used for frmGlobal.inboxSlideIn
+	 *
+	 * @since x.x
+	 *
+	 * @return array|false
+	 */
+	public static function get_inbox_slide_in_value_for_js() {
+		$messages = self::get_slidein_messages();
+		if ( ! $messages ) {
+			return false;
+		}
+
+		$message = reset( $messages );
+
+		/**
+		 * Extend the keys in the global JS object.
+		 * This is used in Pro to include images.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $keys
+		 */
+		$keys_to_return = apply_filters(
+			'frm_inbox_slidein_js_vars',
+			array( 'key', 'slidein', 'subject', 'cta' )
+		);
+
+		return array_reduce(
+			$keys_to_return,
+			function( $total, $key ) use ( $message ) {
+				$total[ $key ] = $message[ $key ];
+				return $total;
+			},
+			array()
 		);
 	}
 }

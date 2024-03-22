@@ -10271,11 +10271,11 @@ function frmAdminBuildJS() {
 
 		inboxInit: function() {
 			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
-				var message = this.parentNode.parentNode,
-					key = message.getAttribute( 'data-message' ),
-					href = this.getAttribute( 'href' ),
-					dismissedMessage = message.cloneNode( true );
-					dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
+				const message                  = this.parentNode.parentNode;
+				const key                      = message.getAttribute( 'data-message' );
+				const href                     = this.getAttribute( 'href' );
+				const dismissedMessage         = message.cloneNode( true );
+				const dismissedMessagesWrapper = document.querySelector( '.frm-dismissed-inbox-messages' );
 
 				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
 					return;
@@ -10285,29 +10285,48 @@ function frmAdminBuildJS() {
 
 				data = {
 					action: 'frm_inbox_dismiss',
-					key: key,
+					key,
 					nonce: frmGlobal.nonce
 				};
-				postAjax( data, function() {
-					if ( href !== '#' ) {
-						window.location = href;
-						return true;
+
+				const isInboxSlideIn = 'frm_inbox_slide_in' === message.id;
+				if ( isInboxSlideIn ) {
+					message.classList.remove( 's11-fadein' );
+					message.classList.add( 's11-fadeout' );
+					message.addEventListener( 'animationend', () => message.remove(), { once: true });
+				}
+
+				postAjax(
+					data,
+					() => {
+						if ( isInboxSlideIn ) {
+							return;
+						}
+
+						if ( href !== '#' ) {
+							window.location = href;
+							return true;
+						}
+
+						fadeOut(
+							message,
+							() => {
+								if ( null !== dismissedMessagesWrapper ) {
+									dismissedMessage.classList.remove( 'frm-fade' );
+									dismissedMessage.querySelector( '.frm-inbox-message-heading' )?.removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+									dismissedMessagesWrapper.append( dismissedMessage );
+								}
+								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
+									document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
+									message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+								}
+								message.parentNode.removeChild( message );
+							}
+						);
 					}
-					fadeOut( message, function() {
-						if ( null !== dismissedMessagesWrapper ) {
-							dismissedMessage.classList.remove( 'frm-fade' );
-							dismissedMessage.querySelector( '.frm-inbox-message-heading' ).removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
-							dismissedMessagesWrapper.append( dismissedMessage );
-						}
-						if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
-							document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-							message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
-						}
-						message.parentNode.removeChild( message );
-					});
-				});
+				);
 			});
-			jQuery( '#frm-dismiss-inbox' ).on( 'click', function( e ) {
+			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
 				data = {
 					action: 'frm_inbox_dismiss',
 					key: 'all',
@@ -10321,7 +10340,7 @@ function frmAdminBuildJS() {
 				});
 			});
 
-			if ( ! document.getElementById( 'frm_empty_inbox' ).classList.contains( 'frm_hidden' ) ) {
+			if ( false === document.getElementById( 'frm_empty_inbox' )?.classList.contains( 'frm_hidden' ) ) {
 				showActiveCampaignForm();
 			}
 		},
