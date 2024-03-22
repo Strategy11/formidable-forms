@@ -186,7 +186,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function try_to_extend_server_timeout( $timeout ) {
-		if ( ! ini_get( 'safe_mode' ) ) {
+		if ( function_exists( 'set_time_limit' ) ) {
 			set_time_limit( $timeout + 10 );
 		}
 	}

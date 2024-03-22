@@ -73,7 +73,11 @@ class test_FrmFieldsController extends FrmUnitTest {
 	 */
 	public function test_include_new_field() {
 		$form_id   = $this->factory->form->create();
+		ob_start();
 		$new_field = FrmFieldsController::include_new_field( 'text', $form_id );
+		$field_output = ob_get_clean();
+
+		$this->assertEquals( 0, strpos( trim( $field_output ), '<li id="frm_field_id_' . $new_field['id'] . '"' ) );
 
 		// Confirm field is an array with type and form id keys.
 		$this->assertIsArray( $new_field );

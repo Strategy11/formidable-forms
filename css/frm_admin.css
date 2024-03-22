@@ -9258,6 +9258,10 @@ Responsive Design
 	text-decoration: underline !important;
 }
 
+#frm_banner .frm-banner-cta a.frm_inbox_dismiss {
+	display: none;
+}
+
 .frm-banner-dismiss {
 	cursor: pointer;
 	position: absolute;

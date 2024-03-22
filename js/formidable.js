@@ -5,7 +5,7 @@ var frmFrontForm;
 function frmFrontFormJS() {
 	'use strict';
 
-	/*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
+	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	var action = '';
@@ -165,7 +165,7 @@ function frmFrontFormJS() {
 	 * @param {object} $form
 	 */
 	function disableSubmitButton( $form ) {
-		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
+		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"], button.frm_save_draft' ).attr( 'disabled', 'disabled' );
 	}
 
 	/**
@@ -1522,6 +1522,16 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Destroys the formidable generated global hcaptcha object since it wouldn't otherwise render.
+	 */
+	function destroyhCaptcha() {
+		if ( ! window.hasOwnProperty( 'hcaptcha' ) || ! document.querySelector( '.frm-show-form .h-captcha' ) ) {
+			return;
+		}
+		window.hcaptcha = null;
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1571,21 +1581,27 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
+			jQuery( document ).on(
+				'frmPageChanged',
+				destroyhCaptcha
+			);
 		},
 
 		getFieldId: function( field, fullID ) {
 			return getFieldId( field, fullID );
 		},
 
-		renderRecaptcha: function( captcha ) {
-			var formID, recaptchaID,
+		renderCaptcha: function( captcha, captchaSelector ) {
+			var formID, captchaID,
 				size = captcha.getAttribute( 'data-size' ),
 				rendered = captcha.getAttribute( 'data-rid' ) !== null,
 				params = {
 					'sitekey': captcha.getAttribute( 'data-sitekey' ),
 					'size': size,
 					'theme': captcha.getAttribute( 'data-theme' )
-				};
+				},
+				activeCaptcha = getSelectedCaptcha( captchaSelector ),
+				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
 
 			if ( rendered ) {
 				return;
@@ -1599,9 +1615,10 @@ function frmFrontFormJS() {
 				};
 			}
 
-			recaptchaID = grecaptcha.render( captcha.id, params );
 
-			captcha.setAttribute( 'data-rid', recaptchaID );
+			captchaID = activeCaptcha.render( captchaContainer, params );
+
+			captcha.setAttribute( 'data-rid', captchaID );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -1897,11 +1914,29 @@ jQuery( document ).ready( function() {
 });
 
 function frmRecaptcha() {
+	frmCaptcha( '.frm-g-recaptcha' );
+}
+
+function frmTurnstile() {
+	frmCaptcha( '.cf-turnstile' );
+}
+
+function frmCaptcha( captchaSelector ) {
 	var c, cl,
-		captchas = jQuery( '.frm-g-recaptcha' );
+		captchas = document.querySelectorAll( captchaSelector );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderRecaptcha( captchas[c]);
+		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
+}
+
+function getSelectedCaptcha( captchaSelector ) {
+	if ( captchaSelector === '.frm-g-recaptcha' ) {
+		return grecaptcha;
+	}
+	if ( document.querySelector( '.cf-turnstile' ) ) {
+		return turnstile;
+	}
+	return hcaptcha;
 }
 
 function frmAfterRecaptcha( token ) {

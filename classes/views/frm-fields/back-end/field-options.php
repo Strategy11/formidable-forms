@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $field_option_count = is_array( $args['field']['options'] ) ? count( $args['field']['options'] ) : 0;
 ?>
-<span class="frm-bulk-edit-link <?php echo empty( FrmField::get_option( $args['field'], 'image_options' ) ) ? '' : 'frm_hidden'; ?> ">
+<span class="frm-bulk-edit-link <?php echo $should_hide_bulk_edit ? 'frm_hidden' : ''; ?>">
 	<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
 		<?php echo esc_html( $this->get_bulk_edit_string() ); ?>
 	</a>
