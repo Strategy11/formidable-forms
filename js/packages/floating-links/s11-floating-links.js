@@ -109,7 +109,7 @@ class S11FloatingLinks {
 		);
 		const slideIn     = frmDom.div({
 			id: 'frm_inbox_slide_in',
-			className: 'frm-card-item frm-compact-card-item frm-dismissible',
+			className: 'frm-card-item frm-compact-card-item frm-dismissible frm-box-shadow-xxl',
 			children
 		});
 		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );

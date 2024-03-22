@@ -175,7 +175,6 @@
 	flex-direction: column;
 	align-items: center;
 	z-index: 4; /* We want the pop up to appear above the license section in the dashboard. */
-	box-shadow: var(--box-shadow-xxl);
 	padding-bottom: 0;
 }
 #frm_inbox_slide_in img {

@@ -1584,6 +1584,10 @@ input.frm_insert_in_template {
 	bottom: 10px !important;
 }
 
+.frm-box-shadow-xxl {
+	box-shadow: var(--box-shadow-xxl) !important;
+}
+
 /* Generic Classes */
 .frm_no_margin, /* deprecated */
 .frm-m-0 {
