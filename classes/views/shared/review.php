@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-review-notice frm-dismissible frm-card-item">
+<div class="frm-review-notice frm-dismissible frm-card-item frm-compact-card-item">
 	<div class="frm-satisfied">
 		<p>
 			<?php echo esc_html( $title ); ?>

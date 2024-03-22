@@ -1545,6 +1545,10 @@ input.frm_insert_in_template {
 	min-width: 100px;
 }
 
+.frm-review-notice p {
+	margin: 0 0 10px 0;
+}
+
 .frm-review-notice p > span {
 	font-size: 13px;
 	opacity: 0.75;
@@ -9480,6 +9484,9 @@ Responsive Design
 }
 .frm-card-item:not(.frm-counter-card) {
 	gap: 10px;
+}
+.frm-compact-card-item {
+	padding: var(--gap-sm) 35px 10px 35px;
 }
 /* End card layout */
 

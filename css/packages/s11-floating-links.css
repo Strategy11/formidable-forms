@@ -176,7 +176,7 @@
 	align-items: center;
 	z-index: 4; /* We want the pop up to appear above the license section in the dashboard. */
 	box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18); /* Use the same box shadow as the floating liks */
-	padding: 15px 35px 0 35px;
+	padding-bottom: 0;
 }
 #frm_inbox_slide_in img {
 	max-width: 100%;
