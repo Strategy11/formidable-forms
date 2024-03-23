@@ -6393,8 +6393,7 @@ function frmAdminBuildJS() {
 
 		document.addEventListener( 'click', handleUpgradeClick );
 		document.addEventListener( 'change', ( event ) => {
-			const element = event.target;
-			if ( element.tagName.toLowerCase() === 'select' && element.classList.contains( 'frm_select_with_premium' ) ) {
+			if ( event.target.matches( 'select.frm_select_with_premium' ) ) {
 				handleUpgradeClick( event );
 			}
 		});
@@ -9678,37 +9677,47 @@ function frmAdminBuildJS() {
 
 
 	/**
+	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
+	 * It sets up initial visibility at page load and updates it on each dropdown change.
 	 *
+	 * @since x.x
 	 *
 	 * @return {void}
 	 */
 	function initSelectDependencies() {
-		const selects = document.querySelectorAll( '.frm_select_with_dependency' );
+		const selects = document.querySelectorAll( 'select.frm_select_with_dependency' );
 
-		selects.forEach( select => {
-			let dependency;
-			let selectedOption = select.options[select.selectedIndex];
-
-			if ( selectedOption.dataset.dependency ) {
-				const dependencyId = selectedOption.dataset.dependency;
-				dependency = document.querySelector( dependencyId );
-				dependency.classList.remove( 'frm_hidden' );
-			}
-
-			select.addEventListener( 'change', ( event ) => {
-				if ( dependency ) {
-					dependency.classList.add( 'frm_hidden' );
-					dependency = null;
+		/**
+		 * Toggles the visibility of dependent elements associated with a select element based on its current selection.
+		 *
+		 * @since x.x
+		 *
+		 * @param {HTMLElement} select The select element whose dependencies need to be managed.
+		 * @return {void}
+		 */
+		function toggleDependencyVisibility( select ) {
+			const selectedOption = select.options[select.selectedIndex] || null;
+			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
+				const dependencyElement = document.querySelector( option.dataset.dependency );
+				if ( ! dependencyElement ) {
+					return;
 				}
 
-				selectedOption = select.options[select.selectedIndex];
-
-				if ( selectedOption.dataset.dependency ) {
-					const dependencyId = selectedOption.dataset.dependency;
-					dependency = document.querySelector( dependencyId );
-					dependency.classList.remove( 'frm_hidden' );
-				}
+				dependencyElement.classList.toggle( 'frm_hidden', selectedOption !== option );
 			});
+		}
+
+		// Initial setup: Show dependencies based on the current selection in each dropdown
+		selects.forEach( select => {
+			toggleDependencyVisibility( select );
+		});
+
+		// Update dependencies visibility on dropdown change
+		document.addEventListener( 'change', event => {
+			const element = event.target;
+			if ( element.matches( 'select.frm_select_with_dependency' ) ) {
+				toggleDependencyVisibility( element );
+			}
 		});
 	};
 

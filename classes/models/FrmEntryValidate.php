@@ -224,12 +224,11 @@ class FrmEntryValidate {
 		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
 			$phone_type = isset( $field->field_options['phone_type'] ) ? $field->field_options['phone_type'] : 'custom';
 
-			if ( $phone_type !== 'international' ) {
-				$pattern = self::phone_format( $field );
+			if ( 'international' === $phone_type ) {
+				$value = preg_replace( '/[^+\d\s().-]/', '', $value );
+				$pattern = '/^\+?\d[\d\s().-]{4,17}\d$/';
 			} else {
-				$sanitized_value = preg_replace( '/[^-+0-9() ]/', '', $value );
-				$pattern = '^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$';
-				$value = $sanitized_value;
+				$pattern = self::phone_format( $field );
 			}
 
 			if ( ! preg_match( $pattern, $value ) ) {
@@ -239,7 +238,11 @@ class FrmEntryValidate {
 	}
 
 	public static function phone_format( $field ) {
+		<< << << < Updated upstream
 		$phone_type = isset( $field['phone_type'] ) ? $field['phone_type'] : 'custom';
+		=== === =
+		$phone_type = isset( $field->field_options['phone_type'] ) ? $field->field_options['phone_type'] : 'custom';
+		>> >> >> > Stashed changes
 		$pattern    = '';
 
 		switch ( $phone_type ) {

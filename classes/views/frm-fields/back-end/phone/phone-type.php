@@ -7,7 +7,7 @@
  *
  * @var array        $field Field array.
  * @var array        $args  Includes 'field', 'display', and 'values'.
- * @var FrmFieldName $this  Field type object.
+ * @var FrmFieldPhone $this  Field type object.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
