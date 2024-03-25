@@ -92,6 +92,6 @@ class FrmShowForm extends WP_Widget {
 			</label>
 		</p>
 		<?php
-		return 'noform';
+		return '';
 	}
 }

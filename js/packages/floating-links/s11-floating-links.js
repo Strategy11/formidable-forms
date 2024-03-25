@@ -46,6 +46,11 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	initComponent() {
+		if ( document.querySelector( '.frm-review-notice' ) ) {
+			// Do not load if the review notice is being shown.
+			return;
+		}
+
 		// Create and append elements
 		this.createWrapper();
 		this.createNavMenu();
@@ -59,6 +64,83 @@ class S11FloatingLinks {
 
 		// Apply styles
 		this.setCSSVariables();
+
+		// Use a timeout to give time for Pro to add hooks.
+		setTimeout( () => this.setupInboxSlideIn(), 0 );
+	}
+
+	setupInboxSlideIn() {
+		if ( 'object' !== typeof frmGlobal.inboxSlideIn || ! window.frmDom || ! window.wp ) {
+			return;
+		}
+
+		const slideIn = this.getInboxSlideIn();
+		slideIn.classList.add( 's11-fadein' );
+		document.body.appendChild( slideIn );
+
+		// Make sure the events are set for dismissing the inbox message.
+		if ( ! document.getElementById( 'frm_inbox_page' ) && ! document.querySelector( '.frm-inbox-wrapper' ) ) {
+			frmAdminBuild.inboxInit();
+		}
+	}
+
+	/**
+	 * @return {HTMLElement}
+	 */
+	getInboxSlideIn() {
+		const h3          = frmDom.tag(
+			'h3',
+			{ id: 'frm_inbox_slidein_title' }
+		);
+		h3.innerHTML      = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const messageSpan = frmDom.span({
+			id: 'frm_inbox_slidein_message',
+			text: frmGlobal.inboxSlideIn.slidein
+		});
+		const dismissIcon = frmDom.a({
+			className: 'dismiss frm_inbox_dismiss',
+			child: frmDom.svg({ href: '#frm_close_icon' })
+		});
+		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss this notice', 'formidable' ) );
+		dismissIcon.setAttribute( 'role', 'button' );
+		const children    = frmAdminBuild.hooks.applyFilters(
+			'frm_inbox_slidein_children',
+			[ h3, messageSpan ]
+		);
+		const slideIn     = frmDom.div({
+			id: 'frm_inbox_slide_in',
+			className: 'frm-card-item frm-compact-card-item frm-dismissible frm-box-shadow-xxl',
+			children
+		});
+		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );
+		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
+		slideIn.querySelector( '.frm-button-secondary' )?.remove();
+		this.updateSlideInCtaUtm( slideIn );
+		slideIn.appendChild( frmDom.span({ child: dismissIcon }) );
+		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
+			'aria-description',
+			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
+		);
+		this.slideIn = slideIn;
+		return slideIn;
+	}
+
+	updateSlideInCtaUtm( slideIn ) {
+		slideIn.querySelectorAll( 'a[href]' ).forEach(
+			anchor => {
+				if ( '#' === anchor.href ) {
+					return;
+				}
+
+				const urlObj       = new URL( anchor.href );
+				const searchParams = new URLSearchParams( urlObj.search );
+
+				searchParams.set( 'utm_medium', 'slidein' );
+
+				urlObj.search = searchParams.toString();
+				anchor.href   = urlObj.toString();
+			}
+		);
 	}
 
 	/**
@@ -142,6 +224,10 @@ class S11FloatingLinks {
 			// Toggle the navigation menu element
 			this.toggleFade( this.navMenuElement );
 
+			if ( this.slideIn ) {
+				this.toggleFade( this.slideIn );
+			}
+
 			// Switch the icon of the icon button element
 			this.switchIconButton( closeIcon );
 		});
@@ -203,6 +289,10 @@ class S11FloatingLinks {
 				// Toggle the navigation menu element
 				this.toggleFade( this.navMenuElement );
 
+				if ( this.slideIn ) {
+					this.toggleFade( this.slideIn );
+				}
+
 				// Switch the icon of the icon button element
 				this.switchIconButton( this.options.logoIcon.trim() );
 			}
@@ -229,15 +319,20 @@ class S11FloatingLinks {
 				if ( ! this.wrapperElement.classList.contains( 's11-fadein' ) ) {
 					this.toggleFade( this.wrapperElement );
 				}
-			} else {
+			} else if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) && ! this.inboxSlideInIsVisible() ) {
 				// When scrolling down hide the Floating Links
-				if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) ) {
-					this.toggleFade( this.wrapperElement );
-				}
+				this.toggleFade( this.wrapperElement );
 			}
 
 			this.lastScrollPosition = currentScrollPosition;
 		});
+	}
+
+	inboxSlideInIsVisible() {
+		if ( ! this.slideIn ) {
+			return 'object' === typeof frmGlobal.inboxSlideIn;
+		}
+		return null === this.wrapperElement.querySelector( '.s11-show-close-icon' );
 	}
 
 	/**
