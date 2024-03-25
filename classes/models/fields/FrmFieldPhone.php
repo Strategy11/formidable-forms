@@ -42,6 +42,8 @@ class FrmFieldPhone extends FrmFieldType {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @return array
 	 */
 	protected function extra_field_opts() {

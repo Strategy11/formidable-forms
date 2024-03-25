@@ -1,6 +1,6 @@
 <?php
 /**
- * Primary options for the Phone field.
+ * HTML for an 'International' option in a dropdown.
  *
  * @package Formidable
  * @since x.x

@@ -300,11 +300,13 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	border: 1px solid var(--grey-300);
 }
 
-.frm_form_field.frm6_followed + p {
+.frm_form_field.frm6_followed + p,
+.frm_form_field.frm6_followed + div {
 	grid-column: span 6 / span 6;
 }
 
-.frm_form_field.frm-phone-type + p > label {
+.frm_form_field.frm-phone-type + p > label,
+.frm_form_field.frm-phone-type + div > label {
 	opacity: 0;
 }
 

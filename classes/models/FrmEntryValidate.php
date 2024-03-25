@@ -227,7 +227,7 @@ class FrmEntryValidate {
 
 			if ( 'international' === $phone_type ) {
 				// Sanitize the input value by removing unwanted characters
-				$value   = preg_replace( '/[^+\d\s().-]/', '', $value );
+				$value = preg_replace( '/[^+\d\s().-]/', '', $value );
 			}
 
 			if ( ! preg_match( $pattern, $value ) ) {
