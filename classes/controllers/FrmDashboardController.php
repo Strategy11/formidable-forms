@@ -38,7 +38,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
 	}
 
 	/**
