@@ -43,8 +43,18 @@ class FrmSubmitHelper {
 			return false;
 		}
 
-		foreach ( $values['fields'] as $field ) {
-			if ( self::FIELD_TYPE === $field['type'] ) {
+		return self::has_submit_field_in_list( $values['fields'] );
+	}
+
+	/**
+	 * Checks if the given fields list contains a submit field.
+	 *
+	 * @param array $fields Array of fields.
+	 * @return bool
+	 */
+	private static function has_submit_field_in_list( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( self::FIELD_TYPE === FrmField::get_field_type( $field ) ) {
 				return true;
 			}
 		}
@@ -128,16 +138,7 @@ class FrmSubmitHelper {
 	 * @param bool   $reset_fields Flag to refresh fields after one is created or updated.
 	 */
 	public static function maybe_create_submit_field( $form, $fields, &$reset_fields ) {
-		$has_submit_field = false;
-
-		foreach ( $fields as $field ) {
-			if ( self::FIELD_TYPE === $field->type ) {
-				$has_submit_field = true;
-				break;
-			}
-		}
-
-		if ( $has_submit_field ) {
+		if ( self::has_submit_field_in_list( $fields ) ) {
 			return;
 		}
 
@@ -167,7 +168,6 @@ class FrmSubmitHelper {
 		foreach ( $fields as $key => $field ) {
 			if ( self::FIELD_TYPE === FrmField::get_field_type( $field ) ) {
 				unset( $fields[ $key ] );
-
 				return;
 			}
 		}
