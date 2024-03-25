@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
-if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
+if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
 		<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
@@ -50,7 +50,7 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
-if ( $values['fields'] && ! $only_contain_submit ) {
+if ( ! $only_contain_submit ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
