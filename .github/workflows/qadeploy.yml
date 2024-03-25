@@ -16,7 +16,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
       with:
-        server: ftp.gyj.ilw.mybluehost.me
+        server: ${{ secrets.FRM_FTP_HOST }}
         server-dir: ${{ github.event.repository.name }}-${{ github.event.pull_request.head.ref }}/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}
@@ -44,7 +44,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
       with:
-        server: ftp.gyj.ilw.mybluehost.me
+        server: ${{ secrets.FRM_FTP_HOST }}
         server-dir: ${{ github.event.repository.name }}-beta/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}
