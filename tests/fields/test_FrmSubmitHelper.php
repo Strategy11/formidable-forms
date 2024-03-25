@@ -6,11 +6,13 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 		$form = $this->factory->form->create_and_get();
 		$this->assertEquals( $form, FrmSubmitHelper::copy_submit_field_settings_to_form( $form ) );
 
-		$this->factory->field->create( array(
-			'form_id' => $form->id,
-			'type'    => 'submit',
-			'name'    => 'Submit form',
-		) );
+		$this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'submit',
+				'name'    => 'Submit form',
+			)
+		);
 
 		$new_form = FrmSubmitHelper::copy_submit_field_settings_to_form( $form );
 		$this->assertEquals( $new_form->options['submit_value'], 'Submit form' );
