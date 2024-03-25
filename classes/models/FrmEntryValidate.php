@@ -222,13 +222,12 @@ class FrmEntryValidate {
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
-			$phone_type = isset( $field->field_options['phone_type'] ) ? $field->field_options['phone_type'] : 'custom';
+			$pattern    = self::phone_format( $field );
+			$phone_type = FrmField::get_option( $field, 'phone_type' );
 
 			if ( 'international' === $phone_type ) {
-				$value = preg_replace( '/[^+\d\s().-]/', '', $value );
-				$pattern = '/^\+?\d[\d\s().-]{4,17}\d$/';
-			} else {
-				$pattern = self::phone_format( $field );
+				// Sanitize the input value by removing unwanted characters
+				$value   = preg_replace( '/[^+\d\s().-]/', '', $value );
 			}
 
 			if ( ! preg_match( $pattern, $value ) ) {
@@ -238,16 +237,12 @@ class FrmEntryValidate {
 	}
 
 	public static function phone_format( $field ) {
-		<< << << < Updated upstream
-		$phone_type = isset( $field['phone_type'] ) ? $field['phone_type'] : 'custom';
-		=== === =
-		$phone_type = isset( $field->field_options['phone_type'] ) ? $field->field_options['phone_type'] : 'custom';
-		>> >> >> > Stashed changes
+		$phone_type = FrmField::get_option( $field, 'phone_type' );
 		$pattern    = '';
 
 		switch ( $phone_type ) {
 			case 'international':
-				$pattern = '^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$';
+				$pattern = self::get_international_phone_regex();
 				break;
 
 			case 'none':
@@ -255,6 +250,7 @@ class FrmEntryValidate {
 				break;
 
 			case 'custom':
+			default:
 				$pattern = ! FrmField::is_option_empty( $field, 'format' ) ? FrmField::get_option( $field, 'format' ) : self::default_phone_format();
 				break;
 		}
@@ -276,6 +272,17 @@ class FrmEntryValidate {
 	 */
 	private static function default_phone_format() {
 		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
+	}
+
+	/**
+	 * Returns regex for validating international phone numbers.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Regex pattern.
+	 */
+	private static function get_international_phone_regex() {
+		return '^\+?(?:\d{1,3})?[-\s.]?(\(?\d{1,4}\)?[-\s.]?)?(\d{1,4}[-\s.]?){1,3}\d+$';
 	}
 
 	/**
