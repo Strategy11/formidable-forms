@@ -4744,8 +4744,22 @@ function frmAdminBuildJS() {
 	 * @return {Boolean}
 	 */
 	function hasOnlySubmitField() {
-		const li = document.querySelectorAll( '#frm-show-fields li' );
-		return li.length === 2 && li[1].classList.contains( 'edit_field_type_submit' );
+		// If there are at least 2 rows, return false.
+		if ( $newFields.get( 0 ).childElementCount > 1 ) {
+			return false;
+		}
+
+		const childUl = $newFields.get( 0 ).firstElementChild.firstElementChild;
+
+		// Use query instead of children because there might be a div inside this ul.
+		const childLi = childUl.querySelectorAll( 'li.frm_field_box' );
+
+		// If there are at least 2 items in the row, return false.
+		if ( childLi.length > 1 ) {
+			return false;
+		}
+
+		return childLi[0].classList.contains( 'edit_field_type_submit' );
 	}
 
 	function deleteField( fieldId ) {
