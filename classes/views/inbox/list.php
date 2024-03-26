@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li class="frm-active">
 				<?php
 				esc_html_e( 'Inbox', 'formidable' );
-				echo wp_kses_post( FrmInboxController::get_notice_count() );
+				echo wp_kses_post( FrmInboxController::get_notice_count( false ) );
 				?>
 			</li>
 			<li><?php esc_html_e( 'Dismissed', 'formidable' ); ?></li>

@@ -321,15 +321,22 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * @since x.x The $filtered parameter was added.
+	 *
+	 * @param bool $filtered
 	 * @return string
 	 */
-	public function unread_html() {
+	public function unread_html( $filtered = true ) {
 		$count = count( $this->unread() );
 		if ( ! $count ) {
 			return '';
 		}
 
 		$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+
+		if ( ! $filtered ) {
+			return $html;
+		}
 
 		/**
 		 * @since 4.06.01
