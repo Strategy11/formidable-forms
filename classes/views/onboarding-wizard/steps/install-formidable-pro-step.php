@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="frm-text-grey-900 frm-font-medium"><?php esc_html_e( '1. Download PRO', 'formidable' ); ?></span>
 			<a href="<?php echo esc_url( 'https://formidableforms.com/account/?utm_source=WordPress&utm_medium=onboarding-wizard&utm_campaign=liteplugin&utm_content=download-pro' ); ?>" class="frm-link-with-external-icon" target="_blank">
 				<span class="frm-font-semibold"><?php esc_html_e( 'Download', 'formidable' ); ?></span>
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_up_right' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup_icon' ); ?>
 			</a>
 		</div>
 
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="frm-text-grey-900 frm-font-medium"><?php esc_html_e( '2. Install on your website', 'formidable' ); ?></span>
 			<a href="<?php echo esc_url( admin_url( 'plugin-install.php' ) ); ?>" class="frm-link-with-external-icon" target="_blank">
 				<span class="frm-font-semibold"><?php esc_html_e( 'Upload Plugin', 'formidable' ); ?></span>
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_up_right' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup_icon' ); ?>
 			</a>
 		</div>
 

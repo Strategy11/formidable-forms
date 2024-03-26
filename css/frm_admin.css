@@ -9755,5 +9755,6 @@ Responsive Design
 .frm-link-with-external-icon .frmsvg {
 	width: 16px;
 	height: 16px;
+	transform: rotate(45deg);
 }
 /* End External Link Styles */
