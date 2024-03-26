@@ -320,18 +320,30 @@ class FrmInbox extends FrmFormApi {
 		return $messages;
 	}
 
-	public function unread_html() {
-		$html  = '';
+	/**
+	 * @since x.x The $filtered parameter was added.
+	 *
+	 * @param bool $filtered
+	 * @return string
+	 */
+	public function unread_html( $filtered = true ) {
 		$count = count( $this->unread() );
-		if ( $count ) {
-			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
-
-			/**
-			 * @since 4.06.01
-			 */
-			$html = apply_filters( 'frm_inbox_badge', $html );
+		if ( ! $count ) {
+			return '';
 		}
-		return $html;
+
+		$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+
+		if ( ! $filtered ) {
+			return $html;
+		}
+
+		/**
+		 * @since 4.06.01
+		 *
+		 * @param string $html
+		 */
+		return (string) apply_filters( 'frm_inbox_badge', $html );
 	}
 
 	/**

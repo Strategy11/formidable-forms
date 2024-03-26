@@ -58,6 +58,12 @@
 	overflow: inherit;
 }
 
+.frm-dashboard-widget span.frm_inbox_count {
+	margin-right: 0;
+	line-height: 1.6;
+	background-color: var(--error-500);
+}
+
 .frm-yt-widget {
 	z-index: 3;
 	padding: 0 !important;
