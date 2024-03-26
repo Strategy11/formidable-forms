@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-06T14:48:42+00:00\n"
-"PO-Revision-Date: 2024-03-19 11:31\n"
+"PO-Revision-Date: 2024-03-26 20:28\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
 msgid "No templates found"
-msgstr ""
+msgstr "Nenhum modelo encontrado"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
 #: js/form-templates.js:3552
@@ -1795,7 +1795,7 @@ msgstr "Inglês"
 
 #: classes/helpers/FrmAppHelper.php:3377
 msgid "Afrikaans"
-msgstr ""
+msgstr "Africâner"
 
 #: classes/helpers/FrmAppHelper.php:3378
 msgid "Albanian"
@@ -1827,7 +1827,7 @@ msgstr "Basco"
 
 #: classes/helpers/FrmAppHelper.php:3385
 msgid "Belarusian"
-msgstr ""
+msgstr "Bielorrusso"
 
 #: classes/helpers/FrmAppHelper.php:3386
 msgid "Bengali"
@@ -1915,11 +1915,11 @@ msgstr "Francês/Suíça"
 
 #: classes/helpers/FrmAppHelper.php:3407
 msgid "Galician"
-msgstr ""
+msgstr "Galega"
 
 #: classes/helpers/FrmAppHelper.php:3408
 msgid "Georgian"
-msgstr ""
+msgstr "Georgiano"
 
 #: classes/helpers/FrmAppHelper.php:3409
 msgid "German"
@@ -1939,7 +1939,7 @@ msgstr "Grego"
 
 #: classes/helpers/FrmAppHelper.php:3413
 msgid "Gujarati"
-msgstr ""
+msgstr "Guzerate"
 
 #: classes/helpers/FrmAppHelper.php:3414
 #: classes/helpers/FrmAppHelper.php:3415
@@ -1972,11 +1972,11 @@ msgstr "Japonês"
 
 #: classes/helpers/FrmAppHelper.php:3422
 msgid "Kannada"
-msgstr ""
+msgstr "Canarês"
 
 #: classes/helpers/FrmAppHelper.php:3423
 msgid "Kazakh"
-msgstr ""
+msgstr "Cazaque"
 
 #: classes/helpers/FrmAppHelper.php:3424
 msgid "Khmer"
@@ -1988,7 +1988,7 @@ msgstr "Coreano"
 
 #: classes/helpers/FrmAppHelper.php:3426
 msgid "Kyrgyz"
-msgstr ""
+msgstr "Quirguiz"
 
 #: classes/helpers/FrmAppHelper.php:3427
 msgid "Laothian"
@@ -2008,11 +2008,11 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3431
 msgid "Macedonian"
-msgstr ""
+msgstr "Macedônio"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Malayalam"
-msgstr ""
+msgstr "Malaiala"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Malaysian"
@@ -2020,7 +2020,7 @@ msgstr "Malásia"
 
 #: classes/helpers/FrmAppHelper.php:3434
 msgid "Marathi"
-msgstr ""
+msgstr "Marati"
 
 #: classes/helpers/FrmAppHelper.php:3435
 msgid "Norwegian"
@@ -2089,7 +2089,7 @@ msgstr "Espanhol/América Latina"
 
 #: classes/helpers/FrmAppHelper.php:3452
 msgid "Swahili"
-msgstr ""
+msgstr "suaíli"
 
 #: classes/helpers/FrmAppHelper.php:3453
 msgid "Swedish"
@@ -2101,7 +2101,7 @@ msgstr "Tâmil"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "Telugu"
-msgstr ""
+msgstr "Telugo"
 
 #: classes/helpers/FrmAppHelper.php:3456
 msgid "Thai"
@@ -2129,7 +2129,7 @@ msgstr "Vietnamita"
 
 #: classes/helpers/FrmAppHelper.php:3462
 msgid "Welsh"
-msgstr ""
+msgstr "Galês"
 
 #: classes/helpers/FrmAppHelper.php:3463
 msgid "Zulu"
@@ -2176,7 +2176,7 @@ msgstr "Data de Comentário"
 
 #: classes/helpers/FrmCSVExportHelper.php:344
 msgid "Timestamp"
-msgstr ""
+msgstr "Marca temporal"
 
 #: classes/helpers/FrmCSVExportHelper.php:345
 msgid "Last Updated"
@@ -2320,7 +2320,7 @@ msgstr "Peso uruguaio"
 
 #: classes/helpers/FrmDashboardHelper.php:201
 msgid "Connect Account"
-msgstr ""
+msgstr "Conectar conta"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
@@ -2444,7 +2444,7 @@ msgstr ""
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
 msgid "View all forms"
-msgstr "Visualizar todos os formulários"
+msgstr "Ver todos os formulários"
 
 #: classes/helpers/FrmEntriesListHelper.php:241
 msgid "Filter"
@@ -2651,7 +2651,7 @@ msgstr "Território Britânico do Oceano Índico"
 
 #: classes/helpers/FrmFieldsHelper.php:1606
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 #: classes/helpers/FrmFieldsHelper.php:1607
 msgid "Bulgaria"
@@ -3007,7 +3007,7 @@ msgstr "Quirguistão"
 
 #: classes/helpers/FrmFieldsHelper.php:1695
 msgid "Laos"
-msgstr ""
+msgstr "Laos"
 
 #: classes/helpers/FrmFieldsHelper.php:1696
 msgid "Latvia"
@@ -3103,7 +3103,7 @@ msgstr "Micronésia"
 
 #: classes/helpers/FrmFieldsHelper.php:1719
 msgid "Moldova"
-msgstr ""
+msgstr "Moldávia"
 
 #: classes/helpers/FrmFieldsHelper.php:1720
 msgid "Monaco"
@@ -3243,7 +3243,7 @@ msgstr "Catar"
 
 #: classes/helpers/FrmFieldsHelper.php:1754
 msgid "Reunion"
-msgstr ""
+msgstr "Reunião"
 
 #: classes/helpers/FrmFieldsHelper.php:1755
 msgid "Romania"
@@ -3391,7 +3391,7 @@ msgstr "Síria"
 
 #: classes/helpers/FrmFieldsHelper.php:1791
 msgid "Taiwan"
-msgstr ""
+msgstr "Taiwan"
 
 #: classes/helpers/FrmFieldsHelper.php:1792
 msgid "Tajikistan"
@@ -3487,7 +3487,7 @@ msgstr "Cidade do Vaticano"
 
 #: classes/helpers/FrmFieldsHelper.php:1815
 msgid "Venezuela"
-msgstr ""
+msgstr "Venezuela"
 
 #: classes/helpers/FrmFieldsHelper.php:1816
 msgid "Vietnam"
@@ -4067,8 +4067,8 @@ msgstr "Mostrar mais detalhes"
 #: classes/helpers/FrmListHelper.php:1220
 msgid "%s item"
 msgid_plural "%s items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s item"
+msgstr[1] "Itens do %s"
 
 #: classes/helpers/FrmListHelper.php:629
 #: classes/helpers/FrmListHelper.php:633
@@ -4116,7 +4116,7 @@ msgstr "URL de redirecionamento"
 
 #: classes/helpers/FrmOnSubmitHelper.php:115
 msgid "Open in new tab"
-msgstr ""
+msgstr "Abrir em uma nova aba"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "Select a page"
@@ -4532,7 +4532,7 @@ msgstr "O captcha está ausente deste formulário"
 #: classes/models/fields/FrmFieldCaptcha.php:357
 #: classes/views/frm-settings/captcha/captcha.php:15
 msgid "reCAPTCHA"
-msgstr ""
+msgstr "reCAPTCHA"
 
 #: classes/models/fields/FrmFieldCaptcha.php:357
 #: classes/views/frm-settings/captcha/captcha.php:20
@@ -4915,7 +4915,7 @@ msgstr "Assinatura"
 
 #: classes/models/FrmField.php:208
 msgid "AI"
-msgstr ""
+msgstr "IA"
 
 #: classes/models/FrmField.php:214
 msgid "Appointment"
@@ -5159,7 +5159,7 @@ msgstr ""
 
 #: classes/models/FrmSolution.php:339
 msgid "View Page"
-msgstr ""
+msgstr "Ver página"
 
 #. translators: %1$s: Plugin name
 #: classes/models/FrmSolution.php:407
@@ -5367,7 +5367,7 @@ msgstr ""
 
 #: classes/views/form-templates/modals/leave-email-modal.php:50
 msgid "Enter your email"
-msgstr ""
+msgstr "Digite seu e-mail"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:54
 msgid "Email is invalid"
@@ -5562,12 +5562,12 @@ msgstr "Indicador:"
 #: stripe/controllers/FrmTransLitePaymentsController.php:57
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:13
 msgid "M j, Y @ G:i"
-msgstr ""
+msgstr "j \\d\\e F \\d\\e Y @ H:i"
 
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "%1$s: %2$s"
-msgstr ""
+msgstr "%1$s: %2$s"
 
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
@@ -6098,7 +6098,7 @@ msgstr "Construir Formulário"
 #. translators: %s: The page number
 #: classes/views/frm-forms/form.php:20
 msgid "Page %s"
-msgstr ""
+msgstr "Página: %s"
 
 #: classes/views/frm-forms/form.php:58
 msgid "Click or drag a field from the sidebar to add it to your form"
@@ -6119,7 +6119,7 @@ msgstr ""
 #. translators: 1: Site name, 2: WordPress
 #: classes/views/frm-forms/preview/footer.php:20
 msgid "%1$s is proudly powered by %2$s"
-msgstr ""
+msgstr "%1$s é orgulhosamente mantido com %2$s"
 
 #: classes/views/frm-forms/settings-advanced.php:7
 msgid "Modify the basic form settings here."
@@ -7100,7 +7100,7 @@ msgstr ""
 
 #: classes/views/styles/_styles-list.php:76
 msgid "Default Style"
-msgstr ""
+msgstr "Estilo padrão"
 
 #: classes/views/styles/_styles-list.php:82
 msgid "Custom Styles"
@@ -7450,7 +7450,7 @@ msgstr "Malsucedido"
 #: stripe/helpers/FrmTransLiteAppHelper.php:108
 #: stripe/helpers/FrmTransLiteAppHelper.php:109
 msgid "Canceled"
-msgstr ""
+msgstr "Cancelado"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
@@ -7521,7 +7521,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
-msgstr ""
+msgstr "mês(es)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
@@ -7529,7 +7529,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
-msgstr ""
+msgstr "Visitante"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:491
 msgid "Test"
@@ -7653,7 +7653,7 @@ msgstr ""
 
 #: stripe/views/action-settings/payments-options.php:95
 msgid "Customer Information"
-msgstr ""
+msgstr "Informação ao cliente"
 
 #: stripe/views/payments/show.php:12
 msgid "View Payment"
@@ -7729,7 +7729,7 @@ msgstr "Assinatura:"
 #: stripe/views/payments/sidebar_list.php:77
 #: stripe/views/subscriptions/sidebar_actions.php:41
 msgid "Cancel Subscription"
-msgstr ""
+msgstr "Cancelar assinatura"
 
 #: stripe/views/payments/sidebar_list.php:94
 msgid "Total Paid:"
@@ -7753,7 +7753,7 @@ msgstr "Desconectar"
 
 #: stripe/views/settings/connect.php:32
 msgid "Connect to Stripe"
-msgstr ""
+msgstr "Conecte-se ao Stripe"
 
 #: stripe/views/settings/form.php:11
 msgid "Test Mode"
@@ -7918,7 +7918,7 @@ msgstr ""
 
 #: js/admin/style.js:126
 msgid "Show less"
-msgstr ""
+msgstr "Mostrar menos"
 
 #. translators: %s: The required license type (ie. Plus, Business, or Elite)
 #: js/admin/style.js:387
@@ -7940,7 +7940,7 @@ msgstr ""
 #: js/admin/style.js:917
 #: js/admin/style.js:944
 msgid "Reset style"
-msgstr ""
+msgstr "Redefinir estilo"
 
 #: js/admin/style.js:928
 msgid "Reset this style back to the default?"
