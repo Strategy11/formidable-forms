@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-06T14:48:42+00:00\n"
-"PO-Revision-Date: 2024-03-19 11:31\n"
+"PO-Revision-Date: 2024-03-26 20:28\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
 msgid "No templates found"
-msgstr ""
+msgstr "Es wurden keine Templates gefunden"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
 #: js/form-templates.js:3552
@@ -625,7 +625,7 @@ msgstr "E-Mail-Marketing"
 
 #: classes/controllers/FrmFormActionsController.php:169
 msgid "CRM"
-msgstr ""
+msgstr "CRM"
 
 #. translators: %s: Name of form action
 #: classes/controllers/FrmFormActionsController.php:213
@@ -890,7 +890,7 @@ msgstr "Nachname"
 
 #: classes/controllers/FrmFormsController.php:1487
 msgid "Display Name"
-msgstr "Anzeigename"
+msgstr "Angezeigter Name"
 
 #: classes/controllers/FrmFormsController.php:1488
 msgid "User Login"
@@ -917,7 +917,7 @@ msgstr "Eintrags-ID"
 
 #: classes/controllers/FrmFormsController.php:1506
 msgid "Post ID"
-msgstr "Beitrags-ID"
+msgstr "Beitrags ID"
 
 #: classes/controllers/FrmFormsController.php:1507
 msgid "User IP"
@@ -1612,7 +1612,7 @@ msgstr "(Leer)"
 
 #: classes/helpers/FrmAppHelper.php:3169
 msgid "(no label)"
-msgstr ""
+msgstr "(ohne Bezeichnung)"
 
 #: classes/helpers/FrmAppHelper.php:3170
 msgid "OK"
@@ -1939,7 +1939,7 @@ msgstr "Griechisch"
 
 #: classes/helpers/FrmAppHelper.php:3413
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 #: classes/helpers/FrmAppHelper.php:3414
 #: classes/helpers/FrmAppHelper.php:3415
@@ -2012,7 +2012,7 @@ msgstr "Mazedonisch"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Malayalam"
-msgstr ""
+msgstr "Malayalam"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Malaysian"
@@ -2020,7 +2020,7 @@ msgstr "Malaiisch"
 
 #: classes/helpers/FrmAppHelper.php:3434
 msgid "Marathi"
-msgstr ""
+msgstr "Marathi"
 
 #: classes/helpers/FrmAppHelper.php:3435
 msgid "Norwegian"
@@ -2101,7 +2101,7 @@ msgstr "Tamilisch"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "Telugu"
-msgstr ""
+msgstr "Telugu"
 
 #: classes/helpers/FrmAppHelper.php:3456
 msgid "Thai"
@@ -2188,7 +2188,7 @@ msgstr "Aktualisiert von"
 
 #: classes/helpers/FrmCSVExportHelper.php:349
 msgid "IP"
-msgstr "IP"
+msgstr "IP Adresse"
 
 #: classes/helpers/FrmCSVExportHelper.php:353
 msgid "Parent ID"
@@ -2651,7 +2651,7 @@ msgstr "Britisches Territorium im Indischen Ozean"
 
 #: classes/helpers/FrmFieldsHelper.php:1606
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 #: classes/helpers/FrmFieldsHelper.php:1607
 msgid "Bulgaria"
@@ -2935,7 +2935,7 @@ msgstr "Indonesien"
 
 #: classes/helpers/FrmFieldsHelper.php:1677
 msgid "Iran"
-msgstr ""
+msgstr "Iran"
 
 #: classes/helpers/FrmFieldsHelper.php:1678
 msgid "Iraq"
@@ -3007,7 +3007,7 @@ msgstr "Kirgisistan"
 
 #: classes/helpers/FrmFieldsHelper.php:1695
 msgid "Laos"
-msgstr ""
+msgstr "Laos"
 
 #: classes/helpers/FrmFieldsHelper.php:1696
 msgid "Latvia"
@@ -3391,7 +3391,7 @@ msgstr "Syrien"
 
 #: classes/helpers/FrmFieldsHelper.php:1791
 msgid "Taiwan"
-msgstr ""
+msgstr "Taiwan"
 
 #: classes/helpers/FrmFieldsHelper.php:1792
 msgid "Tajikistan"
@@ -3487,7 +3487,7 @@ msgstr "Vatikanstadt"
 
 #: classes/helpers/FrmFieldsHelper.php:1815
 msgid "Venezuela"
-msgstr ""
+msgstr "Venezuela"
 
 #: classes/helpers/FrmFieldsHelper.php:1816
 msgid "Vietnam"
@@ -4515,7 +4515,7 @@ msgstr "Erstelle Artikel"
 
 #: classes/helpers/FrmXMLHelper.php:1806
 msgid "Email Notification"
-msgstr "E-Mail Benachrichtigung"
+msgstr "E-Mail-Benachrichtigung"
 
 #: classes/models/fields/FrmFieldCaptcha.php:235
 msgid "There was a problem verifying your captcha"
@@ -4915,7 +4915,7 @@ msgstr "Signatur"
 
 #: classes/models/FrmField.php:208
 msgid "AI"
-msgstr ""
+msgstr "KI"
 
 #: classes/models/FrmField.php:214
 msgid "Appointment"
@@ -5567,7 +5567,7 @@ msgstr "j. M. Y \\u\\m G:i \\U\\h\r"
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "%1$s: %2$s"
-msgstr ""
+msgstr "%1$s: %2$s"
 
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
@@ -5609,7 +5609,7 @@ msgstr "User-ID-Felder werden im Formular nicht angezeigt"
 
 #: classes/views/frm-fields/back-end/html-content.php:8
 msgid "Content"
-msgstr "Inhalt"
+msgstr "Text"
 
 #: classes/views/frm-fields/back-end/input-mask-info.php:7
 msgid "To create a custom input mask, you’ll need to use this specific set of symbols:"
@@ -5657,11 +5657,11 @@ msgstr "Layout Name"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:35
 msgid "First Last"
-msgstr "Vorname"
+msgstr "Vorname Nachname"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:38
 msgid "Last First"
-msgstr "Nachname"
+msgstr "Nachname Vorname"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:41
 msgid "First Middle Last"
@@ -6992,7 +6992,7 @@ msgstr "Stil Klasse"
 
 #: classes/views/styles/_manage-styles-row.php:19
 msgid "default"
-msgstr "Standard"
+msgstr "Standardwert"
 
 #: classes/views/styles/_manage-styles-row.php:23
 msgid "Styling disabled"
