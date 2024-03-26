@@ -66,6 +66,10 @@ async function installAddon( plugin, {isVendor}) {
 			body: formData
 		});
 
+		if ( ! response.ok ) {
+			throw new Error( `Server responded with status ${response.status}` );
+		}
+
 		// Parse the JSON response
 		return await response.json();
 	} catch ( error ) {
