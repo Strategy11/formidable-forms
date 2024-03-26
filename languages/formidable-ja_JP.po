@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-06T14:48:42+00:00\n"
-"PO-Revision-Date: 2024-03-19 11:31\n"
+"PO-Revision-Date: 2024-03-26 20:28\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
 msgid "No templates found"
-msgstr ""
+msgstr "テンプレートが見つかりません"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
 #: js/form-templates.js:3552
@@ -351,7 +351,7 @@ msgstr "今すぐアップグレード"
 
 #: classes/controllers/FrmAppController.php:269
 msgid "Build"
-msgstr ""
+msgstr "ビルド"
 
 #: classes/controllers/FrmAppController.php:276
 #: classes/controllers/FrmStylesController.php:52
@@ -550,7 +550,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:88
 #: classes/helpers/FrmCSVExportHelper.php:346
 msgid "Created By"
-msgstr ""
+msgstr "作成者"
 
 #: classes/controllers/FrmEntriesController.php:91
 #: classes/helpers/FrmCSVExportHelper.php:348
@@ -1819,7 +1819,7 @@ msgstr "バスク語"
 
 #: classes/helpers/FrmAppHelper.php:3385
 msgid "Belarusian"
-msgstr ""
+msgstr "ベラルーシ語"
 
 #: classes/helpers/FrmAppHelper.php:3386
 msgid "Bengali"
@@ -1907,11 +1907,11 @@ msgstr "フランス語/スイス"
 
 #: classes/helpers/FrmAppHelper.php:3407
 msgid "Galician"
-msgstr ""
+msgstr "ガリシア語"
 
 #: classes/helpers/FrmAppHelper.php:3408
 msgid "Georgian"
-msgstr ""
+msgstr "ジョージア語"
 
 #: classes/helpers/FrmAppHelper.php:3409
 msgid "German"
@@ -1931,7 +1931,7 @@ msgstr "ギリシャ語"
 
 #: classes/helpers/FrmAppHelper.php:3413
 msgid "Gujarati"
-msgstr ""
+msgstr "グジャラート語"
 
 #: classes/helpers/FrmAppHelper.php:3414
 #: classes/helpers/FrmAppHelper.php:3415
@@ -1964,11 +1964,11 @@ msgstr "日本語"
 
 #: classes/helpers/FrmAppHelper.php:3422
 msgid "Kannada"
-msgstr ""
+msgstr "カンナダ語"
 
 #: classes/helpers/FrmAppHelper.php:3423
 msgid "Kazakh"
-msgstr ""
+msgstr "カザフ語"
 
 #: classes/helpers/FrmAppHelper.php:3424
 msgid "Khmer"
@@ -1980,7 +1980,7 @@ msgstr "韓国語"
 
 #: classes/helpers/FrmAppHelper.php:3426
 msgid "Kyrgyz"
-msgstr ""
+msgstr "キルギス語"
 
 #: classes/helpers/FrmAppHelper.php:3427
 msgid "Laothian"
@@ -2000,11 +2000,11 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3431
 msgid "Macedonian"
-msgstr ""
+msgstr "マケドニア語"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Malayalam"
-msgstr ""
+msgstr "マラヤーラム語"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Malaysian"
@@ -2012,7 +2012,7 @@ msgstr "マレーシア語"
 
 #: classes/helpers/FrmAppHelper.php:3434
 msgid "Marathi"
-msgstr ""
+msgstr "マラーティー語"
 
 #: classes/helpers/FrmAppHelper.php:3435
 msgid "Norwegian"
@@ -2081,7 +2081,7 @@ msgstr "スペイン語/ラテンアメリカ"
 
 #: classes/helpers/FrmAppHelper.php:3452
 msgid "Swahili"
-msgstr ""
+msgstr "スワヒリ語"
 
 #: classes/helpers/FrmAppHelper.php:3453
 msgid "Swedish"
@@ -2093,7 +2093,7 @@ msgstr "タミル語"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "Telugu"
-msgstr ""
+msgstr "テルグ語"
 
 #: classes/helpers/FrmAppHelper.php:3456
 msgid "Thai"
@@ -2121,7 +2121,7 @@ msgstr "ベトナム語"
 
 #: classes/helpers/FrmAppHelper.php:3462
 msgid "Welsh"
-msgstr ""
+msgstr "ウェールズ語"
 
 #: classes/helpers/FrmAppHelper.php:3463
 msgid "Zulu"
@@ -2164,7 +2164,7 @@ msgstr ""
 
 #: classes/helpers/FrmCSVExportHelper.php:339
 msgid "Comment Date"
-msgstr ""
+msgstr "コメント日付"
 
 #: classes/helpers/FrmCSVExportHelper.php:344
 msgid "Timestamp"
@@ -2312,7 +2312,7 @@ msgstr "ウルグアイ・ペソ"
 
 #: classes/helpers/FrmDashboardHelper.php:201
 msgid "Connect Account"
-msgstr ""
+msgstr "アカウントを連携"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
@@ -4107,7 +4107,7 @@ msgstr "リダイレクト URL"
 
 #: classes/helpers/FrmOnSubmitHelper.php:115
 msgid "Open in new tab"
-msgstr ""
+msgstr "新しいタブで開く"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "Select a page"
@@ -4428,7 +4428,7 @@ msgstr ""
 #: classes/helpers/FrmXMLHelper.php:1333
 #: classes/views/solutions/_import.php:51
 msgid "Imported"
-msgstr ""
+msgstr "インポート済み"
 
 #: classes/helpers/FrmXMLHelper.php:1334
 msgid "Updated"
@@ -4600,7 +4600,7 @@ msgstr ""
 
 #: classes/models/fields/FrmFieldType.php:660
 msgid "Untitled"
-msgstr ""
+msgstr "無題"
 
 #: classes/models/fields/FrmFieldUrl.php:52
 msgid "Website"
@@ -4845,7 +4845,7 @@ msgstr "切り替え"
 
 #: classes/models/FrmField.php:138
 msgid "Dynamic"
-msgstr ""
+msgstr "ダイナミック"
 
 #: classes/models/FrmField.php:143
 msgid "Lookup"
@@ -5142,7 +5142,7 @@ msgstr ""
 
 #: classes/models/FrmSolution.php:339
 msgid "View Page"
-msgstr ""
+msgstr "固定ページを表示"
 
 #. translators: %1$s: Plugin name
 #: classes/models/FrmSolution.php:407
@@ -5350,7 +5350,7 @@ msgstr ""
 
 #: classes/views/form-templates/modals/leave-email-modal.php:50
 msgid "Enter your email"
-msgstr ""
+msgstr "メールを入力してください"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:54
 msgid "Email is invalid"
@@ -5550,7 +5550,7 @@ msgstr "Y年n月j日 @ G:i"
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "%1$s: %2$s"
-msgstr ""
+msgstr "%1$s: %2$s"
 
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
@@ -5738,7 +5738,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/settings.php:149
 #: classes/views/shared/mb_adv_info.php:22
 msgid "Advanced"
-msgstr "上級者向け"
+msgstr "高度"
 
 #: classes/views/frm-fields/back-end/settings.php:218
 msgid "If this URL points to an image, show to image on the entries listing page."
@@ -6081,7 +6081,7 @@ msgstr ""
 #. translators: %s: The page number
 #: classes/views/frm-forms/form.php:20
 msgid "Page %s"
-msgstr ""
+msgstr "ページ %s"
 
 #: classes/views/frm-forms/form.php:58
 msgid "Click or drag a field from the sidebar to add it to your form"
@@ -6102,7 +6102,7 @@ msgstr ""
 #. translators: 1: Site name, 2: WordPress
 #: classes/views/frm-forms/preview/footer.php:20
 msgid "%1$s is proudly powered by %2$s"
-msgstr ""
+msgstr "%1$s is proudly powered by %2$s"
 
 #: classes/views/frm-forms/settings-advanced.php:7
 msgid "Modify the basic form settings here."
@@ -7083,7 +7083,7 @@ msgstr ""
 
 #: classes/views/styles/_styles-list.php:76
 msgid "Default Style"
-msgstr ""
+msgstr "デフォルトスタイル"
 
 #: classes/views/styles/_styles-list.php:82
 msgid "Custom Styles"
@@ -7109,7 +7109,7 @@ msgstr ""
 
 #: classes/views/summary-emails/base.php:54
 msgid "Contact support"
-msgstr ""
+msgstr "サポートに連絡"
 
 #: classes/views/summary-emails/base.php:61
 msgid "Unsubscribe"
@@ -7432,7 +7432,7 @@ msgstr "失敗"
 #: stripe/helpers/FrmTransLiteAppHelper.php:108
 #: stripe/helpers/FrmTransLiteAppHelper.php:109
 msgid "Canceled"
-msgstr ""
+msgstr "キャンセル"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
@@ -7486,7 +7486,7 @@ msgstr "完了"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:97
 msgid "Processing"
-msgstr ""
+msgstr "処理中"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:110
 msgid "Void"
@@ -7503,7 +7503,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
-msgstr ""
+msgstr "か月"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
@@ -7511,7 +7511,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
-msgstr ""
+msgstr "ゲスト"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:491
 msgid "Test"
@@ -7594,7 +7594,7 @@ msgstr ""
 
 #: stripe/models/FrmTransLiteAction.php:168
 msgid "&mdash; Select &mdash;"
-msgstr ""
+msgstr "&mdash; 選択 &mdash;"
 
 #. translators: %s: The comma separated field types expected in the form.
 #: stripe/models/FrmTransLiteAction.php:193
@@ -7711,7 +7711,7 @@ msgstr "サブスクリプション:"
 #: stripe/views/payments/sidebar_list.php:77
 #: stripe/views/subscriptions/sidebar_actions.php:41
 msgid "Cancel Subscription"
-msgstr ""
+msgstr "サブスクリプションをキャンセル"
 
 #: stripe/views/payments/sidebar_list.php:94
 msgid "Total Paid:"
@@ -7735,7 +7735,7 @@ msgstr "接続解除"
 
 #: stripe/views/settings/connect.php:32
 msgid "Connect to Stripe"
-msgstr ""
+msgstr "Stripe に接続"
 
 #: stripe/views/settings/form.php:11
 msgid "Test Mode"
@@ -7900,7 +7900,7 @@ msgstr ""
 
 #: js/admin/style.js:126
 msgid "Show less"
-msgstr ""
+msgstr "簡易表示"
 
 #. translators: %s: The required license type (ie. Plus, Business, or Elite)
 #: js/admin/style.js:387
@@ -7922,7 +7922,7 @@ msgstr ""
 #: js/admin/style.js:917
 #: js/admin/style.js:944
 msgid "Reset style"
-msgstr ""
+msgstr "スタイルをリセット"
 
 #: js/admin/style.js:928
 msgid "Reset this style back to the default?"
