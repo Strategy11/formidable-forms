@@ -95,7 +95,7 @@ class FrmAddonsController {
 	/**
 	 * @return array
 	 */
-	public static function get_api_addons() {
+	protected static function get_api_addons() {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
@@ -110,6 +110,19 @@ class FrmAddonsController {
 		}
 
 		return $addons;
+	}
+
+	/**
+	 * Retrieves the count of available addons.
+	 *
+	 * @since x.x
+	 *
+	 * @return int Count of addons.
+	 */
+	public static function get_addons_count() {
+		$addons = self::get_api_addons();
+
+		return count( $addons );
 	}
 
 	/**

@@ -209,7 +209,7 @@ class FrmOnboardingWizardController {
 		$view_path        = self::get_view_path();
 		$available_addons = self::get_available_addons();
 		$upgrade_link     = self::get_upgrade_link();
-		$addons_count     = count( FrmAddonsController::get_api_addons() );
+		$addons_count     = FrmAddonsController::get_addons_count();
 		$license_key      = base64_decode( rawurldecode( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) ) );
 
 		// Note: Add step parts in order.
