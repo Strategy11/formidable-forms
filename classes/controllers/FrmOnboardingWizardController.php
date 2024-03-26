@@ -102,17 +102,8 @@ class FrmOnboardingWizardController {
 		self::set_page_url();
 		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
 
-		if ( ! self::is_onboarding_wizard_page() ) {
-			return;
-		}
-
-		add_action( 'admin_menu', __CLASS__ . '::menu' );
-		add_action( 'admin_init', __CLASS__ . '::assign_properties' );
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
-		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
-
-		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-		add_filter( 'frm_show_footer_links', '__return_false' );
+		// Load page if admin page is Onboarding Wizard.
+		self::maybe_load_page();
 	}
 
 	/**
@@ -149,6 +140,25 @@ class FrmOnboardingWizardController {
 		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
 		wp_safe_redirect( esc_url_raw( $page_url ) );
 		exit;
+	}
+
+	/**
+	 * Initializes the Onboarding Wizard setup if on its designated admin page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_load_page() {
+		if ( self::is_onboarding_wizard_page() ) {
+			add_action( 'admin_menu', __CLASS__ . '::menu' );
+			add_action( 'admin_init', __CLASS__ . '::assign_properties' );
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
+			add_action( 'admin_head', __CLASS__ . '::remove_menu' );
+
+			add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+			add_filter( 'frm_show_footer_links', '__return_false' );
+		}
 	}
 
 	/**
