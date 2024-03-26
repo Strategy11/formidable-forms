@@ -774,7 +774,7 @@
 	function success( content ) {
 		const container           = document.getElementById( 'wpbody' );
 		const notice              = div({
-			className: 'notice notice-info frm-review-notice frm_updated_message frm-floating-success-message',
+			className: 'frm_updated_message frm-floating-success-message',
 			child: div({
 				className: 'frm-satisfied',
 				child: 'string' === typeof content ? document.createTextNode( content ) : content

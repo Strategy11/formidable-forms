@@ -447,11 +447,15 @@ class FrmXMLHelper {
 				} elseif ( isset( $form_fields[ $f['field_key'] ] ) ) {
 					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
 
+					$old_field_id = $f['id'];
+
 					// check for field to edit by field key
 					unset( $f['id'] );
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
+
+					self::do_after_field_imported_action( $f, $form_fields, $old_field_id );
 
 					// Unset old field id.
 					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] );
@@ -471,6 +475,44 @@ class FrmXMLHelper {
 		if ( $keys_by_original_field_id ) {
 			self::maybe_update_field_ids( $form_id, $keys_by_original_field_id );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_array
+	 * @return array
+	 */
+	private static function update_field_options_with_defaults( $field_array ) {
+		$defaults                     = self::default_field_options( $field_array['type'] );
+		$field_array['field_options'] = array_merge( $defaults, $field_array['field_options'] );
+
+		return $field_array;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_array
+	 * @param array $form_fields
+	 * @param int   $old_field_id
+	 *
+	 * @return void
+	 */
+	private static function do_after_field_imported_action( $field_array, $form_fields, $old_field_id ) {
+		// Assign field array the update field's ID.
+		$field_array['id'] = $form_fields[ $field_array['field_key'] ];
+
+		/**
+		 * Fires when an existing field is imported.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field_array
+		 * @param int   $field_id
+		 * @param int   $old_field_id
+		 */
+		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ], $old_field_id );
 	}
 
 	private static function fill_field( $field, $form_id ) {
@@ -674,8 +716,7 @@ class FrmXMLHelper {
 	 * @param array $imported
 	 */
 	private static function create_imported_field( $f, &$imported ) {
-		$defaults           = self::default_field_options( $f['type'] );
-		$f['field_options'] = array_merge( $defaults, $f['field_options'] );
+		$f = self::update_field_options_with_defaults( $f );
 
 		if ( is_callable( 'FrmProFileImport::import_attachment' ) ) {
 			$f = self::maybe_import_images_for_options( $f );

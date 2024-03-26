@@ -179,9 +179,7 @@
 		</MissingPropertyType>
 		<TooManyArguments>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="deprecated" />
+				<referencedFunction name="apply_filters" />
 			</errorLevel>
 		</TooManyArguments>
 		<PossiblyNullPropertyFetch>
