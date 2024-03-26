@@ -16,6 +16,11 @@ export const showFormError = ( inputId, errorId, type, message ) => {
 	const inputElement = document.querySelector( inputId );
 	const errorElement = document.querySelector( errorId );
 
+	if ( ! inputElement || ! errorElement ) {
+		console.warn( 'showFormError: Unable to find input or error element.' );
+		return;
+	}
+
 	// If a message is provided, update the span element's text that matches the error type
 	if ( message ) {
 		const span = errorElement.querySelector( `span[frm-error="${type}"]` );
