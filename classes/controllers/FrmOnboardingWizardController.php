@@ -134,7 +134,7 @@ class FrmOnboardingWizardController {
 		}
 
 		// Check if we should consider redirection.
-		if ( ! self::is_onboarding_wizard_displayed() ) {
+		if ( ! self::is_onboarding_wizard_displayed() || FrmAppHelper::pro_is_connected() ) {
 			return;
 		}
 
