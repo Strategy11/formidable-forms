@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-06T14:48:42+00:00\n"
-"PO-Revision-Date: 2024-03-19 11:31\n"
+"PO-Revision-Date: 2024-03-26 20:28\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
 msgid "No templates found"
-msgstr ""
+msgstr "No se han encontrado plantillas"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
 #: js/form-templates.js:3552
@@ -625,7 +625,7 @@ msgstr "Marketing por correo electrónico"
 
 #: classes/controllers/FrmFormActionsController.php:169
 msgid "CRM"
-msgstr ""
+msgstr "CRM"
 
 #. translators: %s: Name of form action
 #: classes/controllers/FrmFormActionsController.php:213
@@ -881,16 +881,16 @@ msgstr "ID del usuario"
 #: classes/controllers/FrmFormsController.php:1485
 #: stripe/views/action-settings/payments-options.php:124
 msgid "First Name"
-msgstr "Primer nombre"
+msgstr "Nombre de Pila"
 
 #: classes/controllers/FrmFormsController.php:1486
 #: stripe/views/action-settings/payments-options.php:130
 msgid "Last Name"
-msgstr "Apellidos"
+msgstr "Apellido"
 
 #: classes/controllers/FrmFormsController.php:1487
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr "Nombre para mostrar"
 
 #: classes/controllers/FrmFormsController.php:1488
 msgid "User Login"
@@ -1988,7 +1988,7 @@ msgstr "Coreano"
 
 #: classes/helpers/FrmAppHelper.php:3426
 msgid "Kyrgyz"
-msgstr ""
+msgstr "Kirguistán"
 
 #: classes/helpers/FrmAppHelper.php:3427
 msgid "Laothian"
@@ -2097,11 +2097,11 @@ msgstr "Sueco"
 
 #: classes/helpers/FrmAppHelper.php:3454
 msgid "Tamil"
-msgstr ""
+msgstr "Tamil"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "Telugu"
-msgstr ""
+msgstr "Telugu"
 
 #: classes/helpers/FrmAppHelper.php:3456
 msgid "Thai"
@@ -2320,7 +2320,7 @@ msgstr "Peso uruguayo"
 
 #: classes/helpers/FrmDashboardHelper.php:201
 msgid "Connect Account"
-msgstr ""
+msgstr "Conectar cuenta"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
@@ -3597,7 +3597,7 @@ msgstr "Muy satisfecho"
 #: classes/helpers/FrmFieldsHelper.php:1921
 #: classes/helpers/FrmFieldsHelper.php:1936
 msgid "N/A"
-msgstr "N/D"
+msgstr "No se aplica"
 
 #: classes/helpers/FrmFieldsHelper.php:1897
 msgid "Satisfaction"
@@ -4515,7 +4515,7 @@ msgstr "Crear Mensajes"
 
 #: classes/helpers/FrmXMLHelper.php:1806
 msgid "Email Notification"
-msgstr "Notificación por correo electrónico"
+msgstr "Notificación de correo electrónico"
 
 #: classes/models/fields/FrmFieldCaptcha.php:235
 msgid "There was a problem verifying your captcha"
@@ -4621,7 +4621,7 @@ msgstr "Sin título"
 
 #: classes/models/fields/FrmFieldUrl.php:52
 msgid "Website"
-msgstr "Sitio Web"
+msgstr "Sitio web"
 
 #. translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML
 #: classes/models/FrmAddon.php:353
@@ -5194,7 +5194,7 @@ msgstr "ADVERTENCIA: Cualquier cambio que hagas a este fichero se perderá cuand
 
 #: classes/models/FrmStyle.php:519
 msgid "Formidable Style"
-msgstr "Estilos Formidable"
+msgstr "Estilo de Formidable"
 
 #: classes/models/FrmStyle.php:777
 #: classes/views/styles/_field-description.php:22
@@ -5567,7 +5567,7 @@ msgstr "j M, Y @ G:i"
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "%1$s: %2$s"
-msgstr ""
+msgstr "%1$s: %2$s"
 
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
@@ -5657,11 +5657,11 @@ msgstr "Estructura del nombre"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:35
 msgid "First Last"
-msgstr "Nombre y apellidos"
+msgstr "Nombre de pila Apellido"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:38
 msgid "Last First"
-msgstr "Apellidos y nombre"
+msgstr "Apellido Nombre de pila"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:41
 msgid "First Middle Last"
@@ -5689,7 +5689,7 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/radio-display-format.php:18
 msgid "Display format"
-msgstr "Formato de visualización"
+msgstr "Formato de muestra"
 
 #: classes/views/frm-fields/back-end/radio-images.php:16
 msgid "Separate Values"
@@ -5846,7 +5846,7 @@ msgstr "Crear entrada"
 
 #: classes/views/frm-form-actions/default_actions.php:26
 msgid "Register User"
-msgstr "Registrar usuario"
+msgstr "Registrar Usuario"
 
 #: classes/views/frm-form-actions/default_actions.php:49
 msgid "Scored Quiz"
@@ -6119,7 +6119,7 @@ msgstr "Generar página del formulario"
 #. translators: 1: Site name, 2: WordPress
 #: classes/views/frm-forms/preview/footer.php:20
 msgid "%1$s is proudly powered by %2$s"
-msgstr ""
+msgstr "%1$s funciona gracias a %2$s"
 
 #: classes/views/frm-forms/settings-advanced.php:7
 msgid "Modify the basic form settings here."
@@ -6992,7 +6992,7 @@ msgstr "Clase de estilo"
 
 #: classes/views/styles/_manage-styles-row.php:19
 msgid "default"
-msgstr "por defecto"
+msgstr "valor por defecto"
 
 #: classes/views/styles/_manage-styles-row.php:23
 msgid "Styling disabled"
@@ -7450,7 +7450,7 @@ msgstr "Fallido"
 #: stripe/helpers/FrmTransLiteAppHelper.php:108
 #: stripe/helpers/FrmTransLiteAppHelper.php:109
 msgid "Canceled"
-msgstr ""
+msgstr "Cancelada"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
@@ -7521,7 +7521,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
-msgstr ""
+msgstr "mes/es"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
@@ -7529,7 +7529,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
-msgstr ""
+msgstr "Invitado"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:491
 msgid "Test"
