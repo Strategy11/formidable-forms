@@ -5139,7 +5139,6 @@ label.frm-example-icon {
 
 .frm_inbox_count,
 .frm_inbox_unread {
-	background: var(--orange);
 	color: #fff;
 	border-radius: 50%;
 	display: inline-block;
