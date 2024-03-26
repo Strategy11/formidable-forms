@@ -424,19 +424,19 @@ class FrmOnboardingWizardController {
 			'is-disabled' => true,
 			'help-text'   => esc_html__( 'Collect donations and payments with your forms. Offer physical products, digital goods, services, and more.', 'formidable' ),
 		);
-		self::$available_addons['visual-styler'] = array(
-			'title'       => esc_html__( 'Visual Styler', 'formidable' ),
-			'is-checked'  => true,
-			'is-disabled' => true,
-			'help-text'   => esc_html__( 'Customize form appearance with an intuitive styling interface.', 'formidable' ),
-		);
-		self::$available_addons['save-entries'] = array(
-			'title'       => esc_html__( 'Save Entries', 'formidable' ),
-			'is-checked'  => true,
-			'is-disabled' => true,
-			'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
-		);
 		if ( ! $pro_is_installed ) {
+			self::$available_addons['visual-styler'] = array(
+				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
+				'is-checked'  => true,
+				'is-disabled' => true,
+				'help-text'   => esc_html__( 'Customize form appearance with an intuitive styling interface.', 'formidable' ),
+			);
+			self::$available_addons['save-entries'] = array(
+				'title'       => esc_html__( 'Save Entries', 'formidable' ),
+				'is-checked'  => true,
+				'is-disabled' => true,
+				'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
+			);
 			self::$available_addons['wp-mail-smtp'] = array(
 				'title'      => esc_html__( 'SMTP', 'formidable' ),
 				'rel'        => 'wp-mail-smtp',
@@ -444,7 +444,7 @@ class FrmOnboardingWizardController {
 				'is-vendor'  => true,
 				'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
 			);
-		}
+		}//end if
 		if ( $pro_is_installed ) {
 			$mailchimp_addon    = FrmAddonsController::get_addon( 'mailchimp' );
 			$registration_addon = FrmAddonsController::get_addon( 'registration' );
