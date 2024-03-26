@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-06T14:48:42+00:00\n"
-"PO-Revision-Date: 2024-03-19 11:31\n"
+"PO-Revision-Date: 2024-03-26 20:28\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
 msgid "No templates found"
-msgstr ""
+msgstr "Nessun template trovato"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
 #: js/form-templates.js:3552
@@ -559,11 +559,11 @@ msgstr "Stato del campo"
 
 #: classes/controllers/FrmEntriesController.php:92
 msgid "Entry creation date"
-msgstr "Data di creazione voce"
+msgstr "Data di creazione Voci"
 
 #: classes/controllers/FrmEntriesController.php:93
 msgid "Entry update date"
-msgstr "Data aggiornamento voce"
+msgstr "Data Aggiornamento"
 
 #: classes/controllers/FrmEntriesController.php:432
 msgid "Your import is complete"
@@ -625,7 +625,7 @@ msgstr ""
 
 #: classes/controllers/FrmFormActionsController.php:169
 msgid "CRM"
-msgstr ""
+msgstr "CRM"
 
 #. translators: %s: Name of form action
 #: classes/controllers/FrmFormActionsController.php:213
@@ -890,7 +890,7 @@ msgstr "Cognome"
 
 #: classes/controllers/FrmFormsController.php:1487
 msgid "Display Name"
-msgstr "Nome da visualizzare"
+msgstr "Visualizza Nome"
 
 #: classes/controllers/FrmFormsController.php:1488
 msgid "User Login"
@@ -1775,7 +1775,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3295
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
-msgstr "Stai usando una versione di Formidable superata. Questo plugin potrebbe non funzionare correttamente se non aggiorni Formidable."
+msgstr "Si esegue una versione non aggiornata di Formidable. Questo plugin potrebbe non funzionare correttamente se non si aggiorna Formidable."
 
 #: classes/helpers/FrmAppHelper.php:3324
 msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
@@ -1795,7 +1795,7 @@ msgstr "Inglese"
 
 #: classes/helpers/FrmAppHelper.php:3377
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: classes/helpers/FrmAppHelper.php:3378
 msgid "Albanian"
@@ -1827,7 +1827,7 @@ msgstr "Basco"
 
 #: classes/helpers/FrmAppHelper.php:3385
 msgid "Belarusian"
-msgstr ""
+msgstr "Bielorusso"
 
 #: classes/helpers/FrmAppHelper.php:3386
 msgid "Bengali"
@@ -1915,11 +1915,11 @@ msgstr "Francese/Svizzero"
 
 #: classes/helpers/FrmAppHelper.php:3407
 msgid "Galician"
-msgstr ""
+msgstr "Galician"
 
 #: classes/helpers/FrmAppHelper.php:3408
 msgid "Georgian"
-msgstr ""
+msgstr "Georgiano"
 
 #: classes/helpers/FrmAppHelper.php:3409
 msgid "German"
@@ -1939,7 +1939,7 @@ msgstr "Greco"
 
 #: classes/helpers/FrmAppHelper.php:3413
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 #: classes/helpers/FrmAppHelper.php:3414
 #: classes/helpers/FrmAppHelper.php:3415
@@ -1972,11 +1972,11 @@ msgstr "Giapponese"
 
 #: classes/helpers/FrmAppHelper.php:3422
 msgid "Kannada"
-msgstr ""
+msgstr "Kannada"
 
 #: classes/helpers/FrmAppHelper.php:3423
 msgid "Kazakh"
-msgstr ""
+msgstr "Kazako"
 
 #: classes/helpers/FrmAppHelper.php:3424
 msgid "Khmer"
@@ -1988,7 +1988,7 @@ msgstr "Coreano"
 
 #: classes/helpers/FrmAppHelper.php:3426
 msgid "Kyrgyz"
-msgstr ""
+msgstr "Kirghiso"
 
 #: classes/helpers/FrmAppHelper.php:3427
 msgid "Laothian"
@@ -1996,7 +1996,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3428
 msgid "Latvian"
-msgstr ""
+msgstr "Lettone"
 
 #: classes/helpers/FrmAppHelper.php:3429
 msgid "Lithuanian"
@@ -2008,11 +2008,11 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3431
 msgid "Macedonian"
-msgstr ""
+msgstr "Macedone"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Malayalam"
-msgstr ""
+msgstr "Malayalam"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Malaysian"
@@ -2020,7 +2020,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3434
 msgid "Marathi"
-msgstr ""
+msgstr "Marathi"
 
 #: classes/helpers/FrmAppHelper.php:3435
 msgid "Norwegian"
@@ -2089,7 +2089,7 @@ msgstr "Spagnolo/America latina"
 
 #: classes/helpers/FrmAppHelper.php:3452
 msgid "Swahili"
-msgstr ""
+msgstr "Swahili"
 
 #: classes/helpers/FrmAppHelper.php:3453
 msgid "Swedish"
@@ -2097,11 +2097,11 @@ msgstr "Svedese"
 
 #: classes/helpers/FrmAppHelper.php:3454
 msgid "Tamil"
-msgstr ""
+msgstr "Tamil"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "Telugu"
-msgstr ""
+msgstr "Telugu"
 
 #: classes/helpers/FrmAppHelper.php:3456
 msgid "Thai"
@@ -2129,7 +2129,7 @@ msgstr "Vietnamita"
 
 #: classes/helpers/FrmAppHelper.php:3462
 msgid "Welsh"
-msgstr ""
+msgstr "Gallese"
 
 #: classes/helpers/FrmAppHelper.php:3463
 msgid "Zulu"
@@ -2176,7 +2176,7 @@ msgstr "Data commento"
 
 #: classes/helpers/FrmCSVExportHelper.php:344
 msgid "Timestamp"
-msgstr ""
+msgstr "Timestamp"
 
 #: classes/helpers/FrmCSVExportHelper.php:345
 msgid "Last Updated"
@@ -2196,7 +2196,7 @@ msgstr ""
 
 #: classes/helpers/FrmCurrencyHelper.php:39
 msgid "Australian Dollar"
-msgstr "Dollaro australiano"
+msgstr "Dollaro Australiano"
 
 #: classes/helpers/FrmCurrencyHelper.php:48
 msgid "Bangladeshi Taka"
@@ -2204,11 +2204,11 @@ msgstr "Taka del Bangladesh"
 
 #: classes/helpers/FrmCurrencyHelper.php:57
 msgid "Brazilian Real"
-msgstr "Real brasiliano"
+msgstr "Real Brasiliano"
 
 #: classes/helpers/FrmCurrencyHelper.php:66
 msgid "Canadian Dollar"
-msgstr "Dollaro canadese"
+msgstr "Dollaro Canadese"
 
 #: classes/helpers/FrmCurrencyHelper.php:75
 msgid "Chinese Renminbi Yuan"
@@ -2216,11 +2216,11 @@ msgstr "Renminbi cinese Yuan"
 
 #: classes/helpers/FrmCurrencyHelper.php:84
 msgid "Czech Koruna"
-msgstr "Corona ceca"
+msgstr "Corona Ceca"
 
 #: classes/helpers/FrmCurrencyHelper.php:93
 msgid "Danish Krone"
-msgstr "Corona danese"
+msgstr "Corona Danese"
 
 #: classes/helpers/FrmCurrencyHelper.php:102
 msgid "Euro"
@@ -2228,11 +2228,11 @@ msgstr "Euro"
 
 #: classes/helpers/FrmCurrencyHelper.php:111
 msgid "Hong Kong Dollar"
-msgstr "Dollaro di Hong Kong"
+msgstr "Dollaro Hong Kong"
 
 #: classes/helpers/FrmCurrencyHelper.php:120
 msgid "Hungarian Forint"
-msgstr "Fiorino ungherese"
+msgstr "Fiorino Ungaro"
 
 #: classes/helpers/FrmCurrencyHelper.php:129
 msgid "Indian Rupee"
@@ -2240,27 +2240,27 @@ msgstr "Rupia indiana"
 
 #: classes/helpers/FrmCurrencyHelper.php:138
 msgid "Israeli New Sheqel"
-msgstr "Nuovo shekel israeliano"
+msgstr "Nuovo Siclo Israeliano"
 
 #: classes/helpers/FrmCurrencyHelper.php:147
 msgid "Japanese Yen"
-msgstr "Yen giapponese"
+msgstr "Yen Giapponese"
 
 #: classes/helpers/FrmCurrencyHelper.php:156
 msgid "Malaysian Ringgit"
-msgstr "Ringgit malaysiano"
+msgstr "Ringgit Malese"
 
 #: classes/helpers/FrmCurrencyHelper.php:165
 msgid "Mexican Peso"
-msgstr "Peso messicano"
+msgstr "Peso Messicano"
 
 #: classes/helpers/FrmCurrencyHelper.php:174
 msgid "Norwegian Krone"
-msgstr "Corona norvegese"
+msgstr "Corona Norvegese"
 
 #: classes/helpers/FrmCurrencyHelper.php:183
 msgid "New Zealand Dollar"
-msgstr "Dollaro neozelandese"
+msgstr "Dollaro Neozelandese"
 
 #: classes/helpers/FrmCurrencyHelper.php:192
 msgid "Pakistani Rupee"
@@ -2268,19 +2268,19 @@ msgstr "Rupia pakistana"
 
 #: classes/helpers/FrmCurrencyHelper.php:201
 msgid "Philippine Peso"
-msgstr "Peso filippino"
+msgstr "Peso Filippino"
 
 #: classes/helpers/FrmCurrencyHelper.php:210
 msgid "Polish Zloty"
-msgstr "Zloty polacco"
+msgstr "Złoty Polacco"
 
 #: classes/helpers/FrmCurrencyHelper.php:219
 msgid "Pound Sterling"
-msgstr "Sterlina britannica"
+msgstr "Sterlina Britannica"
 
 #: classes/helpers/FrmCurrencyHelper.php:228
 msgid "Singapore Dollar"
-msgstr "Dollaro di Singapore"
+msgstr "Dollaro Singapore"
 
 #: classes/helpers/FrmCurrencyHelper.php:237
 msgid "South African Rand"
@@ -2292,19 +2292,19 @@ msgstr "Rupia dello Sri Lanka"
 
 #: classes/helpers/FrmCurrencyHelper.php:255
 msgid "Swedish Krona"
-msgstr "Corona svedese"
+msgstr "Corona Svedese"
 
 #: classes/helpers/FrmCurrencyHelper.php:264
 msgid "Swiss Franc"
-msgstr "Franco svizzero"
+msgstr "Franco Svizzero"
 
 #: classes/helpers/FrmCurrencyHelper.php:273
 msgid "Taiwan New Dollar"
-msgstr "Dollaro taiwanese"
+msgstr "Nuovo Dollato Taiwan"
 
 #: classes/helpers/FrmCurrencyHelper.php:282
 msgid "Thai Baht"
-msgstr "Baht thailandese"
+msgstr "Baht Thailandese "
 
 #: classes/helpers/FrmCurrencyHelper.php:291
 msgid "Turkish Liras"
@@ -2312,7 +2312,7 @@ msgstr "Lira Turca"
 
 #: classes/helpers/FrmCurrencyHelper.php:300
 msgid "U.S. Dollar"
-msgstr "Dollaro USA"
+msgstr "Dollaro U.S."
 
 #: classes/helpers/FrmCurrencyHelper.php:309
 msgid "Uruguayan Peso"
@@ -2320,7 +2320,7 @@ msgstr "Peso uruguaiano"
 
 #: classes/helpers/FrmDashboardHelper.php:201
 msgid "Connect Account"
-msgstr ""
+msgstr "Connetti Account"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
@@ -3913,7 +3913,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1258
 msgid "Capitalize"
-msgstr ""
+msgstr "Iniziale maiuscola"
 
 #: classes/helpers/FrmFormsHelper.php:1259
 msgid "Automatically capitalize the first letter in each word."
@@ -4116,7 +4116,7 @@ msgstr "URL di reindirizzamento"
 
 #: classes/helpers/FrmOnSubmitHelper.php:115
 msgid "Open in new tab"
-msgstr ""
+msgstr "Apri in una nuova scheda"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "Select a page"
@@ -4515,7 +4515,7 @@ msgstr "Crea Articoli"
 
 #: classes/helpers/FrmXMLHelper.php:1806
 msgid "Email Notification"
-msgstr "Notifica e-mail"
+msgstr "Notifica Email"
 
 #: classes/models/fields/FrmFieldCaptcha.php:235
 msgid "There was a problem verifying your captcha"
@@ -4621,7 +4621,7 @@ msgstr "Senza titolo"
 
 #: classes/models/fields/FrmFieldUrl.php:52
 msgid "Website"
-msgstr "Sito web"
+msgstr "Sito Web"
 
 #. translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML
 #: classes/models/FrmAddon.php:353
@@ -4862,7 +4862,7 @@ msgstr "Attiva/disattiva"
 
 #: classes/models/FrmField.php:138
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamico"
 
 #: classes/models/FrmField.php:143
 msgid "Lookup"
@@ -4915,7 +4915,7 @@ msgstr "Firma"
 
 #: classes/models/FrmField.php:208
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: classes/models/FrmField.php:214
 msgid "Appointment"
@@ -5194,7 +5194,7 @@ msgstr "ATTENZIONE : verranno perse tutte le modifiche apportate a questo file q
 
 #: classes/models/FrmStyle.php:519
 msgid "Formidable Style"
-msgstr "Stile di Formidable"
+msgstr "Stile Formidable"
 
 #: classes/models/FrmStyle.php:777
 #: classes/views/styles/_field-description.php:22
@@ -5567,7 +5567,7 @@ msgstr "j M Y @ G:i"
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:17
 msgid "%1$s: %2$s"
-msgstr ""
+msgstr "%1$s: %2$s"
 
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
@@ -5661,7 +5661,7 @@ msgstr "Nome Cognome"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:38
 msgid "Last First"
-msgstr ""
+msgstr "Cognome Nome"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:41
 msgid "First Middle Last"
@@ -5689,7 +5689,7 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/radio-display-format.php:18
 msgid "Display format"
-msgstr "Formato di visualizzazione"
+msgstr "Formato Visualizzazione"
 
 #: classes/views/frm-fields/back-end/radio-images.php:16
 msgid "Separate Values"
@@ -5846,7 +5846,7 @@ msgstr "Crea Articolo"
 
 #: classes/views/frm-form-actions/default_actions.php:26
 msgid "Register User"
-msgstr "Registra utente"
+msgstr "Registrazione utente"
 
 #: classes/views/frm-form-actions/default_actions.php:49
 msgid "Scored Quiz"
@@ -6119,7 +6119,7 @@ msgstr ""
 #. translators: 1: Site name, 2: WordPress
 #: classes/views/frm-forms/preview/footer.php:20
 msgid "%1$s is proudly powered by %2$s"
-msgstr ""
+msgstr "%1$s utilizza %2$s"
 
 #: classes/views/frm-forms/settings-advanced.php:7
 msgid "Modify the basic form settings here."
@@ -7100,7 +7100,7 @@ msgstr ""
 
 #: classes/views/styles/_styles-list.php:76
 msgid "Default Style"
-msgstr ""
+msgstr "Stile predefinito"
 
 #: classes/views/styles/_styles-list.php:82
 msgid "Custom Styles"
@@ -7126,7 +7126,7 @@ msgstr ""
 
 #: classes/views/summary-emails/base.php:54
 msgid "Contact support"
-msgstr ""
+msgstr "Contatta il supporto"
 
 #: classes/views/summary-emails/base.php:61
 msgid "Unsubscribe"
@@ -7300,7 +7300,7 @@ msgstr ""
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:338
 msgid "Payment Method"
-msgstr "Metodo di pagamento"
+msgstr "Metodo Pagamento"
 
 #. translators: %s: The amount of money that was refunded.
 #: stripe/controllers/FrmStrpLiteEventsController.php:62
@@ -7340,11 +7340,11 @@ msgstr ""
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:22
 msgid "Please select a payment to view"
-msgstr ""
+msgstr "Per favore seleziona un pagamento da visualizzare"
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:86
 msgid "Payment was Successfully Deleted"
-msgstr ""
+msgstr "Il pagamento è stato eliminato"
 
 #: stripe/controllers/FrmTransLiteListsController.php:29
 #: stripe/helpers/FrmTransLiteListHelper.php:108
@@ -7375,7 +7375,7 @@ msgstr ""
 
 #: stripe/controllers/FrmTransLiteListsController.php:57
 msgid "Receipt ID"
-msgstr ""
+msgstr "ID Ricevuta"
 
 #: stripe/controllers/FrmTransLiteListsController.php:60
 #: stripe/views/action-settings/payments-options.php:25
@@ -7391,7 +7391,7 @@ msgstr "Iscrizione"
 
 #: stripe/controllers/FrmTransLiteListsController.php:62
 msgid "Begin Date"
-msgstr ""
+msgstr "Date di inizio"
 
 #: stripe/controllers/FrmTransLiteListsController.php:63
 msgid "Expire Date"
@@ -7405,7 +7405,7 @@ msgstr "Stato"
 
 #: stripe/controllers/FrmTransLiteListsController.php:74
 msgid "Processor"
-msgstr ""
+msgstr "Processore"
 
 #: stripe/controllers/FrmTransLiteListsController.php:77
 #: stripe/views/payments/show.php:80
@@ -7450,7 +7450,7 @@ msgstr "Non riuscito"
 #: stripe/helpers/FrmTransLiteAppHelper.php:108
 #: stripe/helpers/FrmTransLiteAppHelper.php:109
 msgid "Canceled"
-msgstr ""
+msgstr "Operazione annullata"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
@@ -7521,7 +7521,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
-msgstr ""
+msgstr "mese/i"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
@@ -7529,7 +7529,7 @@ msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
-msgstr ""
+msgstr "Ospite"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:491
 msgid "Test"
@@ -7537,11 +7537,11 @@ msgstr "Test"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:491
 msgid "Live"
-msgstr "Attivo"
+msgstr "Dal vivo"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:100
 msgid "No payments found."
-msgstr "Non sono stati trovati pagamenti."
+msgstr "Nessun pagamento trovato."
 
 #: stripe/helpers/FrmTransLiteListHelper.php:109
 msgid "Subscriptions"
@@ -7667,7 +7667,7 @@ msgstr "Utente"
 #: stripe/views/payments/show.php:53
 #: stripe/views/subscriptions/show.php:52
 msgid "Receipt"
-msgstr ""
+msgstr "Ricevuta"
 
 #: stripe/views/payments/show.php:60
 msgid "Invoice #"
@@ -7685,7 +7685,7 @@ msgstr ""
 #: stripe/views/payments/show.php:100
 #: stripe/views/subscriptions/show.php:85
 msgid "Payment Status Updates"
-msgstr ""
+msgstr "Aggiornamenti Stato di Pagamento "
 
 #: stripe/views/payments/show.php:149
 #: stripe/views/payments/sidebar_list.php:8
@@ -7729,7 +7729,7 @@ msgstr "Iscrizione:"
 #: stripe/views/payments/sidebar_list.php:77
 #: stripe/views/subscriptions/sidebar_actions.php:41
 msgid "Cancel Subscription"
-msgstr ""
+msgstr "Annulla l'abbonamento"
 
 #: stripe/views/payments/sidebar_list.php:94
 msgid "Total Paid:"
@@ -7753,7 +7753,7 @@ msgstr "Disconnetti"
 
 #: stripe/views/settings/connect.php:32
 msgid "Connect to Stripe"
-msgstr ""
+msgstr "Connettiti a Stripe"
 
 #: stripe/views/settings/form.php:11
 msgid "Test Mode"
@@ -7918,7 +7918,7 @@ msgstr ""
 
 #: js/admin/style.js:126
 msgid "Show less"
-msgstr ""
+msgstr "Mostra meno"
 
 #. translators: %s: The required license type (ie. Plus, Business, or Elite)
 #: js/admin/style.js:387
@@ -7940,7 +7940,7 @@ msgstr ""
 #: js/admin/style.js:917
 #: js/admin/style.js:944
 msgid "Reset style"
-msgstr ""
+msgstr "Reimposta Stile"
 
 #: js/admin/style.js:928
 msgid "Reset this style back to the default?"
