@@ -38,6 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
 		<?php esc_html_e( 'Default Email Address', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The default email address to receive notifications for new form submissions.', 'formidable' ); ?>"></span>
 	</label>
 	<input class="frm_with_left_label frm8" type="text" name="frm_default_email" id="frm_default_email" value="<?php echo esc_attr( $frm_settings->default_email ); ?>" />
 </p>
