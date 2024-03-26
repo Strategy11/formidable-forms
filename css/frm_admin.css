@@ -5137,19 +5137,13 @@ label.frm-example-icon {
 	text-align: right;
 }
 
-.frm_inbox_count,
-.frm_inbox_unread {
+.frm_inbox_count {
 	color: #fff;
 	border-radius: 50%;
 	display: inline-block;
 	margin-right: 8px;
 	font-size: 11px;
 	text-align: center;
-}
-
-.frm_inbox_unread {
-	width: 8px;
-	height: 8px;
 }
 
 .frm_inbox_count {
