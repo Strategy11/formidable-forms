@@ -221,6 +221,7 @@ class FrmOnboardingWizardController {
 		$upgrade_link     = self::get_upgrade_link();
 		$addons_count     = FrmAddonsController::get_addons_count();
 		$license_key      = base64_decode( rawurldecode( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) ) );
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
 		// Note: Add step parts in order.
 		$step_parts = array(
