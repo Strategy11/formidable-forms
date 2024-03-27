@@ -115,6 +115,10 @@ class FrmInstallPlugin {
 			wp_send_json_error( $activate->get_error_message() );
 		}
 
+		if ( 'wp-mail-smtp' === $plugin_slug ) {
+			update_option( 'wp_mail_smtp_activation_prevent_redirect', true );
+		}
+
 		// Send a success response.
 		wp_send_json_success( __( 'Plugin installed and activated successfully.', 'formidable' ) );
 	}
