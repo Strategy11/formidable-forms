@@ -8,6 +8,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$pro_is_installed = FrmAppHelper::pro_is_installed();
 ?>
 <section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
@@ -19,7 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-card-box-content frm-fields">
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
 		<p class="frm-card-box-text frmcenter">
-			<?php esc_html_e( 'Explore our handpicked add-ons tailored for you! You\'ll find even more on the Add-ons page.', 'formidable' ); ?>
+			<?php
+			if ( ! $pro_is_installed ) {
+				esc_html_e( 'A few of our add-ons come with every installation. But more are available on the add-ons page!', 'formidable' );
+			} else {
+				esc_html_e( 'Here\'s just a few of our most popular add-ons! You\'ll find even more on the add-ons page.', 'formidable' );
+			}
+			?>
 		</p>
 
 		<div class="frm-mt-md">
@@ -50,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</span>
 			<span class="frm-banner-text frm-text-xs">
 				<?php
-				if ( ! FrmAppHelper::pro_is_installed() ) {
+				if ( ! $pro_is_installed ) {
 					printf(
 						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
 						esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
@@ -60,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				} else {
 					printf(
 						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
-						esc_html__( 'Check them all out on the %1$sAdd-Ons%2$s page.', 'formidable' ),
+						esc_html__( 'Check them all out on the %1$sadd-ons%2$s page.', 'formidable' ),
 						'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '" target="_blank">',
 						'</a>'
 					);
