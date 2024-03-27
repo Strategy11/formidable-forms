@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::get_footer(
 		array(
-			'primary-button-text'   => esc_html__( 'Activate & continue', 'formidable' ),
+			'primary-button-text'   => esc_html__( 'Activate & Continue', 'formidable' ),
 			'primary-button-id'     => 'frm-onboarding-save-license-button',
 			'primary-button-class'  => 'frm_authorize_link',
 			'primary-button-plugin' => 'formidable_pro',
