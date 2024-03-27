@@ -26,11 +26,11 @@ function addSaveLicenseButtonEvents() {
  */
 const onSaveLicenseButtonClick = async() => {
 	wp.hooks.addAction( 'frm_after_authorize', 'frmOnboardingWizard', data => {
-		// After authorization, update URL to "Default Email Address" step and reload page
-		window.location.href = setQueryParam( 'step', STEPS.DEFAULT_EMAIL_ADDRESS, 'replaceState' );
+		if ( true === data.success ) {
+			// After authorization, update URL to "Default Email Address" step and reload page
+			window.location.href = setQueryParam( 'step', STEPS.DEFAULT_EMAIL_ADDRESS, 'replaceState' );
+		}
 
-		// Reset data.message to an empty string to avoid errors or undesired behavior
-		data.message = '';
 		return data;
 	});
 };

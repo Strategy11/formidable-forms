@@ -38,4 +38,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		)
 	);
 	?>
+
+	<div class="frm_pro_license_msg frm_hidden"></div>
 </section>
