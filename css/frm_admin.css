@@ -7490,10 +7490,13 @@ ul.frm_two_col {
 	margin-left: auto;
 }
 
+.frm_code_list.frm-full-hover a {
+	overflow: hidden;
+}
+
 .frm_code_list.frm-full-hover a,
 .frm_code_list.frm-full-hover a span {
 	white-space: nowrap;
-	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
