@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm_wrap wrap upgrade_to_pro frm-fields">
 	<h1 class="frm_pro_heading">
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
+		<img width="265" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
 		<span class="alignright">Take on bigger projects, earn more clients and grow your business.<br/>
 			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
 		<span class="clear"></span>

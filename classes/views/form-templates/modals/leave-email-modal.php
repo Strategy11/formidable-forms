@@ -50,7 +50,7 @@ $args = wp_parse_args( $args, $defaults );
 				<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 			</span>
 
-			<span id="frm_leave_email_error" class="frm-form-templates-modal-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
+			<span id="frm_leave_email_error" class="frm-validation-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
 				<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
 				<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
 			</span>

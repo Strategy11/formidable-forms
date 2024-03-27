@@ -285,7 +285,7 @@ class FrmMigrate {
 		delete_option( 'frm-usage-uuid' );
 		delete_option( 'frm_inbox' );
 		delete_option( 'frmpro_css' );
-		delete_option( 'frm_welcome_redirect' );
+		delete_option( FrmOnboardingWizardController::REDIRECT_STATUS_OPTION );
 		delete_option( FrmEmailSummaryHelper::$option_name );
 
 		// Delete roles.
@@ -317,7 +317,7 @@ class FrmMigrate {
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
-		delete_transient( 'frm_activation_redirect' );
+		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 

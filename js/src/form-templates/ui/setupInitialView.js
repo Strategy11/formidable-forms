@@ -2,8 +2,8 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS, getAppState, hasQueryParam } from '../shared';
-import { show, hide, hideElements, frmAnimate } from '../utils';
+import { HIDE_JS_CLASS, getAppState } from '../shared';
+import { show, hide, hideElements, frmAnimate, hasQueryParam } from '../utils';
 import { showHeaderCancelButton } from './';
 
 /**

@@ -2,7 +2,8 @@
  * Internal dependencies
  */
 import { addElements, getElements } from '../elements';
-import { hasQueryParam, MODAL_SIZES } from '../shared';
+import { MODAL_SIZES } from '../shared';
+import { hasQueryParam } from '../utils';
 import { showLeaveEmailModal } from './';
 
 let modalWidget = null;

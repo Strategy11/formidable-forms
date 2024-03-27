@@ -143,6 +143,7 @@ class FrmAppController {
 			'formidable-styles2',
 			'formidable-inbox',
 			FrmFormTemplatesController::PAGE_SLUG,
+			FrmOnboardingWizardController::PAGE_SLUG,
 		);
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
@@ -432,7 +433,7 @@ class FrmAppController {
 	 * @param string $description
 	 * @return void
 	 */
-	public static function api_email_form( $form_key, $title, $description ) {
+	public static function api_email_form( $form_key, $title = '', $description = '' ) {
 		$user        = wp_get_current_user();
 		$args = array(
 			'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css',

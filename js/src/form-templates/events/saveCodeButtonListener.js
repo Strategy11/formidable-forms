@@ -2,9 +2,9 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getAppState, hasQueryParam, removeQueryParam, nonce  } from '../shared';
+import { PREFIX, getAppState, nonce  } from '../shared';
 import { showConfirmEmailAddressError } from '../ui';
-import { show, hide, hideElements, onClickPreventDefault } from '../utils';
+import { show, hide, hideElements, hasQueryParam, removeQueryParam, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Save Code" button.
@@ -73,7 +73,7 @@ const onSaveCodeButtonClick = async() => {
 	// Handle unsuccessful request
 	if ( ! data.success ) {
 		const { message: errorMessage } = data?.data?.[0] || {};
-		const errorType = errorMessage ? 'custom' : 'wrong-code';
+		const errorType = errorMessage ? 'custom' : 'invalid';
 		showConfirmEmailAddressError( errorType, errorMessage );
 		show( document.getElementById( 'frm_code_from_email_options' ) );
 		return;
