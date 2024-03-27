@@ -1,5 +1,5 @@
 == Changelog ==
-= 6.9 =
+= 6.8.4 =
 * New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
 * New: A new filter has been added to enable support for bulk editing options for a Ranking field.
 * New: The trigger to save draft entries has been updated to a button in new forms.

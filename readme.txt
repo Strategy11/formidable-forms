@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 6.9
+Stable tag: 6.8.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,7 +442,7 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
-= 6.9 =
+= 6.8.4 =
 * New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
 * New: A new filter has been added to enable support for bulk editing options for a Ranking field.
 * New: The trigger to save draft entries has been updated to a button in new forms.
