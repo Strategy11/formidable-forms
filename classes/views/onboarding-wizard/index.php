@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<a id="frm-onboarding-return-dashboard" href="<?php echo esc_url( admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ) ); ?>">
-			<?php esc_html_e( 'Return to the Dashboard', 'formidable' ); ?>
+			<?php esc_html_e( 'Go to dashboard', 'formidable' ); ?>
 		</a>
 	</div>
 
