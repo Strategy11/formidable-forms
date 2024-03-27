@@ -432,7 +432,7 @@ DEFAULT_HTML;
 		/**
 		 * Allows updating a flag that determines whether Bulk edit option should be visible on page load.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param bool   $should_hide_bulk_edit
 		 * @param string $display_format

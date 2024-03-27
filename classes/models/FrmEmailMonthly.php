@@ -24,7 +24,7 @@ class FrmEmailMonthly extends FrmEmailStats {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 */
 	protected function get_content_args() {
 		// Do not send monthly email if there is no entries this month.

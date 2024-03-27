@@ -190,7 +190,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -200,7 +200,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * Allows updating hcaptcha js api url.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param string $api_js_url
 		 */
@@ -322,7 +322,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -399,7 +399,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @param FrmSettings $frm_settings
 	 */
 	protected function captcha_size( $frm_settings ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.8.4' );
 		return 'normal';
 	}
 }

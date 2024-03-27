@@ -68,7 +68,7 @@ class FrmFieldCaptchaSettings {
 	 * The element class name is always the same as the key before "-response" in the $_POST value key.
 	 * For example (h-captcha-response, or cf-turnstile-response).
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return void
 	 */
@@ -77,7 +77,7 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return void
 	 */
@@ -88,7 +88,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the name of the CAPTCHA service.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -99,7 +99,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the class name used for the CAPTCHA element on the front end.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -111,7 +111,7 @@ class FrmFieldCaptchaSettings {
 	 * Get the URL of the page to link to in global settings. This page should have
 	 * instructions on how to get site and secret keys.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -124,7 +124,7 @@ class FrmFieldCaptchaSettings {
 	 * reCAPTCHA fields just use pubkey/privkey.
 	 * But other captcha integrations use a prefix like hcaptcha_public/turnstile_privkey.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -135,7 +135,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the string to use for the tooltip on the Global settings page when hovering over the Site Key label.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -146,7 +146,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the key used in FrmSettings for the site secret used for validating a Captcha.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -157,7 +157,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the key used in FrmSettings for the site key used to initialize a Captcha on the front end.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -168,7 +168,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Get the site key to use for a Captcha on the front end.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -180,7 +180,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Check if the public key is not empty.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -191,7 +191,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * This can be used to add additional attributes to a front end Captcha element.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $attributes
 	 * @param array $field
@@ -208,7 +208,7 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $field
 	 * @return string Either 'normal' or 'compact'.
@@ -222,7 +222,7 @@ class FrmFieldCaptchaSettings {
 	 * This has options for "Normal" and "Compact".
 	 * This is supported by all CAPTCHA types except for invisible reCAPTCHAs.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -234,7 +234,7 @@ class FrmFieldCaptchaSettings {
 	 * Determine if we should show a theme dropdown for our Captcha field.
 	 * This is applicable for all Captcha types except for invisible reCAPTCHA.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -246,7 +246,7 @@ class FrmFieldCaptchaSettings {
 	 * Determine if the "auto" option should be shown for a specific captcha type.
 	 * This is only applicable for Turnstile.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */

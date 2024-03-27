@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.8.4
  */
 class FrmCaptchaFactory {
 
 	/**
 	 * Get the proper FrmFieldCaptchaSettings child class based on a type setting.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param string $captcha_type Either 'active', 'recaptcha', 'hcaptcha' or 'turnstile'. If active, the global setting will be used.
 	 * @return FrmFieldCaptchaSettings
@@ -29,7 +29,7 @@ class FrmCaptchaFactory {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param string $active_captcha
 	 * @return string

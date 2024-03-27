@@ -228,7 +228,7 @@ class FrmFieldsController {
 		/**
 		 * Filter to add new fields that will support import_options/Bulk Edit Options.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param array $bulk_edit_types
 		 * @return array

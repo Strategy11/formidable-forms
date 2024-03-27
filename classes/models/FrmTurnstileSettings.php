@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.8.4
  */
 class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return void
 	 */
@@ -18,7 +18,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -27,7 +27,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -36,7 +36,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -47,7 +47,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Turnstile global settings are saved as turnstile_pubkey and turnstile_privkey.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -56,7 +56,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -67,7 +67,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Turnstile supports an "Auto" theme option so show it.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
