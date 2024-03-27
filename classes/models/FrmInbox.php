@@ -321,7 +321,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x The $filtered parameter was added.
+	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param bool $filtered
 	 * @return string
@@ -385,7 +385,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Make sure that the CTA uses utm_medium=banner.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param string $cta
 	 * @return string
@@ -443,7 +443,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Get all messages with a "slidein" message key defined.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return array
 	 */
@@ -454,7 +454,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Get all messages with a $key message key defined.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param string $key The key we are checking for (ie. banner or slidein).
 	 * @return array
@@ -472,7 +472,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Check if there is at least one slidein message.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -483,7 +483,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Get the array used for frmGlobal.inboxSlideIn
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return array|false
 	 */
@@ -499,7 +499,7 @@ class FrmInbox extends FrmFormApi {
 		 * Extend the keys in the global JS object.
 		 * This is used in Pro to include images.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param array $keys
 		 */

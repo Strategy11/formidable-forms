@@ -12,7 +12,7 @@ class FrmInboxController {
 	 * Get the HTML for the inbox notice.
 	 *
 	 * @since 4.05
-	 * @since x.x The $filtered parameter was added.
+	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param $filtered Set this to false to avoid the frm_inbox_badge filter.
 	 * @return string

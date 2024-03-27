@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.8.4
  */
 class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return void
 	 */
@@ -18,7 +18,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -27,7 +27,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -36,7 +36,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -49,7 +49,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	 * reCAPTCHA fields just use pubkey/privkey.
 	 * But other captcha integrations use a prefix like hcaptcha_public/turnstile_privkey.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -58,7 +58,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
