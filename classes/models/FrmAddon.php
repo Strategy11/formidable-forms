@@ -822,6 +822,9 @@ class FrmAddon {
 
 		// Check if the stream is opened successfully
 		if ( ! $stream ) {
+			if ( ! empty( $php_errormsg ) ) {
+				return $php_errormsg;
+			}
 			return 'Error occurred while opening the stream.';
 		}
 
