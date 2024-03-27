@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-card-box-content frm-fields">
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Default Email Address', 'formidable' ); ?></h2>
 		<p class="frm-card-box-text frmcenter">
-			<?php esc_html_e( 'Set the default email address to receive notifications for new form submissions.', 'formidable' ); ?>
+			<?php esc_html_e( 'Set the default email address to receive notifications for new form submissions. You can change this at any time.', 'formidable' ); ?>
 		</p>
 
 		<div class="frm_form_field frm-mt-lg">
@@ -33,10 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</span>
 			</p>
 
-			<label for="frm-onboarding-subscribe" class="frm-flex frm-gap-xs frm-mb-xs">
-				<input type="checkbox" name="frm-onboarding-subscribe" id="frm-onboarding-subscribe" class="frm-mx-0 frm-mt-2xs" checked />
-				<span><?php esc_html_e( 'Subscribe to our newsletter and get 20+ free form templates', 'formidable' ); ?></span>
-			</label>
+			<?php if ( ! $pro_is_installed ) { ?>
+				<label for="frm-onboarding-subscribe" class="frm-flex frm-gap-xs frm-mb-xs">
+					<input type="checkbox" name="frm-onboarding-subscribe" id="frm-onboarding-subscribe" class="frm-mx-0 frm-mt-2xs" checked />
+					<span><?php esc_html_e( 'Subscribe to our newsletter and get 20+ free form templates', 'formidable' ); ?></span>
+				</label>
+			<?php } ?>
 
 			<label for="frm-onboarding-allow-tracking" class="frm-flex frm-gap-xs">
 				<input type="checkbox" name="frm-onboarding-allow-tracking" id="frm-onboarding-allow-tracking" class="frm-mx-0 frm-mt-2xs" checked />
