@@ -38,31 +38,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php } ?>
 		</div>
 
-		<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
-			<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
-				<span class="frm-banner-title frm-font-semibold frm-flex">
-					<?php
-					printf(
-						/* translators: %s: The count of add-ons */
-						esc_html__( 'Get access to %s more add-ons', 'formidable' ),
-						esc_html( $addons_count )
-					);
-					?>
-				</span>
-				<span class="frm-banner-text frm-text-xs">
-					<?php
+		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
+			<span class="frm-banner-title frm-font-semibold frm-flex">
+				<?php
+				printf(
+					/* translators: %s: The count of add-ons */
+					esc_html__( 'Get access to %s more add-ons', 'formidable' ),
+					esc_html( $addons_count )
+				);
+				?>
+			</span>
+			<span class="frm-banner-text frm-text-xs">
+				<?php
+				if ( ! FrmAppHelper::pro_is_installed() ) {
 					printf(
 						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
 						esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
 						'<a href="' . esc_url( $upgrade_link ) . '" target="_blank">',
 						'</a>'
 					);
-					?>
-				</span>
-			</div>
-			<?php
-		}//end if
-		?>
+				} else {
+					printf(
+						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
+						esc_html__( 'Check them all out on the %1$sAdd-Ons%2$s page.', 'formidable' ),
+						'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '" target="_blank">',
+						'</a>'
+					);
+				}
+				?>
+			</span>
+		</div>
 	</div>
 
 	<?php

@@ -401,6 +401,10 @@ __webpack_require__.r(__webpack_exports__);
 var showFormError = function showFormError(inputId, errorId, type, message) {
   var inputElement = document.querySelector(inputId);
   var errorElement = document.querySelector(errorId);
+  if (!inputElement || !errorElement) {
+    console.warn('showFormError: Unable to find input or error element.');
+    return;
+  }
 
   // If a message is provided, update the span element's text that matches the error type
   if (message) {
@@ -1144,19 +1148,25 @@ function _installAddon() {
           });
         case 8:
           response = _context3.sent;
-          _context3.next = 11;
-          return response.json();
+          if (response.ok) {
+            _context3.next = 11;
+            break;
+          }
+          throw new Error("Server responded with status ".concat(response.status));
         case 11:
+          _context3.next = 13;
+          return response.json();
+        case 13:
           return _context3.abrupt("return", _context3.sent);
-        case 14:
-          _context3.prev = 14;
+        case 16:
+          _context3.prev = 16;
           _context3.t0 = _context3["catch"](5);
           console.error('An error occurred:', _context3.t0);
-        case 17:
+        case 19:
         case "end":
           return _context3.stop();
       }
-    }, _callee2, null, [[5, 14]]);
+    }, _callee2, null, [[5, 16]]);
   }));
   return _installAddon.apply(this, arguments);
 }
@@ -1214,11 +1224,10 @@ var onSaveLicenseButtonClick = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           wp.hooks.addAction('frm_after_authorize', 'frmOnboardingWizard', function (data) {
-            // After authorization, update URL to "Default Email Address" step and reload page
-            window.location.href = (0,_utils__WEBPACK_IMPORTED_MODULE_2__.setQueryParam)('step', _shared__WEBPACK_IMPORTED_MODULE_1__.STEPS.DEFAULT_EMAIL_ADDRESS, 'replaceState');
-
-            // Reset data.message to an empty string to avoid errors or undesired behavior
-            data.message = '';
+            if (true === data.success) {
+              // After authorization, update URL to "Default Email Address" step and reload page
+              window.location.href = (0,_utils__WEBPACK_IMPORTED_MODULE_2__.setQueryParam)('step', _shared__WEBPACK_IMPORTED_MODULE_1__.STEPS.DEFAULT_EMAIL_ADDRESS, 'replaceState');
+            }
             return data;
           });
         case 1:
