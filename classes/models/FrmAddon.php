@@ -788,19 +788,52 @@ class FrmAddon {
 			$api_params['item_name'] = rawurlencode( $this->plugin_name );
 		}
 
-		$arg_array = array(
-			'body'       => $api_params,
-			'timeout'    => 25,
-			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
+		$boundary = uniqid();
+
+		// Prepare headers
+		$headers = array(
+			'Content-Type: multipart/form-data; boundary=' . $boundary,
+			'User-Agent: ' . $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo('url'),
 		);
 
-		$resp = wp_remote_post(
-			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
-			$arg_array
-		);
-		$body = wp_remote_retrieve_body( $resp );
+		$body = '';
+		foreach ( $api_params as $key => $value ) {
+			$body .= "--$boundary\r\n";
+			$body .= "Content-Disposition: form-data; name=\"$key\"\r\n\r\n";
+			$body .= "$value\r\n";
+		}
+		$body .= "--$boundary--";
 
-		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
+		// Prepare context options
+		$context_options = array(
+			'http' => array(
+				'method'  => 'POST',
+				'header'  => $headers,
+				'content' => $body,
+				'timeout' => 25,
+			),
+		);
+
+		// Create a stream context
+		$context = stream_context_create($context_options);
+
+		// Open the stream with the provided URL
+		$stream = fopen( $this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ), 'r', false, $context );
+
+		// Check if the stream is opened successfully
+		if ( ! $stream ) {
+			return 'Error occurred while opening the stream.';
+		}
+
+		// Read the response
+		$response = stream_get_contents( $stream );
+
+		// Close the stream
+		fclose( $stream );
+
+		$body = $response;
+
+		$this->save_status = array( 'response_code' => $http_response_header );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
