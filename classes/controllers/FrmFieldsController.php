@@ -689,13 +689,27 @@ class FrmFieldsController {
 	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
-		if ( FrmField::is_required( $field ) ) {
+		if ( $field['type'] === 'hidden' ) {
+			$field_messages_status = array(
+				'data-invmsg' => false,
+				'data-reqmsg' => false,
+			);
+		} else {
+			$field_messages_status = array(
+				'data-invmsg' => true,
+				'data-reqmsg' => true,
+			);
+		}
+
+		$field_messages_status = apply_filters( 'frm_field_messages_status', $field_messages_status, $field );
+
+		if ( FrmField::is_required( $field ) && $field_messages_status['data-reqmsg'] ) {
 			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
 			self::maybe_add_html_required( $field, $add_html );
 		}
 
-		if ( ! FrmField::is_option_empty( $field, 'invalid' ) ) {
+		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && $field_messages_status['data-invmsg'] ) {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
