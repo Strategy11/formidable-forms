@@ -799,7 +799,6 @@ class FrmAddon {
 			$arg_array
 		);
 		$body = wp_remote_retrieve_body( $resp );
-
 		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
