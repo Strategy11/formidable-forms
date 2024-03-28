@@ -214,24 +214,22 @@ class FrmEntriesHelper {
 			return '';
 		}
 
-		// This is an embeded form.
-		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
-			// This is a repeating section.
-			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
-		} else {
-			// Get all values for this field.
-			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+		$child_entries_data = self::get_display_value_child_entries_data( $entry, $field, $atts );
 
-			if ( $child_values ) {
-				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
-			}
+		$child_entries = $child_entries_data['child_entries'];
+
+		if ( count( $child_entries ) > $child_entries_data['child_entries_limit'] ) {
+			$truncated = true;
 		}
 
-		$field_value = array();
+		// Remove the extra item since we used '$child_entries_limit + 1' when querying db.
+		array_pop( $child_entries );
 
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;
@@ -254,7 +252,75 @@ class FrmEntriesHelper {
 		}
 		$val = implode( $sep, (array) $field_value );
 
+		if ( ! empty( $truncated ) ) {
+			$val = self::maybe_append_ellipses( $val );
+		}
+
 		return FrmAppHelper::kses( $val, 'all' );
+	}
+
+	/**
+	 * Appends ellipses to the displayed value for a repeater field in entries list page, if it is truncated
+	 * and isn't already ending with ellipses.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $val
+	 *
+	 * @return string
+	 */
+	private static function maybe_append_ellipses( $val ) {
+		if ( substr( $val, -3 ) === '...' ) {
+			return $val;
+		}
+
+		return $val . ' ...';
+	}
+
+	/**
+	 * Returns child entries data from repeater or embedded forms.
+	 *
+	 * @since x.x
+	 * @param stdClass $entry
+	 * @param stdClass $field
+	 * @param array    $atts
+	 *
+	 * @return array {
+	 *   @type array $child_entries
+	 *   @type int   $child_entries_limit
+	 * }
+	 */
+	private static function get_display_value_child_entries_data( $entry, $field, $atts ) {
+		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+			/**
+			 * This filter allows updating the limit of child entries in entry list page. The default is 5.
+			 *
+			 * @since x.x
+			 * @param array $args {
+			 *    @type object $field
+			 *    @type array  $atts
+			 * }
+			 */
+			$child_entries_limit = apply_filters( 'frm_entries_list_repeater_display_limit', 5, compact( 'field', 'atts' ) );
+
+			// This is a repeating section.
+			return array(
+				'child_entries'       => FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', $child_entries_limit + 1, true ),
+				'child_entries_limit' => $child_entries_limit,
+			);
+		}
+
+		// This is an embeded form. Get all values for this field.
+		$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+
+		if ( $child_values ) {
+			return FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
+		}
+
+		return array(
+			'child_entries'       => array(),
+			'child_entries_limit' => 0,
+		);
 	}
 
 	/**
