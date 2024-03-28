@@ -2384,6 +2384,11 @@ h2.frm-h2 + .howto {
 	opacity: 0.8;
 }
 
+.frm-addons .plugin-card-top > :not(p):not(h2) {
+	/* Hide notices from third party plugins */
+	display: none;
+}
+
 .frm-addons .plugin-card-bottom {
 	padding: 5px 20px 20px;
 	text-align: center;
