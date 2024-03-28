@@ -3,7 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
+$only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
 		<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
@@ -49,7 +50,7 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
-if ( $values['fields'] ) {
+if ( ! $only_contain_submit ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
@@ -59,6 +60,12 @@ if ( $values['fields'] ) {
 	 * @param array $args   The arguments. Contains `form`.
 	 */
 	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], compact( 'form' ) );
+
+	if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+		// Remove submit field when add or edit entry in backend.
+		FrmSubmitHelper::remove_submit_field_from_list( $fields_to_show );
+	}
+
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }
 
@@ -94,8 +101,7 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 }
 
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-if ( FrmForm::show_submit( $form ) ) {
+if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_current_page( $values ) ) {
 	/**
 	 * @since 5.5.1
 	 */

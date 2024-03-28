@@ -42,15 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</div>
 
-	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
-			<?php echo esc_html( $field['required_indicator'] ); ?>
-		</span>
-		<span class="frm-sub-label frm-collapsed-label">
-			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
-		</span>
-	</label>
+	<?php $field_obj->show_label_on_form_builder(); ?>
 
 	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>
