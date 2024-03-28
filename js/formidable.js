@@ -724,6 +724,8 @@ function frmFrontFormJS() {
 					function() {
 						var container, input, previousInput;
 
+						afterFormSubmittedBeforeReplace( object, response );
+
 						replaceContent.replaceWith( response.content );
 
 						addUrlParam( response );
@@ -857,6 +859,13 @@ function frmFrontFormJS() {
 			jQuery( document ).trigger( 'frmFormComplete', [ object, response ]);
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ]);
+		}
+	}
+
+	function afterFormSubmittedBeforeReplace( object, response ) {
+		var formCompleted = jQuery( response.content ).find( '.frm_message' );
+		if ( formCompleted.length ) {
+			triggerCustomEvent( document, 'frmFormCompleteBeforeReplace', { object, response });
 		}
 	}
 
