@@ -166,7 +166,7 @@ class FrmFieldsController {
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php';
 		} else {
 			if ( ! isset( $field ) && is_object( $field_object ) ) {
 				$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
@@ -177,7 +177,7 @@ class FrmFieldsController {
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
 
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php' );
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
 		}
 	}
 
@@ -442,7 +442,7 @@ class FrmFieldsController {
 	 * @param array $field
 	 */
 	public static function show_format_option( $field ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/value-format.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/value-format.php';
 	}
 
 	public static function input_html( $field, $echo = true ) {
@@ -483,6 +483,10 @@ class FrmFieldsController {
 
 		if ( isset( $field['size'] ) && $field['size'] > 0 ) {
 			$class[] = 'auto_width';
+		}
+
+		if ( 'phone' === $field['type'] && isset( $field['phone_type'] ) && 'international' === $field['phone_type'] ) {
+			$class[] = 'frm-intl-tel-input';
 		}
 	}
 

@@ -6392,6 +6392,11 @@ function frmAdminBuildJS() {
 		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
+		document.addEventListener( 'change', ( event ) => {
+			if ( event.target.matches( 'select.frm_select_with_premium' ) ) {
+				handleUpgradeClick( event );
+			}
+		});
 
 		function handleUpgradeClick( event ) {
 			let element, link, content;
@@ -6403,6 +6408,14 @@ function frmAdminBuildJS() {
 			}
 
 			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
+
+			// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
+			if ( event.type === 'change' && element.classList.contains( 'frm_select_with_premium' ) ) {
+				const selectedOption = element.options[element.selectedIndex];
+				if ( selectedOption && selectedOption.dataset.upgrade ) {
+					element = selectedOption;
+				}
+			}
 
 			if ( ! element.dataset.upgrade ) {
 				let parent = element.closest( '[data-upgrade]' );
@@ -9662,6 +9675,53 @@ function frmAdminBuildJS() {
 		}
 	}
 
+
+	/**
+	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
+	 * It sets up initial visibility at page load and updates it on each dropdown change.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initSelectDependencies() {
+		const selects = document.querySelectorAll( 'select.frm_select_with_dependency' );
+
+		/**
+		 * Toggles the visibility of dependent elements associated with a select element based on its current selection.
+		 *
+		 * @since x.x
+		 *
+		 * @param {HTMLElement} select The select element whose dependencies need to be managed.
+		 * @return {void}
+		 */
+		function toggleDependencyVisibility( select ) {
+			const selectedOption = select.options[select.selectedIndex] || null;
+			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
+				const dependencyElement = document.querySelector( option.dataset.dependency );
+				if ( ! dependencyElement ) {
+					return;
+				}
+
+				dependencyElement.classList.toggle( 'frm_hidden', selectedOption !== option );
+			});
+		}
+
+		// Initial setup: Show dependencies based on the current selection in each dropdown
+		selects.forEach( select => {
+			toggleDependencyVisibility( select );
+		});
+
+		// Update dependencies visibility on dropdown change
+		document.addEventListener( 'change', event => {
+			const element = event.target;
+			if ( element.matches( 'select.frm_select_with_dependency' ) ) {
+				toggleDependencyVisibility( element );
+			}
+		});
+	};
+
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -9724,6 +9784,7 @@ function frmAdminBuildJS() {
 			}
 
 			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
+			initSelectDependencies();
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			if ( $advInfo.length > 0 || jQuery( '.frm_field_list' ).length > 0 ) {
