@@ -7486,17 +7486,19 @@ ul.frm_two_col {
 
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
-	text-align: right;
-	margin-left: auto;
+	text-align: left;
+	margin-right: var(--gap-xs);
 }
 
 .frm_code_list.frm-full-hover a {
-	overflow: hidden;
+	max-width: 95%;
+    display: inline-block;
 }
 
 .frm_code_list.frm-full-hover a,
 .frm_code_list.frm-full-hover a span {
 	white-space: nowrap;
+	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
