@@ -9,5 +9,6 @@ export const STEPS = {
 	INITIAL: INITIAL_STEP,
 	DEFAULT_EMAIL_ADDRESS: 'default-email-address',
 	INSTALL_FORMIDABLE_PRO: 'install-formidable-pro',
-	LICENSE_MANAGEMENT: 'license-management'
+	LICENSE_MANAGEMENT: 'license-management',
+	SUCCESS: 'success'
 };

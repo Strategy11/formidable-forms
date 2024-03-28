@@ -46,7 +46,6 @@ class FrmHooksController {
 			}
 			unset( $c );
 		}
-
 	}
 
 	/**
@@ -217,6 +216,7 @@ class FrmHooksController {
 
 		// Onboarding Wizard Controller.
 		add_action( 'wp_ajax_frm_onboarding_setup_email_step', 'FrmOnboardingWizardController::ajax_setup_email_step' );
+		add_action( 'wp_ajax_frm_onboarding_setup_usage_data', 'FrmOnboardingWizardController::setup_usage_data' );
 
 		// Addons.
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );

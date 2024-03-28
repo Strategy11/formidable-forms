@@ -86,6 +86,7 @@ class FrmOnboardingWizardHelper {
 	public static function get_footer( $args = array() ) {
 		$defaults = array(
 			'footer-class'             => '',
+			'display-back-button'      => true,
 			// Primary Button Args.
 			'primary-button-text'      => esc_html__( 'Next Step', 'formidable' ),
 			'primary-button-class'     => '',

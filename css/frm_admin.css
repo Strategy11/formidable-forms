@@ -1666,6 +1666,10 @@ input.frm_insert_in_template {
 	margin-left: auto;
 }
 
+.frm-mr-auto {
+	margin-right: auto;
+}
+
 .frm-mx-0 {
 	margin-left: 0 !important;
 	margin-right: 0 !important;

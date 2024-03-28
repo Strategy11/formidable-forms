@@ -2,9 +2,8 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { navigateToStep } from '../events';
-import { PREFIX, STEPS, WELCOME_STEP_ID, proIsIncluded } from '../shared';
-import { frmAnimate, getQueryParam, hasQueryParam, removeQueryParam } from '../utils';
+import { STEPS, WELCOME_STEP_ID, proIsIncluded } from '../shared';
+import { frmAnimate, getQueryParam, hasQueryParam, navigateToStep, removeQueryParam } from '../utils';
 import { addProgressToCardBoxes } from '../../common/components';
 
 /**

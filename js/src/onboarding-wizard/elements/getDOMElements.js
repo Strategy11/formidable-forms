@@ -16,6 +16,7 @@ function getDOMElements() {
 		container: document.getElementById( `${PREFIX}-container` ),
 		steps: document.querySelectorAll( `.${PREFIX}-step` ),
 		skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+		backButtons: document.querySelectorAll( `.${PREFIX}-back-button` ),
 		hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' )
 	};
 

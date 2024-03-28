@@ -1,10 +1,9 @@
 /**
  * Internal dependencies
  */
-import { navigateToNextStep } from '.';
 import { getElements } from '../elements';
 import { nonce } from '../shared';
-import { addToRequestQueue, onClickPreventDefault } from '../utils';
+import { addToRequestQueue, navigateToNextStep, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.

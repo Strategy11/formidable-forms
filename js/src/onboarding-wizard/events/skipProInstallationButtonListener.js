@@ -1,10 +1,9 @@
 /**
  * Internal dependencies
  */
-import { navigateToStep } from '.';
 import { getElements } from '../elements';
 import { STEPS } from '../shared';
-import { onClickPreventDefault } from '../utils';
+import { navigateToStep, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Skip" button in the "Install Formidable Pro" step.

@@ -1,9 +1,8 @@
 /**
  * Internal dependencies
  */
-import { navigateToNextStep } from '.';
 import { getElements } from '../elements';
-import { onClickPreventDefault } from '../utils';
+import { navigateToNextStep, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Skip" step button.

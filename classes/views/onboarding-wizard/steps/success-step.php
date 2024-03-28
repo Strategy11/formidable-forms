@@ -27,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmOnboardingWizardHelper::get_footer(
 		array(
 			'footer-class' => 'frm-justify-center frm-mt-2xl',
+			'display-back-button'        => false,
 			'primary-button-text'        => esc_html__( 'Go to Dashboard', 'formidable' ),
 			'primary-button-href'        => admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ),
 			'primary-button-role'        => false,

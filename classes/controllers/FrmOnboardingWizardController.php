@@ -237,7 +237,6 @@ class FrmOnboardingWizardController {
 		include $view_path . 'index.php';
 	}
 
-
 	/**
 	 * Handle AJAX request to setup the "Default Email Address" step.
 	 *
@@ -261,6 +260,22 @@ class FrmOnboardingWizardController {
 		// Remove the 'FrmProSettingsController::store' action to avoid PHP errors during AJAX call.
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
+
+		// Send response.
+		wp_send_json_success();
+	}
+
+	/**
+	 * Handle AJAX request to setup the Onboarding Wizard usage data.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function setup_usage_data() {
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Send response.
 		wp_send_json_success();
