@@ -1926,6 +1926,104 @@ var CHECKED_CLASS = 'frm-checked';
 
 /***/ }),
 
+/***/ "./js/src/common/createAppState.js":
+/*!*****************************************!*\
+  !*** ./js/src/common/createAppState.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createAppState: () => (/* binding */ createAppState)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+/**
+ * Factory function to create a new application state management object.
+ * Allows for custom initialization of the application state specific to each feature or package.
+ *
+ * @param {Function} initializer A function that provides custom initialization logic for the application state.
+ * @throws {Error} Throws an error if the `initializer` is not a function.
+ * @return {{initializeAppState: Function, getAppState: Function, setAppState: Function, getAppStateProperty: Function, setAppStateProperty: Function}}
+ *         An object containing functions to manage and access the application state.
+ */
+var createAppState = function createAppState(initializer) {
+  var appState = null;
+
+  /**
+   * Initializes the application state using the initializer provided.
+   * The initializer function is expected to return the initial state object.
+   *
+   * @throws {Error} Throws an error if `initializer` is not a function.
+   * @return {void}
+   */
+  var initializeAppState = function initializeAppState() {
+    if (typeof initializer === 'function') {
+      appState = initializer();
+    } else {
+      throw new Error('initializeAppState: Initializer must be a function');
+    }
+  };
+
+  /**
+   * Returns the current application state.
+   *
+   * @return {Object} The current state of the application.
+   */
+  var getAppState = function getAppState() {
+    return appState;
+  };
+
+  /**
+   * Updates the application state with new values.
+   *
+   * @param {Object} newState The new values to update the state with.
+   */
+  var setAppState = function setAppState(newState) {
+    appState = _objectSpread(_objectSpread({}, appState), newState);
+  };
+
+  /**
+   * Returns a specific property from the current application state.
+   *
+   * @param {string} propertyName The name of the property to retrieve.
+   * @return {*} The value of the specified property, or null if it doesn't exist.
+   */
+  var getAppStateProperty = function getAppStateProperty(propertyName) {
+    var _Reflect$get;
+    return (_Reflect$get = Reflect.get(appState, propertyName)) !== null && _Reflect$get !== void 0 ? _Reflect$get : null;
+  };
+
+  /**
+   * Updates a specific property in the application state with a new value.
+   *
+   * @param {string} propertyName The name of the property to update.
+   * @param {*} value The new value to set for the property.
+   * @return {void}
+   */
+  var setAppStateProperty = function setAppStateProperty(propertyName, value) {
+    if (Reflect.has(appState, propertyName)) {
+      Reflect.set(appState, propertyName, value);
+    }
+  };
+
+  // Return an object containing all state management functions and the custom initializer
+  return {
+    initializeAppState: initializeAppState,
+    getAppState: getAppState,
+    setAppState: setAppState,
+    getAppStateProperty: getAppStateProperty,
+    setAppStateProperty: setAppStateProperty
+  };
+};
+
+/***/ }),
+
 /***/ "./js/src/common/utilities/animation.js":
 /*!**********************************************!*\
   !*** ./js/src/common/utilities/animation.js ***!
@@ -3985,40 +4083,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setAppState: () => (/* binding */ setAppState),
 /* harmony export */   setAppStateProperty: () => (/* binding */ setAppStateProperty)
 /* harmony export */ });
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/shared/index.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+/* harmony import */ var _common_createAppState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../common/createAppState */ "./js/src/common/createAppState.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/shared/index.js");
 /**
  * Internal dependencies
  */
 
 
-var appState = null;
+
 
 /**
- * Initialize the application state.
+ * Creates an instance of application state management for the Form Templates.
  *
- * @return {void}
-*/
-var initializeAppState = function initializeAppState() {
+ * @return {Object} The initial state of the application.
+ */
+var formTemplatesAppState = (0,_common_createAppState__WEBPACK_IMPORTED_MODULE_0__.createAppState)(function () {
   var _window$frmFormTempla = window.frmFormTemplatesVars,
     templatesCount = _window$frmFormTempla.templatesCount,
     favoritesCount = _window$frmFormTempla.favoritesCount,
     customCount = _window$frmFormTempla.customCount;
-  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
     allTemplatesCategory = _getElements.allTemplatesCategory,
     availableTemplateItems = _getElements.availableTemplateItems,
     freeTemplateItems = _getElements.freeTemplateItems,
     firstLockedFreeTemplate = _getElements.firstLockedFreeTemplate;
   var availableTemplatesCount = availableTemplateItems.length;
   var extraTemplatesCount = templatesCount - availableTemplatesCount;
-  appState = {
-    selectedCategory: ___WEBPACK_IMPORTED_MODULE_1__.VIEW_SLUGS.ALL_TEMPLATES,
+  return {
+    selectedCategory: ___WEBPACK_IMPORTED_MODULE_2__.VIEW_SLUGS.ALL_TEMPLATES,
     selectedCategoryEl: allTemplatesCategory,
     selectedTemplate: firstLockedFreeTemplate,
     notEmptySearchText: false,
@@ -4028,50 +4121,13 @@ var initializeAppState = function initializeAppState() {
     freeTemplatesCount: freeTemplateItems.length,
     extraTemplatesCount: extraTemplatesCount
   };
-};
+});
+var initializeAppState = formTemplatesAppState.initializeAppState,
+  getAppState = formTemplatesAppState.getAppState,
+  setAppState = formTemplatesAppState.setAppState,
+  getAppStateProperty = formTemplatesAppState.getAppStateProperty,
+  setAppStateProperty = formTemplatesAppState.setAppStateProperty;
 
-/**
- * Returns the current application state.
- *
- * @return {Object} The current state of the application.
- */
-var getAppState = function getAppState() {
-  return appState;
-};
-
-/**
- * Updates the application state with new values.
- *
- * @param {Object} newState The new values to update the state.
- * @return {void}
- */
-var setAppState = function setAppState(newState) {
-  appState = _objectSpread(_objectSpread({}, appState), newState);
-};
-
-/**
- * Returns a specific property from the current application state.
- *
- * @param {string} propertyName The property name to retrieve from the state.
- * @return {*} The value of the specified property, or null if it doesn't exist.
- */
-var getAppStateProperty = function getAppStateProperty(propertyName) {
-  var _Reflect$get;
-  return (_Reflect$get = Reflect.get(appState, propertyName)) !== null && _Reflect$get !== void 0 ? _Reflect$get : null;
-};
-
-/**
- * Updates a specific property in the application state with a new value.
- *
- * @param {string} propertyName The property name to update.
- * @param {*} value The new value to set.
- * @return {void}
- */
-var setAppStateProperty = function setAppStateProperty(propertyName, value) {
-  if (Reflect.has(appState, propertyName)) {
-    Reflect.set(appState, propertyName, value);
-  }
-};
 
 /***/ }),
 

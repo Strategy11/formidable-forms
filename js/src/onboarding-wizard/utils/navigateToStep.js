@@ -1,9 +1,9 @@
 /**
  * Internal dependencies
  */
-import { setDataUsage } from '../dataUtils';
+import { setupDataUsage } from '../dataUtils';
 import { getElements } from '../elements';
-import { CURRENT_CLASS, PREFIX, STEPS } from '../shared';
+import { CURRENT_CLASS, getAppState, PREFIX, setAppStateProperty } from '../shared';
 import { hide, frmAnimate, show, setQueryParam } from '../utils';
 
 /**
@@ -33,17 +33,12 @@ export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 	show( targetStep );
 	new frmAnimate( targetStep ).fadeIn();
 
-	// Update the onboarding wizard's current step attribute
 	const { onboardingWizardPage } = getElements();
+	// Update the onboarding wizard's current step attribute
 	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
 
 	// Update the URL query parameter, with control over history update method
 	setQueryParam( 'step', stepName, updateMethod );
-
-	//
-	if ( STEPS.SUCCESS === stepName ) {
-		setDataUsage();
-	}
 };
 
 /**
@@ -60,6 +55,18 @@ export const navigateToNextStep = () => {
 	if ( ! nextStep ) {
 		return;
 	}
+
+	const processedStep = currentStep.dataset.stepName;
+
+	// Save processed steps
+	const { processedSteps } = getAppState();
+	if ( ! processedSteps.includes( processedStep ) ) {
+		processedSteps.push( processedStep );
+		console.log( processedSteps );
+		setAppStateProperty( 'processedSteps', processedSteps );
+	}
+
+	setupDataUsage( processedStep );
 
 	navigateToStep( nextStep.dataset.stepName );
 };

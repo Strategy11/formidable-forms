@@ -266,7 +266,7 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Handle AJAX request to setup the Onboarding Wizard usage data.
+	 * Handle AJAX request to set up usage data for the Onboarding Wizard.
 	 *
 	 * @since x.x
 	 *

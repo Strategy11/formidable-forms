@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { initializeElements } from './elements';
+import { initializeAppState } from './shared';
 import { addEventListeners } from './events';
 import { setupInitialView } from './ui';
 
@@ -11,12 +12,9 @@ import { setupInitialView } from './ui';
  * @return {void}
  */
 function initializeOnboardingWizard() {
-	// Initializes essential DOM elements
 	initializeElements();
-
-	// Set up the initial view, including any required DOM manipulations for proper presentation
+	initializeAppState();
 	setupInitialView();
-
 	addEventListeners();
 }
 
