@@ -262,10 +262,9 @@ DEFAULT_HTML;
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
-			<?php echo esc_html( $field['required_indicator'] ); ?>
-
+				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
-				<span class="frm-sub-label frm-collapsed-label">
+			<span class="frm-sub-label frm-collapsed-label">
 				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 			</span>
 		</label>

@@ -5109,7 +5109,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
 		}
 
-		wp.hooks.doAction( 'frmRenumberPageBreaks', pages );
+		wp.hooks.doAction( 'frm_renumber_page_breaks', pages );
 	}
 
 	// The fake field works differently than real fields.

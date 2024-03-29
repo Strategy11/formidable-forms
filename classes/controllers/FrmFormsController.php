@@ -140,7 +140,7 @@ class FrmFormsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param object $form Form object.
+	 * @param int|object $form Form ID or object.
 	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
@@ -1143,7 +1143,7 @@ class FrmFormsController {
 		self::maybe_update_form_builder_message( $message );
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-		$has_fields    = isset( $values['fields'] ) && ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+		$has_fields    = ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
