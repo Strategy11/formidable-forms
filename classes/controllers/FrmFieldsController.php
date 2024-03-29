@@ -689,27 +689,15 @@ class FrmFieldsController {
 	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
-		if ( $field['type'] === 'hidden' ) {
-			$field_messages_status = array(
-				'data-invmsg' => false,
-				'data-reqmsg' => false,
-			);
-		} else {
-			$field_messages_status = array(
-				'data-invmsg' => true,
-				'data-reqmsg' => true,
-			);
-		}
+		$field_validation_messages = self::get_field_validation_messages_status( $field );
 
-		$field_messages_status = apply_filters( 'frm_field_messages_status', $field_messages_status, $field );
-
-		if ( FrmField::is_required( $field ) && $field_messages_status['data-reqmsg'] ) {
+		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages['data-reqmsg'] ) ) {
 			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
 			self::maybe_add_html_required( $field, $add_html );
 		}
 
-		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && $field_messages_status['data-invmsg'] ) {
+		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && ! empty( $field_validation_messages['data-invmsg'] ) ) {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
@@ -717,6 +705,38 @@ class FrmFieldsController {
 		if ( ! empty( $add_html['data-reqmsg'] ) || ! empty( $add_html['data-invmsg'] ) ) {
 			self::maybe_add_error_html_for_js_validation( $field, $add_html );
 		}
+	}
+
+	/**
+	 * Returns an array that contains field validation messages status.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field_array
+	 * @return array
+	 */
+	private static function get_field_validation_messages_status( $field_array ) {
+		if ( $field_array['type'] === 'hidden' ) {
+			$field_validation_messages_status = array(
+				'data-invmsg' => false,
+				'data-reqmsg' => false,
+			);
+		} else {
+			$field_validation_messages_status = array(
+				'data-invmsg' => true,
+				'data-reqmsg' => true,
+			);
+		}
+
+		/**
+		 * Allows controlling which field validation messages would be included in the field html.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field_validation_messages_status
+		 * @param array $field_array
+		 */
+		return apply_filters( 'frm_field_validation_messages_status', $field_validation_messages_status, $field_array );
 	}
 
 	/**
