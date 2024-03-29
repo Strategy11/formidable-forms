@@ -492,7 +492,7 @@ function frmFrontFormJS() {
 			confirmValue = confirmField.value;
 		}
 
-		if ( value !== confirmValue ) {
+		if ( ! ( value === '' && confirmValue === ''  ) && value !== confirmValue ) {
 			errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			return
 		}
