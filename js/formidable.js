@@ -483,17 +483,25 @@ function frmFrontFormJS() {
 		if ( confirmField === null || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
 			return;
 		}
-
 		if ( fieldID !== strippedFieldID ) {
 			firstField = document.getElementById( strippedId );
 			value = firstField.value;
 			confirmValue = confirmField.value;
-			if ( '' !== value && '' !== confirmValue && value !== confirmValue ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
-			}
 		} else {
-			validateField( confirmField );
+			value        = field.value;
+			confirmValue = confirmField.value;
 		}
+
+		if ( value !== confirmValue ) {
+			errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
+			return
+		}
+
+		if ( fieldID !== strippedFieldID ) {
+			return;
+		}
+
+		validateField( confirmField );
 	}
 
 	function checkNumberField( field, errors ) {
