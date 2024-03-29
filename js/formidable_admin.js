@@ -1773,8 +1773,23 @@ function frmAdminBuildJS() {
 		}
 
 		if ( isSubmitBtn ) {
-			// Only allow dropping submit button into the last row.
-			return droppable.parentElement.matches( '#frm-show-fields > li:last-child' );
+			if ( droppable.classList.contains( 'start_divider' ) ) {
+				// Don't allow dropping submit button into a repeater.
+				return false;
+			}
+
+			if ( isLastRow( droppable.parentElement ) ) {
+				// Allow dropping submit button into the last row.
+				return true;
+			}
+
+			if ( ! isLastRow( droppable.parentElement.nextElementSibling ) ) {
+				// Don't a dropping submit button into the row that isn't the second one from bottom.
+				return false;
+			}
+
+			// Allow dropping submit button into the second row from bottom if there is only submit button in the last row.
+			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
@@ -1791,6 +1806,16 @@ function frmAdminBuildJS() {
 		}
 
 		return allowMoveField( draggable, droppable );
+	}
+
+	/**
+	 * Checks if given element is the last row in form builder.
+	 *
+	 * @param {HTMLElement} element Element.
+	 * @return {Boolean}
+	 */
+	function isLastRow( element ) {
+		return element && element.matches( '#frm-show-fields > li:last-child' );
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
