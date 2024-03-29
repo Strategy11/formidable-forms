@@ -689,15 +689,15 @@ class FrmFieldsController {
 	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
-		$field_validation_messages = self::get_field_validation_messages_status( $field );
+		$field_validation_messages_status = self::get_field_validation_messages_status( $field );
 
-		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages['data-reqmsg'] ) ) {
+		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages_status['data-reqmsg'] ) ) {
 			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
 			self::maybe_add_html_required( $field, $add_html );
 		}
 
-		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && ! empty( $field_validation_messages['data-invmsg'] ) ) {
+		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && ! empty( $field_validation_messages_status['data-invmsg'] ) ) {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
