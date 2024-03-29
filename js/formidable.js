@@ -488,7 +488,7 @@ function frmFrontFormJS() {
 			firstField = document.getElementById( strippedId );
 			value = firstField.value;
 			confirmValue = confirmField.value;
-			if ( value !== confirmValue ) {
+			if ( ! ( value === '' && confirmValue === '' ) && value !== confirmValue ) {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			}
 		} else {
