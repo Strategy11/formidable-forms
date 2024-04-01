@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-03-27 22:02\n"
+"PO-Revision-Date: 2024-04-01 19:03\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -459,11 +459,11 @@ msgstr ""
 
 #: classes/controllers/FrmDashboardController.php:160
 msgid "Create a Payment Form"
-msgstr ""
+msgstr "Crie um formulário de pagamento"
 
 #: classes/controllers/FrmDashboardController.php:165
 msgid "Total Earnings"
-msgstr ""
+msgstr "Total de lucros"
 
 #: classes/controllers/FrmDashboardController.php:189
 msgid "Total Forms"
@@ -3739,7 +3739,7 @@ msgstr "Formulários de pesquisa"
 #: classes/helpers/FrmFormsHelper.php:187
 #: classes/views/frm-entries/show.php:50
 msgid "(ID %d)"
-msgstr ""
+msgstr "(ID %d)"
 
 #: classes/helpers/FrmFormsHelper.php:506
 msgid "Field ID"
@@ -4124,7 +4124,7 @@ msgstr "Abrir em uma nova aba"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "Select a page"
-msgstr ""
+msgstr "Selecione uma página"
 
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:146
@@ -4602,7 +4602,7 @@ msgstr ""
 #: classes/models/fields/FrmFieldType.php:428
 #: classes/models/fields/FrmFieldType.php:578
 msgid "%s Options"
-msgstr ""
+msgstr "Opções de %s"
 
 #: classes/models/fields/FrmFieldType.php:480
 #: classes/views/frm-fields/back-end/settings.php:117
@@ -5075,7 +5075,7 @@ msgstr ""
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:150
 msgid "%s must be unique."
-msgstr ""
+msgstr "%s deve ser único."
 
 #: classes/models/FrmSettings.php:151
 msgid "There was a problem with your submission. Errors are marked below."
@@ -7443,7 +7443,7 @@ msgstr "Modo"
 #: stripe/controllers/FrmTransLitePaymentsController.php:117
 #: stripe/helpers/FrmTransLiteListHelper.php:400
 msgid "%d (Deleted)"
-msgstr ""
+msgstr "%d (excluído)"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:136
 #: stripe/controllers/FrmTransLitePaymentsController.php:191
@@ -7538,11 +7538,11 @@ msgstr ""
 #: stripe/helpers/FrmTransLiteAppHelper.php:227
 #: stripe/views/action-settings/payments-options.php:66
 msgid "day(s)"
-msgstr ""
+msgstr "dia(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:228
 msgid "week(s)"
-msgstr ""
+msgstr "semana(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
@@ -7550,7 +7550,7 @@ msgstr "mês(es)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
-msgstr ""
+msgstr "ano(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
@@ -7692,7 +7692,7 @@ msgstr "Usuário"
 #: stripe/views/payments/show.php:53
 #: stripe/views/subscriptions/show.php:52
 msgid "Receipt"
-msgstr ""
+msgstr "Recibo"
 
 #: stripe/views/payments/show.php:60
 msgid "Invoice #"
@@ -7766,7 +7766,7 @@ msgstr "Conectado"
 
 #: stripe/views/settings/connect.php:18
 msgid "Not connected!"
-msgstr ""
+msgstr "Não conectado!"
 
 #: stripe/views/settings/connect.php:23
 msgid "Finish Stripe Setup"
@@ -7852,7 +7852,7 @@ msgstr ""
 
 #: js/admin/dom.js:159
 msgid "— Select —"
-msgstr ""
+msgstr "— Selecionar —"
 
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:77
@@ -7890,7 +7890,7 @@ msgstr ""
 #. translators: %s: type (ie. view, form).
 #: js/admin/embed.js:192
 msgid "Insert %s"
-msgstr ""
+msgstr "Inserir %s"
 
 #: js/admin/embed.js:227
 msgid "Please select a page"
