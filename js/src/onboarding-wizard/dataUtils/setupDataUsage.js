@@ -1,4 +1,3 @@
-import { getElements } from '../elements';
 import { getAppState, STEPS } from '../shared';
 
 const dataCaptureStepsSet = new Set([
@@ -18,29 +17,41 @@ function setupDataUsage( processedStep ) {
 		return;
 	}
 
+	let hasData = false;
 	const formData = new FormData();
 
 	if ( STEPS.DEFAULT_EMAIL_ADDRESS === processedStep ) {
-		const { defaultEmailField, subscribeCheckbox, allowTrackingCheckbox } = getElements();
-
-		// Prepare FormData for the POST request
-		formData.append( 'default_email', defaultEmailField.value.trim() );
-		formData.append( 'is_subscribed', subscribeCheckbox?.checked ?? false );
-		formData.append( 'allows_tracking', allowTrackingCheckbox.checked );
+		const { emailStepData } = getAppState();
+		if ( emailStepData ) {
+			formData.append( 'default_email', emailStepData.default_email );
+			formData.append( 'is_subscribed', emailStepData.is_subscribed );
+			formData.append( 'allows_tracking', emailStepData.allows_tracking );
+			hasData = true;
+		}
 	}
 
 	if ( STEPS.INSTALL_ADDONS === processedStep ) {
-		const {installedAddons} = getAppState();
-		formData.append( 'installedAddons', installedAddons );
+		const { installedAddons } = getAppState();
+		if ( installedAddons.length > 0 ) {
+			formData.append( 'installed_addons', installedAddons );
+			hasData = true;
+		}
 	}
 
 	if ( STEPS.SUCCESS === processedStep ) {
-		formData.append( 'completed_steps', true );
+		const { processedSteps } = getAppState();
+		if ( processedSteps.length > 1 ) {
+			formData.append( 'processed_steps', processedSteps );
+			formData.append( 'completed_steps', true );
+			hasData = true;
+		}
 	}
 
-	// Send the POST request
-	const { doJsonPost } = frmDom.ajax;
-	doJsonPost( 'onboarding_setup_usage_data', formData );
+	if ( hasData ) {
+		// Send the POST request
+		const { doJsonPost } = frmDom.ajax;
+		doJsonPost( 'onboarding_setup_usage_data', formData );
+	}
 }
 
 export default setupDataUsage;

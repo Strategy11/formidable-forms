@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
+import { getAppState, setAppStateProperty } from '../shared';
 import { showEmailAddressError } from '../ui';
 import { isValidEmail, navigateToNextStep, onClickPreventDefault } from '../utils';
 
@@ -48,6 +49,13 @@ const onSetupEmailStepButtonClick = async() => {
 		// Avoid replacing `#frm_leave_email_wrapper` content with a success message after email setup to prevent errors during modifications.
 		wp.hooks.addFilter( 'frm_thank_you_on_signup', 'frmOnboardingWizard', () => false );
 	}
+
+	// Capture usage data
+	const { emailStepData } = getAppState();
+	emailStepData.default_email = email;
+	emailStepData.is_subscribed = subscribeCheckbox?.checked;
+	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
+	setAppStateProperty( 'emailStepData', emailStepData );
 
 	// Prepare FormData for the POST request
 	const formData = new FormData();

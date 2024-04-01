@@ -2,8 +2,8 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { nonce, setAppStateProperty, STEPS } from '../shared';
-import { addToRequestQueue, navigateToNextStep, navigateToStep, onClickPreventDefault } from '../utils';
+import { getAppState, nonce, setAppStateProperty } from '../shared';
+import { addToRequestQueue, navigateToNextStep, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.
@@ -26,20 +26,28 @@ function addInstallAddonsButtonEvents() {
  */
 const onInstallAddonsButtonClick = async( event ) => {
 	const addons = document.querySelectorAll( '.frm-option-box.frm-checked:not(.frm-disabled)' );
-
+	const { installedAddons } = getAppState();
 	const installAddonsButton = event.currentTarget;
+
 	installAddonsButton.classList.add( 'frm_loading_button' );
 
 	for ( const addon of addons ) {
 		try {
 			await addToRequestQueue( () => installAddon( addon.getAttribute( 'rel' ), addon.dataset ) );
+
+			// Capture addon title
+			const addonTitle = addon.dataset.title;
+			if ( ! installedAddons.includes( addonTitle ) ) {
+				installedAddons.push( addonTitle );
+			}
 		} catch ( error ) {
 			console.error( 'An error occurred:', error );
 		}
 	}
 
 	installAddonsButton.classList.remove( 'frm_loading_button' );
-	setAppStateProperty( 'installedAddons', [ ...addons ]);
+
+	setAppStateProperty( 'installedAddons', installedAddons );
 	navigateToNextStep();
 };
 

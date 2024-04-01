@@ -11,7 +11,8 @@ import { createAppState } from '../../common/createAppState';
 const onboardingWizardAppState = createAppState( () => {
 	return {
 		processedSteps: [],
-		installedAddons: []
+		installedAddons: [],
+		emailStepData: {}
 	};
 });
 

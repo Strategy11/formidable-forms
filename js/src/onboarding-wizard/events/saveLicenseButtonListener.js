@@ -27,7 +27,7 @@ function addSaveLicenseButtonEvents() {
 const onSaveLicenseButtonClick = async() => {
 	wp.hooks.addAction( 'frm_after_authorize', 'frmOnboardingWizard', data => {
 		if ( true === data.success ) {
-			// After authorization, update URL to "Default Email Address" step and reload page
+			// After authorization, update URL to "Default Email Address" step and reload the page
 			window.location.href = setQueryParam( 'step', STEPS.DEFAULT_EMAIL_ADDRESS, 'replaceState' );
 		}
 

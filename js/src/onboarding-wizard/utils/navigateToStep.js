@@ -61,13 +61,11 @@ export const navigateToNextStep = () => {
 	// Save processed steps
 	const { processedSteps } = getAppState();
 	if ( ! processedSteps.includes( processedStep ) ) {
-		processedSteps.push( processedStep );
-		console.log( processedSteps );
+		processedSteps.unshift( processedStep );
 		setAppStateProperty( 'processedSteps', processedSteps );
 	}
 
 	setupDataUsage( processedStep );
-
 	navigateToStep( nextStep.dataset.stepName );
 };
 

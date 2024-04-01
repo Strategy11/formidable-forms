@@ -28,8 +28,9 @@ class FrmOnboardingWizardHelper {
 	public static function add_addon_label_attributes( $addon_key, $addon ) {
 		$id         = 'frm-onboarding-' . $addon_key . '-addon';
 		$attributes = array(
-			'for'   => $id,
-			'class' => 'frm-option-box',
+			'for'        => $id,
+			'class'      => 'frm-option-box',
+			'data-title' => $addon['title'],
 		);
 
 		if ( ! empty( $addon['is-checked'] ) ) {
