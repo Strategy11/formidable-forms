@@ -7492,7 +7492,7 @@ ul.frm_two_col {
 
 .frm_code_list.frm-full-hover a {
 	max-width: 95%;
-    display: inline-block;
+    display: block;
 }
 
 .frm_code_list.frm-full-hover a,
