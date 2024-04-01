@@ -712,11 +712,11 @@ class FrmFieldsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param array $field_array
+	 * @param array|object $field
 	 * @return array
 	 */
-	private static function get_field_validation_messages_status( $field_array ) {
-		if ( $field_array['type'] === 'hidden' ) {
+	private static function get_field_validation_messages_status( $field) {
+		if ( FrmField::get_field_type( $field ) === 'hidden' ) {
 			$field_validation_messages_status = array(
 				'data-invmsg' => false,
 				'data-reqmsg' => false,
