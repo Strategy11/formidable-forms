@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-03-27 22:02\n"
+"PO-Revision-Date: 2024-04-01 19:03\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -459,11 +459,11 @@ msgstr ""
 
 #: classes/controllers/FrmDashboardController.php:160
 msgid "Create a Payment Form"
-msgstr ""
+msgstr "Créer un formulaire de paiement"
 
 #: classes/controllers/FrmDashboardController.php:165
 msgid "Total Earnings"
-msgstr ""
+msgstr "Total des revenus"
 
 #: classes/controllers/FrmDashboardController.php:189
 msgid "Total Forms"
@@ -3379,7 +3379,7 @@ msgstr "Svalbard et Jan Mayen"
 
 #: classes/helpers/FrmFieldsHelper.php:1787
 msgid "Swaziland"
-msgstr ""
+msgstr "Swaziland"
 
 #: classes/helpers/FrmFieldsHelper.php:1788
 msgid "Sweden"
@@ -3739,7 +3739,7 @@ msgstr "Rechercher parmi les formulaires"
 #: classes/helpers/FrmFormsHelper.php:187
 #: classes/views/frm-entries/show.php:50
 msgid "(ID %d)"
-msgstr ""
+msgstr "(ID %d)"
 
 #: classes/helpers/FrmFormsHelper.php:506
 msgid "Field ID"
@@ -5008,7 +5008,7 @@ msgstr ""
 #: classes/models/FrmOnSubmitAction.php:38
 #: classes/views/frm-fields/back-end/settings.php:391
 msgid "Confirmation"
-msgstr ""
+msgstr "Confirmation"
 
 #: classes/models/FrmPersonalData.php:28
 msgid "Formidable Forms Exporter"
@@ -5075,7 +5075,7 @@ msgstr ""
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:150
 msgid "%s must be unique."
-msgstr ""
+msgstr "%s doit être unique."
 
 #: classes/models/FrmSettings.php:151
 msgid "There was a problem with your submission. Errors are marked below."
@@ -7400,7 +7400,7 @@ msgstr ""
 
 #: stripe/controllers/FrmTransLiteListsController.php:57
 msgid "Receipt ID"
-msgstr ""
+msgstr "ID du reçu"
 
 #: stripe/controllers/FrmTransLiteListsController.php:60
 #: stripe/views/action-settings/payments-options.php:25
@@ -7443,7 +7443,7 @@ msgstr "Mode"
 #: stripe/controllers/FrmTransLitePaymentsController.php:117
 #: stripe/helpers/FrmTransLiteListHelper.php:400
 msgid "%d (Deleted)"
-msgstr ""
+msgstr "%d (supprimé)"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:136
 #: stripe/controllers/FrmTransLitePaymentsController.php:191
@@ -7538,11 +7538,11 @@ msgstr ""
 #: stripe/helpers/FrmTransLiteAppHelper.php:227
 #: stripe/views/action-settings/payments-options.php:66
 msgid "day(s)"
-msgstr ""
+msgstr "jour(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:228
 msgid "week(s)"
-msgstr ""
+msgstr "semaine(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
@@ -7550,7 +7550,7 @@ msgstr "mois(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
-msgstr ""
+msgstr "année(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
@@ -7692,11 +7692,11 @@ msgstr "Utilisateur/utilisatrice"
 #: stripe/views/payments/show.php:53
 #: stripe/views/subscriptions/show.php:52
 msgid "Receipt"
-msgstr ""
+msgstr "Justificatif"
 
 #: stripe/views/payments/show.php:60
 msgid "Invoice #"
-msgstr ""
+msgstr "Facture #"
 
 #: stripe/views/payments/show.php:67
 #: stripe/views/subscriptions/show.php:11
@@ -7766,7 +7766,7 @@ msgstr "Connecté"
 
 #: stripe/views/settings/connect.php:18
 msgid "Not connected!"
-msgstr ""
+msgstr "Non connecté!"
 
 #: stripe/views/settings/connect.php:23
 msgid "Finish Stripe Setup"
@@ -7852,7 +7852,7 @@ msgstr ""
 
 #: js/admin/dom.js:159
 msgid "— Select —"
-msgstr ""
+msgstr "— Sélectionner —"
 
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:77
