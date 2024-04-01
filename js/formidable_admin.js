@@ -4865,10 +4865,27 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	const getChoiceValueAndLabel = choiceElement => {
+		let value, label;
+		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
+			label = choiceElement.value;
+			if ( ! value ) {
+				value = label;
+			}
+			return { value, label };
+		}
+
+		label = choiceElement.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).value;
+		value = choiceElement.value;
+		return { value, label };
+	};
+
 	function onOptionTextBlur() {
 		var originalValue,
 			oldValue = this.getAttribute( 'data-value-on-focus' ),
-			newValue = this.value,
+			newValue,
+			newValueLabel,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4882,6 +4899,10 @@ function frmAdminBuildJS() {
 			setting,
 			optionMatches,
 			option;
+
+		const choiceComponents = getChoiceValueAndLabel( this );
+		newValue      = choiceComponents.value;
+		newValueLabel = choiceComponents.label;
 
 		if ( oldValue === newValue ) {
 			return;
@@ -4941,7 +4962,7 @@ function frmAdminBuildJS() {
 			}
 
 			option.setAttribute( 'value', newValue );
-			option.textContent = newValue;
+			option.textContent = newValueLabel;
 
 			if ( fieldIds.indexOf( logicId ) === -1 ) {
 				fieldIds.push( logicId );
@@ -5503,13 +5524,23 @@ function frmAdminBuildJS() {
 				expectedOption = fieldOptions[ optionIndex ];
 				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
 
-				if ( optionMatch === null ) {
+				var optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' )
+
+				var expectedOptionContainer = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
+
+				const choiceComponents = getChoiceValueAndLabel( expectedOptionContainer );
+				newValue      = choiceComponents.value;
+				newValueLabel = choiceComponents.label;
+
+				if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' ) ) {
 					optionMatch = document.createElement( 'option' );
-					optionMatch.setAttribute( 'value', expectedOption );
-					optionMatch.textContent = expectedOption;
+					optionMatch.setAttribute( 'value', newValue );
+					optionMatch.textContent = newValueLabel;
 				}
 
-				valueSelect.prepend( optionMatch );
+				if ( optionMatch ) {
+					valueSelect.prepend( optionMatch );
+				}
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
