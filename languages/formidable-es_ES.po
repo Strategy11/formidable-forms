@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-03-27 22:02\n"
+"PO-Revision-Date: 2024-04-01 19:03\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -459,11 +459,11 @@ msgstr ""
 
 #: classes/controllers/FrmDashboardController.php:160
 msgid "Create a Payment Form"
-msgstr ""
+msgstr "Crear un formulario de pago"
 
 #: classes/controllers/FrmDashboardController.php:165
 msgid "Total Earnings"
-msgstr ""
+msgstr "Ingresos totales"
 
 #: classes/controllers/FrmDashboardController.php:189
 msgid "Total Forms"
@@ -3051,7 +3051,7 @@ msgstr "Macao"
 
 #: classes/helpers/FrmFieldsHelper.php:1705
 msgid "Macedonia"
-msgstr ""
+msgstr "República de Macedonia"
 
 #: classes/helpers/FrmFieldsHelper.php:1706
 msgid "Madagascar"
@@ -3739,7 +3739,7 @@ msgstr "Buscar formularios"
 #: classes/helpers/FrmFormsHelper.php:187
 #: classes/views/frm-entries/show.php:50
 msgid "(ID %d)"
-msgstr ""
+msgstr "(ID %d)"
 
 #: classes/helpers/FrmFormsHelper.php:506
 msgid "Field ID"
@@ -5075,7 +5075,7 @@ msgstr ""
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:150
 msgid "%s must be unique."
-msgstr ""
+msgstr "%s debe ser único."
 
 #: classes/models/FrmSettings.php:151
 msgid "There was a problem with your submission. Errors are marked below."
@@ -7400,7 +7400,7 @@ msgstr ""
 
 #: stripe/controllers/FrmTransLiteListsController.php:57
 msgid "Receipt ID"
-msgstr ""
+msgstr "ID del recibo"
 
 #: stripe/controllers/FrmTransLiteListsController.php:60
 #: stripe/views/action-settings/payments-options.php:25
@@ -7538,11 +7538,11 @@ msgstr ""
 #: stripe/helpers/FrmTransLiteAppHelper.php:227
 #: stripe/views/action-settings/payments-options.php:66
 msgid "day(s)"
-msgstr ""
+msgstr "día(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:228
 msgid "week(s)"
-msgstr ""
+msgstr "semana(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:229
 msgid "month(s)"
@@ -7550,7 +7550,7 @@ msgstr "mes/es"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:230
 msgid "year(s)"
-msgstr ""
+msgstr "año(s)"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:369
 msgid "Guest"
@@ -7852,7 +7852,7 @@ msgstr "El acceso a esta aplicación requiere el plan %s."
 
 #: js/admin/dom.js:159
 msgid "— Select —"
-msgstr ""
+msgstr "— Seleccionar —"
 
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:77
