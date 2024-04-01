@@ -734,7 +734,7 @@ class FrmFieldsController {
 		 * @since x.x
 		 *
 		 * @param array $field_validation_messages_status
-		 * @param array $field
+		 * @param array|object $field
 		 */
 		return apply_filters( 'frm_field_validation_messages_status', $field_validation_messages_status, $field );
 	}
