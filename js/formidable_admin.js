@@ -4884,8 +4884,6 @@ function frmAdminBuildJS() {
 	function onOptionTextBlur() {
 		var originalValue,
 			oldValue = this.getAttribute( 'data-value-on-focus' ),
-			newValue,
-			newValueLabel,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4901,8 +4899,8 @@ function frmAdminBuildJS() {
 			option;
 
 		const choiceComponents = getChoiceValueAndLabel( this );
-		newValue      = choiceComponents.value;
-		newValueLabel = choiceComponents.label;
+		const newValue = choiceComponents.value;
+		const newLabel = choiceComponents.label;
 
 		if ( oldValue === newValue ) {
 			return;
@@ -4962,7 +4960,7 @@ function frmAdminBuildJS() {
 			}
 
 			option.setAttribute( 'value', newValue );
-			option.textContent = newValueLabel;
+			option.textContent = newLabel;
 
 			if ( fieldIds.indexOf( logicId ) === -1 ) {
 				fieldIds.push( logicId );
