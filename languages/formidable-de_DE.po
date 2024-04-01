@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-03-27 22:02\n"
+"PO-Revision-Date: 2024-04-01 19:03\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -3739,7 +3739,7 @@ msgstr "Formulare durchsuchen"
 #: classes/helpers/FrmFormsHelper.php:187
 #: classes/views/frm-entries/show.php:50
 msgid "(ID %d)"
-msgstr ""
+msgstr "(ID %d)"
 
 #: classes/helpers/FrmFormsHelper.php:506
 msgid "Field ID"
@@ -5075,7 +5075,7 @@ msgstr ""
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:150
 msgid "%s must be unique."
-msgstr ""
+msgstr "%s muss einzigartig sein."
 
 #: classes/models/FrmSettings.php:151
 msgid "There was a problem with your submission. Errors are marked below."
@@ -7852,7 +7852,7 @@ msgstr "Der Zugriff auf diese Applikation erfordert den %s Plan."
 
 #: js/admin/dom.js:159
 msgid "— Select —"
-msgstr ""
+msgstr "— Auswählen —"
 
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:77
