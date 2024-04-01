@@ -90,4 +90,34 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$this->assertArrayHasKey( 'draft', $new_field );
 		$this->assertEquals( 1, $new_field['draft'] );
 	}
+
+	/**
+	 * @covers FrmFieldsController::add_validation_messages
+	 */
+	public function test_add_validation_messages() {
+		$form_id   = $this->factory->form->create();
+		$field     = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'email',
+			)
+		);
+		$field = FrmFieldsHelper::setup_edit_vars( $field );
+
+		$add_html  = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayHasKey( 'data-invmsg', $add_html );
+		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );
+
+		$field['required'] = '1';
+		$add_html = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayHasKey( 'data-reqmsg', $add_html );
+
+		$field['type'] = 'hidden';
+		$add_html = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayNotHasKey( 'data-invmsg', $add_html );
+		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );
+	}
 }
