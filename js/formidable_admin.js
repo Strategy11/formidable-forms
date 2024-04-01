@@ -4865,6 +4865,12 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns an object that has the new value and label, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
 	const getChoiceValueAndLabel = choiceElement => {
 		let value, label;
 		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
@@ -4876,6 +4882,7 @@ function frmAdminBuildJS() {
 			return { value, label };
 		}
 
+		// saved value changed
 		label = choiceElement.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).value;
 		value = choiceElement.value;
 		return { value, label };
@@ -5499,6 +5506,13 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
+	/**
+	 * Returns an object that has a value and label for new conditional logic option, for a given option value.
+	 *
+	 * @param {Number} fieldId
+	 * @param {string} expectedOption
+	 * @returns {Object}
+	 */
 	const getNewConditionalLogicOption = ( fieldId, expectedOption ) => {
 		const optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
 
