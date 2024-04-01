@@ -5501,6 +5501,19 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
+	const getNewConditionalLogicOption = ( fieldId, expectedOption ) => {
+		const optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+
+		const expectedOptionContainer = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
+
+		if ( expectedOptionContainer ) {
+			const choiceComponents = getChoiceValueAndLabel( expectedOptionContainer );
+			return { value: choiceComponents.value, label: choiceComponents.label };
+		}
+
+		return { value: expectedOption, label: expectedOption }
+	};
+
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
 			rows = builderPage.querySelectorAll( '.frm_logic_row' ),
@@ -5522,20 +5535,21 @@ function frmAdminBuildJS() {
 
 			for ( optionIndex = optionLength - 1; optionIndex >= 0; optionIndex-- ) {
 				expectedOption = fieldOptions[ optionIndex ];
-				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
+				let expectedOptionValue = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelector( '.frm_option_key input[type="text"]' )?.value;
+				if ( ! expectedOptionValue ) {
+					expectedOptionValue = expectedOption;
+				}
 
-				var optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' )
+				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOptionValue + '"]' );
 
-				var expectedOptionContainer = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
-
-				const choiceComponents = getChoiceValueAndLabel( expectedOptionContainer );
-				newValue      = choiceComponents.value;
-				newValueLabel = choiceComponents.label;
+				const newConditionalLogicOption = getNewConditionalLogicOption( fieldId, expectedOption );
+				const newValue = newConditionalLogicOption.value;
+				const newLabel = newConditionalLogicOption.label;
 
 				if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' ) ) {
 					optionMatch = document.createElement( 'option' );
 					optionMatch.setAttribute( 'value', newValue );
-					optionMatch.textContent = newValueLabel;
+					optionMatch.textContent = newLabel;
 				}
 
 				if ( optionMatch ) {
@@ -5544,6 +5558,7 @@ function frmAdminBuildJS() {
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
+			console.log('Empty option', optionMatch);
 			if ( optionMatch !== null ) {
 				valueSelect.prepend( optionMatch );
 			}
