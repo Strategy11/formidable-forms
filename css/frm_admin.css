@@ -9682,7 +9682,11 @@ Responsive Design
 	cursor: pointer;
 }
 
-.frm-option-box.frm-checked:not(.frm-disabled) {
+.frm-option-box:hover {
+	background-color: var(--grey-25);
+}
+
+.frm-option-box.frm-checked {
 	background-color: var(--primary-25);
 	border-color: var(--primary-200);
 }
@@ -9696,12 +9700,7 @@ Responsive Design
 }
 
 .frm-option-box.frm-disabled input[type="checkbox"] {
-	background-color: var(--grey-100);
-	border-color: var(--grey-300) !important;
-}
-
-.frm-option-box.frm-disabled input[type="checkbox"]::before {
-	filter: brightness(0) saturate(0%) invert(72%);
+	opacity: 0.5;
 }
 
 .frm-option-box .frm_help .frmsvg {
