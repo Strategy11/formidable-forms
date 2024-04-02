@@ -13,6 +13,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<div id="frm-fake-page" class="frm_hidden">
+		<?php
+		/**
+		 * Fires before the fake page in form builder.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $form_array Processed form array.
+		 */
+		do_action( 'frm_before_builder_fake_page', $values );
+		?>
+
 		<div class="frm-page-break">
 			<div class="frm-collapse-page button frm-button-secondary frm-button-sm">
 				<?php
@@ -22,6 +33,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</div>
 		</div>
+
+		<?php
+		/**
+		 * Fires after the fake page in form builder.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $form_array Processed form array.
+		 */
+		do_action( 'frm_after_builder_fake_page', $values );
+		?>
 	</div>
 
 	<ul id="frm-show-fields" class="frm_sorting inside">
@@ -43,11 +65,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<p id="frm-form-button">
-		<button class="frm_button_submit" disabled="disabled">
-			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
-		</button>
-	</p>
+	<?php if ( ! FrmAppHelper::is_admin_page() ) : ?>
+		<p id="frm-form-button">
+			<button class="frm_button_submit" disabled="disabled">
+				<?php echo esc_html( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+			</button>
+		</p>
+	<?php endif; ?>
 
 	<div class="frm_no_fields">
 

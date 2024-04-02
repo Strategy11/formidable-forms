@@ -89,6 +89,10 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 		// Compare to posted values
 		foreach ( $fields as $field ) {
+			if ( FrmField::is_no_save_field( $field->type ) ) {
+				continue;
+			}
+
 			// Check default value
 			$posted_val = $_POST[ 'default_value_' . $field->id ];
 			$actual_val = $field->default_value;

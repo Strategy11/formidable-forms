@@ -189,12 +189,12 @@ abstract class FrmFieldType {
 
 		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
-    <$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
-        <span class="frm_required" aria-hidden="true">[required_label]</span>
-    </$label>
-    $input
-    [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-    [if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
+	<$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
+		<span class="frm_required" aria-hidden="true">[required_label]</span>
+	</$label>
+	$input
+	[if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
+	[if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
 
@@ -247,6 +247,28 @@ DEFAULT_HTML;
 		} elseif ( $this->has_input ) {
 			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
+	}
+
+	/**
+	 * Shows field label on form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function show_label_on_form_builder() {
+		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+		?>
+		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
+			<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
+				<?php echo esc_html( $field['required_indicator'] ); ?>
+			</span>
+			<span class="frm-sub-label frm-collapsed-label">
+				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
+			</span>
+		</label>
+		<?php
 	}
 
 	/**
