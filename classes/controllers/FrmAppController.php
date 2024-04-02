@@ -803,7 +803,7 @@ class FrmAppController {
 	 * The floating links are not shown on every page.
 	 * They are also not shown if white labeling is being used.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -1299,7 +1299,7 @@ class FrmAppController {
 		 * Prompt Pro to load additional floating links scripts.
 		 * This is used to include images in the Inbox SlideIn when Pro is active.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 */
 		do_action( 'frm_enqueue_floating_links' );
 	}

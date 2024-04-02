@@ -305,6 +305,8 @@ class FrmHooksController {
 		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_button_classes' );
 		add_filter( 'frm_back_button_class', 'FrmFormsController::update_button_classes' );
 
+		add_filter( 'frm_pre_display_form', 'FrmSubmitHelper::copy_submit_field_settings_to_form' );
+
 		// Styles Controller.
 		add_filter( 'frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
 	}

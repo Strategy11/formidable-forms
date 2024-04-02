@@ -478,7 +478,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $field_array
 	 * @return array
@@ -491,7 +491,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $field_array
 	 * @param array $form_fields
@@ -506,7 +506,7 @@ class FrmXMLHelper {
 		/**
 		 * Fires when an existing field is imported.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param array $field_array
 		 * @param int   $field_id

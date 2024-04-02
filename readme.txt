@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.4.3
 Requires PHP: 5.6
-Stable tag: 6.8.3
+Stable tag: 6.8.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -442,6 +442,19 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.8.4 =
+* New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
+* New: A new filter has been added to enable support for bulk editing options for a Ranking field.
+* New: The trigger to save draft entries has been updated to a button in new forms.
+* New: A new frm_after_generate_csv action has been added. This can be used to track which entries have already been exported as CSV to avoid exporting an entry more than once.
+* Fix: hCaptcha was not properly resetting after clicking the previous button and returning to the page with the hCaptcha field.
+* Fix: A trim(): Passing null to parameter #1 PHP Deprecated message has been fixed.
+* Fix: Checks have been added to avoid fatal errors when trying to extend the time limit when the function is disabled.
+* Fix: A Creation of dynamic property FrmProEddController::$save_status is deprecated PHP Deprecated message has been fixed.
+* Fix: Icons were missing for collapsible sections in the visual views builder.
+* Monthly summary emails will not longer get sent when there are no new entries to report on.
+* The global JS function frm_add_logic_row used on admin pages has been removed.
+
 = 6.8.3 =
 * New: HTML field descriptions now support the shortcode pop up used in email actions.
 * New: Exported posts from entries will now include <term_parent> tags when applicable.
