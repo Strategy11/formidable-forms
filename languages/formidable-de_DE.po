@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-01 19:03\n"
+"PO-Revision-Date: 2024-04-02 19:41\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,7 +29,7 @@ msgstr "%s auswählen"
 #: js/src/common/components/itemselect.js:47
 #: js/formidable_blocks.js:87
 msgid "Currently, there are no %s"
-msgstr ""
+msgstr "Derzeit gibt es keine %s"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:38
 #: js/admin/applications.js:164
@@ -39,17 +39,17 @@ msgstr "Anwendungs-Beispiele"
 #: js/src/form-templates/elements/applicationTemplatesElement.js:77
 #: js/form-templates.js:1776
 msgid "Ready Made Solution"
-msgstr ""
+msgstr "Fertige Lösung"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:85
 #: js/form-templates.js:1784
 msgid "See all applications"
-msgstr ""
+msgstr "Alle Anwendungen anzeigen"
 
 #: js/src/form-templates/elements/emptyStateElement.js:30
 #: js/form-templates.js:1912
 msgid "Empty State"
-msgstr ""
+msgstr "Leerer Zustand"
 
 #: js/src/form-templates/events/createTemplateListeners.js:76
 #: classes/views/xml/import_form.php:169
@@ -60,17 +60,17 @@ msgstr "Template"
 #: js/src/form-templates/ui/searchState.js:33
 #: js/form-templates.js:3407
 msgid "Search Result"
-msgstr ""
+msgstr "Suchergebnis"
 
 #: js/src/form-templates/ui/showEmptyState.js:115
 #: js/form-templates.js:3626
 msgid "No Templates Available"
-msgstr ""
+msgstr "Keine Templates verfügbar"
 
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr ""
+msgstr "Upgrade auf PRO für %s+ Optionen oder entdecke kostenlose Templates."
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -85,27 +85,27 @@ msgstr "Wir haben leider keine Templates gefunden, die deinen Kriterien entsprec
 #: js/src/form-templates/ui/showEmptyState.js:45
 #: js/form-templates.js:3556
 msgid "Start from Scratch"
-msgstr ""
+msgstr "Ganz von vorne anfangen"
 
 #: js/src/form-templates/ui/showEmptyState.js:65
 #: js/form-templates.js:3576
 msgid "No favorites"
-msgstr ""
+msgstr "Keine Favoriten"
 
 #: js/src/form-templates/ui/showEmptyState.js:66
 #: js/form-templates.js:3577
 msgid "You haven't added any templates to your favorites yet."
-msgstr ""
+msgstr "Du hast noch keine Templates zu deinen Favoriten hinzugefügt."
 
 #: js/src/form-templates/ui/showEmptyState.js:89
 #: js/form-templates.js:3600
 msgid "You currently have no templates."
-msgstr ""
+msgstr "Du hast derzeit keine Templates."
 
 #: js/src/form-templates/ui/showEmptyState.js:90
 #: js/form-templates.js:3601
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
-msgstr ""
+msgstr "Du hast noch keine Templates für Formulare erstellt. Beginne jetzt damit, um deinen Arbeitsablauf zu vereinfachen und Zeit zu sparen."
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
@@ -117,34 +117,34 @@ msgstr "Vorlage erstellen"
 #: js/src/form/block.js:20
 #: js/formidable_blocks.js:193
 msgid "Display a Form"
-msgstr ""
+msgstr "Ein Formular anzeigen"
 
 #: js/src/form/block.js:24
 #: js/formidable_blocks.js:197
 msgid "contact forms"
-msgstr ""
+msgstr "Kontaktformulare"
 
 #: js/src/form/block.js:36
 #: js/src/form/calculator.js:43
 #: js/formidable_blocks.js:209
 #: js/formidable_blocks.js:305
 msgid "This site does not have any forms."
-msgstr ""
+msgstr "Auf dieser Website gibt es keine Formulare."
 
 #: js/src/form/calculator.js:27
 #: js/formidable_blocks.js:289
 msgid "Display a Calculator Form"
-msgstr ""
+msgstr "Ein Taschenrechnerformular anzeigen"
 
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr ""
+msgstr "Auf dieser Website gibt es keine Taschenrechner-Formulare."
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr ""
+msgstr "Upgrade von Formidable Forms."
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -153,7 +153,7 @@ msgstr ""
 #: js/formidable_blocks.js:314
 #: js/formidable_blocks.js:323
 msgid "Calculator Form"
-msgstr ""
+msgstr "Taschenrechner Formular"
 
 #: js/src/form/formselect.js:23
 #: js/admin/embed.js:345
@@ -168,29 +168,29 @@ msgstr "formulare"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr ""
+msgstr "Beeindruckende Karte"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
-msgstr ""
+msgstr "Ein Diagramm oder eine Grafik anzeigen"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr ""
+msgstr "Auf dieser Website sind die Formidable Charts nicht aktiviert."
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
-msgstr ""
+msgstr "Formidable Charts installieren"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
-msgstr ""
+msgstr "Auf dieser Website ist Formidable Charts nicht installiert."
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
 #: js/formidable_blocks.js:572
 msgid "Upgrade Formidable Forms"
-msgstr ""
+msgstr "Upgrade von Formidable Forms"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
@@ -201,7 +201,7 @@ msgstr "Formular auswählen"
 #: js/src/form/inspector.js:57
 #: js/formidable_blocks.js:467
 msgid "Go to form"
-msgstr ""
+msgstr "Zum Formular"
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
@@ -226,7 +226,7 @@ msgstr "Formular-Beschreibung anzeigen"
 #: classes/widgets/FrmElementorWidget.php:55
 #: js/formidable_blocks.js:490
 msgid "Minimize HTML"
-msgstr ""
+msgstr "HTML minimieren"
 
 #: js/src/form/inspector.js:88
 #: js/formidable_blocks.js:498
@@ -236,32 +236,32 @@ msgstr "Shortcode"
 #: js/src/form/modal.js:20
 #: js/formidable_blocks.js:534
 msgid "Modal"
-msgstr ""
+msgstr "Modal"
 
 #: js/src/form/modal.js:21
 #: js/formidable_blocks.js:535
 msgid "Display a modal"
-msgstr ""
+msgstr "Ein Modal anzeigen"
 
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr ""
+msgstr "Bootstrap Modal Popup"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
 msgid "This site does not have popup modals active."
-msgstr ""
+msgstr "Auf dieser Website sind keine Popup-Modale aktiviert."
 
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr ""
+msgstr "Formidable Modals installieren"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
 msgid "This site does not have popup modals."
-msgstr ""
+msgstr "Auf dieser Website gibt es keine Popup-Modale."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -282,12 +282,12 @@ msgstr "Erstelle schnell und einfach Drag-und-Drop Formulare"
 #. Author of the plugin
 #: formidable.php
 msgid "Strategy11 Form Builder Team"
-msgstr ""
+msgstr "Strategy11 Form Builder Team"
 
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:24
 msgid "Add-Ons"
-msgstr ""
+msgstr "Add-ons"
 
 #: classes/controllers/FrmAddonsController.php:32
 #: classes/controllers/FrmAddonsController.php:33
@@ -342,7 +342,7 @@ msgstr "Ein Upgrade konnte nicht installiert werden. Lade es von formidableforms
 
 #: classes/controllers/FrmAddonsController.php:1370
 msgid "The plugin download was not found."
-msgstr ""
+msgstr "Der Download des Plugins wurde nicht gefunden."
 
 #: classes/controllers/FrmAddonsController.php:1464
 #: classes/controllers/FrmAddonsController.php:1465
@@ -1067,7 +1067,7 @@ msgstr "Styles verwalten"
 #: classes/controllers/FrmSettingsController.php:81
 #: classes/models/fields/FrmFieldCaptcha.php:389
 msgid "Captcha"
-msgstr ""
+msgstr "Captcha"
 
 #: classes/controllers/FrmSettingsController.php:85
 msgid "White Labeling"
@@ -1342,7 +1342,7 @@ msgstr "Feld Einstellungen"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
-msgstr ""
+msgstr "Boxen und Radiofelder"
 
 #: classes/controllers/FrmStylesController.php:951
 msgid "Form Messages"
@@ -1728,11 +1728,11 @@ msgstr "Diese Kalkulation beinhaltet möglicherweise Shortcodes, die in Textkalk
 #. translators: %d is the number of allowed actions per form
 #: classes/helpers/FrmAppHelper.php:3235
 msgid "This form action is limited to %d per form."
-msgstr ""
+msgstr "Diese Formularaktion ist auf %d pro Formular begrenzt."
 
 #: classes/helpers/FrmAppHelper.php:3236
 msgid "Please edit the existing form action."
-msgstr ""
+msgstr "Bitte bearbeite die bestehende Formularaktion."
 
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
 #: classes/helpers/FrmAppHelper.php:3239
@@ -1883,7 +1883,7 @@ msgstr "Britisches Englisch"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperanto"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Estonian"
@@ -1911,7 +1911,7 @@ msgstr "Französisch"
 
 #: classes/helpers/FrmAppHelper.php:3439
 msgid "French/Canadian"
-msgstr ""
+msgstr "Französisch/Kanadisch"
 
 #: classes/helpers/FrmAppHelper.php:3440
 msgid "French/Swiss"
@@ -1984,7 +1984,7 @@ msgstr "Kasachisch"
 
 #: classes/helpers/FrmAppHelper.php:3458
 msgid "Khmer"
-msgstr ""
+msgstr "Khmer"
 
 #: classes/helpers/FrmAppHelper.php:3459
 msgid "Korean"
@@ -2052,7 +2052,7 @@ msgstr "Portugiesisch/ Brasilianisch"
 
 #: classes/helpers/FrmAppHelper.php:3475
 msgid "Portuguese/Portugal"
-msgstr ""
+msgstr "Portugiesisch/Portugal"
 
 #: classes/helpers/FrmAppHelper.php:3476
 msgid "Romansh"
@@ -2073,7 +2073,7 @@ msgstr "Serbisch"
 
 #: classes/helpers/FrmAppHelper.php:3481
 msgid "Sinhalese"
-msgstr ""
+msgstr "Singhalesisch"
 
 #: classes/helpers/FrmAppHelper.php:3482
 msgid "Slovak"
@@ -2089,7 +2089,7 @@ msgstr "Spanisch"
 
 #: classes/helpers/FrmAppHelper.php:3485
 msgid "Spanish/Latin America"
-msgstr ""
+msgstr "Spanisch/Lateinamerika"
 
 #: classes/helpers/FrmAppHelper.php:3486
 msgid "Swahili"
@@ -2113,7 +2113,7 @@ msgstr "Thailändisch"
 
 #: classes/helpers/FrmAppHelper.php:3491
 msgid "Tajiki"
-msgstr ""
+msgstr "Tajiki"
 
 #: classes/helpers/FrmAppHelper.php:3492
 msgid "Turkish"
@@ -2137,7 +2137,7 @@ msgstr "Walisisch"
 
 #: classes/helpers/FrmAppHelper.php:3497
 msgid "Zulu"
-msgstr ""
+msgstr "Zulu"
 
 #: classes/helpers/FrmAppHelper.php:3840
 msgid "Form Landing Pages"
@@ -2196,7 +2196,7 @@ msgstr "IP Adresse"
 
 #: classes/helpers/FrmCSVExportHelper.php:375
 msgid "Parent ID"
-msgstr ""
+msgstr "Eltern-ID"
 
 #: classes/helpers/FrmCurrencyHelper.php:39
 msgid "Australian Dollar"
@@ -2417,7 +2417,7 @@ msgstr "Formulare als PDF"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
-msgstr ""
+msgstr "reCAPTCHA Ergebnis"
 
 #: classes/helpers/FrmEntriesHelper.php:837
 msgid "Submitted"
@@ -2501,11 +2501,11 @@ msgstr "Das Feld ist ungültig"
 
 #: classes/helpers/FrmFieldsHelper.php:366
 msgid "This value"
-msgstr ""
+msgstr "Dieser Wert"
 
 #: classes/helpers/FrmFieldsHelper.php:368
 msgid "This field"
-msgstr ""
+msgstr "Dieses Feld"
 
 #. translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link
 #: classes/helpers/FrmFieldsHelper.php:657
@@ -2735,7 +2735,7 @@ msgstr "Costa Rica"
 
 #: classes/helpers/FrmFieldsHelper.php:1626
 msgid "C&ocirc;te d'Ivoire"
-msgstr ""
+msgstr "C&ocirc;te d'Ivoire"
 
 #: classes/helpers/FrmFieldsHelper.php:1627
 msgid "Croatia"
@@ -3543,23 +3543,23 @@ msgstr "Unter 18"
 
 #: classes/helpers/FrmFieldsHelper.php:1870
 msgid "18-24"
-msgstr ""
+msgstr "18-24"
 
 #: classes/helpers/FrmFieldsHelper.php:1871
 msgid "25-34"
-msgstr ""
+msgstr "25-34"
 
 #: classes/helpers/FrmFieldsHelper.php:1872
 msgid "35-44"
-msgstr ""
+msgstr "35-44"
 
 #: classes/helpers/FrmFieldsHelper.php:1873
 msgid "45-54"
-msgstr ""
+msgstr "45-54"
 
 #: classes/helpers/FrmFieldsHelper.php:1874
 msgid "55-64"
-msgstr ""
+msgstr "55-64"
 
 #: classes/helpers/FrmFieldsHelper.php:1875
 msgid "65 or Above"
@@ -3696,7 +3696,7 @@ msgstr "Buttons für Radio-Buttons oder Checkboxen verwenden. Das ist perfekt f�
 #. translators: Add-on name.
 #: classes/helpers/FrmFieldsHelper.php:2185
 msgid "Formidable %s"
-msgstr ""
+msgstr "Beeindruckend %s"
 
 #: classes/helpers/FrmFormMigratorsHelper.php:115
 #: classes/views/frm-forms/error-modal.php:15
@@ -3723,7 +3723,7 @@ msgstr "Installiere %s Importer"
 
 #: classes/helpers/FrmFormsHelper.php:57
 msgid " (child)"
-msgstr ""
+msgstr " (Kind)"
 
 #: classes/helpers/FrmFormsHelper.php:121
 msgid "Switch Form"
@@ -3773,7 +3773,7 @@ msgstr "Einzelne Auswahlmöglichkeit"
 
 #: classes/helpers/FrmFormsHelper.php:535
 msgid "Show a single radio or checkbox option by replacing 1 with the order of the option"
-msgstr ""
+msgstr "Zeige eine einzelne Radio- oder Checkbox-Option an, indem du die 1 durch die Reihenfolge der Option ersetzt"
 
 #: classes/helpers/FrmFormsHelper.php:539
 msgid "Hide Option Label"
@@ -3988,7 +3988,7 @@ msgstr "Entwürfe"
 #. translators: %1$s: Status, %2$s: Number of items
 #: classes/helpers/FrmFormsListHelper.php:195
 msgid "%1$s <span class=\"count\">(%2$s)</span>"
-msgstr ""
+msgstr "%1$s <span class=\"count\">(%2$s)</span>"
 
 #. translators: Form title
 #: classes/helpers/FrmFormsListHelper.php:237
@@ -4499,7 +4499,7 @@ msgstr[1] "%1$s Stile"
 #: classes/helpers/FrmXMLHelper.php:1439
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
-msgstr[0] ""
+msgstr[0] "%1$s Begriff"
 msgstr[1] "%1$s Terme"
 
 #. translators: %1$s: Number of items
@@ -4550,14 +4550,14 @@ msgstr "hCaptcha"
 #: classes/views/styles/_sample_form.php:57
 #: classes/views/styles/_sample_form.php:65
 msgid "Option 1"
-msgstr ""
+msgstr "Option 1"
 
 #: classes/models/fields/FrmFieldCheckbox.php:47
 #: classes/models/fields/FrmFieldRadio.php:75
 #: classes/views/styles/_sample_form.php:58
 #: classes/views/styles/_sample_form.php:66
 msgid "Option 2"
-msgstr ""
+msgstr "Option 2"
 
 #: classes/models/fields/FrmFieldCombo.php:197
 #: classes/views/frm-fields/back-end/default-value-setting.php:11
@@ -4725,7 +4725,7 @@ msgstr "Benutzer Informationen"
 #: classes/models/FrmEmail.php:414
 #: classes/models/FrmEntryValues.php:274
 msgid "User-Agent (Browser/OS)"
-msgstr ""
+msgstr "Benutzer-Agent (Browser/OS)"
 
 #: classes/models/FrmEmail.php:415
 #: classes/models/FrmEntryValues.php:278
@@ -4803,7 +4803,7 @@ msgstr "Checkboxen"
 #: classes/models/FrmField.php:26
 #: classes/views/styles/_sample_form.php:55
 msgid "Radio Buttons"
-msgstr ""
+msgstr "Radio Buttons"
 
 #: classes/models/FrmField.php:30
 msgid "Dropdown"
@@ -4858,7 +4858,7 @@ msgstr "Sterne-Bewertung"
 
 #: classes/models/FrmField.php:121
 msgid "Slider"
-msgstr ""
+msgstr "Slider"
 
 #: classes/models/FrmField.php:125
 msgid "Toggle"
@@ -4870,11 +4870,11 @@ msgstr "Dynamisch"
 
 #: classes/models/FrmField.php:134
 msgid "Lookup"
-msgstr ""
+msgstr "Nachschlagen"
 
 #: classes/models/FrmField.php:139
 msgid "Repeater"
-msgstr ""
+msgstr "Repeater"
 
 #: classes/models/FrmField.php:144
 #: classes/models/FrmFormMigrator.php:302
@@ -4895,7 +4895,7 @@ msgstr "Likert-Skala"
 
 #: classes/models/FrmField.php:166
 msgid "NPS"
-msgstr ""
+msgstr "NPS"
 
 #: classes/models/FrmField.php:171
 msgid "Password"
@@ -4935,7 +4935,7 @@ msgstr "Anzahl"
 
 #: classes/models/FrmField.php:231
 msgid "Ranking"
-msgstr ""
+msgstr "Rangliste"
 
 #: classes/models/FrmFieldValue.php:193
 msgid "The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value()."
@@ -5012,7 +5012,7 @@ msgstr "Bestätigung"
 
 #: classes/models/FrmPersonalData.php:28
 msgid "Formidable Forms Exporter"
-msgstr ""
+msgstr "Formidable Forms Exporter"
 
 #: classes/models/FrmPersonalData.php:46
 msgid "Formidable Forms entries"
@@ -5026,7 +5026,7 @@ msgstr "Formular Einsendungen"
 #: classes/models/FrmPluginSearch.php:82
 msgctxt "Formidable Addon Name"
 msgid "Formidable %s"
-msgstr ""
+msgstr "Beeindruckend %s"
 
 #: classes/models/FrmPluginSearch.php:326
 msgid "Install Now"
@@ -5070,7 +5070,7 @@ msgstr "Ok, ihr habt es verdient"
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:148
 msgid "%s cannot be blank."
-msgstr ""
+msgstr "%s kann nicht leer sein."
 
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:150
@@ -5219,11 +5219,11 @@ msgstr "fett"
 
 #: classes/models/FrmTurnstileSettings.php:64
 msgid "Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs."
-msgstr ""
+msgstr "Turnstile ist ein kostenloses Werkzeug, um CAPTCHAs zu ersetzen. Turnstile bietet Website-Besuchern ein frustrationsfreies, CAPTCHA-freies Web-Erlebnis - mit nur einem einfachen, kostenlosen Codeschnipsel. Außerdem stoppt Turnstile den Missbrauch und bestätigt, dass die Besucher/innen echt sind, ohne die Datenschutzbedenken oder das schreckliche Benutzererlebnis von CAPTCHAs."
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
-msgstr ""
+msgstr "Formidable Add-ons"
 
 #: classes/views/addons/list.php:22
 msgid "Search Add-ons"
@@ -5701,7 +5701,7 @@ msgstr "Feld Größe"
 
 #: classes/views/frm-fields/back-end/pixels-wide.php:10
 msgid "(%, px, em)"
-msgstr ""
+msgstr "(%, px, em)"
 
 #: classes/views/frm-fields/back-end/radio-display-format.php:18
 msgid "Display format"
@@ -5783,7 +5783,7 @@ msgstr "Größe des Captcha-Feldes einstellen. Die Kompakt-Option ist optimal f�
 
 #: classes/views/frm-fields/back-end/settings.php:226
 msgid "Captcha Size"
-msgstr ""
+msgstr "Captcha Größe"
 
 #: classes/views/frm-fields/back-end/settings.php:230
 msgid "Normal"
@@ -5795,7 +5795,7 @@ msgstr "Kompakt"
 
 #: classes/views/frm-fields/back-end/settings.php:241
 msgid "Captcha Theme"
-msgstr ""
+msgstr "Captcha Theme"
 
 #: classes/views/frm-fields/back-end/settings.php:245
 msgid "Light"
@@ -5878,7 +5878,7 @@ msgstr "Quiz-Ergebnis"
 
 #: classes/views/frm-form-actions/default_actions.php:104
 msgid "Twilio SMS"
-msgstr ""
+msgstr "Twilio SMS"
 
 #: classes/views/frm-form-actions/default_actions.php:147
 msgid "The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?"
@@ -6171,7 +6171,7 @@ msgstr "Einträge aus diesem Formular nicht speichern"
 
 #: classes/views/frm-forms/settings-advanced.php:81
 msgid "AJAX"
-msgstr ""
+msgstr "AJAX"
 
 #: classes/views/frm-forms/settings-advanced.php:82
 msgid "Make stuff happen in the background without a page refresh"
@@ -6300,7 +6300,7 @@ msgstr "Wähle den Captcha-Typ aus"
 
 #: classes/views/frm-settings/captcha/captcha.php:23
 msgid "Turnstile"
-msgstr ""
+msgstr "Drehkreuz"
 
 #: classes/views/frm-settings/captcha/captcha.php:29
 msgid "Changing the captcha type here will replace it in all any forms where it is used."
@@ -6316,7 +6316,7 @@ msgstr "reCAPTCHA Typ"
 
 #: classes/views/frm-settings/captcha/captcha.php:45
 msgid "Checkbox (V2)"
-msgstr ""
+msgstr "Kontrollkästchen (V2)"
 
 #: classes/views/frm-settings/captcha/captcha.php:48
 msgid "Invisible"
@@ -6324,7 +6324,7 @@ msgstr "Unsichtbar"
 
 #: classes/views/frm-settings/captcha/captcha.php:51
 msgid "v3"
-msgstr ""
+msgstr "v3"
 
 #: classes/views/frm-settings/captcha/captcha.php:58
 msgid "reCAPTCHA Language"
@@ -6352,7 +6352,7 @@ msgstr "hCaptcha Einstellungen"
 
 #: classes/views/frm-settings/captcha/captcha.php:100
 msgid "Turnstile Settings"
-msgstr ""
+msgstr "Drehkreuz-Einstellungen"
 
 #. translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML
 #: classes/views/frm-settings/captcha/captcha_keys.php:14
@@ -6498,12 +6498,12 @@ msgstr "Sende monatliche und jährliche zusammenfassende E-Mails mit Formular- u
 
 #: classes/views/frm-settings/misc.php:28
 msgid "Summary email recipients"
-msgstr ""
+msgstr "Zusammenfassung der E-Mail-Empfänger"
 
 #. translators: %1$s the opening link tag, %2$s the closing link tag
 #: classes/views/frm-settings/misc.php:35
 msgid "Summary emails can be disabled across multiple sites from %1$sFormidableForms.com%2$s."
-msgstr ""
+msgstr "Zusammenfassende E-Mails können über mehrere Websites deaktiviert werden: %1$sFormidableForms.com%2$s."
 
 #: classes/views/frm-settings/misc.php:51
 msgid "Use HTML5 in forms"
@@ -6619,7 +6619,7 @@ msgstr "Konditionale"
 
 #: classes/views/shared/mb_adv_info.php:28
 msgid "HTML Tags"
-msgstr ""
+msgstr "HTML Schlagwörter"
 
 #: classes/views/shared/mb_adv_info.php:50
 msgid "IDs"
@@ -6855,7 +6855,7 @@ msgstr "Einzelne Zeile"
 
 #: classes/views/styles/_check-box-radio-fields.php:19
 msgid "Check Box"
-msgstr ""
+msgstr "Boxen ankreuzen"
 
 #: classes/views/styles/_check-box-radio-fields.php:31
 #: classes/views/styles/_field-description.php:7
@@ -6902,7 +6902,7 @@ msgstr "Fehler Style"
 
 #: classes/views/styles/_field-colors.php:100
 msgid "Read Only Style"
-msgstr ""
+msgstr "Nur Lesen Stil"
 
 #: classes/views/styles/_field-description.php:25
 msgid "italic"
@@ -6927,7 +6927,7 @@ msgstr "Automatische Breite für Dropdown Felder"
 
 #: classes/views/styles/_field-sizes.php:32
 msgid "Bottom Margin"
-msgstr ""
+msgstr "Unterer Außenabstand"
 
 #: classes/views/styles/_field-sizes.php:37
 msgid "Formidable uses CSS3 border-radius for corner rounding, which is not currently supported by Internet Explorer."
@@ -7074,7 +7074,7 @@ msgstr "Ein weiteres Feld mit Beschreibung"
 
 #: classes/views/styles/_sample_form.php:63
 msgid "Check Boxes"
-msgstr ""
+msgstr "Boxen ankreuzen"
 
 #: classes/views/styles/_sample_form.php:89
 #: classes/views/styles/_sample_form.php:94
@@ -7236,7 +7236,7 @@ msgstr "Exportiere deine Formulare, Einträge, Ansichten und Styles, um sie einf
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
-msgstr ""
+msgstr "Format exportieren"
 
 #: classes/views/xml/import_form.php:90
 msgid "If your CSV special characters are not working correctly, try a different formatting option."
@@ -7244,7 +7244,7 @@ msgstr "Wenn die Sonderzeichen im CSV nicht richtig dargestellt werden, versuche
 
 #: classes/views/xml/import_form.php:91
 msgid "CSV Encoding Format"
-msgstr ""
+msgstr "CSV-Kodierungsformat"
 
 #: classes/views/xml/import_form.php:104
 msgid "Column Separation"
@@ -7430,7 +7430,7 @@ msgstr "Status"
 
 #: stripe/controllers/FrmTransLiteListsController.php:74
 msgid "Processor"
-msgstr ""
+msgstr "Prozessor"
 
 #: stripe/controllers/FrmTransLiteListsController.php:77
 #: stripe/views/payments/show.php:80
@@ -7508,11 +7508,11 @@ msgstr "Verbindungsstatus"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:606
 msgid "TEST"
-msgstr ""
+msgstr "TEST"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:606
 msgid "LIVE"
-msgstr ""
+msgstr "LIVE"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 msgid "Authorized"
@@ -7575,7 +7575,7 @@ msgstr "Abonnements"
 #. translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %3$s: Span close tag.
 #: stripe/helpers/FrmTransLiteListHelper.php:138
 msgid "%1$s %2$s(%3$s)%4$s"
-msgstr ""
+msgstr "%1$s %2$s(%3$s)%4$s"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
