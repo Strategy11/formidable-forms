@@ -2156,6 +2156,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   hasQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_5__.hasQueryParam),
 /* harmony export */   hide: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.hide),
 /* harmony export */   hideElements: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.hideElements),
+/* harmony export */   isEmptyObject: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_3__.isEmptyObject),
 /* harmony export */   isHTMLElement: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_3__.isHTMLElement),
 /* harmony export */   isValidEmail: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_3__.isValidEmail),
 /* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_0__.isVisible),
@@ -2351,6 +2352,7 @@ var hasQueryParam = function hasQueryParam(paramName) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isEmptyObject: () => (/* binding */ isEmptyObject),
 /* harmony export */   isHTMLElement: () => (/* binding */ isHTMLElement),
 /* harmony export */   isValidEmail: () => (/* binding */ isValidEmail)
 /* harmony export */ });
@@ -2367,12 +2369,21 @@ var isValidEmail = function isValidEmail(email) {
 /**
  * Validates if the given element is an instance of HTMLElement.
  *
- * @private
  * @param {any} element Element to be checked.
  * @return {boolean} True if it's an HTMLElement, otherwise false.
  */
 var isHTMLElement = function isHTMLElement(element) {
   return element instanceof HTMLElement || console.warn('Invalid argument: Element must be an instance of HTMLElement') || false;
+};
+
+/**
+ * Checks if the given object is empty.
+ *
+ * @param {Object} obj The object to check.
+ * @return {boolean} True if the object is empty, otherwise false.
+ */
+var isEmptyObject = function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
 };
 
 /***/ }),
@@ -5445,6 +5456,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isAllTemplatesCategory: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isAllTemplatesCategory),
 /* harmony export */   isCustomCategory: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isCustomCategory),
 /* harmony export */   isCustomTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isCustomTemplate),
+/* harmony export */   isEmptyObject: () => (/* reexport safe */ _common_utilities__WEBPACK_IMPORTED_MODULE_0__.isEmptyObject),
 /* harmony export */   isFavoriteTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isFavoriteTemplate),
 /* harmony export */   isFavoritesCategory: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isFavoritesCategory),
 /* harmony export */   isFeaturedTemplate: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_1__.isFeaturedTemplate),

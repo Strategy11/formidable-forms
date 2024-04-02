@@ -10,8 +10,15 @@ export const isValidEmail = email =>
 /**
  * Validates if the given element is an instance of HTMLElement.
  *
- * @private
  * @param {any} element Element to be checked.
  * @return {boolean} True if it's an HTMLElement, otherwise false.
  */
 export const isHTMLElement = element => element instanceof HTMLElement || console.warn( 'Invalid argument: Element must be an instance of HTMLElement' ) || false;
+
+/**
+ * Checks if the given object is empty.
+ *
+ * @param {Object} obj The object to check.
+ * @return {boolean} True if the object is empty, otherwise false.
+ */
+export const isEmptyObject = obj => Object.keys( obj ).length === 0 && obj.constructor === Object;

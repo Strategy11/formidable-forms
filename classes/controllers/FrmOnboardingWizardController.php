@@ -19,77 +19,84 @@ class FrmOnboardingWizardController {
 	/**
 	 * The slug of the Onboarding Wizard page.
 	 *
-	 * @var string PAGE_SLUG Unique identifier for the "Onboarding Wizard" page.
+	 * @var string
 	 */
 	const PAGE_SLUG = 'formidable-onboarding-wizard';
 
 	/**
 	 * The script handle.
 	 *
-	 * @var string SCRIPT_HANDLE Unique handle for the admin script.
+	 * @var string
 	 */
 	const SCRIPT_HANDLE = 'frm-onboarding-wizard';
 
 	/**
 	 * The required user capability to view the Onboarding Wizard page.
 	 *
-	 * @var string REQUIRED_CAPABILITY The capability required to access the Onboarding Wizard.
+	 * @var string
 	 */
 	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
 	/**
 	 * Transient name used for managing redirection to the Onboarding Wizard page.
 	 *
-	 * @var string TRANSIENT_NAME Transient name for redirection management.
+	 * @var string
 	 */
 	const TRANSIENT_NAME = 'frm_activation_redirect';
 
 	/**
 	 * Transient value associated with the redirection to the Onboarding Wizard page.
 	 *
-	 * @var string TRANSIENT_VALUE Transient value for redirection management.
+	 * @var string
 	 */
 	const TRANSIENT_VALUE = 'formidable-welcome';
 
 	/**
 	 * Option name for storing the redirect status for the Onboarding Wizard page.
 	 *
-	 * @var string REDIRECT_STATUS_OPTION Option name for redirect status.
+	 * @var string
 	 */
 	const REDIRECT_STATUS_OPTION = 'frm_welcome_redirect';
 
 	/**
 	 * Defines the initial step for redirection within the application flow.
 	 *
-	 * @var string INITIAL_STEP The default step where the application redirects at the start.
+	 * @var string
 	 */
 	const INITIAL_STEP = 'welcome';
 
 	/**
+	 * Option name to store usage data.
+	 *
+	 * @var string
+	 */
+	const USAGE_DATA_OPTION = 'frm_onboarding_usage_data';
+
+	/**
 	 * Holds the URL to access the Onboarding Wizard's page.
 	 *
-	 * @var string $page_url Used for redirection or linking.
+	 * @var string
 	 */
 	private static $page_url = '';
 
 	/**
 	 * Holds a list of add-ons available for installation.
 	 *
-	 * @var array $available_addons List of add-ons available for installation.
+	 * @var array
 	 */
 	private static $available_addons = array();
 
 	/**
 	 * Path to views.
 	 *
-	 * @var string $view_path Path to the Onboarding Wizard views.
+	 * @var string
 	 */
 	private static $view_path = '';
 
 	/**
 	 * Upgrade URL.
 	 *
-	 * @var string $upgrade_link URL for upgrading accounts.
+	 * @var string
 	 */
 	private static $upgrade_link = '';
 
@@ -277,7 +284,25 @@ class FrmOnboardingWizardController {
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Send response.
+		// Retrieve the current usage data.
+		$usage_data = self::get_usage_data();
+
+		$fields_to_update = array(
+			'default_email'    => 'sanitize_email',
+			'allows_tracking'  => 'rest_sanitize_boolean',
+			'is_subscribed'    => 'rest_sanitize_boolean',
+			'installed_addons' => 'sanitize_text_field',
+			'processed_steps'  => 'sanitize_text_field',
+			'completed_steps'  => 'rest_sanitize_boolean',
+		);
+
+		foreach ( $fields_to_update as $field => $sanitize_callback ) {
+			if ( isset( $_POST[ $field ] ) ) {
+				$usage_data[ $field ] = FrmAppHelper::get_post_param( $field, '', $sanitize_callback );
+			}
+		}
+
+		update_option( self::USAGE_DATA_OPTION, $usage_data );
 		wp_send_json_success();
 	}
 
@@ -561,5 +586,16 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_upgrade_link() {
 		return self::$upgrade_link;
+	}
+
+	/**
+	 * Retrieves the current Onboarding Wizard usage data, returning an empty array if none exists.
+	 *
+	 * @since x.x
+	 *
+	 * @return array Current usage data.
+	 */
+	public static function get_usage_data() {
+		return get_option( self::USAGE_DATA_OPTION, array() );
 	}
 }

@@ -65,30 +65,30 @@ class FrmUsage {
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
-			'uuid'            => $this->uuid(),
+			'uuid'              => $this->uuid(),
 			// Let's keep it anonymous.
-			'admin_email'     => '',
-			'wp_version'      => $wp_version,
-			'php_version'     => phpversion(),
-			'mysql_version'   => $wpdb->db_version(),
-			'os'              => FrmAppHelper::get_server_os(),
-			'locale'          => get_locale(),
+			'admin_email'       => '',
+			'wp_version'        => $wp_version,
+			'php_version'       => phpversion(),
+			'mysql_version'     => $wpdb->db_version(),
+			'os'                => FrmAppHelper::get_server_os(),
+			'locale'            => get_locale(),
 
-			'active_license'  => FrmAppHelper::pro_is_installed(),
-			'form_count'      => $form_counts->published,
-			'entry_count'     => FrmEntry::getRecordCount(),
-			'timestamp'       => gmdate( 'c' ),
+			'active_license'    => FrmAppHelper::pro_is_installed(),
+			'form_count'        => $form_counts->published,
+			'entry_count'       => FrmEntry::getRecordCount(),
+			'timestamp'         => gmdate( 'c' ),
 
-			'theme_name'      => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
-			'plugins'         => $this->plugins(),
-			'settings'        => array(
+			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
+			'plugins'           => $this->plugins(),
+			'settings'          => array(
 				$this->settings(),
 			),
-			'forms'           => $this->forms(),
-			'fields'          => $this->fields(),
-			'actions'         => $this->actions(),
+			'forms'             => $this->forms(),
+			'fields'            => $this->fields(),
+			'actions'           => $this->actions(),
 
-			'steps_completed' => '',
+			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );

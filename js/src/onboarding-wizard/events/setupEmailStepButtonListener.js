@@ -38,7 +38,7 @@ const onSetupEmailStepButtonClick = async() => {
 	const { subscribeCheckbox, allowTrackingCheckbox } = getElements();
 
 	// Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
-	if ( subscribeCheckbox.checked ) {
+	if ( subscribeCheckbox?.checked ) {
 		// Assign default email to 'leave email' input if provided; otherwise, use administrator's email
 		if ( email ) {
 			const emailInput = document.getElementById( 'frm_leave_email' );
@@ -53,8 +53,10 @@ const onSetupEmailStepButtonClick = async() => {
 	// Capture usage data
 	const { emailStepData } = getAppState();
 	emailStepData.default_email = email;
-	emailStepData.is_subscribed = subscribeCheckbox?.checked;
 	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
+	if ( subscribeCheckbox ) {
+		emailStepData.is_subscribed = subscribeCheckbox.checked;
+	}
 	setAppStateProperty( 'emailStepData', emailStepData );
 
 	// Prepare FormData for the POST request

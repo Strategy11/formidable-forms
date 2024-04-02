@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { setupDataUsage } from '../dataUtils';
+import { setupUsageData } from '../dataUtils';
 import { getElements } from '../elements';
 import { CURRENT_CLASS, getAppState, PREFIX, setAppStateProperty } from '../shared';
 import { hide, frmAnimate, show, setQueryParam } from '../utils';
@@ -57,6 +57,7 @@ export const navigateToNextStep = () => {
 	}
 
 	const processedStep = currentStep.dataset.stepName;
+	const nextStepName = nextStep.dataset.stepName;
 
 	// Save processed steps
 	const { processedSteps } = getAppState();
@@ -65,8 +66,8 @@ export const navigateToNextStep = () => {
 		setAppStateProperty( 'processedSteps', processedSteps );
 	}
 
-	setupDataUsage( processedStep );
-	navigateToStep( nextStep.dataset.stepName );
+	setupUsageData( processedStep, nextStepName );
+	navigateToStep( nextStepName );
 };
 
 /**
