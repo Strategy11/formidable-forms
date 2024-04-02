@@ -45,6 +45,7 @@ function getDOMElements() {
 		setupEmailStepButton: document.getElementById( `${PREFIX}-setup-email-step-button` ),
 		defaultEmailField: document.getElementById( `${PREFIX}-default-email-field` ),
 		subscribeCheckbox: document.getElementById( `${PREFIX}-subscribe` ),
+		summaryEmailsCheckbox: document.getElementById( `${PREFIX}-summary-emails` ),
 		allowTrackingCheckbox: document.getElementById( `${PREFIX}-allow-tracking` )
 	};
 

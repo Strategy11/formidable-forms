@@ -952,6 +952,7 @@ function getDOMElements() {
     setupEmailStepButton: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-setup-email-step-button")),
     defaultEmailField: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-default-email-field")),
     subscribeCheckbox: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-subscribe")),
+    summaryEmailsCheckbox: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-summary-emails")),
     allowTrackingCheckbox: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-allow-tracking"))
   };
 
@@ -1505,7 +1506,7 @@ function addSetupEmailStepButtonEvents() {
  */
 var onSetupEmailStepButtonClick = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var _getElements2, defaultEmailField, email, _getElements3, subscribeCheckbox, allowTrackingCheckbox, emailInput, _getAppState, emailStepData, formData, doJsonPost;
+    var _getElements2, defaultEmailField, email, _getElements3, subscribeCheckbox, summaryEmailsCheckbox, allowTrackingCheckbox, emailInput, _getAppState, emailStepData, formData, doJsonPost;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -1518,7 +1519,7 @@ var onSetupEmailStepButtonClick = /*#__PURE__*/function () {
           (0,_ui__WEBPACK_IMPORTED_MODULE_2__.showEmailAddressError)('invalid');
           return _context.abrupt("return");
         case 5:
-          _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(), subscribeCheckbox = _getElements3.subscribeCheckbox, allowTrackingCheckbox = _getElements3.allowTrackingCheckbox; // Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
+          _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(), subscribeCheckbox = _getElements3.subscribeCheckbox, summaryEmailsCheckbox = _getElements3.summaryEmailsCheckbox, allowTrackingCheckbox = _getElements3.allowTrackingCheckbox; // Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
           if (subscribeCheckbox !== null && subscribeCheckbox !== void 0 && subscribeCheckbox.checked) {
             // Assign default email to 'leave email' input if provided; otherwise, use administrator's email
             if (email) {
@@ -1536,6 +1537,7 @@ var onSetupEmailStepButtonClick = /*#__PURE__*/function () {
           _getAppState = (0,_shared__WEBPACK_IMPORTED_MODULE_1__.getAppState)(), emailStepData = _getAppState.emailStepData;
           emailStepData.default_email = email;
           emailStepData.allows_tracking = allowTrackingCheckbox.checked;
+          emailStepData.summary_emails = summaryEmailsCheckbox.checked;
           if (subscribeCheckbox) {
             emailStepData.is_subscribed = subscribeCheckbox.checked;
           }
@@ -1544,12 +1546,13 @@ var onSetupEmailStepButtonClick = /*#__PURE__*/function () {
           // Prepare FormData for the POST request
           formData = new FormData();
           formData.append('default_email', email);
-          formData.append('is_tracking_allowed', allowTrackingCheckbox.checked);
+          formData.append('allows_tracking', allowTrackingCheckbox.checked);
+          formData.append('summary_emails', summaryEmailsCheckbox.checked);
 
           // Send the POST request
           doJsonPost = frmDom.ajax.doJsonPost;
           doJsonPost('onboarding_setup_email_step', formData).then(_utils__WEBPACK_IMPORTED_MODULE_3__.navigateToNextStep);
-        case 17:
+        case 19:
         case "end":
           return _context.stop();
       }

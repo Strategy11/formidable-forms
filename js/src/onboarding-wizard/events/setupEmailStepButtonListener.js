@@ -35,7 +35,7 @@ const onSetupEmailStepButtonClick = async() => {
 		return;
 	}
 
-	const { subscribeCheckbox, allowTrackingCheckbox } = getElements();
+	const { subscribeCheckbox, summaryEmailsCheckbox, allowTrackingCheckbox } = getElements();
 
 	// Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
 	if ( subscribeCheckbox?.checked ) {
@@ -54,6 +54,7 @@ const onSetupEmailStepButtonClick = async() => {
 	const { emailStepData } = getAppState();
 	emailStepData.default_email = email;
 	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
+	emailStepData.summary_emails = summaryEmailsCheckbox.checked;
 	if ( subscribeCheckbox ) {
 		emailStepData.is_subscribed = subscribeCheckbox.checked;
 	}
@@ -62,7 +63,8 @@ const onSetupEmailStepButtonClick = async() => {
 	// Prepare FormData for the POST request
 	const formData = new FormData();
 	formData.append( 'default_email', email );
-	formData.append( 'is_tracking_allowed', allowTrackingCheckbox.checked );
+	formData.append( 'allows_tracking', allowTrackingCheckbox.checked );
+	formData.append( 'summary_emails', summaryEmailsCheckbox.checked );
 
 	// Send the POST request
 	const { doJsonPost } = frmDom.ajax;

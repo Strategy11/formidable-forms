@@ -40,9 +40,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 			<?php } ?>
 
-			<label for="frm-onboarding-allow-tracking" class="frm-flex frm-gap-xs">
+			<label for="frm-onboarding-allow-tracking" class="frm-flex frm-gap-xs frm-mb-xs">
 				<input type="checkbox" name="frm-onboarding-allow-tracking" id="frm-onboarding-allow-tracking" class="frm-mx-0 frm-mt-2xs" checked />
 				<span><?php esc_html_e( 'Help improve Formidable by sharing anonymous usage data', 'formidable' ); ?></span>
+			</label>
+
+			<label for="frm-onboarding-summary-emails" class="frm-flex frm-gap-xs">
+				<input type="checkbox" name="frm-onboarding-summary-emails" id="frm-onboarding-summary-emails" class="frm-mx-0 frm-mt-2xs" checked />
+				<span><?php esc_html_e( 'Send me monthly and yearly summary emails with entry and revenue data from my forms', 'formidable' ); ?></span>
 			</label>
 		</div>
 

@@ -257,13 +257,15 @@ class FrmOnboardingWizardController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data.
-		$default_email       = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
-		$is_tracking_allowed = FrmAppHelper::get_post_param( 'is_tracking_allowed', '', 'rest_sanitize_boolean' );
+		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
+		$allows_tracking = FrmAppHelper::get_post_param( 'allows_tracking', '', 'rest_sanitize_boolean' );
+		$summary_emails  = FrmAppHelper::get_post_param( 'summary_emails', '', 'rest_sanitize_boolean' );
 
 		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
 		$frm_settings->update_setting( 'default_email', $default_email, 'sanitize_text_field' );
-		$frm_settings->update_setting( 'tracking', $is_tracking_allowed, 'rest_sanitize_boolean' );
+		$frm_settings->update_setting( 'tracking', $allows_tracking, 'rest_sanitize_boolean' );
+		$frm_settings->update_setting( 'summary_emails', $summary_emails, 'rest_sanitize_boolean' );
 		// Remove the 'FrmProSettingsController::store' action to avoid PHP errors during AJAX call.
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
@@ -289,8 +291,9 @@ class FrmOnboardingWizardController {
 
 		$fields_to_update = array(
 			'default_email'    => 'sanitize_email',
-			'allows_tracking'  => 'rest_sanitize_boolean',
 			'is_subscribed'    => 'rest_sanitize_boolean',
+			'allows_tracking'  => 'rest_sanitize_boolean',
+			'summary_emails'   => 'rest_sanitize_boolean',
 			'installed_addons' => 'sanitize_text_field',
 			'processed_steps'  => 'sanitize_text_field',
 			'completed_steps'  => 'rest_sanitize_boolean',
