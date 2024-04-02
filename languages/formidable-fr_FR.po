@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 07:45\n"
+"PO-Revision-Date: 2024-04-02 19:41\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -139,7 +139,7 @@ msgstr "Afficher un formulaire de calcul"
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr ""
+msgstr "Ce site n'a aucun formulaire de calculateur."
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
@@ -479,7 +479,7 @@ msgstr "Ajouter une entrée"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
-msgstr ""
+msgstr "Toutes les vues"
 
 #: classes/controllers/FrmDashboardController.php:205
 #: classes/controllers/FrmDashboardController.php:212
@@ -492,7 +492,7 @@ msgstr "En savoir plus"
 
 #: classes/controllers/FrmDashboardController.php:210
 msgid "Installed Apps"
-msgstr ""
+msgstr "Apps installées"
 
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #. translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML
@@ -1371,7 +1371,7 @@ msgstr "Votre serveur manque de l'extension Simple XML. Ceci est nécessaire pou
 
 #: classes/controllers/FrmXMLController.php:64
 msgid "The template you are trying to install could not be validated."
-msgstr ""
+msgstr "Le modèle que vous essayez d’installer n’a pas pu être validé."
 
 #: classes/controllers/FrmXMLController.php:76
 msgid "There was an error reading the form template."
@@ -2312,7 +2312,7 @@ msgstr "Baht thaïlandais"
 
 #: classes/helpers/FrmCurrencyHelper.php:291
 msgid "Turkish Liras"
-msgstr ""
+msgstr "Livres turques"
 
 #: classes/helpers/FrmCurrencyHelper.php:300
 msgid "U.S. Dollar"
@@ -2413,7 +2413,7 @@ msgstr "Modifications de l'entrée"
 
 #: classes/helpers/FrmEntriesHelper.php:748
 msgid "Forms to PDF"
-msgstr ""
+msgstr "Formulaires en PDF"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
@@ -4550,14 +4550,14 @@ msgstr "CAPTCHA"
 #: classes/views/styles/_sample_form.php:57
 #: classes/views/styles/_sample_form.php:65
 msgid "Option 1"
-msgstr ""
+msgstr "Option 1"
 
 #: classes/models/fields/FrmFieldCheckbox.php:47
 #: classes/models/fields/FrmFieldRadio.php:75
 #: classes/views/styles/_sample_form.php:58
 #: classes/views/styles/_sample_form.php:66
 msgid "Option 2"
-msgstr ""
+msgstr "Option 2"
 
 #: classes/models/fields/FrmFieldCombo.php:197
 #: classes/views/frm-fields/back-end/default-value-setting.php:11
@@ -6109,7 +6109,7 @@ msgstr "Glisser à l'horizon"
 
 #: classes/views/frm-forms/add_form_style_options.php:18
 msgid "Slide vertically"
-msgstr ""
+msgstr "Glisser verticalement"
 
 #: classes/views/frm-forms/edit.php:13
 msgid "Build Form"
@@ -6551,7 +6551,7 @@ msgstr "Obtenez Formidable Forms Pro aujourd'hui et débloquez toutes les foncti
 
 #: classes/views/frm-settings/_currency.php:7
 msgid "Select the currency to be used by Formidable globally."
-msgstr ""
+msgstr "Sélectionnez la devise à utiliser par Formidable globalement."
 
 #: classes/views/frm-settings/_currency.php:8
 #: stripe/views/action-settings/payments-options.php:72
@@ -7826,7 +7826,7 @@ msgstr "Améliorez votre flux de travail avec des applications"
 
 #: js/admin/applications.js:115
 msgid "Applications help to organize your workspace by combining forms, Views, and pages into a full solution."
-msgstr ""
+msgstr "Les applications permettent d’organiser votre espace de travail en combinant les formulaires, les vues et les pages pour créer une solution complète."
 
 #. translators: %d: Number of application templates.
 #: js/admin/applications.js:213
