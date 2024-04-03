@@ -76,6 +76,10 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		foreach ( $fields as $field ) {
+			if ( FrmField::is_no_save_field( $field->type ) ) {
+				continue;
+			}
+
 			$_POST['frm_fields_submitted'][] = $field->id;
 			$_POST[ 'default_value_' . $field->id ] = 'default';
 
