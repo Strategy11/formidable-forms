@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-03 21:07\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -4991,7 +4991,7 @@ msgstr "Modulo predefinito"
 
 #: classes/models/FrmHcaptchaSettings.php:66
 msgid "hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA."
-msgstr "hCaptcha è una soluzione anti-bot che protegge la privacy degli utenti e premia i siti web. È un sostituto di reCAPTCHA che può ricevere il focus sulla privacy."
+msgstr "hCaptcha è una soluzione anti-bot che protegge la privacy degli utenti e premia i siti web. È un sostituto di reCAPTCHA incentrato sulla privacy."
 
 #: classes/models/FrmHoneypot.php:110
 msgid "If you are human, leave this field blank."
@@ -5219,7 +5219,7 @@ msgstr "grassetto"
 
 #: classes/models/FrmTurnstileSettings.php:64
 msgid "Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs."
-msgstr "Turnstile è uno strumento gratuito per sostituire i CAPTCHA. Turnstile offre ai visitatori dei siti web un'esperienza web senza frustrazioni e senza CAPTCHA, con un semplice frammento di codice gratuito. Inoltre, Turnstile blocca gli abusi e conferma che i visitatori sono reali senza i problemi di privacy dei dati o la pessima esperienza utente dei CAPTCHA."
+msgstr "Turnstile è uno strumento gratuito per sostituire i CAPTCHA. Turnstile offre ai visitatori dei siti web un'esperienza web senza frustrazioni e senza CAPTCHA, con un semplice snippet di codice gratuito. Inoltre, Turnstile blocca gli abusi e conferma che i visitatori sono reali senza i problemi di privacy dei dati o la pessima esperienza utente dei CAPTCHA."
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
