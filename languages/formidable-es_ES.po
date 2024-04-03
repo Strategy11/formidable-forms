@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-03 21:07\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,7 +29,7 @@ msgstr "Seleccionar %s"
 #: js/src/common/components/itemselect.js:47
 #: js/formidable_blocks.js:87
 msgid "Currently, there are no %s"
-msgstr "Actualmente, no existe %s"
+msgstr "Actualmente, no hay ningún %s"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:38
 #: js/admin/applications.js:164
@@ -70,7 +70,7 @@ msgstr "No hay plantillas disponibles"
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr "Actualiza a PRO para %s+ opciones o explora las plantillas gratuitas."
+msgstr "Actualiza a PRO para más de %s opciones o explora las plantillas gratuitas."
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -90,7 +90,7 @@ msgstr "Empezar de cero"
 #: js/src/form-templates/ui/showEmptyState.js:65
 #: js/form-templates.js:3576
 msgid "No favorites"
-msgstr "Sin favoritos"
+msgstr "No hay favoritos"
 
 #: js/src/form-templates/ui/showEmptyState.js:66
 #: js/form-templates.js:3577
@@ -129,7 +129,7 @@ msgstr "formularios de contacto"
 #: js/formidable_blocks.js:209
 #: js/formidable_blocks.js:305
 msgid "This site does not have any forms."
-msgstr "Este sitio no tiene formularios."
+msgstr "Este sitio no tiene ningún formulario."
 
 #: js/src/form/calculator.js:27
 #: js/formidable_blocks.js:289
@@ -144,7 +144,7 @@ msgstr "Este sitio no tiene formularios de calculadora."
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr "Actualización de Formularios Formidables."
+msgstr "Actualiza Formidable Forms."
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -153,7 +153,7 @@ msgstr "Actualización de Formularios Formidables."
 #: js/formidable_blocks.js:314
 #: js/formidable_blocks.js:323
 msgid "Calculator Form"
-msgstr "Calculadora"
+msgstr "Formulario de calculadora"
 
 #: js/src/form/formselect.js:23
 #: js/admin/embed.js:345
@@ -168,19 +168,19 @@ msgstr "formularios"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr "Gráfico Formidable"
+msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
-msgstr "Visualizar un gráfico"
+msgstr "Mostrar un gráfico"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr "Este sitio no tiene activados los Gráficos Formidables."
+msgstr "Este sitio no tiene activado Formidable Charts."
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
-msgstr "Instalar Cartas Formidables"
+msgstr "Instalar Formidable Charts"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
@@ -190,7 +190,7 @@ msgstr "Este sitio no tiene instalado Formidable Charts."
 #: js/src/form/modal.js:58
 #: js/formidable_blocks.js:572
 msgid "Upgrade Formidable Forms"
-msgstr "Actualización de Formularios Formidables"
+msgstr "Actualiza Formidable Forms"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
@@ -236,27 +236,27 @@ msgstr "Shortcode"
 #: js/src/form/modal.js:20
 #: js/formidable_blocks.js:534
 msgid "Modal"
-msgstr "Modal"
+msgstr "Ventana emergente"
 
 #: js/src/form/modal.js:21
 #: js/formidable_blocks.js:535
 msgid "Display a modal"
-msgstr "Mostrar un modal"
+msgstr "Mostrar una ventana emergente"
 
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr "Bootstrap ventana emergente modal"
+msgstr "Ventana emergente de Bootstrap"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
 msgid "This site does not have popup modals active."
-msgstr "Este sitio no tiene activados los mensajes / ventanas emergentes."
+msgstr "Este sitio no tiene ventanas emergentes activas."
 
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr "Instalar módulos emergentes"
+msgstr "Instalar Formidable Modals"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
@@ -4195,7 +4195,7 @@ msgstr "Marcador de posición dentro del campo"
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
 msgid "Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s."
-msgstr "Los estilos formidables están desactivados. Esto debe activarse en %1$sAjustes globales%2$s."
+msgstr "Los estilos formidables están desactivados. Esto debe activarse en los %1$sajustes globales%2$s."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:210
 msgid "You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features."
@@ -4207,11 +4207,11 @@ msgstr "Los campos captcha están ocultos."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:245
 msgid "Not all JavaScript is loaded in this preview."
-msgstr "No todo el JavaScript está cargado en esta vista previa."
+msgstr "No se carga todo el JavaScript en esta vista previa."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:258
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
-msgstr "Este formulario se está previsualizando porque no se ha seleccionado ningún formulario. Utiliza el desplegable del formulario para seleccionar un nuevo objetivo de vista previa."
+msgstr "Se está previsualizando este formulario porque no se ha seleccionado ninguno. Utiliza el desplegable del formulario para seleccionar un nuevo objetivo de vista previa."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:277
 msgid "Changes that you will make to this style will apply to every form using this style."
@@ -4747,7 +4747,7 @@ msgstr "Los mejores formularios de este mes"
 
 #: classes/models/FrmEmailStats.php:106
 msgid "Entries created"
-msgstr "Entradas / registros creados"
+msgstr "Registros creados"
 
 #: classes/models/FrmEmailStats.php:145
 msgid "Payments collected"
