@@ -4897,11 +4897,13 @@ function frmAdminBuildJS() {
 	const getChoiceValueAndLabel = choiceElement => {
 		let value, label;
 		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
 			label = choiceElement.value;
-			if ( ! value ) {
+			if ( choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked ) {
+				value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
+			} else {
 				value = label;
 			}
+
 			return { value, label };
 		}
 
