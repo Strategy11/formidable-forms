@@ -9,7 +9,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var array
-	 * @access public
 	 */
 	public $items;
 
@@ -24,7 +23,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var array
-	 * @access protected
 	 */
 	protected $_args;
 
@@ -41,7 +39,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var object
-	 * @access protected
 	 */
 	protected $screen;
 
@@ -50,7 +47,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var array
-	 * @access private
 	 */
 	private $_actions;
 
@@ -59,7 +55,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var string
-	 * @access private
 	 */
 	private $_pagination;
 
@@ -68,7 +63,6 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 * @var array
-	 * @access protected
 	 */
 	protected $modes = array();
 
@@ -167,7 +161,6 @@ class FrmListHelper {
 	 * @uses FrmListHelper::set_pagination_args()
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 * @abstract
 	 */
 	public function prepare_items() {
@@ -193,7 +186,6 @@ class FrmListHelper {
 	 *
 	 * @param array $args An associative array with information about the pagination.
 	 *
-	 * @access protected
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -222,7 +214,6 @@ class FrmListHelper {
 	 * Access the pagination args.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @param string $key Pagination argument to retrieve. Common values include 'total_items',
 	 *                    'total_pages', 'per_page', or 'infinite_scroll'.
@@ -243,7 +234,6 @@ class FrmListHelper {
 	 * Whether the table has items to display or not
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @return bool
 	 */
@@ -255,7 +245,6 @@ class FrmListHelper {
 	 * Message to be displayed when there are no items
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 */
 	public function no_items() {
 		esc_html_e( 'No items found.', 'formidable' );
@@ -265,7 +254,6 @@ class FrmListHelper {
 	 * Display the search box.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @param string $text     The search button text.
 	 * @param string $input_id The search input id.
@@ -294,7 +282,6 @@ class FrmListHelper {
 	 * of views available on this table.
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @return array
 	 */
@@ -306,7 +293,6 @@ class FrmListHelper {
 	 * Display the list of views available on this table.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 */
 	public function views() {
 		$views = $this->get_views();
@@ -339,7 +325,6 @@ class FrmListHelper {
 	 * of bulk actions available on this table.
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @return array
 	 */
@@ -351,7 +336,6 @@ class FrmListHelper {
 	 * Display the bulk actions dropdown.
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $which The location of the bulk actions: 'top' or 'bottom'.
 	 *                      This is designated as optional for backwards-compatibility.
@@ -427,7 +411,6 @@ class FrmListHelper {
 	 * Get the current action selected from the bulk actions dropdown.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @return string|false The action name or False if no action was selected
 	 */
@@ -463,7 +446,6 @@ class FrmListHelper {
 	 * Generate row actions div
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param array $actions        The list of actions.
 	 * @param bool  $always_visible Whether the actions should be always visible.
@@ -496,7 +478,6 @@ class FrmListHelper {
 	 * Display a view switcher
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $current_mode
 	 */
@@ -527,7 +508,6 @@ class FrmListHelper {
 	 * Get the current page number
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @return int
 	 */
@@ -545,7 +525,6 @@ class FrmListHelper {
 	 * Get number of items to display on a single page
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $option
 	 * @param int    $default
@@ -578,7 +557,6 @@ class FrmListHelper {
 	 * Display the pagination.
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $which
 	 */
@@ -753,7 +731,6 @@ class FrmListHelper {
 	 * The second format will make the initial sorting order be descending
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @return array
 	 */
@@ -765,7 +742,6 @@ class FrmListHelper {
 	 * Gets the name of the default primary column.
 	 *
 	 * @since 4.3.0
-	 * @access protected
 	 *
 	 * @return string Name of the default primary column, in this case, an empty string.
 	 */
@@ -791,7 +767,6 @@ class FrmListHelper {
 	 * Gets the name of the primary column.
 	 *
 	 * @since 4.3.0
-	 * @access protected
 	 *
 	 * @return string The name of the primary column.
 	 */
@@ -826,7 +801,6 @@ class FrmListHelper {
 	 * Get a list of all, hidden and sortable columns, with filter applied
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @return array
 	 */
@@ -884,7 +858,6 @@ class FrmListHelper {
 	 * Return number of visible columns
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @return int
 	 */
@@ -899,11 +872,11 @@ class FrmListHelper {
 	 * Print column headers, accounting for hidden and sortable columns.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @staticvar int $cb_counter
 	 *
 	 * @param bool $with_id Whether to set the id attribute or not.
+	 * @return void
 	 */
 	public function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
@@ -937,9 +910,9 @@ class FrmListHelper {
 				$class[] = 'hidden';
 			}
 
-			if ( 'cb' == $column_key ) {
+			if ( 'cb' === $column_key ) {
 				$class[] = 'check-column';
-			} elseif ( in_array( $column_key, array( 'posts', 'comments', 'links' ) ) ) {
+			} elseif ( in_array( $column_key, array( 'posts', 'comments', 'links' ), true ) ) {
 				$class[] = 'num';
 			}
 
@@ -951,7 +924,7 @@ class FrmListHelper {
 				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
 				if ( $current_orderby == $orderby ) {
-					$order   = 'asc' == $current_order ? 'desc' : 'asc';
+					$order   = 'asc' === $current_order ? 'desc' : 'asc';
 					$class[] = 'sorted';
 					$class[] = $current_order;
 				} else {
@@ -983,7 +956,6 @@ class FrmListHelper {
 	 * Display the table
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 * @param array $args
 	 */
 	public function display( $args = array() ) {
@@ -1039,7 +1011,6 @@ class FrmListHelper {
 	 * Get a list of CSS classes for the list table table tag.
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @return array List of CSS classes for the table tag.
 	 */
@@ -1051,7 +1022,6 @@ class FrmListHelper {
 	 * Generate the table navigation above or below the table
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $which
 	 */
@@ -1096,7 +1066,6 @@ class FrmListHelper {
 	 * Extra controls to be displayed between bulk actions and pagination
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param string $which
 	 */
@@ -1107,7 +1076,6 @@ class FrmListHelper {
 	 * Generate the tbody element for the list table.
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 */
 	public function display_rows_or_placeholder() {
 		if ( $this->has_items() ) {
@@ -1123,7 +1091,6 @@ class FrmListHelper {
 	 * Generates content for a single row of the table
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 *
 	 * @param object $item The current item.
 	 */
@@ -1137,7 +1104,6 @@ class FrmListHelper {
 	 * Generates the columns for a single row of the table
 	 *
 	 * @since 2.0.18
-	 * @access protected
 	 *
 	 * @param object $item The current item.
 	 */
@@ -1182,7 +1148,6 @@ class FrmListHelper {
 	 * Generates and display row actions links for the list table.
 	 *
 	 * @since 4.3.0
-	 * @access protected
 	 *
 	 * @param object $item The item being acted upon.
 	 * @param string $column_name Current column name.
@@ -1198,7 +1163,6 @@ class FrmListHelper {
 	 * Handle an incoming ajax request (called from admin-ajax.php)
 	 *
 	 * @since 2.0.18
-	 * @access public
 	 */
 	public function ajax_response() {
 		$this->prepare_items();
@@ -1232,7 +1196,6 @@ class FrmListHelper {
 	/**
 	 * Send required variables to JavaScript land
 	 *
-	 * @access public
 	 */
 	public function _js_vars() {
 		$args = array(
