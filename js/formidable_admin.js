@@ -3520,6 +3520,29 @@ function frmAdminBuildJS() {
 			}
 		});
 		fieldUpdated();
+		deleteRelatedConditionalLogicOptions( this );
+	}
+
+	/**
+	 * Deletes all conditional logic dropdown option elements that correspond to the deleted field option.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} option
+	 * @return void
+	 */
+	function deleteRelatedConditionalLogicOptions( option ) {
+		const deletedOptionValue = option.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).value;
+		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
+		const rowLength = rows.length;
+		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
+			const row  = rows[ rowIndex ];
+			const logicId = row.id.split( '_' )[ 2 ];
+			const valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+			const relatedConditionalLogicOption = valueSelect.querySelector( 'option[value="' + deletedOptionValue + '"]' );
+			if ( relatedConditionalLogicOption ) {
+				relatedConditionalLogicOption.remove();
+			}
+		}
 	}
 
 	/**
