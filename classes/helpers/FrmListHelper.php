@@ -904,7 +904,8 @@ class FrmListHelper {
 		}
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			$class = array( 'manage-column', "column-$column_key" );
+			$class      = array( 'manage-column', "column-$column_key" );
+			$order_text = '';
 
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
@@ -931,9 +932,31 @@ class FrmListHelper {
 					$order   = $desc_first ? 'desc' : 'asc';
 					$class[] = 'sortable';
 					$class[] = $desc_first ? 'asc' : 'desc';
+
+					/* translators: Hidden accessibility text. */
+					$asc_text = __( 'Sort ascending.' );
+					/* translators: Hidden accessibility text. */
+					$desc_text  = __( 'Sort descending.' );
+					$order_text = 'asc' === $order ? $asc_text : $desc_text;
 				}
 
-				$column_display_name = '<a href="' . esc_url( add_query_arg( compact( 'orderby', 'order' ), $current_url ) ) . '"><span>' . esc_html( $column_display_name ) . '</span><span class="sorting-indicator"></span></a>';
+				if ( '' !== $order_text ) {
+					$order_text = ' <span class="screen-reader-text">' . $order_text . '</span>';
+				}
+
+				$column_display_name = sprintf(
+					'<a href="%1$s">' .
+						'<span>%2$s</span>' .
+						'<span class="sorting-indicators">' .
+							'<span class="sorting-indicator asc" aria-hidden="true"></span>' .
+							'<span class="sorting-indicator desc" aria-hidden="true"></span>' .
+						'</span>' .
+						'%3$s' .
+					'</a>',
+					esc_url( add_query_arg( compact( 'orderby', 'order' ), $current_url ) ),
+					$column_display_name,
+					$order_text
+				);
 			}
 
 			$tag   = ( 'cb' === $column_key ) ? 'td' : 'th';
