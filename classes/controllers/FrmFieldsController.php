@@ -689,7 +689,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
-		$field_validation_messages_status = self::get_field_validation_messages_status( $field );
+		$field_validation_messages_status = self::get_validation_data_attribute_visibility_info( $field );
 
 		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages_status['data-reqmsg'] ) ) {
 			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
@@ -715,14 +715,14 @@ class FrmFieldsController {
 	 * @param array|object $field
 	 * @return array
 	 */
-	private static function get_field_validation_messages_status( $field ) {
+	private static function get_validation_data_attribute_visibility_info( $field ) {
 		if ( FrmField::get_field_type( $field ) === 'hidden' ) {
-			$field_validation_messages_status = array(
+			$field_validation_data_attributes = array(
 				'data-invmsg' => false,
 				'data-reqmsg' => false,
 			);
 		} else {
-			$field_validation_messages_status = array(
+			$field_validation_data_attributes = array(
 				'data-invmsg' => true,
 				'data-reqmsg' => true,
 			);
@@ -736,7 +736,7 @@ class FrmFieldsController {
 		 * @param array $field_validation_messages_status
 		 * @param array|object $field
 		 */
-		return apply_filters( 'frm_field_validation_messages_status', $field_validation_messages_status, $field );
+		return apply_filters( 'frm_field_validation_include_data_attributes', $field_validation_data_attributes, $field );
 	}
 
 	/**
