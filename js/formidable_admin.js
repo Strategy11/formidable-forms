@@ -5519,8 +5519,7 @@ function frmAdminBuildJS() {
 		const expectedOptionContainer = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
 
 		if ( expectedOptionContainer ) {
-			const choiceComponents = getChoiceValueAndLabel( expectedOptionContainer );
-			return { value: choiceComponents.value, label: choiceComponents.label };
+			return getChoiceValueAndLabel( expectedOptionContainer );
 		}
 
 		return { value: expectedOption, label: expectedOption }
@@ -5570,7 +5569,6 @@ function frmAdminBuildJS() {
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
-			console.log('Empty option', optionMatch);
 			if ( optionMatch !== null ) {
 				valueSelect.prepend( optionMatch );
 			}
