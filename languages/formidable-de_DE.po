@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-03 21:07\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -105,7 +105,7 @@ msgstr "Du hast derzeit keine Templates."
 #: js/src/form-templates/ui/showEmptyState.js:90
 #: js/form-templates.js:3601
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
-msgstr "Du hast noch keine Templates für Formulare erstellt. Beginne jetzt damit, um deinen Arbeitsablauf zu vereinfachen und Zeit zu sparen."
+msgstr "Du hast noch keine Formular-Templates erstellt. Beginne jetzt damit, um deinen Arbeitsablauf zu vereinfachen und Zeit zu sparen."
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
@@ -134,7 +134,7 @@ msgstr "Auf dieser Website gibt es keine Formulare."
 #: js/src/form/calculator.js:27
 #: js/formidable_blocks.js:289
 msgid "Display a Calculator Form"
-msgstr "Ein Taschenrechnerformular anzeigen"
+msgstr "Ein Taschenrechner-Formular anzeigen"
 
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
@@ -153,7 +153,7 @@ msgstr "Upgrade von Formidable Forms."
 #: js/formidable_blocks.js:314
 #: js/formidable_blocks.js:323
 msgid "Calculator Form"
-msgstr "Taschenrechner Formular"
+msgstr "Taschenrechner-Formular"
 
 #: js/src/form/formselect.js:23
 #: js/admin/embed.js:345
@@ -1342,7 +1342,7 @@ msgstr "Feld Einstellungen"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
-msgstr "Boxen und Radiofelder"
+msgstr "Kontrollkästchen & Radiofelder"
 
 #: classes/controllers/FrmStylesController.php:951
 msgid "Form Messages"
@@ -1732,7 +1732,7 @@ msgstr "Diese Formularaktion ist auf %d pro Formular begrenzt."
 
 #: classes/helpers/FrmAppHelper.php:3236
 msgid "Please edit the existing form action."
-msgstr "Bitte bearbeite die bestehende Formularaktion."
+msgstr "Bitte bearbeite die bestehende Formular-Aktion."
 
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
 #: classes/helpers/FrmAppHelper.php:3239
