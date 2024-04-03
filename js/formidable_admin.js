@@ -4897,13 +4897,11 @@ function frmAdminBuildJS() {
 	const getChoiceValueAndLabel = choiceElement => {
 		let value, label;
 		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
 			label = choiceElement.value;
-			if ( choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked ) {
-				value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
-			} else {
+			if ( ! value ) {
 				value = label;
 			}
-
 			return { value, label };
 		}
 
@@ -4915,7 +4913,7 @@ function frmAdminBuildJS() {
 
 	function onOptionTextBlur() {
 		var originalValue,
-			oldValue = this.getAttribute( 'data-value-on-focus' ),
+			oldValue,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4928,11 +4926,15 @@ function frmAdminBuildJS() {
 			settingId,
 			setting,
 			optionMatches,
-			option;
+			option,
+			usingSeparateValues = this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
 
-		if ( this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked && this.parentElement.classList.contains( 'frm_single_option' ) ) {
-			oldValue = this.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-		} else {
+		if ( usingSeparateValues  ) {
+			if ( this.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+				oldValue = this.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+			}
+		}
+		if ( typeof oldValue === 'undefined' ) {
 			oldValue = this.getAttribute( 'data-value-on-focus' );
 		}
 
@@ -4988,8 +4990,14 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					option = document.createElement( 'option' );
-					valueSelect.appendChild( option );
+					if ( ! usingSeparateValues ) {
+						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
+					}
+
+					if ( ! option ) {
+						option = document.createElement( 'option' );
+						valueSelect.appendChild( option );
+					}
 				}
 			}
 
@@ -5010,6 +5018,18 @@ function frmAdminBuildJS() {
 			setting = document.getElementById( 'frm-single-settings-' + settingId );
 			moveFieldSettings( setting );
 		}
+	}
+
+	function searchSelectByText(selectElement, searchText) {
+		const options = selectElement.options;
+	  
+		for (let i = 0; i < options.length; i++) {
+		  const option = options[i];
+		  if ( searchText === option.textContent ) {
+			return option;
+		  }
+		}
+		return null;
 	}
 
 	function updateGetValueFieldSelection() {
