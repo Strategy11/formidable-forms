@@ -904,8 +904,9 @@ class FrmListHelper {
 		}
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			$class      = array( 'manage-column', "column-$column_key" );
-			$order_text = '';
+			$class          = array( 'manage-column', "column-$column_key" );
+			$aria_sort_attr = '';
+			$order_text     = '';
 
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
@@ -925,7 +926,15 @@ class FrmListHelper {
 				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
 				if ( $current_orderby == $orderby ) {
-					$order   = 'asc' === $current_order ? 'desc' : 'asc';
+					// The sorted column. The `aria-sort` attribute must be set only on the sorted column.
+					if ( 'asc' === $current_order ) {
+						$order          = 'desc';
+						$aria_sort_attr = ' aria-sort="ascending"';
+					} else {
+						$order          = 'asc';
+						$aria_sort_attr = ' aria-sort="descending"';
+					}
+
 					$class[] = 'sorted';
 					$class[] = $current_order;
 				} else {
@@ -971,7 +980,7 @@ class FrmListHelper {
 				// Hide the labels but show the border.
 				$column_display_name = '';
 			}
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo "<$tag $scope $id $class $aria_sort_attr>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}//end foreach
 	}
 
