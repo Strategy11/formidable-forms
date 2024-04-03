@@ -5522,7 +5522,7 @@ function frmAdminBuildJS() {
 			return getChoiceValueAndLabel( expectedOptionContainer );
 		}
 
-		return { value: expectedOption, label: expectedOption }
+		return { value: expectedOption, label: expectedOption };
 	};
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
