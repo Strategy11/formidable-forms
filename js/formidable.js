@@ -862,6 +862,15 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Trigger an event before the form is replaced with a success message.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} object The form.
+	 * @param {object} response The response from submitting the form with AJAX.
+	 * @return {void}
+	 */
 	function afterFormSubmittedBeforeReplace( object, response ) {
 		var formCompleted = jQuery( response.content ).find( '.frm_message' );
 		if ( formCompleted.length ) {
