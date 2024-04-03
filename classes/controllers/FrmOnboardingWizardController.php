@@ -59,6 +59,13 @@ class FrmOnboardingWizardController {
 	const REDIRECT_STATUS_OPTION = 'frm_welcome_redirect';
 
 	/**
+	 * Option name for tracking if the onboarding wizard was skipped.
+	 *
+	 * @var string
+	 */
+	const ONBOARDING_SKIPPED_OPTION = 'frm_onboarding_skipped';
+
+	/**
 	 * Defines the initial step for redirection within the application flow.
 	 *
 	 * @var string
@@ -109,6 +116,10 @@ class FrmOnboardingWizardController {
 		self::set_page_url();
 		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
 
+		if ( self::has_onboarding_been_skipped() ) {
+			add_filter( 'option_frm_inbox', __CLASS__ . '::add_wizard_to_floating_links' );
+		}
+
 		// Load page if admin page is Onboarding Wizard.
 		self::maybe_load_page();
 	}
@@ -128,11 +139,12 @@ class FrmOnboardingWizardController {
 
 		// Only do this for single site installs.
 		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			self::mark_onboarding_as_skipped();
 			return;
 		}
 
 		// Check if we should consider redirection.
-		if ( ! self::is_onboarding_wizard_displayed() || FrmAppHelper::pro_is_connected() ) {
+		if ( ! self::is_onboarding_wizard_displayed() || self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
 			return;
 		}
 
@@ -220,6 +232,11 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function render() {
+		if ( self::has_onboarding_been_skipped() ) {
+			delete_option( self::ONBOARDING_SKIPPED_OPTION );
+			self::has_already_redirected();
+		}
+
 		// Include SVG images for icons.
 		FrmAppHelper::include_svg();
 
@@ -387,6 +404,49 @@ class FrmOnboardingWizardController {
 	 */
 	public static function add_admin_body_classes( $classes ) {
 		return $classes . ' frm-admin-full-screen';
+	}
+
+	/**
+	 * Checks if the Onboarding Wizard was skipped during the plugin's installation.
+	 *
+	 * @since x.x
+	 * @return bool True if the Onboarding Wizard was skipped, false otherwise.
+	 */
+	public static function has_onboarding_been_skipped() {
+		return get_option( self::ONBOARDING_SKIPPED_OPTION, false );
+	}
+
+	/**
+	 * Marks the Onboarding Wizard as skipped to prevent automatic redirects to the wizard.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	public static function mark_onboarding_as_skipped() {
+		update_option( self::ONBOARDING_SKIPPED_OPTION, true, 'no' );
+	}
+
+	/**
+	 * Adds an Onboarding Wizard welcome message to the floating notifications.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $inbox_messages The array of existing inbox messages.
+	 * @return array Configuration for the onboarding wizard slide-in notification.
+	 */
+	public static function add_wizard_to_floating_links( $inbox_messages ) {
+		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' );
+
+		return array(
+			'onboarding_wizard' => array(
+				'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
+				'message' => esc_html( $message ),
+				'slidein' => esc_html( $message ),
+				'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
+				'created' => time(),
+				'key'     => 'onboarding_wizard',
+			),
+		);
 	}
 
 	/**
