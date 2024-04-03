@@ -1,7 +1,7 @@
 === Formidable Forms - Contact Form Plugin, Survey, Quiz, Payment, Calculator Form & Custom Form Builder ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
+Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
 Tested up to: 6.5
 Requires PHP: 5.6
@@ -15,7 +15,8 @@ The most advanced WordPress forms plugin. Go beyond contact forms with our drag 
 Discover [Formidable Forms](https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion), the trailblazing solution-centric WordPress form plugin, crafted to revolutionize form creation. Our intuitive drag-and-drop interface enables you to effortlessly design online forms like surveys, polls, quizzes, registration, payment, lead, email forms, and calculator forms - the possibilities are boundless.
 
 https://youtu.be/7X2BqhRsXcg
-[Watch the video overview for the Formidable form, calculator survey, and quiz builder](https://youtu.be/7X2BqhRsXcg)
+
+[Watch the video overview for the Formidable form, calculator, and quiz builder](https://youtu.be/7X2BqhRsXcg)
 
 At Formidable, we prioritize unparalleled limit-breaking. We challenge conventional boundaries unlike any other WP form maker plugin, providing you with the tools to rapidly construct intricate custom forms and applications.
 
@@ -30,11 +31,11 @@ You can start with pre-built templates or create totally custom forms from scrat
 >
 > Or start with the [Lite vs Pro comparison](https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion).
 
-Embrace the limitless possibilities for crafting a lead form, survey, poll, subscription form, request a quote form, payment form, user registration form, and beyond. Dubbed the Swiss Army Knife of WordPress, Formidable integrates seamlessly into your tech ecosystem.
+Embrace the limitless possibilities for crafting a lead form, poll, subscription form, request a quote form, payment form, user registration form, and beyond. Dubbed the Swiss Army Knife of WordPress, Formidable integrates seamlessly into your tech ecosystem.
 
 == Effortless Drag & Drop Form Maker ==
 
-Harness the power of Formidable's drag and drop form creator, equipped with essential fields for crafting solution-oriented WP forms fast. Build unlimited surveys, quiz forms, price calculators, and more with ease.
+Harness the power of Formidable's drag and drop form creator, equipped with essential fields for crafting solution-oriented WP forms fast. Build unlimited quiz forms, price calculators, and more with ease.
 
 == Robust Entry Management for Free Web Forms ==
 
@@ -50,9 +51,9 @@ Elevate website forms with Formidable's built-in styler. Tailor the custom form 
 
 == Craft Smart Surveys & Generate Insightful Reports ==
 
-With Formidable Pro, access survey tools rivaling Survey Monkey — minus the hefty price tag. Design impactful survey and poll forms featuring Net Promoter Scores (NPS), Likert scales, star ratings, and image choices with unparalleled simplicity.
+With Formidable Pro, access survey tools rivaling Survey Monkey — minus the hefty price tag. Design impactful poll forms featuring Net Promoter Scores (NPS), Likert scales, star ratings, and image choices with unparalleled simplicity.
 
-Unlock the power of your data through easy analysis and beautiful reports. Visualize poll, quiz, and calculator data through engaging graphs and reports, ready to interpret or tailor to your needs. Display these insights to visitors by embedding graphs in posts or pages.
+Unlock the power of your data through easy analysis and beautiful reports. Visualize poll, quiz, and order form data through engaging graphs and reports, ready to interpret or tailor to your needs. Display these insights to visitors by embedding graphs in posts or pages.
 
 == Enjoyable Creation of Advanced WordPress Registration Forms ==
 
@@ -68,7 +69,7 @@ With Formidable Views, unlock the potential to display submitted data on the fro
 
 == Elevate Your Online Store with WooCommerce Product Order Forms ==
 
-As the only WordPress form builder plugin fully integrated with WooCommerce, Formidable supercharges your online store.
+As the only WordPress form creator plugin fully integrated with WooCommerce, Formidable supercharges your online store.
 
 Design intricate product order forms with custom calculation fields, effortlessly funneling data into the WooCommerce cart for dynamic pricing options, streamlining the shopping experience for your customers.
 
@@ -90,7 +91,7 @@ With powerful integration options for front-end user post submissions, calculate
 
 == A Developer’s Dream: Extend and Customize with Ease ==
 
-Championed by developers, freelancers, and agencies alike, Formidable is the form maker that's celebrated for its extensibility and flexibility. From custom web app creation to sophisticated form designs, Formidable supports complex projects with low overhead. This makes it the premier choice for professionals looking to push the boundaries of what's possible with WordPress.
+Championed by developers, freelancers, and agencies alike, Formidable is the form creator that's celebrated for its extensibility and flexibility. From custom web app creation to sophisticated form designs, Formidable supports complex projects with low overhead. This makes it the premier choice for professionals looking to push the boundaries of what's possible with WordPress.
 
 * **Responsive Design**: Formidable guarantees that your WordPress forms will look great and function flawlessly across all devices, thanks to its mobile-responsive design and flexible layout options. Ensure that everyone can use your intake form, consent form on any device.
 * **Customization at Your Fingertips**: With the ability to [customize HTML](https://formidableforms.com/features/customize-form-html-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) (like Contact Form 7) while retaining the simplicity of drag-and-drop, Formidable offers the perfect balance of power and ease of use.
@@ -110,7 +111,7 @@ Dive into the endless possibilities with Formidable, the WordPress form builder 
 * **Data Display and Management**: Other WordPress form plugins only let you collect data. With [Formidable Views](https://formidableforms.com/features/display-form-data-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion), showcase data like never before. Create job boards, event calendars, and business directories directly from your form submissions.
 * **Advanced File Uploads**: Our [multiple file upload feature](https://formidableforms.com/features/wordpress-multiple-file-upload-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) simplifies adding documents, photos, and music to any form, perfect for a job application form or WordPress user profile form.
 * **Multi-Step Forms**: Boost conversions with [multi-step forms](https://formidableforms.com/features/wordpress-multi-step-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion), complete with progress bars and conditional logic for a streamlined user experience.
-* **Intelligent Calculator Forms**: From mortgage calculators to auto loan calculators, our [calculator forms](https://formidableforms.com/wordpress-calculator-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) offer dynamic solutions for instant quotes and price estimates.
+* **Intelligent [Calculator Forms](https://formidableforms.com/wordpress-calculator-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)**: From mortgage calculators to auto loan calculators and date calculator forms, Formidable offers dynamic solutions for instant quotes and price estimates.
 * **Custom Styling**: Match your forms to your brand with our [visual style creator](https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion), enabling personalized colors, fonts, and layouts (including RTL forms) without any coding.
 * **User-Generated Content**: Enable front-end post and page submissions, allowing users to contribute content directly through forms. Create an online journaling platform, member directory, classified ads, community recipes, and more.
 * **Comprehensive Entry Management**: Manage, display, and edit form entries with ease, offering front-end editing capabilities for a seamless user experience.
@@ -119,6 +120,7 @@ Dive into the endless possibilities with Formidable, the WordPress form builder 
 * **Template Library**: Jumpstart form creation with our [pre-built form templates](https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion), catering to a wide range of uses from feedback to event registration forms.
 
 https://youtu.be/qkL8rhBRL9s
+
 [How to Build an Instant Quote Form](https://youtu.be/qkL8rhBRL9s)
 
 Formidable Pro stands as a developer's dream, offering unmatched flexibility and power to create, extend, and customize forms. Whether you're building simple forms or complex data-driven applications, Formidable provides all the tools and features you need to defy limits and elevate your WordPress site.
@@ -156,7 +158,7 @@ This online form and quiz builder plugin is created by Steve and Steph Wells and
 3. Click the 'Install Now' button, then 'Activate'
 4. Go to the newly added 'Formidable' menu
 5. Click the 'Add New' button to go to the form generator page and create a new email form
-6. Insert your newly created lead form, quiz form, or survey form on a page or post using the Embed Form pop up. Or insert it manually or into a widget using a shortcode [formidable id=x]. Alternatively use `<?php echo FrmFormsController::show_form(2); ?>` to add it in a theme file.
+6. Insert your newly created lead form, quiz, or survey form on a page or post using the Embed Form pop up. Or insert it manually or into a widget using a shortcode [formidable id=x]. Alternatively use `<?php echo FrmFormsController::show_form(2); ?>` to add it in a theme file.
 
 == Screenshots ==
 1. Build a professional WP form without any code.
@@ -172,7 +174,7 @@ The fastest way to build a form is to use the example we built for you. After yo
 
 Go to the Formidable page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
-Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads. The contact form template will get you up and running fast.
+Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads. The contact form template will get you up and running fast.
 
 = Why isn't WordPress sending emails? =
 When you do not receive emails, try the following steps:
@@ -269,7 +271,7 @@ Our Stripe integration helps you quickly accept credit card payments online. Our
 
 = Which field types does Formidable offer? =
 
-Our online form and quiz builder comes with all the powerful fields that you need to create a solution-focused form, fast!
+Our custom form and quiz builder comes with all the powerful fields that you need to create a solution-focused form, fast!
 
 * Single line text - Great for name, phone number, address, and more.
 * Email
