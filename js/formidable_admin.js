@@ -4913,7 +4913,7 @@ function frmAdminBuildJS() {
 
 	function onOptionTextBlur() {
 		var originalValue,
-			oldValue,
+			oldValue = this.getAttribute( 'data-value-on-focus' ),
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4928,7 +4928,7 @@ function frmAdminBuildJS() {
 			optionMatches,
 			option;
 
-		if ( this.parentElement.classList.contains( 'frm_single_option' ) ) {
+		if ( this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked && this.parentElement.classList.contains( 'frm_single_option' ) ) {
 			oldValue = this.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
 		} else {
 			oldValue = this.getAttribute( 'data-value-on-focus' );
