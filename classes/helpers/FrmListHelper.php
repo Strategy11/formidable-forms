@@ -946,7 +946,7 @@ class FrmListHelper {
 					/* translators: Hidden accessibility text. */
 					$desc_text  = __( 'Sort descending.', 'formidable' );
 					$order_text = 'asc' === $order ? $asc_text : $desc_text;
-				} //end if
+				}//end if
 
 				if ( '' !== $order_text ) {
 					$order_text = ' <span class="screen-reader-text">' . $order_text . '</span>';
@@ -965,7 +965,7 @@ class FrmListHelper {
 					$column_display_name,
 					$order_text
 				);
-			} //end if
+			}//end if
 
 			$tag   = ( 'cb' === $column_key ) ? 'td' : 'th';
 			$scope = ( 'th' === $tag ) ? 'scope="col"' : '';
