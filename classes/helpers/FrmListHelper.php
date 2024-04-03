@@ -185,7 +185,6 @@ class FrmListHelper {
 	 * An internal method that sets all the necessary pagination arguments
 	 *
 	 * @param array $args An associative array with information about the pagination.
-	 *
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -943,11 +942,11 @@ class FrmListHelper {
 					$class[] = $desc_first ? 'asc' : 'desc';
 
 					/* translators: Hidden accessibility text. */
-					$asc_text = __( 'Sort ascending.' );
+					$asc_text = __( 'Sort ascending.', 'formidable' );
 					/* translators: Hidden accessibility text. */
-					$desc_text  = __( 'Sort descending.' );
+					$desc_text  = __( 'Sort descending.', 'formidable' );
 					$order_text = 'asc' === $order ? $asc_text : $desc_text;
-				}
+				} //end if
 
 				if ( '' !== $order_text ) {
 					$order_text = ' <span class="screen-reader-text">' . $order_text . '</span>';
@@ -966,7 +965,7 @@ class FrmListHelper {
 					$column_display_name,
 					$order_text
 				);
-			}
+			} //end if
 
 			$tag   = ( 'cb' === $column_key ) ? 'td' : 'th';
 			$scope = ( 'th' === $tag ) ? 'scope="col"' : '';
@@ -1228,6 +1227,7 @@ class FrmListHelper {
 	/**
 	 * Send required variables to JavaScript land
 	 *
+	 * @return void
 	 */
 	public function _js_vars() {
 		$args = array(
