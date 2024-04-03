@@ -8492,6 +8492,10 @@ button.frm_choose_image_box,
 	background-position: left 11px top 55%;
 }
 
+.rtl .frm_code_list.frm-full-hover a span {
+	margin-left: var(--gap-xs);
+}
+
 /* ---------------------------------------------------------------
 Clearfix
 --------------------------------------------------------------- */
