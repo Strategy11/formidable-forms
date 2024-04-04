@@ -137,6 +137,8 @@ namespace {
 		 */
 		public static function &is_field_visible_to_user( $field ) {
 		}
+		public static function add_default_field_settings( $settings, $atts ) {
+		}
 	}
 	class FrmViewsAppHelper {
 	}
