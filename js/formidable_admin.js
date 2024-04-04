@@ -4975,7 +4975,9 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+		const singleSettingsContainer = this.closest( '.frm-single-settings' );
+
+		fieldId       = singleSettingsContainer.getAttribute( 'data-fid' );
 		originalValue = this.getAttribute( 'data-value-on-load' );
 
 		// check if the newValue is already mapped to another option
@@ -5019,7 +5021,7 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					if ( ! this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked ) {
+					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' ).checked ) {
 						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
 					}
 
