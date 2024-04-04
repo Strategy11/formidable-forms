@@ -3528,17 +3528,17 @@ function frmAdminBuildJS() {
 	 *
 	 * @since x.x
 	 * @param {HTMLElement} option
-	 * @return void
+	 * @return {void}
 	 */
 	function deleteRelatedConditionalLogicOptions( option ) {
 		const deletedOptionValue = option.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).value;
-		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
-		const rowLength = rows.length;
+		const rows               = builderPage.querySelectorAll( '.frm_logic_row' );
+		const rowLength          = rows.length;
+
 		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			const row  = rows[ rowIndex ];
 			const logicId = row.id.split( '_' )[ 2 ];
-			const valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
-			const relatedConditionalLogicOption = valueSelect.querySelector( 'option[value="' + deletedOptionValue + '"]' );
+			const relatedConditionalLogicOption = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"] option[value="' + deletedOptionValue + '"]' );
 			if ( relatedConditionalLogicOption ) {
 				relatedConditionalLogicOption.remove();
 			}
@@ -4897,11 +4897,8 @@ function frmAdminBuildJS() {
 	const getChoiceValueAndLabel = choiceElement => {
 		let value, label;
 		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' )?.value;
+			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' ).value;
 			label = choiceElement.value;
-			if ( ! value ) {
-				value = label;
-			}
 			return { value, label };
 		}
 
@@ -4914,6 +4911,7 @@ function frmAdminBuildJS() {
 	function onOptionTextBlur() {
 		var originalValue,
 			oldValue,
+			oldLabel,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4932,17 +4930,19 @@ function frmAdminBuildJS() {
 		if ( usingSeparateValues  ) {
 			if ( this.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
 				oldValue = this.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+				oldLabel = this.getAttribute( 'data-value-on-focus' );
 			}
 		}
 		if ( typeof oldValue === 'undefined' ) {
 			oldValue = this.getAttribute( 'data-value-on-focus' );
+			oldLabel = this.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
 		}
 
 		const choiceComponents = getChoiceValueAndLabel( this );
 		const newValue = choiceComponents.value;
 		const newLabel = choiceComponents.label;
 
-		if ( oldValue === newValue ) {
+		if ( oldValue === newValue && oldLabel === newLabel ) {
 			return;
 		}
 
@@ -5615,7 +5615,7 @@ function frmAdminBuildJS() {
 				}
 
 				if ( optionMatch ) {
-					valueSelect.prepend( optionMatch );
+					valueSelect.append( optionMatch );
 				}
 			}
 
