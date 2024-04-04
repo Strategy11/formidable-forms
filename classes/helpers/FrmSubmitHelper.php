@@ -142,6 +142,10 @@ class FrmSubmitHelper {
 			return;
 		}
 
+		if ( FrmAppHelper::pro_is_installed() && ! has_filter( 'frm_default_field_options', 'FrmProFieldsHelper::add_default_field_settings' ) ) {
+			add_filter( 'frm_default_field_options', 'FrmProFieldsHelper::add_default_field_settings', 10, 2 );
+		}
+
 		$field_data = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
 
 		$submit_settings             = self::get_submit_settings_from_form( $form );
