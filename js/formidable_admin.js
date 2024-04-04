@@ -4894,24 +4894,49 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} choiceElement
 	 * @returns {Object}
 	 */
-	const getChoiceValueAndLabel = choiceElement => {
-		let value, label;
+	function getChoiceNewValueAndLabel( choiceElement ) {
+		let newValue, newLabel;
 		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-			value = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' ).value;
-			label = choiceElement.value;
-			return { value, label };
+			newValue = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' ).value;
+			newLabel = choiceElement.value;
+			return { newValue, newLabel };
 		}
 
 		// saved value changed
-		label = choiceElement.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).value;
-		value = choiceElement.value;
-		return { value, label };
-	};
+		newLabel = choiceElement.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).value;
+		newValue = choiceElement.value;
+		return { newValue, newLabel };
+	}
+
+	function getChoiceOldAndNewValues( input ) {
+		const { oldValue, oldLabel } = getChoiceOldValueAndLabel( input );
+		const { newValue, newLabel } = getChoiceNewValueAndLabel( input );
+
+		return { oldValue, oldLabel, newValue, newLabel };
+	}
+
+	function getChoiceOldValueAndLabel( input ) {
+		const usingSeparateValues   = input.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+		const singleOptionContainer = input.closest( '.frm_single_option' );
+
+		let oldValue, oldLabel;
+
+		if ( usingSeparateValues  ) {
+			if ( input.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+				oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+				oldLabel = input.getAttribute( 'data-value-on-focus' );
+			}
+		}
+		if ( typeof oldValue === 'undefined' ) {
+			oldValue = input.getAttribute( 'data-value-on-focus' );
+			oldLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+		}
+
+		return { oldValue, oldLabel };
+	}
 
 	function onOptionTextBlur() {
 		var originalValue,
-			oldValue,
-			oldLabel,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4923,24 +4948,9 @@ function frmAdminBuildJS() {
 			fieldIds,
 			settingId,
 			setting,
-			optionMatches,
-			option,
-			usingSeparateValues = this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+			optionMatches;
 
-		if ( usingSeparateValues  ) {
-			if ( this.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-				oldValue = this.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-				oldLabel = this.getAttribute( 'data-value-on-focus' );
-			}
-		}
-		if ( typeof oldValue === 'undefined' ) {
-			oldValue = this.getAttribute( 'data-value-on-focus' );
-			oldLabel = this.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-		}
-
-		const choiceComponents = getChoiceValueAndLabel( this );
-		const newValue = choiceComponents.value;
-		const newLabel = choiceComponents.label;
+		const { oldValue, oldLabel, newValue, newLabel } = getChoiceOldAndNewValues( this );
 
 		if ( oldValue === newValue && oldLabel === newLabel ) {
 			return;
@@ -4986,6 +4996,8 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
 			}
 
+			let option;
+
 			if ( ! optionMatches.length ) {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
@@ -5020,15 +5032,23 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function searchSelectByText(selectElement, searchText) {
+	/**
+	 * Returns an option element that matches a string with its text content.
+	 *
+	 * @param {HTMLElement} selectElement
+	 * @param {string}      searchText
+	 * @returns {HTMLElement|null}
+	 */
+	function searchSelectByText( selectElement, searchText ) {
 		const options = selectElement.options;
-	  
-		for (let i = 0; i < options.length; i++) {
-		  const option = options[i];
-		  if ( searchText === option.textContent ) {
-			return option;
-		  }
+
+		for ( let i = 0; i < options.length; i++ ) {
+			const option = options[i];
+			if ( searchText === option.textContent ) {
+				return option;
+			}
 		}
+
 		return null;
 	}
 
@@ -5564,17 +5584,17 @@ function frmAdminBuildJS() {
 	 * @param {string} expectedOption
 	 * @returns {Object}
 	 */
-	const getNewConditionalLogicOption = ( fieldId, expectedOption ) => {
+	function getNewConditionalLogicOption( fieldId, expectedOption ) {
 		const optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
 
-		const expectedOptionContainer = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
+		const expectedOptionInput = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
 
-		if ( expectedOptionContainer ) {
-			return getChoiceValueAndLabel( expectedOptionContainer );
+		if ( expectedOptionInput ) {
+			return getChoiceNewValueAndLabel( expectedOptionInput );
 		}
 
-		return { value: expectedOption, label: expectedOption };
-	};
+		return { newValue: expectedOption, newLabel: expectedOption };
+	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
@@ -5604,9 +5624,7 @@ function frmAdminBuildJS() {
 
 				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOptionValue + '"]' );
 
-				const newConditionalLogicOption = getNewConditionalLogicOption( fieldId, expectedOption );
-				const newValue = newConditionalLogicOption.value;
-				const newLabel = newConditionalLogicOption.label;
+				const { newValue, newLabel } = getNewConditionalLogicOption( fieldId, expectedOption );
 
 				if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' ) ) {
 					optionMatch = document.createElement( 'option' );
