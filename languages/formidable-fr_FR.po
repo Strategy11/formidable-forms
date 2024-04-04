@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-04 21:28\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -39,7 +39,7 @@ msgstr "Modèles de candidature"
 #: js/src/form-templates/elements/applicationTemplatesElement.js:77
 #: js/form-templates.js:1776
 msgid "Ready Made Solution"
-msgstr "Solution clé en main"
+msgstr "Solution prête à l'emploi"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:85
 #: js/form-templates.js:1784
@@ -70,7 +70,7 @@ msgstr "Aucun modèle disponible"
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr "Mettez à niveau vers PRO pour avoir %s+ options ou explorez les modèles gratuits."
+msgstr "Passez à la version PRO pour avoir %s+ options ou explorez les modèles gratuits."
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -144,7 +144,7 @@ msgstr "Ce site n'a aucun formulaire de calculateur."
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr "Mettre à niveau Formidable Forms."
+msgstr "Mettez à niveau Formidable Forms."
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -176,7 +176,7 @@ msgstr "Afficher un graphique ou un diagramme"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr "Ce site n’a pas Formidable Charts actif."
+msgstr "Formidable Charts n’est pas actif sur ce site."
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
@@ -184,7 +184,7 @@ msgstr "Installer Formidable Charts"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
-msgstr "Ce site n’a pas Formidable Charts installé."
+msgstr "Formidable Charts n’est pas installé sur ce site."
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
@@ -236,32 +236,32 @@ msgstr "Code court"
 #: js/src/form/modal.js:20
 #: js/formidable_blocks.js:534
 msgid "Modal"
-msgstr "Modal"
+msgstr "Modale"
 
 #: js/src/form/modal.js:21
 #: js/formidable_blocks.js:535
 msgid "Display a modal"
-msgstr "Afficher un modal"
+msgstr "Afficher une modale"
 
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr "Fenêtre surgissante Bootstrap"
+msgstr "Modale surgissante Bootstrap"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
 msgid "This site does not have popup modals active."
-msgstr "Ce site n’a pas de fenêtres surgissantes actives."
+msgstr "Ce site n’a pas de modales surgissantes actives."
 
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr "Installer Formidable Modals"
+msgstr "Installer Formidable Modal"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
 msgid "This site does not have popup modals."
-msgstr "Ce site n’a pas de fenêtres surgissantes."
+msgstr "Ce site n’a pas de modales surgissantes."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -282,7 +282,7 @@ msgstr "Créez rapidement et facilement des formulaires par glisser-déposer"
 #. Author of the plugin
 #: formidable.php
 msgid "Strategy11 Form Builder Team"
-msgstr "Équipe frappeuse de formulaires Strategy11"
+msgstr "Équipe du constructeur de formulaires de Strategy11"
 
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:24
@@ -322,7 +322,7 @@ msgstr "Non installé"
 
 #: classes/controllers/FrmAddonsController.php:947
 msgid "Current user cannot delete plugins."
-msgstr "L’utilisateur actuel ne peut pas supprimer les extensions."
+msgstr "L’utilisateur/utilisatrice actuel·le ne peut pas supprimer les extensions."
 
 #: classes/controllers/FrmAddonsController.php:1023
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
@@ -414,7 +414,7 @@ msgstr "Créer un Formulaire"
 #. Translators: 1: Global Settings Link
 #: classes/controllers/FrmAppController.php:637
 msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
-msgstr "Les adresses IP dans les envois de formulaire peuvent ne plus être exactes ! Si vous rencontrez des problèmes, nous vous recommandons d’aller à %1$s et d’activer l’option « Utiliser des en-têtes personnalisés lors de la récupération des IP avec les envois de formulaire. »."
+msgstr "Les adresses IP dans les envois de formulaire peuvent ne plus être exactes ! Si vous rencontrez des problèmes, nous vous recommandons d’ouvrir le %1$s et d’activer le réglage « Utiliser des en-têtes personnalisés lors de la récupération des IP avec les envois de formulaire »."
 
 #: classes/controllers/FrmAppController.php:1212
 #: classes/controllers/FrmFormsController.php:167
@@ -513,7 +513,7 @@ msgstr "Nouveau Formulaire"
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #: classes/controllers/FrmDashboardController.php:319
 msgid "See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you'll see it here."
-msgstr "Voir la %1$sdocumentation du formulaire%2$s pour les instructions sur la publication d’un formulaire. Une fois que vous avez au moins une entrée, vous la verrez ici."
+msgstr "Consultez la %1$sdocumentation sur les formulaires%2$s pour obtenir des instructions sur la publication d’un formulaire. Une fois que vous avez au moins une entrée, vous la verrez ici."
 
 #: classes/controllers/FrmDashboardController.php:395
 #: classes/controllers/FrmEntriesController.php:86
@@ -648,7 +648,7 @@ msgstr "Formulaires"
 
 #: classes/controllers/FrmFormsController.php:57
 msgid "Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching."
-msgstr "Affichez uniquement les champs dont vous avez besoin et créez des formulaires de ramification. Mettez à niveau pour obtenir une logique conditionnelle et une ramification de questions."
+msgstr "Affichez uniquement les champs dont vous avez besoin et créez des formulaires à ramifications. Mettez à niveau pour obtenir une logique conditionnelle et une ramification de questions."
 
 #: classes/controllers/FrmFormsController.php:58
 #: classes/controllers/FrmFormsController.php:59
@@ -671,7 +671,7 @@ msgstr "Formulaire correctement mis à jour"
 #. translators: %1$s: Start link HTML, %2$s: end link HTML
 #: classes/controllers/FrmFormsController.php:236
 msgid "However, your form is very long and may be %1$sreaching server limits%2$s."
-msgstr "Cependant, votre formulaire est très long et peut être %1$sreaching server limits%2$s."
+msgstr "Cependant, votre formulaire est très long et il se peut qu'il %1$sait atteint les limites du serveur%2$s."
 
 #: classes/controllers/FrmFormsController.php:550
 msgid "Form Preview"
@@ -842,7 +842,7 @@ msgstr "Paramètres d'abandon de formulaire"
 
 #: classes/controllers/FrmFormsController.php:1263
 msgid "Unlock the power of data capture to boost lead generation and master the art of form optimization."
-msgstr "Découvrez le pouvoir de la capture de données pour stimuler la génération de prospects et maîtriser l'art de l'optimisation de formulaire."
+msgstr "Débloquez le pouvoir de la capture de données pour booster la génération de prospects et maîtriser l'art de l'optimisation de formulaire."
 
 #: classes/controllers/FrmFormsController.php:1269
 msgid "Customize HTML"
@@ -1116,15 +1116,15 @@ msgstr "Fonctionnalités supplémentaires de formulaire comme les téléchargeme
 
 #: classes/controllers/FrmSettingsController.php:340
 msgid "Repeaters & cascading fields for advanced forms"
-msgstr "Répéteurs et champs en cascade pour des formulaires avancés"
+msgstr "Répéteurs et champs en cascade pour les formulaires avancés"
 
 #: classes/controllers/FrmSettingsController.php:341
 msgid "Flexibly view, search, edit, and delete entries anywhere"
-msgstr "Voir, rechercher, modifier et supprimer des entrées de manière flexible n'importe où"
+msgstr "Affichage, recherche, modification et suppression d’entrées de manière flexible n'importe où"
 
 #: classes/controllers/FrmSettingsController.php:342
 msgid "Display entries with virtually limitless Formidable views"
-msgstr "Afficher les entrées avec pratiquement un nombre illimité de vues Formidable"
+msgstr "Affichage d'entrées avec un nombre quasiment illimité de vues Formidable"
 
 #: classes/controllers/FrmSettingsController.php:343
 msgid "Create surveys & polls"
@@ -1144,7 +1144,7 @@ msgstr "Logique conditionnelle puissante pour des formulaires intelligents"
 
 #: classes/controllers/FrmSettingsController.php:347
 msgid "Integrations with 1000+ marketing & payment services"
-msgstr "Intégrations avec plus de 1000 services de marketing et de paiement"
+msgstr "Intégration avec plus de 1 000 services de marketing et de paiement"
 
 #: classes/controllers/FrmSettingsController.php:348
 msgid "Collect digital signatures"
@@ -1152,7 +1152,7 @@ msgstr "Stockez des signatures en ligne"
 
 #: classes/controllers/FrmSettingsController.php:349
 msgid "Accept user-submitted content with Post submissions"
-msgstr "Acceptez du contenu soumis par l'utilisateur avec des soumissions de publication"
+msgstr "Accepter du contenu soumis par l'utilisateur·ice avec des soumissions de publication"
 
 #: classes/controllers/FrmSettingsController.php:350
 msgid "Email routing"
@@ -1160,7 +1160,7 @@ msgstr "Routage des e-mails"
 
 #: classes/controllers/FrmSettingsController.php:351
 msgid "Create calculator forms"
-msgstr "Créer des formulaires de calculatrice"
+msgstr "Créer des formulaires de calcul"
 
 #: classes/controllers/FrmSettingsController.php:352
 msgid "Save draft entries and return later"
@@ -1180,7 +1180,7 @@ msgstr "Facilite la délivrabilité d’e-mail pour WordPress"
 
 #: classes/controllers/FrmSMTPController.php:163
 msgid "WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications."
-msgstr "WP Mail SMTP vous permet de configurer facilement WordPress pour utiliser un fournisseur de confiance pour envoyer des e-mails de manière fiable, y compris les notifications de formulaire."
+msgstr "WP Mail SMTP vous permet de configurer facilement WordPress pour utiliser un fournisseur de confiance afin d'envoyer des e-mails de manière fiable, y compris des notifications de formulaire."
 
 #: classes/controllers/FrmSMTPController.php:190
 msgid "WP Mail SMTP screenshot"
@@ -1196,11 +1196,11 @@ msgstr "Envoyez des e-mails authentifiés via des tiers de confiance."
 
 #: classes/controllers/FrmSMTPController.php:194
 msgid "Transactional Mailers: Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES."
-msgstr "Mailers transactionnels : Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES."
+msgstr "Services d'envoi transactionnels : Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES."
 
 #: classes/controllers/FrmSMTPController.php:195
 msgid "Web Mailers: Gmail, G Suite, Office 365, Outlook.com."
-msgstr "Web Mailers : Gmail, G Suite, Office 365, Outlook.com."
+msgstr "Services d'envoi web : Gmail, G Suite, Office 365, Outlook.com."
 
 #: classes/controllers/FrmSMTPController.php:217
 msgid "Step 1"
@@ -1354,7 +1354,7 @@ msgstr "Impossible de renommer le style"
 
 #: classes/controllers/FrmStylesController.php:1302
 msgid "The style you are renaming either does not exist or it is not a style"
-msgstr "Le style que vous renommez n'existe soit pas, soit ce n'est pas un style"
+msgstr "Le style que vous renommez n'existe pas, ou ce n'est pas un style"
 
 #: classes/controllers/FrmUsageController.php:45
 msgid "Once Weekly"
