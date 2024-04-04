@@ -292,7 +292,7 @@ class FrmEntriesController {
 		if ( ! $form_id ) {
 			$columns[ $form_id . '_user_id' ] = 'user_id';
 			$columns[ $form_id . '_name' ]    = 'name';
-			$columns[ $form_id . '_form_id']  = 'form_id';
+			$columns[ $form_id . '_form_id' ] = 'form_id';
 		}
 
 		foreach ( $fields as $field ) {
