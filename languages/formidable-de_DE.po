@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-03 21:07\n"
+"PO-Revision-Date: 2024-04-04 09:21\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -168,7 +168,7 @@ msgstr "formulare"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr "Beeindruckende Karte"
+msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
@@ -1342,7 +1342,7 @@ msgstr "Feld Einstellungen"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
-msgstr "Kontrollkästchen & Radiofelder"
+msgstr "Checkbox & Radiofelder"
 
 #: classes/controllers/FrmStylesController.php:951
 msgid "Form Messages"
@@ -3696,7 +3696,7 @@ msgstr "Buttons für Radio-Buttons oder Checkboxen verwenden. Das ist perfekt f�
 #. translators: Add-on name.
 #: classes/helpers/FrmFieldsHelper.php:2185
 msgid "Formidable %s"
-msgstr "Beeindruckend %s"
+msgstr "Formidable %s"
 
 #: classes/helpers/FrmFormMigratorsHelper.php:115
 #: classes/views/frm-forms/error-modal.php:15
@@ -3723,7 +3723,7 @@ msgstr "Installiere %s Importer"
 
 #: classes/helpers/FrmFormsHelper.php:57
 msgid " (child)"
-msgstr " (Kind)"
+msgstr " (child)"
 
 #: classes/helpers/FrmFormsHelper.php:121
 msgid "Switch Form"
@@ -5026,7 +5026,7 @@ msgstr "Formular Einsendungen"
 #: classes/models/FrmPluginSearch.php:82
 msgctxt "Formidable Addon Name"
 msgid "Formidable %s"
-msgstr "Beeindruckend %s"
+msgstr "Formidable %s"
 
 #: classes/models/FrmPluginSearch.php:326
 msgid "Install Now"
@@ -5219,7 +5219,7 @@ msgstr "fett"
 
 #: classes/models/FrmTurnstileSettings.php:64
 msgid "Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs."
-msgstr "Turnstile ist ein kostenloses Werkzeug, um CAPTCHAs zu ersetzen. Turnstile bietet Website-Besuchern ein frustrationsfreies, CAPTCHA-freies Web-Erlebnis - mit nur einem einfachen, kostenlosen Codeschnipsel. Außerdem stoppt Turnstile den Missbrauch und bestätigt, dass die Besucher/innen echt sind, ohne die Datenschutzbedenken oder das schreckliche Benutzererlebnis von CAPTCHAs."
+msgstr "Turnstile ist ein kostenloses Werkzeug, um CAPTCHAs zu ersetzen. Turnstile bietet Website-Besuchern ein frustrationsfreies, CAPTCHA-freies Web-Erlebnis - mit nur einem einfachen, kostenlosen Codeschnipsel. Außerdem stoppt Turnstile den Missbrauch und bestätigt, dass die Besucher echt sind, ohne die Datenschutzbedenken oder das scheußliche Benutzererlebnis von CAPTCHAs."
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
@@ -6300,7 +6300,7 @@ msgstr "Wähle den Captcha-Typ aus"
 
 #: classes/views/frm-settings/captcha/captcha.php:23
 msgid "Turnstile"
-msgstr "Drehkreuz"
+msgstr "Turnstile"
 
 #: classes/views/frm-settings/captcha/captcha.php:29
 msgid "Changing the captcha type here will replace it in all any forms where it is used."
@@ -6316,7 +6316,7 @@ msgstr "reCAPTCHA Typ"
 
 #: classes/views/frm-settings/captcha/captcha.php:45
 msgid "Checkbox (V2)"
-msgstr "Kontrollkästchen (V2)"
+msgstr "Checkbox (V2)"
 
 #: classes/views/frm-settings/captcha/captcha.php:48
 msgid "Invisible"
@@ -6352,7 +6352,7 @@ msgstr "hCaptcha Einstellungen"
 
 #: classes/views/frm-settings/captcha/captcha.php:100
 msgid "Turnstile Settings"
-msgstr "Drehkreuz-Einstellungen"
+msgstr "Turnstile Einstellungen"
 
 #. translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML
 #: classes/views/frm-settings/captcha/captcha_keys.php:14
@@ -6855,7 +6855,7 @@ msgstr "Einzelne Zeile"
 
 #: classes/views/styles/_check-box-radio-fields.php:19
 msgid "Check Box"
-msgstr "Boxen ankreuzen"
+msgstr "Checkbox"
 
 #: classes/views/styles/_check-box-radio-fields.php:31
 #: classes/views/styles/_field-description.php:7
@@ -6902,7 +6902,7 @@ msgstr "Fehler Style"
 
 #: classes/views/styles/_field-colors.php:100
 msgid "Read Only Style"
-msgstr "Nur Lesen Stil"
+msgstr "\"Nur Lesen\" Stil"
 
 #: classes/views/styles/_field-description.php:25
 msgid "italic"
