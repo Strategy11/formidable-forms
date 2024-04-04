@@ -66,21 +66,21 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		global $submenu;
 
 		// Set up the initial submenu state.
-		$submenu['formidable'][] = array(
+		$submenu['formidable'][] = array( // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			'Onboarding Wizard',
 			$this->controller::REQUIRED_CAPABILITY,
 			$this->controller::PAGE_SLUG,
-			'Onboarding Wizard'
+			'Onboarding Wizard',
 		);
 
 		// Ensure the submenu is added correctly.
-		$this->assertNotEmpty($submenu['formidable'], 'The submenu should be populated before removal.');
+		$this->assertNotEmpty( $submenu['formidable'], 'The submenu should be populated before removal.' );
 
 		$this->controller::remove_menu();
 
 		// Check the submenu has been removed
-		$this->assertArrayHasKey('formidable', $submenu, 'The formidable key should still exist in $submenu.');
-		$this->assertEmpty($submenu['formidable'], 'The formidable submenu should be empty after removal.');
+		$this->assertArrayHasKey( 'formidable', $submenu, 'The formidable key should still exist in $submenu.' );
+		$this->assertEmpty( $submenu['formidable'], 'The formidable submenu should be empty after removal.' );
 	}
 
 	/**
