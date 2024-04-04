@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-03 21:07\n"
+"PO-Revision-Date: 2024-04-04 21:29\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5272,7 +5272,7 @@ msgstr "Chiave di licenza"
 
 #: classes/views/dashboard/templates/notification-banner.php:14
 msgid "Whether you're looking to create simple contact forms or complex survey forms, Formidable Forms has you covered."
-msgstr "Che tu voglia creare semplici moduli di contatto o complessi moduli per sondaggi, Formidable Forms ti mette alla copertina."
+msgstr "Sia che si voglia creare semplici moduli di contatto o complessi moduli di sondaggio, Formidable Forms è la soluzione ideale."
 
 #: classes/views/dashboard/templates/notification-banner.php:17
 msgid "Check All Features"
@@ -5379,7 +5379,7 @@ msgstr "Ottieni 20+ template gratuiti per i moduli"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:20
 msgid "Just add your email address and we'll send you a code for free form templates!"
-msgstr "Aggiungi il tuo indirizzo email e ti invieremo un codice per ottenere dei template gratuiti!"
+msgstr "Aggiungi il tuo indirizzo email e ti invieremo un codice per i template gratuiti dei moduli!"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:50
 msgid "Enter your email"
@@ -5420,17 +5420,17 @@ msgstr "Accedi a %1$s%2$s altri moduli precostituiti"
 
 #: classes/views/form-templates/modals/renew-account-modal.php:34
 msgid "That template is not available on your plan. Please renew to unlock this and more awesome templates."
-msgstr "Questo template non è disponibile sul tuo piano. NON SI TRADUCE per sbloccare questo e altri fantastici template."
+msgstr "Questo template non è disponibile sul tuo piano. Rinnova per sbloccare questo e altri fantastici template."
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:26
 msgid "%1$sTEMPLATE NAME%2$s is a PRO Template"
-msgstr "%1$sNOME DEL TEMPLATE%2$s è un template PRO"
+msgstr "%1$sTEMPLATE NAME%2$s è un template PRO"
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:40
 msgid "The %1$sTEMPLATE NAME%2$s is not available on your plan. Please upgrade to unlock this and more awesome templates."
-msgstr "Il template %1$s%2$s non è disponibile sul tuo piano. NON SI TRADUCE per sbloccare questo e altri fantastici template."
+msgstr "%1$sTEMPLATE NAME%2$s non è disponibile sul tuo piano. Aggiorna per sbloccare questo e altri fantastici template."
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:53
@@ -5499,7 +5499,7 @@ msgstr "Questo modulo è impostato per non salvare nessuna voce."
 #. translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML
 #: classes/views/frm-entries/no_entries.php:13
 msgid "If you would like to save entries in this form, go to the %1$sform Settings%2$s page %3$s and uncheck the \"Do not store any entries submitted from this form\" box."
-msgstr "Se vuoi salvare le voci di questo modulo, vai alle Impostazioni del modulo %1$s%2$s pagina %3$s e deseleziona la casella \"Non memorizzare le voci inviate da questo modulo\"."
+msgstr "Se vuoi salvare le voci di questo modulo, vai alla pagina delle %1$sImpostazioni del modulo%2$s %3$s e deseleziona la casella \"Non memorizzare le voci inviate da questo modulo\"."
 
 #. translators: %s: The form name
 #: classes/views/frm-entries/no_entries.php:27
@@ -5727,7 +5727,7 @@ msgstr "Campo %s"
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:32
 msgid "Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s."
-msgstr "I Captchas non saranno utilizzati fino a quando il Sito e le Chiavi Segrete non saranno stati configurati %1$s%2$s."
+msgstr "I Captcha non saranno utilizzati fino a quando il Sito e le Chiavi Segrete non saranno %1$sconfigurati%2$s."
 
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
@@ -5928,7 +5928,7 @@ msgstr "Aggiungi azioni al tuo modulo per eseguire attività quando una voce vie
 
 #: classes/views/frm-form-actions/settings.php:15
 msgid "Search Form Actions"
-msgstr "Azioni del modulo di ricerca"
+msgstr "Ricerca delle azioni del modulo"
 
 #: classes/views/frm-form-actions/settings.php:23
 msgid "(click an action to add it to your form)"
@@ -5940,7 +5940,7 @@ msgstr "Mostra tutte le azioni del modulo"
 
 #: classes/views/frm-form-actions/settings.php:85
 msgid "Hide extra form actions"
-msgstr "Nascondi le azioni extra del modulo"
+msgstr "Nascondi le azioni del modulo addizionali"
 
 #: classes/views/frm-form-actions/_action_inside.php:13
 msgid "Action Name"
@@ -6332,7 +6332,7 @@ msgstr "Lingua reCAPTCHA"
 
 #: classes/views/frm-settings/captcha/captcha.php:62
 msgid "Browser Default"
-msgstr "Predefinito del browser"
+msgstr "Browser predefinito"
 
 #: classes/views/frm-settings/captcha/captcha.php:74
 msgid "reCAPTCHA Threshold"
@@ -6352,12 +6352,12 @@ msgstr "Impostazioni di hCaptcha"
 
 #: classes/views/frm-settings/captcha/captcha.php:100
 msgid "Turnstile Settings"
-msgstr "Impostazioni del tornello"
+msgstr "Regolazioni di Turnstile"
 
 #. translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML
 #: classes/views/frm-settings/captcha/captcha_keys.php:14
 msgid "%1$s requires a Site and Private API key. Sign up for a %2$sfree %1$s key%3$s."
-msgstr "%1$s richiede un sito e una chiave API privata. Registrati per ottenere una %2$schiave gratuita %1$s%3$s."
+msgstr "%1$s richiede un sito e una chiave API privata. Registrati per ottenere una %2$schiave %1$s gratuita%3$s."
 
 #: classes/views/frm-settings/captcha/captcha_keys.php:23
 msgid "Site Key"
@@ -6498,7 +6498,7 @@ msgstr "Invia email di riepilogo mensili e annuali con le statistiche dei moduli
 
 #: classes/views/frm-settings/misc.php:28
 msgid "Summary email recipients"
-msgstr "Riepilogo dei destinatari delle email"
+msgstr "Destinatari delle email di riepilogo"
 
 #. translators: %1$s the opening link tag, %2$s the closing link tag
 #: classes/views/frm-settings/misc.php:35
@@ -8018,7 +8018,7 @@ msgstr "I layout si basano su un sistema a griglia a 12 colonne."
 
 #: js/formidable_admin.js:4547
 msgid "Merge into row"
-msgstr "Unisci in riga"
+msgstr "Unisci in una riga"
 
 #: js/formidable_admin.js:5864
 msgid "Duplicate option value \"%s\" detected"
@@ -8034,7 +8034,7 @@ msgstr "Impossibile installare il template"
 
 #: js/formidable_admin.js:9592
 msgid "Thank you for signing up!"
-msgstr "Grazie per esserti iscritto!"
+msgstr "Grazie per la tua iscrizione!"
 
 #: js/packages/floating-links/config.js:67
 msgid "Documentation"
