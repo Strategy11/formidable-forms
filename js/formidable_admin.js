@@ -3533,10 +3533,9 @@ function frmAdminBuildJS() {
 	function deleteRelatedConditionalLogicOptions( option ) {
 		const deletedOptionValue = option.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).value;
 		const rows               = builderPage.querySelectorAll( '.frm_logic_row' );
-		const rowLength          = rows.length;
 
-		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
-			const row  = rows[ rowIndex ];
+		for ( let rowIndex = 0; rowIndex < rows.length; rowIndex++ ) {
+			const row     = rows[ rowIndex ];
 			const logicId = row.id.split( '_' )[ 2 ];
 			const relatedConditionalLogicOption = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"] option[value="' + deletedOptionValue + '"]' );
 			if ( relatedConditionalLogicOption ) {
