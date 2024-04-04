@@ -170,9 +170,9 @@ class FrmOnboardingWizardController {
 	 */
 	public static function maybe_load_page() {
 		if ( self::is_onboarding_wizard_page() ) {
-			add_action( 'admin_menu', __CLASS__ . '::menu' );
+			add_action( 'admin_menu', __CLASS__ . '::menu', 99 );
 			add_action( 'admin_init', __CLASS__ . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets' );
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 			add_action( 'admin_head', __CLASS__ . '::remove_menu' );
 
 			add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
