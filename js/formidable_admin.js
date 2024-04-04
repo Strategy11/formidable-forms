@@ -4887,26 +4887,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/**
-	 * Returns an object that has the new value and label, when a field choice is changed.
-	 *
-	 * @param {HTMLElement} choiceElement
-	 * @returns {Object}
-	 */
-	function getChoiceNewValueAndLabel( choiceElement ) {
-		let newValue, newLabel;
-		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-			newValue = choiceElement.parentElement.querySelector( '.frm_option_key input[type="text"]' ).value;
-			newLabel = choiceElement.value;
-			return { newValue, newLabel };
-		}
-
-		// saved value changed
-		newLabel = choiceElement.closest( '.frm_single_option' ).querySelector( 'input[type="text"]' ).value;
-		newValue = choiceElement.value;
-		return { newValue, newLabel };
-	}
-
 	function getChoiceOldAndNewValues( input ) {
 		const { oldValue, oldLabel } = getChoiceOldValueAndLabel( input );
 		const { newValue, newLabel } = getChoiceNewValueAndLabel( input );
@@ -4914,22 +4894,55 @@ function frmAdminBuildJS() {
 		return { oldValue, oldLabel, newValue, newLabel };
 	}
 
-	function getChoiceOldValueAndLabel( input ) {
-		const usingSeparateValues   = input.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
-		const singleOptionContainer = input.closest( '.frm_single_option' );
+	/**
+	 * Returns an object that has the new value and label, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
+	function getChoiceNewValueAndLabel( choiceElement ) {
+		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
+
+		let newValue, newLabel;
+
+		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+			newValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).value;
+			newLabel = choiceElement.value;
+			return { newValue, newLabel };
+		}
+
+		// saved value changed
+		newLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).value;
+		newValue = choiceElement.value;
+		return { newValue, newLabel };
+	}
+
+	/**
+	 * Returns an object that has the old value and label, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
+	function getChoiceOldValueAndLabel( choiceElement ) {
+		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
 
 		let oldValue, oldLabel;
 
+		// if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+		// 	oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+		// 	oldLabel = choiceElement.getAttribute( 'data-value-on-focus' );
+		// 	return { oldValue, oldLabel };
+		// }
 		if ( usingSeparateValues  ) {
-			if ( input.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+			if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
 				oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-				oldLabel = input.getAttribute( 'data-value-on-focus' );
+				oldLabel = choiceElement.getAttribute( 'data-value-on-focus' );
+				return { oldValue, oldLabel };
 			}
 		}
-		if ( typeof oldValue === 'undefined' ) {
-			oldValue = input.getAttribute( 'data-value-on-focus' );
-			oldLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-		}
+		oldValue = choiceElement.getAttribute( 'data-value-on-focus' );
+		oldLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
 
 		return { oldValue, oldLabel };
 	}
@@ -5001,7 +5014,7 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					if ( ! usingSeparateValues ) {
+					if ( ! this.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked ) {
 						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
 					}
 
