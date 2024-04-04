@@ -289,6 +289,12 @@ class FrmEntriesController {
 			$form_id . '_is_draft'   => 'is_draft',
 		);
 
+		if ( ! $form_id ) {
+			$columns[ $form_id . '_user_id' ] = 'user_id';
+			$columns[ $form_id . '_name' ]    = 'name';
+			$columns[ $form_id . '_form_id']  = 'form_id';
+		}
+
 		foreach ( $fields as $field ) {
 			if ( self::field_supports_sorting( $field ) ) {
 				$columns[ $form_id . '_' . $field->field_key ] = 'meta_' . $field->id;
