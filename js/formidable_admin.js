@@ -4966,7 +4966,8 @@ function frmAdminBuildJS() {
 			fieldIds,
 			settingId,
 			setting,
-			optionMatches;
+			optionMatches,
+			option;
 
 		const { oldValue, oldLabel, newValue, newLabel } = getChoiceOldAndNewValues( this );
 
@@ -5013,8 +5014,6 @@ function frmAdminBuildJS() {
 			} else {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
 			}
-
-			let option;
 
 			if ( ! optionMatches.length ) {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
