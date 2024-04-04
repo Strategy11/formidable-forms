@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-04 09:21\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -29,22 +29,22 @@ msgstr "%sを選択"
 #: js/src/common/components/itemselect.js:47
 #: js/formidable_blocks.js:87
 msgid "Currently, there are no %s"
-msgstr "現在のところ、 %s"
+msgstr "現在、%s はありません"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:38
 #: js/admin/applications.js:164
 msgid "Application Templates"
-msgstr "アプリケーション・テンプレート"
+msgstr "アプリケーションテンプレート"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:77
 #: js/form-templates.js:1776
 msgid "Ready Made Solution"
-msgstr "レディーメイド・ソリューション"
+msgstr "すぐに使えるソリューション"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:85
 #: js/form-templates.js:1784
 msgid "See all applications"
-msgstr "すべてのアプリケーションを見る"
+msgstr "すべてのアプリケーションを表示"
 
 #: js/src/form-templates/elements/emptyStateElement.js:30
 #: js/form-templates.js:1912
@@ -65,12 +65,12 @@ msgstr "検索結果"
 #: js/src/form-templates/ui/showEmptyState.js:115
 #: js/form-templates.js:3626
 msgid "No Templates Available"
-msgstr "テンプレートなし"
+msgstr "利用できるテンプレートはありません"
 
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr "%s+オプションのためにPROにアップグレードするか、無料のテンプレートを検索します。"
+msgstr "PRO にアップグレードして%s以上のオプションをご利用ください。または、無料テンプレートを探索できます。"
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -90,7 +90,7 @@ msgstr "ゼロからのスタート"
 #: js/src/form-templates/ui/showEmptyState.js:65
 #: js/form-templates.js:3576
 msgid "No favorites"
-msgstr "お気に入りなし"
+msgstr "お気に入りはありません"
 
 #: js/src/form-templates/ui/showEmptyState.js:66
 #: js/form-templates.js:3577
@@ -105,7 +105,7 @@ msgstr "現在、テンプレートはありません。"
 #: js/src/form-templates/ui/showEmptyState.js:90
 #: js/form-templates.js:3601
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
-msgstr "まだフォームテンプレートを作成していません。ワークフローを簡素化し、時間を節約するために今すぐ始めましょう。"
+msgstr "まだフォームテンプレートを作成していません。今すぐ始めてワークフローを簡素化し、時間を節約しましょう。"
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
@@ -117,7 +117,7 @@ msgstr "テンプレートを作成"
 #: js/src/form/block.js:20
 #: js/formidable_blocks.js:193
 msgid "Display a Form"
-msgstr "フォームを表示する"
+msgstr "フォームを表示"
 
 #: js/src/form/block.js:24
 #: js/formidable_blocks.js:197
@@ -129,12 +129,12 @@ msgstr "お問い合わせフォーム"
 #: js/formidable_blocks.js:209
 #: js/formidable_blocks.js:305
 msgid "This site does not have any forms."
-msgstr "このサイトにはフォームはありません。"
+msgstr "このサイトにはフォームがありません。"
 
 #: js/src/form/calculator.js:27
 #: js/formidable_blocks.js:289
 msgid "Display a Calculator Form"
-msgstr "電卓フォームを表示する"
+msgstr "計算フォームを表示"
 
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
@@ -144,7 +144,7 @@ msgstr "このサイトには電卓フォームがありません。"
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr "Formidable Formsのアップグレード状況。"
+msgstr "Formidable Forms をアップグレード。"
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -153,7 +153,7 @@ msgstr "Formidable Formsのアップグレード状況。"
 #: js/formidable_blocks.js:314
 #: js/formidable_blocks.js:323
 msgid "Calculator Form"
-msgstr "電卓フォーム"
+msgstr "計算フォーム"
 
 #: js/src/form/formselect.js:23
 #: js/admin/embed.js:345
@@ -168,29 +168,29 @@ msgstr "フォーム"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr "手ごわいチャート"
+msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
-msgstr "グラフを表示する"
+msgstr "グラフまたはチャートを表示"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr "このサイトではFormidable Chartsは有効化されていません。"
+msgstr "このサイトで有効化された Formidable Charts はありません。"
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
-msgstr "フォルマブル・チャートのインストール"
+msgstr "Formidable Charts をインストール"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
-msgstr "このサイトにはFormidable Chartsはインストールされていません。"
+msgstr "このサイトにインストールされた Formidable Charts はありません。"
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
 #: js/formidable_blocks.js:572
 msgid "Upgrade Formidable Forms"
-msgstr "フォームのアップグレード状況"
+msgstr "Formidable Forms をアップグレード"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
@@ -201,7 +201,7 @@ msgstr "フォームを選択"
 #: js/src/form/inspector.js:57
 #: js/formidable_blocks.js:467
 msgid "Go to form"
-msgstr "フォームへ"
+msgstr "フォームに移動"
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
@@ -214,7 +214,7 @@ msgstr "オプション"
 #: classes/widgets/FrmElementorWidget.php:53
 #: js/formidable_blocks.js:476
 msgid "Show Form Title"
-msgstr "フォームタイトルの表示"
+msgstr "フォームタイトルを表示"
 
 #: js/src/form/inspector.js:73
 #: classes/widgets/FrmElementorWidget.php:54
@@ -226,7 +226,7 @@ msgstr "フォームの説明を表示"
 #: classes/widgets/FrmElementorWidget.php:55
 #: js/formidable_blocks.js:490
 msgid "Minimize HTML"
-msgstr "HTMLの最小化"
+msgstr "HTML を最小化"
 
 #: js/src/form/inspector.js:88
 #: js/formidable_blocks.js:498
@@ -241,27 +241,27 @@ msgstr "モーダル"
 #: js/src/form/modal.js:21
 #: js/formidable_blocks.js:535
 msgid "Display a modal"
-msgstr "モーダルを表示する"
+msgstr "モーダルを表示"
 
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr "Bootstrapモーダルポップアップ"
+msgstr "Bootstrap モーダルポップアップ"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
 msgid "This site does not have popup modals active."
-msgstr "このサイトではポップアップモダルは有効化されていません。"
+msgstr "このサイトでは有効化されたポップアップモーダルはありません。"
 
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr "Formidable Modalsのインストール"
+msgstr "Formidable Modals をインストール"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
 msgid "This site does not have popup modals."
-msgstr "このサイトにはポップアップモダルはありません。"
+msgstr "このサイトにはポップアップモーダルはありません。"
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -282,7 +282,7 @@ msgstr "フォームをドラッグアンドドロップですばやく簡単に
 #. Author of the plugin
 #: formidable.php
 msgid "Strategy11 Form Builder Team"
-msgstr "Strategy11 フォームビルダー・チーム"
+msgstr "Strategy11 Form Builder Team"
 
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:24
@@ -302,7 +302,7 @@ msgstr "アップグレード"
 
 #: classes/controllers/FrmAddonsController.php:85
 msgid "There are no plugins on your site that require a license"
-msgstr "あなたのサイトにライセンス必須のプラグインがない"
+msgstr "サイトにはライセンスが必要なプラグインはありません"
 
 #: classes/controllers/FrmAddonsController.php:680
 #: classes/helpers/FrmAppHelper.php:3247
@@ -326,11 +326,11 @@ msgstr "現在のユーザーはプラグインを削除できません。"
 
 #: classes/controllers/FrmAddonsController.php:1023
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
-msgstr "申し訳ありませんが、あなたのサイトはFTP認証が必須です。FormidableForms.comからプラグインをダウンロードし、手動でインストールしてください。"
+msgstr "申し訳ございません。あなたのサイトでは FTP 認証が必要です。FormidableForms.com からプラグインをダウンロードして、手動でインストールしてください。"
 
 #: classes/controllers/FrmAddonsController.php:1214
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
-msgstr "プラグインが有効化されました。ページを保存して再読み込みしますか？"
+msgstr "プラグインが有効化されました。ページを保存して再読み込みしますか ?"
 
 #: classes/controllers/FrmAddonsController.php:1214
 msgid "Your plugin has been activated."
@@ -338,11 +338,11 @@ msgstr "プラグインが有効化されました。"
 
 #: classes/controllers/FrmAddonsController.php:1323
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
-msgstr "アップグレードをインストールできませんでした。formidableforms.comからダウンロードして手動でインストールしてください。"
+msgstr "アップグレードをインストールできませんでした。formidableforms.com からダウンロードして、手動でインストールしてください。"
 
 #: classes/controllers/FrmAddonsController.php:1370
 msgid "The plugin download was not found."
-msgstr "プラグインのダウンロードが見つかりません。"
+msgstr "プラグインのダウンロードが見つかりませんでした。"
 
 #: classes/controllers/FrmAddonsController.php:1464
 #: classes/controllers/FrmAddonsController.php:1465
@@ -409,12 +409,12 @@ msgstr "Pro へアップグレード"
 
 #: classes/controllers/FrmAppController.php:346
 msgid "Build a Form"
-msgstr "フォームを作る"
+msgstr "フォームを作成"
 
 #. Translators: 1: Global Settings Link
 #: classes/controllers/FrmAppController.php:637
 msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
-msgstr "フォーム送信のIPアドレスが正確でなくなっている可能性があります！問題が発生した場合は、 %1$s 、「フォーム送信でIPを取得する際にカスタマイザーを使用する」設定を有効化することをお勧めします。"
+msgstr "フォーム送信の IP アドレスが正確でなくなっている可能性があります。問題がある場合は、%1$sにアクセスして、「フォーム送信で IP を取得する際にカスタムヘッダーを使用」設定を有効化することをお勧めします。"
 
 #: classes/controllers/FrmAppController.php:1212
 #: classes/controllers/FrmFormsController.php:167
@@ -447,11 +447,11 @@ msgstr "ダッシュボード"
 
 #: classes/controllers/FrmDashboardController.php:145
 msgid "Latest Entries"
-msgstr "最新エントリー"
+msgstr "最新のエントリー"
 
 #: classes/controllers/FrmDashboardController.php:147
 msgid "View All Entries"
-msgstr "すべて表示"
+msgstr "すべてのエントリーを表示"
 
 #: classes/controllers/FrmDashboardController.php:157
 msgid "You don't have a payment form setup yet."
@@ -5150,7 +5150,7 @@ msgstr "新規ページのカスタマイズ"
 
 #: classes/models/FrmSolution.php:338
 msgid "Make any required changes and publish the page."
-msgstr "必要な変更を加え、ページを公開する。"
+msgstr "必要な変更を加え、ページを公開します。"
 
 #: classes/models/FrmSolution.php:339
 msgid "View Page"
@@ -5164,15 +5164,15 @@ msgstr "Formidable %1$s プラグインのダウンロードには権限が必�
 #. translators: %1$s: Step number
 #: classes/models/FrmSolution.php:435
 msgid "Step %1$d"
-msgstr "ステップ %1$d"
+msgstr "ステップ%1$d"
 
 #: classes/models/FrmSolution.php:514
 msgid "Select the form or view you would like to create."
-msgstr "作成したいフォームまたは表示を選択します。"
+msgstr "作成するフォームまたはビューを選択します。"
 
 #: classes/models/FrmSolution.php:537
 msgid "We didn't find anything to import. Please contact our team."
-msgstr "輸入できるものが見つかりませんでした。チームまでご連絡ください。"
+msgstr "インポートできるものが見つかりませんでした。当社のチームまでご連絡ください。"
 
 #: classes/models/FrmSolution.php:539
 msgid "Looks like you may not have a current subscription for this solution. Please check your account."
