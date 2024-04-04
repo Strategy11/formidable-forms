@@ -4887,6 +4887,12 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns an object that has the old and new values and labels, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
 	function getChoiceOldAndNewValues( input ) {
 		const { oldValue, oldLabel } = getChoiceOldValueAndLabel( input );
 		const { newValue, newLabel } = getChoiceNewValueAndLabel( input );
