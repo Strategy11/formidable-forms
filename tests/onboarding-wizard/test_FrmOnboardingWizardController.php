@@ -86,13 +86,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmFormTemplatesController::enqueue_assets
 	 */
-	public function enqueue_assets() {
-		global $wp_scripts, $wp_styles;
-
-		// Mock the global WordPress objects for scripts and styles.
-		$wp_scripts = new WP_Scripts(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_styles  = new WP_Styles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
+	public function test_enqueue_assets() {
 		// Case 1: Not on the Onboarding Wizard page.
 		$this->set_admin_screen();
 		$_GET['page'] = 'some-other-page';
