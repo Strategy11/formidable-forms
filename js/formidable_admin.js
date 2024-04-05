@@ -3534,14 +3534,13 @@ function frmAdminBuildJS() {
 		const deletedOptionValue = option.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).value;
 		const rows               = builderPage.querySelectorAll( '.frm_logic_row' );
 
-		for ( let rowIndex = 0; rowIndex < rows.length; rowIndex++ ) {
-			const row     = rows[ rowIndex ];
+		rows.forEach( row => {
 			const logicId = row.id.split( '_' )[ 2 ];
 			const relatedConditionalLogicOption = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"] option[value="' + deletedOptionValue + '"]' );
 			if ( relatedConditionalLogicOption ) {
 				relatedConditionalLogicOption.remove();
 			}
-		}
+		});
 	}
 
 	/**
@@ -4935,11 +4934,6 @@ function frmAdminBuildJS() {
 
 		let oldValue, oldLabel;
 
-		// if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
-		// 	oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
-		// 	oldLabel = choiceElement.getAttribute( 'data-value-on-focus' );
-		// 	return { oldValue, oldLabel };
-		// }
 		if ( usingSeparateValues  ) {
 			if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
 				oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
