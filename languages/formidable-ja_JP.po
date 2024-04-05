@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-05 09:40\n"
+"PO-Revision-Date: 2024-04-05 21:46\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1711,7 +1711,7 @@ msgstr "この計算には、一致しない ( ) { } [ ] が少なくとも1つ�
 
 #: classes/helpers/FrmAppHelper.php:3232
 msgid "This calculation may have shortcodes that work in Views but not forms."
-msgstr "この計算には、表示では機能するものの、フォームでは機能しないショートコードがある可能性があります。"
+msgstr "この計算には、ビューでは機能するものの、フォームでは機能しないショートコードがある可能性があります。"
 
 #: classes/helpers/FrmAppHelper.php:3233
 msgid "This calculation may have shortcodes that work in text calculations but not numeric calculations."
@@ -1799,7 +1799,7 @@ msgstr "アルバニア語"
 
 #: classes/helpers/FrmAppHelper.php:3413
 msgid "Algerian Arabic"
-msgstr "アルジェリア・アラビア語"
+msgstr "アラビア語 (アルジェリア)"
 
 #: classes/helpers/FrmAppHelper.php:3414
 msgid "Amharic"
@@ -1843,7 +1843,7 @@ msgstr "カタロニア語"
 
 #: classes/helpers/FrmAppHelper.php:3424
 msgid "Chinese Hong Kong"
-msgstr "中国香港"
+msgstr "中国語 (香港)"
 
 #: classes/helpers/FrmAppHelper.php:3425
 msgid "Chinese Simplified"
@@ -1887,7 +1887,7 @@ msgstr "フェロー語"
 
 #: classes/helpers/FrmAppHelper.php:3435
 msgid "Farsi/Persian"
-msgstr "ペルシア語"
+msgstr "ファルシ語 / ペルシア語"
 
 #: classes/helpers/FrmAppHelper.php:3436
 msgid "Filipino"
@@ -1988,7 +1988,7 @@ msgstr "キルギス語"
 
 #: classes/helpers/FrmAppHelper.php:3461
 msgid "Laothian"
-msgstr "ラオス人"
+msgstr "ラオス語"
 
 #: classes/helpers/FrmAppHelper.php:3462
 msgid "Latvian"
@@ -2024,11 +2024,11 @@ msgstr "ノルウェー語"
 
 #: classes/helpers/FrmAppHelper.php:3470
 msgid "Norwegian Bokmål"
-msgstr "ノルウェー語ブークモール"
+msgstr "ノルウェー語 (ブークモール)"
 
 #: classes/helpers/FrmAppHelper.php:3471
 msgid "Norwegian Nynorsk"
-msgstr "ノルウェー語"
+msgstr "ノルウェー語 (ニーノシュク)"
 
 #: classes/helpers/FrmAppHelper.php:3472
 msgid "Polish"
@@ -2065,7 +2065,7 @@ msgstr "セルビア語"
 
 #: classes/helpers/FrmAppHelper.php:3481
 msgid "Sinhalese"
-msgstr "シンハラ人"
+msgstr "シンハラ語"
 
 #: classes/helpers/FrmAppHelper.php:3482
 msgid "Slovak"
@@ -2105,7 +2105,7 @@ msgstr "タイ語"
 
 #: classes/helpers/FrmAppHelper.php:3491
 msgid "Tajiki"
-msgstr "タジキ"
+msgstr "タジク語"
 
 #: classes/helpers/FrmAppHelper.php:3492
 msgid "Turkish"
@@ -2129,15 +2129,15 @@ msgstr "ウェールズ語"
 
 #: classes/helpers/FrmAppHelper.php:3497
 msgid "Zulu"
-msgstr "ズールー"
+msgstr "ズールー語"
 
 #: classes/helpers/FrmAppHelper.php:3840
 msgid "Form Landing Pages"
-msgstr "フォーム・ランディングページ"
+msgstr "フォームランディングページ"
 
 #: classes/helpers/FrmAppHelper.php:3841
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
-msgstr "フォームのランディングページを簡単に管理。アップグレードしてフォームのランディングページを手に入れましょう。"
+msgstr "フォームのランディングページを簡単に管理できます。アップグレードして、フォームのランディングページを利用しましょう。"
 
 #: classes/helpers/FrmAppHelper.php:3934
 #: classes/views/styles/_style-card.php:37
@@ -2152,7 +2152,7 @@ msgstr "非表示"
 
 #: classes/helpers/FrmAppHelper.php:4191
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
-msgstr "Formidable Forms Lite - ライセンスは必要ありません。お楽しみください！"
+msgstr "Formidable Forms Lite をご利用中です - ライセンスは必要ありません。ご活用ください !"
 
 #: classes/helpers/FrmCSVExportHelper.php:273
 msgid "(label)"
@@ -2164,7 +2164,7 @@ msgstr "コメント"
 
 #: classes/helpers/FrmCSVExportHelper.php:360
 msgid "Comment User"
-msgstr "コメントするユーザー"
+msgstr "ユーザーコメント"
 
 #: classes/helpers/FrmCSVExportHelper.php:361
 msgid "Comment Date"
@@ -2188,7 +2188,7 @@ msgstr "IP"
 
 #: classes/helpers/FrmCSVExportHelper.php:375
 msgid "Parent ID"
-msgstr "親のID"
+msgstr "親 ID"
 
 #: classes/helpers/FrmCurrencyHelper.php:39
 msgid "Australian Dollar"
@@ -2320,16 +2320,16 @@ msgstr "アカウントを連携"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
-msgstr "Formidable PROを入手"
+msgstr "Formidable PRO を入手"
 
 #. translators: %d: number of form templates
 #: classes/helpers/FrmDashboardHelper.php:237
 msgid "%d+ Form Templates"
-msgstr "%d+ フォームテンプレート"
+msgstr "%d以上のフォームテンプレート"
 
 #: classes/helpers/FrmDashboardHelper.php:240
 msgid "Calculated Fields and Math"
-msgstr "計算フィールドと数学"
+msgstr "計算済みフィールドと計算"
 
 #: classes/helpers/FrmDashboardHelper.php:241
 msgid "Quizzes"
@@ -2341,7 +2341,7 @@ msgstr "保存して続行"
 
 #: classes/helpers/FrmDashboardHelper.php:243
 msgid "Smart Forms with Conditional Logic"
-msgstr "条件ロジックを使ったスマートフォーム"
+msgstr "条件ロジックを使用したスマートフォーム"
 
 #: classes/helpers/FrmDashboardHelper.php:244
 msgid "Ecommerce Pricing Fields"
@@ -2354,15 +2354,15 @@ msgstr "高度なフィールド"
 
 #: classes/helpers/FrmDashboardHelper.php:246
 msgid "Schedule Forms & Limit Responses"
-msgstr "スケジュールフォームとレスポンシブの制限"
+msgstr "スケジュールフォームと回答の制限"
 
 #: classes/helpers/FrmDashboardHelper.php:247
 msgid "Display Form Data with Views"
-msgstr "ビューでフォームデータを表示する"
+msgstr "ビューでフォームデータを表示"
 
 #: classes/helpers/FrmDashboardHelper.php:248
 msgid "And much more..."
-msgstr "その他にも..."
+msgstr "その他にもさまざまな機能があります"
 
 #: classes/helpers/FrmEntriesHelper.php:563
 #: classes/helpers/FrmEntriesHelper.php:564
@@ -2380,11 +2380,11 @@ msgstr "エントリーを削除"
 
 #: classes/helpers/FrmEntriesHelper.php:685
 msgid "Delete this form entry?"
-msgstr "このフォーム項目を削除しますか？"
+msgstr "このフォームエントリーを削除しますか ?"
 
 #: classes/helpers/FrmEntriesHelper.php:693
 msgid "Print Entry"
-msgstr "印刷エントリー"
+msgstr "エントリーを印刷"
 
 #: classes/helpers/FrmEntriesHelper.php:703
 #: classes/helpers/FrmEntriesHelper.php:706
@@ -2401,7 +2401,7 @@ msgstr "エントリーを編集"
 
 #: classes/helpers/FrmEntriesHelper.php:728
 msgid "Entry edits"
-msgstr "エントリーの編集"
+msgstr "エントリーを編集"
 
 #: classes/helpers/FrmEntriesHelper.php:748
 msgid "Forms to PDF"
@@ -2409,7 +2409,7 @@ msgstr "フォームからPDFへ"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
-msgstr "reCAPTCHAスコア"
+msgstr "reCAPTCHA スコア"
 
 #: classes/helpers/FrmEntriesHelper.php:837
 msgid "Submitted"
@@ -2423,7 +2423,7 @@ msgstr "下書き"
 
 #: classes/helpers/FrmEntriesHelper.php:854
 msgid "Entry status must be return in array format."
-msgstr "エントリー状態は配列形式で返さなければならない。"
+msgstr "エントリーのステータスは配列形式で返す必要があります。"
 
 #: classes/helpers/FrmEntriesListHelper.php:181
 msgid "No Entries Found"
@@ -2431,11 +2431,11 @@ msgstr "投稿は見つかりませんでした"
 
 #: classes/helpers/FrmEntriesListHelper.php:219
 msgid "Getting spam form submissions?"
-msgstr "スパムフォームを受信していませんか？"
+msgstr "スパムフォームを受信していませんか ?"
 
 #: classes/helpers/FrmEntriesListHelper.php:221
 msgid "Learn how to prevent them."
-msgstr "それを防ぐ方法を学ぼう。"
+msgstr "スパムフォームを防ぐ方法を学びましょう。"
 
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
@@ -2456,7 +2456,7 @@ msgstr "表示"
 
 #: classes/helpers/FrmEntriesListHelper.php:424
 msgid "Permanently delete this entry?"
-msgstr "このエントリーを永久に削除しますか？"
+msgstr "このエントリーを完全に削除しますか ?"
 
 #: classes/helpers/FrmEntriesListHelper.php:424
 #: classes/helpers/FrmFormsHelper.php:1216
@@ -2472,7 +2472,7 @@ msgstr "削除"
 #. translators: %1$s: HTML break line, %2$s: HTML bold text
 #: classes/helpers/FrmEntriesListHelper.php:481
 msgid "ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below."
-msgstr "このフォームに入力された内容はすべて永久に削除されます。%1$s次に進みますか？以下に %2$s と入力してください。"
+msgstr "このフォームのエントリーはすべて完全に削除されます。%1$s続行する場合、以下に %2$s と入力してください。"
 
 #. translators: %s: [field_name] shortcode (Which gets replaced by a Field Name)
 #. translators: %s: Field name
@@ -2485,7 +2485,7 @@ msgstr "%s は無効です"
 #. translators: %s: Field name
 #: classes/helpers/FrmFieldsHelper.php:325
 msgid "%s must be unique"
-msgstr "%s ユニークでなければならない"
+msgstr "%sは一意である必要があります"
 
 #: classes/helpers/FrmFieldsHelper.php:328
 msgid "This field is invalid"
@@ -2502,7 +2502,7 @@ msgstr "このフィールド"
 #. translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link
 #: classes/helpers/FrmFieldsHelper.php:657
 msgid "Options are dynamically created from your %1$s%2$s: %3$s%4$s"
-msgstr "オプション設定は、 %1$s%2$s: %3$s%4$sから動的に作成されます。"
+msgstr "オプション設定は、%1$s%2$s: %3$s%4$s から動的に作成されます"
 
 #: classes/helpers/FrmFieldsHelper.php:659
 msgid "taxonomy"
@@ -2519,7 +2519,7 @@ msgstr "アフガニスタン"
 
 #: classes/helpers/FrmFieldsHelper.php:1574
 msgid "Aland Islands"
-msgstr "アランド諸島"
+msgstr "オーランド諸島"
 
 #: classes/helpers/FrmFieldsHelper.php:1575
 msgid "Albania"
@@ -2623,7 +2623,7 @@ msgstr "ボリビア"
 
 #: classes/helpers/FrmFieldsHelper.php:1600
 msgid "Bonaire, Sint Eustatius and Saba"
-msgstr "ボネール島、シント・ユースタティウス島、サバ島"
+msgstr "ボネール、シント・ユースタティウスおよびサバ"
 
 #: classes/helpers/FrmFieldsHelper.php:1601
 msgid "Bosnia and Herzegovina"
@@ -3255,7 +3255,7 @@ msgstr "ルワンダ"
 
 #: classes/helpers/FrmFieldsHelper.php:1758
 msgid "Saint Barthelemy"
-msgstr "サン・バルテルミー"
+msgstr "サン・バルテルミー島"
 
 #: classes/helpers/FrmFieldsHelper.php:1759
 msgid "Saint Helena, Ascension and Tristan da Cunha"
@@ -3523,7 +3523,7 @@ msgstr "国"
 
 #: classes/helpers/FrmFieldsHelper.php:1855
 msgid "U.S. State Abbreviations"
-msgstr "米国の州略称"
+msgstr "米国の州の略称"
 
 #: classes/helpers/FrmFieldsHelper.php:1864
 msgid "U.S. States"
@@ -3535,23 +3535,23 @@ msgstr "18歳以下"
 
 #: classes/helpers/FrmFieldsHelper.php:1870
 msgid "18-24"
-msgstr "18-24"
+msgstr "18～24"
 
 #: classes/helpers/FrmFieldsHelper.php:1871
 msgid "25-34"
-msgstr "25-34"
+msgstr "25～34"
 
 #: classes/helpers/FrmFieldsHelper.php:1872
 msgid "35-44"
-msgstr "35-44"
+msgstr "35～44"
 
 #: classes/helpers/FrmFieldsHelper.php:1873
 msgid "45-54"
-msgstr "45-54"
+msgstr "45～54"
 
 #: classes/helpers/FrmFieldsHelper.php:1874
 msgid "55-64"
-msgstr "55-64"
+msgstr "55～64"
 
 #: classes/helpers/FrmFieldsHelper.php:1875
 msgid "65 or Above"
@@ -3559,7 +3559,7 @@ msgstr "65以上"
 
 #: classes/helpers/FrmFieldsHelper.php:1876
 msgid "Prefer Not to Answer"
-msgstr "回答しない"
+msgstr "回答したくない"
 
 #: classes/helpers/FrmFieldsHelper.php:1882
 msgid "Age"
@@ -3601,7 +3601,7 @@ msgstr "満足度"
 
 #: classes/helpers/FrmFieldsHelper.php:1901
 msgid "Not at all Important"
-msgstr "すべて重要ではない"
+msgstr "まったく重要ではない"
 
 #: classes/helpers/FrmFieldsHelper.php:1902
 msgid "Somewhat Important"
@@ -3617,7 +3617,7 @@ msgstr "非常に重要"
 
 #: classes/helpers/FrmFieldsHelper.php:1912
 msgid "Importance"
-msgstr "重要性"
+msgstr "重要度"
 
 #: classes/helpers/FrmFieldsHelper.php:1916
 msgid "Strongly Disagree"
@@ -3641,7 +3641,7 @@ msgstr "条件"
 
 #: classes/helpers/FrmFieldsHelper.php:1931
 msgid "Extremely Unlikely"
-msgstr "可能性は極めて低い"
+msgstr "非常に可能性は低い"
 
 #: classes/helpers/FrmFieldsHelper.php:1932
 msgid "Unlikely"
@@ -3659,7 +3659,7 @@ msgstr "可能性は非常に高い"
 #. translators: %s: Field name
 #: classes/helpers/FrmFieldsHelper.php:2024
 msgid "%s fields"
-msgstr "%s フィールド"
+msgstr "%sフィールド"
 
 #: classes/helpers/FrmFieldsHelper.php:2088
 msgid "Simple"
@@ -3683,12 +3683,12 @@ msgstr "ボタン設定:"
 
 #: classes/helpers/FrmFieldsHelper.php:2104
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
-msgstr "ラジオボタンやチェックボックスのボタンを表示します。投票、アンケート、セグメンテーションアンケートなどに最適です。"
+msgstr "ラジオボタンやチェックボックスのボタンを表示します。投票、アンケート、セグメント化したアンケートなどに最適です。"
 
 #. translators: Add-on name.
 #: classes/helpers/FrmFieldsHelper.php:2185
 msgid "Formidable %s"
-msgstr "手ごわい %s"
+msgstr "Formidable %s"
 
 #: classes/helpers/FrmFormMigratorsHelper.php:115
 #: classes/views/frm-forms/error-modal.php:15
@@ -3711,7 +3711,7 @@ msgstr "%s を有効化"
 #. translators: %s: Name of the plugin
 #: classes/helpers/FrmFormMigratorsHelper.php:155
 msgid "Install %s Importer"
-msgstr "%s インストーラのインストール"
+msgstr "%s インポーターをインストール"
 
 #: classes/helpers/FrmFormsHelper.php:57
 msgid " (child)"
@@ -3761,15 +3761,15 @@ msgstr "入力項目"
 
 #: classes/helpers/FrmFormsHelper.php:534
 msgid "Single Option"
-msgstr "個別設定"
+msgstr "個別オプション"
 
 #: classes/helpers/FrmFormsHelper.php:535
 msgid "Show a single radio or checkbox option by replacing 1 with the order of the option"
-msgstr "ラジオまたはチェックボックスの個別オプションを、1をオプションの順序に置き換えて表示する。"
+msgstr "1をオプションの順番と置き換えて、1つのラジオボタンまたはチェックボックスオプションを表示します。"
 
 #: classes/helpers/FrmFormsHelper.php:539
 msgid "Hide Option Label"
-msgstr "オプションラベル非表示"
+msgstr "オプションラベルを非表示"
 
 #: classes/helpers/FrmFormsHelper.php:543
 msgid "Required Class"
@@ -3777,7 +3777,7 @@ msgstr "必須クラス"
 
 #: classes/helpers/FrmFormsHelper.php:544
 msgid "Add class name if field is required"
-msgstr "フィールドが必須の場合は、クラス名を追加する。"
+msgstr "フィールドが必須の場合、クラス名を追加"
 
 #: classes/helpers/FrmFormsHelper.php:548
 msgid "Error Class"
@@ -3785,7 +3785,7 @@ msgstr "エラークラス"
 
 #: classes/helpers/FrmFormsHelper.php:549
 msgid "Add class name if field has an error on form submit"
-msgstr "フォーム送信時にフィールドにエラーがある場合、クラス名を追加する"
+msgstr "フォーム送信時にフィールドにエラーがある場合、クラス名を追加"
 
 #: classes/helpers/FrmFormsHelper.php:562
 #: classes/views/frm-forms/settings-advanced.php:20
@@ -3794,7 +3794,7 @@ msgstr "フォームキー"
 
 #: classes/helpers/FrmFormsHelper.php:566
 msgid "Delete Entry Link"
-msgstr "エントリー削除リンク"
+msgstr "エントリーリンクを削除"
 
 #: classes/helpers/FrmFormsHelper.php:571
 msgid "Button Label"
@@ -3833,7 +3833,7 @@ msgstr "ゴミ箱"
 
 #: classes/helpers/FrmFormsHelper.php:1210
 msgid "Do you want to move this form to the trash?"
-msgstr "このフォームをゴミ箱内に移動しますか？"
+msgstr "このフォームをゴミ箱に移動しますか ?"
 
 #: classes/helpers/FrmFormsHelper.php:1215
 #: classes/helpers/FrmFormsListHelper.php:134
@@ -3846,7 +3846,7 @@ msgstr "このフォームとそのすべての情報を削除してもよろし
 
 #: classes/helpers/FrmFormsHelper.php:1221
 msgid "This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?"
-msgstr "これはフォームとそのすべてのエントリーを永久に削除します。これは不可逆的です。本当に〜してもよいですか？"
+msgstr "この操作は、フォームとそのすべてのエントリーを完全に削除します。これは元に戻すことはできません。本当に続行してもよいですか ?"
 
 #: classes/helpers/FrmFormsHelper.php:1234
 #: classes/models/FrmField.php:223
@@ -3859,7 +3859,7 @@ msgstr "これを読み取り専用フィールドに追加すると、枠線や
 
 #: classes/helpers/FrmFormsHelper.php:1238
 msgid "Big Total"
-msgstr "ビッグ・トータル"
+msgstr "合計"
 
 #: classes/helpers/FrmFormsHelper.php:1239
 msgid "Add this to a read-only field to display the text in large, bold text without a border or background."
@@ -3871,7 +3871,7 @@ msgstr "スクロールボックス"
 
 #: classes/helpers/FrmFormsHelper.php:1243
 msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
-msgstr "チェックボックスやラジオボタンの設定が多い場合は、このクラスを追加してユーザーがオプションを簡単にスクロールできるようにするとよいでしょう。あるいは、HTML フィールドのコンテンツのまわりにスクロールエリアを追加します。"
+msgstr "チェックボックスやラジオボタンが多い場合は、このクラスを追加してユーザーがオプションを簡単にスクロールできるようにするとよいでしょう。または、HTML フィールドのコンテンツのまわりにスクロールエリアを追加します。"
 
 #: classes/helpers/FrmFormsHelper.php:1246
 #: classes/models/fields/FrmFieldName.php:36
@@ -3880,7 +3880,7 @@ msgstr "最初"
 
 #: classes/helpers/FrmFormsHelper.php:1247
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
-msgstr "これを各行の最初のフィールドに幅とともに追加する。"
+msgstr "これを各行の最初のフィールドに幅と一緒に追加します (例 frm_first frm4)"
 
 #: classes/helpers/FrmFormsHelper.php:1249
 #: classes/helpers/FrmStylesHelper.php:45
@@ -3893,11 +3893,11 @@ msgstr "最初のグリッド行"
 
 #: classes/helpers/FrmFormsHelper.php:1251
 msgid "Even Grid Row"
-msgstr "偶数グリッド行"
+msgstr "偶数のグリッド行"
 
 #: classes/helpers/FrmFormsHelper.php:1252
 msgid "Odd Grid Row"
-msgstr "奇数グリッド行"
+msgstr "奇数のグリッド行"
 
 #: classes/helpers/FrmFormsHelper.php:1254
 msgid "Color Block"
@@ -3925,11 +3925,11 @@ msgstr "フォームの作成"
 
 #: classes/helpers/FrmFormsHelper.php:1485
 msgid "License plan required:"
-msgstr "ライセンスプラン必須："
+msgstr "ライセンスプランが必要です:"
 
 #: classes/helpers/FrmFormsHelper.php:1602
 msgid "Is this intentional?"
-msgstr "これは意図的なのか？"
+msgstr "これは意図したことですか ?"
 
 #. translators: %s: the name of a single parameter in the redirect URL
 #: classes/helpers/FrmFormsHelper.php:1612
@@ -5009,7 +5009,7 @@ msgstr "フォーム提出"
 #: classes/models/FrmPluginSearch.php:82
 msgctxt "Formidable Addon Name"
 msgid "Formidable %s"
-msgstr "手ごわい %s"
+msgstr "Formidable %s"
 
 #: classes/models/FrmPluginSearch.php:326
 msgid "Install Now"
@@ -6215,7 +6215,7 @@ msgstr "フォームの選択:"
 
 #: classes/views/frm-forms/spam-settings/akismet.php:7
 msgid "Use Akismet to check entries for spam for"
-msgstr "Akismet を使用して、ログインしていない"
+msgstr "Akismet を使用して、次のエントリーをスパムチェックする"
 
 #: classes/views/frm-forms/spam-settings/akismet.php:10
 msgid "no one"
@@ -6227,7 +6227,7 @@ msgstr "誰でも"
 
 #: classes/views/frm-forms/spam-settings/akismet.php:16
 msgid "visitors who are not logged in"
-msgstr "訪問者について、スパムかどうかエントリーをチェックします"
+msgstr "ログイン中ではない訪問者"
 
 #: classes/views/frm-forms/spam-settings/antispam.php:5
 msgid "Generate unique tokens for validating form submissions."
@@ -6287,7 +6287,7 @@ msgstr "Turnstile"
 
 #: classes/views/frm-settings/captcha/captcha.php:29
 msgid "Changing the captcha type here will replace it in all any forms where it is used."
-msgstr "ここで Captcha タイプを変更すると、使用されているすべてのフォームで Captcha が置き換えられます。"
+msgstr "ここで Captcha タイプを変更すると、使用されているすべてのフォームの Captcha が置き換えられます。"
 
 #: classes/views/frm-settings/captcha/captcha.php:33
 msgid "reCAPTCHA Settings"
@@ -7004,7 +7004,7 @@ msgstr "デフォルト"
 
 #: classes/views/styles/_manage-styles-row.php:23
 msgid "Styling disabled"
-msgstr "スタイリング無効化"
+msgstr "スタイリングは無効"
 
 #: classes/views/styles/_sample_form.php:14
 msgid "This is an example form description for styling purposes."
@@ -7033,11 +7033,11 @@ msgstr "エラーのあるテキストフィールド"
 
 #: classes/views/styles/_sample_form.php:39
 msgid "Text field in active state"
-msgstr "有効化したテキストフィールド"
+msgstr "有効な状態のテキストフィールド"
 
 #: classes/views/styles/_sample_form.php:40
 msgid "Active state will be seen when the field is clicked"
-msgstr "有効化した状態は、フィールドがクリックされたときに表示されます。"
+msgstr "有効な状態は、フィールドがクリックされたときに表示されます。"
 
 #: classes/views/styles/_sample_form.php:44
 msgid "Read-only field"
@@ -7071,16 +7071,16 @@ msgstr "応用"
 #: classes/views/styles/_style-preview-container.php:10
 #: js/admin/style.js:492
 msgid "View my form"
-msgstr "私のフォームを表示"
+msgstr "自分のフォームを表示"
 
 #: classes/views/styles/_style-preview-container.php:10
 #: js/admin/style.js:492
 msgid "View sample form"
-msgstr "フォームのサンプルを表示"
+msgstr "サンプルフォームを表示"
 
 #: classes/views/styles/_style-preview-container.php:29
 msgid "One or more of your style settings may contain invalid characters that break form styling."
-msgstr "スタイル設定に無効な文字が含まれている可能性があります。"
+msgstr "1つ以上のスタイル設定に、フォームのスタイル設定を破損する無効な文字が含まれている可能性があります。"
 
 #: classes/views/styles/_style-preview-container.php:49
 msgid "Edit style"
@@ -7092,15 +7092,15 @@ msgstr "お待ちください"
 
 #: classes/views/styles/_style-preview-container.php:68
 msgid "Updating CSS..."
-msgstr "CSSの更新..."
+msgstr "CSS を更新しています..."
 
 #: classes/views/styles/_styles-list.php:37
 msgid "You are currently limited to 1 style template"
-msgstr "現在、1つのスタイルテンプレートに制限されています。"
+msgstr "現在、仕様できるスタイルテンプレートは1つに制限されています"
 
 #: classes/views/styles/_styles-list.php:38
 msgid "Upgrade to create and manage as many form styles as you need."
-msgstr "アップグレード状況により、必要な数のフォームスタイルを作成・管理できます。"
+msgstr "必要なだけフォームスタイルを作成して管理するためにはアップグレードしてください。"
 
 #: classes/views/styles/_styles-list.php:58
 msgid "Enable Formidable styling"
@@ -7112,25 +7112,25 @@ msgstr "デフォルトスタイル"
 
 #: classes/views/styles/_styles-list.php:82
 msgid "Custom Styles"
-msgstr "カスタマイザー"
+msgstr "カスタムスタイル"
 
 #: classes/views/styles/_styles-list.php:88
 msgid "Formidable Styles"
-msgstr "手強いスタイル"
+msgstr "Formidable のスタイル"
 
 #. translators: Contact support URL.
 #: classes/views/summary-emails/base-plain.php:22
 msgid "Need help? Get in touch with our team at %s"
-msgstr "お困りですか？ %sまでご連絡ください。"
+msgstr "お困りの場合は、%s までご連絡ください"
 
 #. translators: Unsubscribe URL.
 #: classes/views/summary-emails/base-plain.php:32
 msgid "Unsubscribe: %s"
-msgstr "退会する %s"
+msgstr "登録解除: %s"
 
 #: classes/views/summary-emails/base.php:52
 msgid "Need help? Get in touch with our team"
-msgstr "お困りですか？私たちのチームに連絡してください"
+msgstr "お困りの場合は、当社のチームまでご連絡ください"
 
 #: classes/views/summary-emails/base.php:54
 msgid "Contact support"
@@ -7147,23 +7147,23 @@ msgstr "統計"
 
 #: classes/views/summary-emails/stats-plain.php:34
 msgid "Go to Dashboard:"
-msgstr "ダッシュボードへ："
+msgstr "ダッシュボードに移動:"
 
 #. translators: submission count.
 #: classes/views/summary-emails/stats-plain.php:48
 msgid "%s submission"
 msgid_plural "%s submissions"
-msgstr[0] "%s 投稿"
+msgstr[0] "%s件の送信"
 
 #. translators: the list of out-of-date plugins.
 #: classes/views/summary-emails/stats-plain.php:61
 #: classes/views/summary-emails/stats.php:108
 msgid "The following plugins are out of date: %s"
-msgstr "以下のプラグインが古いです: %s"
+msgstr "次のプラグインは古くなっています: %s"
 
 #: classes/views/summary-emails/stats-plain.php:66
 msgid "Please go to your Plugins page to update them."
-msgstr "プラグインのページで更新してください。"
+msgstr "プラグインのページに移動し、更新してください。"
 
 #: classes/views/summary-emails/stats.php:54
 msgid "Open Dashboard"
@@ -7183,7 +7183,7 @@ msgstr "古いプラグイン"
 
 #: classes/views/xml/import_form.php:21
 msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Formidable XMLファイルをアップロードして、このサイトにフォームをインポートします。インポートされたフォームキーと作成日があなたのサイトのフォームと一致した場合、そのフォームは更新されます。"
+msgstr "Formidable XML ファイルをアップロードして、このサイトにフォームをインポートします。インポートされたフォームキーと作成日がサイトのフォームと一致した場合、そのフォームは更新されます。"
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
@@ -7192,12 +7192,12 @@ msgstr "%1$s XML ファイルをアップロードして、このサイトにフ
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
-msgstr "Formidable XMLファイルを選択する"
+msgstr "Formidable XML ファイルを選択"
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:44
 msgid "Choose a %1$s XML file"
-msgstr "%1$s XMLファイルを選択"
+msgstr "%1$s XML ファイルを選択"
 
 #. translators: %s: File size
 #: classes/views/xml/import_form.php:52
@@ -7214,7 +7214,7 @@ msgstr "エクスポート"
 
 #: classes/views/xml/import_form.php:72
 msgid "Export your forms, entries, views, and styles so you can easily import them on another site."
-msgstr "フォーム、エントリー、表示、スタイルをエクスポートして、別のサイトに簡単にインポートできます。"
+msgstr "フォーム、エントリー、ビュー、スタイルをエクスポートして、別のサイトに簡単にインポートできます。"
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
@@ -7222,11 +7222,11 @@ msgstr "エクスポート形式"
 
 #: classes/views/xml/import_form.php:90
 msgid "If your CSV special characters are not working correctly, try a different formatting option."
-msgstr "CSVの特殊文字が正しく機能しない場合は、別の設定オプションをお試しください。"
+msgstr "CSV の特殊文字が正しく機能しない場合は、別の設定オプションをお試しください。"
 
 #: classes/views/xml/import_form.php:91
 msgid "CSV Encoding Format"
-msgstr "CSVエンコード形式"
+msgstr "CSV エンコード形式"
 
 #: classes/views/xml/import_form.php:104
 msgid "Column Separation"
@@ -7246,7 +7246,7 @@ msgstr "フォームを選択"
 
 #: classes/views/xml/import_form.php:146
 msgid "ID / Form Key"
-msgstr "ID／フォームキー"
+msgstr "ID /フォームキー"
 
 #: classes/views/xml/import_form.php:147
 msgid "Type"
@@ -7255,7 +7255,7 @@ msgstr "タイプ"
 #. translators: %1$s: Form name
 #: classes/views/xml/import_form.php:174
 msgid "Child Form (%1$s)"
-msgstr "チャイルド・フォーム (%1$s)"
+msgstr "子フォーム (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
@@ -7283,11 +7283,11 @@ msgstr "作成"
 
 #: deprecated/FrmDeprecated.php:176
 msgid "Your plugin has been not been installed. Please update Formidable Pro to get downloads."
-msgstr "プラグインがインストールされていません。ダウンロードするにはFormidable Proを更新してください。"
+msgstr "プラグインがインストールされていません。Formidable Pro を更新してダウンロードしてください。"
 
 #: deprecated/FrmDeprecated.php:357
 msgid "Form template was Successfully Created"
-msgstr "フォームテンプレートの作成に成功しました"
+msgstr "フォームテンプレートは正常に作成されました"
 
 #: deprecated/FrmEDD_SL_Plugin_Updater.php:315
 msgid "You do not have permission to install plugin updates"
@@ -7435,7 +7435,7 @@ msgstr "払い戻し済み"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:138
 msgid "Are you sure you want to refund that payment?"
-msgstr "本当に〜してもよいですか？"
+msgstr "本当にその支払いを払い戻してもよいですか ?"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:142
 msgid "Refund"
@@ -7443,7 +7443,7 @@ msgstr "払い戻し"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:182
 msgid "Oops! No payment was selected for refund."
-msgstr "おっと！返金の対象となる支払いが選択されていません。"
+msgstr "払い戻しの対象となる支払いが選択されていません。"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:193
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:110
@@ -7461,28 +7461,28 @@ msgstr "キャンセル"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
-msgstr "本当に〜してもよいですか？"
+msgstr "本当にそのサブスクリプションをキャンセルしてもよいですか ?"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:113
 msgid "That subscription was not found"
-msgstr "その購読は見つかりませんでした"
+msgstr "そのサブスクリプションは見つかりませんでした"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:116
 msgid "Oops! No subscription was selected for cancelation."
-msgstr "おっと！キャンセルする購読が選択されていません。"
+msgstr "キャンセルするサブスクリプションが選択されていません。"
 
 #: stripe/helpers/FrmStrpLiteAppHelper.php:123
 msgid "Upgrade to save on fees."
-msgstr "アップグレードで料金を節約。"
+msgstr "アップグレードして手数料を節約しましょう。"
 
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "クレジットカードは、 %1$sStripe%2$s に接続しないと機能しません。"
+msgstr "クレジットカードは、まず%1$s Stripe に接続%2$sしないと使用できません。"
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
-msgstr "Stripe Connectでカスタマイザーを取得できません。"
+msgstr "Stripe Connect を通じて顧客を取得できません。"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:587
 msgid "Connection Status"
@@ -7562,7 +7562,7 @@ msgstr "%1$s %2$s(%3$s)%4$s"
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
-msgstr "この支払いを永久に削除しますか？"
+msgstr "この支払いを完全に削除しますか ?"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:462
 msgid "unlimited"
@@ -7579,19 +7579,19 @@ msgstr "この支払い方法は、処理に4～5営業日かかる場合があ�
 
 #: stripe/models/FrmStrpLiteAuth.php:133
 msgid "Payment intent does not exist."
-msgstr "支払い意思は存在しない。"
+msgstr "支払いインテントがありません。"
 
 #: stripe/models/FrmStrpLiteAuth.php:135
 msgid "Unable to verify payment intent."
-msgstr "支払意思を確認できない。"
+msgstr "支払いインテントを確認できません。"
 
 #: stripe/models/FrmStrpLiteAuth.php:137
 msgid "Payment did not complete."
-msgstr "支払いが完了しなかった。"
+msgstr "支払いは完了しませんでした。"
 
 #: stripe/models/FrmStrpLiteAuth.php:139
 msgid "Unable to find record of payment."
-msgstr "支払いの記録が見つからない。"
+msgstr "支払いの記録が見つかりません。"
 
 #: stripe/models/FrmStrpLiteAuth.php:141
 msgid "This form submission does not exist."
@@ -7603,7 +7603,7 @@ msgstr "このフォームはStripeリンク決済用に設定されていませ
 
 #: stripe/models/FrmStrpLiteAuth.php:145
 msgid "Something went wrong when trying to create a subscription."
-msgstr "サブスクリプションを作成しようとしたときに何か問題が発生しました。"
+msgstr "サブスクリプションの作成を試みているときに何らかの問題が発生しました。"
 
 #: stripe/models/FrmStrpLiteAuth.php:147
 msgid "Payment was not successfully processed."
@@ -7624,7 +7624,7 @@ msgstr "&mdash; 選択 &mdash;"
 #. translators: %s: The comma separated field types expected in the form.
 #: stripe/models/FrmTransLiteAction.php:193
 msgid "Oops! You need a %s field in your form."
-msgstr "おっと！フォームに %s フィールドが必要です。"
+msgstr "フォームに %s フィールドが必要です。"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:6
 msgid "Additional Stripe settings"
