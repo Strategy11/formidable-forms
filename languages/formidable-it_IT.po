@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-04 21:29\n"
+"PO-Revision-Date: 2024-04-05 21:46\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,12 +29,12 @@ msgstr "Seleziona un %s"
 #: js/src/common/components/itemselect.js:47
 #: js/formidable_blocks.js:87
 msgid "Currently, there are no %s"
-msgstr "Attualmente non esiste un sito %s"
+msgstr "Al momento non ci sono %s"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:38
 #: js/admin/applications.js:164
 msgid "Application Templates"
-msgstr "Modelli di applicazioni"
+msgstr "Template delle applicazioni"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:77
 #: js/form-templates.js:1776
@@ -70,7 +70,7 @@ msgstr "Nessun template disponibile"
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr "Passa a PRO per %s+ opzioni o esplora i template gratuiti."
+msgstr "Passa a PRO per avere più di %s opzioni o dai un'occhiata ai template gratuiti."
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -85,7 +85,7 @@ msgstr "Non abbiamo trovato nessun template che corrisponda ai tuoi criteri."
 #: js/src/form-templates/ui/showEmptyState.js:45
 #: js/form-templates.js:3556
 msgid "Start from Scratch"
-msgstr "Iniziare da zero"
+msgstr "Inizia da zero"
 
 #: js/src/form-templates/ui/showEmptyState.js:65
 #: js/form-templates.js:3576
@@ -105,7 +105,7 @@ msgstr "Al momento non hai template."
 #: js/src/form-templates/ui/showEmptyState.js:90
 #: js/form-templates.js:3601
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
-msgstr "Non hai creato alcun template di modulo. Inizia subito per semplificare il tuo flusso di lavoro e salvare tempo."
+msgstr "Non hai creato nessun template di modulo. Inizia subito per semplificare il tuo flusso di lavoro e risparmiare tempo."
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
@@ -129,12 +129,12 @@ msgstr "moduli di contatto"
 #: js/formidable_blocks.js:209
 #: js/formidable_blocks.js:305
 msgid "This site does not have any forms."
-msgstr "Questo sito non dispone di moduli."
+msgstr "Questo sito non ha moduli."
 
 #: js/src/form/calculator.js:27
 #: js/formidable_blocks.js:289
 msgid "Display a Calculator Form"
-msgstr "Visualizza il modulo della calcolatrice"
+msgstr "Visualizza il modulo di calcolo"
 
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
@@ -144,7 +144,7 @@ msgstr "Questo sito non dispone di moduli di calcolo."
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr "Aggiorna moduli formidabili."
+msgstr "Fai l'upgrade di Formidable Forms."
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -168,7 +168,7 @@ msgstr "moduli"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr "Grafico formidabile"
+msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
@@ -176,21 +176,21 @@ msgstr "Visualizza un grafico o una tabella"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr "In questo sito non è attiva la funzione Formidable Charts."
+msgstr "In questo sito non è attiva la funzionalità Formidable Charts."
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
-msgstr "Installare grafici formidabili"
+msgstr "Installa Formidable Charts"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
-msgstr "Questo sito non ha installato i grafici Formidable."
+msgstr "Su qesto sito non è installato Formidable Charts."
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
 #: js/formidable_blocks.js:572
 msgid "Upgrade Formidable Forms"
-msgstr "Aggiornamento dei moduli Formidable"
+msgstr "Fai l'upgrade di Formidable Forms"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
@@ -226,7 +226,7 @@ msgstr "Mostra la descrizione del modulo"
 #: classes/widgets/FrmElementorWidget.php:55
 #: js/formidable_blocks.js:490
 msgid "Minimize HTML"
-msgstr "Riduci al minimo l'HTML"
+msgstr "Minimizza l'HTML"
 
 #: js/src/form/inspector.js:88
 #: js/formidable_blocks.js:498
@@ -246,7 +246,7 @@ msgstr "Visualizza una modal"
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr "Popup modale Bootstrap"
+msgstr "Popup modal Bootstrap"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
@@ -256,12 +256,12 @@ msgstr "In questo sito non sono attivi i modal popup."
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr "Installare i modal formidabili"
+msgstr "Installa Formidable Modals"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
 msgid "This site does not have popup modals."
-msgstr "Questo sito non prevede modal popup."
+msgstr "Questo sito non contiene modal popup."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -326,7 +326,7 @@ msgstr "L'utente attuale non può eliminare i plugin."
 
 #: classes/controllers/FrmAddonsController.php:1023
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
-msgstr "NON SI TRADUCE, il tuo sito richiede l'autenticazione FTP. NON SI TRADUCE scaricare i plugin da FormidableForms.com e installarli manualmente."
+msgstr "Il tuo sito richiede l'autenticazione FTP. Scarica i plugin da FormidableForms.com e installali manualmente."
 
 #: classes/controllers/FrmAddonsController.php:1214
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
@@ -338,7 +338,7 @@ msgstr "Il tuo plugin è stato attivato."
 
 #: classes/controllers/FrmAddonsController.php:1323
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
-msgstr "Impossibile installare un aggiornamento. NON SI TRADUCE scaricare da formidableforms.com e installare manualmente."
+msgstr "Impossibile installare un aggiornamento. Scaricalo da formidableforms.com e installalo manualmente."
 
 #: classes/controllers/FrmAddonsController.php:1370
 msgid "The plugin download was not found."
@@ -475,7 +475,7 @@ msgstr "Dati inseriti in totale"
 
 #: classes/controllers/FrmDashboardController.php:193
 msgid "Add Entry"
-msgstr "Aggiungi Voce"
+msgstr "Aggiungi voce"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
@@ -5435,7 +5435,7 @@ msgstr "%1$sTEMPLATE NAME%2$s non è disponibile sul tuo piano. Aggiorna per sbl
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:53
 msgid "Lite users get %1$s50%% OFF%2$s regular price."
-msgstr "Gli utenti Lite ottengono %1$s50%% di sconto sul normale prezzo di%2$s ."
+msgstr "Gli utenti Lite ottengono %1$s50%% di sconto%2$s sul prezzo normale."
 
 #: classes/views/form-templates/modals/upgrade-modal.php:59
 msgid "Discount is automatically applied at checkout."
@@ -5588,7 +5588,7 @@ msgstr "%1$s: %2$s"
 #. translators: %1$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:32
 msgid "Updated: %1$s"
-msgstr "Aggiornati: %1$s"
+msgstr "Aggiornato: %1$s"
 
 #: classes/views/frm-fields/back-end/automatic-width.php:9
 msgid "Automatic width"
@@ -5653,7 +5653,7 @@ msgstr "Vedi altri esempi e documenti"
 
 #: classes/views/frm-fields/back-end/layout-classes.php:8
 msgid "Click on any box below to set the width for your selected field."
-msgstr "Fai clic su uno dei boxed in basso per impostare la larghezza del campo selezionato."
+msgstr "Fai clic su una delle caselle sottostanti per impostare la larghezza del campo selezionato."
 
 #: classes/views/frm-fields/back-end/layout-classes.php:31
 msgid "Other Style Classes"
@@ -5665,7 +5665,7 @@ msgstr "Righe"
 
 #: classes/views/frm-fields/back-end/max.php:12
 msgid "Max Characters"
-msgstr "Caratteri massimi"
+msgstr "Massimo dei caratteri"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:23
 msgid "Name layout"
@@ -5766,7 +5766,7 @@ msgstr "Classi di layout CSS"
 
 #: classes/views/frm-fields/back-end/settings.php:148
 msgid "Collapsible Advanced Settings"
-msgstr "Impostazioni avanzate pieghevoli"
+msgstr "Impostazioni avanzate riducibili"
 
 #: classes/views/frm-fields/back-end/settings.php:149
 #: classes/views/shared/mb_adv_info.php:22
@@ -5827,7 +5827,7 @@ msgstr "Tipo Campo"
 
 #: classes/views/frm-fields/back-end/settings.php:351
 msgid "Collapsible Validation Messages Settings"
-msgstr "Impostazioni dei messaggi di convalida pieghevoli"
+msgstr "Impostazioni dei messaggi di convalida riducibili"
 
 #: classes/views/frm-fields/back-end/settings.php:352
 msgid "Validation Messages"
@@ -5898,7 +5898,7 @@ msgstr "Invia email"
 
 #: classes/views/frm-form-actions/email_action.php:50
 msgid "Conditional emails"
-msgstr "Email condizionate"
+msgstr "Email condizionali"
 
 #: classes/views/frm-form-actions/form_action.php:32
 #: js/admin/style.js:678
@@ -5908,7 +5908,7 @@ msgstr "Duplica"
 
 #: classes/views/frm-form-actions/form_action.php:36
 msgid "Delete this form action?"
-msgstr "Eliminare questo modulo?"
+msgstr "Eliminare l'azione di questo modulo?"
 
 #: classes/views/frm-form-actions/on_submit_settings.php:21
 msgid "Show Message"
@@ -5964,7 +5964,7 @@ msgstr "Allegato"
 
 #: classes/views/frm-form-actions/_action_inside.php:87
 msgid "Form action automations"
-msgstr "Automazione delle azioni del modulo"
+msgstr "Automazioni delle azioni del modulo"
 
 #: classes/views/frm-form-actions/_action_inside.php:100
 msgid "Setup Automation"
@@ -6036,11 +6036,11 @@ msgstr "Mostra opzioni"
 
 #: classes/views/frm-forms/add_field.php:21
 msgid "Expand/Collapse Section"
-msgstr "Espandi/Crolla la sezione"
+msgstr "Espandi/Riduci la sezione"
 
 #: classes/views/frm-forms/add_field.php:25
 msgid "Expand/Collapse Section Icon"
-msgstr "Icona Espandi/Collaudi Sezione"
+msgstr "Icona Espandi/Riduci la sezione"
 
 #: classes/views/frm-forms/add_field.php:31
 msgid "Move Field"
@@ -6060,7 +6060,7 @@ msgstr "Attiva/disattiva il menu a discesa Altre opzioni"
 
 #: classes/views/frm-forms/add_field.php:51
 msgid "(Collapsed)"
-msgstr "(Crollato)"
+msgstr "(Ridotto)"
 
 #: classes/views/frm-forms/add_field.php:105
 #: classes/views/frm-forms/form.php:55
@@ -6260,11 +6260,11 @@ msgstr "Verifica la presenza di spam nelle voci utilizzando JavaScript"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:7
 msgid "Use Honeypot to check entries for spam"
-msgstr "Utilizza Honeypot per verificare la presenza di spam nelle voci."
+msgstr "Utilizza Honeypot per verificare la presenza di spam nelle voci"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:8
 msgid "Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers."
-msgstr "Includi un campo invisibile nel tuo modulo per ingannare i bot. L'impostazione su strict cattura più spam, ma i problemi con il completamento automatico possono impedire alle persone reali di inviare il modulo su alcuni browser."
+msgstr "Includi un campo invisibile nel tuo modulo per ingannare i bot. Se lo si imposta su rigoroso, si cattura più spam, ma i problemi di completamento automatico possono impedire alle persone reali di inviare il modulo in alcuni browser."
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:11
 msgid "Off"
@@ -6300,7 +6300,7 @@ msgstr "Seleziona il tipo di Captcha"
 
 #: classes/views/frm-settings/captcha/captcha.php:23
 msgid "Turnstile"
-msgstr "Tornello"
+msgstr "Turnstile"
 
 #: classes/views/frm-settings/captcha/captcha.php:29
 msgid "Changing the captcha type here will replace it in all any forms where it is used."
@@ -6308,7 +6308,7 @@ msgstr "Modificando il tipo di captcha in questo punto, questo verrà sostituito
 
 #: classes/views/frm-settings/captcha/captcha.php:33
 msgid "reCAPTCHA Settings"
-msgstr "Impostazioni di reCAPTCHA"
+msgstr "Impostazioni reCAPTCHA"
 
 #: classes/views/frm-settings/captcha/captcha.php:41
 msgid "reCAPTCHA Type"
@@ -6687,7 +6687,7 @@ msgstr "L'ho già fatto"
 
 #: classes/views/shared/review.php:37
 msgid "Sorry to hear you aren't enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?"
-msgstr "NON SI TRADUCE che tu non ti stia divertendo a costruire con Formidable. Ci piacerebbe avere la possibilità di migliorare. Potresti prenderti un minuto e farci sapere cosa possiamo migliorare?"
+msgstr "Ci dispiace che tu non ti stia divertendo a costruire con Formidable. Ci piacerebbe avere la possibilità di migliorare. Potresti prenderti un minuto e farci sapere cosa possiamo migliorare?"
 
 #: classes/views/shared/review.php:43
 #: js/packages/floating-links/s11-floating-links.js:104
@@ -6706,7 +6706,7 @@ msgstr "Questo add-on non è installato. Vuoi installarlo ora?"
 #. translators: %s: Feature name
 #: classes/views/shared/upgrade_overlay.php:42
 msgid "%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features."
-msgstr "%s non sono disponibili sul tuo piano. NON SI TRADUCE per sbloccare altre fantastiche caratteristiche."
+msgstr "%s non sono disponibili sul tuo piano. Effettua l'aggiornamento per sbloccare altre fantastiche caratteristiche."
 
 #. translators: %s: Plan name
 #: classes/views/shared/upgrade_overlay.php:60
@@ -7093,7 +7093,7 @@ msgstr "Visualizza il mio modulo"
 #: classes/views/styles/_style-preview-container.php:10
 #: js/admin/style.js:492
 msgid "View sample form"
-msgstr "Visualizza un modulo campione"
+msgstr "Visualizza un modulo di esempio"
 
 #: classes/views/styles/_style-preview-container.php:29
 msgid "One or more of your style settings may contain invalid characters that break form styling."
@@ -7109,19 +7109,19 @@ msgstr "Attendi"
 
 #: classes/views/styles/_style-preview-container.php:68
 msgid "Updating CSS..."
-msgstr "Aggiornare i CSS..."
+msgstr "Aggiornamento CSS..."
 
 #: classes/views/styles/_styles-list.php:37
 msgid "You are currently limited to 1 style template"
-msgstr "Al momento sei limitato a 1 template di stile"
+msgstr "Al momento hai un limite a 1 template di stile"
 
 #: classes/views/styles/_styles-list.php:38
 msgid "Upgrade to create and manage as many form styles as you need."
-msgstr "Potrai creare e gestire tutti gli stili di modulo di cui hai bisogno."
+msgstr "Aggiorna per creare e gestire tutti gli stili di modulo di cui hai bisogno."
 
 #: classes/views/styles/_styles-list.php:58
 msgid "Enable Formidable styling"
-msgstr "Abilita lo stile Formidabile"
+msgstr "Abilita gli stili di Formidable"
 
 #: classes/views/styles/_styles-list.php:76
 msgid "Default Style"
@@ -7133,12 +7133,12 @@ msgstr "Stili personalizzati"
 
 #: classes/views/styles/_styles-list.php:88
 msgid "Formidable Styles"
-msgstr "Stili formidabili"
+msgstr "Stili di Formidable"
 
 #. translators: Contact support URL.
 #: classes/views/summary-emails/base-plain.php:22
 msgid "Need help? Get in touch with our team at %s"
-msgstr "Hai bisogno di aiuto? Contatta il nostro team all'indirizzo %s"
+msgstr "Hai bisogno di aiuto? Contatta il nostro team a %s"
 
 #. translators: Unsubscribe URL.
 #: classes/views/summary-emails/base-plain.php:32
@@ -7164,14 +7164,14 @@ msgstr "Statistiche"
 
 #: classes/views/summary-emails/stats-plain.php:34
 msgid "Go to Dashboard:"
-msgstr "Vai a Bacheca:"
+msgstr "Vai alla Bacheca:"
 
 #. translators: submission count.
 #: classes/views/summary-emails/stats-plain.php:48
 msgid "%s submission"
 msgid_plural "%s submissions"
-msgstr[0] "%s presentazione"
-msgstr[1] "%s commissioni"
+msgstr[0] "%s invio"
+msgstr[1] "%s invii"
 
 #. translators: the list of out-of-date plugins.
 #: classes/views/summary-emails/stats-plain.php:61
@@ -7181,11 +7181,11 @@ msgstr "I seguenti plugin non sono aggiornati: %s"
 
 #: classes/views/summary-emails/stats-plain.php:66
 msgid "Please go to your Plugins page to update them."
-msgstr "NON SI TRADUCE, vai alla pagina dei tuoi plugin per aggiornarli."
+msgstr "Vai alla pagina dei tuoi plugin per aggiornarli."
 
 #: classes/views/summary-emails/stats.php:54
 msgid "Open Dashboard"
-msgstr "Aprire la Bacheca"
+msgstr "Apri la Bacheca"
 
 #: classes/views/summary-emails/stats.php:65
 msgid "Form name"
@@ -7206,7 +7206,7 @@ msgstr "Carica il tuo file XML Formidable ai moduli di importazione in questo si
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
 msgid "Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Carica il file XML di %1$s per importare i moduli in questo sito. Se la chiave del modulo importato e la data di creazione corrispondono a un modulo presente sul tuo sito, quel modulo verrà aggiornato."
+msgstr "Carica il file XML %1$s per importare i moduli in questo sito. Se la chiave del modulo importata e la data di creazione corrispondono a un modulo presente sul tuo sito, quel modulo verrà aggiornato."
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
@@ -7215,7 +7215,7 @@ msgstr "Scegli un file XML Formidable"
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:44
 msgid "Choose a %1$s XML file"
-msgstr "Scegliere un file XML %1$s"
+msgstr "Scegli un file XML di %1$s"
 
 #. translators: %s: File size
 #: classes/views/xml/import_form.php:52
@@ -7273,7 +7273,7 @@ msgstr "Tipo"
 #. translators: %1$s: Form name
 #: classes/views/xml/import_form.php:174
 msgid "Child Form (%1$s)"
-msgstr "Modulo figlio/bambino (%1$s)"
+msgstr "Modulo child (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
@@ -7301,7 +7301,7 @@ msgstr "Crea"
 
 #: deprecated/FrmDeprecated.php:176
 msgid "Your plugin has been not been installed. Please update Formidable Pro to get downloads."
-msgstr "Il tuo plugin non è stato installato. NON SI TRADUCE aggiorna Formidable Pro per ottenere i download."
+msgstr "Il tuo plugin non è stato installato. Aggiorna Formidable Pro per ottenere i download."
 
 #: deprecated/FrmDeprecated.php:357
 msgid "Form template was Successfully Created"
@@ -7317,11 +7317,11 @@ msgstr "Errore"
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:91
 msgid "Please specify an amount for the payment"
-msgstr "NON SI TRADUCE: specifica l'importo del pagamento."
+msgstr "Specifica l'importo del pagamento"
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:96
 msgid "There was a problem communicating with Stripe. Please try again."
-msgstr "Si è verificato un problema di comunicazione con Stripe. NON SI TRADUCE."
+msgstr "Si è verificato un problema di comunicazione con Stripe. Prova di nuovo."
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:338
 msgid "Payment Method"
@@ -7361,7 +7361,7 @@ msgstr "Abbonamento annullato"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:62
 msgid "Subscription Canceled and Expired"
-msgstr "L'abbonamento è stato annullato e scade."
+msgstr "Abbonamento annullato e scaduto"
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:22
 msgid "Please select a payment to view"
@@ -7453,7 +7453,7 @@ msgstr "Rimborsato"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:138
 msgid "Are you sure you want to refund that payment?"
-msgstr "Sei sicuro di voler rimborsare il pagamento?"
+msgstr "Confermi di voler rimborsare il pagamento?"
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:142
 msgid "Refund"
@@ -7479,7 +7479,7 @@ msgstr "Operazione annullata"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:70
 msgid "Are you sure you want to cancel that subscription?"
-msgstr "Sei sicuro di voler davvero annullare l'abbonamento?"
+msgstr "Confermi di voler davvero annullare l'abbonamento?"
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:113
 msgid "That subscription was not found"
@@ -7496,7 +7496,7 @@ msgstr "Effettua l'upgrade per risparmiare sulle tariffe."
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "Le carte di credito non funzionano se prima non si collega %1$sa Stripe%2$s ."
+msgstr "Le carte di credito non funzionano senza %1$scollegare Stripe%2$s prima."
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
@@ -7512,7 +7512,7 @@ msgstr "TEST"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:606
 msgid "LIVE"
-msgstr "IN DIRETTA"
+msgstr "LIVE"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 msgid "Authorized"
@@ -7580,7 +7580,7 @@ msgstr "%1$s %2$s(%3$s)%4$s"
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
-msgstr "Eliminare definitivamente questo pagamento?"
+msgstr "Vuoi eliminare definitivamente questo pagamento?"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:462
 msgid "unlimited"
@@ -7633,7 +7633,7 @@ msgstr "L'elaborazione di questo pagamento potrebbe richiedere diversi giorni."
 
 #: stripe/models/FrmTransLiteAction.php:20
 msgid "Collect a Payment"
-msgstr "Riscuotere un pagamento"
+msgstr "Riscuoti un pagamento"
 
 #: stripe/models/FrmTransLiteAction.php:168
 msgid "&mdash; Select &mdash;"
@@ -7650,11 +7650,11 @@ msgstr "Ulteriori impostazioni di Stripe"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:8
 msgid "Capture Payment"
-msgstr "Acquisizione del pagamento"
+msgstr "Acquisisci il pagamento"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:11
 msgid "When entry is submitted"
-msgstr "Quando la Voce viene inviata"
+msgstr "Quando la voce viene inviata"
 
 #: stripe/views/action-settings/payments-options.php:35
 msgid "Payment Type"
@@ -7770,7 +7770,7 @@ msgstr "Non connesso!"
 
 #: stripe/views/settings/connect.php:23
 msgid "Finish Stripe Setup"
-msgstr "Configurazione delle Stripe Finite"
+msgstr "Completa la configurazione di Stripe"
 
 #: stripe/views/settings/connect.php:27
 msgid "Disconnect"
@@ -7814,7 +7814,7 @@ msgstr "Dettagli sull'abbonamento"
 
 #: stripe/views/subscriptions/show.php:129
 msgid "Permanently delete this subscription?"
-msgstr "Eliminare definitivamente questo abbonamento?"
+msgstr "Vuoi eliminare definitivamente questo abbonamento?"
 
 #: stripe/views/subscriptions/show.php:132
 msgid "Delete Subscription"
@@ -7876,7 +7876,7 @@ msgstr "Inserisci il tuo %s in una pagina appena creata."
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:138
 msgid "Use shortcodes or PHP code to put the %s anywhere."
-msgstr "Utilizza shortcode o codice PHP per inserire il sito %s ovunque."
+msgstr "Utilizza shortcode o codice PHP per inserire il %s ovunque."
 
 #: js/admin/embed.js:143
 msgid "Select existing page"
@@ -7894,7 +7894,7 @@ msgstr "Inserisci %s"
 
 #: js/admin/embed.js:227
 msgid "Please select a page"
-msgstr "NON SI TRADUCE"
+msgstr "Seleziona una pagina"
 
 #: js/admin/embed.js:239
 msgid "Create new page"
@@ -7914,7 +7914,7 @@ msgstr "Crea pagina"
 
 #: js/admin/embed.js:310
 msgid "Insert manually"
-msgstr "Pannello di inserimento manuale"
+msgstr "Inserisci manualmente"
 
 #: js/admin/embed.js:342
 msgid "view"
@@ -7939,7 +7939,7 @@ msgstr "Copia %s"
 
 #: js/admin/embed.js:485
 msgid "Successfully copied embed example"
-msgstr "L'esempio di incorpora è stato copiato con successo"
+msgstr "L'esempio di incorporamento è stato copiato con successo"
 
 #: js/admin/style.js:126
 msgid "Show less"
@@ -7956,7 +7956,7 @@ msgstr "Installa e applica"
 
 #: js/admin/style.js:624
 msgid "Reset to Defaults"
-msgstr "Reimposta i valori predefiniti"
+msgstr "Reimposta ai valori predefiniti"
 
 #: js/admin/style.js:854
 msgid "Style has been renamed successfully"
@@ -7977,24 +7977,24 @@ msgstr "Lo stile è stato reimposto con successo"
 
 #: js/formidable_admin.js:1374
 msgid "Set Row Layout"
-msgstr "Imposta il layout delle righe"
+msgstr "Imposta il layout della riga"
 
 #: js/formidable_admin.js:1381
 msgid "Move Field Group"
-msgstr "Spostare il gruppo di campi"
+msgstr "Sposta il gruppo di campi"
 
 #: js/formidable_admin.js:2339
 msgid "Delete Group"
-msgstr "Gruppo eliminato"
+msgstr "Elimina il gruppo"
 
 #: js/formidable_admin.js:2345
 msgid "Duplicate Group"
-msgstr "Gruppo duplicato"
+msgstr "Duplica il gruppo"
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
 #: js/formidable_admin.js:3565
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
-msgstr "Sei sicuro di voler davvero eliminare questi campi selezionati da %1$s ?"
+msgstr "Confermi di voler davvero eliminare questo/questi %1$s campo/campi selezionati?"
 
 #: js/formidable_admin.js:3803
 msgid "Custom layout"
@@ -8002,11 +8002,11 @@ msgstr "Layout personalizzato"
 
 #: js/formidable_admin.js:3826
 msgid "Break into rows"
-msgstr "Dividiti in righe"
+msgstr "Dividi in righe"
 
 #: js/formidable_admin.js:3836
 msgid "Row Layout"
-msgstr "Layout delle righe"
+msgstr "Layout della riga"
 
 #: js/formidable_admin.js:4090
 msgid "Enter number of columns for each field"
