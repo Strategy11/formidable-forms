@@ -49,7 +49,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::menu
 	 */
-	public function test_menu() {
+	public function menu() {
 		// Simulate the is_onboarding_wizard_page method as true.
 		$this->set_admin_screen();
 		$_GET['page'] = $this->controller::PAGE_SLUG;
@@ -62,7 +62,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::remove_menu
 	 */
-	public function test_remove_menu() {
+	public function remove_menu() {
 		global $submenu;
 
 		// Set up the initial submenu state.
@@ -86,7 +86,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmFormTemplatesController::enqueue_assets
 	 */
-	public function test_enqueue_assets() {
+	public function enqueue_assets() {
 		global $wp_scripts, $wp_styles;
 
 		// Mock the global WordPress objects for scripts and styles.
