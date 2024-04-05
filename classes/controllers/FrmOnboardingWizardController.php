@@ -156,9 +156,11 @@ class FrmOnboardingWizardController {
 		}
 
 		// Redirect to the onboarding wizard's initial step.
-		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
-		wp_safe_redirect( esc_url_raw( $page_url ) );
-		exit;
+		$page_url = apply_filters( 'frm_onboarding_wizard_redirect_url', add_query_arg( 'step', self::INITIAL_STEP, self::$page_url ) );
+		if ( $page_url ) {
+			wp_safe_redirect( esc_url_raw( $page_url ) );
+			exit;
+		}
 	}
 
 	/**

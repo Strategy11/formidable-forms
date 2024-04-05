@@ -37,10 +37,10 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		// Reset for the next case.
 		delete_option( $this->controller::ONBOARDING_SKIPPED_OPTION );
 
-		// TODO: Investigate a method to test wp_safe_redirect() and exit() without causing PHP errors in PHPUnit.
 		// Case 3: Validate the redirect logic when conditions are met for showing the onboarding.
-		// $this->controller::do_admin_redirects();
-		// $this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' );
+		add_filter( 'frm_onboarding_wizard_redirect_url', '__return_false' ); // Bypasses redirect and exit for uninterrupted PHPUnit execution.
+		$this->controller::do_admin_redirects();
+		$this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' );
 
 		// Clean up.
 		delete_transient( $this->controller::TRANSIENT_NAME );
