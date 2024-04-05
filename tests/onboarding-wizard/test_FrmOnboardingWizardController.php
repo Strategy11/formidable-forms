@@ -19,7 +19,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::do_admin_redirects
 	 */
-	public function do_admin_redirects() {
+	public function test_do_admin_redirects() {
 		// Set the initial condition by setting the expected transient.
 		set_transient( $this->controller::TRANSIENT_NAME, $this->controller::TRANSIENT_VALUE, 60 );
 
@@ -49,7 +49,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::menu
 	 */
-	public function menu() {
+	public function test_menu() {
 		// Simulate the is_onboarding_wizard_page method as true.
 		$this->set_admin_screen();
 		$_GET['page'] = $this->controller::PAGE_SLUG;
@@ -62,7 +62,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::remove_menu
 	 */
-	public function remove_menu() {
+	public function test_remove_menu() {
 		global $submenu;
 
 		// Set up the initial submenu state.
