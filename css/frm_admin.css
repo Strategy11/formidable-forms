@@ -7618,8 +7618,11 @@ ul.frm_two_col {
 
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
-	text-align: right;
-	margin-left: auto;
+	margin-right: var(--gap-xs);
+}
+
+.frm_code_list.frm-full-hover a {
+    display: block;
 }
 
 .frm_code_list.frm-full-hover a,
@@ -8636,6 +8639,10 @@ button.frm_choose_image_box,
 	padding-left: var(--gap-lg) !important;
 	padding-right: 5px !important;
 	background-position: left 11px top 55%;
+}
+
+.rtl .frm_code_list.frm-full-hover a span {
+	margin-left: var(--gap-xs);
 }
 
 /* ---------------------------------------------------------------
