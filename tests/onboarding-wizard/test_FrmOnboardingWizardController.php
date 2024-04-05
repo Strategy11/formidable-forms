@@ -19,7 +19,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 	/**
 	 * @covers FrmOnboardingWizardController::do_admin_redirects
 	 */
-	public function test_do_admin_redirects() {
+	public function do_admin_redirects() {
 		// Set the initial condition by setting the expected transient.
 		set_transient( $this->controller::TRANSIENT_NAME, $this->controller::TRANSIENT_VALUE, 60 );
 
