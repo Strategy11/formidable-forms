@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-06 09:48\n"
+"PO-Revision-Date: 2024-04-06 21:55\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5451,7 +5451,7 @@ msgstr "Icona del blocco"
 
 #: classes/views/form-templates/template.php:56
 msgid "Do you want to move this form template to the trash?"
-msgstr "Vuoi spostare questo template nel cestino?"
+msgstr "Vuoi spostare questo template di modulo nel cestino?"
 
 #: classes/views/form-templates/template.php:56
 msgid "Move to the trash button"
@@ -5732,7 +5732,7 @@ msgstr "I Captcha non saranno utilizzati fino a quando il Sito e le Chiavi Segre
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
 msgid "Credit Cards will not work without %1$sadding a Collect Payment action%2$s."
-msgstr "Le carte di credito non funzionano senza che %1$saggiunga un'azione Collect Pagamento%2$s."
+msgstr "Le carte di credito non funzionano senza %1$saggiungere un'azione di riscossione del pagamento%2$s."
 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
@@ -5972,11 +5972,11 @@ msgstr "Configurazione dell'automazione"
 
 #: classes/views/frm-form-actions/_action_inside.php:113
 msgid "Form action logs"
-msgstr "Modulo accedi ai registri di azione"
+msgstr "Registri delle azioni del modulo"
 
 #: classes/views/frm-form-actions/_action_inside.php:115
 msgid "Install logging to get more information on API requests."
-msgstr "Installa il logging per ottenere maggiori informazioni sulle richieste API."
+msgstr "Installare il registro per ottenere maggiori informazioni sulle richieste API."
 
 #. translators: %1$s: The ID of the form action.
 #: classes/views/frm-form-actions/_action_inside.php:125
@@ -6056,7 +6056,7 @@ msgstr "Altre opzioni"
 #: classes/views/frm-forms/add_field.php:38
 #: js/formidable_admin.js:1415
 msgid "Toggle More Options Dropdown"
-msgstr "Attiva/disattiva il menu a discesa Altre opzioni"
+msgstr "Commutatore a tendina per ulteriori opzioni"
 
 #: classes/views/frm-forms/add_field.php:51
 msgid "(Collapsed)"
@@ -6081,7 +6081,7 @@ msgstr "Campi di ricerca"
 
 #: classes/views/frm-forms/add_field_links.php:115
 msgid "Pricing Fields"
-msgstr "Campi di prezzo"
+msgstr "Campi del prezzo"
 
 #: classes/views/frm-forms/add_field_links.php:134
 msgid "Select a field to see the options"
@@ -6105,7 +6105,7 @@ msgstr "Transizioni di pagina"
 
 #: classes/views/frm-forms/add_form_style_options.php:15
 msgid "Slide horizonally"
-msgstr "Scorri all'orizzonte"
+msgstr "Scorri orizzontalmente"
 
 #: classes/views/frm-forms/add_form_style_options.php:18
 msgid "Slide vertically"
@@ -6113,7 +6113,7 @@ msgstr "Scorri in verticale"
 
 #: classes/views/frm-forms/edit.php:13
 msgid "Build Form"
-msgstr "Modulo di costruzione"
+msgstr "Costruisci il modulo"
 
 #. translators: %s: The page number
 #: classes/views/frm-forms/form.php:20
@@ -6568,7 +6568,7 @@ msgstr "Non ci sono nuovi messaggi."
 
 #: classes/views/inbox/list.php:35
 msgid "Get the details about new updates, tips, sales, and more. We'll keep you in the loop."
-msgstr "Ricevi i dettagli sui nuovi aggiornamenti, i consigli, le vendite e molto altro ancora. Ti terremo nel loop."
+msgstr "Ricevi i dettagli su nuovi aggiornamenti, suggerimenti, vendite e altro ancora. Ti terremo al corrente di tutto."
 
 #: classes/views/inbox/list.php:38
 msgid "Subscribe"
@@ -6635,7 +6635,7 @@ msgstr "Usa gli ID"
 
 #: classes/views/shared/mb_adv_info.php:100
 msgid "Use Keys"
-msgstr "Chiavi d'uso"
+msgstr "Utilizza le chiavi"
 
 #: classes/views/shared/mb_adv_info.php:112
 msgid "IF"
@@ -6894,7 +6894,7 @@ msgstr "Rimuovi box shadow"
 
 #: classes/views/styles/_field-colors.php:47
 msgid "Active Style"
-msgstr "Stile Attivo"
+msgstr "Stile attivo"
 
 #: classes/views/styles/_field-colors.php:64
 msgid "Error Style"
@@ -6923,7 +6923,7 @@ msgstr "Indicatore obbligatorio"
 
 #: classes/views/styles/_field-sizes.php:23
 msgid "Automatic width for drop-down fields"
-msgstr "Larghezza automatica per i menu a discesa"
+msgstr "Larghezza automatica per i campi a tendina"
 
 #: classes/views/styles/_field-sizes.php:32
 msgid "Bottom Margin"
