@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-02 19:41\n"
+"PO-Revision-Date: 2024-04-06 09:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,7 +29,7 @@ msgstr "Selecionar um %s"
 #: js/src/common/components/itemselect.js:47
 #: js/formidable_blocks.js:87
 msgid "Currently, there are no %s"
-msgstr "No momento, não há %s"
+msgstr "Não há %s atualmente"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:38
 #: js/admin/applications.js:164
@@ -44,12 +44,12 @@ msgstr "Solução pronta"
 #: js/src/form-templates/elements/applicationTemplatesElement.js:85
 #: js/form-templates.js:1784
 msgid "See all applications"
-msgstr "Veja todos os aplicativos"
+msgstr "Ver todos os aplicativos"
 
 #: js/src/form-templates/elements/emptyStateElement.js:30
 #: js/form-templates.js:1912
 msgid "Empty State"
-msgstr "Estado Vazio"
+msgstr "Estado vazio"
 
 #: js/src/form-templates/events/createTemplateListeners.js:76
 #: classes/views/xml/import_form.php:169
@@ -70,7 +70,7 @@ msgstr "Nenhum modelo disponível"
 #: js/src/form-templates/ui/showEmptyState.js:117
 #: js/form-templates.js:3628
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
-msgstr "Atualize para PRO para mais de %sopções ou explore modelos gratuitos."
+msgstr "Atualize para a versão Pro e acesse mais de %s opções ou conheça os modelos gratuitos."
 
 #: js/src/form-templates/ui/showEmptyState.js:40
 #: js/form-templates.js:3551
@@ -90,22 +90,22 @@ msgstr "Iniciar do zero"
 #: js/src/form-templates/ui/showEmptyState.js:65
 #: js/form-templates.js:3576
 msgid "No favorites"
-msgstr "Sem favoritos"
+msgstr "Nenhum favorito"
 
 #: js/src/form-templates/ui/showEmptyState.js:66
 #: js/form-templates.js:3577
 msgid "You haven't added any templates to your favorites yet."
-msgstr "Você ainda não adicionado nenhum modelo aos seus favoritos."
+msgstr "Você ainda não adicionou nenhum modelo aos seus favoritos."
 
 #: js/src/form-templates/ui/showEmptyState.js:89
 #: js/form-templates.js:3600
 msgid "You currently have no templates."
-msgstr "No momento você não tem modelos."
+msgstr "Você não tem modelos atualmente."
 
 #: js/src/form-templates/ui/showEmptyState.js:90
 #: js/form-templates.js:3601
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
-msgstr "Você não criou nenhum modelo de formulário. Comece agora a simplificar seu fluxo de trabalho e salvar tempo."
+msgstr "Você não criou nenhum modelo de formulário. Comece agora para simplificar seu fluxo de trabalho e economizar tempo."
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
@@ -144,7 +144,7 @@ msgstr "Este site não possui formulários de calculadora."
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
 msgid "Upgrade Formidable Forms."
-msgstr "Atualize Formulários Formidáveis."
+msgstr "Atualizar o Formidable Forms."
 
 #: js/src/form/calculator.js:61
 #: js/src/form/calculator.js:26
@@ -168,29 +168,29 @@ msgstr "formulários"
 
 #: js/src/form/graph.js:26
 msgid "Formidable Chart"
-msgstr "Gráfico formidável"
+msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
 msgid "Display a chart or graph"
-msgstr "Exibir um gráfico ou gráfico"
+msgstr "Exibir um gráfico ou diagrama"
 
 #: js/src/form/graph.js:53
 msgid "This site does not have Formidable Charts active."
-msgstr "Este site não possui Formidable Charts ativos."
+msgstr "Este site não possui nenhum Formidable Chart ativo."
 
 #: js/src/form/graph.js:54
 msgid "Install Formidable Charts"
-msgstr "Instale gráficos formidáveis"
+msgstr "Instalar Formidable Charts"
 
 #: js/src/form/graph.js:59
 msgid "This site does not have Formidable Charts installed."
-msgstr "Este site não possui Formidable Charts instalado."
+msgstr "Este site não possui o Formidable Charts instalado."
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
 #: js/formidable_blocks.js:572
 msgid "Upgrade Formidable Forms"
-msgstr "Atualizar Formulários Formidáveis"
+msgstr "Atualizar o Formidable Forms"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
@@ -201,7 +201,7 @@ msgstr "Selecionar Formulário"
 #: js/src/form/inspector.js:57
 #: js/formidable_blocks.js:467
 msgid "Go to form"
-msgstr "Vá para o formulário"
+msgstr "Ir para o formulário"
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
@@ -226,7 +226,7 @@ msgstr "Mostrar descrição do formulário"
 #: classes/widgets/FrmElementorWidget.php:55
 #: js/formidable_blocks.js:490
 msgid "Minimize HTML"
-msgstr "Minimize HTML"
+msgstr "Minimizar HTML"
 
 #: js/src/form/inspector.js:88
 #: js/formidable_blocks.js:498
@@ -246,17 +246,17 @@ msgstr "Exibir um modal"
 #: js/src/form/modal.js:30
 #: js/formidable_blocks.js:544
 msgid "Bootstrap modal popup"
-msgstr "Pop-up modal de inicialização"
+msgstr "Pop-up modal do Bootstrap"
 
 #: js/src/form/modal.js:51
 #: js/formidable_blocks.js:565
 msgid "This site does not have popup modals active."
-msgstr "Este site não possui modais popup ativos."
+msgstr "Este site não possui modais pop-up ativos."
 
 #: js/src/form/modal.js:52
 #: js/formidable_blocks.js:566
 msgid "Install Formidable Modals"
-msgstr "Instale modais formidáveis"
+msgstr "Instalar Formidable Modals"
 
 #: js/src/form/modal.js:57
 #: js/formidable_blocks.js:571
@@ -282,7 +282,7 @@ msgstr "Crie formulários \"arrasta e solta\" de forma rápida e fácil."
 #. Author of the plugin
 #: formidable.php
 msgid "Strategy11 Form Builder Team"
-msgstr "Equipe do Construtor de Formulários Strategy11"
+msgstr "Equipe do editor de formulários Strategy11"
 
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:24
@@ -322,11 +322,11 @@ msgstr "Não instalado"
 
 #: classes/controllers/FrmAddonsController.php:947
 msgid "Current user cannot delete plugins."
-msgstr "O usuário atual não pode excluir plug-ins."
+msgstr "O usuário atual não pode excluir plugins."
 
 #: classes/controllers/FrmAddonsController.php:1023
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
-msgstr "Desculpe, seu site requer autenticação FTP. Baixar plug-ins de FormidableForms.com e instale-os manualmente."
+msgstr "Desculpe, seu site requer autenticação FTP. Baixe os plugins de FormidableForms.com e instale-os manualmente."
 
 #: classes/controllers/FrmAddonsController.php:1214
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
@@ -338,11 +338,11 @@ msgstr "Seu plugin foi ativado."
 
 #: classes/controllers/FrmAddonsController.php:1323
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
-msgstr "Não foi possível instalar uma atualização. Faça o baixar em formidableforms.com e instale manualmente."
+msgstr "Não foi possível instalar uma atualização. Faça o download em formidableforms.com e instale manualmente."
 
 #: classes/controllers/FrmAddonsController.php:1370
 msgid "The plugin download was not found."
-msgstr "O baixar do plugin não foi encontrado."
+msgstr "O download do plugin não foi encontrado."
 
 #: classes/controllers/FrmAddonsController.php:1464
 #: classes/controllers/FrmAddonsController.php:1465
@@ -414,7 +414,7 @@ msgstr "Construa um formulário"
 #. Translators: 1: Global Settings Link
 #: classes/controllers/FrmAppController.php:637
 msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
-msgstr "Os endereços IP nos envios de formulários poder não ser mais precisos! Se você estiver enfrentando problemas, recomendamos ir para %1$s e ativar \"Usar cabeçalhos personalizado ao recuperar IPs com envios de formulários\". contexto."
+msgstr "Os endereços IP nos envios de formulários podem não estar mais corretos! Se estiver tendo problemas, recomendamos que vá até %1$s e ative a configuração \"Usar cabeçalhos personalizados ao recuperar IPs com envios de formulários\"."
 
 #: classes/controllers/FrmAppController.php:1212
 #: classes/controllers/FrmFormsController.php:167
@@ -447,15 +447,15 @@ msgstr "Painel"
 
 #: classes/controllers/FrmDashboardController.php:145
 msgid "Latest Entries"
-msgstr "Mais recentes Postagens"
+msgstr "Entradas mais recentes"
 
 #: classes/controllers/FrmDashboardController.php:147
 msgid "View All Entries"
-msgstr "Visualização todas as entradas"
+msgstr "Visualizar todas as entradas"
 
 #: classes/controllers/FrmDashboardController.php:157
 msgid "You don't have a payment form setup yet."
-msgstr "Você ainda não tem um formulário de pagamento configurado."
+msgstr "Você ainda não configurou um formulário de pagamento."
 
 #: classes/controllers/FrmDashboardController.php:160
 msgid "Create a Payment Form"
@@ -475,7 +475,7 @@ msgstr "Entradas totais"
 
 #: classes/controllers/FrmDashboardController.php:193
 msgid "Add Entry"
-msgstr "Adicionar post"
+msgstr "Adicionar entrada"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
@@ -513,7 +513,7 @@ msgstr "Adicionar novo formulário"
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #: classes/controllers/FrmDashboardController.php:319
 msgid "See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you'll see it here."
-msgstr "Consulte a documentação do formulário %1$s%2$s para obter instruções sobre como publicar um formulário. Quando você tiver pelo menos uma post, você a verá aqui."
+msgstr "Consulte a %1$sdocumentação do formulário %2$s para obter instruções sobre como publicar um formulário. Quando você tiver pelo menos uma entrada, ela estará visível aqui."
 
 #: classes/controllers/FrmDashboardController.php:395
 #: classes/controllers/FrmEntriesController.php:86
@@ -580,7 +580,7 @@ msgstr "Esse formulário está na lixeira e está programado para ser excluído 
 
 #: classes/controllers/FrmEntriesController.php:465
 msgid "You are trying to view an entry that does not exist."
-msgstr "Você está tentando visualização uma post que não existe."
+msgstr "Você está tentando visualizar uma entrada que não existe."
 
 #: classes/controllers/FrmEntriesController.php:492
 #: classes/controllers/FrmFormActionsController.php:414
@@ -625,7 +625,7 @@ msgstr "Comércio eletrônico"
 
 #: classes/controllers/FrmFormActionsController.php:157
 msgid "Email Marketing"
-msgstr "Marketing e-mail"
+msgstr "E-mail Marketing"
 
 #: classes/controllers/FrmFormActionsController.php:169
 msgid "CRM"
@@ -648,7 +648,7 @@ msgstr "Formulários"
 
 #: classes/controllers/FrmFormsController.php:57
 msgid "Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching."
-msgstr "Mostrar apenas os campos necessários e crie formulários ramificados. Atualize para obter lógica condicional e ramificação de perguntas."
+msgstr "Mostra apenas os campos de que você precisa e cria formulários com ramificações. Atualize para acessar a lógica condicional e a ramificação de perguntas."
 
 #: classes/controllers/FrmFormsController.php:58
 #: classes/controllers/FrmFormsController.php:59
@@ -671,7 +671,7 @@ msgstr "Formulário foi atualizado com sucesso"
 #. translators: %1$s: Start link HTML, %2$s: end link HTML
 #: classes/controllers/FrmFormsController.php:236
 msgid "However, your form is very long and may be %1$sreaching server limits%2$s."
-msgstr "Porém, seu formulário é muito longo e poder ser %1$satingindo os limites do servidor%2$s."
+msgstr "No entanto, seu formulário é muito longo e poder estar %1$satingindo os limites do servidor%2$s."
 
 #: classes/controllers/FrmFormsController.php:550
 msgid "Form Preview"
@@ -697,8 +697,8 @@ msgstr[1] "%1$s formulários movidos para a lixeira. %2$sDesfazer%3$s"
 #: classes/controllers/FrmFormsController.php:721
 msgid "%1$s Form Permanently Deleted"
 msgid_plural "%1$s Forms Permanently Deleted"
-msgstr[0] "%1$s Formulário excluído permanentemente"
-msgstr[1] "%1$s formulários excluído permanentemente"
+msgstr[0] "%1$s Formulário excluído definitivamente"
+msgstr[1] "%1$s formulários excluídos definitivamente"
 
 #. translators: %1$s: Number of forms
 #: classes/controllers/FrmFormsController.php:739
@@ -802,7 +802,7 @@ msgstr "Permissões de formulário"
 
 #: classes/controllers/FrmFormsController.php:1216
 msgid "Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions."
-msgstr "Permita a edição, proteja formulários e arquivos, limite entradas e salvar rascunhos. Atualize para obter permissões de formulário e post ."
+msgstr "Permitir a edição, proteger formulários e arquivos, limitar entradas e salvar rascunhos. Atualize para usar as permissões de formulário e entrada."
 
 #: classes/controllers/FrmFormsController.php:1221
 msgid "Form Scheduling"
@@ -821,7 +821,7 @@ msgstr "Botões"
 
 #: classes/controllers/FrmFormsController.php:1237
 msgid "Form Landing Page"
-msgstr "Página inicial do formulário"
+msgstr "Página de destino de formulários"
 
 #: classes/controllers/FrmFormsController.php:1243
 #: classes/controllers/FrmFormsController.php:1249
@@ -830,7 +830,7 @@ msgstr "Formulários de conversação"
 
 #: classes/controllers/FrmFormsController.php:1250
 msgid "Ask one question at a time for automated conversations."
-msgstr "Faça uma pergunta por vez para conversas automatizadas."
+msgstr "Faça uma pergunta de cada vez para conversas automatizadas."
 
 #: classes/controllers/FrmFormsController.php:1256
 msgid "Form Abandonment"
@@ -842,7 +842,7 @@ msgstr "Configurações de abandono de formulário"
 
 #: classes/controllers/FrmFormsController.php:1263
 msgid "Unlock the power of data capture to boost lead generation and master the art of form optimization."
-msgstr "Desbloqueie o poder da captura de dados para impulsionar a geração de leads e domine a arte da otimização de formulários."
+msgstr "Acesse o poder da captura de dados para impulsionar a geração de leads e domine a arte da otimização de formulários."
 
 #: classes/controllers/FrmFormsController.php:1269
 msgid "Customize HTML"
@@ -850,7 +850,7 @@ msgstr "Personalizar HTML"
 
 #: classes/controllers/FrmFormsController.php:1420
 msgid "Customize field values with the following parameters."
-msgstr "Personalizar os valores dos campos com os parâmetros a seguir."
+msgstr "Personalize os valores dos campos com os parâmetros a seguir."
 
 #: classes/controllers/FrmFormsController.php:1458
 msgid "Separator"
@@ -1030,7 +1030,7 @@ msgstr "Todos os modelos"
 
 #: classes/controllers/FrmFormTemplatesController.php:532
 msgid "Free Templates"
-msgstr "Modelos grátis"
+msgstr "Modelos gratuitos"
 
 #: classes/controllers/FrmInboxController.php:38
 msgid "Dismiss All"
@@ -1038,7 +1038,7 @@ msgstr "Dispensar todos"
 
 #: classes/controllers/FrmInboxController.php:105
 msgid "Help Formidable improve with usage tracking"
-msgstr "Ajude o Formidable a melhorar com o rastreamento de uso"
+msgstr "Ajude o Formidable a ficar ainda melhor com o monitoramento de uso"
 
 #: classes/controllers/FrmSettingsController.php:12
 msgid "Global Settings"
@@ -1067,7 +1067,7 @@ msgstr "Gerenciar estilos"
 #: classes/controllers/FrmSettingsController.php:81
 #: classes/models/fields/FrmFieldCaptcha.php:389
 msgid "Captcha"
-msgstr "CAPTCHA"
+msgstr "Captcha"
 
 #: classes/controllers/FrmSettingsController.php:85
 msgid "White Labeling"
@@ -1112,7 +1112,7 @@ msgstr "Atualizar"
 
 #: classes/controllers/FrmSettingsController.php:339
 msgid "Extra form features like file uploads, pagination, etc"
-msgstr "Recursos extras de formulário, como upload de arquivos, paginação, etc."
+msgstr "Recursos adicionais de formulário, como upload de arquivos, paginação etc."
 
 #: classes/controllers/FrmSettingsController.php:340
 msgid "Repeaters & cascading fields for advanced forms"
@@ -1120,11 +1120,11 @@ msgstr "Repetidores e campos em cascata para formulários avançados"
 
 #: classes/controllers/FrmSettingsController.php:341
 msgid "Flexibly view, search, edit, and delete entries anywhere"
-msgstr "Visualização, pesquisa, edite e excluir entradas com flexibilidade em qualquer lugar"
+msgstr "Visualize, pesquise, edite e exclua entradas com flexibilidade em qualquer lugar"
 
 #: classes/controllers/FrmSettingsController.php:342
 msgid "Display entries with virtually limitless Formidable views"
-msgstr "Exibir entradas com visualizações formidáveis ​​virtualmente ilimitadas"
+msgstr "Exiba entradas com visualizações ​​virtualmente ilimitadas do Formidable"
 
 #: classes/controllers/FrmSettingsController.php:343
 msgid "Create surveys & polls"
@@ -1140,7 +1140,7 @@ msgstr "Crie formulários de pagamento Stripe, PayPal ou Authorize.Net"
 
 #: classes/controllers/FrmSettingsController.php:346
 msgid "Powerful conditional logic for smart forms"
-msgstr "Lógica condicional poderosa para formulários inteligentes"
+msgstr "Lógica condicional avançada para formulários inteligentes"
 
 #: classes/controllers/FrmSettingsController.php:347
 msgid "Integrations with 1000+ marketing & payment services"
@@ -1152,7 +1152,7 @@ msgstr "Colete assinaturas digitais"
 
 #: classes/controllers/FrmSettingsController.php:349
 msgid "Accept user-submitted content with Post submissions"
-msgstr "Aceite o conteúdo enviado pelo usuário com envios de postagem"
+msgstr "Aceite o conteúdo enviado pelo usuário com envios de entrada"
 
 #: classes/controllers/FrmSettingsController.php:350
 msgid "Email routing"
@@ -1164,7 +1164,7 @@ msgstr "Crie formulários de calculadora"
 
 #: classes/controllers/FrmSettingsController.php:352
 msgid "Save draft entries and return later"
-msgstr "Salvar entradas de rascunho e retorne mais tarde"
+msgstr "Salvar rascunhos de entradas para posterior edição"
 
 #: classes/controllers/FrmSettingsController.php:353
 msgid "Analyze form data with graphs & stats"
@@ -1180,7 +1180,7 @@ msgstr "Facilitando o envio de email no WordPress"
 
 #: classes/controllers/FrmSMTPController.php:163
 msgid "WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications."
-msgstr "WP Mail SMTP permite que você configure facilmente o WordPress para usar um provedor confiável para enviar e-mails de maneira confiável, incluindo notificações de formulário."
+msgstr "O WP Mail SMTP permite que você configure facilmente o WordPress para usar um provedor confiável para enviar e-mails de maneira segura, incluindo notificações de formulário."
 
 #: classes/controllers/FrmSMTPController.php:190
 msgid "WP Mail SMTP screenshot"
@@ -1188,11 +1188,11 @@ msgstr "Captura de tela do SMTP do WP Mail"
 
 #: classes/controllers/FrmSMTPController.php:192
 msgid "Over 1,000,000 websites use WP Mail SMTP."
-msgstr "Mais de 1.000.000 de sites usam WP Mail SMTP."
+msgstr "Mais de 1 milhão de sites usa o WP Mail SMTP."
 
 #: classes/controllers/FrmSMTPController.php:193
 msgid "Send emails authenticated via trusted parties."
-msgstr "Envie e-mails autenticados por terceiros confiáveis."
+msgstr "Envie e-mails autenticados por terceiros de confiança."
 
 #: classes/controllers/FrmSMTPController.php:194
 msgid "Transactional Mailers: Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES."
@@ -1200,7 +1200,7 @@ msgstr "Mailers transacionais: Pepipost, Sendinblue, Mailgun, SendGrid, Amazon S
 
 #: classes/controllers/FrmSMTPController.php:195
 msgid "Web Mailers: Gmail, G Suite, Office 365, Outlook.com."
-msgstr "Mailers da Web: Gmail, G Suite, Office 365, Outlook.com."
+msgstr "Mailers da web: Gmail, G Suite, Office 365, Outlook.com."
 
 #: classes/controllers/FrmSMTPController.php:217
 msgid "Step 1"
@@ -1209,7 +1209,7 @@ msgstr "Passo 1"
 #. translators: %s: Name of the plugin
 #: classes/controllers/FrmSMTPController.php:224
 msgid "Install and Activate %s"
-msgstr "Instalar e ativar %s"
+msgstr "Instalar e ativar o %s"
 
 #: classes/controllers/FrmSMTPController.php:240
 msgid "Install WP Mail SMTP from the WordPress.org plugin repository."
@@ -1367,7 +1367,7 @@ msgstr "Importar/Exportar"
 
 #: classes/controllers/FrmXMLController.php:52
 msgid "Your server is missing the Simple XML extension. This is required to install a template."
-msgstr "Seu servidor não possui a extensão Simple XML. Isso é obrigatório para instalar um modelo."
+msgstr "Seu servidor não possui a extensão Simple XML. Ela é obrigatória para instalar um modelo."
 
 #: classes/controllers/FrmXMLController.php:64
 msgid "The template you are trying to install could not be validated."
@@ -1440,7 +1440,7 @@ msgstr "Adicionar/Editar Cenários"
 
 #: classes/helpers/FrmAppHelper.php:1804
 msgid "View Forms List"
-msgstr "Visualização lista de formulários"
+msgstr "Visualizar lista de formulários"
 
 #: classes/helpers/FrmAppHelper.php:1805
 msgid "Add and Edit Forms"
@@ -1565,7 +1565,7 @@ msgstr "Se você deixar o assunto em branco, o padrão será usado: %1$s formul�
 
 #: classes/helpers/FrmAppHelper.php:2883
 msgid "This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed."
-msgstr "Esta opção abrirá o link em uma nova aba do navegador . Observe que alguns bloqueadores de pop-up poder impedir que isso aconteça e, nesse caso, o link será exibido."
+msgstr "Esta opção abrirá o link em uma nova aba do navegador. Alguns bloqueadores de pop-up podem impedir que isso aconteça e, nesse caso, o link será exibido."
 
 #: classes/helpers/FrmAppHelper.php:3147
 #: classes/helpers/FrmAppHelper.php:3225
@@ -1655,7 +1655,7 @@ msgstr "Você tem certeza que quer apagar este campo e todos os dados associados
 
 #: classes/helpers/FrmAppHelper.php:3213
 msgid "All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?"
-msgstr "Todos os campos desta Seção serão excluído junto com seus dados. Tem certeza de que deseja excluir este agrupar de campos?"
+msgstr "Todos os campos desta seção serão excluídoss junto com seus dados. Tem certeza de que deseja excluir este agrupamento de campos?"
 
 #: classes/helpers/FrmAppHelper.php:3214
 msgid "Warning: If you have entries with multiple rows, all but the first row will be lost."
@@ -1737,17 +1737,17 @@ msgstr "Edite a ação do formulário existente."
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
 #: classes/helpers/FrmAppHelper.php:3239
 msgid "The Detail Page Slug \"%s\" is reserved by WordPress. This may cause problems. Is this intentional?"
-msgstr "O Slug da página de detalhes “%s” é reservado pelo WordPress. Isto poder causar problemas. Isso é intencional?"
+msgstr "O Slug da página de detalhes \"%s\" é reservado pelo WordPress. Isso pode causar problemas. É isso mesmo?"
 
 #. Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common.
 #: classes/helpers/FrmAppHelper.php:3241
 msgid "The parameter \"%s\" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? "
-msgstr "O parâmetro “%s” é reservado pelo WordPress. Isto poder causar problemas quando incluído no URL. Isso é intencional? "
+msgstr "O parâmetro “%s” é reservado pelo WordPress. Isso poder causar problemas quando incluído no URL. É isso mesmo? "
 
 #: classes/helpers/FrmAppHelper.php:3242
 #: classes/helpers/FrmFormsHelper.php:1603
 msgid "See the list of reserved words in WordPress."
-msgstr "Veja a lista de palavras reservadas no WordPress."
+msgstr "Ver a lista de palavras reservadas no WordPress."
 
 #: classes/helpers/FrmAppHelper.php:3243
 msgid "Please enter a Repeat Limit that is greater than 1."
@@ -1770,12 +1770,12 @@ msgstr "Não foram encontrados itens."
 
 #: classes/helpers/FrmAppHelper.php:3251
 msgid "Oops. You have already used that field."
-msgstr "Opa. Você já usou esse campo."
+msgstr "Ops, você já usou esse campo."
 
 #. translators: %1$s: HTML open tag, %2$s: HTML end tag.
 #: classes/helpers/FrmAppHelper.php:3260
 msgid "You can hold %1$sShift%2$s on your keyboard to select multiple fields"
-msgstr "Você pode reter %1$sShift%2$s no teclado para selecionar vários campos"
+msgstr "Você pode manter pressionada a tecla %1$sShift%2$s para selecionar vários campos"
 
 #: classes/helpers/FrmAppHelper.php:3329
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
@@ -1783,11 +1783,11 @@ msgstr "Você está executando uma versão desatualizada do Formidable. Este plu
 
 #: classes/helpers/FrmAppHelper.php:3358
 msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
-msgstr "Você está executando uma versão do Formidable Forms que poder não ser compatível com a sua versão do Formidable Forms Pro."
+msgstr "Você está executando uma versão do Formidable Forms que pode não ser compatível com a sua versão do Formidable Forms Pro."
 
 #: classes/helpers/FrmAppHelper.php:3386
 msgid "The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+."
-msgstr "A versão do PHP no seu servidor é muito baixa. Se isso não for corrigido, você poder ver problemas com Formidable Forms. Entre em contato com seu host e solicite a atualizado para PHP 7.0+."
+msgstr "A versão do PHP em seu servidor é muito antiga. Se não corrigir isso, você poderá ter problemas com o Formidable Forms. Entre em contato com o seu host da Web e solicite a atualização para o PHP 7.0+."
 
 #: classes/helpers/FrmAppHelper.php:3392
 msgid "You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome)."
@@ -1811,7 +1811,7 @@ msgstr "Árabe Argelino"
 
 #: classes/helpers/FrmAppHelper.php:3414
 msgid "Amharic"
-msgstr "amárico"
+msgstr "Amárico"
 
 #: classes/helpers/FrmAppHelper.php:3415
 msgid "Arabic"
@@ -1883,7 +1883,7 @@ msgstr "Inglês / Reino Unido"
 
 #: classes/helpers/FrmAppHelper.php:3432
 msgid "Esperanto"
-msgstr "esperanto"
+msgstr "Esperanto"
 
 #: classes/helpers/FrmAppHelper.php:3433
 msgid "Estonian"
@@ -1996,7 +1996,7 @@ msgstr "Quirguiz"
 
 #: classes/helpers/FrmAppHelper.php:3461
 msgid "Laothian"
-msgstr "laosiano"
+msgstr "Laosiano"
 
 #: classes/helpers/FrmAppHelper.php:3462
 msgid "Latvian"
@@ -2032,11 +2032,11 @@ msgstr "Norueguês"
 
 #: classes/helpers/FrmAppHelper.php:3470
 msgid "Norwegian Bokmål"
-msgstr "Bokmål Norueguês"
+msgstr "Bokmål norueguês"
 
 #: classes/helpers/FrmAppHelper.php:3471
 msgid "Norwegian Nynorsk"
-msgstr "Norueguês Nynorsk"
+msgstr "Nynorsk norueguês"
 
 #: classes/helpers/FrmAppHelper.php:3472
 msgid "Polish"
@@ -2113,7 +2113,7 @@ msgstr "Tailandês"
 
 #: classes/helpers/FrmAppHelper.php:3491
 msgid "Tajiki"
-msgstr "tadjique"
+msgstr "Tadjique"
 
 #: classes/helpers/FrmAppHelper.php:3492
 msgid "Turkish"
@@ -2137,15 +2137,15 @@ msgstr "Galês"
 
 #: classes/helpers/FrmAppHelper.php:3497
 msgid "Zulu"
-msgstr "zulu"
+msgstr "Zulu"
 
 #: classes/helpers/FrmAppHelper.php:3840
 msgid "Form Landing Pages"
-msgstr "Formulário de páginas iniciais"
+msgstr "Formulário para páginas de destino"
 
 #: classes/helpers/FrmAppHelper.php:3841
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
-msgstr "Gerenciar facilmente uma landing page para seu formulário. Atualize para obter páginas de destino de formulário."
+msgstr "Gerencie facilmente uma páginas de destino para seu formulário. Atualize para obter formulários para páginas de destino."
 
 #: classes/helpers/FrmAppHelper.php:3934
 #: classes/views/styles/_style-card.php:37
@@ -2160,7 +2160,7 @@ msgstr "Dispensar"
 
 #: classes/helpers/FrmAppHelper.php:4191
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
-msgstr "Você está usando o Formidable Forms Lite - não é necessária licença. Aproveitar!"
+msgstr "Você está usando o Formidable Forms Lite, que não precisa de licença. Aproveite!"
 
 #: classes/helpers/FrmCSVExportHelper.php:273
 msgid "(label)"
@@ -2328,12 +2328,12 @@ msgstr "Conectar conta"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
-msgstr "Obtenha PRO formidável"
+msgstr "Obtenha o Formidable Pro"
 
 #. translators: %d: number of form templates
 #: classes/helpers/FrmDashboardHelper.php:237
 msgid "%d+ Form Templates"
-msgstr "%d+ Modelos de Formulário"
+msgstr "Mais de %d modelos de formulário"
 
 #: classes/helpers/FrmDashboardHelper.php:240
 msgid "Calculated Fields and Math"
@@ -2349,7 +2349,7 @@ msgstr "Salvar e continuar"
 
 #: classes/helpers/FrmDashboardHelper.php:243
 msgid "Smart Forms with Conditional Logic"
-msgstr "Formulários Inteligentes com Lógica Condicional"
+msgstr "Formulários inteligentes com lógica condicional"
 
 #: classes/helpers/FrmDashboardHelper.php:244
 msgid "Ecommerce Pricing Fields"
@@ -2362,11 +2362,11 @@ msgstr "Campos avançados"
 
 #: classes/helpers/FrmDashboardHelper.php:246
 msgid "Schedule Forms & Limit Responses"
-msgstr "Agenda formulários e limitar respostas"
+msgstr "Formulários de agendamento e limite de respostas"
 
 #: classes/helpers/FrmDashboardHelper.php:247
 msgid "Display Form Data with Views"
-msgstr "Exibir dados de formulário com visualizações"
+msgstr "Exiba dados de formulário com visualizações"
 
 #: classes/helpers/FrmDashboardHelper.php:248
 msgid "And much more..."
@@ -2388,11 +2388,11 @@ msgstr "Excluir entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:685
 msgid "Delete this form entry?"
-msgstr "Excluir esta post do formulário?"
+msgstr "Excluir esta entrada de formulário?"
 
 #: classes/helpers/FrmEntriesHelper.php:693
 msgid "Print Entry"
-msgstr "Imprimir post"
+msgstr "Imprimir entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:703
 #: classes/helpers/FrmEntriesHelper.php:706
@@ -2409,7 +2409,7 @@ msgstr "Editar entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:728
 msgid "Entry edits"
-msgstr "Edições de post"
+msgstr "Edições de entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:748
 msgid "Forms to PDF"
@@ -2417,7 +2417,7 @@ msgstr "Formulários para PDF"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
-msgstr "Pontuação reCAPTCHA"
+msgstr "Pontuação do reCAPTCHA"
 
 #: classes/helpers/FrmEntriesHelper.php:837
 msgid "Submitted"
@@ -2431,7 +2431,7 @@ msgstr "Rascunho"
 
 #: classes/helpers/FrmEntriesHelper.php:854
 msgid "Entry status must be return in array format."
-msgstr "O status da post deve ser retornado em formato de array ."
+msgstr "O status da entrada deve ser retornado em formato de array."
 
 #: classes/helpers/FrmEntriesListHelper.php:181
 msgid "No Entries Found"
@@ -2439,11 +2439,11 @@ msgstr "Não foram encontradas entradas"
 
 #: classes/helpers/FrmEntriesListHelper.php:219
 msgid "Getting spam form submissions?"
-msgstr "Recebendo envios de formulários de spam ?"
+msgstr "Está recebendo envios de formulários de spam?"
 
 #: classes/helpers/FrmEntriesListHelper.php:221
 msgid "Learn how to prevent them."
-msgstr "Aprenda como evitá-los."
+msgstr "Saiba como evitá-los."
 
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
@@ -2464,7 +2464,7 @@ msgstr "Ver"
 
 #: classes/helpers/FrmEntriesListHelper.php:424
 msgid "Permanently delete this entry?"
-msgstr "Excluir permanentemente esta post?"
+msgstr "Excluir definitivamente esta entrada?"
 
 #: classes/helpers/FrmEntriesListHelper.php:424
 #: classes/helpers/FrmFormsHelper.php:1216
@@ -2480,7 +2480,7 @@ msgstr "Excluir"
 #. translators: %1$s: HTML break line, %2$s: HTML bold text
 #: classes/helpers/FrmEntriesListHelper.php:481
 msgid "ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below."
-msgstr "TODAS as entradas neste formulário serão excluído permanentemente.%1$sQuer continuar? Digite %2$s abaixo."
+msgstr "TODAS as entradas neste formulário serão excluídas definitivamente.%1$sQuer continuar? Digite %2$s abaixo."
 
 #. translators: %s: [field_name] shortcode (Which gets replaced by a Field Name)
 #. translators: %s: Field name
@@ -3683,7 +3683,7 @@ msgstr "Opções de imagem"
 
 #: classes/helpers/FrmFieldsHelper.php:2096
 msgid "Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
-msgstr "Mostrar imagens em vez de botões de opção ou caixas de seleção. Isso é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
+msgstr "Mostre imagens em vez de botões de rádio ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
 
 #: classes/helpers/FrmFieldsHelper.php:2103
 msgid "Button Options"
@@ -3691,12 +3691,12 @@ msgstr "Opções de botão"
 
 #: classes/helpers/FrmFieldsHelper.php:2104
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
-msgstr "Mostrar botões para botões de opção ou caixas de seleção. Isso é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
+msgstr "Mostrar botões para botões de rádio ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
 
 #. translators: Add-on name.
 #: classes/helpers/FrmFieldsHelper.php:2185
 msgid "Formidable %s"
-msgstr "Formidável %s"
+msgstr "Formidable %s"
 
 #: classes/helpers/FrmFormMigratorsHelper.php:115
 #: classes/views/frm-forms/error-modal.php:15
@@ -3719,7 +3719,7 @@ msgstr "Ativar o %s"
 #. translators: %s: Name of the plugin
 #: classes/helpers/FrmFormMigratorsHelper.php:155
 msgid "Install %s Importer"
-msgstr "Instale %s importador"
+msgstr "Instalar importar do %s"
 
 #: classes/helpers/FrmFormsHelper.php:57
 msgid " (child)"
@@ -3854,7 +3854,7 @@ msgstr "Tem certeza que quer apagar este formulário e todas as suas entradas?"
 
 #: classes/helpers/FrmFormsHelper.php:1221
 msgid "This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?"
-msgstr "Isso excluir permanentemente o formulário e todas as suas entradas. Isto é irreversível. Tem certeza de que deseja continuar?"
+msgstr "Isso excluirá definitivamente o formulário e todas as suas entradas. Essa ação é irreversível. Deseja continuar?"
 
 #: classes/helpers/FrmFormsHelper.php:1234
 #: classes/models/FrmField.php:223
@@ -3867,11 +3867,11 @@ msgstr "Adicione isto a um campo somente leitura para exibir o texto em negrito 
 
 #: classes/helpers/FrmFormsHelper.php:1238
 msgid "Big Total"
-msgstr "Grande total"
+msgstr "Total"
 
 #: classes/helpers/FrmFormsHelper.php:1239
 msgid "Add this to a read-only field to display the text in large, bold text without a border or background."
-msgstr "Adicione isso a um campo somente leitura para exibir o texto em texto grande e em negrito, sem borda ou plano de fundo."
+msgstr "Adicione essa opção a um campo somente leitura para exibir o texto em negrito e em tamanho grande, sem borda ou plano de fundo."
 
 #: classes/helpers/FrmFormsHelper.php:1242
 msgid "Scroll Box"
@@ -3879,7 +3879,7 @@ msgstr "Caixa de rolagem"
 
 #: classes/helpers/FrmFormsHelper.php:1243
 msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
-msgstr "Se você tiver muitas opções de caixa de seleção ou botão de opção , poder adicionar esta classe para permitir que o usuário percorra facilmente as opções. Ou adicione uma área de rolagem ao redor do conteúdo em um campo HTML."
+msgstr "Se você tiver muitas opções de caixa de seleção ou botão de rádio, poderá adicionar essa classe para permitir que o usuário percorra facilmente as opções. Ou adicione uma área de rolagem ao redor do conteúdo em um campo HTML."
 
 #: classes/helpers/FrmFormsHelper.php:1246
 #: classes/models/fields/FrmFieldName.php:36
@@ -3913,7 +3913,7 @@ msgstr "Bloco de cores"
 
 #: classes/helpers/FrmFormsHelper.php:1255
 msgid "Add a background color to the field or section."
-msgstr "Adicione uma cor de plano de fundo ao campo ou seção."
+msgstr "Adicione uma cor de fundo ao campo ou seção."
 
 #: classes/helpers/FrmFormsHelper.php:1258
 msgid "Capitalize"
@@ -3937,17 +3937,17 @@ msgstr "Plano de licença obrigatório:"
 
 #: classes/helpers/FrmFormsHelper.php:1602
 msgid "Is this intentional?"
-msgstr "Isso é intencional?"
+msgstr "É isso mesmo?"
 
 #. translators: %s: the name of a single parameter in the redirect URL
 #: classes/helpers/FrmFormsHelper.php:1612
 msgid "The redirect URL is using the parameter \"%s\", which is reserved by WordPress. "
-msgstr "A URL de redirecionamento usa o parâmetro \"%s\", que é reservado pelo WordPress. "
+msgstr "O URL de redirecionamento usa o parâmetro \"%s\", que é reservado pelo WordPress. "
 
 #. translators: %s: the names of two or more parameters in the redirect URL, separated by commas
 #: classes/helpers/FrmFormsHelper.php:1618
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
-msgstr "A URL de redirecionamento usa os parâmetros \"%s\", que são reservados pelo WordPress. "
+msgstr "O URL de redirecionamento usa os parâmetros \"%s\", que são reservados pelo WordPress. "
 
 #: classes/helpers/FrmFormsHelper.php:1760
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
@@ -3961,7 +3961,7 @@ msgstr "Nenhum formulário encontrado na lixeira."
 
 #: classes/helpers/FrmFormsListHelper.php:115
 msgid "See all forms."
-msgstr "Veja todos os formulários."
+msgstr "Ver todos os formulários."
 
 #: classes/helpers/FrmFormsListHelper.php:120
 #: classes/views/styles/manage.php:50
@@ -3997,7 +3997,7 @@ msgstr "Selecionar %s"
 
 #: classes/helpers/FrmFormsListHelper.php:289
 msgid "Saving entries is disabled for this form"
-msgstr "Salvar entradas está desabilitado para este formulário"
+msgstr "A opção de salvar entradas está desativada para esse formulário"
 
 #: classes/helpers/FrmFormsListHelper.php:328
 #: classes/models/FrmField.php:157
@@ -4011,15 +4011,15 @@ msgstr "Prévia"
 
 #: classes/helpers/FrmFormsListHelper.php:455
 msgid "ALL selected forms and their entries will be permanently deleted. Want to proceed?"
-msgstr "TODOS os formulários selecionados e suas entradas serão excluído permanentemente. Quer prosseguir?"
+msgstr "TODOS os formulários selecionados e suas entradas serão excluídos definitivamente. Quer prosseguir?"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:173
 msgid "Get Super Powers with Pre-built Forms"
-msgstr "Obtenha superpoderes com formulários pré-construídos"
+msgstr "Obtenha superpoderes com formulários predefinidos"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:174
 msgid "Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed."
-msgstr "Liberte o potencial de centenas de modelos de formulário e salvar um tempo precioso. Renove hoje para obter uma velocidade de criação de formulários incomparável."
+msgstr "Conheça o potencial de centenas de modelos de formulários e economize um tempo valioso. Renove hoje mesmo para aproveitar a velocidade incomparável de criação de formulários."
 
 #: classes/helpers/FrmFormTemplatesHelper.php:175
 #: classes/views/form-templates/modals/renew-account-modal.php:43
@@ -4029,11 +4029,11 @@ msgstr "Renove Agora"
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/helpers/FrmFormTemplatesHelper.php:189
 msgid "Get Super Powers with %1$s%2$s More Pre-built Forms"
-msgstr "Obtenha superpoderes com mais %1$s%2$s formulários pré-construídos"
+msgstr "Obtenha superpoderes com mais %1$s%2$s formulários predefinidos"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:193
 msgid "Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities."
-msgstr "Liberte o potencial de centenas de modelos de formulário adicionais e salvar um tempo precioso. Atualize hoje para obter capacidades incomparáveis ​​de criação de formulários."
+msgstr "Conheça o potencial de centenas de modelos de formulários adicionais e economize um tempo valioso. Atualize hoje mesmo para aproveitar os recursos incomparáveis de criação de formulários."
 
 #: classes/helpers/FrmFormTemplatesHelper.php:194
 #: classes/views/form-templates/modals/upgrade-modal.php:87
@@ -4108,7 +4108,7 @@ msgstr "Selecionar Tudo"
 
 #: classes/helpers/FrmOnSubmitHelper.php:33
 msgid "Message on submit"
-msgstr "Mensagem ao enviar"
+msgstr "Mensagem sobre o envio"
 
 #: classes/helpers/FrmOnSubmitHelper.php:66
 msgid "Show the form with the confirmation message"
@@ -4139,7 +4139,7 @@ msgstr "Aguarde enquanto você é redirecionado."
 #: classes/helpers/FrmStylesCardHelper.php:453
 #: js/admin/style.js:134
 msgid "Show all (%d)"
-msgstr "Mostrar tudo (%d)"
+msgstr "Mostrar todos (%d)"
 
 #: classes/helpers/FrmStylesHelper.php:33
 msgid "top"
@@ -4195,11 +4195,11 @@ msgstr "Placeholder dentro do campo"
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
 msgid "Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s."
-msgstr "Os estilos formidáveis ​​estão desativados. Isso precisa ser habilitado em %1$sConfigurações Globais%2$s."
+msgstr "Os estilos Formidable ​​estão desativados. Habilite-os em %1$sConfigurações globais%2$s."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:210
 msgid "You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features."
-msgstr "Você está usando uma versão desatualizada do Formidable Pro. Atualizar para a versão 6.0 para obter acesso a todos os recursos do modelador."
+msgstr "Você está usando uma versão desatualizada do Formidable Pro. Atualize para a versão 6.0 e tenha acesso a todos os recursos de estilos."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:234
 msgid "Captcha fields are hidden."
@@ -4207,15 +4207,15 @@ msgstr "Os campos Captcha estão ocultos."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:245
 msgid "Not all JavaScript is loaded in this preview."
-msgstr "Nem todo o JavaScript é carregado nesta pré-visualizar."
+msgstr "Nem todo o JavaScript é carregado nessa visualização."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:258
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
-msgstr "Este formulário está sendo visualizado porque nenhum formulário foi selecionado. Use o menu suspenso do formulário para selecionar um novo destino de pré-visualizar ."
+msgstr "Esse formulário está sendo pré-visualizado porque nenhum formulário foi selecionado. Use o menu suspenso do formulário para selecionar um novo objeto de pré-visualização."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:277
 msgid "Changes that you will make to this style will apply to every form using this style."
-msgstr "As alterações feitas neste estilo serão aplicadas a todos os formulários que usam esse estilo."
+msgstr "As alterações feitas nesse estilo serão aplicadas a todos os formulários que o utilizam."
 
 #: classes/helpers/FrmTipsHelper.php:87
 msgid "Upgrade to Pro."
@@ -4227,15 +4227,15 @@ msgstr "Use a lógica condicional para encurtar seus formulários e aumentar as 
 
 #: classes/helpers/FrmTipsHelper.php:108
 msgid "Want to stop losing leads from email typos?"
-msgstr "Quer parar de perder leads E-mail do remetente ?"
+msgstr "Quer parar de perder leads devido a erros de digitação de e-mail?"
 
 #: classes/helpers/FrmTipsHelper.php:109
 msgid "Add email confirmation fields."
-msgstr "Adicione campos de confirmação e-mail ."
+msgstr "Adicione campos de confirmação de e-mail."
 
 #: classes/helpers/FrmTipsHelper.php:116
 msgid "Use page breaks for easier forms."
-msgstr "Use quebras de página para formulários mais fáceis."
+msgstr "Use quebras de página para obter formulários mais simples."
 
 #: classes/helpers/FrmTipsHelper.php:124
 msgid "Cut down on back-and-forth with clients."
@@ -4268,19 +4268,19 @@ msgstr "Adicione edição de front-end."
 
 #: classes/helpers/FrmTipsHelper.php:166
 msgid "Have long forms?"
-msgstr "Tem formulários longos?"
+msgstr "Está usando formulários longos?"
 
 #: classes/helpers/FrmTipsHelper.php:167
 msgid "Let users save drafts and return later!"
-msgstr "Permita que os usuários salvar rascunhos e retornem mais tarde!"
+msgstr "Permita que os usuários salvem rascunhos e voltem mais tarde!"
 
 #: classes/helpers/FrmTipsHelper.php:174
 msgid "Want your form open only for a certain time period?"
-msgstr "Quer que seu formulário fique aberto apenas por um determinado período de tempo?"
+msgstr "Quer que seu formulário fique aberto apenas por um determinado período?"
 
 #: classes/helpers/FrmTipsHelper.php:175
 msgid "Add form scheduling."
-msgstr "Adicione agendamento de formulário."
+msgstr "Adicione o agendamento de formulários."
 
 #: classes/helpers/FrmTipsHelper.php:192
 msgid "Save time by sending the email to the right person automatically."
@@ -4296,7 +4296,7 @@ msgstr "Crie postagens de blogs ou páginas do front-end."
 
 #: classes/helpers/FrmTipsHelper.php:208
 msgid "Let your users submit posts on the front-end."
-msgstr "Permita que seus usuários enviar postagens no interface."
+msgstr "Permita que seus usuários enviem posts na interface."
 
 #: classes/helpers/FrmTipsHelper.php:216
 msgid "Grow your business with automated email follow-up."
@@ -4316,7 +4316,7 @@ msgstr "Use o PayPal com este formulário."
 
 #: classes/helpers/FrmTipsHelper.php:232
 msgid "Get paid instantly."
-msgstr "Seja pago instantaneamente."
+msgstr "Receba o pagamento instantaneamente."
 
 #: classes/helpers/FrmTipsHelper.php:233
 msgid "Use Paypal with this form."
@@ -4328,11 +4328,11 @@ msgstr "Crie automaticamente contas de usuários."
 
 #: classes/helpers/FrmTipsHelper.php:241
 msgid "Upgrade to boost your site membership."
-msgstr "Atualize para aumentar a adesão ao seu site."
+msgstr "Atualize para aumentar o número de membros de seu site."
 
 #: classes/helpers/FrmTipsHelper.php:248
 msgid "Need front-end profile editing?"
-msgstr "Precisa de edição de perfil interface ?"
+msgstr "Precisa editar o perfil da interface?"
 
 #: classes/helpers/FrmTipsHelper.php:249
 msgid "Add user registration."
@@ -4353,7 +4353,7 @@ msgstr "Receba um SMS quando um formulário for enviado."
 
 #: classes/helpers/FrmTipsHelper.php:272
 msgid "Fill Advanced Custom Fields from a form."
-msgstr "Preencha campos personalizado avançados em um formulário."
+msgstr "Preencha campos personalizados avançados em um formulário."
 
 #: classes/helpers/FrmTipsHelper.php:273
 msgid "Add ACF Integration"
@@ -4369,7 +4369,7 @@ msgstr "Use vários modelos de estilo. "
 
 #: classes/helpers/FrmTipsHelper.php:298
 msgid "Want to add a background image?"
-msgstr "Quer adicionar uma imagem de plano de fundo ?"
+msgstr "Quer adicionar uma imagem de fundo?"
 
 #: classes/helpers/FrmTipsHelper.php:306
 msgid "Want to duplicate a style?"
@@ -4377,7 +4377,7 @@ msgstr "Quer duplicar um estilo?"
 
 #: classes/helpers/FrmTipsHelper.php:324
 msgid "Want to edit form submissions?"
-msgstr "Quer editar envios de formulários?"
+msgstr "Quer editar os envios de formulários?"
 
 #: classes/helpers/FrmTipsHelper.php:325
 msgid "Add entry management."
@@ -4389,7 +4389,7 @@ msgstr "Deseja pesquisar as entradas enviadas?"
 
 #: classes/helpers/FrmTipsHelper.php:341
 msgid "Display form data with Views."
-msgstr "Exibir dados do formulário com visualizações."
+msgstr "Exibir dados de formulário com visualizações."
 
 #: classes/helpers/FrmTipsHelper.php:359
 msgid "Want to import entries into your forms?"
@@ -4422,7 +4422,7 @@ msgstr "Receba pagamentos instantâneos e envie leads para o Mailchimp."
 #. translators: 1: Documentation link
 #: classes/helpers/FrmXMLHelper.php:38
 msgid "In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled."
-msgstr "Para instalar o XML, seu servidor deve ter o DOMDocument instalado. Siga nossa documentação em %1$s para Garantir que DOMDocument esteja configurado corretamente e que o suporte XML esteja habilitado."
+msgstr "Para instalar o XML, seu servidor deve ter o DOMDocument instalado. Siga nossa documentação sobre %1$s para garantir que o DOMDocument esteja configurado corretamente e que o suporte a XML esteja ativado."
 
 #: classes/helpers/FrmXMLHelper.php:54
 #: classes/helpers/FrmXMLHelper.php:66
@@ -4485,8 +4485,8 @@ msgstr[1] "%1$s Visualizações"
 #: classes/helpers/FrmXMLHelper.php:1435
 msgid "%1$s Page/Post"
 msgid_plural "%1$s Pages/Posts"
-msgstr[0] "%1$s página/postagem"
-msgstr[1] "%1$s páginas/postagens"
+msgstr[0] "%1$s página/post"
+msgstr[1] "%1$s páginas/posts"
 
 #. translators: %1$s: Number of items
 #: classes/helpers/FrmXMLHelper.php:1437
@@ -4511,7 +4511,7 @@ msgstr[1] "%1$s Ações do formulário"
 
 #: classes/helpers/FrmXMLHelper.php:1479
 msgid "Go to imported form"
-msgstr "Ir para o formulário importado"
+msgstr "Ir para formulário importado"
 
 #: classes/helpers/FrmXMLHelper.php:1718
 msgid "Create Posts"
@@ -4595,7 +4595,7 @@ msgstr "Selecione um número menor"
 #. Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 #: classes/models/fields/FrmFieldNumber.php:125
 msgid "Please enter a valid value. Two nearest valid values are %1$s and %2$s"
-msgstr "Por favor, digite um valor válido. Os dois valores válidos mais próximos são %1$s e %2$s"
+msgstr "Digite um valor válido. Os valores válidos mais próximos são %1$s e %2$s"
 
 #. translators: %s: Field name
 #. translators: %s: Field type
@@ -4739,7 +4739,7 @@ msgstr "Endereço de IP"
 
 #: classes/models/FrmEmailMonthly.php:19
 msgid "How your forms performed this month"
-msgstr "Qual foi o desempenho de seus formulários neste mês"
+msgstr "O desempenho de seus formulários este mês"
 
 #: classes/models/FrmEmailMonthly.php:23
 msgid "Top forms this month"
@@ -4951,19 +4951,19 @@ msgstr "O rascunho foi salvo"
 
 #: classes/models/FrmFormAction.php:951
 msgid "Entry is created"
-msgstr "A post é criada"
+msgstr "A entrada é criada"
 
 #: classes/models/FrmFormAction.php:952
 msgid "Entry is updated"
-msgstr "A post é atualizado"
+msgstr "A entrada é atualizado"
 
 #: classes/models/FrmFormAction.php:953
 msgid "Entry is deleted"
-msgstr "A post foi excluído"
+msgstr "A entrada foi excluído"
 
 #: classes/models/FrmFormAction.php:954
 msgid "Entry is imported"
-msgstr "A post é importada"
+msgstr "A entrada é importada"
 
 #: classes/models/FrmFormAction.php:967
 msgid "Use Conditional Logic"
@@ -5026,7 +5026,7 @@ msgstr "Submissões de formulários"
 #: classes/models/FrmPluginSearch.php:82
 msgctxt "Formidable Addon Name"
 msgid "Formidable %s"
-msgstr "Formidável %s"
+msgstr "Formidable %s"
 
 #: classes/models/FrmPluginSearch.php:326
 msgid "Install Now"
@@ -5130,7 +5130,7 @@ msgstr "Conecte-se a FormidableForms.com"
 
 #: classes/models/FrmSolution.php:315
 msgid "Create a connection to get plugin downloads."
-msgstr "Crie uma conexão para obter downloads de plugin ."
+msgstr "Crie uma conexão para obter downloads de plugin."
 
 #: classes/models/FrmSolution.php:316
 #: classes/views/frm-settings/license_box.php:9
@@ -5416,7 +5416,7 @@ msgstr "Digite o nome do seu formulário"
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/renew-account-modal.php:23
 msgid "Get Access to %1$s%2$s more Pre-built Forms"
-msgstr "Obtenha acesso a mais %1$s%2$s formulários pré-construídos"
+msgstr "Obtenha acesso a mais %1$s%2$s formulários predefinidos"
 
 #: classes/views/form-templates/modals/renew-account-modal.php:34
 msgid "That template is not available on your plan. Please renew to unlock this and more awesome templates."
@@ -5649,7 +5649,7 @@ msgstr "Exemplo:"
 
 #: classes/views/frm-fields/back-end/input-mask-info.php:29
 msgid "See more examples and docs"
-msgstr "Veja mais exemplos e documentos"
+msgstr "Ver mais exemplos e documentos"
 
 #: classes/views/frm-fields/back-end/layout-classes.php:8
 msgid "Click on any box below to set the width for your selected field."
@@ -5924,7 +5924,7 @@ msgstr "Exibir conteúdo da página"
 
 #: classes/views/frm-form-actions/settings.php:7
 msgid "Add form actions to your form to perform tasks when an entry is created, updated, imported, and more."
-msgstr "Adicione ações de formulário ao seu formulário para executar tarefas quando uma post for criada, atualizado, importada e muito mais."
+msgstr "Adicione ações de formulário ao seu formulário para executar tarefas quando uma entrada for criada, atualizado, importada e muito mais."
 
 #: classes/views/frm-form-actions/settings.php:15
 msgid "Search Form Actions"
@@ -5956,7 +5956,7 @@ msgstr "Anexos de e-mail"
 
 #: classes/views/frm-form-actions/_action_inside.php:71
 msgid "Email a CSV or a PDF of each new entry, or attach a file of your choice."
-msgstr "E-Mail um CSV ou PDF de cada nova post ou anexe um arquivo de sua escolha."
+msgstr "E-Mail um CSV ou PDF de cada nova entrada ou anexe um arquivo de sua escolha."
 
 #: classes/views/frm-form-actions/_action_inside.php:72
 msgid "Attachment"
@@ -6397,7 +6397,7 @@ msgstr "Outro"
 
 #: classes/views/frm-settings/general.php:65
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
-msgstr "Não armazene IPs com envios de formulários. Marcar esta caixa para ajudar na conformidade com o RGPD ."
+msgstr "Não armazene IPs com envios de formulários. Marcar esta caixa para ajudar na conformidade com o RGPD."
 
 #: classes/views/frm-settings/general.php:78
 msgid "Use custom headers when retrieving IPs with form submissions."
@@ -6486,7 +6486,7 @@ msgstr "A mensagem padrão vista após abrir o URL de redirecionamento em uma no
 
 #: classes/views/frm-settings/messages.php:91
 msgid "The default label for the submit button."
-msgstr "O rótulo padrão para o botão enviar ."
+msgstr "O rótulo padrão para o botão enviar."
 
 #: classes/views/frm-settings/misc.php:9
 msgid "Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings."
@@ -6515,7 +6515,7 @@ msgstr "Recomendamos usar o HTML 5 para seus formulários. Isso adiciona algumas
 
 #: classes/views/frm-settings/misc.php:61
 msgid "Uninstall Formidable Forms and permanently delete all data."
-msgstr "Desinstale Formidable Forms e excluir permanentemente todos os dados."
+msgstr "Desinstale Formidable Forms e excluir definitivamente todos os dados."
 
 #: classes/views/frm-settings/misc.php:63
 msgid "Are you sure you want to delete all forms, form data, and all other Formidable data. There is no Undo."
@@ -6659,7 +6659,7 @@ msgstr "Obtenha mais informações sobre pesquisas, enquetes, contatos diários 
 
 #: classes/views/shared/reports-info.php:32
 msgid "View reports"
-msgstr "Visualização relatórios"
+msgstr "Visualizar relatórios"
 
 #: classes/views/shared/review.php:11
 msgid "Are you enjoying Formidable Forms?"
@@ -7088,12 +7088,12 @@ msgstr "Aplicado"
 #: classes/views/styles/_style-preview-container.php:10
 #: js/admin/style.js:492
 msgid "View my form"
-msgstr "Visualização meu formulário"
+msgstr "Visualizar meu formulário"
 
 #: classes/views/styles/_style-preview-container.php:10
 #: js/admin/style.js:492
 msgid "View sample form"
-msgstr "Visualização modelo de formulário"
+msgstr "Visualizar modelo de formulário"
 
 #: classes/views/styles/_style-preview-container.php:29
 msgid "One or more of your style settings may contain invalid characters that break form styling."
@@ -7177,11 +7177,11 @@ msgstr[1] "%s envios"
 #: classes/views/summary-emails/stats-plain.php:61
 #: classes/views/summary-emails/stats.php:108
 msgid "The following plugins are out of date: %s"
-msgstr "Os seguintes plug-ins estão desatualizados: %s"
+msgstr "Os seguintes plugins estão desatualizados: %s"
 
 #: classes/views/summary-emails/stats-plain.php:66
 msgid "Please go to your Plugins page to update them."
-msgstr "Vá para a página de plug-ins para atualizar -los."
+msgstr "Vá para a página de plugins para atualizar -los."
 
 #: classes/views/summary-emails/stats.php:54
 msgid "Open Dashboard"
@@ -7197,7 +7197,7 @@ msgstr "Submissões"
 
 #: classes/views/summary-emails/stats.php:102
 msgid "Out of date plugins"
-msgstr "Plug-ins desatualizados"
+msgstr "Plugins desatualizados"
 
 #: classes/views/xml/import_form.php:21
 msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
@@ -7580,7 +7580,7 @@ msgstr "%1$s %2$s(%3$s)%4$s"
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
-msgstr "Excluir permanentemente este pagamento?"
+msgstr "Excluir definitivamente este pagamento?"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:462
 msgid "unlimited"
@@ -7617,7 +7617,7 @@ msgstr "Este envio de formulário não existe."
 
 #: stripe/models/FrmStrpLiteAuth.php:143
 msgid "This form is not configured for Stripe link payments."
-msgstr "Este formulário não está configurado para pagamentos com link Stripe ."
+msgstr "Este formulário não está configurado para pagamentos com link Stripe."
 
 #: stripe/models/FrmStrpLiteAuth.php:145
 msgid "Something went wrong when trying to create a subscription."
@@ -7654,7 +7654,7 @@ msgstr "Capturar pagamento"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:11
 msgid "When entry is submitted"
-msgstr "Quando a post é enviada"
+msgstr "Quando a entrada é enviada"
 
 #: stripe/views/action-settings/payments-options.php:35
 msgid "Payment Type"
@@ -7701,7 +7701,7 @@ msgstr "Fatura #"
 #: stripe/views/payments/show.php:67
 #: stripe/views/subscriptions/show.php:11
 msgid "View Subscription"
-msgstr "Visualização assinatura"
+msgstr "Visualizar assinatura"
 
 #: stripe/views/payments/show.php:87
 msgid "Payment Dates"
@@ -7814,7 +7814,7 @@ msgstr "Detalhes da assinatura"
 
 #: stripe/views/subscriptions/show.php:129
 msgid "Permanently delete this subscription?"
-msgstr "Excluir esta assinatura permanentemente?"
+msgstr "Excluir esta assinatura definitivamente?"
 
 #: stripe/views/subscriptions/show.php:132
 msgid "Delete Subscription"
@@ -7835,7 +7835,7 @@ msgstr "Todos os itens (%d)"
 
 #: js/admin/applications.js:253
 msgid "No application templates match your search query."
-msgstr "Nenhum modelo de aplicativo corresponde à sua consulta de pesquisa ."
+msgstr "Nenhum modelo de aplicativo corresponde à sua consulta de pesquisa."
 
 #: js/admin/applications.js:353
 msgid "Pages"
