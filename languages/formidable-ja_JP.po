@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-06 09:48\n"
+"PO-Revision-Date: 2024-04-06 21:55\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -7188,7 +7188,7 @@ msgstr "Formidable XML ファイルをアップロードして、フォームを
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
 msgid "Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "%1$s XML ファイルをアップロードして、このサイトにフォームをインポートします。インポートされたフォームのキーと作成日があなたのサイトのフォームと一致した場合、そのフォームは更新されます。"
+msgstr "%1$s XML ファイルをアップロードして、フォームをこのサイトにインポートします。インポートされたフォームキーと作成日がサイトのフォームと一致した場合、そのフォームは更新されます。"
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
@@ -7222,7 +7222,7 @@ msgstr "エクスポート形式"
 
 #: classes/views/xml/import_form.php:90
 msgid "If your CSV special characters are not working correctly, try a different formatting option."
-msgstr "CSV の特殊文字が正しく機能しない場合は、別の設定オプションをお試しください。"
+msgstr "CSV の特殊文字が正しく機能しない場合は、別の形式設定オプションをお試しください。"
 
 #: classes/views/xml/import_form.php:91
 msgid "CSV Encoding Format"
@@ -7246,7 +7246,7 @@ msgstr "フォームを選択"
 
 #: classes/views/xml/import_form.php:146
 msgid "ID / Form Key"
-msgstr "ID /フォームキー"
+msgstr "ID / フォームキー"
 
 #: classes/views/xml/import_form.php:147
 msgid "Type"
@@ -7259,7 +7259,7 @@ msgstr "子フォーム (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
-msgstr "輸出の選択"
+msgstr "選択をエクスポート"
 
 #: classes/widgets/FrmShowForm.php:9
 msgid "Display a Formidable Form"
@@ -7267,7 +7267,7 @@ msgstr "Formidable Form を表示"
 
 #: classes/widgets/FrmShowForm.php:10
 msgid "Formidable Form"
-msgstr "強力なフォーム"
+msgstr "Formidable フォーム"
 
 #: classes/widgets/FrmShowForm.php:61
 msgid "Title"
@@ -7312,7 +7312,7 @@ msgstr "支払い方法"
 #. translators: %s: The amount of money that was refunded.
 #: stripe/controllers/FrmStrpLiteEventsController.php:62
 msgid "Payment partially refunded %s"
-msgstr "支払いの一部が払い戻されました: %s"
+msgstr "支払いが一部払い戻されました: %s"
 
 #. translators: %s: The status of the payment.
 #. translators: %s: Payment status.
@@ -7494,7 +7494,7 @@ msgstr "テスト"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:606
 msgid "LIVE"
-msgstr "ライブ"
+msgstr "本番"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 msgid "Authorized"
@@ -7984,7 +7984,7 @@ msgstr "カスタムレイアウト"
 
 #: js/formidable_admin.js:3826
 msgid "Break into rows"
-msgstr "個別の行に分割"
+msgstr "行ごとに分割"
 
 #: js/formidable_admin.js:3836
 msgid "Row Layout"
