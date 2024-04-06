@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-05 21:46\n"
+"PO-Revision-Date: 2024-04-06 09:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5600,7 +5600,7 @@ msgstr "Modifica o aggiungi opzioni al campo (una per riga)"
 
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:30
 msgid "Insert Presets"
-msgstr "Pannelli di inserimento"
+msgstr "Inserisci le impostazioni predefinite"
 
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:53
 msgid "Update Options"
@@ -6093,7 +6093,7 @@ msgstr "Valori predefiniti intelligenti"
 
 #: classes/views/frm-forms/add_field_links.php:157
 msgid "Add Layout Classes"
-msgstr "Aggiungere classi di layout"
+msgstr "Aggiungi classi di layout"
 
 #: classes/views/frm-forms/add_field_links.php:165
 msgid "Input Mask Format"
