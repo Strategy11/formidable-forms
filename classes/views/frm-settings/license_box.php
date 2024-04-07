@@ -2,22 +2,21 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$is_welcome = FrmAppHelper::is_admin_page( 'formidable-welcome' );
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 	<p id="frm-connect-btns" class="frm-show-unauthorized">
-		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary<?php echo esc_attr( $is_welcome ? '' : ' frm-button-sm' ); ?>">
+		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm">
 			<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 		</a>
 		<?php esc_html_e( 'or', 'formidable' ); ?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" target="_blank" class="button-secondary frm-button-secondary<?php echo esc_attr( $is_welcome ? '' : ' frm-button-sm' ); ?>">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" target="_blank" class="button-secondary frm-button-secondary frm-button-sm">
 			<?php esc_html_e( 'Get Formidable Now', 'formidable' ); ?>
 		</a>
 	</p>
 
 	<div id="frm-using-lite" class="frm-show-unauthorized">
 		<p>
-			<?php esc_html_e( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ); ?> 🙂
+			<?php echo esc_html( FrmAppHelper::copy_for_lite_license() ); ?>
 		</p>
 		<p>
 				<?php

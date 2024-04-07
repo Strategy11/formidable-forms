@@ -52,7 +52,7 @@ class FrmFieldFactory {
 	/**
 	 * @param int|string|object $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
@@ -68,7 +68,7 @@ class FrmFieldFactory {
 	 * @param string           $field_type
 	 * @param int|array|object $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
@@ -106,6 +106,8 @@ class FrmFieldFactory {
 			'captcha'     => 'FrmFieldCaptcha',
 			'name'        => 'FrmFieldName',
 			'credit_card' => 'FrmFieldCreditCard',
+			// Submit button field.
+			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';

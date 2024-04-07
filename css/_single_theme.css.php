@@ -195,10 +195,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 <?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
-.<?php echo esc_html( $style_class ); ?> input:-moz-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea:-moz-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
@@ -259,23 +255,20 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	echo esc_html( $important );
 	?>
 	;
+	<?php if ( '' !== $submit_border_width ) : ?>
 	border-width:<?php echo esc_html( $submit_border_width ); ?>;
+	<?php endif; ?>
 	border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
 	border-style:solid;
 	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
 	cursor:pointer;
 	font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	text-shadow:none;
 	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
-	-moz-box-sizing:border-box;
 	box-sizing:border-box;
 	-ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
-	-moz-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
-	-webkit-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ); ?>;

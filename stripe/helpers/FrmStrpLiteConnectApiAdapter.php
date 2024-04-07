@@ -67,6 +67,8 @@ class FrmStrpLiteConnectApiAdapter {
 		$user_id   = ! empty( $options['user_id'] ) ? $options['user_id'] : get_current_user_id();
 		$meta_name = FrmStrpLiteAppHelper::get_customer_id_meta_name();
 
+		$customer_id_error_message = '';
+
 		if ( $user_id ) {
 			$customer_id = get_user_meta( $user_id, $meta_name, true );
 			if ( ! isset( $options['email'] ) ) {

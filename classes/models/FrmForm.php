@@ -787,8 +787,7 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
-
-				return apply_filters( 'frm_form_object', wp_unslash( $cache ) );
+				return self::prepare_form_row_data( $cache );
 			}
 		}
 
@@ -805,7 +804,33 @@ class FrmForm {
 			FrmAppHelper::unserialize_or_decode( $results->options );
 		}
 
-		return apply_filters( 'frm_form_object', wp_unslash( $results ) );
+		return self::prepare_form_row_data( $results );
+	}
+
+	/**
+	 * Make sure that if $row is an object, that $row->options is an array and not a string.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param stdClass|null $row The database row for a target form.
+	 * @return stdClass|null
+	 */
+	private static function prepare_form_row_data( $row ) {
+		$row = wp_unslash( $row );
+		if ( ! is_object( $row ) ) {
+			return $row;
+		}
+
+		if ( ! is_array( $row->options ) ) {
+			$row->options = FrmFormsHelper::get_default_opts();
+		}
+
+		/**
+		 * @since 4.03.02
+		 *
+		 * @param stdClass $row
+		 */
+		return apply_filters( 'frm_form_object', $row );
 	}
 
 	/**
@@ -1161,6 +1186,48 @@ class FrmForm {
 	 */
 	public static function is_ajax_on( $form ) {
 		return ! empty( $form->options['ajax_submit'] );
+	}
+
+	/**
+	 * Get the latest form available.
+	 *
+	 * @since 6.8
+	 * @return object
+	 */
+	public static function get_latest_form() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return self::getAll( $args, 'created_at desc', 1 );
+	}
+
+	/**
+	 * Count and return total forms.
+	 *
+	 * @since 6.8
+	 * @return int
+	 */
+	public static function get_forms_count() {
+
+		$args = array(
+			array(
+				'or'               => 1,
+				'parent_form_id'   => null,
+				'parent_form_id <' => 1,
+			),
+			'is_template' => 0,
+			'status !'    => 'trash',
+		);
+
+		return FrmDb::get_count( 'frm_forms', $args );
 	}
 
 	/**

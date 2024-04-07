@@ -22,4 +22,16 @@ class FrmEmailMonthly extends FrmEmailStats {
 	protected function get_top_forms_label() {
 		return __( 'Top forms this month', 'formidable' );
 	}
+
+	/**
+	 * @since 6.8.4
+	 */
+	protected function get_content_args() {
+		// Do not send monthly email if there is no entries this month.
+		if ( ! FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date ) ) {
+			return false;
+		}
+
+		return parent::get_content_args();
+	}
 }

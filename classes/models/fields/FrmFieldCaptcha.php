@@ -42,11 +42,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
+		$settings = FrmCaptchaFactory::get_settings_object();
 		return array(
-			'required'     => false,
-			'invalid'      => true,
-			'captcha_size' => true,
-			'default'      => false,
+			'required'                  => false,
+			'invalid'                   => true,
+			'captcha_size'              => $settings->should_show_captcha_size(),
+			'captcha_theme'             => $settings->should_show_captcha_theme(),
+			'captcha_theme_auto_option' => $settings->should_show_captcha_theme_auto_option(),
+			'default'                   => false,
 		);
 	}
 
@@ -89,6 +92,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -97,24 +102,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return '';
 		}
 
-		$class_prefix  = $this->class_prefix( $frm_settings );
-		$captcha_class = $this->captcha_class( $frm_settings );
-		$captcha_size  = $this->captcha_size( $frm_settings );
-		$allow_mutiple = $frm_settings->re_multi;
-
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$site_key          = $frm_settings->pubkey;
-			$recaptcha_options = ' data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
-		} else {
-			$site_key = $frm_settings->hcaptcha_pubkey;
-		}
-
-		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"';
-		$html .= ! empty( $recaptcha_options ) ? $recaptcha_options : '';
-		if ( $captcha_size === 'invisible' && ! $allow_mutiple ) {
-			$html .= ' data-callback="frmAfterRecaptcha"';
-		}
-		$html .= '></div>';
+		$settings       = FrmCaptchaFactory::get_settings_object();
+		$div_attributes = array(
+			'id'           => $args['html_id'],
+			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
+			'data-sitekey' => $settings->get_pubkey(),
+		);
+		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
+		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
 		return $html;
 	}
@@ -129,17 +124,29 @@ class FrmFieldCaptcha extends FrmFieldType {
 		wp_enqueue_script( 'captcha-api' );
 	}
 
+	/**
+	 * Get the URL for the script JS that is loaded on the front end.
+	 *
+	 * @return string
+	 */
 	protected function api_url() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+		$active_mode  = $frm_settings->active_captcha;
+
+		if ( 'recaptcha' === $active_mode ) {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
 
-		return $this->hcaptcha_api_url();
+		if ( 'hcaptcha' === $active_mode ) {
+			return $this->hcaptcha_api_url();
+		}
+
+		return $this->turnstile_api_url();
 	}
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 * @return string
 	 */
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
@@ -150,15 +157,23 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
-		if ( ! empty( $lang ) ) {
+		if ( $lang ) {
 			$api_js_url .= '&hl=' . $lang;
 		}
 
+		/**
+		 * @param string $api_js_url
+		 */
 		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 
 		return $api_js_url;
 	}
 
+	/**
+	 * @since 6.0
+	 *
+	 * @return string
+	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
 
@@ -170,6 +185,26 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * @param string $api_js_url
 		 */
 		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
+
+		return $api_js_url;
+	}
+
+	/**
+	 * @since 6.8.4
+	 *
+	 * @return string
+	 */
+	protected function turnstile_api_url() {
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile';
+
+		/**
+		 * Allows updating hcaptcha js api url.
+		 *
+		 * @since 6.8.4
+		 *
+		 * @param string $api_js_url
+		 */
+		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
 
 		return $api_js_url;
 	}
@@ -199,24 +234,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return 'g-recaptcha'|'h-captcha'
 	 */
 	protected function captcha_class( $frm_settings ) {
-		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->get_element_class_name();
 	}
 
 	protected function allow_multiple( $frm_settings ) {
 		return $frm_settings->re_multi;
-	}
-
-	/**
-	 * @return string
-	 *
-	 * @param FrmSettings $frm_settings
-	 */
-	protected function captcha_size( $frm_settings ) {
-		if ( in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
-			return 'invisible';
-		}
-		// for reverse compatibility
-		return $this->field['captcha_size'] === 'default' ? 'normal' : $this->field['captcha_size'];
 	}
 
 	/**
@@ -290,9 +313,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['g-recaptcha-response'] ) && ! isset( $_POST['h-captcha-response'] ) ) {
-			// There was no captcha submitted.
+		$missing_token = ! self::post_data_includes_token();
+		if ( $missing_token ) {
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
 
@@ -300,16 +322,26 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * @since 6.8.4
+	 *
+	 * @return bool
+	 */
+	protected static function post_data_includes_token() {
+		$settings = FrmCaptchaFactory::get_settings_object();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return ! empty( $_POST[ $settings->token_field ] );
+	}
+
+	/**
+	 * Check if the active captcha type's public key is set.
+	 *
 	 * @since 4.07
+	 *
 	 * @return bool
 	 */
 	public static function should_show_captcha() {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			return ! empty( $frm_settings->pubkey );
-		}
-
-		return ! empty( $frm_settings->hcaptcha_pubkey );
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->has_pubkey();
 	}
 
 	/**
@@ -329,9 +361,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @param FrmSettings $frm_settings
 	 */
 	protected function send_api_check( $frm_settings ) {
-		$captcha_settings = new FrmFieldCaptchaSettings( $frm_settings );
-
-		$arg_array = array(
+		$captcha_settings = FrmCaptchaFactory::get_settings_object();
+		$arg_array        = array(
 			'body' => array(
 				'secret'   => $captcha_settings->secret,
 				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
@@ -360,5 +391,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * @return string
+	 *
+	 * @param FrmSettings $frm_settings
+	 */
+	protected function captcha_size( $frm_settings ) {
+		_deprecated_function( __METHOD__, '6.8.4' );
+		return 'normal';
 	}
 }

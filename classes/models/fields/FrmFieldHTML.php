@@ -68,4 +68,18 @@ class FrmFieldHTML extends FrmFieldType {
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-html.php';
 	}
+
+	/**
+	 * Overwrite FrmFieldType::should_strip_most_html_before_preparing_display_value.
+	 * An HTML field is not populated from user input.
+	 * It does not need to be passed through FrmAppHelper::strip_most_html.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param array $atts
+	 * @return bool
+	 */
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		return false;
+	}
 }

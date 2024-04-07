@@ -44,6 +44,7 @@ zip -r $zipname $destination \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/composer.lock" \
+	-x "*/crowdin.yml" \
 	-x "*/formidableforms.css" \
 	-x "*/js/src/*" \
 	-x "*/assets/src/*" \

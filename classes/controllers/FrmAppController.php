@@ -62,6 +62,10 @@ class FrmAppController {
 			}
 		}
 
+		if ( self::is_grey_page() ) {
+			$classes .= ' frm-grey-body ';
+		}
+
 		if ( FrmAppHelper::is_full_screen() ) {
 			$full_screen_on = self::get_full_screen_setting();
 			$add_class = '';
@@ -138,8 +142,6 @@ class FrmAppController {
 			'formidable-styles',
 			'formidable-styles2',
 			'formidable-inbox',
-			'formidable-welcome',
-			'formidable-applications',
 			FrmFormTemplatesController::PAGE_SLUG,
 		);
 
@@ -154,13 +156,7 @@ class FrmAppController {
 			}
 		}
 
-		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$is_white_page = in_array( $get_page, $white_pages, true );
-
-		if ( ! $is_white_page ) {
-			$screen        = get_current_screen();
-			$is_white_page = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
-		}
+		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || FrmAppHelper::is_view_builder_page();
 
 		/**
 		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
@@ -172,6 +168,43 @@ class FrmAppController {
 		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
 
 		return $is_white_page;
+	}
+
+	/**
+	 * Add a grey bg instead of white.
+	 *
+	 * @since 6.8
+	 *
+	 * @return bool
+	 */
+	private static function is_grey_page() {
+		$grey_pages = array(
+			'formidable-applications',
+			'formidable-dashboard',
+		);
+
+		$is_grey_page = self::is_page_in_list( $grey_pages );
+
+		/**
+		 * Filter to change FF wrapper background to grey.
+		 *
+		 * @since 6.8
+		 *
+		 * @param bool $is_grey_page
+		 * @return bool
+		 */
+		return apply_filters( 'frm_is_grey_page', $is_grey_page );
+	}
+
+	/**
+	 * @since 6.8
+	 *
+	 * @param array $pages A list of page names to check.
+	 * @return bool
+	 */
+	private static function is_page_in_list( $pages ) {
+		$get_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		return in_array( $get_page, $pages, true );
 	}
 
 	/**
@@ -530,6 +563,8 @@ class FrmAppController {
 			self::admin_js();
 		}
 
+		self::trigger_page_load_hooks();
+
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
 			// This provides backward compatibility for old addons that use legacy modal templates.
@@ -547,6 +582,29 @@ class FrmAppController {
 		}
 
 		self::maybe_add_ip_warning();
+	}
+
+	/**
+	 * Get the current page and check for a possible function to trigger.
+	 * If a class name matches the page name, and the class has a load_page() method, trigger it.
+	 *
+	 * @since 6.8
+	 *
+	 * @return void
+	 */
+	private static function trigger_page_load_hooks() {
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable-' ) !== 0 ) {
+			// Only trigger hooks on Formidable pages.
+			return;
+		}
+
+		$page  = str_replace( array( 'formidable-', '-' ), array( '', ' ' ), $page );
+		$page  = str_replace( ' ', '', ucwords( $page ) );
+		$class = 'Frm' . $page . 'Controller';
+		if ( class_exists( $class ) && method_exists( $class, 'load_page' ) ) {
+			call_user_func( array( $class, 'load_page' ) );
+		}
 	}
 
 	/**
@@ -617,6 +675,9 @@ class FrmAppController {
 
 		FrmAppHelper::load_admin_wide_js();
 
+		// Register component assets early to ensure they can be enqueued later in controllers.
+		wp_register_style( 'formidable-animations', $plugin_url . '/css/admin/animations.css', array(), $version );
+
 		if ( class_exists( 'FrmOverlayController' ) ) {
 			// This should always exist.
 			// But it may not have loaded properly when updating the plugin.
@@ -635,22 +696,8 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 
-		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-
-		// Enqueue Floating Links.
-		$is_valid_page =
-			FrmAppHelper::is_formidable_admin() &&
-			! FrmAppHelper::is_style_editor_page() &&
-			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
-			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( $is_valid_page && FrmAppHelper::is_formidable_branding() ) {
+		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
-		}
-		unset( $is_valid_page );
-
-		if ( 'formidable-applications' === $page ) {
-			FrmApplicationsController::load_assets();
-			return;
 		}
 
 		$dependencies = array(
@@ -693,6 +740,7 @@ class FrmAppController {
 			);
 		}
 
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
@@ -705,6 +753,7 @@ class FrmAppController {
 			wp_enqueue_script( 'formidable_embed' );
 			FrmAppHelper::localize_script( 'admin' );
 
+			wp_enqueue_style( 'formidable-animations' );
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
@@ -747,6 +796,25 @@ class FrmAppController {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
 		}
+	}
+
+	/**
+	 * The floating links are not shown on every page.
+	 * They are also not shown if white labeling is being used.
+	 *
+	 * @since 6.8.4
+	 *
+	 * @return bool
+	 */
+	private static function should_show_floating_links() {
+		if ( ! FrmAppHelper::is_formidable_branding() ) {
+			return false;
+		}
+
+		return FrmAppHelper::is_formidable_admin() &&
+			! FrmAppHelper::is_style_editor_page() &&
+			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
+			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 	}
 
 	/**
@@ -1225,5 +1293,13 @@ class FrmAppController {
 			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
 		);
 		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
+
+		/**
+		 * Prompt Pro to load additional floating links scripts.
+		 * This is used to include images in the Inbox SlideIn when Pro is active.
+		 *
+		 * @since 6.8.4
+		 */
+		do_action( 'frm_enqueue_floating_links' );
 	}
 }

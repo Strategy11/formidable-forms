@@ -141,8 +141,15 @@ class FrmStylesPreviewHelper {
 	private function disable_javascript_validation() {
 		add_filter(
 			'frm_form_object',
+			/**
+			 * @param stdClass|null $form
+			 * @param int           $form_id
+			 * @return stdClass|null
+			 */
 			function( $form ) {
-				$form->options['js_validate'] = false;
+				if ( is_object( $form ) && is_array( $form->options ) ) {
+					$form->options['js_validate'] = false;
+				}
 				return $form;
 			}
 		);

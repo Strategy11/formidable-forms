@@ -35,9 +35,31 @@ namespace {
 	class FrmProAppHelper {
 		public static function get_settings() {
 		}
+		public static function convert_date( $date_str, $from_format, $to_format ) {
+		}
+		/**
+		 * @return bool
+		 */
+		public static function views_is_installed() {
+		}
+		/**
+		 * @return string
+		 */
+		public static function plugin_path() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
+		}
+		/**
+		 * @param object|string|int $field_id
+		 * @param array|string      $value
+		 * @param string|int|false  $entry_id
+		 * @return array|null|string|object
+		 */
+		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		}
+		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
 	}
 	class FrmProFormActionsController {
@@ -56,9 +78,22 @@ namespace {
 	class FrmProStylesController extends FrmStylesController {
 	}
 	class FrmProPost {
+		/**
+		 * @param array $field
+		 * @param array $args
+		 * @return string
+		 */
+		public static function get_category_dropdown( $field, $args ) {
+		}
 	}
 	class FrmProEntriesController {
 		public static function show_entry_shortcode( $atts ) {
+		}
+		/**
+		 * @param array $atts
+		 * @return string
+		 */
+		public static function entry_delete_link( $atts ) {
 		}
 	}
 	class FrmProFormsHelper {
@@ -66,10 +101,27 @@ namespace {
 		}
 	}
 	class FrmProEntry {
+		/**
+		 * @param array|false $values
+		 * @param string      $location
+		 * @return array
+		 */
+		public static function mod_other_vals( $values = false, $location = 'front' ) {
+		}
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
 	class FrmProEntriesHelper {
+		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
+		/**
+		 * @param object           $field
+		 * @param object           $entry
+		 * @param string|array|int $field_value
+		 * @return void
+		 */
+		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**
@@ -78,6 +130,12 @@ namespace {
 		 * @return void
 		 */
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
+		}
+		/**
+		 * @param object|array $field
+		 * @return bool
+		 */
+		public static function &is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -100,6 +158,16 @@ namespace {
 		}
 	}
 	class Akismet {
+		/**
+		 * @param string $request
+		 * @param string $path
+		 * @param string $ip
+		 * @return array
+		 */
+		public static function http_post( $request, $path, $ip = null ) {
+		}
+		public static function get_user_roles( $user_id ) {
+		}
 	}
 	class PHPMailer {
 		public function __construct( $exceptions = null ) {
@@ -108,9 +176,8 @@ namespace {
 	class FrmPaymentsController {
 		public static $db_opt_name = 'frm_pay_db_version';
 	}
-	/**
-	 * @return void
-	 */
+	class FrmProDashboardHelper {
+	}
 	function load_formidable_pro() {
 	}
 	/**
@@ -138,11 +205,29 @@ namespace Elementor {
 	}
 
 	class Plugin {
+		/**
+		 * @return Plugin
+		 */
+		public static function instance() {
+		}
 	}
 }
 
 namespace WPMailSMTP {
 	class Options {
+	   /**
+		* @return Options
+		*/
+	   public static function init() {
+	   }
+	   /**
+		 * @param string $group
+		 * @param string $key
+		 * @param bool   $strip_slashes
+		 * @return mixed|null
+		 */
+		public function get( $group, $key, $strip_slashes = true ) {
+		}
 	}
 	class Core {
 		/**

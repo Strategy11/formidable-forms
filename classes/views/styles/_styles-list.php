@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $frm_settings      = FrmAppHelper::get_settings();
 $globally_disabled = 'none' === $frm_settings->load_style;
-$enabled           = 0 !== (int) $form->options['custom_style'] && ! $globally_disabled;
+$enabled           = ( ! is_array( $form->options ) || 0 !== (int) $form->options['custom_style'] ) && ! $globally_disabled;
 $card_helper       = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
 $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
@@ -84,8 +84,11 @@ if ( $globally_disabled ) {
 		<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
 	<?php } ?>
 
-	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
-	</div>
-	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $card_helper->get_template_info() ); ?>
+	<?php $style_templates = array_filter( $card_helper->get_template_info(), 'is_array' ); ?>
+	<?php if ( $style_templates ) { ?>
+		<div class="frm_form_settings">
+			<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
+		</div>
+		<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_templates ); ?>
+	<?php } ?>
 </div>

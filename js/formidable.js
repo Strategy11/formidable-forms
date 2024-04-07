@@ -1,11 +1,11 @@
-/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField, frmDeleteEntry, frmOnSubmit, frm_resend_email */
+/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
 
 var frmFrontForm;
 
 function frmFrontFormJS() {
 	'use strict';
 
-	/*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
+	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	var action = '';
@@ -165,7 +165,7 @@ function frmFrontFormJS() {
 	 * @param {object} $form
 	 */
 	function disableSubmitButton( $form ) {
-		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
+		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"], button.frm_save_draft' ).attr( 'disabled', 'disabled' );
 	}
 
 	/**
@@ -488,7 +488,7 @@ function frmFrontFormJS() {
 			firstField = document.getElementById( strippedId );
 			value = firstField.value;
 			confirmValue = confirmField.value;
-			if ( '' !== value && '' !== confirmValue && value !== confirmValue ) {
+			if ( value !== confirmValue ) {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			}
 		} else {
@@ -705,7 +705,7 @@ function frmFrontFormJS() {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
-					triggerCustomEvent( object, 'frmSubmitEvent' );
+					triggerCustomEvent( object, 'frmSubmitEvent', { content: response.content });
 					return;
 				}
 
@@ -1522,6 +1522,16 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Destroys the formidable generated global hcaptcha object since it wouldn't otherwise render.
+	 */
+	function destroyhCaptcha() {
+		if ( ! window.hasOwnProperty( 'hcaptcha' ) || ! document.querySelector( '.frm-show-form .h-captcha' ) ) {
+			return;
+		}
+		window.hcaptcha = null;
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1571,21 +1581,27 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
 
 			enableSubmitButtonOnBackButtonPress();
+			jQuery( document ).on(
+				'frmPageChanged',
+				destroyhCaptcha
+			);
 		},
 
 		getFieldId: function( field, fullID ) {
 			return getFieldId( field, fullID );
 		},
 
-		renderRecaptcha: function( captcha ) {
-			var formID, recaptchaID,
+		renderCaptcha: function( captcha, captchaSelector ) {
+			var formID, captchaID,
 				size = captcha.getAttribute( 'data-size' ),
 				rendered = captcha.getAttribute( 'data-rid' ) !== null,
 				params = {
 					'sitekey': captcha.getAttribute( 'data-sitekey' ),
 					'size': size,
 					'theme': captcha.getAttribute( 'data-theme' )
-				};
+				},
+				activeCaptcha = getSelectedCaptcha( captchaSelector ),
+				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
 
 			if ( rendered ) {
 				return;
@@ -1599,9 +1615,10 @@ function frmFrontFormJS() {
 				};
 			}
 
-			recaptchaID = grecaptcha.render( captcha.id, params );
 
-			captcha.setAttribute( 'data-rid', recaptchaID );
+			captchaID = activeCaptcha.render( captchaContainer, params );
+
+			captcha.setAttribute( 'data-rid', captchaID );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -1886,7 +1903,8 @@ function frmFrontFormJS() {
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent
+		triggerCustomEvent: triggerCustomEvent,
+		documentOn
 	};
 }
 frmFrontForm = frmFrontFormJS();
@@ -1896,11 +1914,29 @@ jQuery( document ).ready( function() {
 });
 
 function frmRecaptcha() {
+	frmCaptcha( '.frm-g-recaptcha' );
+}
+
+function frmTurnstile() {
+	frmCaptcha( '.cf-turnstile' );
+}
+
+function frmCaptcha( captchaSelector ) {
 	var c, cl,
-		captchas = jQuery( '.frm-g-recaptcha' );
+		captchas = document.querySelectorAll( captchaSelector );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderRecaptcha( captchas[c]);
+		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
+}
+
+function getSelectedCaptcha( captchaSelector ) {
+	if ( captchaSelector === '.frm-g-recaptcha' ) {
+		return grecaptcha;
+	}
+	if ( document.querySelector( '.cf-turnstile' ) ) {
+		return turnstile;
+	}
+	return hcaptcha;
 }
 
 function frmAfterRecaptcha( token ) {
@@ -1925,51 +1961,6 @@ function frmUpdateField( entryId, fieldId, value, message, num ) {
 			} else {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
 			}
-		}
-	});
-}
-
-function frmDeleteEntry( entryId, prefix ) {
-	console.warn( 'DEPRECATED: function frmDeleteEntry in v2.0.13 use frmFrontForm.deleteEntry' );
-	jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entryId + '"></span>' );
-	jQuery.ajax({
-		type: 'POST',
-		url: frm_js.ajax_url, // eslint-disable-line camelcase
-		data: {
-			action: 'frm_entries_destroy',
-			entry: entryId,
-			nonce: frm_js.nonce // eslint-disable-line camelcase
-		},
-		success: function( html ) {
-			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
-				jQuery( document.getElementById( prefix + entryId ) ).fadeOut( 'slow' );
-			} else {
-				jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( html );
-			}
-		}
-	});
-}
-
-function frmOnSubmit( e ) {
-	console.warn( 'DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm' );
-	frmFrontForm.submitForm( e, this );
-}
-
-function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
-	var $link = jQuery( document.getElementById( 'frm_resend_email' ) );
-	console.warn( 'DEPRECATED: function frm_resend_email in v2.0' );
-	$link.append( '<span class="spinner" style="display:inline"></span>' );
-	jQuery.ajax({
-		type: 'POST',
-		url: frm_js.ajax_url, // eslint-disable-line camelcase
-		data: {
-			action: 'frm_entries_send_email',
-			entry_id: entryId,
-			form_id: formId,
-			nonce: frm_js.nonce // eslint-disable-line camelcase
-		},
-		success: function( msg ) {
-			$link.replaceWith( msg );
 		}
 	});
 }

@@ -221,10 +221,21 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field_id = FrmAppHelper::get_param( 'field_id', '', 'post', 'absint' );
-		$field    = FrmField::getOne( $field_id );
+		$field_id        = FrmAppHelper::get_param( 'field_id', '', 'post', 'absint' );
+		$field           = FrmField::getOne( $field_id );
+		$bulk_edit_types = array( 'radio', 'checkbox', 'select' );
 
-		if ( ! in_array( $field->type, array( 'radio', 'checkbox', 'select' ) ) ) {
+		/**
+		 * Filter to add new fields that will support import_options/Bulk Edit Options.
+		 *
+		 * @since 6.8.4
+		 *
+		 * @param array $bulk_edit_types
+		 * @return array
+		 */
+		$bulk_edit_types = apply_filters( 'frm_bulk_edit_field_types', $bulk_edit_types );
+
+		if ( ! in_array( $field->type, $bulk_edit_types, true ) ) {
 			return;
 		}
 
@@ -678,13 +689,15 @@ class FrmFieldsController {
 	}
 
 	private static function add_validation_messages( $field, array &$add_html ) {
-		if ( FrmField::is_required( $field ) ) {
+		$field_validation_messages_status = self::get_validation_data_attribute_visibility_info( $field );
+
+		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages_status['data-reqmsg'] ) ) {
 			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
 			self::maybe_add_html_required( $field, $add_html );
 		}
 
-		if ( ! FrmField::is_option_empty( $field, 'invalid' ) ) {
+		if ( ! FrmField::is_option_empty( $field, 'invalid' ) && ! empty( $field_validation_messages_status['data-invmsg'] ) ) {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
@@ -692,6 +705,38 @@ class FrmFieldsController {
 		if ( ! empty( $add_html['data-reqmsg'] ) || ! empty( $add_html['data-invmsg'] ) ) {
 			self::maybe_add_error_html_for_js_validation( $field, $add_html );
 		}
+	}
+
+	/**
+	 * Returns an array that contains field validation messages status.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|object $field
+	 * @return array
+	 */
+	private static function get_validation_data_attribute_visibility_info( $field ) {
+		if ( FrmField::get_field_type( $field ) === 'hidden' ) {
+			$field_validation_data_attributes = array(
+				'data-invmsg' => false,
+				'data-reqmsg' => false,
+			);
+		} else {
+			$field_validation_data_attributes = array(
+				'data-invmsg' => true,
+				'data-reqmsg' => true,
+			);
+		}
+
+		/**
+		 * Allows controlling which field validation messages would be included in the field html.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field_validation_messages_status
+		 * @param array|object $field
+		 */
+		return apply_filters( 'frm_field_validation_include_data_attributes', $field_validation_data_attributes, $field );
 	}
 
 	/**

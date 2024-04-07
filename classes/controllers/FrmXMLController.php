@@ -553,6 +553,27 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Returns an array that has parent term slugs for the terms provided.
+	 *
+	 * @since 6.8.3
+	 * @param array $terms
+	 * @return array
+	 */
+	public static function get_parent_terms_slugs( $terms ) {
+		$parent_term_ids = array_filter( array_unique( wp_list_pluck( $terms, 'parent' ) ) );
+		$parent_slugs    = array();
+
+		if ( ! $parent_term_ids ) {
+			return $parent_slugs;
+		}
+
+		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
+		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
+
+		return $parent_slugs;
+	}
+
+	/**
 	 * @return void
 	 */
 	private static function prepare_types_array( &$type ) {
@@ -643,7 +664,9 @@ class FrmXMLController {
 		}
 
 		// Remove time limit to execute this function.
-		set_time_limit( 0 );
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();

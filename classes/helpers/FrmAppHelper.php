@@ -9,7 +9,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 100;
+	public static $db_version = 101;
 
 	/**
 	 * Deprecated.
@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.7.2';
+	public static $plug_version = '6.8.4';
 
 	/**
 	 * @var bool
@@ -174,18 +174,19 @@ class FrmAppHelper {
 
 	/**
 	 * Determine if the current branding is set to 'formidable'.
-	 *
-	 * Checks the menu title, retrieved through get_menu_name,
-	 * and verifies if it matches the 'formidable' branding.
+	 * Checks the menu icon, and verifies if it matches the formidable branding.
 	 *
 	 * @since 6.4.2
 	 *
-	 * @return bool True if the menu title is 'formidable', false otherwise.
+	 * @return bool True if the menu icon is the logo, false otherwise.
 	 */
 	public static function is_formidable_branding() {
-		$menu_title = self::get_menu_name();
+		if ( ! self::pro_is_installed() ) {
+			return true;
+		}
 
-		return 'formidable' === strtolower( trim( $menu_title ) );
+		$menu_icon = self::get_menu_icon_class();
+		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
 	}
 
 	/**
@@ -247,6 +248,17 @@ class FrmAppHelper {
 
 	public static function pro_is_installed() {
 		return apply_filters( 'frm_pro_installed', false );
+	}
+
+	/**
+	 * Check if the Pro plugin is installed, whether authorized or not.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	public static function pro_is_included() {
+		return function_exists( 'load_formidable_pro' );
 	}
 
 	/**
@@ -634,17 +646,33 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Sanitize a value in-place.
+	 * If $value is an array, the sanitize function will get called for each item.
+	 *
+	 * @param callable $sanitize
+	 * @param mixed    $value
+	 * @return void
+	 */
 	public static function sanitize_value( $sanitize, &$value ) {
-		if ( ! empty( $sanitize ) ) {
-			if ( is_array( $value ) ) {
-				$temp_values = $value;
-				foreach ( $temp_values as $k => $v ) {
-					self::sanitize_value( $sanitize, $value[ $k ] );
-				}
-			} else {
-				$value = call_user_func( $sanitize, $value );
-			}
+		if ( ! $sanitize ) {
+			return;
 		}
+
+		if ( is_object( $value ) ) {
+			$value = '';
+			return;
+		}
+
+		if ( is_array( $value ) ) {
+			$temp_values = $value;
+			foreach ( $temp_values as $k => $v ) {
+				self::sanitize_value( $sanitize, $value[ $k ] );
+			}
+			return;
+		}
+
+		$value = call_user_func( $sanitize, $value );
 	}
 
 	public static function sanitize_request( $sanitize_method, &$values ) {
@@ -1337,6 +1365,7 @@ class FrmAppHelper {
 			'tosearch'    => '',
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
+			'value'       => false,
 		);
 		$atts = array_merge( $defaults, $atts );
 
@@ -1351,19 +1380,32 @@ class FrmAppHelper {
 
 		$input_id = $atts['input_id'] . '-search-input';
 
+		$input_atts = array(
+			'type'          => 'search',
+			'id'            => $input_id,
+			'name'          => 's',
+			'placeholder'   => $atts['placeholder'],
+			'class'         => $class,
+			'data-tosearch' => $atts['tosearch'],
+		);
+
+		if ( is_string( $atts['value'] ) ) {
+			$input_atts['value'] = $atts['value'];
+		} elseif ( isset( $_REQUEST['s'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$input_atts['value'] = wp_unslash( $_REQUEST['s'] );
+		}
+
+		if ( ! empty( $atts['tosearch'] ) ) {
+			$input_atts['autocomplete'] = 'off';
+		}
 		?>
 		<p class="frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			<span class="frmfont frm_search_icon"></span>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
-				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
-				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"
-				<?php if ( ! empty( $atts['tosearch'] ) ) { ?>
-				autocomplete="off"
-				<?php } ?>
-				/>
+			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
 				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
@@ -1951,7 +1993,24 @@ class FrmAppHelper {
 				}
 			}
 		} else {
+			$value = self::maybe_update_value_if_null( $value, $function );
 			$value = call_user_func( $function, $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Updates value to empty string if it is null and being passed to a string function.
+	 *
+	 * @since 6.8.4
+	 * @param mixed  $value
+	 * @param string $function
+	 * @return mixed
+	 */
+	private static function maybe_update_value_if_null( $value, $function ) {
+		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
+			$value = '';
 		}
 
 		return $value;
@@ -3094,6 +3153,7 @@ class FrmAppHelper {
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
+			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -3137,7 +3197,6 @@ class FrmAppHelper {
 		}
 
 		if ( $location === 'admin' ) {
-			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
 				'desc'               => __( '(Click to add description)', 'formidable' ),
 				'blank'              => __( '(Blank)', 'formidable' ),
@@ -3153,7 +3212,7 @@ class FrmAppHelper {
 				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'     => $frm_settings->unique_msg,
+				'default_unique'     => FrmFieldsHelper::default_unique_msg(),
 				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
 				'enter_email'        => __( 'Enter Email', 'formidable' ),
 				'confirm_email'      => __( 'Confirm Email', 'formidable' ),
@@ -3172,7 +3231,9 @@ class FrmAppHelper {
 				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
 				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'    => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				/* translators: %d is the number of allowed actions per form */
+				'only_one_action'    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
+				'edit_action_text'   => __( 'Please edit the existing form action.', 'formidable' ),
 				'unsafe_params'      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
@@ -4116,5 +4177,27 @@ class FrmAppHelper {
 		}
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Lite license copy.
+	 * Used in FrmDashboardController & FrmSettingsController
+	 *
+	 * @since 6.8
+	 *
+	 * @return string
+	 */
+	public static function copy_for_lite_license() {
+		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
+
+		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
+			// Manage PRO versions without PRO dashboard functionality.
+			$license_type = FrmProAddonsController::get_readable_license_type();
+			if ( 'lite' !== strtolower( $license_type ) ) {
+				$message = 'Formidable Pro ' . $license_type;
+			}
+		}
+
+		return apply_filters( 'frm_license_type_text', $message );
 	}
 }
