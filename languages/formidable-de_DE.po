@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-04 09:21\n"
+"PO-Revision-Date: 2024-04-07 21:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -7074,7 +7074,7 @@ msgstr "Ein weiteres Feld mit Beschreibung"
 
 #: classes/views/styles/_sample_form.php:63
 msgid "Check Boxes"
-msgstr "Boxen ankreuzen"
+msgstr "Check-Boxen"
 
 #: classes/views/styles/_sample_form.php:89
 #: classes/views/styles/_sample_form.php:94
