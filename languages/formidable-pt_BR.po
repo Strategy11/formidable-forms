@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-06 21:55\n"
+"PO-Revision-Date: 2024-04-07 09:51\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1148,7 +1148,7 @@ msgstr "Integrações com mais de 1.000 serviços de marketing e pagamento"
 
 #: classes/controllers/FrmSettingsController.php:348
 msgid "Collect digital signatures"
-msgstr "Colete assinaturas digitais"
+msgstr "Receba assinaturas digitais"
 
 #: classes/controllers/FrmSettingsController.php:349
 msgid "Accept user-submitted content with Post submissions"
@@ -4751,7 +4751,7 @@ msgstr "Entradas criadas"
 
 #: classes/models/FrmEmailStats.php:145
 msgid "Payments collected"
-msgstr "Pagamentos cobrados"
+msgstr "Pagamentos recebidos"
 
 #. translators: currency name.
 #: classes/models/FrmEmailStats.php:154
@@ -5051,7 +5051,7 @@ msgstr "reCAPTCHA é um serviço gratuito e acessível que ajuda a digitalizar l
 #. translators: %s: User name, %2$d: number of entries
 #: classes/models/FrmReviews.php:114
 msgid "Congratulations%1$s! You have collected %2$d form submissions."
-msgstr "Parabéns, %1$s! Você coletou %2$d envios de formulário."
+msgstr "Parabéns, %1$s! Você recebeu %2$d envios de formulário."
 
 #: classes/models/FrmReviews.php:157
 msgid "If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?"
@@ -5130,7 +5130,7 @@ msgstr "Conecte-se a FormidableForms.com"
 
 #: classes/models/FrmSolution.php:315
 msgid "Create a connection to get plugin downloads."
-msgstr "Crie uma conexão para obter downloads de plugin."
+msgstr "Crie uma conexão para fazer downloads de plugin."
 
 #: classes/models/FrmSolution.php:316
 #: classes/views/frm-settings/license_box.php:9
@@ -5518,7 +5518,7 @@ msgstr "Você ainda não criou nenhum formulário"
 #: classes/views/frm-entries/no_entries.php:47
 #: classes/views/frm-forms/list.php:47
 msgid "Start collecting leads and data today."
-msgstr "Comece a coletar leads e dados hoje."
+msgstr "Comece a receber leads e dados hoje."
 
 #: classes/views/frm-entries/show.php:41
 msgid "Hide empty fields"
@@ -5732,7 +5732,7 @@ msgstr "Os captchas não serão usados ​​até que o site e as shaves secreta
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
 msgid "Credit Cards will not work without %1$sadding a Collect Payment action%2$s."
-msgstr "Os cartões de crédito não funcionarão sem a %1$sadição de uma ação de cobrança de pagamento%2$s."
+msgstr "Os cartões de crédito não funcionarão sem a %1$sinclusão de uma ação de cobrança de pagamento%2$s."
 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
@@ -6728,7 +6728,7 @@ msgstr "Você pode adicionar CSS personalizado aqui ou no style.css do seu tema.
 
 #: classes/views/styles/manage.php:8
 msgid "Easily change which style your forms are using by making changes below."
-msgstr "Altere facilmente o estilo que seus formulários estão usando fazendo as alterações abaixo."
+msgstr "Altere facilmente o estilo dos formulários fazendo as alterações abaixo."
 
 #: classes/views/styles/manage.php:20
 msgid "Assigned Style Templates"
@@ -6837,7 +6837,7 @@ msgstr "Ao passar o mouse"
 
 #: classes/views/styles/_buttons.php:102
 msgid "On Click"
-msgstr "Ao clicar"
+msgstr "Quando clicar"
 
 #: classes/views/styles/_check-box-radio-fields.php:7
 msgid "Radio"
@@ -6894,7 +6894,7 @@ msgstr "Remover sombra da caixa"
 
 #: classes/views/styles/_field-colors.php:47
 msgid "Active Style"
-msgstr "Estilo Ativo"
+msgstr "Estilo ativo"
 
 #: classes/views/styles/_field-colors.php:64
 msgid "Error Style"
@@ -6961,7 +6961,7 @@ msgstr "Substituir estilo do tema"
 
 #: classes/views/styles/_general.php:14
 msgid "This will center your form on the page where it is published if the form width is less than the available width on the page."
-msgstr "Isso centralizará seu formulário na página onde ele foi publicado se a largura do formulário for menor que a largura disponível na página."
+msgstr "Essa opção centralizará o formulário na página em que ele for publicado se a largura do formulário for menor que a da página."
 
 #: classes/views/styles/_general.php:16
 msgid "Center form on page"
@@ -6985,7 +6985,7 @@ msgstr "Fundo"
 
 #: classes/views/styles/_general.php:49
 msgid "Background image styles"
-msgstr "Estilos de imagem de plano de fundo"
+msgstr "Estilos de imagem de fundo"
 
 #: classes/views/styles/_general.php:52
 msgid "Upload background image"
@@ -6997,7 +6997,7 @@ msgstr "Família de fonte"
 
 #: classes/views/styles/_general.php:76
 msgid "Leave blank to inherit from theme"
-msgstr "Deixe em branco para herdar do tema"
+msgstr "Deixar em branco para herdar do tema"
 
 #: classes/views/styles/_general.php:80
 msgid "Direction"
@@ -7013,7 +7013,7 @@ msgstr "Da direita para a esquerda"
 
 #: classes/views/styles/_general.php:92
 msgid "Style Class"
-msgstr "Classe de estilo"
+msgstr "Classe do estilo"
 
 #: classes/views/styles/_manage-styles-row.php:19
 msgid "default"
@@ -7097,7 +7097,7 @@ msgstr "Visualizar modelo de formulário"
 
 #: classes/views/styles/_style-preview-container.php:29
 msgid "One or more of your style settings may contain invalid characters that break form styling."
-msgstr "Uma ou mais configurações de estilo poder conter caracteres inválidos que quebram o estilo do formulário."
+msgstr "Uma ou mais de suas configurações de estilo podem conter caracteres inválidos que prejudicam o estilo do formulário."
 
 #: classes/views/styles/_style-preview-container.php:49
 msgid "Edit style"
@@ -7113,15 +7113,15 @@ msgstr "Atualizando CSS..."
 
 #: classes/views/styles/_styles-list.php:37
 msgid "You are currently limited to 1 style template"
-msgstr "No momento você está limitado a 1 modelo de estilo"
+msgstr "No momento, o seu limite é de 1 modelo de estilo"
 
 #: classes/views/styles/_styles-list.php:38
 msgid "Upgrade to create and manage as many form styles as you need."
-msgstr "Atualize para criar e gerenciar quantos estilos de formulário você precisar."
+msgstr "Atualize para criar e gerenciar o número de estilos de formulário que você precisar."
 
 #: classes/views/styles/_styles-list.php:58
 msgid "Enable Formidable styling"
-msgstr "Ativar um estilo formidável"
+msgstr "Ativar um estilo do Formidable"
 
 #: classes/views/styles/_styles-list.php:76
 msgid "Default Style"
@@ -7129,16 +7129,16 @@ msgstr "Estilo padrão"
 
 #: classes/views/styles/_styles-list.php:82
 msgid "Custom Styles"
-msgstr "Estilos personalizado"
+msgstr "Estilos personalizados"
 
 #: classes/views/styles/_styles-list.php:88
 msgid "Formidable Styles"
-msgstr "Estilos formidáveis"
+msgstr "Estilos do Formidable"
 
 #. translators: Contact support URL.
 #: classes/views/summary-emails/base-plain.php:22
 msgid "Need help? Get in touch with our team at %s"
-msgstr "Preciso de ajuda? Entre em contato com nossa equipe em %s"
+msgstr "Precisa de ajuda? Entre em contato com nossa equipe em %s"
 
 #. translators: Unsubscribe URL.
 #: classes/views/summary-emails/base-plain.php:32
@@ -7147,7 +7147,7 @@ msgstr "Cancelar inscrição: %s"
 
 #: classes/views/summary-emails/base.php:52
 msgid "Need help? Get in touch with our team"
-msgstr "Preciso de ajuda? Entre em contato com nossa equipe"
+msgstr "Precisa de ajuda? Entre em contato com nossa equipe"
 
 #: classes/views/summary-emails/base.php:54
 msgid "Contact support"
@@ -7160,11 +7160,11 @@ msgstr "Cancelar assinatura"
 #: classes/views/summary-emails/stats-plain.php:23
 #: classes/views/summary-emails/stats.php:28
 msgid "Statistics"
-msgstr "Estatisticas"
+msgstr "Estatísticas"
 
 #: classes/views/summary-emails/stats-plain.php:34
 msgid "Go to Dashboard:"
-msgstr "Ir para a dashboard:"
+msgstr "Ir para o Painel:"
 
 #. translators: submission count.
 #: classes/views/summary-emails/stats-plain.php:48
@@ -7181,15 +7181,15 @@ msgstr "Os seguintes plugins estão desatualizados: %s"
 
 #: classes/views/summary-emails/stats-plain.php:66
 msgid "Please go to your Plugins page to update them."
-msgstr "Vá para a página de plugins para atualizar -los."
+msgstr "Vá para a página de plugins para atualizá-los."
 
 #: classes/views/summary-emails/stats.php:54
 msgid "Open Dashboard"
-msgstr "Abra o painel"
+msgstr "Abrir Painel"
 
 #: classes/views/summary-emails/stats.php:65
 msgid "Form name"
-msgstr "Nome do formulario"
+msgstr "Nome do formulário"
 
 #: classes/views/summary-emails/stats.php:66
 msgid "Submissions"
@@ -7206,7 +7206,7 @@ msgstr "Envie seu arquivo XML do Formidable para importar formulários para este
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
 msgid "Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Enviar seu arquivo XML %1$s para importar formulários para este site. Se a chave do formulário importado e a data de criação corresponderem a um formulário no seu site, esse formulário será atualizado."
+msgstr "Carregue seu arquivo XML %1$s para importar formulários para este site. Se a chave do formulário importado e a data de criação corresponderem a um formulário em seu site, ele será atualizado."
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
@@ -7215,7 +7215,7 @@ msgstr "Escolha um arquivo XML do Formidable"
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:44
 msgid "Choose a %1$s XML file"
-msgstr "Escolha um arquivo XML %1$s"
+msgstr "Escolher um arquivo XML %1$s"
 
 #. translators: %s: File size
 #: classes/views/xml/import_form.php:52
@@ -7232,7 +7232,7 @@ msgstr "Exportar"
 
 #: classes/views/xml/import_form.php:72
 msgid "Export your forms, entries, views, and styles so you can easily import them on another site."
-msgstr "Exporte seus formulários, entradas, visualizações e estilos para poder importá-los facilmente para outro site."
+msgstr "Exporte seus formulários, entradas, visualizações e estilos para poder importá-los facilmente em outro site."
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
@@ -7264,7 +7264,7 @@ msgstr "Selecione um formulário"
 
 #: classes/views/xml/import_form.php:146
 msgid "ID / Form Key"
-msgstr "ID /chave do formulário"
+msgstr "ID/Chave do formulário"
 
 #: classes/views/xml/import_form.php:147
 msgid "Type"
@@ -7273,7 +7273,7 @@ msgstr "Tipo"
 #. translators: %1$s: Form name
 #: classes/views/xml/import_form.php:174
 msgid "Child Form (%1$s)"
-msgstr "Formulário Filho (%1$s)"
+msgstr "Formulário subordinado (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
@@ -7301,7 +7301,7 @@ msgstr "Criar"
 
 #: deprecated/FrmDeprecated.php:176
 msgid "Your plugin has been not been installed. Please update Formidable Pro to get downloads."
-msgstr "Seu plugin não foi instalado. Atualizar o Formidable Pro para obter downloads."
+msgstr "Seu plugin não foi instalado. Atualize o Formidable Pro para obter downloads."
 
 #: deprecated/FrmDeprecated.php:357
 msgid "Form template was Successfully Created"
@@ -7321,7 +7321,7 @@ msgstr "Especifique um valor para o pagamento"
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:96
 msgid "There was a problem communicating with Stripe. Please try again."
-msgstr "Ocorreu um problema de comunicação com o Stripe. Por favor, tente novamente."
+msgstr "Ocorreu um problema de comunicação com o Stripe. Tente novamente."
 
 #: stripe/controllers/FrmStrpLiteActionsController.php:338
 msgid "Payment Method"
@@ -7341,7 +7341,7 @@ msgstr "Pagamento %s"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:57
 msgid "Successful Payment"
-msgstr "Pagamento bem sucedido"
+msgstr "Pagamento bem-sucedido"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:58
 msgid "Failed Payment"
@@ -7353,7 +7353,7 @@ msgstr "Pagamento reembolsado"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:60
 msgid "Processing Payment"
-msgstr "Processando o pagamento"
+msgstr "Processando pagamento"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:61
 msgid "Canceled Subscription"
@@ -7396,7 +7396,7 @@ msgstr "Pagamentos efetuados"
 
 #: stripe/controllers/FrmTransLiteListsController.php:53
 msgid "Next Bill Date"
-msgstr "Próxima data de fatura"
+msgstr "Próxima data de cobrança"
 
 #: stripe/controllers/FrmTransLiteListsController.php:57
 msgid "Receipt ID"
@@ -7491,16 +7491,16 @@ msgstr "Opa! Nenhuma assinatura foi selecionada para cancelamento."
 
 #: stripe/helpers/FrmStrpLiteAppHelper.php:123
 msgid "Upgrade to save on fees."
-msgstr "Atualize para salvar em taxas."
+msgstr "Atualize para economizar em taxas."
 
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "Os cartões de crédito não funcionarão sem %1$sconectar o Stripe%2$s primeiro."
+msgstr "Os cartões de crédito não funcionarão sem %1$sconectar o Stripe%2$s antes."
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
-msgstr "Não foi possível recuperar o cliente por meio do Stripe Connect."
+msgstr "Não é possível acessar o cliente pelo Stripe Connect."
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:587
 msgid "Connection Status"
@@ -7512,7 +7512,7 @@ msgstr "TESTE"
 
 #: stripe/helpers/FrmStrpLiteConnectHelper.php:606
 msgid "LIVE"
-msgstr "AO VIVO"
+msgstr "ATIVO"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 msgid "Authorized"
@@ -7580,7 +7580,7 @@ msgstr "%1$s %2$s(%3$s)%4$s"
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
-msgstr "Excluir definitivamente este pagamento?"
+msgstr "Excluir definitivamente esse pagamento?"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:462
 msgid "unlimited"
@@ -7593,7 +7593,7 @@ msgstr "%1$s de %2$s"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:497
 msgid "This payment method may take between 4-5 business days to process."
-msgstr "Este método de pagamento poder levar de 4 a 5 dias úteis para ser processado."
+msgstr "Esse método de pagamento poder levar de 4 a 5 dias úteis para ser processado."
 
 #: stripe/models/FrmStrpLiteAuth.php:133
 msgid "Payment intent does not exist."
@@ -7613,15 +7613,15 @@ msgstr "Não foi possível encontrar registro de pagamento."
 
 #: stripe/models/FrmStrpLiteAuth.php:141
 msgid "This form submission does not exist."
-msgstr "Este envio de formulário não existe."
+msgstr "Esse envio de formulário não existe."
 
 #: stripe/models/FrmStrpLiteAuth.php:143
 msgid "This form is not configured for Stripe link payments."
-msgstr "Este formulário não está configurado para pagamentos com link Stripe."
+msgstr "Esse formulário não está configurado para pagamentos com link Stripe."
 
 #: stripe/models/FrmStrpLiteAuth.php:145
 msgid "Something went wrong when trying to create a subscription."
-msgstr "Algo deu errado ao tentar criar uma assinatura."
+msgstr "Ocorreu um erro ao tentar criar uma assinatura."
 
 #: stripe/models/FrmStrpLiteAuth.php:147
 msgid "Payment was not successfully processed."
@@ -7629,7 +7629,7 @@ msgstr "O pagamento não foi processado com sucesso."
 
 #: stripe/models/FrmStrpLiteSettings.php:31
 msgid "This payment may take several days to finish processing."
-msgstr "Este pagamento poder levar vários dias para ser concluído."
+msgstr "Esse pagamento poder levar vários dias para ser concluído."
 
 #: stripe/models/FrmTransLiteAction.php:20
 msgid "Collect a Payment"
@@ -7646,7 +7646,7 @@ msgstr "Opa! Você precisa de um campo %s em seu formulário."
 
 #: stripe/views/action-settings/capture-payments-upsell.php:6
 msgid "Additional Stripe settings"
-msgstr "Configurações adicionais de Stripe"
+msgstr "Configurações adicionais do Stripe"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:8
 msgid "Capture Payment"
@@ -7670,11 +7670,11 @@ msgstr "Recorrente"
 
 #: stripe/views/action-settings/payments-options.php:47
 msgid "Repeat Every"
-msgstr "Repita a cada"
+msgstr "Repetir a cada"
 
 #: stripe/views/action-settings/payments-options.php:62
 msgid "Trial Period"
-msgstr "Período de teste"
+msgstr "Período de avaliação"
 
 #: stripe/views/action-settings/payments-options.php:95
 msgid "Customer Information"
@@ -7696,7 +7696,7 @@ msgstr "Recibo"
 
 #: stripe/views/payments/show.php:60
 msgid "Invoice #"
-msgstr "Fatura #"
+msgstr "N.º da fatura"
 
 #: stripe/views/payments/show.php:67
 #: stripe/views/subscriptions/show.php:11
@@ -7710,7 +7710,7 @@ msgstr "Datas de pagamento"
 #: stripe/views/payments/show.php:100
 #: stripe/views/subscriptions/show.php:85
 msgid "Payment Status Updates"
-msgstr "Atualizações de status de pagamento"
+msgstr "Atualizações do status de pagamento"
 
 #: stripe/views/payments/show.php:149
 #: stripe/views/payments/sidebar_list.php:8
@@ -7770,7 +7770,7 @@ msgstr "Não conectado!"
 
 #: stripe/views/settings/connect.php:23
 msgid "Finish Stripe Setup"
-msgstr "Concluir configuração de Stripe"
+msgstr "Concluir configuração do Stripe"
 
 #: stripe/views/settings/connect.php:27
 msgid "Disconnect"
@@ -7786,19 +7786,19 @@ msgstr "Modo de teste"
 
 #: stripe/views/settings/form.php:16
 msgid "Use the Stripe test mode"
-msgstr "Use o modo de teste Stripe"
+msgstr "Use o modo de teste do Stripe"
 
 #: stripe/views/settings/form.php:19
 msgid "Your site is not using SSL. Before using Stripe to collect live payments, you will need to install an SSL certificate on your site."
-msgstr "Seu site não está usando SSL. Antes de usar o Stripe para receber pagamentos ao vivo, você precisará instalar um certificado SSL em seu site."
+msgstr "Seu site não está usando SSL. Antes de usar o Stripe para receber pagamentos em tempo real, você precisará instalar um certificado SSL em seu site."
 
 #: stripe/views/settings/messages.php:8
 msgid "Stripe Processing Message"
-msgstr "Mensagem de processamento de Stripe"
+msgstr "Mensagem de processamento do Stripe"
 
 #: stripe/views/settings/messages.php:9
 msgid "The text used to notify users that a Stripe payment is still processing and will not be finalized for several days."
-msgstr "O texto usado para notificar os usuários de que um pagamento Stripe ainda está sendo processado e não será finalizado por vários dias."
+msgstr "Texto usado para notificar os usuários de que um pagamento Stripe ainda está sendo processado e não será concluído por vários dias."
 
 #: stripe/views/subscriptions/show.php:72
 msgid "Next Payment Date"
@@ -7806,7 +7806,7 @@ msgstr "Próxima data de pagamento"
 
 #: stripe/views/subscriptions/show.php:78
 msgid "Fail Count"
-msgstr "Contagem de falhas"
+msgstr "Número de falhas"
 
 #: stripe/views/subscriptions/show.php:118
 msgid "Subscription Details"
@@ -7814,7 +7814,7 @@ msgstr "Detalhes da assinatura"
 
 #: stripe/views/subscriptions/show.php:129
 msgid "Permanently delete this subscription?"
-msgstr "Excluir esta assinatura definitivamente?"
+msgstr "Excluir essa assinatura definitivamente?"
 
 #: stripe/views/subscriptions/show.php:132
 msgid "Delete Subscription"
@@ -7822,7 +7822,7 @@ msgstr "Excluir assinatura"
 
 #: js/admin/applications.js:114
 msgid "Improve your workflow with applications"
-msgstr "Melhore seu fluxo de trabalho com aplicativos"
+msgstr "Melhore seu fluxo de trabalho com os aplicativos"
 
 #: js/admin/applications.js:115
 msgid "Applications help to organize your workspace by combining forms, Views, and pages into a full solution."
@@ -7848,7 +7848,7 @@ msgstr "Página"
 #. translators: %s: The required license type (ie. Plus, Business, or Elite)
 #: js/admin/applications.js:422
 msgid "Access to this application requires the %s plan."
-msgstr "O acesso a esta aplicação requer o plano %s."
+msgstr "O acesso a esse aplicativo requer o plano %s."
 
 #: js/admin/dom.js:159
 msgid "— Select —"
@@ -7876,7 +7876,7 @@ msgstr "Coloque seu %s em uma página recém-criada."
 #. translators: %s type: ie form, view.
 #: js/admin/embed.js:138
 msgid "Use shortcodes or PHP code to put the %s anywhere."
-msgstr "Use códigos de acesso ou código PHP para colocar o %s em qualquer lugar."
+msgstr "Use shortcodes ou código PHP para colocar o %s em qualquer lugar."
 
 #: js/admin/embed.js:143
 msgid "Select existing page"
@@ -7926,7 +7926,7 @@ msgstr "Shortcode do WordPress"
 
 #: js/admin/embed.js:389
 msgid "How to use shortcodes in WordPress"
-msgstr "Como usar códigos de acesso no WordPress"
+msgstr "Como usar shortcodes no WordPress"
 
 #: js/admin/embed.js:392
 msgid "Use PHP code"
@@ -7939,7 +7939,7 @@ msgstr "Copiar %s"
 
 #: js/admin/embed.js:485
 msgid "Successfully copied embed example"
-msgstr "Exemplo de incorporar copiado com sucesso"
+msgstr "Exemplo de incorporação copiado com sucesso"
 
 #: js/admin/style.js:126
 msgid "Show less"
@@ -7948,7 +7948,7 @@ msgstr "Mostrar menos"
 #. translators: %s: The required license type (ie. Plus, Business, or Elite)
 #: js/admin/style.js:387
 msgid "Access to this style requires the %s plan."
-msgstr "O acesso a este estilo requer o plano %s."
+msgstr "O acesso a esse estilo requer o plano %s."
 
 #: js/admin/style.js:605
 msgid "Install and apply"
@@ -7969,11 +7969,11 @@ msgstr "Redefinir estilo"
 
 #: js/admin/style.js:928
 msgid "Reset this style back to the default?"
-msgstr "Redefinir este estilo de volta ao padrão?"
+msgstr "Redefinir esse estilo de volta ao padrão?"
 
 #: js/admin/style.js:989
 msgid "Style has been reset successfully"
-msgstr "O estilo foi redefinir com sucesso"
+msgstr "O estilo foi redefinido com sucesso"
 
 #: js/formidable_admin.js:1374
 msgid "Set Row Layout"
@@ -7981,20 +7981,20 @@ msgstr "Definir layout de linha"
 
 #: js/formidable_admin.js:1381
 msgid "Move Field Group"
-msgstr "Mover agrupar de campos"
+msgstr "Mover agrupamento de campos"
 
 #: js/formidable_admin.js:2339
 msgid "Delete Group"
-msgstr "Excluir agrupar"
+msgstr "Excluir agrupamento"
 
 #: js/formidable_admin.js:2345
 msgid "Duplicate Group"
-msgstr "Agrupar duplicado"
+msgstr "Duplicar agrupamento"
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
 #: js/formidable_admin.js:3565
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
-msgstr "Tem certeza de que deseja excluir estes %1$s campos selecionados?"
+msgstr "Tem certeza de que deseja excluir esses %1$s campos selecionados?"
 
 #: js/formidable_admin.js:3803
 msgid "Custom layout"
@@ -8002,7 +8002,7 @@ msgstr "Layout personalizado"
 
 #: js/formidable_admin.js:3826
 msgid "Break into rows"
-msgstr "Divida em linhas"
+msgstr "Dividir em linhas"
 
 #: js/formidable_admin.js:3836
 msgid "Row Layout"
@@ -8010,7 +8010,7 @@ msgstr "Layout de linha"
 
 #: js/formidable_admin.js:4090
 msgid "Enter number of columns for each field"
-msgstr "Digite o número de colunas para cada campo"
+msgstr "Digite o número de colunas de cada campo"
 
 #: js/formidable_admin.js:4094
 msgid "Layouts are based on a 12-column grid system"
@@ -8018,11 +8018,11 @@ msgstr "Os layouts são baseados em um sistema de grade de 12 colunas"
 
 #: js/formidable_admin.js:4547
 msgid "Merge into row"
-msgstr "Mesclar em linha"
+msgstr "Mesclar em uma linha"
 
 #: js/formidable_admin.js:5864
 msgid "Duplicate option value \"%s\" detected"
-msgstr "Valor de opção duplicado \"%s\" detectado"
+msgstr "Valor de opção duplicada \"%s\" detectado"
 
 #: js/formidable_admin.js:8776
 msgid "Save and Reload"
