@@ -622,6 +622,7 @@ function frmAdminBuildJS() {
 				const type = this.closest( '.frm_form_action_settings' ).querySelector( '.frm_action_name' ).value;
 				afterActionRemoved( type );
 			}
+			document.querySelector( '.tooltip' )?.remove();
 		});
 
 		if ( typeof removeMore !== 'undefined' ) {
