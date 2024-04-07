@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-06 21:55\n"
+"PO-Revision-Date: 2024-04-07 21:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -7780,7 +7780,7 @@ msgstr "Stripe 処理中メッセージ"
 
 #: stripe/views/settings/messages.php:9
 msgid "The text used to notify users that a Stripe payment is still processing and will not be finalized for several days."
-msgstr "Stripe での支払いがまだ処理中であり、数日間確定しないことをユーザーに通知するためのテキストです。"
+msgstr "Stripe での支払いがまだ処理中であり、数日間確定しないことをユーザーに通知するためのテキスト。"
 
 #: stripe/views/subscriptions/show.php:72
 msgid "Next Payment Date"
