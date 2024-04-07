@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-04 09:21\n"
+"PO-Revision-Date: 2024-04-07 21:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -479,7 +479,7 @@ msgstr "Añadir registro"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
-msgstr "Todas las opiniones"
+msgstr "Todas las vistas"
 
 #: classes/controllers/FrmDashboardController.php:205
 #: classes/controllers/FrmDashboardController.php:212
@@ -2413,7 +2413,7 @@ msgstr "Modificaciones de la entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:748
 msgid "Forms to PDF"
-msgstr "Formularios a PDF"
+msgstr "Forms to PDF"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
