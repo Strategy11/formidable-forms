@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			),
 		)
 	);
+	$frmpro_settings = new FrmProSettings();
 	?>
 	<div class="frm-dashboard-container wrap frm-flex-box frm-justify-between">
 		<?php $dashboard_view->get_welcome_banner(); ?>
@@ -32,7 +33,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
-			<?php $dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' ); ?>
+			<?php
+			if ( ! $frmpro_settings->hide_dashboard_videos || $frmpro_settings->menu_icon === '' ) {
+				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );
+			}
+			?>
 			<div class="frm-dashboard-widget frm-card-item frm-inbox-widget frm-px-0">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>
