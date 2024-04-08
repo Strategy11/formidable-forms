@@ -200,7 +200,6 @@ class FrmFormTemplatesController {
 		$custom_templates   = self::get_custom_templates();
 		$categories         = self::get_categories();
 
-		// Render the view.
 		include $view_path . 'index.php';
 	}
 
@@ -253,7 +252,6 @@ class FrmFormTemplatesController {
 			}
 		}
 
-		// Render the view.
 		include $view_path . 'modal.php';
 	}
 

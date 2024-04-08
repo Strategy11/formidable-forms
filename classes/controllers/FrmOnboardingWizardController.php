@@ -259,7 +259,6 @@ class FrmOnboardingWizardController {
 			'success'                => 'steps/success-step.php',
 		);
 
-		// Render the view.
 		include $view_path . 'index.php';
 	}
 
