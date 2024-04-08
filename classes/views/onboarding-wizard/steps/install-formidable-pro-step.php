@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php
-	FrmOnboardingWizardHelper::get_footer(
+	FrmOnboardingWizardHelper::print_footer(
 		array(
 			'primary-button-text'        => esc_html__( 'Continue', 'formidable' ),
 			'primary-button-id'          => 'frm-onboarding-check-pro-installation-button',

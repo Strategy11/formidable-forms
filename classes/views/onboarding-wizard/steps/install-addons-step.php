@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php
-	FrmOnboardingWizardHelper::get_footer(
+	FrmOnboardingWizardHelper::print_footer(
 		array(
 			'primary-button-text' => esc_html__( 'Install & Finish Setup', 'formidable' ),
 			'primary-button-id'   => 'frm-onboarding-install-addons-button',

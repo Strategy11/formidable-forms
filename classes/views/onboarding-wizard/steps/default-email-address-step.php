@@ -54,5 +54,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppController::api_email_form( 'freetemplates' ); ?>
 	</div>
 
-	<?php FrmOnboardingWizardHelper::get_footer( array( 'primary-button-id' => 'frm-onboarding-setup-email-step-button' ) ); ?>
+	<?php FrmOnboardingWizardHelper::print_footer( array( 'primary-button-id' => 'frm-onboarding-setup-email-step-button' ) ); ?>
 </section>

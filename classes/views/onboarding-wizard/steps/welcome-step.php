@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php
-	FrmOnboardingWizardHelper::get_footer(
+	FrmOnboardingWizardHelper::print_footer(
 		array(
 			'footer-class'          => 'frm-justify-center',
 			'display-back-button'   => false,

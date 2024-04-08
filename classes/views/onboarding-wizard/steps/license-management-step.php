@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php
-	FrmOnboardingWizardHelper::get_footer(
+	FrmOnboardingWizardHelper::print_footer(
 		array(
 			'primary-button-text'   => esc_html__( 'Activate & Continue', 'formidable' ),
 			'primary-button-id'     => 'frm-onboarding-save-license-button',

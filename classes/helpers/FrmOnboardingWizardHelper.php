@@ -84,7 +84,7 @@ class FrmOnboardingWizardHelper {
 	 * @param array $args
 	 * @return void
 	 */
-	public static function get_footer( $args = array() ) {
+	public static function print_footer( $args = array() ) {
 		$defaults = array(
 			'footer-class'             => '',
 			'display-back-button'      => true,
