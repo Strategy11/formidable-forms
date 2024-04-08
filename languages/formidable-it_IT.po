@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-06 21:55\n"
+"PO-Revision-Date: 2024-04-08 09:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -499,12 +499,12 @@ msgstr "Applicazioni installate"
 #: classes/controllers/FrmDashboardController.php:302
 #: classes/views/frm-entries/no_entries.php:37
 msgid "See the %1$sform documentation%2$s for instructions on publishing your form"
-msgstr "Consulta la documentazione del modulo %1$s%2$s per le istruzioni sulla pubblicazione del tuo modulo."
+msgstr "Consulta la %1$sdocumentazione del modulo%2$s per le istruzioni sulla pubblicazione del tuo modulo"
 
 #: classes/controllers/FrmDashboardController.php:308
 #: classes/controllers/FrmDashboardController.php:325
 msgid "You Have No Entries Yet"
-msgstr "Non hai ancora nessuna Voce"
+msgstr "Non c'è ancora nessuna voce"
 
 #: classes/controllers/FrmDashboardController.php:311
 msgid "Add New Form"
@@ -513,7 +513,7 @@ msgstr "Aggiungi nuovo modulo"
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #: classes/controllers/FrmDashboardController.php:319
 msgid "See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you'll see it here."
-msgstr "Consulta la documentazione del modulo %1$s%2$s per le istruzioni sulla pubblicazione di un modulo. Quando avrai almeno una voce, la vedrai qui."
+msgstr "Consulta la %1$sdocumentazione del modulo%2$s per le istruzioni sulla pubblicazione di un modulo. Quando avrai almeno una voce, la vedrai qui."
 
 #: classes/controllers/FrmDashboardController.php:395
 #: classes/controllers/FrmEntriesController.php:86
@@ -549,7 +549,7 @@ msgstr "Inserisci chiave"
 
 #: classes/controllers/FrmEntriesController.php:87
 msgid "Entry Name"
-msgstr "Nome della Voce"
+msgstr "Nome della voce"
 
 #: classes/controllers/FrmEntriesController.php:88
 #: classes/helpers/FrmCSVExportHelper.php:368
@@ -576,7 +576,7 @@ msgstr "La tua importazione è completa"
 #. translators: %1$s: Time string
 #: classes/controllers/FrmEntriesController.php:444
 msgid "This form is in the trash and is scheduled to be deleted permanently in %s along with any entries."
-msgstr "Questo modulo è nel cestino ed è programmato per essere eliminato definitivamente in %s insieme a tutte le voci."
+msgstr "Questo modulo è nel cestino ed è programmato per essere eliminato definitivamente tra %s insieme a tutte le voci."
 
 #: classes/controllers/FrmEntriesController.php:465
 msgid "You are trying to view an entry that does not exist."
@@ -634,7 +634,7 @@ msgstr "CRM"
 #. translators: %s: Name of form action
 #: classes/controllers/FrmFormActionsController.php:213
 msgid "%s form actions"
-msgstr "%s azioni del modulo"
+msgstr "Azioni %s del modulo"
 
 #: classes/controllers/FrmFormsController.php:19
 #: classes/controllers/FrmFormsController.php:989
@@ -648,7 +648,7 @@ msgstr "Moduli"
 
 #: classes/controllers/FrmFormsController.php:57
 msgid "Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching."
-msgstr "Mostra solo i campi che ti servono e crea moduli ramificati. Effettua l'upgrade per ottenere la logica condizionale e la ramificazione delle domande."
+msgstr "Mostra solo i campi che ti servono e crea moduli ramificati. Fai l'upgrade per ottenere la logica condizionale e la ramificazione delle domande."
 
 #: classes/controllers/FrmFormsController.php:58
 #: classes/controllers/FrmFormsController.php:59
@@ -698,7 +698,7 @@ msgstr[1] "%1$s moduli spostati nel cestino. %2$sAnnulla%3$s"
 msgid "%1$s Form Permanently Deleted"
 msgid_plural "%1$s Forms Permanently Deleted"
 msgstr[0] "%1$s Modulo eliminato definitivamente"
-msgstr[1] "%1$s Moduli eliminati in modo permanente"
+msgstr[1] "%1$s moduli eliminati in modo permanente"
 
 #. translators: %1$s: Number of forms
 #: classes/controllers/FrmFormsController.php:739
@@ -763,7 +763,7 @@ msgstr "Stai cercando di modificare un modulo che non esiste."
 
 #: classes/controllers/FrmFormsController.php:1060
 msgid "The form you're trying to edit is in trash. You must restore it first before you can make changes"
-msgstr "Il modulo che stai cercando di modificare è cestinato. Devi prima ripristinarlo prima di poter apportare delle modifiche"
+msgstr "Il modulo che stai cercando di modificare è cestinato. Devi ripristinarlo prima di poter apportare delle modifiche"
 
 #: classes/controllers/FrmFormsController.php:1070
 msgid "Restore form"
@@ -802,7 +802,7 @@ msgstr "Autorizzazioni per i moduli"
 
 #: classes/controllers/FrmFormsController.php:1216
 msgid "Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions."
-msgstr "Consenti la modifica, proteggi moduli e file, limita le voci e salva le bozze. Effettua l'upgrade per ottenere le autorizzazioni per i moduli e le voci."
+msgstr "Consenti la modifica, proteggi moduli e file, limita le voci e salva le bozze. Fai l'upgrade per ottenere le autorizzazioni per i moduli e le voci."
 
 #: classes/controllers/FrmFormsController.php:1221
 msgid "Form Scheduling"
@@ -993,7 +993,7 @@ msgstr "Seleziona un modulo valido"
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
 #: classes/controllers/FrmFormsController.php:2719
 msgid "%1$sClick here%2$s if you are not automatically redirected."
-msgstr "%1$sFai clic qui%2$s se non vieni reindirizzato automaticamente."
+msgstr "%1$sFai clic qui se il reindirizzamento automatico non funziona%2$s."
 
 #: classes/controllers/FrmFormsController.php:3100
 #: classes/helpers/FrmAppHelper.php:1628
@@ -1075,7 +1075,7 @@ msgstr "Etichetta bianca"
 
 #: classes/controllers/FrmSettingsController.php:90
 msgid "White labeling options"
-msgstr "Opzioni di etichettatura in bianco"
+msgstr "Opzioni per l'etichetta bianca"
 
 #: classes/controllers/FrmSettingsController.php:95
 #: classes/views/inbox/list.php:11
@@ -1124,7 +1124,7 @@ msgstr "Visualizza, cerca, modifica ed elimina le voci in modo flessibile e ovun
 
 #: classes/controllers/FrmSettingsController.php:342
 msgid "Display entries with virtually limitless Formidable views"
-msgstr "Visualizza le voci con visualizzazioni formidabili praticamente illimitate"
+msgstr "Visualizza le voci con visualizzazioni Formidable praticamente illimitate"
 
 #: classes/controllers/FrmSettingsController.php:343
 msgid "Create surveys & polls"
@@ -1152,11 +1152,11 @@ msgstr "Raccogli le firme digitali"
 
 #: classes/controllers/FrmSettingsController.php:349
 msgid "Accept user-submitted content with Post submissions"
-msgstr "Accetta i contenuti inviati dall'utente con gli invii di pubblicazioni"
+msgstr "Accetta i contenuti inviati dall'utente con gli invii di articoli"
 
 #: classes/controllers/FrmSettingsController.php:350
 msgid "Email routing"
-msgstr "Instradamento delle email"
+msgstr "Routing delle email"
 
 #: classes/controllers/FrmSettingsController.php:351
 msgid "Create calculator forms"
@@ -1164,7 +1164,7 @@ msgstr "Crea moduli di calcolo"
 
 #: classes/controllers/FrmSettingsController.php:352
 msgid "Save draft entries and return later"
-msgstr "Salva le bozze della Voce e restituiscile in un secondo momento."
+msgstr "Salva le bozze della voce e tornaci più tardi"
 
 #: classes/controllers/FrmSettingsController.php:353
 msgid "Analyze form data with graphs & stats"
@@ -1180,7 +1180,7 @@ msgstr "Contribuiamo ad alzare il tasso di consegna delle email per WordPress"
 
 #: classes/controllers/FrmSMTPController.php:163
 msgid "WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications."
-msgstr "WP Mail SMTP ti permette di impostare facilmente WordPress in modo che utilizzi un provider affidabile per inviare email in modo affidabile, comprese le notifiche dei moduli."
+msgstr "WP Mail SMTP ti permette di impostare facilmente WordPress in modo che utilizzi un provider affidabile per inviare email in modo sicuro, comprese le notifiche dei moduli."
 
 #: classes/controllers/FrmSMTPController.php:190
 msgid "WP Mail SMTP screenshot"
@@ -1188,7 +1188,7 @@ msgstr "Screenshot di WP Mail SMTP"
 
 #: classes/controllers/FrmSMTPController.php:192
 msgid "Over 1,000,000 websites use WP Mail SMTP."
-msgstr "Oltre 1.000.000 di siti web utilizzano WP Mail SMTP."
+msgstr "Più di 1.000.000 di siti web usano WP Mail SMTP."
 
 #: classes/controllers/FrmSMTPController.php:193
 msgid "Send emails authenticated via trusted parties."
@@ -1196,11 +1196,11 @@ msgstr "Invia email autenticate tramite parti fidate."
 
 #: classes/controllers/FrmSMTPController.php:194
 msgid "Transactional Mailers: Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES."
-msgstr "Mailers transazionali: Pepipost, Sendinblue, Mailgun, SendGrid, Amazon SES."
+msgstr "Mailer transazionali: Pepipost, Sendinblue, Mailgun, SendGrid, Amazon SES."
 
 #: classes/controllers/FrmSMTPController.php:195
 msgid "Web Mailers: Gmail, G Suite, Office 365, Outlook.com."
-msgstr "Web Mailers: Gmail, G Suite, Office 365, Outlook.com."
+msgstr "Web Mailer: Gmail, G Suite, Office 365, Outlook.com."
 
 #: classes/controllers/FrmSMTPController.php:217
 msgid "Step 1"
@@ -1209,7 +1209,7 @@ msgstr "Step 1"
 #. translators: %s: Name of the plugin
 #: classes/controllers/FrmSMTPController.php:224
 msgid "Install and Activate %s"
-msgstr "Installare e attivare %s"
+msgstr "Installa e attiva %s"
 
 #: classes/controllers/FrmSMTPController.php:240
 msgid "Install WP Mail SMTP from the WordPress.org plugin repository."
@@ -1651,11 +1651,11 @@ msgstr "Sei sicuro?"
 
 #: classes/helpers/FrmAppHelper.php:3212
 msgid "Are you sure you want to delete this field and all data associated with it?"
-msgstr "Sei sicuro di voler eliminare questo campo e tutti i dati ad esso associati?"
+msgstr "Vuoi davvero eliminare questo campo e tutti i dati a esso associati?"
 
 #: classes/helpers/FrmAppHelper.php:3213
 msgid "All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?"
-msgstr "Tutti i campi di questa sezione verranno eliminati insieme ai loro dati. Sei sicuro di voler davvero eliminare questo gruppo di campi?"
+msgstr "Tutti i campi di questa sezione verranno eliminati insieme ai loro dati. Vuoi davvero eliminare questo gruppo di campi?"
 
 #: classes/helpers/FrmAppHelper.php:3214
 msgid "Warning: If you have entries with multiple rows, all but the first row will be lost."
@@ -1732,12 +1732,12 @@ msgstr "Questa azione del modulo è limitata a %d per modulo."
 
 #: classes/helpers/FrmAppHelper.php:3236
 msgid "Please edit the existing form action."
-msgstr "NON SI TRADUCE l'azione del modulo esistente."
+msgstr "Modifica l'azione del modulo esistente."
 
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
 #: classes/helpers/FrmAppHelper.php:3239
 msgid "The Detail Page Slug \"%s\" is reserved by WordPress. This may cause problems. Is this intentional?"
-msgstr "Lo slug della pagina di dettaglio \"%s\" è riservato da WordPress. Questo potrebbe causare problemi. È una cosa voluta?"
+msgstr "Lo slug della pagina di dettaglio \"%s\" è riservato da WordPress. Questo potrebbe causare problemi. È una scelta intenzionale?"
 
 #. Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common.
 #: classes/helpers/FrmAppHelper.php:3241
@@ -1751,11 +1751,11 @@ msgstr "Consulta l'elenco delle parole riservate in WordPress."
 
 #: classes/helpers/FrmAppHelper.php:3243
 msgid "Please enter a Repeat Limit that is greater than 1."
-msgstr "NON SI TRADUCE inserisci un Limite di Ripetizione superiore a 1."
+msgstr "Inserisci un Limite di Ripetizione superiore a 1."
 
 #: classes/helpers/FrmAppHelper.php:3244
 msgid "Please select a limit between 0 and 200."
-msgstr "NON SI TRADUCE un limite compreso tra 0 e 200."
+msgstr "Seleziona un limite compreso tra 0 e 200."
 
 #: classes/helpers/FrmAppHelper.php:3249
 #: classes/views/shared/mb_adv_info.php:119
@@ -1791,7 +1791,7 @@ msgstr "La versione di PHP sul tuo server è troppo bassa. Se non viene corretta
 
 #: classes/helpers/FrmAppHelper.php:3392
 msgid "You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome)."
-msgstr "Stai utilizzando un browser obsoleto che non è compatibile con Formidable Forms. Ti invitiamo ad aggiornare il browser (ti consigliamo Chrome)."
+msgstr "Stai usando un browser obsoleto che non è compatibile con Formidable Forms. Ti invitiamo ad aggiornare il browser (ti consigliamo Chrome)."
 
 #: classes/helpers/FrmAppHelper.php:3410
 msgid "English"
@@ -3854,7 +3854,7 @@ msgstr "Sei sicuro di voler eliminare questo modulo e tutte le sue voci?"
 
 #: classes/helpers/FrmFormsHelper.php:1221
 msgid "This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?"
-msgstr "In questo modo il modulo e tutti i suoi dati verranno eliminati in modo permanente. Questa operazione è irreversibile. Sei sicuro di voler continuare?"
+msgstr "In questo modo il modulo e tutti i suoi dati verranno eliminati in modo permanente. Questa operazione è irreversibile. Confermi di voler continuare?"
 
 #: classes/helpers/FrmFormsHelper.php:1234
 #: classes/models/FrmField.php:223
@@ -3875,7 +3875,7 @@ msgstr "Aggiungi questa opzione a un campo di sola lettura per visualizzare il t
 
 #: classes/helpers/FrmFormsHelper.php:1242
 msgid "Scroll Box"
-msgstr "Boxed"
+msgstr "Casella di scorrimento"
 
 #: classes/helpers/FrmFormsHelper.php:1243
 msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
@@ -3888,7 +3888,7 @@ msgstr "Primo"
 
 #: classes/helpers/FrmFormsHelper.php:1247
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
-msgstr "Aggiungi questo valore al primo campo di ogni riga, insieme alla larghezza."
+msgstr "Aggiungi questo valore al primo campo di ogni riga, insieme alla larghezza. Es. frm_first frm4"
 
 #: classes/helpers/FrmFormsHelper.php:1249
 #: classes/helpers/FrmStylesHelper.php:45
@@ -3909,7 +3909,7 @@ msgstr "Riga griglia dispari"
 
 #: classes/helpers/FrmFormsHelper.php:1254
 msgid "Color Block"
-msgstr "Blocco di colori"
+msgstr "Blocco colore"
 
 #: classes/helpers/FrmFormsHelper.php:1255
 msgid "Add a background color to the field or section."
@@ -3937,17 +3937,17 @@ msgstr "È necessario un piano di licenza:"
 
 #: classes/helpers/FrmFormsHelper.php:1602
 msgid "Is this intentional?"
-msgstr "È una cosa intenzionale?"
+msgstr "È una scelta intenzionale?"
 
 #. translators: %s: the name of a single parameter in the redirect URL
 #: classes/helpers/FrmFormsHelper.php:1612
 msgid "The redirect URL is using the parameter \"%s\", which is reserved by WordPress. "
-msgstr "L'URL di reindirizzamento utilizza il parametro \"%s\", che è riservato da WordPress. "
+msgstr "L'URL di reindirizzamento usa il parametro \"%s\", che è riservato da WordPress. "
 
 #. translators: %s: the names of two or more parameters in the redirect URL, separated by commas
 #: classes/helpers/FrmFormsHelper.php:1618
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
-msgstr "La reindirizza URL utilizza i parametri \"%s\", che sono riservati da WordPress. "
+msgstr "L'URL di reindirizzamento usa i parametri \"%s\", che sono riservati da WordPress. "
 
 #: classes/helpers/FrmFormsHelper.php:1760
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
@@ -4033,7 +4033,7 @@ msgstr "Ottieni i superpoteri con %1$s%2$s Altri moduli precostituiti"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:193
 msgid "Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities."
-msgstr "Sfrutta il potenziale di centinaia di template aggiuntivi e salva tempo prezioso. Effettua l'aggiornamento oggi stesso per ottenere capacità di creazione di moduli senza precedenti."
+msgstr "Sfrutta il potenziale di centinaia di template aggiuntivi e salva tempo prezioso. Fai l'upgrade oggi stesso per ottenere capacità di creazione di moduli senza precedenti."
 
 #: classes/helpers/FrmFormTemplatesHelper.php:194
 #: classes/views/form-templates/modals/upgrade-modal.php:87
@@ -4108,7 +4108,7 @@ msgstr "Seleziona Tutti"
 
 #: classes/helpers/FrmOnSubmitHelper.php:33
 msgid "Message on submit"
-msgstr "Messaggio su invia"
+msgstr "Messaggio all'invio"
 
 #: classes/helpers/FrmOnSubmitHelper.php:66
 msgid "Show the form with the confirmation message"
@@ -4133,7 +4133,7 @@ msgstr "Le tue risposte sono state inviate con successo. Grazie!"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
-msgstr "NON SI TRADUCE: attendi di essere reindirizzato."
+msgstr "Attendi il reindirizzamento."
 
 #. translators: %d: The number of styles
 #: classes/helpers/FrmStylesCardHelper.php:453
@@ -4195,11 +4195,11 @@ msgstr "Segnaposto all'interno del campo"
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
 msgid "Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s."
-msgstr "Gli stili disabilitati sono disabilitati. Questo deve essere abilitato in %1$sImpostazioni globali%2$s."
+msgstr "Gli stili Formidable sono disabilitati. Per abilitarli, vai su %1$sImpostazioni globali%2$s."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:210
 msgid "You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features."
-msgstr "Stai utilizzando una versione non aggiornata di Formidable Pro. Aggiorna alla versione 6.0 per avere accesso a tutte le caratteristiche dello styler."
+msgstr "Stai usando una versione non aggiornata di Formidable Pro. Passa alla versione 6.0 per avere accesso a tutte le caratteristiche dello styler."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:234
 msgid "Captcha fields are hidden."
