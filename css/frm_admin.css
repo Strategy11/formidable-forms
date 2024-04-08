@@ -1277,6 +1277,7 @@ body.frm-hidden-overflow {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 #frm-form-button button,
+.frm-form-button button,
 .frm-preview-buttons button,
 .frm-button-red,
 .frm-button-tertiary {
@@ -1421,6 +1422,7 @@ body.frm-hidden-overflow {
 
 .frm-white-body #search-submit,
 #frm-form-button .frm_button_submit,
+.frm-form-button .frm_button_submit,
 .frm-white-body .frm-preview-buttons button,
 .frm-white-body .button:not(.frm-button-primary),
 .wp-core-ui.frm-white-body .button-secondary,
@@ -6420,6 +6422,10 @@ ul.start_divider {
 	display: none !important;
 }
 
+.edit_field_type_submit .frm_more_options_li:not(:last-child) {
+	display: none !important;
+}
+
 .frm_no_section_fields:not(.frm_block) + ul.start_divider {
 	padding: 0;
 	min-height: 132px;
@@ -6718,6 +6724,10 @@ tr.frm_options_heading td {
 
 .frm-empty-fields .frm_updated_message ~ .frm_no_fields {
 	top: 60px;
+}
+
+#frm_form_editor_container:not(.frm-has-fields) #frm-show-fields > .frm_field_box:last-child {
+	visibility: hidden;
 }
 
 .frm-has-fields .frm_no_fields {
@@ -7491,8 +7501,11 @@ ul.frm_two_col {
 
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
-	text-align: right;
-	margin-left: auto;
+	margin-right: var(--gap-xs);
+}
+
+.frm_code_list.frm-full-hover a {
+    display: block;
 }
 
 .frm_code_list.frm-full-hover a,
@@ -8492,6 +8505,10 @@ button.frm_choose_image_box,
 	padding-left: var(--gap-lg) !important;
 	padding-right: 5px !important;
 	background-position: left 11px top 55%;
+}
+
+.rtl .frm_code_list.frm-full-hover a span {
+	margin-left: var(--gap-xs);
 }
 
 /* ---------------------------------------------------------------

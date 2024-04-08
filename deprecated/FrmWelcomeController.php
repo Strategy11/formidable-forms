@@ -12,8 +12,6 @@ class FrmWelcomeController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public static function load_hooks() {

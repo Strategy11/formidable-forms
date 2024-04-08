@@ -135,6 +135,35 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Creates submit button field.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|object $form Form ID or object.
+	 */
+	private static function create_submit_button_field( $form ) {
+		FrmForm::maybe_get_form( $form );
+
+		if ( FrmSubmitHelper::get_submit_field( $form->id ) ) {
+			// Do not create submit button field if it exists.
+			return;
+		}
+
+		FrmField::create(
+			array(
+				'type'        => FrmSubmitHelper::FIELD_TYPE,
+				'name'        => __( 'Submit', 'formidable' ),
+				'field_order' => 9999,
+				'form_id'     => $form->id,
+				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
+				'description'   => '',
+				'default_value' => '',
+				'options'       => array(),
+			)
+		);
+	}
+
 	public static function edit( $values = false ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -796,6 +825,7 @@ class FrmFormsController {
 		 */
 		do_action( 'frm_build_new_form', $form_id );
 
+		self::create_submit_button_field( $form_id );
 		self::create_default_on_submit_action( $form_id );
 		self::create_default_email_action( $form_id );
 
@@ -1084,6 +1114,7 @@ class FrmFormsController {
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
+		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
 
 		if ( $reset_fields ) {
 			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
@@ -1112,7 +1143,7 @@ class FrmFormsController {
 		self::maybe_update_form_builder_message( $message );
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-		$has_fields    = isset( $values['fields'] ) && ! empty( $values['fields'] );
+		$has_fields    = ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
