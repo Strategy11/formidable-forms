@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<td>
 		<select id="frm_option_transition" >
 			<option disabled>
-				<?php esc_html_e( 'Slide horizonally', 'formidable' ); ?>
+				<?php esc_html_e( 'Slide horizontally', 'formidable' ); ?>
 			</option>
 			<option disabled>
 				<?php esc_html_e( 'Slide vertically', 'formidable' ); ?>
