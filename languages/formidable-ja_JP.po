@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-07 21:48\n"
+"PO-Revision-Date: 2024-04-08 09:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -3934,12 +3934,12 @@ msgstr "これは意図したことですか ?"
 #. translators: %s: the name of a single parameter in the redirect URL
 #: classes/helpers/FrmFormsHelper.php:1612
 msgid "The redirect URL is using the parameter \"%s\", which is reserved by WordPress. "
-msgstr "リダイレクトURLはWordPressが予約したパラメータ \"%s\" を使用しています。 "
+msgstr "リダイレクト URL は WordPress 限定のパラメータ \"%s\" を使用しています。"
 
 #. translators: %s: the names of two or more parameters in the redirect URL, separated by commas
 #: classes/helpers/FrmFormsHelper.php:1618
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
-msgstr "リダイレクトURLは、WordPressが予約しているパラメータ \"%s\" を使用しています。 "
+msgstr "リダイレクト URL は WordPress 限定のパラメータ \"%s\" を使用しています。"
 
 #: classes/helpers/FrmFormsHelper.php:1760
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
@@ -3949,11 +3949,11 @@ msgstr "保存"
 
 #: classes/helpers/FrmFormsListHelper.php:112
 msgid "No forms found in the trash."
-msgstr "ゴミ箱内の用紙は見つからなかった。"
+msgstr "ゴミ箱にフォームはありません。"
 
 #: classes/helpers/FrmFormsListHelper.php:115
 msgid "See all forms."
-msgstr "すべてのフォームを見る。"
+msgstr "すべてのフォームを表示。"
 
 #: classes/helpers/FrmFormsListHelper.php:120
 #: classes/views/styles/manage.php:50
@@ -3989,7 +3989,7 @@ msgstr "%s を選択"
 
 #: classes/helpers/FrmFormsListHelper.php:289
 msgid "Saving entries is disabled for this form"
-msgstr "このフォームでは、エントリーの保存は無効化されます。"
+msgstr "このフォームでは、エントリーの保存は無効化されています。"
 
 #: classes/helpers/FrmFormsListHelper.php:328
 #: classes/models/FrmField.php:157
@@ -4003,15 +4003,15 @@ msgstr "プレビュー"
 
 #: classes/helpers/FrmFormsListHelper.php:455
 msgid "ALL selected forms and their entries will be permanently deleted. Want to proceed?"
-msgstr "選択されたフォームとそのエントリーはすべて永久に削除されます。続行しますか？"
+msgstr "選択されたフォームとそのエントリーはすべて完全に削除されます。続行しますか ?"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:173
 msgid "Get Super Powers with Pre-built Forms"
-msgstr "ビルトイン・フォームでスーパーパワーを手に入れる"
+msgstr "あらかじめ用意されたフォームで強力なパワーを手に入れましょう"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:174
 msgid "Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed."
-msgstr "何百ものフォームテンプレートの可能性を引き出し、貴重な時間を節約しましょう。今すぐ更新して、圧倒的なスピードでフォームを作成しましょう。"
+msgstr "何百ものフォームテンプレートを活用して、貴重な時間を節約できます。今すぐ更新して、圧倒的なスピードでフォームを作成しましょう。"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:175
 #: classes/views/form-templates/modals/renew-account-modal.php:43
@@ -4021,11 +4021,11 @@ msgstr "今すぐ更新"
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/helpers/FrmFormTemplatesHelper.php:189
 msgid "Get Super Powers with %1$s%2$s More Pre-built Forms"
-msgstr "%1$s%2$s その他のビルトインフォームでスーパーパワーを手に入れよう"
+msgstr "さらに%1$s%2$sのあらかじめ用意されたフォームで、強力なパワーを手に入れましょう"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:193
 msgid "Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities."
-msgstr "何百もの追加フォームテンプレートの可能性を引き出し、貴重な時間を節約しましょう。今すぐアップグレードして、比類のないフォーム作成機能を手に入れましょう。"
+msgstr "何百もの追加のフォームテンプレートを活用して、貴重な時間を節約できます。今すぐアップグレードして、圧倒的な機能でフォームを作成しましょう。"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:194
 #: classes/views/form-templates/modals/upgrade-modal.php:87
@@ -4099,11 +4099,11 @@ msgstr "すべて選択"
 
 #: classes/helpers/FrmOnSubmitHelper.php:33
 msgid "Message on submit"
-msgstr "送信時のメッセージ"
+msgstr "送信するメッセージ"
 
 #: classes/helpers/FrmOnSubmitHelper.php:66
 msgid "Show the form with the confirmation message"
-msgstr "確認メッセージとともにフォームを表示する"
+msgstr "フォームを確認メッセージと一緒に表示"
 
 #: classes/helpers/FrmOnSubmitHelper.php:89
 msgid "Redirect URL"
@@ -4120,7 +4120,7 @@ msgstr "ページを選択"
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:146
 msgid "Your responses were successfully submitted. Thank you!"
-msgstr "あなたのレスポンシブは正常に送信されました。ありがとうございました！"
+msgstr "回答は正常に送信されました。ありがとうございました。"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
@@ -4168,7 +4168,7 @@ msgstr "左"
 
 #: classes/helpers/FrmStylesHelper.php:46
 msgid "Inline (left without a set width)"
-msgstr "インライン（幅を設定せずに残す）"
+msgstr "インライン (幅を設定せずに左)"
 
 #: classes/helpers/FrmStylesHelper.php:47
 #: stripe/controllers/FrmStrpLiteEventsController.php:293
@@ -4177,7 +4177,7 @@ msgstr "なし"
 
 #: classes/helpers/FrmStylesHelper.php:48
 msgid "Hidden (but leave the space)"
-msgstr "非表示（ただしスペースは残す）"
+msgstr "非表示 (ただしスペースは残す)"
 
 #: classes/helpers/FrmStylesHelper.php:49
 msgid "Placeholder inside the field"
@@ -4186,19 +4186,19 @@ msgstr "フィールド内のプレースホルダー"
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
 msgid "Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s."
-msgstr "Formidable スタイルは無効化される。これは %1$sグローバル設定%2$sで有効化する必要があります。"
+msgstr "Formidable スタイルは無効化されています。これは%1$sグローバル設定%2$sで有効化する必要があります。"
 
 #: classes/helpers/FrmStylesPreviewHelper.php:210
 msgid "You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features."
-msgstr "Formidable Pro のバージョンが古いようです。すべてのスタイラー機能をご利用いただくには、バージョン 6.0 に更新してください。"
+msgstr "Formidable Pro のバージョンが古いようです。すべてのスタイル編集機能をご利用いただくには、バージョン 6.0に更新してください。"
 
 #: classes/helpers/FrmStylesPreviewHelper.php:234
 msgid "Captcha fields are hidden."
-msgstr "Captchaフィールドは非表示です。"
+msgstr "Captcha フィールドは非表示になっています。"
 
 #: classes/helpers/FrmStylesPreviewHelper.php:245
 msgid "Not all JavaScript is loaded in this preview."
-msgstr "このプレビューでは、すべてのJavaScriptが読み込まれるわけではありません。"
+msgstr "このプレビューでは、すべての JavaScript が読み込まれるわけではありません。"
 
 #: classes/helpers/FrmStylesPreviewHelper.php:258
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
@@ -4214,23 +4214,23 @@ msgstr "プロ版にアップグレード."
 
 #: classes/helpers/FrmTipsHelper.php:100
 msgid "Use conditional logic to shorten your forms and increase conversions."
-msgstr "条件ロジックを使ってフォームを短縮し、コンバージョンを増やしましょう。"
+msgstr "条件ロジックを使用してフォームを短縮し、コンバージョンを増やしましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:108
 msgid "Want to stop losing leads from email typos?"
-msgstr "メールの誤字脱字でリードを失いたくないですか？"
+msgstr "メールの誤字脱字でリードを失うことを防ぎたいですか ?"
 
 #: classes/helpers/FrmTipsHelper.php:109
 msgid "Add email confirmation fields."
-msgstr "メール確認フィールドを追加する。"
+msgstr "メール確認フィールドを追加しましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:116
 msgid "Use page breaks for easier forms."
-msgstr "フォームを簡単にするために改ページを使う。"
+msgstr "フォームをシンプルにするために、改ページを使いましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:124
 msgid "Cut down on back-and-forth with clients."
-msgstr "顧客とのやりとりを減らす。"
+msgstr "顧客とのやりとりを減らしましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:125
 msgid "Allow file uploads in your form."
@@ -4246,12 +4246,12 @@ msgstr "時間を節約."
 
 #: classes/helpers/FrmTipsHelper.php:141
 msgid "Fill out forms automatically!"
-msgstr "フォームの自動入力"
+msgstr "フォームを自動入力しましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:158
 #: classes/helpers/FrmTipsHelper.php:340
 msgid "A site with dynamic, user-generated content is within reach."
-msgstr "ダイナミックなユーザー・ジェネレータ・コンテンツを持つサイトは手の届くところにある。"
+msgstr "ダイナミックなユーザー生成コンテンツがあるサイトは、すぐそこに。"
 
 #: classes/helpers/FrmTipsHelper.php:159
 msgid "Add front-end editing."
@@ -4259,19 +4259,19 @@ msgstr "フロントエンド編集を追加。"
 
 #: classes/helpers/FrmTipsHelper.php:166
 msgid "Have long forms?"
-msgstr "長いフォームをお持ちですか？"
+msgstr "長いフォームがありますか ?"
 
 #: classes/helpers/FrmTipsHelper.php:167
 msgid "Let users save drafts and return later!"
-msgstr "ユーザーに下書きを保存させ、後で戻せるようにする！"
+msgstr "ユーザーが下書きを保存して、後で戻れるようにしましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:174
 msgid "Want your form open only for a certain time period?"
-msgstr "フォームを特定の期間だけ開きたいですか？"
+msgstr "一定の期間だけフォームが開くようにしたいですか ?"
 
 #: classes/helpers/FrmTipsHelper.php:175
 msgid "Add form scheduling."
-msgstr "フォームのスケジューリングを追加"
+msgstr "フォームのスケジューリングを追加できます。"
 
 #: classes/helpers/FrmTipsHelper.php:192
 msgid "Save time by sending the email to the right person automatically."
@@ -4279,7 +4279,7 @@ msgstr "適切な担当者に自動的にメールを送信することで、時
 
 #: classes/helpers/FrmTipsHelper.php:193
 msgid "Add email routing."
-msgstr "メールルーティングを追加する。"
+msgstr "メールルーティングを追加しましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:200
 msgid "Create blog posts or pages from the front-end."
@@ -4291,15 +4291,15 @@ msgstr "ユーザーがフロントエンドで投稿できるようにしまし
 
 #: classes/helpers/FrmTipsHelper.php:216
 msgid "Grow your business with automated email follow-up."
-msgstr "自動メールフォローでビジネスを成長させましょう。"
+msgstr "自動のメールフォローでビジネスを成長させましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:217
 msgid "Send leads straight to Mailchimp."
-msgstr "Mailchimpに直接リードを送信します。"
+msgstr "Mailchimp に直接リードを送信します。"
 
 #: classes/helpers/FrmTipsHelper.php:224
 msgid "Increase revenue."
-msgstr "収入を増やす。"
+msgstr "収入を増やしましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:225
 msgid "Use PayPal with this form."
@@ -4307,7 +4307,7 @@ msgstr "このフォームに PayPal を使用する。"
 
 #: classes/helpers/FrmTipsHelper.php:232
 msgid "Get paid instantly."
-msgstr "即座に支払われます。"
+msgstr "支払いを即座に受け取りましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:233
 msgid "Use Paypal with this form."
@@ -4319,11 +4319,11 @@ msgstr "自動的にユーザーアカウントを作成します。"
 
 #: classes/helpers/FrmTipsHelper.php:241
 msgid "Upgrade to boost your site membership."
-msgstr "アップグレードでサイト会員を増やしましょう。"
+msgstr "アップグレードして、サイト会員を増やしましょう。"
 
 #: classes/helpers/FrmTipsHelper.php:248
 msgid "Need front-end profile editing?"
-msgstr "フロントエンドでのプロフィール編集が必要ですか？"
+msgstr "フロントエンドでのプロフィール編集が必要ですか ?"
 
 #: classes/helpers/FrmTipsHelper.php:249
 msgid "Add user registration."
@@ -5029,7 +5029,7 @@ msgstr "この提案は、すでにあなたのサイトにインストールさ
 
 #: classes/models/FrmRecaptchaSettings.php:54
 msgid "reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot."
-msgstr "reCAPTCHA は無料でアクセス可能な CAPTCHA サービスであり、ブログでスパムをブロックしながら一方で書籍をデジタル化するのに役立ちます。reCAPTCHA では、書籍からスキャンされた2つの単語を再入力して、人間であることを証明するようにコメント投稿者に求めます。これにより、そのユーザーがスパムボットではないことが証明されます。"
+msgstr "reCAPTCHA は無料でアクセス可能な CAPTCHA サービスであり、ブログでスパムをブロックする一方で書籍をデジタル化するのに役立ちます。reCAPTCHA では、書籍からスキャンされた2つの単語を再入力して、人間であることを証明するようにコメント投稿者に求めます。これにより、そのユーザーがスパムボットではないことが証明されます。"
 
 #. translators: %s: User name, %2$d: number of entries
 #: classes/models/FrmReviews.php:114
@@ -5202,7 +5202,7 @@ msgstr "太字"
 
 #: classes/models/FrmTurnstileSettings.php:64
 msgid "Turnstile is a free tool to replace CAPTCHAs. Turnstile delivers frustration-free, CAPTCHA-free web experiences to website visitors - with just a simple snippet of free code. Moreover, Turnstile stops abuse and confirms visitors are real without the data privacy concerns or awful user experience of CAPTCHAs."
-msgstr "Turnstile は、CAPTCHA に代わる無料のツールです。Turnstile は、CAPTCHA のない、スムーズなウェブ体験をサイト訪問者に提供します。さらに、Turnstile は不正使用を阻止し、CAPTCHA のデータプライバシーに関する懸念や不快なユーザー体験なしに訪問者が本物であることを確認します。"
+msgstr "Turnstile は、CAPTCHA に代わる無料のツールです。Turnstile は、CAPTCHA のない、スムーズなウェブ体験をサイト訪問者に提供します。さらに、Turnstile は、CAPTCHA のデータプライバシーの心配やわずらしさを訪問者に感じさせずに不正使用を阻止し、訪問者が実在の人物であることを確認します。"
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
@@ -5267,7 +5267,7 @@ msgstr "強力な機能をすべてアンロックして、可能性を最大限
 
 #: classes/views/dashboard/templates/pro-features-list.php:25
 msgid "Upgrade to Pro & Get 50% Off"
-msgstr "50%オフで Pro にアップグレード"
+msgstr "50% オフで Pro にアップグレード"
 
 #. translators: %1$s: category name, %2$d: number of items in the category
 #: classes/views/form-templates/categories.php:18
@@ -5358,11 +5358,11 @@ msgstr "テンプレート名"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:19
 msgid "Get 20+ Free Form Templates"
-msgstr "20以上の無料フォームテンプレートを入手しましょう"
+msgstr "20以上の無料のフォームテンプレートを入手しましょう"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:20
 msgid "Just add your email address and we'll send you a code for free form templates!"
-msgstr "メールアドレスをご登録いただくだけで、無料のフォームテンプレート用のコードをお届けします !"
+msgstr "メールアドレスをご登録いただくだけで、無料のフォームテンプレート用のコードが届きます !"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:50
 msgid "Enter your email"
@@ -5374,7 +5374,7 @@ msgstr "メールアドレスが無効です"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:55
 msgid "Email is empty"
-msgstr "メールアドレスは空です"
+msgstr "メールアドレスが空です"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:65
 msgid "Get Code"
@@ -5408,7 +5408,7 @@ msgstr "このテンプレートはお客様のプランではご利用いただ
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:26
 msgid "%1$sTEMPLATE NAME%2$s is a PRO Template"
-msgstr "%1$sTEMPLATE NAME%2$s は PRO のテンプレートです。"
+msgstr "%1$sTEMPLATE NAME%2$s は PRO のテンプレートです"
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/views/form-templates/modals/upgrade-modal.php:40
@@ -5521,7 +5521,7 @@ msgstr "投稿"
 
 #: classes/views/frm-entries/sidebar-shared.php:8
 msgid "Entry Actions"
-msgstr "投稿アクション"
+msgstr "エントリーのアクション"
 
 #: classes/views/frm-entries/sidebar-shared.php:28
 msgid "Entry Details"
@@ -5696,7 +5696,7 @@ msgstr "区切り値"
 
 #: classes/views/frm-fields/back-end/radio-images.php:16
 msgid "Add a separate value to use for calculations, email routing, saving to the database, and many other uses. The option values are saved while the option labels are shown in the form."
-msgstr "計算、メールルーティング、データベースへの保存、その他多くの用途に使用するために区切り値を追加します。このオプション値は保存され、オプションラベルはフォームに表示されます。"
+msgstr "計算、メールルーティング、データベースへの保存、その他多くの用途に使用する区切り値を追加します。このオプション値は保存され、オプションラベルはフォームに表示されます。"
 
 #: classes/views/frm-fields/back-end/radio-images.php:19
 msgid "Use separate values"
@@ -5715,7 +5715,7 @@ msgstr "Captcha は、サイトキーとシークレットキーが%1$s設定%2$
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
 msgid "Credit Cards will not work without %1$sadding a Collect Payment action%2$s."
-msgstr "クレジットカードは、%1$s支払い回収アクションを追加%2$sしないと使用できません。"
+msgstr "クレジットカードは、%1$s支払い回収アクションを追加%2$sしないと機能しません。"
 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
@@ -5991,7 +5991,7 @@ msgstr "送信元"
 
 #: classes/views/frm-form-actions/_email_settings.php:56
 msgid "Warning: If you are sending an email to the user, the To and From fields should not match."
-msgstr "警告: ユーザーにメールを送信する場合、宛先フィールドと発信元フィールドが一致しないようにしてください。"
+msgstr "警告: ユーザーにメールを送信する場合、宛先フィールドと送信元フィールドが一致しないようにしてください。"
 
 #: classes/views/frm-form-actions/_email_settings.php:70
 msgid "Subject"
@@ -6039,7 +6039,7 @@ msgstr "その他のオプション"
 #: classes/views/frm-forms/add_field.php:38
 #: js/formidable_admin.js:1415
 msgid "Toggle More Options Dropdown"
-msgstr "その他のオプションドロップダウンの切り替え"
+msgstr "その他のオプションのドロップダウンを切り替える"
 
 #: classes/views/frm-forms/add_field.php:51
 msgid "(Collapsed)"
@@ -6182,7 +6182,7 @@ msgstr "javascript を使用してこのフォームを検証する"
 
 #: classes/views/frm-forms/settings-advanced.php:111
 msgid "Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields."
-msgstr "必須フィールド、メール形式、数値形式は、ブラウザーですぐに確認できます。特定のフィールドの検証メッセージを削除するようにカスタマイズしている場合は、このオプションをオフにすることをお勧めします。"
+msgstr "必須フィールド、メールアドレス形式、数値形式を、ブラウザーですぐに確認できます。特定のフィールドの検証メッセージを削除するようにカスタマイズしている場合は、このオプションをオフにすることをお勧めします。"
 
 #: classes/views/frm-forms/settings-buttons.php:7
 msgid "Set your button text."
@@ -6247,7 +6247,7 @@ msgstr "ハニーポットを使用してエントリーをスパムチェック
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:8
 msgid "Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers."
-msgstr "ボットを欺くためにフォーム内に目に見えないフィールドを設定します。「厳格」に設定するとより多くのスパムを捕捉できますが、ブラウザーによってはオートコンプリートの問題で、実際のユーザーが送信できない可能性があります。"
+msgstr "ボットを欺くためにフォーム内に目に見えないフィールドを設定します。「厳格」に設定するとより多くのスパムを捕捉できますが、ブラウザーによってはオートコンプリートの問題で、実際のユーザーが送信できなくなる可能性があります。"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:11
 msgid "Off"
@@ -6267,11 +6267,11 @@ msgstr "新規フォームを作成"
 
 #: classes/views/frm-forms/_publish_box.php:26
 msgid "On Blank Page"
-msgstr "白紙のページ"
+msgstr "空白ページを使用"
 
 #: classes/views/frm-forms/_publish_box.php:31
 msgid "In Theme"
-msgstr "テーマ"
+msgstr "テーマを使用"
 
 #: classes/views/frm-forms/_publish_box.php:47
 msgid "Embed"
@@ -6287,7 +6287,7 @@ msgstr "Turnstile"
 
 #: classes/views/frm-settings/captcha/captcha.php:29
 msgid "Changing the captcha type here will replace it in all any forms where it is used."
-msgstr "ここで Captcha タイプを変更すると、使用されているすべてのフォームの Captcha が置き換えられます。"
+msgstr "ここで Captcha タイプを変更すると、Captcha が使用されているすべてのフォームで Captcha が置き換えられます。"
 
 #: classes/views/frm-settings/captcha/captcha.php:33
 msgid "reCAPTCHA Settings"
@@ -6356,7 +6356,7 @@ msgstr "ライセンスキーにより、新機能や更新にアクセスでき
 
 #: classes/views/frm-settings/general.php:15
 msgid "Styling & Scripts"
-msgstr "スタイリング＆スクリプト"
+msgstr "スタイルとスクリプト"
 
 #: classes/views/frm-settings/general.php:19
 msgid "Load form styling"
@@ -6518,7 +6518,7 @@ msgstr "Formidable Forms Pro を入手して、すべての強力な機能のロ
 
 #: classes/views/frm-settings/settings_cta.php:15
 msgid "Thanks for being a loyal Formidable Forms user. Upgrade to Formidable Forms Pro to unlock all the awesome features and learn how others are defying the limits by taking on big projects without big resources."
-msgstr "いつも Formidable Forms をご利用いただきありがとうございます。Formidable Forms Pro にアップグレードして、すばらしい機能をすべてアンロックしてください。また、他のユーザーがどのようにして豊富なリソースなしに大規模なプロジェクトに取り組み、成果を上げているのかをご確認ください。"
+msgstr "いつも Formidable Forms をご利用いただきありがとうございます。Formidable Forms Pro にアップグレードして、すばらしい機能をすべてアンロックしてください。また、他のユーザーが枠にとらわれず、豊富なリソースなしに大規模なプロジェクトに取り組んでいるかをご確認ください。"
 
 #: classes/views/frm-settings/settings_cta.php:17
 msgid "We know that you will truly love Formidable Forms."
@@ -6634,7 +6634,7 @@ msgstr "クリックして挿入"
 
 #: classes/views/shared/reports-info.php:17
 msgid "Get Live Graphs and Reports"
-msgstr "ライブグラフとレポートを取得 "
+msgstr "ライブのグラフとレポートを取得"
 
 #: classes/views/shared/reports-info.php:19
 msgid "Get more insight for surveys, polls, daily contacts, and more."
@@ -6642,7 +6642,7 @@ msgstr "アンケート、投票、毎日のお問い合わせなどに関して
 
 #: classes/views/shared/reports-info.php:32
 msgid "View reports"
-msgstr "レポートの表示"
+msgstr "レポートを表示"
 
 #: classes/views/shared/review.php:11
 msgid "Are you enjoying Formidable Forms?"
@@ -6699,7 +6699,7 @@ msgstr "%s にアップグレード"
 
 #: classes/views/shared/views-info.php:17
 msgid "Show and Edit Entries with Views"
-msgstr "ビューを伴うエントリーの表示と編集"
+msgstr "ビューによるエントリーの表示と編集"
 
 #: classes/views/shared/views-info.php:19
 msgid "Bring entries to the front-end of your site for full-featured applications or just to show the content."
@@ -7004,11 +7004,11 @@ msgstr "デフォルト"
 
 #: classes/views/styles/_manage-styles-row.php:23
 msgid "Styling disabled"
-msgstr "スタイリングは無効"
+msgstr "スタイルは無効"
 
 #: classes/views/styles/_sample_form.php:14
 msgid "This is an example form description for styling purposes."
-msgstr "これはスタイリングのためのフォーム説明の例です。"
+msgstr "これはスタイル設定のためのフォーム記述の例です。"
 
 #: classes/views/styles/_sample_form.php:18
 msgid "Text field"
@@ -7037,7 +7037,7 @@ msgstr "有効な状態のテキストフィールド"
 
 #: classes/views/styles/_sample_form.php:40
 msgid "Active state will be seen when the field is clicked"
-msgstr "有効な状態は、フィールドがクリックされたときに表示されます。"
+msgstr "フィールドがクリックされると、有効な状態が示されます。"
 
 #: classes/views/styles/_sample_form.php:44
 msgid "Read-only field"
@@ -7230,7 +7230,7 @@ msgstr "CSV エンコード形式"
 
 #: classes/views/xml/import_form.php:104
 msgid "Column Separation"
-msgstr "カラム分離"
+msgstr "カラム区切り文字"
 
 #: classes/views/xml/import_form.php:110
 msgid "Include the following in the export file"
@@ -7259,7 +7259,7 @@ msgstr "子フォーム (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
-msgstr "選択をエクスポート"
+msgstr "選択したものをエクスポート"
 
 #: classes/widgets/FrmShowForm.php:9
 msgid "Display a Formidable Form"
@@ -7374,7 +7374,7 @@ msgstr "請求サイクル"
 
 #: stripe/controllers/FrmTransLiteListsController.php:52
 msgid "Payments Made"
-msgstr "支払い完了"
+msgstr "完了した支払い"
 
 #: stripe/controllers/FrmTransLiteListsController.php:53
 msgid "Next Bill Date"
@@ -7478,7 +7478,7 @@ msgstr "アップグレードして手数料を節約しましょう。"
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "クレジットカードは、まず%1$s Stripe に接続%2$sしないと使用できません。"
+msgstr "クレジットカードは、まず%1$s Stripe に接続%2$sしないと機能しません。"
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
@@ -7498,7 +7498,7 @@ msgstr "本番"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 msgid "Authorized"
-msgstr "投稿者"
+msgstr "認証済み"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:92
 #: stripe/helpers/FrmTransLiteAppHelper.php:106
@@ -7557,7 +7557,7 @@ msgstr "サブスクリプション"
 #. translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %3$s: Span close tag.
 #: stripe/helpers/FrmTransLiteListHelper.php:138
 msgid "%1$s %2$s(%3$s)%4$s"
-msgstr "%1$s %2$s(%3$s)%4$s"
+msgstr "%1$s %2$s (%3$s) %4$s"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
@@ -7772,11 +7772,11 @@ msgstr "Stripe テストモードを使用する"
 
 #: stripe/views/settings/form.php:19
 msgid "Your site is not using SSL. Before using Stripe to collect live payments, you will need to install an SSL certificate on your site."
-msgstr "サイトが SSL を使用していません。Stripe を使用して実際の支払いを回収する前に、SSL 証明書をサイトにインストールする必要があります。"
+msgstr "サイトで SSL が使用されていません。Stripe を使用して実際の支払いを回収する前に、SSL 証明書をサイトにインストールする必要があります。"
 
 #: stripe/views/settings/messages.php:8
 msgid "Stripe Processing Message"
-msgstr "Stripe 処理中メッセージ"
+msgstr "Stripe 処理中のメッセージ"
 
 #: stripe/views/settings/messages.php:9
 msgid "The text used to notify users that a Stripe payment is still processing and will not be finalized for several days."
@@ -7784,7 +7784,7 @@ msgstr "Stripe での支払いがまだ処理中であり、数日間確定し�
 
 #: stripe/views/subscriptions/show.php:72
 msgid "Next Payment Date"
-msgstr "次回支払日"
+msgstr "次回支払い日"
 
 #: stripe/views/subscriptions/show.php:78
 msgid "Fail Count"
