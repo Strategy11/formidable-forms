@@ -7504,7 +7504,11 @@ ul.frm_two_col {
 	margin-right: var(--gap-xs);
 }
 
-.frm_code_list.frm-full-hover a {
+.frm-views-editor-body .frm_code_list.frm-full-hover a span {
+	margin-left: auto;
+}
+
+.frm-single-settings .frm_code_list.frm-full-hover a {
     display: block;
 }
 
