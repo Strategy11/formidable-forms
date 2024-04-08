@@ -282,7 +282,7 @@ class FrmEntryValidate {
 	 * @return string Regex pattern.
 	 */
 	private static function get_international_phone_regex() {
-		return '^\+?(?:\d{1,3})?[-\s.]?(\(?\d{1,4}\)?[-\s.]?)?(\d{1,4}[-\s.]?){1,3}\d+$';
+		return '^\+?\d{1,4}[\s\-]?(?:\(\d{1,3}\)[\s\-]?)?\d{1,4}[\s\-]?\d{1,4}[\s\-]?\d{1,4}$';
 	}
 
 	/**
