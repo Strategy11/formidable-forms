@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-07 21:48\n"
+"PO-Revision-Date: 2024-04-08 21:49\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -4811,7 +4811,7 @@ msgstr "Dropdown"
 
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
-msgstr ""
+msgstr "Website/URL"
 
 #: classes/models/FrmField.php:42
 msgid "Number"
