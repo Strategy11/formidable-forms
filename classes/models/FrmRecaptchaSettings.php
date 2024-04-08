@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.8.4
  */
 class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return void
 	 */
@@ -18,7 +18,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -28,7 +28,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -37,7 +37,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -46,7 +46,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
@@ -57,7 +57,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Add additional element attributes for reCAPTCHA.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $attributes
 	 * @param array $field
@@ -75,7 +75,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $field
 	 * @return string
@@ -90,7 +90,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Show the Captcha field size setting if the captcha is visible.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -99,7 +99,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -108,7 +108,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */

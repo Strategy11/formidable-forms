@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.8.3';
+	public static $plug_version = '6.8.4';
 
 	/**
 	 * @var bool
@@ -2003,7 +2003,7 @@ class FrmAppHelper {
 	/**
 	 * Updates value to empty string if it is null and being passed to a string function.
 	 *
-	 * @since x.x
+	 * @since 6.8.4
 	 * @param mixed  $value
 	 * @param string $function
 	 * @return mixed

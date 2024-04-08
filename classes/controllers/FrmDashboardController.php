@@ -23,8 +23,6 @@ class FrmDashboardController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
@@ -38,7 +36,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), __( 'Dashboard', 'formidable' ) . FrmInboxController::get_notice_count(), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . wp_kses_post( FrmInboxController::get_notice_count() ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
 	}
 
 	/**

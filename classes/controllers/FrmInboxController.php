@@ -9,13 +9,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmInboxController {
 
 	/**
+	 * Get the HTML for the inbox notice.
+	 *
 	 * @since 4.05
+	 * @since 6.8.4 The $filtered parameter was added.
+	 *
+	 * @param bool $filtered Set this to false to avoid the frm_inbox_badge filter.
+	 * @return string
 	 */
-	public static function get_notice_count() {
+	public static function get_notice_count( $filtered = true ) {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
 		$inbox = new FrmInbox();
-		return $inbox->unread_html();
+		return $inbox->unread_html( $filtered );
 	}
 
 	/**

@@ -33,8 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				foreach ( $frm_field_selection as $field_key => $field_type ) {
 					$field_label = FrmFormsHelper::get_field_link_name( $field_type );
+					$classes     = 'frmbutton frm6 frm_t' . $field_key;
+					if ( ! empty( $field_type['hide'] ) ) {
+						$classes .= ' frm_hidden';
+					}
 					?>
-					<li class="frmbutton frm6 <?php echo esc_attr( ' frm_t' . $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
+					<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
 						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ); ?>">
 							<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 							<span><?php echo esc_html( $field_label ); ?></span>

@@ -161,14 +161,14 @@ class FrmCSVExportHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @param array $atts
 	 * @return void
 	 */
 	private static function after_generate_csv( $atts ) {
 		/**
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param array $atts {
 		 *   @type object $form

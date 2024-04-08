@@ -70,6 +70,10 @@ class FrmField {
 				'name'  => __( 'Payment', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
+			FrmSubmitHelper::FIELD_TYPE => array(
+				'name' => __( 'Submit', 'formidable' ),
+				'hide' => true,
+			),
 		);
 
 		/**
@@ -1023,7 +1027,7 @@ class FrmField {
 	}
 
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary' );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
 	}
 
 	/**
