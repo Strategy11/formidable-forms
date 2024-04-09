@@ -724,6 +724,8 @@ function frmFrontFormJS() {
 					function() {
 						var container, input, previousInput;
 
+						afterFormSubmittedBeforeReplace( object, response );
+
 						replaceContent.replaceWith( response.content );
 
 						addUrlParam( response );
@@ -857,6 +859,22 @@ function frmFrontFormJS() {
 			jQuery( document ).trigger( 'frmFormComplete', [ object, response ]);
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ]);
+		}
+	}
+
+	/**
+	 * Trigger an event before the form is replaced with a success message.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} object The form.
+	 * @param {object} response The response from submitting the form with AJAX.
+	 * @return {void}
+	 */
+	function afterFormSubmittedBeforeReplace( object, response ) {
+		var formCompleted = jQuery( response.content ).find( '.frm_message' );
+		if ( formCompleted.length ) {
+			triggerCustomEvent( document, 'frmFormCompleteBeforeReplace', { object, response });
 		}
 	}
 
