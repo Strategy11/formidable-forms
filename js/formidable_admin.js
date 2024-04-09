@@ -9818,14 +9818,8 @@ function frmAdminBuildJS() {
 		});
 
 		// Update dependencies visibility on dropdown change
-		document.addEventListener( 'change', event => {
-			const element = event.target;
-			if ( element.matches( 'select.frm_select_with_dependency' ) ) {
-				toggleDependencyVisibility( element );
-			}
-		});
+		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
 	};
-
 
 	return {
 		init: function() {
