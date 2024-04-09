@@ -10510,7 +10510,7 @@ function frmAdminBuildJS() {
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => fieldsUpdated = 0 );
 
 			frmDom.util.documentOn( 'change', 'input[name="frm_menu_icon"]', ( e ) => {
-				document.getElementById( 'frm_hide_dashboard_videos_wrapper' ).classList.toggle( 'frm_hidden', ! e.target.value );
+				document.getElementById( 'frm_hide_dashboard_videos_wrapper' )?.classList.toggle( 'frm_hidden', ! e.target.value );
 			});
 		},
 
