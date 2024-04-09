@@ -169,6 +169,9 @@ class FrmDashboardController {
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
+
+		$frmpro_settings = new FrmProSettings();
+
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
 

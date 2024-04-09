@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			),
 		)
 	);
-	$frmpro_settings = new FrmProSettings();
 	?>
 	<div class="frm-dashboard-container wrap frm-flex-box frm-justify-between">
 		<?php $dashboard_view->get_welcome_banner(); ?>
