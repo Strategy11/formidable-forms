@@ -25,7 +25,7 @@ $phone_type = FrmField::get_option( $field, 'phone_type' );
 	<select
 		name="field_options[phone_type_<?php echo esc_attr( $field_id ); ?>]"
 		id="phone_type_<?php echo esc_attr( $field_id ); ?>"
-		class="frm_phone_type_dropdown frm_select_with_premium frm_select_with_dependency"
+		class="frm_phone_type_dropdown frm_select_with_upgrade frm_select_with_dependency"
 		data-field-id="<?php echo intval( $field_id ); ?>"
 	>
 		<option value="none" <?php selected( $phone_type, 'none' ); ?>>

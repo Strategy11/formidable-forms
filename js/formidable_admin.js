@@ -6496,11 +6496,7 @@ function frmAdminBuildJS() {
 		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
-		document.addEventListener( 'change', ( event ) => {
-			if ( event.target.matches( 'select.frm_select_with_premium' ) ) {
-				handleUpgradeClick( event );
-			}
-		});
+		frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', ( event ) => handleUpgradeClick( event ) );
 
 		function handleUpgradeClick( event ) {
 			let element, link, content;
@@ -6514,7 +6510,7 @@ function frmAdminBuildJS() {
 			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
 
 			// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
-			if ( event.type === 'change' && element.classList.contains( 'frm_select_with_premium' ) ) {
+			if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
 				const selectedOption = element.options[element.selectedIndex];
 				if ( selectedOption && selectedOption.dataset.upgrade ) {
 					element = selectedOption;
