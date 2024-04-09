@@ -10,6 +10,7 @@ class FrmEntryMeta {
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
 	 * @param mixed  $meta_value
+	 * @return int
 	 */
 	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
@@ -202,6 +203,10 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param stdClass   $entry
+	 * @param string|int $field_id
+	 * @return mixed
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
 		if ( isset( $entry->metas ) ) {
@@ -311,6 +316,13 @@ class FrmEntryMeta {
 		return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id ) );
 	}
 
+	/**
+	 * @param array  $where
+	 * @param string $order_by
+	 * @param string $limit
+	 * @param bool   $stripslashes
+	 * @return array
+	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
 		$query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
