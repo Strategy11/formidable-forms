@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-09 10:14\n"
+"PO-Revision-Date: 2024-04-09 22:11\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -6972,7 +6972,7 @@ msgstr "背景画像のスタイル"
 
 #: classes/views/styles/_general.php:52
 msgid "Upload background image"
-msgstr "背景画像のアップロード"
+msgstr "背景画像をアップロード"
 
 #: classes/views/styles/_general.php:75
 msgid "Font Family"
@@ -7053,7 +7053,7 @@ msgstr "テキストエリア"
 
 #: classes/views/styles/_sample_form.php:51
 msgid "Another field with a description"
-msgstr "説明のある別のフィールド"
+msgstr "説明を含む別のフィールド"
 
 #: classes/views/styles/_sample_form.php:63
 msgid "Check Boxes"
