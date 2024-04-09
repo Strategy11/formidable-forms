@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-08 21:49\n"
+"PO-Revision-Date: 2024-04-09 10:14\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -5468,7 +5468,7 @@ msgstr "おっと。"
 #. translators: %1$s: HTML open link, %2$s: HTML close link
 #: classes/views/frm-entries/form.php:13
 msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
-msgstr "フォームにフィールドが追加されていません。 %1$s%2$s に戻ってフィールドを追加してください。"
+msgstr "フォームにフィールドが追加されていません。%1$s前に戻り%2$sフィールドを追加してください。"
 
 #: classes/views/frm-entries/list.php:14
 #: classes/views/frm-entries/list.php:31
@@ -5592,7 +5592,7 @@ msgstr "更新オプション"
 #: classes/views/frm-fields/back-end/field-captcha.php:10
 #: classes/views/frm-fields/back-end/field-credit-card.php:10
 msgid "This field is not set up yet."
-msgstr "このフィールドはまだ設定されていない。"
+msgstr "このフィールドはまだ設定されていません。"
 
 #: classes/views/frm-fields/back-end/field-hidden.php:8
 msgid "Note: This field will not show in the form. Enter the value to be hidden."
@@ -5700,7 +5700,7 @@ msgstr "計算、メールルーティング、データベースへの保存、
 
 #: classes/views/frm-fields/back-end/radio-images.php:19
 msgid "Use separate values"
-msgstr "区切り値を使う"
+msgstr "区切り値を使用"
 
 #. translators: %s: Field type
 #: classes/views/frm-fields/back-end/settings.php:14
@@ -5845,7 +5845,7 @@ msgstr "保存値"
 
 #: classes/views/frm-form-actions/default_actions.php:14
 msgid "Create Post"
-msgstr "投稿を作成する"
+msgstr "投稿を作成"
 
 #: classes/views/frm-form-actions/default_actions.php:26
 msgid "Register User"
@@ -6084,7 +6084,7 @@ msgstr "入力マスク形式"
 
 #: classes/views/frm-forms/add_form_style_options.php:9
 msgid "Page Turn Transitions"
-msgstr "ページ遷移"
+msgstr "ページめくり遷移"
 
 #: classes/views/frm-forms/add_form_style_options.php:15
 msgid "Slide horizonally"
@@ -6092,7 +6092,7 @@ msgstr "水平方向にスライド"
 
 #: classes/views/frm-forms/add_form_style_options.php:18
 msgid "Slide vertically"
-msgstr "垂直にスライドさせる"
+msgstr "垂直方向にスライド"
 
 #: classes/views/frm-forms/edit.php:13
 msgid "Build Form"
@@ -6170,11 +6170,11 @@ msgstr "長いフォームにお勧めします。"
 
 #: classes/views/frm-forms/settings-advanced.php:100
 msgid "Submit this form with AJAX"
-msgstr "このフォームをAJAXで送信する"
+msgstr "AJAX を使用してこのフォームを送信する"
 
 #: classes/views/frm-forms/settings-advanced.php:101
 msgid "Submit the form without refreshing the page."
-msgstr "ページを更新せずにフォームを送信する。"
+msgstr "ページを更新せずにフォームを送信します。"
 
 #: classes/views/frm-forms/settings-advanced.php:110
 msgid "Validate this form with javascript"
@@ -6534,7 +6534,7 @@ msgstr "今すぐ Formidable Forms Pro を入手して、すべての強力な�
 
 #: classes/views/frm-settings/_currency.php:7
 msgid "Select the currency to be used by Formidable globally."
-msgstr "Formidableがグローバルに使用する通貨を選択します。"
+msgstr "Formidable 全体で使用される通貨を選択します。"
 
 #: classes/views/frm-settings/_currency.php:8
 #: stripe/views/action-settings/payments-options.php:72
