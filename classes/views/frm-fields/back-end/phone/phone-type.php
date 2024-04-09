@@ -32,7 +32,7 @@ $phone_type = FrmField::get_option( $field, 'phone_type' );
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
 		<?php $this->get_international_option(); ?>
-		<option value="custom" data-dependency="<?php echo esc_attr( '#frm-phone-field-custom-format-' . $field_id ); ?>" <?php selected( $phone_type, 'custom' ); ?>>
+		<option value="custom" data-dependency="#frm-phone-field-custom-format-<?php echo esc_attr( $field_id ); ?>" <?php selected( $phone_type, 'custom' ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
 	</select>
