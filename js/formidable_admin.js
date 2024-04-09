@@ -3508,6 +3508,7 @@ function frmAdminBuildJS() {
 			fieldId = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
+			wp.hooks.doAction( 'frm_before_delete_field_option', this );
 			jQuery( parentLi ).remove();
 
 			var hasOther = jQuery( parentUl ).find( '.frm_other_option' );
@@ -3520,27 +3521,6 @@ function frmAdminBuildJS() {
 			}
 		});
 		fieldUpdated();
-		deleteRelatedConditionalLogicOptions( this );
-	}
-
-	/**
-	 * Deletes all conditional logic dropdown option elements that correspond to the deleted field option.
-	 *
-	 * @since x.x
-	 * @param {HTMLElement} option
-	 * @return {void}
-	 */
-	function deleteRelatedConditionalLogicOptions( option ) {
-		const deletedOptionValue = option.closest( '.frm_single_option' ).querySelector( '.frm_option_key input[type="text"]' ).value;
-		const rows               = builderPage.querySelectorAll( '.frm_logic_row' );
-
-		rows.forEach( row => {
-			const logicId = row.id.split( '_' )[ 2 ];
-			const relatedConditionalLogicOption = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"] option[value="' + deletedOptionValue + '"]' );
-			if ( relatedConditionalLogicOption ) {
-				relatedConditionalLogicOption.remove();
-			}
-		});
 	}
 
 	/**
