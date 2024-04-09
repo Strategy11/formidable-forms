@@ -9801,7 +9801,7 @@ function frmAdminBuildJS() {
 		 * @return {void}
 		 */
 		function toggleDependencyVisibility( select ) {
-			const selectedOption = select.options[select.selectedIndex] || null;
+			const selectedOption = select.options[ select.selectedIndex ];
 			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
 				const dependencyElement = document.querySelector( option.dataset.dependency );
 				if ( ! dependencyElement ) {
