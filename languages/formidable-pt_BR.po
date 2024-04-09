@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-08 21:49\n"
+"PO-Revision-Date: 2024-04-09 22:11\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1371,7 +1371,7 @@ msgstr "Seu servidor não possui a extensão Simple XML. Ela é obrigatória par
 
 #: classes/controllers/FrmXMLController.php:64
 msgid "The template you are trying to install could not be validated."
-msgstr "O modelo que você está tentando instalar Não foi possível ser validado."
+msgstr "O modelo que você está tentando instalar não pôde ser validado."
 
 #: classes/controllers/FrmXMLController.php:76
 msgid "There was an error reading the form template."
