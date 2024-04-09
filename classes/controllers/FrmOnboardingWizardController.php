@@ -552,16 +552,16 @@ class FrmOnboardingWizardController {
 				'is-disabled' => true,
 				'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
 			);
-			if ( ! function_exists( 'wp_mail_smtp' ) ) {
-				self::$available_addons['wp-mail-smtp'] = array(
-					'title'      => esc_html__( 'SMTP', 'formidable' ),
-					'rel'        => 'wp-mail-smtp',
-					'is-checked' => false,
-					'is-vendor'  => true,
-					'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
-				);
-			}
-		}//end if
+		}
+		if ( ! function_exists( 'wp_mail_smtp' ) ) {
+			self::$available_addons['wp-mail-smtp'] = array(
+				'title'      => esc_html__( 'SMTP', 'formidable' ),
+				'rel'        => 'wp-mail-smtp',
+				'is-checked' => false,
+				'is-vendor'  => true,
+				'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
+			);
+		}
 		if ( $pro_is_installed ) {
 			$views_addon        = FrmAddonsController::get_addon( 'views' );
 			$mailchimp_addon    = FrmAddonsController::get_addon( 'mailchimp' );
