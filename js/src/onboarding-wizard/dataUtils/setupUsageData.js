@@ -37,6 +37,9 @@ function processDataForStep( processedStep, nextStepName ) {
 	if ( STEPS.SUCCESS === nextStepName ) {
 		const { processedSteps } = getAppState();
 		if ( processedSteps.length > 1 ) {
+			if ( ! processedSteps.includes( STEPS.SUCCESS ) ) {
+				processedSteps.push( STEPS.SUCCESS );
+			}
 			formData = new FormData();
 			formData.append( 'processed_steps', processedSteps.join( ',' ) );
 			formData.append( 'completed_steps', true );

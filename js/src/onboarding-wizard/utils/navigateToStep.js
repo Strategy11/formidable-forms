@@ -62,7 +62,7 @@ export const navigateToNextStep = () => {
 	// Save processed steps
 	const { processedSteps } = getAppState();
 	if ( ! processedSteps.includes( processedStep ) ) {
-		processedSteps.unshift( processedStep );
+		processedSteps.push( processedStep );
 		setAppStateProperty( 'processedSteps', processedSteps );
 	}
 

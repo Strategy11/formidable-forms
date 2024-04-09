@@ -795,6 +795,9 @@ function processDataForStep(processedStep, nextStepName) {
     var _getAppState = (0,_shared__WEBPACK_IMPORTED_MODULE_1__.getAppState)(),
       processedSteps = _getAppState.processedSteps;
     if (processedSteps.length > 1) {
+      if (!processedSteps.includes(_shared__WEBPACK_IMPORTED_MODULE_1__.STEPS.SUCCESS)) {
+        processedSteps.push(_shared__WEBPACK_IMPORTED_MODULE_1__.STEPS.SUCCESS);
+      }
       formData = new FormData();
       formData.append('processed_steps', processedSteps.join(','));
       formData.append('completed_steps', true);
@@ -2148,7 +2151,7 @@ var navigateToNextStep = function navigateToNextStep() {
   var _getAppState = (0,_shared__WEBPACK_IMPORTED_MODULE_2__.getAppState)(),
     processedSteps = _getAppState.processedSteps;
   if (!processedSteps.includes(processedStep)) {
-    processedSteps.unshift(processedStep);
+    processedSteps.push(processedStep);
     (0,_shared__WEBPACK_IMPORTED_MODULE_2__.setAppStateProperty)('processedSteps', processedSteps);
   }
   (0,_dataUtils__WEBPACK_IMPORTED_MODULE_0__.setupUsageData)(processedStep, nextStepName);
