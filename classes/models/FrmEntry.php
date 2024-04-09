@@ -602,6 +602,10 @@ class FrmEntry {
 		return $count;
 	}
 
+	/**
+	 * @param string|int $p_size
+	 * @return int
+	 */
 	public static function getPageCount( $p_size, $where = '' ) {
 		$p_size = (int) $p_size;
 		$count  = 1;

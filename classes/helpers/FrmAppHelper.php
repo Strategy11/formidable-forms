@@ -166,6 +166,9 @@ class FrmAppHelper {
 		return $frm_settings;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
@@ -377,7 +380,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_admin() {
 		$is_admin = is_admin() && ! wp_doing_ajax();
@@ -1074,8 +1077,10 @@ class FrmAppHelper {
 	 * Try to show the SVG if possible. Otherwise, use the font icon.
 	 *
 	 * @since 4.0.02
+	 *
 	 * @param string $class
 	 * @param array  $atts
+	 * @return string|null
 	 */
 	public static function icon_by_class( $class, $atts = array() ) {
 		$echo = ! isset( $atts['echo'] ) || $atts['echo'];
@@ -1236,7 +1241,7 @@ class FrmAppHelper {
 	 *
 	 * @param Closure $echo_function
 	 * @param bool    $echo
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function clip( $echo_function, $echo = false ) {
 		if ( ! $echo ) {
@@ -1256,9 +1261,12 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function get_admin_header( $atts ) {
-		$has_nav = ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ( ! isset( $atts['is_template'] ) || ! $atts['is_template'] ) );
+		$has_nav = ! empty( $atts['form'] ) && empty( $atts['is_template'] );
 		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
 			$atts['close'] = admin_url( 'admin.php?page=formidable' );
 		}
@@ -1266,7 +1274,7 @@ class FrmAppHelper {
 			$atts['import_link'] = false;
 		}
 
-		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
+		include self::plugin_path() . '/classes/views/shared/admin-header.php';
 	}
 
 	/**
@@ -1417,6 +1425,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $type
+	 * @return void
 	 */
 	public static function trigger_hook_load( $type, $object = null ) {
 		// Only load the form hooks once.
@@ -1902,6 +1911,9 @@ class FrmAppHelper {
 	 * Make sure admins have permission to see the menu items
 	 *
 	 * @since 2.0.6
+	 *
+	 * @param string $cap
+	 * @return void
 	 */
 	public static function force_capability( $cap = 'frm_change_settings' ) {
 		if ( current_user_can( 'administrator' ) && ! current_user_can( $cap ) ) {
@@ -2040,6 +2052,11 @@ class FrmAppHelper {
 		return $return;
 	}
 
+	/**
+	 * @param string $text
+	 * @param bool   $is_rich_text
+	 * @return string
+	 */
 	public static function esc_textarea( $text, $is_rich_text = false ) {
 		$safe_text = str_replace( '&quot;', '"', $text );
 		if ( ! $is_rich_text ) {
@@ -2047,7 +2064,11 @@ class FrmAppHelper {
 		}
 		$safe_text = str_replace( '&amp; ', '& ', $safe_text );
 
-		return apply_filters( 'esc_textarea', $safe_text, $text );
+		/**
+		 * @param string $safe_text
+		 * @param string $text
+		 */
+		return (string) apply_filters( 'esc_textarea', $safe_text, $text );
 	}
 
 	/**
@@ -2100,7 +2121,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $url
 	 * @param bool   $echo
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function js_redirect( $url, $echo = false ) {
 		$callback = function() use ( $url ) {
@@ -2133,6 +2154,11 @@ class FrmAppHelper {
 		return $user_id;
 	}
 
+	/**
+	 * @param string $filename
+	 * @param array  $atts
+	 * @return string|false
+	 */
 	public static function get_file_contents( $filename, $atts = array() ) {
 		if ( ! is_file( $filename ) ) {
 			return false;
@@ -3138,6 +3164,9 @@ class FrmAppHelper {
 	 * Load the JS file on non-Formidable pages in the admin area
 	 *
 	 * @since 2.0
+	 *
+	 * @param bool $load
+	 * @return void
 	 */
 	public static function load_admin_wide_js( $load = true ) {
 		$version = self::plugin_version();
@@ -3531,6 +3560,9 @@ class FrmAppHelper {
 		_deprecated_function( __METHOD__, '5.1' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_menu_icon_class() {
 		if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
 			$settings = FrmProAppHelper::get_settings();

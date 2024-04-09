@@ -1152,6 +1152,11 @@ class FrmField {
 		return ! isset( $field->field_options[ $option ] ) || empty( $field->field_options[ $option ] );
 	}
 
+	/**
+	 * @param stdClass $field
+	 * @param string   $option
+	 * @return bool
+	 */
 	public static function is_option_value_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
 	}
