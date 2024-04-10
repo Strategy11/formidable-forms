@@ -44,17 +44,6 @@ class FrmFieldPhone extends FrmFieldType {
 	/**
 	 * @since x.x
 	 *
-	 * @return array
-	 */
-	protected function extra_field_opts() {
-		return array(
-			'phone_type'    => 'none',
-		);
-	}
-
-	/**
-	 * @since x.x
-	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
 	 *
 	 * @return void
@@ -82,7 +71,7 @@ class FrmFieldPhone extends FrmFieldType {
 			class="frm_show_upgrade frm_noallow"
 			data-upgrade="<?php esc_attr_e( 'International phone field', 'formidable' ); ?>"
 			data-medium="international-phone-field"
-			<?php selected( FrmField::get_option( $this->field, 'phone_type' ), 'international' ); ?>
+			<?php selected( FrmField::get_option( $this->field, 'format' ), 'international' ); ?>
 		>
 			<?php esc_html_e( 'International', 'formidable' ); ?>
 		</option>

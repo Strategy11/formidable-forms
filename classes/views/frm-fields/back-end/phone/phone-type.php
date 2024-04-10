@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field_id   = $field['id'];
-$phone_type = FrmField::get_option( $field, 'phone_type' );
+$field_id = $field['id'];
+$format   = FrmField::get_option( $field, 'format' );
 ?>
 <p class="frm6 frm6_followed frm_form_field frm-phone-type">
 	<label for="phone_type_<?php echo esc_attr( $field_id ); ?>">
@@ -28,11 +28,11 @@ $phone_type = FrmField::get_option( $field, 'phone_type' );
 		class="frm_phone_type_dropdown frm_select_with_upgrade frm_select_with_dependency"
 		data-field-id="<?php echo intval( $field_id ); ?>"
 	>
-		<option value="none" <?php selected( $phone_type, 'none' ); ?>>
+		<option value="none" <?php selected( $format, '' ); ?>>
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
 		<?php $this->get_international_option(); ?>
-		<option value="custom" data-dependency="#frm-phone-field-custom-format-<?php echo esc_attr( $field_id ); ?>" <?php selected( $phone_type, 'custom' ); ?>>
+		<option value="custom" data-dependency="#frm-phone-field-custom-format-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'international' !== $format, true ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
 	</select>

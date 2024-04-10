@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $attributes          = array();
 $attributes['class'] = 'frm-has-modal';
-if ( ! empty( $field['phone_type'] ) ) {
+if ( 'phone' === $field['type'] ) {
 	$attributes['id']     = 'frm-phone-field-custom-format-' . $field['id'];
 	$attributes['class'] .= ' frm_hidden';
 }
