@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-09 22:11\n"
+"PO-Revision-Date: 2024-04-10 10:16\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -139,7 +139,7 @@ msgstr "計算フォームを表示"
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr "このサイトには電卓フォームがありません。"
+msgstr "このサイトには計算フォームがありません。"
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
@@ -7884,7 +7884,7 @@ msgstr "新規ページを作成"
 
 #: js/admin/embed.js:282
 msgid "What will you call the new page?"
-msgstr "新しいページは何と呼ぶのですか？"
+msgstr "新しいページにどのような名前を付けますか ?"
 
 #: js/admin/embed.js:288
 msgid "Name your page"
@@ -7892,7 +7892,7 @@ msgstr "ページに名前をつける"
 
 #: js/admin/embed.js:298
 msgid "Create page"
-msgstr "ページ作成"
+msgstr "ページを作成"
 
 #: js/admin/embed.js:310
 msgid "Insert manually"
