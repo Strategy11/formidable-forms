@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-08 21:49\n"
+"PO-Revision-Date: 2024-04-10 22:12\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -479,7 +479,7 @@ msgstr "Aggiungi voce"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
-msgstr "Tutte le visualizzazioni"
+msgstr "Tutte le Views"
 
 #: classes/controllers/FrmDashboardController.php:205
 #: classes/controllers/FrmDashboardController.php:212
@@ -4858,7 +4858,7 @@ msgstr "Valutazione in stelle"
 
 #: classes/models/FrmField.php:121
 msgid "Slider"
-msgstr "Cursore"
+msgstr "Slider"
 
 #: classes/models/FrmField.php:125
 msgid "Toggle"
@@ -6551,7 +6551,7 @@ msgstr "Ottieni Formidable Forms Pro oggi stesso e sblocca tutte le sue potenti 
 
 #: classes/views/frm-settings/_currency.php:7
 msgid "Select the currency to be used by Formidable globally."
-msgstr "Seleziona la valuta che Formidable utilizzerà a livello globale."
+msgstr "Seleziona la valuta che Formidable userà a livello globale."
 
 #: classes/views/frm-settings/_currency.php:8
 #: stripe/views/action-settings/payments-options.php:72
@@ -7826,7 +7826,7 @@ msgstr "Migliora il tuo flusso di lavoro con le applicazioni"
 
 #: js/admin/applications.js:115
 msgid "Applications help to organize your workspace by combining forms, Views, and pages into a full solution."
-msgstr "Le applicazioni aiutano a organizzare il tuo spazio di lavoro combinando moduli, Visualizzazioni e pagine in una soluzione completa."
+msgstr "Le applicazioni aiutano a organizzare il tuo spazio di lavoro combinando moduli, Views e pagine in una soluzione completa."
 
 #. translators: %d: Number of application templates.
 #: js/admin/applications.js:213
