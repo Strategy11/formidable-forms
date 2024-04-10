@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-10 10:16\n"
+"PO-Revision-Date: 2024-04-10 22:12\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -479,7 +479,7 @@ msgstr "エントリーを追加"
 
 #: classes/controllers/FrmDashboardController.php:203
 msgid "All Views"
-msgstr "すべて表示"
+msgstr "すべてのビュー"
 
 #: classes/controllers/FrmDashboardController.php:205
 #: classes/controllers/FrmDashboardController.php:212
@@ -1367,7 +1367,7 @@ msgstr "サーバーに Simple XML 拡張がありません。これはテンプ
 
 #: classes/controllers/FrmXMLController.php:64
 msgid "The template you are trying to install could not be validated."
-msgstr "インストールしようとしているテンプレートが正しくありません。"
+msgstr "インストールしようとしているテンプレートを認証できませんでした。"
 
 #: classes/controllers/FrmXMLController.php:76
 msgid "There was an error reading the form template."
@@ -1432,7 +1432,7 @@ msgstr "レポートを表示"
 
 #: classes/helpers/FrmAppHelper.php:1785
 msgid "Add/Edit Views"
-msgstr "表示の追加/編集"
+msgstr "ビューを追加 / 編集"
 
 #: classes/helpers/FrmAppHelper.php:1804
 msgid "View Forms List"
@@ -1656,7 +1656,7 @@ msgstr "警告: 複数行のエントリーがある場合、最初の行以外�
 #: classes/helpers/FrmAppHelper.php:3216
 #: classes/helpers/FrmFieldsHelper.php:320
 msgid "The entered values do not match"
-msgstr "入力された値が一致しない。"
+msgstr "入力された値が一致しません"
 
 #: classes/helpers/FrmAppHelper.php:3217
 msgid "Enter Email"
@@ -2405,7 +2405,7 @@ msgstr "エントリーを編集"
 
 #: classes/helpers/FrmEntriesHelper.php:748
 msgid "Forms to PDF"
-msgstr "フォームからPDFへ"
+msgstr "フォームを PDF へ"
 
 #: classes/helpers/FrmEntriesHelper.php:778
 msgid "reCAPTCHA Score"
@@ -5533,7 +5533,7 @@ msgstr "投稿"
 
 #: classes/views/frm-entries/sidebar-shared.php:64
 msgid "Parent Entry ID"
-msgstr "親エントリーID"
+msgstr "親エントリー ID"
 
 #. translators: %1$s: User display name.
 #: classes/views/frm-entries/sidebar-shared.php:85
@@ -6219,7 +6219,7 @@ msgstr "Akismet を使用して、以下に関するエントリーをスパム�
 
 #: classes/views/frm-forms/spam-settings/akismet.php:10
 msgid "no one"
-msgstr "誰一人"
+msgstr "誰もなし"
 
 #: classes/views/frm-forms/spam-settings/akismet.php:13
 msgid "everyone"
@@ -7175,7 +7175,7 @@ msgstr "フォーム名"
 
 #: classes/views/summary-emails/stats.php:66
 msgid "Submissions"
-msgstr "投稿"
+msgstr "送信"
 
 #: classes/views/summary-emails/stats.php:102
 msgid "Out of date plugins"
