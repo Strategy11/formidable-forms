@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-10 10:16\n"
+"PO-Revision-Date: 2024-04-10 22:12\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -139,7 +139,7 @@ msgstr "Exibir um formulário de calculadora"
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr "Este site não possui formulários de calculadora."
+msgstr "Este site não tem formulários de calculadora."
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
@@ -438,7 +438,7 @@ msgstr "Continuar"
 #: classes/controllers/FrmApplicationsController.php:17
 #: classes/views/applications/index.php:8
 msgid "Applications"
-msgstr "Formulários"
+msgstr "Aplicativos"
 
 #: classes/controllers/FrmDashboardController.php:41
 #: classes/views/dashboard/dashboard.php:11
@@ -4870,7 +4870,7 @@ msgstr "Dinâmico"
 
 #: classes/models/FrmField.php:134
 msgid "Lookup"
-msgstr "Olho para cima"
+msgstr "Pesquisa"
 
 #: classes/models/FrmField.php:139
 msgid "Repeater"
@@ -5609,7 +5609,7 @@ msgstr "Atualizar Opções"
 #: classes/views/frm-fields/back-end/field-captcha.php:10
 #: classes/views/frm-fields/back-end/field-credit-card.php:10
 msgid "This field is not set up yet."
-msgstr "Este campo ainda não está configurado."
+msgstr "Esse campo ainda não está configurado."
 
 #: classes/views/frm-fields/back-end/field-hidden.php:8
 msgid "Note: This field will not show in the form. Enter the value to be hidden."
@@ -6101,7 +6101,7 @@ msgstr "Formato da máscara de entrada"
 
 #: classes/views/frm-forms/add_form_style_options.php:9
 msgid "Page Turn Transitions"
-msgstr "Transições de virada de página"
+msgstr "Transições de mudança de página"
 
 #: classes/views/frm-forms/add_form_style_options.php:15
 msgid "Slide horizonally"
@@ -6109,7 +6109,7 @@ msgstr "Deslize horizontalmente"
 
 #: classes/views/frm-forms/add_form_style_options.php:18
 msgid "Slide vertically"
-msgstr "Deslize verticalmente"
+msgstr "Deslizar verticalmente"
 
 #: classes/views/frm-forms/edit.php:13
 msgid "Build Form"
@@ -6989,7 +6989,7 @@ msgstr "Estilos de imagem de fundo"
 
 #: classes/views/styles/_general.php:52
 msgid "Upload background image"
-msgstr "Enviar imagem de plano de fundo"
+msgstr "Carregar imagem de fundo"
 
 #: classes/views/styles/_general.php:75
 msgid "Font Family"
