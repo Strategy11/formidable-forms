@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-11 10:21\n"
+"PO-Revision-Date: 2024-04-11 22:19\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -2489,7 +2489,7 @@ msgstr "%sは一意である必要があります"
 
 #: classes/helpers/FrmFieldsHelper.php:328
 msgid "This field is invalid"
-msgstr "このフィールドは無効です。"
+msgstr "このフィールドは無効です"
 
 #: classes/helpers/FrmFieldsHelper.php:366
 msgid "This value"
@@ -4514,7 +4514,7 @@ msgstr "reCAPTCHA が正しく入力されませんでした"
 
 #: classes/models/fields/FrmFieldCaptcha.php:318
 msgid "The captcha is missing from this form"
-msgstr "このフォームにはキャプチャがありません。"
+msgstr "このフォームには Captcha がありません"
 
 #: classes/models/fields/FrmFieldCaptcha.php:388
 #: classes/views/frm-settings/captcha/captcha.php:13
@@ -4591,7 +4591,7 @@ msgstr "%s オプション"
 #: classes/views/frm-fields/back-end/settings.php:117
 #: classes/views/frm-fields/back-end/value-format.php:16
 msgid "Toggle Options"
-msgstr "オプション設定"
+msgstr "トグルオプション"
 
 #: classes/models/fields/FrmFieldType.php:518
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:10
@@ -5189,7 +5189,7 @@ msgstr "警告: このファイルに加えた変更は、Formidable の設定�
 
 #: classes/models/FrmStyle.php:519
 msgid "Formidable Style"
-msgstr "手強いスタイル"
+msgstr "Formidable のスタイル"
 
 #: classes/models/FrmStyle.php:777
 #: classes/views/styles/_field-description.php:22
