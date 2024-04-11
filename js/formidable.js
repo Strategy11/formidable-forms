@@ -1651,7 +1651,7 @@ function frmFrontFormJS() {
 
 		handleSubmit: function( e ) {
 			frmFrontForm.submitForm( e );
-			frmFrontForm.speak( frm_js.submit_speak_msg );
+			frmFrontForm.speak( frm_js.submit_speak_msg ); // eslint-disable-line camelcase
 		},
 
 		speak: function( message ) {
@@ -1660,7 +1660,7 @@ function frmFrontFormJS() {
 			element.className = 'frm_screen_reader frm_hidden';
 			element.textContent = message;
 			document.body.appendChild( element );
-	
+
 			setTimeout(
 				function() {
 					document.body.removeChild( element );
