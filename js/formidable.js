@@ -1656,7 +1656,6 @@ function frmFrontFormJS() {
 
 		speak: function( message ) {
 			var element = document.createElement( 'div' );
-			element.id = 'speak_formidable_form_submitted';
 			element.setAttribute( 'aria-live', 'assertive' );
 			element.className = 'frm_screen_reader frm_hidden';
 			element.textContent = message;
@@ -1666,7 +1665,7 @@ function frmFrontFormJS() {
 				function() {
 					document.body.removeChild( element );
 				},
-				1000
+				0
 			);
 		},
 
