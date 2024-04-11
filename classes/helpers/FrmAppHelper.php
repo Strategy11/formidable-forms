@@ -3218,6 +3218,7 @@ class FrmAppHelper {
 			'empty_fields'       => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 			'focus_first_error'  => self::should_focus_first_error(),
 			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
+			'submit_speak_msg'   => ( new FrmSettings() )->submit_speak_msg,
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );

@@ -1555,7 +1555,7 @@ function frmFrontFormJS() {
 			maybeAddPolyfills();
 
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
-			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
+			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.handleSubmit );
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
@@ -1649,8 +1649,29 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
+		handleSubmit: function( e ) {
+			frmFrontForm.submitForm( e );
+			frmFrontForm.speak( frm_js.submit_speak_msg );
+		},
+
+		speak: function( message ) {
+			var element = document.createElement( 'div' );
+			element.id = 'speak_formidable_form_submitted';
+			element.setAttribute( 'aria-live', 'assertive' );
+			element.className = 'frm_screen_reader frm_hidden';
+			element.textContent = message;
+			document.body.appendChild( element );
+	
+			setTimeout(
+				function() {
+					document.body.removeChild( element );
+				},
+				1000
+			);
+		},
+
 		submitForm: function( e ) {
-			frmFrontForm.submitFormManual( e, this );
+			frmFrontForm.submitFormManual( e, e.target );
 		},
 
 		submitFormManual: function( e, object ) {
