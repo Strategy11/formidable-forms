@@ -353,6 +353,7 @@ class FrmFormApi {
 		} else {
 			delete_option( $this->cache_key );
 		}
+		$this->done_running();
 	}
 
 	/**
