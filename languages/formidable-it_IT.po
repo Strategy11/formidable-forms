@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-10 22:12\n"
+"PO-Revision-Date: 2024-04-11 22:19\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5766,7 +5766,7 @@ msgstr "Classi di layout CSS"
 
 #: classes/views/frm-fields/back-end/settings.php:148
 msgid "Collapsible Advanced Settings"
-msgstr "Impostazioni avanzate riducibili"
+msgstr "Impostazioni avanzate richiudibili"
 
 #: classes/views/frm-fields/back-end/settings.php:149
 #: classes/views/shared/mb_adv_info.php:22
@@ -5827,7 +5827,7 @@ msgstr "Tipo Campo"
 
 #: classes/views/frm-fields/back-end/settings.php:351
 msgid "Collapsible Validation Messages Settings"
-msgstr "Impostazioni dei messaggi di convalida riducibili"
+msgstr "Impostazioni dei messaggi di convalida richiudibili"
 
 #: classes/views/frm-fields/back-end/settings.php:352
 msgid "Validation Messages"
@@ -6036,11 +6036,11 @@ msgstr "Mostra opzioni"
 
 #: classes/views/frm-forms/add_field.php:21
 msgid "Expand/Collapse Section"
-msgstr "Espandi/Riduci la sezione"
+msgstr "Espandi/Chiudi la sezione"
 
 #: classes/views/frm-forms/add_field.php:25
 msgid "Expand/Collapse Section Icon"
-msgstr "Icona Espandi/Riduci la sezione"
+msgstr "Icona Espandi/Chiudi la sezione"
 
 #: classes/views/frm-forms/add_field.php:31
 msgid "Move Field"
@@ -6060,7 +6060,7 @@ msgstr "Commutatore a tendina per ulteriori opzioni"
 
 #: classes/views/frm-forms/add_field.php:51
 msgid "(Collapsed)"
-msgstr "(Ridotto)"
+msgstr "(Chiuso)"
 
 #: classes/views/frm-forms/add_field.php:105
 #: classes/views/frm-forms/form.php:55
