@@ -39,8 +39,11 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 
 		// Case 3: Validate the redirect logic when conditions are met for showing the onboarding.
 		add_filter( 'wp_redirect', '__return_false' ); // Bypasses redirect and exit for uninterrupted PHPUnit execution.
+		$_GET['page'] = 'formidable';
 		$this->controller::do_admin_redirects();
 		$this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' );
+		// Reset for the next case.
+		unset( $_GET['page'] );
 
 		// Clean up.
 		delete_transient( $this->controller::TRANSIENT_NAME );
