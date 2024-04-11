@@ -2,6 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+/**
+ * @var bool $should_display_formidable_videos
+ */
 ?>
 <div class="frm_wrap frm-dashboard-wrapper">
 	<?php
@@ -33,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
 			<?php
-			if ( ! $frmpro_settings->hide_dashboard_videos || $frmpro_settings->menu_icon === '' ) {
+			if ( $should_display_formidable_videos ) {
 				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );
 			}
 			?>

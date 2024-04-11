@@ -170,7 +170,12 @@ class FrmDashboardController {
 			)
 		);
 
-		$frmpro_settings = new FrmProSettings();
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$frmpro_settings = new FrmProSettings();
+			$should_display_formidable_videos = ! isset( $frmpro_settings->hide_dashboard_videos ) || ! $frmpro_settings->hide_dashboard_videos || $frmpro_settings->menu_icon === '';
+		} else {
+			$should_display_formidable_videos = true;
+		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
