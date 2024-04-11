@@ -138,7 +138,7 @@ class FrmOnboardingWizardController {
 		}
 
 		// Only do this for single site installs.
-		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( is_network_admin() ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			self::mark_onboarding_as_skipped();
 			return;
 		}
