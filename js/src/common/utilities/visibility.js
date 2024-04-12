@@ -1,4 +1,4 @@
-const HIDDEN_CLASS = 'frm_hidden';
+import { HIDDEN_CLASS } from '../constants';
 
 /**
  * Shows specified elements by removing the hidden class.
@@ -41,6 +41,6 @@ export const hide = element => element?.classList.add( HIDDEN_CLASS );
  * @return {boolean} Returns true if the element is visible, otherwise false.
  */
 export const isVisible = element => {
-	const styles = window.getComputedStyle(element);
-    return styles.getPropertyValue('display') !== 'none';
+	const styles = window.getComputedStyle( element );
+	return styles.getPropertyValue( 'display' ) !== 'none';
 };

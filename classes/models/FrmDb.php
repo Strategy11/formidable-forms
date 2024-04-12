@@ -27,6 +27,7 @@ class FrmDb {
 	 *
 	 * @param array  $args
 	 * @param string $starts_with
+	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
 		if ( empty( $args ) ) {
@@ -570,6 +571,10 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.06
+	 *
+	 * @param string       $starts_with
+	 * @param string|array $where
+	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {

@@ -1418,6 +1418,11 @@ class FrmFormsController {
 		return $classes;
 	}
 
+	/**
+	 * @param string|int $form_id
+	 * @param string     $class
+	 * @return void
+	 */
 	public static function mb_tags_box( $form_id, $class = '' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
