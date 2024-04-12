@@ -83,6 +83,7 @@ class FrmSettings {
 	public $summary_emails;
 	public $summary_emails_recipients;
 
+	public $default_email;
 	public $currency;
 
 	/**
@@ -199,6 +200,10 @@ class FrmSettings {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
 			}
+		}
+
+		if ( ! isset( $this->default_email ) ) {
+			$this->default_email = get_option( 'admin_email' );
 		}
 
 		if ( ! isset( $this->currency ) ) {
@@ -397,6 +402,7 @@ class FrmSettings {
 		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
 		$this->load_style        = $params['frm_load_style'];
 		$this->custom_css        = $params['frm_custom_css'];
+		$this->default_email     = $params['frm_default_email'];
 		$this->currency          = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
@@ -429,6 +435,29 @@ class FrmSettings {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Updates a single setting with specified sanitization.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key The setting key to update.
+	 * @param mixed  $value The new value for the setting.
+	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_setting( $key, $value, $sanitize ) {
+		if ( ! property_exists( $this, $key ) || ! is_callable( $sanitize ) ) {
+			// Setting does not exist or sanitization function name is not callable.
+			return false;
+		}
+
+		// Update the property value.
+		FrmAppHelper::sanitize_value( $sanitize, $value );
+		$this->{$key} = $value;
+
+		return true;
 	}
 
 	/**

@@ -113,6 +113,19 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Retrieves the count of available addons.
+	 *
+	 * @since x.x
+	 *
+	 * @return int Count of addons.
+	 */
+	public static function get_addons_count() {
+		$addons = self::get_api_addons();
+
+		return count( $addons );
+	}
+
+	/**
 	 * If the API is unable to connect, show something on the addons page
 	 *
 	 * @since 3.04.03
@@ -514,7 +527,7 @@ class FrmAddonsController {
 	 * @param string $plugin The plugin slug.
 	 * @return array|false
 	 */
-	protected static function get_addon( $plugin ) {
+	public static function get_addon( $plugin ) {
 		$addons = self::get_api_addons();
 		self::prepare_addons( $addons );
 		foreach ( $addons as $addon ) {

@@ -9691,11 +9691,14 @@ function frmAdminBuildJS() {
 				spinner.remove();
 			}
 
-			// Handle successful form submission.
-			// handle the Active Campaign form on the inbox page.
-			document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-				span({ text: __( 'Thank you for signing up!', 'formidable' ) })
-			);
+			const showSuccessMessage = wp.hooks.applyFilters( 'frm_thank_you_on_signup', true );
+			if ( showSuccessMessage ) {
+				// Handle successful form submission.
+				// handle the Active Campaign form on the inbox page.
+				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
+					span( __( 'Thank you for signing up!', 'formidable' ) )
+				);
+			}
 		});
 	}
 
@@ -10636,7 +10639,9 @@ function frmAdminBuildJS() {
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
-		purifyHtml
+		purifyHtml,
+		loadApiEmailForm,
+		addMyEmailAddress
 	};
 }
 
