@@ -170,11 +170,10 @@ class FrmDashboardController {
 			)
 		);
 
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$frmpro_settings = new FrmProSettings();
-			$should_display_formidable_videos = empty( $frmpro_settings->hide_dashboard_videos ) || $frmpro_settings->menu_icon === '';
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProDashboardHelper::should_display_videos' ) ) {
+			$should_display_videos = FrmProDashboardHelper::should_display_videos();
 		} else {
-			$should_display_formidable_videos = true;
+			$should_display_videos = true;
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';

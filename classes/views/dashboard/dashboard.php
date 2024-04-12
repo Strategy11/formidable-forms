@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
 			<?php
-			if ( $should_display_formidable_videos ) {
+			if ( $should_display_videos ) {
 				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );
 			}
 			?>
