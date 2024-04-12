@@ -6478,6 +6478,29 @@ function frmAdminBuildJS() {
 			b.classList.add( 'frm_loading_button' );
 		}
 		b.setAttribute( 'aria-busy', 'true' );
+
+		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
+		phoneTypes.forEach( phoneType => {
+			const value = phoneType.value;
+			if ( ! [ 'none', 'international' ].includes( value ) ) {
+				return;
+			}
+
+			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
+			if ( 'none' === value ) {
+				formatInput.setAttribute( 'value', '' );
+			}
+			if ( 'international' === value ) {
+				formatInput.setAttribute( 'value', 'international' );
+			}
+		});
+
+		/**
+		 * Triggers an action hook before saving a form in the admin area, passing the submitted button.
+		 *
+		 * @param {HTMLButtonElement} b The button that was submitted.
+		 */
+		wp.hooks.doAction( 'frmAdmin.preFormSave', b );
 	}
 
 	function afterFormSave( button ) {
