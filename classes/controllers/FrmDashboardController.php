@@ -170,11 +170,7 @@ class FrmDashboardController {
 			)
 		);
 
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProDashboardHelper::should_display_videos' ) ) {
-			$should_display_videos = FrmProDashboardHelper::should_display_videos();
-		} else {
-			$should_display_videos = true;
-		}
+		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
