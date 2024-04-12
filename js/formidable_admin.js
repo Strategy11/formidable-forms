@@ -1145,6 +1145,11 @@ function frmAdminBuildJS() {
 
 		let index, item, itemTop, returnIndex;
 
+		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
+			// Always return 0 when there are no fields.
+			return 0;
+		}
+
 		returnIndex = 0;
 		for ( index = length - 1; index >= 0; --index ) {
 			item    = $items.get( index );
