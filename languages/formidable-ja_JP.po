@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-11 22:19\n"
+"PO-Revision-Date: 2024-04-12 10:22\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -6219,7 +6219,7 @@ msgstr "Akismet を使用して、以下に関するエントリーをスパム�
 
 #: classes/views/frm-forms/spam-settings/akismet.php:10
 msgid "no one"
-msgstr "誰もなし"
+msgstr "誰にも"
 
 #: classes/views/frm-forms/spam-settings/akismet.php:13
 msgid "everyone"
