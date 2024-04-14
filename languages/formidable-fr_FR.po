@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-14 10:28\n"
+"PO-Revision-Date: 2024-04-14 22:28\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -139,7 +139,7 @@ msgstr "Afficher un formulaire de calcul"
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr "Ce site n'a aucun formulaire de calcul."
+msgstr "Ce site n’a aucun formulaire de calcul."
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
