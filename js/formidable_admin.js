@@ -5331,6 +5331,16 @@ function frmAdminBuildJS() {
 		clickAction( this );
 	}
 
+	function maybeUpdatePhoneFormatInput( event ) {
+		const phoneType = event.target;
+		if ( 'custom' === phoneType.value ) {
+			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
+			if ( 'international' === formatInput.value ) {
+				formatInput.setAttribute( 'value', '' );
+			}
+		}
+	}
+
 	/**
 	 * Open Advanced settings on double click.
 	 */
@@ -10178,6 +10188,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
+			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
