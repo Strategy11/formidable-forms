@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-05 21:46\n"
+"PO-Revision-Date: 2024-04-14 10:28\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -139,7 +139,7 @@ msgstr "Afficher un formulaire de calcul"
 #: js/src/form/calculator.js:55
 #: js/formidable_blocks.js:317
 msgid "This site does not have any calculator forms."
-msgstr "Ce site n'a aucun formulaire de calculateur."
+msgstr "Ce site n'a aucun formulaire de calcul."
 
 #: js/src/form/calculator.js:58
 #: js/formidable_blocks.js:320
@@ -4550,14 +4550,14 @@ msgstr "CAPTCHA"
 #: classes/views/styles/_sample_form.php:57
 #: classes/views/styles/_sample_form.php:65
 msgid "Option 1"
-msgstr "Option 1"
+msgstr "Option 1"
 
 #: classes/models/fields/FrmFieldCheckbox.php:47
 #: classes/models/fields/FrmFieldRadio.php:75
 #: classes/views/styles/_sample_form.php:58
 #: classes/views/styles/_sample_form.php:66
 msgid "Option 2"
-msgstr "Option 2"
+msgstr "Option 2"
 
 #: classes/models/fields/FrmFieldCombo.php:197
 #: classes/views/frm-fields/back-end/default-value-setting.php:11
@@ -6551,7 +6551,7 @@ msgstr "Obtenez Formidable Forms Pro aujourd'hui et débloquez toutes les foncti
 
 #: classes/views/frm-settings/_currency.php:7
 msgid "Select the currency to be used by Formidable globally."
-msgstr "Sélectionnez la devise à utiliser par Formidable globalement."
+msgstr "Sélectionnez la devise que Formidable doit utiliser globalement."
 
 #: classes/views/frm-settings/_currency.php:8
 #: stripe/views/action-settings/payments-options.php:72
