@@ -36,9 +36,6 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	protected $entry = null;
 
-	/**
-	 * Ensure that the plugin has been installed and activated.
-	 */
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
 		self::empty_tables();

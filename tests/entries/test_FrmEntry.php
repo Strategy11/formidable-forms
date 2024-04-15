@@ -5,9 +5,6 @@
  */
 class test_FrmEntry extends FrmUnitTest {
 
-	/**
-	 * Ensure that the plugin has been installed and activated.
-	 */
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
 		self::empty_tables();
