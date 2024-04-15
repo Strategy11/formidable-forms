@@ -9,45 +9,58 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	protected static $installed = false;
 
+	/**
+	 * @var int
+	 */
 	protected $user_id = 0;
 
+	/**
+	 * @var string
+	 */
 	protected $contact_form_key = 'contact-with-email';
-	protected $contact_form_field_count = 10;
-
-	protected $all_fields_form_key = 'all_field_types';
-	protected $all_field_types_count = 50;
-
-	protected $repeat_sec_form_key  = 'rep_sec_form';
-	protected $create_post_form_key = 'create-a-post';
-
-	protected $is_pro_active = false;
 
 	/**
-	 * @var FrmUnitTest $instance
+	 * @var int
 	 */
-	protected static $instance;
+	protected $contact_form_field_count = 10;
 
-	public static function wpSetUpBeforeClass() {
-		$_POST = array();
-	}
+	/**
+	 * @var string
+	 */
+	protected $all_fields_form_key = 'all_field_types';
 
-	public static function wpTearDownAfterClass() {
-	}
+	/**
+	 * @var int
+	 */
+	protected $all_field_types_count = 50;
+
+	/**
+	 * @var string
+	 */
+	protected $repeat_sec_form_key  = 'rep_sec_form';
+
+	/**
+	 * @var string
+	 */
+	protected $create_post_form_key = 'create-a-post';
+
+	/**
+	 * @var bool|null
+	 */
+	protected static $is_pro_active;
+
+	/**
+	 * @var bool
+	 */
+	private static $loaded_admin_hooks = false;
 
 	public function setUp(): void {
-		self::$instance = $this;
 		parent::setUp();
 
-		// The JavaScript antispam check doesn't work with unit tests so turn it off.
-		add_filter( 'frm_run_antispam', '__return_false' );
-
-		$this->is_pro_active = get_option( 'frmpro-authorized' );
-		if ( is_multisite() && ! $this->is_pro_active ) {
-			// WP unit testing bootstrap doesn't bother hooking into `pre_site_option` so we need to get_option() instead.
-			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
+		if ( ! self::$loaded_admin_hooks ) {
+			FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+			self::$loaded_admin_hooks = true;
 		}
-
-		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 
 		$this->factory        = new FrmUnitTestFactory();
 		$this->factory->form  = new Form_Factory( $this );
@@ -251,7 +264,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	public function get_all_fields_for_form_key( $form_key ) {
 		$field_totals = array(
-			$this->all_fields_form_key => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
+			$this->all_fields_form_key => self::$is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
 			$this->create_post_form_key => 10,
 			$this->contact_form_key => $this->contact_form_field_count,
 			$this->repeat_sec_form_key => 3,
@@ -356,7 +369,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			),
 		);
 
-		if ( $page == 'formidable-edit' ) {
+		if ( $page === 'formidable-edit' ) {
 			$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 			$page = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
 			$screens[ $page ] = $screens['admin.php?page=formidable'];
@@ -438,6 +451,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_footer_output() {
 		ob_start();
 		do_action( 'wp_footer' );
@@ -447,12 +463,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $output;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function install_data() {
 		return array(
-			dirname( __FILE__ ) . '/testdata.xml',
-			dirname( __FILE__ ) . '/free-form.xml',
-			dirname( __FILE__ ) . '/editform.xml',
-			dirname( __FILE__ ) . '/file-upload.xml',
+			__DIR__ . '/testdata.xml',
+			__DIR__ . '/free-form.xml',
+			__DIR__ . '/editform.xml',
+			__DIR__ . '/file-upload.xml',
 		);
 	}
 
@@ -461,26 +480,26 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 
 		$type = (array) $type;
-		if ( in_array( 'items', $type ) && ! in_array( 'forms', $type ) ) {
+		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
 
 		$tables = array(
-			'items'     => $wpdb->prefix . 'frm_items',
-			'forms'     => $wpdb->prefix . 'frm_forms',
-			'posts'     => $wpdb->posts,
-			'styles'    => $wpdb->posts,
-			'actions'   => $wpdb->posts,
+			'items'   => $wpdb->prefix . 'frm_items',
+			'forms'   => $wpdb->prefix . 'frm_forms',
+			'posts'   => $wpdb->posts,
+			'styles'  => $wpdb->posts,
+			'actions' => $wpdb->posts,
 		);
 
 		$defaults = array( 'ids' => false );
-		$args = wp_parse_args( $xml_args, $defaults );
+		$args     = wp_parse_args( $xml_args, $defaults );
 
 		// Make sure ids are numeric.
 		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {

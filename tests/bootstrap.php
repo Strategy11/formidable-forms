@@ -32,5 +32,8 @@ require_once dirname( __FILE__ ) . '/base/frm_factory.php';
 require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';
 require_once dirname( __FILE__ ) . '/base/FrmAjaxUnitTest.php';
 
+// The JavaScript antispam check doesn't work with unit tests so turn it off.
+add_filter( 'frm_run_antispam', '__return_false' );
+
 // Ensure that the plugin has been installed and activated.
 FrmUnitTest::frm_install();
