@@ -64,7 +64,7 @@ class FrmFieldPhone extends FrmFieldType {
 	 *
 	 * @return void Outputs the HTML option tag directly.
 	 */
-	protected function get_international_option() {
+	protected function print_international_option() {
 		?>
 		<option
 			value="international"

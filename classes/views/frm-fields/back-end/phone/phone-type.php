@@ -31,7 +31,7 @@ $format   = FrmField::get_option( $field, 'format' );
 		<option value="none" <?php selected( $format, '' ); ?>>
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
-		<?php $this->get_international_option(); ?>
+		<?php $this->print_international_option(); ?>
 		<option value="custom" data-dependency="#frm-phone-field-custom-format-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'international' !== $format, true ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
