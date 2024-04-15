@@ -565,7 +565,7 @@ class FrmFormActionsController {
 				 * @param object $form   Form object.
 				 * @param string $event  Event ('create' or 'update').
 				 */
-				if ( false === apply_filters( 'frm_custom_trigger_' . $action->post_excerpt . '_action', false, $action, $entry, $form, $event ) ) {
+				if ( false === apply_filters( 'frm_custom_trigger_action', false, $action, $entry, $form, $event ) ) {
 					do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
 					do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
 				}

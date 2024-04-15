@@ -52,7 +52,6 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 ?>
 </div>
 <?php
-
 $action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 $pass_args = array(
@@ -61,6 +60,7 @@ $pass_args = array(
 	'action_key' => $action_key,
 	'values'     => $values,
 );
+FrmProFormActionsController::show_repeater_entries_dropdown( $form_action, $pass_args );
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 // Show Conditional logic indicator.
