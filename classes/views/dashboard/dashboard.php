@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 /**
- * @var bool $should_display_formidable_videos
+ * @var bool $should_display_videos
  */
 ?>
 <div class="frm_wrap frm-dashboard-wrapper">

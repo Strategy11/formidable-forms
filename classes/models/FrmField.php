@@ -733,6 +733,7 @@ class FrmField {
 				'inc_repeat' => $inc_sub,
 			)
 		);
+		$results = false;
 		if ( ! empty( $results ) ) {
 			$fields = array();
 			$count  = 0;
