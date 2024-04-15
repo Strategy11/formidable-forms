@@ -38,8 +38,15 @@ class FrmStylesHelper {
 		);
 	}
 
-	public static function get_single_label_positions() {
-		return array(
+	/**
+	 * @since x.x Added $field param.
+	 *
+	 * @param array|object $field
+	 *
+	 * @return array
+	 */
+	public static function get_single_label_positions( $field = array() ) {
+		$positions = array(
 			'top'    => __( 'Top', 'formidable' ),
 			'left'   => __( 'Left', 'formidable' ),
 			'right'  => __( 'Right', 'formidable' ),
@@ -48,6 +55,8 @@ class FrmStylesHelper {
 			'hidden' => __( 'Hidden (but leave the space)', 'formidable' ),
 			'inside' => __( 'Placeholder inside the field', 'formidable' ),
 		);
+
+		return apply_filters( 'frm_label_positions', $positions, $field );
 	}
 
 	public static function minus_icons() {

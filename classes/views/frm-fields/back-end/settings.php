@@ -281,7 +281,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						<?php esc_html_e( 'Default', 'formidable' ); ?>
 					</option>
 					<?php
-					foreach ( FrmStylesHelper::get_single_label_positions() as $pos => $pos_label ) {
+					foreach ( FrmStylesHelper::get_single_label_positions( $field ) as $pos => $pos_label ) {
 						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
 							// Don't allow inside labels for fields without placeholders.
 							continue;
