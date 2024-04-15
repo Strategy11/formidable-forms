@@ -45,9 +45,6 @@ class test_FrmEmail extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	public function setUp(): void {
 		parent::setUp();
 

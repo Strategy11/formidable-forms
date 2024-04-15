@@ -14,9 +14,6 @@ class test_FrmField extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	public function test_create() {
 		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
 		$field_types = array_merge( FrmField::field_selection(), FrmField::pro_field_selection() );

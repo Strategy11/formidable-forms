@@ -19,9 +19,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	protected $include_fields = array();
 	protected $exclude_fields = array();
 	protected $include_extras = array();

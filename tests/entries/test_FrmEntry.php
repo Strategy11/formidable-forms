@@ -14,9 +14,6 @@ class test_FrmEntry extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	/**
 	 * @covers FrmEntry::create
 	 * @covers FrmEntry::is_duplicate

@@ -14,9 +14,6 @@ class test_FrmPersonalData extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	public function setUp(): void {
 		parent::setUp();
 		$this->create_users();

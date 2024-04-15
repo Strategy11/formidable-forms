@@ -11,9 +11,6 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	public static function wpTearDownAfterClass() {
-	}
-
 	public function test_get_options() {
 		$options = $this->run_private_method(
 			array( 'FrmEmailSummaryHelper', 'get_options' )
