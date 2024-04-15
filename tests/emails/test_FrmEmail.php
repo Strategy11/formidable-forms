@@ -36,6 +36,12 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	protected $entry = null;
 
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+		self::empty_tables();
+		self::frm_install();
+	}
+
 	public function setUp(): void {
 		parent::setUp();
 

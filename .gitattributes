@@ -10,7 +10,6 @@
 .gitignore export-ignore
 .jshintrc export-ignore
 .jshintignore export-ignore
-.travis.yml export-ignore
 .wordpress-org export-ignore
 .phpunit.result.cache export-ignore
 /bin/ export-ignore
