@@ -95,14 +95,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		id="frm_submit_value" name="frm_submit_value"
 		class="frm_with_left_label"/>
 </p>
-
-<p>
-	<label for="frm_submit_speak_msg" class="frm_left_label"><?php esc_html_e( 'Submit Speak Text', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon"
-			title="<?php esc_attr_e( 'The text announced by screen reader when a form is submitted.', 'formidable' ); ?>"></span>
-	</label>
-	<input type="text"
-		value="<?php echo esc_attr( $frm_settings->submit_speak_msg ); ?>"
-		id="frm_submit_speak_msg" name="frm_submit_speak_msg"
-		class="frm_with_left_label"/>
-</p>

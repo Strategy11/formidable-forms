@@ -92,12 +92,6 @@ class FrmSettings {
 	 */
 	public $custom_css;
 
-	/**
-	 * @since x.x
-	 * @var string
-	 */
-	public $submit_speak_msg;
-
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -173,7 +167,6 @@ class FrmSettings {
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css' => false,
-			'submit_speak_msg' => __( 'Form submitted. Please wait for the request to process.', 'formidable' ),
 		);
 	}
 
@@ -222,7 +215,7 @@ class FrmSettings {
 		$filter_html = ! FrmAppHelper::allow_unfiltered_html();
 
 		if ( $filter_html ) {
-			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu', 'submit_speak_msg' );
+			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
 			if ( ! empty( $params['additional_filter_keys'] ) ) {
 				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
 			}
