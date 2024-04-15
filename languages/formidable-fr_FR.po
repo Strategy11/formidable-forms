@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-14 22:28\n"
+"PO-Revision-Date: 2024-04-15 22:34\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -4634,7 +4634,7 @@ msgstr "Votre clé de licence pour %1$s est manquante. Veuillez l’ajouter sur 
 
 #: classes/models/FrmAddon.php:600
 msgid "Oops! You forgot to enter your license number."
-msgstr "Aïe ! Vous avez oublier de saisir votre numéro de licence."
+msgstr "Oups ! Vous avez oublié de saisir votre numéro de licence."
 
 #: classes/models/FrmAddon.php:666
 msgid "Please wait two minutes before trying again."
