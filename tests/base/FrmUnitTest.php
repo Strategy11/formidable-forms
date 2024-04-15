@@ -27,16 +27,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	protected static $instance;
 
-	/**
-	 * Ensure that the plugin has been installed and activated.
-	 */
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
-		self::frm_install();
 	}
 
 	public static function wpTearDownAfterClass() {
-		self::empty_tables();
 	}
 
 	public function setUp(): void {
@@ -64,7 +59,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
-	protected static function empty_tables() {
+	public static function empty_tables() {
 		global $wpdb;
 		$tables = self::get_table_names();
 		foreach ( $tables as $table ) {

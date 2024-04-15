@@ -2,6 +2,18 @@
 
 class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
+	/**
+	 * Ensure that the plugin has been installed and activated.
+	 */
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+		self::empty_tables();
+		self::frm_install();
+	}
+
+	public static function wpTearDownAfterClass() {
+	}
+
 	public function test_get_options() {
 		$options = $this->run_private_method(
 			array( 'FrmEmailSummaryHelper', 'get_options' )

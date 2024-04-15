@@ -4,6 +4,7 @@
  * @group form-templates
  */
 class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
+
 	private $controller;
 
 	public function setUp(): void {

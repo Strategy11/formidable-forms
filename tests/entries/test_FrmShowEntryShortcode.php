@@ -10,6 +10,18 @@
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
+	/**
+	 * Ensure that the plugin has been installed and activated.
+	 */
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+		self::empty_tables();
+		self::frm_install();
+	}
+
+	public static function wpTearDownAfterClass() {
+	}
+
 	protected $include_fields = array();
 	protected $exclude_fields = array();
 	protected $include_extras = array();
