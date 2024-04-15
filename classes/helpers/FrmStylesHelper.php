@@ -46,7 +46,7 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function get_single_label_positions( $field = array() ) {
-		$positions = array(
+		$label_positions = array(
 			'top'    => __( 'Top', 'formidable' ),
 			'left'   => __( 'Left', 'formidable' ),
 			'right'  => __( 'Right', 'formidable' ),
@@ -56,7 +56,15 @@ class FrmStylesHelper {
 			'inside' => __( 'Placeholder inside the field', 'formidable' ),
 		);
 
-		return apply_filters( 'frm_label_positions', $positions, $field );
+		/**
+		 * Allows updating label positions in field settings.
+		 *
+		 * @since x.x
+		 *
+		 * @param array        $label_positions
+		 * @param array|object $field
+		 */
+		return apply_filters( 'frm_label_positions', $label_positions, $field );
 	}
 
 	public static function minus_icons() {
