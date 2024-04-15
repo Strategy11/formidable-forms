@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-12 10:22\n"
+"PO-Revision-Date: 2024-04-15 10:34\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1771,7 +1771,7 @@ msgstr "キーボードの %1$sShift%2$s を押しながら複数のフィール
 
 #: classes/helpers/FrmAppHelper.php:3329
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
-msgstr "Formidableのバージョンが古いようです。Formidableをアップデートしないと、このプラグインが正しく動作しない可能性があります。"
+msgstr "Formidable のバージョンが古いようです。Formidable を更新しない場合、このプラグインが適切に動作しない可能性があります。"
 
 #: classes/helpers/FrmAppHelper.php:3358
 msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
