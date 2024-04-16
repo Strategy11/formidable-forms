@@ -5331,6 +5331,18 @@ function frmAdminBuildJS() {
 		clickAction( this );
 	}
 
+	/**
+	 * Update the phone format input based on the selected phone type.
+	 *
+	 * This function is triggered when a phone type is selected.
+	 * If the selected type is 'custom' and the current format is 'international',
+	 * the format input value is cleared to allow for custom input.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event The event object from the phone type selection.
+	 * @return {void}
+	 */
 	function maybeUpdatePhoneFormatInput( event ) {
 		const phoneType = event.target;
 		if ( 'custom' === phoneType.value ) {
