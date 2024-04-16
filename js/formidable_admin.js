@@ -9868,11 +9868,7 @@ function frmAdminBuildJS() {
 			const selectedOption = select.options[ select.selectedIndex ];
 			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
 				const dependencyElement = document.querySelector( option.dataset.dependency );
-				if ( ! dependencyElement ) {
-					return;
-				}
-
-				dependencyElement.classList.toggle( 'frm_hidden', selectedOption !== option );
+				dependencyElement?.classList.toggle( 'frm_hidden', selectedOption !== option );
 			});
 		}
 
