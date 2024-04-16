@@ -15,11 +15,6 @@ class FrmFieldUrl extends FrmFieldType {
 	protected $type = 'url';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
 	 */
 	protected $array_allowed = false;

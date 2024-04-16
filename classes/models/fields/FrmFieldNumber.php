@@ -15,11 +15,6 @@ class FrmFieldNumber extends FrmFieldType {
 	protected $type = 'number';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
 	 */
 	protected $array_allowed = false;
