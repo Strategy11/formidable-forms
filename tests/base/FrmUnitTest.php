@@ -97,6 +97,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
 		}
 
+		/**
+		 * This is required to run on newer versions of WP without triggering an error:
+		 * file_get_contents(/tmp/wordpress/src/wp-includes/js/wp-emoji-loader.min.js): failed to open stream: No such file or directory
+		 * Our tests do not require the emoji scripts so we can just disable them.
+		 */
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
