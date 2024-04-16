@@ -603,6 +603,9 @@ class FrmFormsController {
 	private static function load_direct_preview() {
 		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 
+		// print_emoji_styles is deprecated.
+		remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
 		if ( $key == '' ) {
 			$key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_title' );
