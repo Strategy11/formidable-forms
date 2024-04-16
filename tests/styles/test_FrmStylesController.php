@@ -3,6 +3,7 @@
  * @group styles
  */
 class test_FrmStylesController extends FrmUnitTest {
+
 	/**
 	 * Make sure the stylesheet is loaded at the right times
 	 */
