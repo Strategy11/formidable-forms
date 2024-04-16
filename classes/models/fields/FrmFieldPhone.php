@@ -15,11 +15,6 @@ class FrmFieldPhone extends FrmFieldType {
 	protected $type = 'phone';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
 	 * @since 3.0
 	 */
