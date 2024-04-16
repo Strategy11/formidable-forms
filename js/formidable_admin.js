@@ -9850,9 +9850,7 @@ function frmAdminBuildJS() {
 		}
 
 		// Initial setup: Show dependencies based on the current selection in each dropdown
-		selects.forEach( select => {
-			toggleDependencyVisibility( select );
-		});
+		selects.forEach( toggleDependencyVisibility );
 
 		// Update dependencies visibility on dropdown change
 		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
