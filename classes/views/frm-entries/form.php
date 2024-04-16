@@ -28,7 +28,7 @@ FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['l
 // Get conditionally hidden fields
 $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id, '', 'sanitize_text_field' );
 
-if ( FrmFormsController::current_theme_is( 'Twenty Nineteen' ) ) {
+if ( is_callable( 'twentynineteen_setup' ) ) {
 	?>
 <div class="site-branding frm_hidden"></div>
 	<?php

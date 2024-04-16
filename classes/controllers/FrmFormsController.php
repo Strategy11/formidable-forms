@@ -2820,20 +2820,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Returns true if the current theme name matches $theme_name.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $theme_name
-	 *
-	 * @return bool
-	 */
-	public static function current_theme_is( $theme_name ) {
-		$current_theme = wp_get_theme();
-		return  $current_theme->get( 'Name' ) === $theme_name;
-	}
-
-	/**
 	 * @return string - 'before', 'after', or 'submit'
 	 *
 	 * @since 4.05.02
