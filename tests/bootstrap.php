@@ -31,3 +31,6 @@ require_once dirname( __FILE__ ) . '/base/frm_factory.php';
 // include unit test base class
 require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';
 require_once dirname( __FILE__ ) . '/base/FrmAjaxUnitTest.php';
+
+// Ensure that the plugin has been installed and activated.
+FrmUnitTest::frm_install();

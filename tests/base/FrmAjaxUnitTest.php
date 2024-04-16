@@ -14,11 +14,9 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		$_POST = array();
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
-		FrmUnitTest::frm_install();
 	}
 
 	public static function wpTearDownAfterClass() {
-		FrmUnitTest::wpTearDownAfterClass();
 	}
 
 	public function setUp(): void {

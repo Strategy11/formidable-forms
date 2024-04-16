@@ -27,16 +27,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	protected static $instance;
 
-	/**
-	 * Ensure that the plugin has been installed and activated.
-	 */
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
-		self::frm_install();
 	}
 
 	public static function wpTearDownAfterClass() {
-		self::empty_tables();
 	}
 
 	public function setUp(): void {
@@ -64,7 +59,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
-	protected static function empty_tables() {
+	public static function empty_tables() {
 		global $wpdb;
 		$tables = self::get_table_names();
 		foreach ( $tables as $table ) {
@@ -101,6 +96,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 			// Mimes get changed because of add_filter( 'upload_mimes', 'check_upload_mimes' ); in ms-default-filters.php (A WordPress file).
 			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
 		}
+
+		/**
+		 * This is required to run on newer versions of WP without triggering an error:
+		 * file_get_contents(/tmp/wordpress/src/wp-includes/js/wp-emoji-loader.min.js): failed to open stream: No such file or directory
+		 * Our tests do not require the emoji scripts so we can just disable them.
+		 */
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();

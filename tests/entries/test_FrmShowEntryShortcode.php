@@ -10,6 +10,12 @@
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+		self::empty_tables();
+		self::frm_install();
+	}
+
 	protected $include_fields = array();
 	protected $exclude_fields = array();
 	protected $include_extras = array();
