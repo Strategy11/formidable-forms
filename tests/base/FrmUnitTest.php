@@ -97,6 +97,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
 		}
 
+		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
