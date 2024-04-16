@@ -27,6 +27,7 @@ FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['l
 
 // Get conditionally hidden fields
 $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id, '', 'sanitize_text_field' );
+
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
