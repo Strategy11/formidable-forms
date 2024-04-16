@@ -6501,12 +6501,7 @@ function frmAdminBuildJS() {
 		}
 		b.setAttribute( 'aria-busy', 'true' );
 
-		/**
-		 * Triggers an action hook before saving a form in the admin area, passing the submitted button.
-		 *
-		 * @param {HTMLButtonElement} b The button that was submitted.
-		 */
-		wp.hooks.doAction( 'frmAdmin.preFormSave', b );
+		adjustFormatInputBeforeSave();
 	}
 
 	/**
@@ -10081,7 +10076,6 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
-			wp.hooks.addAction( 'frmAdmin.preFormSave', 'formidable', adjustFormatInputBeforeSave );
 
 			addFormNameModalEvents();
 
