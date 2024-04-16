@@ -70,6 +70,10 @@ class FrmField {
 				'name'  => __( 'Payment', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
+			FrmSubmitHelper::FIELD_TYPE => array(
+				'name' => __( 'Submit', 'formidable' ),
+				'hide' => true,
+			),
 		);
 
 		/**
@@ -1023,7 +1027,7 @@ class FrmField {
 	}
 
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary' );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
 	}
 
 	/**
@@ -1148,6 +1152,11 @@ class FrmField {
 		return ! isset( $field->field_options[ $option ] ) || empty( $field->field_options[ $option ] );
 	}
 
+	/**
+	 * @param stdClass $field
+	 * @param string   $option
+	 * @return bool
+	 */
 	public static function is_option_value_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
 	}

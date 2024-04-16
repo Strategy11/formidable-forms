@@ -106,6 +106,8 @@ class FrmFieldFactory {
 			'captcha'     => 'FrmFieldCaptcha',
 			'name'        => 'FrmFieldName',
 			'credit_card' => 'FrmFieldCreditCard',
+			// Submit button field.
+			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';

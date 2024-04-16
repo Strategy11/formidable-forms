@@ -200,7 +200,6 @@ class FrmFormTemplatesController {
 		$custom_templates   = self::get_custom_templates();
 		$categories         = self::get_categories();
 
-		// Render the view.
 		include $view_path . 'index.php';
 	}
 
@@ -253,7 +252,6 @@ class FrmFormTemplatesController {
 			}
 		}
 
-		// Render the view.
 		include $view_path . 'modal.php';
 	}
 
@@ -675,7 +673,7 @@ class FrmFormTemplatesController {
 		 */
 		do_action( 'frm_form_templates_enqueue_assets' );
 
-		self::dequeue_scripts();
+		FrmAppHelper::dequeue_extra_global_scripts();
 	}
 
 	/**
@@ -706,20 +704,6 @@ class FrmFormTemplatesController {
 		 * @param array $js_variables Array of js_variables passed to "Form Templates".
 		 */
 		return apply_filters( 'frm_form_templates_js_variables', $js_variables );
-	}
-
-	/**
-	 * Dequeue scripts and styles on "Form Templates".
-	 *
-	 * Avoid extra scripts loading on "Form Templates" page that aren't needed.
-	 *
-	 * @since 6.7
-	 *
-	 * @return void
-	 */
-	private static function dequeue_scripts() {
-		wp_dequeue_script( 'frm-surveys-admin' );
-		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
 
 	/**

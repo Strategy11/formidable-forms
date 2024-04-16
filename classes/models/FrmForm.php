@@ -770,7 +770,9 @@ class FrmForm {
 	}
 
 	/**
-	 * @return object form
+	 * @param string|int $id
+	 * @param int|false  $blog_id
+	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
 		global $wpdb;

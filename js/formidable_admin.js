@@ -622,6 +622,7 @@ function frmAdminBuildJS() {
 				const type = this.closest( '.frm_form_action_settings' ).querySelector( '.frm_action_name' ).value;
 				afterActionRemoved( type );
 			}
+			document.querySelector( '.tooltip' )?.remove();
 		});
 
 		if ( typeof removeMore !== 'undefined' ) {
@@ -815,7 +816,7 @@ function frmAdminBuildJS() {
 		const droppable = getDroppableForOnDragOver( event.target );
 		const draggable = ui.draggable[0];
 
-		if ( ! allowDrop( draggable, droppable ) ) {
+		if ( ! allowDrop( draggable, droppable, event ) ) {
 			droppable.classList.remove( 'frm-over-droppable' );
 			jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
 			return;
@@ -939,8 +940,7 @@ function frmAdminBuildJS() {
 		const droppable = getDroppableTarget();
 
 		let placeholder = document.getElementById( 'frm_drag_placeholder' );
-
-		if ( ! allowDrop( draggable, droppable ) ) {
+		if ( ! allowDrop( draggable, droppable, event ) ) {
 			if ( placeholder ) {
 				placeholder.remove();
 			}
@@ -1144,6 +1144,11 @@ function frmAdminBuildJS() {
 		const length = $items.length;
 
 		let index, item, itemTop, returnIndex;
+
+		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
+			// Always return 0 when there are no fields.
+			return 0;
+		}
 
 		returnIndex = 0;
 		for ( index = length - 1; index >= 0; --index ) {
@@ -1642,7 +1647,8 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: sectionId,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
+				last_row_field_ids: getFieldIdsInSubmitRow()
 			},
 			success: function( msg ) {
 				let replaceWith;
@@ -1676,6 +1682,21 @@ function frmAdminBuildJS() {
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	function getFieldIdsInSubmitRow() {
+		const submitField = document.querySelector( '.edit_field_type_submit' );
+		if ( ! submitField ) {
+			return [];
+		}
+
+		const lastRowFields = submitField.parentNode.children;
+		const ids = [];
+		for ( let i = 0; i < lastRowFields.length; i++ ) {
+			ids.push( lastRowFields[ i ].dataset.fid );
+		}
+
+		return ids;
 	}
 
 	function moveFieldThatAlreadyExists( draggable, placeholder ) {
@@ -1713,12 +1734,23 @@ function frmAdminBuildJS() {
 		return ++autoId;
 	}
 
-	// Don't allow page break, embed form, or section inside section field
-	// Don't allow page breaks inside of field groups.
-	// Don't allow field groups with sections inside of sections.
-	// Don't allow field groups in field groups.
-	// Don't allow hidden fields inside of field groups but allow them in sections.
-	function allowDrop( draggable, droppable ) {
+	/**
+	 * Determine if a draggable element can be droppable into a droppable element.
+	 *
+	 * Don't allow page break, embed form, or section inside section field
+	 * Don't allow page breaks inside of field groups.
+	 * Don't allow field groups with sections inside of sections.
+	 * Don't allow field groups in field groups.
+	 * Don't allow hidden fields inside of field groups but allow them in sections.
+	 * Don't allow any fields below the submit button field.
+	 * Don't allow submit button field above any fields.
+	 *
+	 * @param {HTMLElement} draggable
+	 * @param {HTMLElement} droppable
+	 * @param {Event} event
+	 * @returns {Boolean}
+	 */
+	function allowDrop( draggable, droppable, event ) {
 		if ( false === droppable ) {
 			// Don't show drop placeholder if dragging somewhere off of the droppable area.
 			return false;
@@ -1729,9 +1761,41 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
+		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
+		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && !! draggable.querySelector( '.edit_field_type_submit' );
+
 		if ( 'frm-show-fields' === droppable.id ) {
-			// Everything can be dropped into the main list of fields.
-			return true;
+			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
+
+			if ( isSubmitBtn || containSubmitBtn ) {
+				// Do not allow dropping submit button to above position.
+				const lastRowIndex = droppable.childElementCount - 1;
+				return draggableIndex > lastRowIndex;
+			}
+
+			// Do not allow dropping other fields to below submit button.
+			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
+			return draggableIndex <= submitButtonIndex;
+		}
+
+		if ( isSubmitBtn ) {
+			if ( droppable.classList.contains( 'start_divider' ) ) {
+				// Don't allow dropping submit button into a repeater.
+				return false;
+			}
+
+			if ( isLastRow( droppable.parentElement ) ) {
+				// Allow dropping submit button into the last row.
+				return true;
+			}
+
+			if ( ! isLastRow( droppable.parentElement.nextElementSibling ) ) {
+				// Don't a dropping submit button into the row that isn't the second one from bottom.
+				return false;
+			}
+
+			// Allow dropping submit button into the second row from bottom if there is only submit button in the last row.
+			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
@@ -1748,6 +1812,16 @@ function frmAdminBuildJS() {
 		}
 
 		return allowMoveField( draggable, droppable );
+	}
+
+	/**
+	 * Checks if given element is the last row in form builder.
+	 *
+	 * @param {HTMLElement} element Element.
+	 * @return {Boolean}
+	 */
+	function isLastRow( element ) {
+		return element && element.matches( '#frm-show-fields > li:last-child' );
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
@@ -1981,12 +2055,20 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: 0,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
+				last_row_field_ids: getFieldIdsInSubmitRow()
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
-				$newFields.append( replaceWith );
+
+				const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
+				if ( ! submitField ) {
+					$newFields.append( replaceWith );
+				} else {
+					jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
+				}
+
 				afterAddField( msg, true );
 
 				replaceWith.each(
@@ -2515,6 +2597,7 @@ function frmAdminBuildJS() {
 
 	function deselectFields( preventFieldGroups ) {
 		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
+		jQuery( '.frm-show-field-settings.selected' ).removeClass( 'selected' );
 		if ( ! preventFieldGroups ) {
 			unselectFieldGroups();
 		}
@@ -4686,6 +4769,30 @@ function frmAdminBuildJS() {
 		toggleSectionHolder();
 	}
 
+	/**
+	 * Checks if there is only submit field in the form builder.
+	 *
+	 * @return {Boolean}
+	 */
+	function hasOnlySubmitField() {
+		// If there are at least 2 rows, return false.
+		if ( $newFields.get( 0 ).childElementCount > 1 ) {
+			return false;
+		}
+
+		const childUl = $newFields.get( 0 ).firstElementChild.firstElementChild;
+
+		// Use query instead of children because there might be a div inside this ul.
+		const childLi = childUl.querySelectorAll( 'li.frm_field_box' );
+
+		// If there are at least 2 items in the row, return false.
+		if ( childLi.length > 1 ) {
+			return false;
+		}
+
+		return childLi[0].classList.contains( 'edit_field_type_submit' );
+	}
+
 	function deleteField( fieldId ) {
 		jQuery.ajax({
 			type: 'POST',
@@ -4722,19 +4829,19 @@ function frmAdminBuildJS() {
 					$thisField.remove();
 					if ( type === 'break' ) {
 						renumberPageBreaks();
-					}
-					if ( type === 'product' ) {
+					} else if ( type === 'product' ) {
 						maybeHideQuantityProductFieldOption();
 						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
 						popAllProductFields();
 					}
+
 					if ( $adjacentFields.length ) {
 						syncLayoutClasses( $adjacentFields.first() );
 					} else {
 						$liWrapper.remove();
 					}
 
-					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
+					if ( jQuery( '#frm-show-fields li' ).length === 0 || hasOnlySubmitField() ) {
 						const formEditorContainer = document.getElementById( 'frm_form_editor_container' );
 						formEditorContainer.classList.remove( 'frm-has-fields' );
 						formEditorContainer.classList.add( 'frm-empty-fields' );
@@ -5032,6 +5139,8 @@ function frmAdminBuildJS() {
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
 		}
+
+		wp.hooks.doAction( 'frm_renumber_page_breaks', pages );
 	}
 
 	// The fake field works differently than real fields.
@@ -6964,6 +7073,7 @@ function frmAdminBuildJS() {
 			);
 		}
 
+		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 	}
 
@@ -9586,11 +9696,14 @@ function frmAdminBuildJS() {
 				spinner.remove();
 			}
 
-			// Handle successful form submission.
-			// handle the Active Campaign form on the inbox page.
-			document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
-				span({ text: __( 'Thank you for signing up!', 'formidable' ) })
-			);
+			const showSuccessMessage = wp.hooks.applyFilters( 'frm_thank_you_on_signup', true );
+			if ( showSuccessMessage ) {
+				// Handle successful form submission.
+				// handle the Active Campaign form on the inbox page.
+				document.getElementById( 'frm_leave_email_wrapper' ).replaceWith(
+					span( __( 'Thank you for signing up!', 'formidable' ) )
+				);
+			}
 		});
 	}
 
@@ -9989,6 +10102,8 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
+
+			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
@@ -10529,7 +10644,9 @@ function frmAdminBuildJS() {
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
-		purifyHtml
+		purifyHtml,
+		loadApiEmailForm,
+		addMyEmailAddress
 	};
 }
 

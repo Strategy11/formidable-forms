@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDashboardController {
 
 	/**
-	 * Option name used to store the time when auto redirected for welcome.
-	 */
-	const REDIRECT_META_NAME = 'frm_activation_redirect';
-
-	/**
 	 * Handle name used for registering controller scripts and style.
 	 */
 	const PAGE_SLUG = 'formidable-dashboard';
@@ -23,12 +18,9 @@ class FrmDashboardController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_init', __CLASS__ . '::redirect' );
 		add_action( 'admin_menu', __CLASS__ . '::menu', 9 );
 	}
 
@@ -39,58 +31,6 @@ class FrmDashboardController {
 	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . wp_kses_post( FrmInboxController::get_notice_count() ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
-	}
-
-	/**
-	 * Performs a safe (local) redirect to the welcome screen
-	 * when the plugin is activated
-	 *
-	 * @return void
-	 */
-	public static function redirect() {
-		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( $current_page === self::PAGE_SLUG ) {
-			// Prevent endless loop.
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification
-		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) {
-			// Only do this for single site installs.
-			return;
-		}
-
-		// Check if we should consider redirection.
-		if ( ! self::is_dashboard_page() ) {
-			return;
-		}
-
-		set_transient( self::REDIRECT_META_NAME, 'no', 60 );
-
-		// Prevent redirect with every activation.
-		if ( self::already_redirected() ) {
-			return;
-		}
-
-		// Initial install.
-		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) ) );
-		exit;
-	}
-
-	/**
-	 * Don't redirect every time the plugin is activated.
-	 *
-	 * @return bool
-	 */
-	private static function already_redirected() {
-		$redirect_option = 'frm_welcome_redirect';
-		$last_redirect   = get_option( $redirect_option );
-		if ( $last_redirect ) {
-			return true;
-		}
-
-		update_option( $redirect_option, FrmAppHelper::plugin_version(), 'no' );
-		return false;
 	}
 
 	/**
@@ -309,7 +249,7 @@ class FrmDashboardController {
 				'copy'       => $copy,
 				'button'     => array(
 					'label' => esc_html__( 'Add New Form', 'formidable' ),
-					'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+					'link'  => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
 				),
 			);
 		}

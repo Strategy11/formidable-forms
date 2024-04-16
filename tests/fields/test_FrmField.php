@@ -4,6 +4,13 @@
  * @group fields
  */
 class test_FrmField extends FrmUnitTest {
+
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+		self::empty_tables();
+		self::frm_install();
+	}
+
 	public function test_create() {
 		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
 		$field_types = array_merge( FrmField::field_selection(), FrmField::pro_field_selection() );
@@ -43,18 +50,18 @@ class test_FrmField extends FrmUnitTest {
 		$forms = array(
 			'basic_test' => array(
 				'form_key' => $this->contact_form_key,
-				'count' => $this->contact_form_field_count,
+				'count'    => $this->contact_form_field_count,
 			),
 			'no_repeat_or_embed' => array(
 				'form_key' => $this->all_fields_form_key,
-				'count' => $this->all_field_types_count - $this->contact_form_field_count - 3,
+				'count'    => $this->all_field_types_count - $this->contact_form_field_count - 3,
 			),
 		);
 
 		foreach ( $forms as $test => $args ) {
 			$form_id = FrmForm::get_id_by_key( $args['form_key'] );
 
-			if ( $test == 'no_repeat_or_embed' ) {
+			if ( $test === 'no_repeat_or_embed' ) {
 				$fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );
 			} else {
 				$fields = FrmField::get_all_for_form( $form_id );

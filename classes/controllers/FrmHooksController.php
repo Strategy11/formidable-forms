@@ -46,7 +46,6 @@ class FrmHooksController {
 			}
 			unset( $c );
 		}
-
 	}
 
 	/**
@@ -203,6 +202,7 @@ class FrmHooksController {
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
+		FrmOnboardingWizardController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
@@ -214,6 +214,10 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
 		add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 
+		// Onboarding Wizard Controller.
+		add_action( 'wp_ajax_frm_onboarding_setup_email_step', 'FrmOnboardingWizardController::ajax_setup_email_step' );
+		add_action( 'wp_ajax_frm_onboarding_setup_usage_data', 'FrmOnboardingWizardController::setup_usage_data' );
+
 		// Addons.
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
 		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
@@ -221,6 +225,9 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_deactivate_addon', 'FrmAddonsController::ajax_deactivate_addon' );
 		add_action( 'wp_ajax_frm_install_addon', 'FrmAddonsController::ajax_install_addon' );
 		add_action( 'wp_ajax_frm_uninstall_addon', 'FrmAddonsController::ajax_uninstall_addon' );
+		// Plugin.
+		add_action( 'wp_ajax_frm_install_plugin', 'FrmInstallPlugin::ajax_install_plugin' );
+		add_action( 'wp_ajax_frm_check_plugin_activation', 'FrmInstallPlugin::ajax_check_plugin_activation' );
 
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
@@ -297,6 +304,8 @@ class FrmHooksController {
 		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
 		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_button_classes' );
 		add_filter( 'frm_back_button_class', 'FrmFormsController::update_button_classes' );
+
+		add_filter( 'frm_pre_display_form', 'FrmSubmitHelper::copy_submit_field_settings_to_form' );
 
 		// Styles Controller.
 		add_filter( 'frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
