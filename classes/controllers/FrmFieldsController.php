@@ -442,6 +442,14 @@ class FrmFieldsController {
 	 * @param array $field
 	 */
 	public static function show_format_option( $field ) {
+		$attributes          = array();
+		$attributes['class'] = 'frm-has-modal';
+
+		if ( 'phone' === $field['type'] ) {
+			$attributes['id']     = 'frm-phone-field-custom-format-' . $field['id'];
+			$attributes['class'] .= ' frm_hidden';
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/value-format.php';
 	}
 
