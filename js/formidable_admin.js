@@ -6534,7 +6534,7 @@ function frmAdminBuildJS() {
 		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
-		frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', ( event ) => handleUpgradeClick( event ) );
+		frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 		function handleUpgradeClick( event ) {
 			let element, link, content;
