@@ -311,7 +311,7 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 
 .frm_form_field.frm-phone-type + p > label,
 .frm_form_field.frm-phone-type + div > label {
-	opacity: 0;
+	opacity: 0; /* Hide the label for the format input in the phone field. */
 }
 
 .frm-short-list {
