@@ -5332,6 +5332,28 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Update the phone format input based on the selected phone type.
+	 *
+	 * This function is triggered when a phone type is selected.
+	 * If the selected type is 'custom' and the current format is 'international',
+	 * the format input value is cleared to allow for custom input.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event The event object from the phone type selection.
+	 * @return {void}
+	 */
+	function maybeUpdatePhoneFormatInput( event ) {
+		const phoneType = event.target;
+		if ( 'custom' === phoneType.value ) {
+			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
+			if ( 'international' === formatInput.value ) {
+				formatInput.setAttribute( 'value', '' );
+			}
+		}
+	}
+
+	/**
 	 * Open Advanced settings on double click.
 	 */
 	function openAdvanced() {
@@ -6478,6 +6500,39 @@ function frmAdminBuildJS() {
 			b.classList.add( 'frm_loading_button' );
 		}
 		b.setAttribute( 'aria-busy', 'true' );
+
+		adjustFormatInputBeforeSave();
+	}
+
+	/**
+	 * Updates the format input based on the selected phone type from dropdowns during the form save process.
+	 *
+	 * Triggered within the preFormSave function, this function iterates through all phone type dropdown elements
+	 * and adjusts the format input value accordingly. Specifically, if the phone type is 'custom' but the format input
+	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
+	 * before the form is saved.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLButtonElement} submitButton The button that was submitted.
+	 * @return {void}
+	 */
+	function adjustFormatInputBeforeSave( submitButton ) {
+		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
+		phoneTypes.forEach( phoneType => {
+			const value = phoneType.value;
+			if ( ! [ 'none', 'international' ].includes( value ) ) {
+				return;
+			}
+
+			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
+			if ( 'none' === value ) {
+				formatInput.setAttribute( 'value', '' );
+			}
+			if ( 'international' === value ) {
+				formatInput.setAttribute( 'value', 'international' );
+			}
+		});
 	}
 
 	function afterFormSave( button ) {
@@ -6501,6 +6556,7 @@ function frmAdminBuildJS() {
 		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
+		frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 		function handleUpgradeClick( event ) {
 			let element, link, content;
@@ -6512,6 +6568,14 @@ function frmAdminBuildJS() {
 			}
 
 			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
+
+			// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
+			if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
+				const selectedOption = element.options[element.selectedIndex];
+				if ( selectedOption && selectedOption.dataset.upgrade ) {
+					element = selectedOption;
+				}
+			}
 
 			if ( ! element.dataset.upgrade ) {
 				let parent = element.closest( '[data-upgrade]' );
@@ -9775,6 +9839,41 @@ function frmAdminBuildJS() {
 		}
 	}
 
+
+	/**
+	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
+	 * It sets up initial visibility at page load and updates it on each dropdown change.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initSelectDependencies() {
+		const selects = document.querySelectorAll( 'select.frm_select_with_dependency' );
+
+		/**
+		 * Toggles the visibility of dependent elements associated with a select element based on its current selection.
+		 *
+		 * @since x.x
+		 *
+		 * @param {HTMLElement} select The select element whose dependencies need to be managed.
+		 * @return {void}
+		 */
+		function toggleDependencyVisibility( select ) {
+			const selectedOption = select.options[ select.selectedIndex ];
+			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
+				const dependencyElement = document.querySelector( option.dataset.dependency );
+				dependencyElement?.classList.toggle( 'frm_hidden', selectedOption !== option );
+			});
+		}
+
+		// Initial setup: Show dependencies based on the current selection in each dropdown
+		selects.forEach( toggleDependencyVisibility );
+
+		// Update dependencies visibility on dropdown change
+		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
+	};
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
@@ -9837,6 +9936,7 @@ function frmAdminBuildJS() {
 			}
 
 			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
+			initSelectDependencies();
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			if ( $advInfo.length > 0 || jQuery( '.frm_field_list' ).length > 0 ) {
@@ -10104,6 +10204,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
+			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
