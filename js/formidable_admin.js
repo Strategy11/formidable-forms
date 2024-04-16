@@ -6501,6 +6501,28 @@ function frmAdminBuildJS() {
 		}
 		b.setAttribute( 'aria-busy', 'true' );
 
+		/**
+		 * Triggers an action hook before saving a form in the admin area, passing the submitted button.
+		 *
+		 * @param {HTMLButtonElement} b The button that was submitted.
+		 */
+		wp.hooks.doAction( 'frmAdmin.preFormSave', b );
+	}
+
+	/**
+	 * Updates the format input based on the selected phone type from dropdowns during the form save process.
+	 *
+	 * Triggered within the preFormSave function, this function iterates through all phone type dropdown elements
+	 * and adjusts the format input value accordingly. Specifically, if the phone type is 'custom' but the format input
+	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
+	 * before the form is saved.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLButtonElement} submitButton The button that was submitted.
+	 * @return {void}
+	 */
+	function adjustFormatInputBeforeSave( submitButton ) {
 		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
 		phoneTypes.forEach( phoneType => {
 			const value = phoneType.value;
@@ -6516,13 +6538,6 @@ function frmAdminBuildJS() {
 				formatInput.setAttribute( 'value', 'international' );
 			}
 		});
-
-		/**
-		 * Triggers an action hook before saving a form in the admin area, passing the submitted button.
-		 *
-		 * @param {HTMLButtonElement} b The button that was submitted.
-		 */
-		wp.hooks.doAction( 'frmAdmin.preFormSave', b );
 	}
 
 	function afterFormSave( button ) {
@@ -10070,6 +10085,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).on( 'click', submitNoAjax );
+			wp.hooks.addAction( 'frmAdmin.preFormSave', 'formidable', adjustFormatInputBeforeSave );
 
 			addFormNameModalEvents();
 
