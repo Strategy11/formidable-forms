@@ -100,9 +100,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		/**
 		 * This is required to run on newer versions of WP without triggering an error:
 		 * file_get_contents(/tmp/wordpress/src/wp-includes/js/wp-emoji-loader.min.js): failed to open stream: No such file or directory
+		 * Our tests do not require the emoji scripts so we can just disable them.
 		 */
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
