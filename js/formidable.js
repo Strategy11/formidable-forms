@@ -1555,7 +1555,7 @@ function frmFrontFormJS() {
 			maybeAddPolyfills();
 
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
-			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.handleSubmit );
+			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
@@ -1649,11 +1649,6 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
-		handleSubmit: function( e ) {
-			frmFrontForm.submitForm( e );
-			frmFrontForm.speak( frm_js.submit_speak_msg ); // eslint-disable-line camelcase
-		},
-
 		speak: function( message ) {
 			var element = document.createElement( 'div' );
 			element.setAttribute( 'aria-live', 'assertive' );
@@ -1671,6 +1666,7 @@ function frmFrontFormJS() {
 
 		submitForm: function( e ) {
 			frmFrontForm.submitFormManual( e, e.target );
+			frmFrontForm.speak( frm_js.submit_speak_msg ); // eslint-disable-line camelcase
 		},
 
 		submitFormManual: function( e, object ) {
