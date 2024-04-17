@@ -21,7 +21,6 @@ parameters:
 		booleansInConditions: false
 		uselessCast: false
 		requireParentConstructorCall: false
-		overwriteVariablesWithLoop: false
 		closureUsesThis: false
 		numericOperandsInArithmeticOperators: false
 		strictCalls: false
@@ -77,3 +76,9 @@ parameters:
 		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
 		- '#should be contravariant with#'
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
+		-
+			message: '#Foreach overwrites \$ip with its value variable.#'
+			path: classes/helpers/FrmAppHelper.php
+		-
+			message: '#Foreach overwrites \$opt_key with its key variable.#'
+			path: classes/helpers/FrmFieldsHelper.php
