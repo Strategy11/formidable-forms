@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-27T16:27:09+00:00\n"
-"PO-Revision-Date: 2024-04-15 10:34\n"
+"POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
+"PO-Revision-Date: 2024-04-17 22:36\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -37,80 +37,80 @@ msgid "Application Templates"
 msgstr "アプリケーションテンプレート"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:77
-#: js/form-templates.js:1776
+#: js/form-templates.js:1972
 msgid "Ready Made Solution"
 msgstr "すぐに使えるソリューション"
 
 #: js/src/form-templates/elements/applicationTemplatesElement.js:85
-#: js/form-templates.js:1784
+#: js/form-templates.js:1980
 msgid "See all applications"
 msgstr "すべてのアプリケーションを表示"
 
 #: js/src/form-templates/elements/emptyStateElement.js:30
-#: js/form-templates.js:1912
+#: js/form-templates.js:2108
 msgid "Empty State"
 msgstr "空の状態"
 
 #: js/src/form-templates/events/createTemplateListeners.js:76
 #: classes/views/xml/import_form.php:169
-#: js/form-templates.js:2306
+#: js/form-templates.js:2502
 msgid "Template"
 msgstr "テンプレート"
 
 #: js/src/form-templates/ui/searchState.js:33
-#: js/form-templates.js:3407
+#: js/form-templates.js:3524
 msgid "Search Result"
 msgstr "検索結果"
 
 #: js/src/form-templates/ui/showEmptyState.js:115
-#: js/form-templates.js:3626
+#: js/form-templates.js:3743
 msgid "No Templates Available"
 msgstr "利用できるテンプレートはありません"
 
 #: js/src/form-templates/ui/showEmptyState.js:117
-#: js/form-templates.js:3628
+#: js/form-templates.js:3745
 msgid "Upgrade to PRO for %s+ options or explore Free Templates."
 msgstr "PRO にアップグレードして%s以上のオプションをご利用ください。または、無料テンプレートを探索できます。"
 
 #: js/src/form-templates/ui/showEmptyState.js:40
-#: js/form-templates.js:3551
+#: js/form-templates.js:3668
 msgid "No templates found"
 msgstr "テンプレートが見つかりません"
 
 #: js/src/form-templates/ui/showEmptyState.js:41
-#: js/form-templates.js:3552
+#: js/form-templates.js:3669
 msgid "Sorry, we didn't find any templates that match your criteria."
 msgstr "申し訳ありませんが、条件に一致するテンプレートが見つかりませんでした。"
 
 #: js/src/form-templates/ui/showEmptyState.js:45
-#: js/form-templates.js:3556
+#: js/form-templates.js:3673
 msgid "Start from Scratch"
 msgstr "ゼロからのスタート"
 
 #: js/src/form-templates/ui/showEmptyState.js:65
-#: js/form-templates.js:3576
+#: js/form-templates.js:3693
 msgid "No favorites"
 msgstr "お気に入りはありません"
 
 #: js/src/form-templates/ui/showEmptyState.js:66
-#: js/form-templates.js:3577
+#: js/form-templates.js:3694
 msgid "You haven't added any templates to your favorites yet."
 msgstr "まだお気に入りにテンプレートが追加されていません。"
 
 #: js/src/form-templates/ui/showEmptyState.js:89
-#: js/form-templates.js:3600
+#: js/form-templates.js:3717
 msgid "You currently have no templates."
 msgstr "現在、テンプレートはありません。"
 
 #: js/src/form-templates/ui/showEmptyState.js:90
-#: js/form-templates.js:3601
+#: js/form-templates.js:3718
 msgid "You haven't created any form templates. Begin now to simplify your workflow and save time."
 msgstr "まだフォームテンプレートを作成していません。今すぐ始めてワークフローを簡素化し、時間を節約しましょう。"
 
 #: js/src/form-templates/ui/showEmptyState.js:94
 #: classes/views/form-templates/list.php:14
 #: classes/views/form-templates/modals/create-template-modal.php:65
-#: js/form-templates.js:3605
+#: js/form-templates.js:3722
 msgid "Create Template"
 msgstr "テンプレートを作成"
 
@@ -167,99 +167,105 @@ msgid "forms"
 msgstr "フォーム"
 
 #: js/src/form/graph.js:26
+#: js/formidable_blocks.js:436
 msgid "Formidable Chart"
 msgstr "Formidable Chart"
 
 #: js/src/form/graph.js:30
+#: js/formidable_blocks.js:440
 msgid "Display a chart or graph"
 msgstr "グラフまたはチャートを表示"
 
 #: js/src/form/graph.js:53
+#: js/formidable_blocks.js:463
 msgid "This site does not have Formidable Charts active."
 msgstr "このサイトで有効化された Formidable Charts はありません。"
 
 #: js/src/form/graph.js:54
+#: js/formidable_blocks.js:464
 msgid "Install Formidable Charts"
 msgstr "Formidable Charts をインストール"
 
 #: js/src/form/graph.js:59
+#: js/formidable_blocks.js:469
 msgid "This site does not have Formidable Charts installed."
 msgstr "このサイトにインストールされた Formidable Charts はありません。"
 
 #: js/src/form/graph.js:60
 #: js/src/form/modal.js:58
-#: js/formidable_blocks.js:572
+#: js/formidable_blocks.js:470
+#: js/formidable_blocks.js:647
 msgid "Upgrade Formidable Forms"
 msgstr "Formidable Forms をアップグレード"
 
 #: js/src/form/inspector.js:43
 #: classes/widgets/FrmElementorWidget.php:29
-#: js/formidable_blocks.js:453
+#: js/formidable_blocks.js:528
 msgid "Select Form"
 msgstr "フォームを選択"
 
 #: js/src/form/inspector.js:57
-#: js/formidable_blocks.js:467
+#: js/formidable_blocks.js:542
 msgid "Go to form"
 msgstr "フォームに移動"
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
 #: classes/widgets/FrmElementorWidget.php:48
-#: js/formidable_blocks.js:472
+#: js/formidable_blocks.js:547
 msgid "Options"
 msgstr "オプション"
 
 #: js/src/form/inspector.js:66
 #: classes/widgets/FrmElementorWidget.php:53
-#: js/formidable_blocks.js:476
+#: js/formidable_blocks.js:551
 msgid "Show Form Title"
 msgstr "フォームタイトルを表示"
 
 #: js/src/form/inspector.js:73
 #: classes/widgets/FrmElementorWidget.php:54
-#: js/formidable_blocks.js:483
+#: js/formidable_blocks.js:558
 msgid "Show Form Description"
 msgstr "フォームの説明を表示"
 
 #: js/src/form/inspector.js:80
 #: classes/widgets/FrmElementorWidget.php:55
-#: js/formidable_blocks.js:490
+#: js/formidable_blocks.js:565
 msgid "Minimize HTML"
 msgstr "HTML を最小化"
 
 #: js/src/form/inspector.js:88
-#: js/formidable_blocks.js:498
+#: js/formidable_blocks.js:573
 msgid "Shortcode"
 msgstr "ショートコード"
 
 #: js/src/form/modal.js:20
-#: js/formidable_blocks.js:534
+#: js/formidable_blocks.js:609
 msgid "Modal"
 msgstr "モーダル"
 
 #: js/src/form/modal.js:21
-#: js/formidable_blocks.js:535
+#: js/formidable_blocks.js:610
 msgid "Display a modal"
 msgstr "モーダルを表示"
 
 #: js/src/form/modal.js:30
-#: js/formidable_blocks.js:544
+#: js/formidable_blocks.js:619
 msgid "Bootstrap modal popup"
 msgstr "Bootstrap モーダルポップアップ"
 
 #: js/src/form/modal.js:51
-#: js/formidable_blocks.js:565
+#: js/formidable_blocks.js:640
 msgid "This site does not have popup modals active."
 msgstr "このサイトで有効化されたポップアップモーダルはありません。"
 
 #: js/src/form/modal.js:52
-#: js/formidable_blocks.js:566
+#: js/formidable_blocks.js:641
 msgid "Install Formidable Modals"
 msgstr "Formidable Modals をインストール"
 
 #: js/src/form/modal.js:57
-#: js/formidable_blocks.js:571
+#: js/formidable_blocks.js:646
 msgid "This site does not have popup modals."
 msgstr "このサイトにはポップアップモーダルがありません。"
 
@@ -304,48 +310,48 @@ msgstr "アップグレード"
 msgid "There are no plugins on your site that require a license"
 msgstr "サイトにはライセンスが必要なプラグインはありません"
 
-#: classes/controllers/FrmAddonsController.php:680
-#: classes/helpers/FrmAppHelper.php:3247
+#: classes/controllers/FrmAddonsController.php:693
+#: classes/helpers/FrmAppHelper.php:3271
 msgid "Installed"
 msgstr "インストール済み"
 
-#: classes/controllers/FrmAddonsController.php:685
-#: classes/helpers/FrmAppHelper.php:3246
+#: classes/controllers/FrmAddonsController.php:698
+#: classes/helpers/FrmAppHelper.php:3270
 #: stripe/helpers/FrmTransLiteAppHelper.php:107
 msgid "Active"
 msgstr "有効"
 
-#: classes/controllers/FrmAddonsController.php:690
-#: classes/helpers/FrmAppHelper.php:3248
+#: classes/controllers/FrmAddonsController.php:703
+#: classes/helpers/FrmAppHelper.php:3272
 msgid "Not Installed"
 msgstr "未インストール"
 
-#: classes/controllers/FrmAddonsController.php:947
+#: classes/controllers/FrmAddonsController.php:960
 msgid "Current user cannot delete plugins."
 msgstr "現在のユーザーはプラグインを削除できません。"
 
-#: classes/controllers/FrmAddonsController.php:1023
+#: classes/controllers/FrmAddonsController.php:1036
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
 msgstr "申し訳ございません。あなたのサイトでは FTP 認証が必要です。FormidableForms.com からプラグインをダウンロードして、手動でインストールしてください。"
 
-#: classes/controllers/FrmAddonsController.php:1214
+#: classes/controllers/FrmAddonsController.php:1227
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
 msgstr "プラグインが有効化されました。ページを保存して再読み込みしますか ?"
 
-#: classes/controllers/FrmAddonsController.php:1214
+#: classes/controllers/FrmAddonsController.php:1227
 msgid "Your plugin has been activated."
 msgstr "プラグインが有効化されました。"
 
-#: classes/controllers/FrmAddonsController.php:1323
+#: classes/controllers/FrmAddonsController.php:1336
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
 msgstr "アップグレードをインストールできませんでした。formidableforms.com からダウンロードして、手動でインストールしてください。"
 
-#: classes/controllers/FrmAddonsController.php:1370
+#: classes/controllers/FrmAddonsController.php:1383
 msgid "The plugin download was not found."
 msgstr "プラグインのダウンロードが見つかりませんでした。"
 
-#: classes/controllers/FrmAddonsController.php:1464
-#: classes/controllers/FrmAddonsController.php:1465
+#: classes/controllers/FrmAddonsController.php:1477
+#: classes/controllers/FrmAddonsController.php:1478
 #: classes/views/form-templates/modals/upgrade-modal.php:89
 #: classes/views/shared/reports-info.php:22
 #: js/admin/applications.js:397
@@ -353,11 +359,11 @@ msgstr "プラグインのダウンロードが見つかりませんでした。
 msgid "Upgrade Now"
 msgstr "今すぐアップグレード"
 
-#: classes/controllers/FrmAppController.php:269
+#: classes/controllers/FrmAppController.php:270
 msgid "Build"
 msgstr "ビルド"
 
-#: classes/controllers/FrmAppController.php:276
+#: classes/controllers/FrmAppController.php:277
 #: classes/controllers/FrmStylesController.php:52
 #: classes/controllers/FrmStylesController.php:53
 #: classes/views/styles/_field-colors.php:23
@@ -367,71 +373,73 @@ msgstr "ビルド"
 msgid "Style"
 msgstr "スタイル"
 
-#: classes/controllers/FrmAppController.php:283
+#: classes/controllers/FrmAppController.php:284
 #: classes/helpers/FrmFormsListHelper.php:386
 #: classes/views/frm-forms/settings.php:13
 #: classes/views/frm-settings/form.php:14
 msgid "Settings"
 msgstr "設定"
 
-#: classes/controllers/FrmAppController.php:290
+#: classes/controllers/FrmAppController.php:291
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:103
-#: classes/controllers/FrmFormsController.php:980
+#: classes/controllers/FrmFormsController.php:1013
 #: classes/controllers/FrmXMLController.php:311
 #: classes/views/xml/import_form.php:148
 msgid "Entries"
 msgstr "投稿"
 
-#: classes/controllers/FrmAppController.php:302
+#: classes/controllers/FrmAppController.php:303
 #: classes/controllers/FrmEntriesController.php:15
+#: classes/controllers/FrmOnboardingWizardController.php:574
 #: classes/views/shared/views-info.php:10
 #: js/admin/applications.js:349
 msgid "Views"
 msgstr "表示数"
 
-#: classes/controllers/FrmAppController.php:316
+#: classes/controllers/FrmAppController.php:317
 #: classes/views/shared/reports-info.php:10
 msgid "Reports"
 msgstr "レポート"
 
-#: classes/controllers/FrmAppController.php:342
+#: classes/controllers/FrmAppController.php:343
 #: classes/helpers/FrmFormsHelper.php:1428
 #: classes/helpers/FrmTipsHelper.php:87
 #: classes/views/shared/upgrade_overlay.php:56
 msgid "Renew"
 msgstr "更新"
 
-#: classes/controllers/FrmAppController.php:342
+#: classes/controllers/FrmAppController.php:343
 #: js/admin/applications.js:118
 msgid "Upgrade to Pro"
 msgstr "Pro へアップグレード"
 
-#: classes/controllers/FrmAppController.php:346
+#: classes/controllers/FrmAppController.php:347
 msgid "Build a Form"
 msgstr "フォームを作成"
 
 #. Translators: 1: Global Settings Link
-#: classes/controllers/FrmAppController.php:637
+#: classes/controllers/FrmAppController.php:638
 msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
 msgstr "フォーム送信の IP アドレスが正確でなくなっている可能性があります。問題がある場合は、%1$s にアクセスして、「フォーム送信で IP を取得する際にカスタムヘッダーを使用」設定を有効化することをお勧めします。"
 
-#: classes/controllers/FrmAppController.php:1212
-#: classes/controllers/FrmFormsController.php:167
-#: classes/controllers/FrmFormTemplatesController.php:614
+#: classes/controllers/FrmAppController.php:1213
+#: classes/controllers/FrmFormsController.php:196
+#: classes/controllers/FrmFormTemplatesController.php:612
 #: classes/controllers/FrmSettingsController.php:275
-#: classes/helpers/FrmAppHelper.php:3205
+#: classes/helpers/FrmAppHelper.php:3229
 #: classes/views/form-templates/modals/create-template-modal.php:62
 #: classes/views/form-templates/modals/name-your-form-modal.php:32
 #: classes/views/shared/admin-header.php:32
 #: classes/views/shared/confirm-overlay.php:20
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:68
 #: js/admin/style.js:939
-#: js/formidable_admin.js:4105
+#: js/formidable_admin.js:4188
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: classes/controllers/FrmAppController.php:1216
+#: classes/controllers/FrmAppController.php:1217
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:70
 msgid "Continue"
 msgstr "次へ"
 
@@ -440,49 +448,49 @@ msgstr "次へ"
 msgid "Applications"
 msgstr "アプリケーション"
 
-#: classes/controllers/FrmDashboardController.php:41
+#: classes/controllers/FrmDashboardController.php:33
 #: classes/views/dashboard/dashboard.php:11
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
-#: classes/controllers/FrmDashboardController.php:145
+#: classes/controllers/FrmDashboardController.php:85
 msgid "Latest Entries"
 msgstr "最新のエントリー"
 
-#: classes/controllers/FrmDashboardController.php:147
+#: classes/controllers/FrmDashboardController.php:87
 msgid "View All Entries"
 msgstr "すべてのエントリーを表示"
 
-#: classes/controllers/FrmDashboardController.php:157
+#: classes/controllers/FrmDashboardController.php:97
 msgid "You don't have a payment form setup yet."
 msgstr "支払いフォームはまだ設定されていません。"
 
-#: classes/controllers/FrmDashboardController.php:160
+#: classes/controllers/FrmDashboardController.php:100
 msgid "Create a Payment Form"
 msgstr "支払いフォームを作成"
 
-#: classes/controllers/FrmDashboardController.php:165
+#: classes/controllers/FrmDashboardController.php:105
 msgid "Total Earnings"
 msgstr "総収益"
 
-#: classes/controllers/FrmDashboardController.php:189
+#: classes/controllers/FrmDashboardController.php:129
 msgid "Total Forms"
 msgstr "フォーム合計"
 
-#: classes/controllers/FrmDashboardController.php:191
+#: classes/controllers/FrmDashboardController.php:131
 msgid "Total Entries"
 msgstr "すべての回答"
 
-#: classes/controllers/FrmDashboardController.php:193
+#: classes/controllers/FrmDashboardController.php:133
 msgid "Add Entry"
 msgstr "エントリーを追加"
 
-#: classes/controllers/FrmDashboardController.php:203
+#: classes/controllers/FrmDashboardController.php:143
 msgid "All Views"
 msgstr "すべてのビュー"
 
-#: classes/controllers/FrmDashboardController.php:205
-#: classes/controllers/FrmDashboardController.php:212
+#: classes/controllers/FrmDashboardController.php:145
+#: classes/controllers/FrmDashboardController.php:152
 #: classes/helpers/FrmFormMigratorsHelper.php:54
 #: js/admin/applications.js:373
 #: js/admin/applications.js:484
@@ -490,34 +498,34 @@ msgstr "すべてのビュー"
 msgid "Learn More"
 msgstr "さらに詳しく"
 
-#: classes/controllers/FrmDashboardController.php:210
+#: classes/controllers/FrmDashboardController.php:150
 msgid "Installed Apps"
 msgstr "インストール済みアプリ"
 
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #. translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML
-#: classes/controllers/FrmDashboardController.php:302
+#: classes/controllers/FrmDashboardController.php:241
 #: classes/views/frm-entries/no_entries.php:37
 msgid "See the %1$sform documentation%2$s for instructions on publishing your form"
 msgstr "フォームを公開する手順については、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。"
 
-#: classes/controllers/FrmDashboardController.php:308
-#: classes/controllers/FrmDashboardController.php:325
+#: classes/controllers/FrmDashboardController.php:247
+#: classes/controllers/FrmDashboardController.php:264
 msgid "You Have No Entries Yet"
 msgstr "エントリーはまだありません"
 
-#: classes/controllers/FrmDashboardController.php:311
+#: classes/controllers/FrmDashboardController.php:250
 msgid "Add New Form"
 msgstr "新規フォームを追加"
 
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
-#: classes/controllers/FrmDashboardController.php:319
+#: classes/controllers/FrmDashboardController.php:258
 msgid "See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you'll see it here."
 msgstr "フォームを公開する手順については、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。エントリーが少なくとも1つあると、ここに表示されます。"
 
-#: classes/controllers/FrmDashboardController.php:395
+#: classes/controllers/FrmDashboardController.php:334
 #: classes/controllers/FrmEntriesController.php:86
-#: classes/controllers/FrmFormsController.php:854
+#: classes/controllers/FrmFormsController.php:887
 #: classes/views/xml/import_form.php:179
 #: classes/widgets/FrmElementorWidget.php:37
 #: classes/widgets/FrmShowForm.php:71
@@ -527,22 +535,22 @@ msgstr "フォームを公開する手順については、%1$sフォームに�
 msgid "Form"
 msgstr "フォーム:"
 
-#: classes/controllers/FrmDashboardController.php:396
+#: classes/controllers/FrmDashboardController.php:335
 #: classes/models/FrmField.php:46
 msgid "Name"
 msgstr "名前"
 
-#: classes/controllers/FrmDashboardController.php:397
+#: classes/controllers/FrmDashboardController.php:336
 msgid "Author"
 msgstr "投稿者"
 
-#: classes/controllers/FrmDashboardController.php:398
+#: classes/controllers/FrmDashboardController.php:337
 msgid "Created on"
 msgstr "作成日時"
 
 #: classes/controllers/FrmEntriesController.php:81
-#: classes/controllers/FrmFormsController.php:1505
-#: classes/views/frm-entries/form.php:69
+#: classes/controllers/FrmFormsController.php:1544
+#: classes/views/frm-entries/form.php:76
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
 msgstr "投稿キー"
@@ -569,27 +577,27 @@ msgstr "エントリー作成日"
 msgid "Entry update date"
 msgstr "エントリー更新日"
 
-#: classes/controllers/FrmEntriesController.php:432
+#: classes/controllers/FrmEntriesController.php:438
 msgid "Your import is complete"
 msgstr "インポートが完了しました"
 
 #. translators: %1$s: Time string
-#: classes/controllers/FrmEntriesController.php:444
+#: classes/controllers/FrmEntriesController.php:450
 msgid "This form is in the trash and is scheduled to be deleted permanently in %s along with any entries."
 msgstr "このフォームはゴミ箱に入っています。%s後に他のエントリーと一緒に完全に削除される予定です。"
 
-#: classes/controllers/FrmEntriesController.php:465
+#: classes/controllers/FrmEntriesController.php:471
 msgid "You are trying to view an entry that does not exist."
 msgstr "存在しないエントリーを表示しようとしています。"
 
-#: classes/controllers/FrmEntriesController.php:492
+#: classes/controllers/FrmEntriesController.php:498
 #: classes/controllers/FrmFormActionsController.php:414
-#: classes/controllers/FrmFormsController.php:165
+#: classes/controllers/FrmFormsController.php:194
 #: classes/controllers/FrmSettingsController.php:273
 msgid "Verification failed"
 msgstr "検証に失敗しました"
 
-#: classes/controllers/FrmEntriesController.php:508
+#: classes/controllers/FrmEntriesController.php:514
 msgid "Entry was successfully deleted"
 msgstr "エントリーは正常に削除されました"
 
@@ -637,7 +645,7 @@ msgid "%s form actions"
 msgstr "%sのフォームアクション"
 
 #: classes/controllers/FrmFormsController.php:19
-#: classes/controllers/FrmFormsController.php:989
+#: classes/controllers/FrmFormsController.php:1022
 #: classes/controllers/FrmStylesController.php:72
 #: classes/controllers/FrmXMLController.php:310
 #: classes/views/frm-forms/list.php:10
@@ -659,73 +667,82 @@ msgstr "条件付きロジックのオプション"
 msgid "Conditional Logic"
 msgstr "条件付きロジック"
 
-#: classes/controllers/FrmFormsController.php:193
+#: classes/controllers/FrmFormsController.php:156
+#: classes/helpers/FrmSubmitHelper.php:153
+#: classes/models/FrmField.php:74
+#: classes/models/FrmSettings.php:154
+#: classes/views/frm-forms/form.php:71
+#: classes/views/styles/_sample_form.php:83
+msgid "Submit"
+msgstr "送信"
+
+#: classes/controllers/FrmFormsController.php:222
 msgid "Settings Successfully Updated"
 msgstr "設定が正常に更新されました"
 
-#: classes/controllers/FrmFormsController.php:231
-#: classes/controllers/FrmFormsController.php:1107
+#: classes/controllers/FrmFormsController.php:260
+#: classes/controllers/FrmFormsController.php:1141
 msgid "Form was successfully updated."
 msgstr "フォームが正常に更新されました。"
 
 #. translators: %1$s: Start link HTML, %2$s: end link HTML
-#: classes/controllers/FrmFormsController.php:236
+#: classes/controllers/FrmFormsController.php:265
 msgid "However, your form is very long and may be %1$sreaching server limits%2$s."
 msgstr "しかし、フォームが非常に長いため、%1$sサーバーの上限に達している可能性があります%2$s。"
 
-#: classes/controllers/FrmFormsController.php:550
+#: classes/controllers/FrmFormsController.php:579
 msgid "Form Preview"
 msgstr "フォームのプレビュー"
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:609
-#: classes/controllers/FrmFormsController.php:670
+#: classes/controllers/FrmFormsController.php:641
+#: classes/controllers/FrmFormsController.php:702
 msgid "%1$s form restored from the Trash."
 msgid_plural "%1$s forms restored from the Trash."
 msgstr[0] "%1$s個のフォームをゴミ箱から復元しました。"
 
 #. translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML
-#: classes/controllers/FrmFormsController.php:673
-#: classes/controllers/FrmFormsController.php:698
+#: classes/controllers/FrmFormsController.php:705
+#: classes/controllers/FrmFormsController.php:730
 msgid "%1$s form moved to the Trash. %2$sUndo%3$s"
 msgid_plural "%1$s forms moved to the Trash. %2$sUndo%3$s"
 msgstr[0] "%1$s個のフォームをゴミ箱に移動しました。%2$s元に戻す%3$s"
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:721
+#: classes/controllers/FrmFormsController.php:753
 msgid "%1$s Form Permanently Deleted"
 msgid_plural "%1$s Forms Permanently Deleted"
 msgstr[0] "%1$s個のフォームを完全に削除しました"
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:739
-#: classes/controllers/FrmFormsController.php:1786
+#: classes/controllers/FrmFormsController.php:771
+#: classes/controllers/FrmFormsController.php:1825
 msgid "%1$s form permanently deleted."
 msgid_plural "%1$s forms permanently deleted."
 msgstr[0] "%1$s個のフォームを完全に削除しました。"
 
-#: classes/controllers/FrmFormsController.php:836
+#: classes/controllers/FrmFormsController.php:869
 msgid "Add forms and content"
 msgstr "フォームとコンテンツを追加"
 
-#: classes/controllers/FrmFormsController.php:855
+#: classes/controllers/FrmFormsController.php:888
 #: classes/views/frm-forms/insert_form_popup.php:33
 msgid "Insert a Form"
 msgstr "フォームを挿入"
 
-#: classes/controllers/FrmFormsController.php:908
+#: classes/controllers/FrmFormsController.php:941
 msgid "Display form title"
 msgstr "フォームタイトルを表示"
 
-#: classes/controllers/FrmFormsController.php:912
+#: classes/controllers/FrmFormsController.php:945
 msgid "Display form description"
 msgstr "フォームの説明を表示"
 
-#: classes/controllers/FrmFormsController.php:916
+#: classes/controllers/FrmFormsController.php:949
 msgid "Minimize form HTML"
 msgstr "フォーム HTML を最小化"
 
-#: classes/controllers/FrmFormsController.php:979
+#: classes/controllers/FrmFormsController.php:1012
 #: classes/controllers/FrmStylesController.php:943
 #: classes/views/frm-forms/settings-advanced.php:13
 #: classes/views/styles/manage.php:17
@@ -734,241 +751,241 @@ msgstr "フォーム HTML を最小化"
 msgid "Form Title"
 msgstr "フォーム名"
 
-#: classes/controllers/FrmFormsController.php:982
+#: classes/controllers/FrmFormsController.php:1015
 #: classes/helpers/FrmCSVExportHelper.php:373
 msgid "Key"
 msgstr "キー"
 
-#: classes/controllers/FrmFormsController.php:983
+#: classes/controllers/FrmFormsController.php:1016
 msgid "Actions"
 msgstr "操作"
 
-#: classes/controllers/FrmFormsController.php:984
-#: classes/models/FrmField.php:104
+#: classes/controllers/FrmFormsController.php:1017
+#: classes/models/FrmField.php:108
 #: stripe/controllers/FrmTransLiteListsController.php:70
 msgid "Date"
 msgstr "日付"
 
-#: classes/controllers/FrmFormsController.php:1045
+#: classes/controllers/FrmFormsController.php:1078
 msgid "You can't edit the form"
 msgstr "フォームは編集できません"
 
-#: classes/controllers/FrmFormsController.php:1046
+#: classes/controllers/FrmFormsController.php:1079
 msgid "You are trying to edit a form that does not exist"
 msgstr "存在しないフォームを編集しようとしています"
 
-#: classes/controllers/FrmFormsController.php:1060
+#: classes/controllers/FrmFormsController.php:1093
 msgid "The form you're trying to edit is in trash. You must restore it first before you can make changes"
 msgstr "編集しようとしているフォームはゴミ箱に入っています。変更する前に、まず復元する必要があります。"
 
-#: classes/controllers/FrmFormsController.php:1070
+#: classes/controllers/FrmFormsController.php:1103
 msgid "Restore form"
 msgstr "フォームを復元"
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:1077
+#: classes/controllers/FrmFormsController.php:1110
 msgid "You are trying to edit a child form. Please edit from %1$shere%2$s"
 msgstr "子フォームを編集しようとしています。%1$sこちら%2$sから編集してください。"
 
-#: classes/controllers/FrmFormsController.php:1109
+#: classes/controllers/FrmFormsController.php:1143
 msgid "Template was successfully updated."
 msgstr "テンプレートは正常に更新されました。"
 
-#: classes/controllers/FrmFormsController.php:1133
+#: classes/controllers/FrmFormsController.php:1167
 msgid "Form was Successfully Copied"
 msgstr "フォームが正常にコピーされました"
 
-#: classes/controllers/FrmFormsController.php:1198
+#: classes/controllers/FrmFormsController.php:1232
 #: classes/controllers/FrmStylesController.php:942
 msgid "General"
 msgstr "一般"
 
-#: classes/controllers/FrmFormsController.php:1199
+#: classes/controllers/FrmFormsController.php:1233
 msgid "General Form Settings"
 msgstr "一般フォーム設定"
 
-#: classes/controllers/FrmFormsController.php:1204
+#: classes/controllers/FrmFormsController.php:1238
 msgid "Actions & Notifications"
 msgstr "アクションと通知"
 
-#: classes/controllers/FrmFormsController.php:1210
-#: classes/controllers/FrmFormsController.php:1215
+#: classes/controllers/FrmFormsController.php:1244
+#: classes/controllers/FrmFormsController.php:1249
 msgid "Form Permissions"
 msgstr "フォーム権限"
 
-#: classes/controllers/FrmFormsController.php:1216
+#: classes/controllers/FrmFormsController.php:1250
 msgid "Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions."
 msgstr "編集の許可、フォームとファイルの保護、エントリーの制限、下書きの保存。フォームとエントリーの権限を得るには、アップグレードしてください。"
 
-#: classes/controllers/FrmFormsController.php:1221
+#: classes/controllers/FrmFormsController.php:1255
 msgid "Form Scheduling"
 msgstr "フォームのスケジューリング"
 
-#: classes/controllers/FrmFormsController.php:1226
+#: classes/controllers/FrmFormsController.php:1260
 msgid "Form scheduling settings"
 msgstr "フォームのスケジュール設定"
 
-#: classes/controllers/FrmFormsController.php:1231
+#: classes/controllers/FrmFormsController.php:1265
 #: classes/controllers/FrmStylesController.php:950
-#: classes/helpers/FrmFieldsHelper.php:2100
+#: classes/helpers/FrmFieldsHelper.php:2115
 #: classes/views/frm-forms/settings-buttons.php:16
 msgid "Buttons"
 msgstr "ボタン"
 
-#: classes/controllers/FrmFormsController.php:1237
+#: classes/controllers/FrmFormsController.php:1271
 msgid "Form Landing Page"
 msgstr "フォームランディングページ"
 
-#: classes/controllers/FrmFormsController.php:1243
-#: classes/controllers/FrmFormsController.php:1249
+#: classes/controllers/FrmFormsController.php:1277
+#: classes/controllers/FrmFormsController.php:1283
 msgid "Conversational Forms"
 msgstr "会話形式"
 
-#: classes/controllers/FrmFormsController.php:1250
+#: classes/controllers/FrmFormsController.php:1284
 msgid "Ask one question at a time for automated conversations."
 msgstr "自動化された会話では、一度に1つだけ質問してください。"
 
-#: classes/controllers/FrmFormsController.php:1256
+#: classes/controllers/FrmFormsController.php:1290
 msgid "Form Abandonment"
 msgstr "フォーム放棄"
 
-#: classes/controllers/FrmFormsController.php:1262
+#: classes/controllers/FrmFormsController.php:1296
 msgid "Form abandonment settings"
 msgstr "フォーム放棄の設定"
 
-#: classes/controllers/FrmFormsController.php:1263
+#: classes/controllers/FrmFormsController.php:1297
 msgid "Unlock the power of data capture to boost lead generation and master the art of form optimization."
 msgstr "リード生成を促進するデータキャプチャの力を活用し、フォーム最適化の技を身につけましょう。"
 
-#: classes/controllers/FrmFormsController.php:1269
+#: classes/controllers/FrmFormsController.php:1303
 msgid "Customize HTML"
 msgstr "カスタム HTML"
 
-#: classes/controllers/FrmFormsController.php:1420
+#: classes/controllers/FrmFormsController.php:1459
 msgid "Customize field values with the following parameters."
 msgstr "以下のパラメータでフィールド値をカスタマイズします。"
 
-#: classes/controllers/FrmFormsController.php:1458
+#: classes/controllers/FrmFormsController.php:1497
 msgid "Separator"
 msgstr "区切り"
 
-#: classes/controllers/FrmFormsController.php:1459
+#: classes/controllers/FrmFormsController.php:1498
 msgid "Use a different separator for checkbox fields"
 msgstr "チェックボックスフィールドに異なる区切りを使用"
 
-#: classes/controllers/FrmFormsController.php:1462
+#: classes/controllers/FrmFormsController.php:1501
 msgid "Date Format"
 msgstr "日付形式"
 
-#: classes/controllers/FrmFormsController.php:1465
+#: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
 msgid "Field Label"
 msgstr "フィールドラベル"
 
-#: classes/controllers/FrmFormsController.php:1468
+#: classes/controllers/FrmFormsController.php:1507
 msgid "No Auto P"
 msgstr "自動パラグラフなし"
 
-#: classes/controllers/FrmFormsController.php:1469
+#: classes/controllers/FrmFormsController.php:1508
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr "段落や改行を自動的に追加しない"
 
-#: classes/controllers/FrmFormsController.php:1484
+#: classes/controllers/FrmFormsController.php:1523
 #: classes/models/FrmField.php:62
 msgid "User ID"
 msgstr "ユーザー ID"
 
-#: classes/controllers/FrmFormsController.php:1485
+#: classes/controllers/FrmFormsController.php:1524
 #: stripe/views/action-settings/payments-options.php:124
 msgid "First Name"
 msgstr "名"
 
-#: classes/controllers/FrmFormsController.php:1486
+#: classes/controllers/FrmFormsController.php:1525
 #: stripe/views/action-settings/payments-options.php:130
 msgid "Last Name"
 msgstr "姓"
 
-#: classes/controllers/FrmFormsController.php:1487
+#: classes/controllers/FrmFormsController.php:1526
 msgid "Display Name"
 msgstr "表示名"
 
-#: classes/controllers/FrmFormsController.php:1488
+#: classes/controllers/FrmFormsController.php:1527
 msgid "User Login"
 msgstr "ユーザーログイン"
 
-#: classes/controllers/FrmFormsController.php:1489
+#: classes/controllers/FrmFormsController.php:1528
 #: classes/models/FrmField.php:34
 #: stripe/views/action-settings/payments-options.php:100
 msgid "Email"
 msgstr "メールアドレス"
 
-#: classes/controllers/FrmFormsController.php:1490
+#: classes/controllers/FrmFormsController.php:1529
 msgid "Avatar"
 msgstr "アバター"
 
-#: classes/controllers/FrmFormsController.php:1491
+#: classes/controllers/FrmFormsController.php:1530
 msgid "Author Link"
 msgstr "作者リンク"
 
-#: classes/controllers/FrmFormsController.php:1504
+#: classes/controllers/FrmFormsController.php:1543
 #: classes/views/frm-entries/sidebar-shared.php:51
 msgid "Entry ID"
 msgstr "エントリー ID"
 
-#: classes/controllers/FrmFormsController.php:1506
+#: classes/controllers/FrmFormsController.php:1545
 msgid "Post ID"
 msgstr "投稿 ID"
 
-#: classes/controllers/FrmFormsController.php:1507
+#: classes/controllers/FrmFormsController.php:1546
 msgid "User IP"
 msgstr "ユーザー IP"
 
-#: classes/controllers/FrmFormsController.php:1508
+#: classes/controllers/FrmFormsController.php:1547
 msgid "Entry created"
 msgstr "エントリーが作成されました"
 
-#: classes/controllers/FrmFormsController.php:1509
+#: classes/controllers/FrmFormsController.php:1548
 msgid "Entry updated"
 msgstr "エントリーが更新されました"
 
-#: classes/controllers/FrmFormsController.php:1511
+#: classes/controllers/FrmFormsController.php:1550
 msgid "Site URL"
 msgstr "サイト URL"
 
-#: classes/controllers/FrmFormsController.php:1512
+#: classes/controllers/FrmFormsController.php:1551
 msgid "Site Name"
 msgstr "サイト名"
 
-#: classes/controllers/FrmFormsController.php:1520
+#: classes/controllers/FrmFormsController.php:1559
 msgid "Default Msg"
 msgstr "初期設定メッセージ"
 
-#: classes/controllers/FrmFormsController.php:1521
+#: classes/controllers/FrmFormsController.php:1560
 msgid "Default HTML"
 msgstr "デフォルト HTML"
 
-#: classes/controllers/FrmFormsController.php:1522
+#: classes/controllers/FrmFormsController.php:1561
 msgid "Default Plain"
 msgstr "初期設定プレーンテキスト"
 
-#: classes/controllers/FrmFormsController.php:1523
+#: classes/controllers/FrmFormsController.php:1562
 #: classes/helpers/FrmFormsHelper.php:554
 msgid "Form Name"
 msgstr "フォーム名"
 
-#: classes/controllers/FrmFormsController.php:1671
+#: classes/controllers/FrmFormsController.php:1710
 msgid "No forms were specified"
 msgstr "フォームが指定されていません"
 
-#: classes/controllers/FrmFormsController.php:1779
+#: classes/controllers/FrmFormsController.php:1818
 msgid "There was a problem duplicating the form"
 msgstr "フォームの複製中に問題が発生しました"
 
-#: classes/controllers/FrmFormsController.php:1823
+#: classes/controllers/FrmFormsController.php:1862
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr "異常な HTML 文字のために、フォームを正しく保存できませんでした"
 
-#: classes/controllers/FrmFormsController.php:1940
+#: classes/controllers/FrmFormsController.php:1979
 #: classes/helpers/FrmFormsHelper.php:57
 #: classes/helpers/FrmFormsHelper.php:122
 #: classes/helpers/FrmFormsHelper.php:178
@@ -981,18 +998,18 @@ msgstr "異常な HTML 文字のために、フォームを正しく保存でき
 msgid "(no title)"
 msgstr "(タイトルなし)"
 
-#: classes/controllers/FrmFormsController.php:2006
-#: classes/controllers/FrmFormsController.php:2028
+#: classes/controllers/FrmFormsController.php:2045
+#: classes/controllers/FrmFormsController.php:2067
 msgid "Please select a valid form"
 msgstr "有効なフォームを選択してください"
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:2719
+#: classes/controllers/FrmFormsController.php:2758
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr "自動的にリダイレクトされない場合は、%1$sこちらをクリック%2$sしてください。"
 
-#: classes/controllers/FrmFormsController.php:3100
-#: classes/helpers/FrmAppHelper.php:1628
+#: classes/controllers/FrmFormsController.php:3139
+#: classes/helpers/FrmAppHelper.php:1636
 #: classes/helpers/FrmOnSubmitHelper.php:146
 msgid "Select a Page"
 msgstr "ページを選択"
@@ -1002,29 +1019,30 @@ msgstr "ページを選択"
 msgid "Form Templates"
 msgstr "フォームのテンプレート"
 
-#: classes/controllers/FrmFormTemplatesController.php:370
+#: classes/controllers/FrmFormTemplatesController.php:368
 msgid "There was an error creating a template."
 msgstr "テンプレートの作成中にエラーが発生しました。"
 
-#: classes/controllers/FrmFormTemplatesController.php:511
+#: classes/controllers/FrmFormTemplatesController.php:509
 msgid "Favorites"
 msgstr "お気に入り"
 
-#: classes/controllers/FrmFormTemplatesController.php:515
+#: classes/controllers/FrmFormTemplatesController.php:513
 #: classes/views/form-templates/list.php:38
+#: classes/views/frm-fields/back-end/phone/phone-type.php:36
 msgid "Custom"
 msgstr "カスタム"
 
-#: classes/controllers/FrmFormTemplatesController.php:522
+#: classes/controllers/FrmFormTemplatesController.php:520
 msgid "Available Templates"
 msgstr "利用可能なテンプレート"
 
-#: classes/controllers/FrmFormTemplatesController.php:528
+#: classes/controllers/FrmFormTemplatesController.php:526
 #: classes/views/form-templates/list.php:13
 msgid "All Templates"
 msgstr "すべてのテンプレート"
 
-#: classes/controllers/FrmFormTemplatesController.php:532
+#: classes/controllers/FrmFormTemplatesController.php:530
 msgid "Free Templates"
 msgstr "無料テンプレート"
 
@@ -1035,6 +1053,91 @@ msgstr "すべて無視する"
 #: classes/controllers/FrmInboxController.php:105
 msgid "Help Formidable improve with usage tracking"
 msgstr "使用状況の追跡を使って、Formidable の改善にご協力ください"
+
+#: classes/controllers/FrmOnboardingWizardController.php:216
+msgid "Onboarding Wizard"
+msgstr "オンボーディングウィザード"
+
+#: classes/controllers/FrmOnboardingWizardController.php:438
+msgid "Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:442
+msgid "Begin With Ease!"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:445
+msgid "Begin Setup"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:530
+msgid "Spam Protection"
+msgstr "スパム保護"
+
+#: classes/controllers/FrmOnboardingWizardController.php:533
+msgid "Get anti-spam options like reCAPTCHA, hCaptcha, Akismet, Turnstile and the blocklist."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:536
+msgid "Stripe Payments"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:539
+msgid "Collect donations and payments with your forms. Offer physical products, digital goods, services, and more."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:543
+msgid "Visual Styler"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:546
+msgid "Customize form appearance with an intuitive styling interface."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:549
+msgid "Save Entries"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:552
+msgid "Save form submissions to your database for future reference and analysis."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:557
+#: classes/controllers/FrmSMTPController.php:108
+msgid "SMTP"
+msgstr "SMTP"
+
+#: classes/controllers/FrmOnboardingWizardController.php:561
+msgid "Improve email deliverability by routing WordPress emails through SMTP."
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:582
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+#: classes/controllers/FrmOnboardingWizardController.php:590
+msgid "User Registration"
+msgstr "ユーザー登録"
+
+#: classes/controllers/FrmOnboardingWizardController.php:598
+msgid "Form Rest API"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:606
+msgid "ACF Forms"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:614
+msgid "Signature Forms"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:623
+msgid "Gravity Forms Migrator"
+msgstr ""
+
+#: classes/controllers/FrmOnboardingWizardController.php:627
+msgid "Easily migrate your forms from Gravity Forms to Formidable."
+msgstr ""
 
 #: classes/controllers/FrmSettingsController.php:12
 msgid "Global Settings"
@@ -1099,7 +1202,7 @@ msgstr "設定を保存しました"
 #: classes/controllers/FrmSettingsController.php:312
 #: classes/helpers/FrmFormsHelper.php:1762
 #: classes/helpers/FrmStylesHelper.php:24
-#: classes/views/frm-forms/add_field_links.php:177
+#: classes/views/frm-forms/add_field_links.php:181
 #: classes/views/frm-forms/edit.php:29
 #: classes/views/summary-emails/stats.php:117
 #: deprecated/FrmDeprecated.php:66
@@ -1166,10 +1269,6 @@ msgstr "下書きを保存して後で再開"
 msgid "Analyze form data with graphs & stats"
 msgstr "グラフと統計でフォームデータを分析"
 
-#: classes/controllers/FrmSMTPController.php:108
-msgid "SMTP"
-msgstr "SMTP"
-
 #: classes/controllers/FrmSMTPController.php:162
 msgid "Making Email Deliverability Easy for WordPress"
 msgstr "WordPress のメール配信を簡単に"
@@ -1228,7 +1327,7 @@ msgid "Install WP Mail SMTP"
 msgstr "WP Mail SMTP をインストール"
 
 #: classes/controllers/FrmSMTPController.php:321
-#: classes/helpers/FrmAppHelper.php:3245
+#: classes/helpers/FrmAppHelper.php:3269
 #: classes/helpers/FrmFormMigratorsHelper.php:151
 #: classes/views/shared/upgrade_overlay.php:36
 msgid "Install"
@@ -1245,7 +1344,7 @@ msgstr "WP Mail SMTP を有効化"
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:319
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:6626
+#: js/formidable_admin.js:6799
 msgid "Activate"
 msgstr "有効化"
 
@@ -1332,7 +1431,7 @@ msgid "Field Colors"
 msgstr "フィールドカラー"
 
 #: classes/controllers/FrmStylesController.php:948
-#: js/formidable_admin.js:2311
+#: js/formidable_admin.js:2393
 msgid "Field Settings"
 msgstr "フィールドの設定"
 
@@ -1377,40 +1476,40 @@ msgstr "フォームテンプレートの読み込み中にエラーが発生し
 msgid "There was an error importing form"
 msgstr "フォームのインポート中にエラーが発生しました。"
 
-#: classes/controllers/FrmXMLController.php:349
+#: classes/controllers/FrmXMLController.php:350
 msgid "Oops, you didn't select a file."
 msgstr "ファイルが選択されていません。"
 
-#: classes/controllers/FrmXMLController.php:360
+#: classes/controllers/FrmXMLController.php:361
 msgid "The file does not exist, please try again."
 msgstr "ファイルが存在しません。もう一度お試しください。"
 
-#: classes/controllers/FrmXMLController.php:387
+#: classes/controllers/FrmXMLController.php:388
 msgid "XML import is not enabled on your server with the libxml_disable_entity_loader function."
 msgstr "サーバーで libxml_disable_entity_loader 関数を使って XML インポートが有効化されていません。"
 
-#: classes/controllers/FrmXMLController.php:645
+#: classes/controllers/FrmXMLController.php:646
 msgid "Please select a form"
 msgstr "フォームを選択してください"
 
-#: classes/controllers/FrmXMLController.php:680
+#: classes/controllers/FrmXMLController.php:681
 msgid "Form not found."
 msgstr "フォームが見つかりません。"
 
-#: classes/controllers/FrmXMLController.php:712
+#: classes/controllers/FrmXMLController.php:713
 msgid "There are no entries for that form."
 msgstr "そのフォームのエントリーはありません。"
 
-#: classes/helpers/FrmAppHelper.php:1281
+#: classes/helpers/FrmAppHelper.php:1288
 #: classes/views/xml/import_form.php:17
 msgid "Import"
 msgstr "インポート"
 
-#: classes/helpers/FrmAppHelper.php:1354
+#: classes/helpers/FrmAppHelper.php:1361
 msgid "Add New"
 msgstr "新規追加"
 
-#: classes/helpers/FrmAppHelper.php:1366
+#: classes/helpers/FrmAppHelper.php:1373
 #: classes/views/frm-entries/list.php:43
 #: classes/views/frm-forms/list.php:36
 #: classes/views/shared/mb_adv_info.php:41
@@ -1418,739 +1517,739 @@ msgstr "新規追加"
 msgid "Search"
 msgstr "検索"
 
-#: classes/helpers/FrmAppHelper.php:1771
+#: classes/helpers/FrmAppHelper.php:1779
 msgid "Add Entries from Admin Area"
 msgstr "管理画面から投稿を追加"
 
-#: classes/helpers/FrmAppHelper.php:1772
+#: classes/helpers/FrmAppHelper.php:1780
 msgid "Edit Entries from Admin Area"
 msgstr "管理画面から投稿を編集"
 
-#: classes/helpers/FrmAppHelper.php:1773
+#: classes/helpers/FrmAppHelper.php:1781
 msgid "View Reports"
 msgstr "レポートを表示"
 
-#: classes/helpers/FrmAppHelper.php:1785
+#: classes/helpers/FrmAppHelper.php:1793
 msgid "Add/Edit Views"
 msgstr "ビューを追加 / 編集"
 
-#: classes/helpers/FrmAppHelper.php:1804
+#: classes/helpers/FrmAppHelper.php:1812
 msgid "View Forms List"
 msgstr "フォームの一覧を表示"
 
-#: classes/helpers/FrmAppHelper.php:1805
+#: classes/helpers/FrmAppHelper.php:1813
 msgid "Add and Edit Forms"
 msgstr "フォームの追加と編集"
 
-#: classes/helpers/FrmAppHelper.php:1806
+#: classes/helpers/FrmAppHelper.php:1814
 msgid "Delete Forms"
 msgstr "フォームを削除"
 
-#: classes/helpers/FrmAppHelper.php:1807
+#: classes/helpers/FrmAppHelper.php:1815
 msgid "Access this Settings Page"
 msgstr "設定ページにアクセス"
 
-#: classes/helpers/FrmAppHelper.php:1808
+#: classes/helpers/FrmAppHelper.php:1816
 msgid "View Entries from Admin Area"
 msgstr "管理画面から投稿を表示"
 
-#: classes/helpers/FrmAppHelper.php:1809
+#: classes/helpers/FrmAppHelper.php:1817
 msgid "Delete Entries from Admin Area"
 msgstr "管理画面から投稿を削除"
 
-#: classes/helpers/FrmAppHelper.php:2600
+#: classes/helpers/FrmAppHelper.php:2621
 msgid "at"
 msgstr "、"
 
-#: classes/helpers/FrmAppHelper.php:2744
+#: classes/helpers/FrmAppHelper.php:2765
 #: stripe/helpers/FrmTransLiteAppHelper.php:245
 msgid "year"
 msgid_plural "years"
 msgstr[0] "年"
 
-#: classes/helpers/FrmAppHelper.php:2745
+#: classes/helpers/FrmAppHelper.php:2766
 msgid "years"
 msgstr "年"
 
-#: classes/helpers/FrmAppHelper.php:2749
+#: classes/helpers/FrmAppHelper.php:2770
 #: stripe/helpers/FrmTransLiteAppHelper.php:244
 msgid "month"
 msgid_plural "months"
 msgstr[0] "月"
 
-#: classes/helpers/FrmAppHelper.php:2750
+#: classes/helpers/FrmAppHelper.php:2771
 msgid "months"
 msgstr "ヶ月"
 
-#: classes/helpers/FrmAppHelper.php:2754
+#: classes/helpers/FrmAppHelper.php:2775
 #: stripe/helpers/FrmTransLiteAppHelper.php:243
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "週"
 
-#: classes/helpers/FrmAppHelper.php:2755
+#: classes/helpers/FrmAppHelper.php:2776
 msgid "weeks"
 msgstr "週間"
 
-#: classes/helpers/FrmAppHelper.php:2759
+#: classes/helpers/FrmAppHelper.php:2780
 #: stripe/helpers/FrmTransLiteAppHelper.php:242
 msgid "day"
 msgid_plural "days"
 msgstr[0] "日"
 
-#: classes/helpers/FrmAppHelper.php:2760
+#: classes/helpers/FrmAppHelper.php:2781
 msgid "days"
 msgstr "日"
 
-#: classes/helpers/FrmAppHelper.php:2764
+#: classes/helpers/FrmAppHelper.php:2785
 msgid "hour"
 msgstr "時間"
 
-#: classes/helpers/FrmAppHelper.php:2765
+#: classes/helpers/FrmAppHelper.php:2786
 msgid "hours"
 msgstr "時"
 
-#: classes/helpers/FrmAppHelper.php:2769
+#: classes/helpers/FrmAppHelper.php:2790
 msgid "minute"
 msgstr "分"
 
-#: classes/helpers/FrmAppHelper.php:2770
+#: classes/helpers/FrmAppHelper.php:2791
 msgid "minutes"
 msgstr "分"
 
-#: classes/helpers/FrmAppHelper.php:2774
+#: classes/helpers/FrmAppHelper.php:2795
 msgid "second"
 msgstr "秒"
 
-#: classes/helpers/FrmAppHelper.php:2775
+#: classes/helpers/FrmAppHelper.php:2796
 msgid "seconds"
 msgstr "秒"
 
-#: classes/helpers/FrmAppHelper.php:2875
+#: classes/helpers/FrmAppHelper.php:2896
 msgid "Give this action a label for easy reference."
 msgstr "このアクションにラベルを付けると、簡単に参照することができます。"
 
-#: classes/helpers/FrmAppHelper.php:2876
+#: classes/helpers/FrmAppHelper.php:2897
 msgid "Add one or more recipient addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings."
 msgstr "1つ以上の受信者アドレスを \", \" で区切って追加します。形式: 名前 <name@email.com> または name@email.com。[admin_email] は WP 一般設定で設定したアドレスです。"
 
-#: classes/helpers/FrmAppHelper.php:2877
+#: classes/helpers/FrmAppHelper.php:2898
 msgid "Add CC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "CC アドレスを \", \" で区切って追加します。形式: 名前 <name@email.com> または name@email.com。"
 
-#: classes/helpers/FrmAppHelper.php:2878
+#: classes/helpers/FrmAppHelper.php:2899
 msgid "Add BCC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "BCC アドレスを \", \" で区切って追加します。形式: 名前 <name@email.com> または name@email.com。"
 
-#: classes/helpers/FrmAppHelper.php:2879
+#: classes/helpers/FrmAppHelper.php:2900
 msgid "If you would like a different reply to address than the \"from\" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "返信先を「from」アドレスとは別にしたい場合は、ここに個別のアドレスを追加してください。形式: 名前 <name@email.com> または name@email.com。"
 
-#: classes/helpers/FrmAppHelper.php:2880
+#: classes/helpers/FrmAppHelper.php:2901
 msgid "Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com."
 msgstr "送信者の名前とメールアドレス、またはそのいずれかを入力します。形式: John Bates <john@example.com> または john@example.com。"
 
 #. translators: %1$s: Form name, %2$s: Date
-#: classes/helpers/FrmAppHelper.php:2882
+#: classes/helpers/FrmAppHelper.php:2903
 msgid "If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s"
 msgstr "件名を空白にした場合、初期設定が使用されます: %1$s フォーム送信日: %2$s"
 
-#: classes/helpers/FrmAppHelper.php:2883
+#: classes/helpers/FrmAppHelper.php:2904
 msgid "This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed."
 msgstr "この設定は、リンクを新しいブラウザータブで開きます。一部のポップアップブロッカーはこの動作を妨げる場合があり、その場合はリンクが表示されます。"
 
-#: classes/helpers/FrmAppHelper.php:3147
-#: classes/helpers/FrmAppHelper.php:3225
+#: classes/helpers/FrmAppHelper.php:3171
+#: classes/helpers/FrmAppHelper.php:3249
 msgid "Please wait while your site updates."
 msgstr "サイトが更新されるまでお待ちください。"
 
-#: classes/helpers/FrmAppHelper.php:3148
+#: classes/helpers/FrmAppHelper.php:3172
 msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
 msgstr "本当にこのサイトで Formidable Forms を無効にしてもよいですか ?"
 
-#: classes/helpers/FrmAppHelper.php:3153
-#: classes/helpers/FrmAppHelper.php:3181
+#: classes/helpers/FrmAppHelper.php:3177
+#: classes/helpers/FrmAppHelper.php:3205
 msgid "Loading&hellip;"
 msgstr "読み込み中&hellip;"
 
-#: classes/helpers/FrmAppHelper.php:3182
+#: classes/helpers/FrmAppHelper.php:3206
 msgid "Remove"
 msgstr "削除"
 
-#: classes/helpers/FrmAppHelper.php:3185
+#: classes/helpers/FrmAppHelper.php:3209
 #: classes/helpers/FrmCSVExportHelper.php:372
 msgid "ID"
 msgstr "ID"
 
-#: classes/helpers/FrmAppHelper.php:3186
+#: classes/helpers/FrmAppHelper.php:3210
 msgid "No results match"
 msgstr "一致する結果がありません"
 
-#: classes/helpers/FrmAppHelper.php:3187
+#: classes/helpers/FrmAppHelper.php:3211
 msgid "That file looks like Spam."
 msgstr "そのファイルはスパムのようです。"
 
-#: classes/helpers/FrmAppHelper.php:3188
+#: classes/helpers/FrmAppHelper.php:3212
 msgid "There is an error in the calculation in the field with key"
 msgstr "キーのあるフィールドでの計算にエラーがあります。"
 
-#: classes/helpers/FrmAppHelper.php:3189
+#: classes/helpers/FrmAppHelper.php:3213
 msgid "Please complete the preceding required fields before uploading a file."
 msgstr "ファイルをアップロードする前に、前述の必須項目を入力してください。"
 
-#: classes/helpers/FrmAppHelper.php:3201
+#: classes/helpers/FrmAppHelper.php:3225
 msgid "(Click to add description)"
 msgstr "(クリックして説明を追加)"
 
-#: classes/helpers/FrmAppHelper.php:3202
+#: classes/helpers/FrmAppHelper.php:3226
 msgid "(Blank)"
 msgstr "(空白)"
 
-#: classes/helpers/FrmAppHelper.php:3203
+#: classes/helpers/FrmAppHelper.php:3227
 msgid "(no label)"
 msgstr "(ラベルなし)"
 
-#: classes/helpers/FrmAppHelper.php:3204
+#: classes/helpers/FrmAppHelper.php:3228
 msgid "OK"
 msgstr "はい"
 
-#: classes/helpers/FrmAppHelper.php:3206
+#: classes/helpers/FrmAppHelper.php:3230
 #: classes/views/frm-fields/back-end/settings.php:281
 msgid "Default"
 msgstr "デフォルト"
 
-#: classes/helpers/FrmAppHelper.php:3207
+#: classes/helpers/FrmAppHelper.php:3231
 msgid "Clear default value when typing"
 msgstr "入力時に初期設定をクリア"
 
-#: classes/helpers/FrmAppHelper.php:3208
+#: classes/helpers/FrmAppHelper.php:3232
 msgid "Do not clear default value when typing"
 msgstr "入力時に初期設定をクリアしない"
 
-#: classes/helpers/FrmAppHelper.php:3209
+#: classes/helpers/FrmAppHelper.php:3233
 msgid "Default value will pass form validation"
 msgstr "初期設定値はフォームの検証に合格します"
 
-#: classes/helpers/FrmAppHelper.php:3210
+#: classes/helpers/FrmAppHelper.php:3234
 msgid "Default value will NOT pass form validation"
 msgstr "初期設定値はフォームの検証に合格しません"
 
-#: classes/helpers/FrmAppHelper.php:3211
+#: classes/helpers/FrmAppHelper.php:3235
 #: classes/views/shared/confirm-overlay.php:15
 #: classes/views/shared/info-overlay.php:15
 msgid "Are you sure?"
 msgstr "本当に実行しますか ?"
 
-#: classes/helpers/FrmAppHelper.php:3212
+#: classes/helpers/FrmAppHelper.php:3236
 msgid "Are you sure you want to delete this field and all data associated with it?"
 msgstr "このフィールドと関連するすべてのデータを本当に削除してもよいですか ?"
 
-#: classes/helpers/FrmAppHelper.php:3213
+#: classes/helpers/FrmAppHelper.php:3237
 msgid "All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?"
 msgstr "このセクション内のすべてのフィールドは、データと一緒に削除されます。このフィールドグループを本当に削除してもよいですか ?"
 
-#: classes/helpers/FrmAppHelper.php:3214
+#: classes/helpers/FrmAppHelper.php:3238
 msgid "Warning: If you have entries with multiple rows, all but the first row will be lost."
 msgstr "警告: 複数行のエントリーがある場合、最初の行以外はすべて失われます。"
 
-#: classes/helpers/FrmAppHelper.php:3216
-#: classes/helpers/FrmFieldsHelper.php:320
+#: classes/helpers/FrmAppHelper.php:3240
+#: classes/helpers/FrmFieldsHelper.php:331
 msgid "The entered values do not match"
 msgstr "入力された値が一致しません"
 
-#: classes/helpers/FrmAppHelper.php:3217
+#: classes/helpers/FrmAppHelper.php:3241
 msgid "Enter Email"
 msgstr "メールアドレスを入力"
 
-#: classes/helpers/FrmAppHelper.php:3218
+#: classes/helpers/FrmAppHelper.php:3242
 msgid "Confirm Email"
 msgstr "メールアドレスの確認"
 
-#: classes/helpers/FrmAppHelper.php:3219
+#: classes/helpers/FrmAppHelper.php:3243
 #: classes/views/shared/mb_adv_info.php:173
 msgid "Conditional content here"
 msgstr "条件付きコンテンツはこちら"
 
-#: classes/helpers/FrmAppHelper.php:3220
-#: classes/helpers/FrmFieldsHelper.php:555
-#: classes/helpers/FrmFieldsHelper.php:556
+#: classes/helpers/FrmAppHelper.php:3244
+#: classes/helpers/FrmFieldsHelper.php:566
+#: classes/helpers/FrmFieldsHelper.php:567
 msgid "New Option"
 msgstr "新規オプション"
 
-#: classes/helpers/FrmAppHelper.php:3221
+#: classes/helpers/FrmAppHelper.php:3245
 msgid "In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding."
 msgstr "特定のブラウザー (Firefoxなど) では、フィールドの高さがフィールドのパディングやテキストサイズに対して小さすぎる場合、テキストが正しく表示されません。フィールドの高さを大きくするか、フィールドのパディングを小さくしてください。"
 
-#: classes/helpers/FrmAppHelper.php:3222
+#: classes/helpers/FrmAppHelper.php:3246
 msgid "Enter Password"
 msgstr "パスワードを入力"
 
-#: classes/helpers/FrmAppHelper.php:3223
+#: classes/helpers/FrmAppHelper.php:3247
 msgid "Confirm Password"
 msgstr "パスワード確認"
 
-#: classes/helpers/FrmAppHelper.php:3224
+#: classes/helpers/FrmAppHelper.php:3248
 msgid "Import Complete"
 msgstr "インポートが完了しました"
 
-#: classes/helpers/FrmAppHelper.php:3226
+#: classes/helpers/FrmAppHelper.php:3250
 msgid "Warning: There is no way to retrieve unsaved entries."
 msgstr "警告: 保存されていないエントリーを取得する方法はありません。"
 
-#: classes/helpers/FrmAppHelper.php:3227
+#: classes/helpers/FrmAppHelper.php:3251
 msgid "Private"
 msgstr "非公開"
 
-#: classes/helpers/FrmAppHelper.php:3230
+#: classes/helpers/FrmAppHelper.php:3254
 msgid "No new licenses were found"
 msgstr "新しいライセンスが見つかりませんでした"
 
-#: classes/helpers/FrmAppHelper.php:3231
+#: classes/helpers/FrmAppHelper.php:3255
 msgid "This calculation has at least one unmatched ( ) { } [ ]."
 msgstr "この計算には、一致しない ( ) { } [ ] が少なくとも1つあります。"
 
-#: classes/helpers/FrmAppHelper.php:3232
+#: classes/helpers/FrmAppHelper.php:3256
 msgid "This calculation may have shortcodes that work in Views but not forms."
 msgstr "この計算には、ビューでは機能するものの、フォームでは機能しないショートコードがある可能性があります。"
 
-#: classes/helpers/FrmAppHelper.php:3233
+#: classes/helpers/FrmAppHelper.php:3257
 msgid "This calculation may have shortcodes that work in text calculations but not numeric calculations."
 msgstr "この計算には、テキスト計算では機能するものの、数値計算では機能しないショートコードがある可能性があります。"
 
 #. translators: %d is the number of allowed actions per form
-#: classes/helpers/FrmAppHelper.php:3235
+#: classes/helpers/FrmAppHelper.php:3259
 msgid "This form action is limited to %d per form."
 msgstr "このフォームアクションは、1つのフォームにつき%d個に限定されています。"
 
-#: classes/helpers/FrmAppHelper.php:3236
+#: classes/helpers/FrmAppHelper.php:3260
 msgid "Please edit the existing form action."
 msgstr "既存のフォームアクションを編集してください。"
 
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
-#: classes/helpers/FrmAppHelper.php:3239
+#: classes/helpers/FrmAppHelper.php:3263
 msgid "The Detail Page Slug \"%s\" is reserved by WordPress. This may cause problems. Is this intentional?"
 msgstr "詳細ページのスラッグ \"%s\" は WordPress だけに限定されています。これは問題を引き起こす可能性があります。これは意図したことですか ?"
 
 #. Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common.
-#: classes/helpers/FrmAppHelper.php:3241
+#: classes/helpers/FrmAppHelper.php:3265
 msgid "The parameter \"%s\" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? "
 msgstr "パラメータ \"%s\" は WordPress だけに限定されています。URL に含めると問題が発生する可能性があります。これは意図したことですか ? "
 
-#: classes/helpers/FrmAppHelper.php:3242
+#: classes/helpers/FrmAppHelper.php:3266
 #: classes/helpers/FrmFormsHelper.php:1603
 msgid "See the list of reserved words in WordPress."
 msgstr "WordPress の予約語リストを参照してください。"
 
-#: classes/helpers/FrmAppHelper.php:3243
+#: classes/helpers/FrmAppHelper.php:3267
 msgid "Please enter a Repeat Limit that is greater than 1."
 msgstr "1以上の繰り返し上限を入力してください。"
 
-#: classes/helpers/FrmAppHelper.php:3244
+#: classes/helpers/FrmAppHelper.php:3268
 msgid "Please select a limit between 0 and 200."
 msgstr "0～200の間で制限を選択してください。"
 
-#: classes/helpers/FrmAppHelper.php:3249
+#: classes/helpers/FrmAppHelper.php:3273
 #: classes/views/shared/mb_adv_info.php:119
 #: classes/views/shared/mb_adv_info.php:133
 msgid "Select a Field"
 msgstr "フィールドを選択"
 
-#: classes/helpers/FrmAppHelper.php:3250
-#: classes/helpers/FrmListHelper.php:261
+#: classes/helpers/FrmAppHelper.php:3274
+#: classes/helpers/FrmListHelper.php:249
 msgid "No items found."
 msgstr "項目は見つかりませんでした。"
 
-#: classes/helpers/FrmAppHelper.php:3251
+#: classes/helpers/FrmAppHelper.php:3275
 msgid "Oops. You have already used that field."
 msgstr "そのフィールドはすでに使用しています。"
 
 #. translators: %1$s: HTML open tag, %2$s: HTML end tag.
-#: classes/helpers/FrmAppHelper.php:3260
+#: classes/helpers/FrmAppHelper.php:3284
 msgid "You can hold %1$sShift%2$s on your keyboard to select multiple fields"
 msgstr "キーボードの %1$sShift%2$s を押しながら複数のフィールドを選択できます。"
 
-#: classes/helpers/FrmAppHelper.php:3329
+#: classes/helpers/FrmAppHelper.php:3353
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
 msgstr "Formidable のバージョンが古いようです。Formidable を更新しない場合、このプラグインが適切に動作しない可能性があります。"
 
-#: classes/helpers/FrmAppHelper.php:3358
+#: classes/helpers/FrmAppHelper.php:3382
 msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
 msgstr "お使いの Formidable Forms のバージョンが Formidable Forms Pro のバージョンと互換性がない可能性があります。"
 
-#: classes/helpers/FrmAppHelper.php:3386
+#: classes/helpers/FrmAppHelper.php:3410
 msgid "The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+."
 msgstr "サーバーの PHP のバージョンが低すぎます。これを修正しないと、Formidable Forms で問題が発生する可能性があります。ホスティングサービスに連絡して、PHP 7.0以上に更新するよう依頼してください。"
 
-#: classes/helpers/FrmAppHelper.php:3392
+#: classes/helpers/FrmAppHelper.php:3416
 msgid "You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome)."
 msgstr "Formidable Forms と互換性のない古いブラウザーを使用しています。最新のブラウザー (Chrome をお勧めします) に更新してください。"
 
-#: classes/helpers/FrmAppHelper.php:3410
+#: classes/helpers/FrmAppHelper.php:3434
 msgid "English"
 msgstr "英語"
 
-#: classes/helpers/FrmAppHelper.php:3411
+#: classes/helpers/FrmAppHelper.php:3435
 msgid "Afrikaans"
 msgstr "アフリカーンス語"
 
-#: classes/helpers/FrmAppHelper.php:3412
+#: classes/helpers/FrmAppHelper.php:3436
 msgid "Albanian"
 msgstr "アルバニア語"
 
-#: classes/helpers/FrmAppHelper.php:3413
+#: classes/helpers/FrmAppHelper.php:3437
 msgid "Algerian Arabic"
 msgstr "アラビア語 (アルジェリア)"
 
-#: classes/helpers/FrmAppHelper.php:3414
+#: classes/helpers/FrmAppHelper.php:3438
 msgid "Amharic"
 msgstr "アムハラ語"
 
-#: classes/helpers/FrmAppHelper.php:3415
+#: classes/helpers/FrmAppHelper.php:3439
 msgid "Arabic"
 msgstr "アラビア語"
 
-#: classes/helpers/FrmAppHelper.php:3416
+#: classes/helpers/FrmAppHelper.php:3440
 msgid "Armenian"
 msgstr "アルメニア語"
 
-#: classes/helpers/FrmAppHelper.php:3417
+#: classes/helpers/FrmAppHelper.php:3441
 msgid "Azerbaijani"
 msgstr "アゼルバイジャン語"
 
-#: classes/helpers/FrmAppHelper.php:3418
+#: classes/helpers/FrmAppHelper.php:3442
 msgid "Basque"
 msgstr "バスク語"
 
-#: classes/helpers/FrmAppHelper.php:3419
+#: classes/helpers/FrmAppHelper.php:3443
 msgid "Belarusian"
 msgstr "ベラルーシ語"
 
-#: classes/helpers/FrmAppHelper.php:3420
+#: classes/helpers/FrmAppHelper.php:3444
 msgid "Bengali"
 msgstr "ベンガル語"
 
-#: classes/helpers/FrmAppHelper.php:3421
+#: classes/helpers/FrmAppHelper.php:3445
 msgid "Bosnian"
 msgstr "ボスニア語"
 
-#: classes/helpers/FrmAppHelper.php:3422
+#: classes/helpers/FrmAppHelper.php:3446
 msgid "Bulgarian"
 msgstr "ブルガリア語"
 
-#: classes/helpers/FrmAppHelper.php:3423
+#: classes/helpers/FrmAppHelper.php:3447
 msgid "Catalan"
 msgstr "カタロニア語"
 
-#: classes/helpers/FrmAppHelper.php:3424
+#: classes/helpers/FrmAppHelper.php:3448
 msgid "Chinese Hong Kong"
 msgstr "中国語 (香港)"
 
-#: classes/helpers/FrmAppHelper.php:3425
+#: classes/helpers/FrmAppHelper.php:3449
 msgid "Chinese Simplified"
 msgstr "中国語簡体字"
 
-#: classes/helpers/FrmAppHelper.php:3426
+#: classes/helpers/FrmAppHelper.php:3450
 msgid "Chinese Traditional"
 msgstr "中国語繁体字"
 
-#: classes/helpers/FrmAppHelper.php:3427
+#: classes/helpers/FrmAppHelper.php:3451
 msgid "Croatian"
 msgstr "クロアチア語"
 
-#: classes/helpers/FrmAppHelper.php:3428
+#: classes/helpers/FrmAppHelper.php:3452
 msgid "Czech"
 msgstr "チェコ語"
 
-#: classes/helpers/FrmAppHelper.php:3429
+#: classes/helpers/FrmAppHelper.php:3453
 msgid "Danish"
 msgstr "デンマーク語"
 
-#: classes/helpers/FrmAppHelper.php:3430
+#: classes/helpers/FrmAppHelper.php:3454
 msgid "Dutch"
 msgstr "オランダ語"
 
-#: classes/helpers/FrmAppHelper.php:3431
+#: classes/helpers/FrmAppHelper.php:3455
 msgid "English/UK"
 msgstr "英語/英国"
 
-#: classes/helpers/FrmAppHelper.php:3432
+#: classes/helpers/FrmAppHelper.php:3456
 msgid "Esperanto"
 msgstr "エスペラント語"
 
-#: classes/helpers/FrmAppHelper.php:3433
+#: classes/helpers/FrmAppHelper.php:3457
 msgid "Estonian"
 msgstr "エストニア語"
 
-#: classes/helpers/FrmAppHelper.php:3434
+#: classes/helpers/FrmAppHelper.php:3458
 msgid "Faroese"
 msgstr "フェロー語"
 
-#: classes/helpers/FrmAppHelper.php:3435
+#: classes/helpers/FrmAppHelper.php:3459
 msgid "Farsi/Persian"
 msgstr "ファルシ語 / ペルシア語"
 
-#: classes/helpers/FrmAppHelper.php:3436
+#: classes/helpers/FrmAppHelper.php:3460
 msgid "Filipino"
 msgstr "フィリピン語"
 
-#: classes/helpers/FrmAppHelper.php:3437
+#: classes/helpers/FrmAppHelper.php:3461
 msgid "Finnish"
 msgstr "フィンランド語"
 
-#: classes/helpers/FrmAppHelper.php:3438
+#: classes/helpers/FrmAppHelper.php:3462
 msgid "French"
 msgstr "フランス語"
 
-#: classes/helpers/FrmAppHelper.php:3439
+#: classes/helpers/FrmAppHelper.php:3463
 msgid "French/Canadian"
 msgstr "フランス語/カナダ"
 
-#: classes/helpers/FrmAppHelper.php:3440
+#: classes/helpers/FrmAppHelper.php:3464
 msgid "French/Swiss"
 msgstr "フランス語/スイス"
 
-#: classes/helpers/FrmAppHelper.php:3441
+#: classes/helpers/FrmAppHelper.php:3465
 msgid "Galician"
 msgstr "ガリシア語"
 
-#: classes/helpers/FrmAppHelper.php:3442
+#: classes/helpers/FrmAppHelper.php:3466
 msgid "Georgian"
 msgstr "ジョージア語"
 
-#: classes/helpers/FrmAppHelper.php:3443
+#: classes/helpers/FrmAppHelper.php:3467
 msgid "German"
 msgstr "ドイツ語"
 
-#: classes/helpers/FrmAppHelper.php:3444
+#: classes/helpers/FrmAppHelper.php:3468
 msgid "German/Austria"
 msgstr "ドイツ語/オーストリア"
 
-#: classes/helpers/FrmAppHelper.php:3445
+#: classes/helpers/FrmAppHelper.php:3469
 msgid "German/Switzerland"
 msgstr "ドイツ語/スイス"
 
-#: classes/helpers/FrmAppHelper.php:3446
+#: classes/helpers/FrmAppHelper.php:3470
 msgid "Greek"
 msgstr "ギリシャ語"
 
-#: classes/helpers/FrmAppHelper.php:3447
+#: classes/helpers/FrmAppHelper.php:3471
 msgid "Gujarati"
 msgstr "グジャラート語"
 
-#: classes/helpers/FrmAppHelper.php:3448
-#: classes/helpers/FrmAppHelper.php:3449
+#: classes/helpers/FrmAppHelper.php:3472
+#: classes/helpers/FrmAppHelper.php:3473
 msgid "Hebrew"
 msgstr "ヘブライ語"
 
-#: classes/helpers/FrmAppHelper.php:3450
+#: classes/helpers/FrmAppHelper.php:3474
 msgid "Hindi"
 msgstr "ヒンディー語"
 
-#: classes/helpers/FrmAppHelper.php:3451
+#: classes/helpers/FrmAppHelper.php:3475
 msgid "Hungarian"
 msgstr "ハンガリー語"
 
-#: classes/helpers/FrmAppHelper.php:3452
+#: classes/helpers/FrmAppHelper.php:3476
 msgid "Icelandic"
 msgstr "アイスランド語"
 
-#: classes/helpers/FrmAppHelper.php:3453
+#: classes/helpers/FrmAppHelper.php:3477
 msgid "Indonesian"
 msgstr "インドネシア語"
 
-#: classes/helpers/FrmAppHelper.php:3454
+#: classes/helpers/FrmAppHelper.php:3478
 msgid "Italian"
 msgstr "イタリア語"
 
-#: classes/helpers/FrmAppHelper.php:3455
+#: classes/helpers/FrmAppHelper.php:3479
 msgid "Japanese"
 msgstr "日本語"
 
-#: classes/helpers/FrmAppHelper.php:3456
+#: classes/helpers/FrmAppHelper.php:3480
 msgid "Kannada"
 msgstr "カンナダ語"
 
-#: classes/helpers/FrmAppHelper.php:3457
+#: classes/helpers/FrmAppHelper.php:3481
 msgid "Kazakh"
 msgstr "カザフ語"
 
-#: classes/helpers/FrmAppHelper.php:3458
+#: classes/helpers/FrmAppHelper.php:3482
 msgid "Khmer"
 msgstr "クメール語"
 
-#: classes/helpers/FrmAppHelper.php:3459
+#: classes/helpers/FrmAppHelper.php:3483
 msgid "Korean"
 msgstr "韓国語"
 
-#: classes/helpers/FrmAppHelper.php:3460
+#: classes/helpers/FrmAppHelper.php:3484
 msgid "Kyrgyz"
 msgstr "キルギス語"
 
-#: classes/helpers/FrmAppHelper.php:3461
+#: classes/helpers/FrmAppHelper.php:3485
 msgid "Laothian"
 msgstr "ラオス語"
 
-#: classes/helpers/FrmAppHelper.php:3462
+#: classes/helpers/FrmAppHelper.php:3486
 msgid "Latvian"
 msgstr "ラトビア語"
 
-#: classes/helpers/FrmAppHelper.php:3463
+#: classes/helpers/FrmAppHelper.php:3487
 msgid "Lithuanian"
 msgstr "リトアニア語"
 
-#: classes/helpers/FrmAppHelper.php:3464
+#: classes/helpers/FrmAppHelper.php:3488
 msgid "Luxembourgish"
 msgstr "ルクセンブルク語"
 
-#: classes/helpers/FrmAppHelper.php:3465
+#: classes/helpers/FrmAppHelper.php:3489
 msgid "Macedonian"
 msgstr "マケドニア語"
 
-#: classes/helpers/FrmAppHelper.php:3466
+#: classes/helpers/FrmAppHelper.php:3490
 msgid "Malayalam"
 msgstr "マラヤーラム語"
 
-#: classes/helpers/FrmAppHelper.php:3467
+#: classes/helpers/FrmAppHelper.php:3491
 msgid "Malaysian"
 msgstr "マレーシア語"
 
-#: classes/helpers/FrmAppHelper.php:3468
+#: classes/helpers/FrmAppHelper.php:3492
 msgid "Marathi"
 msgstr "マラーティー語"
 
-#: classes/helpers/FrmAppHelper.php:3469
+#: classes/helpers/FrmAppHelper.php:3493
 msgid "Norwegian"
 msgstr "ノルウェー語"
 
-#: classes/helpers/FrmAppHelper.php:3470
+#: classes/helpers/FrmAppHelper.php:3494
 msgid "Norwegian Bokmål"
 msgstr "ノルウェー語 (ブークモール)"
 
-#: classes/helpers/FrmAppHelper.php:3471
+#: classes/helpers/FrmAppHelper.php:3495
 msgid "Norwegian Nynorsk"
 msgstr "ノルウェー語 (ニーノシュク)"
 
-#: classes/helpers/FrmAppHelper.php:3472
+#: classes/helpers/FrmAppHelper.php:3496
 msgid "Polish"
 msgstr "ポーランド語"
 
-#: classes/helpers/FrmAppHelper.php:3473
+#: classes/helpers/FrmAppHelper.php:3497
 msgid "Portuguese"
 msgstr "ポルトガル語"
 
-#: classes/helpers/FrmAppHelper.php:3474
+#: classes/helpers/FrmAppHelper.php:3498
 msgid "Portuguese/Brazilian"
 msgstr "ポルトガル語 (ブラジル)"
 
-#: classes/helpers/FrmAppHelper.php:3475
+#: classes/helpers/FrmAppHelper.php:3499
 msgid "Portuguese/Portugal"
 msgstr "ポルトガル語 (ポルトガル)"
 
-#: classes/helpers/FrmAppHelper.php:3476
+#: classes/helpers/FrmAppHelper.php:3500
 msgid "Romansh"
 msgstr "ロマンシュ語"
 
-#: classes/helpers/FrmAppHelper.php:3477
+#: classes/helpers/FrmAppHelper.php:3501
 msgid "Romanian"
 msgstr "ルーマニア語"
 
-#: classes/helpers/FrmAppHelper.php:3478
+#: classes/helpers/FrmAppHelper.php:3502
 msgid "Russian"
 msgstr "ロシア語"
 
-#: classes/helpers/FrmAppHelper.php:3479
-#: classes/helpers/FrmAppHelper.php:3480
+#: classes/helpers/FrmAppHelper.php:3503
+#: classes/helpers/FrmAppHelper.php:3504
 msgid "Serbian"
 msgstr "セルビア語"
 
-#: classes/helpers/FrmAppHelper.php:3481
+#: classes/helpers/FrmAppHelper.php:3505
 msgid "Sinhalese"
 msgstr "シンハラ語"
 
-#: classes/helpers/FrmAppHelper.php:3482
+#: classes/helpers/FrmAppHelper.php:3506
 msgid "Slovak"
 msgstr "スロバキア語"
 
-#: classes/helpers/FrmAppHelper.php:3483
+#: classes/helpers/FrmAppHelper.php:3507
 msgid "Slovenian"
 msgstr "スロベニア語"
 
-#: classes/helpers/FrmAppHelper.php:3484
+#: classes/helpers/FrmAppHelper.php:3508
 msgid "Spanish"
 msgstr "スペイン語"
 
-#: classes/helpers/FrmAppHelper.php:3485
+#: classes/helpers/FrmAppHelper.php:3509
 msgid "Spanish/Latin America"
 msgstr "スペイン語/ラテンアメリカ"
 
-#: classes/helpers/FrmAppHelper.php:3486
+#: classes/helpers/FrmAppHelper.php:3510
 msgid "Swahili"
 msgstr "スワヒリ語"
 
-#: classes/helpers/FrmAppHelper.php:3487
+#: classes/helpers/FrmAppHelper.php:3511
 msgid "Swedish"
 msgstr "スウェーデン語"
 
-#: classes/helpers/FrmAppHelper.php:3488
+#: classes/helpers/FrmAppHelper.php:3512
 msgid "Tamil"
 msgstr "タミル語"
 
-#: classes/helpers/FrmAppHelper.php:3489
+#: classes/helpers/FrmAppHelper.php:3513
 msgid "Telugu"
 msgstr "テルグ語"
 
-#: classes/helpers/FrmAppHelper.php:3490
+#: classes/helpers/FrmAppHelper.php:3514
 msgid "Thai"
 msgstr "タイ語"
 
-#: classes/helpers/FrmAppHelper.php:3491
+#: classes/helpers/FrmAppHelper.php:3515
 msgid "Tajiki"
 msgstr "タジク語"
 
-#: classes/helpers/FrmAppHelper.php:3492
+#: classes/helpers/FrmAppHelper.php:3516
 msgid "Turkish"
 msgstr "トルコ語"
 
-#: classes/helpers/FrmAppHelper.php:3493
+#: classes/helpers/FrmAppHelper.php:3517
 msgid "Ukrainian"
 msgstr "ウクライナ語"
 
-#: classes/helpers/FrmAppHelper.php:3494
+#: classes/helpers/FrmAppHelper.php:3518
 msgid "Urdu"
 msgstr "ウルドゥー語"
 
-#: classes/helpers/FrmAppHelper.php:3495
+#: classes/helpers/FrmAppHelper.php:3519
 msgid "Vietnamese"
 msgstr "ベトナム語"
 
-#: classes/helpers/FrmAppHelper.php:3496
+#: classes/helpers/FrmAppHelper.php:3520
 msgid "Welsh"
 msgstr "ウェールズ語"
 
-#: classes/helpers/FrmAppHelper.php:3497
+#: classes/helpers/FrmAppHelper.php:3521
 msgid "Zulu"
 msgstr "ズールー語"
 
-#: classes/helpers/FrmAppHelper.php:3840
+#: classes/helpers/FrmAppHelper.php:3867
 msgid "Form Landing Pages"
 msgstr "フォームランディングページ"
 
-#: classes/helpers/FrmAppHelper.php:3841
+#: classes/helpers/FrmAppHelper.php:3868
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr "フォームのランディングページを簡単に管理できます。アップグレードして、フォームのランディングページを利用しましょう。"
 
-#: classes/helpers/FrmAppHelper.php:3934
+#: classes/helpers/FrmAppHelper.php:3961
 #: classes/views/styles/_style-card.php:37
 #: js/admin/applications.js:304
 msgid "NEW"
 msgstr "新規"
 
-#: classes/helpers/FrmAppHelper.php:4150
+#: classes/helpers/FrmAppHelper.php:4177
 msgctxt "warning message: close icon label"
 msgid "Dismiss"
 msgstr "非表示"
 
-#: classes/helpers/FrmAppHelper.php:4191
+#: classes/helpers/FrmAppHelper.php:4218
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
 msgstr "Formidable Forms Lite をご利用中です - ライセンスは必要ありません。ご活用ください !"
 
@@ -2315,6 +2414,7 @@ msgid "Uruguayan Peso"
 msgstr "ウルグアイ・ペソ"
 
 #: classes/helpers/FrmDashboardHelper.php:201
+#: classes/views/onboarding-wizard/steps/welcome-step.php:29
 msgid "Connect Account"
 msgstr "アカウントを連携"
 
@@ -2348,7 +2448,7 @@ msgid "Ecommerce Pricing Fields"
 msgstr "eコマースの価格設定フィールド"
 
 #: classes/helpers/FrmDashboardHelper.php:245
-#: classes/views/frm-forms/add_field_links.php:51
+#: classes/views/frm-forms/add_field_links.php:55
 msgid "Advanced Fields"
 msgstr "高度なフィールド"
 
@@ -2465,7 +2565,7 @@ msgstr "このエントリーを完全に削除しますか ?"
 #: stripe/helpers/FrmTransLiteListHelper.php:383
 #: stripe/views/payments/show.php:156
 #: stripe/views/subscriptions/show.php:129
-#: js/formidable_admin.js:2339
+#: js/formidable_admin.js:2421
 msgid "Delete"
 msgstr "削除"
 
@@ -2476,1217 +2576,1217 @@ msgstr "このフォームのエントリーはすべて完全に削除されま
 
 #. translators: %s: [field_name] shortcode (Which gets replaced by a Field Name)
 #. translators: %s: Field name
-#: classes/helpers/FrmFieldsHelper.php:186
-#: classes/helpers/FrmFieldsHelper.php:330
+#: classes/helpers/FrmFieldsHelper.php:197
+#: classes/helpers/FrmFieldsHelper.php:341
 #: classes/helpers/FrmXMLHelper.php:1562
 msgid "%s is invalid"
 msgstr "%s は無効です"
 
 #. translators: %s: Field name
-#: classes/helpers/FrmFieldsHelper.php:325
+#: classes/helpers/FrmFieldsHelper.php:336
 msgid "%s must be unique"
 msgstr "%sは一意である必要があります"
 
-#: classes/helpers/FrmFieldsHelper.php:328
+#: classes/helpers/FrmFieldsHelper.php:339
 msgid "This field is invalid"
 msgstr "このフィールドは無効です"
 
-#: classes/helpers/FrmFieldsHelper.php:366
+#: classes/helpers/FrmFieldsHelper.php:377
 msgid "This value"
 msgstr "この値"
 
-#: classes/helpers/FrmFieldsHelper.php:368
+#: classes/helpers/FrmFieldsHelper.php:379
 msgid "This field"
 msgstr "このフィールド"
 
 #. translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link
-#: classes/helpers/FrmFieldsHelper.php:657
+#: classes/helpers/FrmFieldsHelper.php:668
 msgid "Options are dynamically created from your %1$s%2$s: %3$s%4$s"
 msgstr "オプション設定は、%1$s%2$s: %3$s%4$s から動的に作成されます"
 
-#: classes/helpers/FrmFieldsHelper.php:659
+#: classes/helpers/FrmFieldsHelper.php:670
 msgid "taxonomy"
 msgstr "タクソノミー"
 
-#: classes/helpers/FrmFieldsHelper.php:660
+#: classes/helpers/FrmFieldsHelper.php:671
 #: classes/views/form-templates/categories.php:12
 msgid "Categories"
 msgstr "カテゴリー"
 
-#: classes/helpers/FrmFieldsHelper.php:1573
+#: classes/helpers/FrmFieldsHelper.php:1584
 msgid "Afghanistan"
 msgstr "アフガニスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1574
+#: classes/helpers/FrmFieldsHelper.php:1585
 msgid "Aland Islands"
 msgstr "オーランド諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1575
+#: classes/helpers/FrmFieldsHelper.php:1586
 msgid "Albania"
 msgstr "アルバニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1576
+#: classes/helpers/FrmFieldsHelper.php:1587
 msgid "Algeria"
 msgstr "アルジェリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1577
+#: classes/helpers/FrmFieldsHelper.php:1588
 msgid "American Samoa"
 msgstr "アメリカ領サモア"
 
-#: classes/helpers/FrmFieldsHelper.php:1578
+#: classes/helpers/FrmFieldsHelper.php:1589
 msgid "Andorra"
 msgstr "アンドラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1579
+#: classes/helpers/FrmFieldsHelper.php:1590
 msgid "Angola"
 msgstr "アンゴラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1580
+#: classes/helpers/FrmFieldsHelper.php:1591
 msgid "Anguilla"
 msgstr "アンギラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1581
+#: classes/helpers/FrmFieldsHelper.php:1592
 msgid "Antarctica"
 msgstr "南極"
 
-#: classes/helpers/FrmFieldsHelper.php:1582
+#: classes/helpers/FrmFieldsHelper.php:1593
 msgid "Antigua and Barbuda"
 msgstr "アンティグア・バーブーダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1583
+#: classes/helpers/FrmFieldsHelper.php:1594
 msgid "Argentina"
 msgstr "アルゼンチン"
 
-#: classes/helpers/FrmFieldsHelper.php:1584
+#: classes/helpers/FrmFieldsHelper.php:1595
 msgid "Armenia"
 msgstr "アルメニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1585
+#: classes/helpers/FrmFieldsHelper.php:1596
 msgid "Aruba"
 msgstr "アルバ"
 
-#: classes/helpers/FrmFieldsHelper.php:1586
+#: classes/helpers/FrmFieldsHelper.php:1597
 msgid "Australia"
 msgstr "オーストラリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1587
+#: classes/helpers/FrmFieldsHelper.php:1598
 msgid "Austria"
 msgstr "オーストリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1588
+#: classes/helpers/FrmFieldsHelper.php:1599
 msgid "Azerbaijan"
 msgstr "アゼルバイジャン"
 
-#: classes/helpers/FrmFieldsHelper.php:1589
+#: classes/helpers/FrmFieldsHelper.php:1600
 msgid "Bahamas"
 msgstr "バハマ"
 
-#: classes/helpers/FrmFieldsHelper.php:1590
+#: classes/helpers/FrmFieldsHelper.php:1601
 msgid "Bahrain"
 msgstr "バーレーン"
 
-#: classes/helpers/FrmFieldsHelper.php:1591
+#: classes/helpers/FrmFieldsHelper.php:1602
 msgid "Bangladesh"
 msgstr "バングラデシュ"
 
-#: classes/helpers/FrmFieldsHelper.php:1592
+#: classes/helpers/FrmFieldsHelper.php:1603
 msgid "Barbados"
 msgstr "バルバドス"
 
-#: classes/helpers/FrmFieldsHelper.php:1593
+#: classes/helpers/FrmFieldsHelper.php:1604
 msgid "Belarus"
 msgstr "ベラルーシ"
 
-#: classes/helpers/FrmFieldsHelper.php:1594
+#: classes/helpers/FrmFieldsHelper.php:1605
 msgid "Belgium"
 msgstr "ベルギー"
 
-#: classes/helpers/FrmFieldsHelper.php:1595
+#: classes/helpers/FrmFieldsHelper.php:1606
 msgid "Belize"
 msgstr "ベリーズ"
 
-#: classes/helpers/FrmFieldsHelper.php:1596
+#: classes/helpers/FrmFieldsHelper.php:1607
 msgid "Benin"
 msgstr "ベニン"
 
-#: classes/helpers/FrmFieldsHelper.php:1597
+#: classes/helpers/FrmFieldsHelper.php:1608
 msgid "Bermuda"
 msgstr "バミューダ島"
 
-#: classes/helpers/FrmFieldsHelper.php:1598
+#: classes/helpers/FrmFieldsHelper.php:1609
 msgid "Bhutan"
 msgstr "ブータン"
 
-#: classes/helpers/FrmFieldsHelper.php:1599
+#: classes/helpers/FrmFieldsHelper.php:1610
 msgid "Bolivia"
 msgstr "ボリビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1600
+#: classes/helpers/FrmFieldsHelper.php:1611
 msgid "Bonaire, Sint Eustatius and Saba"
 msgstr "ボネール、シント・ユースタティウスおよびサバ"
 
-#: classes/helpers/FrmFieldsHelper.php:1601
+#: classes/helpers/FrmFieldsHelper.php:1612
 msgid "Bosnia and Herzegovina"
 msgstr "ボスニア・ヘルツェゴビナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1602
+#: classes/helpers/FrmFieldsHelper.php:1613
 msgid "Botswana"
 msgstr "ボツワナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1603
+#: classes/helpers/FrmFieldsHelper.php:1614
 msgid "Bouvet Island"
 msgstr "ブーベ島"
 
-#: classes/helpers/FrmFieldsHelper.php:1604
+#: classes/helpers/FrmFieldsHelper.php:1615
 msgid "Brazil"
 msgstr "ブラジル"
 
-#: classes/helpers/FrmFieldsHelper.php:1605
+#: classes/helpers/FrmFieldsHelper.php:1616
 msgid "British Indian Ocean Territory"
 msgstr "イギリス領インド洋地域"
 
-#: classes/helpers/FrmFieldsHelper.php:1606
+#: classes/helpers/FrmFieldsHelper.php:1617
 msgid "Brunei"
 msgstr "ブルネイ"
 
-#: classes/helpers/FrmFieldsHelper.php:1607
+#: classes/helpers/FrmFieldsHelper.php:1618
 msgid "Bulgaria"
 msgstr "ブルガリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1608
+#: classes/helpers/FrmFieldsHelper.php:1619
 msgid "Burkina Faso"
 msgstr "ブルキナファソ"
 
-#: classes/helpers/FrmFieldsHelper.php:1609
+#: classes/helpers/FrmFieldsHelper.php:1620
 msgid "Burundi"
 msgstr "ブルンジ"
 
-#: classes/helpers/FrmFieldsHelper.php:1610
+#: classes/helpers/FrmFieldsHelper.php:1621
 msgid "Cambodia"
 msgstr "カンボジア"
 
-#: classes/helpers/FrmFieldsHelper.php:1611
+#: classes/helpers/FrmFieldsHelper.php:1622
 msgid "Cameroon"
 msgstr "カメルーン"
 
-#: classes/helpers/FrmFieldsHelper.php:1612
+#: classes/helpers/FrmFieldsHelper.php:1623
 msgid "Canada"
 msgstr "カナダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1613
+#: classes/helpers/FrmFieldsHelper.php:1624
 msgid "Cape Verde"
 msgstr "カーボベルデ"
 
-#: classes/helpers/FrmFieldsHelper.php:1614
+#: classes/helpers/FrmFieldsHelper.php:1625
 msgid "Cayman Islands"
 msgstr "ケイマン諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1615
+#: classes/helpers/FrmFieldsHelper.php:1626
 msgid "Central African Republic"
 msgstr "中央アフリカ共和国"
 
-#: classes/helpers/FrmFieldsHelper.php:1616
+#: classes/helpers/FrmFieldsHelper.php:1627
 msgid "Chad"
 msgstr "チャド"
 
-#: classes/helpers/FrmFieldsHelper.php:1617
+#: classes/helpers/FrmFieldsHelper.php:1628
 msgid "Chile"
 msgstr "チリ"
 
-#: classes/helpers/FrmFieldsHelper.php:1618
+#: classes/helpers/FrmFieldsHelper.php:1629
 msgid "China"
 msgstr "中国"
 
-#: classes/helpers/FrmFieldsHelper.php:1619
+#: classes/helpers/FrmFieldsHelper.php:1630
 msgid "Christmas Island"
 msgstr "クリスマス島"
 
-#: classes/helpers/FrmFieldsHelper.php:1620
+#: classes/helpers/FrmFieldsHelper.php:1631
 msgid "Cocos (Keeling) Islands"
 msgstr "ココス (キーリング) 諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1621
+#: classes/helpers/FrmFieldsHelper.php:1632
 msgid "Colombia"
 msgstr "コロンビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1622
+#: classes/helpers/FrmFieldsHelper.php:1633
 msgid "Comoros"
 msgstr "コモロ"
 
-#: classes/helpers/FrmFieldsHelper.php:1623
+#: classes/helpers/FrmFieldsHelper.php:1634
 msgid "Congo"
 msgstr "コンゴ共和国"
 
-#: classes/helpers/FrmFieldsHelper.php:1624
+#: classes/helpers/FrmFieldsHelper.php:1635
 msgid "Cook Islands"
 msgstr "クック諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1625
+#: classes/helpers/FrmFieldsHelper.php:1636
 msgid "Costa Rica"
 msgstr "コスタリカ"
 
-#: classes/helpers/FrmFieldsHelper.php:1626
+#: classes/helpers/FrmFieldsHelper.php:1637
 msgid "C&ocirc;te d'Ivoire"
 msgstr "コートジボワール"
 
-#: classes/helpers/FrmFieldsHelper.php:1627
+#: classes/helpers/FrmFieldsHelper.php:1638
 msgid "Croatia"
 msgstr "クロアチア"
 
-#: classes/helpers/FrmFieldsHelper.php:1628
+#: classes/helpers/FrmFieldsHelper.php:1639
 msgid "Cuba"
 msgstr "キューバ"
 
-#: classes/helpers/FrmFieldsHelper.php:1629
+#: classes/helpers/FrmFieldsHelper.php:1640
 msgid "Curacao"
 msgstr "キュラソー"
 
-#: classes/helpers/FrmFieldsHelper.php:1630
+#: classes/helpers/FrmFieldsHelper.php:1641
 msgid "Cyprus"
 msgstr "キプロス"
 
-#: classes/helpers/FrmFieldsHelper.php:1631
+#: classes/helpers/FrmFieldsHelper.php:1642
 msgid "Czech Republic"
 msgstr "チェコ共和国"
 
-#: classes/helpers/FrmFieldsHelper.php:1632
+#: classes/helpers/FrmFieldsHelper.php:1643
 msgid "Denmark"
 msgstr "デンマーク"
 
-#: classes/helpers/FrmFieldsHelper.php:1633
+#: classes/helpers/FrmFieldsHelper.php:1644
 msgid "Djibouti"
 msgstr "ジブチ"
 
-#: classes/helpers/FrmFieldsHelper.php:1634
+#: classes/helpers/FrmFieldsHelper.php:1645
 msgid "Dominica"
 msgstr "ドミニカ"
 
-#: classes/helpers/FrmFieldsHelper.php:1635
+#: classes/helpers/FrmFieldsHelper.php:1646
 msgid "Dominican Republic"
 msgstr "ドミニカ共和国"
 
-#: classes/helpers/FrmFieldsHelper.php:1636
+#: classes/helpers/FrmFieldsHelper.php:1647
 msgid "East Timor"
 msgstr "東チモール"
 
-#: classes/helpers/FrmFieldsHelper.php:1637
+#: classes/helpers/FrmFieldsHelper.php:1648
 msgid "Ecuador"
 msgstr "エクアドル"
 
-#: classes/helpers/FrmFieldsHelper.php:1638
+#: classes/helpers/FrmFieldsHelper.php:1649
 msgid "Egypt"
 msgstr "エジプト"
 
-#: classes/helpers/FrmFieldsHelper.php:1639
+#: classes/helpers/FrmFieldsHelper.php:1650
 msgid "El Salvador"
 msgstr "エルサルバドル"
 
-#: classes/helpers/FrmFieldsHelper.php:1640
+#: classes/helpers/FrmFieldsHelper.php:1651
 msgid "Equatorial Guinea"
 msgstr "赤道ギニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1641
+#: classes/helpers/FrmFieldsHelper.php:1652
 msgid "Eritrea"
 msgstr "エリトリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1642
+#: classes/helpers/FrmFieldsHelper.php:1653
 msgid "Estonia"
 msgstr "エストニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1643
+#: classes/helpers/FrmFieldsHelper.php:1654
 msgid "Ethiopia"
 msgstr "エチオピア"
 
-#: classes/helpers/FrmFieldsHelper.php:1644
+#: classes/helpers/FrmFieldsHelper.php:1655
 msgid "Falkland Islands (Malvinas)"
 msgstr "フォークランド諸島 (マルビナス)"
 
-#: classes/helpers/FrmFieldsHelper.php:1645
+#: classes/helpers/FrmFieldsHelper.php:1656
 msgid "Faroe Islands"
 msgstr "フェロー諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1646
+#: classes/helpers/FrmFieldsHelper.php:1657
 msgid "Fiji"
 msgstr "フィジー"
 
-#: classes/helpers/FrmFieldsHelper.php:1647
+#: classes/helpers/FrmFieldsHelper.php:1658
 msgid "Finland"
 msgstr "フィンランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1648
+#: classes/helpers/FrmFieldsHelper.php:1659
 msgid "France"
 msgstr "フランス"
 
-#: classes/helpers/FrmFieldsHelper.php:1649
+#: classes/helpers/FrmFieldsHelper.php:1660
 msgid "French Guiana"
 msgstr "フランス領ギアナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1650
+#: classes/helpers/FrmFieldsHelper.php:1661
 msgid "French Polynesia"
 msgstr "フランス領ポリネシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1651
+#: classes/helpers/FrmFieldsHelper.php:1662
 msgid "French Southern Territories"
 msgstr "フランス領南方・南極地域"
 
-#: classes/helpers/FrmFieldsHelper.php:1652
+#: classes/helpers/FrmFieldsHelper.php:1663
 msgid "Gabon"
 msgstr "ガボン"
 
-#: classes/helpers/FrmFieldsHelper.php:1653
+#: classes/helpers/FrmFieldsHelper.php:1664
 msgid "Gambia"
 msgstr "ガンビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1654
+#: classes/helpers/FrmFieldsHelper.php:1665
 msgid "Georgia"
 msgstr "ジョージア"
 
-#: classes/helpers/FrmFieldsHelper.php:1655
+#: classes/helpers/FrmFieldsHelper.php:1666
 msgid "Germany"
 msgstr "ドイツ"
 
-#: classes/helpers/FrmFieldsHelper.php:1656
+#: classes/helpers/FrmFieldsHelper.php:1667
 msgid "Ghana"
 msgstr "ガーナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1657
+#: classes/helpers/FrmFieldsHelper.php:1668
 msgid "Gibraltar"
 msgstr "ジブラルタル"
 
-#: classes/helpers/FrmFieldsHelper.php:1658
+#: classes/helpers/FrmFieldsHelper.php:1669
 msgid "Greece"
 msgstr "ギリシャ"
 
-#: classes/helpers/FrmFieldsHelper.php:1659
+#: classes/helpers/FrmFieldsHelper.php:1670
 msgid "Greenland"
 msgstr "グリーンランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1660
+#: classes/helpers/FrmFieldsHelper.php:1671
 msgid "Grenada"
 msgstr "グレナダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1661
+#: classes/helpers/FrmFieldsHelper.php:1672
 msgid "Guadeloupe"
 msgstr "グアドループ"
 
-#: classes/helpers/FrmFieldsHelper.php:1662
+#: classes/helpers/FrmFieldsHelper.php:1673
 msgid "Guam"
 msgstr "グアム"
 
-#: classes/helpers/FrmFieldsHelper.php:1663
+#: classes/helpers/FrmFieldsHelper.php:1674
 msgid "Guatemala"
 msgstr "グアテマラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1664
+#: classes/helpers/FrmFieldsHelper.php:1675
 msgid "Guernsey"
 msgstr "ガーンジー"
 
-#: classes/helpers/FrmFieldsHelper.php:1665
+#: classes/helpers/FrmFieldsHelper.php:1676
 msgid "Guinea"
 msgstr "ギニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1666
+#: classes/helpers/FrmFieldsHelper.php:1677
 msgid "Guinea-Bissau"
 msgstr "ギニアビサウ"
 
-#: classes/helpers/FrmFieldsHelper.php:1667
+#: classes/helpers/FrmFieldsHelper.php:1678
 msgid "Guyana"
 msgstr "ガイアナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1668
+#: classes/helpers/FrmFieldsHelper.php:1679
 msgid "Haiti"
 msgstr "ハイチ"
 
-#: classes/helpers/FrmFieldsHelper.php:1669
+#: classes/helpers/FrmFieldsHelper.php:1680
 msgid "Heard Island and McDonald Islands"
 msgstr "ハード島とマクドナルド諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1670
+#: classes/helpers/FrmFieldsHelper.php:1681
 msgid "Holy See"
 msgstr "教皇庁"
 
-#: classes/helpers/FrmFieldsHelper.php:1671
+#: classes/helpers/FrmFieldsHelper.php:1682
 msgid "Honduras"
 msgstr "ホンジュラス"
 
-#: classes/helpers/FrmFieldsHelper.php:1672
+#: classes/helpers/FrmFieldsHelper.php:1683
 msgid "Hong Kong"
 msgstr "香港"
 
-#: classes/helpers/FrmFieldsHelper.php:1673
+#: classes/helpers/FrmFieldsHelper.php:1684
 msgid "Hungary"
 msgstr "ハンガリー"
 
-#: classes/helpers/FrmFieldsHelper.php:1674
+#: classes/helpers/FrmFieldsHelper.php:1685
 msgid "Iceland"
 msgstr "アイスランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1675
+#: classes/helpers/FrmFieldsHelper.php:1686
 msgid "India"
 msgstr "インド"
 
-#: classes/helpers/FrmFieldsHelper.php:1676
+#: classes/helpers/FrmFieldsHelper.php:1687
 msgid "Indonesia"
 msgstr "インドネシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1677
+#: classes/helpers/FrmFieldsHelper.php:1688
 msgid "Iran"
 msgstr "イラン"
 
-#: classes/helpers/FrmFieldsHelper.php:1678
+#: classes/helpers/FrmFieldsHelper.php:1689
 msgid "Iraq"
 msgstr "イラク"
 
-#: classes/helpers/FrmFieldsHelper.php:1679
+#: classes/helpers/FrmFieldsHelper.php:1690
 msgid "Ireland"
 msgstr "アイルランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1680
+#: classes/helpers/FrmFieldsHelper.php:1691
 msgid "Israel"
 msgstr "イスラエル"
 
-#: classes/helpers/FrmFieldsHelper.php:1681
+#: classes/helpers/FrmFieldsHelper.php:1692
 msgid "Isle of Man"
 msgstr "マン島"
 
-#: classes/helpers/FrmFieldsHelper.php:1682
+#: classes/helpers/FrmFieldsHelper.php:1693
 msgid "Italy"
 msgstr "イタリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1683
+#: classes/helpers/FrmFieldsHelper.php:1694
 msgid "Jamaica"
 msgstr "ジャマイカ"
 
-#: classes/helpers/FrmFieldsHelper.php:1684
+#: classes/helpers/FrmFieldsHelper.php:1695
 msgid "Japan"
 msgstr "日本"
 
-#: classes/helpers/FrmFieldsHelper.php:1685
+#: classes/helpers/FrmFieldsHelper.php:1696
 msgid "Jersey"
 msgstr "ジャージー島"
 
-#: classes/helpers/FrmFieldsHelper.php:1686
+#: classes/helpers/FrmFieldsHelper.php:1697
 msgid "Jordan"
 msgstr "ヨルダン"
 
-#: classes/helpers/FrmFieldsHelper.php:1687
+#: classes/helpers/FrmFieldsHelper.php:1698
 msgid "Kazakhstan"
 msgstr "カザフスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1688
+#: classes/helpers/FrmFieldsHelper.php:1699
 msgid "Kenya"
 msgstr "ケニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1689
+#: classes/helpers/FrmFieldsHelper.php:1700
 msgid "Kiribati"
 msgstr "キリバス"
 
-#: classes/helpers/FrmFieldsHelper.php:1690
+#: classes/helpers/FrmFieldsHelper.php:1701
 msgid "North Korea"
 msgstr "北朝鮮"
 
-#: classes/helpers/FrmFieldsHelper.php:1691
+#: classes/helpers/FrmFieldsHelper.php:1702
 msgid "South Korea"
 msgstr "韓国"
 
-#: classes/helpers/FrmFieldsHelper.php:1692
+#: classes/helpers/FrmFieldsHelper.php:1703
 msgid "Kosovo"
 msgstr "コソボ"
 
-#: classes/helpers/FrmFieldsHelper.php:1693
+#: classes/helpers/FrmFieldsHelper.php:1704
 msgid "Kuwait"
 msgstr "クウェート"
 
-#: classes/helpers/FrmFieldsHelper.php:1694
+#: classes/helpers/FrmFieldsHelper.php:1705
 msgid "Kyrgyzstan"
 msgstr "キルギスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1695
+#: classes/helpers/FrmFieldsHelper.php:1706
 msgid "Laos"
 msgstr "ラオス"
 
-#: classes/helpers/FrmFieldsHelper.php:1696
+#: classes/helpers/FrmFieldsHelper.php:1707
 msgid "Latvia"
 msgstr "ラトビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1697
+#: classes/helpers/FrmFieldsHelper.php:1708
 msgid "Lebanon"
 msgstr "レバノン"
 
-#: classes/helpers/FrmFieldsHelper.php:1698
+#: classes/helpers/FrmFieldsHelper.php:1709
 msgid "Lesotho"
 msgstr "レソト"
 
-#: classes/helpers/FrmFieldsHelper.php:1699
+#: classes/helpers/FrmFieldsHelper.php:1710
 msgid "Liberia"
 msgstr "リベリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1700
+#: classes/helpers/FrmFieldsHelper.php:1711
 msgid "Libya"
 msgstr "リビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1701
+#: classes/helpers/FrmFieldsHelper.php:1712
 msgid "Liechtenstein"
 msgstr "リヒテンシュタイン"
 
-#: classes/helpers/FrmFieldsHelper.php:1702
+#: classes/helpers/FrmFieldsHelper.php:1713
 msgid "Lithuania"
 msgstr "リトアニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1703
+#: classes/helpers/FrmFieldsHelper.php:1714
 msgid "Luxembourg"
 msgstr "ルクセンブルク"
 
-#: classes/helpers/FrmFieldsHelper.php:1704
+#: classes/helpers/FrmFieldsHelper.php:1715
 msgid "Macao"
 msgstr "マカオ"
 
-#: classes/helpers/FrmFieldsHelper.php:1705
+#: classes/helpers/FrmFieldsHelper.php:1716
 msgid "Macedonia"
 msgstr "マケドニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1706
+#: classes/helpers/FrmFieldsHelper.php:1717
 msgid "Madagascar"
 msgstr "マダガスカル"
 
-#: classes/helpers/FrmFieldsHelper.php:1707
+#: classes/helpers/FrmFieldsHelper.php:1718
 msgid "Malawi"
 msgstr "マラウイ"
 
-#: classes/helpers/FrmFieldsHelper.php:1708
+#: classes/helpers/FrmFieldsHelper.php:1719
 msgid "Malaysia"
 msgstr "マレーシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1709
+#: classes/helpers/FrmFieldsHelper.php:1720
 msgid "Maldives"
 msgstr "モルディブ"
 
-#: classes/helpers/FrmFieldsHelper.php:1710
+#: classes/helpers/FrmFieldsHelper.php:1721
 msgid "Mali"
 msgstr "マリ"
 
-#: classes/helpers/FrmFieldsHelper.php:1711
+#: classes/helpers/FrmFieldsHelper.php:1722
 msgid "Malta"
 msgstr "マルタ"
 
-#: classes/helpers/FrmFieldsHelper.php:1712
+#: classes/helpers/FrmFieldsHelper.php:1723
 msgid "Marshall Islands"
 msgstr "マーシャル諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1713
+#: classes/helpers/FrmFieldsHelper.php:1724
 msgid "Martinique"
 msgstr "マルティニーク"
 
-#: classes/helpers/FrmFieldsHelper.php:1714
+#: classes/helpers/FrmFieldsHelper.php:1725
 msgid "Mauritania"
 msgstr "モーリタニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1715
+#: classes/helpers/FrmFieldsHelper.php:1726
 msgid "Mauritius"
 msgstr "モーリシャス"
 
-#: classes/helpers/FrmFieldsHelper.php:1716
+#: classes/helpers/FrmFieldsHelper.php:1727
 msgid "Mayotte"
 msgstr "マヨット"
 
-#: classes/helpers/FrmFieldsHelper.php:1717
+#: classes/helpers/FrmFieldsHelper.php:1728
 msgid "Mexico"
 msgstr "メキシコ"
 
-#: classes/helpers/FrmFieldsHelper.php:1718
+#: classes/helpers/FrmFieldsHelper.php:1729
 msgid "Micronesia"
 msgstr "ミクロネシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1719
+#: classes/helpers/FrmFieldsHelper.php:1730
 msgid "Moldova"
 msgstr "モルドバ"
 
-#: classes/helpers/FrmFieldsHelper.php:1720
+#: classes/helpers/FrmFieldsHelper.php:1731
 msgid "Monaco"
 msgstr "モナコ"
 
-#: classes/helpers/FrmFieldsHelper.php:1721
+#: classes/helpers/FrmFieldsHelper.php:1732
 msgid "Mongolia"
 msgstr "モンゴル"
 
-#: classes/helpers/FrmFieldsHelper.php:1722
+#: classes/helpers/FrmFieldsHelper.php:1733
 msgid "Montenegro"
 msgstr "モンテネグロ"
 
-#: classes/helpers/FrmFieldsHelper.php:1723
+#: classes/helpers/FrmFieldsHelper.php:1734
 msgid "Montserrat"
 msgstr "モントセラート"
 
-#: classes/helpers/FrmFieldsHelper.php:1724
+#: classes/helpers/FrmFieldsHelper.php:1735
 msgid "Morocco"
 msgstr "モロッコ"
 
-#: classes/helpers/FrmFieldsHelper.php:1725
+#: classes/helpers/FrmFieldsHelper.php:1736
 msgid "Mozambique"
 msgstr "モザンビーク"
 
-#: classes/helpers/FrmFieldsHelper.php:1726
+#: classes/helpers/FrmFieldsHelper.php:1737
 msgid "Myanmar"
 msgstr "ミャンマー"
 
-#: classes/helpers/FrmFieldsHelper.php:1727
+#: classes/helpers/FrmFieldsHelper.php:1738
 msgid "Namibia"
 msgstr "ナミビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1728
+#: classes/helpers/FrmFieldsHelper.php:1739
 msgid "Nauru"
 msgstr "ナウル"
 
-#: classes/helpers/FrmFieldsHelper.php:1729
+#: classes/helpers/FrmFieldsHelper.php:1740
 msgid "Nepal"
 msgstr "ネパール"
 
-#: classes/helpers/FrmFieldsHelper.php:1730
+#: classes/helpers/FrmFieldsHelper.php:1741
 msgid "Netherlands"
 msgstr "オランダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1731
+#: classes/helpers/FrmFieldsHelper.php:1742
 msgid "New Caledonia"
 msgstr "ニューカレドニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1732
+#: classes/helpers/FrmFieldsHelper.php:1743
 msgid "New Zealand"
 msgstr "ニュージーランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1733
+#: classes/helpers/FrmFieldsHelper.php:1744
 msgid "Nicaragua"
 msgstr "ニカラグア"
 
-#: classes/helpers/FrmFieldsHelper.php:1734
+#: classes/helpers/FrmFieldsHelper.php:1745
 msgid "Niger"
 msgstr "ニジェール"
 
-#: classes/helpers/FrmFieldsHelper.php:1735
+#: classes/helpers/FrmFieldsHelper.php:1746
 msgid "Nigeria"
 msgstr "ナイジェリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1736
+#: classes/helpers/FrmFieldsHelper.php:1747
 msgid "Niue"
 msgstr "ニウエ"
 
-#: classes/helpers/FrmFieldsHelper.php:1737
+#: classes/helpers/FrmFieldsHelper.php:1748
 msgid "Norfolk Island"
 msgstr "ノーフォーク島"
 
-#: classes/helpers/FrmFieldsHelper.php:1738
+#: classes/helpers/FrmFieldsHelper.php:1749
 msgid "Northern Mariana Islands"
 msgstr "北マリアナ諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1739
+#: classes/helpers/FrmFieldsHelper.php:1750
 msgid "Norway"
 msgstr "ノルウェー"
 
-#: classes/helpers/FrmFieldsHelper.php:1740
+#: classes/helpers/FrmFieldsHelper.php:1751
 msgid "Oman"
 msgstr "オマーン"
 
-#: classes/helpers/FrmFieldsHelper.php:1741
+#: classes/helpers/FrmFieldsHelper.php:1752
 msgid "Pakistan"
 msgstr "パキスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1742
+#: classes/helpers/FrmFieldsHelper.php:1753
 msgid "Palau"
 msgstr "パラウ"
 
-#: classes/helpers/FrmFieldsHelper.php:1743
+#: classes/helpers/FrmFieldsHelper.php:1754
 msgid "Palestine"
 msgstr "パレスチナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1744
+#: classes/helpers/FrmFieldsHelper.php:1755
 msgid "Panama"
 msgstr "パナマ"
 
-#: classes/helpers/FrmFieldsHelper.php:1745
+#: classes/helpers/FrmFieldsHelper.php:1756
 msgid "Papua New Guinea"
 msgstr "パプアニューギニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1746
+#: classes/helpers/FrmFieldsHelper.php:1757
 msgid "Paraguay"
 msgstr "パラグアイ"
 
-#: classes/helpers/FrmFieldsHelper.php:1747
+#: classes/helpers/FrmFieldsHelper.php:1758
 msgid "Peru"
 msgstr "ペルー"
 
-#: classes/helpers/FrmFieldsHelper.php:1748
+#: classes/helpers/FrmFieldsHelper.php:1759
 msgid "Philippines"
 msgstr "フィリピン"
 
-#: classes/helpers/FrmFieldsHelper.php:1749
+#: classes/helpers/FrmFieldsHelper.php:1760
 msgid "Pitcairn"
 msgstr "ピトケアン諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1750
+#: classes/helpers/FrmFieldsHelper.php:1761
 msgid "Poland"
 msgstr "ポーランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1751
+#: classes/helpers/FrmFieldsHelper.php:1762
 msgid "Portugal"
 msgstr "ポルトガル"
 
-#: classes/helpers/FrmFieldsHelper.php:1752
+#: classes/helpers/FrmFieldsHelper.php:1763
 msgid "Puerto Rico"
 msgstr "プエルトリコ"
 
-#: classes/helpers/FrmFieldsHelper.php:1753
+#: classes/helpers/FrmFieldsHelper.php:1764
 msgid "Qatar"
 msgstr "カタール"
 
-#: classes/helpers/FrmFieldsHelper.php:1754
+#: classes/helpers/FrmFieldsHelper.php:1765
 msgid "Reunion"
 msgstr "レユニオン"
 
-#: classes/helpers/FrmFieldsHelper.php:1755
+#: classes/helpers/FrmFieldsHelper.php:1766
 msgid "Romania"
 msgstr "ルーマニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1756
+#: classes/helpers/FrmFieldsHelper.php:1767
 msgid "Russia"
 msgstr "ロシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1757
+#: classes/helpers/FrmFieldsHelper.php:1768
 msgid "Rwanda"
 msgstr "ルワンダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1758
+#: classes/helpers/FrmFieldsHelper.php:1769
 msgid "Saint Barthelemy"
 msgstr "サン・バルテルミー島"
 
-#: classes/helpers/FrmFieldsHelper.php:1759
+#: classes/helpers/FrmFieldsHelper.php:1770
 msgid "Saint Helena, Ascension and Tristan da Cunha"
 msgstr "セントヘレナ・アセンションおよびトリスタンダクーニャ"
 
-#: classes/helpers/FrmFieldsHelper.php:1760
+#: classes/helpers/FrmFieldsHelper.php:1771
 msgid "Saint Kitts and Nevis"
 msgstr "セントクリストファー・ネイビス"
 
-#: classes/helpers/FrmFieldsHelper.php:1761
+#: classes/helpers/FrmFieldsHelper.php:1772
 msgid "Saint Lucia"
 msgstr "セントルシア"
 
-#: classes/helpers/FrmFieldsHelper.php:1762
+#: classes/helpers/FrmFieldsHelper.php:1773
 msgid "Saint Martin (French part)"
 msgstr "サン・マルタン (フランス領)"
 
-#: classes/helpers/FrmFieldsHelper.php:1763
+#: classes/helpers/FrmFieldsHelper.php:1774
 msgid "Saint Pierre and Miquelon"
 msgstr "サンピエール・ミクロン島"
 
-#: classes/helpers/FrmFieldsHelper.php:1764
+#: classes/helpers/FrmFieldsHelper.php:1775
 msgid "Saint Vincent and the Grenadines"
 msgstr "セントビンセントとグレナディーン"
 
-#: classes/helpers/FrmFieldsHelper.php:1765
+#: classes/helpers/FrmFieldsHelper.php:1776
 msgid "Samoa"
 msgstr "サモア"
 
-#: classes/helpers/FrmFieldsHelper.php:1766
+#: classes/helpers/FrmFieldsHelper.php:1777
 msgid "San Marino"
 msgstr "サンマリノ"
 
-#: classes/helpers/FrmFieldsHelper.php:1767
+#: classes/helpers/FrmFieldsHelper.php:1778
 msgid "Sao Tome and Principe"
 msgstr "サントメ・プリンシペ"
 
-#: classes/helpers/FrmFieldsHelper.php:1768
+#: classes/helpers/FrmFieldsHelper.php:1779
 msgid "Saudi Arabia"
 msgstr "サウジアラビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1769
+#: classes/helpers/FrmFieldsHelper.php:1780
 msgid "Senegal"
 msgstr "セネガル"
 
-#: classes/helpers/FrmFieldsHelper.php:1770
+#: classes/helpers/FrmFieldsHelper.php:1781
 msgid "Serbia"
 msgstr "セルビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1771
+#: classes/helpers/FrmFieldsHelper.php:1782
 msgid "Seychelles"
 msgstr "セイシェル"
 
-#: classes/helpers/FrmFieldsHelper.php:1772
+#: classes/helpers/FrmFieldsHelper.php:1783
 msgid "Sierra Leone"
 msgstr "シエラレオネ"
 
-#: classes/helpers/FrmFieldsHelper.php:1773
+#: classes/helpers/FrmFieldsHelper.php:1784
 msgid "Singapore"
 msgstr "シンガポール"
 
-#: classes/helpers/FrmFieldsHelper.php:1774
+#: classes/helpers/FrmFieldsHelper.php:1785
 msgid "Sint Maarten (Dutch part)"
 msgstr "シント・マールテン (オランダ領)"
 
-#: classes/helpers/FrmFieldsHelper.php:1775
+#: classes/helpers/FrmFieldsHelper.php:1786
 msgid "Slovakia"
 msgstr "スロバキア"
 
-#: classes/helpers/FrmFieldsHelper.php:1776
+#: classes/helpers/FrmFieldsHelper.php:1787
 msgid "Slovenia"
 msgstr "スロベニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1777
+#: classes/helpers/FrmFieldsHelper.php:1788
 msgid "Solomon Islands"
 msgstr "ソロモン諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1778
+#: classes/helpers/FrmFieldsHelper.php:1789
 msgid "Somalia"
 msgstr "ソマリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1779
+#: classes/helpers/FrmFieldsHelper.php:1790
 msgid "South Africa"
 msgstr "南アフリカ"
 
-#: classes/helpers/FrmFieldsHelper.php:1780
+#: classes/helpers/FrmFieldsHelper.php:1791
 msgid "South Georgia and the South Sandwich Islands"
 msgstr "サウスジョージア・サウスサンドウィッチ諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1781
+#: classes/helpers/FrmFieldsHelper.php:1792
 msgid "South Sudan"
 msgstr "南スーダン"
 
-#: classes/helpers/FrmFieldsHelper.php:1782
+#: classes/helpers/FrmFieldsHelper.php:1793
 msgid "Spain"
 msgstr "スペイン"
 
-#: classes/helpers/FrmFieldsHelper.php:1783
+#: classes/helpers/FrmFieldsHelper.php:1794
 msgid "Sri Lanka"
 msgstr "スリランカ"
 
-#: classes/helpers/FrmFieldsHelper.php:1784
+#: classes/helpers/FrmFieldsHelper.php:1795
 msgid "Sudan"
 msgstr "スーダン"
 
-#: classes/helpers/FrmFieldsHelper.php:1785
+#: classes/helpers/FrmFieldsHelper.php:1796
 msgid "Suriname"
 msgstr "スリナム"
 
-#: classes/helpers/FrmFieldsHelper.php:1786
+#: classes/helpers/FrmFieldsHelper.php:1797
 msgid "Svalbard and Jan Mayen"
 msgstr "スバールバル諸島ヤンマイエン島"
 
-#: classes/helpers/FrmFieldsHelper.php:1787
+#: classes/helpers/FrmFieldsHelper.php:1798
 msgid "Swaziland"
 msgstr "スワジランド"
 
-#: classes/helpers/FrmFieldsHelper.php:1788
+#: classes/helpers/FrmFieldsHelper.php:1799
 msgid "Sweden"
 msgstr "スウェーデン"
 
-#: classes/helpers/FrmFieldsHelper.php:1789
+#: classes/helpers/FrmFieldsHelper.php:1800
 msgid "Switzerland"
 msgstr "スイス"
 
-#: classes/helpers/FrmFieldsHelper.php:1790
+#: classes/helpers/FrmFieldsHelper.php:1801
 msgid "Syria"
 msgstr "シリア"
 
-#: classes/helpers/FrmFieldsHelper.php:1791
+#: classes/helpers/FrmFieldsHelper.php:1802
 msgid "Taiwan"
 msgstr "台湾"
 
-#: classes/helpers/FrmFieldsHelper.php:1792
+#: classes/helpers/FrmFieldsHelper.php:1803
 msgid "Tajikistan"
 msgstr "タジキスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1793
+#: classes/helpers/FrmFieldsHelper.php:1804
 msgid "Tanzania"
 msgstr "タンザニア"
 
-#: classes/helpers/FrmFieldsHelper.php:1794
+#: classes/helpers/FrmFieldsHelper.php:1805
 msgid "Thailand"
 msgstr "タイ"
 
-#: classes/helpers/FrmFieldsHelper.php:1795
+#: classes/helpers/FrmFieldsHelper.php:1806
 msgid "Timor-Leste"
 msgstr "東ティモール"
 
-#: classes/helpers/FrmFieldsHelper.php:1796
+#: classes/helpers/FrmFieldsHelper.php:1807
 msgid "Togo"
 msgstr "トーゴ"
 
-#: classes/helpers/FrmFieldsHelper.php:1797
+#: classes/helpers/FrmFieldsHelper.php:1808
 msgid "Tokelau"
 msgstr "トケラウ"
 
-#: classes/helpers/FrmFieldsHelper.php:1798
+#: classes/helpers/FrmFieldsHelper.php:1809
 msgid "Tonga"
 msgstr "トンガ"
 
-#: classes/helpers/FrmFieldsHelper.php:1799
+#: classes/helpers/FrmFieldsHelper.php:1810
 msgid "Trinidad and Tobago"
 msgstr "トリニダード・トバゴ"
 
-#: classes/helpers/FrmFieldsHelper.php:1800
+#: classes/helpers/FrmFieldsHelper.php:1811
 msgid "Tunisia"
 msgstr "チュニジア"
 
-#: classes/helpers/FrmFieldsHelper.php:1801
+#: classes/helpers/FrmFieldsHelper.php:1812
 msgid "Turkey"
 msgstr "トルコ"
 
-#: classes/helpers/FrmFieldsHelper.php:1802
+#: classes/helpers/FrmFieldsHelper.php:1813
 msgid "Turkmenistan"
 msgstr "トルクメニスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1803
+#: classes/helpers/FrmFieldsHelper.php:1814
 msgid "Turks and Caicos Islands"
 msgstr "タークス・カイコス諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1804
+#: classes/helpers/FrmFieldsHelper.php:1815
 msgid "Tuvalu"
 msgstr "ツバル"
 
-#: classes/helpers/FrmFieldsHelper.php:1805
+#: classes/helpers/FrmFieldsHelper.php:1816
 msgid "Uganda"
 msgstr "ウガンダ"
 
-#: classes/helpers/FrmFieldsHelper.php:1806
+#: classes/helpers/FrmFieldsHelper.php:1817
 msgid "Ukraine"
 msgstr "ウクライナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1807
+#: classes/helpers/FrmFieldsHelper.php:1818
 msgid "United Arab Emirates"
 msgstr "アラブ首長国連邦"
 
-#: classes/helpers/FrmFieldsHelper.php:1808
+#: classes/helpers/FrmFieldsHelper.php:1819
 msgid "United Kingdom"
 msgstr "イギリス"
 
-#: classes/helpers/FrmFieldsHelper.php:1809
+#: classes/helpers/FrmFieldsHelper.php:1820
 msgid "United States"
 msgstr "アメリカ合衆国"
 
-#: classes/helpers/FrmFieldsHelper.php:1810
+#: classes/helpers/FrmFieldsHelper.php:1821
 msgid "United States Minor Outlying Islands"
 msgstr "合衆国領有小離島"
 
-#: classes/helpers/FrmFieldsHelper.php:1811
+#: classes/helpers/FrmFieldsHelper.php:1822
 msgid "Uruguay"
 msgstr "ウルグアイ"
 
-#: classes/helpers/FrmFieldsHelper.php:1812
+#: classes/helpers/FrmFieldsHelper.php:1823
 msgid "Uzbekistan"
 msgstr "ウズベキスタン"
 
-#: classes/helpers/FrmFieldsHelper.php:1813
+#: classes/helpers/FrmFieldsHelper.php:1824
 msgid "Vanuatu"
 msgstr "バヌアツ"
 
-#: classes/helpers/FrmFieldsHelper.php:1814
+#: classes/helpers/FrmFieldsHelper.php:1825
 msgid "Vatican City"
 msgstr "バチカン市国"
 
-#: classes/helpers/FrmFieldsHelper.php:1815
+#: classes/helpers/FrmFieldsHelper.php:1826
 msgid "Venezuela"
 msgstr "ベネズエラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1816
+#: classes/helpers/FrmFieldsHelper.php:1827
 msgid "Vietnam"
 msgstr "ベトナム"
 
-#: classes/helpers/FrmFieldsHelper.php:1817
+#: classes/helpers/FrmFieldsHelper.php:1828
 msgid "Virgin Islands, British"
 msgstr "イギリス領ヴァージン諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1818
+#: classes/helpers/FrmFieldsHelper.php:1829
 msgid "Virgin Islands, U.S."
 msgstr "アメリカ領ヴァージン諸島"
 
-#: classes/helpers/FrmFieldsHelper.php:1819
+#: classes/helpers/FrmFieldsHelper.php:1830
 msgid "Wallis and Futuna"
 msgstr "ウォリス・フツナ"
 
-#: classes/helpers/FrmFieldsHelper.php:1820
+#: classes/helpers/FrmFieldsHelper.php:1831
 msgid "Western Sahara"
 msgstr "西サハラ"
 
-#: classes/helpers/FrmFieldsHelper.php:1821
+#: classes/helpers/FrmFieldsHelper.php:1832
 msgid "Yemen"
 msgstr "イエメン"
 
-#: classes/helpers/FrmFieldsHelper.php:1822
+#: classes/helpers/FrmFieldsHelper.php:1833
 msgid "Zambia"
 msgstr "ザンビア"
 
-#: classes/helpers/FrmFieldsHelper.php:1823
+#: classes/helpers/FrmFieldsHelper.php:1834
 msgid "Zimbabwe"
 msgstr "ジンバブエ"
 
-#: classes/helpers/FrmFieldsHelper.php:1845
+#: classes/helpers/FrmFieldsHelper.php:1856
 msgid "Countries"
 msgstr "国"
 
-#: classes/helpers/FrmFieldsHelper.php:1855
+#: classes/helpers/FrmFieldsHelper.php:1866
 msgid "U.S. State Abbreviations"
 msgstr "米国の州の略称"
 
-#: classes/helpers/FrmFieldsHelper.php:1864
+#: classes/helpers/FrmFieldsHelper.php:1875
 msgid "U.S. States"
 msgstr "米国の州"
 
-#: classes/helpers/FrmFieldsHelper.php:1869
+#: classes/helpers/FrmFieldsHelper.php:1880
 msgid "Under 18"
 msgstr "18歳以下"
 
-#: classes/helpers/FrmFieldsHelper.php:1870
+#: classes/helpers/FrmFieldsHelper.php:1881
 msgid "18-24"
 msgstr "18～24"
 
-#: classes/helpers/FrmFieldsHelper.php:1871
+#: classes/helpers/FrmFieldsHelper.php:1882
 msgid "25-34"
 msgstr "25～34"
 
-#: classes/helpers/FrmFieldsHelper.php:1872
+#: classes/helpers/FrmFieldsHelper.php:1883
 msgid "35-44"
 msgstr "35～44"
 
-#: classes/helpers/FrmFieldsHelper.php:1873
+#: classes/helpers/FrmFieldsHelper.php:1884
 msgid "45-54"
 msgstr "45～54"
 
-#: classes/helpers/FrmFieldsHelper.php:1874
+#: classes/helpers/FrmFieldsHelper.php:1885
 msgid "55-64"
 msgstr "55～64"
 
-#: classes/helpers/FrmFieldsHelper.php:1875
+#: classes/helpers/FrmFieldsHelper.php:1886
 msgid "65 or Above"
 msgstr "65以上"
 
-#: classes/helpers/FrmFieldsHelper.php:1876
+#: classes/helpers/FrmFieldsHelper.php:1887
 msgid "Prefer Not to Answer"
 msgstr "回答したくない"
 
-#: classes/helpers/FrmFieldsHelper.php:1882
+#: classes/helpers/FrmFieldsHelper.php:1893
 msgid "Age"
 msgstr "年齢"
 
-#: classes/helpers/FrmFieldsHelper.php:1886
+#: classes/helpers/FrmFieldsHelper.php:1897
 msgid "Very Unsatisfied"
 msgstr "非常に不満"
 
-#: classes/helpers/FrmFieldsHelper.php:1887
+#: classes/helpers/FrmFieldsHelper.php:1898
 msgid "Unsatisfied"
 msgstr "不満"
 
-#: classes/helpers/FrmFieldsHelper.php:1888
-#: classes/helpers/FrmFieldsHelper.php:1903
-#: classes/helpers/FrmFieldsHelper.php:1918
-#: classes/helpers/FrmFieldsHelper.php:1933
+#: classes/helpers/FrmFieldsHelper.php:1899
+#: classes/helpers/FrmFieldsHelper.php:1914
+#: classes/helpers/FrmFieldsHelper.php:1929
+#: classes/helpers/FrmFieldsHelper.php:1944
 msgid "Neutral"
 msgstr "普通"
 
-#: classes/helpers/FrmFieldsHelper.php:1889
+#: classes/helpers/FrmFieldsHelper.php:1900
 msgid "Satisfied"
 msgstr "満足"
 
-#: classes/helpers/FrmFieldsHelper.php:1890
+#: classes/helpers/FrmFieldsHelper.php:1901
 msgid "Very Satisfied"
 msgstr "非常に満足"
 
-#: classes/helpers/FrmFieldsHelper.php:1891
-#: classes/helpers/FrmFieldsHelper.php:1906
-#: classes/helpers/FrmFieldsHelper.php:1921
-#: classes/helpers/FrmFieldsHelper.php:1936
+#: classes/helpers/FrmFieldsHelper.php:1902
+#: classes/helpers/FrmFieldsHelper.php:1917
+#: classes/helpers/FrmFieldsHelper.php:1932
+#: classes/helpers/FrmFieldsHelper.php:1947
 msgid "N/A"
 msgstr "該当なし"
 
-#: classes/helpers/FrmFieldsHelper.php:1897
+#: classes/helpers/FrmFieldsHelper.php:1908
 msgid "Satisfaction"
 msgstr "満足度"
 
-#: classes/helpers/FrmFieldsHelper.php:1901
+#: classes/helpers/FrmFieldsHelper.php:1912
 msgid "Not at all Important"
 msgstr "まったく重要ではない"
 
-#: classes/helpers/FrmFieldsHelper.php:1902
+#: classes/helpers/FrmFieldsHelper.php:1913
 msgid "Somewhat Important"
 msgstr "やや重要"
 
-#: classes/helpers/FrmFieldsHelper.php:1904
+#: classes/helpers/FrmFieldsHelper.php:1915
 msgid "Important"
 msgstr "重要"
 
-#: classes/helpers/FrmFieldsHelper.php:1905
+#: classes/helpers/FrmFieldsHelper.php:1916
 msgid "Very Important"
 msgstr "非常に重要"
 
-#: classes/helpers/FrmFieldsHelper.php:1912
+#: classes/helpers/FrmFieldsHelper.php:1923
 msgid "Importance"
 msgstr "重要度"
 
-#: classes/helpers/FrmFieldsHelper.php:1916
+#: classes/helpers/FrmFieldsHelper.php:1927
 msgid "Strongly Disagree"
 msgstr "まったくそう思わない"
 
-#: classes/helpers/FrmFieldsHelper.php:1917
+#: classes/helpers/FrmFieldsHelper.php:1928
 msgid "Disagree"
 msgstr "そう思わない"
 
-#: classes/helpers/FrmFieldsHelper.php:1919
+#: classes/helpers/FrmFieldsHelper.php:1930
 msgid "Agree"
 msgstr "そう思う"
 
-#: classes/helpers/FrmFieldsHelper.php:1920
+#: classes/helpers/FrmFieldsHelper.php:1931
 msgid "Strongly Agree"
 msgstr "とてもそう思う"
 
-#: classes/helpers/FrmFieldsHelper.php:1927
+#: classes/helpers/FrmFieldsHelper.php:1938
 msgid "Agreement"
 msgstr "条件"
 
-#: classes/helpers/FrmFieldsHelper.php:1931
+#: classes/helpers/FrmFieldsHelper.php:1942
 msgid "Extremely Unlikely"
 msgstr "非常に可能性は低い"
 
-#: classes/helpers/FrmFieldsHelper.php:1932
+#: classes/helpers/FrmFieldsHelper.php:1943
 msgid "Unlikely"
 msgstr "可能性はやや低い"
 
-#: classes/helpers/FrmFieldsHelper.php:1934
-#: classes/helpers/FrmFieldsHelper.php:1942
+#: classes/helpers/FrmFieldsHelper.php:1945
+#: classes/helpers/FrmFieldsHelper.php:1953
 msgid "Likely"
 msgstr "可能性はやや高い"
 
-#: classes/helpers/FrmFieldsHelper.php:1935
+#: classes/helpers/FrmFieldsHelper.php:1946
 msgid "Extremely Likely"
 msgstr "可能性は非常に高い"
 
 #. translators: %s: Field name
-#: classes/helpers/FrmFieldsHelper.php:2024
+#: classes/helpers/FrmFieldsHelper.php:2035
 msgid "%s fields"
 msgstr "%sフィールド"
 
-#: classes/helpers/FrmFieldsHelper.php:2088
+#: classes/helpers/FrmFieldsHelper.php:2103
 msgid "Simple"
 msgstr "シンプル"
 
-#: classes/helpers/FrmFieldsHelper.php:2092
+#: classes/helpers/FrmFieldsHelper.php:2107
 msgid "Images"
 msgstr "画像"
 
-#: classes/helpers/FrmFieldsHelper.php:2095
+#: classes/helpers/FrmFieldsHelper.php:2110
 msgid "Image Options"
 msgstr "画像オプション"
 
-#: classes/helpers/FrmFieldsHelper.php:2096
+#: classes/helpers/FrmFieldsHelper.php:2111
 msgid "Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
 msgstr "ラジオボタンやチェックボックスの代わりに画像を表示します。投票、アンケート、セグメンテーションアンケートなどに最適です。"
 
-#: classes/helpers/FrmFieldsHelper.php:2103
+#: classes/helpers/FrmFieldsHelper.php:2118
 msgid "Button Options"
 msgstr "ボタン設定:"
 
-#: classes/helpers/FrmFieldsHelper.php:2104
+#: classes/helpers/FrmFieldsHelper.php:2119
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
 msgstr "ラジオボタンやチェックボックスのボタンを表示します。投票、アンケート、セグメント化したアンケートなどに最適です。"
 
 #. translators: Add-on name.
-#: classes/helpers/FrmFieldsHelper.php:2185
+#: classes/helpers/FrmFieldsHelper.php:2200
 msgid "Formidable %s"
 msgstr "Formidable %s"
 
@@ -3849,7 +3949,7 @@ msgid "This will permanently delete the form and all its entries. This is irreve
 msgstr "この操作は、フォームとそのすべてのエントリーを完全に削除します。これは元に戻すことはできません。本当に続行してもよいですか ?"
 
 #: classes/helpers/FrmFormsHelper.php:1234
-#: classes/models/FrmField.php:223
+#: classes/models/FrmField.php:227
 msgid "Total"
 msgstr "合計"
 
@@ -3943,7 +4043,7 @@ msgstr "リダイレクト URL は WordPress 限定のパラメータ \"%s\" を
 
 #: classes/helpers/FrmFormsHelper.php:1760
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
-#: js/formidable_admin.js:4110
+#: js/formidable_admin.js:4193
 msgid "Save"
 msgstr "保存"
 
@@ -3992,7 +4092,7 @@ msgid "Saving entries is disabled for this form"
 msgstr "このフォームでは、エントリーの保存は無効化されています。"
 
 #: classes/helpers/FrmFormsListHelper.php:328
-#: classes/models/FrmField.php:157
+#: classes/models/FrmField.php:161
 msgid "Embed Form"
 msgstr "フォームを埋め込む"
 
@@ -4032,70 +4132,88 @@ msgstr "何百もの追加のフォームテンプレートを活用して、貴
 msgid "Upgrade to PRO"
 msgstr "プロ版にアップグレード"
 
-#: classes/helpers/FrmListHelper.php:144
+#: classes/helpers/FrmListHelper.php:138
 msgid "List View"
 msgstr "リスト表示"
 
-#: classes/helpers/FrmListHelper.php:145
+#: classes/helpers/FrmListHelper.php:139
 msgid "Excerpt View"
 msgstr "抜粋表示"
 
-#: classes/helpers/FrmListHelper.php:388
+#: classes/helpers/FrmListHelper.php:371
 msgid "Select bulk action"
 msgstr "一括操作を選択"
 
-#: classes/helpers/FrmListHelper.php:390
+#: classes/helpers/FrmListHelper.php:373
 msgid "Bulk Actions"
 msgstr "一括操作"
 
-#: classes/helpers/FrmListHelper.php:415
+#: classes/helpers/FrmListHelper.php:398
 #: js/admin/style.js:605
 msgid "Apply"
 msgstr "適用"
 
-#: classes/helpers/FrmListHelper.php:490
-#: classes/helpers/FrmListHelper.php:1194
+#: classes/helpers/FrmListHelper.php:471
+#: classes/helpers/FrmListHelper.php:1190
 msgid "Show more details"
 msgstr "詳細を追加表示"
 
 #. translators: %s: Number of items
-#: classes/helpers/FrmListHelper.php:598
-#: classes/helpers/FrmListHelper.php:1220
+#: classes/helpers/FrmListHelper.php:575
+#: classes/helpers/FrmListHelper.php:1215
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] "%s個の項目"
 
-#: classes/helpers/FrmListHelper.php:629
-#: classes/helpers/FrmListHelper.php:633
+#: classes/helpers/FrmListHelper.php:606
+#: classes/helpers/FrmListHelper.php:610
 msgid "Current Page"
 msgstr "現在のページ"
 
 #. translators: %1$s: Current page number, %2$s: Total pages
-#: classes/helpers/FrmListHelper.php:641
+#: classes/helpers/FrmListHelper.php:618
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr "%1$s / %2$s"
 
-#: classes/helpers/FrmListHelper.php:705
+#: classes/helpers/FrmListHelper.php:682
 msgid "First page"
 msgstr "最初の固定ページ"
 
-#: classes/helpers/FrmListHelper.php:706
+#: classes/helpers/FrmListHelper.php:683
 msgid "Last page"
 msgstr "最後のページ"
 
-#: classes/helpers/FrmListHelper.php:707
+#: classes/helpers/FrmListHelper.php:684
 msgid "Previous page"
 msgstr "前のページ"
 
-#: classes/helpers/FrmListHelper.php:708
+#: classes/helpers/FrmListHelper.php:685
 msgid "Next page"
 msgstr "次のページ"
 
-#: classes/helpers/FrmListHelper.php:928
+#: classes/helpers/FrmListHelper.php:900
 #: classes/views/xml/import_form.php:142
 msgid "Select All"
 msgstr "すべて選択"
+
+#. translators: Hidden accessibility text.
+#: classes/helpers/FrmListHelper.php:945
+msgid "Sort ascending."
+msgstr ""
+
+#. translators: Hidden accessibility text.
+#: classes/helpers/FrmListHelper.php:947
+msgid "Sort descending."
+msgstr ""
+
+#: classes/helpers/FrmOnboardingWizardHelper.php:92
+msgid "Next Step"
+msgstr ""
+
+#: classes/helpers/FrmOnboardingWizardHelper.php:97
+msgid "Skip"
+msgstr "スキップ"
 
 #: classes/helpers/FrmOnSubmitHelper.php:33
 msgid "Message on submit"
@@ -4118,7 +4236,7 @@ msgid "Select a page"
 msgstr "ページを選択"
 
 #: classes/helpers/FrmOnSubmitHelper.php:194
-#: classes/models/FrmSettings.php:146
+#: classes/models/FrmSettings.php:147
 msgid "Your responses were successfully submitted. Thank you!"
 msgstr "回答は正常に送信されました。ありがとうございました。"
 
@@ -4171,6 +4289,7 @@ msgid "Inline (left without a set width)"
 msgstr "インライン (幅を設定せずに左)"
 
 #: classes/helpers/FrmStylesHelper.php:47
+#: classes/views/frm-fields/back-end/phone/phone-type.php:32
 #: stripe/controllers/FrmStrpLiteEventsController.php:293
 msgid "None"
 msgstr "なし"
@@ -4567,46 +4686,58 @@ msgstr "ミドルネーム"
 msgid "Last"
 msgstr "最後"
 
-#: classes/models/fields/FrmFieldNumber.php:85
+#: classes/models/fields/FrmFieldNumber.php:80
 msgid "Please select a higher number"
 msgstr "もっと大きい数字を選択してください"
 
-#: classes/models/fields/FrmFieldNumber.php:87
+#: classes/models/fields/FrmFieldNumber.php:82
 msgid "Please select a lower number"
 msgstr "もっと小さい数字を選択してください"
 
 #. Translators: %1$s: the first nearest value; %2$s: the second nearest value.
-#: classes/models/fields/FrmFieldNumber.php:125
+#: classes/models/fields/FrmFieldNumber.php:120
 msgid "Please enter a valid value. Two nearest valid values are %1$s and %2$s"
 msgstr "有効な値を入力してください。最も近い有効な値は %1$s と %2$s です"
 
+#: classes/models/fields/FrmFieldPhone.php:67
+msgid "International phone field"
+msgstr ""
+
+#: classes/models/fields/FrmFieldPhone.php:71
+msgid "International"
+msgstr "海外"
+
+#: classes/models/fields/FrmFieldType.php:268
+msgid "(Collapsed)"
+msgstr "(折りたたみ表示)"
+
 #. translators: %s: Field name
 #. translators: %s: Field type
-#: classes/models/fields/FrmFieldType.php:428
-#: classes/models/fields/FrmFieldType.php:578
+#: classes/models/fields/FrmFieldType.php:450
+#: classes/models/fields/FrmFieldType.php:600
 msgid "%s Options"
 msgstr "%s オプション"
 
-#: classes/models/fields/FrmFieldType.php:480
+#: classes/models/fields/FrmFieldType.php:502
 #: classes/views/frm-fields/back-end/settings.php:117
 #: classes/views/frm-fields/back-end/value-format.php:16
 msgid "Toggle Options"
 msgstr "トグルオプション"
 
-#: classes/models/fields/FrmFieldType.php:518
+#: classes/models/fields/FrmFieldType.php:540
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:10
 msgid "Bulk Edit Options"
 msgstr "一括編集オプション"
 
-#: classes/models/fields/FrmFieldType.php:525
+#: classes/models/fields/FrmFieldType.php:547
 msgid "Add Option"
 msgstr "オプションを追加"
 
-#: classes/models/fields/FrmFieldType.php:677
+#: classes/models/fields/FrmFieldType.php:699
 msgid "Untitled"
 msgstr "無題"
 
-#: classes/models/fields/FrmFieldUrl.php:52
+#: classes/models/fields/FrmFieldUrl.php:47
 msgid "Website"
 msgstr "ウェブサイト"
 
@@ -4660,21 +4791,21 @@ msgstr "そのライセンスは正常に削除されました"
 msgid "There was an error deactivating your license."
 msgstr "ライセンスを無効化中にエラーが発生しました."
 
-#: classes/models/FrmAddon.php:805
+#: classes/models/FrmAddon.php:804
 msgid "Your License Key was invalid"
 msgstr "ライセンスキーが無効です"
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/models/FrmAddon.php:809
+#: classes/models/FrmAddon.php:808
 msgid "You had an error communicating with the Formidable API. %1$sClick here%2$s for more information."
 msgstr "Formidable API との通信エラーが発生しました。詳しくは%1$sこちらをクリック%2$sしてください。"
 
-#: classes/models/FrmAddon.php:812
+#: classes/models/FrmAddon.php:811
 msgid "You had an HTTP error connecting to the Formidable API"
 msgstr "Formidable API への接続で HTTP エラーが発生しました。"
 
 #. translators: %1$s: Error code, %2$s: Error message
-#: classes/models/FrmAddon.php:826
+#: classes/models/FrmAddon.php:825
 msgid "There was a %1$s error: %2$s"
 msgstr "%1$s エラー: %2$s が発生しました"
 
@@ -4691,7 +4822,7 @@ msgstr "フォームトークンが無効です。 ページを更新してく�
 msgid "Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue."
 msgstr "この問題の解決の詳細については、%1$sトラブルシューティングガイド%2$sを確認してください。"
 
-#: classes/models/FrmDb.php:449
+#: classes/models/FrmDb.php:450
 msgid "Use the query in an array format so it can be properly prepared."
 msgstr "クエリーを配列形式で使用して、クエリーを適切に準備できるようにしましょう。"
 
@@ -4819,104 +4950,104 @@ msgstr "非表示"
 msgid "Payment"
 msgstr "支払い"
 
-#: classes/models/FrmField.php:94
+#: classes/models/FrmField.php:98
 msgid "File Upload"
 msgstr "ファイルアップロード"
 
-#: classes/models/FrmField.php:100
+#: classes/models/FrmField.php:104
 msgid "Rich Text"
 msgstr "リッチテキスト"
 
-#: classes/models/FrmField.php:108
+#: classes/models/FrmField.php:112
 msgid "Time"
 msgstr "時間"
 
-#: classes/models/FrmField.php:112
+#: classes/models/FrmField.php:116
 msgid "Scale"
 msgstr "スケール"
 
-#: classes/models/FrmField.php:117
+#: classes/models/FrmField.php:121
 msgid "Star Rating"
 msgstr "星評価"
 
-#: classes/models/FrmField.php:121
+#: classes/models/FrmField.php:125
 msgid "Slider"
 msgstr "スライダー"
 
-#: classes/models/FrmField.php:125
+#: classes/models/FrmField.php:129
 msgid "Toggle"
 msgstr "切り替え"
 
-#: classes/models/FrmField.php:129
+#: classes/models/FrmField.php:133
 msgid "Dynamic"
 msgstr "ダイナミック"
 
-#: classes/models/FrmField.php:134
+#: classes/models/FrmField.php:138
 msgid "Lookup"
 msgstr "検索"
 
-#: classes/models/FrmField.php:139
+#: classes/models/FrmField.php:143
 msgid "Repeater"
 msgstr "リピーター"
 
-#: classes/models/FrmField.php:144
+#: classes/models/FrmField.php:148
 #: classes/models/FrmFormMigrator.php:302
 msgid "Section Buttons"
 msgstr "セクションボタン"
 
-#: classes/models/FrmField.php:148
+#: classes/models/FrmField.php:152
 msgid "Section"
 msgstr "セクション"
 
-#: classes/models/FrmField.php:152
+#: classes/models/FrmField.php:156
 msgid "Page Break"
 msgstr "ページ区切り"
 
-#: classes/models/FrmField.php:161
+#: classes/models/FrmField.php:165
 msgid "Likert Scale"
 msgstr "リッカートスケール"
 
-#: classes/models/FrmField.php:166
+#: classes/models/FrmField.php:170
 msgid "NPS"
 msgstr "NPS"
 
-#: classes/models/FrmField.php:171
+#: classes/models/FrmField.php:175
 msgid "Password"
 msgstr "パスワード"
 
-#: classes/models/FrmField.php:175
+#: classes/models/FrmField.php:179
 msgid "Tags"
 msgstr "タグ"
 
-#: classes/models/FrmField.php:185
+#: classes/models/FrmField.php:189
 msgid "Address"
 msgstr "住所"
 
-#: classes/models/FrmField.php:189
+#: classes/models/FrmField.php:193
 msgid "Summary"
 msgstr "要約"
 
-#: classes/models/FrmField.php:194
+#: classes/models/FrmField.php:198
 msgid "Signature"
 msgstr "署名"
 
-#: classes/models/FrmField.php:199
+#: classes/models/FrmField.php:203
 msgid "AI"
 msgstr "AI"
 
-#: classes/models/FrmField.php:205
+#: classes/models/FrmField.php:209
 msgid "Appointment"
 msgstr "予約"
 
-#: classes/models/FrmField.php:213
+#: classes/models/FrmField.php:217
 msgid "Product"
 msgstr "商品"
 
-#: classes/models/FrmField.php:218
+#: classes/models/FrmField.php:222
 msgid "Quantity"
 msgstr "数量"
 
-#: classes/models/FrmField.php:231
+#: classes/models/FrmField.php:235
 msgid "Ranking"
 msgstr "ランキング"
 
@@ -4979,6 +5110,10 @@ msgstr "hCaptchaは、ユーザーのプライバシーを保護し、サイト�
 #: classes/models/FrmHoneypot.php:110
 msgid "If you are human, leave this field blank."
 msgstr "あなたが人間の場合、このフィールドは空白のままにしてください。"
+
+#: classes/models/FrmInstallPlugin.php:126
+msgid "Plugin installed and activated successfully."
+msgstr ""
 
 #: classes/models/FrmMigrate.php:645
 msgid "Sending"
@@ -5051,42 +5186,36 @@ msgid "Ok, you deserve it"
 msgstr "はい、もちろんです"
 
 #. translators: %s: [field_name] shortcode.
-#: classes/models/FrmSettings.php:148
+#: classes/models/FrmSettings.php:149
 msgid "%s cannot be blank."
 msgstr "%s は空白にできません。"
 
 #. translators: %s: [field_name] shortcode.
-#: classes/models/FrmSettings.php:150
+#: classes/models/FrmSettings.php:151
 msgid "%s must be unique."
 msgstr "%s は一意である必要があります。"
 
-#: classes/models/FrmSettings.php:151
+#: classes/models/FrmSettings.php:152
 msgid "There was a problem with your submission. Errors are marked below."
 msgstr "送信で問題が発生しました。以下のエラーを参照してください。"
 
-#: classes/models/FrmSettings.php:152
+#: classes/models/FrmSettings.php:153
 msgid "We're sorry. It looks like you've already submitted that."
 msgstr "申し訳ございません。これはすでに送信済みのようです。"
 
-#: classes/models/FrmSettings.php:153
-#: classes/views/frm-forms/form.php:48
-#: classes/views/styles/_sample_form.php:83
-msgid "Submit"
-msgstr "送信"
-
-#: classes/models/FrmSettings.php:154
+#: classes/models/FrmSettings.php:155
 msgid "You do not have permission to view this form."
 msgstr "このフォームを表示する権限がありません。"
 
-#: classes/models/FrmSettings.php:155
+#: classes/models/FrmSettings.php:156
 msgid "You do not have permission to do that"
 msgstr "この操作を行う権限がありません"
 
-#: classes/models/FrmSettings.php:156
+#: classes/models/FrmSettings.php:157
 msgid "The page has been opened in a new tab."
 msgstr "新しいタブでページが開かれました。"
 
-#: classes/models/FrmSettings.php:296
+#: classes/models/FrmSettings.php:301
 msgid "The CAPTCHA was not entered correctly"
 msgstr "CAPTCHA が正しく入力されませんでした"
 
@@ -5298,7 +5427,7 @@ msgstr "空白のフォームを作成"
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:71
-#: js/formidable_admin.js:8791
+#: js/formidable_admin.js:8965
 msgid "Close"
 msgstr "閉じる"
 
@@ -5331,6 +5460,7 @@ msgid "Resend code"
 msgstr "コードを再送"
 
 #: classes/views/form-templates/modals/code-from-email-modal.php:41
+#: classes/views/onboarding-wizard/footer.php:15
 #: classes/views/styles/_style-options.php:7
 #: js/admin/embed.js:102
 msgid "Back"
@@ -5365,14 +5495,17 @@ msgid "Just add your email address and we'll send you a code for free form templ
 msgstr "メールアドレスをご登録いただくだけで、無料のフォームテンプレート用のコードが届きます !"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:50
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:28
 msgid "Enter your email"
 msgstr "メールを入力してください"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:54
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:31
 msgid "Email is invalid"
 msgstr "メールアドレスが無効です"
 
 #: classes/views/form-templates/modals/leave-email-modal.php:55
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:32
 msgid "Email is empty"
 msgstr "メールアドレスが空です"
 
@@ -5461,12 +5594,12 @@ msgstr "作成日: %s"
 msgid "No description"
 msgstr "説明なし"
 
-#: classes/views/frm-entries/form.php:9
+#: classes/views/frm-entries/form.php:10
 msgid "Oops!"
 msgstr "おっと。"
 
 #. translators: %1$s: HTML open link, %2$s: HTML close link
-#: classes/views/frm-entries/form.php:13
+#: classes/views/frm-entries/form.php:14
 msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
 msgstr "フォームにフィールドが追加されていません。%1$s前に戻り%2$sフィールドを追加してください。"
 
@@ -5678,6 +5811,11 @@ msgstr "数値範囲"
 msgid "Step"
 msgstr "ステップ"
 
+#: classes/views/frm-fields/back-end/phone/phone-type.php:22
+#: classes/views/frm-fields/back-end/value-format.php:8
+msgid "Format"
+msgstr "フォーマット"
+
 #: classes/views/frm-fields/back-end/pixels-wide.php:8
 msgid "Field Size"
 msgstr "フィールドサイズ"
@@ -5835,10 +5973,6 @@ msgstr "購入済みですか ?"
 msgid "Insert the format you would like to accept. Use a regular expression starting with ^ or an exact format like (999)999-9999."
 msgstr "使用する形式を挿入します。^ で始まる正規表現、または (999)999-9999のような正確な形式を使用します。"
 
-#: classes/views/frm-fields/back-end/value-format.php:8
-msgid "Format"
-msgstr "フォーマット"
-
 #: classes/views/frm-fields/single-option.php:27
 msgid "Saved Value"
 msgstr "保存値"
@@ -5885,7 +6019,7 @@ msgstr "条件付きメール"
 
 #: classes/views/frm-form-actions/form_action.php:32
 #: js/admin/style.js:678
-#: js/formidable_admin.js:2345
+#: js/formidable_admin.js:2427
 msgid "Duplicate"
 msgstr "複製"
 
@@ -6030,23 +6164,19 @@ msgid "Move Field"
 msgstr "フィールドを移動"
 
 #: classes/views/frm-forms/add_field.php:36
-#: js/formidable_admin.js:1423
 #: js/formidable_admin.js:1428
-#: js/formidable_admin.js:2270
+#: js/formidable_admin.js:1433
+#: js/formidable_admin.js:2352
 msgid "More Options"
 msgstr "その他のオプション"
 
 #: classes/views/frm-forms/add_field.php:38
-#: js/formidable_admin.js:1415
+#: js/formidable_admin.js:1420
 msgid "Toggle More Options Dropdown"
 msgstr "その他のオプションのドロップダウンを切り替える"
 
-#: classes/views/frm-forms/add_field.php:51
-msgid "(Collapsed)"
-msgstr "(折りたたみ表示)"
-
-#: classes/views/frm-forms/add_field.php:105
-#: classes/views/frm-forms/form.php:55
+#: classes/views/frm-forms/add_field.php:97
+#: classes/views/frm-forms/form.php:79
 msgid "Add Fields Here"
 msgstr "ここにフィールドを追加"
 
@@ -6062,23 +6192,23 @@ msgstr "フィールド設定"
 msgid "Search Fields"
 msgstr "検索フィールド"
 
-#: classes/views/frm-forms/add_field_links.php:115
+#: classes/views/frm-forms/add_field_links.php:119
 msgid "Pricing Fields"
 msgstr "価格フィールド"
 
-#: classes/views/frm-forms/add_field_links.php:134
+#: classes/views/frm-forms/add_field_links.php:138
 msgid "Select a field to see the options"
 msgstr "オプションを確認するにはフィールドを選択してください"
 
-#: classes/views/frm-forms/add_field_links.php:149
+#: classes/views/frm-forms/add_field_links.php:153
 msgid "Smart Default Values"
 msgstr "スマートデフォルト値"
 
-#: classes/views/frm-forms/add_field_links.php:157
+#: classes/views/frm-forms/add_field_links.php:161
 msgid "Add Layout Classes"
 msgstr "レイアウトクラスを追加"
 
-#: classes/views/frm-forms/add_field_links.php:165
+#: classes/views/frm-forms/add_field_links.php:169
 msgid "Input Mask Format"
 msgstr "入力マスク形式"
 
@@ -6087,7 +6217,7 @@ msgid "Page Turn Transitions"
 msgstr "ページめくり遷移"
 
 #: classes/views/frm-forms/add_form_style_options.php:15
-msgid "Slide horizonally"
+msgid "Slide horizontally"
 msgstr "水平方向にスライド"
 
 #: classes/views/frm-forms/add_form_style_options.php:18
@@ -6099,11 +6229,11 @@ msgid "Build Form"
 msgstr "フォームを作成"
 
 #. translators: %s: The page number
-#: classes/views/frm-forms/form.php:20
+#: classes/views/frm-forms/form.php:31
 msgid "Page %s"
 msgstr "ページ %s"
 
-#: classes/views/frm-forms/form.php:58
+#: classes/views/frm-forms/form.php:82
 msgid "Click or drag a field from the sidebar to add it to your form"
 msgstr "フィールドをサイドバーからクリックまたはドラッグしてフォームに追加します"
 
@@ -6188,10 +6318,9 @@ msgstr "必須フィールド、メールアドレス形式、数値形式を、
 msgid "Set your button text."
 msgstr "ボタンテキストを設定します。"
 
-#: classes/views/frm-forms/settings-buttons.php:20
-#: classes/views/frm-settings/messages.php:89
-msgid "Submit Button Text"
-msgstr "送信ボタンのテキスト"
+#: classes/views/frm-forms/settings-buttons.php:22
+msgid "Submit button settings were moved to the Submit button in the form builder."
+msgstr ""
 
 #: classes/views/frm-forms/settings-html.php:8
 msgid "Form Classes"
@@ -6378,19 +6507,28 @@ msgstr "どのページにもフォームスタイルを使用しない"
 msgid "Other"
 msgstr "その他"
 
-#: classes/views/frm-settings/general.php:65
+#: classes/views/frm-settings/general.php:40
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:20
+msgid "Default Email Address"
+msgstr ""
+
+#: classes/views/frm-settings/general.php:41
+msgid "The default email address to receive notifications for new form submissions."
+msgstr ""
+
+#: classes/views/frm-settings/general.php:73
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
 msgstr "フォーム送信で IP を保存しない。GDPR コンプライアンスに対応するには、このボックスにチェックを入れてください。"
 
-#: classes/views/frm-settings/general.php:78
+#: classes/views/frm-settings/general.php:86
 msgid "Use custom headers when retrieving IPs with form submissions."
 msgstr "フォーム送信で IP を取得する場合にカスタムヘッダーを使用する。"
 
-#: classes/views/frm-settings/general.php:79
+#: classes/views/frm-settings/general.php:87
 msgid "Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address."
 msgstr "エントリー内の IP アドレスが正しくない場合にのみ、これをオンにします。一部のサーバー設定では、正確な IP アドレスを決定するためにスプーフィング可能なヘッダーが必要になる場合があります。"
 
-#: classes/views/frm-settings/general.php:86
+#: classes/views/frm-settings/general.php:94
 msgid "Do not include Formidable in the admin bar."
 msgstr "管理バーに Formidable を含めない。"
 
@@ -6466,6 +6604,10 @@ msgstr "新しいタブで開く際のメッセージ"
 #: classes/views/frm-settings/messages.php:81
 msgid "The default message seen after opening the redirect URL in new tab when a form is submitted."
 msgstr "フォーム送信時に新しいタブでリダイレクト URL が開かれた後に表示されるデフォルトメッセージ。"
+
+#: classes/views/frm-settings/messages.php:89
+msgid "Submit Button Text"
+msgstr "送信ボタンのテキスト"
 
 #: classes/views/frm-settings/messages.php:91
 msgid "The default label for the submit button."
@@ -6565,6 +6707,147 @@ msgstr "%s前"
 #: classes/views/inbox/list.php:58
 msgid "Dismiss"
 msgstr "非表示"
+
+#: classes/views/onboarding-wizard/index.php:14
+msgid "Onboarding Wizard Background"
+msgstr ""
+
+#: classes/views/onboarding-wizard/index.php:25
+msgid "Go to dashboard"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:22
+msgid "Set the default email address to receive notifications for new form submissions. You can change this at any time."
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:27
+msgid "Default email address"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:39
+msgid "Subscribe to our newsletter and get 20+ free form templates"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:45
+msgid "Help improve Formidable by sharing anonymous usage data"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/default-email-address-step.php:50
+msgid "Send me monthly and yearly summary emails with entry and revenue data from my forms"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:20
+msgid "Install Formidable Add-ons"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:24
+msgid "A few of our add-ons come with every installation. But more are available on the add-ons page!"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:26
+msgid "Here's just a few of our most popular add-ons! You'll find even more on the add-ons page."
+msgstr ""
+
+#. translators: %s: The count of add-ons
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:52
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:49
+msgid "Get access to %s more add-ons"
+msgstr ""
+
+#. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:62
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:58
+msgid "%1$sUpgrade to PRO%2$s and get more out of Formidable Forms"
+msgstr ""
+
+#. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:69
+msgid "Check them all out on the %1$sadd-ons%2$s page."
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-addons-step.php:82
+msgid "Install & Finish Setup"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:20
+msgid "Install Formidable Pro"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:21
+msgid "It’s time to install Formidable Forms Pro, to get access to the premium features."
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:24
+msgid "1. Download PRO"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:26
+msgid "Download"
+msgstr "ダウンロード"
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:32
+msgid "2. Install on your website"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:34
+msgid "Upload Plugin"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:41
+msgid "Formidable Pro is currently inactive!"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/license-management-step.php:20
+msgid "License Management"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/license-management-step.php:21
+msgid "To get started, please activate your license by following the simple steps below."
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/license-management-step.php:25
+msgid "License key"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/license-management-step.php:26
+msgid "Enter your license key"
+msgstr "ライセンスキーの入力"
+
+#: classes/views/onboarding-wizard/steps/license-management-step.php:34
+msgid "Activate & Continue"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/success-step.php:20
+msgid "You're All Set!"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/success-step.php:22
+msgid "We're thrilled to have you and hope you love your experience with Formidable Forms"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/success-step.php:31
+msgid "Go to Dashboard"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/success-step.php:34
+msgid "Create a Form"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/welcome-step.php:14
+msgid "Formidable Onboarding Wizard Logo"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/welcome-step.php:18
+msgid "Welcome to Formidable Forms!"
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/welcome-step.php:20
+msgid "This quick setup wizard will guide you through the basic settings and get you started in 2 minutes."
+msgstr ""
+
+#: classes/views/onboarding-wizard/steps/welcome-step.php:33
+msgid "Proceed without Account"
+msgstr ""
 
 #. translators: %1$s: Heart icon
 #: classes/views/shared/admin-footer-links.php:18
@@ -7114,7 +7397,7 @@ msgstr "デフォルトスタイル"
 msgid "Custom Styles"
 msgstr "カスタムスタイル"
 
-#: classes/views/styles/_styles-list.php:88
+#: classes/views/styles/_styles-list.php:90
 msgid "Formidable Styles"
 msgstr "Formidable のスタイル"
 
@@ -7957,64 +8240,64 @@ msgstr "このスタイルをデフォルトにリセットしますか ?"
 msgid "Style has been reset successfully"
 msgstr "スタイルは正常にリセットされました"
 
-#: js/formidable_admin.js:1374
+#: js/formidable_admin.js:1379
 msgid "Set Row Layout"
 msgstr "行のレイアウトを設定"
 
-#: js/formidable_admin.js:1381
+#: js/formidable_admin.js:1386
 msgid "Move Field Group"
 msgstr "フィールドグループを移動"
 
-#: js/formidable_admin.js:2339
+#: js/formidable_admin.js:2421
 msgid "Delete Group"
 msgstr "グループを削除"
 
-#: js/formidable_admin.js:2345
+#: js/formidable_admin.js:2427
 msgid "Duplicate Group"
 msgstr "グループを複製"
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3565
+#: js/formidable_admin.js:3648
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
 msgstr "本当に%1$s個の選択したフィールドを削除してもよいですか ?"
 
-#: js/formidable_admin.js:3803
+#: js/formidable_admin.js:3886
 msgid "Custom layout"
 msgstr "カスタムレイアウト"
 
-#: js/formidable_admin.js:3826
+#: js/formidable_admin.js:3909
 msgid "Break into rows"
 msgstr "行ごとに分割"
 
-#: js/formidable_admin.js:3836
+#: js/formidable_admin.js:3919
 msgid "Row Layout"
 msgstr "行のレイアウト"
 
-#: js/formidable_admin.js:4090
+#: js/formidable_admin.js:4173
 msgid "Enter number of columns for each field"
 msgstr "各フィールドのカラム数を入力してください"
 
-#: js/formidable_admin.js:4094
+#: js/formidable_admin.js:4177
 msgid "Layouts are based on a 12-column grid system"
 msgstr "レイアウトは12カラムのグリッドシステムに基づいています。"
 
-#: js/formidable_admin.js:4547
+#: js/formidable_admin.js:4630
 msgid "Merge into row"
 msgstr "行にマージ"
 
-#: js/formidable_admin.js:5864
+#: js/formidable_admin.js:5995
 msgid "Duplicate option value \"%s\" detected"
 msgstr "重複したオプション値「%s」が検出されました"
 
-#: js/formidable_admin.js:8776
+#: js/formidable_admin.js:8950
 msgid "Save and Reload"
 msgstr "保存してリロード"
 
-#: js/formidable_admin.js:8945
+#: js/formidable_admin.js:9119
 msgid "Unable to install template"
 msgstr "テンプレートをインストールできません"
 
-#: js/formidable_admin.js:9592
+#: js/formidable_admin.js:9768
 msgid "Thank you for signing up!"
 msgstr "ご登録ありがとうございます !"
 
