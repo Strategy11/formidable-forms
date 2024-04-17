@@ -15,40 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-
-      - name: "💽  Installing PHP, Composer, CS2PR"
-        uses: shivammathur/setup-php@2.30.2
-        with:
-          php-version: 8.0
-          coverage: none
-          ini-values: display_errors = on, error_reporting = E_ALL, opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
-          tools: composer
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: "💽  Installing Composer Packages"
         run: composer install --dev --prefer-dist --no-progress --no-suggest
 
       - name: PHPCS check
         run: ./vendor/bin/phpcs ./
-
-      - uses: shivammathur/setup-php@2.25.5
-        with:
-          php-version: 5.6
-      - name: Check PHP 5.6 syntax
-        run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
-      - uses: shivammathur/setup-php@2.25.5
-        with:
-          php-version: 8.1
-      - name: Check PHP 8.1 syntax
-        run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
-

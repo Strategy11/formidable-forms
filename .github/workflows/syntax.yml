@@ -1,0 +1,32 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, synchronize ]
+
+name: PHP Syntax Check
+jobs:
+  runPHPSyntaxCheck:
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+    name: Run PHP Syntax inspection
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: 5.6
+            wordpress: trunk
+            multisite: 0
+          - php: 8.1
+            wordpress: trunk
+            multisite: 0
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - uses: shivammathur/setup-php@2.25.5
+        with:
+          php-version: ${{ matrix.php }}
+      - name: Check PHP ${{ matrix.multisite }} syntax
+        run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
