@@ -25,9 +25,7 @@ parameters:
 		closureUsesThis: false
 		numericOperandsInArithmeticOperators: false
 		strictCalls: false
-		switchConditionsMatchingType: false
 		noVariableVariables: false
-		strictArrayFilter: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
 		- '#Call to an undefined method object::#'
