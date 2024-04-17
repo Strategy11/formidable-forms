@@ -36,7 +36,7 @@ class FrmMigrate {
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$old_db_version = get_option( 'frm_db_version' );
 

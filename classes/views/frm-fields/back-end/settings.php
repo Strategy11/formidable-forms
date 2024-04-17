@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		if ( $display['range'] ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php';
 		}
 
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
@@ -201,13 +201,13 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php
 		if ( $display['description'] ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}
 
 		// Field Size
 		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ) ) ) {
 			$display_max = $display['max'];
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
 		?>
 

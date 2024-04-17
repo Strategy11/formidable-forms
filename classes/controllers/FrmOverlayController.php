@@ -182,5 +182,4 @@ class FrmOverlayController {
 		wp_enqueue_style( self::$assets_handle_name );
 		wp_enqueue_script( self::$assets_handle_name );
 	}
-
 }

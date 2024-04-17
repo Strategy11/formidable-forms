@@ -159,5 +159,4 @@ class FrmInboxController {
 	public static function inbox() {
 		_deprecated_function( __METHOD__, '6.8' );
 	}
-
 }

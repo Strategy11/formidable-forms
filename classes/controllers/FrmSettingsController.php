@@ -21,7 +21,7 @@ class FrmSettingsController {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php';
 	}
 
 	public static function display_form( $errors = array(), $message = '' ) {
@@ -35,7 +35,7 @@ class FrmSettingsController {
 		$sections = self::get_settings_tabs();
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php';
 	}
 
 	/**
@@ -223,7 +223,7 @@ class FrmSettingsController {
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
 	/**
@@ -233,7 +233,7 @@ class FrmSettingsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php';
 	}
 
 	/**
@@ -243,7 +243,7 @@ class FrmSettingsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
 	}
 
 	/**
@@ -252,7 +252,7 @@ class FrmSettingsController {
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
 	/**
@@ -353,7 +353,7 @@ class FrmSettingsController {
 			__( 'Analyze form data with graphs & stats', 'formidable' ),
 		);
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php';
 	}
 
 	/**

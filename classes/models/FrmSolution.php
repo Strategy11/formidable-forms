@@ -615,7 +615,7 @@ class FrmSolution {
 		foreach ( $options as $info ) {
 			// Count the number of options displayed for css.
 			if ( $count > 1 && ! isset( $info['img'] ) ) {
-				$count --;
+				$count--;
 			}
 		}
 		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
@@ -623,7 +623,7 @@ class FrmSolution {
 
 		$selected = false;
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php';
 	}
 
 	/**
@@ -890,5 +890,4 @@ class FrmSolution {
 </style>
 		<?php
 	}
-
 }

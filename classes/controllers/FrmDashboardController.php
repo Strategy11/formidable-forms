@@ -161,7 +161,6 @@ class FrmDashboardController {
 		}
 
 		return array_merge( $lite_counters, $pro_counters_placeholder );
-
 	}
 
 	/**

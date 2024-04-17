@@ -23,7 +23,7 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->markTestIncomplete( 'Needs work' );
 
 		ob_start();
-		require( ABSPATH . 'wp-admin/menu.php' );
+		require ABSPATH . 'wp-admin/menu.php';
 		$menu = ob_get_contents();
 		ob_end_clean();
 		echo $menu;

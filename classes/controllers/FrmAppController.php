@@ -239,7 +239,7 @@ class FrmAppController {
 		$current_page = self::get_current_page();
 		$nav_items    = self::get_form_nav_items( $form );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php';
 	}
 
 	/**

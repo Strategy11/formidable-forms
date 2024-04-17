@@ -72,7 +72,6 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'description' => new WP_UnitTest_Generator_Sequence( 'Field description %s' ),
 			'type'        => 'text',
 		);
-
 	}
 
 	public function create_object( $args ) {
@@ -161,7 +160,6 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 			'item_key' => FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' ),
 			'name'     => new WP_UnitTest_Generator_Sequence( 'Entry name %s' ),
 		);
-
 	}
 
 	public function create_object( $args ) {

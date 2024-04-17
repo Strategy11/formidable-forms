@@ -384,7 +384,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt'] --;
+			$shortcode_atts['opt']--;
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';

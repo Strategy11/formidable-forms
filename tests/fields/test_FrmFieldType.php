@@ -320,7 +320,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->use_frm_role( 'administrator' );
 		add_filter(
 			'user_has_cap',
-			function( $caps ) {
+			function ( $caps ) {
 				$caps['frm_edit_forms'] = true;
 				return $caps;
 			}

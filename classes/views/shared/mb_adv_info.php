@@ -260,7 +260,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	if ( $settings_tab ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_html_tab.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_html_tab.php';
 	}
 	?>
 </div>

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="columns-2">
 		<div class="frm-right-panel">
-			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' ); ?>
+			<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php'; ?>
 		</div>
 
 		<div id="post-body-content" class="frm-fields">
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="inside frm-inner-content">
 					<?php
 					// Add form messages.
-					require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+					require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 					?>
 
 					<?php foreach ( $sections as $section ) { ?>
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php do_action( 'frm_add_form_option_section', $values ); ?>
 					<div class="clear"></div>
-					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
+					<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php'; ?>
 					<?php do_action( 'frm_page_footer', array( 'table' => 'form-settings' ) ); ?>
 				</div>
 			</div>

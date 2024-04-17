@@ -616,7 +616,7 @@ class FrmFormsController {
 			$form = FrmForm::getAll( array(), '', 1 );
 		}
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php';
 	}
 
 	public static function untrash() {
@@ -688,7 +688,7 @@ class FrmFormsController {
 
 		$count = 0;
 		if ( FrmForm::set_status( $params['id'], $available_status[ $status ]['new_status'] ) ) {
-			$count ++;
+			$count++;
 		}
 
 		$form_type = FrmAppHelper::get_simple_request(
@@ -715,7 +715,7 @@ class FrmFormsController {
 		$count = 0;
 		foreach ( $ids as $id ) {
 			if ( FrmForm::trash( $id ) ) {
-				$count ++;
+				$count++;
 			}
 		}
 
@@ -746,7 +746,7 @@ class FrmFormsController {
 
 		$count = 0;
 		if ( FrmForm::destroy( $params['id'] ) ) {
-			$count ++;
+			$count++;
 		}
 
 		/* translators: %1$s: Number of forms */
@@ -762,7 +762,7 @@ class FrmFormsController {
 		foreach ( $ids as $id ) {
 			$d = FrmForm::destroy( $id );
 			if ( $d ) {
-				$count ++;
+				$count++;
 			}
 		}
 
@@ -958,7 +958,7 @@ class FrmFormsController {
 			unset( $opts['form_id'] );
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/shortcode_opts.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/shortcode_opts.php';
 
 		echo '</div>';
 
@@ -1207,7 +1207,7 @@ class FrmFormsController {
 		$sections = self::get_settings_tabs( $values );
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php';
 	}
 
 	/**
@@ -1215,7 +1215,7 @@ class FrmFormsController {
 	 */
 	public static function form_publish_button( $atts ) {
 		$values = $atts['values'];
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_publish_box.php';
 	}
 
 	/**
@@ -1381,7 +1381,7 @@ class FrmFormsController {
 		$frm_settings    = FrmAppHelper::get_settings();
 		$no_global_style = $frm_settings->load_style === 'none';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php';
 	}
 
 	/**
@@ -1390,7 +1390,7 @@ class FrmFormsController {
 	 * @param array $values
 	 */
 	public static function html_settings( $values ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-html.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-html.php';
 	}
 
 	/**
@@ -1447,7 +1447,7 @@ class FrmFormsController {
 
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
 	}
 
 	/**
@@ -1613,9 +1613,9 @@ class FrmFormsController {
 
 		echo FrmEntriesController::show_entry_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			array(
-				'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
+				'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'default_email' => true,
-				'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ),
+				'plain_text'    => FrmAppHelper::get_post_param( 'plain_text', '', 'absint' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			)
 		);
 		wp_die();
@@ -1870,7 +1870,7 @@ class FrmFormsController {
 	 * @since 4.05
 	 */
 	public static function add_form_style_tab_options() {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 
 	/**
@@ -2888,7 +2888,7 @@ class FrmFormsController {
 		$form    = $atts['form'];
 		$message = $atts['message'];
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 	}
 
 	/**
@@ -3131,7 +3131,7 @@ class FrmFormsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$html             = FrmAppHelper::clip(
-			function() {
+			function () {
 				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
 						'field_name'  => 'frm_page_dropdown',

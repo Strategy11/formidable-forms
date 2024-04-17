@@ -201,7 +201,7 @@ class FrmStylesCardHelper {
 			 * @param stdClass $style_object
 			 * @param array    $style
 			 */
-			$param_filter = function( $params, $args ) use ( $style_object, $style ) {
+			$param_filter = function ( $params, $args ) use ( $style_object, $style ) {
 				if ( $args['style'] !== $style_object ) {
 					return $params;
 				}
@@ -225,7 +225,7 @@ class FrmStylesCardHelper {
 			 * @param array $style
 			 * @return array
 			 */
-			$param_filter = function( $params ) use ( $style ) {
+			$param_filter = function ( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
@@ -396,7 +396,7 @@ class FrmStylesCardHelper {
 			 * @param int          $count Used for pagination.
 			 * @return void
 			 */
-			function( $style, $key ) {
+			function ( $style, $key ) {
 				if ( ! is_numeric( $key ) ) {
 					// Skip active_sub/expires keys.
 					return;
@@ -423,7 +423,7 @@ class FrmStylesCardHelper {
 			* @param int     $count Used for pagination.
 			* @return void
 			*/
-			function( $style ) use ( &$count ) {
+			function ( $style ) use ( &$count ) {
 				$hidden = $count > ( self::PAGE_SIZE - 1 );
 				$this->echo_style_card( $style, $hidden );
 				++$count;
@@ -484,7 +484,7 @@ class FrmStylesCardHelper {
 			 * @param WP_Post $style
 			 * @return bool
 			 */
-			function( $style ) {
+			function ( $style ) {
 				return $this->default_style->ID !== $style->ID;
 			}
 		);

@@ -336,7 +336,7 @@ class FrmCSVExportHelper {
 						$repeater_headings += self::field_headings( $col );
 					}
 
-					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
+					for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
 						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
 							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
 						}
@@ -355,7 +355,7 @@ class FrmCSVExportHelper {
 		}//end if
 
 		if ( self::$comment_count ) {
-			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
+			for ( $i = 0; $i < self::$comment_count; $i++ ) {
 				$headings[ 'comment' . $i ]            = __( 'Comment', 'formidable' );
 				$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
 				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
@@ -638,7 +638,7 @@ class FrmCSVExportHelper {
 				// array indexed data is not at $rows[ $k ]
 				if ( $k[ strlen( $k ) - 1 ] === ']' ) {
 					$start = strrpos( $k, '[' );
-					$key   = substr( $k, 0, $start ++ );
+					$key   = substr( $k, 0, $start++ );
 					$index = substr( $k, $start, strlen( $k ) - 1 - $start );
 
 					if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {

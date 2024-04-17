@@ -539,10 +539,10 @@ class FrmFieldsHelper {
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
 				if ( FrmAppHelper::pro_is_installed() ) {
-					require( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/other-option.php' );
+					require FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/other-option.php';
 				}
 			} else {
-				require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
+				require FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php';
 			}
 
 			unset( $checked );
@@ -572,7 +572,7 @@ class FrmFieldsHelper {
 		$default_type = self::get_default_value_type( $field );
 		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php';
 	}
 
 	/**
@@ -621,7 +621,7 @@ class FrmFieldsHelper {
 		);
 		$args = array_merge( $defaults, $args );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/inline-modal.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/inline-modal.php';
 	}
 
 	/**
@@ -634,7 +634,7 @@ class FrmFieldsHelper {
 				'medium'  => 'builder',
 				'content' => 'smart-tags',
 			);
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
 		}
 	}
 
@@ -642,14 +642,14 @@ class FrmFieldsHelper {
 	 * @since 4.0
 	 */
 	public static function input_mask() {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/input-mask-info.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/input-mask-info.php';
 	}
 
 	/**
 	 * @since 4.0
 	 */
 	public static function layout_classes() {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/layout-classes.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/layout-classes.php';
 	}
 
 	/**
@@ -1518,7 +1518,7 @@ class FrmFieldsHelper {
 		$prepop = array();
 		self::get_bulk_prefilled_opts( $prepop, true );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php';
 	}
 
 	public static function get_us_states() {
@@ -2267,7 +2267,7 @@ class FrmFieldsHelper {
 
 		return array_filter(
 			$rows,
-			function( $row ) {
+			function ( $row ) {
 				FrmAppHelper::unserialize_or_decode( $row->field_options );
 				return is_array( $row->field_options ) && ! empty( $row->field_options['draft'] );
 			}

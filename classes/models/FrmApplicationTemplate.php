@@ -128,7 +128,7 @@ class FrmApplicationTemplate {
 				$application[ $key ] = array_values(
 					array_filter(
 						$value,
-						function( $category ) {
+						function ( $category ) {
 							return false === strpos( $category, '+Views' );
 						}
 					)

@@ -482,7 +482,7 @@ class FrmEntriesController {
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
 		$form   = FrmForm::getOne( $entry->form_id );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php';
 	}
 
 	/**
@@ -714,7 +714,7 @@ class FrmEntriesController {
 			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
 	}
 
 	/**

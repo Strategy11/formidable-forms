@@ -859,5 +859,4 @@ class FrmEntriesHelper {
 
 		return $existing_entry_statuses;
 	}
-
 }

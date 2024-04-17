@@ -344,6 +344,7 @@ class FrmXMLController {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
 		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
@@ -352,7 +353,7 @@ class FrmXMLController {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? sanitize_option( 'upload_path', $_FILES['frm_import_file']['tmp_name'] ) : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
@@ -372,7 +373,7 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file_type = sanitize_option( 'upload_path', $_FILES['frm_import_file']['name'] );
 		$file_type = strtolower( pathinfo( $file_type, PATHINFO_EXTENSION ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {

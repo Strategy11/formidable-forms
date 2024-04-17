@@ -727,7 +727,7 @@ class FrmStylesHelper {
 	 */
 	private static function get_default_style_count( $style_id, $conversational_style_id ) {
 		$substrings = array_map(
-			function( $value ) {
+			function ( $value ) {
 				$substring = serialize( array( 'custom_style' => $value ) );
 				return substr( $substring, 5, -1 );
 			},

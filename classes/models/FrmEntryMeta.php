@@ -419,7 +419,7 @@ class FrmEntryMeta {
 			} elseif ( false !== strpos( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
-					function( $total, $current ) {
+					function ( $total, $current ) {
 						if ( is_numeric( $current ) ) {
 							$total[] = absint( $current );
 						}

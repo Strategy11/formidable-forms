@@ -579,14 +579,12 @@ class FrmDb {
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {
 			$where = '';
-		} else {
-			if ( is_array( $where ) ) {
+		} elseif ( is_array( $where ) ) {
 				global $wpdb;
 				self::get_where_clause_and_values( $where, $starts_with );
 				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			} else {
-				$where = $starts_with . $where;
-			}
+		} else {
+			$where = $starts_with . $where;
 		}
 
 		/**
