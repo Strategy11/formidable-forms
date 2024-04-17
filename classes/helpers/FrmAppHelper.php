@@ -2508,13 +2508,13 @@ class FrmAppHelper {
 		return $custom_style;
 	}
 
-	public static function truncate( $str, $length, $minword = 3, $continue = '...' ) {
-		if ( is_array( $str ) ) {
+	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
+		if ( is_array( $original_string ) ) {
 			return '';
 		}
 
 		$length       = (int) $length;
-		$str          = wp_strip_all_tags( $str );
+		$str          = wp_strip_all_tags( $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length == 0 ) {
@@ -2529,6 +2529,10 @@ class FrmAppHelper {
 		$len = 0;
 
 		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
+
+		if ( ! is_array( $words ) ) {
+			return $original_string;
+		}
 
 		foreach ( $words as $word ) {
 			$part      = ( ( $sub != '' ) ? ' ' : '' ) . $word;
