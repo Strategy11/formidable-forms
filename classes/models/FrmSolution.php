@@ -391,7 +391,6 @@ class FrmSolution {
 			if ( $plugin['status'] === 'active' ) {
 				continue;
 			}
-			$links[ $plugin_key ] = $plugin;
 			if ( isset( $plugin['url'] ) ) {
 				$rel[] = $plugin['url'];
 			} else {
