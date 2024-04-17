@@ -16,8 +16,8 @@ if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 	define( 'SCRIPT_DEBUG', false );
 }
 
-if ( file_exists( dirname( __FILE__ ) . '/../vendor/autoload.php' ) ) {
-	include dirname( __FILE__ ) . '/../vendor/autoload.php';
+if ( file_exists( __DIR__ . '/../vendor/autoload.php' ) ) {
+	include __DIR__ . '/../vendor/autoload.php';
 }
 
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
@@ -26,11 +26,11 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
-require_once dirname( __FILE__ ) . '/base/frm_factory.php';
+require_once __DIR__ . '/base/frm_factory.php';
 
 // include unit test base class
-require_once dirname( __FILE__ ) . '/base/FrmUnitTest.php';
-require_once dirname( __FILE__ ) . '/base/FrmAjaxUnitTest.php';
+require_once __DIR__ . '/base/FrmUnitTest.php';
+require_once __DIR__ . '/base/FrmAjaxUnitTest.php';
 
 // Ensure that the plugin has been installed and activated.
 FrmUnitTest::frm_install();

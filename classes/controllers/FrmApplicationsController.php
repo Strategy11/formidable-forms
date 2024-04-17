@@ -154,7 +154,7 @@ class FrmApplicationsController {
 	private static function sort_templates( $applications ) {
 		usort(
 			$applications,
-			function( $a, $b ) {
+			function ( $a, $b ) {
 				return strcmp( $a['name'], $b['name'] );
 			}
 		);

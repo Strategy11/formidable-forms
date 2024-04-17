@@ -27,7 +27,7 @@ class FrmStrpLiteHooksController {
 		// This filter flags the Pro credit card field that Stripe is enabled.
 		add_filter(
 			'frm_pro_show_card_callback',
-			function() {
+			function () {
 				return 'FrmStrpLiteActionsController::show_card';
 			}
 		);
@@ -35,10 +35,10 @@ class FrmStrpLiteHooksController {
 		// This filter hides gateway fields from the entries list.
 		add_filter(
 			'frm_fields_in_entries_list_table',
-			function( $form_cols ) {
+			function ( $form_cols ) {
 				return array_filter(
 					$form_cols,
-					function( $form_col ) {
+					function ( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}
 				);

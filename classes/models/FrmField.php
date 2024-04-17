@@ -742,7 +742,7 @@ class FrmField {
 				}
 
 				$fields[ $result->id ] = $result;
-				$count ++;
+				$count++;
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
@@ -786,7 +786,7 @@ class FrmField {
 			$fields = array();
 			$count  = 0;
 			foreach ( $results as $result ) {
-				$count ++;
+				$count++;
 				$fields[ $result->id ] = $result;
 				if ( ! empty( $limit ) && $count >= $limit ) {
 					break;
@@ -990,7 +990,7 @@ class FrmField {
 
 			if ( count( $next_fields ) >= self::$transient_size ) {
 				// if this transient is full, check for another
-				$next ++;
+				$next++;
 				self::get_next_transient( $fields, $base_name, $next );
 			}
 		}
@@ -1018,7 +1018,7 @@ class FrmField {
 				return;
 			}
 
-			$next ++;
+			$next++;
 		}
 	}
 

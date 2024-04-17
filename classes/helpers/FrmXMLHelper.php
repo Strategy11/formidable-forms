@@ -176,7 +176,7 @@ class FrmXMLHelper {
 			);
 
 			if ( $term && is_array( $term ) ) {
-				$imported['imported']['terms'] ++;
+				$imported['imported']['terms']++;
 				$imported['terms'][ (int) $t->term_id ] = $term['term_id'];
 			}
 
@@ -229,7 +229,7 @@ class FrmXMLHelper {
 				if ( $form_id ) {
 					if ( empty( $form['parent_form_id'] ) ) {
 						// Don't include the repeater form in the imported count.
-						$imported['imported']['forms'] ++;
+						$imported['imported']['forms']++;
 					}
 
 					// Keep track of whether this specific form was updated or not.
@@ -318,7 +318,7 @@ class FrmXMLHelper {
 		FrmForm::update( $form_id, $form );
 		if ( empty( $form['parent_form_id'] ) ) {
 			// Don't include the repeater form in the updated count.
-			$imported['updated']['forms'] ++;
+			$imported['updated']['forms']++;
 		}
 
 		// Keep track of whether this specific form was updated or not
@@ -436,7 +436,7 @@ class FrmXMLHelper {
 				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
 					FrmField::update( $f['id'], $f );
-					$imported['updated']['fields'] ++;
+					$imported['updated']['fields']++;
 
 					unset( $form_fields[ $f['id'] ] );
 
@@ -453,7 +453,7 @@ class FrmXMLHelper {
 					unset( $f['id'] );
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
-					$imported['updated']['fields'] ++;
+					$imported['updated']['fields']++;
 
 					self::do_after_field_imported_action( $f, $form_fields, $old_field_id );
 
@@ -724,7 +724,7 @@ class FrmXMLHelper {
 
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
-			$imported['imported']['fields'] ++;
+			$imported['imported']['fields']++;
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
 	}
@@ -948,9 +948,9 @@ class FrmXMLHelper {
 			}
 
 			if ( isset( $post['ID'] ) && $post_id == $post['ID'] ) {
-				$imported['updated'][ $this_type ] ++;
+				$imported['updated'][ $this_type ]++;
 			} else {
-				$imported['imported'][ $this_type ] ++;
+				$imported['imported'][ $this_type ]++;
 			}
 
 			$imported['posts'][ (int) $old_id ] = $post_id;
@@ -1776,7 +1776,7 @@ class FrmXMLHelper {
 		if ( ! $exists ) {
 			// this isn't an email, but we need to use a class that will always be included
 			FrmDb::save_json_post( $new_action );
-			$imported['imported']['actions'] ++;
+			$imported['imported']['actions']++;
 		}
 	}
 
@@ -1870,7 +1870,7 @@ class FrmXMLHelper {
 
 			if ( empty( $exists ) ) {
 				FrmDb::save_json_post( $new_notification );
-				$imported['imported']['actions'] ++;
+				$imported['imported']['actions']++;
 			}
 			unset( $new_notification );
 		}//end foreach
@@ -2122,4 +2122,3 @@ class FrmXMLHelper {
 		return $file_types;
 	}
 }
-

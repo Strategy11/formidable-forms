@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	if ( $has_fields ) {
 		// Add form messages.
-		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 	}
 	?>
 

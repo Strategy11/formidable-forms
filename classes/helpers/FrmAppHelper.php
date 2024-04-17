@@ -54,7 +54,7 @@ class FrmAppHelper {
 	}
 
 	public static function plugin_path() {
-		return dirname( dirname( dirname( __FILE__ ) ) );
+		return dirname( dirname( __DIR__ ) );
 	}
 
 	public static function plugin_url() {
@@ -619,11 +619,10 @@ class FrmAppHelper {
 					self::unserialize_or_decode( $value );
 				}
 			}
-		} else {
-			if ( isset( $_REQUEST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		} elseif ( isset( $_REQUEST[ $args['param'] ] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
-			}
 		}
 
 		self::sanitize_value( $args['sanitize'], $value );
@@ -1224,7 +1223,7 @@ class FrmAppHelper {
 	 * @return string|void
 	 */
 	public static function array_to_html_params( $atts, $echo = false ) {
-		$callback = function() use ( $atts ) {
+		$callback = function () use ( $atts ) {
 			if ( $atts ) {
 				foreach ( $atts as $key => $value ) {
 					echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
@@ -2040,12 +2039,10 @@ class FrmAppHelper {
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
-			} else {
-				if ( $keys === 'keep' ) {
+			} elseif ( $keys === 'keep' ) {
 					$return[ $key ] = $value;
-				} else {
-					$return[] = $value;
-				}
+			} else {
+				$return[] = $value;
 			}
 		}
 
@@ -2124,7 +2121,7 @@ class FrmAppHelper {
 	 * @return string|null
 	 */
 	public static function js_redirect( $url, $echo = false ) {
-		$callback = function() use ( $url ) {
+		$callback = function () use ( $url ) {
 			echo '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
 		};
 		return self::clip( $callback, $echo );
@@ -2166,7 +2163,7 @@ class FrmAppHelper {
 
 		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		ob_start();
-		include( $filename );
+		include $filename;
 		$contents = ob_get_contents();
 		ob_end_clean();
 
@@ -2364,11 +2361,10 @@ class FrmAppHelper {
 
 		if ( $args['default'] ) {
 			$meta_value = $field->default_value;
-		} else {
-			if ( $record->post_id && self::pro_is_installed() && isset( $field->field_options['post_field'] ) && $field->field_options['post_field'] ) {
-				if ( ! isset( $field->field_options['custom_field'] ) ) {
-					$field->field_options['custom_field'] = '';
-				}
+		} elseif ( $record->post_id && self::pro_is_installed() && isset( $field->field_options['post_field'] ) && $field->field_options['post_field'] ) {
+			if ( ! isset( $field->field_options['custom_field'] ) ) {
+				$field->field_options['custom_field'] = '';
+			}
 				$meta_value = FrmProEntryMetaHelper::get_post_value(
 					$record->post_id,
 					$field->field_options['post_field'],
@@ -2380,9 +2376,8 @@ class FrmAppHelper {
 						'field'    => $field,
 					)
 				);
-			} else {
-				$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
-			}
+		} else {
+			$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 		}//end if
 
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
@@ -4007,7 +4002,7 @@ class FrmAppHelper {
 
 		add_filter(
 			'option_gmt_offset',
-			function( $offset ) {
+			function ( $offset ) {
 				if ( ! is_string( $offset ) || is_numeric( $offset ) ) {
 					// Leave a valid value alone.
 					return $offset;
@@ -4161,7 +4156,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$ajax_callback = function() use ( $option ) {
+		$ajax_callback = function () use ( $option ) {
 			self::dismiss_warning_message( $option );
 		};
 
@@ -4171,7 +4166,7 @@ class FrmAppHelper {
 
 		add_filter(
 			'frm_message_list',
-			function( $show_messages ) use ( $message, $option ) {
+			function ( $show_messages ) use ( $message, $option ) {
 				if ( get_option( $option, false ) ) {
 					return $show_messages;
 				}

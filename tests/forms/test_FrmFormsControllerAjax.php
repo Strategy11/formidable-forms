@@ -10,7 +10,6 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $this->user_id );
-
 	}
 
 	/**

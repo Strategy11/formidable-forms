@@ -97,5 +97,4 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @param mixed  ...$args Optional text replacements.
 	 */
 	public function feedback( $string, ...$args ) {}
-
 }

@@ -119,7 +119,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function fix_woocommerce_conflict() {
 		add_action(
 			'wp_print_footer_scripts',
-			function() {
+			function () {
 				if ( ! function_exists( 'get_current_screen' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/screen.php';
 				}

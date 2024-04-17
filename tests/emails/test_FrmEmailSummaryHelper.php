@@ -155,7 +155,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 		add_filter(
 			'pre_http_request',
-			function( $pre, $parsed_args, $url ) {
+			function ( $pre, $parsed_args, $url ) {
 				if ( strpos( $url, 'formidableforms.com' ) === false ) {
 					return $pre;
 				}

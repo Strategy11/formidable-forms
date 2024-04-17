@@ -696,7 +696,7 @@ class FrmForm {
 			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
 				self::destroy( $form->id );
 				if ( empty( $form->parent_form_id ) ) {
-					$count ++;
+					$count++;
 				}
 			}
 
@@ -920,16 +920,16 @@ class FrmForm {
 		foreach ( $results as $row ) {
 			if ( 'trash' != $row->status ) {
 				if ( $row->is_template ) {
-					$counts['template'] ++;
+					$counts['template']++;
 				} else {
-					$counts['published'] ++;
+					$counts['published']++;
 				}
 			} else {
-				$counts['trash'] ++;
+				$counts['trash']++;
 			}
 
 			if ( 'draft' == $row->status ) {
-				$counts['draft'] ++;
+				$counts['draft']++;
 			}
 
 			unset( $row );

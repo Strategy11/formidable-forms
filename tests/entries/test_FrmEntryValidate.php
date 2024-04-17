@@ -10,7 +10,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 	 * @covers FrmEntryValidate::validate
 	 */
 	public function test_validate() {
-		$add_a_custom_error = function( $errors ) {
+		$add_a_custom_error = function ( $errors ) {
 			$errors['custom_error'] = 'Error message';
 			return $errors;
 		};

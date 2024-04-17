@@ -337,7 +337,7 @@ class FrmDashboardHelper {
 	private static function load_entries_list_template( $template ) {
 		add_filter(
 			'formidable_page_formidable_entries_per_page',
-			function() {
+			function () {
 				return 7;
 			}
 		);

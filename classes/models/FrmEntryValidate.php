@@ -417,6 +417,7 @@ class FrmEntryValidate {
 		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
 			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
 		}
+		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
 		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
 	}
 
@@ -429,6 +430,7 @@ class FrmEntryValidate {
 		$keys = get_option( 'disallowed_keys' );
 		if ( false === $keys ) {
 			// Fallback for WP < 5.5.
+			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
 			$keys = get_option( 'blacklist_keys' );
 		}
 		return $keys;

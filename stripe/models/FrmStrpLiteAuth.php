@@ -57,7 +57,7 @@ class FrmStrpLiteAuth {
 		$intent_is_processing = 'processing' === $intent->status;
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
-			$filter = function( $message ) {
+			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
 				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
 				return $message;

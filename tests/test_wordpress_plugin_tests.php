@@ -13,7 +13,6 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 			self::do_tables_exist( true );
 		}
 	}
-
 }
 
 /**

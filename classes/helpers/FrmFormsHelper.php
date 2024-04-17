@@ -691,7 +691,7 @@ BEFORE_HTML;
 		$last_field         = false;
 		foreach ( $fields as $field ) {
 			if ( $prev_order === $field->field_order ) {
-				$add_order ++;
+				$add_order++;
 			}
 
 			if ( $add_order ) {
@@ -1045,7 +1045,7 @@ BEFORE_HTML;
 			$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 			$trash_link = self::delete_trash_info( $form_id, $status );
 			$links      = self::get_action_links( $form_id, $status );
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
 		}
 	}
 

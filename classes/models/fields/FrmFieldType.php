@@ -289,7 +289,7 @@ DEFAULT_HTML;
 		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
-		include( $this->include_form_builder_file() );
+		include $this->include_form_builder_file();
 	}
 
 	/**
@@ -430,7 +430,7 @@ DEFAULT_HTML;
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
 		$this->show_priority_field_choices( $args );
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php';
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
 	}
@@ -462,7 +462,7 @@ DEFAULT_HTML;
 		 */
 		$should_hide_bulk_edit = apply_filters( 'frm_should_hide_bulk_edit', $display_format === '1', $display_format, $args );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php';
 	}
 
 	/**
@@ -666,7 +666,7 @@ DEFAULT_HTML;
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
 		if ( $use_style ) {
 			$field = $args['field'];
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
 		}
 	}
 
@@ -1002,7 +1002,7 @@ DEFAULT_HTML;
 		unset( $args['form'] );
 
 		ob_start();
-		include( $include_file );
+		include $include_file;
 		$input_html = ob_get_contents();
 		ob_end_clean();
 

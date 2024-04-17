@@ -42,9 +42,9 @@ function load_formidable_forms() {
 	);
 
 	// For reverse compatibility. Load Pro if it's still nested.
-	$frm_path = dirname( __FILE__ );
+	$frm_path = __DIR__;
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
-		include( $frm_path . '/pro/formidable-pro.php' );
+		include $frm_path . '/pro/formidable-pro.php';
 	}
 
 	FrmHooksController::trigger_load_hook();
@@ -67,7 +67,7 @@ function frm_forms_autoloader( $class_name ) {
 		return;
 	}
 
-	frm_class_autoloader( $class_name, dirname( __FILE__ ) );
+	frm_class_autoloader( $class_name, __DIR__ );
 }
 
 /**
@@ -148,7 +148,7 @@ function frm_maybe_install() {
 
 register_deactivation_hook(
 	__FILE__,
-	function() {
+	function () {
 		if ( ! class_exists( 'FrmCronController', false ) ) {
 			require_once __DIR__ . '/classes/controllers/FrmCronController.php';
 		}

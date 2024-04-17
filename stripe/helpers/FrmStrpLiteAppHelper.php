@@ -57,7 +57,7 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function should_use_stripe_connect() {
 		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
-			require dirname( __FILE__ ) . '/FrmStrpLiteConnectApiAdapter.php';
+			require __DIR__ . '/FrmStrpLiteConnectApiAdapter.php';
 		}
 		return FrmStrpLiteConnectApiAdapter::initialize_api();
 	}

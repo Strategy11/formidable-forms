@@ -84,7 +84,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			return;
 		}
 
-		$allow_xml_mime_types_function = function( $mimes ) {
+		$allow_xml_mime_types_function = function ( $mimes ) {
 			$mimes['xml'] = 'application/xml';
 			return $mimes;
 		};
@@ -456,10 +456,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	public static function install_data() {
 		return array(
-			dirname( __FILE__ ) . '/testdata.xml',
-			dirname( __FILE__ ) . '/free-form.xml',
-			dirname( __FILE__ ) . '/editform.xml',
-			dirname( __FILE__ ) . '/file-upload.xml',
+			__DIR__ . '/testdata.xml',
+			__DIR__ . '/free-form.xml',
+			__DIR__ . '/editform.xml',
+			__DIR__ . '/file-upload.xml',
 		);
 	}
 
@@ -569,7 +569,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		ob_start();
-		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
 		$xml_body = ob_get_contents();
 		ob_end_clean();
 
@@ -624,7 +624,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 		$subscriber = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );
-
 	}
 
 	protected function run_private_method( $method, $args = array() ) {

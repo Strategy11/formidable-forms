@@ -74,7 +74,7 @@ class FrmStylesPreviewHelper {
 			 * @param object|array $field
 			 * @return string
 			 */
-			function( $position, $field ) {
+			function ( $position, $field ) {
 				if ( is_array( $field ) ) {
 					$this->default_label_position_field_ids[] = (int) $field['id'];
 				}
@@ -91,7 +91,7 @@ class FrmStylesPreviewHelper {
 			 * @param object|array $field
 			 * @return string
 			 */
-			function( $classes, $field ) {
+			function ( $classes, $field ) {
 				if ( is_array( $field ) && in_array( (int) $field['id'], $this->default_label_position_field_ids, true ) ) {
 					$classes .= ' frm-default-label-position';
 				}
@@ -118,7 +118,7 @@ class FrmStylesPreviewHelper {
 			 * @param string $target_field_type
 			 * @return bool
 			 */
-			function( $show, $field_type ) {
+			function ( $show, $field_type ) {
 				if ( 'captcha' === $field_type ) {
 					$show = false;
 				}
@@ -146,7 +146,7 @@ class FrmStylesPreviewHelper {
 			 * @param int           $form_id
 			 * @return stdClass|null
 			 */
-			function( $form ) {
+			function ( $form ) {
 				if ( is_object( $form ) && is_array( $form->options ) ) {
 					$form->options['js_validate'] = false;
 				}
@@ -196,7 +196,7 @@ class FrmStylesPreviewHelper {
 
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( 'none' === $frm_settings->load_style ) {
-			$notes[] = function() {
+			$notes[] = function () {
 				printf(
 					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),

@@ -73,7 +73,7 @@ class FrmAddonsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/addons/list.php';
 	}
 
 	/**
@@ -89,7 +89,7 @@ class FrmAddonsController {
 
 		ksort( $plugins );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php';
 	}
 
 	/**
@@ -912,7 +912,7 @@ class FrmAddonsController {
 			),
 		);
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php';
 	}
 
 	/**
@@ -1012,7 +1012,7 @@ class FrmAddonsController {
 	 */
 	protected static function maybe_show_cred_form() {
 		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
 		// Start output bufferring to catch the filesystem form if credentials are needed.
@@ -1105,7 +1105,7 @@ class FrmAddonsController {
 	 */
 	public static function ajax_activate_addon() {
 		self::process_addon_action(
-			function( $plugin ) {
+			function ( $plugin ) {
 				return self::handle_addon_action( $plugin, 'activate' );
 			},
 			array( 'FrmAddonsController', 'get_addon_activation_response' )
@@ -1130,7 +1130,7 @@ class FrmAddonsController {
 	 */
 	public static function ajax_deactivate_addon() {
 		self::process_addon_action(
-			function( $plugin ) {
+			function ( $plugin ) {
 				return self::handle_addon_action( $plugin, 'deactivate' );
 			}
 		);
@@ -1145,7 +1145,7 @@ class FrmAddonsController {
 	 */
 	public static function ajax_uninstall_addon() {
 		self::process_addon_action(
-			function( $plugin ) {
+			function ( $plugin ) {
 				return self::handle_addon_action( $plugin, 'uninstall' );
 			}
 		);

@@ -8,8 +8,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$field,
 		array(
 			'location' => 'front',
-			'name'     => $field_name,
-			'id'       => $html_id,
+			'name'     => $field_name, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			'id'       => $html_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		)
 	);
 } else {

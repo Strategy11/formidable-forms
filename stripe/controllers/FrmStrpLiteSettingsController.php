@@ -24,7 +24,7 @@ class FrmStrpLiteSettingsController {
 			 * @param object $frm_settings
 			 * @return void
 			 */
-			function( $frm_settings ) {
+			function ( $frm_settings ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings()->settings;
 				require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/messages.php';
 			}
@@ -85,5 +85,4 @@ class FrmStrpLiteSettingsController {
 		$settings->update( $_POST );
 		$settings->store();
 	}
-
 }

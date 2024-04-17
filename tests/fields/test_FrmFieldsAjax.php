@@ -107,7 +107,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		self::check_field_prior_to_duplication( $field );
 
 		return $field;
-
 	}
 
 	/**

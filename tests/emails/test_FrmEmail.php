@@ -444,7 +444,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertNotEmpty( $actions );
 
 		return reset( $actions );
-
 	}
 
 	protected function create_entry( $form ) {
@@ -469,7 +468,6 @@ class test_FrmEmail extends FrmUnitTest {
 		if ( $bcc_status === 'no_bcc' ) {
 			$this->check_no_bcc_included( $mock_email );
 		}
-
 	}
 
 	protected function check_senders( $expected, $mock_email ) {

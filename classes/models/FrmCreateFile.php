@@ -175,7 +175,7 @@ class FrmCreateFile {
 
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
 		$access_type = get_filesystem_method();
