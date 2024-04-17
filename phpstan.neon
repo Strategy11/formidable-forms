@@ -21,8 +21,6 @@ parameters:
 		booleansInConditions: false
 		uselessCast: false
 		requireParentConstructorCall: false
-		closureUsesThis: false
-		numericOperandsInArithmeticOperators: false
 		strictCalls: false
 		noVariableVariables: false
 	ignoreErrors:
@@ -82,3 +80,8 @@ parameters:
 		-
 			message: '#Foreach overwrites \$opt_key with its key variable.#'
 			path: classes/helpers/FrmFieldsHelper.php
+		-
+			message: '#Only numeric types are allowed#'
+			paths:
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/models/FrmStyle.php
