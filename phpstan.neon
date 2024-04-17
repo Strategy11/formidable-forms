@@ -16,6 +16,19 @@ parameters:
 		- */vendor/*
 		- */fonts/*
 		- */deprecated/*
+	strictRules:
+		disallowedLooseComparison: false
+		booleansInConditions: false
+		uselessCast: false
+		requireParentConstructorCall: false
+		disallowedConstructs: false
+		overwriteVariablesWithLoop: false
+		closureUsesThis: false
+		numericOperandsInArithmeticOperators: false
+		strictCalls: false
+		switchConditionsMatchingType: false
+		noVariableVariables: false
+		strictArrayFilter: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
 		- '#Call to an undefined method object::#'
@@ -65,3 +78,6 @@ parameters:
 		- '#customer_id_error_message#'
 		- "#Offset 'custom_style' on#"
 		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
+		- '#Use more strict comparison.#'
+		- '#should be contravariant with#'
+		- '#should be covariant with#'
