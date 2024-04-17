@@ -67,6 +67,9 @@
 .frm-view-filter-component label {
 	font-weight: 600;
 }
+.frm-view-filter-component .components-radio-control__option {
+	flex-wrap: wrap;
+}
 
 .components-panel__row.frm-row-small-top-margin {
 	margin-top: 5px;
