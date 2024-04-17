@@ -5,8 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormApi {
 
-	protected $license       = '';
-	protected $cache_key     = '';
+	/**
+	 * @var string
+	 */
+	protected $license = '';
+
+	/**
+	 * @var string
+	 */
+	protected $cache_key = '';
+
+	/**
+	 * @var string
+	 */
 	protected $cache_timeout = '+6 hours';
 
 	/**

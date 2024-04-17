@@ -62,7 +62,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	protected function skip_categories() {
 		return array();

@@ -1122,6 +1122,8 @@ class FrmFieldsHelper {
 	 * Get a value from the user profile from the user ID
 	 *
 	 * @since 3.0
+	 *
+	 * @return string
 	 */
 	public static function get_user_display_name( $user_id, $user_info = 'display_name', $args = array() ) {
 		$defaults = array(
@@ -1136,9 +1138,9 @@ class FrmFieldsHelper {
 		$info = '';
 
 		if ( $user ) {
-			if ( $user_info == 'avatar' ) {
+			if ( $user_info === 'avatar' ) {
 				$info = get_avatar( $user_id, $args['size'] );
-			} elseif ( $user_info == 'author_link' ) {
+			} elseif ( $user_info === 'author_link' ) {
 				$info = get_author_posts_url( $user_id );
 			} else {
 				$info = isset( $user->$user_info ) ? $user->$user_info : '';

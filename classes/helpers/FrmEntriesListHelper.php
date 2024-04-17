@@ -4,13 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmEntriesListHelper extends FrmListHelper {
+
 	protected $column_name;
 	protected $item;
 	protected $field;
 
 	/**
 	 * @since 4.07
-	 * @var int
+	 * @var int|bool
 	 */
 	public $total_items = 0;
 
