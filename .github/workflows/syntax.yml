@@ -17,11 +17,7 @@ jobs:
       matrix:
         include:
           - php: 5.6
-            wordpress: trunk
-            multisite: 0
           - php: 8.1
-            wordpress: trunk
-            multisite: 0
     steps:
       - uses: actions/checkout@v4.1.1
 
