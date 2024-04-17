@@ -549,7 +549,13 @@ class FrmField {
 				$values['type'] = 'select';
 			}
 
-			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
+			/**
+			 * @since x.x The Field ID param was added.
+			 *
+			 * @param array $values
+			 * @param int   $id Field ID.
+			 */
+			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// don't keep the old placeholder setting for hidden fields
