@@ -165,7 +165,7 @@ class FrmFormAction {
 
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
 		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
@@ -235,7 +235,7 @@ class FrmFormAction {
 	 * @return string Name attribute for $field_name
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		$name = $this->option_name . '[' . $this->number . ']';
+		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
 		$name .= '[' . $field_name . ']';
 
@@ -453,7 +453,7 @@ class FrmFormAction {
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
-			$instance = $this->update( $new_instance, $old_instance );
+			$instance                   = $this->update( $new_instance, $old_instance );
 
 			/**
 			 * Filter an action's settings before saving.
@@ -638,8 +638,8 @@ class FrmFormAction {
 		$frm_vars['action_type'] = $type;
 
 		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
-		$query = self::action_args( $form_id, $limit );
-		$query['post_status'] = $atts['post_status'];
+		$query                     = self::action_args( $form_id, $limit );
+		$query['post_status']      = $atts['post_status'];
 		$query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( json_encode( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
@@ -788,7 +788,7 @@ class FrmFormAction {
 	 * Migrate settings from form->options into new action.
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
-		$action        = $this->prepare_new( $form->id );
+		$action = $this->prepare_new( $form->id );
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
 		// fill with existing options

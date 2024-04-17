@@ -408,7 +408,7 @@ class FrmEmail {
 
 		// Add the user info if it isn't already included
 		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
-			$data      = $this->entry->description;
+			$data       = $this->entry->description;
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
@@ -760,7 +760,7 @@ class FrmEmail {
 
 		if ( ! is_email( $reply_to ) ) {
 			list( $name, $email ) = $this->get_name_and_email_for_sender( $reply_to );
-			$reply_to = $this->format_from_email( $name, $email );
+			$reply_to             = $this->format_from_email( $name, $email );
 		}
 
 		return $reply_to;

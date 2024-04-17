@@ -482,7 +482,7 @@ class FrmFormTemplatesController {
 					);
 				}
 
-				self::$categories[ $category_slug ]['count']++;
+				++self::$categories[ $category_slug ]['count'];
 			}
 
 			// Mark the template as favorite if it's in the favorite templates list.

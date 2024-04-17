@@ -27,8 +27,8 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 				'post_excerpt' => 'payment',
 			)
 		);
-		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
-		$action  = reset( $actions );
+		$actions   = FrmTransLiteActionsController::get_actions_for_form( $form_id );
+		$action    = reset( $actions );
 
 		$fields = $this->get_fields_for_price( $action );
 

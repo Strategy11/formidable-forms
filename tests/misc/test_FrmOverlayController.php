@@ -13,7 +13,7 @@ class test_FrmOverlayController extends FrmUnitTest {
 
 	public function test_open_overlay() {
 
-		$test_data = array(
+		$test_data                                   = array(
 			'hero_image' => FrmAppHelper::plugin_url() . '/images/overlay/lock.svg',
 			'heading'    => 'Overlay Heading Test',
 			'copy'       => 'Overlay copy test',

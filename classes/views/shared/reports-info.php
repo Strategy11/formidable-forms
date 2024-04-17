@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Reports', 'formidable' ),
-			'form'        => $form,
-			'close'       => $form ? admin_url( 'admin.php?page=formidable&frm_action=reports&form=' . $form->id ) : '',
+			'label' => __( 'Reports', 'formidable' ),
+			'form'  => $form,
+			'close' => $form ? admin_url( 'admin.php?page=formidable&frm_action=reports&form=' . $form->id ) : '',
 		)
 	);
 	?>

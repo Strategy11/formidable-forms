@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="wrap">
 
 	<?php
-	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
+	require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 
 	FrmAppHelper::show_search_box(
 		array(

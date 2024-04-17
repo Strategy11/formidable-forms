@@ -469,7 +469,7 @@ class FrmTransLiteAppHelper {
 			return false;
 		}
 
-		$option = get_option( FrmPaymentsController::$db_opt_name );
+		$option                          = get_option( FrmPaymentsController::$db_opt_name );
 		self::$should_fallback_to_paypal = false !== $option;
 
 		return self::$should_fallback_to_paypal;

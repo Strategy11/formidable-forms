@@ -29,10 +29,10 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 */
 	public function test_create() {
 		$_POST = array(
-			'action'    => 'frm_insert_field',
-			'nonce'     => wp_create_nonce( 'frm_ajax' ),
-			'form_id'   => $this->form_id,
-			'field_type'     => 'text', // Create text field.
+			'action'     => 'frm_insert_field',
+			'nonce'      => wp_create_nonce( 'frm_ajax' ),
+			'form_id'    => $this->form_id,
+			'field_type' => 'text', // Create text field.
 		);
 
 		try {
@@ -61,13 +61,13 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	public function test_duplicating_text_field() {
 		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
 
-		$format = '^([a-zA-Z]\d{4})$';
+		$format         = '^([a-zA-Z]\d{4})$';
 		$original_field = $this->factory->field->create_and_get(
 			array(
 				'form_id'       => $this->form_id,
 				'type'          => 'text',
 				'field_options' => array(
-					'format'    => $format,
+					'format'     => $format,
 					'in_section' => 0,
 				),
 			)
@@ -103,7 +103,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 */
 	protected function get_field_by_key( $field_key ) {
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
-		$field = FrmField::getOne( $divider_field_id );
+		$field            = FrmField::getOne( $divider_field_id );
 		self::check_field_prior_to_duplication( $field );
 
 		return $field;

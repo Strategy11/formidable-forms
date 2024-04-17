@@ -266,11 +266,11 @@ class FrmEntryValues {
 			);
 		}
 
-		$ip      = array(
+		$ip       = array(
 			'label' => __( 'IP Address', 'formidable' ),
 			'value' => $this->entry->ip,
 		);
-		$browser = array(
+		$browser  = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
 			'value' => isset( $entry_description['browser'] ) ? FrmEntriesHelper::get_browser( $entry_description['browser'] ) : '',
 		);

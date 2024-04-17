@@ -130,7 +130,7 @@ class FrmReviews {
 	 * @return void
 	 */
 	private function add_to_inbox( $title, $name, $asked ) {
-		$message = new FrmInbox();
+		$message  = new FrmInbox();
 		$requests = $message->get_messages();
 		$key      = $this->inbox_key . ( $asked ? $asked : '' );
 

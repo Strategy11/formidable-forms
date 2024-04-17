@@ -19,7 +19,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$entry = $this->factory->entry->create_object( $entry_data );
+		$entry      = $this->factory->entry->create_object( $entry_data );
 
 		$this->assertNotEmpty( $entry );
 		$this->assertTrue( is_numeric( $entry ) );
@@ -43,7 +43,7 @@ class test_FrmEntry extends FrmUnitTest {
 		unset( $entry_data['item_meta'][ $website_field ] );
 		$this->factory->entry->create_object( $entry_data );
 		$entry_data['item_meta'][ $website_field ] = 'http://test.com';
-		$entry = $this->factory->entry->create_object( $entry_data );
+		$entry                                     = $this->factory->entry->create_object( $entry_data );
 		$this->assertNotEmpty( $entry, 'False Positive for duplicate entry (A != A + B)' );
 	}
 
@@ -65,7 +65,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$this->assertTrue( empty( $first_item->metas ), 'Entries should not include metas unless $meta = true is set.' );
 
 		// Test with $meta = true.
-		$items = FrmEntry::getAll( array( 'it.form_id' => $form->id ), '', '', true, false );
+		$items      = FrmEntry::getAll( array( 'it.form_id' => $form->id ), '', '', true, false );
 		$first_item = reset( $items );
 
 		$this->assertIsObject( $first_item );

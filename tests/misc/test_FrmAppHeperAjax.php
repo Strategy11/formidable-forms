@@ -18,7 +18,7 @@ class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
 	public function test_dismiss_warning_message() {
 		$option = 'test_option';
 		$action = 'frm_' . $option;
-		$_POST = array(
+		$_POST  = array(
 			'action' => $action,
 			'nonce'  => wp_create_nonce( 'frm_ajax' ),
 		);

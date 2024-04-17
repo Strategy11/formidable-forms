@@ -14,7 +14,7 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::create
 	 */
 	public function test_create() {
-		$values = FrmFormsHelper::setup_new_vars( false );
+		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
 		$this->assertTrue( is_numeric( $form_id ) );
 		$this->assertNotEmpty( $form_id );
@@ -32,7 +32,7 @@ class test_FrmForm extends FrmUnitTest {
 
 		// check the number of form actions
 		$original_actions = FrmFormAction::get_action_for_form( $form->id );
-		$new_actions = FrmFormAction::get_action_for_form( $id );
+		$new_actions      = FrmFormAction::get_action_for_form( $id );
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
 	}
 
@@ -61,7 +61,7 @@ class test_FrmForm extends FrmUnitTest {
 				continue;
 			}
 
-			$id = FrmForm::destroy( $form->id );
+			$id          = FrmForm::destroy( $form->id );
 			$form_exists = FrmForm::getOne( $form->id );
 			$this->assertEmpty( $form_exists, 'Failed to delete form ' . $form->form_key );
 
@@ -110,7 +110,7 @@ class test_FrmForm extends FrmUnitTest {
 
 		$this->use_frm_role( $capability );
 
-		$form->logged_in = 1;
+		$form->logged_in                 = 1;
 		$form->options['logged_in_role'] = $visibility;
 		return FrmForm::is_visible_to_user( $form );
 	}

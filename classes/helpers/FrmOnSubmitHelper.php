@@ -295,7 +295,7 @@ class FrmOnSubmitHelper {
 			return;
 		}
 
-		$form->id = $form_id;
+		$form->id    = $form_id;
 		$action_type = FrmOnSubmitAction::$slug;
 
 		// Check if form already has form actions to avoid creating duplicates.

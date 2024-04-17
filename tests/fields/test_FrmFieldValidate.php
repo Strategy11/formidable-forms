@@ -14,7 +14,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	protected function create_validation_form() {
-		$this->form = $this->factory->form->create_and_get();
+		$this->form  = $this->factory->form->create_and_get();
 		$field_types = $this->get_all_fields();
 		foreach ( $field_types as $field_type ) {
 			$this->factory->field->create(
@@ -28,7 +28,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	protected function get_all_fields() {
-		$fields = array_keys( FrmField::field_selection() );
+		$fields  = array_keys( FrmField::field_selection() );
 		$exclude = array( 'html' );
 		return array_diff( $fields, $exclude );
 	}
@@ -43,13 +43,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			'action'    => 'create',
 		);
 
-		$errors = FrmEntryValidate::validate( $_POST );
+		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
 			foreach ( $error_field_ids as $error_field ) {
-				$field = FrmField::getOne( str_replace( 'field', '', $error_field ) );
+				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
 				$error_fields[] = ( $field ) ? $field->type : $error_field;
 			}
 		}
@@ -67,7 +67,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$test_formats = $this->expected_format_errors();
 		foreach ( $test_formats as $test_format ) {
 			$field_key = $this->get_field_key( $test_format['type'] );
-			$field_id = FrmField::get_id_by_key( $field_key );
+			$field_id  = FrmField::get_id_by_key( $field_key );
 
 			$errors = $this->check_single_value( array( $field_id => $test_format['value'] ) );
 
@@ -158,7 +158,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
 			foreach ( $error_field_ids as $error_field ) {
-				$field = FrmField::getOne( str_replace( 'field', '', $error_field ) );
+				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
 				$error_fields[] = $field ? $field->type : $error_field;
 			}
 		}
@@ -203,14 +203,14 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 * @covers FrmFieldNumber::validate
 	 */
 	public function test_number_validation() {
-		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
+		$field  = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
 		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed validation ' . print_r( $errors, 1 ) );
 
 		$field = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'number',
-				'form_id' => $this->form->id,
+				'type'          => 'number',
+				'form_id'       => $this->form->id,
 				'field_options' => array(
 					'minnum' => 0,
 					'maxnum' => 20,
@@ -289,9 +289,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		foreach ( $check_formats as $check_it ) {
 			$field = $this->factory->field->create_and_get(
 				array(
-					'type'      => 'phone',
-					'form_id'   => $this->form->id,
-					'field_key' => $check_it['field_key'],
+					'type'          => 'phone',
+					'form_id'       => $this->form->id,
+					'field_key'     => $check_it['field_key'],
 					'field_options' => array(
 						'format' => $check_it['format'],
 					),
@@ -313,7 +313,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			'a9aa2328'      => '^[a-zA-Z]\d[a-zA-Z][a-zA-Z]\d\d\d\d$',
 			'****'          => '^\w\w\w\w$',
 			'99/23'         => '^\d\d\/\d\d$',
-			'99?99'        => '^\d\d(\d\d)?$',
+			'99?99'         => '^\d\d(\d\d)?$',
 		);
 
 		foreach ( $formats as $start => $expected ) {
@@ -366,7 +366,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_blacklist_check() {
 		$values = array(
-			'item_meta' => array(
+			'item_meta'      => array(
 				'25' => '23.342.33',
 				'36' => 'email@example.com',
 				'37' => array( 'value1', 'value2' ),
@@ -379,7 +379,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		$blocked = '23.343.12332';
+		$blocked   = '23.343.12332';
 		$new_block = $blocked . "\nspamemail@example.com";
 		update_option( $this->get_disallowed_option_name(), $new_block );
 		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
@@ -387,7 +387,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
 		$this->assertFalse( $wp_test );
 
-		$ip = FrmAppHelper::get_ip_address();
+		$ip      = FrmAppHelper::get_ip_address();
 		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
 		if ( ! $wp_test ) {
 			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
@@ -401,11 +401,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertFalse( $is_spam );
 
 		$values['item_meta']['25'] = $blocked;
-		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$is_spam                   = FrmEntryValidate::blacklist_check( $values );
 		$this->assertTrue( $is_spam, 'Exact match for spam missed' );
 
 		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
-		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$is_spam                   = FrmEntryValidate::blacklist_check( $values );
 		$this->assertTrue( $is_spam );
 	}
 

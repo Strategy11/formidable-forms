@@ -63,13 +63,13 @@ class test_FrmAppController extends FrmUnitTest {
 	 */
 	public function test_add_admin_class() {
 		$this->set_admin_screen();
-		$class = 'other-class';
+		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
 		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
 		$this->assertFalse( strpos( $filtered_class, 'frm-white-body' ), '"frm-white-body" was added to admin classes' );
 
 		$this->set_admin_screen( 'admin.php?page=formidable' );
-		$class = 'other-class';
+		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
 		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
 		$this->assertTrue( strpos( $filtered_class, ' frm-white-body' ) !== false, '"frm-white-body" is missing from admin classes' );
@@ -185,7 +185,7 @@ class test_FrmAppController extends FrmUnitTest {
 			$this->markTestSkipped( 'Run without ajax' );
 		}
 
-		$current_db = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
+		$current_db  = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
 		$previous_db = FrmAppHelper::plugin_version() . '-' . ( absint( FrmAppHelper::$db_version ) - 1 );
 		update_option( 'frm_db_version', $previous_db );
 		FrmAppController::admin_init();

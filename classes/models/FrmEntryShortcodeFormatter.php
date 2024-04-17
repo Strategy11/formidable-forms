@@ -204,7 +204,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function get_table() {
-		$content = $this->table_generator->generate_table_header();
+		$content  = $this->table_generator->generate_table_header();
 		$content .= $this->generate_content_for_all_fields();
 		$content .= $this->table_generator->generate_table_footer();
 

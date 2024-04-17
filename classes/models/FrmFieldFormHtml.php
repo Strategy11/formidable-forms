@@ -219,7 +219,7 @@ class FrmFieldFormHtml {
 		if ( is_string( $inner_html[2] ) ) {
 			$has_id = strpos( $inner_html[2], ' id=' );
 			if ( ! $has_id ) {
-				$id = 'frm_' . $id . '_' . $this->html_id;
+				$id         = 'frm_' . $id . '_' . $this->html_id;
 				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 			}
 		}
@@ -384,7 +384,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt']--;
+			--$shortcode_atts['opt'];
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
@@ -452,7 +452,7 @@ class FrmFieldFormHtml {
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
-			$classes .= ' frm_' . $label_position . '_container';
+			$classes       .= ' frm_' . $label_position . '_container';
 
 			// Add class if field has value, to be used for floating label styling.
 			if ( 'inside' === $label_position && $this->field_obj->get_field_column( 'value' ) ) {

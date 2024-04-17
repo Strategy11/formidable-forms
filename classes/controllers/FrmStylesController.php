@@ -400,7 +400,7 @@ class FrmStylesController {
 		if ( ! $form_id ) {
 			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
-			$where = array(
+			$where   = array(
 				'status'         => 'published',
 				// Make sure it's not a repeater.
 				'parent_form_id' => array( null, 0 ),
@@ -628,7 +628,7 @@ class FrmStylesController {
 		add_filter(
 			'frm_add_form_style_class',
 			function ( $class ) use ( $style ) {
-				$split = array_filter(
+				$split   = array_filter(
 					explode( ' ', $class ),
 					/**
 					 * @param string $class
@@ -711,7 +711,7 @@ class FrmStylesController {
 		}
 
 		parse_str( $query, $parsed_query );
-		$form_id      = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
+		$form_id = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
 
 		$style     = new stdClass();
 		$style->ID = end( $ids );

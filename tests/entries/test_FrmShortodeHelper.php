@@ -14,8 +14,8 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 				'id'       => 'x',
 				'minimize' => '1',
 			),
-			' ' => array(),
-			''  => array(),
+			' '                  => array(),
+			''                   => array(),
 		);
 
 		foreach ( $shortcodes as $shortcode => $expected ) {
@@ -57,12 +57,12 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 		$title = 'Testing';
 		$codes = array(
 			array(
-				'html' => 'Before [form_name] After',
+				'html'       => 'Before [form_name] After',
 				'with_title' => 'Before ' . $title . ' After',
 				'no_title'   => 'Before  After',
 			),
 			array(
-				'html' => 'Before [if form_name]Name: [form_name][/if form_name] After',
+				'html'       => 'Before [if form_name]Name: [form_name][/if form_name] After',
 				'with_title' => 'Before Name: ' . $title . ' After',
 				'no_title'   => 'Before  After',
 			),

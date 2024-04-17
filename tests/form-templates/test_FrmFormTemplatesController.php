@@ -228,7 +228,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Case 1: 'new_template' not present in the URL.
 		$_GET['new_template'] = null;
-		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, array() );
+		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
@@ -236,7 +236,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Case 2: 'new_template' is present in the URL.
 		$_GET['new_template'] = 'true';
-		$modified_nav_items = $this->controller::append_new_template_to_nav( $nav_items, array() );
+		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';

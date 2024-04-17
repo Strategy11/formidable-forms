@@ -17,7 +17,7 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$option_name = 'frm_' . $id_base . '_action';
 		$number      = -1;
 
-		$action_id           = $this->factory->post->create(
+		$action_id = $this->factory->post->create(
 			array(
 				'post_type'    => FrmFormActionsController::$action_post_type,
 				'menu_order'   => $form_id,
@@ -41,7 +41,7 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$action->update_callback( $form_id );
 
 		$updated_action = get_post( $action_id );
-		$post_content = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
+		$post_content   = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
 
 		$this->assertFalse( empty( $post_content['success_url'] ) );
 		$this->assertEquals( 'https://example.com/?param=[' . $field_id . ' sanitize_url=1]', $post_content['success_url'] );

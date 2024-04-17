@@ -101,7 +101,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 
 		// Create a style and test a custom style value as well.
 		$frm_style = new FrmStyle();
-		$style_id = $this->factory->post->create(
+		$style_id  = $this->factory->post->create(
 			array(
 				'post_type'    => 'frm_styles',
 				'post_content' => FrmAppHelper::prepare_and_encode( $frm_style->get_defaults() ),

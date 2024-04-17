@@ -43,8 +43,8 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$form       = $this->factory->form->create_and_get();
 		$field      = $this->factory->field->create_and_get(
 			array(
-				'form_id' => $form->id,
-				'type'    => 'text',
+				'form_id'       => $form->id,
+				'type'          => 'text',
 				'field_options' => array(
 					'custom_html' => '
 						<div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
@@ -72,9 +72,9 @@ class test_FrmFieldsController extends FrmUnitTest {
 	 * @covers FrmFieldsController::include_new_field
 	 */
 	public function test_include_new_field() {
-		$form_id   = $this->factory->form->create();
+		$form_id = $this->factory->form->create();
 		ob_start();
-		$new_field = FrmFieldsController::include_new_field( 'text', $form_id );
+		$new_field    = FrmFieldsController::include_new_field( 'text', $form_id );
 		$field_output = ob_get_clean();
 
 		$this->assertEquals( 0, strpos( trim( $field_output ), '<li id="frm_field_id_' . $new_field['id'] . '"' ) );
@@ -95,27 +95,27 @@ class test_FrmFieldsController extends FrmUnitTest {
 	 * @covers FrmFieldsController::add_validation_messages
 	 */
 	public function test_add_validation_messages() {
-		$form_id   = $this->factory->form->create();
-		$field     = $this->factory->field->create_and_get(
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $form_id,
 				'type'    => 'email',
 			)
 		);
-		$field = FrmFieldsHelper::setup_edit_vars( $field );
+		$field   = FrmFieldsHelper::setup_edit_vars( $field );
 
-		$add_html  = array();
+		$add_html = array();
 		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
 		$this->assertArrayHasKey( 'data-invmsg', $add_html );
 		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );
 
 		$field['required'] = '1';
-		$add_html = array();
+		$add_html          = array();
 		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
 		$this->assertArrayHasKey( 'data-reqmsg', $add_html );
 
 		$field['type'] = 'hidden';
-		$add_html = array();
+		$add_html      = array();
 		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
 		$this->assertArrayNotHasKey( 'data-invmsg', $add_html );
 		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );

@@ -35,8 +35,8 @@ class FrmHoneypot extends FrmValidate {
 			$is_honeypot_spam = '' !== $honeypot_value;
 		}
 
-		$form             = $this->get_form();
-		$atts             = compact( 'form' );
+		$form = $this->get_form();
+		$atts = compact( 'form' );
 		return apply_filters( 'frm_process_honeypot', $is_honeypot_spam, $atts );
 	}
 

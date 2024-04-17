@@ -21,7 +21,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 	 * @covers FrmFormTemplatesController::ajax_add_or_remove_favorite
 	 */
 	public function test_ajax_add_or_remove_favorite() {
-		$_POST = array(
+		$_POST    = array(
 			'action'             => 'frm_add_or_remove_favorite_template',
 			'nonce'              => wp_create_nonce( 'frm_ajax' ),
 			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
@@ -44,7 +44,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 	 * @covers FrmFormTemplatesController::ajax_create_template
 	 */
 	public function test_ajax_create_template() {
-		$_POST = array(
+		$_POST    = array(
 			'action' => 'frm_create_template',
 			'nonce'  => wp_create_nonce( 'frm_ajax' ),
 			'xml'    => '1',

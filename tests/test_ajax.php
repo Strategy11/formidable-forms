@@ -13,7 +13,7 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 	 */
 	public function test_block_uninstall() {
 		// log in as user
-		$role = 'editor';
+		$role    = 'editor';
 		$user_id = $this->factory->user->create( compact( 'role' ) );
 		wp_set_current_user( $user_id );
 		$this->assertTrue( current_user_can( $role ), 'Role not set correctly' );
@@ -26,7 +26,7 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 		$response = $this->trigger_action( 'frm_uninstall' );
 
 		$frm_settings = FrmAppHelper::get_settings();
-		$expected = $frm_settings->admin_permission;
+		$expected     = $frm_settings->admin_permission;
 
 		$this->assertSame( $expected, $response );
 

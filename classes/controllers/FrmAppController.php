@@ -68,7 +68,7 @@ class FrmAppController {
 
 		if ( FrmAppHelper::is_full_screen() ) {
 			$full_screen_on = self::get_full_screen_setting();
-			$add_class = '';
+			$add_class      = '';
 			if ( $full_screen_on ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
 
@@ -299,12 +299,12 @@ class FrmAppController {
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
-				'label'   => __( 'Views', 'formidable' ),
-				'current' => array(),
-				'page'    => 'formidable-views',
+				'link'       => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
+				'label'      => __( 'Views', 'formidable' ),
+				'current'    => array(),
+				'page'       => 'formidable-views',
 				'permission' => 'frm_view_entries',
-				'atts'    => array(
+				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
 			);
@@ -313,12 +313,12 @@ class FrmAppController {
 		// Let people know reports and views exist.
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
-				'label'   => __( 'Reports', 'formidable' ),
-				'current' => array( 'reports' ),
-				'page'    => 'formidable',
+				'link'       => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
+				'label'      => __( 'Reports', 'formidable' ),
+				'current'    => array( 'reports' ),
+				'page'       => 'formidable',
 				'permission' => 'frm_view_entries',
-				'atts'    => array(
+				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
 			);
@@ -434,7 +434,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function api_email_form( $form_key, $title = '', $description = '' ) {
-		$user        = wp_get_current_user();
+		$user = wp_get_current_user();
 		$args = array(
 			'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css',
 			'title'       => $title,
@@ -569,11 +569,11 @@ class FrmAppController {
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
 			// This provides backward compatibility for old addons that use legacy modal templates.
-			$action = FrmAppHelper::get_param( 'frm_action' );
+			$action             = FrmAppHelper::get_param( 'frm_action' );
 			$trigger_name_modal = FrmAppHelper::get_param( 'triggerNewFormModal' );
 			if ( $trigger_name_modal || in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
 				$application_id = FrmAppHelper::simple_get( 'applicationId', 'absint' );
-				$url_param = $application_id ? '&applicationId=' . $application_id : '';
+				$url_param      = $application_id ? '&applicationId=' . $application_id : '';
 
 				wp_safe_redirect( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . $url_param ) );
 				exit;
@@ -633,7 +633,7 @@ class FrmAppController {
 		}
 
 		$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
-		$message = sprintf(
+		$message              = sprintf(
 			// Translators: 1: Global Settings Link
 			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
 			'<a href="' . esc_url( $global_settings_link ) . '">Global Settings</a>'
@@ -960,16 +960,16 @@ class FrmAppController {
 	 */
 	public static function create_rest_routes() {
 		$args = array(
-			'methods'  => 'GET',
-			'callback' => 'FrmAppController::api_install',
+			'methods'             => 'GET',
+			'callback'            => 'FrmAppController::api_install',
 			'permission_callback' => __CLASS__ . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );
 
 		$args = array(
-			'methods'  => 'GET',
-			'callback' => 'FrmAddonsController::install_addon_api',
+			'methods'             => 'GET',
+			'callback'            => 'FrmAddonsController::install_addon_api',
 			'permission_callback' => 'FrmAddonsController::can_install_addon_api',
 		);
 

@@ -142,7 +142,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			return;
 		}
 
-		$frm_sub = new FrmTransLiteSubscription();
+		$frm_sub       = new FrmTransLiteSubscription();
 		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
 		if ( empty( $subscriptions ) ) {
 			return;

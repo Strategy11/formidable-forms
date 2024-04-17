@@ -92,7 +92,7 @@ class FrmStringReaderHelper {
 	 */
 	private function read_one() {
 		if ( $this->pos <= $this->max ) {
-			$value = $this->string[ $this->pos ];
+			$value      = $this->string[ $this->pos ];
 			$this->pos += 1;
 		} else {
 			$value = null;

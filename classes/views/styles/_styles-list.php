@@ -19,7 +19,7 @@ $sidebar_params    = array(
 );
 $toggle_input_html = array();
 if ( $globally_disabled ) {
-	$sidebar_params['class'] .= ' frm-styles-globally-disabled';
+	$sidebar_params['class']      .= ' frm-styles-globally-disabled';
 	$toggle_input_html['disabled'] = 'disabled';
 }
 ?>
@@ -27,7 +27,7 @@ if ( $globally_disabled ) {
 	<?php
 	$can_create_styles = class_exists( 'FrmProStylesPreviewHelper' );
 	$trigger_params    = array(
-		'id' => 'frm_new_style_trigger',
+		'id'   => 'frm_new_style_trigger',
 		'href' => '#',
 	);
 	if ( $can_create_styles ) {
@@ -58,7 +58,7 @@ if ( $globally_disabled ) {
 				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
 				'show_labels' => true,
 				'echo'        => true,
-				'input_html' => $toggle_input_html,
+				'input_html'  => $toggle_input_html,
 			)
 		);
 		?>

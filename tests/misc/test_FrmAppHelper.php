@@ -16,7 +16,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$version = FrmAppHelper::plugin_version();
 		$this->assertNotEmpty( $version );
 
-		$plugin_data = get_plugin_data( dirname( __DIR__ ) . '/../formidable.php' );
+		$plugin_data      = get_plugin_data( dirname( __DIR__ ) . '/../formidable.php' );
 		$expected_version = $plugin_data['Version'];
 		$this->assertEquals( $version, $expected_version );
 	}
@@ -25,7 +25,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::plugin_folder
 	 */
 	public function test_plugin_folder() {
-		$folder = FrmAppHelper::plugin_folder();
+		$folder   = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
 		$this->assertTrue( in_array( $folder, $expected ) );
 	}
@@ -34,7 +34,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::plugin_path
 	 */
 	public function test_plugin_path() {
-		$path = FrmAppHelper::plugin_path();
+		$path          = FrmAppHelper::plugin_path();
 		$expected_file = $path . '/formidable.php';
 		$this->assertTrue( file_exists( $expected_file ) );
 	}
@@ -82,7 +82,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 			'https://site.com/page/' => 'site.com/page/',
 		);
 		foreach ( $urls as $url => $expected ) {
-			$new_url = FrmAppHelper::make_affiliate_url( $url );
+			$new_url  = FrmAppHelper::make_affiliate_url( $url );
 			$expected = 'http://www.shareasale.com/r.cfm?u=1&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $expected );
 			$this->assertEquals( $expected, $new_url );
 		}
@@ -122,7 +122,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		);
 		foreach ( $page_names as $page => $expected ) {
 			$_GET['page'] = $page;
-			$is_admin = FrmAppHelper::is_formidable_admin();
+			$is_admin     = FrmAppHelper::is_formidable_admin();
 			$this->assertEquals( $expected, $is_admin );
 		}
 
@@ -132,9 +132,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$view = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
 
 		$admin_pages = array(
-			'index.php'                      => false,
-			'edit.php?post_type=frm_display' => true,
-			'edit.php?post_type=post'        => false,
+			'index.php'                               => false,
+			'edit.php?post_type=frm_display'          => true,
+			'edit.php?post_type=post'                 => false,
 			'post.php?post=' . $view . '&action=edit&view=1' => true,
 			'post.php?post=' . $page . '&action=edit' => false,
 		);
@@ -170,7 +170,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( $url, 'example.org' );
 
 		$_SERVER['HTTP_HOST'] = '<script>alert()</script>example.org';
-		$url = FrmAppHelper::get_server_value( 'HTTP_HOST' );
+		$url                  = FrmAppHelper::get_server_value( 'HTTP_HOST' );
 		$this->assertEquals( $url, 'example.org' );
 	}
 
@@ -199,7 +199,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_simple_request
 	 */
 	public function test_get_post_param() {
-		$set_value = '<script></script>test';
+		$set_value      = '<script></script>test';
 		$expected_value = 'test';
 		$_POST['test3'] = $set_value;
 
@@ -238,9 +238,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_simple_request
 	 */
 	public function test_simple_get() {
-		$set_value = '<script></script>test';
+		$set_value      = '<script></script>test';
 		$expected_value = 'test';
-		$_GET['test4'] = $set_value;
+		$_GET['test4']  = $set_value;
 
 		$result = FrmAppHelper::simple_get( 'test4' );
 		$this->assertEquals( $result, $expected_value );
@@ -258,8 +258,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 		);
 		$this->assertEquals( '', $result );
 
-		$set_value = '<script></script>test';
-		$expected = 'test';
+		$set_value         = '<script></script>test';
+		$expected          = 'test';
 		$_REQUEST['test5'] = $set_value;
 
 		$result = FrmAppHelper::get_simple_request(
@@ -276,7 +276,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_sanitize_request() {
 		$values = array(
-			'form_id' => '<script></script>12',
+			'form_id'    => '<script></script>12',
 			'frm_action' => '<script></script>create me',
 			'form_key'   => '<script></script>This is a <b>text</b> field',
 			'content'    => '<script></script>This is a <b>text</b> field',
@@ -410,7 +410,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_allowed_html() {
 		$safe_html = $this->run_private_method( array( 'FrmAppHelper', 'safe_html' ), array() );
-		$tests = array(
+		$tests     = array(
 			array(
 				'start'    => 'all',
 				'expected' => $safe_html,
@@ -668,7 +668,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( 'value', $unserialized_array['key'] );
 
 		$serialized_string = 'O:8:"DateTime":0:{}';
-		$unserialized = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$unserialized      = FrmAppHelper::maybe_unserialize_array( $serialized_string );
 		$this->assertIsString( $unserialized );
 		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
@@ -681,18 +681,18 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$echo_function = function () {
 			echo '<div>My html</div>';
 		};
-		$html = FrmAppHelper::clip( $echo_function );
+		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '<div>My html</div>', $html );
 
 		// Test a callable string.
 		$echo_function = __CLASS__ . '::echo_function';
-		$html = FrmAppHelper::clip( $echo_function );
+		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '<div>My echo function content</div>', $html );
 
 		// Test something uncallable.
 		// Make sure it isn't fatal just in case.
 		$echo_function = __CLASS__ . '::something_uncallable';
-		$html = FrmAppHelper::clip( $echo_function );
+		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '', $html );
 	}
 
@@ -716,7 +716,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		// Test with valid message and option parameters.
 		$message = 'Test warning message';
-		$option = 'test_option';
+		$option  = 'test_option';
 		FrmAppHelper::add_dismissable_warning_message( $message, $option );
 		$messages = apply_filters( 'frm_message_list', array() );
 		$this->assertNotEmpty( $messages );

@@ -15,7 +15,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertEmpty( $save_form->options['no_save'] );
 
 		$entry_key = 'test' . $save_form->id . 'entry1';
-		$post_id = $this->create_post_entry( $save_form, $entry_key );
+		$post_id   = $this->create_post_entry( $save_form, $entry_key );
 		$this->assertNotEmpty( FrmEntry::getOne( $entry_key ) );
 
 		$post = get_post( $post_id );
@@ -25,7 +25,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$no_save_form = $this->create_form( array( 'no_save' => 1 ) );
 		$this->assertNotEmpty( $no_save_form->options['no_save'] );
 
-		$entry_key = 'test' . $no_save_form->id . 'entry2';
+		$entry_key    = 'test' . $no_save_form->id . 'entry2';
 		$created_post = $this->create_post_entry( $no_save_form, $entry_key );
 		$this->assertEmpty( FrmEntry::getOne( $entry_key ), 'Entry was not deleted' );
 
@@ -50,10 +50,10 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$new_post = $this->factory->post->create_and_get();
 
-		$_POST = $this->factory->field->generate_entry_array( $form );
+		$_POST             = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key'] = $entry_key;
-		$_POST['action'] = 'create';
-		$_POST['post_id'] = $new_post->ID;
+		$_POST['action']   = 'create';
+		$_POST['post_id']  = $new_post->ID;
 		FrmEntriesController::process_entry();
 
 		$entry = FrmEntry::getOne( $entry_key );

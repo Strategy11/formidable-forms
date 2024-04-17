@@ -13,7 +13,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 	 * @covers FrmTableHTMLGenerator::get_color_markup
 	 */
 	public function test_init_style_settings() {
-		$colors = $this->_get_colors();
+		$colors          = $this->_get_colors();
 		$table_generator = new FrmTableHTMLGenerator( 'entry', $colors['start'] );
 
 		$style_settings = $this->get_private_property( $table_generator, 'style_settings' );
@@ -59,7 +59,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		);
 
 		return array(
-			'start' => $atts,
+			'start'    => $atts,
 			'expected' => $expected,
 		);
 	}

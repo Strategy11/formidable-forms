@@ -290,10 +290,10 @@ class FrmStrpLiteEventsController {
 			$payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 		}
 
-		$payment_values['receipt_id']  = $this->charge ? $this->charge : __( 'None', 'formidable' );
-		$payment_values['status']      = $this->status;
-		$payment_values['meta_value']  = array();
-		$payment_values['created_at']  = current_time( 'mysql', 1 );
+		$payment_values['receipt_id'] = $this->charge ? $this->charge : __( 'None', 'formidable' );
+		$payment_values['status']     = $this->status;
+		$payment_values['meta_value'] = array();
+		$payment_values['created_at'] = current_time( 'mysql', 1 );
 
 		FrmTransLiteAppHelper::add_note_to_payment( $payment_values );
 	}

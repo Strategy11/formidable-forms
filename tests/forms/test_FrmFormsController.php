@@ -65,40 +65,40 @@ class test_FrmFormsController extends FrmUnitTest {
 		$form = FrmForm::getOne( $form_id );
 
 		$_POST = array(
-			'page' => 'formidable',
-			'frm_action' => 'update',
-			'id' => $form_id,
-			'action' => 'update',
-			'frm_save_form' => wp_create_nonce( 'frm_save_form_nonce' ),
-			'status' => 'published',
-			'new_status' => '',
-			'name' => $form->name,
+			'page'                 => 'formidable',
+			'frm_action'           => 'update',
+			'id'                   => $form_id,
+			'action'               => 'update',
+			'frm_save_form'        => wp_create_nonce( 'frm_save_form_nonce' ),
+			'status'               => 'published',
+			'new_status'           => '',
+			'name'                 => $form->name,
 			'frm_fields_submitted' => array(),
-			'item_meta' => array(),
-			'field_options' => array(),
+			'item_meta'            => array(),
+			'field_options'        => array(),
 		);
 
 		foreach ( $fields as $field ) {
-			$_POST['frm_fields_submitted'][] = $field->id;
+			$_POST['frm_fields_submitted'][]        = $field->id;
 			$_POST[ 'default_value_' . $field->id ] = 'default';
 
 			$field_options = array(
-				'description_' . $field->id => '',
-				'type_' . $field->id => '',
+				'description_' . $field->id        => '',
+				'type_' . $field->id               => '',
 				'required_indicator_' . $field->id => '*',
-				'field_key_' . $field->id => $field->field_key,
-				'classes_' . $field->id => '',
-				'label_' . $field->id => '',
-				'size_' . $field->id => '',
-				'max_' . $field->id => '',
-				'admin_only_' . $field->id => '',
-				'use_calc_' . $field->id => 1,
-				'calc_' . $field->id => '',
-				'calc_dec_' . $field->id => '',
-				'show_hide_' . $field->id => 'show',
-				'any_all_' . $field->id => 'any',
-				'blank_' . $field->id => 'This field cannot be blank.',
-				'unique_msg_' . $field->id => '',
+				'field_key_' . $field->id          => $field->field_key,
+				'classes_' . $field->id            => '',
+				'label_' . $field->id              => '',
+				'size_' . $field->id               => '',
+				'max_' . $field->id                => '',
+				'admin_only_' . $field->id         => '',
+				'use_calc_' . $field->id           => 1,
+				'calc_' . $field->id               => '',
+				'calc_dec_' . $field->id           => '',
+				'show_hide_' . $field->id          => 'show',
+				'any_all_' . $field->id            => 'any',
+				'blank_' . $field->id              => 'This field cannot be blank.',
+				'unique_msg_' . $field->id         => '',
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
@@ -338,7 +338,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		wp_cache_delete( $form->id, 'frm_form' );
 
 		$entry_key = 'submit-message';
-		$response = $this->post_new_entry( $form, $entry_key );
+		$response  = $this->post_new_entry( $form, $entry_key );
 
 		$this->assertEmpty( $response );
 
@@ -357,10 +357,10 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	private function post_new_entry( $form, $entry_key ) {
-		$_POST = $this->factory->field->generate_entry_array( $form );
-		$_POST['item_key'] = $entry_key;
+		$_POST               = $this->factory->field->generate_entry_array( $form );
+		$_POST['item_key']   = $entry_key;
 		$_POST['frm_action'] = 'create';
-		$_POST['action'] = 'create';
+		$_POST['action']     = 'create';
 
 		ob_start();
 		FrmEntriesController::process_entry();
@@ -371,7 +371,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	public function test_redirect_in_new_tab() {
-		$form_id  = $this->factory->form->create();
+		$form_id = $this->factory->form->create();
 
 		$this->create_on_submit_action(
 			$form_id,

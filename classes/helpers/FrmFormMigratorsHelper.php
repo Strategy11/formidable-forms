@@ -74,7 +74,7 @@ class FrmFormMigratorsHelper {
 				continue;
 			}
 
-			$installer = new FrmInstallPlugin( array( 'plugin_file' => $form['importer'] ) );
+			$installer         = new FrmInstallPlugin( array( 'plugin_file' => $form['importer'] ) );
 			$form['installed'] = $installer->is_installed();
 			$form['link']      = $installer->get_activate_link();
 

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
-	protected static $code_option_name  = 'frm_free_license_code';
+	protected static $code_option_name = 'frm_free_license_code';
 
 	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
 

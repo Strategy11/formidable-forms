@@ -13,10 +13,10 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals( array(), $saved );
 
 		$defaults = array(
-			'x' => 'X',
-			'y' => 'Y',
-			'z' => 'Z',
-			'b' => 'B',
+			'x'    => 'X',
+			'y'    => 'Y',
+			'z'    => 'Z',
+			'b'    => 'B',
 			'arr2' => array(
 				'x' => 'X',
 				'z' => 'Z',
@@ -133,7 +133,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals( $simple_xml_string, $xml_string );
 
 		$conflicting_meta_tag = '<meta name="generator" content="Equity 1.7.13" />';
-		$xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . $conflicting_meta_tag . '<channel></channel>';
+		$xml_string           = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . $conflicting_meta_tag . '<channel></channel>';
 		$this->maybe_fix_xml( $xml_string );
 
 		$this->assertEquals( $simple_xml_string, $xml_string );
@@ -158,7 +158,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			FrmXMLHelper::cdata(
 				serialize(
 					array(
-						'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
+						'browser'  => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
 						'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',
 					)
 				)

@@ -64,8 +64,8 @@ class test_FrmStylesController extends FrmUnitTest {
 			'frm_style'         => wp_create_nonce( 'frm_style_nonce' ),
 			'frm_action'        => 'save',
 			'frm_style_setting' => array(
-				'post_title'    => $style->post_title . ' Updated',
-				'post_content'  => $style->post_content,
+				'post_title'   => $style->post_title . ' Updated',
+				'post_content' => $style->post_content,
 			),
 		);
 

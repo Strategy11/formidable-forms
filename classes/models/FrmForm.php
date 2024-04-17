@@ -94,8 +94,8 @@ class FrmForm {
 		);
 
 		if ( $blog_id ) {
-			$new_values['status']    = 'published';
-			$new_options             = $values->options;
+			$new_values['status'] = 'published';
+			$new_options          = $values->options;
 			FrmAppHelper::unserialize_or_decode( $new_options );
 			$new_options['email_to'] = get_option( 'admin_email' );
 			$new_options['copy']     = false;
@@ -127,7 +127,7 @@ class FrmForm {
 	}
 
 	public static function after_duplicate( $form_id, $values ) {
-		$new_opts          = $values['options'];
+		$new_opts = $values['options'];
 		FrmAppHelper::unserialize_or_decode( $new_opts );
 		$values['options'] = $new_opts;
 
@@ -696,7 +696,7 @@ class FrmForm {
 			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
 				self::destroy( $form->id );
 				if ( empty( $form->parent_form_id ) ) {
-					$count++;
+					++$count;
 				}
 			}
 
@@ -920,16 +920,16 @@ class FrmForm {
 		foreach ( $results as $row ) {
 			if ( 'trash' != $row->status ) {
 				if ( $row->is_template ) {
-					$counts['template']++;
+					++$counts['template'];
 				} else {
-					$counts['published']++;
+					++$counts['published'];
 				}
 			} else {
-				$counts['trash']++;
+				++$counts['trash'];
 			}
 
 			if ( 'draft' == $row->status ) {
-				$counts['draft']++;
+				++$counts['draft'];
 			}
 
 			unset( $row );
@@ -1162,7 +1162,7 @@ class FrmForm {
 	 * @since 2.3
 	 */
 	public static function get_option( $atts ) {
-		$form = $atts['form'];
+		$form    = $atts['form'];
 		$default = isset( $atts['default'] ) ? $atts['default'] : '';
 
 		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $default;

@@ -53,13 +53,13 @@ class FrmAddonsController {
 		$errors = array();
 
 		if ( isset( $addons['error'] ) ) {
-			$api    = new FrmFormApi();
-			$errors = $api->get_error_from_response( $addons );
+			$api          = new FrmFormApi();
+			$errors       = $api->get_error_from_response( $addons );
 			$license_type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : '';
 			unset( $addons['error'] );
 		}
 
-		$pro = array(
+		$pro    = array(
 			'pro' => array(
 				'title'    => 'Formidable Forms Pro',
 				'slug'     => 'formidable-pro',
@@ -717,7 +717,7 @@ class FrmAddonsController {
 		);
 
 		$features = array(
-			'Display Entries' => array(
+			'Display Entries'  => array(
 				array(
 					'label' => 'Display form data with virtually limitless views',
 					'link'  => array(
@@ -769,7 +769,7 @@ class FrmAddonsController {
 					'lite'  => true,
 				),
 			),
-			'Form Building' => array(
+			'Form Building'    => array(
 				array(
 					'label' => 'Save a calculated value into a field',
 					'link'  => array(
@@ -855,7 +855,7 @@ class FrmAddonsController {
 					'lite'  => true,
 				),
 			),
-			'Form Actions' => array(
+			'Form Actions'     => array(
 				array(
 					'label' => 'Conditionally send your email notifications based on values in your form',
 					'link'  => array(
@@ -880,7 +880,7 @@ class FrmAddonsController {
 					'lite'  => true,
 				),
 			),
-			'Form Appearance' => array(
+			'Form Appearance'  => array(
 				array(
 					'label' => 'Create Multiple styles for different forms',
 					'link'  => array(

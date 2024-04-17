@@ -7,10 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'                  => __( 'Forms', 'formidable' ),
+			'label'       => __( 'Forms', 'formidable' ),
 
-			'import_link'            => true,
-			'publish'                => array(
+			'import_link' => true,
+			'publish'     => array(
 				'FrmAppHelper::add_new_item_link',
 				array(
 					'create_form' => current_user_can( 'frm_edit_forms' ),

@@ -105,7 +105,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 
 		$values['action'] = 'create';
-		$new_values = array();
+		$new_values       = array();
 		$this->fill_values( $values, $new_values );
 
 		$wpdb->insert( $wpdb->prefix . $this->table_name, $new_values );

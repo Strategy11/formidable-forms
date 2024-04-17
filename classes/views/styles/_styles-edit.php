@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		wp_nonce_field( 'frm_style_nonce', 'frm_style' );
 
 		$frm_style = new FrmStyle( $style->ID );
-		include $style_views_path . '_style-options.php';
+		require $style_views_path . '_style-options.php';
 		?>
 	</form>
 

@@ -36,7 +36,7 @@ class FrmStylesPreviewHelper {
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
-		$this->form_id = (int) $form_id;
+		$this->form_id                          = (int) $form_id;
 		$this->default_label_position_field_ids = array();
 	}
 

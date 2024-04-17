@@ -329,8 +329,8 @@ class FrmAppHelper {
 		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 
 		if ( empty( $post_type ) ) {
-			$post_id = self::simple_get( 'post', 'absint' );
-			$post    = get_post( $post_id );
+			$post_id   = self::simple_get( 'post', 'absint' );
+			$post      = get_post( $post_id );
 			$post_type = $post ? $post->post_type : '';
 		}
 
@@ -557,10 +557,10 @@ class FrmAppHelper {
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
-				'type'     => 'post',
-				'param'    => $param,
-				'default'  => $default,
-				'sanitize' => $sanitize,
+				'type'       => 'post',
+				'param'      => $param,
+				'default'    => $default,
+				'sanitize'   => $sanitize,
 				'serialized' => $serialized,
 			)
 		);
@@ -597,10 +597,10 @@ class FrmAppHelper {
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
-			'param'    => '',
-			'default'  => '',
-			'type'     => 'get',
-			'sanitize' => 'sanitize_text_field',
+			'param'      => '',
+			'default'    => '',
+			'type'       => 'get',
+			'sanitize'   => 'sanitize_text_field',
 			'serialized' => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
@@ -903,7 +903,7 @@ class FrmAppHelper {
 		);
 
 		return array(
-			'a'            => array(
+			'a'          => array(
 				'class'    => true,
 				'href'     => true,
 				'id'       => true,
@@ -974,14 +974,14 @@ class FrmAppHelper {
 				'title' => true,
 			),
 			'rect'       => array(
-				'class'  => true,
-				'fill'   => true,
-				'height' => true,
-				'width'  => true,
-				'x'      => true,
-				'y'      => true,
-				'rx'     => true,
-				'stroke' => true,
+				'class'          => true,
+				'fill'           => true,
+				'height'         => true,
+				'width'          => true,
+				'x'              => true,
+				'y'              => true,
+				'rx'             => true,
+				'stroke'         => true,
 				'stroke-opacity' => true,
 				'stroke-width'   => true,
 			),
@@ -1018,7 +1018,7 @@ class FrmAppHelper {
 			),
 			'ul'         => $allow_class,
 			'label'      => array(
-				'for'    => true,
+				'for'   => true,
 				'class' => true,
 				'id'    => true,
 			),
@@ -1374,7 +1374,7 @@ class FrmAppHelper {
 			'input_id'    => '',
 			'value'       => false,
 		);
-		$atts = array_merge( $defaults, $atts );
+		$atts     = array_merge( $defaults, $atts );
 
 		if ( $atts['input_id'] === 'template' && empty( $atts['tosearch'] ) ) {
 			$atts['tosearch'] = 'frm-card';
@@ -1470,7 +1470,7 @@ class FrmAppHelper {
 			)
 		);
 		$new_file  = new FrmCreateFile( $file_atts );
-		$files = array(
+		$files     = array(
 			FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.min.js',
 		);
 
@@ -1562,7 +1562,7 @@ class FrmAppHelper {
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-		$title = '';
+		$title    = '';
 
 		if ( $selected ) {
 			$title = get_the_title( $selected );
@@ -1628,11 +1628,11 @@ class FrmAppHelper {
 	 */
 	private static function preformat_selection_args( $args ) {
 		$defaults = array(
-			'truncate'    => false,
-			'placeholder' => ' ',
-			'field_name'  => '',
-			'page_id'     => '',
-			'post_type'   => 'page',
+			'truncate'                 => false,
+			'placeholder'              => ' ',
+			'field_name'               => '',
+			'page_id'                  => '',
+			'post_type'                => 'page',
 			'autocomplete_placeholder' => __( 'Select a Page', 'formidable' ),
 		);
 
@@ -2654,7 +2654,7 @@ class FrmAppHelper {
 		$diff        = get_object_vars( $diff_object );
 
 		// Add week amount and update day amount
-		$diff['w'] = floor( $diff['d'] / 7 );
+		$diff['w']  = floor( $diff['d'] / 7 );
 		$diff['d'] -= $diff['w'] * 7;
 
 		$time_strings = self::get_time_strings();
@@ -2663,7 +2663,7 @@ class FrmAppHelper {
 			// Show time in specified unit.
 			$levels = self::get_unit( $levels );
 			if ( isset( $time_strings[ $levels ] ) ) {
-				$diff = array(
+				$diff         = array(
 					$levels => self::time_format( $levels, $diff ),
 				);
 				$time_strings = array(
@@ -3375,7 +3375,7 @@ class FrmAppHelper {
 		}
 
 		$pro_version = FrmProDb::$plug_version;
-		$expired = FrmAddonsController::is_license_expired();
+		$expired     = FrmAddonsController::is_license_expired();
 		?>
 		<div class="frm-banner-alert frm_error_style frm_previous_install">
 			<?php
@@ -3691,7 +3691,7 @@ class FrmAppHelper {
 		$image = self::icon_by_class(
 			'frmfont ' . $option['svg'],
 			array(
-				'echo'   => false,
+				'echo' => false,
 			)
 		);
 
@@ -4175,7 +4175,7 @@ class FrmAppHelper {
 					'frmfont frm_close_icon',
 					array(
 						'aria-label' => _x( 'Dismiss', 'warning message: close icon label', 'formidable' ),
-						'echo' => false,
+						'echo'       => false,
 					)
 				);
 

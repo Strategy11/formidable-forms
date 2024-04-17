@@ -239,7 +239,7 @@ class FrmEntryMeta {
 		if ( is_numeric( $field_id ) ) {
 			$query['field_id'] = $field_id;
 		} else {
-			$get_table             .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+			$get_table            .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 			$query['fi.field_key'] = $field_id;
 		}
 
@@ -498,7 +498,7 @@ class FrmEntryMeta {
 				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
-			$query = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
+			$query  = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 		} else {
 			if ( $operator == 'LIKE' ) {
 				$search = '%' . $search . '%';

@@ -42,22 +42,22 @@ class test_FrmStyle extends FrmUnitTest {
 	 * @covers FrmStyle::strip_invalid_characters
 	 */
 	public function test_sanitize_post_content() {
-		$post_content = array(
-			'bg_color'              => '000',
-			'font_size'             => '14px',
-			'title_margin_bottom'   => '60px}',
-			'field_height'          => ';12px',
-			'field_width'           => '{10px',
-			'width'                 => 'calc(100% / 3)',
-			'section_color'         => 'rgba(255,255,255,1)',
-			'submit_border_color'   => 'ffffff',
-			'submit_active_color'   => 'rgb(255,255,255)',
-			'progress_bg_color'     => '000(',
-			'success_bg_color'      => ')fff',
-			'section_border_width'  => '[12px',
-			'section_font_size'     => '16px]',
-			'unsupported_key'       => 'fff',
-			'custom_css'            => '.my-class { color: red; }',
+		$post_content           = array(
+			'bg_color'             => '000',
+			'font_size'            => '14px',
+			'title_margin_bottom'  => '60px}',
+			'field_height'         => ';12px',
+			'field_width'          => '{10px',
+			'width'                => 'calc(100% / 3)',
+			'section_color'        => 'rgba(255,255,255,1)',
+			'submit_border_color'  => 'ffffff',
+			'submit_active_color'  => 'rgb(255,255,255)',
+			'progress_bg_color'    => '000(',
+			'success_bg_color'     => ')fff',
+			'section_border_width' => '[12px',
+			'section_font_size'    => '16px]',
+			'unsupported_key'      => 'fff',
+			'custom_css'           => '.my-class { color: red; }',
 		);
 		$frm_style              = new FrmStyle();
 		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );

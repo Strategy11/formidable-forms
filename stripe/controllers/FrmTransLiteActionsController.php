@@ -135,9 +135,9 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
-		$action = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
+		$action   = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
-		$atts = array(
+		$atts     = array(
 			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
 		);
@@ -213,7 +213,7 @@ class FrmTransLiteActionsController {
 	public static function prepare_amount( $amount, $atts = array() ) {
 		if ( isset( $atts['form'] ) ) {
 			$atts['value'] = $amount;
-			$amount = FrmTransLiteAppHelper::process_shortcodes( $atts );
+			$amount        = FrmTransLiteAppHelper::process_shortcodes( $atts );
 		}
 
 		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] == '[' && substr( $amount, -1 ) == ']' ) {
@@ -319,7 +319,7 @@ class FrmTransLiteActionsController {
 			 * @param WP_Post $payment_action
 			 */
 			$settings_for_action = apply_filters( 'frm_trans_settings_for_js', $settings_for_action, $payment_action );
-			$action_settings[] = $settings_for_action;
+			$action_settings[]   = $settings_for_action;
 		}
 
 		return $action_settings;

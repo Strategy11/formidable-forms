@@ -118,8 +118,8 @@ class FrmStrpLiteLinkRedirectHelper {
 			return false;
 		}
 
-		$home_url      = home_url();
-		$parsed        = parse_url( $home_url );
+		$home_url = home_url();
+		$parsed   = parse_url( $home_url );
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}

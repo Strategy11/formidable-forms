@@ -149,7 +149,7 @@ class FrmStrpLiteLinkController {
 			'form'  => $entry->form_id,
 			'value' => $action->post_content['description'],
 		);
-		$new_values = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
+		$new_values     = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
 		FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent->id, $new_values );
 	}
 
@@ -215,13 +215,13 @@ class FrmStrpLiteLinkController {
 		$new_charge = array(
 			'customer'               => $customer_id,
 			'default_payment_method' => $payment_method_id,
-			'plan' => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
+			'plan'                   => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
 					'action' => $action,
 					'amount' => $amount,
 				)
 			),
-			'expand'           => array( 'latest_invoice.charge' ),
+			'expand'                 => array( 'latest_invoice.charge' ),
 		);
 
 		if ( ! FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
@@ -259,7 +259,7 @@ class FrmStrpLiteLinkController {
 		$new_payment_values        = array();
 
 		if ( $customer_has_been_charged ) {
-			$charge = $subscription->latest_invoice->charge;
+			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
 
 			if ( 'failed' === $charge->status ) {
