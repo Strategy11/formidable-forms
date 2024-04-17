@@ -28,7 +28,7 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 				'field_key' => 'description',
 			)
 		);
-		$item->metas = array(
+		$item->metas          = array(
 			$description_field_id => 'Description field value',
 		);
 

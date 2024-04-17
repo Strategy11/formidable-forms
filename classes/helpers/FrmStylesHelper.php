@@ -733,7 +733,7 @@ class FrmStylesHelper {
 			},
 			array( '1', 1 )
 		);
-		$where = array(
+		$where      = array(
 			'status' => 'published',
 			0        => array(
 				'options NOT LIKE' => 'custom_style',
@@ -745,7 +745,7 @@ class FrmStylesHelper {
 		if ( $conversational_style_id ) {
 			// When a conversational style is set, check for it in the query by wrapping the where and adding a conversational option check.
 			$is_conversational_style = (int) $style_id === (int) $conversational_style_id;
-			$where[0] = array(
+			$where[0]                = array(
 				// The chat option doesn't exist if it isn't on.
 				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
 				$where[0],

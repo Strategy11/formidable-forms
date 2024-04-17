@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			continue;
 		}
 
-		$license = $plugin->license;
-		$status  = get_option( $plugin->option_name . 'active' );
-		$activate = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
+		$license    = $plugin->license;
+		$status     = get_option( $plugin->option_name . 'active' );
+		$activate   = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
 		$icon_class = ( empty( $license ) ) ? 'frm_hidden' : '';
 		?>
 

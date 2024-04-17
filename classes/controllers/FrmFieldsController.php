@@ -174,7 +174,7 @@ class FrmFieldsController {
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
 
-			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
+			$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
 
 			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
@@ -244,13 +244,13 @@ class FrmFieldsController {
 		$opts  = explode( "\n", rtrim( $opts, "\n" ) );
 		$opts  = array_map( 'trim', $opts );
 
-		$separate = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
+		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = ( $separate === 'true' );
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
 				if ( strpos( $opt, '|' ) !== false ) {
-					$vals = explode( '|', $opt );
+					$vals             = explode( '|', $opt );
 					$opts[ $opt_key ] = array(
 						'label' => trim( $vals[0] ),
 						'value' => trim( $vals[1] ),
@@ -343,7 +343,7 @@ class FrmFieldsController {
 	 */
 	private static function default_value_types( $field, $atts ) {
 		$types = array(
-			'default_value' => array(
+			'default_value'    => array(
 				'class' => '',
 				'icon'  => 'frm_icon_font frm_text2_icon',
 				'title' => __( 'Default Value (Text)', 'formidable' ),
@@ -351,7 +351,7 @@ class FrmFieldsController {
 					'frmshow' => '#default-value-for-',
 				),
 			),
-			'calc' => array(
+			'calc'             => array(
 				'class' => 'frm_show_upgrade frm_noallow',
 				'title' => __( 'Default Value (Calculation)', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_calculator_icon',

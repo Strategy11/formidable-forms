@@ -65,10 +65,10 @@ class FrmDb {
 		}
 
 		foreach ( $args as $key => $value ) {
-			$where          .= empty( $where ) ? $base_where : $condition;
+			$where         .= empty( $where ) ? $base_where : $condition;
 			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
 			if ( is_numeric( $key ) || $array_inc_null ) {
-				$where        .= ' ( ';
+				$where       .= ' ( ';
 				$nested_where = '';
 				if ( $array_inc_null ) {
 					foreach ( $value as $val ) {
@@ -112,20 +112,20 @@ class FrmDb {
 		if ( is_array( $value ) ) {
 			// translate array of values to "in"
 			if ( strpos( $lowercase_key, 'like' ) !== false ) {
-				$where = preg_replace( '/' . $key . '$/', '', $where );
+				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
-				$start = true;
+				$start  = true;
 				foreach ( $value as $v ) {
 					if ( ! $start ) {
 						$where .= ' OR ';
 					}
 					$start    = false;
-					$where    .= $key . ' %s';
+					$where   .= $key . ' %s';
 					$values[] = '%' . self::esc_like( $v ) . '%';
 				}
 				$where .= ')';
 			} elseif ( ! empty( $value ) ) {
-				$where  .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
+				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
 		} elseif ( strpos( $lowercase_key, 'like' ) !== false ) {
@@ -140,12 +140,12 @@ class FrmDb {
 				$start = '';
 				$where = rtrim( $where, '%' );
 			} elseif ( $lowercase_key == '%like' ) {
-				$end   = '';
-				$where = rtrim( rtrim( $where, '%like' ), '%LIKE' );
+				$end    = '';
+				$where  = rtrim( rtrim( $where, '%like' ), '%LIKE' );
 				$where .= 'like';
 			}
 
-			$where    .= ' %s';
+			$where   .= ' %s';
 			$values[] = $start . self::esc_like( $value ) . $end;
 
 		} elseif ( $value === null ) {
@@ -176,7 +176,7 @@ class FrmDb {
 	private static function add_query_placeholder( $key, $value, &$where ) {
 		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
 			// Switch string to number.
-			$value = $value + 0;
+			$value  = $value + 0;
 			$where .= is_float( $value ) ? '%f' : '%d';
 		} else {
 			$where .= '%s';
@@ -241,7 +241,7 @@ class FrmDb {
 			$cache_key .= $key . '_' . $value;
 		}
 		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
-		$cache_key = str_replace( array( ' ', ',' ), '_', $cache_key );
+		$cache_key  = str_replace( array( ' ', ',' ), '_', $cache_key );
 
 		return $cache_key;
 	}

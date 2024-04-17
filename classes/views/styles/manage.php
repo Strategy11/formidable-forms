@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Easily change which style your forms are using by making changes below.', 'formidable' ); ?>
 	</p>
 
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 	<table class="widefat fixed striped">
 		<thead>

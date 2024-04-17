@@ -208,7 +208,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 				'draft' => 1,
 			),
 		);
-		$draft_field_id = $this->factory->field->create( $draft_field_options );
+		$draft_field_id      = $this->factory->field->create( $draft_field_options );
 
 		// Test a single draft field.
 		$results = FrmFieldsHelper::get_draft_field_results( $form_id );
@@ -217,8 +217,8 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 
 		// Test with two draft fields.
 		$draft_field_id2 = $this->factory->field->create( $draft_field_options );
-		$results = FrmFieldsHelper::get_draft_field_results( $form_id );
-		$ids     = wp_list_pluck( $results, 'id' );
+		$results         = FrmFieldsHelper::get_draft_field_results( $form_id );
+		$ids             = wp_list_pluck( $results, 'id' );
 		$this->assertEquals( array( $draft_field_id, $draft_field_id2 ), $ids );
 
 		// Test the $field_ids parameter. If this is not empty, we only want o query for these IDs.
@@ -245,12 +245,12 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 				),
 			)
 		);
-		$entry_data = $this->factory->field->generate_entry_array( $form );
+		$entry_data     = $this->factory->field->generate_entry_array( $form );
 		$entry_data['item_meta'][ $checkbox_field->id ] = array(
 			'Option 1',
 			'Option 2',
 		);
-		$entry   = $this->factory->entry->create_and_get( $entry_data );
+		$entry = $this->factory->entry->create_and_get( $entry_data );
 
 		$shortcode  = '[' . $checkbox_field->id . ' sep="</div><div>"]';
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );

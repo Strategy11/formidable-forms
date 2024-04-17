@@ -329,9 +329,9 @@ class FrmSMTPController {
 		$step['plugin'] = $this->output_data['pro_plugin_installed'] ? $this->config['pro_plugin'] : $this->config['lite_plugin'];
 
 		if ( $this->output_data['plugin_activated'] ) {
-			$step['icon']          = 'frm_step_complete_icon';
-			$step['button_text']   = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
-			$step['button_class']  = 'grey disabled';
+			$step['icon']         = 'frm_step_complete_icon';
+			$step['button_text']  = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
+			$step['button_class'] = 'grey disabled';
 		} else {
 			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
 			$step['button_class']  = 'frm-activate-addon';

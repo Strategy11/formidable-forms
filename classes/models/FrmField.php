@@ -5,70 +5,70 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmField {
 
-	public static $use_cache = true;
+	public static $use_cache      = true;
 	public static $transient_size = 200;
 
 	public static function field_selection() {
 		$fields = array(
-			'text'     => array(
+			'text'                      => array(
 				'name' => __( 'Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_text2_icon',
 			),
-			'textarea' => array(
+			'textarea'                  => array(
 				'name' => __( 'Paragraph', 'formidable' ),
 				'icon' => 'frm_icon_font frm_paragraph_icon',
 			),
-			'checkbox' => array(
+			'checkbox'                  => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
 				'icon' => 'frm_icon_font frm_check_square_icon',
 			),
-			'radio'    => array(
+			'radio'                     => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
 				'icon' => 'frm_icon_font frm_radio_checked_icon',
 			),
-			'select'   => array(
+			'select'                    => array(
 				'name' => __( 'Dropdown', 'formidable' ),
 				'icon' => 'frm_icon_font frm_caret_square_down_icon',
 			),
-			'email'    => array(
+			'email'                     => array(
 				'name' => __( 'Email', 'formidable' ),
 				'icon' => 'frm_icon_font frm_email_icon',
 			),
-			'url'      => array(
+			'url'                       => array(
 				'name' => __( 'Website/URL', 'formidable' ),
 				'icon' => 'frm_icon_font frm_link_icon',
 			),
-			'number'   => array(
+			'number'                    => array(
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
-			'name'     => array(
+			'name'                      => array(
 				'name' => __( 'Name', 'formidable' ),
 				'icon' => 'frm_icon_font frm_user_name_icon',
 			),
-			'phone'    => array(
+			'phone'                     => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
 			),
-			'html'     => array(
+			'html'                      => array(
 				'name' => __( 'HTML', 'formidable' ),
 				'icon' => 'frm_icon_font frm_code_icon',
 			),
-			'hidden'   => array(
+			'hidden'                    => array(
 				'name' => __( 'Hidden', 'formidable' ),
 				'icon' => 'frm_icon_font frm_eye_slash_icon',
 			),
-			'user_id'  => array(
+			'user_id'                   => array(
 				'name' => __( 'User ID', 'formidable' ),
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
-			'captcha'  => array(
+			'captcha'                   => array(
 				'name' => self::get_captcha_field_name(),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
-			'credit_card' => array(
-				'name'  => __( 'Payment', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_credit_card_icon',
+			'credit_card'               => array(
+				'name' => __( 'Payment', 'formidable' ),
+				'icon' => 'frm_icon_font frm_credit_card_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -94,115 +94,115 @@ class FrmField {
 	public static function pro_field_selection() {
 		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
-			'file'           => array(
-				'name' => __( 'File Upload', 'formidable' ),
-				'icon' => 'frm_icon_font frm_upload_icon',
+			'file'            => array(
+				'name'    => __( 'File Upload', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_upload_icon',
 				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
 			),
-			'ranking'  => array(),
-			'rte'            => array(
+			'ranking'         => array(),
+			'rte'             => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
 			),
-			'date'           => array(
+			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
 				'icon' => 'frm_icon_font frm_calendar_icon',
 			),
-			'time'           => array(
+			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),
 				'icon' => 'frm_icon_font frm_clock_icon',
 			),
-			'scale'          => array(
-				'name' => __( 'Scale', 'formidable' ),
-				'icon' => 'frm_icon_font frm_linear_scale_icon',
+			'scale'           => array(
+				'name'    => __( 'Scale', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_linear_scale_icon',
 				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
 			),
-			'star'           => array(
+			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
 				'icon' => 'frm_icon_font frm_star_icon',
 			),
-			'range'          => array(
+			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
 				'icon' => 'frm_icon_font frm_code_commit_icon',
 			),
-			'toggle'         => array(
+			'toggle'          => array(
 				'name' => __( 'Toggle', 'formidable' ),
 				'icon' => 'frm_icon_font frm_toggle_on_icon',
 			),
-			'data'           => array(
-				'name' => __( 'Dynamic', 'formidable' ),
-				'icon' => 'frm_icon_font frm_sitemap_icon',
+			'data'            => array(
+				'name'    => __( 'Dynamic', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_sitemap_icon',
 				'message' => 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.',
 			),
-			'lookup'         => array(
-				'name' => __( 'Lookup', 'formidable' ),
-				'icon' => 'frm_icon_font frm_search_icon',
+			'lookup'          => array(
+				'name'    => __( 'Lookup', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_search_icon',
 				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
 			),
-			'divider|repeat' => array(
-				'name' => __( 'Repeater', 'formidable' ),
-				'icon' => 'frm_icon_font frm_repeater_icon',
+			'divider|repeat'  => array(
+				'name'    => __( 'Repeater', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_repeater_icon',
 				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_attr( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
 			),
-			'end_divider'    => array(
+			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
 				'switch_from' => 'divider',
 			),
-			'divider'        => array(
+			'divider'         => array(
 				'name' => __( 'Section', 'formidable' ),
 				'icon' => 'frm_icon_font frm_header_icon',
 			),
-			'break'          => array(
-				'name' => __( 'Page Break', 'formidable' ),
-				'icon' => 'frm_icon_font frm_page_break_icon',
+			'break'           => array(
+				'name'    => __( 'Page Break', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_page_break_icon',
 				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
 			),
-			'form'           => array(
+			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
 				'icon' => 'frm_icon_font frm_file_text_icon',
 			),
-			'likert'         => array(
+			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
 				'addon' => 'surveys',
 			),
-			'nps'            => array(
+			'nps'             => array(
 				'name'  => __( 'NPS', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
 				'addon' => 'surveys',
 			),
-			'password'       => array(
+			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
 				'icon' => 'frm_icon_font frm_lock_open_icon',
 			),
-			'tag'            => array(
+			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
 				'icon' => 'frm_icon_font frm_price_tags_icon',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
-			'credit_card'    => array(
-				'name'  => '',
-				'icon'  => '',
+			'credit_card'     => array(
+				'name' => '',
+				'icon' => '',
 			),
-			'address'        => array(
+			'address'         => array(
 				'name' => __( 'Address', 'formidable' ),
 				'icon' => 'frm_icon_font frm_location_icon',
 			),
-			'summary' => array(
-				'name'  => __( 'Summary', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_file_text_icon',
+			'summary'         => array(
+				'name'    => __( 'Summary', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_file_text_icon',
 				'message' => 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.',
 			),
-			'signature' => array(
+			'signature'       => array(
 				'name'  => __( 'Signature', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
 				'addon' => 'signature',
 			),
-			'ai' => array(
-				'name'  => __( 'AI', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_eye_icon frm_show_upgrade',
-				'addon' => 'ai',
+			'ai'              => array(
+				'name'    => __( 'AI', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'addon'   => 'ai',
 				'message' => 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.',
 			),
 			'ssa-appointment' => array(
@@ -213,17 +213,17 @@ class FrmField {
 					<img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
-			'product' => array(
+			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_product_icon',
 				'section' => 'pricing',
 			),
-			'quantity' => array(
+			'quantity'        => array(
 				'name'    => __( 'Quantity', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_quantity_icon',
 				'section' => 'pricing',
 			),
-			'total' => array(
+			'total'           => array(
 				'name'    => __( 'Total', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_total_icon',
 				'section' => 'pricing',
@@ -742,7 +742,7 @@ class FrmField {
 				}
 
 				$fields[ $result->id ] = $result;
-				$count++;
+				++$count;
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
@@ -786,7 +786,7 @@ class FrmField {
 			$fields = array();
 			$count  = 0;
 			foreach ( $results as $result ) {
-				$count++;
+				++$count;
 				$fields[ $result->id ] = $result;
 				if ( ! empty( $limit ) && $count >= $limit ) {
 					break;
@@ -837,7 +837,7 @@ class FrmField {
 			return;
 		}
 
-		$form_fields = $results;
+		$form_fields         = $results;
 		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
@@ -856,7 +856,7 @@ class FrmField {
 			}
 
 			if ( ! empty( $sub_fields ) ) {
-				$index        = $k + $index_offset;
+				$index         = $k + $index_offset;
 				$index_offset += count( $sub_fields );
 				array_splice( $results, $index, 0, $sub_fields );
 			}
@@ -990,7 +990,7 @@ class FrmField {
 
 			if ( count( $next_fields ) >= self::$transient_size ) {
 				// if this transient is full, check for another
-				$next++;
+				++$next;
 				self::get_next_transient( $fields, $base_name, $next );
 			}
 		}
@@ -1018,7 +1018,7 @@ class FrmField {
 				return;
 			}
 
-			$next++;
+			++$next;
 		}
 	}
 

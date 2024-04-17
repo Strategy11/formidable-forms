@@ -14,7 +14,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertTrue( strpos( $base['baseurl'], 'http://' ) !== false );
 
 		$_SERVER['HTTPS'] = 'on';
-		$base = FrmStylesHelper::get_upload_base();
+		$base             = FrmStylesHelper::get_upload_base();
 		$this->assertTrue( strpos( $base['baseurl'], 'https://' ) !== false );
 	}
 
@@ -32,7 +32,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			'action'            => 'frm_change_styling',
 			'style_name'        => 'frm_style_test',
 			'frm_style_setting' => array(
-				'post_content'  => $frm_style->get_defaults(),
+				'post_content' => $frm_style->get_defaults(),
 			),
 		);
 
@@ -128,7 +128,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			FrmAppHelper::unserialize_or_decode( $options );
 
 			if ( ! isset( $options['custom_style'] ) || in_array( $options['custom_style'], array( '1', 1 ), true ) ) {
-				$default_count++;
+				++$default_count;
 			}
 
 			unset( $options );

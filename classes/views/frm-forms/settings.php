@@ -10,18 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Settings', 'formidable' ),
-			'form'        => $form,
-			'hide_title'  => true,
-			'close'       => '?page=formidable',
-			'publish'     => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
+			'label'      => __( 'Settings', 'formidable' ),
+			'form'       => $form,
+			'hide_title' => true,
+			'close'      => '?page=formidable',
+			'publish'    => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);
 	?>
 
 	<div class="columns-2">
 		<div class="frm-right-panel">
-			<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php'; ?>
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php'; ?>
 		</div>
 
 		<div id="post-body-content" class="frm-fields">
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php do_action( 'frm_add_form_option_section', $values ); ?>
 					<div class="clear"></div>
-					<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php'; ?>
+					<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php'; ?>
 					<?php do_action( 'frm_page_footer', array( 'table' => 'form-settings' ) ); ?>
 				</div>
 			</div>

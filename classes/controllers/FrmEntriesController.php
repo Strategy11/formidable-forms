@@ -395,7 +395,7 @@ class FrmEntriesController {
 
 			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
-				$i--;
+				--$i;
 			}
 
 			unset( $col_key, $col );
@@ -447,7 +447,7 @@ class FrmEntriesController {
 			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
 
 			/* translators: %1$s: Time string */
-			$errors['trash']  = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 		}
 	}
 
@@ -495,9 +495,9 @@ class FrmEntriesController {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
 			$error_args = array(
-				'title'       => __( 'Verification failed', 'formidable' ),
-				'body'        => $permission_error,
-				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $permission_error,
+				'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 			return;

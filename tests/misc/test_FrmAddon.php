@@ -122,7 +122,7 @@ class FrmTestAddon extends FrmAddon {
 
 	public $plugin_name = 'Signature';
 	public $download_id = 163248;
-	public $version = '1.10';
+	public $version     = '1.10';
 
 	public function __construct() {
 		$this->plugin_file = FrmAppHelper::plugin_path() . '/signature.php';

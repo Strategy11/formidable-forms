@@ -41,7 +41,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$test_email             = 'amadeupemail@email.com';
 		$test_url               = 'http://madeupwebsite.com';
 		$values                 = array(
-			'item_meta' => array(
+			'item_meta'      => array(
 				0                       => '',
 				$made_up_name_field_id  => $test_name,
 				$made_up_email_field_id => $test_email,
@@ -59,7 +59,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
 		// Test with repeater/embedded field.
-		$values['item_meta'][ $made_up_name_field_id ] = array(
+		$values['item_meta'][ $made_up_name_field_id ]  = array(
 			'John Doe',
 			'Some Guy',
 		);
@@ -67,7 +67,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			'johndoe@gmail.com',
 			'someguy@gmail.com',
 		);
-		$values['item_meta'][ $made_up_url_field_id ] = array(
+		$values['item_meta'][ $made_up_url_field_id ]   = array(
 			'https://johndoe.com',
 			'https://someguy.com',
 		);
@@ -221,7 +221,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$values['item_meta'][ $fields['radio_3']->id ] = 'option-2';
 		$values['item_meta'][ $fields['radio_4']->id ] = 'Other';
 		$values['item_meta'][ $fields['radio_5']->id ] = 'Other';
-		$values['item_meta']['other'] = array(
+		$values['item_meta']['other']                  = array(
 			$fields['radio_4']->id => 'option-3',
 			$fields['radio_5']->id => 'another-value',
 		);

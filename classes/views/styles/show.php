@@ -39,10 +39,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		$view_file = 'list' === $view ? 'list' : 'edit';
 		// Render view based on type (either _styles-list.php or _styles-edit.php).
-		include $style_views_path . '_styles-' . $view_file . '.php';
+		require $style_views_path . '_styles-' . $view_file . '.php';
 
 		// Render preview container.
-		include $style_views_path . '_style-preview-container.php';
+		require $style_views_path . '_style-preview-container.php';
 		?>
 	</div>
 </div>

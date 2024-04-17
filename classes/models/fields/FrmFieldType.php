@@ -133,7 +133,7 @@ abstract class FrmFieldType {
 
 		if ( is_array( $this->field ) ) {
 			$this->field_id = isset( $this->field['id'] ) ? $this->field['id'] : 0;
-		} else if ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
+		} elseif ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
 			$this->field_id = $this->field->id;
 		} elseif ( is_numeric( $this->field ) ) {
 			$this->field_id = $this->field;
@@ -284,8 +284,8 @@ DEFAULT_HTML;
 		$html_id    = $this->html_id();
 		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
-		$field['html_name']     = $field_name;
-		$field['html_id']       = $html_id;
+		$field['html_name'] = $field_name;
+		$field['html_id']   = $html_id;
 		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
@@ -1120,7 +1120,7 @@ DEFAULT_HTML;
 			}
 		} else {
 			$args['save_array'] = $this->is_readonly_array();
-			$hidden             .= $this->show_single_hidden( $selected_value, $args );
+			$hidden            .= $this->show_single_hidden( $selected_value, $args );
 		}
 
 		return $hidden;
@@ -1129,7 +1129,7 @@ DEFAULT_HTML;
 	protected function show_single_hidden( $selected, $args ) {
 		if ( $args['save_array'] ) {
 			$args['field_name'] .= '[]';
-			$id                 = '';
+			$id                  = '';
 		} else {
 			$id = ' id="' . esc_attr( $args['html_id'] ) . '"';
 		}

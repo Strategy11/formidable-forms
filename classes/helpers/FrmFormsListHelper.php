@@ -91,8 +91,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 		}
 
-		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
-		$total_items = FrmDb::get_count( 'frm_forms', $s_query );
+		$this->items       = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
+		$total_items       = FrmDb::get_count( 'frm_forms', $s_query );
 		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
@@ -274,7 +274,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
+					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
 					$val .= $action_links;
 					break;
 				case 'created_at':

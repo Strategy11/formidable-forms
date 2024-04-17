@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
 			foreach ( $values['fields'] as $field ) {
-				$values['count']++;
+				++$values['count'];
 				$grid_helper->set_field( $field );
 				$grid_helper->maybe_begin_field_wrapper();
 				FrmFieldsController::load_single_field( $field, $values );

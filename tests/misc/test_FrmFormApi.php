@@ -6,7 +6,7 @@ class test_FrmFormApi extends FrmUnitTest {
 	 * @covers FrmFormApi::get_error_from_response
 	 */
 	public function test_get_error_from_response() {
-		$api     = new FrmFormApi();
+		$api = new FrmFormApi();
 
 		// Test an array error.
 		$message = 'Your license has expired.';

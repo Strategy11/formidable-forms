@@ -464,7 +464,7 @@ class FrmListHelper {
 		foreach ( $actions as $action => $link ) {
 			++$i;
 			( $i == $action_count ) ? $sep = '' : $sep = ' | ';
-			$out .= "<span class='$action'>$link$sep</span>";
+			$out                          .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
 
@@ -862,7 +862,7 @@ class FrmListHelper {
 	 */
 	public function get_column_count() {
 		list ( $columns, $hidden ) = $this->get_column_info();
-		$hidden = array_intersect( array_keys( $columns ), array_filter( $hidden ) );
+		$hidden                    = array_intersect( array_keys( $columns ), array_filter( $hidden ) );
 
 		return count( $columns ) - count( $hidden );
 	}
@@ -897,9 +897,9 @@ class FrmListHelper {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
-			$columns['cb'] .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
-			$cb_counter++;
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
+			$columns['cb']    .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
+			++$cb_counter;
 		}
 
 		foreach ( $columns as $column_key => $column_display_name ) {

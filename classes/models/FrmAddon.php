@@ -13,9 +13,9 @@ class FrmAddon {
 	public $plugin_slug;
 	public $option_name;
 	public $version;
-	public $author = 'Strategy11';
+	public $author            = 'Strategy11';
 	public $is_parent_licence = false;
-	public $needs_license = true;
+	public $needs_license     = true;
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
@@ -794,18 +794,18 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp = wp_remote_post(
+		$resp              = wp_remote_post(
 			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
 			$arg_array
 		);
-		$body = wp_remote_retrieve_body( $resp );
+		$body              = wp_remote_retrieve_body( $resp );
 		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
 			$link = FrmAppHelper::admin_upgrade_link( 'api', 'knowledgebase/why-cant-i-activate-formidable-pro/' );
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			$message = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' );
+			$message  = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' );
 			$message .= ' ' . $resp->get_error_message();
 		} elseif ( 'error' === $body || is_wp_error( $body ) ) {
 			$message = __( 'You had an HTTP error connecting to the Formidable API', 'formidable' );

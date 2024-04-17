@@ -12,8 +12,8 @@ class test_FrmFieldType extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'number',
-				'form_id' => $form_id,
+				'type'          => 'number',
+				'form_id'       => $form_id,
 				'field_options' => array(
 					'minnum' => 10,
 					'maxnum' => 999,
@@ -165,8 +165,8 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::get_import_value
 	 */
 	public function test_get_import_value() {
-		$field = new stdClass();
-		$field->type = 'checkbox';
+		$field          = new stdClass();
+		$field->type    = 'checkbox';
 		$field->options = array(
 			array(
 				'value' => 'a',
@@ -207,7 +207,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	public function test_is_not_unique() {
 
 		$form_id = $this->factory->form->create();
-		$field1 = $this->factory->field->create_and_get(
+		$field1  = $this->factory->field->create_and_get(
 			array(
 				'type'    => 'number',
 				'form_id' => $form_id,
@@ -215,7 +215,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		);
 
 		$field_object1 = FrmFieldFactory::get_field_type( 'text', $field1 );
-		$entry_id     = 0;
+		$entry_id      = 0;
 
 		$this->assertFalse( $field_object1->is_not_unique( 'First', $entry_id ), 'the first iteration of a new value should be flagged as okay' );
 		$this->assertTrue( $field_object1->is_not_unique( 'First', $entry_id ), 'the second iteration of a new value should should be flagged as a duplicate' );
@@ -229,7 +229,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field_object2 = FrmFieldFactory::get_field_type( 'text', $field1 );
 		$this->assertTrue( $field_object2->is_not_unique( 'First', $entry_id ), 'another field object for the same field should also be flagging a duplicate' );
 
-		$field2 = $this->factory->field->create_and_get(
+		$field2        = $this->factory->field->create_and_get(
 			array(
 				'type'    => 'number',
 				'form_id' => $form_id,
@@ -327,7 +327,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		);
 
 		global $pagenow;
-		$pagenow = 'admin-ajax.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$pagenow        = 'admin-ajax.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$_GET['action'] = 'frm_forms_preview';
 
 		$html = $field_object->prepare_field_html( $args );

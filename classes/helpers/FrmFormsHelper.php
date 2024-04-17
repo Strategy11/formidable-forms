@@ -118,8 +118,8 @@ class FrmFormsHelper {
 			$selected = $selected->name;
 		}
 
-		$name = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
+		$name           = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
+		$name           = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		if ( count( $forms ) < 2 ) {
@@ -258,7 +258,7 @@ class FrmFormsHelper {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg = do_shortcode( $frm_settings->invalid_msg );
+		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
@@ -502,49 +502,49 @@ BEFORE_HTML;
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
-			'id'             => array(
+			'id'               => array(
 				'label' => __( 'Field ID', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'key'            => array(
+			'key'              => array(
 				'label' => __( 'Field Key', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'field_name'     => array(
+			'field_name'       => array(
 				'label' => __( 'Field Name', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'description'    => array(
+			'description'      => array(
 				'label' => __( 'Field Description', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'label_position' => array(
+			'label_position'   => array(
 				'label' => __( 'Label Position', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'required_label' => array(
+			'required_label'   => array(
 				'label' => __( 'Required Label', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'input'          => array(
+			'input'            => array(
 				'label' => __( 'Input Field', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'input opt=1'    => array(
+			'input opt=1'      => array(
 				'label' => __( 'Single Option', 'formidable' ),
 				'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'input label=0'  => array(
+			'input label=0'    => array(
 				'label' => __( 'Hide Option Label', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'required_class' => array(
+			'required_class'   => array(
 				'label' => __( 'Required Class', 'formidable' ),
 				'title' => __( 'Add class name if field is required', 'formidable' ),
 				'class' => 'show_field_custom_html',
 			),
-			'error_class'    => array(
+			'error_class'      => array(
 				'label' => __( 'Error Class', 'formidable' ),
 				'title' => __( 'Add class name if field has an error on form submit', 'formidable' ),
 				'class' => 'show_field_custom_html',
@@ -567,11 +567,11 @@ BEFORE_HTML;
 				'class' => 'show_before_html show_after_html',
 			),
 
-			'button_label' => array(
+			'button_label'     => array(
 				'label' => __( 'Button Label', 'formidable' ),
 				'class' => 'show_submit_html',
 			),
-			'button_action' => array(
+			'button_action'    => array(
 				'label' => __( 'Button Hook', 'formidable' ),
 				'class' => 'show_submit_html',
 			),
@@ -691,7 +691,7 @@ BEFORE_HTML;
 		$last_field         = false;
 		foreach ( $fields as $field ) {
 			if ( $prev_order === $field->field_order ) {
-				$add_order++;
+				++$add_order;
 			}
 
 			if ( $add_order ) {
@@ -748,7 +748,7 @@ BEFORE_HTML;
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
 
-		$add_order    += 2;
+		$add_order   += 2;
 		$open         = false;
 		$reset_fields = true;
 	}
@@ -1158,7 +1158,7 @@ BEFORE_HTML;
 			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
 			if ( $length == 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
-				$link  .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
+				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
 			}
 
 			$link .= '>' . $label . '</a>';
@@ -1230,31 +1230,31 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
-			'frm_total'      => array(
+			'frm_total'       => array(
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
 			),
-			'frm_total_big'  => array(
+			'frm_total_big'   => array(
 				'label' => __( 'Big Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in large, bold text without a border or background.', 'formidable' ),
 			),
-			'frm_scroll_box' => array(
+			'frm_scroll_box'  => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
 				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
 			),
-			'frm_first'      => array(
+			'frm_first'       => array(
 				'label' => __( 'First', 'formidable' ),
 				'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
 			),
-			'frm_alignright' => __( 'Right', 'formidable' ),
-			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
-			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
-			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_alignright'  => __( 'Right', 'formidable' ),
+			'frm_grid_first'  => __( 'First Grid Row', 'formidable' ),
+			'frm_grid'        => __( 'Even Grid Row', 'formidable' ),
+			'frm_grid_odd'    => __( 'Odd Grid Row', 'formidable' ),
 			'frm_color_block' => array(
 				'label' => __( 'Color Block', 'formidable' ),
 				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
 			),
-			'frm_capitalize' => array(
+			'frm_capitalize'  => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
 			),
@@ -1323,9 +1323,9 @@ BEFORE_HTML;
 	public static function template_icon( $categories, $atts = array() ) {
 		// Define defaults.
 		$defaults = array(
-			'bg'   => true,
+			'bg' => true,
 		);
-		$atts = array_merge( $defaults, $atts );
+		$atts     = array_merge( $defaults, $atts );
 
 		// Filter out ignored categories.
 		$ignore     = self::ignore_template_categories();
@@ -1333,34 +1333,34 @@ BEFORE_HTML;
 
 		// Define icons mapping.
 		$icons = array(
-			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
-			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
-			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'WooCommerce'             => array( 'woocommerce', 'var(--purple)' ),
+			'Post'                    => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration'       => array( 'register', 'var(--pink)' ),
 			'Registration and Signup' => array( 'register', 'var(--pink)' ),
-			'PayPal'              => array( 'paypal' ),
-			'Stripe'              => array( 'credit_card', 'var(--green)' ),
-			'Twilio'              => array( 'sms' ),
-			'Payment'             => array( 'credit_card' ),
-			'Order Form'          => array( 'product' ),
-			'Finance'             => array( 'total' ),
-			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
-			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
-			'Real Estate'         => array( 'house' ),
-			'Nonprofit'           => array( 'heart_solid' ),
-			'Calculator'          => array( 'calculator', 'var(--purple)' ),
-			'Quiz'                => array( 'percent' ),
-			'Registrations'       => array( 'address_card' ),
-			'Customer Service'    => array( 'users_solid' ),
-			'Education'           => array( 'pencil' ),
-			'Marketing'           => array( 'eye' ),
-			'Feedback'            => array( 'smile' ),
-			'Business Operations' => array( 'case' ),
-			'Contact Form'        => array( 'email' ),
-			'Conversational Forms' => array( 'chat_forms' ),
-			'Survey'              => array( 'chat_forms', 'var(--orange)' ),
-			'Application'         => array( 'align_right' ),
-			'Signature'           => array( 'signature' ),
-			''                    => array( 'align_right' ),
+			'PayPal'                  => array( 'paypal' ),
+			'Stripe'                  => array( 'credit_card', 'var(--green)' ),
+			'Twilio'                  => array( 'sms' ),
+			'Payment'                 => array( 'credit_card' ),
+			'Order Form'              => array( 'product' ),
+			'Finance'                 => array( 'total' ),
+			'Health and Wellness'     => array( 'heart', 'var(--pink)' ),
+			'Event Planning'          => array( 'calendar', 'var(--orange)' ),
+			'Real Estate'             => array( 'house' ),
+			'Nonprofit'               => array( 'heart_solid' ),
+			'Calculator'              => array( 'calculator', 'var(--purple)' ),
+			'Quiz'                    => array( 'percent' ),
+			'Registrations'           => array( 'address_card' ),
+			'Customer Service'        => array( 'users_solid' ),
+			'Education'               => array( 'pencil' ),
+			'Marketing'               => array( 'eye' ),
+			'Feedback'                => array( 'smile' ),
+			'Business Operations'     => array( 'case' ),
+			'Contact Form'            => array( 'email' ),
+			'Conversational Forms'    => array( 'chat_forms' ),
+			'Survey'                  => array( 'chat_forms', 'var(--orange)' ),
+			'Application'             => array( 'align_right' ),
+			'Signature'               => array( 'signature' ),
+			''                        => array( 'align_right' ),
 		);
 
 		// Determine the icon to be used.
@@ -1370,7 +1370,7 @@ BEFORE_HTML;
 			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
 		} elseif ( ! empty( $categories ) ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
-			$icon = reset( $icons );
+			$icon  = reset( $icons );
 		}
 
 		// Prepare variables for output.

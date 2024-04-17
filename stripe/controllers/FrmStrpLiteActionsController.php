@@ -522,7 +522,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function get_appearance_rules( $settings ) {
 		return array(
-			'.Input' => array(
+			'.Input'              => array(
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
 				'padding'         => $settings['field_pad'],
@@ -534,15 +534,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'.Input::placeholder' => array(
 				'color' => $settings['text_color_disabled'],
 			),
-			'.Input:focus' => array(
+			'.Input:focus'        => array(
 				'backgroundColor' => $settings['bg_color_active'],
 			),
-			'.Label' => array(
+			'.Label'              => array(
 				'color'      => $settings['label_color'],
 				'fontSize'   => $settings['font_size'],
 				'fontWeight' => $settings['weight'],
 			),
-			'.Error' => array(
+			'.Error'              => array(
 				'color' => $settings['border_color_error'],
 			),
 		);

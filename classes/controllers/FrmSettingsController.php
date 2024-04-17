@@ -45,25 +45,25 @@ class FrmSettingsController {
 	 */
 	private static function get_settings_tabs() {
 		$sections = array(
-			'general' => array(
+			'general'       => array(
 				'class'    => __CLASS__,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
-			'messages' => array(
+			'messages'      => array(
 				'class'    => __CLASS__,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
-			'permissions' => array(
+			'permissions'   => array(
 				'class'    => __CLASS__,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
-			'custom_css' => array(
+			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
 				'name'     => __( 'Custom CSS', 'formidable' ),
@@ -75,13 +75,13 @@ class FrmSettingsController {
 				'name'     => __( 'Manage Styles', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
-			'captcha' => array(
+			'captcha'       => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
-			'white_label' => array(
+			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_ghost_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -91,7 +91,7 @@ class FrmSettingsController {
 					'screenshot' => 'white-label.png',
 				),
 			),
-			'inbox' => array(
+			'inbox'         => array(
 				'name'       => __( 'Inbox', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_email_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -270,8 +270,8 @@ class FrmSettingsController {
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$error_args = array(
-				'title' => __( 'Verification failed', 'formidable' ),
-				'body'  => $frm_settings->admin_permission,
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $frm_settings->admin_permission,
 				'cancel_text' => __( 'Cancel', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
@@ -381,7 +381,7 @@ class FrmSettingsController {
 
 		global $wpdb;
 
-		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$term      = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
 		$where = array(

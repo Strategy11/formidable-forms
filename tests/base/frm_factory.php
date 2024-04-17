@@ -32,7 +32,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 
 		// This is a workaround for WP_UnitTest_Factory_For_Thing::generate_args
 		// Non-scalar values are not currently allowed in default definitions
-		$this->default_generation_definitions['rootline_titles'] = '';
+		$this->default_generation_definitions['rootline_titles']    = '';
 		$this->default_generation_definitions['protect_files_role'] = '';
 	}
 
@@ -100,7 +100,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	public function generate_entry_array( $form ) {
-		$form_id = is_object( $form ) ? $form->id : $form;
+		$form_id    = is_object( $form ) ? $form->id : $form;
 		$entry_data = array(
 			'form_id'   => $form_id,
 			'item_meta' => array(),
@@ -124,17 +124,17 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	 * When creating an entry, set the correct data formats
 	 */
 	public function set_field_value( $field ) {
-		$value = rand_str();
+		$value        = rand_str();
 		$field_values = array(
-			'email'  => 'admin@example.org',
-			'url'    => 'http://test.com',
-			'number' => 120,
-			'scale'  => 8,
-			'date'   => '2015-01-01',
-			'time'   => '13:30:00',
-			'user_id' => get_current_user_id(),
-			'phone'  => '222-222-2222',
-			'html'   => '',
+			'email'    => 'admin@example.org',
+			'url'      => 'http://test.com',
+			'number'   => 120,
+			'scale'    => 8,
+			'date'     => '2015-01-01',
+			'time'     => '13:30:00',
+			'user_id'  => get_current_user_id(),
+			'phone'    => '222-222-2222',
+			'html'     => '',
 			'quantity' => 2,
 		);
 
@@ -167,7 +167,7 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 			'form_id'   => $args['form_id'],
 			'item_meta' => array(),
 		);
-		$args = array_merge( $default_values, $args );
+		$args           = array_merge( $default_values, $args );
 		return FrmEntry::create( $args );
 	}
 

@@ -189,7 +189,7 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function assign_properties() {
-		self::$view_path    = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
+		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/onboarding-wizard/';
 
 		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
@@ -545,7 +545,7 @@ class FrmOnboardingWizardController {
 				'is-disabled' => true,
 				'help-text'   => esc_html__( 'Customize form appearance with an intuitive styling interface.', 'formidable' ),
 			);
-			self::$available_addons['save-entries'] = array(
+			self::$available_addons['save-entries']  = array(
 				'title'       => esc_html__( 'Save Entries', 'formidable' ),
 				'is-checked'  => true,
 				'is-disabled' => true,

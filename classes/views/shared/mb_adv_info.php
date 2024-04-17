@@ -64,10 +64,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_opt_html(
 					array(
-						'id'   => $f->id,
-						'key'  => $f->field_key,
-						'name' => $f->name,
-						'type' => $f->type,
+						'id'    => $f->id,
+						'key'   => $f->field_key,
+						'name'  => $f->name,
+						'type'  => $f->type,
 						'class' => 'frm-customize-list dropdown-item',
 					)
 				);
@@ -200,7 +200,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				continue;
 			}
 
-			$classes = 'frm-advanced-list';
+			$classes  = 'frm-advanced-list';
 			$classes .= ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? ' show_before_content show_after_content' : '';
 			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? ' hide_frm_not_email_subject' : '';
 

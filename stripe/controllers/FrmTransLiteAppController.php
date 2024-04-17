@@ -128,7 +128,7 @@ class FrmTransLiteAppController {
 			$frm_sub->update(
 				$sub->id,
 				array(
-					'fail_count' => 0,
+					'fail_count'     => 0,
 					'next_bill_date' => $last_payment->expire_date,
 				)
 			);

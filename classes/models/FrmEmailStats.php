@@ -130,7 +130,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 			return;
 		}
 
-		$prev_entries_count = FrmEmailSummaryHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
+		$prev_entries_count          = FrmEmailSummaryHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
 		$stats['entries']['compare'] = $this->get_compare_diff( $stats['entries']['count'], $prev_entries_count );
 	}
 
@@ -140,7 +140,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @param array $stats Statistics section data.
 	 */
 	protected function add_payments_data( &$stats ) {
-		$payment_data  = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
+		$payment_data            = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
 		$stats['payments_count'] = array(
 			'label'   => __( 'Payments collected', 'formidable' ),
 			'count'   => $payment_data['count'],
@@ -159,7 +159,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		}
 
 		if ( $this->has_comparison ) {
-			$prev_payment_data  = FrmEmailSummaryHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
+			$prev_payment_data = FrmEmailSummaryHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
 
 			if ( ! $payment_data['count'] && ! $prev_payment_data['count'] ) {
 				// Maybe this site doesn't collect payment, hide these sections.

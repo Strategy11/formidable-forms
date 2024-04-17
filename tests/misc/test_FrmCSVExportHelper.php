@@ -73,8 +73,8 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 	 * @covers FrmCsvExportHelper::csv_headings exports the fields in a section for an embedded form
 	 */
 	public function test_csv_headings_for_embedded_sections() {
-		$embedded_form = $this->factory->form->create_and_get();
-		$section       = $this->factory->field->create_and_get(
+		$embedded_form    = $this->factory->form->create_and_get();
+		$section          = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $embedded_form->id,
 				'type'    => 'divider',
@@ -83,9 +83,9 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		);
 		$field_in_section = $this->factory->field->create_and_get(
 			array(
-				'form_id' => $embedded_form->id,
-				'type'    => 'text',
-				'name'    => 'Text',
+				'form_id'       => $embedded_form->id,
+				'type'          => 'text',
+				'name'          => 'Text',
 				'field_options' => array(
 					'in_section' => $section->id,
 				),
@@ -95,8 +95,8 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$parent_form = $this->factory->form->create_and_get();
 		$embed_field = $this->factory->field->create_and_get(
 			array(
-				'form_id' => $parent_form->id,
-				'type'    => 'embed',
+				'form_id'       => $parent_form->id,
+				'type'          => 'embed',
 				'field_options' => array(
 					'form_select' => $embedded_form->id,
 				),
@@ -141,21 +141,21 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 	 * @covers FrmCSVExportHelper::generate_csv
 	 */
 	public function test_generate_csv() {
-		$form_id       = $this->factory->form->create();
-		$text_field_id = $this->factory->field->create(
+		$form_id                 = $this->factory->form->create();
+		$text_field_id           = $this->factory->field->create(
 			array(
 				'form_id' => $form_id,
 				'name'    => 'Text Field Name',
 				'type'    => 'text',
 			)
 		);
-		$form          = FrmForm::getOne( $form_id );
-		$entry_data    = $this->factory->field->generate_entry_array( $form );
+		$form                    = FrmForm::getOne( $form_id );
+		$entry_data              = $this->factory->field->generate_entry_array( $form );
 		$entry_data['item_meta'] = array(
 			$text_field_id => 'Test Value',
 		);
-		$entry         = $this->factory->entry->create_and_get( $entry_data );
-		$csv_path      = FrmCSVExportHelper::generate_csv(
+		$entry                   = $this->factory->entry->create_and_get( $entry_data );
+		$csv_path                = FrmCSVExportHelper::generate_csv(
 			array(
 				'mode'      => 'file',
 				'form'      => $form,

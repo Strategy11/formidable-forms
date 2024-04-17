@@ -36,7 +36,7 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 			'type' => 'submit',
 			'id'   => 2,
 		);
-		$fields[] = $last_submit;
+		$fields[]    = $last_submit;
 		$this->assertEquals( $last_submit, FrmSubmitHelper::only_contains_submit_field( $fields ) );
 	}
 }

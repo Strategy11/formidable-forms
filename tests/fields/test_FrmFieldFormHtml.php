@@ -7,19 +7,19 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 	 * @covers FrmFieldFormHtml::add_multiple_input_attributes
 	 */
 	public function test_add_multiple_input_attributes() {
-		$form_id       = $this->factory->form->create();
-		$form          = FrmForm::getOne( $form_id );
+		$form_id             = $this->factory->form->create();
+		$form                = FrmForm::getOne( $form_id );
 		$multiple_input_html = '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
 
 		$valid_field_types = array(
 			array(
-				'type'     => 'radio',
+				'type' => 'radio',
 			),
 			array(
-				'type'     => 'checkbox',
+				'type' => 'checkbox',
 			),
 			array(
-				'type'     => 'scale',
+				'type' => 'scale',
 			),
 			array(
 				'type'      => 'data',
@@ -54,7 +54,7 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 				);
 			}
 
-			$field = $this->factory->field->create_and_get( $field_args );
+			$field        = $this->factory->field->create_and_get( $field_args );
 			$field_object = FrmFieldFactory::get_field_type( $field_type['type'], $field );
 
 			// Prepare the necessary constructor arguments

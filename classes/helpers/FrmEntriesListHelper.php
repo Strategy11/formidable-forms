@@ -89,7 +89,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( strpos( $orderby, 'meta' ) !== false ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby          .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
+			$orderby         .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
 		}
 
 		$order = self::get_param(
@@ -319,8 +319,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
-					$r         .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
-					$r         .= $action_links;
+					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
+					$r        .= $action_links;
 				} else {
 					$r .= $val;
 				}
@@ -364,7 +364,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
-				$val = sprintf(
+				$val          = sprintf(
 					'<span class="frm-meta-tag frm-entry-status frm-entry-status-%s">%s</span>',
 					sanitize_html_class( $item->is_draft ),
 					esc_html( $entry_status )

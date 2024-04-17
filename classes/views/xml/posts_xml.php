@@ -49,7 +49,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
-<?php
+		<?php
 		endif;
 
 		$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
@@ -110,7 +110,7 @@ foreach ( (array) $terms as $term ) {
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
+	$label         = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {

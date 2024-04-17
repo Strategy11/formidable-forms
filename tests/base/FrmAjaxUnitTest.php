@@ -5,9 +5,9 @@
  */
 class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
-	protected $field_id = 0;
-	protected $user_id = 0;
-	protected $is_pro_active = false;
+	protected $field_id         = 0;
+	protected $user_id          = 0;
+	protected $is_pro_active    = false;
 	protected $contact_form_key = 'contact-with-email';
 
 	public static function wpSetUpBeforeClass( $factory ) {
@@ -34,7 +34,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	public function set_as_user_role( $role ) {
 		// create user
 		$user_id = $this->factory->user->create( array( 'role' => $role ) );
-		$user = new WP_User( $user_id );
+		$user    = new WP_User( $user_id );
 		$this->assertTrue( $user->exists(), 'Problem getting user ' . $user_id );
 
 		// log in as user

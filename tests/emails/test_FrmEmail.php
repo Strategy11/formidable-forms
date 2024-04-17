@@ -68,15 +68,15 @@ class test_FrmEmail extends FrmUnitTest {
 		$pass_entry = clone $this->entry;
 
 		$expected = array(
-			'to' => array( array( $this->email_action->post_content['email_to'], '' ) ),
-			'cc' => array(),
-			'bcc' => array(),
-			'from' => FrmAppHelper::site_name() . ' <' . get_option( 'admin_email' ) . '>',
-			'reply_to' => get_option( 'admin_email' ),
-			'subject' => self::prepare_subject( $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name() ),
-			'body' => FrmEntriesController::show_entry_shortcode(
+			'to'           => array( array( $this->email_action->post_content['email_to'], '' ) ),
+			'cc'           => array(),
+			'bcc'          => array(),
+			'from'         => FrmAppHelper::site_name() . ' <' . get_option( 'admin_email' ) . '>',
+			'reply_to'     => get_option( 'admin_email' ),
+			'subject'      => self::prepare_subject( $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name() ),
+			'body'         => FrmEntriesController::show_entry_shortcode(
 				array(
-					'id' => $this->entry->id,
+					'id'    => $this->entry->id,
 					'entry' => $pass_entry,
 				)
 			),
@@ -112,43 +112,43 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_trigger_email_two() {
 		$entry_clone = clone $this->entry;
-		$expected = array();
+		$expected    = array();
 		$admin_email = get_option( 'admin_email' );
 
 		// Adjust entry values
-		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$name_id                        = FrmField::get_id_by_key( $this->name_field_key );
 		$entry_clone->metas[ $name_id ] = 'Test Testerson';
 
 		// To
 		$this->email_action->post_content['email_to'] = 'Name2<jamie@test.com>, [admin_email]';
-		$expected['to'] = array( array( 'jamie@test.com', 'Name2' ), array( $admin_email, '' ) );
+		$expected['to']                               = array( array( 'jamie@test.com', 'Name2' ), array( $admin_email, '' ) );
 
 		// CC
 		$this->email_action->post_content['cc'] = '"Jamie Wahlin" test@mail.com';
-		$expected['cc'] = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
+		$expected['cc']                         = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
 
 		// BCC
 		$this->email_action->post_content['bcc'] = 'jw@test.com';
-		$expected['bcc'] = array( array( 'jw@test.com', '' ) );
+		$expected['bcc']                         = array( array( 'jw@test.com', '' ) );
 
 		// Subject
 		$this->email_action->post_content['email_subject'] = 'Submission from [' . $name_id . ']';
-		$expected['subject'] = self::prepare_subject( 'Submission from Test Testerson' );
+		$expected['subject']                               = self::prepare_subject( 'Submission from Test Testerson' );
 
 		// From
 		$this->email_action->post_content['from'] = '';
-		$expected['from'] = FrmAppHelper::site_name() . ' <' . $admin_email . '>';
+		$expected['from']                         = FrmAppHelper::site_name() . ' <' . $admin_email . '>';
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = 'Reply Name';
-		$expected['reply_to'] = 'Reply Name <' . get_option( 'admin_email' ) . '>';
+		$expected['reply_to']                         = 'Reply Name <' . get_option( 'admin_email' ) . '>';
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+		$expected['body']                               = FrmEntriesController::show_entry_shortcode(
 			array(
-				'id' => $entry_clone->id,
-				'entry' => $entry_clone,
+				'id'         => $entry_clone->id,
+				'entry'      => $entry_clone,
 				'plain_text' => true,
 			)
 		);
@@ -184,48 +184,48 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_trigger_email_three() {
 		$entry_clone = clone $this->entry;
-		$expected = array();
+		$expected    = array();
 
-		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
 		$email_id = FrmField::get_id_by_key( $this->email_field_key );
 
 		// Adjust entry values
-		$entry_clone->metas[ $name_id ] = 'Test Testerson';
+		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
 		$entry_clone->metas[ $email_id ] = 'tester@mail.com';
 
 		// To
 		$this->email_action->post_content['email_to'] = 'Name test1@mail.com, Name2<test2@mail.com>';
-		$expected['to'] = array( array( 'test1@mail.com', 'Name' ), array( 'test2@mail.com', 'Name2' ), array( 'test3@mail.com', '' ) );
+		$expected['to']                               = array( array( 'test1@mail.com', 'Name' ), array( 'test2@mail.com', 'Name2' ), array( 'test3@mail.com', '' ) );
 		add_filter( 'frm_to_email', array( $this, 'add_to_emails' ), 10, 4 );
 
 		// CC
-		$this->email_action->post_content['cc'] = '"Jamie Wahlin" <testcc1@mail.com>,';
+		$this->email_action->post_content['cc']  = '"Jamie Wahlin" <testcc1@mail.com>,';
 		$this->email_action->post_content['cc'] .= '[' . $name_id . '] <[' . $email_id . ']>';
-		$expected['cc'] = array( array( 'testcc1@mail.com', 'Jamie Wahlin' ), array( 'tester@mail.com', 'Test Testerson' ) );
+		$expected['cc']                          = array( array( 'testcc1@mail.com', 'Jamie Wahlin' ), array( 'tester@mail.com', 'Test Testerson' ) );
 
 		// BCC
 		$this->email_action->post_content['bcc'] = 'testbcc1@mail.com, "Tester test" testbcc2@mail.com';
-		$expected['bcc'] = array( array( 'testbcc1@mail.com', '' ), array( 'testbcc2@mail.com', 'Tester test' ) );
+		$expected['bcc']                         = array( array( 'testbcc1@mail.com', '' ), array( 'testbcc2@mail.com', 'Tester test' ) );
 
 		// Subject
 		$this->email_action->post_content['email_subject'] = 'Original subject';
-		$expected['subject'] = self::prepare_subject( 'New subject' );
+		$expected['subject']                               = self::prepare_subject( 'New subject' );
 		add_filter( 'frm_email_subject', array( $this, 'change_email_subject' ), 10, 2 );
 
 		// From
 		$this->email_action->post_content['from'] = 'Name';
-		$expected['from'] = 'Name <' . get_option( 'admin_email' ) . '>';
+		$expected['from']                         = 'Name <' . get_option( 'admin_email' ) . '>';
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = '"Reply To" <[' . $this->email_field_key . ']>';
-		$expected['reply_to'] = 'Reply To <tester@mail.com>';
+		$expected['reply_to']                         = 'Reply To <tester@mail.com>';
 
 		// Body - set inc_user_info to true
 		$this->email_action->post_content['inc_user_info'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+		$expected['body']                                  = FrmEntriesController::show_entry_shortcode(
 			array(
-				'id' => $entry_clone->id,
-				'entry' => $entry_clone,
+				'id'        => $entry_clone->id,
+				'entry'     => $entry_clone,
 				'user_info' => true,
 			)
 		);
@@ -265,40 +265,40 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_trigger_email_four() {
 		$entry_clone = clone $this->entry;
-		$expected = array();
+		$expected    = array();
 
 		// To
 		$this->email_action->post_content['email_to'] = 'Name test1@mail.com, "Name Two"<test2@mail.com>';
-		$expected['to']['first'] = array( array( 'test1@mail.com', 'Name' ) );
-		$expected['to']['second'] = array( array( 'test2@mail.com', 'Name Two' ) );
+		$expected['to']['first']                      = array( array( 'test1@mail.com', 'Name' ) );
+		$expected['to']['second']                     = array( array( 'test2@mail.com', 'Name Two' ) );
 		add_filter( 'frm_send_separate_emails', array( $this, 'send_separate_emails' ), 10, 2 );
 
 		// CC
 		$this->email_action->post_content['cc'] = '"Jamie Wahlin" test@mail.com';
-		$expected['cc'] = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
+		$expected['cc']                         = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
 
 		// BCC
 		$this->email_action->post_content['bcc'] = '';
-		$expected['bcc'] = array();
+		$expected['bcc']                         = array();
 
 		// Subject
 		$this->email_action->post_content['email_subject'] = 'Submission from test';
-		$expected['subject'] = self::prepare_subject( 'Submission from test' );
+		$expected['subject']                               = self::prepare_subject( 'Submission from test' );
 
 		// From
 		$this->email_action->post_content['from'] = 'testfrom@mail.com';
-		$expected['from'] = FrmAppHelper::site_name() . ' <testfrom@mail.com>';
+		$expected['from']                         = FrmAppHelper::site_name() . ' <testfrom@mail.com>';
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = '';
-		$expected['reply_to'] = 'testfrom@mail.com';
+		$expected['reply_to']                         = 'testfrom@mail.com';
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+		$expected['body']                               = FrmEntriesController::show_entry_shortcode(
 			array(
-				'id' => $entry_clone->id,
-				'entry' => $entry_clone,
+				'id'         => $entry_clone->id,
+				'entry'      => $entry_clone,
 				'plain_text' => true,
 			)
 		);
@@ -310,9 +310,9 @@ class test_FrmEmail extends FrmUnitTest {
 
 		remove_filter( 'frm_send_separate_emails', array( $this, 'send_separate_emails' ), 10 );
 
-		$email_count = count( $GLOBALS['phpmailer']->mock_sent );
+		$email_count         = count( $GLOBALS['phpmailer']->mock_sent );
 		$previous_mock_email = $GLOBALS['phpmailer']->mock_sent[ $email_count - 2 ];
-		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
+		$mock_email          = end( $GLOBALS['phpmailer']->mock_sent );
 
 		$this->assertSame( $expected['to']['first'], $previous_mock_email['to'], 'To address is not set correctly when using User ID field.' );
 		$this->assertSame( $expected['to']['second'], $mock_email['to'], 'To address is not set correctly when using User ID field.' );
@@ -342,32 +342,32 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_trigger_email_five() {
 		$entry_clone = clone $this->entry;
-		$expected = array();
+		$expected    = array();
 		$admin_email = get_option( 'admin_email' );
 
 		// Update entry values
-		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$name_id                        = FrmField::get_id_by_key( $this->name_field_key );
 		$entry_clone->metas[ $name_id ] = 'Test Testerson';
 
 		// To
 		$this->email_action->post_content['email_to'] = '[admin_email]';
-		$expected['to'] = array( array( $admin_email, '' ) );
+		$expected['to']                               = array( array( $admin_email, '' ) );
 
 		// CC
 		$this->email_action->post_content['cc'] = '"Jamie Wahlin" test@mail.com';
-		$expected['cc'] = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
+		$expected['cc']                         = array( array( 'test@mail.com', 'Jamie Wahlin' ) );
 
 		// BCC
 		$this->email_action->post_content['bcc'] = '';
-		$expected['bcc'] = array();
+		$expected['bcc']                         = array();
 
 		// Subject
 		$this->email_action->post_content['email_subject'] = 'Submission from [' . $name_id . ']';
-		$expected['subject'] = self::prepare_subject( 'Submission from Test Testerson' );
+		$expected['subject']                               = self::prepare_subject( 'Submission from Test Testerson' );
 
 		// From
 		$this->email_action->post_content['from'] = '"Yahoo" test@yahoo.com';
-		$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
+		$sitename                                 = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 		if ( substr( $sitename, 0, 4 ) == 'www.' ) {
 			$sitename = substr( $sitename, 4 );
 		}
@@ -378,10 +378,10 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+		$expected['body']                               = FrmEntriesController::show_entry_shortcode(
 			array(
-				'id' => $entry_clone->id,
-				'entry' => $entry_clone,
+				'id'         => $entry_clone->id,
+				'entry'      => $entry_clone,
 				'plain_text' => true,
 			)
 		);
@@ -408,11 +408,11 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_six() {
-		$name_id = FrmField::get_id_by_key( $this->name_field_key );
+		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
 		$email_id = FrmField::get_id_by_key( $this->email_field_key );
 
-		$entry_clone = clone $this->entry;
-		$entry_clone->metas[ $name_id ] = 'Test Testerson';
+		$entry_clone                     = clone $this->entry;
+		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
 		$entry_clone->metas[ $email_id ] = 'tester@mail.com';
 
 		$this->email_action->post_content['from']     = '[' . $name_id . '] [' . $email_id . ']';
@@ -448,7 +448,7 @@ class test_FrmEmail extends FrmUnitTest {
 
 	protected function create_entry( $form ) {
 		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$entry_id = $this->factory->entry->create( $entry_data );
+		$entry_id   = $this->factory->entry->create( $entry_data );
 
 		$entry = FrmEntry::getOne( $entry_id, true );
 		$this->assertNotEmpty( $entry );
@@ -483,7 +483,7 @@ class test_FrmEmail extends FrmUnitTest {
 
 	protected function check_message_body( $expected, $mock_email ) {
 		// Remove line breaks from body for comparison
-		$expected['body'] = preg_replace( "/\r|\n/", '', $expected['body'] );
+		$expected['body']   = preg_replace( "/\r|\n/", '', $expected['body'] );
 		$mock_email['body'] = preg_replace( "/\r|\n/", '', $mock_email['body'] );
 
 		$this->assertSame( $expected['body'], $mock_email['body'], 'Message body does not match expected.' );
@@ -521,7 +521,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_set_from() {
 		$default_email = get_option( 'admin_email' );
-		$default_name = FrmAppHelper::site_name();
+		$default_name  = FrmAppHelper::site_name();
 
 		$from = array(
 			'From name <[admin_email]>' => 'From name <' . $default_email . '>',
@@ -599,11 +599,11 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmEmail::set_subject
 	 */
 	public function test_set_subject() {
-		$name_id = FrmField::get_id_by_key( $this->name_field_key );
-		$default = $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name();
+		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
+		$default  = $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name();
 		$settings = array(
-			''                 => $default,
-			'Original subject' => 'Original subject',
+			''                   => $default,
+			'Original subject'   => 'Original subject',
 			'[' . $name_id . ']' => $this->entry->metas[ $name_id ],
 		);
 		$this->check_private_properties( $settings, 'email_subject', 'subject' );
@@ -642,9 +642,9 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmEmail::add_autop
 	 */
 	public function test_add_autop() {
-		$action                                = $this->email_action;
+		$action                             = $this->email_action;
 		$action->post_content['plain_text'] = '0';
-		$messages = array(
+		$messages                           = array(
 			'<html><head><style>label{font-size:14px;font-weight:bold;padding-bottom:5px;}</style></head><body>
 LINE 1<br>LINE 2<br></body></html>'
 			=>
@@ -682,7 +682,7 @@ LINE 1<br>LINE 2<br></body></html>'
 				$action->post_content[ $name ] = $value;
 			}
 
-			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$email  = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual = $this->get_private_property( $email, 'message' );
 
 			if ( $setting['compare'] === 'Contains' ) {

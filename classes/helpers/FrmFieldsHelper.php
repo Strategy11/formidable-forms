@@ -526,7 +526,7 @@ class FrmFieldsHelper {
 		$base_name = 'default_value_' . $field['id'];
 		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
-		$default_type          = self::get_default_value_type( $field );
+		$default_type = self::get_default_value_type( $field );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
@@ -611,15 +611,15 @@ class FrmFieldsHelper {
 	 */
 	public static function inline_modal( $args ) {
 		$defaults = array(
-			'id'       => '',
-			'class'    => '',
-			'show'     => 0,
-			'callback' => array(),
-			'args'     => array(),
-			'title'    => '',
+			'id'           => '',
+			'class'        => '',
+			'show'         => 0,
+			'callback'     => array(),
+			'args'         => array(),
+			'title'        => '',
 			'inside_class' => 'inside',
 		);
-		$args = array_merge( $defaults, $args );
+		$args     = array_merge( $defaults, $args );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/inline-modal.php';
 	}
@@ -1332,7 +1332,7 @@ class FrmFieldsHelper {
 			return $other_args;
 		}
 
-		$other_opt  = true;
+		$other_opt = true;
 
 		self::set_other_name( $args, $other_args );
 		self::set_other_value( $args, $other_args );
@@ -2100,8 +2100,8 @@ class FrmFieldsHelper {
 	public static function get_display_format_options( $field ) {
 		$options = array(
 			'0'       => array(
-				'text'   => __( 'Simple', 'formidable' ),
-				'svg'    => 'frm_simple_radio',
+				'text' => __( 'Simple', 'formidable' ),
+				'svg'  => 'frm_simple_radio',
 			),
 			'1'       => array(
 				'text'    => __( 'Images', 'formidable' ),
@@ -2254,7 +2254,7 @@ class FrmFieldsHelper {
 		}
 
 		$where = array(
-			'form_id' => $form_ids,
+			'form_id'            => $form_ids,
 			// Do a soft check for fields that look like drafts only.
 			'field_options LIKE' => 's:5:"draft";i:1;',
 		);

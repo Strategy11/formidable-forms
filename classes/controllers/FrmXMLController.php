@@ -102,7 +102,7 @@ class FrmXMLController {
 			}
 
 			if ( isset( $pages ) && ! empty( $pages ) ) {
-				$post_id = end( $pages );
+				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
@@ -163,7 +163,7 @@ class FrmXMLController {
 			return;
 		}
 
-		$selected_xml  = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
+		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
 			return;
 		}
@@ -197,7 +197,7 @@ class FrmXMLController {
 			return;
 		}
 
-		$form_key = self::get_selected_in_form( $form, 'form' );
+		$form_key  = self::get_selected_in_form( $form, 'form' );
 		$view_keys = self::get_selected_in_form( $form, 'view' );
 
 		$page_ids = array();
@@ -211,7 +211,7 @@ class FrmXMLController {
 				$item_key  = is_array( $view_keys ) ? $view_keys[ $form_key ] : $view_keys;
 				$shortcode = '[display-frm-data id=%1$s filter=limited]';
 			} elseif ( $for === 'form' ) {
-				$item_key = $form_key;
+				$item_key  = $form_key;
 				$shortcode = '[formidable id=%1$s]';
 			} else {
 				$item_key  = self::get_selected_in_form( $form, 'form' );
@@ -302,7 +302,7 @@ class FrmXMLController {
 	 */
 	public static function form( $errors = array(), $message = '' ) {
 		$where = array(
-			'status'         => array( null, '', 'published' ),
+			'status' => array( null, '', 'published' ),
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 

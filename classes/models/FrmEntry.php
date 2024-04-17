@@ -355,7 +355,7 @@ class FrmEntry {
 		$query = "SELECT it.*, fr.name as form_name, fr.form_key as form_key FROM {$wpdb->prefix}frm_items it
                   LEFT OUTER JOIN {$wpdb->prefix}frm_forms fr ON it.form_id=fr.id WHERE ";
 
-		$query      .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
+		$query     .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
 		$query_args = array( $id );
 		$query      = $wpdb->prepare( $query, $query_args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -486,7 +486,7 @@ class FrmEntry {
 
 			if ( $inc_form ) {
 				$fields = 'it.*, fr.name as form_name,fr.form_key as form_key';
-				$table  .= 'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id ';
+				$table .= 'LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fr ON it.form_id=fr.id ';
 			}
 
 			if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {

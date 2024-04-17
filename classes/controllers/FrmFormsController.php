@@ -152,10 +152,10 @@ class FrmFormsController {
 
 		FrmField::create(
 			array(
-				'type'        => FrmSubmitHelper::FIELD_TYPE,
-				'name'        => __( 'Submit', 'formidable' ),
-				'field_order' => 9999,
-				'form_id'     => $form->id,
+				'type'          => FrmSubmitHelper::FIELD_TYPE,
+				'name'          => __( 'Submit', 'formidable' ),
+				'field_order'   => 9999,
+				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
 				'default_value' => '',
@@ -190,7 +190,7 @@ class FrmFormsController {
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
-			$error_args = array(
+			$error_args   = array(
 				'title'       => __( 'Verification failed', 'formidable' ),
 				'body'        => $frm_settings->admin_permission,
 				'cancel_text' => __( 'Cancel', 'formidable' ),
@@ -201,7 +201,7 @@ class FrmFormsController {
 
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
-		$errors = FrmForm::validate( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$errors   = FrmForm::validate( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$warnings = FrmFormsHelper::check_for_warnings( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( count( $errors ) > 0 ) {
@@ -355,8 +355,8 @@ class FrmFormsController {
 
 		if ( $form ) {
 			$new_template = FrmAppHelper::simple_get( 'new_template' ) ? '&new_template=true' : '';
-			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) . $new_template );
-			$message = 'form_duplicated';
+			$url          = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) . $new_template );
+			$message      = 'form_duplicated';
 		}
 
 		$url .= '&message=' . $message;
@@ -688,7 +688,7 @@ class FrmFormsController {
 
 		$count = 0;
 		if ( FrmForm::set_status( $params['id'], $available_status[ $status ]['new_status'] ) ) {
-			$count++;
+			++$count;
 		}
 
 		$form_type = FrmAppHelper::get_simple_request(
@@ -702,7 +702,7 @@ class FrmFormsController {
 		$available_status['untrash']['message'] = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 
 		/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
-		$available_status['trash']['message']   = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
+		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
 
 		$message = $available_status[ $status ]['message'];
 
@@ -715,7 +715,7 @@ class FrmFormsController {
 		$count = 0;
 		foreach ( $ids as $id ) {
 			if ( FrmForm::trash( $id ) ) {
-				$count++;
+				++$count;
 			}
 		}
 
@@ -746,7 +746,7 @@ class FrmFormsController {
 
 		$count = 0;
 		if ( FrmForm::destroy( $params['id'] ) ) {
-			$count++;
+			++$count;
 		}
 
 		/* translators: %1$s: Number of forms */
@@ -762,7 +762,7 @@ class FrmFormsController {
 		foreach ( $ids as $id ) {
 			$d = FrmForm::destroy( $id );
 			if ( $d ) {
-				$count++;
+				++$count;
 			}
 		}
 
@@ -789,7 +789,7 @@ class FrmFormsController {
 		$count = FrmForm::scheduled_delete( time() );
 		$url   = remove_query_arg( array( 'delete_all' ) );
 
-		$url  .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
+		$url .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
 
 		wp_safe_redirect( $url );
 		die();
@@ -807,7 +807,7 @@ class FrmFormsController {
 		$new_values             = self::get_modal_values();
 		$new_values['form_key'] = $new_values['name'];
 		$new_values['options']  = array(
-			'antispam' => 1,
+			'antispam'           => 1,
 			'on_submit_migrated' => 1,
 		);
 
@@ -1073,11 +1073,11 @@ class FrmFormsController {
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
 		global $frm_vars;
 
-		$form = FrmForm::getOne( $id );
+		$form       = FrmForm::getOne( $id );
 		$error_args = array(
-			'title'       => __( 'You can\'t edit the form', 'formidable' ),
-			'body'        => __( 'You are trying to edit a form that does not exist', 'formidable' ),
-			'cancel_url'  => admin_url( 'admin.php?page=formidable' ),
+			'title'        => __( 'You can\'t edit the form', 'formidable' ),
+			'body'         => __( 'You are trying to edit a form that does not exist', 'formidable' ),
+			'cancel_url'   => admin_url( 'admin.php?page=formidable' ),
 			'continue_url' => add_query_arg(
 				array(
 					'page' => 'formidable',
@@ -1090,8 +1090,8 @@ class FrmFormsController {
 		}
 
 		if ( 'trash' === $form->status ) {
-			$error_args['body'] = __( 'The form you\'re trying to edit is in trash. You must restore it first before you can make changes', 'formidable' );
-			$error_args['continue_url'] = add_query_arg(
+			$error_args['body']          = __( 'The form you\'re trying to edit is in trash. You must restore it first before you can make changes', 'formidable' );
+			$error_args['continue_url']  = add_query_arg(
 				array(
 					'page'       => 'formidable',
 					'_wpnonce'   => wp_create_nonce( 'untrash_form_' . $id ),
@@ -1251,7 +1251,7 @@ class FrmFormsController {
 					'screenshot' => 'permissions.png',
 				),
 			),
-			'scheduling' => array(
+			'scheduling'  => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_calendar_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -1286,7 +1286,7 @@ class FrmFormsController {
 					)
 				),
 			),
-			'abandonment'   => array(
+			'abandonment' => array(
 				'name'       => __( 'Form Abandonment', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_abandoned_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -1470,7 +1470,7 @@ class FrmFormsController {
 			}
 
 			$advanced_helpers['user_id'] = array(
-				'codes'   => $user_helpers,
+				'codes' => $user_helpers,
 			);
 		}
 
@@ -1992,7 +1992,7 @@ class FrmFormsController {
 	public static function get_form_shortcode( $atts ) {
 		global $frm_vars;
 		if ( isset( $frm_vars['skip_shortcode'] ) && $frm_vars['skip_shortcode'] ) {
-			$sc = '[formidable';
+			$sc  = '[formidable';
 			$sc .= FrmAppHelper::array_to_html_params( $atts );
 			return $sc . ']';
 		}
@@ -2151,9 +2151,9 @@ class FrmFormsController {
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
-				$entry_id                 = self::just_created_entry( $form->id );
-				$pass_args['entry_id']    = $entry_id;
-				$pass_args['reset']       = true;
+				$entry_id              = self::just_created_entry( $form->id );
+				$pass_args['entry_id'] = $entry_id;
+				$pass_args['reset']    = true;
 
 				self::run_on_submit_actions( $pass_args );
 
@@ -2350,9 +2350,9 @@ class FrmFormsController {
 			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
 		}
 
-		$entry       = FrmEntry::getOne( $args['entry_id'], true );
-		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
-		$met_actions = array();
+		$entry        = FrmEntry::getOne( $args['entry_id'], true );
+		$actions      = FrmOnSubmitHelper::get_actions( $args['form']->id );
+		$met_actions  = array();
 		$has_redirect = false;
 
 		foreach ( $actions as $action ) {
