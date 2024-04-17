@@ -14,6 +14,10 @@ class test_FrmApplicationApi extends FrmUnitTest {
 
 		$this->assertTrue( is_array( $applications ) );
 
+		if ( ! empty( $applications['error'] ) ) {
+			$this->markTestSkipped( 'We cannot currently reach the API, so skip the test.' );
+		}
+
 		$business_hours_id = 28067848;
 		$this->assertTrue( array_key_exists( $business_hours_id, $applications ) );
 

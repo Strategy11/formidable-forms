@@ -14,6 +14,11 @@ class test_FrmStyleApi extends FrmUnitTest {
 
 		$this->assertIsArray( $info );
 		$this->assertNotEmpty( $info );
+
+		if ( ! empty( $info['error'] ) ) {
+			$this->markTestSkipped( 'We cannot currently reach the API, so skip the test.' );
+		}
+
 		$first_style_template = reset( $info );
 
 		$this->assertIsArray( $first_style_template );
