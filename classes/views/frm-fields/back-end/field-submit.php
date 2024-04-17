@@ -2,7 +2,7 @@
 /**
  * View for submit button field in form builder
  *
- * @since x.x
+ * @since 6.9
  * @package Formidable
  *
  * @var array $field Field array.

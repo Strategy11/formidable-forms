@@ -4231,7 +4231,7 @@ class FrmAppHelper {
 	/**
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 */
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );

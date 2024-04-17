@@ -2,7 +2,7 @@
 /**
  * Submit field class
  *
- * @since x.x
+ * @since 6.9
  * @package Formidable
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.9
  */
 class FrmFieldSubmit extends FrmFieldType {
 

@@ -5338,7 +5338,7 @@ function frmAdminBuildJS() {
 	 * If the selected type is 'custom' and the current format is 'international',
 	 * the format input value is cleared to allow for custom input.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param {Event} event The event object from the phone type selection.
 	 * @return {void}
@@ -6512,7 +6512,7 @@ function frmAdminBuildJS() {
 	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
 	 * before the form is saved.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param {HTMLButtonElement} submitButton The button that was submitted.
 	 * @return {void}
@@ -9844,7 +9844,7 @@ function frmAdminBuildJS() {
 	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
 	 * It sets up initial visibility at page load and updates it on each dropdown change.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return {void}
 	 */
@@ -9854,7 +9854,7 @@ function frmAdminBuildJS() {
 		/**
 		 * Toggles the visibility of dependent elements associated with a select element based on its current selection.
 		 *
-		 * @since x.x
+		 * @since 6.9
 		 *
 		 * @param {HTMLElement} select The select element whose dependencies need to be managed.
 		 * @return {void}

@@ -70,7 +70,7 @@ class FrmInstallPlugin {
 	/**
 	 * Handles the AJAX request to install a plugin.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -129,7 +129,7 @@ class FrmInstallPlugin {
 	/**
 	 * Checks plugin activation status via AJAX.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */

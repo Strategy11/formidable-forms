@@ -718,7 +718,7 @@ class FrmFieldsController {
 	/**
 	 * Returns an array that contains field validation messages status.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param array|object $field
 	 * @return array
@@ -739,7 +739,7 @@ class FrmFieldsController {
 		/**
 		 * Allows controlling which field validation messages would be included in the field html.
 		 *
-		 * @since x.x
+		 * @since 6.9
 		 *
 		 * @param array $field_validation_messages_status
 		 * @param array|object $field

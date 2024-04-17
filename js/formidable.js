@@ -865,7 +865,7 @@ function frmFrontFormJS() {
 	/**
 	 * Trigger an event before the form is replaced with a success message.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param {HTMLElement} object The form.
 	 * @param {object} response The response from submitting the form with AJAX.

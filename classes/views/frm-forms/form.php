@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		/**
 		 * Fires before the fake page in form builder.
 		 *
-		 * @since x.x
+		 * @since 6.9
 		 *
 		 * @param array $form_array Processed form array.
 		 */
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		/**
 		 * Fires after the fake page in form builder.
 		 *
-		 * @since x.x
+		 * @since 6.9
 		 *
 		 * @param array $form_array Processed form array.
 		 */

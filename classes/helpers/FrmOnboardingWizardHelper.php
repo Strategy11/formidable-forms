@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for managing onboarding wizard in the admin area.
  *
- * @since x.x
+ * @since 6.9
  */
 class FrmOnboardingWizardHelper {
 
 	/**
 	 * Echo attributes for the addon's label tag.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
@@ -52,7 +52,7 @@ class FrmOnboardingWizardHelper {
 	/**
 	 * Echo attributes for the addon's input tag.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
@@ -79,7 +79,7 @@ class FrmOnboardingWizardHelper {
 	/**
 	 * Renders the Onboarding Wizard page footer in the WordPress admin area.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param array $args
 	 * @return void
