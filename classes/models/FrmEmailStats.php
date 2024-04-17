@@ -80,7 +80,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @return mixed
+	 * @return string|false
 	 */
 	protected function get_inner_content() {
 		$args = $this->get_content_args();

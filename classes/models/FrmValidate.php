@@ -42,7 +42,7 @@ abstract class FrmValidate {
 	}
 
 	/**
-	 * @return bool
+	 * @return bool|string
 	 */
 	abstract public function validate();
 

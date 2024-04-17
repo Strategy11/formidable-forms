@@ -85,7 +85,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @param string $value
 	 * @param array  $atts
 	 *
-	 * @return false|mixed|string
+	 * @return string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );

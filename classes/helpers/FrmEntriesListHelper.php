@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmEntriesListHelper extends FrmListHelper {
+
 	protected $column_name;
 	protected $item;
 	protected $field;
