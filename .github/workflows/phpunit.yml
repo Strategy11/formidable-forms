@@ -23,7 +23,6 @@ jobs:
           - php: 8.0
             wordpress: trunk
             multisite: 0
-            ini-values: opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
@@ -34,7 +33,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: phpunit-polyfills
-          ini-values: ${{ matrix.ini-values }}
 
       - name: Installing WordPress
         run: |
