@@ -550,7 +550,7 @@ class FrmField {
 			}
 
 			/**
-			 * @since x.x The Field ID param was added.
+			 * @since 6.9 The Field ID param was added.
 			 *
 			 * @param array $values
 			 * @param int   $id Field ID.

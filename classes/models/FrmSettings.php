@@ -440,7 +440,7 @@ class FrmSettings {
 	/**
 	 * Updates a single setting with specified sanitization.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $key The setting key to update.
 	 * @param mixed  $value The new value for the setting.

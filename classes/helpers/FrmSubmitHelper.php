@@ -2,7 +2,7 @@
 /**
  * Submit helper
  *
- * @since x.x
+ * @since 6.9
  * @package Formidable
  */
 

@@ -115,7 +115,7 @@ class FrmAddonsController {
 	/**
 	 * Retrieves the count of available addons.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return int Count of addons.
 	 */

@@ -37,7 +37,7 @@ class FrmFieldPhone extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
 	 *
@@ -55,7 +55,7 @@ class FrmFieldPhone extends FrmFieldType {
 	/**
 	 * Retrieves the HTML for an 'International' option in a dropdown.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void Outputs the HTML option tag directly.
 	 */

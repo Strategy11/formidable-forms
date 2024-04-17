@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Handles the Onboarding Wizard page in the admin area.
  *
- * @since x.x
+ * @since 6.9
  */
 class FrmOnboardingWizardController {
 
@@ -110,7 +110,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Initialize hooks for template page only.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
@@ -165,7 +165,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Initializes the Onboarding Wizard setup if on its designated admin page.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -184,7 +184,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Initializes class properties with essential values for operation.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -204,7 +204,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Add Onboarding Wizard menu item to sidebar and define index page.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -228,7 +228,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Renders the Onboarding Wizard page in the WordPress admin area.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -264,7 +264,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Handle AJAX request to setup the "Default Email Address" step.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -294,7 +294,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Handle AJAX request to set up usage data for the Onboarding Wizard.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -329,7 +329,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Enqueues the Onboarding Wizard page scripts and styles.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -359,7 +359,7 @@ class FrmOnboardingWizardController {
 		/**
 		 * Fires after the Onboarding Wizard enqueue assets.
 		 *
-		 * @since x.x
+		 * @since 6.9
 		 */
 		do_action( 'frm_onboarding_wizard_enqueue_assets' );
 
@@ -369,7 +369,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Get the Onboarding Wizard JS variables as an array.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return array
 	 */
@@ -384,7 +384,7 @@ class FrmOnboardingWizardController {
 	 * Remove the Onboarding Wizard submenu page from the formidable parent menu
 	 * since it is not necessary to show that link there.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -397,7 +397,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * The function appends a custom class to the existing admin body classes, enabling full-screen mode for the admin interface.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $classes Existing body classes.
 	 * @return string Updated list of body classes, including the newly added classes.
@@ -409,7 +409,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Checks if the Onboarding Wizard was skipped during the plugin's installation.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 * @return bool True if the Onboarding Wizard was skipped, false otherwise.
 	 */
 	public static function has_onboarding_been_skipped() {
@@ -419,7 +419,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Marks the Onboarding Wizard as skipped to prevent automatic redirects to the wizard.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
@@ -429,7 +429,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Adds an Onboarding Wizard welcome message to the floating notifications.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param array $inbox_messages The array of existing inbox messages.
 	 * @return array Configuration for the onboarding wizard slide-in notification.
@@ -452,7 +452,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Check if the current page is the Onboarding Wizard page.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return bool True if the current page is the Onboarding Wizard page, false otherwise.
 	 */
@@ -463,7 +463,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Validates if the Onboarding Wizard page is being displayed.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
 	 */
@@ -488,7 +488,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Get the path to the Onboarding Wizard views.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return string Path to views.
 	 */
@@ -508,7 +508,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Get the list of add-ons available for installation.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return array A list of add-ons.
 	 */
@@ -519,7 +519,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Set the list of add-ons available for installation.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -632,7 +632,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Get the path to the Onboarding Wizard views.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return string Path to views.
 	 */
@@ -643,7 +643,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Get the upgrade link.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return string URL for upgrading accounts.
 	 */
@@ -654,7 +654,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Retrieves the current Onboarding Wizard usage data, returning an empty array if none exists.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return array Current usage data.
 	 */

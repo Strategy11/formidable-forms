@@ -138,7 +138,7 @@ class FrmFormsController {
 	/**
 	 * Creates submit button field.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param int|object $form Form ID or object.
 	 */

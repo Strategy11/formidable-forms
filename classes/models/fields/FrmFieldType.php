@@ -252,7 +252,7 @@ DEFAULT_HTML;
 	/**
 	 * Shows field label on form builder.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
