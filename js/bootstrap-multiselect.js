@@ -935,7 +935,7 @@
          * @param {String} inputType 
          * @returns {JQuery}
          */
-        createCheckbox: function ($item, labelContent, name, value, title, inputType ) {
+        createCheckbox: function ($item, labelContent, name, value, title, inputType) {
             var $wrapper = $('<span />');
             $wrapper.addClass("form-check");
 
@@ -996,7 +996,7 @@
             }
 
             var name = this.options.checkboxName($element);
-            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType );
+            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType);
 
             var selected = $element.prop('selected') || false;
 
