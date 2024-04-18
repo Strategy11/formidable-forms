@@ -6,17 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesController {
 
 	/**
-	 * @var string $post_type
+	 * @var string
 	 */
 	public static $post_type = 'frm_styles';
 
 	/**
-	 * @var string $screen
+	 * @var string
 	 */
 	public static $screen = 'formidable_page_formidable-styles';
 
 	/**
-	 * @var string|null $message
+	 * @var string|null
 	 */
 	private static $message;
 
@@ -749,8 +749,8 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			$new_style      = ( isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$previous_style = ( isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$new_style      = isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$previous_style = isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( $new_style == $previous_style ) {
 				continue;
 			}
@@ -1107,7 +1107,7 @@ class FrmStylesController {
 	/**
 	 * Get the style post object for a target form.
 	 *
-	 * @param object|string|boolean $form
+	 * @param object|string|bool $form
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {

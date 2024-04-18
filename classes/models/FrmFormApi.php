@@ -5,14 +5,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormApi {
 
-	protected $license       = '';
-	protected $cache_key     = '';
+	/**
+	 * @var string
+	 */
+	protected $license = '';
+
+	/**
+	 * @var string
+	 */
+	protected $cache_key = '';
+
+	/**
+	 * @var string
+	 */
 	protected $cache_timeout = '+6 hours';
 
 	/**
 	 * The number of days an add-on is new.
 	 *
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 90;
 

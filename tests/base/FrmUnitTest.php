@@ -23,7 +23,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
-	 * @var FrmUnitTest $instance
+	 * @var FrmUnitTest
 	 */
 	protected static $instance;
 
@@ -258,7 +258,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	public function get_all_fields_for_form_key( $form_key ) {
 		$field_totals       = array(
-			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
+			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : $this->all_field_types_count - 3,
 			$this->create_post_form_key => 10,
 			$this->contact_form_key     => $this->contact_form_field_count,
 			$this->repeat_sec_form_key  => 3,

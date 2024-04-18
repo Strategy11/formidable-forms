@@ -73,8 +73,8 @@ class FrmFieldsController {
 	/**
 	 * Set up and create a new field
 	 *
-	 * @param string  $field_type
-	 * @param integer $form_id
+	 * @param string $field_type
+	 * @param int    $form_id
 	 *
 	 * @return array|bool
 	 */
@@ -161,7 +161,7 @@ class FrmFieldsController {
 		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
 		$display   = self::display_field_options( array(), $field_obj );
 
-		$ajax_loading    = isset( $values['ajax_load'] ) && $values['ajax_load'];
+		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
 
 		if ( $ajax_loading && $ajax_this_field ) {

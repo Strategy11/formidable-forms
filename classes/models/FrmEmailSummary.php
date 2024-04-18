@@ -29,7 +29,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets inner content.
 	 *
-	 * @return string
+	 * @return string|false
 	 */
 	abstract protected function get_inner_content();
 

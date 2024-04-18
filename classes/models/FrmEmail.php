@@ -9,92 +9,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEmail {
 
 	/**
-	 * @var string $email_key
+	 * @var string
 	 */
 	private $email_key = '';
 
 	/**
-	 * @var array $to
+	 * @var array
 	 */
 	private $to = array();
 
 	/**
-	 * @var array $cc
+	 * @var array
 	 */
 	private $cc = array();
 
 	/**
-	 * @var array $bcc
+	 * @var array
 	 */
 	private $bcc = array();
 
 	/**
-	 * @var string $from
+	 * @var string
 	 */
 	private $from = '';
 
 	/**
-	 * @var string $reply_to
+	 * @var string
 	 */
 	private $reply_to = '';
 
 	/**
-	 * @var string $subject
+	 * @var string
 	 */
 	private $subject = '';
 
 	/**
-	 * @var string $message
+	 * @var string
 	 */
 	private $message = '';
 
 	/**
-	 * @var array $attachments
+	 * @var array
 	 */
 	private $attachments = array();
 
 	/**
-	 * @var bool $is_plain_text
+	 * @var bool
 	 */
 	private $is_plain_text = false;
 
 	/**
-	 * @var bool $is_single_recipient
+	 * @var bool
 	 */
 	private $is_single_recipient = false;
 
 	/**
-	 * @var bool $include_user_info
+	 * @var bool
 	 */
 	private $include_user_info = false;
 
 	/**
-	 * @var string $charset
+	 * @var string
 	 */
 	private $charset = '';
 
 	/**
-	 * @var string $content_type
+	 * @var string
 	 */
 	private $content_type = 'text/html';
 
 	/**
-	 * @var array $settings
+	 * @var array
 	 */
 	private $settings = array();
 
 	/**
-	 * @var stdClass $entry
+	 * @var stdClass
 	 */
 	private $entry;
 
 	/**
-	 * @var stdClass $form
+	 * @var stdClass
 	 */
 	private $form;
 
 	/**
-	 * @var int $action_id
+	 * @var int
 	 */
 	private $action_id = 0;
 
@@ -514,9 +514,8 @@ class FrmEmail {
 	private function has_recipients() {
 		if ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) ) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	/**
@@ -693,18 +692,18 @@ class FrmEmail {
 			if ( is_email( $val ) ) {
 				// If a plain email is used, no formatting is needed
 				continue;
-			} else {
-				$parts = explode( ' ', $val );
-				$email = end( $parts );
+			}
 
-				if ( is_email( $email ) ) {
-					// If user enters a name and email
-					$name = trim( str_replace( $email, '', $val ) );
-				} else {
-					// If user enters a name without an email
-					unset( $recipients[ $key ] );
-					continue;
-				}
+			$parts = explode( ' ', $val );
+			$email = end( $parts );
+
+			if ( is_email( $email ) ) {
+				// If user enters a name and email
+				$name = trim( str_replace( $email, '', $val ) );
+			} else {
+				// If user enters a name without an email
+				unset( $recipients[ $key ] );
+				continue;
 			}
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );

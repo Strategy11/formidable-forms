@@ -86,7 +86,7 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 	<tr>
 		<td>
 			<label for="ajax_load" class="frm_inline_block">
-				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ( $values['ajax_load'] ) ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
+				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo $values['ajax_load'] ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Recommended for long forms.', 'formidable' ); ?>"></span>
 			</label>
 		</td>

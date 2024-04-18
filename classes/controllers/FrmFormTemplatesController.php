@@ -58,77 +58,77 @@ class FrmFormTemplatesController {
 	/**
 	 * Instance of the Form Template API handler.
 	 *
-	 * @var FrmFormTemplateApi $form_template_api Form Template API handler.
+	 * @var FrmFormTemplateApi Form Template API handler.
 	 */
 	private static $form_template_api;
 
 	/**
 	 * Templates fetched from the API.
 	 *
-	 * @var array $templates Templates information from API.
+	 * @var array Templates information from API.
 	 */
 	private static $templates = array();
 
 	/**
 	 * Featured templates.
 	 *
-	 * @var array $featured_templates Associative array with the featured templates' information.
+	 * @var array Associative array with the featured templates' information.
 	 */
 	private static $featured_templates = array();
 
 	/**
 	 * List of user favorite templates.
 	 *
-	 * @var array $favorite_templates List of templates that the user has marked as favorites.
+	 * @var array List of templates that the user has marked as favorites.
 	 */
 	private static $favorite_templates = array();
 
 	/**
 	 * Templates fetched from the published form by user.
 	 *
-	 * @var array $custom_templates Templates information from published form.
+	 * @var array Templates information from published form.
 	 */
 	private static $custom_templates = array();
 
 	/**
 	 * Categories for organizing templates.
 	 *
-	 * @var array $categories Categories for organizing templates.
+	 * @var array Categories for organizing templates.
 	 */
 	private static $categories = array();
 
 	/**
 	 * Status of API request, true if expired.
 	 *
-	 * @var bool $is_expired Whether the API request is expired or not.
+	 * @var bool Whether the API request is expired or not.
 	 */
 	private static $is_expired = false;
 
 	/**
 	 * The type of license received from the API.
 	 *
-	 * @var string $license_type License type received from the API.
+	 * @var string License type received from the API.
 	 */
 	private static $license_type = '';
 
 	/**
 	 * Path to views.
 	 *
-	 * @var string $view_path Path to form templates views.
+	 * @var string Path to form templates views.
 	 */
 	private static $view_path = '';
 
 	/**
 	 * Upgrade URL.
 	 *
-	 * @var string $upgrade_link URL for upgrading accounts.
+	 * @var string URL for upgrading accounts.
 	 */
 	private static $upgrade_link = '';
 
 	/**
 	 * Renew URL.
 	 *
-	 * @var string $renew_link URL for renewing accounts.
+	 * @var string URL for renewing accounts.
 	 */
 	private static $renew_link = '';
 

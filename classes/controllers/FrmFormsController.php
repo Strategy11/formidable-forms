@@ -253,27 +253,27 @@ class FrmFormsController {
 
 		if ( count( $errors ) > 0 ) {
 			return self::get_edit_vars( $id, $errors );
-		} else {
-			self::maybe_remove_draft_option_from_fields( $id );
+		}
 
-			FrmForm::update( $id, $values );
-			$message = __( 'Form was successfully updated.', 'formidable' );
+		self::maybe_remove_draft_option_from_fields( $id );
 
-			if ( self::is_too_long( $values ) ) {
-				$message .= '<br/> ' . sprintf(
-					/* translators: %1$s: Start link HTML, %2$s: end link HTML */
-					__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
-					'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
-					'</a>'
-				);
-			}
+		FrmForm::update( $id, $values );
+		$message = __( 'Form was successfully updated.', 'formidable' );
 
-			if ( defined( 'DOING_AJAX' ) ) {
-				wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
+		if ( self::is_too_long( $values ) ) {
+			$message .= '<br/> ' . sprintf(
+				/* translators: %1$s: Start link HTML, %2$s: end link HTML */
+				__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
+				'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
+				'</a>'
+			);
+		}
 
-			return self::get_edit_vars( $id, array(), $message );
-		}//end if
+		if ( defined( 'DOING_AJAX' ) ) {
+			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+
+		return self::get_edit_vars( $id, array(), $message );
 	}
 
 	/**
@@ -310,9 +310,11 @@ class FrmFormsController {
 	 * were likely not saved either.
 	 *
 	 * @since 3.06.01
+	 *
+	 * @return bool
 	 */
 	private static function is_too_long( $values ) {
-		return ( ! isset( $values['frm_end'] ) ) || empty( $values['frm_end'] );
+		return empty( $values['frm_end'] );
 	}
 
 	/**
@@ -1398,7 +1400,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.03.08
 	 *
-	 * @param array|boolean $values
+	 * @param array|bool $values
 	 */
 	private static function clean_submit_html( &$values ) {
 		if ( is_array( $values ) && isset( $values['submit_html'] ) ) {
@@ -2199,7 +2201,7 @@ class FrmFormsController {
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
 
-		return ( isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
+		return isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
 	}
 
 	/**
@@ -2219,7 +2221,7 @@ class FrmFormsController {
 	private static function get_confirmation_method( $atts ) {
 		$action = FrmOnSubmitHelper::current_event( $atts );
 		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
-		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
+		$method = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 
 		if ( ! empty( $atts['entry_id'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts, $action );
@@ -2230,7 +2232,7 @@ class FrmFormsController {
 
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
-		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
+		if ( $method !== 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
 			$method = 'message';
 		}
 
@@ -2317,7 +2319,7 @@ class FrmFormsController {
 
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
 
-		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
+		$opt = ! isset( $args['action'] ) || $args['action'] === 'create' ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
 		$args['ajax']        = ! empty( $frm_vars['ajax'] );
@@ -3028,7 +3030,7 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );

@@ -12,12 +12,12 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected static $free_license;
 
 	/**
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 30;
 
 	/**
-	 * @var string $cache_timeout
+	 * @var string
 	 */
 	protected $cache_timeout = '+12 hours';
 
@@ -62,7 +62,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	protected function skip_categories() {
 		return array();

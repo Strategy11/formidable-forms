@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$license    = $plugin->license;
 		$status     = get_option( $plugin->option_name . 'active' );
-		$activate   = ( false !== $license && $status == 'valid' ) ? 'deactivate' : 'activate';
-		$icon_class = ( empty( $license ) ) ? 'frm_hidden' : '';
+		$activate   = false !== $license && $status == 'valid' ? 'deactivate' : 'activate';
+		$icon_class = empty( $license ) ? 'frm_hidden' : '';
 		?>
 
 		<div class="edd_frm_license_row frm-inline-select frm_grid_container">

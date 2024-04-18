@@ -442,7 +442,7 @@ class FrmTransLiteAppHelper {
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
 		if ( ! empty( $currency['decimals'] ) ) {
-			$amount = number_format( ( $amount / 100 ), 2, '.', '' );
+			$amount = number_format( $amount / 100, 2, '.', '' );
 		}
 
 		return $amount;

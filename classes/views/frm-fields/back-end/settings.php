@@ -321,7 +321,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value = 'select' === $fkey ? 'dropdown' : $fkey;
 						?>
-						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
+						<option value="<?php echo esc_attr( $type_option_value ); ?>" <?php echo $fkey === $field['type'] ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?>
 						</option>
 						<?php

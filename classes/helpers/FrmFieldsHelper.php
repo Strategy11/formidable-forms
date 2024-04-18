@@ -64,7 +64,7 @@ class FrmFieldsHelper {
 
 		self::fill_field_array( $field, $values );
 
-		$values['custom_html'] = ( isset( $field->field_options['custom_html'] ) ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+		$values['custom_html'] = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
 
 		return $values;
 	}
@@ -491,7 +491,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = ( ! empty( $position ) ) ? $position : 'top';
+		$position = ! empty( $position ) ? $position : 'top';
 
 		return $position;
 	}
@@ -700,9 +700,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false ? true : false;
 			} else {
-				$m = ( $m === false ) ? false : true;
+				$m = $m === false ? false : true;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -762,7 +762,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false ? true : false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -1122,6 +1122,8 @@ class FrmFieldsHelper {
 	 * Get a value from the user profile from the user ID
 	 *
 	 * @since 3.0
+	 *
+	 * @return string
 	 */
 	public static function get_user_display_name( $user_id, $user_info = 'display_name', $args = array() ) {
 		$defaults = array(
@@ -1136,9 +1138,9 @@ class FrmFieldsHelper {
 		$info = '';
 
 		if ( $user ) {
-			if ( $user_info == 'avatar' ) {
+			if ( $user_info === 'avatar' ) {
 				$info = get_avatar( $user_id, $args['size'] );
-			} elseif ( $user_info == 'author_link' ) {
+			} elseif ( $user_info === 'author_link' ) {
 				$info = get_author_posts_url( $user_id );
 			} else {
 				$info = isset( $user->$user_info ) ? $user->$user_info : '';
@@ -1213,7 +1215,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param string $opt_key
 	 *
-	 * @return boolean Returns true if current field option is an "Other" option
+	 * @return bool Returns true if current field option is an "Other" option
 	 */
 	public static function is_other_opt( $opt_key ) {
 		return $opt_key && strpos( $opt_key, 'other_' ) === 0;
@@ -1258,8 +1260,9 @@ class FrmFieldsHelper {
 			}
 
 			return $other_val;
+		}
 
-		} elseif ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
@@ -1315,9 +1318,9 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.6
 	 *
-	 * @param array   $args Should include field, opt_key and field name.
-	 * @param boolean $other_opt
-	 * @param string  $checked
+	 * @param array  $args Should include field, opt_key and field name.
+	 * @param bool   $other_opt
+	 * @param string $checked
 	 *
 	 * @return array $other_args
 	 */
@@ -1445,9 +1448,9 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.08
 	 *
-	 * @param string         $type    Field type.
-	 * @param string         $html_id
-	 * @param string|boolean $opt_key
+	 * @param string      $type    Field type.
+	 * @param string      $html_id
+	 * @param string|bool $opt_key
 	 *
 	 * @return string $other_id
 	 */

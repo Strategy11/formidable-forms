@@ -180,7 +180,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.05
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_color_setting( $setting_key ) {
 		return strpos( $setting_key, 'color' ) !== false;

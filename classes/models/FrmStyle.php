@@ -586,7 +586,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ( ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] == 'auto' ) ? 'normal' : $settings['field_height'];
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] == 'auto' ? 'normal' : $settings['field_height'];
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];

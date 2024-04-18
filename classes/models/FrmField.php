@@ -904,7 +904,7 @@ class FrmField {
 		$limit = FrmDb::esc_limit( $limit );
 
 		$query      = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = ( $limit == ' LIMIT 1' || $limit == 1 ) ? 'row' : 'results';
+		$query_type = $limit == ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
 
 		if ( is_array( $where ) ) {
 			$args    = array(
@@ -916,7 +916,7 @@ class FrmField {
 			// if the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-			$function_name = ( $query_type == 'row' ) ? 'get_row' : 'get_results';
+			$function_name = $query_type == 'row' ? 'get_row' : 'get_results';
 			$results       = $wpdb->$function_name( $query );
 		}
 		unset( $where );
@@ -1043,7 +1043,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_field_with_multiple_values( $field ) {
 		if ( ! $field ) {
@@ -1089,7 +1089,7 @@ class FrmField {
 	 * Check if this is a multiselect dropdown field
 	 *
 	 * @since 2.0.9
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
 		$field_type  = self::get_field_type( $field );
@@ -1112,50 +1112,84 @@ class FrmField {
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array $field
+	 * @return bool
 	 */
 	public static function is_required( $field ) {
-		$required = ( $field['required'] != '0' );
-		$required = apply_filters( 'frm_is_field_required', $required, $field );
+		$required = $field['required'] != '0';
+
+		/**
+		 * @param bool  $required
+		 * @param array $field
+		 */
+		$required = (bool) apply_filters( 'frm_is_field_required', $required, $field );
 
 		return $required;
 	}
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @param string       $option
+	 * @return bool
 	 */
 	public static function is_option_true( $field, $option ) {
 		if ( is_array( $field ) ) {
 			return self::is_option_true_in_array( $field, $option );
-		} else {
-			return self::is_option_true_in_object( $field, $option );
 		}
+		return self::is_option_true_in_object( $field, $option );
 	}
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @param string       $option
+	 * @return bool
 	 */
 	public static function is_option_empty( $field, $option ) {
 		if ( is_array( $field ) ) {
 			return self::is_option_empty_in_array( $field, $option );
-		} else {
-			return self::is_option_empty_in_object( $field, $option );
 		}
+		return self::is_option_empty_in_object( $field, $option );
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_true_in_array( $field, $option ) {
-		return isset( $field[ $option ] ) && $field[ $option ];
+		return ! empty( $field[ $option ] );
 	}
 
+	/**
+	 * @param object $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_true_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_empty_in_array( $field, $option ) {
-		return ! isset( $field[ $option ] ) || empty( $field[ $option ] );
+		return empty( $field[ $option ] );
 	}
 
+	/**
+	 * @param object $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_empty_in_object( $field, $option ) {
-		return ! isset( $field->field_options[ $option ] ) || empty( $field->field_options[ $option ] );
+		return empty( $field->field_options[ $option ] );
 	}
 
 	/**
@@ -1169,6 +1203,10 @@ class FrmField {
 
 	/**
 	 * @since 2.0.18
+	 *
+	 * @param object|array $field
+	 * @param string       $option
+	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
 		if ( is_array( $field ) ) {
@@ -1180,8 +1218,12 @@ class FrmField {
 		return $option;
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return mixed
+	 */
 	public static function get_option_in_array( $field, $option ) {
-
 		if ( isset( $field[ $option ] ) ) {
 			$this_option = $field[ $option ];
 		} elseif ( isset( $field['field_options'] ) && is_array( $field['field_options'] ) && isset( $field['field_options'][ $option ] ) ) {
@@ -1199,15 +1241,18 @@ class FrmField {
 
 	/**
 	 * @since 2.0.09
+	 *
+	 * @param array|object $field
+	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
 		if ( is_array( $field ) ) {
-			$is_repeating_field = ( 'divider' == $field['type'] );
+			$is_repeating_field = ( 'divider' === $field['type'] );
 		} else {
-			$is_repeating_field = ( 'divider' == $field->type );
+			$is_repeating_field = ( 'divider' === $field->type );
 		}
 
-		return ( $is_repeating_field && self::is_option_true( $field, 'repeat' ) );
+		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
 	/**
@@ -1243,7 +1288,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean true if field type is radio or Dynamic radio
+	 * @return bool true if field type is radio or Dynamic radio
 	 */
 	public static function is_radio( $field ) {
 		return self::is_field_type( $field, 'radio' );
@@ -1256,7 +1301,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_checkbox( $field ) {
 		return self::is_field_type( $field, 'checkbox' );
@@ -1270,7 +1315,7 @@ class FrmField {
 	 * @param array|object $field
 	 * @param string       $is_type Options include radio, checkbox, text.
 	 *
-	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_field_type( $field, $is_type ) {
 		$field_type = self::get_original_field_type( $field );

@@ -6,7 +6,6 @@
  * @package Formidable
  *
  * @var array  $args   The arguments of images_dropdown() method.
- * @var array  $option The option data.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

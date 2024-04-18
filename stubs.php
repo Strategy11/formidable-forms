@@ -216,11 +216,11 @@ namespace Elementor {
 namespace WPMailSMTP {
 	class Options {
 	   /**
-		* @return Options
-		*/
+	    * @return Options
+	    */
 	   public static function init() {
 	   }
-	   /**
+		/**
 		 * @param string $group
 		 * @param string $key
 		 * @param bool   $strip_slashes

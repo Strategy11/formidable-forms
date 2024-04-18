@@ -28,7 +28,7 @@ class FrmFieldGridHelper {
 	private $active_field_size;
 
 	/**
-	 * @var bool $is_frm_first flagged while calling get_field_layout_class, true if classes contain frm_first class.
+	 * @var bool flagged while calling get_field_layout_class, true if classes contain frm_first class.
 	 */
 	private $is_frm_first;
 
@@ -38,17 +38,17 @@ class FrmFieldGridHelper {
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper $section_helper
+	 * @var FrmFieldGridHelper
 	 */
 	private $section_helper;
 
 	/**
-	 * @var bool $nested
+	 * @var bool
 	 */
 	private $nested;
 
 	/**
-	 * @var int $section_size
+	 * @var int
 	 */
 	private $section_size;
 
