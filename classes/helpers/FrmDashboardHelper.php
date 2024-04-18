@@ -25,7 +25,7 @@ class FrmDashboardHelper {
 	 *        @type array  $counters['counters'][]['cta']
 	 *            @type string  $counters['counters'][]['cta']['title']
 	 *            @type string  $counters['counters'][]['cta']['link']
-	 *            @type boolean $counters['counters'][]['cta']['display'] If true a CTA will be displayed instead of the counter.
+	 *            @type bool $counters['counters'][]['cta']['display'] If true a CTA will be displayed instead of the counter.
 	 *    @type array $license Array of license args
 	 *        @type string $license['heading']
 	 *        @type string $license['copy']
@@ -68,7 +68,7 @@ class FrmDashboardHelper {
 	 *                @type string $entries['placeholder']['button']['label']
 	 *                @type string $entries['placeholder']['button']['link']
 	 *    @type array $payments Array of payments args
-	 *        @type boolean $payments['show-placeholder']
+	 *        @type bool $payments['show-placeholder']
 	 *        @type array   $payments['placeholder']
 	 *            @type string $payments['placeholder']['copy']
 	 *            @type array  $payments['placeholder']['cta']

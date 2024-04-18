@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAddonsController {
 
 	/**
-	 * @var string $plugin
+	 * @var string
 	 */
 	protected static $plugin;
 
@@ -315,7 +315,7 @@ class FrmAddonsController {
 	/**
 	 * @since 4.08
 	 *
-	 * @return boolean|int false or the number of days until expiration.
+	 * @return bool|int false or the number of days until expiration.
 	 */
 	public static function is_license_expiring() {
 		if ( is_callable( 'FrmProAddonsController::is_license_expiring' ) ) {
@@ -1623,10 +1623,10 @@ class FrmAddonsController {
 	 * @deprecated 3.04.03
 	 * @codeCoverageIgnore
 	 *
-	 * @param boolean $return
-	 * @param string  $package
+	 * @param bool   $return
+	 * @param string $package
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function add_shorten_edd_filename_filter( $return, $package ) {
 		return FrmDeprecated::add_shorten_edd_filename_filter( $return, $package );

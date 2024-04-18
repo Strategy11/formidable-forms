@@ -6,17 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesController {
 
 	/**
-	 * @var string $post_type
+	 * @var string
 	 */
 	public static $post_type = 'frm_styles';
 
 	/**
-	 * @var string $screen
+	 * @var string
 	 */
 	public static $screen = 'formidable_page_formidable-styles';
 
 	/**
-	 * @var string|null $message
+	 * @var string|null
 	 */
 	private static $message;
 
@@ -1107,7 +1107,7 @@ class FrmStylesController {
 	/**
 	 * Get the style post object for a target form.
 	 *
-	 * @param object|string|boolean $form
+	 * @param object|string|bool $form
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {

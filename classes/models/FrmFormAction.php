@@ -330,7 +330,7 @@ class FrmFormAction {
 	 * @since 2.0
 	 *
 	 * @param array $action
-	 * @return integer $post_id
+	 * @return int $post_id
 	 */
 	public function maybe_create_action( $action, $forms ) {
 		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
