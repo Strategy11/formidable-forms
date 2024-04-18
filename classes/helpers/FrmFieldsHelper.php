@@ -64,7 +64,7 @@ class FrmFieldsHelper {
 
 		self::fill_field_array( $field, $values );
 
-		$values['custom_html'] = ( isset( $field->field_options['custom_html'] ) ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+		$values['custom_html'] = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
 
 		return $values;
 	}
@@ -491,7 +491,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = ( ! empty( $position ) ) ? $position : 'top';
+		$position = ! empty( $position ) ? $position : 'top';
 
 		return $position;
 	}
@@ -700,9 +700,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false ? true : false;
 			} else {
-				$m = ( $m === false ) ? false : true;
+				$m = $m === false ? false : true;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -762,7 +762,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false ? true : false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with

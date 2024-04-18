@@ -581,7 +581,7 @@ class FrmCSVExportHelper {
 				'show_icon'         => false,
 				'entry_id'          => self::$entry->id,
 				'sep'               => self::$separator,
-				'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
 			)
 		);
 	}

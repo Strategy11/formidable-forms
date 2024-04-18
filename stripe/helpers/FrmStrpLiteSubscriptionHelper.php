@@ -90,7 +90,7 @@ class FrmStrpLiteSubscriptionHelper {
 		if ( ! $plan_id ) {
 			// The amount has already been formatted, so add the decimal back in.
 			$amount                         = $action->post_content['amount'];
-			$action->post_content['amount'] = number_format( ( $amount / 100 ), 2, '.', '' );
+			$action->post_content['amount'] = number_format( $amount / 100, 2, '.', '' );
 			$plan_opts                      = self::prepare_plan_options( $action->post_content );
 			$plan_id                        = self::maybe_create_plan( $plan_opts );
 		}
@@ -105,7 +105,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 */
 	public static function prepare_plan_options( $settings ) {
 		$amount              = FrmStrpLiteActionsController::prepare_amount( $settings['amount'], $settings );
-		$default_description = number_format( ( $amount / 100 ), 2 ) . '/' . $settings['interval'];
+		$default_description = number_format( $amount / 100, 2 ) . '/' . $settings['interval'];
 		$plan_opts           = array(
 			'amount'         => $amount,
 			'interval'       => $settings['interval'],

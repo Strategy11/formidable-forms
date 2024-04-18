@@ -178,6 +178,6 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
+		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ! empty( $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
 	</form>
 </div>

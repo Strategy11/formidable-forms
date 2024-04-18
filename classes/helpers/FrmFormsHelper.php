@@ -50,7 +50,7 @@ class FrmFormsHelper {
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
 			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
-				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
+				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
@@ -118,7 +118,7 @@ class FrmFormsHelper {
 			$selected = $selected->name;
 		}
 
-		$name           = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
+		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
 		$name           = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
@@ -212,8 +212,8 @@ class FrmFormsHelper {
 	}
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
-		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
-		echo ( $sort_col == $col && $sort_dir === 'desc' ) ? ' asc' : ' desc';
+		echo $sort_col == $col ? 'sorted' : 'sortable';
+		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
 	}
 
 	/**
@@ -321,7 +321,7 @@ class FrmFormsHelper {
 		unset( $defaults );
 
 		if ( ! isset( $values['form_key'] ) ) {
-			$values['form_key'] = ( $post_values && isset( $post_values['form_key'] ) ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
+			$values['form_key'] = $post_values && isset( $post_values['form_key'] ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
 		}
 
 		$values                 = self::fill_default_opts( $values, false, $post_values );
@@ -353,15 +353,15 @@ class FrmFormsHelper {
 		foreach ( $defaults as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
-					$values[ $var ] = ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : array();
+					$values[ $var ] = $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : array();
 				}
 
 				foreach ( $default as $k => $v ) {
-					$values[ $var ][ $k ] = ( $post_values && isset( $post_values[ $var ][ $k ] ) ) ? $post_values[ $var ][ $k ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ) ? $record->options[ $var ][ $k ] : $v );
+					$values[ $var ][ $k ] = $post_values && isset( $post_values[ $var ][ $k ] ) ? $post_values[ $var ][ $k ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ? $record->options[ $var ][ $k ] : $v );
 
 					if ( is_array( $v ) ) {
 						foreach ( $v as $k1 => $v1 ) {
-							$values[ $var ][ $k ][ $k1 ] = ( $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ) ? $post_values[ $var ][ $k ][ $k1 ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
+							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
 							unset( $k1, $v1 );
 						}
 					}
@@ -369,7 +369,7 @@ class FrmFormsHelper {
 					unset( $k, $v );
 				}
 			} else {
-				$values[ $var ] = ( $post_values && isset( $post_values['options'][ $var ] ) ) ? $post_values['options'][ $var ] : ( ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : $default );
+				$values[ $var ] = $post_values && isset( $post_values['options'][ $var ] ) ? $post_values['options'][ $var ] : ( $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : $default );
 			}
 
 			unset( $var, $default );
@@ -961,7 +961,7 @@ BEFORE_HTML;
 			$form = FrmForm::getOne( $form );
 		}
 
-		$style = ( $form && is_object( $form ) && isset( $form->options['custom_style'] ) ) ? $form->options['custom_style'] : $style;
+		$style = $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
 
 		return $style;
 	}
@@ -1558,7 +1558,7 @@ BEFORE_HTML;
 		$options = $values['options'];
 		FrmAppHelper::sanitize_with_html( $options );
 
-		if ( ( ! isset( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
+		if ( ! isset( $options['success_action'] ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
 			return false;
 		}
 

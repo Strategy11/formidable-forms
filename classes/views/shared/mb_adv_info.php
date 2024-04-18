@@ -201,8 +201,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			$classes  = 'frm-advanced-list';
-			$classes .= ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? ' show_before_content show_after_content' : '';
-			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? ' hide_frm_not_email_subject' : '';
+			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ? ' show_before_content show_after_content' : '';
+			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
 
 			FrmFormsHelper::insert_code_html(
 				array(

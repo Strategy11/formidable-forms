@@ -420,7 +420,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = ( ! isset( $step['current'] ) || ! $step['current'] ) ? 'frm_grey' : '';
+		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
 
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
