@@ -2509,7 +2509,7 @@ class FrmAppHelper {
 	}
 
 	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
-		if ( is_array( $original_string ) ) {
+		if ( ! is_string( $original_string ) ) {
 			return '';
 		}
 
