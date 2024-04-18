@@ -947,6 +947,7 @@ BEFORE_HTML;
 		if ( empty( $form ) || 'default' === $form ) {
 			return $style;
 		}
+
 		if ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
 			$form = $form->parent_form_id;

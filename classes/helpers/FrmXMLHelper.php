@@ -1360,14 +1360,14 @@ class FrmXMLHelper {
 			}
 
 			return;
-		}
+		}//end if
+
 		if ( ! $result ) {
 			return;
-		}//end if
+		}
 
 		if ( ! is_array( $result ) ) {
 			$message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
-
 			return;
 		}
 
