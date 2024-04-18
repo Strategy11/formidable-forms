@@ -3,9 +3,12 @@
 $finder = ( new PhpCsFixer\Finder() )->in( __DIR__ );
 $rules  = array(
 	// Keep these rules for sure.
-	// 'phpdoc_order'  => true,
-	// 'phpdoc_scalar' => true,
-	// 'phpdoc_trim'   => true,
+	// 'phpdoc_order'            => true,
+	// 'phpdoc_scalar'           => true,
+	// 'phpdoc_trim'             => true,
+	// 'phpdoc_var_without_name' => true,
+	// 'phpdoc_indent'           => true,
+	// 'align_multiline_comment' => true,
 );
 
 $config = new PhpCsFixer\Config();
@@ -19,3 +22,4 @@ return $config->setFinder( $finder );
 // Maybe include these.
 // 'phpdoc_separation' => true,
 // 'phpdoc_summary' => true,
+// 'phpdoc_align' => true,
