@@ -939,6 +939,7 @@
          * @param {String} name 
          * @param {String} value 
          * @param {String} inputType 
+         * @param {Object} data
          * @returns {JQuery}
          */
         createCheckbox: function ($item, labelContent, name, value, title, inputType, data = {} ) {
@@ -964,8 +965,10 @@
                 $checkbox.attr('name', name);
             }
 
-            $item[0].setAttribute( 'data-oneclick', JSON.stringify( data['oneclick'] ) );
-            $item[0].setAttribute( 'data-upgrade', data['upgrade'] );
+            if ( data.hasOwnProperty( 'oneclick' ) && data.hasOwnProperty( 'upgrade' ) ) {
+                $item[0].setAttribute( 'data-oneclick', data['oneclick'] );
+                $item[0].setAttribute( 'data-upgrade', data['upgrade'] );
+            }
 
             $item.prepend($wrapper);
             $item.attr("title", title || labelContent);
