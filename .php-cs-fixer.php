@@ -2,7 +2,8 @@
 
 $finder = ( new PhpCsFixer\Finder() )->in( __DIR__ );
 $rules  = array(
-	'phpdoc_order' => true,
+	'phpdoc_order'  => true,
+	'phpdoc_scalar' => true,
 );
 
 $config = new PhpCsFixer\Config();
