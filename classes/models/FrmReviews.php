@@ -34,7 +34,7 @@ class FrmReviews {
 			$dismissed = false;
 		}
 
-		$week_ago = ( $this->review_status['time'] + WEEK_IN_SECONDS ) <= time();
+		$week_ago = $this->review_status['time'] + WEEK_IN_SECONDS <= time();
 
 		if ( empty( $dismissed ) && $week_ago ) {
 			$this->review();

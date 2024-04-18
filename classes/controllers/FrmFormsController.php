@@ -312,7 +312,7 @@ class FrmFormsController {
 	 * @since 3.06.01
 	 */
 	private static function is_too_long( $values ) {
-		return ( ! isset( $values['frm_end'] ) ) || empty( $values['frm_end'] );
+		return ! isset( $values['frm_end'] ) || empty( $values['frm_end'] );
 	}
 
 	/**
@@ -2199,7 +2199,7 @@ class FrmFormsController {
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
 
-		return ( isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
+		return isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
 	}
 
 	/**
@@ -2219,7 +2219,7 @@ class FrmFormsController {
 	private static function get_confirmation_method( $atts ) {
 		$action = FrmOnSubmitHelper::current_event( $atts );
 		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
-		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
+		$method = isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 
 		if ( ! empty( $atts['entry_id'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts, $action );
@@ -2317,7 +2317,7 @@ class FrmFormsController {
 
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
 
-		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
+		$opt = ! isset( $args['action'] ) || $args['action'] === 'create' ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
 		$args['ajax']        = ! empty( $frm_vars['ajax'] );

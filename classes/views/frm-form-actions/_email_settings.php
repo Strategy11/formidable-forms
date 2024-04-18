@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'from', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
 </p>
 
-<p class="frm_error_style frm_from_to_match_row <?php echo ( ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">
+<p class="frm_error_style frm_from_to_match_row <?php echo ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">
 	<?php esc_html_e( 'Warning: If you are sending an email to the user, the To and From fields should not match.', 'formidable' ); ?>
 </p>
 

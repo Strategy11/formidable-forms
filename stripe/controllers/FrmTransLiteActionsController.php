@@ -182,7 +182,7 @@ class FrmTransLiteActionsController {
 
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
-			$trigger_event = ( $payment->status === 'complete' ) ? 'payment-success' : 'payment-failed';
+			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}

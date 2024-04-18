@@ -159,7 +159,7 @@ class FrmForm {
 		$keys     = array( 'default_value', 'field_options' );
 		$sql_cols = 'fi.id';
 		foreach ( $keys as $key ) {
-			$sql_cols .= ( ',fi.' . $key );
+			$sql_cols .= ',fi.' . $key;
 		}
 
 		$fields = FrmDb::get_results(
@@ -283,7 +283,7 @@ class FrmForm {
 		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;
 		$options['before_html']  = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
-		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
+		$options['submit_html']  = isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		/**
 		 * Allows modifying form options before updating or creating.
@@ -514,7 +514,7 @@ class FrmForm {
 			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = ( $default === '' ) ? $field->{$col} : $default;
+			$default = $default === '' ? $field->{$col} : $default;
 
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
 		}

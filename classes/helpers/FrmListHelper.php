@@ -462,7 +462,7 @@ class FrmListHelper {
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			( $i == $action_count ) ? $sep = '' : $sep = ' | ';
+			$i == $action_count ? $sep = '' : $sep = ' | ';
 			$out                          .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
@@ -966,8 +966,8 @@ class FrmListHelper {
 				);
 			}//end if
 
-			$tag   = ( 'cb' === $column_key ) ? 'td' : 'th';
-			$scope = ( 'th' === $tag ) ? 'scope="col"' : '';
+			$tag   = 'cb' === $column_key ? 'td' : 'th';
+			$scope = 'th' === $tag ? 'scope="col"' : '';
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
 			if ( ! empty( $class ) ) {
