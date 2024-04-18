@@ -563,17 +563,13 @@
             }
 
             this.$popupContainer.on("touchstart click", function (e) {
-                if ( this.optionIsDisabled( e.currentTarget ) ) {
+                if ( e.target.closest( '.frm_disabled_option' ) ) {
                     return;
                 }
                 e.stopPropagation();
             });
 
             this.$container.append(this.$popupContainer);
-        },
-
-        optionIsDisabled: function( el ) {
-            return el.classList.contains( 'frm_disabled_option' );
         },
 
         synchronizeButtonAndPopupWidth: function () {
@@ -726,7 +722,7 @@
 
             $(this.$popupContainer).off('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group');
             $(this.$popupContainer).on('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group', $.proxy(function (event) {
-                if ( this.optionIsDisabled( event.currentTarget ) ) {
+                if ( event.currentTarget.classList.contains( 'frm_disabled_option' ) ) {
                     return;
                 }
                 event.stopPropagation();
