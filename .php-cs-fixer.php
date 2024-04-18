@@ -3,17 +3,16 @@
 $finder = ( new PhpCsFixer\Finder() )->in( __DIR__ );
 $rules  = array(
 	// Keep these rules for sure.
-	// 'phpdoc_order'                => true,
-	// 'phpdoc_scalar'               => true,
-	// 'phpdoc_trim'                 => true,
-	// 'phpdoc_var_without_name'     => true,
-	// 'phpdoc_indent'               => true,
-	// 'align_multiline_comment'     => true,
-	// 'short_scalar_cast'           => true,
-	// 'standardize_not_equals'      => true,
-	// 'echo_tag_syntax'             => true,
-	// 'semicolon_after_instruction' => true,
-	'string_length_to_empty' => true,
+	'phpdoc_order'                => true,
+	'phpdoc_scalar'               => true,
+	'phpdoc_trim'                 => true,
+	'phpdoc_var_without_name'     => true,
+	'phpdoc_indent'               => true,
+	'align_multiline_comment'     => true,
+	'short_scalar_cast'           => true,
+	'standardize_not_equals'      => true,
+	'echo_tag_syntax'             => true,
+	'semicolon_after_instruction' => true,
 );
 
 $config = new PhpCsFixer\Config();
