@@ -573,7 +573,7 @@
         },
 
         optionIsDisabled: function( el ) {
-            return el.classList.contains( 'frm_disabled_role' );
+            return el.classList.contains( 'frm_disabled_option' );
         },
 
         synchronizeButtonAndPopupWidth: function () {
