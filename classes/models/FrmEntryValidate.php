@@ -298,9 +298,9 @@ class FrmEntryValidate {
 	/**
 	 * Check for spam
 	 *
-	 * @param bool $exclude
-	 * @param array   $values
-	 * @param array   $errors By reference.
+	 * @param bool  $exclude
+	 * @param array $values
+	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {

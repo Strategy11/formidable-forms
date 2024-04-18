@@ -1027,9 +1027,9 @@ class FrmEntry {
 	 * @since 2.0.16
 	 *
 	 * @param bool|int $query_results
-	 * @param int         $id
-	 * @param array       $values
-	 * @param array       $new_values
+	 * @param int      $id
+	 * @param array    $values
+	 * @param array    $new_values
 	 */
 	private static function after_update_entry( $query_results, $id, $values, $new_values ) {
 		if ( $query_results ) {

@@ -675,9 +675,9 @@ BEFORE_HTML;
 	 *
 	 * @since 2.0
 	 *
-	 * @param object  $form
-	 * @param array   $fields
-	 * @param bool $reset_fields
+	 * @param object $form
+	 * @param array  $fields
+	 * @param bool   $reset_fields
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {

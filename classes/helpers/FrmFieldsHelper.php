@@ -1317,9 +1317,9 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.6
 	 *
-	 * @param array   $args Should include field, opt_key and field name.
-	 * @param bool $other_opt
-	 * @param string  $checked
+	 * @param array  $args Should include field, opt_key and field name.
+	 * @param bool   $other_opt
+	 * @param string $checked
 	 *
 	 * @return array $other_args
 	 */
@@ -1447,8 +1447,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.08
 	 *
-	 * @param string         $type    Field type.
-	 * @param string         $html_id
+	 * @param string      $type    Field type.
+	 * @param string      $html_id
 	 * @param string|bool $opt_key
 	 *
 	 * @return string $other_id

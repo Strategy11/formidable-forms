@@ -22,7 +22,7 @@ class FrmOverlayController {
 	/**
 	 * The controller configs passed through construct. If empty the overlay will run normaly, it will open every time when open_overlay is called.
 	 *
-	 * @var array {
+	 * @var array Config {
 	 *
 	 *     @type string $execution-frequency Example values: '1 day', '10 days', '1 week', etc.
 	 *     @type string $config-option-name A handle name that will be used to store the controller options_data.
@@ -41,7 +41,7 @@ class FrmOverlayController {
 	/**
 	 * The controller data. It will handle the options from multiple instances of the controller
 	 *
-	 * @var array {
+	 * @var array Option data {
 	 *     @type array $options_data[ '[instance1-option_name_provided_via-->config-option-name]' ] {
 	 *       @type string $execution-frequency Values example: '1 day' | '10 days' | '1 week' | '10 weeks' | '1 month' | '10 months' | '1 year' | '10 years'
 	 *     }

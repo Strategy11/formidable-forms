@@ -1623,8 +1623,8 @@ class FrmAddonsController {
 	 * @deprecated 3.04.03
 	 * @codeCoverageIgnore
 	 *
-	 * @param bool $return
-	 * @param string  $package
+	 * @param bool   $return
+	 * @param string $package
 	 *
 	 * @return bool
 	 */

@@ -190,9 +190,9 @@ class FrmDashboardController {
 	/**
 	 * Build view args for cta.
 	 *
-	 * @param string  $title
-	 * @param string  $link
-	 * @param bool $display
+	 * @param string $title
+	 * @param string $link
+	 * @param bool   $display
 	 *
 	 * @return array
 	 */

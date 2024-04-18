@@ -102,9 +102,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0.13
 	 *
-	 * @param object  $field - this is passed by reference since it is an object.
-	 * @param bool $reset
-	 * @param array   $args
+	 * @param object $field - this is passed by reference since it is an object.
+	 * @param bool   $reset
+	 * @param array  $args
 	 *
 	 * @return string|array $new_value
 	 */

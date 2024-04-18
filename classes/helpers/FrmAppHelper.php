@@ -1580,9 +1580,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param array   $args
-	 * @param string  $page_id Deprecated.
-	 * @param bool $truncate Deprecated.
+	 * @param array  $args
+	 * @param string $page_id Deprecated.
+	 * @param bool   $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
