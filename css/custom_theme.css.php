@@ -259,7 +259,6 @@ legend.frm_hidden{
 	outline:none<?php echo esc_html( $important ); ?>;
 	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;
 	font-weight:var(--field-weight);
-	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
 <?php if ( ! empty( $important ) ) { ?>
@@ -473,7 +472,7 @@ legend.frm_hidden{
 /* Floating labels */
 .with_frm_style .frm_inside_container {
 	position: relative;
-	padding-top: 16px;
+	padding-top: 18px;
 	padding-top: calc(0.5 * var(--field-height));
 }
 
@@ -506,7 +505,7 @@ legend.frm_hidden{
 	transition: all 0.3s ease-in;
 
 	position: absolute;
-	top: 17px;
+	top: 19px;
 	top: calc(1px + .5 * var(--field-height));
 	left: 3px;
 	width: 100%;
@@ -516,7 +515,7 @@ legend.frm_hidden{
 	overflow: hidden;
 	white-space: nowrap;
 
-	padding: 6px 10px;
+	padding: 8px 12px;
 	padding: var(--field-pad);
 
 	font-size: 14px;
