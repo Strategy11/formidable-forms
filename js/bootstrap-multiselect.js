@@ -722,10 +722,9 @@
 
             $(this.$popupContainer).off('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group');
             $(this.$popupContainer).on('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group', $.proxy(function (event) {
-                if ( event.currentTarget.classList.contains( 'frm_disabled_option' ) ) {
-                    return;
+                if ( ! event.currentTarget.classList.contains( 'frm_disabled_option' ) ) {
+                    event.stopPropagation();
                 }
-                event.stopPropagation();
 
                 var $target = $(event.target);
 
