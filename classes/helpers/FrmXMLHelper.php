@@ -1360,7 +1360,8 @@ class FrmXMLHelper {
 			}
 
 			return;
-		} elseif ( ! $result ) {
+		}
+		if ( ! $result ) {
 			return;
 		}//end if
 

@@ -2519,7 +2519,8 @@ class FrmAppHelper {
 
 		if ( $length == 0 ) {
 			return '';
-		} elseif ( $length <= 10 ) {
+		}
+		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
 
 			return $sub . ( ( $length < $original_len ) ? $continue : '' );
