@@ -12,7 +12,7 @@
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
 
-	<arg name="extensions" value="php" />
+	<arg name="extensions" value="php,css" />
 	<arg value="nsp" />
 
 	<rule ref="WordPress">

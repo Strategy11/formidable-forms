@@ -86,7 +86,7 @@
 }
 
 .s11-floating-links-nav-item:hover::before {
-    background-color: var(--floating-links-bg-hover-color);
+	 background-color: var(--floating-links-bg-hover-color);
 }
 
 .s11-floating-links-nav-text {
@@ -99,7 +99,7 @@
 }
 
 .s11-floating-links-nav-item:hover .s11-floating-links-nav-text {
-    color: var(--floating-links-hover-color);
+	 color: var(--floating-links-hover-color);
 }
 
 .s11-floating-links-nav-icon {
@@ -112,7 +112,7 @@
 }
 
 .s11-floating-links-nav-item:hover .s11-floating-links-nav-icon > svg path {
-    stroke: var(--floating-links-hover-color);
+	 stroke: var(--floating-links-hover-color);
 }
 
 .s11-fadein {
