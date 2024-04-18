@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_form_builder with_frm_style">
 
 		<p class="frm_hidden frm-no-margin">
-			<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">
+			<button class="frm_submit_<?php echo ! empty( $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">
 				<?php esc_attr_e( 'Update', 'formidable' ); ?>"
 			</button>
 		</p>

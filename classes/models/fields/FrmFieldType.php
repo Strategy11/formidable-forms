@@ -1146,7 +1146,7 @@ DEFAULT_HTML;
 
 		if ( isset( $values['combo_name'] ) ) {
 			$options  = $options[ $values['combo_name'] ];
-			$selected = ( is_array( $selected ) && isset( $selected[ $values['combo_name'] ] ) ) ? $selected[ $values['combo_name'] ] : '';
+			$selected = is_array( $selected ) && isset( $selected[ $values['combo_name'] ] ) ? $selected[ $values['combo_name'] ] : '';
 		}
 
 		$input = $this->select_tag( $values );

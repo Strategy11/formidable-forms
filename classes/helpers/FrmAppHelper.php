@@ -1721,7 +1721,7 @@ class FrmAppHelper {
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
-			<?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?>
+			<?php echo 'multiple' === $multiple ? 'multiple="multiple"' : ''; ?>
 			class="frm_multiselect">
 			<?php self::roles_options( $capability ); ?>
 		</select>
@@ -1963,7 +1963,7 @@ class FrmAppHelper {
 			return $error;
 		}
 
-		$nonce_value = ( $_REQUEST && isset( $_REQUEST[ $nonce_name ] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $nonce_name ] ) ) : '';
+		$nonce_value = $_REQUEST && isset( $_REQUEST[ $nonce_name ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $nonce_name ] ) ) : '';
 		if ( $_REQUEST && ( ! isset( $_REQUEST[ $nonce_name ] ) || ! wp_verify_nonce( $nonce_value, $nonce ) ) ) {
 			$frm_settings = self::get_settings();
 			$error        = $frm_settings->admin_permission;
@@ -2472,7 +2472,7 @@ class FrmAppHelper {
 
 		foreach ( $form_defaults as $opt => $default ) {
 			if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
-				$values[ $opt ] = ( $post_values && isset( $post_values['options'][ $opt ] ) ) ? $post_values['options'][ $opt ] : $default;
+				$values[ $opt ] = $post_values && isset( $post_values['options'][ $opt ] ) ? $post_values['options'][ $opt ] : $default;
 			}
 
 			unset( $opt, $default );
@@ -2508,21 +2508,22 @@ class FrmAppHelper {
 		return $custom_style;
 	}
 
-	public static function truncate( $str, $length, $minword = 3, $continue = '...' ) {
-		if ( is_array( $str ) ) {
+	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
+		if ( ! is_string( $original_string ) ) {
 			return '';
 		}
 
 		$length       = (int) $length;
-		$str          = wp_strip_all_tags( $str );
+		$str          = wp_strip_all_tags( $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length == 0 ) {
 			return '';
-		} elseif ( $length <= 10 ) {
-			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+		}
 
-			return $sub . ( ( $length < $original_len ) ? $continue : '' );
+		if ( $length <= 10 ) {
+			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
 		$sub = '';
@@ -2530,8 +2531,12 @@ class FrmAppHelper {
 
 		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
 
+		if ( ! is_array( $words ) ) {
+			return $original_string;
+		}
+
 		foreach ( $words as $word ) {
-			$part      = ( ( $sub != '' ) ? ' ' : '' ) . $word;
+			$part      = ( $sub != '' ? ' ' : '' ) . $word;
 			$total_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub . $part ) );
 			if ( $total_len > $length && substr_count( $sub, ' ' ) ) {
 				break;
@@ -2549,7 +2554,7 @@ class FrmAppHelper {
 
 		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
 
-		return $sub . ( ( $len < $original_len ) ? $continue : '' );
+		return $sub . ( $len < $original_len ? $continue : '' );
 	}
 
 	/**
@@ -2808,7 +2813,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
-		return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
+		return ( $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size );
 	}
 
 	/**
@@ -2821,7 +2826,7 @@ class FrmAppHelper {
 		if ( $current_p == 1 ) {
 			return 1;
 		}
-		return ( self::get_last_record_num( $r_count, ( $current_p - 1 ), $p_size ) + 1 );
+		return self::get_last_record_num( $r_count, $current_p - 1, $p_size ) + 1;
 	}
 
 	/**
@@ -2846,7 +2851,7 @@ class FrmAppHelper {
 					$l3 = $name;
 				}
 
-				$this_val = ( $p == $last ) ? $jv['value'] : array();
+				$this_val = $p == $last ? $jv['value'] : array();
 
 				switch ( $p ) {
 					case 0:

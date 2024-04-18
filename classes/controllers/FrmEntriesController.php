@@ -192,7 +192,7 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		// Add a check so we don't create a loop.
-		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
+		$frm_vars['prev_hidden_cols'] = ! empty( $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
 	}
@@ -442,9 +442,9 @@ class FrmEntriesController {
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
 
 			/* translators: %1$s: Time string */
 			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );

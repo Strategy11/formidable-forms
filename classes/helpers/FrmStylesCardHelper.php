@@ -424,7 +424,7 @@ class FrmStylesCardHelper {
 			 * @return void
 			 */
 			function ( $style ) use ( &$count ) {
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				$hidden = $count > self::PAGE_SIZE - 1;
 				$this->echo_style_card( $style, $hidden );
 				++$count;
 			}

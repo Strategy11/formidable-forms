@@ -13,7 +13,7 @@ $field_option_count = is_array( $args['field']['options'] ) ? count( $args['fiel
 
 <?php do_action( 'frm_add_multiple_opts_labels', $args['field'] ); ?>
 
-<ul id="frm_field_<?php echo esc_attr( $args['field']['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( $field_option_count > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $args['field']['field_key'] ); ?>">
+<ul id="frm_field_<?php echo esc_attr( $args['field']['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo $field_option_count > 10 ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $args['field']['field_key'] ); ?>">
 	<?php $this->show_single_option( $args ); ?>
 </ul>
 

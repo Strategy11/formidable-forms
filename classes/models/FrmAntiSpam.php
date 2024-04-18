@@ -108,9 +108,9 @@ class FrmAntiSpam extends FrmValidate {
 			'frm_form_token_check_before_today',
 			array(
 				// Two days ago.
-				( 2 * DAY_IN_SECONDS ),
+				2 * DAY_IN_SECONDS,
 				// One day ago.
-				( 1 * DAY_IN_SECONDS ),
+				1 * DAY_IN_SECONDS,
 			)
 		);
 
@@ -120,7 +120,7 @@ class FrmAntiSpam extends FrmValidate {
 			'frm_form_token_check_after_today',
 			array(
 				// Add in 45 minutes past today to catch some midnight edge cases.
-				( 45 * MINUTE_IN_SECONDS ),
+				45 * MINUTE_IN_SECONDS,
 			)
 		);
 

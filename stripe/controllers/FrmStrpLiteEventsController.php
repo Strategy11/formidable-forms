@@ -285,7 +285,7 @@ class FrmStrpLiteEventsController {
 		$payment_values['expire_date'] = '0000-00-00';
 
 		foreach ( $this->invoice->lines->data as $line ) {
-			$payment_values['amount']      = number_format( ( $line->amount / 100 ), 2, '.', '' );
+			$payment_values['amount']      = number_format( $line->amount / 100, 2, '.', '' );
 			$payment_values['begin_date']  = gmdate( 'Y-m-d', $line->period->start );
 			$payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 		}
@@ -397,7 +397,7 @@ class FrmStrpLiteEventsController {
 	 */
 	private function last_attempt_to_process_event_is_too_recent( $event_id ) {
 		$last_process_attempt = get_transient( 'frm_last_process_' . $event_id );
-		return is_numeric( $last_process_attempt ) && $last_process_attempt > ( time() - 60 );
+		return is_numeric( $last_process_attempt ) && $last_process_attempt > time() - 60;
 	}
 
 	/**
