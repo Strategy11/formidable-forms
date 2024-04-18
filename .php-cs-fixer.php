@@ -13,6 +13,9 @@ $rules  = array(
 	'standardize_not_equals'      => true,
 	'echo_tag_syntax'             => true,
 	'semicolon_after_instruction' => true,
+
+	'no_useless_else' => true,
+	
 );
 
 $config = new PhpCsFixer\Config();
