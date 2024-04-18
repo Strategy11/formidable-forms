@@ -838,9 +838,8 @@ BEFORE_HTML;
 		if ( empty( $style ) ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
-			} else {
-				return;
 			}
+			return;
 		}
 
 		// If submit button needs to be inline or centered.

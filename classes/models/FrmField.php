@@ -1112,50 +1112,84 @@ class FrmField {
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array $field
+	 * @return bool
 	 */
 	public static function is_required( $field ) {
-		$required = ( $field['required'] != '0' );
-		$required = apply_filters( 'frm_is_field_required', $required, $field );
+		$required = $field['required'] != '0';
+
+		/**
+		 * @param bool  $required
+		 * @param array $field
+		 */
+		$required = (bool) apply_filters( 'frm_is_field_required', $required, $field );
 
 		return $required;
 	}
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @param string       $option
+	 * @return bool
 	 */
 	public static function is_option_true( $field, $option ) {
 		if ( is_array( $field ) ) {
 			return self::is_option_true_in_array( $field, $option );
-		} else {
-			return self::is_option_true_in_object( $field, $option );
 		}
+		return self::is_option_true_in_object( $field, $option );
 	}
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @param string       $option
+	 * @return bool
 	 */
 	public static function is_option_empty( $field, $option ) {
 		if ( is_array( $field ) ) {
 			return self::is_option_empty_in_array( $field, $option );
-		} else {
-			return self::is_option_empty_in_object( $field, $option );
 		}
+		return self::is_option_empty_in_object( $field, $option );
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_true_in_array( $field, $option ) {
-		return isset( $field[ $option ] ) && $field[ $option ];
+		return ! empty( $field[ $option ] );
 	}
 
+	/**
+	 * @param object $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_true_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_empty_in_array( $field, $option ) {
-		return ! isset( $field[ $option ] ) || empty( $field[ $option ] );
+		return empty( $field[ $option ] );
 	}
 
+	/**
+	 * @param object $field
+	 * @param string $option
+	 * @return bool
+	 */
 	public static function is_option_empty_in_object( $field, $option ) {
-		return ! isset( $field->field_options[ $option ] ) || empty( $field->field_options[ $option ] );
+		return empty( $field->field_options[ $option ] );
 	}
 
 	/**
@@ -1169,6 +1203,10 @@ class FrmField {
 
 	/**
 	 * @since 2.0.18
+	 *
+	 * @param object|array $field
+	 * @param string       $option
+	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
 		if ( is_array( $field ) ) {
@@ -1180,8 +1218,12 @@ class FrmField {
 		return $option;
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $option
+	 * @return mixed
+	 */
 	public static function get_option_in_array( $field, $option ) {
-
 		if ( isset( $field[ $option ] ) ) {
 			$this_option = $field[ $option ];
 		} elseif ( isset( $field['field_options'] ) && is_array( $field['field_options'] ) && isset( $field['field_options'][ $option ] ) ) {
@@ -1199,15 +1241,18 @@ class FrmField {
 
 	/**
 	 * @since 2.0.09
+	 *
+	 * @param array|object $field
+	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
 		if ( is_array( $field ) ) {
-			$is_repeating_field = ( 'divider' == $field['type'] );
+			$is_repeating_field = ( 'divider' === $field['type'] );
 		} else {
-			$is_repeating_field = ( 'divider' == $field->type );
+			$is_repeating_field = ( 'divider' === $field->type );
 		}
 
-		return ( $is_repeating_field && self::is_option_true( $field, 'repeat' ) );
+		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
 	/**
