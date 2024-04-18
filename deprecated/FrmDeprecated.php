@@ -68,7 +68,7 @@ class FrmDeprecated {
 		?>
 		<div class="postbox">
 			<p class="inside">
-				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
+				<button class="frm_submit_<?php echo esc_attr( ( ! empty( $values['ajax_load'] ) ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
 					<?php echo esc_html( $label ); ?>
 				</button>
 			</p>

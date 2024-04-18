@@ -310,9 +310,11 @@ class FrmFormsController {
 	 * were likely not saved either.
 	 *
 	 * @since 3.06.01
+	 *
+	 * @return bool
 	 */
 	private static function is_too_long( $values ) {
-		return ! isset( $values['frm_end'] ) || empty( $values['frm_end'] );
+		return empty( $values['frm_end'] );
 	}
 
 	/**
@@ -2219,7 +2221,7 @@ class FrmFormsController {
 	private static function get_confirmation_method( $atts ) {
 		$action = FrmOnSubmitHelper::current_event( $atts );
 		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
-		$method = isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
+		$method = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 
 		if ( ! empty( $atts['entry_id'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts, $action );
@@ -2230,7 +2232,7 @@ class FrmFormsController {
 
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
-		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
+		if ( $method !== 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
 			$method = 'message';
 		}
 

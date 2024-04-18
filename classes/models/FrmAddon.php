@@ -456,7 +456,7 @@ class FrmAddon {
 	 * @since 2.05.05
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
-		$timeout = isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
+		$timeout = ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
 			// Cache is expired.
 			$version_info = false;
