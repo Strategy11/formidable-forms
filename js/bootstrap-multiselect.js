@@ -563,9 +563,6 @@
             }
 
             this.$popupContainer.on("touchstart click", function (e) {
-                if ( e.target.closest( '.frm_disabled_option' ) ) {
-                    return;
-                }
                 e.stopPropagation();
             });
 
@@ -722,9 +719,7 @@
 
             $(this.$popupContainer).off('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group');
             $(this.$popupContainer).on('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group', $.proxy(function (event) {
-                if ( ! event.currentTarget.classList.contains( 'frm_disabled_option' ) ) {
-                    event.stopPropagation();
-                }
+                event.stopPropagation();
 
                 var $target = $(event.target);
 
@@ -938,10 +933,9 @@
          * @param {String} name 
          * @param {String} value 
          * @param {String} inputType 
-         * @param {Object} data
          * @returns {JQuery}
          */
-        createCheckbox: function ($item, labelContent, name, value, title, inputType, data = {} ) {
+        createCheckbox: function ($item, labelContent, name, value, title, inputType ) {
             var $wrapper = $('<span />');
             $wrapper.addClass("form-check");
 
@@ -962,11 +956,6 @@
 
             if (name) {
                 $checkbox.attr('name', name);
-            }
-
-            if ( data.hasOwnProperty( 'oneclick' ) && data.hasOwnProperty( 'upgrade' ) ) {
-                $item[0].setAttribute( 'data-oneclick', data['oneclick'] );
-                $item[0].setAttribute( 'data-upgrade', data['upgrade'] );
             }
 
             $item.prepend($wrapper);
@@ -1007,7 +996,7 @@
             }
 
             var name = this.options.checkboxName($element);
-            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType, $element[0].dataset );
+            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType );
 
             var selected = $element.prop('selected') || false;
 
