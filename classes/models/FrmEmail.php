@@ -514,9 +514,8 @@ class FrmEmail {
 	private function has_recipients() {
 		if ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) ) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	/**
@@ -693,18 +692,18 @@ class FrmEmail {
 			if ( is_email( $val ) ) {
 				// If a plain email is used, no formatting is needed
 				continue;
-			} else {
-				$parts = explode( ' ', $val );
-				$email = end( $parts );
+			}
 
-				if ( is_email( $email ) ) {
-					// If user enters a name and email
-					$name = trim( str_replace( $email, '', $val ) );
-				} else {
-					// If user enters a name without an email
-					unset( $recipients[ $key ] );
-					continue;
-				}
+			$parts = explode( ' ', $val );
+			$email = end( $parts );
+
+			if ( is_email( $email ) ) {
+				// If user enters a name and email
+				$name = trim( str_replace( $email, '', $val ) );
+			} else {
+				// If user enters a name without an email
+				unset( $recipients[ $key ] );
+				continue;
 			}
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );

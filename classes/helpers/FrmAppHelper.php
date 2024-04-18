@@ -2820,9 +2820,8 @@ class FrmAppHelper {
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
 		if ( $current_p == 1 ) {
 			return 1;
-		} else {
-			return ( self::get_last_record_num( $r_count, ( $current_p - 1 ), $p_size ) + 1 );
 		}
+		return ( self::get_last_record_num( $r_count, ( $current_p - 1 ), $p_size ) + 1 );
 	}
 
 	/**
