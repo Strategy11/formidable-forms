@@ -192,7 +192,7 @@ class FrmDashboardController {
 	 *
 	 * @param string  $title
 	 * @param string  $link
-	 * @param boolean $display
+	 * @param bool $display
 	 *
 	 * @return array
 	 */
@@ -341,7 +341,7 @@ class FrmDashboardController {
 	/**
 	 * Check if user has closed the welcome banner. The status of banner is saved in db options.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
@@ -356,7 +356,7 @@ class FrmDashboardController {
 	/**
 	 * Check if is dashboard page.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_dashboard_page() {
 		return FrmAppHelper::is_admin_page( 'formidable-dashboard' );
@@ -366,7 +366,7 @@ class FrmDashboardController {
 	 * Detect if the logged user's email is subscribed. Used for inbox email subscribe.
 	 *
 	 * @param string $email The logged user's email.
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();

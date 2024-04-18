@@ -1398,7 +1398,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.03.08
 	 *
-	 * @param array|boolean $values
+	 * @param array|bool $values
 	 */
 	private static function clean_submit_html( &$values ) {
 		if ( is_array( $values ) && isset( $values['submit_html'] ) ) {
@@ -3028,7 +3028,7 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );

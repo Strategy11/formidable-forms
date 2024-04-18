@@ -67,7 +67,6 @@ class FrmListHelper {
 	protected $modes = array();
 
 	/**
-	 *
 	 * @var array
 	 */
 	protected $params;

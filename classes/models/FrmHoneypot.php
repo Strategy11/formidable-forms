@@ -24,7 +24,7 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_honeypot_spam() {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();

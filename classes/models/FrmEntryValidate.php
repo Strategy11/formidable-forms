@@ -298,7 +298,7 @@ class FrmEntryValidate {
 	/**
 	 * Check for spam
 	 *
-	 * @param boolean $exclude
+	 * @param bool $exclude
 	 * @param array   $values
 	 * @param array   $errors By reference.
 	 */
@@ -352,7 +352,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_honeypot_spam( $values ) {
 		$honeypot = new FrmHoneypot( $values['form_id'] );
@@ -360,7 +360,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
@@ -370,7 +370,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
@@ -439,7 +439,7 @@ class FrmEntryValidate {
 	/**
 	 * Check entries for Akismet spam
 	 *
-	 * @return boolean true if is spam
+	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
 		if ( empty( $values['item_meta'] ) ) {

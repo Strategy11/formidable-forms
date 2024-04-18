@@ -16,10 +16,9 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 }
 
 /**
-*
-* Namespacing allows more flexibility
-*   - Mock objects without real data
-* Check out PHPUnit test doubles, PHPunit data providers, Test-driven development (TDD)
-* qunit/phantomjs for js unit testing
-* See: "Browser Eyeballing != Javascript testing" by Jordna Kaspar
-*/
+ * Namespacing allows more flexibility
+ *   - Mock objects without real data
+ * Check out PHPUnit test doubles, PHPunit data providers, Test-driven development (TDD)
+ * qunit/phantomjs for js unit testing
+ * See: "Browser Eyeballing != Javascript testing" by Jordna Kaspar
+ */

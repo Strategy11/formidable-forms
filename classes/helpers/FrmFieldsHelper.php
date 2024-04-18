@@ -1215,7 +1215,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param string $opt_key
 	 *
-	 * @return boolean Returns true if current field option is an "Other" option
+	 * @return bool Returns true if current field option is an "Other" option
 	 */
 	public static function is_other_opt( $opt_key ) {
 		return $opt_key && strpos( $opt_key, 'other_' ) === 0;
@@ -1318,7 +1318,7 @@ class FrmFieldsHelper {
 	 * @since 2.0.6
 	 *
 	 * @param array   $args Should include field, opt_key and field name.
-	 * @param boolean $other_opt
+	 * @param bool $other_opt
 	 * @param string  $checked
 	 *
 	 * @return array $other_args
@@ -1449,7 +1449,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param string         $type    Field type.
 	 * @param string         $html_id
-	 * @param string|boolean $opt_key
+	 * @param string|bool $opt_key
 	 *
 	 * @return string $other_id
 	 */

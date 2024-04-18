@@ -16,7 +16,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * This is used to determine if a specific entry is deleted.
 	 * When an entry is deleted, there is no link to the deleted entry.
 	 *
-	 * @var int[] $valid_entry_ids
+	 * @var int[]
 	 */
 	private $valid_entry_ids = array();
 

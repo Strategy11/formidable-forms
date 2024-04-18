@@ -1043,7 +1043,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_field_with_multiple_values( $field ) {
 		if ( ! $field ) {
@@ -1089,7 +1089,7 @@ class FrmField {
 	 * Check if this is a multiselect dropdown field
 	 *
 	 * @since 2.0.9
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
 		$field_type  = self::get_field_type( $field );
@@ -1243,7 +1243,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean true if field type is radio or Dynamic radio
+	 * @return bool true if field type is radio or Dynamic radio
 	 */
 	public static function is_radio( $field ) {
 		return self::is_field_type( $field, 'radio' );
@@ -1256,7 +1256,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 *
-	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_checkbox( $field ) {
 		return self::is_field_type( $field, 'checkbox' );
@@ -1270,7 +1270,7 @@ class FrmField {
 	 * @param array|object $field
 	 * @param string       $is_type Options include radio, checkbox, text.
 	 *
-	 * @return boolean true if field type is checkbox or Dynamic checkbox
+	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_field_type( $field, $is_type ) {
 		$field_type = self::get_original_field_type( $field );

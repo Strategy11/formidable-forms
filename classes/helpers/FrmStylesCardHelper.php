@@ -417,12 +417,12 @@ class FrmStylesCardHelper {
 		array_walk(
 			$styles,
 			/**
-			* Echo a style card for a single style in the $styles array.
-			*
-			* @param WP_Post $style
-			* @param int     $count Used for pagination.
-			* @return void
-			*/
+			 * Echo a style card for a single style in the $styles array.
+			 *
+			 * @param WP_Post $style
+			 * @param int     $count Used for pagination.
+			 * @return void
+			 */
 			function ( $style ) use ( &$count ) {
 				$hidden = $count > ( self::PAGE_SIZE - 1 );
 				$this->echo_style_card( $style, $hidden );

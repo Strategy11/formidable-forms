@@ -74,7 +74,7 @@ class FrmFieldsController {
 	 * Set up and create a new field
 	 *
 	 * @param string  $field_type
-	 * @param integer $form_id
+	 * @param int $form_id
 	 *
 	 * @return array|bool
 	 */

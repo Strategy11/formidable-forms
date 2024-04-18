@@ -70,7 +70,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|boolean ID on success or false on failure
+	 * @return int|bool ID on success or false on failure
 	 */
 	public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
 		global $wpdb;
@@ -219,7 +219,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|boolean
+	 * @return int|bool
 	 */
 	public static function update( $id, $values, $create_link = false ) {
 		global $wpdb;
@@ -552,7 +552,7 @@ class FrmForm {
 	 * @param int    $id
 	 * @param string $status
 	 *
-	 * @return int|boolean
+	 * @return int|bool
 	 */
 	public static function set_status( $id, $status ) {
 		if ( 'trash' == $status ) {
@@ -589,7 +589,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|boolean
+	 * @return int|bool
 	 */
 	public static function trash( $id ) {
 		if ( ! EMPTY_TRASH_DAYS ) {
@@ -635,7 +635,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|boolean
+	 * @return int|bool
 	 */
 	public static function destroy( $id ) {
 		global $wpdb;

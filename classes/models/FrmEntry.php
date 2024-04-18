@@ -10,7 +10,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return int | boolean $entry_id
+	 * @return int|bool $entry_id
 	 */
 	public static function create( $values ) {
 		$entry_id = self::create_entry( $values, 'standard' );
@@ -24,7 +24,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return int | boolean $entry_id
+	 * @return int|bool $entry_id
 	 */
 	private static function create_entry( $values, $type ) {
 		$new_values = self::before_insert_entry_in_database( $values, $type );
@@ -42,7 +42,7 @@ class FrmEntry {
 	/**
 	 * Check for duplicate entries created in the last minute
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
@@ -216,7 +216,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return boolean|int $update_results
+	 * @return bool|int $update_results
 	 */
 	public static function update( $id, $values ) {
 		$update_results = self::update_entry( $id, $values, 'standard' );
@@ -232,7 +232,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return boolean|int $query_results
+	 * @return bool|int $query_results
 	 */
 	private static function update_entry( $id, $values, $update_type ) {
 		global $wpdb;
@@ -650,7 +650,7 @@ class FrmEntry {
 	 * @param array $values
 	 * @param array $new_values
 	 *
-	 * @return boolean|int $entry_id
+	 * @return bool|int $entry_id
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
 		$entry_id = self::insert_entry_into_database( $new_values );
@@ -851,7 +851,7 @@ class FrmEntry {
 	 *
 	 * @param array $new_values
 	 *
-	 * @return int | boolean $entry_id
+	 * @return int|bool $entry_id
 	 */
 	private static function insert_entry_into_database( $new_values ) {
 		global $wpdb;
@@ -961,7 +961,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $update_type
 	 *
-	 * @return boolean $update
+	 * @return bool $update
 	 */
 	private static function before_update_entry( $id, &$values, $update_type ) {
 		$update = true;
@@ -1026,7 +1026,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param boolean|int $query_results
+	 * @param bool|int $query_results
 	 * @param int         $id
 	 * @param array       $values
 	 * @param array       $new_values
@@ -1059,7 +1059,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return int | boolean $entry_id
+	 * @return int|bool $entry_id
 	 */
 	public static function create_entry_from_xml( $values ) {
 		$entry_id = self::create_entry( $values, 'xml' );
@@ -1076,7 +1076,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return int | boolean $updated
+	 * @return int|bool $updated
 	 */
 	public static function update_entry_from_xml( $id, $values ) {
 		$updated = self::update_entry( $id, $values, 'xml' );

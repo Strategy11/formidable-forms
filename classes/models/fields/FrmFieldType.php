@@ -1370,7 +1370,7 @@ DEFAULT_HTML;
 	 *
 	 * @param string|array $value
 	 *
-	 * @return string|array|float|integer
+	 * @return string|array|float|int
 	 */
 	public function set_value_before_save( $value ) {
 		return $value;
@@ -1379,7 +1379,6 @@ DEFAULT_HTML;
 	/** Prepare value for display **/
 
 	/**
-	 *
 	 * @param string|array $value
 	 * @param array        $atts
 	 *

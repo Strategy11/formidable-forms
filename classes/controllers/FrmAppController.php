@@ -490,7 +490,7 @@ class FrmAppController {
 	 * Check if the database is outdated
 	 *
 	 * @since 2.0.1
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function needs_update() {
 		$needs_upgrade = self::compare_for_update(

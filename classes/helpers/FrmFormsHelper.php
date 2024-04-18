@@ -677,7 +677,7 @@ BEFORE_HTML;
 	 *
 	 * @param object  $form
 	 * @param array   $fields
-	 * @param boolean $reset_fields
+	 * @param bool $reset_fields
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {
@@ -940,7 +940,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|array|string|boolean $form
+	 * @param object|array|string|bool $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -1315,7 +1315,7 @@ BEFORE_HTML;
 	 * @param array $atts {
 	 *     Optional. An array of attributes for rendering.
 	 *     @type string  $html 'span' or 'div'. Default 'span'.
-	 *     @type boolean $bg   Whether to add a background color or not. Default false.
+	 *     @type bool $bg   Whether to add a background color or not. Default false.
 	 * }
 	 *
 	 * @return void
