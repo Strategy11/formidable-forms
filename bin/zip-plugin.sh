@@ -37,6 +37,8 @@ zip -r $zipname $destination \
 	-x "*/.git/*" \
 	-x "*/.github/*" \
 	-x "*/.phpunit.result.cache" \
+	-x "*/.php-cs-fixer.yml" \
+	-x "*/.php-cs-fixer.cache" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \

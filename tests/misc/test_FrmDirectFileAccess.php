@@ -13,16 +13,18 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 			$dir = FrmAppHelper::plugin_path();
 		}
 
-		$files = scandir( $dir );
+		$files             = scandir( $dir );
+		$files_to_ignore   = array( 'set-php-version.php', 'stubs.php', '.php-cs-fixer.php' );
+		$folders_to_ignore = array( 'tests', 'vendor', 'languages', 'node_modules', 'js' );
 
 		foreach ( $files as $key => $value ) {
 			$path = realpath( $dir . DIRECTORY_SEPARATOR . $value );
 			if ( ! is_dir( $path ) ) {
-				if ( substr( $value, strlen( $value ) - 4 ) === '.php' && ! in_array( $value, array( 'set-php-version.php', 'stubs.php' ), true ) ) {
+				if ( substr( $value, strlen( $value ) - 4 ) === '.php' && ! in_array( $value, $files_to_ignore, true ) ) {
 					$results[] = $path;
 				}
 			} elseif ( $value !== '.' && $value !== '..' ) {
-				if ( in_array( $value, array( 'tests', 'vendor', 'languages', 'node_modules', 'js' ), true ) ) {
+				if ( in_array( $value, $folders_to_ignore, true ) ) {
 					continue;
 				}
 

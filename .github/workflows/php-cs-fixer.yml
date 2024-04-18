@@ -1,0 +1,22 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, synchronize ]
+
+name: Inspections
+jobs:
+  runPHPCSFixerInspection:
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+    name: Run PHP CS Fixer inspection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Install dependencies
+        run: composer install --dev --prefer-dist --no-progress --no-suggest
+
+      - name: PHPCSFixer check
+        run: ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --verbose
