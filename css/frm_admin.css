@@ -3332,13 +3332,18 @@ h1 .fa-caret-down {
 }
 
 .frm-select-list-item.disabled,
-.frm-dropdown-menu > .disabled > a, .frm-dropdown-menu > .disabled > a:hover, .frm-dropdown-menu > .disabled > a:focus {
+.frm-dropdown-menu > .disabled > a, .frm-dropdown-menu > .disabled > a:hover, .frm-dropdown-menu > .disabled > a:focus,
+.frm-dropdown-menu > .disabled > span,
+.frm-dropdown-menu > .disabled > span *:hover,
+.frm-dropdown-menu > .disabled > span *:focus {
 	color: #999999;
 }
 
 .frm-select-list-item.disabled:hover,
 .frm-dropdown-menu > .disabled > a:hover,
-.frm-dropdown-menu > .disabled > a:focus {
+.frm-dropdown-menu > .disabled > a:focus,
+.frm-dropdown-menu > .disabled > span *:hover,
+.frm-dropdown-menu > .disabled > span *:focus {
 	text-decoration: none;
 	background-color: transparent;
 	background-image: none;

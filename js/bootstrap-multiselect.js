@@ -563,10 +563,17 @@
             }
 
             this.$popupContainer.on("touchstart click", function (e) {
+                if ( this.optionIsDisabled( e.currentTarget ) ) {
+                    return;
+                }
                 e.stopPropagation();
             });
 
             this.$container.append(this.$popupContainer);
+        },
+
+        optionIsDisabled: function( el ) {
+            return el.classList.contains( 'frm_disabled_role' );
         },
 
         synchronizeButtonAndPopupWidth: function () {
@@ -719,6 +726,9 @@
 
             $(this.$popupContainer).off('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group');
             $(this.$popupContainer).on('touchstart click', '.multiselect-option, .multiselect-all, .multiselect-group', $.proxy(function (event) {
+                if ( this.optionIsDisabled( event.currentTarget ) ) {
+                    return;
+                }
                 event.stopPropagation();
 
                 var $target = $(event.target);
@@ -935,7 +945,7 @@
          * @param {String} inputType 
          * @returns {JQuery}
          */
-        createCheckbox: function ($item, labelContent, name, value, title, inputType) {
+        createCheckbox: function ($item, labelContent, name, value, title, inputType, data = {} ) {
             var $wrapper = $('<span />');
             $wrapper.addClass("form-check");
 
@@ -957,6 +967,9 @@
             if (name) {
                 $checkbox.attr('name', name);
             }
+
+            $item[0].setAttribute( 'data-oneclick', JSON.stringify( data['oneclick'] ) );
+            $item[0].setAttribute( 'data-upgrade', data['upgrade'] );
 
             $item.prepend($wrapper);
             $item.attr("title", title || labelContent);
@@ -996,7 +1009,7 @@
             }
 
             var name = this.options.checkboxName($element);
-            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType);
+            var $checkbox = this.createCheckbox($option, label, name, value, title, inputType, $element[0].dataset );
 
             var selected = $element.prop('selected') || false;
 
