@@ -19,4 +19,4 @@ jobs:
         run: composer install --dev --prefer-dist --no-progress --no-suggest
 
       - name: PHPCS check
-        run: . vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --verbose
+        run: ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --verbose
