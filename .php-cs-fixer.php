@@ -13,9 +13,8 @@ $rules  = array(
 	'standardize_not_equals'      => true,
 	'echo_tag_syntax'             => true,
 	'semicolon_after_instruction' => true,
-
-	'no_useless_else' => true,
-	
+	'no_useless_else'             => true,
+	'no_superfluous_elseif'       => true,
 );
 
 $config = new PhpCsFixer\Config();
@@ -23,16 +22,12 @@ $config->setRules( $rules );
 
 return $config->setFinder( $finder );
 
-// Probably include these (but not right away).
-// 'phpdoc_types_order' => true,
-// 'no_superfluous_elseif' => true,
-// 'no_useless_else' => true,
-// 'static_lambda' => true,
-// 'return_assignment' => true,
-
 // Maybe include these.
 // 'phpdoc_separation' => true,
 // 'phpdoc_summary' => true,
 // 'phpdoc_align' => true,
 // 'visibility_required' => true,
 // 'multiline_comment_opening_closing' => true,
+// 'phpdoc_types_order' => true,
+// 'return_assignment' => true,
+// 'static_lambda' => true,
