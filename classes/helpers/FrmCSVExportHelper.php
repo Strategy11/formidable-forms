@@ -6,87 +6,87 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmCSVExportHelper {
 
 	/**
-	 * @var string $separator
+	 * @var string
 	 */
 	protected static $separator = ', ';
 
 	/**
-	 * @var string $column_separator
+	 * @var string
 	 */
 	protected static $column_separator = ',';
 
 	/**
-	 * @var string $line_break
+	 * @var string
 	 */
 	protected static $line_break = 'return';
 
 	/**
-	 * @var string $charset
+	 * @var string
 	 */
 	protected static $charset = 'UTF-8';
 
 	/**
-	 * @var string $to_encoding
+	 * @var string
 	 */
 	protected static $to_encoding = 'UTF-8';
 
 	/**
-	 * @var string $wp_date_format
+	 * @var string
 	 */
 	protected static $wp_date_format = 'Y-m-d H:i:s';
 
 	/**
-	 * @var int $comment_count
+	 * @var int
 	 */
 	protected static $comment_count = 0;
 
 	/**
-	 * @var int $form_id
+	 * @var int
 	 */
 	protected static $form_id = 0;
 
 	/**
-	 * @var array $headings
+	 * @var array
 	 */
 	protected static $headings = array();
 
 	/**
-	 * @var array $fields
+	 * @var array
 	 */
 	protected static $fields = array();
 
 	/**
-	 * @var stdClass|null $entry
+	 * @var stdClass|null
 	 */
 	protected static $entry;
 
 	/**
-	 * @var bool|null $has_parent_id
+	 * @var bool|null
 	 */
 	protected static $has_parent_id;
 
 	/**
-	 * @var array|null $fields_by_repeater_id
+	 * @var array|null
 	 */
 	protected static $fields_by_repeater_id;
 
 	/**
-	 * @var string $mode either 'echo' or 'file' are supported.
+	 * @var string either 'echo' or 'file' are supported.
 	 */
 	protected static $mode = 'echo';
 
 	/**
-	 * @var resource|null $fp used to write a CSV file in file mode.
+	 * @var resource|null used to write a CSV file in file mode.
 	 */
 	protected static $fp;
 
 	/**
-	 * @var string $context the context of the CSV being generated. Possible values include 'email' when used as an email attachment, or 'default'.
+	 * @var string the context of the CSV being generated. Possible values include 'email' when used as an email attachment, or 'default'.
 	 */
 	protected static $context = 'default';
 
 	/**
-	 * @var array $meta
+	 * @var array
 	 */
 	protected static $meta = array();
 

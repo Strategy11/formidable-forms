@@ -15,14 +15,14 @@ class FrmOverlayController {
 	/**
 	 * Check if the overlay will run again periodically.
 	 *
-	 * @var boolean If the condition is true, the overlay will execute only following a specified time interval.
+	 * @var bool If the condition is true, the overlay will execute only following a specified time interval.
 	 */
 	private $recurring_execution = false;
 
 	/**
 	 * The controller configs passed through construct. If empty the overlay will run normaly, it will open every time when open_overlay is called.
 	 *
-	 * @var array $config {
+	 * @var array Config {
 	 *
 	 *     @type string $execution-frequency Example values: '1 day', '10 days', '1 week', etc.
 	 *     @type string $config-option-name A handle name that will be used to store the controller options_data.
@@ -41,7 +41,7 @@ class FrmOverlayController {
 	/**
 	 * The controller data. It will handle the options from multiple instances of the controller
 	 *
-	 * @var array $options_data {
+	 * @var array Option data {
 	 *     @type array $options_data[ '[instance1-option_name_provided_via-->config-option-name]' ] {
 	 *       @type string $execution-frequency Values example: '1 day' | '10 days' | '1 week' | '10 weeks' | '1 month' | '10 months' | '1 year' | '10 years'
 	 *     }
@@ -101,7 +101,7 @@ class FrmOverlayController {
 	/**
 	 * Ascertain whether the overlay needs to be executed or not.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_time_to_execute() {
 		if ( ! isset( $this->options_data[ $this->config['config-option-name'] ] ) ) {
@@ -145,7 +145,7 @@ class FrmOverlayController {
 	 *       @type string $buttons[]['target'] Target attribute for the button link.
 	 *       @type string $buttons[]['label'] Label/text of the button.
 	 * }
-	 * @return boolean
+	 * @return bool
 	 */
 	public function open_overlay( $data = array() ) {
 		if ( true === $this->recurring_execution ) {

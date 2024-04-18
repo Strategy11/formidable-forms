@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmXMLHelper {
 
 	/**
-	 * @var bool $installing_template true if importing an XML from API, false if importing an XML file manually.
+	 * @var bool true if importing an XML from API, false if importing an XML file manually.
 	 */
 	private static $installing_template = false;
 
@@ -2089,9 +2089,9 @@ class FrmXMLHelper {
 	/**
 	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
 	 *
-	 * @param boolean $loader
+	 * @param bool $loader
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function maybe_libxml_disable_entity_loader( $loader ) {
 		if ( version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' ) ) {

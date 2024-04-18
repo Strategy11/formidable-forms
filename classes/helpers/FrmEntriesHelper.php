@@ -102,9 +102,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0.13
 	 *
-	 * @param object  $field - this is passed by reference since it is an object.
-	 * @param boolean $reset
-	 * @param array   $args
+	 * @param object $field - this is passed by reference since it is an object.
+	 * @param bool   $reset
+	 * @param array  $args
 	 *
 	 * @return string|array $new_value
 	 */
@@ -130,7 +130,7 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 * @param array  $args
 	 *
-	 * @return boolean $value_is_posted
+	 * @return bool $value_is_posted
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;

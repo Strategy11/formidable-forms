@@ -6,7 +6,7 @@
 class test_FrmFormsHelper extends FrmUnitTest {
 
 	/**
-	 * @var stdClass|null $form
+	 * @var stdClass|null
 	 */
 	private $form;
 

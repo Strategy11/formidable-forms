@@ -228,10 +228,10 @@ class FrmDeprecated {
 	 * @since 2.03.08
 	 * @deprecated 3.04.03
 	 *
-	 * @param boolean $return
+	 * @param bool $return
 	 * @param string $package
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function add_shorten_edd_filename_filter( $return, $package ) {
 		_deprecated_function( __FUNCTION__, '3.04.03' );
@@ -459,9 +459,9 @@ class FrmDeprecated {
 		return FrmStylesHelper::get_single_label_positions();
 	}
 
-	/**
-	 * @deprecated 3.02.03
-	 */
+    /**
+     * @deprecated 3.02.03
+     */
     public static function jquery_themes() {
 		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::jquery_themes' );
 
@@ -496,9 +496,9 @@ class FrmDeprecated {
         return $themes;
     }
 
-	/**
-	 * @deprecated 3.02.03
-	 */
+    /**
+     * @deprecated 3.02.03
+     */
     public static function enqueue_jquery_css() {
 		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::enqueue_jquery_css' );
 

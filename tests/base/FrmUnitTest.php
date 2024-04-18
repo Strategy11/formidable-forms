@@ -23,7 +23,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
-	 * @var FrmUnitTest $instance
+	 * @var FrmUnitTest
 	 */
 	protected static $instance;
 

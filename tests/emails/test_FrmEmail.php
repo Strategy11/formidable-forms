@@ -401,7 +401,6 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	/**
-	 *
 	 * Reply_to:
 	 * From: [x] [y]
 	 *

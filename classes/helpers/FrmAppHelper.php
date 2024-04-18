@@ -24,7 +24,7 @@ class FrmAppHelper {
 	public static $font_version = 7;
 
 	/**
-	 * @var bool $added_gmt_offset_filter
+	 * @var bool
 	 */
 	private static $added_gmt_offset_filter = false;
 
@@ -297,7 +297,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $page The name of the page to check.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_admin_page( $page = 'formidable' ) {
 		global $pagenow;
@@ -342,7 +342,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_preview_page() {
 		global $pagenow;
@@ -356,7 +356,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function doing_ajax() {
 		return wp_doing_ajax() && ! self::is_preview_page();
@@ -400,7 +400,7 @@ class FrmAppHelper {
 	 * @param mixed  $value Value to check.
 	 * @param string $empty
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_empty_value( $value, $empty = '' ) {
 		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
@@ -1491,7 +1491,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $value The value to compare.
 	 *
-	 * @return boolean True or False
+	 * @return bool True or False
 	 */
 	public static function is_true( $value ) {
 		return ( true === $value || 1 == $value || 'true' == $value || 'yes' == $value );
@@ -1580,9 +1580,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param array   $args
-	 * @param string  $page_id Deprecated.
-	 * @param boolean $truncate Deprecated.
+	 * @param array  $args
+	 * @param string $page_id Deprecated.
+	 * @param bool   $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
@@ -2495,7 +2495,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $post_values
 	 *
-	 * @return boolean|int
+	 * @return bool|int
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
@@ -2802,9 +2802,9 @@ class FrmAppHelper {
 	// Pagination Methods.
 
 	/**
-	 * @param integer $r_count
-	 * @param integer $current_p
-	 * @param integer $p_size
+	 * @param int $r_count
+	 * @param int $current_p
+	 * @param int $p_size
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
@@ -2812,9 +2812,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param integer $r_count
-	 * @param integer $current_p
-	 * @param integer $p_size
+	 * @param int $r_count
+	 * @param int $current_p
+	 * @param int $p_size
 	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {

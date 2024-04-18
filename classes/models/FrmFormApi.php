@@ -23,7 +23,7 @@ class FrmFormApi {
 	/**
 	 * The number of days an add-on is new.
 	 *
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 90;
 

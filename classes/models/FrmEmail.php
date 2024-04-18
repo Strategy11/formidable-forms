@@ -9,92 +9,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEmail {
 
 	/**
-	 * @var string $email_key
+	 * @var string
 	 */
 	private $email_key = '';
 
 	/**
-	 * @var array $to
+	 * @var array
 	 */
 	private $to = array();
 
 	/**
-	 * @var array $cc
+	 * @var array
 	 */
 	private $cc = array();
 
 	/**
-	 * @var array $bcc
+	 * @var array
 	 */
 	private $bcc = array();
 
 	/**
-	 * @var string $from
+	 * @var string
 	 */
 	private $from = '';
 
 	/**
-	 * @var string $reply_to
+	 * @var string
 	 */
 	private $reply_to = '';
 
 	/**
-	 * @var string $subject
+	 * @var string
 	 */
 	private $subject = '';
 
 	/**
-	 * @var string $message
+	 * @var string
 	 */
 	private $message = '';
 
 	/**
-	 * @var array $attachments
+	 * @var array
 	 */
 	private $attachments = array();
 
 	/**
-	 * @var bool $is_plain_text
+	 * @var bool
 	 */
 	private $is_plain_text = false;
 
 	/**
-	 * @var bool $is_single_recipient
+	 * @var bool
 	 */
 	private $is_single_recipient = false;
 
 	/**
-	 * @var bool $include_user_info
+	 * @var bool
 	 */
 	private $include_user_info = false;
 
 	/**
-	 * @var string $charset
+	 * @var string
 	 */
 	private $charset = '';
 
 	/**
-	 * @var string $content_type
+	 * @var string
 	 */
 	private $content_type = 'text/html';
 
 	/**
-	 * @var array $settings
+	 * @var array
 	 */
 	private $settings = array();
 
 	/**
-	 * @var stdClass $entry
+	 * @var stdClass
 	 */
 	private $entry;
 
 	/**
-	 * @var stdClass $form
+	 * @var stdClass
 	 */
 	private $form;
 
 	/**
-	 * @var int $action_id
+	 * @var int
 	 */
 	private $action_id = 0;
 
