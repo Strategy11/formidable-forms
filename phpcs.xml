@@ -128,6 +128,32 @@
 		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
 	</rule>
 
+	<rule ref="WordPressVIPMinimum">
+		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.chmod_chmod" />
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.NotAbsolutePath" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules" />
+		<exclude name="WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.term_exists_term_exists" />
+		<exclude name="WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
+		<exclude name="WordPressVIPMinimum.UserExperience.AdminBarRemoval.HidingDetected" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite" />
+	</rule>
+	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log_error_log">
+		<exclude-pattern>FrmTransLiteLog.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink">
+		<exclude-pattern>test_FrmCSVExportHelper.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Security.ExitAfterRedirect.NoExit">
+		<exclude-pattern>FrmEntriesController.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.custom_role_add_role">
+		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
+	</rule>
+
 	<!-- Treat these warnings as errors -->
 	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
 		<severity>8</severity>

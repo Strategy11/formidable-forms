@@ -253,7 +253,7 @@ class FrmFieldValueSelector {
 	 */
 	protected function display_dropdown() {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
-		echo '<option value="">' . esc_attr( $this->blank_option_label ) . '</option>';
+		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
 		if ( ! empty( $this->options ) ) {
 			foreach ( $this->options as $key => $value ) {
