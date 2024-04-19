@@ -412,7 +412,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	private static function destroy_entry_later( $entry_id ) {
@@ -425,7 +425,7 @@ class FrmTransLiteActionsController {
 			/**
 			 * Destroy an entry and remove this action so it only tries to destroy the entry once.
 			 *
-			 * @param string|int $entry_id
+			 * @param int|string $entry_id
 			 * @param Closure    $destroy_callback
 			 * @return void
 			 */

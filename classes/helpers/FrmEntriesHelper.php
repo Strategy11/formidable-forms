@@ -106,7 +106,7 @@ class FrmEntriesHelper {
 	 * @param bool   $reset
 	 * @param array  $args
 	 *
-	 * @return string|array $new_value
+	 * @return array|string $new_value
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
@@ -403,7 +403,7 @@ class FrmEntriesHelper {
 	 * @since 2.0
 	 *
 	 * @param object       $field
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $args
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
@@ -444,7 +444,7 @@ class FrmEntriesHelper {
 	 * @since 2.0
 	 *
 	 * @param object       $field
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $args
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
@@ -475,8 +475,8 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string|array $value
-	 * @param string|array $other_vals (usually of posted values).
+	 * @param array|string $value
+	 * @param array|string $other_vals (usually of posted values).
 	 * @param object       $field
 	 * @param array        $args
 	 */
@@ -762,7 +762,7 @@ class FrmEntriesHelper {
 	/**
 	 * @since 5.0.15
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	public static function maybe_render_captcha_score( $entry_id ) {

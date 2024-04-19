@@ -117,7 +117,7 @@ class FrmDashboardController {
 	/**
 	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
-	 * @param object|false $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param false|object $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
 	 * @param array        $counters_value The counter values for "Total Forms" & "Total Entries".
 	 *
 	 * @return array
@@ -272,7 +272,7 @@ class FrmDashboardController {
 	 *
 	 * @param string       $counter_type
 	 * @param int          $counter_value
-	 * @param object|false $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
 	 * @return array
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
@@ -435,7 +435,7 @@ class FrmDashboardController {
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
 	 * @param int $entries_count The total entries available.
-	 * @return string|null The YouTube video ID.
+	 * @return null|string The YouTube video ID.
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
 		$youtube_api    = new FrmYoutubeFeedApi();
@@ -491,7 +491,7 @@ class FrmDashboardController {
 	/**
 	 * Get the dashboard options from db.
 	 *
-	 * @param string|null $option_name The dashboard option name. If null it will return all dashboard options.
+	 * @param null|string $option_name The dashboard option name. If null it will return all dashboard options.
 	 * @return array
 	 */
 	private static function get_dashboard_options( $option_name = null ) {

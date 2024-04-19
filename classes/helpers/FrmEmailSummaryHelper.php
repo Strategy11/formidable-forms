@@ -197,7 +197,7 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Gets date object.
 	 *
-	 * @param string|DateTime $date Date string or object.
+	 * @param DateTime|string $date Date string or object.
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
@@ -211,9 +211,9 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Gets the days different between 2 dates.
 	 *
-	 * @param string|DateTime $date1 Date 1.
-	 * @param string|DateTime $date2 Date 2.
-	 * @return int|false
+	 * @param DateTime|string $date1 Date 1.
+	 * @param DateTime|string $date2 Date 2.
+	 * @return false|int
 	 */
 	private static function get_date_diff( $date1, $date2 ) {
 		$date1 = self::get_date_obj( $date1 );
@@ -233,7 +233,7 @@ class FrmEmailSummaryHelper {
 	 * Gets sent date of the last monthly or yearly email.
 	 *
 	 * @param string $type Accepts `monthly`, `yearly`.
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_last_sent_date( $type ) {
 		$options = self::get_options();
@@ -419,7 +419,7 @@ class FrmEmailSummaryHelper {
 	 * Gets Formidable URL with tracking params.
 	 *
 	 * @param string       $url  The URL.
-	 * @param string|array $args Custom tracking args if is array, or `utm_content` if is string.
+	 * @param array|string $args Custom tracking args if is array, or `utm_content` if is string.
 	 * @return string
 	 */
 	public static function get_frm_url( $url, $args = array() ) {

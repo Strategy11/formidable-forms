@@ -543,7 +543,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return string
 	 */
@@ -552,7 +552,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return array
 	 */

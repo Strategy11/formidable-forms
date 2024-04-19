@@ -35,12 +35,12 @@ class FrmSettings {
 	 */
 
 	/**
-	 * @var string|null
+	 * @var null|string
 	 */
 	public $pubkey;
 
 	/**
-	 * @var string|null
+	 * @var null|string
 	 */
 	public $privkey;
 	public $re_lang;
@@ -58,7 +58,7 @@ class FrmSettings {
 	public $hcaptcha_pubkey;
 
 	/**
-	 * @var string|null
+	 * @var null|string
 	 */
 	public $hcaptcha_privkey;
 
@@ -72,7 +72,7 @@ class FrmSettings {
 	public $turnstile_pubkey;
 
 	/**
-	 * @var string|null
+	 * @var null|string
 	 */
 	public $turnstile_privkey;
 
@@ -89,7 +89,7 @@ class FrmSettings {
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var null|false|string
 	 */
 	public $custom_css;
 

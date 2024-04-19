@@ -205,7 +205,7 @@ class FrmEntryMeta {
 	 * @since 2.0.9
 	 *
 	 * @param stdClass   $entry
-	 * @param string|int $field_id
+	 * @param int|string $field_id
 	 * @return mixed
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
@@ -279,7 +279,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @param string|int $field_id
+	 * @param int|string $field_id
 	 * @param string     $order
 	 * @param string     $limit
 	 * @param array      $args
@@ -376,7 +376,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @param string|array $where
+	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
 	 */

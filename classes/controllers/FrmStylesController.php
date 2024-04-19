@@ -16,7 +16,7 @@ class FrmStylesController {
 	public static $screen = 'formidable_page_formidable-styles';
 
 	/**
-	 * @var string|null
+	 * @var null|string
 	 */
 	private static $message;
 
@@ -621,7 +621,7 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
@@ -1107,8 +1107,8 @@ class FrmStylesController {
 	/**
 	 * Get the style post object for a target form.
 	 *
-	 * @param object|string|bool $form
-	 * @return WP_Post|null
+	 * @param bool|object|string $form
+	 * @return null|WP_Post
 	 */
 	public static function get_form_style( $form = 'default' ) {
 		$style = FrmFormsHelper::get_form_style( $form );

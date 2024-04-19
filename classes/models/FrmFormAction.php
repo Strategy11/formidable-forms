@@ -490,7 +490,7 @@ class FrmFormAction {
 	 * @since 3.04
 	 *
 	 * @param array          $new_instance
-	 * @param stdClass|array $old_instance
+	 * @param array|stdClass $old_instance
 	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
@@ -689,7 +689,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param WP_Post|array $action
+	 * @param array|WP_Post $action
 	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );

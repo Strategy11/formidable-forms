@@ -649,7 +649,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @return string|false either 'visual-views' or 'views', false if one is not found.
+	 * @return false|string either 'visual-views' or 'views', false if one is not found.
 	 */
 	private static function get_active_views_version() {
 		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
@@ -989,7 +989,7 @@ class FrmAddonsController {
 	/**
 	 * @since 4.08
 	 *
-	 * @return void|array
+	 * @return array|void
 	 */
 	protected static function download_and_activate() {
 		if ( is_admin() ) {
@@ -1157,7 +1157,7 @@ class FrmAddonsController {
 	 * @since 6.8
 	 *
 	 * @param callable      $action_callback The specific add-on action to be executed.
-	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
+	 * @param null|callable $response_callback Optional. The response handling callback. Default null.
 	 * @return void
 	 */
 	private static function process_addon_action( $action_callback, $response_callback = null ) {
@@ -1182,7 +1182,7 @@ class FrmAddonsController {
 	 *
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
-	 * @return void|array
+	 * @return array|void
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
 		if ( ! $installed || ! $action ) {
@@ -1374,7 +1374,7 @@ class FrmAddonsController {
 	/**
 	 * @since 6.8.3
 	 *
-	 * @return true|array
+	 * @return array|true
 	 */
 	private static function maybe_download_and_activate() {
 		if ( ! self::$plugin ) {
@@ -1433,7 +1433,7 @@ class FrmAddonsController {
 	 *     Button attributes.
 	 *
 	 *     @type array $addon
-	 *     @type string|false $license_type
+	 *     @type false|string $license_type
 	 *     @type string $plan_required
 	 *     @type string $upgrade_link
 	 * }
@@ -1452,7 +1452,7 @@ class FrmAddonsController {
 	 * @since 4.09.01
 	 *
 	 * @param array|false  $addon
-	 * @param string|array $upgrade_link
+	 * @param array|string $upgrade_link
 	 *
 	 * @return void
 	 */

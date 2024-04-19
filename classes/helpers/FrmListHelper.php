@@ -14,7 +14,7 @@ class FrmListHelper {
 
 	/**
 	 * @since 4.07
-	 * @var int|bool
+	 * @var bool|int
 	 */
 	public $total_items = false;
 
@@ -410,7 +410,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return string|false The action name or False if no action was selected
+	 * @return false|string The action name or False if no action was selected
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) ) {

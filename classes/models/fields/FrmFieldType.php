@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class FrmFieldType {
 
 	/**
-	 * @var object|array|int
+	 * @var array|int|object
 	 * @since 3.0
 	 */
 	protected $field;
@@ -83,12 +83,12 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
-	 * @var bool|null Whether or not draft fields should be hidden on the front end.
+	 * @var null|bool Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
 
 	/**
-	 * @param object|array|int $field
+	 * @param array|int|object $field
 	 * @param string           $type
 	 */
 	public function __construct( $field = 0, $type = '' ) {
@@ -143,7 +143,7 @@ abstract class FrmFieldType {
 	/**
 	 * @param string $column
 	 *
-	 * @return string|array
+	 * @return array|string
 	 */
 	public function get_field_column( $column ) {
 		$field_val = '';
@@ -1368,9 +1368,9 @@ DEFAULT_HTML;
 	/**
 	 * Prepare value last thing before saving in the db
 	 *
-	 * @param string|array $value
+	 * @param array|string $value
 	 *
-	 * @return string|array|float|int
+	 * @return array|float|int|string
 	 */
 	public function set_value_before_save( $value ) {
 		return $value;
@@ -1379,7 +1379,7 @@ DEFAULT_HTML;
 	/** Prepare value for display **/
 
 	/**
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $atts
 	 *
 	 * @return string
@@ -1453,7 +1453,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 6.8
 	 *
-	 * @param string|int $user_id
+	 * @param int|string $user_id
 	 * @return bool
 	 */
 	private function user_id_is_privileged( $user_id ) {
@@ -1510,7 +1510,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $atts {
 	 *     Details about the field to show.
 	 *

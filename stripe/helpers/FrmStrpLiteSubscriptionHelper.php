@@ -37,7 +37,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param array $atts
-	 * @return string|int $sub_id
+	 * @return int|string $sub_id
 	 */
 	public static function create_new_subscription( $atts ) {
 		$atts['charge'] = (object) $atts['charge'];
@@ -83,7 +83,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param WP_Post $action
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
@@ -156,11 +156,11 @@ class FrmStrpLiteSubscriptionHelper {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param object|string|false $subscription
+	 * @param false|object|string $subscription
 	 * @param array               $charge_data
 	 * @param WP_Post             $action
 	 * @param int                 $amount
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
 		if ( ! is_string( $subscription ) || 0 !== strpos( $subscription, 'No such plan: ' ) ) {

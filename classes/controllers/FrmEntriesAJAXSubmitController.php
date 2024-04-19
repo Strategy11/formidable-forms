@@ -198,7 +198,7 @@ class FrmEntriesAJAXSubmitController {
 	 * @since 6.2
 	 *
 	 * @param array      $response
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function check_for_failed_form_submission( $response, $form_id ) {

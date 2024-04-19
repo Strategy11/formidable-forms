@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSerializedStringParserHelper {
 
 	/**
-	 * @var FrmSerializedStringParserHelper|null
+	 * @var null|FrmSerializedStringParserHelper
 	 */
 	private static $instance;
 

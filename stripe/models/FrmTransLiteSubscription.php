@@ -79,7 +79,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	}
 
 	/**
-	 * @return array|object|null
+	 * @return null|array|object
 	 */
 	public function get_overdue_subscriptions() {
 		global $wpdb;

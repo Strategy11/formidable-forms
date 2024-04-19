@@ -91,7 +91,7 @@ class FrmDb {
 
 	/**
 	 * @param string       $key
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param string       $where
 	 * @param array        $values
 	 * @return void
@@ -204,7 +204,7 @@ class FrmDb {
 	 * @param string $limit
 	 * @param string $type
 	 *
-	 * @return array|null|string|object
+	 * @return null|array|object|string
 	 */
 	public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
 		$group = '';
@@ -573,7 +573,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string       $starts_with
-	 * @param string|array $where
+	 * @param array|string $where
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {

@@ -40,7 +40,7 @@ class FrmTransLiteCRUDController {
 
 	/**
 	 * @param int $id
-	 * @return object|null
+	 * @return null|object
 	 */
 	private static function get_payment_row( $id ) {
 		global $wpdb;
@@ -105,7 +105,7 @@ class FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @return FrmTransLiteSubscription|FrmTransLitePayment
+	 * @return FrmTransLitePayment|FrmTransLiteSubscription
 	 */
 	private static function the_class() {
 		$class_name = self::table_name() === 'subscriptions' ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';

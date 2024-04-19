@@ -449,7 +449,7 @@ class FrmStyle {
 	 * Delete a style by its post ID.
 	 *
 	 * @param int $id
-	 * @return WP_Post|false|null
+	 * @return null|false|WP_Post
 	 */
 	public function destroy( $id ) {
 		if ( $id === $this->get_default_style()->ID ) {
@@ -459,7 +459,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @return WP_Post|stdClass
+	 * @return stdClass|WP_Post
 	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {
@@ -563,7 +563,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @param array|null $styles
+	 * @param null|array $styles
 	 */
 	public function get_default_style( $styles = null ) {
 		if ( ! isset( $styles ) ) {

@@ -10,7 +10,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @var string|null
+	 * @var null|string
 	 */
 	public static $latest_error_from_stripe_connect;
 
@@ -417,7 +417,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_oauth_redirect_url() {
 		$mode = self::get_mode_value_from_post();
@@ -546,7 +546,7 @@ class FrmStrpLiteConnectHelper {
 	 * Get a Pro license when Pro is active.
 	 * Otherwise we'll use a uuid to support Lite.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
@@ -652,7 +652,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode
-	 * @return string|bool
+	 * @return bool|string
 	 */
 	public static function get_account_id( $mode = 'auto' ) {
 		return get_option( self::get_account_id_option_name( $mode ) );
@@ -660,7 +660,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $options
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_customer_id( $options ) {
 		$data    = self::post_with_authenticated_body( 'get_customer', compact( 'options' ) );
@@ -687,7 +687,7 @@ class FrmStrpLiteConnectHelper {
 	 * @param string $action
 	 * @param array  $additional_body
 	 *
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
 		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
@@ -751,7 +751,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string       $sub_id
-	 * @param string|false $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
@@ -770,7 +770,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return object|false
+	 * @return false|object
 	 */
 	public static function get_customer_subscriptions() {
 		$user_id     = get_current_user_id();
@@ -787,7 +787,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
-	 * @return object|false
+	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
 		$event = wp_cache_get( $event_id, 'frm_strp' );
@@ -814,7 +814,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $plan
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function maybe_create_plan( $plan ) {
 		$data = self::post_with_authenticated_body( 'maybe_create_plan', compact( 'plan' ) );
@@ -862,7 +862,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string      $customer_id
 	 * @param array|false $payment_method_types
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
 		$charge_data = array( 'customer' => $customer_id );
@@ -884,7 +884,7 @@ class FrmStrpLiteConnectHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {
 		return self::post_with_authenticated_body( 'get_setup_intent', compact( 'setup_id' ) );

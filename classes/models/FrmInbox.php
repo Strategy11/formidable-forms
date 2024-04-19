@@ -48,7 +48,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param false|array $filter
+	 * @param array|false $filter
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
