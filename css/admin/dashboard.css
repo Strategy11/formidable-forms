@@ -96,7 +96,7 @@
 }
 
 .frm-dashboard-banner .frm-dashboard-banner-close svg {
-	width:100%;
+	width: 100%;
 	color: white;
 	opacity: .5;
 }
@@ -315,7 +315,8 @@
 	height: 8px;
 	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%);
 	position: absolute;
-	top: 0; left: 0;
+	top: 0;
+left: 0;
 	border-top-right-radius: var(--small-radius);
 	border-top-left-radius: var(--small-radius);
 }
@@ -374,7 +375,8 @@
 	height: 2px;
 	background: var(--primary-500);
 	position: absolute;
-	left: 24px; bottom: 0;
+	left: 24px;
+bottom: 0;
 	width: 45px;
 	transition: 0.4s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -418,8 +420,8 @@ div.frm-inbox-subscribe:not(.frm_hidden) {
 }
 
 .frm-inbox-subscribe h2:before {
-	content:'';
-	display:block;
+	content: '';
+	display: block;
 	background: url( '../../images/dashboard/bell-cross.svg' ) no-repeat;
 	width: 40px;
 	height: 40px;
@@ -463,7 +465,7 @@ div.frm-inbox-subscribe:not(.frm_hidden) {
 .frm-tabs-slide-track > div > div {
 	overflow: auto;
 	position: relative;
-	width:100%;
+	width: 100%;
 	padding: 0 var(--gap-md);
 	box-sizing: border-box;
 }

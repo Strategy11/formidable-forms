@@ -19,10 +19,10 @@
 .frmfont,
 .frm_icon_font,
 .frm_dashicon_font{
-	text-decoration:none;
+	text-decoration: none;
 	text-shadow: none;
-	font-weight:normal;
-	display:inline-block;
+	font-weight: normal;
+	display: inline-block;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: auto;
@@ -35,7 +35,7 @@
 
 i.frmfont,
 i.frm_icon_font{
-	font-style:normal;
+	font-style: normal;
 	font-variant: normal;
 	speak: none;
 }
@@ -45,7 +45,7 @@ select.frmfont,
 .frm_icon_font:before,
 select.frm_icon_font{
 	font-family: 's11-fp' !important;
-	text-align:center;
+	text-align: center;
 }
 
 .frmfont,
@@ -56,23 +56,23 @@ a.frmfont:hover
 a.frm_icon_font,
 .frm_icon_font:hover,
 a.frm_icon_font:hover{
-	text-decoration:none !important;
-	box-shadow:none;
+	text-decoration: none !important;
+	box-shadow: none;
 }
 
 .frmfont:focus,
 .frm_icon_font:focus,
 .frm_dashicon_font:focus{
-	box-shadow:none;
+	box-shadow: none;
 }
 
 .frmfont:active,
 .frm_icon_font:active{
-	outline:none;
+	outline: none;
 }
 
 .frm_trigger .frm_icon_font{
-	padding:0 5px;
+	padding: 0 5px;
 }
 
 .frm_logo_icon:before {

@@ -106,4 +106,12 @@
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 
+	<!-- Add more CSS validation rules -->
+	<rule ref="Squiz.CSS.ColonSpacing.NoneAfter" />
+	<rule ref="Squiz.CSS.ClassDefinitionClosingBraceSpace.ContentBeforeClose" />
+	<rule ref="Squiz.CSS.ClassDefinitionOpeningBraceSpace.ContentBefore" />
+	<rule ref="Squiz.CSS.DisallowMultipleStyleDefinitions.Found" />
+	<rule ref="Squiz.CSS.SemicolonSpacing.NotAtEnd" />
+	<rule ref="Squiz.CSS.MissingColon.Found" />
+	<rule ref="Squiz.CSS.ClassDefinitionNameSpacing.BlankLinesFound" />
 </ruleset>

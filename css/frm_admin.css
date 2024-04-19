@@ -2248,7 +2248,7 @@ div.frm_updated_message {
 
 .frm_warning_heading{
 	font-weight: bold;
-	margin-bottom:4px;
+	margin-bottom: 4px;
 }
 
 /* Warning message dismiss */
@@ -4287,10 +4287,10 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm-alt-table {
 	position: relative;
-	width:100%;
-	border-collapse:collapse;
-	margin-top:0.5em;
-	font-size:15px;
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 0.5em;
+	font-size: 15px;
 }
 
 /* Before `applyZebraStriping` is executed, an empty space is displayed */
@@ -4305,12 +4305,12 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 .frm-alt-table th {
-	width:200px;
+	width: 200px;
 }
 
 .frm-alt-table tr,
 .frm-alt-table tr.frm-odd {
-	background-color:transparent;
+	background-color: transparent;
 }
 
 .frm-alt-table tr.frm-even {
@@ -4319,10 +4319,10 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm-alt-table th,
 .frm-alt-table td {
-	background-color:transparent;
-	vertical-align:top;
-	text-align:left;
-	padding:20px;
+	background-color: transparent;
+	vertical-align: top;
+	text-align: left;
+	padding: 20px;
 }
 
 .frm-alt-table h3 {
@@ -4969,7 +4969,7 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 
 .frm_toggle input, /* Reverse compatibility */
 .frm_toggle_block input {
-	display:none !important;
+	display: none !important;
 }
 
 .frm_toggle_slider {
@@ -7316,7 +7316,7 @@ span.multiselect-selected-text {
 }
 
 .frm-search #search-submit .caret {
-	opacity:.7;
+	opacity: .7;
 }
 
 .frm-not-set input {

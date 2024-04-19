@@ -38,11 +38,11 @@
 
 /* FadeIn 3d */
 .frm-init-fadein-3d.frm-animate {
-	opacity:0.0!important;
+	opacity: 0.0!important;
 	transform: matrix3d( 1,0,0,0,0,1,0,-0.00095,0,0,1,0,0,0,0,1 ) translateY( 15px ) scale3d( 0.92, 0.92, 1 );
 }
 .frm-init-fadein-3d {
-	opacity:1!important;
+	opacity: 1!important;
 	transform: matrix3d( 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 ) translateY( 0px ) scale3d( 1, 1, 1 );
 	transition: 0.35s transform, 0.5s opacity linear;
 }
