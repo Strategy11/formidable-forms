@@ -106,6 +106,28 @@
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 
+	<!-- Set rules for Cognitive Complexity -->
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+		<properties>
+			<property name="warningThreshold" value="30" />
+			<property name="errorThreshold" value="10" />
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
+	</rule>
+
 	<!-- Treat these warnings as errors -->
 	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
 		<severity>8</severity>
