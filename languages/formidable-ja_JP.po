@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-17 22:36\n"
+"PO-Revision-Date: 2024-04-19 22:49\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1060,15 +1060,15 @@ msgstr "オンボーディングウィザード"
 
 #: classes/controllers/FrmOnboardingWizardController.php:438
 msgid "Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes."
-msgstr ""
+msgstr "Formidable Forms へようこそ ! ここをクリックして、オンボーディングウィザードを開始してください。基本設定の説明を見て、2分で開始できます。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:442
 msgid "Begin With Ease!"
-msgstr ""
+msgstr "簡単に始めましょう !"
 
 #: classes/controllers/FrmOnboardingWizardController.php:445
 msgid "Begin Setup"
-msgstr ""
+msgstr "設定を開始"
 
 #: classes/controllers/FrmOnboardingWizardController.php:530
 msgid "Spam Protection"
@@ -1076,31 +1076,31 @@ msgstr "スパム保護"
 
 #: classes/controllers/FrmOnboardingWizardController.php:533
 msgid "Get anti-spam options like reCAPTCHA, hCaptcha, Akismet, Turnstile and the blocklist."
-msgstr ""
+msgstr "reCAPTCHA、hCaptcha、Akismet、Turnstile、ブロックリストのようなスパム対策オプションを使用できます。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:536
 msgid "Stripe Payments"
-msgstr ""
+msgstr "Stripe 決済"
 
 #: classes/controllers/FrmOnboardingWizardController.php:539
 msgid "Collect donations and payments with your forms. Offer physical products, digital goods, services, and more."
-msgstr ""
+msgstr "フォームを使用して寄付や決済を収集します。物理的な商品、デジタル製品、サービスなどを提供できます。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:543
 msgid "Visual Styler"
-msgstr ""
+msgstr "ビジュアルスタイラー"
 
 #: classes/controllers/FrmOnboardingWizardController.php:546
 msgid "Customize form appearance with an intuitive styling interface."
-msgstr ""
+msgstr "直感的なスタイリングインターフェースを使用して、フォームの外観をカスタマイズします。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:549
 msgid "Save Entries"
-msgstr ""
+msgstr "エントリーを保存"
 
 #: classes/controllers/FrmOnboardingWizardController.php:552
 msgid "Save form submissions to your database for future reference and analysis."
-msgstr ""
+msgstr "今後の参照と分析のために、フォームの送信内容をデータベースに保存します。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:557
 #: classes/controllers/FrmSMTPController.php:108
@@ -1109,7 +1109,7 @@ msgstr "SMTP"
 
 #: classes/controllers/FrmOnboardingWizardController.php:561
 msgid "Improve email deliverability by routing WordPress emails through SMTP."
-msgstr ""
+msgstr "SMTP を使用して WordPress メールをルーティングすることで、メールの到達性を改善します。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:582
 msgid "Mailchimp"
@@ -1121,23 +1121,23 @@ msgstr "ユーザー登録"
 
 #: classes/controllers/FrmOnboardingWizardController.php:598
 msgid "Form Rest API"
-msgstr ""
+msgstr "フォーム Rest API"
 
 #: classes/controllers/FrmOnboardingWizardController.php:606
 msgid "ACF Forms"
-msgstr ""
+msgstr "ACF フォーム"
 
 #: classes/controllers/FrmOnboardingWizardController.php:614
 msgid "Signature Forms"
-msgstr ""
+msgstr "署名フォーム"
 
 #: classes/controllers/FrmOnboardingWizardController.php:623
 msgid "Gravity Forms Migrator"
-msgstr ""
+msgstr "Gravity Forms 移行ツール"
 
 #: classes/controllers/FrmOnboardingWizardController.php:627
 msgid "Easily migrate your forms from Gravity Forms to Formidable."
-msgstr ""
+msgstr "お使いのフォームを Gravity Forms から Formidable に簡単に移行します。"
 
 #: classes/controllers/FrmSettingsController.php:12
 msgid "Global Settings"
@@ -4200,16 +4200,16 @@ msgstr "すべて選択"
 #. translators: Hidden accessibility text.
 #: classes/helpers/FrmListHelper.php:945
 msgid "Sort ascending."
-msgstr ""
+msgstr "昇順で並べ替え。"
 
 #. translators: Hidden accessibility text.
 #: classes/helpers/FrmListHelper.php:947
 msgid "Sort descending."
-msgstr ""
+msgstr "降順で並べ替え。"
 
 #: classes/helpers/FrmOnboardingWizardHelper.php:92
 msgid "Next Step"
-msgstr ""
+msgstr "次のステップ"
 
 #: classes/helpers/FrmOnboardingWizardHelper.php:97
 msgid "Skip"
@@ -4701,7 +4701,7 @@ msgstr "有効な値を入力してください。最も近い有効な値は %1
 
 #: classes/models/fields/FrmFieldPhone.php:67
 msgid "International phone field"
-msgstr ""
+msgstr "国際電話フィールド"
 
 #: classes/models/fields/FrmFieldPhone.php:71
 msgid "International"
@@ -5113,7 +5113,7 @@ msgstr "あなたが人間の場合、このフィールドは空白のままに
 
 #: classes/models/FrmInstallPlugin.php:126
 msgid "Plugin installed and activated successfully."
-msgstr ""
+msgstr "プラグインは正常にインストールされ、有効化されました。"
 
 #: classes/models/FrmMigrate.php:645
 msgid "Sending"
@@ -6320,7 +6320,7 @@ msgstr "ボタンテキストを設定します。"
 
 #: classes/views/frm-forms/settings-buttons.php:22
 msgid "Submit button settings were moved to the Submit button in the form builder."
-msgstr ""
+msgstr "送信ボタンの設定は、フォームビルダーの送信ボタンに移動しました。"
 
 #: classes/views/frm-forms/settings-html.php:8
 msgid "Form Classes"
@@ -6510,11 +6510,11 @@ msgstr "その他"
 #: classes/views/frm-settings/general.php:40
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:20
 msgid "Default Email Address"
-msgstr ""
+msgstr "デフォルトメールアドレス"
 
 #: classes/views/frm-settings/general.php:41
 msgid "The default email address to receive notifications for new form submissions."
-msgstr ""
+msgstr "新規のフォーム送信の通知を受け取るデフォルトのメールアドレスです。"
 
 #: classes/views/frm-settings/general.php:73
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
@@ -6710,76 +6710,76 @@ msgstr "非表示"
 
 #: classes/views/onboarding-wizard/index.php:14
 msgid "Onboarding Wizard Background"
-msgstr ""
+msgstr "オンボーディングウィザードの背景"
 
 #: classes/views/onboarding-wizard/index.php:25
 msgid "Go to dashboard"
-msgstr ""
+msgstr "ダッシュボードに移動"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:22
 msgid "Set the default email address to receive notifications for new form submissions. You can change this at any time."
-msgstr ""
+msgstr "新規のフォーム送信の通知を受け取るデフォルトのメールアドレスを設定します。これはいつでも変更できます。"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:27
 msgid "Default email address"
-msgstr ""
+msgstr "デフォルトメールアドレス"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:39
 msgid "Subscribe to our newsletter and get 20+ free form templates"
-msgstr ""
+msgstr "ニュースレターに登録して、20以上の無料フォームテンプレートを手に入れましょう"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:45
 msgid "Help improve Formidable by sharing anonymous usage data"
-msgstr ""
+msgstr "匿名の使用状況データを共有して、Formidable の改善にご協力ください"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:50
 msgid "Send me monthly and yearly summary emails with entry and revenue data from my forms"
-msgstr ""
+msgstr "フォームのエントリーデータと収益データを含む月次と年次の要約メールを送信してください"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:20
 msgid "Install Formidable Add-ons"
-msgstr ""
+msgstr "Formidableアドオンをインストール"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:24
 msgid "A few of our add-ons come with every installation. But more are available on the add-ons page!"
-msgstr ""
+msgstr "私たちのいくつかのアドオンはすべてのインストールで提供されます。しかし、アドオンページでさらに提供されています！"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:26
 msgid "Here's just a few of our most popular add-ons! You'll find even more on the add-ons page."
-msgstr ""
+msgstr "これは私たちの最も人気のあるアドオンの一部です！アドオンページでさらに見つけることができます。"
 
 #. translators: %s: The count of add-ons
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:52
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:49
 msgid "Get access to %s more add-ons"
-msgstr ""
+msgstr "%s個のアドオンを使用可能にします"
 
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:62
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:58
 msgid "%1$sUpgrade to PRO%2$s and get more out of Formidable Forms"
-msgstr ""
+msgstr "%1$sPROにアップグレード%2$sし、Formidable Formsをもっと活用しましょう"
 
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:69
 msgid "Check them all out on the %1$sadd-ons%2$s page."
-msgstr ""
+msgstr "すべてを%1$sアドオン%2$sページでチェックしてください。"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:82
 msgid "Install & Finish Setup"
-msgstr ""
+msgstr "インストールして設定を終了"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:20
 msgid "Install Formidable Pro"
-msgstr ""
+msgstr "Formidable Proをインストール"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:21
 msgid "It’s time to install Formidable Forms Pro, to get access to the premium features."
-msgstr ""
+msgstr "プレミアム機能にアクセスするために、Formidable Forms Proをインストールする時です。"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:24
 msgid "1. Download PRO"
-msgstr ""
+msgstr "1. PROをダウンロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:26
 msgid "Download"
@@ -6787,27 +6787,27 @@ msgstr "ダウンロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:32
 msgid "2. Install on your website"
-msgstr ""
+msgstr "2. あなたのウェブサイトにインストール"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:34
 msgid "Upload Plugin"
-msgstr ""
+msgstr "プラグインをアップロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:41
 msgid "Formidable Pro is currently inactive!"
-msgstr ""
+msgstr "Formidable Proは現在非アクティブです！"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:20
 msgid "License Management"
-msgstr ""
+msgstr "ライセンス管理"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:21
 msgid "To get started, please activate your license by following the simple steps below."
-msgstr ""
+msgstr "始めるには、以下の簡単な手順に従ってライセンスを有効化してください。"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:25
 msgid "License key"
-msgstr ""
+msgstr "ライセンスキー"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:26
 msgid "Enter your license key"
@@ -6815,39 +6815,39 @@ msgstr "ライセンスキーの入力"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:34
 msgid "Activate & Continue"
-msgstr ""
+msgstr "有効化して続行"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:20
 msgid "You're All Set!"
-msgstr ""
+msgstr "すべて準備ができました！"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:22
 msgid "We're thrilled to have you and hope you love your experience with Formidable Forms"
-msgstr ""
+msgstr "私たちはあなたを歓迎し、あなたがFormidable Formsとの経験を愛することを願っています"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:31
 msgid "Go to Dashboard"
-msgstr ""
+msgstr "ダッシュボードに移動"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:34
 msgid "Create a Form"
-msgstr ""
+msgstr "フォームを作成"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:14
 msgid "Formidable Onboarding Wizard Logo"
-msgstr ""
+msgstr "Formidableオンボーディングウィザードロゴ"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:18
 msgid "Welcome to Formidable Forms!"
-msgstr ""
+msgstr "Formidable Formsへようこそ！"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:20
 msgid "This quick setup wizard will guide you through the basic settings and get you started in 2 minutes."
-msgstr ""
+msgstr "このクイックセットアップウィザードは、基本設定を案内し、あなたを2分で始めることができます。"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:33
 msgid "Proceed without Account"
-msgstr ""
+msgstr "アカウントなしで進行"
 
 #. translators: %1$s: Heart icon
 #: classes/views/shared/admin-footer-links.php:18
