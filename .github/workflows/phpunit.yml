@@ -30,12 +30,12 @@ jobs:
           - php: 7.4
             wordpress: trunk
             multisite: 0
-            filter: '^(?!test_Frm[A-F]).*'
+            filter: '/^(?!test_Frm[A-F]).*/'
             group: 2
           - php: 8.0
             wordpress: trunk
             multisite: 0
-            filter: '^(?!test_Frm[A-F]).*'
+            filter: '/^(?!test_Frm[A-F]).*/'
             group: 2
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }} (${{ matrix.group }}/2)
