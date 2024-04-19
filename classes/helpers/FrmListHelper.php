@@ -463,7 +463,7 @@ class FrmListHelper {
 		foreach ( $actions as $action => $link ) {
 			++$i;
 			$i == $action_count ? $sep = '' : $sep = ' | ';
-			$out                          .= "<span class='$action'>$link$sep</span>";
+			$out .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
 
