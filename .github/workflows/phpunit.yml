@@ -20,12 +20,12 @@ jobs:
           - php: 7.4
             wordpress: trunk
             multisite: 0
-            filter: '/^(test_Frm){1}[A-M]/'
+            filter: '/^(test_Frm){1}[A-F]/'
             group: 1
           - php: 8.0
             wordpress: trunk
             multisite: 0
-            filter: '/^(test_Frm){1}[A-M]/'
+            filter: '/^(test_Frm){1}[A-F]/'
             group: 1
           - php: 7.4
             wordpress: trunk
