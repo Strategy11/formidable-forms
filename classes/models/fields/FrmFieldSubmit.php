@@ -94,7 +94,11 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$form        = FrmForm::getOne( $this->field['form_id'] );
+		$form = FrmForm::getOne( $this->field['form_id'] );
+		if ( ! FrmForm::show_submit( $form ) ) {
+			return '';
+		}
+
 		$submit      = $this->field['name'];
 		$form_action = FrmSubmitHelper::get_current_action_from_global_var( $form->id );
 		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
