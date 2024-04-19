@@ -106,6 +106,7 @@
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 
+	<!-- Treat these warnings as errors -->
 	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
 		<severity>8</severity>
 		<type>error</type>
