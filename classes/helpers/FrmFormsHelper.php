@@ -1015,7 +1015,7 @@ BEFORE_HTML;
 			echo '<div id="' . esc_attr( $id ) . '_error">';
 
 			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
-				echo '<img src="' . esc_attr( $args['img'] ) . '" alt="" />';
+				echo '<img src="' . esc_url( $args['img'] ) . '" alt="" />';
 			} else {
 				$args['show_img'] = true;
 			}

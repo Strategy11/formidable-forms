@@ -115,7 +115,7 @@ class FrmField {
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
+				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_url( $images_url ) . 'scale_field.png" alt="Scale Field" />',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -137,12 +137,12 @@ class FrmField {
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
+				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
-				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_attr( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
+				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -210,7 +210,7 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
-					<img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
+					<img src="' . esc_url( $images_url ) . 'appointments.png" alt="Scheduling" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
