@@ -17,6 +17,8 @@ jobs:
     strategy:
       matrix:
         include:
+          # Run tests starting with test_FrmA through test_FrmF
+          # Tests are split into 2 groups to run in half the time.
           - php: 7.4
             wordpress: trunk
             multisite: 0
@@ -27,6 +29,8 @@ jobs:
             multisite: 0
             filter: '/^(test_Frm){1}[A-F]/'
             group: 1
+          # Run tests that do not start with test_FrmA through test_FrmF
+          # This includes the tests that do not start with test_Frm at all.
           - php: 7.4
             wordpress: trunk
             multisite: 0
