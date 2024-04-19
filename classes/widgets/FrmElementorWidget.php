@@ -35,8 +35,8 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 				'form_id',
 				array(
 					'label'   => __( 'Form', 'formidable' ),
-					'type'    => \Elementor\Controls_Manager::SELECT2,
 					'options' => $this->get_form_options(),
+					'type'    => \Elementor\Controls_Manager::SELECT2,
 				)
 			);
 
@@ -91,10 +91,10 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo FrmFormsController::get_form_shortcode(
 				array(
-					'id'          => $form_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'title'       => $title, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'description' => $description, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'          => $form_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'minimize'    => $minimize, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'title'       => $title, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				)
 			);
 		}

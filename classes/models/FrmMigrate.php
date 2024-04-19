@@ -26,9 +26,9 @@ class FrmMigrate {
 
 		$needs_upgrade = FrmAppController::compare_for_update(
 			array(
-				'option'             => 'frm_db_version',
 				'new_db_version'     => FrmAppHelper::$db_version,
 				'new_plugin_version' => FrmAppHelper::plugin_version(),
+				'option'             => 'frm_db_version',
 			)
 		);
 
@@ -451,9 +451,9 @@ class FrmMigrate {
 		);
 
 		$query = array(
-			'type'                   => $field_types,
 			'field_options like'     => 's:4:"size";',
 			'field_options not like' => 's:4:"size";s:0:',
+			'type'                   => $field_types,
 		);
 
 		return FrmDb::get_results( $this->fields, $query, 'id, field_options' );

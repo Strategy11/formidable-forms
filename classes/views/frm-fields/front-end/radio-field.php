@@ -54,15 +54,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		$other_args = array(
-			'other_opt' => $other_opt,
-			'read_only' => $read_only,
 			'checked'   => $checked,
-			'name'      => $other_args['name'],
-			'value'     => $other_args['value'],
 			'field'     => $field,
 			'html_id'   => $html_id,
+			'name'      => $other_args['name'],
 			'opt_key'   => $opt_key,
 			'opt_label' => $opt,
+			'other_opt' => $other_opt,
+			'read_only' => $read_only,
+			'value'     => $other_args['value'],
 		);
 		FrmFieldsHelper::include_other_input( $other_args );
 

@@ -48,11 +48,11 @@ class FrmFormMigratorsHelper {
 		foreach ( $forms as $form ) {
 			$inbox->add_message(
 				array(
-					'key'     => $form['class'],
-					'subject' => 'You have new importable forms',
-					'message' => 'Did you know you can import your forms created in ' . esc_html( $form['name'] ) . '?',
 					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-import' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Learn More', 'formidable' ) . '</a>',
 					'icon'    => 'frm_cloud_upload_solid_icon',
+					'key'     => $form['class'],
+					'message' => 'Did you know you can import your forms created in ' . esc_html( $form['name'] ) . '?',
+					'subject' => 'You have new importable forms',
 					'type'    => 'news',
 				)
 			);
@@ -90,17 +90,17 @@ class FrmFormMigratorsHelper {
 		return array(
 			'gf' => array(
 				'class'    => 'FrmGravityImporter',
-				'plugin'   => 'gravityforms/gravityforms.php',
 				'importer' => 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php',
 				'name'     => 'Gravity Forms',
 				'package'  => 'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
+				'plugin'   => 'gravityforms/gravityforms.php',
 			),
 			'pf' => array(
 				'class'    => 'FrmPirateImporter',
-				'plugin'   => 'pirate-forms/pirate-forms.php',
 				'importer' => 'formidable-import-pirate-forms/pf-to-frm.php',
 				'name'     => 'Pirate Forms',
 				'package'  => 'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
+				'plugin'   => 'pirate-forms/pirate-forms.php',
 			),
 		);
 	}

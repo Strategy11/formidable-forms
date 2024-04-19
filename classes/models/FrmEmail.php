@@ -311,9 +311,9 @@ class FrmEmail {
 	 */
 	private function set_is_single_recipient( $action ) {
 		$args = array(
-			'form'   => $this->form,
-			'entry'  => $this->entry,
 			'action' => $action,
+			'entry'  => $this->entry,
+			'form'   => $this->form,
 		);
 
 		/**
@@ -367,9 +367,9 @@ class FrmEmail {
 		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 
 		$args          = array(
-			'form'      => $this->form,
-			'entry'     => $this->entry,
 			'email_key' => $this->email_key,
+			'entry'     => $this->entry,
+			'form'      => $this->form,
 		);
 		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
 		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
@@ -399,8 +399,8 @@ class FrmEmail {
 		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
-				'id'         => $this->entry->id,
 				'entry'      => $pass_entry,
+				'id'         => $this->entry->id,
 				'plain_text' => $this->is_plain_text,
 				'user_info'  => $this->include_user_info,
 			)
@@ -464,10 +464,10 @@ class FrmEmail {
 	 */
 	private function set_attachments() {
 		$args = array(
-			'entry'     => $this->entry,
-			'email_key' => $this->email_key,
-			'settings'  => $this->settings,
 			'action_id' => $this->action_id,
+			'email_key' => $this->email_key,
+			'entry'     => $this->entry,
+			'settings'  => $this->settings,
 		);
 
 		$this->attachments = apply_filters( 'frm_notification_attachment', array(), $this->form, $args );
@@ -486,10 +486,10 @@ class FrmEmail {
 		} else {
 
 			$filter_args = array(
-				'message'   => $this->message,
-				'subject'   => $this->subject,
-				'recipient' => $this->to,
 				'header'    => $this->package_header(),
+				'message'   => $this->message,
+				'recipient' => $this->to,
+				'subject'   => $this->subject,
 			);
 
 			/**
@@ -557,8 +557,8 @@ class FrmEmail {
 			'frm_email_header',
 			$this->package_header(),
 			array(
-				'to_email' => $recipient,
 				'subject'  => $this->subject,
+				'to_email' => $recipient,
 			)
 		);
 
@@ -843,15 +843,15 @@ class FrmEmail {
 				do_action(
 					'frm_send_to_not_email',
 					array(
-						'e'           => $recipient,
-						'subject'     => $this->subject,
-						'mail_body'   => $this->message,
-						'reply_to'    => $this->reply_to,
-						'from'        => $this->from,
-						'plain_text'  => $this->is_plain_text,
 						'attachments' => $this->attachments,
-						'form'        => $this->form,
+						'e'           => $recipient,
 						'email_key'   => $key,
+						'form'        => $this->form,
+						'from'        => $this->from,
+						'mail_body'   => $this->message,
+						'plain_text'  => $this->is_plain_text,
+						'reply_to'    => $this->reply_to,
+						'subject'     => $this->subject,
 					)
 				);
 
@@ -870,17 +870,17 @@ class FrmEmail {
 	 */
 	public function package_atts() {
 		return array(
-			'to_email'    => $this->to,
-			'cc'          => $this->cc,
+			'attachments' => $this->attachments,
 			'bcc'         => $this->bcc,
+			'cc'          => $this->cc,
+			'entry'       => $this->entry,
+			'form'        => $this->form,
 			'from'        => $this->from,
+			'message'     => $this->message,
+			'plain_text'  => $this->is_plain_text,
 			'reply_to'    => $this->reply_to,
 			'subject'     => $this->subject,
-			'message'     => $this->message,
-			'attachments' => $this->attachments,
-			'plain_text'  => $this->is_plain_text,
-			'form'        => $this->form,
-			'entry'       => $this->entry,
+			'to_email'    => $this->to,
 		);
 	}
 

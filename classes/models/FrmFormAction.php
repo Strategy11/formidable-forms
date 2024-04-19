@@ -139,18 +139,18 @@ class FrmFormAction {
 		$this->option_name = 'frm_' . $this->id_base . '_action';
 
 		$default_options = array(
-			'classes'     => '',
 			'active'      => true,
-			'event'       => array( 'create' ),
-			'limit'       => 1,
-			'force_event' => false,
-			'priority'    => 20,
 			'ajax_load'   => true,
-			'plugin'      => $this->id_base,
-			'tooltip'     => $name,
-			'group'       => $id_base,
+			'classes'     => '',
 			'color'       => '',
+			'event'       => array( 'create' ),
+			'force_event' => false,
+			'group'       => $id_base,
 			'keywords'    => '',
+			'limit'       => 1,
+			'plugin'      => $this->id_base,
+			'priority'    => 20,
+			'tooltip'     => $name,
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
@@ -283,14 +283,14 @@ class FrmFormAction {
 		}
 
 		$form_action = array(
-			'post_title'   => $this->name,
+			'ID'           => '',
+			'menu_order'   => $this->form_id,
 			'post_content' => $post_content,
 			'post_excerpt' => $this->id_base,
-			'ID'           => '',
-			'post_status'  => 'publish',
-			'post_type'    => FrmFormActionsController::$action_post_type,
 			'post_name'    => $this->form_id . '_' . $this->id_base . '_' . $this->number,
-			'menu_order'   => $this->form_id,
+			'post_status'  => 'publish',
+			'post_title'   => $this->name,
+			'post_type'    => FrmFormActionsController::$action_post_type,
 		);
 		unset( $post_content );
 
@@ -674,11 +674,11 @@ class FrmFormAction {
 	 */
 	public static function action_args( $form_id = 0, $limit = 99 ) {
 		$args = array(
-			'post_type'   => FrmFormActionsController::$action_post_type,
-			'post_status' => 'publish',
 			'numberposts' => $limit,
-			'orderby'     => 'title',
 			'order'       => 'ASC',
+			'orderby'     => 'title',
+			'post_status' => 'publish',
+			'post_type'   => FrmFormActionsController::$action_post_type,
 		);
 
 		if ( $form_id && $form_id != 'all' ) {
@@ -767,8 +767,8 @@ class FrmFormAction {
 
 		if ( ! isset( $defaults['conditions'] ) ) {
 			$defaults['conditions'] = array(
-				'send_stop' => '',
 				'any_all'   => '',
+				'send_stop' => '',
 			);
 		}
 
@@ -805,9 +805,9 @@ class FrmFormAction {
 		$post_id = get_posts(
 			array(
 				'name'        => $action->post_name,
-				'post_type'   => FrmFormActionsController::$action_post_type,
-				'post_status' => $action->post_status,
 				'numberposts' => 1,
+				'post_status' => $action->post_status,
+				'post_type'   => FrmFormActionsController::$action_post_type,
 			)
 		);
 
@@ -939,19 +939,19 @@ class FrmFormAction {
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
-			'classes' => 'frm_icon_font ' . $class,
 			'active'  => false,
+			'classes' => 'frm_icon_font ' . $class,
 			'limit'   => 0,
 		);
 	}
 
 	public static function trigger_labels() {
 		$triggers = array(
-			'draft'  => __( 'Draft is saved', 'formidable' ),
 			'create' => __( 'Entry is created', 'formidable' ),
-			'update' => __( 'Entry is updated', 'formidable' ),
 			'delete' => __( 'Entry is deleted', 'formidable' ),
+			'draft'  => __( 'Draft is saved', 'formidable' ),
 			'import' => __( 'Entry is imported', 'formidable' ),
+			'update' => __( 'Entry is updated', 'formidable' ),
 		);
 
 		return apply_filters( 'frm_action_triggers', $triggers );

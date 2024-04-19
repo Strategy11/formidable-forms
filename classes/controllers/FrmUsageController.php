@@ -41,8 +41,8 @@ class FrmUsageController {
 	 */
 	public static function add_schedules( $schedules = array() ) {
 		$schedules['weekly'] = array(
-			'interval' => DAY_IN_SECONDS * 7,
 			'display'  => __( 'Once Weekly', 'formidable' ),
+			'interval' => DAY_IN_SECONDS * 7,
 		);
 		return $schedules;
 	}

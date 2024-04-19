@@ -158,54 +158,54 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$file_urls = array(
 			array(
-				'val'   => 'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
-				'field' => $single_file_upload_field,
 				'entry' => 'jamie_entry_key',
-			),
-			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
 				'field' => $single_file_upload_field,
-				'entry' => 'steph_entry_key',
+				'val'   => 'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
 			),
 			array(
+				'entry' => 'steph_entry_key',
+				'field' => $single_file_upload_field,
+				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
+			),
+			array(
+				'entry' => 'jamie_entry_key',
+				'field' => $multi_file_upload_field,
 				'val'   => array(
 					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
 					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/create-a-form_add-new.png',
 					'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
 				),
-				'field' => $multi_file_upload_field,
-				'entry' => 'jamie_entry_key',
 			),
 			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				'field' => FrmField::getOne( 'file_upload_single' ),
 				'entry' => 'many_files_key',
+				'field' => FrmField::getOne( 'file_upload_single' ),
+				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
 			),
 			array(
+				'entry' => 'many_files_key',
+				'field' => FrmField::getOne( 'file_upload_multiple' ),
 				'val'   => array(
 					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-form.png',
 					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-progress.png',
 					'https://cdn.formidableforms.com/wp-content/uploads/2016/09/new-graph-types1.png',
 				),
-				'field' => FrmField::getOne( 'file_upload_multiple' ),
-				'entry' => 'many_files_key',
 			),
 			array(
+				'entry' => 'file-repeat-child-one',
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
 				'val'   => array(
 					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/user-registration-multisite.jpeg',
 					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/lost-password-form.png',
 					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/login-form.png',
 				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-one',
 			),
 			array(
+				'entry' => 'file-repeat-child-two',
+				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
 				'val'   => array(
 					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/normal-section-job-history-1.png',
 					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/repeating-section-job-history-1.png',
 				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-two',
 			),
 		);
 
@@ -259,8 +259,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function get_all_fields_for_form_key( $form_key ) {
 		$field_totals       = array(
 			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : $this->all_field_types_count - 3,
-			$this->create_post_form_key => 10,
 			$this->contact_form_key     => $this->contact_form_field_count,
+			$this->create_post_form_key => 10,
 			$this->repeat_sec_form_key  => 3,
 		);
 		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
@@ -317,8 +317,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function get_user_by_role( $role ) {
 		$users = get_users(
 			array(
-				'role'   => $role,
 				'number' => 1,
+				'role'   => $role,
 			)
 		);
 		if ( empty( $users ) ) {
@@ -353,13 +353,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $current_screen;
 
 		$screens = array(
-			'index.php'                 => array(
-				'base' => 'dashboard',
-				'id'   => 'dashboard',
-			),
 			'admin.php?page=formidable' => array(
 				'base' => 'admin',
 				'id'   => 'toplevel_page_formidable',
+			),
+			'index.php'                 => array(
+				'base' => 'dashboard',
+				'id'   => 'dashboard',
 			),
 		);
 
@@ -431,12 +431,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		global $frm_vars;
 		$frm_vars = array(
-			'load_css'          => false,
-			'forms_loaded'      => array(),
 			'created_entries'   => array(),
-			'pro_is_authorized' => false,
+			'forms_loaded'      => array(),
+			'load_css'          => false,
 			'next_page'         => array(),
 			'prev_page'         => array(),
+			'pro_is_authorized' => false,
 		);
 
 		if ( class_exists( 'FrmProEddController' ) ) {
@@ -479,11 +479,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		$tables = array(
-			'items'   => $wpdb->prefix . 'frm_items',
+			'actions' => $wpdb->posts,
 			'forms'   => $wpdb->prefix . 'frm_forms',
+			'items'   => $wpdb->prefix . 'frm_items',
 			'posts'   => $wpdb->posts,
 			'styles'  => $wpdb->posts,
-			'actions' => $wpdb->posts,
 		);
 
 		$defaults = array( 'ids' => false );
@@ -509,9 +509,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 					// Add forms.
 					if ( $args['ids'] ) {
 						$where[] = array(
-							'or'                       => 1,
 							$table . '.id'             => $args['ids'],
 							$table . '.parent_form_id' => $args['ids'],
+							'or'                       => 1,
 						);
 					} else {
 						$where[ $table . '.status !' ] = 'draft';
@@ -599,28 +599,28 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		$admin_args = array(
-			'user_login' => 'admin',
-			'user_email' => 'admin@mail.com',
-			'user_pass'  => 'admin',
 			'role'       => 'administrator',
+			'user_email' => 'admin@mail.com',
+			'user_login' => 'admin',
+			'user_pass'  => 'admin',
 		);
 		$admin      = $this->factory->user->create_object( $admin_args );
 		$this->assertNotEmpty( $admin );
 
 		$editor_args = array(
-			'user_login' => 'editor',
-			'user_email' => 'editor@mail.com',
-			'user_pass'  => 'editor',
 			'role'       => 'editor',
+			'user_email' => 'editor@mail.com',
+			'user_login' => 'editor',
+			'user_pass'  => 'editor',
 		);
 		$editor      = $this->factory->user->create_object( $editor_args );
 		$this->assertNotEmpty( $editor );
 
 		$subscriber_args = array(
-			'user_login' => 'subscriber',
-			'user_email' => 'subscriber@mail.com',
-			'user_pass'  => 'subscriber',
 			'role'       => 'subscriber',
+			'user_email' => 'subscriber@mail.com',
+			'user_login' => 'subscriber',
+			'user_pass'  => 'subscriber',
 		);
 		$subscriber      = $this->factory->user->create_object( $subscriber_args );
 		$this->assertNotEmpty( $subscriber );

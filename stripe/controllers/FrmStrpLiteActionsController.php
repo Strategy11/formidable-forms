@@ -80,9 +80,9 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
 		$response = array(
-			'success'      => false,
 			'run_triggers' => false,
 			'show_errors'  => true,
+			'success'      => false,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
 
@@ -208,8 +208,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		if ( ! is_numeric( $trial ) ) {
 			$trial = FrmTransLiteAppHelper::process_shortcodes(
 				array(
-					'value' => $trial,
 					'entry' => $atts['entry'],
+					'value' => $trial,
 				)
 			);
 		}
@@ -278,8 +278,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$credit_card_field_id = FrmDb::get_var(
 				'frm_fields',
 				array(
-					'type'    => 'credit_card',
 					'form_id' => $form_id,
+					'type'    => 'credit_card',
 				)
 			);
 			if ( ! $credit_card_field_id ) {
@@ -293,8 +293,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$gateway_field_id = FrmDb::get_var(
 			'frm_fields',
 			array(
-				'type'    => 'gateway',
 				'form_id' => $form_id,
+				'type'    => 'gateway',
 			)
 		);
 		if ( ! $gateway_field_id ) {
@@ -466,15 +466,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$style_settings  = self::get_style_settings_for_form( $form_id );
 		$stripe_vars     = array(
-			'publishable_key' => $publishable,
-			'form_id'         => $form_id,
-			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
-			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings'        => $action_settings,
-			'locale'          => self::get_locale(),
-			'baseFontSize'    => $style_settings['field_font_size'],
-			'appearanceRules' => self::get_appearance_rules( $style_settings ),
 			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
+			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'appearanceRules' => self::get_appearance_rules( $style_settings ),
+			'baseFontSize'    => $style_settings['field_font_size'],
+			'form_id'         => $form_id,
+			'locale'          => self::get_locale(),
+			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
+			'publishable_key' => $publishable,
+			'settings'        => $action_settings,
 		);
 
 		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
@@ -522,14 +522,17 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function get_appearance_rules( $settings ) {
 		return array(
+			'.Error'              => array(
+				'color' => $settings['border_color_error'],
+			),
 			'.Input'              => array(
-				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
-				'padding'         => $settings['field_pad'],
-				'lineHeight'      => 1.3,
 				'borderColor'     => $settings['border_color'],
-				'borderWidth'     => $settings['field_border_width'],
 				'borderStyle'     => $settings['field_border_style'],
+				'borderWidth'     => $settings['field_border_width'],
+				'color'           => $settings['text_color'],
+				'lineHeight'      => 1.3,
+				'padding'         => $settings['field_pad'],
 			),
 			'.Input::placeholder' => array(
 				'color' => $settings['text_color_disabled'],
@@ -541,9 +544,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color'      => $settings['label_color'],
 				'fontSize'   => $settings['font_size'],
 				'fontWeight' => $settings['weight'],
-			),
-			'.Error'              => array(
-				'color' => $settings['border_color_error'],
 			),
 		);
 	}

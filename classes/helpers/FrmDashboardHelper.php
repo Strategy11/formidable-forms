@@ -198,14 +198,14 @@ class FrmDashboardHelper {
 	public static function get_license_buttons() {
 		return array(
 			array(
+				'classes' => 'frm-button-primary frm-show-unauthorized',
 				'label'   => __( 'Connect Account', 'formidable' ),
 				'link'    => FrmAddonsController::connect_link(),
-				'classes' => 'frm-button-primary frm-show-unauthorized',
 			),
 			array(
+				'classes' => 'frm-button-secondary frm-show-unauthorized',
 				'label'   => __( 'Get Formidable PRO', 'formidable' ),
 				'link'    => FrmAppHelper::admin_upgrade_link( 'settings-license' ),
-				'classes' => 'frm-button-secondary frm-show-unauthorized',
 			),
 		);
 	}

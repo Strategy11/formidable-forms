@@ -17,16 +17,16 @@ class FrmFormActionsController {
 		register_post_type(
 			self::$action_post_type,
 			array(
-				'label'               => __( 'Form Actions', 'formidable' ),
-				'description'         => '',
-				'public'              => false,
-				'show_ui'             => false,
-				'exclude_from_search' => true,
-				'show_in_nav_menus'   => false,
-				'show_in_menu'        => true,
 				'capability_type'     => 'page',
-				'supports'            => array( 'title', 'editor', 'excerpt', 'custom-fields', 'page-attributes' ),
+				'description'         => '',
+				'exclude_from_search' => true,
 				'has_archive'         => false,
+				'label'               => __( 'Form Actions', 'formidable' ),
+				'public'              => false,
+				'show_in_menu'        => true,
+				'show_in_nav_menus'   => false,
+				'show_ui'             => false,
+				'supports'            => array( 'title', 'editor', 'excerpt', 'custom-fields', 'page-attributes' ),
 			)
 		);
 
@@ -44,27 +44,27 @@ class FrmFormActionsController {
 	 */
 	public static function register_actions() {
 		$action_classes = array(
-			'on_submit'         => 'FrmOnSubmitAction',
+			'activecampaign'    => 'FrmDefActiveCampaignAction',
+			'api'               => 'FrmDefApiAction',
+			'aweber'            => 'FrmDefAweberAction',
+			'constantcontact'   => 'FrmDefConstContactAction',
 			'email'             => 'FrmEmailAction',
-			'wppost'            => 'FrmDefPostAction',
-			'register'          => 'FrmDefRegAction',
-			'paypal'            => 'FrmDefPayPalAction',
+			'getresponse'       => 'FrmDefGetResponseAction',
+			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
+			'highrise'          => 'FrmDefHighriseAction',
+			'hubspot'           => 'FrmDefHubspotAction',
+			'mailchimp'         => 'FrmDefMlcmpAction',
+			'mailpoet'          => 'FrmDefMailpoetAction',
+			'on_submit'         => 'FrmOnSubmitAction',
 			'payment'           => 'FrmTransLiteAction',
+			'paypal'            => 'FrmDefPayPalAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
-			'mailchimp'         => 'FrmDefMlcmpAction',
-			'api'               => 'FrmDefApiAction',
+			'register'          => 'FrmDefRegAction',
 			'salesforce'        => 'FrmDefSalesforceAction',
-			'activecampaign'    => 'FrmDefActiveCampaignAction',
-			'constantcontact'   => 'FrmDefConstContactAction',
-			'getresponse'       => 'FrmDefGetResponseAction',
-			'hubspot'           => 'FrmDefHubspotAction',
-			'zapier'            => 'FrmDefZapierAction',
 			'twilio'            => 'FrmDefTwilioAction',
-			'highrise'          => 'FrmDefHighriseAction',
-			'mailpoet'          => 'FrmDefMailpoetAction',
-			'aweber'            => 'FrmDefAweberAction',
-			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
+			'wppost'            => 'FrmDefPostAction',
+			'zapier'            => 'FrmDefZapierAction',
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
@@ -133,29 +133,16 @@ class FrmFormActionsController {
 	 */
 	public static function form_action_groups() {
 		$groups = array(
-			'misc'      => array(
-				'name'    => '',
-				'icon'    => 'frm_icon_font frm_shuffle_icon',
+			'crm'       => array(
 				'actions' => array(
-					'email',
-					'wppost',
-					'register',
-					'quiz',
-					'quiz_outcome',
-					'twilio',
+					'salesforce',
+					'hubspot',
+					'highrise',
 				),
-			),
-			'payment'   => array(
-				'name'    => __( 'eCommerce', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
-				'actions' => array(
-					'paypal',
-					'payment',
-				),
+				'icon'    => 'frm_icon_font frm_address_card_icon',
+				'name'    => __( 'CRM', 'formidable' ),
 			),
 			'marketing' => array(
-				'name'    => __( 'Email Marketing', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
 				'actions' => array(
 					'mailchimp',
 					'activecampaign',
@@ -164,15 +151,28 @@ class FrmFormActionsController {
 					'aweber',
 					'mailpoet',
 				),
+				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
+				'name'    => __( 'Email Marketing', 'formidable' ),
 			),
-			'crm'       => array(
-				'name'    => __( 'CRM', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_address_card_icon',
+			'misc'      => array(
 				'actions' => array(
-					'salesforce',
-					'hubspot',
-					'highrise',
+					'email',
+					'wppost',
+					'register',
+					'quiz',
+					'quiz_outcome',
+					'twilio',
 				),
+				'icon'    => 'frm_icon_font frm_shuffle_icon',
+				'name'    => '',
+			),
+			'payment'   => array(
+				'actions' => array(
+					'paypal',
+					'payment',
+				),
+				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
+				'name'    => __( 'eCommerce', 'formidable' ),
 			),
 		);
 
@@ -411,16 +411,16 @@ class FrmFormActionsController {
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			$error_args   = array(
-				'title'      => __( 'Verification failed', 'formidable' ),
 				'body'       => $frm_settings->admin_permission,
 				'cancel_url' => add_query_arg(
 					array(
-						'page'       => 'formidable',
 						'frm_action' => 'settings',
 						'id'         => $form_id,
+						'page'       => 'formidable',
 					),
 					admin_url( 'admin.php?' )
 				),
+				'title'      => __( 'Verification failed', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 			return;
@@ -433,8 +433,8 @@ class FrmFormActionsController {
 		$old_actions = FrmDb::get_col(
 			$wpdb->posts,
 			array(
-				'post_type'  => self::$action_post_type,
 				'menu_order' => $form_id,
+				'post_type'  => self::$action_post_type,
 			),
 			'ID'
 		);

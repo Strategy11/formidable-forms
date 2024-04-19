@@ -140,20 +140,20 @@ class FrmXMLHelper {
 	 */
 	private static function pre_import_data() {
 		$defaults = array(
-			'forms'   => 0,
-			'fields'  => 0,
-			'terms'   => 0,
-			'posts'   => 0,
-			'views'   => 0,
 			'actions' => 0,
+			'fields'  => 0,
+			'forms'   => 0,
+			'posts'   => 0,
 			'styles'  => 0,
+			'terms'   => 0,
+			'views'   => 0,
 		);
 
 		return array(
-			'imported' => $defaults,
-			'updated'  => $defaults,
 			'forms'    => array(),
+			'imported' => $defaults,
 			'terms'    => array(),
+			'updated'  => $defaults,
 		);
 	}
 
@@ -169,9 +169,9 @@ class FrmXMLHelper {
 				(string) $t->term_name,
 				(string) $t->term_taxonomy,
 				array(
-					'slug'        => (string) $t->term_slug,
 					'description' => (string) $t->term_description,
 					'parent'      => empty( $parent ) ? 0 : $parent,
+					'slug'        => (string) $t->term_slug,
 				)
 			);
 
@@ -265,17 +265,17 @@ class FrmXMLHelper {
 
 	private static function fill_form( $item ) {
 		$form = array(
-			'id'             => (int) $item->id,
-			'form_key'       => (string) $item->form_key,
-			'name'           => (string) $item->name,
-			'description'    => (string) $item->description,
-			'options'        => (string) $item->options,
-			'logged_in'      => (int) $item->logged_in,
-			'is_template'    => (int) $item->is_template,
-			'editable'       => (int) $item->editable,
-			'status'         => (string) $item->status,
-			'parent_form_id' => isset( $item->parent_form_id ) ? (int) $item->parent_form_id : 0,
 			'created_at'     => gmdate( 'Y-m-d H:i:s', strtotime( (string) $item->created_at ) ),
+			'description'    => (string) $item->description,
+			'editable'       => (int) $item->editable,
+			'form_key'       => (string) $item->form_key,
+			'id'             => (int) $item->id,
+			'is_template'    => (int) $item->is_template,
+			'logged_in'      => (int) $item->logged_in,
+			'name'           => (string) $item->name,
+			'options'        => (string) $item->options,
+			'parent_form_id' => isset( $item->parent_form_id ) ? (int) $item->parent_form_id : 0,
+			'status'         => (string) $item->status,
 		);
 
 		if ( empty( $item->created_at ) ) {
@@ -517,17 +517,17 @@ class FrmXMLHelper {
 
 	private static function fill_field( $field, $form_id ) {
 		return array(
-			'id'            => (int) $field->id,
-			'field_key'     => (string) $field->field_key,
-			'name'          => (string) $field->name,
-			'description'   => (string) $field->description,
-			'type'          => (string) $field->type,
 			'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value ),
+			'description'   => (string) $field->description,
+			'field_key'     => (string) $field->field_key,
+			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
 			'field_order'   => (int) $field->field_order,
 			'form_id'       => (int) $form_id,
-			'required'      => (int) $field->required,
+			'id'            => (int) $field->id,
+			'name'          => (string) $field->name,
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
-			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
+			'required'      => (int) $field->required,
+			'type'          => (string) $field->type,
 		);
 	}
 
@@ -679,8 +679,8 @@ class FrmXMLHelper {
 		unset( $field_options['default_blank'], $field_options['clear_on_focus'] );
 
 		$changes = array(
-			'field_options' => $field_options,
 			'default_value' => '',
+			'field_options' => $field_options,
 		);
 
 		// If a dropdown placeholder was used, remove the option so it won't be included twice.
@@ -776,9 +776,9 @@ class FrmXMLHelper {
 		$former_duplicate_ids = $frm_duplicate_ids;
 		$where                = array(
 			array(
-				'or'                => 1,
 				'fi.form_id'        => $form_id,
 				'fr.parent_form_id' => $form_id,
+				'or'                => 1,
 			),
 		);
 		$fields               = FrmField::getAll( $where, 'field_order' );
@@ -868,8 +868,8 @@ class FrmXMLHelper {
 		$form_action_type  = FrmFormActionsController::$action_post_type;
 
 		$post_types = array(
-			'frm_display'     => 'views',
 			$form_action_type => 'actions',
+			'frm_display'     => 'views',
 			'frm_styles'      => 'styles',
 		);
 
@@ -878,25 +878,25 @@ class FrmXMLHelper {
 
 		foreach ( $views as $item ) {
 			$post = array(
-				'post_title'     => (string) $item->title,
-				'post_name'      => (string) $item->post_name,
-				'post_type'      => (string) $item->post_type,
-				'post_password'  => (string) $item->post_password,
-				'guid'           => (string) $item->guid,
-				'post_status'    => (string) $item->status,
-				'post_author'    => FrmAppHelper::get_user_id_param( (string) $item->post_author ),
-				'post_id'        => (int) $item->post_id,
-				'post_parent'    => (int) $item->post_parent,
-				'menu_order'     => (int) $item->menu_order,
-				'post_content'   => FrmFieldsHelper::switch_field_ids( (string) $item->content ),
-				'post_excerpt'   => FrmFieldsHelper::switch_field_ids( (string) $item->excerpt ),
-				'is_sticky'      => (string) $item->is_sticky,
 				'comment_status' => (string) $item->comment_status,
-				'post_date'      => (string) $item->post_date,
-				'post_date_gmt'  => (string) $item->post_date_gmt,
+				'guid'           => (string) $item->guid,
+				'is_sticky'      => (string) $item->is_sticky,
+				'layout'         => array(),
+				'menu_order'     => (int) $item->menu_order,
 				'ping_status'    => (string) $item->ping_status,
 				'postmeta'       => array(),
-				'layout'         => array(),
+				'post_author'    => FrmAppHelper::get_user_id_param( (string) $item->post_author ),
+				'post_content'   => FrmFieldsHelper::switch_field_ids( (string) $item->content ),
+				'post_date'      => (string) $item->post_date,
+				'post_date_gmt'  => (string) $item->post_date_gmt,
+				'post_excerpt'   => FrmFieldsHelper::switch_field_ids( (string) $item->excerpt ),
+				'post_id'        => (int) $item->post_id,
+				'post_name'      => (string) $item->post_name,
+				'post_parent'    => (int) $item->post_parent,
+				'post_password'  => (string) $item->post_password,
+				'post_status'    => (string) $item->status,
+				'post_title'     => (string) $item->title,
+				'post_type'      => (string) $item->post_type,
 				'tax_input'      => array(),
 			);
 
@@ -1248,10 +1248,10 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_editing_post( &$post ) {
 		$match_by = array(
-			'post_type'      => $post['post_type'],
 			'name'           => $post['post_name'],
-			'post_status'    => $post['post_status'],
 			'posts_per_page' => 1,
+			'post_status'    => $post['post_status'],
+			'post_type'      => $post['post_type'],
 		);
 
 		if ( in_array( $post['post_status'], array( 'trash', 'draft' ) ) ) {
@@ -1425,13 +1425,13 @@ class FrmXMLHelper {
 
 		$strings = array(
 			/* translators: %1$s: Number of items */
-			'forms'   => sprintf( _n( '%1$s Form', '%1$s Forms', $m, 'formidable' ), $m ),
+			'actions' => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
 			'fields'  => sprintf( _n( '%1$s Field', '%1$s Fields', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
-			'items'   => sprintf( _n( '%1$s Entry', '%1$s Entries', $m, 'formidable' ), $m ),
+			'forms'   => sprintf( _n( '%1$s Form', '%1$s Forms', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
-			'views'   => sprintf( _n( '%1$s View', '%1$s Views', $m, 'formidable' ), $m ),
+			'items'   => sprintf( _n( '%1$s Entry', '%1$s Entries', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
 			'posts'   => sprintf( _n( '%1$s Page/Post', '%1$s Pages/Posts', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
@@ -1439,7 +1439,7 @@ class FrmXMLHelper {
 			/* translators: %1$s: Number of items */
 			'terms'   => sprintf( _n( '%1$s Term', '%1$s Terms', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
-			'actions' => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
+			'views'   => sprintf( _n( '%1$s View', '%1$s Views', $m, 'formidable' ), $m ),
 		);
 
 		if ( isset( $strings[ $type ] ) ) {
@@ -1714,13 +1714,13 @@ class FrmXMLHelper {
 		}
 
 		$new_action = array(
-			'post_type'    => $post_type,
-			'post_excerpt' => 'wppost',
-			'post_title'   => __( 'Create Posts', 'formidable' ),
 			'menu_order'   => $form_id,
-			'post_status'  => 'publish',
 			'post_content' => array(),
+			'post_excerpt' => 'wppost',
 			'post_name'    => $form_id . '_wppost_1',
+			'post_status'  => 'publish',
+			'post_title'   => __( 'Create Posts', 'formidable' ),
+			'post_type'    => $post_type,
 		);
 
 		$post_settings = array(
@@ -1768,9 +1768,9 @@ class FrmXMLHelper {
 		$exists = get_posts(
 			array(
 				'name'        => $new_action['post_name'],
-				'post_type'   => $new_action['post_type'],
-				'post_status' => $new_action['post_status'],
 				'numberposts' => 1,
+				'post_status' => $new_action['post_status'],
+				'post_type'   => $new_action['post_type'],
 			)
 		);
 
@@ -1863,9 +1863,9 @@ class FrmXMLHelper {
 			$exists = get_posts(
 				array(
 					'name'        => $new_notification['post_name'],
-					'post_type'   => $new_notification['post_type'],
-					'post_status' => $new_notification['post_status'],
 					'numberposts' => 1,
+					'post_status' => $new_notification['post_status'],
+					'post_type'   => $new_notification['post_type'],
 				)
 			);
 
@@ -1910,12 +1910,12 @@ class FrmXMLHelper {
 			foreach ( $form_options['notification'] as $email_key => $notification ) {
 
 				$atts = array(
+					'email_key'     => $email_key,
 					'email_to'      => '',
-					'reply_to'      => '',
-					'reply_to_name' => '',
 					'event'         => '',
 					'form_id'       => $form_id,
-					'email_key'     => $email_key,
+					'reply_to'      => '',
+					'reply_to_name' => '',
 				);
 
 				// Format the email data
@@ -2065,8 +2065,8 @@ class FrmXMLHelper {
 					'email_message' => $notification['ar_email_message'],
 					'email_subject' => isset( $notification['ar_email_subject'] ) ? $notification['ar_email_subject'] : '',
 					'email_to'      => $email_field,
-					'plain_text'    => isset( $notification['ar_plain_text'] ) ? $notification['ar_plain_text'] : 0,
 					'inc_user_info' => 0,
+					'plain_text'    => isset( $notification['ar_plain_text'] ) ? $notification['ar_plain_text'] : 0,
 				),
 				'post_name'    => $form_id . '_email_' . count( $notifications ),
 			);

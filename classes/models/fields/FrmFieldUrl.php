@@ -24,10 +24,10 @@ class FrmFieldUrl extends FrmFieldType {
 	 */
 	protected function field_settings_for_type() {
 		return array(
-			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
 			'show_image'     => true,
+			'size'           => true,
 		);
 	}
 
@@ -52,8 +52,8 @@ class FrmFieldUrl extends FrmFieldType {
 	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
-			'sep'  => ', ',
 			'html' => false,
+			'sep'  => ', ',
 		);
 		$atts     = wp_parse_args( $atts, $defaults );
 

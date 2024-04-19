@@ -100,8 +100,8 @@ class FrmEntriesController {
 			add_screen_option(
 				'per_page',
 				array(
-					'label'   => esc_html__( 'Entries', 'formidable' ),
 					'default' => 20,
+					'label'   => esc_html__( 'Entries', 'formidable' ),
 					'option'  => 'formidable_page_formidable_entries_per_page',
 				)
 			);
@@ -281,12 +281,12 @@ class FrmEntriesController {
 		$fields  = FrmField::get_all_for_form( $form_id );
 
 		$columns = array(
-			$form_id . '_id'         => 'id',
 			$form_id . '_created_at' => 'created_at',
-			$form_id . '_updated_at' => 'updated_at',
+			$form_id . '_id'         => 'id',
 			$form_id . '_ip'         => 'ip',
-			$form_id . '_item_key'   => 'item_key',
 			$form_id . '_is_draft'   => 'is_draft',
+			$form_id . '_item_key'   => 'item_key',
+			$form_id . '_updated_at' => 'updated_at',
 		);
 
 		if ( ! $form_id ) {
@@ -381,8 +381,8 @@ class FrmEntriesController {
 		global $frm_vars;
 
 		$remove_first = array(
-			$atts['form_id'] . '_item_key' => '',
 			$atts['form_id'] . '_id'       => '',
+			$atts['form_id'] . '_item_key' => '',
 		);
 		$cols         = $remove_first + array_reverse( $frm_vars['cols'], true );
 
@@ -495,9 +495,9 @@ class FrmEntriesController {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
 			$error_args = array(
-				'title'      => __( 'Verification failed', 'formidable' ),
 				'body'       => $permission_error,
 				'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
+				'title'      => __( 'Verification failed', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 			return;
@@ -641,33 +641,33 @@ class FrmEntriesController {
 	 */
 	public static function show_entry_shortcode( $atts ) {
 		$defaults = array(
-			'id'              => false,
-			'entry'           => false,
-			'fields'          => false,
-			'plain_text'      => false,
-			'user_info'       => false,
-			'include_blank'   => false,
-			'default_email'   => false,
-			'form_id'         => false,
-			'format'          => 'text',
-			'array_key'       => 'key',
-			'direction'       => 'ltr',
-			'font_size'       => '',
-			'text_color'      => '',
-			'border_width'    => '',
-			'border_color'    => '',
-			'bg_color'        => '',
 			'alt_bg_color'    => '',
-			'class'           => '',
-			'clickable'       => false,
-			'exclude_fields'  => '',
-			'include_fields'  => '',
-			'include_extras'  => '',
-			'inline_style'    => 1,
+			'array_key'       => 'key',
+			'array_separator' => ', ',
+			'bg_color'        => '',
+			'border_color'    => '',
+			'border_width'    => '',
 			// Return embedded fields as nested array.
 			'child_array'     => false,
+			'class'           => '',
+			'clickable'       => false,
+			'default_email'   => false,
+			'direction'       => 'ltr',
+			'entry'           => false,
+			'exclude_fields'  => '',
+			'fields'          => false,
+			'font_size'       => '',
+			'format'          => 'text',
+			'form_id'         => false,
+			'id'              => false,
+			'include_blank'   => false,
+			'include_extras'  => '',
+			'include_fields'  => '',
+			'inline_style'    => 1,
 			'line_breaks'     => true,
-			'array_separator' => ', ',
+			'plain_text'      => false,
+			'text_color'      => '',
+			'user_info'       => false,
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 

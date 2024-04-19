@@ -43,10 +43,10 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 				$action_control->get_field_name( 'post_status', '' ),
 				array(
 					'checked'     => $form_action->post_status === 'publish',
-					'on_label'    => 'publish',
-					'off_label'   => 'OFF',
-					'show_labels' => false,
 					'echo'        => true,
+					'off_label'   => 'OFF',
+					'on_label'    => 'publish',
+					'show_labels' => false,
 				)
 			);
 			?>

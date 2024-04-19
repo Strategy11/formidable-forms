@@ -104,11 +104,11 @@ class FrmListHelper {
 		$args = wp_parse_args(
 			$args,
 			array(
+				'ajax'     => false,
 				'params'   => array(),
 				'plural'   => '',
-				'singular' => '',
-				'ajax'     => false,
 				'screen'   => null,
+				'singular' => '',
 			)
 		);
 
@@ -134,8 +134,8 @@ class FrmListHelper {
 
 		if ( empty( $this->modes ) ) {
 			$this->modes = array(
-				'list'    => __( 'List View', 'formidable' ),
 				'excerpt' => __( 'Excerpt View', 'formidable' ),
+				'list'    => __( 'List View', 'formidable' ),
 			);
 		}
 	}
@@ -172,8 +172,8 @@ class FrmListHelper {
 	protected function get_param( $args ) {
 		return FrmAppHelper::get_simple_request(
 			array(
-				'param'    => $args['param'],
 				'default'  => isset( $args['default'] ) ? $args['default'] : '',
+				'param'    => $args['param'],
 				'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
 				'type'     => 'request',
 			)
@@ -189,9 +189,9 @@ class FrmListHelper {
 		$args = wp_parse_args(
 			$args,
 			array(
+				'per_page'    => 0,
 				'total_items' => 0,
 				'total_pages' => 0,
-				'per_page'    => 0,
 			)
 		);
 
@@ -584,19 +584,19 @@ class FrmListHelper {
 
 		$page_links[] = $this->add_page_link(
 			array(
-				'page'     => 'first',
 				'arrow'    => '&laquo;',
-				'number'   => '',
 				'disabled' => $disable['first'],
+				'number'   => '',
+				'page'     => 'first',
 			)
 		);
 
 		$page_links[] = $this->add_page_link(
 			array(
-				'page'     => 'prev',
 				'arrow'    => '&lsaquo;',
-				'number'   => max( 1, $current - 1 ),
 				'disabled' => $disable['prev'],
+				'number'   => max( 1, $current - 1 ),
+				'page'     => 'prev',
 			)
 		);
 
@@ -618,19 +618,19 @@ class FrmListHelper {
 
 		$page_links[] = $this->add_page_link(
 			array(
-				'page'     => 'next',
 				'arrow'    => '&rsaquo;',
-				'number'   => min( $total_pages, $current + 1 ),
 				'disabled' => $disable['next'],
+				'number'   => min( $total_pages, $current + 1 ),
+				'page'     => 'next',
 			)
 		);
 
 		$page_links[] = $this->add_page_link(
 			array(
-				'page'     => 'last',
 				'arrow'    => '&raquo;',
-				'number'   => $total_pages,
 				'disabled' => $disable['last'],
+				'number'   => $total_pages,
+				'page'     => 'last',
 			)
 		);
 
@@ -655,8 +655,8 @@ class FrmListHelper {
 		$disable = array(
 			'first' => false,
 			'last'  => false,
-			'prev'  => false,
 			'next'  => false,
+			'prev'  => false,
 		);
 
 		if ( $current == 1 ) {
@@ -680,8 +680,8 @@ class FrmListHelper {
 		$labels = array(
 			'first' => __( 'First page', 'formidable' ),
 			'last'  => __( 'Last page', 'formidable' ),
-			'prev'  => __( 'Previous page', 'formidable' ),
 			'next'  => __( 'Next page', 'formidable' ),
+			'prev'  => __( 'Previous page', 'formidable' ),
 		);
 
 		return $labels[ $link ];
@@ -1232,8 +1232,8 @@ class FrmListHelper {
 		$args = array(
 			'class'  => get_class( $this ),
 			'screen' => array(
-				'id'   => $this->screen->id,
 				'base' => $this->screen->base,
+				'id'   => $this->screen->id,
 			),
 		);
 

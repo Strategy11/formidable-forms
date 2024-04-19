@@ -16,15 +16,15 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 
 		$action_id = $this->factory->post->create(
 			array(
+				'menu_order'   => $form_id,
 				'post_content' => json_encode(
 					array(
 						'amount' => '[' . $field_id . ']',
 					)
 				),
-				'menu_order'   => $form_id,
-				'post_type'    => 'frm_form_actions',
-				'post_status'  => 'publish',
 				'post_excerpt' => 'payment',
+				'post_status'  => 'publish',
+				'post_type'    => 'frm_form_actions',
 			)
 		);
 		$actions   = FrmTransLiteActionsController::get_actions_for_form( $form_id );

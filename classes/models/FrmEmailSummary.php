@@ -123,11 +123,11 @@ abstract class FrmEmailSummary {
 	 */
 	protected function get_content_args() {
 		return array(
-			'subject'          => $this->get_subject(),
 			'site_url'         => home_url( '/' ),
 			'site_url_display' => home_url( '/' ),
-			'unsubscribe_url'  => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
+			'subject'          => $this->get_subject(),
 			'support_url'      => FrmEmailSummaryHelper::get_frm_url( 'new-topic', 'contact_support' ),
+			'unsubscribe_url'  => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
 		);
 	}
 

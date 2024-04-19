@@ -25,8 +25,8 @@ class FrmPersonalData {
 	 */
 	public function register_exporter( $exporters ) {
 		$exporters['formidable-exporter'] = array(
-			'exporter_friendly_name' => __( 'Formidable Forms Exporter', 'formidable' ),
 			'callback'               => array( $this, 'export_data' ),
+			'exporter_friendly_name' => __( 'Formidable Forms Exporter', 'formidable' ),
 		);
 
 		return $exporters;
@@ -43,8 +43,8 @@ class FrmPersonalData {
 	 */
 	public function register_data_eraser( $erasers ) {
 		$erasers['formidable-eraser'] = array(
-			'eraser_friendly_name' => __( 'Formidable Forms entries', 'formidable' ),
 			'callback'             => array( $this, 'erase_data' ),
+			'eraser_friendly_name' => __( 'Formidable Forms entries', 'formidable' ),
 		);
 
 		return $erasers;
@@ -68,10 +68,10 @@ class FrmPersonalData {
 
 		foreach ( (array) $entries as $entry ) {
 			$data_to_export['data'][] = array(
+				'data'        => $this->prepare_entry_data( $entry ),
 				'group_id'    => 'formidable',
 				'group_label' => __( 'Form Submissions', 'formidable' ),
 				'item_id'     => esc_attr( 'entry-' . $entry ),
-				'data'        => $this->prepare_entry_data( $entry ),
 			);
 		}
 
@@ -85,10 +85,10 @@ class FrmPersonalData {
 	 */
 	public function erase_data( $email, $page = 1 ) {
 		$data_removed = array(
+			'done'           => true,
 			'items_removed'  => false,
 			'items_retained' => false,
 			'messages'       => array(),
-			'done'           => true,
 		);
 
 		if ( empty( $email ) ) {
@@ -128,8 +128,8 @@ class FrmPersonalData {
 	 */
 	private function get_user_entries( $email ) {
 		$query_args = array(
-			'order_by' => 'item_id ASC',
 			'limit'    => $this->get_current_page(),
+			'order_by' => 'item_id ASC',
 		);
 
 		$user = get_user_by( 'email', $email );

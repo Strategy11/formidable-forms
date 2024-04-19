@@ -18,19 +18,19 @@ $success_action = $instance->post_content['success_action'];
 
 $types = array(
 	'message'  => array(
-		'label'        => __( 'Show Message', 'formidable' ),
 		'icon'         => 'frm_icon_font frm_chat_forms_icon frm_svg20',
+		'label'        => __( 'Show Message', 'formidable' ),
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_message_settings' ),
 	),
-	'redirect' => array(
-		'label'        => __( 'Redirect to URL', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_globe_icon frm_svg20',
-		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_redirect_settings' ),
-	),
 	'page'     => array(
-		'label'        => __( 'Show Page Content', 'formidable' ),
 		'icon'         => 'frm_icon_font frm_file_text_icon frm_svg20',
+		'label'        => __( 'Show Page Content', 'formidable' ),
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_page_settings' ),
+	),
+	'redirect' => array(
+		'icon'         => 'frm_icon_font frm_globe_icon frm_svg20',
+		'label'        => __( 'Redirect to URL', 'formidable' ),
+		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_redirect_settings' ),
 	),
 );
 

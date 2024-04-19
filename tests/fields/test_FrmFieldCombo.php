@@ -13,24 +13,24 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			array(
 				array(
 					'first_child'  => array(
-						'type'    => 'text',
 						'label'   => 'First child',
 						'options' => array(),
-					),
-					'second_child' => array(
 						'type'    => 'text',
-						'label'   => 'Second child',
-						'options' => array(),
-					),
-					'third_child'  => array(
-						'type'    => 'text',
-						'label'   => 'Third child',
-						'options' => array(),
 					),
 					'forth_child'  => array(
-						'type'    => 'text',
 						'label'   => 'Forth child',
 						'options' => array(),
+						'type'    => 'text',
+					),
+					'second_child' => array(
+						'label'   => 'Second child',
+						'options' => array(),
+						'type'    => 'text',
+					),
+					'third_child'  => array(
+						'label'   => 'Third child',
+						'options' => array(),
+						'type'    => 'text',
 					),
 				),
 			)
@@ -46,23 +46,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			array( $combo_field, 'register_sub_fields' ),
 			array(
 				array(
-					'name'  => array(
-						'type'    => 'text',
-						'label'   => 'Name',
-						'options' => array(
-							'desc',
-						),
-					),
-					'email' => array(
-						'type'    => 'email',
-						'label'   => 'Email',
-						'options' => array(
-							'placeholder',
-							'default_value',
-						),
-					),
 					'dob'   => array(
-						'type'    => 'date',
 						'label'   => 'Date of Birth',
 						'options' => array(
 							'default_value',
@@ -72,6 +56,22 @@ class test_FrmFieldCombo extends FrmUnitTest {
 								'type' => 'text',
 							),
 						),
+						'type'    => 'date',
+					),
+					'email' => array(
+						'label'   => 'Email',
+						'options' => array(
+							'placeholder',
+							'default_value',
+						),
+						'type'    => 'email',
+					),
+					'name'  => array(
+						'label'   => 'Name',
+						'options' => array(
+							'desc',
+						),
+						'type'    => 'text',
 					),
 				),
 			)
@@ -99,32 +99,32 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'first'  => array(
-					'name'            => 'first',
-					'label'           => 'first label',
-					'type'            => 'text',
+					'atts'            => array(),
 					'classes'         => '',
-					'wrapper_classes' => '',
+					'label'           => 'first label',
+					'name'            => 'first',
 					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'            => array(),
+					'type'            => 'text',
+					'wrapper_classes' => '',
 				),
 				'second' => array(
-					'name'            => 'second',
-					'label'           => 'second label',
-					'type'            => 'text',
+					'atts'            => array(),
 					'classes'         => '',
-					'wrapper_classes' => '',
+					'label'           => 'second label',
+					'name'            => 'second',
 					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'            => array(),
+					'type'            => 'text',
+					'wrapper_classes' => '',
 				),
 			)
 		);
@@ -136,12 +136,12 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			array(
 				array(
 					'first'  => array(),
+					'forth'  => true,
 					'second' => 'second label',
 					'third'  => array(
 						'name'    => 'another name',
 						'options' => array(),
 					),
-					'forth'  => true,
 				),
 			)
 		);
@@ -150,28 +150,28 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'second' => array(
-					'name'            => 'second',
-					'label'           => 'second label',
-					'type'            => 'text',
+					'atts'            => array(),
 					'classes'         => '',
-					'wrapper_classes' => '',
+					'label'           => 'second label',
+					'name'            => 'second',
 					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'            => array(),
+					'type'            => 'text',
+					'wrapper_classes' => '',
 				),
 				'third'  => array(
-					'name'            => 'third',
-					'label'           => '',
-					'type'            => 'text',
+					'atts'            => array(),
 					'classes'         => '',
-					'wrapper_classes' => '',
+					'label'           => '',
+					'name'            => 'third',
 					'optional'        => false,
 					'options'         => array(),
-					'atts'            => array(),
+					'type'            => 'text',
+					'wrapper_classes' => '',
 				),
 			)
 		);
@@ -187,10 +187,10 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals(
 			$this->run_private_method( array( $combo_field, 'extra_field_opts' ) ),
 			array(
-				'name_desc'         => '',
-				'email_placeholder' => '',
-				'dob_desc'          => '',
 				'dob_custom_opt'    => '',
+				'dob_desc'          => '',
+				'email_placeholder' => '',
+				'name_desc'         => '',
 			)
 		);
 	}
@@ -202,9 +202,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->run_private_method( array( $combo_field, 'get_default_value' ) ),
 			array(
 				'first_child'  => '',
+				'forth_child'  => '',
 				'second_child' => '',
 				'third_child'  => '',
-				'forth_child'  => '',
 			)
 		);
 
@@ -213,9 +213,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals(
 			$this->run_private_method( array( $combo_field, 'get_default_value' ) ),
 			array(
-				'name'  => '',
-				'email' => '',
 				'dob'   => '',
+				'email' => '',
+				'name'  => '',
 			)
 		);
 	}
@@ -228,8 +228,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$field = (array) $this->factory->field->create_and_get(
 			array(
-				'type'    => 'text',
 				'form_id' => 1,
+				'type'    => 'text',
 			)
 		);
 
@@ -240,17 +240,17 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 
 		$sub_field = array(
-			'name'    => 'first',
-			'label'   => 'First',
-			'type'    => 'text',
 			'atts'    => array(
-				'maxlength' => 10,
 				'data-attr' => 'custom-attr',
+				'maxlength' => 10,
 			),
 			'classes' => 'frm-custom-class',
+			'label'   => 'First',
+			'name'    => 'first',
 			'options' => array(
 				'placeholder',
 			),
+			'type'    => 'text',
 		);
 
 		FrmHooksController::load_form_hooks();
@@ -265,15 +265,15 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals( $atts, ' placeholder="First placeholder" class="frm-custom-class"  maxlength="10" data-attr="custom-attr" ' );
 
 		$sub_field = array(
-			'name'     => 'second',
-			'label'    => 'Second',
-			'type'     => 'text',
 			'classes'  => array(
 				'frm-class1',
 				'frm-class2',
 			),
+			'label'    => 'Second',
+			'name'     => 'second',
 			'optional' => true,
 			'options'  => array(),
+			'type'     => 'text',
 		);
 
 		ob_start();
@@ -286,10 +286,10 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals( $atts, ' class="frm-class1 frm-class2 frm_optional"  ' );
 
 		$sub_field = array(
-			'name'    => 'forth',
 			'label'   => 'Forth',
-			'type'    => 'text',
+			'name'    => 'forth',
 			'options' => array(),
+			'type'    => 'text',
 		);
 
 		ob_start();
@@ -306,8 +306,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$combo_field = $this->get_combo_field_without_sub_field_options();
 		$field       = (array) $this->factory->field->create_and_get(
 			array(
-				'type'    => 'name',
 				'form_id' => 1,
+				'type'    => 'name',
 			)
 		);
 
@@ -320,9 +320,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals(
 			array(
 				$field_id . '_first_child'  => $field_name . ' (' . $field_key . ') - First child',
+				$field_id . '_forth_child'  => $field_name . ' (' . $field_key . ') - Forth child',
 				$field_id . '_second_child' => $field_name . ' (' . $field_key . ') - Second child',
 				$field_id . '_third_child'  => $field_name . ' (' . $field_key . ') - Third child',
-				$field_id . '_forth_child'  => $field_name . ' (' . $field_key . ') - Forth child',
 			),
 			$combo_field->get_export_headings()
 		);

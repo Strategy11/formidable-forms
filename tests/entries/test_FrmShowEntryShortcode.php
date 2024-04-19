@@ -130,8 +130,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( false );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => false,
 		);
@@ -155,8 +155,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => false,
 		);
@@ -180,11 +180,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->include_extras = array( 'divider', 'break', 'html' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'id'             => $entry->id,
+			'include_extras' => 'section, page, html',
 			'plain_text'     => false,
 			'user_info'      => false,
-			'include_extras' => 'section, page, html',
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -206,11 +206,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->set_included_fields( 'id ' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'id'             => $entry->id,
+			'include_fields' => implode( ',', $this->include_fields ),
 			'plain_text'     => false,
 			'user_info'      => false,
-			'include_fields' => implode( ',', $this->include_fields ),
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -232,11 +232,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->set_included_fields( 'key' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'id'             => $entry->id,
+			'include_fields' => implode( ',', $this->include_fields ),
 			'plain_text'     => false,
 			'user_info'      => false,
-			'include_fields' => implode( ',', $this->include_fields ),
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -258,11 +258,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->set_included_fields( 'id' );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'fields'     => implode( ',', $this->include_fields ),
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => false,
-			'fields'     => implode( ',', $this->include_fields ),
 		);
 
 		$content = $this->get_formatted_content( $atts );
@@ -289,11 +289,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->include_fields = $this->get_single_included_field( 'object' );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'fields'     => $this->include_fields,
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => false,
-			'fields'     => $this->include_fields,
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -315,11 +315,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->set_excluded_fields( 'id' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'exclude_fields' => implode( ',', $this->exclude_fields ),
+			'id'             => $entry->id,
 			'plain_text'     => false,
 			'user_info'      => false,
-			'exclude_fields' => implode( ',', $this->exclude_fields ),
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -341,11 +341,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->set_excluded_fields( 'key' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'exclude_fields' => implode( ',', $this->exclude_fields ),
+			'id'             => $entry->id,
 			'plain_text'     => false,
 			'user_info'      => false,
-			'exclude_fields' => implode( ',', $this->exclude_fields ),
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -368,12 +368,12 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->include_extras = array( 'divider', 'break', 'html' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
-			'plain_text'     => false,
-			'user_info'      => false,
+			'id'             => $entry->id,
 			'include_extras' => 'section, page, html',
 			'include_fields' => implode( ',', $this->include_fields ),
+			'plain_text'     => false,
+			'user_info'      => false,
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -393,16 +393,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'           => $entry->id,
-			'entry'        => $entry,
-			'plain_text'   => false,
-			'user_info'    => false,
-			'font_size'    => '20px',
-			'text_color'   => '#00ff00',
-			'border_width' => '3px',
-			'border_color' => '#FF69B4',
-			'bg_color'     => '#0000ff',
 			'alt_bg_color' => '#0000ff',
+			'bg_color'     => '#0000ff',
+			'border_color' => '#FF69B4',
+			'border_width' => '3px',
+			'entry'        => $entry,
+			'font_size'    => '20px',
+			'id'           => $entry->id,
+			'plain_text'   => false,
+			'text_color'   => '#00ff00',
+			'user_info'    => false,
 		);
 
 		$this->tr_style = str_replace( 'background-color:#ffffff', 'background-color:' . $atts['bg_color'], $this->tr_style );
@@ -429,11 +429,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'           => $entry->id,
 			'entry'        => $entry,
+			'id'           => $entry->id,
+			'inline_style' => false,
 			'plain_text'   => false,
 			'user_info'    => false,
-			'inline_style' => false,
 		);
 
 		$content = $this->get_formatted_content( $atts );
@@ -456,8 +456,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => true,
 		);
@@ -479,8 +479,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'         => $entry->id,
 			'entry'      => $entry,
+			'id'         => $entry->id,
 			'plain_text' => true,
 			'user_info'  => false,
 		);
@@ -503,11 +503,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->include_extras = array( 'divider', 'break', 'html' );
 
 		$atts = array(
-			'id'             => $entry->id,
 			'entry'          => $entry,
+			'id'             => $entry->id,
+			'include_extras' => 'page,section,html',
 			'plain_text'     => true,
 			'user_info'      => false,
-			'include_extras' => 'page,section,html',
 		);
 
 		$content          = $this->get_formatted_content( $atts );
@@ -527,11 +527,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'         => $entry->id,
+			'direction'  => 'rtl',
 			'entry'      => $entry,
+			'id'         => $entry->id,
 			'plain_text' => false,
 			'user_info'  => false,
-			'direction'  => 'rtl',
 		);
 
 		$content = $this->get_formatted_content( $atts );
@@ -553,8 +553,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$form_id = $this->get_form_id_for_test();
 
 		$atts = array(
-			'form_id'       => $form_id,
 			'default_email' => true,
+			'form_id'       => $form_id,
 			'plain_text'    => false,
 		);
 
@@ -575,8 +575,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$form_id = $this->get_form_id_for_test();
 
 		$atts = array(
-			'form_id'       => $form_id,
 			'default_email' => true,
+			'form_id'       => $form_id,
 			'plain_text'    => true,
 		);
 
@@ -597,10 +597,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'            => $entry->id,
-			'user_info'     => false,
 			'format'        => 'array',
+			'id'            => $entry->id,
 			'include_blank' => true,
+			'user_info'     => false,
 		);
 
 		$data_array     = FrmEntriesController::show_entry_shortcode( $atts );
@@ -620,10 +620,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$form_id = $this->get_form_id_for_test();
 
 		$atts = array(
+			'default_email' => true,
+			'format'        => 'array',
 			'form_id'       => $form_id,
 			'user_info'     => false,
-			'format'        => 'array',
-			'default_email' => true,
 		);
 
 		$data_array     = FrmEntriesController::show_entry_shortcode( $atts );
@@ -643,11 +643,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'            => $entry->id,
 			'fields'        => FrmField::get_all_for_form( $entry->form_id, '', 'include' ),
-			'user_info'     => false,
 			'format'        => 'array',
+			'id'            => $entry->id,
 			'include_blank' => true,
+			'user_info'     => false,
 		);
 
 		$data_array     = FrmEntriesController::show_entry_shortcode( $atts );
@@ -667,11 +667,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'            => $entry->id,
 			'entry'         => $entry,
-			'user_info'     => false,
 			'format'        => 'array',
+			'id'            => $entry->id,
 			'include_blank' => true,
+			'user_info'     => false,
 		);
 
 		$data_array     = FrmEntriesController::show_entry_shortcode( $atts );
@@ -691,10 +691,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id'            => $entry->id,
-			'user_info'     => false,
 			'format'        => 'json',
+			'id'            => $entry->id,
 			'include_blank' => true,
+			'user_info'     => false,
 		);
 
 		$actual_json   = FrmEntriesController::show_entry_shortcode( $atts );
@@ -705,13 +705,13 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function get_test_entry( $include_meta ) {
 		$new_entry = array(
-			'form_id'     => FrmForm::get_id_by_key( 'free_field_types' ),
-			'item_key'    => 'free_entry_key',
+			'created_at'  => '2015-05-12 19:30:23',
 			'description' => array(
 				'browser'  => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
 				'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',
 			),
-			'created_at'  => '2015-05-12 19:30:23',
+			'form_id'     => FrmForm::get_id_by_key( 'free_field_types' ),
+			'item_key'    => 'free_entry_key',
 			'item_meta'   => $this->expected_free_meta(),
 		);
 
@@ -722,16 +722,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	private function expected_free_meta() {
 		return array(
-			FrmField::get_id_by_key( 'free-text-field' )   => 'Test Testerson',
-			FrmField::get_id_by_key( 'free-paragraph-field' ) => "Test\r\nMiddle\r\nTesterson",
 			FrmField::get_id_by_key( 'free-checkboxes' )   => array( 'Red', 'Green' ),
-			FrmField::get_id_by_key( 'free-radio-button-field' ) => 'cookies',
 			FrmField::get_id_by_key( 'free-dropdown-field' ) => 'Ace Ventura',
 			FrmField::get_id_by_key( 'free-email-field' )  => 'jamie@mail.com',
-			FrmField::get_id_by_key( 'free-website-field' ) => 'http://www.jamie.com',
-			FrmField::get_id_by_key( 'free-number-field' ) => '11',
-			FrmField::get_id_by_key( 'free-phone-field' )  => '1231231234',
 			FrmField::get_id_by_key( 'free-hidden-field' ) => '',
+			FrmField::get_id_by_key( 'free-number-field' ) => '11',
+			FrmField::get_id_by_key( 'free-paragraph-field' ) => "Test\r\nMiddle\r\nTesterson",
+			FrmField::get_id_by_key( 'free-phone-field' )  => '1231231234',
+			FrmField::get_id_by_key( 'free-radio-button-field' ) => 'cookies',
+			FrmField::get_id_by_key( 'free-text-field' )   => 'Test Testerson',
+			FrmField::get_id_by_key( 'free-website-field' ) => 'http://www.jamie.com',
 		);
 	}
 
@@ -997,8 +997,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function set_field_array( $type ) {
 		$fields = array(
-			'free-text-field' => 'free-text-field',
 			'free-checkboxes' => 'free-checkboxes',
+			'free-text-field' => 'free-text-field',
 		);
 
 		$this->convert_field_array( $type, $fields );
@@ -1150,8 +1150,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 			$expected[ $field->id ] = array(
 				'label' => '[' . $field->id . ' show=field_label]',
-				'val'   => '[' . $field->id . ']',
 				'type'  => $field->type,
+				'val'   => '[' . $field->id . ']',
 			);
 		}
 
@@ -1160,17 +1160,17 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function expected_array( $entry, $atts ) {
 		$expected = array(
-			'free-text-field'         => 'Test Testerson',
-			'free-paragraph-field'    => "Test\r\nMiddle\r\nTesterson",
 			'free-checkboxes'         => array( 'Red', 'Green' ),
-			'free-radio-button-field' => 'cookies',
 			'free-dropdown-field'     => 'Ace Ventura',
 			'free-email-field'        => 'jamie@mail.com',
-			'free-website-field'      => 'http://www.jamie.com',
-			'free-number-field'       => '11',
-			'free-phone-field'        => '1231231234',
 			'free-hidden-field'       => '',
+			'free-number-field'       => '11',
+			'free-paragraph-field'    => "Test\r\nMiddle\r\nTesterson",
+			'free-phone-field'        => '1231231234',
+			'free-radio-button-field' => 'cookies',
+			'free-text-field'         => 'Test Testerson',
 			'free-user-id-field'      => '',
+			'free-website-field'      => 'http://www.jamie.com',
 		);
 
 		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {

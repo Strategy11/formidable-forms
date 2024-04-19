@@ -42,8 +42,8 @@ class FrmTipsHelper {
 	 */
 	public static function show_tip( $tip, $html = '' ) {
 		$defaults = array(
-			'page'  => '',
 			'class' => 'frm-mt-0',
+			'page'  => '',
 		);
 		$tip      = array_merge( $defaults, $tip );
 
@@ -93,52 +93,52 @@ class FrmTipsHelper {
 	public static function get_builder_tip() {
 		$tips = array(
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'conditional-logic',
 					'param'   => 'conditional-logic-wordpress-forms',
 				),
 				'tip'  => __( 'Use conditional logic to shorten your forms and increase conversions.', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => __( 'Add email confirmation fields.', 'formidable' ),
 				'link' => array(
 					'content' => 'confirmation-fields',
 					'param'   => 'confirmation-fields-wordpress-forms',
 				),
 				'tip'  => __( 'Want to stop losing leads from email typos?', 'formidable' ),
-				'call' => __( 'Add email confirmation fields.', 'formidable' ),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'page-breaks',
 					'param'   => 'wordpress-multi-page-forms',
 				),
 				'tip'  => __( 'Use page breaks for easier forms.', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => __( 'Allow file uploads in your form.', 'formidable' ),
 				'link' => array(
 					'content' => 'file-uploads',
 					'param'   => 'wordpress-multi-file-upload-fields',
 				),
 				'tip'  => __( 'Cut down on back-and-forth with clients.', 'formidable' ),
-				'call' => __( 'Allow file uploads in your form.', 'formidable' ),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'calculations',
 					'param'   => 'field-calculations-wordpress-form',
 				),
 				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => __( 'Fill out forms automatically!', 'formidable' ),
 				'link' => array(
 					'content' => 'prefill-fields',
 					'param'   => 'auto-fill-forms',
 				),
 				'tip'  => __( 'Save time.', 'formidable' ),
-				'call' => __( 'Fill out forms automatically!', 'formidable' ),
 			),
 		);
 
@@ -151,28 +151,28 @@ class FrmTipsHelper {
 	public static function get_form_settings_tip() {
 		$tips = array(
 			array(
+				'call' => __( 'Add front-end editing.', 'formidable' ),
 				'link' => array(
 					'content' => 'front-edit-b',
 					'param'   => 'wordpress-front-end-editing',
 				),
 				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
-				'call' => __( 'Add front-end editing.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Let users save drafts and return later!', 'formidable' ),
 				'link' => array(
 					'content' => 'save-drafts',
 					'param'   => 'save-drafts-wordpress-form',
 				),
 				'tip'  => __( 'Have long forms?', 'formidable' ),
-				'call' => __( 'Let users save drafts and return later!', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Add form scheduling.', 'formidable' ),
 				'link' => array(
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
 				'tip'  => __( 'Want your form open only for a certain time period?', 'formidable' ),
-				'call' => __( 'Add form scheduling.', 'formidable' ),
 			),
 		);
 
@@ -185,92 +185,92 @@ class FrmTipsHelper {
 	public static function get_form_action_tip() {
 		$tips = array(
 			array(
+				'call' => __( 'Add email routing.', 'formidable' ),
 				'link' => array(
 					'content' => 'email-routing',
 					'param'   => 'virtually-unlimited-emails',
 				),
 				'tip'  => __( 'Save time by sending the email to the right person automatically.', 'formidable' ),
-				'call' => __( 'Add email routing.', 'formidable' ),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'create-posts',
 					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Create blog posts or pages from the front-end.', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'user-submit',
 					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Let your users submit posts on the front-end.', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => __( 'Send leads straight to Mailchimp.', 'formidable' ),
 				'link' => array(
 					'content' => 'mailchimp',
 					'page'    => 'mailchimp-tip',
 				),
 				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
-				'call' => __( 'Send leads straight to Mailchimp.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Use PayPal with this form.', 'formidable' ),
 				'link' => array(
 					'content' => 'paypal-revenue',
 					'page'    => 'paypal-increase-revenue-tip',
 				),
 				'tip'  => __( 'Increase revenue.', 'formidable' ),
-				'call' => __( 'Use PayPal with this form.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Use Paypal with this form.', 'formidable' ),
 				'link' => array(
 					'content' => 'paypal-fast',
 					'page'    => 'paypal-save-time-tip',
 				),
 				'tip'  => __( 'Get paid instantly.', 'formidable' ),
-				'call' => __( 'Use Paypal with this form.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Upgrade to boost your site membership.', 'formidable' ),
 				'link' => array(
 					'content' => 'registration',
 					'page'    => 'registration-tip',
 				),
 				'tip'  => __( 'Automatically create user accounts.', 'formidable' ),
-				'call' => __( 'Upgrade to boost your site membership.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Add user registration.', 'formidable' ),
 				'link' => array(
 					'content' => 'profile',
 					'page'    => 'registration-profile-editing-tip',
 				),
 				'tip'  => __( 'Need front-end profile editing?', 'formidable' ),
-				'call' => __( 'Add user registration.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 				'link' => array(
 					'content' => 'twilio-payment',
 					'page'    => 'twilio-tip',
 				),
 				'tip'  => __( 'Want an SMS notification when a form is submitted or a payment received?', 'formidable' ),
-				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 				'link' => array(
 					'content' => 'twilio',
 					'page'    => 'twilio-send-tip',
 				),
 				'tip'  => __( 'Send an SMS message when a form is submitted.', 'formidable' ),
-				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Add ACF Integration', 'formidable' ),
 				'link' => array(
 					'content' => 'acf-tip',
 					'param'   => 'acf-tip',
 				),
 				'tip'  => __( 'Fill Advanced Custom Fields from a form.', 'formidable' ),
-				'call' => __( 'Add ACF Integration', 'formidable' ),
 			),
 		);
 
@@ -283,28 +283,28 @@ class FrmTipsHelper {
 	public static function get_styling_tip() {
 		$tips = array(
 			array(
+				'call' => __( 'Use multiple style templates.', 'formidable' ),
 				'link' => array(
 					'content' => 'style',
 					'param'   => 'wordpress-visual-form-styler',
 				),
 				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
-				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'style',
 					'param'   => 'bg-image-style-settings',
 				),
 				'tip'  => __( 'Want to add a background image?', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'style',
 					'param'   => 'duplicate-style',
 				),
 				'tip'  => __( 'Want to duplicate a style?', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 		);
 
@@ -317,28 +317,28 @@ class FrmTipsHelper {
 	public static function get_entries_tip() {
 		$tips = array(
 			array(
+				'call' => __( 'Add entry management.', 'formidable' ),
 				'link' => array(
 					'content' => 'entries',
 					'param'   => 'form-entry-management-wordpress',
 				),
 				'tip'  => __( 'Want to edit form submissions?', 'formidable' ),
-				'call' => __( 'Add entry management.', 'formidable' ),
 			),
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'entries-search',
 					'param'   => 'form-entry-management-wordpress',
 				),
 				'tip'  => __( 'Want to search submitted entries?', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 			array(
+				'call' => __( 'Display form data with Views.', 'formidable' ),
 				'link' => array(
 					'content' => 'views',
 					'param'   => 'views-display-form-data',
 				),
 				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
-				'call' => __( 'Display form data with Views.', 'formidable' ),
 			),
 		);
 		$tips = array_merge( $tips, self::get_import_tip() );
@@ -352,12 +352,12 @@ class FrmTipsHelper {
 	public static function get_import_tip() {
 		$tips = array(
 			array(
+				'call' => self::cta_label(),
 				'link' => array(
 					'content' => 'import',
 					'param'   => 'importing-exporting-wordpress-forms',
 				),
 				'tip'  => __( 'Want to import entries into your forms?', 'formidable' ),
-				'call' => self::cta_label(),
 			),
 		);
 
@@ -370,28 +370,28 @@ class FrmTipsHelper {
 	public static function get_banner_tip() {
 		$tips       = array(
 			array(
+				'call' => __( 'Take your forms to the next level.', 'formidable' ),
 				'link' => array(
-					'medium'  => 'banner',
 					'content' => 'professional-results',
+					'medium'  => 'banner',
 				),
 				'tip'  => __( 'Looking for more ways to get professional results?', 'formidable' ),
-				'call' => __( 'Take your forms to the next level.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Add conditional logic, page breaks, and section headings.', 'formidable' ),
 				'link' => array(
-					'medium'  => 'banner',
 					'content' => 'increase-conversions',
+					'medium'  => 'banner',
 				),
 				'tip'  => __( 'Increase conversions in long forms.', 'formidable' ),
-				'call' => __( 'Add conditional logic, page breaks, and section headings.', 'formidable' ),
 			),
 			array(
+				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
 				'link' => array(
-					'medium'  => 'banner',
 					'content' => 'automate',
+					'medium'  => 'banner',
 				),
 				'tip'  => __( 'Automate your business and increase revenue.', 'formidable' ),
-				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
 			),
 		);
 		$random     = rand( 0, count( $tips ) - 1 );
@@ -433,12 +433,12 @@ class FrmTipsHelper {
 		}
 
 		$defaults = array(
-			'title'       => '',
+			'class'       => '',
 			'description' => '',
+			'id'          => '',
 			'link_text'   => '',
 			'link_url'    => '#',
-			'class'       => '',
-			'id'          => '',
+			'title'       => '',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

@@ -125,9 +125,9 @@ class FrmAppHelper {
 		}
 
 		$query_args = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => $medium,
 			'utm_campaign' => 'liteplugin',
+			'utm_medium'   => $medium,
+			'utm_source'   => 'WordPress',
 		);
 
 		if ( isset( $content ) ) {
@@ -197,10 +197,10 @@ class FrmAppHelper {
 	 */
 	public static function svg_logo( $atts = array() ) {
 		$defaults = array(
-			'height' => 18,
-			'width'  => 18,
 			'fill'   => '#4d4d4d',
+			'height' => 18,
 			'orange' => '#f05a24',
+			'width'  => 18,
 		);
 		$atts     = array_merge( $defaults, $atts );
 
@@ -532,10 +532,10 @@ class FrmAppHelper {
 		} else {
 			$value = self::get_simple_request(
 				array(
-					'type'     => $src,
-					'param'    => $param,
 					'default'  => $default,
+					'param'    => $param,
 					'sanitize' => $sanitize,
+					'type'     => $src,
 				)
 			);
 		}
@@ -557,11 +557,11 @@ class FrmAppHelper {
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
-				'type'       => 'post',
-				'param'      => $param,
 				'default'    => $default,
+				'param'      => $param,
 				'sanitize'   => $sanitize,
 				'serialized' => $serialized,
+				'type'       => 'post',
 			)
 		);
 	}
@@ -578,10 +578,10 @@ class FrmAppHelper {
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request(
 			array(
-				'type'     => 'get',
-				'param'    => $param,
 				'default'  => $default,
+				'param'    => $param,
 				'sanitize' => $sanitize,
+				'type'     => 'get',
 			)
 		);
 	}
@@ -597,11 +597,11 @@ class FrmAppHelper {
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
-			'param'      => '',
 			'default'    => '',
-			'type'       => 'get',
+			'param'      => '',
 			'sanitize'   => 'sanitize_text_field',
 			'serialized' => false,
+			'type'       => 'get',
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
@@ -713,12 +713,12 @@ class FrmAppHelper {
 		$allowed_html = array(
 			'b'      => array(),
 			'br'     => array(),
-			'strong' => array(),
-			'p'      => array(),
 			'i'      => array(),
-			'ul'     => array(),
-			'ol'     => array(),
 			'li'     => array(),
+			'ol'     => array(),
+			'p'      => array(),
+			'strong' => array(),
+			'ul'     => array(),
 		);
 
 		/**
@@ -764,26 +764,26 @@ class FrmAppHelper {
 		}
 
 		$translation = array(
-			'&quot;'  => '"',
 			'&#034;'  => '"',
-			'&#x22;'  => '"',
-			// The space preserves the HTML.
-			'&lt; '   => '< ',
+			'&#038;'  => '&',
 			// The space preserves the HTML.
 			'&#060; ' => '< ',
-			'&gt;'    => '>',
 			'&#062;'  => '>',
-			'&amp;'   => '&',
-			'&#038;'  => '&',
+			'&#x22;'  => '"',
 			'&#x26;'  => '&',
+			'&amp;'   => '&',
+			'&gt;'    => '>',
+			// The space preserves the HTML.
+			'&lt; '   => '< ',
+			'&quot;'  => '"',
 		);
 
 		$translation_preg = array(
 			'/&#0*34;/'   => '&#034;',
-			'/&#x0*22;/i' => '&#x22;',
+			'/&#0*38;/'   => '&#038;',
 			'/&#0*60;/'   => '&#060;',
 			'/&#0*62;/'   => '&#062;',
-			'/&#0*38;/'   => '&#038;',
+			'/&#x0*22;/i' => '&#x22;',
 			'/&#x0*26;/i' => '&#x26;',
 		);
 
@@ -864,11 +864,11 @@ class FrmAppHelper {
 	 */
 	public static function add_allowed_submit_button_tags( $allowed_html ) {
 		$allowed_html['input']                    = array(
-			'type'           => true,
-			'value'          => true,
+			'class'          => true,
 			'formnovalidate' => true,
 			'name'           => true,
-			'class'          => true,
+			'type'           => true,
+			'value'          => true,
 		);
 		$allowed_html['button']['formnovalidate'] = true;
 		$allowed_html['button']['name']           = true;
@@ -908,9 +908,9 @@ class FrmAppHelper {
 				'href'     => true,
 				'id'       => true,
 				'rel'      => true,
+				'tabindex' => true,
 				'target'   => true,
 				'title'    => true,
-				'tabindex' => true,
 			),
 			'abbr'       => array(
 				'title' => true,
@@ -921,22 +921,26 @@ class FrmAppHelper {
 				'cite' => true,
 			),
 			'br'         => array(),
+			'button'     => array(
+				'class' => true,
+				'type'  => true,
+			),
 			'cite'       => array(
 				'title' => true,
 			),
 			'code'       => array(),
+			'dd'         => array(),
 			'defs'       => array(),
 			'del'        => array(
 				'datetime' => true,
 				'title'    => true,
 			),
-			'dd'         => array(),
 			'div'        => array(
 				'class' => true,
 				'id'    => true,
-				'title' => true,
-				'style' => true,
 				'role'  => true,
+				'style' => true,
+				'title' => true,
 			),
 			'dl'         => array(),
 			'dt'         => array(),
@@ -949,8 +953,8 @@ class FrmAppHelper {
 			'h6'         => $allow_class,
 			'i'          => array(
 				'class' => true,
-				'id'    => true,
 				'icon'  => true,
+				'id'    => true,
 				'style' => true,
 			),
 			'img'        => array(
@@ -960,6 +964,14 @@ class FrmAppHelper {
 				'id'     => true,
 				'src'    => true,
 				'width'  => true,
+			),
+			'label'      => array(
+				'class' => true,
+				'for'   => true,
+				'id'    => true,
+			),
+			'legend'     => array(
+				'class' => true,
 			),
 			'li'         => $allow_class,
 			'ol'         => $allow_class,
@@ -977,57 +989,45 @@ class FrmAppHelper {
 				'class'          => true,
 				'fill'           => true,
 				'height'         => true,
-				'width'          => true,
-				'x'              => true,
-				'y'              => true,
 				'rx'             => true,
 				'stroke'         => true,
 				'stroke-opacity' => true,
 				'stroke-width'   => true,
+				'width'          => true,
+				'x'              => true,
+				'y'              => true,
 			),
 			'section'    => $allow_class,
 			'span'       => array(
+				'aria-hidden' => true,
 				'class'       => true,
 				'id'          => true,
-				'title'       => true,
 				'style'       => true,
-				'aria-hidden' => true,
+				'title'       => true,
 			),
 			'strike'     => array(),
 			'strong'     => array(),
+			'svg'        => array(
+				'aria-hidden' => true,
+				'aria-label'  => true,
+				'class'       => true,
+				'fill'        => true,
+				'height'      => true,
+				'id'          => true,
+				'style'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'xmlns'       => true,
+			),
 			'symbol'     => array(
 				'class'   => true,
 				'id'      => true,
 				'viewbox' => true,
 			),
-			'svg'        => array(
-				'class'       => true,
-				'id'          => true,
-				'xmlns'       => true,
-				'viewbox'     => true,
-				'width'       => true,
-				'height'      => true,
-				'style'       => true,
-				'fill'        => true,
-				'aria-label'  => true,
-				'aria-hidden' => true,
-			),
+			'ul'         => $allow_class,
 			'use'        => array(
 				'href'       => true,
 				'xlink:href' => true,
-			),
-			'ul'         => $allow_class,
-			'label'      => array(
-				'for'   => true,
-				'class' => true,
-				'id'    => true,
-			),
-			'button'     => array(
-				'class' => true,
-				'type'  => true,
-			),
-			'legend'     => array(
-				'class' => true,
 			),
 		);
 	}
@@ -1368,10 +1368,10 @@ class FrmAppHelper {
 	 */
 	public static function show_search_box( $atts ) {
 		$defaults = array(
-			'placeholder' => '',
-			'tosearch'    => '',
-			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
+			'placeholder' => '',
+			'text'        => __( 'Search', 'formidable' ),
+			'tosearch'    => '',
 			'value'       => false,
 		);
 		$atts     = array_merge( $defaults, $atts );
@@ -1388,12 +1388,12 @@ class FrmAppHelper {
 		$input_id = $atts['input_id'] . '-search-input';
 
 		$input_atts = array(
-			'type'          => 'search',
+			'class'         => $class,
+			'data-tosearch' => $atts['tosearch'],
 			'id'            => $input_id,
 			'name'          => 's',
 			'placeholder'   => $atts['placeholder'],
-			'class'         => $class,
-			'data-tosearch' => $atts['tosearch'],
+			'type'          => 'search',
 		);
 
 		if ( is_string( $atts['value'] ) ) {
@@ -1508,11 +1508,11 @@ class FrmAppHelper {
 	 */
 	public static function get_pages( $post_type = 'page' ) {
 		$query = array(
-			'post_type'   => $post_type,
-			'post_status' => array( 'publish', 'private' ),
 			'numberposts' => - 1,
-			'orderby'     => 'title',
 			'order'       => 'ASC',
+			'orderby'     => 'title',
+			'post_status' => array( 'publish', 'private' ),
+			'post_type'   => $post_type,
 		);
 
 		return get_posts( $query );
@@ -1530,8 +1530,8 @@ class FrmAppHelper {
 		return FrmDb::get_results(
 			'posts',
 			array(
-				'post_type'   => $post_type,
 				'post_status' => array( 'publish', 'private' ),
+				'post_type'   => $post_type,
 			),
 			'ID, post_title',
 			array(
@@ -1628,12 +1628,12 @@ class FrmAppHelper {
 	 */
 	private static function preformat_selection_args( $args ) {
 		$defaults = array(
-			'truncate'                 => false,
-			'placeholder'              => ' ',
+			'autocomplete_placeholder' => __( 'Select a Page', 'formidable' ),
 			'field_name'               => '',
 			'page_id'                  => '',
+			'placeholder'              => ' ',
 			'post_type'                => 'page',
-			'autocomplete_placeholder' => __( 'Select a Page', 'formidable' ),
+			'truncate'                 => false,
 		);
 
 		return array_merge( $defaults, $args );
@@ -1809,12 +1809,12 @@ class FrmAppHelper {
 	 */
 	private static function get_lite_capabilities() {
 		return array(
-			'frm_view_forms'      => __( 'View Forms List', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
 			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
-			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
+			'frm_view_forms'      => __( 'View Forms List', 'formidable' ),
 		);
 	}
 
@@ -2318,8 +2318,8 @@ class FrmAppHelper {
 		}
 
 		$values = array(
-			'id'     => $record->id,
 			'fields' => array(),
+			'id'     => $record->id,
 		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
@@ -2370,10 +2370,10 @@ class FrmAppHelper {
 					$field->field_options['post_field'],
 					$field->field_options['custom_field'],
 					array(
+						'field'    => $field,
+						'form_id'  => $field->form_id,
 						'truncate' => false,
 						'type'     => $field->type,
-						'form_id'  => $field->form_id,
-						'field'    => $field,
 					)
 				);
 		} else {
@@ -2415,15 +2415,15 @@ class FrmAppHelper {
 	 */
 	public static function start_field_array( $field ) {
 		return array(
-			'id'            => $field->id,
 			'default_value' => $field->default_value,
-			'name'          => $field->name,
 			'description'   => $field->description,
-			'options'       => $field->options,
-			'required'      => $field->required,
 			'field_key'     => $field->field_key,
 			'field_order'   => $field->field_order,
 			'form_id'       => $field->form_id,
+			'id'            => $field->id,
+			'name'          => $field->name,
+			'options'       => $field->options,
+			'required'      => $field->required,
 		);
 	}
 
@@ -2708,8 +2708,8 @@ class FrmAppHelper {
 	 */
 	private static function time_format( $unit, $diff ) {
 		$return = array(
-			'y' => 'y',
 			'd' => 'days',
+			'y' => 'y',
 		);
 		if ( isset( $return[ $unit ] ) ) {
 			return $diff[ $return[ $unit ] ];
@@ -2735,12 +2735,12 @@ class FrmAppHelper {
 	 */
 	private static function convert_time( $from, $to ) {
 		$convert = array(
-			's' => 1,
-			'i' => MINUTE_IN_SECONDS,
-			'h' => HOUR_IN_SECONDS,
 			'd' => DAY_IN_SECONDS,
-			'w' => WEEK_IN_SECONDS,
+			'h' => HOUR_IN_SECONDS,
+			'i' => MINUTE_IN_SECONDS,
 			'm' => DAY_IN_SECONDS * 30.42,
+			's' => 1,
+			'w' => WEEK_IN_SECONDS,
 			'y' => DAY_IN_SECONDS * 365.25,
 		);
 
@@ -2773,21 +2773,6 @@ class FrmAppHelper {
 	 */
 	private static function get_time_strings() {
 		return array(
-			'y' => array(
-				__( 'year', 'formidable' ),
-				__( 'years', 'formidable' ),
-				'year',
-			),
-			'm' => array(
-				__( 'month', 'formidable' ),
-				__( 'months', 'formidable' ),
-				'month',
-			),
-			'w' => array(
-				__( 'week', 'formidable' ),
-				__( 'weeks', 'formidable' ),
-				'week',
-			),
 			'd' => array(
 				__( 'day', 'formidable' ),
 				__( 'days', 'formidable' ),
@@ -2803,10 +2788,25 @@ class FrmAppHelper {
 				__( 'minutes', 'formidable' ),
 				'minute',
 			),
+			'm' => array(
+				__( 'month', 'formidable' ),
+				__( 'months', 'formidable' ),
+				'month',
+			),
 			's' => array(
 				__( 'second', 'formidable' ),
 				__( 'seconds', 'formidable' ),
 				'second',
+			),
+			'w' => array(
+				__( 'week', 'formidable' ),
+				__( 'weeks', 'formidable' ),
+				'week',
+			),
+			'y' => array(
+				__( 'year', 'formidable' ),
+				__( 'years', 'formidable' ),
+				'year',
 			),
 		);
 	}
@@ -2905,14 +2905,14 @@ class FrmAppHelper {
 	public static function maybe_add_tooltip( $name, $class = 'closed', $form_name = '' ) {
 		$tooltips = array(
 			'action_title'  => __( 'Give this action a label for easy reference.', 'formidable' ),
-			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable' ),
-			'cc'            => __( 'Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'bcc'           => __( 'Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
-			'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
-			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
+			'cc'            => __( 'Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			/* translators: %1$s: Form name, %2$s: Date */
 			'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
+			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable' ),
+			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
 			'new_tab'       => __( 'This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed.', 'formidable' ),
+			'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 		);
 
 		if ( ! isset( $tooltips[ $name ] ) ) {
@@ -3179,16 +3179,16 @@ class FrmAppHelper {
 		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 		$global_strings = array(
-			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
-			'deauthorize'                   => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-			'url'                           => self::plugin_url(),
-			'app_url'                       => 'https://formidableforms.com/',
 			'applicationsUrl'               => admin_url( 'admin.php?page=formidable-applications' ),
+			'app_url'                       => 'https://formidableforms.com/',
 			'canAccessApplicationDashboard' => current_user_can( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ? FrmProApplicationsHelper::get_required_templates_capability() : 'frm_edit_forms' ),
+			'deauthorize'                   => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
-			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
+			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
+			'url'                           => self::plugin_url(),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -3212,18 +3212,18 @@ class FrmAppHelper {
 
 		$script_strings = array(
 			'ajax_url'           => esc_url_raw( self::get_ajax_url() ),
-			'images_url'         => self::plugin_url() . '/images',
-			'loading'            => __( 'Loading&hellip;', 'formidable' ),
-			'remove'             => __( 'Remove', 'formidable' ),
-			'offset'             => apply_filters( 'frm_scroll_offset', 4 ),
-			'nonce'              => wp_create_nonce( 'frm_ajax' ),
-			'id'                 => __( 'ID', 'formidable' ),
-			'no_results'         => __( 'No results match', 'formidable' ),
-			'file_spam'          => __( 'That file looks like Spam.', 'formidable' ),
 			'calc_error'         => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields'       => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
+			'file_spam'          => __( 'That file looks like Spam.', 'formidable' ),
 			'focus_first_error'  => self::should_focus_first_error(),
+			'id'                 => __( 'ID', 'formidable' ),
+			'images_url'         => self::plugin_url() . '/images',
 			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
+			'loading'            => __( 'Loading&hellip;', 'formidable' ),
+			'nonce'              => wp_create_nonce( 'frm_ajax' ),
+			'no_results'         => __( 'No results match', 'formidable' ),
+			'offset'             => apply_filters( 'frm_scroll_offset', 4 ),
+			'remove'             => __( 'Remove', 'formidable' ),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3233,66 +3233,66 @@ class FrmAppHelper {
 
 		if ( $location === 'admin' ) {
 			$admin_script_strings = array(
-				'desc'               => __( '(Click to add description)', 'formidable' ),
+				'active'             => __( 'Active', 'formidable' ),
 				'blank'              => __( '(Blank)', 'formidable' ),
-				'no_label'           => __( '(no label)', 'formidable' ),
-				'ok'                 => __( 'OK', 'formidable' ),
 				'cancel'             => __( 'Cancel', 'formidable' ),
-				'default_label'      => __( 'Default', 'formidable' ),
+				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'clear_default'      => __( 'Clear default value when typing', 'formidable' ),
-				'no_clear_default'   => __( 'Do not clear default value when typing', 'formidable' ),
-				'valid_default'      => __( 'Default value will pass form validation', 'formidable' ),
-				'no_valid_default'   => __( 'Default value will NOT pass form validation', 'formidable' ),
+				'conditional_text'   => __( 'Conditional content here', 'formidable' ),
 				'confirm'            => __( 'Are you sure?', 'formidable' ),
+				'confirm_email'      => __( 'Confirm Email', 'formidable' ),
+				'confirm_password'   => __( 'Confirm Password', 'formidable' ),
 				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'     => FrmFieldsHelper::default_unique_msg(),
-				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
-				'enter_email'        => __( 'Enter Email', 'formidable' ),
-				'confirm_email'      => __( 'Confirm Email', 'formidable' ),
-				'conditional_text'   => __( 'Conditional content here', 'formidable' ),
-				'new_option'         => __( 'New Option', 'formidable' ),
 				'css_invalid_size'   => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
-				'enter_password'     => __( 'Enter Password', 'formidable' ),
-				'confirm_password'   => __( 'Confirm Password', 'formidable' ),
-				'import_complete'    => __( 'Import Complete', 'formidable' ),
-				'updating'           => __( 'Please wait while your site updates.', 'formidable' ),
-				'no_save_warning'    => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
-				'private_label'      => __( 'Private', 'formidable' ),
-				'jquery_ui_url'      => '',
-				'pro_url'            => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
-				'no_licenses'        => __( 'No new licenses were found', 'formidable' ),
-				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
-				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
-				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				/* translators: %d is the number of allowed actions per form */
-				'only_one_action'    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
+				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
+				'default_label'      => __( 'Default', 'formidable' ),
+				'default_unique'     => FrmFieldsHelper::default_unique_msg(),
+				'desc'               => __( '(Click to add description)', 'formidable' ),
 				'edit_action_text'   => __( 'Please edit the existing form action.', 'formidable' ),
-				'unsafe_params'      => FrmFormsHelper::reserved_words(),
-				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
-				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
-				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
-				'param_is_reserved'  => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
-				'reserved_words'     => __( 'See the list of reserved words in WordPress.', 'formidable' ),
-				'repeat_limit_min'   => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
-				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
-				'install'            => __( 'Install', 'formidable' ),
-				'active'             => __( 'Active', 'formidable' ),
-				'installed'          => __( 'Installed', 'formidable' ),
-				'not_installed'      => __( 'Not Installed', 'formidable' ),
-				'select_a_field'     => __( 'Select a Field', 'formidable' ),
-				'no_items_found'     => __( 'No items found.', 'formidable' ),
+				'enter_email'        => __( 'Enter Email', 'formidable' ),
+				'enter_password'     => __( 'Enter Password', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
 
-				// Deprecated in 6.0.
-				'saving'             => '',
+				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
+				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				'import_complete'    => __( 'Import Complete', 'formidable' ),
+				'install'            => __( 'Install', 'formidable' ),
+				'installed'          => __( 'Installed', 'formidable' ),
+				'jquery_ui_url'      => '',
+				'new_option'         => __( 'New Option', 'formidable' ),
+				'not_installed'      => __( 'Not Installed', 'formidable' ),
+				'no_clear_default'   => __( 'Do not clear default value when typing', 'formidable' ),
+				'no_items_found'     => __( 'No items found.', 'formidable' ),
+				'no_label'           => __( '(no label)', 'formidable' ),
+				'no_licenses'        => __( 'No new licenses were found', 'formidable' ),
+				'no_save_warning'    => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
+				'no_valid_default'   => __( 'Default value will NOT pass form validation', 'formidable' ),
+				'ok'                 => __( 'OK', 'formidable' ),
+				/* translators: %d is the number of allowed actions per form */
+				'only_one_action'    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
+				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
+				'param_is_reserved'  => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
+				'private_label'      => __( 'Private', 'formidable' ),
+				'pro_url'            => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
+				'repeat_limit_min'   => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
+				'reserved_words'     => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 
 				// Deprecated in 6.0.
 				'saved'              => '',
 
-				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
-				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				// Deprecated in 6.0.
+				'saving'             => '',
+				'select_a_field'     => __( 'Select a Field', 'formidable' ),
+				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
+				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
+				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
+				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
+				'unsafe_params'      => FrmFormsHelper::reserved_words(),
+				'updating'           => __( 'Please wait while your site updates.', 'formidable' ),
+				'valid_default'      => __( 'Default value will pass form validation', 'formidable' ),
+				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 			);
 			/**
 			 * @param array $admin_script_strings
@@ -3442,68 +3442,67 @@ class FrmAppHelper {
 	 */
 	public static function locales( $type = 'date' ) {
 		$locales = array(
-			'en'     => __( 'English', 'formidable' ),
 			'af'     => __( 'Afrikaans', 'formidable' ),
-			'sq'     => __( 'Albanian', 'formidable' ),
-			'ar-DZ'  => __( 'Algerian Arabic', 'formidable' ),
 			'am'     => __( 'Amharic', 'formidable' ),
 			'ar'     => __( 'Arabic', 'formidable' ),
-			'hy'     => __( 'Armenian', 'formidable' ),
+			'ar-DZ'  => __( 'Algerian Arabic', 'formidable' ),
 			'az'     => __( 'Azerbaijani', 'formidable' ),
-			'eu'     => __( 'Basque', 'formidable' ),
 			'be'     => __( 'Belarusian', 'formidable' ),
+			'bg'     => __( 'Bulgarian', 'formidable' ),
 			'bn'     => __( 'Bengali', 'formidable' ),
 			'bs'     => __( 'Bosnian', 'formidable' ),
-			'bg'     => __( 'Bulgarian', 'formidable' ),
 			'ca'     => __( 'Catalan', 'formidable' ),
-			'zh-HK'  => __( 'Chinese Hong Kong', 'formidable' ),
-			'zh-CN'  => __( 'Chinese Simplified', 'formidable' ),
-			'zh-TW'  => __( 'Chinese Traditional', 'formidable' ),
-			'hr'     => __( 'Croatian', 'formidable' ),
 			'cs'     => __( 'Czech', 'formidable' ),
+			'cy-GB'  => __( 'Welsh', 'formidable' ),
 			'da'     => __( 'Danish', 'formidable' ),
-			'nl'     => __( 'Dutch', 'formidable' ),
-			'en-GB'  => __( 'English/UK', 'formidable' ),
-			'eo'     => __( 'Esperanto', 'formidable' ),
-			'et'     => __( 'Estonian', 'formidable' ),
-			'fo'     => __( 'Faroese', 'formidable' ),
-			'fa'     => __( 'Farsi/Persian', 'formidable' ),
-			'fil'    => __( 'Filipino', 'formidable' ),
-			'fi'     => __( 'Finnish', 'formidable' ),
-			'fr'     => __( 'French', 'formidable' ),
-			'fr-CA'  => __( 'French/Canadian', 'formidable' ),
-			'fr-CH'  => __( 'French/Swiss', 'formidable' ),
-			'gl'     => __( 'Galician', 'formidable' ),
-			'ka'     => __( 'Georgian', 'formidable' ),
 			'de'     => __( 'German', 'formidable' ),
 			'de-AT'  => __( 'German/Austria', 'formidable' ),
 			'de-CH'  => __( 'German/Switzerland', 'formidable' ),
 			'el'     => __( 'Greek', 'formidable' ),
+			'en'     => __( 'English', 'formidable' ),
+			'en-GB'  => __( 'English/UK', 'formidable' ),
+			'eo'     => __( 'Esperanto', 'formidable' ),
+			'es'     => __( 'Spanish', 'formidable' ),
+			'es-419' => __( 'Spanish/Latin America', 'formidable' ),
+			'et'     => __( 'Estonian', 'formidable' ),
+			'eu'     => __( 'Basque', 'formidable' ),
+			'fa'     => __( 'Farsi/Persian', 'formidable' ),
+			'fi'     => __( 'Finnish', 'formidable' ),
+			'fil'    => __( 'Filipino', 'formidable' ),
+			'fo'     => __( 'Faroese', 'formidable' ),
+			'fr'     => __( 'French', 'formidable' ),
+			'fr-CA'  => __( 'French/Canadian', 'formidable' ),
+			'fr-CH'  => __( 'French/Swiss', 'formidable' ),
+			'gl'     => __( 'Galician', 'formidable' ),
 			'gu'     => __( 'Gujarati', 'formidable' ),
 			'he'     => __( 'Hebrew', 'formidable' ),
-			'iw'     => __( 'Hebrew', 'formidable' ),
 			'hi'     => __( 'Hindi', 'formidable' ),
+			'hr'     => __( 'Croatian', 'formidable' ),
 			'hu'     => __( 'Hungarian', 'formidable' ),
-			'is'     => __( 'Icelandic', 'formidable' ),
+			'hy'     => __( 'Armenian', 'formidable' ),
 			'id'     => __( 'Indonesian', 'formidable' ),
+			'is'     => __( 'Icelandic', 'formidable' ),
 			'it'     => __( 'Italian', 'formidable' ),
+			'iw'     => __( 'Hebrew', 'formidable' ),
 			'ja'     => __( 'Japanese', 'formidable' ),
-			'kn'     => __( 'Kannada', 'formidable' ),
+			'ka'     => __( 'Georgian', 'formidable' ),
 			'kk'     => __( 'Kazakh', 'formidable' ),
 			'km'     => __( 'Khmer', 'formidable' ),
+			'kn'     => __( 'Kannada', 'formidable' ),
 			'ko'     => __( 'Korean', 'formidable' ),
 			'ky'     => __( 'Kyrgyz', 'formidable' ),
-			'lo'     => __( 'Laothian', 'formidable' ),
-			'lv'     => __( 'Latvian', 'formidable' ),
-			'lt'     => __( 'Lithuanian', 'formidable' ),
 			'lb'     => __( 'Luxembourgish', 'formidable' ),
+			'lo'     => __( 'Laothian', 'formidable' ),
+			'lt'     => __( 'Lithuanian', 'formidable' ),
+			'lv'     => __( 'Latvian', 'formidable' ),
 			'mk'     => __( 'Macedonian', 'formidable' ),
 			'ml'     => __( 'Malayalam', 'formidable' ),
-			'ms'     => __( 'Malaysian', 'formidable' ),
 			'mr'     => __( 'Marathi', 'formidable' ),
-			'no'     => __( 'Norwegian', 'formidable' ),
+			'ms'     => __( 'Malaysian', 'formidable' ),
 			'nb'     => __( 'Norwegian Bokmål', 'formidable' ),
+			'nl'     => __( 'Dutch', 'formidable' ),
 			'nn'     => __( 'Norwegian Nynorsk', 'formidable' ),
+			'no'     => __( 'Norwegian', 'formidable' ),
 			'pl'     => __( 'Polish', 'formidable' ),
 			'pt'     => __( 'Portuguese', 'formidable' ),
 			'pt-BR'  => __( 'Portuguese/Brazilian', 'formidable' ),
@@ -3511,15 +3510,14 @@ class FrmAppHelper {
 			'rm'     => __( 'Romansh', 'formidable' ),
 			'ro'     => __( 'Romanian', 'formidable' ),
 			'ru'     => __( 'Russian', 'formidable' ),
-			'sr'     => __( 'Serbian', 'formidable' ),
-			'sr-SR'  => __( 'Serbian', 'formidable' ),
 			'si'     => __( 'Sinhalese', 'formidable' ),
 			'sk'     => __( 'Slovak', 'formidable' ),
 			'sl'     => __( 'Slovenian', 'formidable' ),
-			'es'     => __( 'Spanish', 'formidable' ),
-			'es-419' => __( 'Spanish/Latin America', 'formidable' ),
-			'sw'     => __( 'Swahili', 'formidable' ),
+			'sq'     => __( 'Albanian', 'formidable' ),
+			'sr'     => __( 'Serbian', 'formidable' ),
+			'sr-SR'  => __( 'Serbian', 'formidable' ),
 			'sv'     => __( 'Swedish', 'formidable' ),
+			'sw'     => __( 'Swahili', 'formidable' ),
 			'ta'     => __( 'Tamil', 'formidable' ),
 			'te'     => __( 'Telugu', 'formidable' ),
 			'th'     => __( 'Thai', 'formidable' ),
@@ -3528,7 +3526,9 @@ class FrmAppHelper {
 			'uk'     => __( 'Ukrainian', 'formidable' ),
 			'ur'     => __( 'Urdu', 'formidable' ),
 			'vi'     => __( 'Vietnamese', 'formidable' ),
-			'cy-GB'  => __( 'Welsh', 'formidable' ),
+			'zh-CN'  => __( 'Chinese Simplified', 'formidable' ),
+			'zh-HK'  => __( 'Chinese Hong Kong', 'formidable' ),
+			'zh-TW'  => __( 'Chinese Traditional', 'formidable' ),
 			'zu'     => __( 'Zulu', 'formidable' ),
 		);
 
@@ -3623,10 +3623,10 @@ class FrmAppHelper {
 	 */
 	private static function fill_default_images_dropdown_args( $args ) {
 		$defaults = array(
-			'selected'    => '',
-			'options'     => array(),
 			'classes'     => '',
 			'input_attrs' => array(),
+			'options'     => array(),
+			'selected'    => '',
 		);
 		$new_args = wp_parse_args( $args, $defaults );
 
@@ -3875,9 +3875,9 @@ class FrmAppHelper {
 	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
 		$params = array(
 			'medium'     => $medium,
-			'upgrade'    => __( 'Form Landing Pages', 'formidable' ),
 			'message'    => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 			'screenshot' => 'landing.png',
+			'upgrade'    => __( 'Form Landing Pages', 'formidable' ),
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
 	}

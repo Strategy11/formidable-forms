@@ -311,8 +311,8 @@ class FrmEntryShortcodeFormatter {
 	protected function add_single_field_array( $field, $value ) {
 		$array = array(
 			'label' => '[' . $field->id . ' show=field_label]',
-			'val'   => '[' . $value . ']',
 			'type'  => $field->type,
+			'val'   => '[' . $value . ']',
 		);
 
 		$this->array_content[ $field->id ] = apply_filters( 'frm_field_shortcodes_for_default_html_email', $array, $field );

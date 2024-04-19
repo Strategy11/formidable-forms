@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'      => __( 'View Subscription', 'formidable' ),
 				'form'       => $form_id,
 				'hide_title' => true,
+				'label'      => __( 'View Subscription', 'formidable' ),
 			)
 		);
 		?>

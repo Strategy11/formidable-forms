@@ -45,61 +45,61 @@ class FrmSettingsController {
 	 */
 	private static function get_settings_tabs() {
 		$sections = array(
-			'general'       => array(
+			'captcha'       => array(
 				'class'    => __CLASS__,
-				'function' => 'general_settings',
-				'name'     => __( 'General Settings', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_settings_icon',
-			),
-			'messages'      => array(
-				'class'    => __CLASS__,
-				'function' => 'message_settings',
-				'name'     => __( 'Message Defaults', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_stamp_icon',
-			),
-			'permissions'   => array(
-				'class'    => __CLASS__,
-				'function' => 'permission_settings',
-				'name'     => __( 'Permissions', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_lock_icon',
+				'function' => 'captcha_settings',
+				'icon'     => 'frm_icon_font frm_shield_check_icon',
+				'name'     => __( 'Captcha', 'formidable' ),
 			),
 			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
-				'name'     => __( 'Custom CSS', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_code_icon',
+				'name'     => __( 'Custom CSS', 'formidable' ),
+			),
+			'general'       => array(
+				'class'    => __CLASS__,
+				'function' => 'general_settings',
+				'icon'     => 'frm_icon_font frm_settings_icon',
+				'name'     => __( 'General Settings', 'formidable' ),
+			),
+			'inbox'         => array(
+				'data'       => array(
+					'medium'     => 'inbox-settings',
+					'screenshot' => 'inbox.png',
+					'upgrade'    => __( 'Inbox settings', 'formidable' ),
+				),
+				'html_class' => 'frm_show_upgrade_tab frm_noallow',
+				'icon'       => 'frm_icon_font frm_email_icon',
+				'name'       => __( 'Inbox', 'formidable' ),
 			),
 			'manage_styles' => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'manage',
-				'name'     => __( 'Manage Styles', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_pallet_icon',
+				'name'     => __( 'Manage Styles', 'formidable' ),
 			),
-			'captcha'       => array(
+			'messages'      => array(
 				'class'    => __CLASS__,
-				'function' => 'captcha_settings',
-				'name'     => __( 'Captcha', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_shield_check_icon',
+				'function' => 'message_settings',
+				'icon'     => 'frm_icon_font frm_stamp_icon',
+				'name'     => __( 'Message Defaults', 'formidable' ),
+			),
+			'permissions'   => array(
+				'class'    => __CLASS__,
+				'function' => 'permission_settings',
+				'icon'     => 'frm_icon_font frm_lock_icon',
+				'name'     => __( 'Permissions', 'formidable' ),
 			),
 			'white_label'   => array(
-				'name'       => __( 'White Labeling', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_ghost_icon',
-				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'white-label',
-					'upgrade'    => __( 'White labeling options', 'formidable' ),
 					'screenshot' => 'white-label.png',
+					'upgrade'    => __( 'White labeling options', 'formidable' ),
 				),
-			),
-			'inbox'         => array(
-				'name'       => __( 'Inbox', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_email_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
-				'data'       => array(
-					'medium'     => 'inbox-settings',
-					'upgrade'    => __( 'Inbox settings', 'formidable' ),
-					'screenshot' => 'inbox.png',
-				),
+				'icon'       => 'frm_icon_font frm_ghost_icon',
+				'name'       => __( 'White Labeling', 'formidable' ),
 			),
 		);
 
@@ -116,11 +116,11 @@ class FrmSettingsController {
 
 			if ( $show_licenses ) {
 				$sections['licenses'] = array(
+					'ajax'     => true,
 					'class'    => 'FrmAddonsController',
 					'function' => 'license_settings',
-					'name'     => __( 'Plugin Licenses', 'formidable' ),
 					'icon'     => 'frmfont frm_key_icon',
-					'ajax'     => true,
+					'name'     => __( 'Plugin Licenses', 'formidable' ),
 				);
 			}
 		}//end if
@@ -131,20 +131,20 @@ class FrmSettingsController {
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
 		$sections['misc'] = array(
-			'name'     => __( 'Miscellaneous', 'formidable' ),
-			'icon'     => 'frm_icon_font frm_shuffle_icon',
 			'class'    => __CLASS__,
 			'function' => 'misc_settings',
+			'icon'     => 'frm_icon_font frm_shuffle_icon',
+			'name'     => __( 'Miscellaneous', 'formidable' ),
 		);
 
 		foreach ( $sections as $key => $section ) {
 			$original = $section;
 			$defaults = array(
-				'html_class' => '',
-				'name'       => ucfirst( $key ),
-				'icon'       => 'frm_icon_font frm_settings_icon',
 				'anchor'     => $key . '_settings',
 				'data'       => array(),
+				'html_class' => '',
+				'icon'       => 'frm_icon_font frm_settings_icon',
+				'name'       => ucfirst( $key ),
 			);
 
 			$section = array_merge( $defaults, $section );
@@ -270,9 +270,9 @@ class FrmSettingsController {
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$error_args = array(
-				'title'       => __( 'Verification failed', 'formidable' ),
 				'body'        => $frm_settings->admin_permission,
 				'cancel_text' => __( 'Cancel', 'formidable' ),
+				'title'       => __( 'Verification failed', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 			return;
@@ -386,8 +386,8 @@ class FrmSettingsController {
 
 		$where = array(
 			'post_status'     => 'publish',
-			'post_type'       => $post_type,
 			'post_title LIKE' => $term,
+			'post_type'       => $post_type,
 		);
 
 		$atts = array(
@@ -400,8 +400,8 @@ class FrmSettingsController {
 		$results = array();
 		foreach ( $pages as $page ) {
 			$results[] = array(
-				'value' => $page->ID,
 				'label' => $page->post_title,
+				'value' => $page->ID,
 			);
 		}
 

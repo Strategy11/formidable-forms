@@ -25,26 +25,26 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$mode    = self::get_param(
 			array(
-				'param'   => 'mode',
 				'default' => 'list',
+				'param'   => 'mode',
 			)
 		);
 		$orderby = self::get_param(
 			array(
-				'param'   => 'orderby',
 				'default' => 'name',
+				'param'   => 'orderby',
 			)
 		);
 		$order   = self::get_param(
 			array(
-				'param'   => 'order',
 				'default' => 'ASC',
+				'param'   => 'order',
 			)
 		);
 		$start   = self::get_param(
 			array(
-				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
+				'param'   => 'start',
 			)
 		);
 
@@ -80,12 +80,12 @@ class FrmFormsListHelper extends FrmListHelper {
 			$search_terms = array_map( 'trim', $matches[0] );
 			foreach ( (array) $search_terms as $term ) {
 				$s_query[] = array(
-					'or'               => true,
-					'name LIKE'        => $term,
-					'description LIKE' => $term,
 					'created_at LIKE'  => $term,
+					'description LIKE' => $term,
 					'form_key LIKE'    => $term,
 					'id'               => $term,
+					'name LIKE'        => $term,
+					'or'               => true,
 				);
 				unset( $term );
 			}
@@ -97,8 +97,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $total_items,
 				'per_page'    => $per_page,
+				'total_items' => $total_items,
 			)
 		);
 	}
@@ -162,8 +162,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function get_views() {
 
 		$statuses = array(
-			'published' => __( 'My Forms', 'formidable' ),
 			'draft'     => __( 'Drafts', 'formidable' ),
+			'published' => __( 'My Forms', 'formidable' ),
 			'trash'     => __( 'Trash', 'formidable' ),
 		);
 
@@ -177,8 +177,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$form_type = self::get_param(
 			array(
-				'param'   => 'form_type',
 				'default' => 'published',
+				'param'   => 'form_type',
 			)
 		);
 
@@ -286,8 +286,8 @@ class FrmFormsListHelper extends FrmListHelper {
 						$val = FrmAppHelper::icon_by_class(
 							'frmfont frm_forbid_icon frm_bstooltip',
 							array(
-								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
 								'echo'  => false,
+								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
 							)
 						);
 					} else {

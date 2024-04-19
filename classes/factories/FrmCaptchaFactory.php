@@ -36,8 +36,8 @@ class FrmCaptchaFactory {
 	 */
 	private static function get_settings_class( $active_captcha ) {
 		$settings_classes = array(
-			'recaptcha' => 'FrmRecaptchaSettings',
 			'hcaptcha'  => 'FrmHcaptchaSettings',
+			'recaptcha' => 'FrmRecaptchaSettings',
 			'turnstile' => 'FrmTurnstileSettings',
 		);
 

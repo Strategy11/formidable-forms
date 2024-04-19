@@ -70,8 +70,8 @@ class FrmDashboardController {
 		$latest_available_form = FrmForm::get_latest_form();
 		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
-			'forms'   => FrmForm::get_forms_count(),
 			'entries' => FrmEntry::get_entries_count(),
+			'forms'   => FrmForm::get_forms_count(),
 		);
 
 		$dashboard_view = new FrmDashboardHelper(
@@ -79,34 +79,34 @@ class FrmDashboardController {
 				'counters' => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
-				'license'  => array(),
-				'inbox'    => self::view_args_inbox(),
 				'entries'  => array(
-					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
+					'count'            => $counters_value['entries'],
 					'cta'              => array(
 						'label' => __( 'View All Entries', 'formidable' ),
 						'link'  => admin_url( 'admin.php?page=formidable-entries' ),
 					),
-					'show-placeholder' => 0 >= (int) $counters_value['entries'],
-					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
+					'show-placeholder' => 0 >= (int) $counters_value['entries'],
+					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
 				),
+				'inbox'    => self::view_args_inbox(),
+				'license'  => array(),
 				'payments' => array(
-					'show-placeholder' => empty( $total_payments ),
-					'placeholder'      => array(
-						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
-						'cta'  => array(
-							'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
-							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
-						),
-					),
 					'counters'         => array(
 						array(
 							'heading' => __( 'Total Earnings', 'formidable' ),
-							'type'    => 'currency',
 							'items'   => $total_payments,
+							'type'    => 'currency',
 						),
 					),
+					'placeholder'      => array(
+						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
+						'cta'  => array(
+							'label' => esc_html__( 'Create a Payment Form', 'formidable' ),
+							'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+						),
+					),
+					'show-placeholder' => empty( $total_payments ),
 				),
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
@@ -176,8 +176,8 @@ class FrmDashboardController {
 	public static function view_args_build_counter( $heading, $cta = array(), $value = 0, $type = 'default' ) {
 
 		$counter_args = array(
-			'heading' => $heading,
 			'counter' => $value,
+			'heading' => $heading,
 			'type'    => 'default',
 		);
 		if ( ! empty( $cta ) ) {
@@ -198,9 +198,9 @@ class FrmDashboardController {
 	 */
 	public static function view_args_build_cta( $title, $link = '#', $display = true ) {
 		return array(
-			'title'   => $title,
-			'link'    => $link,
 			'display' => $display,
+			'link'    => $link,
+			'title'   => $title,
 		);
 	}
 
@@ -218,8 +218,8 @@ class FrmDashboardController {
 		foreach ( $payments['total'] as $currency => $total_payments ) {
 			if ( 0 < (int) $total_payments ) {
 				$prepared_data[] = array(
-					'counter_label' => FrmCurrencyHelper::get_currency( $currency ),
 					'counter'       => (int) $total_payments,
+					'counter_label' => FrmCurrencyHelper::get_currency( $currency ),
 				);
 			}
 		}
@@ -244,12 +244,12 @@ class FrmDashboardController {
 			);
 			return array(
 				'background' => 'entries-placeholder',
-				'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
-				'copy'       => $copy,
 				'button'     => array(
 					'label' => esc_html__( 'Add New Form', 'formidable' ),
 					'link'  => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
 				),
+				'copy'       => $copy,
+				'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
 			);
 		}
 
@@ -261,9 +261,9 @@ class FrmDashboardController {
 		);
 		return array(
 			'background' => 'entries-placeholder',
-			'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
-			'copy'       => $copy,
 			'button'     => null,
+			'copy'       => $copy,
+			'heading'    => __( 'You Have No Entries Yet', 'formidable' ),
 		);
 	}
 

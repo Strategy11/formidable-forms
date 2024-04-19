@@ -184,11 +184,11 @@ class FrmSolution {
 	public function add_settings( $sections ) {
 		wp_enqueue_style( 'formidable-pro-fields' );
 		$sections[ $this->plugin_slug ] = array(
+			'ajax'     => true,
 			'class'    => $this,
 			'function' => 'settings_page',
-			'name'     => $this->plugin_name(),
 			'icon'     => $this->icon,
-			'ajax'     => true,
+			'name'     => $this->plugin_name(),
 		);
 		return $sections;
 	}
@@ -310,35 +310,35 @@ class FrmSolution {
 		$pro_installed = FrmAppHelper::pro_is_connected();
 
 		$steps = array(
+			'complete' => array(
+				'button_label' => __( 'View Page', 'formidable' ),
+				'complete'     => false,
+				'description'  => __( 'Make any required changes and publish the page.', 'formidable' ),
+				'label'        => __( 'Customize Your New Pages', 'formidable' ),
+				'num'          => 4,
+			),
+			'import'   => array(
+				'button_label' => __( 'Create Now', 'formidable' ),
+				'complete'     => $this->is_complete(),
+				'description'  => __( 'Build the forms, views, and pages automatically.', 'formidable' ),
+				'label'        => __( 'Setup Forms, Views, and Pages', 'formidable' ),
+				'num'          => 3,
+			),
 			'license'  => array(
-				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
-				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
 				'button_label' => __( 'Connect an Account', 'formidable' ),
-				'current'      => empty( $pro_installed ),
 				'complete'     => $pro_installed,
+				'current'      => empty( $pro_installed ),
+				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
+				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
 				'num'          => 1,
 			),
 			'plugin'   => array(
-				'label'        => __( 'Install and Activate Add-Ons', 'formidable' ),
-				'description'  => __( 'Install any required add-ons from FormidableForms.com.', 'formidable' ),
 				'button_label' => __( 'Install & Activate', 'formidable' ),
+				'complete'     => false,
 				'current'      => false,
-				'complete'     => false,
+				'description'  => __( 'Install any required add-ons from FormidableForms.com.', 'formidable' ),
+				'label'        => __( 'Install and Activate Add-Ons', 'formidable' ),
 				'num'          => 2,
-			),
-			'import'   => array(
-				'label'        => __( 'Setup Forms, Views, and Pages', 'formidable' ),
-				'description'  => __( 'Build the forms, views, and pages automatically.', 'formidable' ),
-				'button_label' => __( 'Create Now', 'formidable' ),
-				'complete'     => $this->is_complete(),
-				'num'          => 3,
-			),
-			'complete' => array(
-				'label'        => __( 'Customize Your New Pages', 'formidable' ),
-				'description'  => __( 'Make any required changes and publish the page.', 'formidable' ),
-				'button_label' => __( 'View Page', 'formidable' ),
-				'complete'     => false,
-				'num'          => 4,
 			),
 		);
 

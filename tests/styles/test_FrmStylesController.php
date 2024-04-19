@@ -59,14 +59,14 @@ class test_FrmStylesController extends FrmUnitTest {
 		$defaults  = $frm_style->get_defaults();
 
 		$_POST = array(
+			'frm_action'        => 'save',
+			'frm_style'         => wp_create_nonce( 'frm_style_nonce' ),
+			'frm_style_setting' => array(
+				'post_content' => $style->post_content,
+				'post_title'   => $style->post_title . ' Updated',
+			),
 			'ID'                => $style->ID,
 			'style_name'        => $style->post_name,
-			'frm_style'         => wp_create_nonce( 'frm_style_nonce' ),
-			'frm_action'        => 'save',
-			'frm_style_setting' => array(
-				'post_title'   => $style->post_title . ' Updated',
-				'post_content' => $style->post_content,
-			),
 		);
 
 		FrmStylesController::save_style();

@@ -13,57 +13,57 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 */
 	public function get_defaults() {
 		$values = array(
-			'receipt_id'  => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => '',
-			),
-			'invoice_id'  => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => '',
-			),
-			'sub_id'      => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => '',
-			),
-			'item_id'     => array(
+			'action_id'   => array(
+				'default'  => 0,
 				'sanitize' => 'absint',
-				'default'  => '',
 			),
 			'amount'      => array(
-				'sanitize' => 'float',
 				'default'  => '',
-			),
-			'status'      => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => 'pending',
-			),
-			'action_id'   => array(
-				'sanitize' => 'absint',
-				'default'  => 0,
-			),
-			'paysys'      => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => 'manual',
-			),
-			'created_at'  => array(
-				'sanitize' => 'sanitize_text_field',
-				'default'  => current_time( 'mysql', 1 ),
+				'sanitize' => 'float',
 			),
 			'begin_date'  => array(
-				'sanitize' => 'sanitize_text_field',
 				'default'  => current_time( 'mysql', 1 ),
+				'sanitize' => 'sanitize_text_field',
+			),
+			'created_at'  => array(
+				'default'  => current_time( 'mysql', 1 ),
+				'sanitize' => 'sanitize_text_field',
 			),
 			'expire_date' => array(
-				'sanitize' => 'sanitize_text_field',
 				'default'  => '0000-00-00',
+				'sanitize' => 'sanitize_text_field',
+			),
+			'invoice_id'  => array(
+				'default'  => '',
+				'sanitize' => 'sanitize_text_field',
+			),
+			'item_id'     => array(
+				'default'  => '',
+				'sanitize' => 'absint',
 			),
 			'meta_value'  => array(
-				'sanitize' => 'maybe_serialize',
 				'default'  => '',
+				'sanitize' => 'maybe_serialize',
+			),
+			'paysys'      => array(
+				'default'  => 'manual',
+				'sanitize' => 'sanitize_text_field',
+			),
+			'receipt_id'  => array(
+				'default'  => '',
+				'sanitize' => 'sanitize_text_field',
+			),
+			'status'      => array(
+				'default'  => 'pending',
+				'sanitize' => 'sanitize_text_field',
+			),
+			'sub_id'      => array(
+				'default'  => '',
+				'sanitize' => 'sanitize_text_field',
 			),
 			'test'        => array(
-				'sanitize' => 'sanitize_text_field',
 				'default'  => null,
+				'sanitize' => 'sanitize_text_field',
 			),
 		);
 		return $values;

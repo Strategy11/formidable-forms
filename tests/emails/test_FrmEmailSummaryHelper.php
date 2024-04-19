@@ -107,9 +107,9 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 		// Nothing set, except renewal date is coming.
 		$options = array(
+			'last_license' => '',
 			'last_monthly' => '',
 			'last_yearly'  => '',
-			'last_license' => '',
 			'renewal_date' => FrmEmailSummaryHelper::get_date_from_today( '+1 day' ),
 		);
 		$this->save_options( $options );
@@ -161,11 +161,11 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 				}
 
 				return array(
+					'body'     => json_encode( array( 'no_emails' => 'test@example.com' ) ),
 					'response' => array(
 						'code'    => 200,
 						'message' => 'Fake response',
 					),
-					'body'     => json_encode( array( 'no_emails' => 'test@example.com' ) ),
 				);
 			},
 			10,

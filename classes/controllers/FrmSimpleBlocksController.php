@@ -37,20 +37,20 @@ class FrmSimpleBlocksController {
 		$charts_addon = self::get_addon_info( 28248560 );
 
 		$script_vars = array(
-			'forms'       => self::get_forms_options(),
-			'icon'        => $icon,
-			'name'        => $block_name,
-			'link'        => FrmAppHelper::admin_upgrade_link( 'block' ),
-			'url'         => FrmAppHelper::plugin_url(),
-			'modalAddon'  => array(
-				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
-				'hasAccess' => ! empty( $modal_addon['url'] ),
-			),
 			'chartsAddon' => array(
-				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ),
 				'hasAccess' => ! empty( $charts_addon['url'] ),
 				'installed' => class_exists( 'FrmChartsAppController' ),
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ),
 			),
+			'forms'       => self::get_forms_options(),
+			'icon'        => $icon,
+			'link'        => FrmAppHelper::admin_upgrade_link( 'block' ),
+			'modalAddon'  => array(
+				'hasAccess' => ! empty( $modal_addon['url'] ),
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
+			),
+			'name'        => $block_name,
+			'url'         => FrmAppHelper::plugin_url(),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
@@ -139,24 +139,24 @@ class FrmSimpleBlocksController {
 			'formidable/simple-form',
 			array(
 				'attributes'      => array(
-					'formId'      => array(
-						'type' => 'string',
-					),
-					'title'       => array(
+					'className'   => array(
 						'type' => 'string',
 					),
 					'description' => array(
 						'type' => 'string',
 					),
+					'formId'      => array(
+						'type' => 'string',
+					),
 					'minimize'    => array(
 						'type' => 'string',
 					),
-					'className'   => array(
+					'title'       => array(
 						'type' => 'string',
 					),
 				),
-				'editor_style'    => 'formidable',
 				'editor_script'   => 'formidable-form-selector',
+				'editor_style'    => 'formidable',
 				'render_callback' => 'FrmSimpleBlocksController::simple_form_render',
 
 			)

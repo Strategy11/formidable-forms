@@ -17,8 +17,8 @@ class test_FrmEntryFormatter extends FrmUnitTest {
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry_id   = $this->factory->entry->create( $entry_data );
 		$atts       = array(
-			'id'     => $entry_id,
 			'format' => 'text',
+			'id'     => $entry_id,
 		);
 
 		$this->formatter = new FrmEntryFormatter( $atts );

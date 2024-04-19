@@ -97,9 +97,9 @@ class FrmTransLiteActionsController {
 	public static function trigger_gateway( $action, $entry, $form ) {
 		// This function must be overridden in a subclass.
 		return array(
-			'success'      => false,
 			'run_triggers' => false,
 			'show_errors'  => true,
+			'success'      => false,
 		);
 	}
 
@@ -123,8 +123,8 @@ class FrmTransLiteActionsController {
 		if ( $payment && $payment->action_id ) {
 			self::trigger_payment_status_change(
 				array(
-					'status'  => $sub->status,
 					'payment' => $payment,
+					'status'  => $sub->status,
 				)
 			);
 		}
@@ -138,8 +138,8 @@ class FrmTransLiteActionsController {
 		$action   = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
 		$atts     = array(
-			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
+			'trigger'  => $atts['status'],
 		);
 
 		if ( ! isset( $atts['payment'] ) ) {
@@ -305,13 +305,13 @@ class FrmTransLiteActionsController {
 		$action_settings = array();
 		foreach ( $payment_actions as $payment_action ) {
 			$settings_for_action = array(
-				'id'         => $payment_action->ID,
-				'first_name' => $payment_action->post_content['billing_first_name'],
-				'last_name'  => $payment_action->post_content['billing_last_name'],
-				'gateways'   => $payment_action->post_content['gateway'],
-				'fields'     => self::get_fields_for_price( $payment_action ),
-				'one'        => $payment_action->post_content['type'],
 				'email'      => $payment_action->post_content['email'],
+				'fields'     => self::get_fields_for_price( $payment_action ),
+				'first_name' => $payment_action->post_content['billing_first_name'],
+				'gateways'   => $payment_action->post_content['gateway'],
+				'id'         => $payment_action->ID,
+				'last_name'  => $payment_action->post_content['billing_last_name'],
+				'one'        => $payment_action->post_content['type'],
 			);
 
 			/**

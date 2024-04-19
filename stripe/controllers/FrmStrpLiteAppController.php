@@ -79,16 +79,16 @@ class FrmStrpLiteAppController {
 	 */
 	public static function add_gateway( $gateways ) {
 		$gateways['stripe'] = array(
-			'label'      => 'Stripe',
-			'user_label' => __( 'Payment', 'formidable' ),
 			'class'      => 'StrpLite',
-			'recurring'  => true,
 			'include'    => array(
 				'billing_first_name',
 				'billing_last_name',
 				'credit_card',
 				'billing_address',
 			),
+			'label'      => 'Stripe',
+			'recurring'  => true,
+			'user_label' => __( 'Payment', 'formidable' ),
 		);
 		return $gateways;
 	}
@@ -138,8 +138,8 @@ class FrmStrpLiteAppController {
 		$cc_field_id = FrmDb::get_var(
 			'frm_fields',
 			array(
-				'type'    => 'credit_card',
 				'form_id' => $entry->form_id,
+				'type'    => 'credit_card',
 			)
 		);
 		if ( ! $cc_field_id ) {

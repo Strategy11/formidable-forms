@@ -35,8 +35,8 @@ class FrmEntriesAJAXSubmitController {
 		}
 
 		$response = array(
-			'errors'  => array(),
 			'content' => '',
+			'errors'  => array(),
 			'pass'    => false,
 		);
 
@@ -95,10 +95,10 @@ class FrmEntriesAJAXSubmitController {
 			$invalid_msg               = FrmFormsHelper::get_invalid_error_message( array( 'form' => $form ) );
 			$response['error_message'] = FrmFormsHelper::get_success_message(
 				array(
-					'message'  => $invalid_msg,
-					'form'     => $form,
-					'entry_id' => 0,
 					'class'    => FrmFormsHelper::form_error_class(),
+					'entry_id' => 0,
+					'form'     => $form,
+					'message'  => $invalid_msg,
 				)
 			);
 		}//end if

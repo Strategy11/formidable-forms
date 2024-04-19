@@ -11,24 +11,24 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
 		$invalid_color_values = array(
-			'rgba(45, 45, 45,' => 'rgba(45,45,45,1)',
-			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
-			'rgba(45,45'       => 'rgba(45,45,0,1)',
-			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
-			'rgba(255,0,0,11)' => 'rgba(255,0,0,1)',
-			'rgba(99,99,99,1)' => 'rgba(99,99,99,1)',
-			'rgb(45, ,45)'     => 'rgb(45,0,45)',
-			'rgb( , , )'       => 'rgb(0,0,0)',
-			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
-			'rgb('             => 'rgb(0,0,0)',
-			'rgb(255,255,255)' => 'rgb(255,255,255)',
-			'(rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
 			'((rgba(0,0,0,1)'  => 'rgba(0,0,0,1)',
 			'(rgb(0,0,0)'      => 'rgb(0,0,0)',
-			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
-			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
 			' (rgb(0,0,0)'     => 'rgb(0,0,0)',
+			'(rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'rgb('             => 'rgb(0,0,0)',
+			'rgb( , , )'       => 'rgb(0,0,0)',
+			'rgb(45, ,45)'     => 'rgb(45,0,45)',
+			'rgb(255,255,255)' => 'rgb(255,255,255)',
+			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
 			'rgba((0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
+			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
+			'rgba(45,45'       => 'rgba(45,45,0,1)',
+			'rgba(45, 45, 45,' => 'rgba(45,45,45,1)',
+			'rgba(99,99,99,1)' => 'rgba(99,99,99,1)',
+			'rgba(255,0,0,11)' => 'rgba(255,0,0,1)',
+			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
 		);
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
@@ -44,20 +44,20 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_sanitize_post_content() {
 		$post_content           = array(
 			'bg_color'             => '000',
-			'font_size'            => '14px',
-			'title_margin_bottom'  => '60px}',
+			'custom_css'           => '.my-class { color: red; }',
 			'field_height'         => ';12px',
 			'field_width'          => '{10px',
-			'width'                => 'calc(100% / 3)',
-			'section_color'        => 'rgba(255,255,255,1)',
-			'submit_border_color'  => 'ffffff',
-			'submit_active_color'  => 'rgb(255,255,255)',
+			'font_size'            => '14px',
 			'progress_bg_color'    => '000(',
-			'success_bg_color'     => ')fff',
 			'section_border_width' => '[12px',
+			'section_color'        => 'rgba(255,255,255,1)',
 			'section_font_size'    => '16px]',
+			'submit_active_color'  => 'rgb(255,255,255)',
+			'submit_border_color'  => 'ffffff',
+			'success_bg_color'     => ')fff',
+			'title_margin_bottom'  => '60px}',
 			'unsupported_key'      => 'fff',
-			'custom_css'           => '.my-class { color: red; }',
+			'width'                => 'calc(100% / 3)',
 		);
 		$frm_style              = new FrmStyle();
 		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );

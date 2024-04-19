@@ -217,8 +217,8 @@ class FrmEntryValues {
 			'frm_entry_values_fields',
 			$this->fields,
 			array(
-				'form_id' => $this->form_id,
 				'entry'   => $this->entry,
+				'form_id' => $this->form_id,
 			)
 		);
 	}
@@ -291,8 +291,8 @@ class FrmEntryValues {
 		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
 		$this->user_info = array(
-			'ip'       => $ip,
 			'browser'  => $browser,
+			'ip'       => $ip,
 			'referrer' => $referrer,
 		);
 	}

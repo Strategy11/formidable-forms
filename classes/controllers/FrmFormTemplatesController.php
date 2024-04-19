@@ -286,8 +286,8 @@ class FrmFormTemplatesController {
 	 */
 	private static function init_favorite_templates() {
 		$default_option_structure = array(
-			'default' => array(),
 			'custom'  => array(),
+			'default' => array(),
 		);
 
 		$favorites = get_option( self::FAVORITE_TEMPLATES_OPTION, $default_option_structure );
@@ -295,8 +295,8 @@ class FrmFormTemplatesController {
 
 		// Set the favorite templates property and remove empty values.
 		self::$favorite_templates = array(
-			'default' => array_filter( (array) $favorites['default'] ),
 			'custom'  => array_filter( (array) $favorites['custom'] ),
+			'default' => array_filter( (array) $favorites['default'] ),
 		);
 	}
 
@@ -394,8 +394,8 @@ class FrmFormTemplatesController {
 		// Get all custom templates that are not default templates.
 		$custom_templates = FrmForm::getAll(
 			array(
-				'is_template'      => 1,
 				'default_template' => 0,
+				'is_template'      => 1,
 				'status'           => array( null, '', 'published' ),
 			),
 			'name'
@@ -409,16 +409,16 @@ class FrmFormTemplatesController {
 
 		foreach ( $custom_templates as $template ) {
 			$template = array(
-				'id'          => absint( $template->id ),
-				'name'        => $template->name,
-				'key'         => $template->form_key,
+				'created_at'  => $template->created_at,
 				'description' => $template->description,
-				'link'        => FrmForm::get_edit_link( absint( $template->id ) ),
-				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&new_template=true&id=' . absint( $template->id ) ) ),
-				'released'    => $template->created_at,
+				'id'          => absint( $template->id ),
 				'installed'   => 1,
 				'is_custom'   => true,
-				'created_at'  => $template->created_at,
+				'key'         => $template->form_key,
+				'link'        => FrmForm::get_edit_link( absint( $template->id ) ),
+				'name'        => $template->name,
+				'released'    => $template->created_at,
+				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&new_template=true&id=' . absint( $template->id ) ) ),
 			);
 
 			// Mark the template as favorite if it's in the favorite templates list.
@@ -477,8 +477,8 @@ class FrmFormTemplatesController {
 
 				if ( ! isset( self::$categories[ $category_slug ] ) ) {
 					self::$categories[ $category_slug ] = array(
-						'name'  => $category,
 						'count' => 0,
+						'name'  => $category,
 					);
 				}
 
@@ -505,31 +505,31 @@ class FrmFormTemplatesController {
 
 		// Add special categories.
 		$special_categories = array(
-			'favorites' => array(
-				'name'  => __( 'Favorites', 'formidable' ),
-				'count' => self::get_favorite_templates_count(),
-			),
 			'custom'    => array(
-				'name'  => __( 'Custom', 'formidable' ),
 				'count' => count( self::$custom_templates ),
+				'name'  => __( 'Custom', 'formidable' ),
+			),
+			'favorites' => array(
+				'count' => self::get_favorite_templates_count(),
+				'name'  => __( 'Favorites', 'formidable' ),
 			),
 		);
 		// Add the 'Available Templates' category for non-elite users.
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
-				'name'  => __( 'Available Templates', 'formidable' ),
 				// Assigned via JavaScript.
 				'count' => 0,
+				'name'  => __( 'Available Templates', 'formidable' ),
 			);
 		}
 		$special_categories['all-templates']  = array(
-			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
+			'name'  => __( 'All Templates', 'formidable' ),
 		);
 		$special_categories['free-templates'] = array(
-			'name'  => __( 'Free Templates', 'formidable' ),
 			// Assigned via JavaScript.
 			'count' => 0,
+			'name'  => __( 'Free Templates', 'formidable' ),
 		);
 
 		self::$categories = array_merge(
@@ -583,15 +583,15 @@ class FrmFormTemplatesController {
 
 		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
-				'medium'  => 'form-templates',
 				'content' => 'upgrade',
+				'medium'  => 'form-templates',
 			)
 		);
 
 		self::$renew_link = FrmAppHelper::admin_upgrade_link(
 			array(
-				'medium'  => 'form-templates',
 				'content' => 'renew',
+				'medium'  => 'form-templates',
 			)
 		);
 	}
@@ -685,14 +685,14 @@ class FrmFormTemplatesController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
+			'customCount'             => count( self::$custom_templates ),
+			'favoritesCount'          => array(
+				'custom'  => count( self::$favorite_templates['custom'] ),
+				'default' => count( self::$favorite_templates['default'] ),
+				'total'   => self::get_favorite_templates_count(),
+			),
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
 			'templatesCount'          => self::get_template_count(),
-			'favoritesCount'          => array(
-				'total'   => self::get_favorite_templates_count(),
-				'default' => count( self::$favorite_templates['default'] ),
-				'custom'  => count( self::$favorite_templates['custom'] ),
-			),
-			'customCount'             => count( self::$custom_templates ),
 			'upgradeLink'             => self::$upgrade_link,
 		);
 

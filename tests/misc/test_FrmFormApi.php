@@ -12,8 +12,8 @@ class test_FrmFormApi extends FrmUnitTest {
 		$message = 'Your license has expired.';
 		$addons  = array(
 			'error' => array(
-				'license' => 'license_123',
 				'code'    => 'expired',
+				'license' => 'license_123',
 				'message' => $message,
 			),
 		);

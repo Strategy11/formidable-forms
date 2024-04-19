@@ -111,8 +111,8 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Define test data for favorite templates.
 		$test_favorites = array(
 			array(
-				'default' => array( 20872734 ),
 				'custom'  => array( 51 ),
+				'default' => array( 20872734 ),
 			),
 			array(
 				'custom' => array( 51 ),
@@ -120,8 +120,8 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		);
 
 		$default = array(
-			'default' => array(),
 			'custom'  => array(),
+			'default' => array(),
 		);
 
 		foreach ( $test_favorites as $test_favorite ) {

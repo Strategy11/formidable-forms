@@ -49,11 +49,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
 			array(
-				'type'          => 'text',
-				'form_id'       => $form_id,
 				'field_options' => array(
 					'size' => '10', // the old size in characters
 				),
+				'form_id'       => $form_id,
+				'type'          => 'text',
 			)
 		);
 		$this->assertNotEmpty( $field );
@@ -99,8 +99,8 @@ class test_FrmMigrate extends FrmUnitTest {
 	public function test_migrate_to_86() {
 		$form_id   = $this->factory->form->create();
 		$sizes     = array(
-			'10px'   => '10px',
 			'10'     => '10',
+			'10px'   => '10px',
 			'1024'   => '1024',
 			'1024px' => round( 1024 / 9 ),
 		);
@@ -108,11 +108,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		foreach ( $sizes as $start_size => $new_size ) {
 			$field_id                 = $this->factory->field->create(
 				array(
-					'type'          => 'text',
-					'form_id'       => $form_id,
 					'field_options' => array(
 						'size' => $start_size,
 					),
+					'form_id'       => $form_id,
+					'type'          => 'text',
 				)
 			);
 			$field_ids[ $start_size ] = $field_id;
@@ -137,125 +137,125 @@ class test_FrmMigrate extends FrmUnitTest {
 		$form_id  = $this->factory->form->create();
 		$settings = array(
 			array(
+				'expected' => array(
+					'default_value' => '',
+					'placeholder'   => 'Default 1',
+				),
 				'start'    => array(
+					'default_value' => 'Default 1',
 					'field_options' => array(
 						'clear_on_focus' => '1',
 					),
-					'default_value' => 'Default 1',
-				),
-				'expected' => array(
-					'placeholder'   => 'Default 1',
-					'default_value' => '',
 				),
 			),
 			array(
+				'expected' => array(
+					'default_value' => 'Default 2',
+					'placeholder'   => '',
+				),
 				'start'    => array(
+					'default_value' => 'Default 2',
 					'field_options' => array(
 						'clear_on_focus' => '0',
 					),
-					'default_value' => 'Default 2',
-				),
-				'expected' => array(
-					'placeholder'   => '',
-					'default_value' => 'Default 2',
 				),
 			),
 			array(
+				'expected' => array(
+					'default_value' => '',
+					'placeholder'   => '',
+				),
 				'start'    => array(
+					'default_value' => '',
 					'field_options' => array(
 						'clear_on_focus' => '1',
 					),
-					'default_value' => '',
-				),
-				'expected' => array(
-					'placeholder'   => '',
-					'default_value' => '',
 				),
 			),
 			array(
+				'expected' => array(
+					'default_value' => '',
+					'placeholder'   => '',
+				),
 				'start'    => array(
+					'default_value' => '',
 					'field_options' => array(
 						'default_blank' => '1',
 					),
-					'default_value' => '',
-				),
-				'expected' => array(
-					'placeholder'   => '',
-					'default_value' => '',
 				),
 			),
 			array(
-				'start'    => array(
-					'field_options' => array(
-						'default_blank' => '1',
-					),
-					'default_value' => 'Default 3',
-				),
 				'expected' => array(
+					'default_value' => '',
 					'placeholder'   => 'Default 3',
-					'default_value' => '',
 				),
-			),
-			array(
 				'start'    => array(
+					'default_value' => 'Default 3',
 					'field_options' => array(
 						'default_blank' => '1',
 					),
+				),
+			),
+			array(
+				'expected' => array(
+					'default_value' => '',
+					'placeholder'   => 'Default 3.1',
+				),
+				'start'    => array(
 					'default_value' => 'Default 3.1',
-					'type'          => 'select',
+					'field_options' => array(
+						'default_blank' => '1',
+					),
 					'options'       => array(
 						'Default 3.1',
 						'Option 1',
 						'Option 2',
 					),
-				),
-				'expected' => array(
-					'placeholder'   => 'Default 3.1',
-					'default_value' => '',
+					'type'          => 'select',
 				),
 			),
 			array(
+				'expected' => array(
+					'default_value' => '',
+					'placeholder'   => 'Default 3.1',
+				),
 				'start'    => array(
+					'default_value' => 'Default 3.1',
 					'field_options' => array(
 						'default_blank' => '1',
 					),
-					'default_value' => 'Default 3.1',
-					'type'          => 'select',
 					'options'       => array(
 						array( 'value' => 'Default 3.1' ),
 						array( 'value' => 'Option 1' ),
 						array( 'value' => 'Option 2' ),
 					),
-				),
-				'expected' => array(
-					'placeholder'   => 'Default 3.1',
-					'default_value' => '',
+					'type'          => 'select',
 				),
 			),
 			array(
-				'start'    => array(
-					'field_options' => array(
-						'default_blank'  => '1',
-						'clear_on_click' => '1',
-					),
-					'default_value' => 'Default 4',
-				),
 				'expected' => array(
+					'default_value' => '',
 					'placeholder'   => 'Default 4',
-					'default_value' => '',
+				),
+				'start'    => array(
+					'default_value' => 'Default 4',
+					'field_options' => array(
+						'clear_on_click' => '1',
+						'default_blank'  => '1',
+					),
 				),
 			),
 			array(
-				'start'    => array(
-					'field_options' => array(
-						'default_blank'  => '1',
-						'clear_on_click' => '1',
-					),
-					'default_value' => '',
-				),
 				'expected' => array(
-					'placeholder'   => '',
 					'default_value' => '',
+					'placeholder'   => '',
+				),
+				'start'    => array(
+					'default_value' => '',
+					'field_options' => array(
+						'clear_on_click' => '1',
+						'default_blank'  => '1',
+					),
 				),
 			),
 		);
@@ -329,25 +329,25 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		// Create new contact-db12 form on site
 		$form_values = array(
+			'description' => '',
 			'form_key'    => 'contact-db12-copy',
 			'name'        => 'Contact DB12 Copy',
-			'description' => '',
-			'status'      => 'published',
 			'options'     => array(
 				'custom_style' => '1',
 				'notification' => array(
-					'email_to'           => 'emailto@test.com,tester@mail.com',
-					'reply_to'           => 'replyto@test.com',
-					'reply_to_name'      => 'Reply to me',
 					'cust_reply_to'      => '',
 					'cust_reply_to_name' => '',
-					'plain_text'         => 1,
-					'inc_user_info'      => 1,
 					'email_message'      => 'This is my email message. [default-message]',
 					'email_subject'      => 'The subject',
+					'email_to'           => 'emailto@test.com,tester@mail.com',
+					'inc_user_info'      => 1,
+					'plain_text'         => 1,
+					'reply_to'           => 'replyto@test.com',
+					'reply_to_name'      => 'Reply to me',
 					'update_email'       => 2,
 				),
 			),
+			'status'      => 'published',
 		);
 
 		FrmForm::create( $form_values );

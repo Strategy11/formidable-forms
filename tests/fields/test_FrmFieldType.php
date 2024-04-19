@@ -12,13 +12,13 @@ class test_FrmFieldType extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
 			array(
-				'type'          => 'number',
-				'form_id'       => $form_id,
 				'field_options' => array(
-					'minnum' => 10,
 					'maxnum' => 999,
+					'minnum' => 10,
 					'step'   => 'any',
 				),
+				'form_id'       => $form_id,
+				'type'          => 'number',
 			)
 		);
 		$this->assertNotEmpty( $field );
@@ -42,91 +42,91 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$values = array(
 			array(
+				'expected' => 'test',
 				'type'     => 'default',
 				'value'    => '<script></script>test',
-				'expected' => 'test',
 			),
 			array(
+				'expected' => '1 > 2',
 				'type'     => 'text',
 				'value'    => '1 > 2',
-				'expected' => '1 > 2',
 			),
 			array(
+				'expected' => '<div class="here"></div>',
 				'type'     => 'textarea',
 				'value'    => '<div class="here"></div>',
-				'expected' => '<div class="here"></div>',
 			),
 			array(
+				'expected' => 'test > with \' < & characters "like “ and ‘ this',
 				'type'     => 'text',
 				'value'    => 'test > with \' < & characters "like “ and ‘ this',
-				'expected' => 'test > with \' < & characters "like “ and ‘ this',
 			),
 			array(
+				'expected' => '&lt;span>2 < 1&lt;/span>',
 				'type'     => 'text',
 				'value'    => '&lt;span&gt;2 < 1&lt;/span&gt;',
-				'expected' => '&lt;span>2 < 1&lt;/span>',
 			),
 			array(
+				'expected' => 'johndoe@yahoo.co.uk',
 				'type'     => 'email',
 				'value'    => 'johndoe@yahoo.co.uk',
-				'expected' => 'johndoe@yahoo.co.uk',
 			),
 			array(
+				'expected' => 'Option 1',
 				'type'     => 'select',
 				'value'    => 'Option 1',
-				'expected' => 'Option 1',
 			),
 			array(
+				'expected' => 'https://team.strategy11.com/?foo=bar&baz=bam',
 				'type'     => 'url',
 				'value'    => 'https://team.strategy11.com/?foo=bar&baz=bam',
-				'expected' => 'https://team.strategy11.com/?foo=bar&baz=bam',
 			),
 			array(
+				'expected' => array(
+					'test',
+					'another test',
+				),
 				'type'     => 'default',
 				'value'    => array(
 					'<script></script>test',
 					'another test',
 				),
-				'expected' => array(
-					'test',
-					'another test',
-				),
 			),
 			array(
+				'expected' => array(
+					'(555) 555-1234',
+					'1-541-754-3010',
+					'+1(408) 785-9969',
+				),
 				'type'     => 'phone',
 				'value'    => array(
 					'(555) 555-1234',
 					'1-541-754-3010',
 					'+1(408) 785-9969',
 				),
-				'expected' => array(
-					'(555) 555-1234',
-					'1-541-754-3010',
-					'+1(408) 785-9969',
-				),
 			),
 			array(
+				'expected' => array(
+					'1009',
+					'1.5',
+				),
 				'type'     => 'number',
 				'value'    => array(
 					'1009',
 					'1.5',
 				),
-				'expected' => array(
-					'1009',
-					'1.5',
-				),
 			),
 			array(
+				'expected' => array(
+					'6',
+					'2',
+					'0',
+				),
 				'type'     => 'user_id',
 				'value'    => array(
 					'6',
 					'2a',
 					'a1',
-				),
-				'expected' => array(
-					'6',
-					'2',
-					'0',
 				),
 			),
 		);
@@ -139,19 +139,19 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->use_frm_role( 'loggedout' );
 		$values = array(
 			array(
+				'expected' => 'test',
 				'type'     => 'default',
 				'value'    => '<script></script>test',
-				'expected' => 'test',
 			),
 			array(
+				'expected' => '',
 				'type'     => 'textarea',
 				'value'    => '<div class="here"></div>',
-				'expected' => '',
 			),
 			array(
+				'expected' => '<p>Here</p>',
 				'type'     => 'textarea',
 				'value'    => '<p>Here</p>',
-				'expected' => '<p>Here</p>',
 			),
 		);
 		foreach ( $values as $value ) {
@@ -169,28 +169,28 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field->type    = 'checkbox';
 		$field->options = array(
 			array(
-				'value' => 'a',
 				'label' => 'A',
+				'value' => 'a',
 			),
 			array(
-				'value' => 'b',
 				'label' => 'B',
+				'value' => 'b',
 			),
 			array(
-				'value' => 'c',
 				'label' => 'C',
+				'value' => 'c',
 			),
 			array(
-				'value' => 'a,b',
 				'label' => 'A, B',
+				'value' => 'a,b',
 			),
 			array(
+				'label' => 'A, B, C',
 				'value' => 'a,b,c',
-				'label' => 'A, B, C',
 			),
 			array(
-				'value' => 'a, b, c',
 				'label' => 'A, B, C',
+				'value' => 'a, b, c',
 			),
 		);
 
@@ -209,8 +209,8 @@ class test_FrmFieldType extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'number',
 				'form_id' => $form_id,
+				'type'    => 'number',
 			)
 		);
 
@@ -231,8 +231,8 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$field2        = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'number',
 				'form_id' => $form_id,
+				'type'    => 'number',
 			)
 		);
 		$field_object3 = FrmFieldFactory::get_field_type( 'text', $field2 );
@@ -247,29 +247,29 @@ class test_FrmFieldType extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'input',
 				'form_id' => $form_id,
+				'type'    => 'input',
 			)
 		);
 
 		$field_object = FrmFieldFactory::get_field_type( 'text', $field );
 		$args         = array(
-			'field_id' => 1,
-			'html_id'  => 2,
 			'errors'   => array(
 				'field1' => 'This field cannot be blank.',
 			),
+			'field_id' => 1,
+			'html_id'  => 2,
 		);
 
 		$input_html_actual_expected = array(
+
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_2 frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_2 my_custom_aria_describedby frm_desc_2" aria-invalid="true" ',
 
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_2 frm_desc_2"',
-
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_2 frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
@@ -288,8 +288,8 @@ class test_FrmFieldType extends FrmUnitTest {
 		// Test a basic text field.
 		$field        = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'text',
 				'form_id' => $form_id,
+				'type'    => 'text',
 			)
 		);
 		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );

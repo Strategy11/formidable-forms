@@ -414,8 +414,8 @@ class FrmEntry {
 		$metas = FrmDb::get_results(
 			$wpdb->prefix . 'frm_item_metas m LEFT JOIN ' . $wpdb->prefix . 'frm_fields f ON m.field_id=f.id',
 			array(
-				'item_id'    => $entry->id,
 				'field_id !' => 0,
+				'item_id'    => $entry->id,
 			),
 			'field_id, meta_value, field_key, item_id, f.type'
 		);
@@ -672,16 +672,16 @@ class FrmEntry {
 	 */
 	public static function sanitize_entry_post( &$values ) {
 		$sanitize_method = array(
+			'created_at'       => 'sanitize_text_field',
 			'form_id'          => 'absint',
-			'frm_action'       => 'sanitize_title',
 			'form_key'         => 'sanitize_title',
-			'item_key'         => 'sanitize_title',
-			'item_name'        => 'sanitize_text_field',
+			'frm_action'       => 'sanitize_title',
 			'frm_saving_draft' => 'absint',
 			'is_draft'         => 'absint',
-			'post_id'          => 'absint',
+			'item_key'         => 'sanitize_title',
+			'item_name'        => 'sanitize_text_field',
 			'parent_item_id'   => 'absint',
-			'created_at'       => 'sanitize_text_field',
+			'post_id'          => 'absint',
 			'updated_at'       => 'sanitize_text_field',
 		);
 
@@ -706,16 +706,16 @@ class FrmEntry {
 
 		$item_name  = self::get_new_entry_name( $values, $values['item_key'] );
 		$new_values = array(
-			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
-			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
+			'created_at'     => self::get_created_at( $values ),
+			'description'    => self::get_entry_description( $values ),
+			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
 			'ip'             => self::get_ip( $values ),
 			'is_draft'       => self::get_is_draft_value( $values ),
-			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
-			'post_id'        => (int) self::get_entry_value( $values, 'post_id', 0 ),
+			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
+			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
 			'parent_item_id' => (int) self::get_entry_value( $values, 'parent_item_id', 0 ),
-			'created_at'     => self::get_created_at( $values ),
+			'post_id'        => (int) self::get_entry_value( $values, 'post_id', 0 ),
 			'updated_at'     => self::get_updated_at( $values ),
-			'description'    => self::get_entry_description( $values ),
 			'user_id'        => self::get_entry_user_id( $values ),
 		);
 
@@ -993,9 +993,9 @@ class FrmEntry {
 		global $wpdb;
 
 		$new_values = array(
-			'name'       => self::get_new_entry_name( $values ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
+			'name'       => self::get_new_entry_name( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
 			'updated_by' => isset( $values['updated_by'] ) ? $values['updated_by'] : get_current_user_id(),
 		);

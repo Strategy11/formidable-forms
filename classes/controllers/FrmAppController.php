@@ -266,30 +266,30 @@ class FrmAppController {
 
 		$nav_items = array(
 			array(
-				'link'       => FrmForm::get_edit_link( $id ),
-				'label'      => __( 'Build', 'formidable' ),
 				'current'    => array( 'edit', 'new', 'duplicate' ),
+				'label'      => __( 'Build', 'formidable' ),
+				'link'       => FrmForm::get_edit_link( $id ),
 				'page'       => 'formidable',
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => FrmStylesHelper::get_list_url( $id ),
-				'label'      => __( 'Style', 'formidable' ),
 				'current'    => array(),
+				'label'      => __( 'Style', 'formidable' ),
+				'link'       => FrmStylesHelper::get_list_url( $id ),
 				'page'       => 'formidable-styles',
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . absint( $id ) ),
-				'label'      => __( 'Settings', 'formidable' ),
 				'current'    => array( 'settings' ),
+				'label'      => __( 'Settings', 'formidable' ),
+				'link'       => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . absint( $id ) ),
 				'page'       => 'formidable',
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
-				'label'      => __( 'Entries', 'formidable' ),
 				'current'    => array(),
+				'label'      => __( 'Entries', 'formidable' ),
+				'link'       => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
 				'page'       => 'formidable-entries',
 				'permission' => 'frm_view_entries',
 			),
@@ -299,34 +299,34 @@ class FrmAppController {
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
-				'link'       => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
-				'label'      => __( 'Views', 'formidable' ),
-				'current'    => array(),
-				'page'       => 'formidable-views',
-				'permission' => 'frm_view_entries',
 				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
+				'current'    => array(),
+				'label'      => __( 'Views', 'formidable' ),
+				'link'       => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
+				'page'       => 'formidable-views',
+				'permission' => 'frm_view_entries',
 			);
 		}
 
 		// Let people know reports and views exist.
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
-				'link'       => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
-				'label'      => __( 'Reports', 'formidable' ),
-				'current'    => array( 'reports' ),
-				'page'       => 'formidable',
-				'permission' => 'frm_view_entries',
 				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
+				'current'    => array( 'reports' ),
+				'label'      => __( 'Reports', 'formidable' ),
+				'link'       => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
+				'page'       => 'formidable',
+				'permission' => 'frm_view_entries',
 			);
 		}
 
 		$nav_args = array(
-			'form_id' => $id,
 			'form'    => $form,
+			'form_id' => $id,
 		);
 
 		return (array) apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
@@ -414,8 +414,8 @@ class FrmAppController {
 	public static function upgrade_overlay_html() {
 		$is_pro       = FrmAppHelper::pro_is_installed();
 		$upgrade_link = array(
-			'medium'  => 'builder',
 			'content' => 'upgrade',
+			'medium'  => 'builder',
 		);
 		$default_link = FrmAppHelper::admin_upgrade_link( $upgrade_link );
 		$plugin_path  = FrmAppHelper::plugin_path();
@@ -437,8 +437,8 @@ class FrmAppController {
 		$user = wp_get_current_user();
 		$args = array(
 			'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css',
-			'title'       => $title,
 			'description' => $description,
+			'title'       => $title,
 		);
 		require FrmAppHelper::plugin_path() . '/classes/views/form-templates/modals/leave-email-modal.php';
 	}
@@ -495,9 +495,9 @@ class FrmAppController {
 	public static function needs_update() {
 		$needs_upgrade = self::compare_for_update(
 			array(
-				'option'             => 'frm_db_version',
 				'new_db_version'     => FrmAppHelper::$db_version,
 				'new_plugin_version' => FrmAppHelper::plugin_version(),
+				'option'             => 'frm_db_version',
 			)
 		);
 
@@ -960,16 +960,16 @@ class FrmAppController {
 	 */
 	public static function create_rest_routes() {
 		$args = array(
-			'methods'             => 'GET',
 			'callback'            => 'FrmAppController::api_install',
+			'methods'             => 'GET',
 			'permission_callback' => __CLASS__ . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );
 
 		$args = array(
-			'methods'             => 'GET',
 			'callback'            => 'FrmAddonsController::install_addon_api',
+			'methods'             => 'GET',
 			'permission_callback' => 'FrmAddonsController::can_install_addon_api',
 		);
 
@@ -1199,13 +1199,13 @@ class FrmAppController {
 	 */
 	public static function show_error_modal( $error_args ) {
 		$defaults = array(
-			'title'            => '',
 			'body'             => '',
-			'cancel_url'       => '',
 			'cancel_classes'   => '',
-			'continue_url'     => '',
+			'cancel_url'       => '',
 			'continue_classes' => '',
+			'continue_url'     => '',
 			'icon'             => 'frm_lock_simple',
+			'title'            => '',
 		);
 
 		$error_args = wp_parse_args( $error_args, $defaults );

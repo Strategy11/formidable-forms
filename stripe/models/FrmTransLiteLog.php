@@ -19,8 +19,8 @@ class FrmTransLiteLog {
 		$log = new FrmLog();
 		$log->add(
 			array(
-				'title'   => $title,
 				'content' => $text,
+				'title'   => $title,
 			)
 		);
 	}

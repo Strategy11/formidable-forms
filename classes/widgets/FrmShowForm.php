@@ -21,9 +21,9 @@ class FrmShowForm extends WP_Widget {
 		}
 
 		$form_atts = array(
+			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
 			'id'          => isset( $instance['form'] ) ? $instance['form'] : 0,
 			'title'       => false,
-			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
 		);
 
 		echo FrmFormsController::get_form_shortcode( $form_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -50,9 +50,9 @@ class FrmShowForm extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$defaults = array(
-			'title'       => false,
-			'form'        => false,
 			'description' => false,
+			'form'        => false,
+			'title'       => false,
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		?>
@@ -76,8 +76,8 @@ class FrmShowForm extends WP_Widget {
 				$instance['form'],
 				array(
 					'blank'    => false,
-					'field_id' => $this->get_field_id( 'form' ),
 					'class'    => 'widefat',
+					'field_id' => $this->get_field_id( 'form' ),
 				)
 			);
 			?>

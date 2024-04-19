@@ -24,8 +24,8 @@ class FrmFieldCreditCard extends FrmFieldType {
 	protected function field_settings_for_type() {
 		$settings = array(
 			'clear_on_focus' => false,
-			'description'    => false,
 			'default'        => false,
+			'description'    => false,
 			'required'       => false,
 		);
 		return $settings;
@@ -43,8 +43,8 @@ class FrmFieldCreditCard extends FrmFieldType {
 	public function front_field_input( $args, $shortcode_atts ) {
 		$pass_args = array(
 			'errors'   => $args['errors'],
-			'html_id'  => $args['html_id'],
 			'field_id' => $args['field_id'],
+			'html_id'  => $args['html_id'],
 		);
 
 		ob_start();

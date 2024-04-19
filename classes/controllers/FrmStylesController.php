@@ -30,30 +30,30 @@ class FrmStylesController {
 		register_post_type(
 			self::$post_type,
 			array(
-				'label'           => __( 'Styles', 'formidable' ),
-				'public'          => false,
-				'show_ui'         => false,
-				'capability_type' => 'page',
 				'capabilities'    => array(
-					'edit_post'          => 'frm_change_settings',
-					'edit_posts'         => 'frm_change_settings',
-					'edit_others_posts'  => 'frm_change_settings',
-					'publish_posts'      => 'frm_change_settings',
 					'delete_post'        => 'frm_change_settings',
 					'delete_posts'       => 'frm_change_settings',
+					'edit_others_posts'  => 'frm_change_settings',
+					'edit_post'          => 'frm_change_settings',
+					'edit_posts'         => 'frm_change_settings',
+					'publish_posts'      => 'frm_change_settings',
 					'read_private_posts' => 'read_private_posts',
 				),
-				'supports'        => array(
-					'title',
-				),
+				'capability_type' => 'page',
 				'has_archive'     => false,
+				'label'           => __( 'Styles', 'formidable' ),
 				'labels'          => array(
+					'add_new_item'  => __( 'Create a New Style', 'formidable' ),
+					'edit'          => __( 'Edit', 'formidable' ),
+					'edit_item'     => __( 'Edit Style', 'formidable' ),
+					'menu_name'     => __( 'Style', 'formidable' ),
 					'name'          => __( 'Styles', 'formidable' ),
 					'singular_name' => __( 'Style', 'formidable' ),
-					'menu_name'     => __( 'Style', 'formidable' ),
-					'edit'          => __( 'Edit', 'formidable' ),
-					'add_new_item'  => __( 'Create a New Style', 'formidable' ),
-					'edit_item'     => __( 'Edit Style', 'formidable' ),
+				),
+				'public'          => false,
+				'show_ui'         => false,
+				'supports'        => array(
+					'title',
 				),
 			)
 		);
@@ -401,9 +401,9 @@ class FrmStylesController {
 			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
 			$where   = array(
-				'status'         => 'published',
 				// Make sure it's not a repeater.
 				'parent_form_id' => array( null, 0 ),
+				'status'         => 'published',
 			);
 			$form_id = FrmDb::get_var( 'frm_forms', $where, 'id' );
 		}
@@ -812,14 +812,14 @@ class FrmStylesController {
 
 		$settings = wp_enqueue_code_editor(
 			array(
-				'type'       => 'text/css',
 				'codemirror' => array(
-					'indentUnit'  => 2,
-					'tabSize'     => 2,
 					// As the codemirror box only appears once you click into the Custom CSS tab, we need to auto-refresh.
 					// Otherwise the line numbers all end up with a 1px width causing overlap issues with the text in the content.
 					'autoRefresh' => true,
+					'indentUnit'  => 2,
+					'tabSize'     => 2,
 				),
+				'type'       => 'text/css',
 			)
 		);
 
@@ -939,16 +939,16 @@ class FrmStylesController {
 	public static function add_meta_boxes() {
 		// setup meta boxes
 		$meta_boxes = array(
-			'general'                => __( 'General', 'formidable' ),
-			'form-title'             => __( 'Form Title', 'formidable' ),
-			'form-description'       => __( 'Form Description', 'formidable' ),
-			'field-labels'           => __( 'Field Labels', 'formidable' ),
-			'field-description'      => __( 'Field Description', 'formidable' ),
-			'field-colors'           => __( 'Field Colors', 'formidable' ),
-			'field-sizes'            => __( 'Field Settings', 'formidable' ),
-			'check-box-radio-fields' => __( 'Check Box & Radio Fields', 'formidable' ),
 			'buttons'                => __( 'Buttons', 'formidable' ),
+			'check-box-radio-fields' => __( 'Check Box & Radio Fields', 'formidable' ),
+			'field-colors'           => __( 'Field Colors', 'formidable' ),
+			'field-description'      => __( 'Field Description', 'formidable' ),
+			'field-labels'           => __( 'Field Labels', 'formidable' ),
+			'field-sizes'            => __( 'Field Settings', 'formidable' ),
+			'form-description'       => __( 'Form Description', 'formidable' ),
 			'form-messages'          => __( 'Form Messages', 'formidable' ),
+			'form-title'             => __( 'Form Title', 'formidable' ),
+			'general'                => __( 'General', 'formidable' ),
 		);
 
 		/**

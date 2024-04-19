@@ -19,21 +19,21 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 
 		$action_id = $this->factory->post->create(
 			array(
-				'post_type'    => FrmFormActionsController::$action_post_type,
 				'menu_order'   => $form_id,
 				'post_excerpt' => $id_base,
+				'post_type'    => FrmFormActionsController::$action_post_type,
 			)
 		);
 
 		$_POST[ $option_name ] = array(
 			$number => array(
 				'ID'           => $action_id,
-				'post_status'  => 'publish',
-				'post_title'   => 'Confirmation',
 				'post_content' => array(
 					'success_action' => 'redirect',
 					'success_url'    => 'https://example.com/?param=[' . $field_id . ']',
 				),
+				'post_status'  => 'publish',
+				'post_title'   => 'Confirmation',
 			),
 		);
 

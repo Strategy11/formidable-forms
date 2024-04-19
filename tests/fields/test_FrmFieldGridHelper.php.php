@@ -72,11 +72,11 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	private function create_field_with_classes( $type, $classes = '' ) {
 		return $this->factory->field->create_and_get(
 			array(
-				'form_id'       => $this->form_id,
-				'type'          => $type,
 				'field_options' => array(
 					'classes' => $classes,
 				),
+				'form_id'       => $this->form_id,
+				'type'          => $type,
 			)
 		);
 	}

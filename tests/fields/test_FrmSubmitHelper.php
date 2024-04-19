@@ -9,8 +9,8 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 		$this->factory->field->create(
 			array(
 				'form_id' => $form->id,
-				'type'    => 'submit',
 				'name'    => 'Submit form',
+				'type'    => 'submit',
 			)
 		);
 
@@ -33,8 +33,8 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 		$this->assertEquals( array( 'type' => 'submit' ), FrmSubmitHelper::only_contains_submit_field( $fields ) );
 
 		$last_submit = array(
-			'type' => 'submit',
 			'id'   => 2,
+			'type' => 'submit',
 		);
 		$fields[]    = $last_submit;
 		$this->assertEquals( $last_submit, FrmSubmitHelper::only_contains_submit_field( $fields ) );

@@ -92,9 +92,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	if ( $rich_text_emails ) {
 		$editor_args = array(
+			'editor_class'  => 'frm_not_email_message',
 			'textarea_name' => $this->get_field_name( 'email_message' ),
 			'textarea_rows' => 6,
-			'editor_class'  => 'frm_not_email_message',
 		);
 		wp_editor(
 			$form_action->post_content['email_message'],

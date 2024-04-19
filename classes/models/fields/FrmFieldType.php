@@ -327,27 +327,27 @@ DEFAULT_HTML;
 	 */
 	protected function default_field_settings() {
 		return array(
-			'type'           => $this->type,
-			'label'          => true,
-			'required'       => true,
-			'unique'         => false,
-			'read_only'      => false,
-			'description'    => true,
-			'options'        => true,
-			'label_position' => true,
-			'invalid'        => false,
-			'size'           => false,
-			// Shows the placeholder option.
-			'clear_on_focus' => false,
-			'css'            => true,
-			'conf_field'     => false,
-			'max'            => true,
-			'range'          => false,
 			'captcha_size'   => false,
 			'captcha_theme'  => false,
-			'format'         => false,
-			'show_image'     => false,
+			// Shows the placeholder option.
+			'clear_on_focus' => false,
+			'conf_field'     => false,
+			'css'            => true,
 			'default'        => true,
+			'description'    => true,
+			'format'         => false,
+			'invalid'        => false,
+			'label'          => true,
+			'label_position' => true,
+			'max'            => true,
+			'options'        => true,
+			'range'          => false,
+			'read_only'      => false,
+			'required'       => true,
+			'show_image'     => false,
+			'size'           => false,
+			'type'           => $this->type,
+			'unique'         => false,
 		);
 	}
 
@@ -362,10 +362,10 @@ DEFAULT_HTML;
 
 	private function no_input_settings() {
 		return array(
-			'required'       => false,
+			'default'        => false,
 			'description'    => false,
 			'label_position' => false,
-			'default'        => false,
+			'required'       => false,
 		);
 	}
 
@@ -578,11 +578,11 @@ DEFAULT_HTML;
 	 */
 	public function displayed_field_type( $field ) {
 		$display_type = array(
-			'radio'    => FrmField::is_field_type( $field, 'radio' ),
 			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
-			'select'   => FrmField::is_field_type( $field, 'select' ),
-			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
 			'data'     => FrmField::is_field_type( $field, 'data' ),
+			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
+			'radio'    => FrmField::is_field_type( $field, 'radio' ),
+			'select'   => FrmField::is_field_type( $field, 'select' ),
 		);
 		return array_filter( $display_type );
 	}
@@ -676,13 +676,13 @@ DEFAULT_HTML;
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
-			'name'          => $this->get_new_field_name(),
-			'description'   => '',
-			'type'          => $this->type,
-			'options'       => '',
 			'default_value' => '',
-			'required'      => false,
+			'description'   => '',
 			'field_options' => $this->get_default_field_options(),
+			'name'          => $this->get_new_field_name(),
+			'options'       => '',
+			'required'      => false,
+			'type'          => $this->type,
 		);
 
 		$field_options = $this->new_field_settings();
@@ -725,23 +725,23 @@ DEFAULT_HTML;
 	 */
 	public function get_default_field_options() {
 		$opts        = array(
-			'size'               => '',
-			'max'                => '',
-			'label'              => '',
 			'blank'              => FrmFieldsHelper::default_blank_msg(),
-			'required_indicator' => '*',
-			'invalid'            => '',
-			'unique_msg'         => '',
-			'separate_value'     => 0,
-			'clear_on_focus'     => 0,
 			'classes'            => '',
+			'clear_on_focus'     => 0,
 			'custom_html'        => '',
-			'minnum'             => 1,
-			'maxnum'             => 10,
-			'step'               => 1,
-			'format'             => '',
-			'placeholder'        => '',
 			'draft'              => 0,
+			'format'             => '',
+			'invalid'            => '',
+			'label'              => '',
+			'max'                => '',
+			'maxnum'             => 10,
+			'minnum'             => 1,
+			'placeholder'        => '',
+			'required_indicator' => '*',
+			'separate_value'     => 0,
+			'size'               => '',
+			'step'               => 1,
+			'unique_msg'         => '',
 		);
 		$field_opts  = $this->extra_field_opts();
 		$opts        = array_merge( $opts, $field_opts );
@@ -1198,8 +1198,8 @@ DEFAULT_HTML;
 
 	protected function fill_display_field_values( $args = array() ) {
 		$defaults        = array(
-			'field_name'    => 'item_meta[' . $this->get_field_column( 'id' ) . ']',
 			'field_id'      => $this->get_field_column( 'id' ),
+			'field_name'    => 'item_meta[' . $this->get_field_column( 'id' ) . ']',
 			'field_plus_id' => '',
 			'section_id'    => '',
 		);

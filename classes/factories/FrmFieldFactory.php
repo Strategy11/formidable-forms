@@ -90,22 +90,22 @@ class FrmFieldFactory {
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
-			'text'                      => 'FrmFieldText',
-			'textarea'                  => 'FrmFieldTextarea',
-			'select'                    => 'FrmFieldSelect',
-			'radio'                     => 'FrmFieldRadio',
+			'captcha'                   => 'FrmFieldCaptcha',
 			'checkbox'                  => 'FrmFieldCheckbox',
+			'credit_card'               => 'FrmFieldCreditCard',
+			'email'                     => 'FrmFieldEmail',
+			'hidden'                    => 'FrmFieldHidden',
+			'html'                      => 'FrmFieldHTML',
+			'name'                      => 'FrmFieldName',
 			'number'                    => 'FrmFieldNumber',
 			'phone'                     => 'FrmFieldPhone',
+			'radio'                     => 'FrmFieldRadio',
+			'select'                    => 'FrmFieldSelect',
+			'text'                      => 'FrmFieldText',
+			'textarea'                  => 'FrmFieldTextarea',
 			'url'                       => 'FrmFieldUrl',
-			'website'                   => 'FrmFieldUrl',
-			'email'                     => 'FrmFieldEmail',
 			'user_id'                   => 'FrmFieldUserID',
-			'html'                      => 'FrmFieldHTML',
-			'hidden'                    => 'FrmFieldHidden',
-			'captcha'                   => 'FrmFieldCaptcha',
-			'name'                      => 'FrmFieldName',
-			'credit_card'               => 'FrmFieldCreditCard',
+			'website'                   => 'FrmFieldUrl',
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
 		);

@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Forms', 'formidable' ),
 
 			'import_link' => true,
+			'label'       => __( 'Forms', 'formidable' ),
 			'publish'     => array(
 				'FrmAppHelper::add_new_item_link',
 				array(

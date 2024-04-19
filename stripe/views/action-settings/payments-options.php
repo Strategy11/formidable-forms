@@ -84,8 +84,8 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 	<?php
 	FrmStrpLiteActionsController::add_action_options(
 		array(
-			'form_action'    => $form_action,
 			'action_control' => $this,
+			'form_action'    => $form_action,
 		)
 	);
 	?>

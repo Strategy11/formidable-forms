@@ -43,8 +43,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $this->total_items,
 				'per_page'    => $per_page,
+				'total_items' => $this->total_items,
 			)
 		);
 	}
@@ -83,8 +83,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected function get_order_by() {
 		$orderby = self::get_param(
 			array(
-				'param'   => 'orderby',
 				'default' => 'id',
+				'param'   => 'orderby',
 			)
 		);
 
@@ -95,8 +95,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$order = self::get_param(
 			array(
-				'param'   => 'order',
 				'default' => 'DESC',
+				'param'   => 'order',
 			)
 		);
 
@@ -113,8 +113,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$page  = $this->get_pagenum();
 		$start = (int) self::get_param(
 			array(
-				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
+				'param'   => 'start',
 			)
 		);
 
@@ -454,11 +454,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$atts = array(
-			'type'              => $field->type,
-			'truncate'          => true,
-			'post_id'           => $item->post_id,
-			'entry_id'          => $item->id,
 			'embedded_field_id' => 0,
+			'entry_id'          => $item->id,
+			'post_id'           => $item->post_id,
+			'truncate'          => true,
+			'type'              => $field->type,
 		);
 
 		if ( $sep_val ) {

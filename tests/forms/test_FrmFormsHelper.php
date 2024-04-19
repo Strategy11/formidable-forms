@@ -103,8 +103,8 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$frm_style = new FrmStyle();
 		$style_id  = $this->factory->post->create(
 			array(
-				'post_type'    => 'frm_styles',
 				'post_content' => FrmAppHelper::prepare_and_encode( $frm_style->get_defaults() ),
+				'post_type'    => 'frm_styles',
 			)
 		);
 

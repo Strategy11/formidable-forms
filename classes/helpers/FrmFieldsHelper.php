@@ -330,16 +330,6 @@ class FrmFieldsHelper {
 
 		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
-			'unique_msg' => array(
-				'full' => self::default_unique_msg(),
-				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s must be unique', 'formidable' ), '[field_name]' ),
-			),
-			'invalid'    => array(
-				'full' => __( 'This field is invalid', 'formidable' ),
-				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
-			),
 			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
 				'part' => $frm_settings->blank_msg,
@@ -347,6 +337,16 @@ class FrmFieldsHelper {
 			'conf_msg'   => array(
 				'full' => $conf_msg,
 				'part' => $conf_msg,
+			),
+			'invalid'    => array(
+				'full' => __( 'This field is invalid', 'formidable' ),
+				/* translators: %s: Field name */
+				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
+			),
+			'unique_msg' => array(
+				'full' => self::default_unique_msg(),
+				/* translators: %s: Field name */
+				'part' => sprintf( __( '%s must be unique', 'formidable' ), '[field_name]' ),
 			),
 		);
 
@@ -611,13 +611,13 @@ class FrmFieldsHelper {
 	 */
 	public static function inline_modal( $args ) {
 		$defaults = array(
-			'id'           => '',
-			'class'        => '',
-			'show'         => 0,
-			'callback'     => array(),
 			'args'         => array(),
-			'title'        => '',
+			'callback'     => array(),
+			'class'        => '',
+			'id'           => '',
 			'inside_class' => 'inside',
+			'show'         => 0,
+			'title'        => '',
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -631,8 +631,8 @@ class FrmFieldsHelper {
 		$continue = apply_filters( 'frm_smart_values_box', true );
 		if ( $continue === true ) {
 			$upgrade_link = array(
-				'medium'  => 'builder',
 				'content' => 'smart-tags',
+				'medium'  => 'builder',
 			);
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
 		}
@@ -949,8 +949,8 @@ class FrmFieldsHelper {
 
 		$shortcode_values = array(
 			'id'  => $atts['entry']->id,
-			'key' => $atts['entry']->item_key,
 			'ip'  => $atts['entry']->ip,
+			'key' => $atts['entry']->item_key,
 		);
 
 		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get' );
@@ -1230,8 +1230,8 @@ class FrmFieldsHelper {
 	 */
 	public static function get_other_val( $args ) {
 		$defaults = array(
-			'opt_key' => 0,
 			'field'   => array(),
+			'opt_key' => 0,
 			'parent'  => false,
 			'pointer' => false,
 		);
@@ -1400,8 +1400,8 @@ class FrmFieldsHelper {
 		// Get text for "other" text field
 		$other_args['value'] = self::get_other_val(
 			array(
-				'opt_key' => $args['opt_key'],
 				'field'   => $args['field'],
+				'opt_key' => $args['opt_key'],
 				'parent'  => $parent,
 				'pointer' => $pointer,
 			)
@@ -1526,41 +1526,41 @@ class FrmFieldsHelper {
 
 	public static function get_us_states() {
 		$states = array(
-			'AL' => 'Alabama',
 			'AK' => 'Alaska',
+			'AL' => 'Alabama',
 			'AR' => 'Arkansas',
 			'AZ' => 'Arizona',
 			'CA' => 'California',
 			'CO' => 'Colorado',
 			'CT' => 'Connecticut',
-			'DE' => 'Delaware',
 			'DC' => 'District of Columbia',
+			'DE' => 'Delaware',
 			'FL' => 'Florida',
 			'GA' => 'Georgia',
 			'HI' => 'Hawaii',
+			'IA' => 'Iowa',
 			'ID' => 'Idaho',
 			'IL' => 'Illinois',
 			'IN' => 'Indiana',
-			'IA' => 'Iowa',
 			'KS' => 'Kansas',
 			'KY' => 'Kentucky',
 			'LA' => 'Louisiana',
-			'ME' => 'Maine',
-			'MD' => 'Maryland',
 			'MA' => 'Massachusetts',
+			'MD' => 'Maryland',
+			'ME' => 'Maine',
 			'MI' => 'Michigan',
 			'MN' => 'Minnesota',
-			'MS' => 'Mississippi',
 			'MO' => 'Missouri',
+			'MS' => 'Mississippi',
 			'MT' => 'Montana',
+			'NC' => 'North Carolina',
+			'ND' => 'North Dakota',
 			'NE' => 'Nebraska',
-			'NV' => 'Nevada',
 			'NH' => 'New Hampshire',
 			'NJ' => 'New Jersey',
 			'NM' => 'New Mexico',
+			'NV' => 'Nevada',
 			'NY' => 'New York',
-			'NC' => 'North Carolina',
-			'ND' => 'North Dakota',
 			'OH' => 'Ohio',
 			'OK' => 'Oklahoma',
 			'OR' => 'Oregon',
@@ -1571,11 +1571,11 @@ class FrmFieldsHelper {
 			'TN' => 'Tennessee',
 			'TX' => 'Texas',
 			'UT' => 'Utah',
-			'VT' => 'Vermont',
 			'VA' => 'Virginia',
+			'VT' => 'Vermont',
 			'WA' => 'Washington',
-			'WV' => 'West Virginia',
 			'WI' => 'Wisconsin',
+			'WV' => 'West Virginia',
 			'WY' => 'Wyoming',
 		);
 
@@ -2044,13 +2044,13 @@ class FrmFieldsHelper {
 
 		$li_params = array(
 			'class'         => 'frmbutton frm6 ' . $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ),
-			'id'            => $field_key,
-			'data-upgrade'  => $upgrade_label,
+			'data-content'  => $field_key,
 			'data-link'     => $link,
 			'data-medium'   => 'builder',
 			'data-oneclick' => $install_data,
-			'data-content'  => $field_key,
 			'data-requires' => $requires,
+			'data-upgrade'  => $upgrade_label,
+			'id'            => $field_key,
 		);
 
 		if ( ! empty( $field_type['hide'] ) ) {
@@ -2103,24 +2103,24 @@ class FrmFieldsHelper {
 	public static function get_display_format_options( $field ) {
 		$options = array(
 			'0'       => array(
-				'text' => __( 'Simple', 'formidable' ),
 				'svg'  => 'frm_simple_radio',
+				'text' => __( 'Simple', 'formidable' ),
 			),
 			'1'       => array(
-				'text'    => __( 'Images', 'formidable' ),
-				'svg'     => 'frm_image_as_option',
 				'addon'   => 'pro',
-				'upgrade' => __( 'Image Options', 'formidable' ),
-				'message' => __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . esc_url( FrmAppHelper::plugin_url() ) . '/images/image-options.png" />',
 				'content' => 'image-options',
+				'message' => __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . esc_url( FrmAppHelper::plugin_url() ) . '/images/image-options.png" />',
+				'svg'     => 'frm_image_as_option',
+				'text'    => __( 'Images', 'formidable' ),
+				'upgrade' => __( 'Image Options', 'formidable' ),
 			),
 			'buttons' => array(
-				'text'    => __( 'Buttons', 'formidable' ),
-				'svg'     => 'frm_button_as_option',
 				'addon'   => 'surveys',
-				'upgrade' => __( 'Button Options', 'formidable' ),
-				'message' => __( 'Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ),
 				'content' => 'button-options',
+				'message' => __( 'Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ),
+				'svg'     => 'frm_button_as_option',
+				'text'    => __( 'Buttons', 'formidable' ),
+				'upgrade' => __( 'Button Options', 'formidable' ),
 			),
 		);
 
@@ -2148,12 +2148,12 @@ class FrmFieldsHelper {
 	 */
 	public static function get_display_format_args( $field, $options ) {
 		$args = array(
-			'selected'    => '0',
-			'options'     => array(),
-			'name'        => 'field_options[image_options_' . $field['id'] . ']',
 			'input_attrs' => array(
 				'class' => 'frm_toggle_image_options',
 			),
+			'name'        => 'field_options[image_options_' . $field['id'] . ']',
+			'options'     => array(),
+			'selected'    => '0',
 		);
 
 		self::fill_image_setting_options( $options, $args );
@@ -2257,9 +2257,9 @@ class FrmFieldsHelper {
 		}
 
 		$where = array(
-			'form_id'            => $form_ids,
 			// Do a soft check for fields that look like drafts only.
 			'field_options LIKE' => 's:5:"draft";i:1;',
+			'form_id'            => $form_ids,
 		);
 
 		if ( $field_ids ) {

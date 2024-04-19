@@ -22,28 +22,28 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 				'type' => 'scale',
 			),
 			array(
-				'type'      => 'data',
 				'data_type' => 'radio',
-			),
-			array(
 				'type'      => 'data',
-				'data_type' => 'checkbox',
 			),
 			array(
-				'type'      => 'product',
+				'data_type' => 'checkbox',
+				'type'      => 'data',
+			),
+			array(
 				'data_type' => 'radio',
+				'type'      => 'product',
 			),
 			array(
-				'type'      => 'product',
 				'data_type' => 'checkbox',
+				'type'      => 'product',
 			),
 		);
 
 		foreach ( $valid_field_types as $field_type ) {
 			$field_args = array(
-				'type'     => $field_type['type'],
 				'form_id'  => $form_id,
 				'required' => '1',
+				'type'     => $field_type['type'],
 			);
 
 			if ( in_array( $field_type['type'], array( 'data', 'product' ), true ) ) {
@@ -59,11 +59,11 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 
 			// Prepare the necessary constructor arguments
 			$atts = array(
-				'field_obj' => $field_object,
 				'field_id'  => $field->id,
+				'field_obj' => $field_object,
 				'form'      => $form,
-				'html_id'   => 1,
 				'html'      => $multiple_input_html,
+				'html_id'   => 1,
 			);
 
 			$instance = new FrmFieldFormHtml( $atts );

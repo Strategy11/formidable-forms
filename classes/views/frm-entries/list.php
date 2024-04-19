@@ -11,10 +11,10 @@ $should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'f
 		// Adding new entries from an admin page is a Pro feature.
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'       => __( 'Form Entries', 'formidable' ),
-				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
+				'form'        => $form,
 				'import_link' => $pro_is_installed,
+				'label'       => __( 'Form Entries', 'formidable' ),
 				'publish'     => ! $should_show_add_new_button ? true : array(
 					'FrmAppHelper::add_new_item_link',
 					array(

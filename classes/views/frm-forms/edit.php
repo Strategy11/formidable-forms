@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php';
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'      => __( 'Build Form', 'formidable' ),
 			'form'       => $form,
 			'hide_title' => true,
+			'label'      => __( 'Build Form', 'formidable' ),
 			'publish'    => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);

@@ -89,12 +89,12 @@ class FrmTransLiteAppHelper {
 	public static function get_payment_statuses() {
 		return array(
 			'authorized' => __( 'Authorized', 'formidable' ),
-			'pending'    => __( 'Pending', 'formidable' ),
+			'canceled'   => __( 'Canceled', 'formidable' ),
 			'complete'   => __( 'Completed', 'formidable' ),
 			'failed'     => __( 'Failed', 'formidable' ),
-			'refunded'   => __( 'Refunded', 'formidable' ),
-			'canceled'   => __( 'Canceled', 'formidable' ),
+			'pending'    => __( 'Pending', 'formidable' ),
 			'processing' => __( 'Processing', 'formidable' ),
+			'refunded'   => __( 'Refunded', 'formidable' ),
 		);
 	}
 
@@ -103,10 +103,10 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_subscription_statuses() {
 		return array(
-			'pending'       => __( 'Pending', 'formidable' ),
 			'active'        => __( 'Active', 'formidable' ),
-			'future_cancel' => __( 'Canceled', 'formidable' ),
 			'canceled'      => __( 'Canceled', 'formidable' ),
+			'future_cancel' => __( 'Canceled', 'formidable' ),
+			'pending'       => __( 'Pending', 'formidable' ),
 			'void'          => __( 'Void', 'formidable' ),
 		);
 	}
@@ -140,8 +140,8 @@ class FrmTransLiteAppHelper {
 	public static function add_meta_to_payment( $meta_value, $note ) {
 		$meta_value   = (array) maybe_unserialize( $meta_value );
 		$meta_value[] = array(
-			'message' => $note,
 			'date'    => gmdate( 'Y-m-d H:i:s' ),
+			'message' => $note,
 		);
 		return $meta_value;
 	}
@@ -225,8 +225,8 @@ class FrmTransLiteAppHelper {
 	public static function get_repeat_times() {
 		return array(
 			'day'   => __( 'day(s)', 'formidable' ),
-			'week'  => __( 'week(s)', 'formidable' ),
 			'month' => __( 'month(s)', 'formidable' ),
+			'week'  => __( 'week(s)', 'formidable' ),
 			'year'  => __( 'year(s)', 'formidable' ),
 		);
 	}
@@ -240,8 +240,8 @@ class FrmTransLiteAppHelper {
 	private static function get_plural_repeat_times( $number ) {
 		return array(
 			'day'   => _n( 'day', 'days', $number, 'formidable' ),
-			'week'  => _n( 'week', 'weeks', $number, 'formidable' ),
 			'month' => _n( 'month', 'months', $number, 'formidable' ),
+			'week'  => _n( 'week', 'weeks', $number, 'formidable' ),
 			'year'  => _n( 'year', 'years', $number, 'formidable' ),
 		);
 	}

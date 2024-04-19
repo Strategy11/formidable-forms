@@ -107,54 +107,54 @@ class test_FrmAppController extends FrmUnitTest {
 
 		$tests = array(
 			array(
-				'version'  => '',
 				'db'       => 74,
 				'expected' => true,
+				'version'  => '',
 			),
 			array(
-				'version'  => '',
 				'db'       => 50,
 				'expected' => true,
+				'version'  => '',
 			),
 			array(
-				'version'  => '2.05.09',
 				'db'       => 75,
 				'expected' => true,
+				'version'  => '2.05.09',
 			),
 			array(
-				'version'  => '3.0',
 				'db'       => 51,
 				'expected' => true,
+				'version'  => '3.0',
 			),
 			array(
-				'version'  => '5.0',
 				'db'       => 98,
 				'expected' => true,
+				'version'  => '5.0',
 			),
 			array(
-				'version'  => '7.0', // This version should be later than the current version (Bump this to 8 when v7.0 is released).
 				'db'       => FrmAppHelper::$db_version + 1,
 				'expected' => false,
+				'version'  => '7.0', // This version should be later than the current version (Bump this to 8 when v7.0 is released).
 			),
 			array(
-				'version'  => '7.01.10',
 				'db'       => 900,
 				'expected' => false,
+				'version'  => '7.01.10',
 			),
 			array(
-				'version'  => FrmAppHelper::plugin_version(),
 				'db'       => FrmAppHelper::$db_version,
 				'expected' => false,
+				'version'  => FrmAppHelper::plugin_version(),
 			),
 			array(
-				'version'  => FrmAppHelper::plugin_version(),
 				'db'       => FrmAppHelper::$db_version - 1, // previous version
 				'expected' => true,
+				'version'  => FrmAppHelper::plugin_version(),
 			),
 			array(
-				'version'  => FrmAppHelper::plugin_version(),
 				'db'       => FrmAppHelper::$db_version + 1, // next version
 				'expected' => false,
+				'version'  => FrmAppHelper::plugin_version(),
 			),
 		);
 
@@ -166,9 +166,9 @@ class test_FrmAppController extends FrmUnitTest {
 
 			$upgrade = FrmAppController::compare_for_update(
 				array(
-					'option'             => 'frm_db_version',
 					'new_db_version'     => FrmAppHelper::$db_version,
 					'new_plugin_version' => FrmAppHelper::plugin_version(),
+					'option'             => 'frm_db_version',
 				)
 			);
 			$this->assertEquals( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );

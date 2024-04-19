@@ -85,8 +85,8 @@ class FrmStrpLiteEventsController {
 		if ( $run_triggers && $payment && $payment->action_id ) {
 			FrmTransLiteActionsController::trigger_payment_status_change(
 				array(
-					'status'  => $this->status,
 					'payment' => $payment,
+					'status'  => $this->status,
 				)
 			);
 		}
@@ -459,11 +459,11 @@ class FrmStrpLiteEventsController {
 		}
 
 		$events = array(
-			'payment_intent.succeeded'      => 'complete',
-			'payment_intent.payment_failed' => 'failed',
-			'invoice.payment_succeeded'     => 'complete',
-			'invoice.payment_failed'        => 'failed',
 			'charge.refunded'               => 'refunded',
+			'invoice.payment_failed'        => 'failed',
+			'invoice.payment_succeeded'     => 'complete',
+			'payment_intent.payment_failed' => 'failed',
+			'payment_intent.succeeded'      => 'complete',
 		);
 
 		if ( isset( $events[ $this->event->type ] ) ) {

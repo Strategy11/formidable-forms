@@ -40,8 +40,8 @@ class FrmStrpLiteAuth {
 		}
 
 		$atts = array(
-			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
 			'entry'  => $details['entry'],
+			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
 		);
 		self::prepare_success_atts( $atts );
 
@@ -333,8 +333,8 @@ class FrmStrpLiteAuth {
 					continue;
 				}
 				$intents[ $k ] = array(
-					'id'     => $intent,
 					'action' => $action->ID,
+					'id'     => $intent,
 				);
 
 				$amount = $action->post_content['amount'];
@@ -449,8 +449,8 @@ class FrmStrpLiteAuth {
 		foreach ( $actions as $action ) {
 			if ( is_array( $details ) && self::intent_has_failed_status( $details['intent'] ) ) {
 				$intents[] = array(
-					'id'     => $details['intent']->client_secret,
 					'action' => $action->ID,
+					'id'     => $details['intent']->client_secret,
 				);
 				continue;
 			}
@@ -468,8 +468,8 @@ class FrmStrpLiteAuth {
 			}
 
 			$intents[] = array(
-				'id'     => $intent->client_secret,
 				'action' => $action->ID,
+				'id'     => $intent->client_secret,
 			);
 		}//end foreach
 

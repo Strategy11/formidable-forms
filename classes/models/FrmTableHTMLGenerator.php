@@ -87,12 +87,12 @@ class FrmTableHTMLGenerator {
 	 */
 	private function init_style_settings( $atts ) {
 		$style_settings       = array(
-			'border_color' => 'dddddd',
-			'bg_color'     => 'f7f7f7',
-			'text_color'   => '444444',
-			'font_size'    => '12px',
-			'border_width' => '1px',
 			'alt_bg_color' => 'ffffff',
+			'bg_color'     => 'f7f7f7',
+			'border_color' => 'dddddd',
+			'border_width' => '1px',
+			'font_size'    => '12px',
+			'text_color'   => '444444',
 		);
 		$this->style_settings = apply_filters( 'frm_show_entry_styles', $style_settings );
 

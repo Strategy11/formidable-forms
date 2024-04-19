@@ -30,47 +30,47 @@ class FrmStylesHelper {
 	 */
 	public static function get_css_label_positions() {
 		return array(
-			'none'     => __( 'top', 'formidable' ),
-			'left'     => __( 'left', 'formidable' ),
-			'right'    => __( 'right', 'formidable' ),
-			'no_label' => __( 'none', 'formidable' ),
 			'inside'   => __( 'inside', 'formidable' ),
+			'left'     => __( 'left', 'formidable' ),
+			'none'     => __( 'top', 'formidable' ),
+			'no_label' => __( 'none', 'formidable' ),
+			'right'    => __( 'right', 'formidable' ),
 		);
 	}
 
 	public static function get_single_label_positions() {
 		return array(
-			'top'    => __( 'Top', 'formidable' ),
-			'left'   => __( 'Left', 'formidable' ),
-			'right'  => __( 'Right', 'formidable' ),
-			'inline' => __( 'Inline (left without a set width)', 'formidable' ),
-			'none'   => __( 'None', 'formidable' ),
 			'hidden' => __( 'Hidden (but leave the space)', 'formidable' ),
+			'inline' => __( 'Inline (left without a set width)', 'formidable' ),
 			'inside' => __( 'Placeholder inside the field', 'formidable' ),
+			'left'   => __( 'Left', 'formidable' ),
+			'none'   => __( 'None', 'formidable' ),
+			'right'  => __( 'Right', 'formidable' ),
+			'top'    => __( 'Top', 'formidable' ),
 		);
 	}
 
 	public static function minus_icons() {
 		return array(
 			0 => array(
-				'-' => '62e',
 				'+' => '62f',
+				'-' => '62e',
 			),
 			1 => array(
-				'-' => '600',
 				'+' => '602',
+				'-' => '600',
 			),
 			2 => array(
-				'-' => '604',
 				'+' => '603',
+				'-' => '604',
 			),
 			3 => array(
-				'-' => '633',
 				'+' => '632',
+				'-' => '633',
 			),
 			4 => array(
-				'-' => '613',
 				'+' => '60f',
+				'-' => '613',
 			),
 		);
 	}
@@ -79,39 +79,39 @@ class FrmStylesHelper {
 		$minus_icons = self::minus_icons();
 
 		return array(
-			6    => array(
-				'-' => '62d',
-				'+' => '62a',
-			),
-			0    => array(
-				'-' => '60d',
-				'+' => '609',
-			),
-			1    => array(
-				'-' => '60e',
-				'+' => '60c',
-			),
-			2    => array(
-				'-' => '630',
-				'+' => '631',
-			),
-			3    => array(
-				'-' => '62b',
-				'+' => '628',
-			),
-			4    => array(
-				'-' => '62c',
-				'+' => '629',
-			),
-			5    => array(
-				'-' => '635',
-				'+' => '634',
-			),
 			'p0' => $minus_icons[0],
 			'p1' => $minus_icons[1],
 			'p2' => $minus_icons[2],
 			'p3' => $minus_icons[3],
 			'p4' => $minus_icons[4],
+			0    => array(
+				'+' => '609',
+				'-' => '60d',
+			),
+			1    => array(
+				'+' => '60c',
+				'-' => '60e',
+			),
+			2    => array(
+				'+' => '631',
+				'-' => '630',
+			),
+			3    => array(
+				'+' => '628',
+				'-' => '62b',
+			),
+			4    => array(
+				'+' => '629',
+				'-' => '62c',
+			),
+			5    => array(
+				'+' => '634',
+				'-' => '635',
+			),
+			6    => array(
+				'+' => '62a',
+				'-' => '62d',
+			),
 		);
 	}
 
@@ -123,16 +123,16 @@ class FrmStylesHelper {
 		if ( 'arrow' === $type && is_numeric( $key ) ) {
 			// frm_arrowup6_icon.
 			$arrow = array(
-				'-' => 'down',
 				'+' => 'up',
+				'-' => 'down',
 			);
 			$class = 'frm_arrow' . $arrow[ $icon ];
 		} else {
 			// frm_minus1_icon.
 			$key   = str_replace( 'p', '', $key );
 			$plus  = array(
-				'-' => 'minus',
 				'+' => 'plus',
+				'-' => 'minus',
 			);
 			$class = 'frm_' . $plus[ $icon ];
 		}
@@ -540,8 +540,8 @@ class FrmStylesHelper {
 		);
 
 		return array(
-			'transparent' => $transparent,
 			''            => array_diff( $colors, $transparent ),
+			'transparent' => $transparent,
 		);
 	}
 
@@ -670,9 +670,9 @@ class FrmStylesHelper {
 	 */
 	public static function get_edit_url( $style, $form_id = 0 ) {
 		$query_args = array(
-			'page'       => 'formidable-styles',
 			'frm_action' => 'edit',
 			'id'         => $style->ID,
+			'page'       => 'formidable-styles',
 		);
 
 		if ( $form_id ) {
@@ -700,8 +700,8 @@ class FrmStylesHelper {
 		$number_of_forms = FrmDb::get_count(
 			'frm_forms',
 			array(
-				'status'       => 'published',
 				'options LIKE' => $substring,
+				'status'       => 'published',
 			)
 		);
 
@@ -736,9 +736,9 @@ class FrmStylesHelper {
 		$where      = array(
 			'status' => 'published',
 			0        => array(
+				'options LIKE'     => $substrings,
 				'options NOT LIKE' => 'custom_style',
 				'or'               => 1,
-				'options LIKE'     => $substrings,
 			),
 		);
 

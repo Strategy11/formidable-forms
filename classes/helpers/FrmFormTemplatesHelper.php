@@ -56,9 +56,9 @@ class FrmFormTemplatesHelper {
 	 */
 	public static function add_template_attributes( $template, $expired ) {
 		$attributes = array(
-			'tabindex'        => '0',
 			'data-id'         => $template['id'],
 			'frm-search-text' => strtolower( $template['name'] ),
+			'tabindex'        => '0',
 		);
 
 		// Set 'data-slug' attribute.
@@ -135,14 +135,14 @@ class FrmFormTemplatesHelper {
 	public static function add_template_link_attributes( $template ) {
 		$attributes = array(
 			'class' => 'button button-secondary frm-button-secondary frm-small',
-			'role'  => 'button',
 			'href'  => $template['link'],
+			'role'  => 'button',
 		);
 
 		if ( ! $template['is_custom'] ) {
 			$utm = array(
-				'medium'  => 'form-templates',
 				'content' => $template['slug'],
+				'medium'  => 'form-templates',
 			);
 
 			$attributes['href']   = FrmAppHelper::admin_upgrade_link( $utm, $attributes['href'] );
@@ -170,11 +170,11 @@ class FrmFormTemplatesHelper {
 		if ( $args['expired'] ) {
 			FrmTipsHelper::show_admin_cta(
 				array(
-					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
 					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
+					'id'          => 'frm-renew-subscription-banner',
 					'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
 					'link_url'    => $args['renew_link'],
-					'id'          => 'frm-renew-subscription-banner',
+					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
 				)
 			);
 			return;
@@ -184,16 +184,16 @@ class FrmFormTemplatesHelper {
 		if ( ! in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) ) {
 			FrmTipsHelper::show_admin_cta(
 				array(
+					'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
+					'id'          => 'frm-upgrade-banner',
+					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+					'link_url'    => $args['upgrade_link'],
 					'title'       => sprintf(
 						/* translators: %1$s: Open span tag, %2$s: Close span tag */
 						esc_html__( 'Get Super Powers with %1$s%2$s More Pre-built Forms', 'formidable' ) . ' 🦸',
 						'<span class="frm-form-templates-extra-templates-count">',
 						'</span>'
 					),
-					'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
-					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
-					'link_url'    => $args['upgrade_link'],
-					'id'          => 'frm-upgrade-banner',
 				)
 			);
 		}

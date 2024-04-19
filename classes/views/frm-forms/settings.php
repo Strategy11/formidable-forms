@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'      => __( 'Settings', 'formidable' ),
+			'close'      => '?page=formidable',
 			'form'       => $form,
 			'hide_title' => true,
-			'close'      => '?page=formidable',
+			'label'      => __( 'Settings', 'formidable' ),
 			'publish'    => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);

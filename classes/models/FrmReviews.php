@@ -52,9 +52,9 @@ class FrmReviews {
 		$user_id = get_current_user_id();
 		$review  = get_user_meta( $user_id, $this->option_name, true );
 		$default = array(
-			'time'      => time(),
-			'dismissed' => false,
 			'asked'     => 0,
+			'dismissed' => false,
+			'time'      => time(),
 		);
 
 		if ( empty( $review ) ) {
@@ -153,13 +153,13 @@ class FrmReviews {
 
 		$message->add_message(
 			array(
+				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
+					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
 				'key'     => $key,
 				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
 					'- Steph Wells<br/>' .
 					'<span>' . esc_html__( 'Co-Founder and CTO of Formidable Forms', 'formidable' ) . '<span>',
 				'subject' => str_replace( $name, '', $title ),
-				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
-					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
 				'type'    => 'feedback',
 			)
 		);

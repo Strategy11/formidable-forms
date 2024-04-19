@@ -104,9 +104,9 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		$additional_body = array(
+			'frm_strp_connect_mode' => $mode,
 			'password'              => self::generate_client_password( $mode ),
 			'user_id'               => get_current_user_id(),
-			'frm_strp_connect_mode' => $mode,
 		);
 		$data            = self::post_to_connect_server( 'initialize', $additional_body );
 
@@ -344,8 +344,8 @@ class FrmStrpLiteConnectHelper {
 		$mode = self::get_mode_value_from_post();
 		return array(
 			'account_id'      => get_option( self::get_account_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
 			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
 		);
 	}
 
@@ -376,9 +376,9 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		$body = array(
-			'server_password'       => get_option( self::get_server_side_token_option_name( $mode ) ),
 			'client_password'       => get_option( self::get_client_side_token_option_name( $mode ) ),
 			'frm_strp_connect_mode' => $mode,
+			'server_password'       => get_option( self::get_server_side_token_option_name( $mode ) ),
 		);
 		$data = self::post_to_connect_server( 'oauth_account_status', $body );
 
@@ -428,9 +428,9 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		$additional_body = array(
+			'frm_strp_connect_mode' => $mode,
 			'password'              => self::generate_client_password( $mode ),
 			'user_id'               => get_current_user_id(),
-			'frm_strp_connect_mode' => $mode,
 		);
 
 		// Clear the transient so it doesn't fail.

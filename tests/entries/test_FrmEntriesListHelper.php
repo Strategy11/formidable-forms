@@ -24,8 +24,8 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 		$item->form_id        = $this->factory->form->create();
 		$description_field_id = $this->factory->field->create(
 			array(
-				'form_id'   => $item->form_id,
 				'field_key' => 'description',
+				'form_id'   => $item->form_id,
 			)
 		);
 		$item->metas          = array(

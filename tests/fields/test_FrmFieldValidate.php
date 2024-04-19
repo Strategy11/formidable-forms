@@ -19,9 +19,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		foreach ( $field_types as $field_type ) {
 			$this->factory->field->create(
 				array(
-					'type'      => $field_type,
-					'form_id'   => $this->form->id,
 					'field_key' => $this->get_field_key( $field_type ),
+					'form_id'   => $this->form->id,
+					'type'      => $field_type,
 				)
 			);
 		}
@@ -38,9 +38,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_not_required_fields() {
 		$_POST = array(
+			'action'    => 'create',
 			'form_id'   => $this->form->id,
 			'item_meta' => array(),
-			'action'    => 'create',
 		);
 
 		$errors       = FrmEntryValidate::validate( $_POST );
@@ -82,39 +82,39 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	protected function expected_format_errors() {
 		return array(
 			array(
+				'invalid' => false,
 				'type'    => 'number',
 				'value'   => 123,
-				'invalid' => false,
 			),
 			array(
+				'invalid' => true,
 				'type'    => 'number',
 				'value'   => 'hello',
-				'invalid' => true,
 			),
 			array(
+				'invalid' => false,
 				'type'    => 'number',
 				'value'   => '1.234',
-				'invalid' => false,
 			),
 			array(
+				'invalid' => false,
 				'type'    => 'phone',
 				'value'   => '232-343-2322',
-				'invalid' => false,
 			),
 			array(
+				'invalid' => true,
 				'type'    => 'phone',
 				'value'   => '2323',
-				'invalid' => true,
 			),
 			array(
+				'invalid' => true,
 				'type'    => 'url',
 				'value'   => '2323',
-				'invalid' => true,
 			),
 			array(
+				'invalid' => false,
 				'type'    => 'url',
 				'value'   => 'http://',
-				'invalid' => false,
 			),
 		);
 	}
@@ -127,9 +127,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_fields( $fields );
 
 		$_POST = array(
+			'action'    => 'create',
 			'form_id'   => $this->form->id,
 			'item_meta' => array(),
-			'action'    => 'create',
 		);
 
 		$errors = FrmEntryValidate::validate( $_POST );
@@ -209,12 +209,12 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		$field = $this->factory->field->create_and_get(
 			array(
-				'type'          => 'number',
-				'form_id'       => $this->form->id,
 				'field_options' => array(
-					'minnum' => 0,
 					'maxnum' => 20,
+					'minnum' => 0,
 				),
+				'form_id'       => $this->form->id,
+				'type'          => 'number',
 			)
 		);
 		$this->assertEquals( 20, $field->field_options['maxnum'] );
@@ -256,9 +256,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	protected function check_single_value( $item_meta ) {
 		$_POST = array(
+			'action'    => 'create',
 			'form_id'   => $this->form->id,
 			'item_meta' => $item_meta,
-			'action'    => 'create',
 		);
 
 		return FrmEntryValidate::validate( $_POST );
@@ -270,31 +270,31 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_phone_format() {
 		$check_formats = array(
 			array(
+				'expected'  => $this->run_private_method( array( 'FrmEntryValidate', 'default_phone_format' ), array() ),
 				'field_key' => 'phone_with_default_format',
 				'format'    => '',
-				'expected'  => $this->run_private_method( array( 'FrmEntryValidate', 'default_phone_format' ), array() ),
 			),
 			array(
+				'expected'  => '^\d\d\d-\d\d\d-\d\d\d\d$',
 				'field_key' => 'phone_with_format',
 				'format'    => '999-999-9999',
-				'expected'  => '^\d\d\d-\d\d\d-\d\d\d\d$',
 			),
 			array(
+				'expected'  => '^\d{3}-\d{4}$', // leave it alone
 				'field_key' => 'phone_with_regex',
 				'format'    => '^\d{3}-\d{4}$',
-				'expected'  => '^\d{3}-\d{4}$', // leave it alone
 			),
 		);
 
 		foreach ( $check_formats as $check_it ) {
 			$field = $this->factory->field->create_and_get(
 				array(
-					'type'          => 'phone',
-					'form_id'       => $this->form->id,
 					'field_key'     => $check_it['field_key'],
 					'field_options' => array(
 						'format' => $check_it['format'],
 					),
+					'form_id'       => $this->form->id,
+					'type'          => 'phone',
 				)
 			);
 			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
@@ -310,10 +310,10 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_create_regular_expression_from_format() {
 		$formats = array(
 			'(999)999-2323' => '^\(\d\d\d\)\d\d\d-\d\d\d\d$',
-			'a9aa2328'      => '^[a-zA-Z]\d[a-zA-Z][a-zA-Z]\d\d\d\d$',
 			'****'          => '^\w\w\w\w$',
 			'99/23'         => '^\d\d\/\d\d$',
 			'99?99'         => '^\d\d(\d\d)?$',
+			'a9aa2328'      => '^[a-zA-Z]\d[a-zA-Z][a-zA-Z]\d\d\d\d$',
 		);
 
 		foreach ( $formats as $start => $expected ) {
@@ -366,13 +366,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_blacklist_check() {
 		$values = array(
+			'form_id'        => 1,
 			'item_meta'      => array(
 				'25' => '23.342.33',
 				'36' => 'email@example.com',
 				'37' => array( 'value1', 'value2' ),
 			),
 			'name_field_ids' => array(),
-			'form_id'        => 1,
 		);
 
 		update_option( $this->get_disallowed_option_name(), '' );

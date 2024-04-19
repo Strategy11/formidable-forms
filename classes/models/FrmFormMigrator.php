@@ -39,8 +39,8 @@ abstract class FrmFormMigrator {
 		$this->maybe_add_to_import_page();
 
 		$this->response = array(
-			'upgrade_omit' => array(),
 			'unsupported'  => array(),
+			'upgrade_omit' => array(),
 		);
 	}
 
@@ -121,8 +121,8 @@ abstract class FrmFormMigrator {
 		$forms = FrmAppHelper::get_simple_request(
 			array(
 				'param'    => 'form_id',
-				'type'     => 'post',
 				'sanitize' => 'absint',
+				'type'     => 'post',
 			)
 		);
 
@@ -155,8 +155,8 @@ abstract class FrmFormMigrator {
 			wp_send_json_success(
 				array(
 					'error' => true,
-					'name'  => esc_html( $source_form_name ),
 					'msg'   => __( 'No form fields found.', 'formidable' ),
+					'name'  => esc_html( $source_form_name ),
 				)
 			);
 		}
@@ -177,12 +177,12 @@ abstract class FrmFormMigrator {
 
 	protected function prepare_new_form( $source_id, $source_form_name ) {
 		return array(
-			'import_form_id' => $source_id,
-			'fields'         => array(),
-			'name'           => $source_form_name,
-			'description'    => '',
-			'options'        => array(),
 			'actions'        => array(),
+			'description'    => '',
+			'fields'         => array(),
+			'import_form_id' => $source_id,
+			'name'           => $source_form_name,
+			'options'        => array(),
 		);
 	}
 
@@ -356,9 +356,9 @@ abstract class FrmFormMigrator {
 
 		// Build and send final AJAX response!
 		return array(
-			'name'         => $form['name'],
 			'id'           => $form_id,
 			'link'         => esc_url_raw( FrmForm::get_edit_link( $form_id ) ),
+			'name'         => $form['name'],
 			'upgrade_omit' => $this->response['upgrade_omit'],
 		);
 	}
@@ -385,8 +385,8 @@ abstract class FrmFormMigrator {
 	protected function form_creation_error_response( $form ) {
 		return array(
 			'error' => true,
-			'name'  => sanitize_text_field( $form['name'] ),
 			'msg'   => esc_html__( 'There was an error while creating a new form.', 'formidable' ),
+			'name'  => sanitize_text_field( $form['name'] ),
 		);
 	}
 

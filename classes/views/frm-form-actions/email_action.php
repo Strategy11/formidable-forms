@@ -7,12 +7,12 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_email_solid_icon',
 			'active'   => true,
+			'classes'  => 'frm_icon_font frm_email_solid_icon',
+			'color'    => 'rgb(49, 119, 199)',
 			'event'    => array( 'create' ),
 			'limit'    => 99,
 			'priority' => 10,
-			'color'    => 'rgb(49, 119, 199)',
 		);
 		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
 
@@ -30,16 +30,16 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function get_defaults() {
 		return array(
-			'email_to'      => '[admin_email]',
-			'cc'            => '',
 			'bcc'           => '',
-			'from'          => '[sitename] <[admin_email]>',
-			'reply_to'      => '',
-			'email_subject' => '',
+			'cc'            => '',
 			'email_message' => '[default-message]',
+			'email_subject' => '',
+			'email_to'      => '[admin_email]',
+			'event'         => array( 'create' ),
+			'from'          => '[sitename] <[admin_email]>',
 			'inc_user_info' => 0,
 			'plain_text'    => 0,
-			'event'         => array( 'create' ),
+			'reply_to'      => '',
 		);
 	}
 

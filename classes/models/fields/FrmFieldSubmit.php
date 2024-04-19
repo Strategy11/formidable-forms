@@ -58,13 +58,13 @@ DEFAULT_HTML;
 	 */
 	protected function field_settings_for_type() {
 		$settings = array(
-			'required'       => false,
-			'visibility'     => false,
-			'label_position' => false,
-			'options'        => false,
 			'default'        => false,
 			'description'    => false,
+			'label_position' => false,
 			'logic'          => true,
+			'options'        => false,
+			'required'       => false,
+			'visibility'     => false,
 		);
 
 		return $settings;

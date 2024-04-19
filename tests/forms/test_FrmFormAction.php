@@ -15,10 +15,10 @@ class test_FrmFormAction extends FrmUnitTest {
 		$number                = -1;
 		$new_post_id           = $this->factory->post->create(
 			array(
-				'post_type'    => FrmFormActionsController::$action_post_type,
 				'menu_order'   => $form_id,
 				'post_excerpt' => $id_base,
 				'post_status'  => 'publish',
+				'post_type'    => FrmFormActionsController::$action_post_type,
 			)
 		);
 		$_POST[ $option_name ] = array(

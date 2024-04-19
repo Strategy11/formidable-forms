@@ -21,10 +21,10 @@ class FrmEntryMeta {
 		}
 
 		$new_values = array(
-			'meta_value' => is_array( $meta_value ) ? serialize( array_filter( $meta_value, 'FrmAppHelper::is_not_empty_value' ) ) : trim( $meta_value ),
-			'item_id'    => $entry_id,
-			'field_id'   => $field_id,
 			'created_at' => current_time( 'mysql', 1 ),
+			'field_id'   => $field_id,
+			'item_id'    => $entry_id,
+			'meta_value' => is_array( $meta_value ) ? serialize( array_filter( $meta_value, 'FrmAppHelper::is_not_empty_value' ) ) : trim( $meta_value ),
 		);
 
 		self::set_value_before_save( $new_values );
@@ -59,8 +59,8 @@ class FrmEntryMeta {
 		global $wpdb;
 
 		$values               = array(
-			'item_id'  => $entry_id,
 			'field_id' => $field_id,
+			'item_id'  => $entry_id,
 		);
 		$where_values         = $values;
 		$values['meta_value'] = $meta_value;
@@ -114,8 +114,8 @@ class FrmEntryMeta {
 		$prev_values = FrmDb::get_col(
 			$wpdb->prefix . 'frm_item_metas',
 			array(
-				'item_id'    => $entry_id,
 				'field_id !' => 0,
+				'item_id'    => $entry_id,
 			),
 			'field_id'
 		);
@@ -155,8 +155,8 @@ class FrmEntryMeta {
 
 		// prepare the query
 		$where = array(
-			'item_id'  => $entry_id,
 			'field_id' => $prev_values,
+			'item_id'  => $entry_id,
 		);
 		FrmDb::get_where_clause_and_values( $where );
 
@@ -251,10 +251,10 @@ class FrmEntryMeta {
 
 	public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
 		$defaults = array(
-			'value'        => false,
-			'unique'       => false,
-			'stripslashes' => true,
 			'is_draft'     => false,
+			'stripslashes' => true,
+			'unique'       => false,
+			'value'        => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
@@ -347,9 +347,9 @@ class FrmEntryMeta {
 
 	public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
 		$defaults = array(
+			'group_by' => '',
 			'is_draft' => false,
 			'user_id'  => '',
-			'group_by' => '',
 		);
 		$args     = wp_parse_args( $args, $defaults );
 

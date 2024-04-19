@@ -56,9 +56,9 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 $action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 $pass_args = array(
-	'form'           => $form,
 	'action_control' => $action_control,
 	'action_key'     => $action_key,
+	'form'           => $form,
 	'values'         => $values,
 );
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
@@ -82,10 +82,10 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->post_excerpt, apply_filters( 'frm_autoresponder_allowed_actions', array( 'email', 'twilio', 'api', 'register' ) ), true ) ) {
 	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
 	$params    = array(
-		'href'         => 'javascript:void(0)',
 		'class'        => 'frm_show_upgrade',
-		'data-upgrade' => __( 'Form action automations', 'formidable' ),
 		'data-medium'  => 'action-automation',
+		'data-upgrade' => __( 'Form action automations', 'formidable' ),
+		'href'         => 'javascript:void(0)',
 	);
 
 	if ( isset( $upgrading['url'] ) ) {

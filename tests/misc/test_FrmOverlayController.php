@@ -14,21 +14,21 @@ class test_FrmOverlayController extends FrmUnitTest {
 	public function test_open_overlay() {
 
 		$test_data                                   = array(
-			'hero_image' => FrmAppHelper::plugin_url() . '/images/overlay/lock.svg',
-			'heading'    => 'Overlay Heading Test',
-			'copy'       => 'Overlay copy test',
 			'buttons'    => array(
 				array(
-					'url'    => FrmAppHelper::admin_upgrade_link( 'nulled-full', 'formidable-forms-pro-nulled/' ),
-					'target' => '_blank',
 					'label'  => __( 'Learn More', 'formidable' ),
+					'target' => '_blank',
+					'url'    => FrmAppHelper::admin_upgrade_link( 'nulled-full', 'formidable-forms-pro-nulled/' ),
 				),
 				array(
-					'url'    => FrmAppHelper::admin_upgrade_link( 'nulled-full' ),
-					'target' => '_blank',
 					'label'  => __( 'Get 50% off!', 'formidable' ),
+					'target' => '_blank',
+					'url'    => FrmAppHelper::admin_upgrade_link( 'nulled-full' ),
 				),
 			),
+			'copy'       => 'Overlay copy test',
+			'heading'    => 'Overlay Heading Test',
+			'hero_image' => FrmAppHelper::plugin_url() . '/images/overlay/lock.svg',
 		);
 		$recurring_execution_interval                = '1 week';
 		$overlay_controller                          = new FrmOverlayController();

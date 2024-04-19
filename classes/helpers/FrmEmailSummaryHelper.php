@@ -294,9 +294,9 @@ class FrmEmailSummaryHelper {
 		return FrmDb::get_count(
 			'frm_items',
 			array(
+				'created_at <' => $to_date . ' 23:59:59',
 				// The `=` is added after `>` in the query.
 				'created_at >' => $from_date,
-				'created_at <' => $to_date . ' 23:59:59',
 				'is_draft'     => 0,
 			)
 		);
@@ -427,14 +427,14 @@ class FrmEmailSummaryHelper {
 			$args = wp_parse_args(
 				$args,
 				array(
-					'medium'  => 'summary-email',
 					'content' => 'link',
+					'medium'  => 'summary-email',
 				)
 			);
 		} else {
 			$args = array(
-				'medium'  => 'summary-email',
 				'content' => $args,
+				'medium'  => 'summary-email',
 			);
 		}
 

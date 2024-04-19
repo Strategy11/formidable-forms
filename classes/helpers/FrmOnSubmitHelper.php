@@ -38,9 +38,9 @@ class FrmOnSubmitHelper {
 				$args['form_action']->post_content['success_msg'],
 				$id_attr,
 				array(
+					'editor_class'  => 'frm_not_email_message',
 					'textarea_name' => $args['action_control']->get_field_name( 'success_msg' ),
 					'textarea_rows' => 4,
-					'editor_class'  => 'frm_not_email_message',
 				)
 			);
 			?>
@@ -56,8 +56,8 @@ class FrmOnSubmitHelper {
 				$id_attr,
 				$name_attr,
 				array(
-					'div_class' => 'with_frm_style frm_toggle',
 					'checked'   => ! empty( $args['form_action']->post_content['show_form'] ),
+					'div_class' => 'with_frm_style frm_toggle',
 					'echo'      => true,
 				)
 			);
@@ -105,8 +105,8 @@ class FrmOnSubmitHelper {
 				$id_attr,
 				$name_attr,
 				array(
-					'div_class' => 'with_frm_style frm_toggle',
 					'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
+					'div_class' => 'with_frm_style frm_toggle',
 					'echo'      => true,
 				)
 			);

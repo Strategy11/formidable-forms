@@ -90,10 +90,10 @@ class FrmInstallPlugin {
 		$api = plugins_api(
 			'plugin_information',
 			array(
-				'slug'   => $plugin_slug,
 				'fields' => array(
 					'sections' => false,
 				),
+				'slug'   => $plugin_slug,
 			)
 		);
 		if ( is_wp_error( $api ) ) {

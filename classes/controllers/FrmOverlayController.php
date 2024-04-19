@@ -72,8 +72,8 @@ class FrmOverlayController {
 	private function get_next_execution() {
 		$next_timestamp = strtotime( '+' . $this->config['execution-frequency'], $this->get_time() );
 		return array(
-			'timestamp' => $next_timestamp,
 			'date'      => gmdate( 'Y-m-d H:i:s', $next_timestamp ),
+			'timestamp' => $next_timestamp,
 		);
 	}
 

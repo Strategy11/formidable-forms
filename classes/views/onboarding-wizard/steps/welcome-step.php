@@ -24,12 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'footer-class'          => 'frm-justify-center',
 			'display-back-button'   => false,
-			'primary-button-text'   => esc_html__( 'Connect Account', 'formidable' ),
-			'primary-button-id'     => 'frm-onboarding-connect-account',
+			'footer-class'          => 'frm-justify-center',
 			'primary-button-href'   => FrmAddonsController::connect_link(),
+			'primary-button-id'     => 'frm-onboarding-connect-account',
 			'primary-button-role'   => false,
+			'primary-button-text'   => esc_html__( 'Connect Account', 'formidable' ),
 			'secondary-button-text' => esc_html__( 'Proceed without Account', 'formidable' ),
 		)
 	);

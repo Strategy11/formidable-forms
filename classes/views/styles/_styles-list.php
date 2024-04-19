@@ -13,9 +13,9 @@ $card_helper       = new FrmStylesCardHelper( $active_style, $default_style, $fo
 $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
 $sidebar_params    = array(
-	'id'    => 'frm_style_sidebar',
 	// Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 	'class' => 'frm-right-panel frm-p-6 frm_wrap',
+	'id'    => 'frm_style_sidebar',
 );
 $toggle_input_html = array();
 if ( $globally_disabled ) {
@@ -27,8 +27,8 @@ if ( $globally_disabled ) {
 	<?php
 	$can_create_styles = class_exists( 'FrmProStylesPreviewHelper' );
 	$trigger_params    = array(
-		'id'   => 'frm_new_style_trigger',
 		'href' => '#',
+		'id'   => 'frm_new_style_trigger',
 	);
 	if ( $can_create_styles ) {
 		$trigger_params['data-new-style-url'] = esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=new_style' ) );
@@ -55,10 +55,10 @@ if ( $globally_disabled ) {
 			'frm_enable_styling',
 			array(
 				'checked'     => $enabled,
-				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
-				'show_labels' => true,
 				'echo'        => true,
 				'input_html'  => $toggle_input_html,
+				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
+				'show_labels' => true,
 			)
 		);
 		?>

@@ -103,9 +103,9 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
 		$args['stats']           = array(
 			'entries' => array(
-				'label'   => __( 'Entries created', 'formidable' ),
-				'count'   => $entries_count,
 				'compare' => 0,
+				'count'   => $entries_count,
+				'label'   => __( 'Entries created', 'formidable' ),
 			),
 		);
 
@@ -142,19 +142,19 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	protected function add_payments_data( &$stats ) {
 		$payment_data            = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
 		$stats['payments_count'] = array(
-			'label'   => __( 'Payments collected', 'formidable' ),
-			'count'   => $payment_data['count'],
 			'compare' => 0,
+			'count'   => $payment_data['count'],
+			'label'   => __( 'Payments collected', 'formidable' ),
 		);
 
 		// Build total for each currency.
 		foreach ( $payment_data['total'] as $currency => $amount ) {
 			$stats[ 'payments_total_' . $currency ] = array(
-				// translators: currency name.
-				'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
+				'compare' => 0,
 				'count'   => $amount,
 				'display' => $this->get_formatted_price( $amount, $currency ),
-				'compare' => 0,
+				// translators: currency name.
+				'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
 			);
 		}
 
@@ -183,11 +183,11 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 			// If prev month has more currencies.
 			foreach ( $prev_payment_data['total'] as $currency => $amount ) {
 				$stats[ 'payments_total_' . $currency ] = array(
-					// translators: currency name.
-					'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
+					'compare' => -1,
 					'count'   => 0,
 					'display' => $this->get_formatted_price( 0, $currency ),
-					'compare' => -1,
+					// translators: currency name.
+					'label'   => sprintf( __( 'Total %s', 'formidable' ), strtoupper( $currency ) ),
 				);
 			}
 		}//end if

@@ -234,10 +234,10 @@ class FrmFieldValue {
 		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
 			$meta = array(
-				'item_id'    => $this->entry->id,
 				'field_id'   => $this->field->id,
-				'meta_value' => $this->saved_value,
 				'field_type' => $this->field->type,
+				'item_id'    => $this->entry->id,
+				'meta_value' => $this->saved_value,
 			);
 
 			if ( has_filter( 'frm_email_value' ) ) {
@@ -259,8 +259,8 @@ class FrmFieldValue {
 			'frm_display_' . $this->field->type . '_value_custom',
 			$this->displayed_value,
 			array(
-				'field' => $this->field,
 				'entry' => $this->entry,
+				'field' => $this->field,
 			)
 		);
 

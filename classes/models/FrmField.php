@@ -10,69 +10,69 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = array(
-			'text'                      => array(
-				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_text2_icon',
-			),
-			'textarea'                  => array(
-				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'frm_icon_font frm_paragraph_icon',
+			'captcha'                   => array(
+				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'name' => self::get_captcha_field_name(),
 			),
 			'checkbox'                  => array(
-				'name' => __( 'Checkboxes', 'formidable' ),
 				'icon' => 'frm_icon_font frm_check_square_icon',
-			),
-			'radio'                     => array(
-				'name' => __( 'Radio Buttons', 'formidable' ),
-				'icon' => 'frm_icon_font frm_radio_checked_icon',
-			),
-			'select'                    => array(
-				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_caret_square_down_icon',
-			),
-			'email'                     => array(
-				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email_icon',
-			),
-			'url'                       => array(
-				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link_icon',
-			),
-			'number'                    => array(
-				'name' => __( 'Number', 'formidable' ),
-				'icon' => 'frm_icon_font frm_hashtag_icon',
-			),
-			'name'                      => array(
-				'name' => __( 'Name', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_name_icon',
-			),
-			'phone'                     => array(
-				'name' => __( 'Phone', 'formidable' ),
-				'icon' => 'frm_icon_font frm_phone_icon',
-			),
-			'html'                      => array(
-				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_icon',
-			),
-			'hidden'                    => array(
-				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash_icon',
-			),
-			'user_id'                   => array(
-				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
-			),
-			'captcha'                   => array(
-				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'name' => __( 'Checkboxes', 'formidable' ),
 			),
 			'credit_card'               => array(
-				'name' => __( 'Payment', 'formidable' ),
 				'icon' => 'frm_icon_font frm_credit_card_icon',
+				'name' => __( 'Payment', 'formidable' ),
+			),
+			'email'                     => array(
+				'icon' => 'frm_icon_font frm_email_icon',
+				'name' => __( 'Email', 'formidable' ),
+			),
+			'hidden'                    => array(
+				'icon' => 'frm_icon_font frm_eye_slash_icon',
+				'name' => __( 'Hidden', 'formidable' ),
+			),
+			'html'                      => array(
+				'icon' => 'frm_icon_font frm_code_icon',
+				'name' => __( 'HTML', 'formidable' ),
+			),
+			'name'                      => array(
+				'icon' => 'frm_icon_font frm_user_name_icon',
+				'name' => __( 'Name', 'formidable' ),
+			),
+			'number'                    => array(
+				'icon' => 'frm_icon_font frm_hashtag_icon',
+				'name' => __( 'Number', 'formidable' ),
+			),
+			'phone'                     => array(
+				'icon' => 'frm_icon_font frm_phone_icon',
+				'name' => __( 'Phone', 'formidable' ),
+			),
+			'radio'                     => array(
+				'icon' => 'frm_icon_font frm_radio_checked_icon',
+				'name' => __( 'Radio Buttons', 'formidable' ),
+			),
+			'select'                    => array(
+				'icon' => 'frm_icon_font frm_caret_square_down_icon',
+				'name' => __( 'Dropdown', 'formidable' ),
+			),
+			'text'                      => array(
+				'icon' => 'frm_icon_font frm_text2_icon',
+				'name' => __( 'Text', 'formidable' ),
+			),
+			'textarea'                  => array(
+				'icon' => 'frm_icon_font frm_paragraph_icon',
+				'name' => __( 'Paragraph', 'formidable' ),
+			),
+			'url'                       => array(
+				'icon' => 'frm_icon_font frm_link_icon',
+				'name' => __( 'Website/URL', 'formidable' ),
+			),
+			'user_id'                   => array(
+				'icon' => 'frm_icon_font frm_user_icon',
+				'name' => __( 'User ID', 'formidable' ),
 			),
 			FrmSubmitHelper::FIELD_TYPE => array(
-				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
+				'name' => __( 'Submit', 'formidable' ),
 			),
 		);
 
@@ -94,150 +94,150 @@ class FrmField {
 	public static function pro_field_selection() {
 		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
-			'file'            => array(
-				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload_icon',
-				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
+			'address'         => array(
+				'icon' => 'frm_icon_font frm_location_icon',
+				'name' => __( 'Address', 'formidable' ),
 			),
-			'ranking'         => array(),
-			'rte'             => array(
-				'name' => __( 'Rich Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_align_right_icon',
+			'ai'              => array(
+				'addon'   => 'ai',
+				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'message' => 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.',
+				'name'    => __( 'AI', 'formidable' ),
 			),
-			'date'            => array(
-				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar_icon',
+			'break'           => array(
+				'icon'    => 'frm_icon_font frm_page_break_icon',
+				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
+				'name'    => __( 'Page Break', 'formidable' ),
 			),
-			'time'            => array(
-				'name' => __( 'Time', 'formidable' ),
-				'icon' => 'frm_icon_font frm_clock_icon',
-			),
-			'scale'           => array(
-				'name'    => __( 'Scale', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
-			),
-			'star'            => array(
-				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star_icon',
-			),
-			'range'           => array(
-				'name' => __( 'Slider', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_commit_icon',
-			),
-			'toggle'          => array(
-				'name' => __( 'Toggle', 'formidable' ),
-				'icon' => 'frm_icon_font frm_toggle_on_icon',
+			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
+			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
+			'credit_card'     => array(
+				'icon' => '',
+				'name' => '',
 			),
 			'data'            => array(
-				'name'    => __( 'Dynamic', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_sitemap_icon',
 				'message' => 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.',
+				'name'    => __( 'Dynamic', 'formidable' ),
 			),
-			'lookup'          => array(
-				'name'    => __( 'Lookup', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
+			'date'            => array(
+				'icon' => 'frm_icon_font frm_calendar_icon',
+				'name' => __( 'Date', 'formidable' ),
+			),
+			'divider'         => array(
+				'icon' => 'frm_icon_font frm_header_icon',
+				'name' => __( 'Section', 'formidable' ),
 			),
 			'divider|repeat'  => array(
-				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
 				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_attr( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
+				'name'    => __( 'Repeater', 'formidable' ),
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
 				'switch_from' => 'divider',
 			),
-			'divider'         => array(
-				'name' => __( 'Section', 'formidable' ),
-				'icon' => 'frm_icon_font frm_header_icon',
-			),
-			'break'           => array(
-				'name'    => __( 'Page Break', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_page_break_icon',
-				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
+			'file'            => array(
+				'icon'    => 'frm_icon_font frm_upload_icon',
+				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
+				'name'    => __( 'File Upload', 'formidable' ),
 			),
 			'form'            => array(
-				'name' => __( 'Embed Form', 'formidable' ),
 				'icon' => 'frm_icon_font frm_file_text_icon',
+				'name' => __( 'Embed Form', 'formidable' ),
 			),
 			'likert'          => array(
-				'name'  => __( 'Likert Scale', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
 				'addon' => 'surveys',
+				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'name'  => __( 'Likert Scale', 'formidable' ),
+			),
+			'lookup'          => array(
+				'icon'    => 'frm_icon_font frm_search_icon',
+				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
+				'name'    => __( 'Lookup', 'formidable' ),
 			),
 			'nps'             => array(
-				'name'  => __( 'NPS', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
 				'addon' => 'surveys',
+				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
+				'name'  => __( 'NPS', 'formidable' ),
 			),
 			'password'        => array(
-				'name' => __( 'Password', 'formidable' ),
 				'icon' => 'frm_icon_font frm_lock_open_icon',
-			),
-			'tag'             => array(
-				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags_icon',
-			),
-			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
-			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
-			'credit_card'     => array(
-				'name' => '',
-				'icon' => '',
-			),
-			'address'         => array(
-				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location_icon',
-			),
-			'summary'         => array(
-				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text_icon',
-				'message' => 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.',
-			),
-			'signature'       => array(
-				'name'  => __( 'Signature', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
-				'addon' => 'signature',
-			),
-			'ai'              => array(
-				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
-				'addon'   => 'ai',
-				'message' => 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.',
-			),
-			'ssa-appointment' => array(
-				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
-				'require' => 'Simply Schedule Appointments',
-				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
-					<img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
-				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
+				'name' => __( 'Password', 'formidable' ),
 			),
 			'product'         => array(
-				'name'    => __( 'Product', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_product_icon',
+				'name'    => __( 'Product', 'formidable' ),
 				'section' => 'pricing',
 			),
 			'quantity'        => array(
-				'name'    => __( 'Quantity', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_quantity_icon',
+				'name'    => __( 'Quantity', 'formidable' ),
 				'section' => 'pricing',
 			),
+			'range'           => array(
+				'icon' => 'frm_icon_font frm_code_commit_icon',
+				'name' => __( 'Slider', 'formidable' ),
+			),
+			'ranking'         => array(),
+			'rte'             => array(
+				'icon' => 'frm_icon_font frm_align_right_icon',
+				'name' => __( 'Rich Text', 'formidable' ),
+			),
+			'scale'           => array(
+				'icon'    => 'frm_icon_font frm_linear_scale_icon',
+				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
+				'name'    => __( 'Scale', 'formidable' ),
+			),
+			'signature'       => array(
+				'addon' => 'signature',
+				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
+				'name'  => __( 'Signature', 'formidable' ),
+			),
+			'ssa-appointment' => array(
+				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
+				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
+                    <img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
+				'name'    => __( 'Appointment', 'formidable' ),
+				'require' => 'Simply Schedule Appointments',
+			),
+			'star'            => array(
+				'icon' => 'frm_icon_font frm_star_icon',
+				'name' => __( 'Star Rating', 'formidable' ),
+			),
+			'summary'         => array(
+				'icon'    => 'frm_icon_font frm_file_text_icon',
+				'message' => 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.',
+				'name'    => __( 'Summary', 'formidable' ),
+			),
+			'tag'             => array(
+				'icon' => 'frm_icon_font frm_price_tags_icon',
+				'name' => __( 'Tags', 'formidable' ),
+			),
+			'time'            => array(
+				'icon' => 'frm_icon_font frm_clock_icon',
+				'name' => __( 'Time', 'formidable' ),
+			),
+			'toggle'          => array(
+				'icon' => 'frm_icon_font frm_toggle_on_icon',
+				'name' => __( 'Toggle', 'formidable' ),
+			),
 			'total'           => array(
-				'name'    => __( 'Total', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_total_icon',
+				'name'    => __( 'Total', 'formidable' ),
 				'section' => 'pricing',
 			),
 		);
 
 		if ( self::include_ranking_fields() ) {
 			$fields['ranking'] = array(
-				'name'         => __( 'Ranking', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
-				'upsell_image' => $images_url . 'ranking-field.svg',
 				'addon'        => 'surveys',
+				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
 				'is_new'       => self::field_is_new( 'ranking' ),
+				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
+				'name'         => __( 'Ranking', 'formidable' ),
+				'upsell_image' => $images_url . 'ranking-field.svg',
 			);
 		} else {
 			unset( $fields['ranking'] );
@@ -476,9 +476,9 @@ class FrmField {
 
 		$where  = array(
 			array(
-				'or'                => 1,
 				'fi.form_id'        => $old_form_id,
 				'fr.parent_form_id' => $old_form_id,
+				'or'                => 1,
 			),
 		);
 		$fields = self::getAll( $where, 'field_order', '', $blog_id );
@@ -499,8 +499,8 @@ class FrmField {
 					'frm_create_repeat_form',
 					0,
 					array(
-						'parent_form_id' => $form_id,
 						'field_name'     => $field->name,
+						'parent_form_id' => $form_id,
 					)
 				);
 
@@ -717,9 +717,9 @@ class FrmField {
 			$type = $field->{$col};
 		} else {
 			$where = array(
-				'or'        => 1,
-				'id'        => $id,
 				'field_key' => $id,
+				'id'        => $id,
+				'or'        => 1,
 			);
 			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
@@ -829,9 +829,9 @@ class FrmField {
 		if ( $inc_repeat == 'include' ) {
 			$form_id = $where['fi.form_id'];
 			$where[] = array(
-				'or'                => 1,
 				'fi.form_id'        => $form_id,
 				'fr.parent_form_id' => $form_id,
+				'or'                => 1,
 			);
 			unset( $where['fi.form_id'] );
 		}
@@ -908,8 +908,8 @@ class FrmField {
 
 		if ( is_array( $where ) ) {
 			$args    = array(
-				'order_by' => $order_by,
 				'limit'    => $limit,
+				'order_by' => $order_by,
 			);
 			$results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {

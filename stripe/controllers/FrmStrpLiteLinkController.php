@@ -215,13 +215,13 @@ class FrmStrpLiteLinkController {
 		$new_charge = array(
 			'customer'               => $customer_id,
 			'default_payment_method' => $payment_method_id,
+			'expand'                 => array( 'latest_invoice.charge' ),
 			'plan'                   => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
 					'action' => $action,
 					'amount' => $amount,
 				)
 			),
-			'expand'                 => array( 'latest_invoice.charge' ),
 		);
 
 		if ( ! FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
@@ -389,12 +389,12 @@ class FrmStrpLiteLinkController {
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(
 			array(
-				'paysys'     => 'stripe',
-				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
-				'status'     => 'pending',
-				'item_id'    => $entry->id,
 				'action_id'  => $action->ID,
+				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
+				'item_id'    => $entry->id,
+				'paysys'     => 'stripe',
 				'receipt_id' => $intent_id,
+				'status'     => 'pending',
 				'sub_id'     => '',
 				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)

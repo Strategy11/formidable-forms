@@ -75,14 +75,14 @@ class FrmPluginSearch {
 
 		$inject    = (array) $this->get_plugin_data();
 		$overrides = array(
-			// Helps to determine if that an injected card.
-			'plugin-search'     => true,
+			'addon'             => $addon_list[ $matching_addon ]['slug'],
 			'name'              => sprintf(
 				/* translators: Formidable addon name */
 				esc_html_x( 'Formidable %s', 'Formidable Addon Name', 'formidable' ),
 				$addon_list[ $matching_addon ]['name']
 			),
-			'addon'             => $addon_list[ $matching_addon ]['slug'],
+			// Helps to determine if that an injected card.
+			'plugin-search'     => true,
 			'short_description' => $addon_list[ $matching_addon ]['excerpt'],
 			'slug'              => self::$slug,
 			'version'           => $addon_list[ $matching_addon ]['version'],
@@ -164,15 +164,15 @@ class FrmPluginSearch {
 		$data = plugins_api(
 			'plugin_information',
 			array(
-				'slug'   => 'formidable',
-				'is_ssl' => is_ssl(),
 				'fields' => array(
+					'active_installs' => true,
 					'banners'         => true,
 					'reviews'         => true,
-					'active_installs' => true,
-					'versions'        => false,
 					'sections'        => false,
+					'versions'        => false,
 				),
+				'is_ssl' => is_ssl(),
+				'slug'   => 'formidable',
 			)
 		);
 		set_transient( 'formidable_plugin_data', $data, DAY_IN_SECONDS );
@@ -311,8 +311,8 @@ class FrmPluginSearch {
 				$activate_url             = add_query_arg(
 					array(
 						'action'   => 'activate',
-						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin['plugin'] ),
 						'plugin'   => $plugin['plugin'],
+						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin['plugin'] ),
 					),
 					admin_url( 'plugins.php' )
 				);

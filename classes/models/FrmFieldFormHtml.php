@@ -58,8 +58,8 @@ class FrmFieldFormHtml {
 		$this->set_from_field(
 			$atts,
 			array(
-				'param'   => 'html',
 				'default' => 'custom_html',
+				'param'   => 'html',
 			)
 		);
 	}
@@ -73,8 +73,8 @@ class FrmFieldFormHtml {
 		$this->set_from_field(
 			$atts,
 			array(
-				'param'   => 'field_id',
 				'default' => 'id',
+				'param'   => 'field_id',
 			)
 		);
 	}

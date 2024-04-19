@@ -13,20 +13,20 @@ class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 		$form     = $this->factory->form->create_and_get();
 		$field_id = $this->factory->field->create(
 			array(
-				'form_id'       => $form->id,
-				'type'          => 'text',
 				'field_options' => array(
 					'custom_html' => '
-						<div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
-						<label for="field_[key]" id="field_[key]_label" class="frm_primary_label">[field_name]
-							<span class="frm_required" aria-hidden="true">[required_label]</span>
-						</label>
-						[input]
-						[if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-						[if error]<div class="frm_error my_custom_error_class" id="frm_error_field_[key]">My custom error label: [error]</div>[/if error]
-					</div>
-					',
+                        <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
+                        <label for="field_[key]" id="field_[key]_label" class="frm_primary_label">[field_name]
+                            <span class="frm_required" aria-hidden="true">[required_label]</span>
+                        </label>
+                        [input]
+                        [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
+                        [if error]<div class="frm_error my_custom_error_class" id="frm_error_field_[key]">My custom error label: [error]</div>[/if error]
+                    </div>
+                    ',
 				),
+				'form_id'       => $form->id,
+				'type'          => 'text',
 			)
 		);
 		$this->assertEquals(

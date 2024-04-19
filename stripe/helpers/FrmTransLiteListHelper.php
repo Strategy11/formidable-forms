@@ -62,8 +62,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $total_items,
 				'per_page'    => $per_page,
+				'total_items' => $total_items,
 			)
 		);
 	}
@@ -119,9 +119,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 		$type        = FrmAppHelper::get_simple_request(
 			array(
+				'default' => 'payments',
 				'param'   => 'trans_type',
 				'type'    => 'request',
-				'default' => 'payments',
 			)
 		);
 
@@ -157,15 +157,15 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function get_sortable_columns() {
 		return array(
-			'item_id'        => 'item_id',
 			'amount'         => 'amount',
-			'created_at'     => 'created_at',
-			'receipt_id'     => 'receipt_id',
-			'sub_id'         => 'sub_id',
 			'begin_date'     => 'begin_date',
+			'created_at'     => 'created_at',
 			'expire_date'    => 'expire_date',
-			'status'         => 'status',
+			'item_id'        => 'item_id',
 			'next_bill_date' => 'next_bill_date',
+			'receipt_id'     => 'receipt_id',
+			'status'         => 'status',
+			'sub_id'         => 'sub_id',
 		);
 	}
 

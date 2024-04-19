@@ -111,13 +111,13 @@ class FrmEntryValidate {
 
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
 		$defaults = array(
-			'id'              => $posted_field->id,
-			// The id of the repeat or embed form.
-			'parent_field_id' => '',
-			// The pointer in the posted array.
-			'key_pointer'     => '',
 			// Exclude these field types from validation.
 			'exclude'         => array(),
+			'id'              => $posted_field->id,
+			// The pointer in the posted array.
+			'key_pointer'     => '',
+			// The id of the repeat or embed form.
+			'parent_field_id' => '',
 
 		);
 		$args = wp_parse_args( $args, $defaults );
@@ -517,11 +517,11 @@ class FrmEntryValidate {
 		$user = wp_get_current_user();
 
 		return array(
-			'user_ID'              => $user->ID,
-			'user_id'              => $user->ID,
 			'comment_author'       => $user->display_name,
 			'comment_author_email' => $user->user_email,
 			'comment_author_url'   => $user->user_url,
+			'user_ID'              => $user->ID,
+			'user_id'              => $user->ID,
 		);
 	}
 
@@ -538,9 +538,9 @@ class FrmEntryValidate {
 			'comment_author'       => '',
 			'comment_author_email' => '',
 			'comment_author_url'   => '',
-			'name_field_ids'       => $values['name_field_ids'],
-			'missing_keys'         => array( 'comment_author_email', 'comment_author_url', 'comment_author' ),
 			'frm_duplicated'       => array(),
+			'missing_keys'         => array( 'comment_author_email', 'comment_author_url', 'comment_author' ),
+			'name_field_ids'       => $values['name_field_ids'],
 		);
 
 		if ( isset( $values['item_meta'] ) ) {

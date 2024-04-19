@@ -86,16 +86,16 @@ class FrmSubmitHelper {
 	 */
 	private static function get_submit_settings_from_form( $form ) {
 		return array(
-			'edit_text'        => FrmForm::get_option(
-				array(
-					'form'   => $form,
-					'option' => 'edit_value',
-				)
-			),
 			'align'            => FrmForm::get_option(
 				array(
 					'form'   => $form,
 					'option' => 'submit_align',
+				)
+			),
+			'edit_text'        => FrmForm::get_option(
+				array(
+					'form'   => $form,
+					'option' => 'edit_value',
 				)
 			),
 			'start_over'       => FrmForm::get_option(
@@ -148,9 +148,9 @@ class FrmSubmitHelper {
 		$field_data['field_options'] = $submit_settings + $field_data['field_options'];
 		$field_data['name']          = FrmForm::get_option(
 			array(
+				'default' => __( 'Submit', 'formidable' ),
 				'form'    => $form,
 				'option'  => 'submit_value',
-				'default' => __( 'Submit', 'formidable' ),
 			)
 		);
 

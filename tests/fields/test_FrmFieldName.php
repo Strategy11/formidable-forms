@@ -8,8 +8,8 @@ class test_FrmFieldName extends FrmUnitTest {
 	public function test_get_processed_sub_fields() {
 		$field = $this->factory->field->create_and_get(
 			array(
-				'type'    => 'name',
 				'form_id' => 1,
+				'type'    => 'name',
 			)
 		);
 

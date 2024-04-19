@@ -65,17 +65,17 @@ class test_FrmFormsController extends FrmUnitTest {
 		$form = FrmForm::getOne( $form_id );
 
 		$_POST = array(
-			'page'                 => 'formidable',
-			'frm_action'           => 'update',
-			'id'                   => $form_id,
 			'action'               => 'update',
-			'frm_save_form'        => wp_create_nonce( 'frm_save_form_nonce' ),
-			'status'               => 'published',
-			'new_status'           => '',
-			'name'                 => $form->name,
-			'frm_fields_submitted' => array(),
-			'item_meta'            => array(),
 			'field_options'        => array(),
+			'frm_action'           => 'update',
+			'frm_fields_submitted' => array(),
+			'frm_save_form'        => wp_create_nonce( 'frm_save_form_nonce' ),
+			'id'                   => $form_id,
+			'item_meta'            => array(),
+			'name'                 => $form->name,
+			'new_status'           => '',
+			'page'                 => 'formidable',
+			'status'               => 'published',
 		);
 
 		foreach ( $fields as $field ) {
@@ -83,22 +83,22 @@ class test_FrmFormsController extends FrmUnitTest {
 			$_POST[ 'default_value_' . $field->id ] = 'default';
 
 			$field_options = array(
-				'description_' . $field->id        => '',
-				'type_' . $field->id               => '',
-				'required_indicator_' . $field->id => '*',
-				'field_key_' . $field->id          => $field->field_key,
-				'classes_' . $field->id            => '',
-				'label_' . $field->id              => '',
-				'size_' . $field->id               => '',
-				'max_' . $field->id                => '',
 				'admin_only_' . $field->id         => '',
-				'use_calc_' . $field->id           => 1,
-				'calc_' . $field->id               => '',
-				'calc_dec_' . $field->id           => '',
-				'show_hide_' . $field->id          => 'show',
 				'any_all_' . $field->id            => 'any',
 				'blank_' . $field->id              => 'This field cannot be blank.',
+				'calc_' . $field->id               => '',
+				'calc_dec_' . $field->id           => '',
+				'classes_' . $field->id            => '',
+				'description_' . $field->id        => '',
+				'field_key_' . $field->id          => $field->field_key,
+				'label_' . $field->id              => '',
+				'max_' . $field->id                => '',
+				'required_indicator_' . $field->id => '*',
+				'show_hide_' . $field->id          => 'show',
+				'size_' . $field->id               => '',
+				'type_' . $field->id               => '',
 				'unique_msg_' . $field->id         => '',
+				'use_calc_' . $field->id           => 1,
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
@@ -161,11 +161,11 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	private function create_on_submit_action( $form_id, $post_content ) {
 		$post_data = array(
-			'post_type'    => FrmFormActionsController::$action_post_type,
 			'menu_order'   => $form_id,
+			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
 			'post_excerpt' => FrmOnSubmitAction::$slug,
 			'post_status'  => 'publish',
-			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
+			'post_type'    => FrmFormActionsController::$action_post_type,
 		);
 
 		return $this->factory->post->create_and_get( $post_data );
@@ -174,8 +174,8 @@ class test_FrmFormsController extends FrmUnitTest {
 	public function test_multiple_on_submit_actions() {
 		$test_page_id = $this->factory->post->create(
 			array(
-				'post_type'    => 'page',
 				'post_content' => 'Test page content',
+				'post_type'    => 'page',
 			)
 		);
 
@@ -314,9 +314,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$form = $this->factory->form->create_and_get(
 			array(
 				'options' => array(
+					'show_form'      => $show_form,
 					'success_action' => 'message',
 					'success_msg'    => 'Done!',
-					'show_form'      => $show_form,
 				),
 			)
 		);
@@ -328,9 +328,9 @@ class test_FrmFormsController extends FrmUnitTest {
 			$form->id,
 			array(
 				'event'          => array( 'create' ),
+				'show_form'      => $show_form,
 				'success_action' => 'message',
 				'success_msg'    => 'Done!',
-				'show_form'      => $show_form,
 			)
 		);
 
@@ -377,9 +377,9 @@ class test_FrmFormsController extends FrmUnitTest {
 			$form_id,
 			array(
 				'event'           => array( 'create' ),
+				'open_in_new_tab' => 1,
 				'success_action'  => 'redirect',
 				'success_url'     => 'http://example.com',
-				'open_in_new_tab' => 1,
 			)
 		);
 

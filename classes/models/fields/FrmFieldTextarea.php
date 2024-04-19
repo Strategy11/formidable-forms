@@ -24,8 +24,8 @@ class FrmFieldTextarea extends FrmFieldType {
 	 */
 	protected function field_settings_for_type() {
 		return array(
-			'size'           => true,
 			'clear_on_focus' => true,
+			'size'           => true,
 		);
 	}
 

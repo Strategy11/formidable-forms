@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 
 	$textarea_params = array(
-		'name' => 'frm_custom_css',
 		'id'   => $id,
+		'name' => 'frm_custom_css',
 	);
 	if ( ! empty( $settings ) ) {
 		$textarea_params['class'] = 'hide-if-js';

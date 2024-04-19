@@ -30,9 +30,9 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	public function test_create() {
 		$_POST = array(
 			'action'     => 'frm_insert_field',
-			'nonce'      => wp_create_nonce( 'frm_ajax' ),
-			'form_id'    => $this->form_id,
 			'field_type' => 'text', // Create text field.
+			'form_id'    => $this->form_id,
+			'nonce'      => wp_create_nonce( 'frm_ajax' ),
 		);
 
 		try {
@@ -64,12 +64,12 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$format         = '^([a-zA-Z]\d{4})$';
 		$original_field = $this->factory->field->create_and_get(
 			array(
-				'form_id'       => $this->form_id,
-				'type'          => 'text',
 				'field_options' => array(
 					'format'     => $format,
 					'in_section' => 0,
 				),
+				'form_id'       => $this->form_id,
+				'type'          => 'text',
 			)
 		);
 		$this->assertNotEmpty( $original_field->id );
@@ -77,9 +77,9 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 		$_POST = array(
 			'action'   => 'frm_duplicate_field',
-			'nonce'    => wp_create_nonce( 'frm_ajax' ),
 			'field_id' => $original_field->id,
 			'form_id'  => $original_field->form_id,
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
 		);
 
 		$response = $this->trigger_action( 'frm_duplicate_field' );

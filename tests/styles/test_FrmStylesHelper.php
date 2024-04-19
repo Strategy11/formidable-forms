@@ -30,10 +30,10 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		$_POST = array(
 			'action'            => 'frm_change_styling',
-			'style_name'        => 'frm_style_test',
 			'frm_style_setting' => array(
 				'post_content' => $frm_style->get_defaults(),
 			),
+			'style_name'        => 'frm_style_test',
 		);
 
 		$settings = FrmStylesHelper::get_settings_for_output( $style );
@@ -61,9 +61,9 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 */
 	public function test_hex2rgb() {
 		$colors = array(
-			'ffffff'            => '255,255,255',
 			'#ffffff'           => '255,255,255',
 			'262626'            => '38,38,38',
+			'ffffff'            => '255,255,255',
 			'rgb(255,255,255)'  => '255,255,255',
 			'rgba(211,77,40,1)' => '211,77,40',
 		);
@@ -79,19 +79,19 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	public function test_adjust_brightness() {
 		$colors = array(
 			array(
+				'end'   => '#9b9b9b',
 				'start' => '#999999',
 				'steps' => 2,
-				'end'   => '#9b9b9b',
 			),
 			array(
+				'end'   => '#858585',
 				'start' => '#999999',
 				'steps' => -20,
-				'end'   => '#858585',
 			),
 			array(
+				'end'   => 'rgba(77,59,255,1)',
 				'start' => 'rgba(32,14,237,1)',
 				'steps' => 45,
-				'end'   => 'rgba(77,59,255,1)',
 			),
 		);
 
@@ -112,10 +112,10 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		$this->factory->form->create(
 			array(
-				'status'  => 'published',
 				'options' => array(
 					'custom_style' => (string) $new_style_id,
 				),
+				'status'  => 'published',
 			)
 		);
 		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
@@ -140,8 +140,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		$conversational_style_id = $this->factory->post->create(
 			array(
-				'post_type' => FrmStylesController::$post_type,
 				'post_name' => 'lines-no-boxes',
+				'post_type' => FrmStylesController::$post_type,
 			)
 		);
 
@@ -157,8 +157,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->factory->form->create(
 			array(
 				'options' => array(
-					'custom_style' => 1,
 					'chat'         => 1,
+					'custom_style' => 1,
 				),
 			)
 		);
@@ -170,8 +170,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->factory->form->create(
 			array(
 				'options' => array(
-					'custom_style' => (string) $conversational_style_id,
 					'chat'         => 1,
+					'custom_style' => (string) $conversational_style_id,
 				),
 			)
 		);

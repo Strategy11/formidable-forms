@@ -54,20 +54,20 @@ class test_FrmAddon extends FrmUnitTest {
 	public function test_checked_recently() {
 		$times = array(
 			array(
+				'expected' => true,
 				'time'     => time(),
-				'expected' => true,
 			),
 			array(
+				'expected' => false,
 				'time'     => false,
-				'expected' => false,
 			),
 			array(
+				'expected' => false,
 				'time'     => strtotime( '-2 days' ),
-				'expected' => false,
 			),
 			array(
-				'time'     => strtotime( '-2 hours' ),
 				'expected' => true,
+				'time'     => strtotime( '-2 hours' ),
 			),
 		);
 

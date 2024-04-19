@@ -100,11 +100,11 @@ class FrmStylesCardHelper {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
 			'class'               => 'frm-style-card frm-transition-ease',
-			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
-			'data-style-id'       => $style->ID,
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $label_position,
+			'data-style-id'       => $style->ID,
+			'style'               => self::get_style_param_for_card( $style ),
 		);
 
 		$is_active_style = $style->ID === $this->active_style->ID;
@@ -331,8 +331,8 @@ class FrmStylesCardHelper {
 
 		// Begin card wrapper
 		$card_wrapper_params = array(
-			'id'    => $id,
 			'class' => 'frm-style-card-wrapper with_frm_style',
+			'id'    => $id,
 			'style' => $wrapper_style,
 		);
 		if ( $this->enabled ) {

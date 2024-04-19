@@ -16,8 +16,8 @@ if ( ! isset( $args ) ) {
 
 $defaults = array(
 	'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css',
-	'title'       => esc_html__( 'Get 20+ Free Form Templates', 'formidable' ),
 	'description' => esc_html__( 'Just add your email address and we\'ll send you a code for free form templates!', 'formidable' ),
+	'title'       => esc_html__( 'Get 20+ Free Form Templates', 'formidable' ),
 );
 
 $args = wp_parse_args( $args, $defaults );
@@ -38,8 +38,8 @@ $args = wp_parse_args( $args, $defaults );
 		echo wp_kses(
 			wpautop( esc_html( $args['description'] ) ),
 			array(
-				'p'  => true,
 				'br' => true,
+				'p'  => true,
 			)
 		);
 		?>

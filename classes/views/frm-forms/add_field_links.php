@@ -150,25 +150,25 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 				<?php
 				FrmFieldsHelper::inline_modal(
 					array(
-						'title'    => __( 'Smart Default Values', 'formidable' ),
 						'callback' => array( 'FrmFieldsHelper', 'smart_values' ),
 						'id'       => 'frm-smart-values-box',
+						'title'    => __( 'Smart Default Values', 'formidable' ),
 					)
 				);
 
 				FrmFieldsHelper::inline_modal(
 					array(
-						'title'    => __( 'Add Layout Classes', 'formidable' ),
 						'callback' => array( 'FrmFieldsHelper', 'layout_classes' ),
 						'id'       => 'frm-layout-classes-box',
+						'title'    => __( 'Add Layout Classes', 'formidable' ),
 					)
 				);
 
 				FrmFieldsHelper::inline_modal(
 					array(
-						'title'    => __( 'Input Mask Format', 'formidable' ),
 						'callback' => array( 'FrmFieldsHelper', 'input_mask' ),
 						'id'       => 'frm-input-mask-box',
+						'title'    => __( 'Input Mask Format', 'formidable' ),
 					)
 				);
 				?>

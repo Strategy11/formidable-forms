@@ -64,11 +64,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_opt_html(
 					array(
+						'class' => 'frm-customize-list dropdown-item',
 						'id'    => $f->id,
 						'key'   => $f->field_key,
 						'name'  => $f->name,
 						'type'  => $f->type,
-						'class' => 'frm-customize-list dropdown-item',
 					)
 				);
 
@@ -96,11 +96,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'',
 				array(
 					'checked'     => true,
-					'on_label'    => __( 'Use IDs', 'formidable' ),
-					'off_label'   => __( 'Use Keys', 'formidable' ),
-					'value'       => 'id',
-					'show_labels' => true,
 					'echo'        => true,
+					'off_label'   => __( 'Use Keys', 'formidable' ),
+					'on_label'    => __( 'Use IDs', 'formidable' ),
+					'show_labels' => true,
+					'value'       => 'id',
 				)
 			);
 			?>
@@ -206,9 +206,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			FrmFormsHelper::insert_code_html(
 				array(
+					'class' => $classes,
 					'code'  => $skey,
 					'label' => $sname,
-					'class' => $classes,
 				)
 			);
 
@@ -244,10 +244,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_code_html(
 					array(
+						'class' => 'frm-advanced-list',
 						'code'  => $include_x . $code,
 						'label' => $code_label['label'],
 						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
-						'class' => 'frm-advanced-list',
 					)
 				);
 

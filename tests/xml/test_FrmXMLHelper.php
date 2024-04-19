@@ -13,24 +13,24 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals( array(), $saved );
 
 		$defaults = array(
-			'x'    => 'X',
-			'y'    => 'Y',
-			'z'    => 'Z',
-			'b'    => 'B',
 			'arr2' => array(
 				'x' => 'X',
 				'z' => 'Z',
 			),
+			'b'    => 'B',
+			'x'    => 'X',
+			'y'    => 'Y',
+			'z'    => 'Z',
 		);
 
 		$saved = array(
 			'a'   => 'A',
-			'b'   => 'B',
-			'c'   => 'C',
 			'arr' => array(
 				'x' => 'X',
 				'y' => 'Y',
 			),
+			'b'   => 'B',
+			'c'   => 'C',
 		);
 
 		$this->run_private_method(
@@ -40,31 +40,31 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals(
 			array(
 				'a'   => 'A',
-				'c'   => 'C',
 				'arr' => array(
 					'x' => 'X',
 					'y' => 'Y',
 				),
+				'c'   => 'C',
 			),
 			$saved
 		);
 
 		$defaults = array(
 			'a'   => 'A',
-			'b'   => 'B',
 			'arr' => array(
 				'x' => 'X',
 			),
+			'b'   => 'B',
 		);
 
 		$saved = array(
 			'a'   => 'A',
-			'b'   => 'B',
-			'c'   => 'C',
 			'arr' => array(
 				'x' => 'X',
 				'y' => 'Y',
 			),
+			'b'   => 'B',
+			'c'   => 'C',
 		);
 
 		$this->run_private_method(
@@ -73,11 +73,11 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		);
 		$this->assertEquals(
 			array(
-				'c'   => 'C',
 				'arr' => array(
 					'x' => 'X',
 					'y' => 'Y',
 				),
+				'c'   => 'C',
 			),
 			$saved
 		);

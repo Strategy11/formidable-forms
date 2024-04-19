@@ -20,8 +20,8 @@ class FrmEmailHelper {
 	 */
 	public static function get_user_id_field_for_form( $form_id ) {
 		$where = array(
-			'type'    => 'user_id',
 			'form_id' => $form_id,
+			'type'    => 'user_id',
 		);
 
 		$user_id_field = FrmDb::get_var( 'frm_fields', $where, 'id' );

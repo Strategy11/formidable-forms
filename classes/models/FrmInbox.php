@@ -134,15 +134,15 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function fill_message( &$message ) {
 		$defaults = array(
-			'time'    => time(),
-			'message' => '',
-			'subject' => '',
-			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
+			'icon'    => 'frm_tooltip_icon',
+			'message' => '',
+			'subject' => '',
+			'time'    => time(),
+			'type'    => '',
 			// Use 'free', 'personal', 'business', 'elite', 'grandfathered'.
 			'who'     => 'all',
-			'type'    => '',
 		);
 
 		$message = array_merge( $defaults, $message );

@@ -26,17 +26,17 @@ class FrmTransLiteListsController {
 		add_screen_option(
 			'per_page',
 			array(
-				'label'   => esc_html__( 'Payments', 'formidable' ),
 				'default' => 20,
+				'label'   => esc_html__( 'Payments', 'formidable' ),
 				'option'  => 'formidable_page_formidable_payments_per_page',
 			)
 		);
 
 		$type = FrmAppHelper::get_simple_request(
 			array(
+				'default' => 'payments',
 				'param'   => 'trans_type',
 				'type'    => 'request',
-				'default' => 'payments',
 			)
 		);
 
@@ -45,22 +45,22 @@ class FrmTransLiteListsController {
 
 		if ( 'subscriptions' === $type ) {
 			$add_columns = array(
-				'sub_id'         => esc_html__( 'Profile ID', 'formidable' ),
-				'item_id'        => esc_html__( 'Entry', 'formidable' ),
-				'form_id'        => esc_html__( 'Form', 'formidable' ),
 				'amount'         => esc_html__( 'Billing Cycle', 'formidable' ),
 				'end_count'      => esc_html__( 'Payments Made', 'formidable' ),
+				'form_id'        => esc_html__( 'Form', 'formidable' ),
+				'item_id'        => esc_html__( 'Entry', 'formidable' ),
 				'next_bill_date' => esc_html__( 'Next Bill Date', 'formidable' ),
+				'sub_id'         => esc_html__( 'Profile ID', 'formidable' ),
 			);
 		} else {
 			$add_columns = array(
-				'receipt_id'  => esc_html__( 'Receipt ID', 'formidable' ),
-				'item_id'     => esc_html__( 'Entry', 'formidable' ),
-				'form_id'     => esc_html__( 'Form', 'formidable' ),
 				'amount'      => esc_html__( 'Amount', 'formidable' ),
-				'sub_id'      => esc_html__( 'Subscription', 'formidable' ),
 				'begin_date'  => esc_html__( 'Begin Date', 'formidable' ),
 				'expire_date' => esc_html__( 'Expire Date', 'formidable' ),
+				'form_id'     => esc_html__( 'Form', 'formidable' ),
+				'item_id'     => esc_html__( 'Entry', 'formidable' ),
+				'receipt_id'  => esc_html__( 'Receipt ID', 'formidable' ),
+				'sub_id'      => esc_html__( 'Subscription', 'formidable' ),
 			);
 		}
 
@@ -114,12 +114,12 @@ class FrmTransLiteListsController {
 	public static function list_page_params() {
 		$values = array();
 		foreach ( array(
+			'form'   => '',
 			'id'     => '',
 			'paged'  => 1,
-			'form'   => '',
+			'sdir'   => '',
 			'search' => '',
 			'sort'   => '',
-			'sdir'   => '',
 		) as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
 		}

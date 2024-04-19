@@ -115,10 +115,10 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_is_formidable_admin() {
 		$page_names = array(
-			'nope'               => false,
+			'entry-formidable'   => true,
 			'formidable'         => true,
 			'formidable-entries' => true,
-			'entry-formidable'   => true,
+			'nope'               => false,
 		);
 		foreach ( $page_names as $page => $expected ) {
 			$_GET['page'] = $page;
@@ -132,11 +132,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$view = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
 
 		$admin_pages = array(
-			'index.php'                               => false,
 			'edit.php?post_type=frm_display'          => true,
 			'edit.php?post_type=post'                 => false,
-			'post.php?post=' . $view . '&action=edit&view=1' => true,
+			'index.php'                               => false,
 			'post.php?post=' . $page . '&action=edit' => false,
+			'post.php?post=' . $view . '&action=edit&view=1' => true,
 		);
 		foreach ( $admin_pages as $admin_page => $expected ) {
 			$this->set_admin_screen( $admin_page );
@@ -213,16 +213,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_sanitize_value() {
 		$values = array(
 			array(
-				'value'    => '<script></script>test',
 				'expected' => 'test',
+				'value'    => '<script></script>test',
 			),
 			array(
-				'value'    => array(
-					'<script></script>test',
-					'another test',
-				),
 				'expected' => array(
 					'test',
+					'another test',
+				),
+				'value'    => array(
+					'<script></script>test',
 					'another test',
 				),
 			),
@@ -252,8 +252,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_get_simple_request() {
 		$result = FrmAppHelper::get_simple_request(
 			array(
-				'type'  => 'request',
 				'param' => 'test5',
+				'type'  => 'request',
 			)
 		);
 		$this->assertEquals( '', $result );
@@ -264,8 +264,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$result = FrmAppHelper::get_simple_request(
 			array(
-				'type'  => 'request',
 				'param' => 'test5',
+				'type'  => 'request',
 			)
 		);
 		$this->assertEquals( $expected, $result );
@@ -276,17 +276,17 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_sanitize_request() {
 		$values = array(
-			'form_id'    => '<script></script>12',
-			'frm_action' => '<script></script>create me',
-			'form_key'   => '<script></script>This is a <b>text</b> field',
 			'content'    => '<script></script>This is a <b>text</b> field',
+			'form_id'    => '<script></script>12',
+			'form_key'   => '<script></script>This is a <b>text</b> field',
+			'frm_action' => '<script></script>create me',
 		);
 
 		$sanitize_method = array(
-			'form_id'    => 'absint',
-			'frm_action' => 'sanitize_title',
-			'form_key'   => 'sanitize_text_field',
 			'content'    => 'wp_kses_post',
+			'form_id'    => 'absint',
+			'form_key'   => 'sanitize_text_field',
+			'frm_action' => 'sanitize_title',
 		);
 
 		FrmAppHelper::sanitize_request( $sanitize_method, $values );
@@ -412,21 +412,21 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$safe_html = $this->run_private_method( array( 'FrmAppHelper', 'safe_html' ), array() );
 		$tests     = array(
 			array(
-				'start'    => 'all',
 				'expected' => $safe_html,
+				'start'    => 'all',
 			),
 			array(
-				'start'    => array( 'a' ),
 				'expected' => array(
 					'a' => $safe_html['a'],
 				),
+				'start'    => array( 'a' ),
 			),
 			array(
-				'start'    => array( 'a', 'br' ),
 				'expected' => array(
 					'a'  => $safe_html['a'],
 					'br' => $safe_html['br'],
 				),
+				'start'    => array( 'a', 'br' ),
 			),
 		);
 		foreach ( $tests as $test ) {
@@ -737,14 +737,14 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_truncate() {
 		$assertions = array(
 			array(
-				'string'   => 'This is my first example string',
-				'length'   => 10,
 				'expected' => 'This is my...',
+				'length'   => 10,
+				'string'   => 'This is my first example string',
 			),
 			array(
-				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ),
-				'length'   => 60,
 				'expected' => '&lt;img src=&quot;data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAA',
+				'length'   => 60,
+				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ),
 			),
 		);
 
@@ -760,19 +760,19 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_recursive_function_map() {
 		$test_cases = array(
 			array(
-				'input'    => array( 'Apple', 'Banana', '', null ),
-				'function' => 'strlen',
 				'expected' => array( 5, 6, 0, 0 ),
+				'function' => 'strlen',
+				'input'    => array( 'Apple', 'Banana', '', null ),
 			),
 			array(
-				'input'    => array( '  Apple', '  Banana  ', '   ', null ),
-				'function' => 'trim',
 				'expected' => array( 'Apple', 'Banana', '', '' ),
+				'function' => 'trim',
+				'input'    => array( '  Apple', '  Banana  ', '   ', null ),
 			),
 			array(
-				'input'    => array( '&gt;', '&amp;' ),
-				'function' => 'htmlspecialchars_decode',
 				'expected' => array( '>', '&' ),
+				'function' => 'htmlspecialchars_decode',
+				'input'    => array( '&gt;', '&amp;' ),
 			),
 		);
 		foreach ( $test_cases as $test_case ) {

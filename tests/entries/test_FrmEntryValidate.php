@@ -42,10 +42,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$test_url               = 'http://madeupwebsite.com';
 		$values                 = array(
 			'item_meta'      => array(
-				0                       => '',
-				$made_up_name_field_id  => $test_name,
 				$made_up_email_field_id => $test_email,
+				$made_up_name_field_id  => $test_name,
 				$made_up_url_field_id   => $test_url,
+				0                       => '',
 			),
 			'name_field_ids' => array(),
 		);
@@ -96,11 +96,16 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 	public function test_get_all_form_ids_and_flatten_meta() {
 		$test_values = array(
-			'frm_action'         => 'create',
 			'form_id'            => 1,
-			'frm_hide_fields_1'  => '',
 			'form_key'           => 'contact-form',
+			'frm_action'         => 'create',
+			'frm_hide_fields_1'  => '',
+			'frm_state'          => 'gfMW/S4I1MCpqXn7OnjXQHLIibJNuRkLkCYpp7MWM7Y=',
+			'frm_submit_entry_1' => '6e70504545',
+			'frm_verify'         => null,
+			'item_key'           => '8wl00',
 			'item_meta'          => array(
+				'other' => array( 141 => null ),
 				0       => null,
 				1       => array(
 					'first' => 'John',
@@ -111,7 +116,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 				4       => 'Test',
 				5       => 'This is a test',
 				141     => 'Developer',
-				'other' => array( 141 => null ),
 				155     => null,
 				156     => null,
 				163     => array(
@@ -141,11 +145,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 					),
 				),
 			),
-			'frm_submit_entry_1' => '6e70504545',
 			'_wp_http_referer'   => '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form',
-			'item_key'           => '8wl00',
-			'frm_verify'         => null,
-			'frm_state'          => 'gfMW/S4I1MCpqXn7OnjXQHLIibJNuRkLkCYpp7MWM7Y=',
 		);
 
 		$form_ids = $this->run_private_method(
@@ -178,9 +178,9 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		// Radio field, has Other, but no options.
 		$fields['radio_2'] = $this->factory->field->create_and_get(
 			array(
+				'field_options' => array( 'other' => '1' ),
 				'form_id'       => $form->id,
 				'type'          => 'radio',
-				'field_options' => array( 'other' => '1' ),
 			)
 		);
 
@@ -208,10 +208,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		foreach ( array( 'radio_3', 'radio_4', 'radio_5' ) as $key ) {
 			$fields[ $key ] = $this->factory->field->create_and_get(
 				array(
-					'form_id'       => $form->id,
-					'type'          => 'radio',
 					'field_options' => array( 'other' => '1' ),
+					'form_id'       => $form->id,
 					'options'       => $options,
+					'type'          => 'radio',
 				)
 			);
 		}

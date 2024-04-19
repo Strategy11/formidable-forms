@@ -43,16 +43,16 @@ class FrmStrpLiteSubscriptionHelper {
 		$atts['charge'] = (object) $atts['charge'];
 
 		$new_values = array(
-			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
-			'paysys'         => 'stripe',
-			'item_id'        => $atts['entry']->id,
 			'action_id'      => $atts['action']->ID,
-			'sub_id'         => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
 			'interval_count' => $atts['action']->post_content['interval_count'],
-			'time_interval'  => $atts['action']->post_content['interval'],
-			'status'         => 'active',
+			'item_id'        => $atts['entry']->id,
 			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'paysys'         => 'stripe',
+			'status'         => 'active',
+			'sub_id'         => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
 			'test'           => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
+			'time_interval'  => $atts['action']->post_content['interval'],
 		);
 
 		$frm_sub = new FrmTransLiteSubscription();
@@ -108,9 +108,9 @@ class FrmStrpLiteSubscriptionHelper {
 		$default_description = number_format( $amount / 100, 2 ) . '/' . $settings['interval'];
 		$plan_opts           = array(
 			'amount'         => $amount,
+			'currency'       => $settings['currency'],
 			'interval'       => $settings['interval'],
 			'interval_count' => $settings['interval_count'],
-			'currency'       => $settings['currency'],
 			'name'           => empty( $settings['description'] ) ? $default_description : $settings['description'],
 		);
 

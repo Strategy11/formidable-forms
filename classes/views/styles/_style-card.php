@@ -42,8 +42,8 @@ $include_info = $is_active_style;
 			<?php
 			$colors = array(
 				'label-color'     => $style->post_content['label_color'],
-				'text-color'      => $style->post_content['text_color'],
 				'submit-bg-color' => $style->post_content['submit_bg_color'],
+				'text-color'      => $style->post_content['text_color'],
 			);
 			$index  = 0;
 			foreach ( $colors as $css_var_name => $color ) {

@@ -413,10 +413,10 @@ class FrmEntryFormatter {
 			'frm_formatted_entry_values_content',
 			$content,
 			array(
-				'entry'        => $this->entry,
 				'atts'         => $this->atts,
-				'format'       => $this->format,
+				'entry'        => $this->entry,
 				'entry_values' => $this->entry_values,
+				'format'       => $this->format,
 			)
 		);
 	}
@@ -725,9 +725,9 @@ class FrmEntryFormatter {
 	 */
 	protected function package_value_args( $field_value ) {
 		return array(
+			'field_type' => $field_value->get_field_type(),
 			'label'      => $field_value->get_field_label(),
 			'value'      => $field_value->get_displayed_value(),
-			'field_type' => $field_value->get_field_type(),
 		);
 	}
 
@@ -744,9 +744,9 @@ class FrmEntryFormatter {
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
 
 				$value_args = array(
+					'field_type' => 'none',
 					'label'      => $user_info['label'],
 					'value'      => $user_info['value'],
-					'field_type' => 'none',
 				);
 
 				$this->add_html_row( $value_args, $content );

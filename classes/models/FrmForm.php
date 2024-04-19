@@ -15,15 +15,15 @@ class FrmForm {
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		$new_values = array(
-			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
-			'name'           => $values['name'],
-			'description'    => $values['description'],
-			'status'         => isset( $values['status'] ) ? $values['status'] : 'published',
-			'logged_in'      => isset( $values['logged_in'] ) ? $values['logged_in'] : 0,
-			'is_template'    => isset( $values['is_template'] ) ? (int) $values['is_template'] : 0,
-			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
-			'editable'       => isset( $values['editable'] ) ? (int) $values['editable'] : 0,
 			'created_at'     => isset( $values['created_at'] ) ? $values['created_at'] : current_time( 'mysql', 1 ),
+			'description'    => $values['description'],
+			'editable'       => isset( $values['editable'] ) ? (int) $values['editable'] : 0,
+			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
+			'is_template'    => isset( $values['is_template'] ) ? (int) $values['is_template'] : 0,
+			'logged_in'      => isset( $values['logged_in'] ) ? $values['logged_in'] : 0,
+			'name'           => $values['name'],
+			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
+			'status'         => isset( $values['status'] ) ? $values['status'] : 'published',
 		);
 
 		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
@@ -83,14 +83,14 @@ class FrmForm {
 		$new_key = $copy_keys ? $values->form_key : '';
 
 		$new_values = array(
-			'form_key'    => FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_forms', 'form_key' ),
-			'name'        => $values->name,
-			'description' => $values->description,
-			'status'      => $values->status ? $values->status : 'published',
-			'logged_in'   => $values->logged_in ? $values->logged_in : 0,
-			'editable'    => $values->editable ? $values->editable : 0,
 			'created_at'  => current_time( 'mysql', 1 ),
+			'description' => $values->description,
+			'editable'    => $values->editable ? $values->editable : 0,
+			'form_key'    => FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_forms', 'form_key' ),
 			'is_template' => $template ? 1 : 0,
+			'logged_in'   => $values->logged_in ? $values->logged_in : 0,
+			'name'        => $values->name,
+			'status'      => $values->status ? $values->status : 'published',
 		);
 
 		if ( $blog_id ) {
@@ -165,9 +165,9 @@ class FrmForm {
 		$fields = FrmDb::get_results(
 			"{$wpdb->prefix}frm_fields AS fi LEFT OUTER JOIN {$wpdb->prefix}frm_forms AS fr ON fi.form_id = fr.id",
 			array(
-				'or'                => 1,
 				'fi.form_id'        => $form_id,
 				'fr.parent_form_id' => $form_id,
+				'or'                => 1,
 			),
 			$sql_cols
 		);
@@ -363,8 +363,8 @@ class FrmForm {
 			$field->field_options = apply_filters( 'frm_update_field_options', $field->field_options, $field, $values );
 
 			$new_field = array(
-				'field_options' => $field->field_options,
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
+				'field_options' => $field->field_options,
 			);
 
 			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
@@ -505,13 +505,13 @@ class FrmForm {
 
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
-			'field_order' => 0,
+			'description' => '',
 			'field_key'   => '',
+			'field_order' => 0,
+			'name'        => '',
+			'options'     => '',
 			'required'    => false,
 			'type'        => '',
-			'description' => '',
-			'options'     => '',
-			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
 			$default = $default === '' ? $field->{$col} : $default;
@@ -569,8 +569,8 @@ class FrmForm {
 		if ( is_array( $id ) ) {
 			$where = array(
 				'id'             => $id,
-				'parent_form_id' => $id,
 				'or'             => 1,
+				'parent_form_id' => $id,
 			);
 			FrmDb::get_where_clause_and_values( $where );
 			array_unshift( $where['values'], $status );
@@ -608,8 +608,8 @@ class FrmForm {
 		$query_results = $wpdb->update(
 			$wpdb->prefix . 'frm_forms',
 			array(
-				'status'  => 'trash',
 				'options' => serialize( $options ),
+				'status'  => 'trash',
 			),
 			array(
 				'id' => $id,
@@ -619,8 +619,8 @@ class FrmForm {
 		$wpdb->update(
 			$wpdb->prefix . 'frm_forms',
 			array(
-				'status'  => 'trash',
 				'options' => serialize( $options ),
+				'status'  => 'trash',
 			),
 			array(
 				'parent_form_id' => $id,
@@ -978,16 +978,16 @@ class FrmForm {
 		$action     = apply_filters( 'frm_show_new_entry_page', FrmAppHelper::get_param( $action_var, 'new', 'get', 'sanitize_title' ), $form );
 
 		$default_values = array(
-			'id'        => '',
-			'form_name' => '',
-			'paged'     => 1,
+			'action'    => $action,
+			'field_id'  => '',
 			'form'      => $form->id,
 			'form_id'   => $form->id,
-			'field_id'  => '',
+			'form_name' => '',
+			'id'        => '',
+			'paged'     => 1,
+			'sdir'      => '',
 			'search'    => '',
 			'sort'      => '',
-			'sdir'      => '',
-			'action'    => $action,
 		);
 
 		$values                   = array();
@@ -1025,13 +1025,13 @@ class FrmForm {
 	public static function list_page_params() {
 		$values   = array();
 		$defaults = array(
-			'template' => 0,
+			'form'     => '',
 			'id'       => '',
 			'paged'    => 1,
-			'form'     => '',
+			'sdir'     => '',
 			'search'   => '',
 			'sort'     => '',
-			'sdir'     => '',
+			'template' => 0,
 		);
 		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
@@ -1050,16 +1050,16 @@ class FrmForm {
 
 		$values   = array();
 		$defaults = array(
-			'id'        => '',
-			'form_name' => '',
-			'paged'     => 1,
-			'form'      => $form_id,
+			'fid'       => '',
 			'field_id'  => '',
+			'form'      => $form_id,
+			'form_name' => '',
+			'id'        => '',
+			'keep_post' => '',
+			'paged'     => 1,
+			'sdir'      => '',
 			'search'    => '',
 			'sort'      => '',
-			'sdir'      => '',
-			'fid'       => '',
-			'keep_post' => '',
 		);
 		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );

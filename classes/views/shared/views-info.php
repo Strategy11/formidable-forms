@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label' => __( 'Views', 'formidable' ),
-			'form'  => $form,
 			'close' => $form ? admin_url( 'admin.php?page=formidable&frm_action=views&form=' . $form->id ) : '',
+			'form'  => $form,
+			'label' => __( 'Views', 'formidable' ),
 		)
 	);
 	?>
@@ -20,9 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 		<?php
 		$upgrade_link_args = array(
+			'class'  => 'frm-mb-md frm-button-primary',
 			'medium' => 'views-info',
 			'plan'   => 'view',
-			'class'  => 'frm-mb-md frm-button-primary',
 		);
 		FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
 		?>

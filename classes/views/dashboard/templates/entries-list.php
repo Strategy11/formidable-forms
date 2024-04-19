@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 $wp_list_table->display(
 	array(
-		'display-top-nav'        => false,
-		'display-bottom-nav'     => false,
 		'display-bottom-headers' => false,
+		'display-bottom-nav'     => false,
+		'display-top-nav'        => false,
 	)
 );

@@ -44,12 +44,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function field_settings_for_type() {
 		$settings = FrmCaptchaFactory::get_settings_object();
 		return array(
-			'required'                  => false,
-			'invalid'                   => true,
 			'captcha_size'              => $settings->should_show_captcha_size(),
 			'captcha_theme'             => $settings->should_show_captcha_theme(),
 			'captcha_theme_auto_option' => $settings->should_show_captcha_theme_auto_option(),
 			'default'                   => false,
+			'invalid'                   => true,
+			'required'                  => false,
 		);
 	}
 
@@ -69,9 +69,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function extra_field_opts() {
 		return array(
-			'label'         => 'none',
 			'captcha_size'  => 'normal',
 			'captcha_theme' => 'light',
+			'label'         => 'none',
 		);
 	}
 
@@ -104,9 +104,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		$settings       = FrmCaptchaFactory::get_settings_object();
 		$div_attributes = array(
-			'id'           => $args['html_id'],
 			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
 			'data-sitekey' => $settings->get_pubkey(),
+			'id'           => $args['html_id'],
 		);
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
 		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
@@ -364,9 +364,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
 		$arg_array        = array(
 			'body' => array(
-				'secret'   => $captcha_settings->secret,
-				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
 				'remoteip' => FrmAppHelper::get_ip_address(),
+				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
+				'secret'   => $captcha_settings->secret,
 			),
 		);
 

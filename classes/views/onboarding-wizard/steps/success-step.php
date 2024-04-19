@@ -26,15 +26,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'footer-class'               => 'frm-justify-center frm-mt-2xl',
 			'display-back-button'        => false,
-			'primary-button-text'        => esc_html__( 'Go to Dashboard', 'formidable' ),
+			'footer-class'               => 'frm-justify-center frm-mt-2xl',
 			'primary-button-href'        => admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ),
 			'primary-button-role'        => false,
-			'secondary-button-text'      => esc_html__( 'Create a Form', 'formidable' ),
+			'primary-button-text'        => esc_html__( 'Go to Dashboard', 'formidable' ),
 			'secondary-button-href'      => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
 			'secondary-button-role'      => false,
 			'secondary-button-skip-step' => false,
+			'secondary-button-text'      => esc_html__( 'Create a Form', 'formidable' ),
 		)
 	);
 	?>

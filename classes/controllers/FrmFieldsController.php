@@ -19,8 +19,8 @@ class FrmFieldsController {
 		$_GET['page'] = 'formidable';
 
 		$values     = array(
-			'id'         => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 			'doing_ajax' => true,
+			'id'         => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 		);
 		$field_html = array();
 
@@ -311,8 +311,8 @@ class FrmFieldsController {
 		if ( ! isset( $all_field_types[ $field['type'] ] ) ) {
 			// Add fallback for an add-on field type that has been deactivated.
 			$all_field_types[ $field['type'] ] = array(
-				'name' => ucfirst( $field['type'] ),
 				'icon' => 'frm_icon_font frm_pencil_icon',
+				'name' => ucfirst( $field['type'] ),
 			);
 		} elseif ( ! is_array( $all_field_types[ $field['type'] ] ) ) {
 			// Fallback for fields added in a more basic way.
@@ -343,31 +343,31 @@ class FrmFieldsController {
 	 */
 	private static function default_value_types( $field, $atts ) {
 		$types = array(
-			'default_value'    => array(
-				'class' => '',
-				'icon'  => 'frm_icon_font frm_text2_icon',
-				'title' => __( 'Default Value (Text)', 'formidable' ),
-				'data'  => array(
-					'frmshow' => '#default-value-for-',
-				),
-			),
 			'calc'             => array(
 				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Calculation)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_calculator_icon',
 				'data'  => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
 				),
+				'icon'  => 'frm_icon_font frm_calculator_icon',
+				'title' => __( 'Default Value (Calculation)', 'formidable' ),
+			),
+			'default_value'    => array(
+				'class' => '',
+				'data'  => array(
+					'frmshow' => '#default-value-for-',
+				),
+				'icon'  => 'frm_icon_font frm_text2_icon',
+				'title' => __( 'Default Value (Text)', 'formidable' ),
 			),
 			'get_values_field' => array(
 				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Lookup)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_search_icon',
 				'data'  => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),
 				),
+				'icon'  => 'frm_icon_font frm_search_icon',
+				'title' => __( 'Default Value (Lookup)', 'formidable' ),
 			),
 		);
 
@@ -396,12 +396,12 @@ class FrmFieldsController {
 
 	public static function change_type( $type ) {
 		$type_switch = array(
+			'10radio' => 'radio',
+			'image'   => 'url',
+			'rte'     => 'textarea',
 			'scale'   => 'radio',
 			'star'    => 'radio',
-			'10radio' => 'radio',
-			'rte'     => 'textarea',
 			'website' => 'url',
-			'image'   => 'url',
 		);
 		if ( isset( $type_switch[ $type ] ) ) {
 			$type = $type_switch[ $type ];
@@ -531,9 +531,9 @@ class FrmFieldsController {
 		// Convert to cols for textareas.
 		$calc = array(
 			''    => 9,
+			'em'  => 0.544,
 			'px'  => 9,
 			'rem' => 0.444,
-			'em'  => 0.544,
 		);
 
 		// include "col" for valid html
@@ -654,8 +654,8 @@ class FrmFieldsController {
 		if ( $placeholder !== '' ) {
 			$placeholder_attributes = array(
 				'class'            => 'frm-select-placeholder',
-				'value'            => '',
 				'data-placeholder' => 'true',
+				'value'            => '',
 			);
 
 			if ( $autocomplete && empty( $use_chosen ) ) {

@@ -24,13 +24,13 @@ class FrmUsage {
 
 		// Setup variable for wp_remote_request.
 		$post = array(
-			'method'  => 'POST',
+			'body'    => $body,
 			'headers' => array(
 				'Accept'         => 'application/json',
-				'Content-Type'   => 'application/json',
 				'Content-Length' => strlen( $body ),
+				'Content-Type'   => 'application/json',
 			),
-			'body'    => $body,
+			'method'  => 'POST',
 		);
 
 		wp_remote_request( base64_decode( $ep ), $post );
@@ -65,30 +65,30 @@ class FrmUsage {
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
-			'uuid'              => $this->uuid(),
-			// Let's keep it anonymous.
-			'admin_email'       => '',
-			'wp_version'        => $wp_version,
-			'php_version'       => phpversion(),
-			'mysql_version'     => $wpdb->db_version(),
-			'os'                => FrmAppHelper::get_server_os(),
-			'locale'            => get_locale(),
+			'actions'           => $this->actions(),
 
 			'active_license'    => FrmAppHelper::pro_is_installed(),
-			'form_count'        => $form_counts->published,
+			// Let's keep it anonymous.
+			'admin_email'       => '',
 			'entry_count'       => FrmEntry::getRecordCount(),
-			'timestamp'         => gmdate( 'c' ),
+			'fields'            => $this->fields(),
+			'forms'             => $this->forms(),
+			'form_count'        => $form_counts->published,
+			'locale'            => get_locale(),
+			'mysql_version'     => $wpdb->db_version(),
 
-			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
+			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'os'                => FrmAppHelper::get_server_os(),
+			'php_version'       => phpversion(),
 			'plugins'           => $this->plugins(),
 			'settings'          => array(
 				$this->settings(),
 			),
-			'forms'             => $this->forms(),
-			'fields'            => $this->fields(),
-			'actions'           => $this->actions(),
 
-			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
+			'timestamp'         => gmdate( 'c' ),
+			'uuid'              => $this->uuid(),
+			'wp_version'        => $wp_version,
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
@@ -104,10 +104,10 @@ class FrmUsage {
 		$plugins = array();
 		foreach ( $plugin_list as $slug => $info ) {
 			$plugins[] = array(
+				'active'  => is_plugin_active( $slug ),
 				'name'    => $info['Name'],
 				'slug'    => $slug,
 				'version' => $info['Version'],
-				'active'  => is_plugin_active( $slug ),
 			);
 		}
 
@@ -257,14 +257,14 @@ class FrmUsage {
 
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
-				'form_id'           => $form->id,
 				'description'       => $form->description,
-				'logged_in'         => $form->logged_in,
 				'editable'          => $form->editable,
-				'is_template'       => $form->is_template,
 				'entry_count'       => FrmEntry::getRecordCount( $form->id ),
 				'field_count'       => $this->form_field_count( $form->id ),
 				'form_action_count' => $this->form_action_count( $form->id ),
+				'form_id'           => $form->id,
+				'is_template'       => $form->is_template,
+				'logged_in'         => $form->logged_in,
 			);
 
 			foreach ( $settings as $setting ) {
@@ -290,8 +290,8 @@ class FrmUsage {
 		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
-			'or'             => 1,
 			'fi.form_id'     => $form_id,
+			'or'             => 1,
 			'parent_form_id' => $form_id,
 		);
 
@@ -304,9 +304,9 @@ class FrmUsage {
 	 */
 	private function form_action_count( $form_id ) {
 		$args = array(
-			'post_type'  => FrmFormActionsController::$action_post_type,
-			'menu_order' => $form_id,
 			'fields'     => 'ids',
+			'menu_order' => $form_id,
+			'post_type'  => FrmFormActionsController::$action_post_type,
 		);
 
 		$actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
@@ -339,8 +339,8 @@ class FrmUsage {
 	 */
 	private function actions() {
 		$args = array(
-			'post_type'   => FrmFormActionsController::$action_post_type,
 			'numberposts' => 100,
+			'post_type'   => FrmFormActionsController::$action_post_type,
 		);
 
 		$actions = array();
@@ -349,9 +349,9 @@ class FrmUsage {
 		foreach ( $saved_actions as $action ) {
 			$actions[] = array(
 				'form_id'  => $action->menu_order,
-				'type'     => $action->post_excerpt,
-				'status'   => $action->post_status,
 				'settings' => $action->post_content,
+				'status'   => $action->post_status,
+				'type'     => $action->post_excerpt,
 			);
 		}
 

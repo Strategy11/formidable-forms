@@ -56,8 +56,8 @@ class FrmInboxController {
 		$inbox->filter_messages( $dismissed_messages, 'dismissed' );
 
 		return array(
-			'unread'    => array_reverse( $unread_messages ),
 			'dismissed' => array_reverse( $dismissed_messages ),
+			'unread'    => array_reverse( $unread_messages ),
 			'user'      => wp_get_current_user(),
 		);
 	}
@@ -100,10 +100,10 @@ class FrmInboxController {
 		$message = new FrmInbox();
 		$message->add_message(
 			array(
+				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
 				'key'     => 'usage',
 				'message' => 'Gathering usage data allows us to improve Formidable. Your forms will be considered as we evaluate new features, judge the quality of an update, or determine if an improvement makes sense. You can always visit the <a href="' . esc_url( $link ) . '">Global Settings</a> and choose to stop sharing data. <a href="https://formidableforms.com/knowledgebase/global-settings-overview/#kb-usage-tracking" target="_blank" rel="noopener noreferrer">Read more about what data we collect</a>.',
 				'subject' => __( 'Help Formidable improve with usage tracking', 'formidable' ),
-				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
 				'type'    => 'feedback',
 			)
 		);
@@ -131,10 +131,10 @@ class FrmInboxController {
 		$message = new FrmInbox();
 		$message->add_message(
 			array(
+				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'key'     => 'free_templates',
 				'message' => 'Add your email address to get a code for 20+ free form templates.',
 				'subject' => 'Get 20+ Free Form Templates',
-				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'type'    => 'feedback',
 			)
 		);

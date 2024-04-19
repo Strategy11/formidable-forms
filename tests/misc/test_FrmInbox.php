@@ -8,11 +8,11 @@ class test_FrmInbox extends FrmUnitTest {
 		$this->inbox   = new FrmInbox();
 		$initial_count = $this->get_message_count();
 		$message       = array(
-			'key'     => 'sale-20201108',
-			'subject' => 'Want a Free 27-inch iMac?',
-			'message' => 'Do you write code? Edit videos? Create podcasts? Play online games? Want a free 27” iMac to do it? We want you to have one.',
 			'cta'     => 'Win a Free iMac',
 			'icon'    => 'frm_price_tags_icon',
+			'key'     => 'sale-20201108',
+			'message' => 'Do you write code? Edit videos? Create podcasts? Play online games? Want a free 27” iMac to do it? We want you to have one.',
+			'subject' => 'Want a Free 27-inch iMac?',
 			'type'    => 'promo',
 		);
 		$this->inbox->add_message( $message );

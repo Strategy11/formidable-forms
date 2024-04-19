@@ -27,8 +27,8 @@ class FrmStrpLiteSettings {
 	 */
 	public function default_options() {
 		return array(
-			'test_mode'          => 1,
 			'processing_message' => __( 'This payment may take several days to finish processing.', 'formidable' ),
+			'test_mode'          => 1,
 		);
 	}
 

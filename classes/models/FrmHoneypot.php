@@ -94,10 +94,10 @@ class FrmHoneypot extends FrmValidate {
 		$form        = $this->get_form();
 		$class_name  = self::get_honeypot_class_name();
 		$input_attrs = array(
-			'id'    => 'frm_email_' . absint( $form->id ),
-			'type'  => 'strict' === $honeypot ? 'email' : 'text',
 			'class' => 'frm_verify',
+			'id'    => 'frm_email_' . absint( $form->id ),
 			'name'  => $class_name,
+			'type'  => 'strict' === $honeypot ? 'email' : 'text',
 			'value' => FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ),
 		);
 

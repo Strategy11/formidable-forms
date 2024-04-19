@@ -41,17 +41,17 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $form_id );
 
 		$_POST = array(
-			'page'                 => 'formidable',
-			'frm_action'           => 'update',
-			'id'                   => $form_id,
 			'action'               => 'update',
-			'frm_save_form'        => wp_create_nonce( 'frm_save_form_nonce' ),
-			'status'               => 'published',
-			'new_status'           => '',
-			'name'                 => $form->name,
-			'frm_fields_submitted' => array(),
-			'item_meta'            => array(),
 			'field_options'        => array(),
+			'frm_action'           => 'update',
+			'frm_fields_submitted' => array(),
+			'frm_save_form'        => wp_create_nonce( 'frm_save_form_nonce' ),
+			'id'                   => $form_id,
+			'item_meta'            => array(),
+			'name'                 => $form->name,
+			'new_status'           => '',
+			'page'                 => 'formidable',
+			'status'               => 'published',
 		);
 
 		foreach ( $fields as $field ) {
@@ -59,22 +59,22 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			$_POST[ 'default_value_' . $field->id ] = 'default';
 
 			$field_options = array(
-				'description_' . $field->id        => '',
-				'type_' . $field->id               => '',
-				'required_indicator_' . $field->id => '*',
-				'field_key_' . $field->id          => $field->field_key,
-				'classes_' . $field->id            => '',
-				'label_' . $field->id              => '',
-				'size_' . $field->id               => '',
-				'max_' . $field->id                => '',
 				'admin_only_' . $field->id         => '',
-				'use_calc_' . $field->id           => 1,
-				'calc_' . $field->id               => '',
-				'calc_dec_' . $field->id           => '',
-				'show_hide_' . $field->id          => 'show',
 				'any_all_' . $field->id            => 'any',
 				'blank_' . $field->id              => 'This field cannot be blank.',
+				'calc_' . $field->id               => '',
+				'calc_dec_' . $field->id           => '',
+				'classes_' . $field->id            => '',
+				'description_' . $field->id        => '',
+				'field_key_' . $field->id          => $field->field_key,
+				'label_' . $field->id              => '',
+				'max_' . $field->id                => '',
+				'required_indicator_' . $field->id => '*',
+				'show_hide_' . $field->id          => 'show',
+				'size_' . $field->id               => '',
+				'type_' . $field->id               => '',
 				'unique_msg_' . $field->id         => '',
+				'use_calc_' . $field->id           => 1,
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );

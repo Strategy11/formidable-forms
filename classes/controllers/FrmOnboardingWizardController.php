@@ -193,8 +193,8 @@ class FrmOnboardingWizardController {
 
 		self::$upgrade_link = FrmAppHelper::admin_upgrade_link(
 			array(
-				'medium'  => 'onboarding-wizard',
 				'content' => 'upgrade',
+				'medium'  => 'onboarding-wizard',
 			)
 		);
 
@@ -250,12 +250,12 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in order.
 		$step_parts = array(
-			'welcome'                => 'steps/welcome-step.php',
-			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
-			'license-management'     => 'steps/license-management-step.php',
 			'default-email-address'  => 'steps/default-email-address-step.php',
 			'install-addons'         => 'steps/install-addons-step.php',
+			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
+			'license-management'     => 'steps/license-management-step.php',
 			'success'                => 'steps/success-step.php',
+			'welcome'                => 'steps/welcome-step.php',
 		);
 
 		include $view_path . 'index.php';
@@ -307,13 +307,13 @@ class FrmOnboardingWizardController {
 		$usage_data = self::get_usage_data();
 
 		$fields_to_update = array(
-			'default_email'    => 'sanitize_email',
-			'is_subscribed'    => 'rest_sanitize_boolean',
 			'allows_tracking'  => 'rest_sanitize_boolean',
-			'summary_emails'   => 'rest_sanitize_boolean',
-			'installed_addons' => 'sanitize_text_field',
-			'processed_steps'  => 'sanitize_text_field',
 			'completed_steps'  => 'rest_sanitize_boolean',
+			'default_email'    => 'sanitize_email',
+			'installed_addons' => 'sanitize_text_field',
+			'is_subscribed'    => 'rest_sanitize_boolean',
+			'processed_steps'  => 'sanitize_text_field',
+			'summary_emails'   => 'rest_sanitize_boolean',
 		);
 
 		foreach ( $fields_to_update as $field => $sanitize_callback ) {
@@ -439,12 +439,12 @@ class FrmOnboardingWizardController {
 
 		return array(
 			'onboarding_wizard' => array(
-				'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
+				'created' => time(),
+				'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
+				'key'     => 'onboarding_wizard',
 				'message' => esc_html( $message ),
 				'slidein' => esc_html( $message ),
-				'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
-				'created' => time(),
-				'key'     => 'onboarding_wizard',
+				'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
 			),
 		);
 	}
@@ -527,38 +527,38 @@ class FrmOnboardingWizardController {
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
 		self::$available_addons['spam-protection'] = array(
-			'title'       => esc_html__( 'Spam Protection', 'formidable' ),
+			'help-text'   => esc_html__( 'Get anti-spam options like reCAPTCHA, hCaptcha, Akismet, Turnstile and the blocklist.', 'formidable' ),
 			'is-checked'  => true,
 			'is-disabled' => true,
-			'help-text'   => esc_html__( 'Get anti-spam options like reCAPTCHA, hCaptcha, Akismet, Turnstile and the blocklist.', 'formidable' ),
+			'title'       => esc_html__( 'Spam Protection', 'formidable' ),
 		);
 		self::$available_addons['stripe-payments'] = array(
-			'title'       => esc_html__( 'Stripe Payments', 'formidable' ),
+			'help-text'   => esc_html__( 'Collect donations and payments with your forms. Offer physical products, digital goods, services, and more.', 'formidable' ),
 			'is-checked'  => true,
 			'is-disabled' => true,
-			'help-text'   => esc_html__( 'Collect donations and payments with your forms. Offer physical products, digital goods, services, and more.', 'formidable' ),
+			'title'       => esc_html__( 'Stripe Payments', 'formidable' ),
 		);
 		if ( ! $pro_is_installed ) {
 			self::$available_addons['visual-styler'] = array(
-				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
+				'help-text'   => esc_html__( 'Customize form appearance with an intuitive styling interface.', 'formidable' ),
 				'is-checked'  => true,
 				'is-disabled' => true,
-				'help-text'   => esc_html__( 'Customize form appearance with an intuitive styling interface.', 'formidable' ),
+				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
 			);
 			self::$available_addons['save-entries']  = array(
-				'title'       => esc_html__( 'Save Entries', 'formidable' ),
+				'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
 				'is-checked'  => true,
 				'is-disabled' => true,
-				'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
+				'title'       => esc_html__( 'Save Entries', 'formidable' ),
 			);
 		}
 		if ( ! function_exists( 'wp_mail_smtp' ) ) {
 			self::$available_addons['wp-mail-smtp'] = array(
-				'title'      => esc_html__( 'SMTP', 'formidable' ),
-				'rel'        => 'wp-mail-smtp',
+				'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
 				'is-checked' => false,
 				'is-vendor'  => true,
-				'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
+				'rel'        => 'wp-mail-smtp',
+				'title'      => esc_html__( 'SMTP', 'formidable' ),
 			);
 		}
 		if ( $pro_is_installed ) {
@@ -571,60 +571,60 @@ class FrmOnboardingWizardController {
 
 			if ( ! is_plugin_active( 'formidable-views/formidable-views.php' ) ) {
 				self::$available_addons['formidable-views'] = array(
-					'title'      => esc_html__( 'Views', 'formidable' ),
-					'rel'        => $views_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $views_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $views_addon['url'],
+					'title'      => esc_html__( 'Views', 'formidable' ),
 				);
 			}
 			if ( ! is_plugin_active( 'formidable-mailchimp/formidable-mailchimp.php' ) ) {
 				self::$available_addons['formidable-mailchimp'] = array(
-					'title'      => esc_html__( 'Mailchimp', 'formidable' ),
-					'rel'        => $mailchimp_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $mailchimp_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $mailchimp_addon['url'],
+					'title'      => esc_html__( 'Mailchimp', 'formidable' ),
 				);
 			}
 			if ( ! is_plugin_active( 'formidable-registration/formidable-registration.php' ) ) {
 				self::$available_addons['formidable-registration'] = array(
-					'title'      => esc_html__( 'User Registration', 'formidable' ),
-					'rel'        => $registration_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $registration_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $registration_addon['url'],
+					'title'      => esc_html__( 'User Registration', 'formidable' ),
 				);
 			}
 			if ( ! is_plugin_active( 'formidable-api/formidable-api.php' ) ) {
 				self::$available_addons['formidable-api'] = array(
-					'title'      => esc_html__( 'Form Rest API', 'formidable' ),
-					'rel'        => $api_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $api_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $api_addon['url'],
+					'title'      => esc_html__( 'Form Rest API', 'formidable' ),
 				);
 			}
 			if ( class_exists( 'ACF' ) && ! is_plugin_active( 'formidable-acf/formidable-acf.php' ) ) {
 				self::$available_addons['formidable-acf'] = array(
-					'title'      => esc_html__( 'ACF Forms', 'formidable' ),
-					'rel'        => $acf_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $acf_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $acf_addon['url'],
+					'title'      => esc_html__( 'ACF Forms', 'formidable' ),
 				);
 			}
 			if ( ! is_plugin_active( 'formidable-signature/signature.php' ) ) {
 				self::$available_addons['formidable-signature'] = array(
-					'title'      => esc_html__( 'Signature Forms', 'formidable' ),
-					'rel'        => $signature_addon['url'],
-					'is-checked' => false,
 					'help-text'  => $signature_addon['excerpt'],
+					'is-checked' => false,
+					'rel'        => $signature_addon['url'],
+					'title'      => esc_html__( 'Signature Forms', 'formidable' ),
 				);
 			}
 		}//end if
 		if ( class_exists( 'GFForms' ) && ! is_plugin_active( 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php' ) ) {
 			self::$available_addons['formidable-gravity-forms-importer'] = array(
-				'title'      => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
-				'rel'        => 'formidable-gravity-forms-importer',
+				'help-text'  => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
 				'is-checked' => false,
 				'is-vendor'  => true,
-				'help-text'  => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
+				'rel'        => 'formidable-gravity-forms-importer',
+				'title'      => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
 			);
 		}
 	}

@@ -61,11 +61,11 @@ class FrmAddonsController {
 
 		$pro    = array(
 			'pro' => array(
-				'title'    => 'Formidable Forms Pro',
-				'slug'     => 'formidable-pro',
-				'released' => '2011-02-05',
 				'docs'     => 'knowledgebase/',
 				'excerpt'  => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
+				'released' => '2011-02-05',
+				'slug'     => 'formidable-pro',
+				'title'    => 'Formidable Forms Pro',
 			),
 		);
 		$addons = $pro + $addons;
@@ -133,82 +133,82 @@ class FrmAddonsController {
 	 */
 	protected static function fallback_plugin_list() {
 		$list = array(
-			'formidable-pro' => array(
-				'title'   => 'Formidable Forms Pro',
-				'link'    => 'pricing/',
-				'docs'    => '',
-				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',
-			),
-			'mailchimp'      => array(
-				'title'   => 'Mailchimp Forms',
-				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.',
-			),
-			'registration'   => array(
-				'title'   => 'User Registration Forms',
-				'link'    => 'downloads/user-registration/',
-				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
-			),
-			'paypal'         => array(
-				'title'   => 'PayPal Standard Forms',
-				'link'    => 'downloads/paypal-standard/',
-				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
-			),
-			'stripe'         => array(
-				'title'   => 'Stripe Forms',
-				'docs'    => 'knowledgebase/stripe/',
-				'excerpt' => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
+			'api'            => array(
+				'excerpt' => 'Send entry results to any other site that has a Rest API. This includes the option of sending entries from one Formidable site to another.',
+				'link'    => 'downloads/formidable-api/',
+				'title'   => 'Formidable Forms API',
 			),
 			'authorize-net'  => array(
-				'title'   => 'Authorize.net AIM Forms',
-				'link'    => 'downloads/authorize-net-aim/',
 				'docs'    => 'knowledgebase/authorize-net-aim/',
 				'excerpt' => 'Accept one-time payments directly on your site, using Authorize.net AIM.',
-			),
-			'woocommerce'    => array(
-				'title'   => 'WooCommerce Forms',
-				'excerpt' => 'Use a Formidable form on your WooCommerce product pages.',
+				'link'    => 'downloads/authorize-net-aim/',
+				'title'   => 'Authorize.net AIM Forms',
 			),
 			'autoresponder'  => array(
-				'title'   => 'Form Action Automation',
 				'docs'    => 'knowledgebase/schedule-autoresponder/',
 				'excerpt' => 'Schedule email notifications, SMS messages, and API actions.',
-			),
-			'modal'          => array(
-				'title'   => 'Bootstrap Modal Forms',
-				'link'    => 'downloads/bootstrap-modal/',
-				'docs'    => 'knowledgebase/bootstrap-modal/',
-				'excerpt' => 'Open a view or form in a Bootstrap popup.',
+				'title'   => 'Form Action Automation',
 			),
 			'bootstrap'      => array(
-				'title'   => 'Bootstrap Style Forms',
 				'excerpt' => 'Instantly add Bootstrap styling to all your Formidable forms.',
+				'title'   => 'Bootstrap Style Forms',
 			),
-			'zapier'         => array(
-				'title'   => 'Zapier Forms',
-				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
+			'formidable-pro' => array(
+				'docs'    => '',
+				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',
+				'link'    => 'pricing/',
+				'title'   => 'Formidable Forms Pro',
 			),
-			'signature'      => array(
-				'title'   => 'Digital Signature Forms',
-				'excerpt' => 'Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.',
+			'mailchimp'      => array(
+				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.',
+				'title'   => 'Mailchimp Forms',
 			),
-			'api'            => array(
-				'title'   => 'Formidable Forms API',
-				'link'    => 'downloads/formidable-api/',
-				'excerpt' => 'Send entry results to any other site that has a Rest API. This includes the option of sending entries from one Formidable site to another.',
+			'modal'          => array(
+				'docs'    => 'knowledgebase/bootstrap-modal/',
+				'excerpt' => 'Open a view or form in a Bootstrap popup.',
+				'link'    => 'downloads/bootstrap-modal/',
+				'title'   => 'Bootstrap Modal Forms',
 			),
-			'twilio'         => array(
-				'title'   => 'Twilio SMS Forms',
-				'docs'    => 'knowledgebase/twilio-add-on/',
-				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
-			),
-			'views'          => array(
-				'title'   => 'Formidable Views',
-				'excerpt' => 'Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.',
+			'paypal'         => array(
+				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
+				'link'    => 'downloads/paypal-standard/',
+				'title'   => 'PayPal Standard Forms',
 			),
 			'quiz_maker'     => array(
-				'title'   => 'Quiz Maker',
-				'link'    => 'downloads/quiz-maker/',
 				'excerpt' => 'Make quizzes, automatically score them and show user scores.',
+				'link'    => 'downloads/quiz-maker/',
+				'title'   => 'Quiz Maker',
+			),
+			'registration'   => array(
+				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
+				'link'    => 'downloads/user-registration/',
+				'title'   => 'User Registration Forms',
+			),
+			'signature'      => array(
+				'excerpt' => 'Add a signature field to your form. The user may write their signature with a trackpad/mouse or just type it.',
+				'title'   => 'Digital Signature Forms',
+			),
+			'stripe'         => array(
+				'docs'    => 'knowledgebase/stripe/',
+				'excerpt' => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
+				'title'   => 'Stripe Forms',
+			),
+			'twilio'         => array(
+				'docs'    => 'knowledgebase/twilio-add-on/',
+				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
+				'title'   => 'Twilio SMS Forms',
+			),
+			'views'          => array(
+				'excerpt' => 'Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.',
+				'title'   => 'Formidable Views',
+			),
+			'woocommerce'    => array(
+				'excerpt' => 'Use a Formidable form on your WooCommerce product pages.',
+				'title'   => 'WooCommerce Forms',
+			),
+			'zapier'         => array(
+				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
+				'title'   => 'Zapier Forms',
 			),
 		);
 
@@ -471,8 +471,8 @@ class FrmAddonsController {
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
 				if ( isset( $addon_info['error'] ) ) {
 					$version_info[ $download_id ]['error'] = array(
-						'message' => $addon_info['error']['message'],
 						'code'    => $addon_info['error']['code'],
+						'message' => $addon_info['error']['message'],
 					);
 				}
 			}
@@ -495,13 +495,13 @@ class FrmAddonsController {
 		if ( $addon ) {
 			if ( $addon['status']['type'] === 'installed' && ! empty( $addon['activate_url'] ) ) {
 				$link = array(
-					'url'   => $addon['plugin'],
 					'class' => 'frm-activate-addon',
+					'url'   => $addon['plugin'],
 				);
 			} elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) {
 				$link = array(
-					'url'   => $addon['url'],
 					'class' => 'frm-install-addon',
+					'url'   => $addon['url'],
 				);
 			} elseif ( isset( $addon['categories'] ) && ! empty( $addon['categories'] ) ) {
 				$link = array(
@@ -514,8 +514,8 @@ class FrmAddonsController {
 			}
 		} elseif ( current_user_can( 'activate_plugins' ) && self::is_installed( 'formidable-' . $plugin . '/formidable-' . $plugin . '.php' ) ) {
 			$link = array(
-				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
 				'class' => 'frm-activate-addon',
+				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
 			);
 		}//end if
 
@@ -616,8 +616,8 @@ class FrmAddonsController {
 			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
-						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
 						'plugin'   => $file_name,
+						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
 					),
 					$activate_url
 				);
@@ -671,9 +671,9 @@ class FrmAddonsController {
 		}
 		$link       = FrmAppHelper::make_affiliate_url( $link );
 		$query_args = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => 'addons',
 			'utm_campaign' => 'liteplugin',
+			'utm_medium'   => 'addons',
+			'utm_source'   => 'WordPress',
 		);
 		$link       = add_query_arg( $query_args, $link );
 	}
@@ -689,18 +689,18 @@ class FrmAddonsController {
 	protected static function set_addon_status( &$addon ) {
 		if ( ! empty( $addon['activate_url'] ) ) {
 			$addon['status'] = array(
-				'type'  => 'installed',
 				'label' => __( 'Installed', 'formidable' ),
+				'type'  => 'installed',
 			);
 		} elseif ( $addon['installed'] ) {
 			$addon['status'] = array(
-				'type'  => 'active',
 				'label' => __( 'Active', 'formidable' ),
+				'type'  => 'active',
 			);
 		} else {
 			$addon['status'] = array(
-				'type'  => 'not-installed',
 				'label' => __( 'Not Installed', 'formidable' ),
+				'type'  => 'not-installed',
 			);
 		}
 	}
@@ -712,8 +712,8 @@ class FrmAddonsController {
 		FrmAppHelper::include_svg();
 
 		$link_parts = array(
-			'medium'  => 'upgrade',
 			'content' => 'button',
+			'medium'  => 'upgrade',
 		);
 
 		$features = array(
@@ -766,6 +766,61 @@ class FrmAddonsController {
 				),
 				array(
 					'label' => 'Export your entries to a CSV',
+					'lite'  => true,
+				),
+			),
+			'Form Actions'     => array(
+				array(
+					'label' => 'Conditionally send your email notifications based on values in your form',
+					'link'  => array(
+						'content' => 'conditional-emails',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Create and edit WordPress posts or custom posts from the front-end',
+					'link'  => array(
+						'content' => 'create-posts',
+						'param'   => 'create-posts-pages-wordpress-forms',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Send multiple emails and autoresponders',
+					'link'  => array(
+						'content' => 'multiple-emails',
+						'param'   => 'virtually-unlimited-emails',
+					),
+					'lite'  => true,
+				),
+			),
+			'Form Appearance'  => array(
+				array(
+					'label' => 'Create Multiple styles for different forms',
+					'link'  => array(
+						'content' => 'multiple-styles',
+						'param'   => 'wordpress-visual-form-styler',
+					),
+					'lite'  => false,
+				),
+				array(
+					'label' => 'Customizable layout with CSS classes',
+					'link'  => array(
+						'content' => 'form-layout',
+						'param'   => 'wordpress-mobile-friendly-forms',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Customize the HTML for your forms',
+					'link'  => array(
+						'content' => 'custom-html',
+						'param'   => 'customizable-html-wordpress-form',
+					),
+					'lite'  => true,
+				),
+				array(
+					'label' => 'Style your form with the Visual Form Styler',
 					'lite'  => true,
 				),
 			),
@@ -852,61 +907,6 @@ class FrmAddonsController {
 				),
 				array(
 					'label' => 'Use input placeholder text in your fields that clear when typing starts.',
-					'lite'  => true,
-				),
-			),
-			'Form Actions'     => array(
-				array(
-					'label' => 'Conditionally send your email notifications based on values in your form',
-					'link'  => array(
-						'content' => 'conditional-emails',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Create and edit WordPress posts or custom posts from the front-end',
-					'link'  => array(
-						'content' => 'create-posts',
-						'param'   => 'create-posts-pages-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Send multiple emails and autoresponders',
-					'link'  => array(
-						'content' => 'multiple-emails',
-						'param'   => 'virtually-unlimited-emails',
-					),
-					'lite'  => true,
-				),
-			),
-			'Form Appearance'  => array(
-				array(
-					'label' => 'Create Multiple styles for different forms',
-					'link'  => array(
-						'content' => 'multiple-styles',
-						'param'   => 'wordpress-visual-form-styler',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Customizable layout with CSS classes',
-					'link'  => array(
-						'content' => 'form-layout',
-						'param'   => 'wordpress-mobile-friendly-forms',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Customize the HTML for your forms',
-					'link'  => array(
-						'content' => 'custom-html',
-						'param'   => 'customizable-html-wordpress-form',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Style your form with the Visual Form Styler',
 					'lite'  => true,
 				),
 			),
@@ -1036,9 +1036,9 @@ class FrmAddonsController {
 			$message  = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
 			$data     = $form;
 			$response = array(
-				'success' => false,
-				'message' => $message,
 				'form'    => $form,
+				'message' => $message,
+				'success' => false,
 			);
 			wp_send_json( $response );
 		}
@@ -1283,13 +1283,13 @@ class FrmAddonsController {
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
 		$link = 'https://formidableforms.com/api-connect/';
 		$args = array(
-			'v'       => 2,
-			'siteurl' => FrmAppHelper::site_url(),
-			'url'     => get_rest_url(),
 			'inst'    => (int) FrmAppHelper::pro_is_included(),
-			'return'  => $page,
-			'token'   => $auth,
 			'l'       => self::get_pro_license(),
+			'return'  => $page,
+			'siteurl' => FrmAppHelper::site_url(),
+			'token'   => $auth,
+			'url'     => get_rest_url(),
+			'v'       => 2,
 		);
 
 		return add_query_arg( $args, $link );
@@ -1354,8 +1354,8 @@ class FrmAddonsController {
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 			if ( ! $license ) {
 				return array(
-					'success' => false,
 					'error'   => 'That site does not have a valid license key.',
+					'success' => false,
 				);
 			}
 
@@ -1379,8 +1379,8 @@ class FrmAddonsController {
 	private static function maybe_download_and_activate() {
 		if ( ! self::$plugin ) {
 			return array(
-				'success' => false,
 				'message' => __( 'The plugin download was not found.', 'formidable' ),
+				'success' => false,
 			);
 		}
 

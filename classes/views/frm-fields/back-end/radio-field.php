@@ -31,15 +31,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			<?php
 			FrmFieldsHelper::include_other_input(
 				array(
-					'other_opt' => $other_opt,
-					'read_only' => false,
 					'checked'   => $checked,
-					'name'      => $other_args['name'],
-					'value'     => $other_args['value'],
 					'field'     => $field,
 					'html_id'   => $html_id,
+					'name'      => $other_args['name'],
 					'opt_key'   => $opt_key,
 					'opt_label' => $opt,
+					'other_opt' => $other_opt,
+					'read_only' => false,
+					'value'     => $other_args['value'],
 				)
 			);
 

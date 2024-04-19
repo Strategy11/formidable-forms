@@ -133,41 +133,41 @@ class FrmSettings {
 	 */
 	public function default_options() {
 		return array(
-			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
-			'mu_menu'                   => 0,
-			'use_html'                  => true,
-			'jquery_css'                => false,
 			'accordion_js'              => false,
-			'fade_form'                 => false,
-			'old_css'                   => false,
 			'admin_bar'                 => false,
-
-			're_multi'                  => 1,
-
-			'success_msg'               => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			'admin_permission'          => __( 'You do not have permission to do that', 'formidable' ),
 			// translators: %s: [field_name] shortcode.
 			'blank_msg'                 => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
-			// translators: %s: [field_name] shortcode.
-			'unique_msg'                => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
-			'invalid_msg'               => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
-			'failed_msg'                => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
-			'submit_value'              => __( 'Submit', 'formidable' ),
-			'login_msg'                 => __( 'You do not have permission to view this form.', 'formidable' ),
-			'admin_permission'          => __( 'You do not have permission to do that', 'formidable' ),
-			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
-
-			'email_to'                  => '[admin_email]',
-			'no_ips'                    => 0,
-			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip'          => false,
-			'tracking'                  => FrmAppHelper::pro_is_installed(),
-			// Only enable this by default for the main site.
-			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
-			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css'                => false,
+			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
+			'custom_header_ip'          => false,
+
+			'email_to'                  => '[admin_email]',
+			'fade_form'                 => false,
+			'failed_msg'                => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
+			'invalid_msg'               => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
+			'jquery_css'                => false,
+			'login_msg'                 => __( 'You do not have permission to view this form.', 'formidable' ),
+			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
+			'mu_menu'                   => 0,
+			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
+			'no_ips'                    => 0,
+			'old_css'                   => false,
+
+			're_multi'                  => 1,
+			'submit_value'              => __( 'Submit', 'formidable' ),
+
+			'success_msg'               => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			// Only enable this by default for the main site.
+			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
+			'summary_emails_recipients' => '[admin_email]',
+			'tracking'                  => FrmAppHelper::pro_is_installed(),
+			// translators: %s: [field_name] shortcode.
+			'unique_msg'                => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
+			'use_html'                  => true,
 		);
 	}
 

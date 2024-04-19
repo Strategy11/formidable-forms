@@ -24,10 +24,10 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	protected function field_settings_for_type() {
 		$settings = array(
-			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
 			'range'          => true,
+			'size'           => true,
 		);
 
 		$frm_settings = FrmAppHelper::get_settings();
@@ -43,8 +43,8 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	protected function extra_field_opts() {
 		return array(
-			'minnum' => 0,
 			'maxnum' => 9999999,
+			'minnum' => 0,
 			'step'   => 'any',
 		);
 	}

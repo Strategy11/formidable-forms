@@ -16,13 +16,13 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_checkmark_icon',
 			'active'   => true,
+			'classes'  => 'frm_icon_font frm_checkmark_icon',
+			'color'    => 'rgb(66, 193, 178)',
 			'event'    => array( 'create' ),
+			'keywords' => __( 'redirect, success, confirmation, submit', 'formidable' ),
 			'limit'    => 99,
 			'priority' => 9,
-			'color'    => 'rgb(66, 193, 178)',
-			'keywords' => __( 'redirect, success, confirmation, submit', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
@@ -47,12 +47,12 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function get_defaults() {
 		return array(
+			'open_in_new_tab' => '',
+			'show_form'       => '',
 			'success_action'  => FrmOnSubmitHelper::get_default_action_type(),
 			'success_msg'     => FrmOnSubmitHelper::get_default_msg(),
-			'show_form'       => '',
-			'success_url'     => '',
 			'success_page_id' => '',
-			'open_in_new_tab' => '',
+			'success_url'     => '',
 		);
 	}
 

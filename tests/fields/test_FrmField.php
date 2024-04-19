@@ -17,8 +17,8 @@ class test_FrmField extends FrmUnitTest {
 		foreach ( $field_types as $field_type => $field_info ) {
 			$field_id = $this->factory->field->create(
 				array(
-					'type'    => $field_type,
 					'form_id' => $form_id,
+					'type'    => $field_type,
 				)
 			);
 			$this->assertTrue( is_numeric( $field_id ) );
@@ -31,8 +31,8 @@ class test_FrmField extends FrmUnitTest {
 	 */
 	public function test_getAll() {
 		$forms = array(
-			$this->contact_form_key    => $this->contact_form_field_count,
 			$this->all_fields_form_key => $this->all_field_types_count - $this->contact_form_field_count - 3,
+			$this->contact_form_key    => $this->contact_form_field_count,
 		);
 
 		foreach ( $forms as $form_key => $expected_count ) {
@@ -49,12 +49,12 @@ class test_FrmField extends FrmUnitTest {
 	public function test_get_all_for_form() {
 		$forms = array(
 			'basic_test'         => array(
-				'form_key' => $this->contact_form_key,
 				'count'    => $this->contact_form_field_count,
+				'form_key' => $this->contact_form_key,
 			),
 			'no_repeat_or_embed' => array(
-				'form_key' => $this->all_fields_form_key,
 				'count'    => $this->all_field_types_count - $this->contact_form_field_count - 3,
+				'form_key' => $this->all_fields_form_key,
 			),
 		);
 

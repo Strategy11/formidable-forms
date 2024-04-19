@@ -67,9 +67,9 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 		global $wpdb;
 		$this->default_generation_definitions = array(
+			'description' => new WP_UnitTest_Generator_Sequence( 'Field description %s' ),
 			'field_key'   => FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' ),
 			'name'        => new WP_UnitTest_Generator_Sequence( 'Field name %s' ),
-			'description' => new WP_UnitTest_Generator_Sequence( 'Field description %s' ),
 			'type'        => 'text',
 		);
 	}
@@ -126,16 +126,16 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	public function set_field_value( $field ) {
 		$value        = rand_str();
 		$field_values = array(
-			'email'    => 'admin@example.org',
-			'url'      => 'http://test.com',
-			'number'   => 120,
-			'scale'    => 8,
 			'date'     => '2015-01-01',
-			'time'     => '13:30:00',
-			'user_id'  => get_current_user_id(),
-			'phone'    => '222-222-2222',
+			'email'    => 'admin@example.org',
 			'html'     => '',
+			'number'   => 120,
+			'phone'    => '222-222-2222',
 			'quantity' => 2,
+			'scale'    => 8,
+			'time'     => '13:30:00',
+			'url'      => 'http://test.com',
+			'user_id'  => get_current_user_id(),
 		);
 
 		if ( isset( $field_values[ $field->type ] ) ) {

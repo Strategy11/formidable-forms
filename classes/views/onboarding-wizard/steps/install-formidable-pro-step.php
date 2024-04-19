@@ -67,8 +67,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'primary-button-text'        => esc_html__( 'Continue', 'formidable' ),
 			'primary-button-id'          => 'frm-onboarding-check-pro-installation-button',
+			'primary-button-text'        => esc_html__( 'Continue', 'formidable' ),
 			'secondary-button-id'        => 'frm-onboarding-skip-pro-installation-button',
 			'secondary-button-skip-step' => false,
 		)

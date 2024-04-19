@@ -16,13 +16,13 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$expected = array(
 			// default expected
 			'created_at' => 'Timestamp',
-			'updated_at' => 'Last Updated',
-			'user_id'    => 'Created By',
-			'updated_by' => 'Updated By',
-			'is_draft'   => 'Entry Status',
-			'ip'         => 'IP',
 			'id'         => 'ID',
+			'ip'         => 'IP',
+			'is_draft'   => 'Entry Status',
 			'item_key'   => 'Key',
+			'updated_at' => 'Last Updated',
+			'updated_by' => 'Updated By',
+			'user_id'    => 'Created By',
 		);
 		$keys     = array_keys( $headings );
 
@@ -77,29 +77,29 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$section          = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $embedded_form->id,
-				'type'    => 'divider',
 				'name'    => 'Section',
+				'type'    => 'divider',
 			)
 		);
 		$field_in_section = $this->factory->field->create_and_get(
 			array(
-				'form_id'       => $embedded_form->id,
-				'type'          => 'text',
-				'name'          => 'Text',
 				'field_options' => array(
 					'in_section' => $section->id,
 				),
+				'form_id'       => $embedded_form->id,
+				'name'          => 'Text',
+				'type'          => 'text',
 			)
 		);
 
 		$parent_form = $this->factory->form->create_and_get();
 		$embed_field = $this->factory->field->create_and_get(
 			array(
-				'form_id'       => $parent_form->id,
-				'type'          => 'embed',
 				'field_options' => array(
 					'form_select' => $embedded_form->id,
 				),
+				'form_id'       => $parent_form->id,
+				'type'          => 'embed',
 			)
 		);
 
@@ -157,10 +157,10 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$entry                   = $this->factory->entry->create_and_get( $entry_data );
 		$csv_path                = FrmCSVExportHelper::generate_csv(
 			array(
-				'mode'      => 'file',
-				'form'      => $form,
 				'entry_ids' => array( $entry->id ),
+				'form'      => $form,
 				'form_cols' => FrmField::get_all_for_form( $form->id, '', 'include' ),
+				'mode'      => 'file',
 			)
 		);
 		$this->assertTrue( is_string( $csv_path ) && ! empty( $csv_path ) && file_exists( $csv_path ) );

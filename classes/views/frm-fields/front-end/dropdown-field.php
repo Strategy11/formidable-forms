@@ -13,9 +13,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	echo FrmProPost::get_category_dropdown( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$field,
 		array(
+			'id'       => $html_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'location' => 'front',
 			'name'     => $field_name, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			'id'       => $html_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		)
 	);
 } else {
@@ -71,14 +71,14 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	if ( isset( $other_args ) ) {
 		FrmFieldsHelper::include_other_input(
 			array(
-				'other_opt' => $other_opt,
-				'read_only' => $read_only,
 				'checked'   => $other_checked,
-				'name'      => $other_args['name'],
-				'value'     => $other_args['value'],
 				'field'     => $field,
 				'html_id'   => $html_id,
+				'name'      => $other_args['name'],
 				'opt_key'   => false,
+				'other_opt' => $other_opt,
+				'read_only' => $read_only,
+				'value'     => $other_args['value'],
 			)
 		);
 	}

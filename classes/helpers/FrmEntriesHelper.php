@@ -25,9 +25,9 @@ class FrmEntriesHelper {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
 		$values = array(
-			'name'        => '',
 			'description' => '',
 			'item_key'    => '',
+			'name'        => '',
 		);
 
 		$values['fields'] = array();
@@ -269,16 +269,16 @@ class FrmEntriesHelper {
 	public static function display_value( $value, $field, $atts = array() ) {
 
 		$defaults = array(
-			'type'          => '',
+			'field'         => $field,
+			'form_id'       => $field->form_id,
 			'html'          => false,
+			'keepjs'        => 0,
+			'post_id'       => 0,
+			'return_array'  => false,
+			'sep'           => ', ',
 			'show_filename' => true,
 			'truncate'      => false,
-			'sep'           => ', ',
-			'post_id'       => 0,
-			'form_id'       => $field->form_id,
-			'field'         => $field,
-			'keepjs'        => 0,
-			'return_array'  => false,
+			'type'          => '',
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
@@ -577,10 +577,10 @@ class FrmEntriesHelper {
 
 		$agent_options = array(
 			'Chrome'   => 'Google Chrome',
-			'Safari'   => 'Apple Safari',
-			'Opera'    => 'Opera',
-			'Netscape' => 'Netscape',
 			'Firefox'  => 'Mozilla Firefox',
+			'Netscape' => 'Netscape',
+			'Opera'    => 'Opera',
+			'Safari'   => 'Apple Safari',
 		);
 
 		// Next get the name of the useragent yes seperately and for good reason
@@ -670,66 +670,66 @@ class FrmEntriesHelper {
 
 		if ( $page != 'show' ) {
 			$actions['frm_view'] = array(
-				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
-				'label' => __( 'View Entry', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_save_icon',
+				'label' => __( 'View Entry', 'formidable' ),
+				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 			);
 		}
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$actions['frm_delete'] = array(
-				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
-				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array(
 					'frmverify' => __( 'Delete this form entry?', 'formidable' ),
 				),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'label' => __( 'Delete Entry', 'formidable' ),
+				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
 			);
 		}
 
 		if ( $page == 'show' ) {
 			$actions['frm_print'] = array(
-				'url'   => '#',
-				'label' => __( 'Print Entry', 'formidable' ),
 				'data'  => array(
 					'frmprint' => '1',
 				),
 				'icon'  => 'frm_icon_font frm_printer_icon',
+				'label' => __( 'Print Entry', 'formidable' ),
+				'url'   => '#',
 			);
 		}
 
 		$actions['frm_resend'] = array(
-			'url'   => '#',
-			'label' => __( 'Resend Emails', 'formidable' ),
 			'class' => 'frm_noallow',
 			'data'  => array(
-				'upgrade' => __( 'Resend Emails', 'formidable' ),
-				'medium'  => 'resend-email',
 				'content' => 'entry',
+				'medium'  => 'resend-email',
+				'upgrade' => __( 'Resend Emails', 'formidable' ),
 			),
 			'icon'  => 'frm_icon_font frm_email_icon',
+			'label' => __( 'Resend Emails', 'formidable' ),
+			'url'   => '#',
 		);
 
 		if ( ! function_exists( 'frm_pdfs_autoloader' ) && FrmAppHelper::show_new_feature( 'pdfs' ) ) {
 			$actions['frm_download_pdf'] = array(
-				'url'   => '#',
-				'label' => __( 'Download as PDF', 'formidable' ),
 				'class' => 'frm_noallow',
 				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
 				'icon'  => 'frm_icon_font frm_download_icon',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'url'   => '#',
 			);
 		}
 
 		$actions['frm_edit'] = array(
-			'url'   => '#',
-			'label' => __( 'Edit Entry', 'formidable' ),
 			'class' => 'frm_noallow',
 			'data'  => array(
-				'upgrade' => __( 'Entry edits', 'formidable' ),
-				'medium'  => 'edit-entries',
 				'content' => 'entry',
+				'medium'  => 'edit-entries',
+				'upgrade' => __( 'Entry edits', 'formidable' ),
 			),
 			'icon'  => 'frm_icon_font frm_pencil_icon',
+			'label' => __( 'Edit Entry', 'formidable' ),
+			'url'   => '#',
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
@@ -743,10 +743,10 @@ class FrmEntriesHelper {
 	 */
 	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
 		$data = array(
+			'medium'   => $medium,
 			'oneclick' => '',
 			'requires' => '',
 			'upgrade'  => __( 'Forms to PDF', 'formidable' ),
-			'medium'   => $medium,
 		);
 
 		$upgrading = FrmAddonsController::install_link( 'pdfs' );
@@ -767,8 +767,8 @@ class FrmEntriesHelper {
 	 */
 	public static function maybe_render_captcha_score( $entry_id ) {
 		$query                 = array(
-			'item_id'  => (int) $entry_id,
 			'field_id' => 0,
+			'item_id'  => (int) $entry_id,
 		);
 		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
 		foreach ( $metas_without_a_field as $meta ) {
@@ -834,8 +834,8 @@ class FrmEntriesHelper {
 	public static function get_entry_statuses() {
 
 		$default_entry_statuses = array(
-			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),
+			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 		);
 
 		/**

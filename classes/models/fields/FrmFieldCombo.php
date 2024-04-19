@@ -68,8 +68,8 @@ class FrmFieldCombo extends FrmFieldType {
 			if ( is_string( $sub_field ) ) {
 				$this->sub_fields[ $name ] = wp_parse_args(
 					array(
-						'name'  => $name,
 						'label' => $sub_field,
+						'name'  => $name,
 					),
 					$defaults
 				);
@@ -84,17 +84,17 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	protected function get_default_sub_field() {
 		return array(
-			'type'            => 'text',
-			'label'           => '',
+			'atts'            => array(),
 			'classes'         => '',
-			'wrapper_classes' => '',
+			'label'           => '',
+			'optional'        => false,
 			'options'         => array(
 				'default_value',
 				'placeholder',
 				'desc',
 			),
-			'optional'        => false,
-			'atts'            => array(),
+			'type'            => 'text',
+			'wrapper_classes' => '',
 		);
 	}
 
@@ -195,8 +195,8 @@ class FrmFieldCombo extends FrmFieldType {
 	protected function get_built_in_option_labels() {
 		return array(
 			'default_value' => __( 'Default Value', 'formidable' ),
-			'placeholder'   => __( 'Placeholder Text', 'formidable' ),
 			'desc'          => __( 'Description', 'formidable' ),
+			'placeholder'   => __( 'Placeholder Text', 'formidable' ),
 		);
 	}
 
@@ -207,10 +207,10 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	protected function field_settings_for_type() {
 		$settings = array(
-			'description'    => false,
-			'default'        => false,
 			// Don't use the regular placeholder option.
 			'clear_on_focus' => false,
+			'default'        => false,
+			'description'    => false,
 			'logic'          => true,
 			'visibility'     => true,
 		);

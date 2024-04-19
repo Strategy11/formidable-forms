@@ -107,8 +107,8 @@ class FrmTransLiteAppController {
 
 			self::maybe_trigger_changes(
 				array(
-					'status'  => $status,
 					'payment' => $last_payment,
+					'status'  => $status,
 				)
 			);
 

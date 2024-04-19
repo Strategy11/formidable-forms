@@ -22,11 +22,11 @@ class FrmFormsHelper {
 	public static function forms_dropdown( $field_name, $field_value = '', $args = array() ) {
 		$defaults = array(
 			'blank'        => true,
-			'field_id'     => false,
-			'onchange'     => false,
-			'exclude'      => false,
 			'class'        => '',
+			'exclude'      => false,
+			'field_id'     => false,
 			'inc_children' => 'exclude',
+			'onchange'     => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
@@ -82,8 +82,8 @@ class FrmFormsHelper {
 		$forms = FrmForm::get_published_forms( $where );
 
 		$args = array(
-			'id'   => 0,
 			'form' => 0,
+			'id'   => 0,
 		);
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
@@ -294,8 +294,8 @@ class FrmFormsHelper {
 		}
 
 		$defaults = array(
-			'name'        => '',
 			'description' => '',
+			'name'        => '',
 		);
 		foreach ( $defaults as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
@@ -306,12 +306,12 @@ class FrmFormsHelper {
 		$values['description'] = FrmAppHelper::use_wpautop( $values['description'] );
 
 		$defaults = array(
-			'form_id'        => '',
-			'logged_in'      => '',
 			'editable'       => '',
+			'form_id'        => '',
 			'is_template'    => 0,
-			'status'         => 'published',
+			'logged_in'      => '',
 			'parent_form_id' => 0,
+			'status'         => 'published',
 		);
 		foreach ( $defaults as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
@@ -385,24 +385,24 @@ class FrmFormsHelper {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		return array(
+			'after_html'       => '',
+			'ajax_load'        => 0,
+			'ajax_submit'      => 0,
+			'akismet'          => '',
+			'antispam'         => 0,
+			'before_html'      => self::get_default_html( 'before' ),
+			'custom_style'     => 1,
+			'form_class'       => '',
+			'honeypot'         => 'basic',
+			'js_validate'      => 0,
+			'no_save'          => 0,
+			'show_description' => 0,
+			'show_form'        => 0,
+			'show_title'       => 0,
+			'submit_html'      => self::get_default_html( 'submit' ),
 			'submit_value'     => $frm_settings->submit_value,
 			'success_action'   => 'message',
 			'success_msg'      => $frm_settings->success_msg,
-			'show_form'        => 0,
-			'akismet'          => '',
-			'honeypot'         => 'basic',
-			'antispam'         => 0,
-			'no_save'          => 0,
-			'ajax_load'        => 0,
-			'js_validate'      => 0,
-			'form_class'       => '',
-			'custom_style'     => 1,
-			'before_html'      => self::get_default_html( 'before' ),
-			'after_html'       => '',
-			'submit_html'      => self::get_default_html( 'submit' ),
-			'show_title'       => 0,
-			'show_description' => 0,
-			'ajax_submit'      => 0,
 		);
 	}
 
@@ -502,78 +502,78 @@ BEFORE_HTML;
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
-			'id'               => array(
-				'label' => __( 'Field ID', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'key'              => array(
-				'label' => __( 'Field Key', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'field_name'       => array(
-				'label' => __( 'Field Name', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'description'      => array(
-				'label' => __( 'Field Description', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'label_position'   => array(
-				'label' => __( 'Label Position', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'required_label'   => array(
-				'label' => __( 'Required Label', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'input'            => array(
-				'label' => __( 'Input Field', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'input opt=1'      => array(
-				'label' => __( 'Single Option', 'formidable' ),
-				'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'input label=0'    => array(
-				'label' => __( 'Hide Option Label', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'required_class'   => array(
-				'label' => __( 'Required Class', 'formidable' ),
-				'title' => __( 'Add class name if field is required', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-			'error_class'      => array(
-				'label' => __( 'Error Class', 'formidable' ),
-				'title' => __( 'Add class name if field has an error on form submit', 'formidable' ),
-				'class' => 'show_field_custom_html',
-			),
-
-			'form_name'        => array(
-				'label' => __( 'Form Name', 'formidable' ),
-				'class' => 'show_before_html show_after_html',
-			),
-			'form_description' => array(
-				'label' => __( 'Form Description', 'formidable' ),
-				'class' => 'show_before_html show_after_html',
-			),
-			'form_key'         => array(
-				'label' => __( 'Form Key', 'formidable' ),
-				'class' => 'show_before_html show_after_html',
-			),
-			'deletelink'       => array(
-				'label' => __( 'Delete Entry Link', 'formidable' ),
-				'class' => 'show_before_html show_after_html',
+			'button_action'    => array(
+				'class' => 'show_submit_html',
+				'label' => __( 'Button Hook', 'formidable' ),
 			),
 
 			'button_label'     => array(
+				'class' => 'show_submit_html',
 				'label' => __( 'Button Label', 'formidable' ),
-				'class' => 'show_submit_html',
 			),
-			'button_action'    => array(
-				'label' => __( 'Button Hook', 'formidable' ),
-				'class' => 'show_submit_html',
+			'deletelink'       => array(
+				'class' => 'show_before_html show_after_html',
+				'label' => __( 'Delete Entry Link', 'formidable' ),
+			),
+			'description'      => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Field Description', 'formidable' ),
+			),
+			'error_class'      => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Error Class', 'formidable' ),
+				'title' => __( 'Add class name if field has an error on form submit', 'formidable' ),
+			),
+			'field_name'       => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Field Name', 'formidable' ),
+			),
+			'form_description' => array(
+				'class' => 'show_before_html show_after_html',
+				'label' => __( 'Form Description', 'formidable' ),
+			),
+			'form_key'         => array(
+				'class' => 'show_before_html show_after_html',
+				'label' => __( 'Form Key', 'formidable' ),
+			),
+
+			'form_name'        => array(
+				'class' => 'show_before_html show_after_html',
+				'label' => __( 'Form Name', 'formidable' ),
+			),
+			'id'               => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Field ID', 'formidable' ),
+			),
+			'input'            => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Input Field', 'formidable' ),
+			),
+			'input label=0'    => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Hide Option Label', 'formidable' ),
+			),
+			'input opt=1'      => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Single Option', 'formidable' ),
+				'title' => __( 'Show a single radio or checkbox option by replacing 1 with the order of the option', 'formidable' ),
+			),
+			'key'              => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Field Key', 'formidable' ),
+			),
+			'label_position'   => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Label Position', 'formidable' ),
+			),
+			'required_class'   => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Required Class', 'formidable' ),
+				'title' => __( 'Add class name if field is required', 'formidable' ),
+			),
+			'required_label'   => array(
+				'class' => 'show_field_custom_html',
+				'label' => __( 'Required Label', 'formidable' ),
 			),
 		);
 
@@ -664,8 +664,8 @@ BEFORE_HTML;
 	public static function prepare_field_type( &$field ) {
 		if ( ! is_array( $field ) ) {
 			$field = array(
-				'name' => $field,
 				'icon' => 'frm_icon_font frm_pencil_icon',
+				'name' => $field,
 			);
 		}
 	}
@@ -755,9 +755,9 @@ BEFORE_HTML;
 
 	public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
 		$codes = array(
-			'form_name'        => $title,
-			'form_description' => $description,
 			'entry_key'        => true,
+			'form_description' => $description,
+			'form_name'        => $title,
 		);
 		foreach ( $codes as $code => $show ) {
 			if ( $code === 'form_name' ) {
@@ -985,8 +985,8 @@ BEFORE_HTML;
 
 		self::show_error(
 			array(
-				'img'      => $args['img'],
 				'errors'   => $args['errors'],
+				'img'      => $args['img'],
 				'show_img' => $show_img,
 			)
 		);
@@ -1070,15 +1070,15 @@ BEFORE_HTML;
 			$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $form_id;
 			if ( $form->is_template ) {
 				$actions['frm_duplicate'] = array(
-					'url'   => wp_nonce_url( $duplicate_link ),
-					'label' => __( 'Create Form from Template', 'formidable' ),
 					'icon'  => 'frm_icon_font frm_clone_icon',
+					'label' => __( 'Create Form from Template', 'formidable' ),
+					'url'   => wp_nonce_url( $duplicate_link ),
 				);
 			} else {
 				$actions['duplicate'] = array(
-					'url'   => wp_nonce_url( $duplicate_link ),
-					'label' => __( 'Duplicate Form', 'formidable' ),
 					'icon'  => 'frm_icon_font frm_clone_icon',
+					'label' => __( 'Duplicate Form', 'formidable' ),
+					'url'   => wp_nonce_url( $duplicate_link ),
 				);
 			}
 
@@ -1197,31 +1197,31 @@ BEFORE_HTML;
 		$base_url     = '?page=formidable&form_type=' . $current_page . '&id=' . $id;
 
 		return array(
+			'delete'  => array(
+				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
+				'data'    => array(
+					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
+				'icon'    => 'frm_icon_font frm_delete_icon',
+				'label'   => __( 'Delete Permanently', 'formidable' ),
+				'short'   => __( 'Delete', 'formidable' ),
+				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
+			),
 			'restore' => array(
 				'label' => __( 'Restore from Trash', 'formidable' ),
 				'short' => __( 'Restore', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=untrash', 'untrash_form_' . absint( $id ) ),
 			),
 			'trash'   => array(
-				'label' => __( 'Move Form to Trash', 'formidable' ),
-				'short' => __( 'Trash', 'formidable' ),
-				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
 				),
-			),
-			'delete'  => array(
-				'label'   => __( 'Delete Permanently', 'formidable' ),
-				'short'   => __( 'Delete', 'formidable' ),
-				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
-				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_delete_icon',
-				'data'    => array(
-					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
-					'frmverify-btn' => 'frm-button-red',
-				),
+				'icon'  => 'frm_icon_font frm_delete_icon',
+				'label' => __( 'Move Form to Trash', 'formidable' ),
+				'short' => __( 'Trash', 'formidable' ),
+				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
 			),
 		);
 	}
@@ -1231,6 +1231,26 @@ BEFORE_HTML;
 	 */
 	public static function css_classes() {
 		$classes = array(
+			'frm_alignright'  => __( 'Right', 'formidable' ),
+			'frm_capitalize'  => array(
+				'label' => __( 'Capitalize', 'formidable' ),
+				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
+			),
+			'frm_color_block' => array(
+				'label' => __( 'Color Block', 'formidable' ),
+				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
+			),
+			'frm_first'       => array(
+				'label' => __( 'First', 'formidable' ),
+				'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
+			),
+			'frm_grid'        => __( 'Even Grid Row', 'formidable' ),
+			'frm_grid_first'  => __( 'First Grid Row', 'formidable' ),
+			'frm_grid_odd'    => __( 'Odd Grid Row', 'formidable' ),
+			'frm_scroll_box'  => array(
+				'label' => __( 'Scroll Box', 'formidable' ),
+				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
+			),
 			'frm_total'       => array(
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
@@ -1239,26 +1259,6 @@ BEFORE_HTML;
 				'label' => __( 'Big Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in large, bold text without a border or background.', 'formidable' ),
 			),
-			'frm_scroll_box'  => array(
-				'label' => __( 'Scroll Box', 'formidable' ),
-				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
-			),
-			'frm_first'       => array(
-				'label' => __( 'First', 'formidable' ),
-				'title' => __( 'Add this to the first field in each row along with a width. ie frm_first frm4', 'formidable' ),
-			),
-			'frm_alignright'  => __( 'Right', 'formidable' ),
-			'frm_grid_first'  => __( 'First Grid Row', 'formidable' ),
-			'frm_grid'        => __( 'Even Grid Row', 'formidable' ),
-			'frm_grid_odd'    => __( 'Odd Grid Row', 'formidable' ),
-			'frm_color_block' => array(
-				'label' => __( 'Color Block', 'formidable' ),
-				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
-			),
-			'frm_capitalize'  => array(
-				'label' => __( 'Capitalize', 'formidable' ),
-				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
-			),
 		);
 
 		return apply_filters( 'frm_layout_classes', $classes );
@@ -1266,14 +1266,14 @@ BEFORE_HTML;
 
 	public static function grid_classes() {
 		return array(
-			'frm_half'          => '1/2',
-			'frm_third'         => '1/3',
-			'frm_two_thirds'    => '2/3',
-			'frm_fourth'        => '1/4',
-			'frm_three_fourths' => '3/4',
-			'frm_sixth'         => '1/6',
 			'frm10'             => '5/6',
 			'frm12'             => '100%',
+			'frm_fourth'        => '1/4',
+			'frm_half'          => '1/2',
+			'frm_sixth'         => '1/6',
+			'frm_third'         => '1/3',
+			'frm_three_fourths' => '3/4',
+			'frm_two_thirds'    => '2/3',
 		);
 	}
 
@@ -1296,8 +1296,8 @@ BEFORE_HTML;
 	public static function status_nice_name( $status ) {
 		$nice_names = array(
 			'draft'   => __( 'Draft', 'formidable' ),
-			'trash'   => __( 'Trash', 'formidable' ),
 			'publish' => __( 'Published', 'formidable' ),
+			'trash'   => __( 'Trash', 'formidable' ),
 		);
 
 		if ( ! in_array( $status, array_keys( $nice_names ) ) ) {
@@ -1334,34 +1334,34 @@ BEFORE_HTML;
 
 		// Define icons mapping.
 		$icons = array(
-			'WooCommerce'             => array( 'woocommerce', 'var(--purple)' ),
-			'Post'                    => array( 'wordpress', 'rgb(0,160,210)' ),
-			'User Registration'       => array( 'register', 'var(--pink)' ),
-			'Registration and Signup' => array( 'register', 'var(--pink)' ),
-			'PayPal'                  => array( 'paypal' ),
-			'Stripe'                  => array( 'credit_card', 'var(--green)' ),
-			'Twilio'                  => array( 'sms' ),
-			'Payment'                 => array( 'credit_card' ),
-			'Order Form'              => array( 'product' ),
-			'Finance'                 => array( 'total' ),
-			'Health and Wellness'     => array( 'heart', 'var(--pink)' ),
-			'Event Planning'          => array( 'calendar', 'var(--orange)' ),
-			'Real Estate'             => array( 'house' ),
-			'Nonprofit'               => array( 'heart_solid' ),
-			'Calculator'              => array( 'calculator', 'var(--purple)' ),
-			'Quiz'                    => array( 'percent' ),
-			'Registrations'           => array( 'address_card' ),
-			'Customer Service'        => array( 'users_solid' ),
-			'Education'               => array( 'pencil' ),
-			'Marketing'               => array( 'eye' ),
-			'Feedback'                => array( 'smile' ),
+			''                        => array( 'align_right' ),
+			'Application'             => array( 'align_right' ),
 			'Business Operations'     => array( 'case' ),
+			'Calculator'              => array( 'calculator', 'var(--purple)' ),
 			'Contact Form'            => array( 'email' ),
 			'Conversational Forms'    => array( 'chat_forms' ),
-			'Survey'                  => array( 'chat_forms', 'var(--orange)' ),
-			'Application'             => array( 'align_right' ),
+			'Customer Service'        => array( 'users_solid' ),
+			'Education'               => array( 'pencil' ),
+			'Event Planning'          => array( 'calendar', 'var(--orange)' ),
+			'Feedback'                => array( 'smile' ),
+			'Finance'                 => array( 'total' ),
+			'Health and Wellness'     => array( 'heart', 'var(--pink)' ),
+			'Marketing'               => array( 'eye' ),
+			'Nonprofit'               => array( 'heart_solid' ),
+			'Order Form'              => array( 'product' ),
+			'Payment'                 => array( 'credit_card' ),
+			'PayPal'                  => array( 'paypal' ),
+			'Post'                    => array( 'wordpress', 'rgb(0,160,210)' ),
+			'Quiz'                    => array( 'percent' ),
+			'Real Estate'             => array( 'house' ),
+			'Registration and Signup' => array( 'register', 'var(--pink)' ),
+			'Registrations'           => array( 'address_card' ),
 			'Signature'               => array( 'signature' ),
-			''                        => array( 'align_right' ),
+			'Stripe'                  => array( 'credit_card', 'var(--green)' ),
+			'Survey'                  => array( 'chat_forms', 'var(--orange)' ),
+			'Twilio'                  => array( 'sms' ),
+			'User Registration'       => array( 'register', 'var(--pink)' ),
+			'WooCommerce'             => array( 'woocommerce', 'var(--purple)' ),
 		);
 
 		// Determine the icon to be used.
@@ -1410,28 +1410,28 @@ BEFORE_HTML;
 	 */
 	public static function get_template_install_link( $template, $args ) {
 		$defaults = array(
+			'atts'  => true,
 			'class' => 'install-now',
 			'href'  => 'href',
-			'atts'  => true,
 		);
 
 		if ( ! empty( $template['url'] ) ) {
 			$link = array(
-				'url'   => $template['url'],
-				'label' => __( 'Create Form', 'formidable' ),
+				'atts'  => '',
 				'class' => 'frm-install-template',
 				'href'  => 'rel',
-				'atts'  => '',
+				'label' => __( 'Create Form', 'formidable' ),
+				'url'   => $template['url'],
 			);
 		} elseif ( self::plan_is_allowed( $args ) ) {
 			$link = array(
-				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
 				'label' => __( 'Renew', 'formidable' ),
+				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
 			);
 		} else {
 			$link = array(
-				'url'   => $args['pricing'],
 				'label' => __( 'Upgrade', 'formidable' ),
+				'url'   => $args['pricing'],
 			);
 		}
 

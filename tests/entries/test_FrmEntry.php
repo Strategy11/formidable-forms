@@ -84,8 +84,8 @@ class test_FrmEntry extends FrmUnitTest {
 		$checkbox_field_id = $this->factory->field->create(
 			array(
 				'form_id' => $form_id,
-				'type'    => 'checkbox',
 				'options' => serialize( array( 'Option 1', 'Option 2', 'Option 3' ) ),
+				'type'    => 'checkbox',
 			)
 		);
 

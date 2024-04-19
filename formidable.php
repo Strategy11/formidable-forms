@@ -35,9 +35,9 @@ add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
 	$frm_vars = array(
-		'load_css'          => false,
-		'forms_loaded'      => array(),
 		'created_entries'   => array(),
+		'forms_loaded'      => array(),
+		'load_css'          => false,
 		'pro_is_authorized' => false,
 	);
 

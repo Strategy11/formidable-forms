@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		foreach ( $entry_shortcodes as $skey => $code ) {
 			FrmFormsHelper::insert_code_html(
 				array(
+					'class' => $code['class'],
 					'code'  => $skey,
 					'label' => $code['label'],
-					'class' => $code['class'],
 					'title' => isset( $code['title'] ) ? $code['title'] : '',
 				)
 			);

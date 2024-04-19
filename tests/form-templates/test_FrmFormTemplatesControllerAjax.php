@@ -23,10 +23,10 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 	public function test_ajax_add_or_remove_favorite() {
 		$_POST    = array(
 			'action'             => 'frm_add_or_remove_favorite_template',
-			'nonce'              => wp_create_nonce( 'frm_ajax' ),
-			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
-			'operation'          => 'add',
 			'is_custom_template' => 'false',
+			'nonce'              => wp_create_nonce( 'frm_ajax' ),
+			'operation'          => 'add',
+			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
 		);
 		$response = $this->trigger_action( $_POST['action'] );
 
@@ -46,10 +46,10 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 	public function test_ajax_create_template() {
 		$_POST    = array(
 			'action' => 'frm_create_template',
+			'desc'   => 'Lorem ipsum dolor sit amet consectetur.',
+			'name'   => 'Contact Us Template',
 			'nonce'  => wp_create_nonce( 'frm_ajax' ),
 			'xml'    => '1',
-			'name'   => 'Contact Us Template',
-			'desc'   => 'Lorem ipsum dolor sit amet consectetur.',
 		);
 		$response = $this->trigger_action( $_POST['action'] );
 

@@ -7,14 +7,14 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
+			'active'   => true,
 			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frm_icon_font',
+			'color'    => 'var(--green)',
+			'event'    => array( 'create' ),
 			// This is 99 in the Payments submodule but Stripe Lite only supports a single action.
 			'limit'    => 1,
-			'active'   => true,
 			// After user registration.
 			'priority' => 45,
-			'event'    => array( 'create' ),
-			'color'    => 'var(--green)',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );
@@ -67,19 +67,19 @@ class FrmTransLiteAction extends FrmFormAction {
 	 */
 	public function get_defaults() {
 		$defaults = array(
-			'description'          => '',
-			'email'                => '',
 			'amount'               => '',
-			'type'                 => '',
-			'interval_count'       => 1,
-			'interval'             => 'month',
-			'payment_count'        => 9999,
-			'trial_interval_count' => 0,
-			'currency'             => $this->default_currency(),
-			'gateway'              => array(),
-			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'credit_card'          => '',
+			'currency'             => $this->default_currency(),
+			'description'          => '',
+			'email'                => '',
+			'gateway'              => array(),
+			'interval'             => 'month',
+			'interval_count'       => 1,
+			'payment_count'        => 9999,
+			'trial_interval_count' => 0,
+			'type'                 => '',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}

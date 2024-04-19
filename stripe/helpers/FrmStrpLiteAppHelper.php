@@ -115,13 +115,13 @@ class FrmStrpLiteAppHelper {
 
 		FrmTipsHelper::show_tip(
 			array(
+				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
+				'class' => 'frm-light-tip',
 				'link'  => array(
 					'content' => 'stripe-fee',
 					'medium'  => $medium,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
-				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
-				'class' => 'frm-light-tip',
 			),
 			'p'
 		);

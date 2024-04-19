@@ -131,14 +131,14 @@ class FrmCSVExportHelper {
 		$comment_count       = FrmDb::get_count(
 			'frm_item_metas',
 			array(
-				'item_id'         => $atts['entry_ids'],
 				'field_id'        => 0,
+				'item_id'         => $atts['entry_ids'],
 				'meta_value like' => '{',
 			),
 			array(
 				'group_by' => 'item_id',
-				'order_by' => 'count(*) DESC',
 				'limit'    => 1,
+				'order_by' => 'count(*) DESC',
 			)
 		);
 		self::$comment_count = $comment_count;
@@ -231,8 +231,8 @@ class FrmCSVExportHelper {
 		do_action(
 			'frm_csv_headers',
 			array(
-				'form_id' => self::$form_id,
 				'fields'  => self::$fields,
+				'form_id' => self::$form_id,
 			)
 		);
 	}
@@ -404,8 +404,8 @@ class FrmCSVExportHelper {
 	private static function prepare_next_csv_rows( $next_set ) {
 		// order by parent_item_id so children will be first
 		$where   = array(
-			'or'             => 1,
 			'id'             => $next_set,
+			'or'             => 1,
 			'parent_item_id' => $next_set,
 		);
 		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
@@ -430,10 +430,10 @@ class FrmCSVExportHelper {
 			'frm_csv_row',
 			$row,
 			array(
-				'entry'         => self::$entry,
-				'date_format'   => self::$wp_date_format,
 				'comment_count' => self::$comment_count,
 				'context'       => self::$context,
+				'date_format'   => self::$wp_date_format,
+				'entry'         => self::$entry,
 			)
 		);
 		self::print_csv_row( $row );
@@ -535,10 +535,10 @@ class FrmCSVExportHelper {
 				'frm_csv_value',
 				$field_value,
 				array(
-					'field'     => $col,
-					'entry'     => self::$entry,
-					'separator' => self::$separator,
 					'context'   => self::$context,
+					'entry'     => self::$entry,
+					'field'     => $col,
+					'separator' => self::$separator,
 				)
 			);
 
@@ -576,12 +576,12 @@ class FrmCSVExportHelper {
 			$field_value,
 			$field,
 			array(
-				'type'              => $field->type,
-				'post_id'           => self::$entry->post_id,
-				'show_icon'         => false,
-				'entry_id'          => self::$entry->id,
-				'sep'               => self::$separator,
 				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+				'entry_id'          => self::$entry->id,
+				'post_id'           => self::$entry->post_id,
+				'sep'               => self::$separator,
+				'show_icon'         => false,
+				'type'              => $field->type,
 			)
 		);
 	}

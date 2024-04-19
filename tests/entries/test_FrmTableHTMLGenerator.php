@@ -45,22 +45,22 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 
 	private function _get_colors() {
 		$atts = array(
-			'border_color' => 'ffffff',
-			'bg_color'     => 'red',
-			'text_color'   => '999',
 			'alt_bg_color' => '#fff',
+			'bg_color'     => 'red',
+			'border_color' => 'ffffff',
+			'text_color'   => '999',
 		);
 
 		$expected = array(
-			'border_color' => '#ffffff',
-			'bg_color'     => 'red',
-			'text_color'   => '#999',
 			'alt_bg_color' => '#fff',
+			'bg_color'     => 'red',
+			'border_color' => '#ffffff',
+			'text_color'   => '#999',
 		);
 
 		return array(
-			'start'    => $atts,
 			'expected' => $expected,
+			'start'    => $atts,
 		);
 	}
 }

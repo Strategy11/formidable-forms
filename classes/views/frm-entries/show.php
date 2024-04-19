@@ -8,10 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'      => __( 'View Entry', 'formidable' ),
+				'close'      => '?page=formidable-entries&form=' . $form->id,
 				'form'       => $form,
 				'hide_title' => true,
-				'close'      => '?page=formidable-entries&form=' . $form->id,
+				'label'      => __( 'View Entry', 'formidable' ),
 			)
 		);
 		?>
@@ -55,17 +55,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</h3>
 					<?php
 					$show_args = array(
-						'id'             => $entry->id,
+						'add_link'       => true,
+						'class'          => 'frm-alt-table',
 						'entry'          => $entry,
 						'fields'         => $fields,
+						'id'             => $entry->id,
 						'include_blank'  => true,
 						'include_extras' => 'page, section, password',
 						'inline_style'   => 0,
-						'class'          => 'frm-alt-table',
 						'show_filename'  => true,
 						'show_image'     => true,
 						'size'           => 'thumbnail',
-						'add_link'       => true,
 					);
 
 					/**

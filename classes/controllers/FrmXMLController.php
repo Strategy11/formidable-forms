@@ -225,9 +225,9 @@ class FrmXMLController {
 
 			$page_ids[ $for ] = wp_insert_post(
 				array(
+					'post_content' => sprintf( $shortcode, $item_key ),
 					'post_title'   => $name,
 					'post_type'    => 'page',
-					'post_content' => sprintf( $shortcode, $item_key ),
 				)
 			);
 		}//end foreach
@@ -313,15 +313,15 @@ class FrmXMLController {
 		$export_types = apply_filters( 'frm_xml_export_types', $export_types );
 
 		$export_format = array(
-			'xml' => array(
-				'name'    => 'XML',
-				'support' => 'forms',
-				'count'   => 'multiple',
-			),
 			'csv' => array(
+				'count'   => 'single',
 				'name'    => 'CSV',
 				'support' => 'items',
-				'count'   => 'single',
+			),
+			'xml' => array(
+				'count'   => 'multiple',
+				'name'    => 'XML',
+				'support' => 'forms',
 			),
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
@@ -366,9 +366,9 @@ class FrmXMLController {
 
 		$export_format = array(
 			'xml' => array(
+				'count'   => 'multiple',
 				'name'    => 'XML',
 				'support' => 'forms',
-				'count'   => 'multiple',
 			),
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
@@ -448,11 +448,11 @@ class FrmXMLController {
 		self::prepare_types_array( $type );
 
 		$tables = array(
-			'items'   => $wpdb->prefix . 'frm_items',
+			'actions' => $wpdb->posts,
 			'forms'   => $wpdb->prefix . 'frm_forms',
+			'items'   => $wpdb->prefix . 'frm_items',
 			'posts'   => $wpdb->posts,
 			'styles'  => $wpdb->posts,
-			'actions' => $wpdb->posts,
 		);
 
 		$defaults = array(
@@ -480,9 +480,9 @@ class FrmXMLController {
 					// Add forms.
 					if ( $args['ids'] ) {
 						$where[] = array(
-							'or'                       => 1,
 							$table . '.id'             => $args['ids'],
 							$table . '.parent_form_id' => $args['ids'],
+							'or'                       => 1,
 						);
 					} else {
 						$where[ $table . '.status !' ] = 'draft';

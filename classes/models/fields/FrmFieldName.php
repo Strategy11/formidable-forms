@@ -34,8 +34,8 @@ class FrmFieldName extends FrmFieldCombo {
 		$this->register_sub_fields(
 			array(
 				'first'  => __( 'First', 'formidable' ),
-				'middle' => __( 'Middle', 'formidable' ),
 				'last'   => __( 'Last', 'formidable' ),
+				'middle' => __( 'Middle', 'formidable' ),
 			)
 		);
 	}
@@ -142,8 +142,8 @@ class FrmFieldName extends FrmFieldCombo {
 			$value,
 			array(
 				'first'  => '',
-				'middle' => '',
 				'last'   => '',
+				'middle' => '',
 			)
 		);
 

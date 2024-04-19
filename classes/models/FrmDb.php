@@ -33,8 +33,8 @@ class FrmDb {
 		if ( empty( $args ) ) {
 			// add an arg to prevent prepare from failing
 			$args = array(
-				'where'  => $starts_with . '1=%d',
 				'values' => array( 1 ),
+				'where'  => $starts_with . '1=%d',
 			);
 
 			return;
@@ -301,16 +301,16 @@ class FrmDb {
 	 */
 	public static function append_where_is( $where_is ) {
 		$switch_to = array(
-			'='        => '',
 			'!='       => '!',
-			'<='       => '<',
-			'>='       => '>',
-			'like'     => 'like',
-			'not like' => 'not like',
-			'in'       => '',
-			'not in'   => 'not',
-			'like%'    => 'like%',
 			'%like'    => '%like',
+			'<='       => '<',
+			'='        => '',
+			'>='       => '>',
+			'in'       => '',
+			'like%'    => 'like%',
+			'like'     => 'like',
+			'not in'   => 'not',
+			'not like' => 'not like',
 		);
 
 		$where_is = strtolower( $where_is );

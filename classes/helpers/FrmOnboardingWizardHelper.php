@@ -28,9 +28,9 @@ class FrmOnboardingWizardHelper {
 	public static function add_addon_label_attributes( $addon_key, $addon ) {
 		$id         = 'frm-onboarding-' . $addon_key . '-addon';
 		$attributes = array(
-			'for'        => $id,
 			'class'      => 'frm-option-box',
 			'data-title' => $addon['title'],
+			'for'        => $id,
 		);
 
 		if ( ! empty( $addon['is-checked'] ) ) {
@@ -61,9 +61,9 @@ class FrmOnboardingWizardHelper {
 	public static function add_addon_input_attributes( $addon_key, $addon ) {
 		$id         = 'frm-onboarding-' . $addon_key . '-addon';
 		$attributes = array(
-			'type' => 'checkbox',
-			'name' => $id,
 			'id'   => $id,
+			'name' => $id,
+			'type' => 'checkbox',
 		);
 
 		if ( ! empty( $addon['is-checked'] ) ) {
@@ -86,19 +86,19 @@ class FrmOnboardingWizardHelper {
 	 */
 	public static function print_footer( $args = array() ) {
 		$defaults = array(
-			'footer-class'               => '',
 			'display-back-button'        => true,
-			// Primary Button Args.
-			'primary-button-text'        => esc_html__( 'Next Step', 'formidable' ),
+			'footer-class'               => '',
 			'primary-button-class'       => '',
 			'primary-button-href'        => '#',
 			'primary-button-role'        => 'button',
-			// Secondary Button Args.
-			'secondary-button-text'      => esc_html__( 'Skip', 'formidable' ),
+			// Primary Button Args.
+			'primary-button-text'        => esc_html__( 'Next Step', 'formidable' ),
 			'secondary-button-class'     => '',
 			'secondary-button-href'      => '#',
 			'secondary-button-role'      => 'button',
 			'secondary-button-skip-step' => true,
+			// Secondary Button Args.
+			'secondary-button-text'      => esc_html__( 'Skip', 'formidable' ),
 		);
 		$args     = wp_parse_args( $args, $defaults );
 

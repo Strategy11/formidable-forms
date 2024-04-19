@@ -25,8 +25,8 @@ class FrmSMTPController {
 	 * @var array
 	 */
 	private $config = array(
-		'lite_plugin'       => 'wp-mail-smtp/wp_mail_smtp.php',
 		'lite_download_url' => 'https://downloads.wordpress.org/plugin/wp-mail-smtp.zip',
+		'lite_plugin'       => 'wp-mail-smtp/wp_mail_smtp.php',
 		'pro_plugin'        => 'wp-mail-smtp-pro/wp_mail_smtp.php',
 		'smtp_settings'     => 'admin.php?page=wp-mail-smtp',
 	);
@@ -152,8 +152,8 @@ class FrmSMTPController {
 				'frmfont frm_heart_solid_icon',
 				array(
 					'aria-label' => 'Loves',
-					'style'      => 'width:30px;height:30px;margin:0 35px;',
 					'color'      => '#d11c25',
+					'style'      => 'width:30px;height:30px;margin:0 35px;',
 				)
 			);
 			$this->stmp_logo();
@@ -309,8 +309,8 @@ class FrmSMTPController {
 		$this->output_data['plugin_setup']         = false;
 
 		$step = array(
-			'icon'          => 'frm_step1_icon',
 			'button_action' => '',
+			'icon'          => 'frm_step1_icon',
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];

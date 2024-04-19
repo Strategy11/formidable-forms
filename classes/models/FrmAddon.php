@@ -128,13 +128,13 @@ class FrmAddon {
 		$item_id = $this->download_id;
 		if ( empty( $item_id ) ) {
 			$_data = array(
-				'name'      => $this->plugin_name,
-				'excerpt'   => '',
-				'changelog' => 'See the full changelog at <a href="' . esc_url( $this->store_url . '/changelog/' ) . '"></a>',
 				'banners'   => array(
 					'high' => '',
 					'low'  => 'https://ps.w.org/formidable/assets/banner-1544x500.png',
 				),
+				'changelog' => 'See the full changelog at <a href="' . esc_url( $this->store_url . '/changelog/' ) . '"></a>',
+				'excerpt'   => '',
+				'name'      => $this->plugin_name,
 			);
 		} else {
 			$api     = new FrmFormApi( $this->license );
@@ -143,8 +143,8 @@ class FrmAddon {
 		}
 
 		$_data['sections'] = array(
-			'description' => $_data['excerpt'],
 			'changelog'   => $_data['changelog'],
+			'description' => $_data['excerpt'],
 		);
 		$_data['author']   = '<a href="' . esc_url( $this->store_url ) . '">' . esc_html( $this->author ) . '</a>';
 		$_data['homepage'] = $this->store_url;
@@ -673,8 +673,8 @@ class FrmAddon {
 		$this->set_running();
 
 		$response = array(
-			'status' => 'missing',
 			'error'  => true,
+			'status' => 'missing',
 		);
 		if ( empty( $this->license ) ) {
 			$response['error'] = false;
@@ -706,13 +706,13 @@ class FrmAddon {
 
 	private function get_messages() {
 		return array(
-			'valid'               => __( 'Your license has been activated. Enjoy!', 'formidable' ),
-			'invalid'             => __( 'That license key is invalid', 'formidable' ),
 			'expired'             => __( 'That license is expired', 'formidable' ),
-			'revoked'             => __( 'That license has been refunded', 'formidable' ),
-			'no_activations_left' => __( 'That license has been used on too many sites', 'formidable' ),
+			'invalid'             => __( 'That license key is invalid', 'formidable' ),
 			'invalid_item_id'     => __( 'Oops! That is the wrong license key for this plugin.', 'formidable' ),
 			'missing'             => __( 'That license key is invalid', 'formidable' ),
+			'no_activations_left' => __( 'That license has been used on too many sites', 'formidable' ),
+			'revoked'             => __( 'That license has been refunded', 'formidable' ),
+			'valid'               => __( 'Your license has been activated. Enjoy!', 'formidable' ),
 		);
 	}
 
@@ -727,8 +727,8 @@ class FrmAddon {
 		$this_plugin->delete_cache();
 
 		$response = array(
-			'success' => true,
 			'message' => __( 'Cache cleared', 'formidable' ),
+			'success' => true,
 		);
 
 		wp_send_json( $response );
@@ -741,8 +741,8 @@ class FrmAddon {
 		$this_plugin = self::set_license_from_post();
 
 		$response = array(
-			'success' => false,
 			'message' => '',
+			'success' => false,
 		);
 		try {
 			// $license_data->license will be either "deactivated" or "failed"
