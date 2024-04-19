@@ -52,10 +52,10 @@ namespace {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
 		}
 		/**
-		 * @param object|string|int $field_id
+		 * @param int|object|string $field_id
 		 * @param array|string      $value
-		 * @param string|int|false  $entry_id
-		 * @return array|null|string|object
+		 * @param false|int|string  $entry_id
+		 * @return array|object|string|null
 		 */
 		public static function &value_exists( $field_id, $value, $entry_id = false ) {
 		}
@@ -117,7 +117,7 @@ namespace {
 		/**
 		 * @param object           $field
 		 * @param object           $entry
-		 * @param string|array|int $field_value
+		 * @param array|int|string $field_value
 		 * @return void
 		 */
 		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
@@ -132,7 +132,7 @@ namespace {
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
 		}
 		/**
-		 * @param object|array $field
+		 * @param array|object $field
 		 * @return bool
 		 */
 		public static function &is_field_visible_to_user( $field ) {

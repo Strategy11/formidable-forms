@@ -99,7 +99,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param array $atts
-	 * @return string|false|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 * @return false|string|void returns a string file path or false if $atts['mode'] is set to 'file'.
 	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;

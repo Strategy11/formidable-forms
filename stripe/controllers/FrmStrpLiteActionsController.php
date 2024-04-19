@@ -38,7 +38,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	public static function get_actions_before_submit( $form_id ) {
@@ -60,8 +60,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
-	 * @return WP_Post|false
+	 * @param int|string $form_id
+	 * @return false|WP_Post
 	 */
 	public static function get_stripe_link_action( $form_id ) {
 		$actions = self::get_actions_before_submit( $form_id );
@@ -308,7 +308,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param int    $form_id
 	 * @param string $field_type
 	 * @param string $field_name
-	 * @return int|false
+	 * @return false|int
 	 */
 	private static function add_a_field( $form_id, $field_type, $field_name ) {
 		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
@@ -321,7 +321,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * A credit card field is added automatically if missing before a Stripe action is updated.
 	 *
 	 * @param int $form_id
-	 * @return int|false
+	 * @return false|int
 	 */
 	private static function add_a_credit_card_field( $form_id ) {
 		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
@@ -332,7 +332,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * The gateway field is not important for the Stripe Lite implementation.
 	 *
 	 * @param int $form_id
-	 * @return int|false
+	 * @return false|int
 	 */
 	private static function add_a_gateway_field( $form_id ) {
 		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );

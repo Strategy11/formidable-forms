@@ -258,7 +258,7 @@ class FrmSettingsController {
 	/**
 	 * Save form data submitted from the Global settings page.
 	 *
-	 * @param string|bool $stop_load
+	 * @param bool|string $stop_load
 	 *
 	 * @return void
 	 */

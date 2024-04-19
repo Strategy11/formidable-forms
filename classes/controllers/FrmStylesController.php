@@ -621,7 +621,7 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
@@ -1107,7 +1107,7 @@ class FrmStylesController {
 	/**
 	 * Get the style post object for a target form.
 	 *
-	 * @param object|string|bool $form
+	 * @param bool|object|string $form
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {

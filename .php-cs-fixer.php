@@ -15,6 +15,9 @@ $rules  = array(
 	'semicolon_after_instruction' => true,
 	'no_useless_else'             => true,
 	'no_superfluous_elseif'       => true,
+	'phpdoc_types_order'          => array(
+		'null_adjustment' => 'always_last',
+	),
 );
 
 $config = new PhpCsFixer\Config();

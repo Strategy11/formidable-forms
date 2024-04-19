@@ -135,7 +135,7 @@ class FrmStrpLiteLinkController {
 	 * Try to add the description to a Stripe link payment after it was confirmed.
 	 *
 	 * @param object           $intent
-	 * @param WP_Post|stdClass $action
+	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
 	 * @return void
 	 */
@@ -317,7 +317,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
 		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
@@ -406,8 +406,8 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
-	 * @return string|false String intent id on success, False if intent is missing or cannot be verified.
+	 * @param int|string $form_id
+	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
 	private static function verify_intent( $form_id ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );

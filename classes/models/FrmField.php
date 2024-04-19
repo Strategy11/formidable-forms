@@ -293,7 +293,7 @@ class FrmField {
 	 * @since 6.8.3
 	 *
 	 * @param string $plugin
-	 * @return string|false String version. False if the plugin is not installed.
+	 * @return false|string String version. False if the plugin is not installed.
 	 */
 	private static function get_installed_version( $plugin ) {
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -360,7 +360,7 @@ class FrmField {
 	 *
 	 * @param array $values
 	 * @param bool  $return
-	 * @return int|false
+	 * @return false|int
 	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
@@ -659,7 +659,7 @@ class FrmField {
 	}
 
 	/**
-	 * @param string|int $id The field id or key.
+	 * @param int|string $id The field id or key.
 	 * @param bool       $filter When true, run the frm_field filter.
 	 */
 	public static function getOne( $id, $filter = false ) {
@@ -1204,7 +1204,7 @@ class FrmField {
 	/**
 	 * @since 2.0.18
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
 	 * @param string       $option
 	 * @return mixed
 	 */
@@ -1269,7 +1269,7 @@ class FrmField {
 	/**
 	 * @param string $id
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );

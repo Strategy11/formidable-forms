@@ -35,7 +35,7 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
 	 */
 	public static function get_field_factory( $field ) {
 		if ( is_object( $field ) ) {
@@ -50,7 +50,7 @@ class FrmFieldFactory {
 	}
 
 	/**
-	 * @param int|string|object $field
+	 * @param int|object|string $field
 	 *
 	 * @return FrmFieldType
 	 */
@@ -66,7 +66,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param string           $field_type
-	 * @param int|array|object $field
+	 * @param array|int|object $field
 	 *
 	 * @return FrmFieldType
 	 */

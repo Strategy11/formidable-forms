@@ -64,7 +64,7 @@ class FrmDashboardHelper {
 	 *            @type string     $entries['placeholder']['background']
 	 *            @type string     $entries['placeholder']['heading']
 	 *            @type string     $entries['placeholder']['copy']
-	 *            @type null|array $entries['placeholder']['button']
+	 *            @type array|null $entries['placeholder']['button']
 	 *                @type string $entries['placeholder']['button']['label']
 	 *                @type string $entries['placeholder']['button']['link']
 	 *    @type array $payments Array of payments args

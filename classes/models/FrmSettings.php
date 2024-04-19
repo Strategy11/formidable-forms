@@ -89,7 +89,7 @@ class FrmSettings {
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var false|string|null
 	 */
 	public $custom_css;
 

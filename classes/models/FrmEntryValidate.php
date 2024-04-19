@@ -7,7 +7,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array         $values
-	 * @param string[]|bool $exclude
+	 * @param bool|string[] $exclude
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -174,7 +174,7 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param string|array $value Field value.
+	 * @param array|string $value Field value.
 	 * @param object       $field Field object.
 	 */
 	private static function maybe_add_item_name( $value, $field ) {

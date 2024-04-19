@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|bool id on success or false on failure.
+	 * @return bool|int id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -70,7 +70,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool ID on success or false on failure
+	 * @return bool|int ID on success or false on failure
 	 */
 	public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
 		global $wpdb;
@@ -219,7 +219,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function update( $id, $values, $create_link = false ) {
 		global $wpdb;
@@ -552,7 +552,7 @@ class FrmForm {
 	 * @param int    $id
 	 * @param string $status
 	 *
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function set_status( $id, $status ) {
 		if ( 'trash' == $status ) {
@@ -589,7 +589,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function trash( $id ) {
 		if ( ! EMPTY_TRASH_DAYS ) {
@@ -635,7 +635,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
 		global $wpdb;
@@ -759,7 +759,7 @@ class FrmForm {
 	/**
 	 * If $form is numeric, get the form object
 	 *
-	 * @param object|int $form
+	 * @param int|object $form
 	 *
 	 * @since 2.0.9
 	 */
@@ -770,8 +770,8 @@ class FrmForm {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @param int|false  $blog_id
+	 * @param int|string $id
+	 * @param false|int  $blog_id
 	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
@@ -836,7 +836,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return object|array of objects
+	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
@@ -1248,7 +1248,7 @@ class FrmForm {
 	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
 	 * @codeCoverageIgnore
 	 *
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @return string
 	 */
 	public static function getKeyById( $id ) {
