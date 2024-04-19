@@ -19,4 +19,4 @@ jobs:
         run: composer install --dev --prefer-dist --no-progress --no-suggest
 
       - name: PHPCS check
-        run: ./vendor/bin/phpcs ./
+        run: ./vendor/bin/phpcs --parallel=10 ./
