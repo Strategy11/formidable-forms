@@ -772,7 +772,7 @@ class FrmForm {
 	/**
 	 * @param int|string $id
 	 * @param false|int  $blog_id
-	 * @return null|stdClass
+	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
 		global $wpdb;
@@ -814,8 +814,8 @@ class FrmForm {
 	 *
 	 * @since 6.8.3
 	 *
-	 * @param null|stdClass $row The database row for a target form.
-	 * @return null|stdClass
+	 * @param stdClass|null $row The database row for a target form.
+	 * @return stdClass|null
 	 */
 	private static function prepare_form_row_data( $row ) {
 		$row = wp_unslash( $row );

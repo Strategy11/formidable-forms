@@ -40,7 +40,7 @@ class FrmTransLiteCRUDController {
 
 	/**
 	 * @param int $id
-	 * @return null|object
+	 * @return object|null
 	 */
 	private static function get_payment_row( $id ) {
 		global $wpdb;

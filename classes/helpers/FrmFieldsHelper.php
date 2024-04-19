@@ -997,7 +997,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $atts
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	private static function get_field_shortcode_value( $atts ) {
 		$field = FrmField::getOne( $atts['tag'] );

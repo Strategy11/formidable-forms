@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppHelper {
 
 	/**
-	 * @var null|bool
+	 * @var bool|null
 	 */
 	private static $should_fallback_to_paypal;
 

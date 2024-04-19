@@ -10,7 +10,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @var null|string
+	 * @var string|null
 	 */
 	public static $latest_error_from_stripe_connect;
 

@@ -109,7 +109,7 @@ class FrmPluginSearch {
 	 * @param array $addon_list
 	 * @param array $normalized_term
 	 *
-	 * @return null|int
+	 * @return int|null
 	 */
 	private function matching_addon( $addon_list, $normalized_term ) {
 		$matching_addon = null;

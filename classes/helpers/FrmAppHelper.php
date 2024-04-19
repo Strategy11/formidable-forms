@@ -1079,7 +1079,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $class
 	 * @param array  $atts
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function icon_by_class( $class, $atts = array() ) {
 		$echo = ! isset( $atts['echo'] ) || $atts['echo'];
@@ -1240,7 +1240,7 @@ class FrmAppHelper {
 	 *
 	 * @param Closure $echo_function
 	 * @param bool    $echo
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function clip( $echo_function, $echo = false ) {
 		if ( ! $echo ) {
@@ -2118,7 +2118,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $url
 	 * @param bool   $echo
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function js_redirect( $url, $echo = false ) {
 		$callback = function () use ( $url ) {

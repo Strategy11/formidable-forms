@@ -56,17 +56,17 @@ class FrmCSVExportHelper {
 	protected static $fields = array();
 
 	/**
-	 * @var null|stdClass
+	 * @var stdClass|null
 	 */
 	protected static $entry;
 
 	/**
-	 * @var null|bool
+	 * @var bool|null
 	 */
 	protected static $has_parent_id;
 
 	/**
-	 * @var null|array
+	 * @var array|null
 	 */
 	protected static $fields_by_repeater_id;
 
@@ -76,7 +76,7 @@ class FrmCSVExportHelper {
 	protected static $mode = 'echo';
 
 	/**
-	 * @var null|resource used to write a CSV file in file mode.
+	 * @var resource|null used to write a CSV file in file mode.
 	 */
 	protected static $fp;
 

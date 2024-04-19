@@ -262,7 +262,7 @@ class FrmStylesHelper {
 	 * @since 6.8
 	 *
 	 * @param string $hsl
-	 * @return null|string Null if it fails to parse the HSL string.
+	 * @return string|null Null if it fails to parse the HSL string.
 	 */
 	private static function hsl_to_hex( $hsl ) {
 		// Convert hsla to hsl.

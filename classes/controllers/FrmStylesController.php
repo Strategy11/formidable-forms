@@ -16,7 +16,7 @@ class FrmStylesController {
 	public static $screen = 'formidable_page_formidable-styles';
 
 	/**
-	 * @var null|string
+	 * @var string|null
 	 */
 	private static $message;
 
@@ -1108,7 +1108,7 @@ class FrmStylesController {
 	 * Get the style post object for a target form.
 	 *
 	 * @param bool|object|string $form
-	 * @return null|WP_Post
+	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {
 		$style = FrmFormsHelper::get_form_style( $form );

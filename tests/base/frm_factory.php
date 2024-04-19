@@ -3,17 +3,17 @@
 class FrmUnitTestFactory extends WP_UnitTest_Factory {
 
 	/**
-	 * @var null|Form_Factory
+	 * @var Form_Factory|null
 	 */
 	public $form;
 
 	/**
-	 * @var null|Field_Factory
+	 * @var Field_Factory|null
 	 */
 	public $field;
 
 	/**
-	 * @var null|Entry_Factory
+	 * @var Entry_Factory|null
 	 */
 	public $entry;
 }

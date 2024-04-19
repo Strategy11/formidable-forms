@@ -157,7 +157,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param int|string $id
-	 * @return null|array|object|void
+	 * @return array|object|void|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
@@ -174,7 +174,7 @@ class FrmTransLiteDb {
 	/**
 	 * @param int|string $id
 	 * @param string     $field
-	 * @return null|object
+	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteAppHelper {
 
 	/**
-	 * @var null|FrmStrpLiteSettings
+	 * @var FrmStrpLiteSettings|null
 	 */
 	private static $settings;
 

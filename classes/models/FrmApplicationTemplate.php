@@ -9,17 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmApplicationTemplate {
 
 	/**
-	 * @var null|array<string>
+	 * @var array<string>|null
 	 */
 	private static $keys;
 
 	/**
-	 * @var null|array<string>
+	 * @var array<string>|null
 	 */
 	private static $keys_with_images;
 
 	/**
-	 * @var null|array<string>
+	 * @var array<string>|null
 	 */
 	private static $categories;
 

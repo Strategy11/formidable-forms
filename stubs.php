@@ -55,7 +55,7 @@ namespace {
 		 * @param int|object|string $field_id
 		 * @param array|string      $value
 		 * @param false|int|string  $entry_id
-		 * @return null|array|object|string
+		 * @return array|object|string|null
 		 */
 		public static function &value_exists( $field_id, $value, $entry_id = false ) {
 		}
@@ -224,7 +224,7 @@ namespace WPMailSMTP {
 		 * @param string $group
 		 * @param string $key
 		 * @param bool   $strip_slashes
-		 * @return null|mixed
+		 * @return mixed|null
 		 */
 		public function get( $group, $key, $strip_slashes = true ) {
 		}
@@ -252,7 +252,7 @@ namespace WPMailSMTP\Providers {
 		 * @param string               $provider  The provider name.
 		 * @param MailCatcherInterface $phpmailer The MailCatcher object.
 		 *
-		 * @return null|MailerAbstract
+		 * @return MailerAbstract|null
 		 */
 		public function get_mailer( $provider, $phpmailer ) {
 		}

@@ -1269,7 +1269,7 @@ class FrmField {
 	/**
 	 * @param string $id
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );

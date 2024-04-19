@@ -83,7 +83,7 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
-	 * @var null|bool Whether or not draft fields should be hidden on the front end.
+	 * @var bool|null Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
 

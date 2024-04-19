@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteSettings {
 
 	/**
-	 * @var null|stdClass
+	 * @var stdClass|null
 	 */
 	public $settings;
 

@@ -922,7 +922,7 @@ class FrmAddonsController {
 	 * @param string $redirect
 	 * @param bool   $network_wide
 	 * @param bool   $silent
-	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 * @return WP_Error|null Null on success, WP_Error on invalid file.
 	 */
 	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
 		if ( ! function_exists( 'activate_plugin' ) ) {
@@ -1157,7 +1157,7 @@ class FrmAddonsController {
 	 * @since 6.8
 	 *
 	 * @param callable      $action_callback The specific add-on action to be executed.
-	 * @param null|callable $response_callback Optional. The response handling callback. Default null.
+	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
 	 * @return void
 	 */
 	private static function process_addon_action( $action_callback, $response_callback = null ) {

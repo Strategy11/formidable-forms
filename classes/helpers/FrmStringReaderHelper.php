@@ -88,7 +88,7 @@ class FrmStringReaderHelper {
 	 * Read the next character from the supplied string.
 	 * Return null when we have run out of characters.
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	private function read_one() {
 		if ( $this->pos <= $this->max ) {

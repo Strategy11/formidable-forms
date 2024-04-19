@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
-	 * @var null|object|string A memoized value for the current Stripe customer object.
+	 * @var object|string|null A memoized value for the current Stripe customer object.
 	 */
 	private static $customer;
 

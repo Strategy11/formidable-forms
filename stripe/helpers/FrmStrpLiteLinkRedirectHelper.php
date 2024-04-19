@@ -19,7 +19,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	private $client_secret;
 
 	/**
-	 * @var null|int The entry ID associated with the payment being handled.
+	 * @var int|null The entry ID associated with the payment being handled.
 	 */
 	private $entry_id;
 

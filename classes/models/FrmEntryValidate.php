@@ -563,7 +563,7 @@ class FrmEntryValidate {
 	 *
 	 * @param array    $datas        Guest data.
 	 * @param array    $values       The values.
-	 * @param null|int $custom_index Custom index (or field ID).
+	 * @param int|null $custom_index Custom index (or field ID).
 	 */
 	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {

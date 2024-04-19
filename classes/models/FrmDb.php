@@ -204,7 +204,7 @@ class FrmDb {
 	 * @param string $limit
 	 * @param string $type
 	 *
-	 * @return null|array|object|string
+	 * @return array|object|string|null
 	 */
 	public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
 		$group = '';

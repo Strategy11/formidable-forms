@@ -435,7 +435,7 @@ class FrmDashboardController {
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
 	 * @param int $entries_count The total entries available.
-	 * @return null|string The YouTube video ID.
+	 * @return string|null The YouTube video ID.
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
 		$youtube_api    = new FrmYoutubeFeedApi();
@@ -491,7 +491,7 @@ class FrmDashboardController {
 	/**
 	 * Get the dashboard options from db.
 	 *
-	 * @param null|string $option_name The dashboard option name. If null it will return all dashboard options.
+	 * @param string|null $option_name The dashboard option name. If null it will return all dashboard options.
 	 * @return array
 	 */
 	private static function get_dashboard_options( $option_name = null ) {

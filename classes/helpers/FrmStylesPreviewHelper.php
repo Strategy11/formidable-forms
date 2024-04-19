@@ -142,9 +142,9 @@ class FrmStylesPreviewHelper {
 		add_filter(
 			'frm_form_object',
 			/**
-			 * @param null|stdClass $form
+			 * @param stdClass|null $form
 			 * @param int           $form_id
-			 * @return null|stdClass
+			 * @return stdClass|null
 			 */
 			function ( $form ) {
 				if ( is_object( $form ) && is_array( $form->options ) ) {
