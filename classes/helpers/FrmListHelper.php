@@ -462,8 +462,8 @@ class FrmListHelper {
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			$i == $action_count ? $sep = '' : $sep = ' | ';
-			$out                          .= "<span class='$action'>$link$sep</span>";
+			$sep  = $i == $action_count ? '' : ' | ';
+			$out .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
 

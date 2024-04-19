@@ -2434,7 +2434,7 @@ class FrmAppHelper {
 	 * @param array  $values
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
-		if ( $table == 'entries' ) {
+		if ( $table === 'entries' ) {
 			$form = $record->form_id;
 			FrmForm::maybe_get_form( $form );
 		} else {
