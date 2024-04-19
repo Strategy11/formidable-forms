@@ -68,7 +68,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
           pwd
-          phpunit --coverage-clover=coverage.xml --filter ${{ matrix.filter }}
+          phpunit --coverage-clover=coverage.xml --filter '${{ matrix.filter }}'
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v2
         with:
