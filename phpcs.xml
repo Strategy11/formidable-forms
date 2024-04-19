@@ -110,4 +110,8 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 </ruleset>
