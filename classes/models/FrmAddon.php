@@ -486,7 +486,7 @@ class FrmAddon {
 			return false;
 		}
 
-		$response = ! isset( $transient->response ) || empty( $transient->response );
+		$response = empty( $transient->response );
 		if ( $response ) {
 			return true;
 		}

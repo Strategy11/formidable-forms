@@ -1266,7 +1266,7 @@ class FrmAppHelper {
 	 */
 	public static function get_admin_header( $atts ) {
 		$has_nav = ! empty( $atts['form'] ) && empty( $atts['is_template'] );
-		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
+		if ( empty( $atts['close'] ) ) {
 			$atts['close'] = admin_url( 'admin.php?page=formidable' );
 		}
 		if ( ! isset( $atts['import_link'] ) ) {
