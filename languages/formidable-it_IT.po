@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-19 22:49\n"
+"PO-Revision-Date: 2024-04-20 17:08\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1113,7 +1113,7 @@ msgstr "SMTP"
 
 #: classes/controllers/FrmOnboardingWizardController.php:561
 msgid "Improve email deliverability by routing WordPress emails through SMTP."
-msgstr "Migliora la deliverability delle email instradando le email di WordPress attraverso l'SMTP."
+msgstr "Migliora la capacità di consegna delle email instradando le email di WordPress tramite SMTP."
 
 #: classes/controllers/FrmOnboardingWizardController.php:582
 msgid "Mailchimp"
@@ -1133,7 +1133,7 @@ msgstr "Moduli ACF"
 
 #: classes/controllers/FrmOnboardingWizardController.php:614
 msgid "Signature Forms"
-msgstr "Moduli di firma"
+msgstr "Moduli della firma"
 
 #: classes/controllers/FrmOnboardingWizardController.php:623
 msgid "Gravity Forms Migrator"
@@ -6792,7 +6792,7 @@ msgstr "Installa Formidable Pro"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:21
 msgid "It’s time to install Formidable Forms Pro, to get access to the premium features."
-msgstr "È il momento di installare Formidable Forms Pro, per avere accesso alle funzioni premium."
+msgstr "È il momento di installare Formidable Forms Pro per avere accesso alle caratteristiche premium."
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:24
 msgid "1. Download PRO"
