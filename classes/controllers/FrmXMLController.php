@@ -193,7 +193,7 @@ class FrmXMLController {
 	 * @return array The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
-		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
+		if ( empty( $form['pages'] ) ) {
 			return;
 		}
 

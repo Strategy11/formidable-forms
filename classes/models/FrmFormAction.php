@@ -838,7 +838,7 @@ class FrmFormAction {
 		$stop         = false;
 		$met          = array();
 
-		if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
+		if ( empty( $notification['conditions'] ) ) {
 			return $stop;
 		}
 

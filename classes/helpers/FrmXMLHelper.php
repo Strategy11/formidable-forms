@@ -124,7 +124,7 @@ class FrmXMLHelper {
 
 		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
 
-		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
+		if ( empty( $imported['form_status'] ) ) {
 			// Check for an error message in the XML.
 			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
 				$imported['error'] = (string) $xml->Message; // phpcs:ignore WordPress.NamingConventions
