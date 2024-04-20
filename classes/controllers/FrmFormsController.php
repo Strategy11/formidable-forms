@@ -1736,7 +1736,7 @@ class FrmFormsController {
 				$message = self::bulk_untrash( $ids );
 		}
 
-		if ( isset( $message ) && ! empty( $message ) ) {
+		if ( ! empty( $message ) ) {
 			$errors['message'] = $message;
 		}
 

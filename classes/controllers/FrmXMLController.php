@@ -101,7 +101,7 @@ class FrmXMLController {
 				$pages = self::create_pages_for_import( $form );
 			}
 
-			if ( isset( $pages ) && ! empty( $pages ) ) {
+			if ( ! empty( $pages ) ) {
 				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
