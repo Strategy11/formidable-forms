@@ -167,7 +167,7 @@ class FrmFormAction {
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
-		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
+		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
 		}
 
@@ -838,7 +838,7 @@ class FrmFormAction {
 		$stop         = false;
 		$met          = array();
 
-		if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
+		if ( empty( $notification['conditions'] ) ) {
 			return $stop;
 		}
 

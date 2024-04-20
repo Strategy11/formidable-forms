@@ -303,7 +303,7 @@ class FrmEntryValidate {
 	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
-		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}

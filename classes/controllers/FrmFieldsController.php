@@ -481,7 +481,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_input_classes( $field, array &$class ) {
-		if ( isset( $field['input_class'] ) && ! empty( $field['input_class'] ) ) {
+		if ( ! empty( $field['input_class'] ) ) {
 			$class[] = $field['input_class'];
 		}
 

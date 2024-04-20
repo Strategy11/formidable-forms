@@ -220,7 +220,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				continue;
 			}
 
-			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
+			if ( ! empty( $helper['heading'] ) ) {
 				?>
 				<li style="padding:0 25px;">
 					<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>

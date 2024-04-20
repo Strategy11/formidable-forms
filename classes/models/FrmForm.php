@@ -244,7 +244,7 @@ class FrmForm {
 			}
 		}
 
-		if ( isset( $values['new_status'] ) && ! empty( $values['new_status'] ) ) {
+		if ( ! empty( $values['new_status'] ) ) {
 			$new_values['status'] = $values['new_status'];
 		}
 

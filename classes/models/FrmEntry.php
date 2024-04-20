@@ -810,7 +810,7 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_entry_description( $values ) {
-		if ( isset( $values['description'] ) && ! empty( $values['description'] ) ) {
+		if ( ! empty( $values['description'] ) ) {
 			$description = FrmAppHelper::maybe_json_encode( $values['description'] );
 		} else {
 			$description = json_encode(

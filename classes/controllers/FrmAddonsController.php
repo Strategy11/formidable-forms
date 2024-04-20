@@ -498,12 +498,12 @@ class FrmAddonsController {
 					'url'   => $addon['plugin'],
 					'class' => 'frm-activate-addon',
 				);
-			} elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) {
+			} elseif ( ! empty( $addon['url'] ) ) {
 				$link = array(
 					'url'   => $addon['url'],
 					'class' => 'frm-install-addon',
 				);
-			} elseif ( isset( $addon['categories'] ) && ! empty( $addon['categories'] ) ) {
+			} elseif ( ! empty( $addon['categories'] ) ) {
 				$link = array(
 					'categories' => $addon['categories'],
 				);

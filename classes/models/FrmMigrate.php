@@ -657,7 +657,7 @@ DEFAULT_HTML;
 		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
-			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
+			if ( empty( $form->options['submit_html'] ) ) {
 				continue;
 			}
 

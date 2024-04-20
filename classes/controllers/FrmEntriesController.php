@@ -128,7 +128,7 @@ class FrmEntriesController {
 				continue;
 			}
 
-			$has_child_fields = $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] );
+			$has_child_fields = $form_col->type === 'form' && ! empty( $form_col->field_options['form_select'] );
 			if ( $has_child_fields ) {
 				self::add_subform_cols( $form_col, $form_id, $columns );
 			} else {
