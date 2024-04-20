@@ -3033,7 +3033,7 @@ class FrmFormsController {
 	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
-		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+		return ! empty( $atts['minimize'] );
 	}
 
 	/**

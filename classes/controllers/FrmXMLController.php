@@ -178,7 +178,7 @@ class FrmXMLController {
 	 * @param string $value
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -603,7 +603,7 @@ class FrmXMLController {
 	 * @return string
 	 */
 	private static function get_file_name( $args, $type, $records ) {
-		$has_one_form = isset( $records['forms'] ) && ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
+		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );

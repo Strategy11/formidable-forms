@@ -56,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php
 						echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-						$show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'];
+						$show_docs = ! empty( $addon['docs'] ) && $addon['installed'];
 						?>
 						<?php if ( $show_docs ) { ?>
 							<br/><a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">

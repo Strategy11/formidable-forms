@@ -413,7 +413,7 @@ class FrmListHelper {
 	 * @return false|string The action name or False if no action was selected
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) ) {
+		if ( ! empty( $_REQUEST['filter_action'] ) ) {
 			return false;
 		}
 

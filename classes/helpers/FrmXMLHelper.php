@@ -1174,7 +1174,7 @@ class FrmXMLHelper {
 					}
 
 					$check_dup_array = array();
-					if ( isset( $m['value']['order_by'] ) && ! empty( $m['value']['order_by'] ) ) {
+					if ( ! empty( $m['value']['order_by'] ) ) {
 						if ( is_numeric( $m['value']['order_by'] ) && isset( $frm_duplicate_ids[ $m['value']['order_by'] ] ) ) {
 							$m['value']['order_by'] = $frm_duplicate_ids[ $m['value']['order_by'] ];
 						} elseif ( is_array( $m['value']['order_by'] ) ) {
@@ -1182,7 +1182,7 @@ class FrmXMLHelper {
 						}
 					}
 
-					if ( isset( $m['value']['where'] ) && ! empty( $m['value']['where'] ) ) {
+					if ( ! empty( $m['value']['where'] ) ) {
 						$check_dup_array[] = 'where';
 					}
 
@@ -1318,8 +1318,8 @@ class FrmXMLHelper {
 	}
 
 	private static function maybe_update_stylesheet( $imported ) {
-		$new_styles     = isset( $imported['imported']['styles'] ) && ! empty( $imported['imported']['styles'] );
-		$updated_styles = isset( $imported['updated']['styles'] ) && ! empty( $imported['updated']['styles'] );
+		$new_styles     = ! empty( $imported['imported']['styles'] );
+		$updated_styles = ! empty( $imported['updated']['styles'] );
 		if ( $new_styles || $updated_styles ) {
 			if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
 				$frm_style = new FrmStyle();
@@ -1898,7 +1898,7 @@ class FrmXMLHelper {
 	}
 
 	private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
-		if ( ! isset( $form_options['notification'] ) && isset( $form_options['email_to'] ) && ! empty( $form_options['email_to'] ) ) {
+		if ( ! isset( $form_options['notification'] ) && ! empty( $form_options['email_to'] ) ) {
 			// add old settings into notification array
 			$form_options['notification'] = array( 0 => $form_options );
 		} elseif ( isset( $form_options['notification']['email_to'] ) ) {

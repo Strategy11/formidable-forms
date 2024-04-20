@@ -236,7 +236,7 @@ abstract class FrmFormMigrator {
 			// list field, as field_order would already be prepared to be used.
 			++$field_order;
 
-			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
+			if ( ! empty( $new_field['fields'] ) && is_array( $new_field['fields'] ) ) {
 				// we have (inner) fields to merge
 
 				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
