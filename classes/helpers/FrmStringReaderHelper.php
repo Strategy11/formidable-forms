@@ -89,14 +89,33 @@ class FrmStringReaderHelper {
 			--$count;
 		}
 
-		return $this->strip_quotes( $value );
+		/**
+		 * Remove a single set of double-quotes from around a string.
+		 *
+		 * abc => abc
+		 * "abc" => abc
+		 * ""abc"" => "abc"
+		 */
+		if ( strlen( $value ) < 2 || substr( $value, 0, 1 ) !== '"' || substr( $value, -1, 1 ) !== '"' ) {
+			// Only remove exactly one quote from the start and the end and then only if there is one at each end.
+			// Too short, or does not start or end with a quote.
+			return $value;
+		}
+
+		// Return the middle of the string, from the second character to the second-but-last.
+		return substr( $value, 1, -1 );
 	}
 
 	/**
+	 * Shift the position. This is used to skip characters that we don't need to read.
+	 *
+	 * @since x.x This was added as an optimization.
+	 *
+	 * @param int $count
 	 * @return void
 	 */
 	public function increment_position( $count = 0 ) {
-		$this->pos += 1;
+		$this->pos += $count;
 	}
 
 	/**
@@ -109,30 +128,8 @@ class FrmStringReaderHelper {
 		if ( $this->pos <= $this->max ) {
 			$value      = $this->string[ $this->pos ];
 			$this->pos += 1;
-		} else {
-			$value = null;
+			return $value;
 		}
-		return $value;
-	}
-
-	/**
-	 * Remove a single set of double-quotes from around a string.
-	 *  abc => abc
-	 *  "abc" => abc
-	 *  ""abc"" => "abc"
-	 *
-	 * @param string $string
-	 * @return string
-	 */
-	private function strip_quotes( $string ) {
-		// Only remove exactly one quote from the start and the end and then only if there is one at each end.
-
-		if ( strlen( $string ) < 2 || substr( $string, 0, 1 ) !== '"' || substr( $string, -1, 1 ) !== '"' ) {
-			// Too short, or does not start or end with a quote.
-			return $string;
-		}
-
-		// Return the middle of the string, from the second character to the second-but-last.
-		return substr( $string, 1, -1 );
+		return null;
 	}
 }
