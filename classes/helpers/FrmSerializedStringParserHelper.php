@@ -53,7 +53,7 @@ class FrmSerializedStringParserHelper {
 	private function do_parse( $string ) {
 		// May be : or ; as a terminator, depending on what the data type is.
 		$type = $string->read( 1 );
-		$string->increment_position( 1 );
+		$string->skip_next_character();
 
 		switch ( $type ) {
 			case 'a':
@@ -86,7 +86,7 @@ class FrmSerializedStringParserHelper {
 		$count = (int) $string->read_until( ':' );
 
 		// Eat the opening "{" of the array.
-		$string->increment_position( 1 );
+		$string->skip_next_character();
 
 		$val = array();
 		for ( $i = 0; $i < $count; $i++ ) {
@@ -99,7 +99,7 @@ class FrmSerializedStringParserHelper {
 		}
 
 		// Eat "}" terminating the array.
-		$string->increment_position( 1 );
+		$string->skip_next_character();
 
 		return $val;
 	}
@@ -113,7 +113,7 @@ class FrmSerializedStringParserHelper {
 		$val = $string->read( $len + 2 );
 
 		// Eat the separator.
-		$string->increment_position( 1 );
+		$string->skip_next_character();
 
 		return $val;
 	}
@@ -141,7 +141,7 @@ class FrmSerializedStringParserHelper {
 	private function parse_bool( $string ) {
 		// Boolean is 0 or 1.
 		$val = $string->read( 1 ) === '1';
-		$string->increment_position( 1 );
+		$string->skip_next_character();
 		return $val;
 	}
 

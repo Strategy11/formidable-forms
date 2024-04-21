@@ -91,14 +91,13 @@ class FrmStringReaderHelper {
 	}
 
 	/**
-	 * Shift the position. This is used to skip characters that we don't need to read.
+	 * Shift the position. This is used to skip a character that we don't need to read.
 	 *
 	 * @since x.x This was added as an optimization.
 	 *
-	 * @param int $count
 	 * @return void
 	 */
-	public function increment_position( $count = 0 ) {
-		$this->pos += $count;
+	public function skip_next_character() {
+		$this->pos += 1;
 	}
 }
