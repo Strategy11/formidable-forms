@@ -48,11 +48,9 @@ class FrmSerializedStringParserHelper {
 	 * This is the recursive parser.
 	 *
 	 * @param FrmStringReaderHelper $string
-	 * @return mixed
+	 * @return array|bool|float|int|string|null
 	 */
 	private function do_parse( $string ) {
-		$val = null;
-
 		// May be : or ; as a terminator, depending on what the data type is.
 		$type = $string->read( 1 );
 		$string->increment_position( 1 );
@@ -79,6 +77,10 @@ class FrmSerializedStringParserHelper {
 		return null;
 	}
 
+	/**
+	 * @param FrmStringReaderHelper $string
+	 * @return array
+	 */
 	private function parse_array( $string ) {
 		// Associative array: a:length:{[index][value]...}
 		$count = (int) $string->read_until( ':' );
@@ -102,6 +104,10 @@ class FrmSerializedStringParserHelper {
 		return $val;
 	}
 
+	/**
+	 * @param FrmStringReaderHelper $string
+	 * @return string
+	 */
 	private function parse_string( $string ) {
 		$len = (int) $string->read_until( ':' );
 		$val = $string->read( $len + 2 );
@@ -112,14 +118,26 @@ class FrmSerializedStringParserHelper {
 		return $val;
 	}
 
+	/**
+	 * @param FrmStringReaderHelper $string
+	 * @return int
+	 */
 	private function parse_int( $string ) {
 		return (int) $string->read_until( ';' );
 	}
 
+	/**
+	 * @param FrmStringReaderHelper $string
+	 * @return float
+	 */
 	private function parse_float( $string ) {
 		return (float) $string->read_until( ';' );
 	}
 
+	/**
+	 * @param FrmStringReaderHelper $string
+	 * @return bool
+	 */
 	private function parse_bool( $string ) {
 		// Boolean is 0 or 1.
 		$val = $string->read( 1 ) === '1';
