@@ -54,59 +54,77 @@ class FrmSerializedStringParserHelper {
 		$val = null;
 
 		// May be : or ; as a terminator, depending on what the data type is.
-		$type = substr( $string->read( 2 ), 0, 1 );
+		$type = $string->read( 1 );
+		$string->increment_position( 1 );
 
 		switch ( $type ) {
 			case 'a':
-				// Associative array: a:length:{[index][value]...}
-				$count = (int) $string->read_until( ':' );
-
-				// Eat the opening "{" of the array.
-				$string->read( 1 );
-
-				$val = array();
-				for ( $i = 0; $i < $count; $i++ ) {
-					$array_key   = $this->do_parse( $string );
-					$array_value = $this->do_parse( $string );
-
-					if ( ! is_array( $array_key ) ) {
-						$val[ $array_key ] = $array_value;
-					}
-				}
-
-				// Eat "}" terminating the array.
-				$string->read( 1 );
-				break;
+				return $this->parse_array( $string );
 
 			case 's':
-				$len = (int) $string->read_until( ':' );
-				$val = $string->read( $len + 2 );
-
-				// Eat the separator.
-				$string->read( 1 );
-				break;
+				return $this->parse_string( $string );
 
 			case 'i':
-				$val = (int) $string->read_until( ';' );
-				break;
+				return $this->parse_int( $string );
 
 			case 'd':
-				$val = (float) $string->read_until( ';' );
-				break;
+				return $this->parse_float( $string );
 
 			case 'b':
-				// Boolean is 0 or 1.
-				$bool = $string->read( 2 );
-				$val  = substr( $bool, 0, 1 ) == '1';
-				break;
+				return $this->parse_bool( $string );
+		}
 
-			default:
-				// Includes case 'N' and case 'O'.
-				// Treat a serialized object or anything unexpected as Null.
-				$val = null;
-				break;
-		}//end switch
+		// Includes case 'N' and case 'O'.
+		// Treat a serialized object or anything unexpected as Null.
+		return null;
+	}
+
+	private function parse_array( $string ) {
+		// Associative array: a:length:{[index][value]...}
+		$count = (int) $string->read_until( ':' );
+
+		// Eat the opening "{" of the array.
+		$string->increment_position( 1 );
+
+		$val = array();
+		for ( $i = 0; $i < $count; $i++ ) {
+			$array_key   = $this->do_parse( $string );
+			$array_value = $this->do_parse( $string );
+
+			if ( ! is_array( $array_key ) ) {
+				$val[ $array_key ] = $array_value;
+			}
+		}
+
+		// Eat "}" terminating the array.
+		$string->increment_position( 1 );
 
 		return $val;
 	}
+
+	private function parse_string( $string ) {
+		$len = (int) $string->read_until( ':' );
+		$val = $string->read( $len + 2 );
+
+		// Eat the separator.
+		$string->increment_position( 1 );
+
+		return $val;
+	}
+
+	private function parse_int( $string ) {
+		return (int) $string->read_until( ';' );
+	}
+
+	private function parse_float( $string ) {
+		return (float) $string->read_until( ';' );
+	}
+
+	private function parse_bool( $string ) {
+		// Boolean is 0 or 1.
+		$val = $string->read( 1 ) === '1';
+		$string->increment_position( 1 );
+		return $val;
+	}
+
 }

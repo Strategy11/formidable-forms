@@ -52,14 +52,22 @@ class FrmStringReaderHelper {
 	public function read_until( $char, $discard_char = true ) {
 		$value = '';
 
-		while ( null !== ( $one = $this->read_one() ) ) {
-			if ( $one !== $char || ! $discard_char ) {
+		if ( ! $discard_char ) {
+			while ( null !== ( $one = $this->read_one() ) ) {
 				$value .= $one;
+				if ( $one === $char ) {
+					break;
+				}
 			}
+			return $value;
+		}
 
-			if ( $one === $char ) {
-				break;
+		while ( null !== ( $one = $this->read_one() ) ) {
+			if ( $one !== $char ) {
+				$value .= $one;
+				continue;
 			}
+			break;
 		}
 
 		return $value;
@@ -82,6 +90,13 @@ class FrmStringReaderHelper {
 		}
 
 		return $this->strip_quotes( $value );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function increment_position( $count = 0 ) {
+		$this->pos += 1;
 	}
 
 	/**
