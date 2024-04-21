@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-20 17:08\n"
+"PO-Revision-Date: 2024-04-21 05:08\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -6727,7 +6727,7 @@ msgstr "Ignora"
 
 #: classes/views/onboarding-wizard/index.php:14
 msgid "Onboarding Wizard Background"
-msgstr "Sfondo della procedura guidata di Onboarding"
+msgstr "Sfondo della procedura guidata di avvio"
 
 #: classes/views/onboarding-wizard/index.php:25
 msgid "Go to dashboard"
@@ -6780,11 +6780,11 @@ msgstr "%1$sPassa a PRO%2$s e ottieni di più da Formidable Forms"
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:69
 msgid "Check them all out on the %1$sadd-ons%2$s page."
-msgstr "Scopri tutti i componenti aggiuntivi nella pagina %1$s%2$s."
+msgstr "Scopri tutto nella pagina degli %1$sadd-on%2$s."
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:82
 msgid "Install & Finish Setup"
-msgstr "Installare e terminare la configurazione"
+msgstr "Installa e termina la configurazione"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:20
 msgid "Install Formidable Pro"
@@ -6852,7 +6852,7 @@ msgstr "Crea un modulo"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:14
 msgid "Formidable Onboarding Wizard Logo"
-msgstr "Logo Formidable Onboarding Wizard"
+msgstr "Logo della procedura guidata di avvio di Formidable"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:18
 msgid "Welcome to Formidable Forms!"
