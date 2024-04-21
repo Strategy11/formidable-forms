@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-19 22:49\n"
+"PO-Revision-Date: 2024-04-21 17:13\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1060,19 +1060,19 @@ msgstr "Hilf Formidable sich zu verbessern, indem du Tracking erlaubst."
 
 #: classes/controllers/FrmOnboardingWizardController.php:216
 msgid "Onboarding Wizard"
-msgstr "Onboarding-Assistent"
+msgstr "Einrichtungsassistent"
 
 #: classes/controllers/FrmOnboardingWizardController.php:438
 msgid "Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes."
-msgstr "Willkommen bei Formidable Forms! Klicke hier, um den Onboarding-Assistenten zu starten. Er führt dich durch die Grundeinstellungen und bringt dich in 2 Minuten zum Laufen."
+msgstr "Willkommen bei Formidable Forms! Klicke hier, um den Einrichtungsassistenten zu starten, der dich durch die Grundeinstellungen führt und es dir ermöglicht, in 2 Minuten loszulegen."
 
 #: classes/controllers/FrmOnboardingWizardController.php:442
 msgid "Begin With Ease!"
-msgstr "Beginne mit Leichtigkeit!"
+msgstr "Starte ganz einfach!"
 
 #: classes/controllers/FrmOnboardingWizardController.php:445
 msgid "Begin Setup"
-msgstr "Einrichten beginnen"
+msgstr "Einrichtung beginnen"
 
 #: classes/controllers/FrmOnboardingWizardController.php:530
 msgid "Spam Protection"
@@ -1084,7 +1084,7 @@ msgstr "Hol dir Anti-Spam-Optionen wie reCAPTCHA, hCaptcha, Akismet, Turnstile u
 
 #: classes/controllers/FrmOnboardingWizardController.php:536
 msgid "Stripe Payments"
-msgstr "Stripe Zahlungen"
+msgstr "Stripe-Zahlungen"
 
 #: classes/controllers/FrmOnboardingWizardController.php:539
 msgid "Collect donations and payments with your forms. Offer physical products, digital goods, services, and more."
@@ -1121,11 +1121,11 @@ msgstr "Mailchimp"
 
 #: classes/controllers/FrmOnboardingWizardController.php:590
 msgid "User Registration"
-msgstr "Benutzer-Registrierung"
+msgstr "Benutzerregistrierung"
 
 #: classes/controllers/FrmOnboardingWizardController.php:598
 msgid "Form Rest API"
-msgstr "Formular Rest API"
+msgstr "Formular-Rest-API"
 
 #: classes/controllers/FrmOnboardingWizardController.php:606
 msgid "ACF Forms"
@@ -1133,7 +1133,7 @@ msgstr "ACF-Formulare"
 
 #: classes/controllers/FrmOnboardingWizardController.php:614
 msgid "Signature Forms"
-msgstr "Unterschriftsformulare"
+msgstr "Unterschriften-Formulare"
 
 #: classes/controllers/FrmOnboardingWizardController.php:623
 msgid "Gravity Forms Migrator"
@@ -4718,7 +4718,7 @@ msgstr "Bitte gib einen gültigen Wert ein. Die beiden nächsten gültigen Werte
 
 #: classes/models/fields/FrmFieldPhone.php:67
 msgid "International phone field"
-msgstr "Internationales Telefonfeld"
+msgstr "Feld für internationale Telefonnummer"
 
 #: classes/models/fields/FrmFieldPhone.php:71
 msgid "International"
@@ -6337,7 +6337,7 @@ msgstr "Lege den Text der Schaltfläche fest."
 
 #: classes/views/frm-forms/settings-buttons.php:22
 msgid "Submit button settings were moved to the Submit button in the form builder."
-msgstr "Die Einstellungen für die Schaltfläche \"Absenden\" wurden in die Schaltfläche \"Absenden\" im Formular-Builder verschoben."
+msgstr "Die Einstellungen für den Button \"Absenden\" wurden in den Button \"Absenden\" im Formular-Builder verschoben."
 
 #: classes/views/frm-forms/settings-html.php:8
 msgid "Form Classes"
@@ -6727,7 +6727,7 @@ msgstr "Verwerfen"
 
 #: classes/views/onboarding-wizard/index.php:14
 msgid "Onboarding Wizard Background"
-msgstr "Hintergrund des Onboarding-Assistenten"
+msgstr "Hintergrund des Einrichtungsassistenten"
 
 #: classes/views/onboarding-wizard/index.php:25
 msgid "Go to dashboard"
@@ -6751,7 +6751,7 @@ msgstr "Hilf Formidable zu verbessern, indem du anonyme Nutzungsdaten teilst"
 
 #: classes/views/onboarding-wizard/steps/default-email-address-step.php:50
 msgid "Send me monthly and yearly summary emails with entry and revenue data from my forms"
-msgstr "Senden Sie mir monatliche und jährliche Übersichts-E-Mails mit Eingabe- und Umsatzdaten aus meinen Formularen"
+msgstr "Sende mir monatliche und jährliche Übersichts-E-Mails mit Eingabe- und Umsatzdaten aus meinen Formularen"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:20
 msgid "Install Formidable Add-ons"
@@ -6775,12 +6775,12 @@ msgstr "Erhalte Zugang zu %s mehr Add-ons"
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:62
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:58
 msgid "%1$sUpgrade to PRO%2$s and get more out of Formidable Forms"
-msgstr "%1$sUpgrade auf PRO%2$s und mehr aus Formidable Forms herausholen"
+msgstr "%1$sUpgrade auf PRO%2$s, um mehr aus Formidable Forms herauszuholen"
 
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:69
 msgid "Check them all out on the %1$sadd-ons%2$s page."
-msgstr "Sieh dir alle auf der Seite %1$sadd-ons%2$s an."
+msgstr "Schau sie dir alle auf der %1$sadd-ons%2$s Seite an."
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:82
 msgid "Install & Finish Setup"
@@ -6836,7 +6836,7 @@ msgstr "Aktivieren & Fortfahren"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:20
 msgid "You're All Set!"
-msgstr "Du bist bereit!"
+msgstr "Du bist startklar!"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:22
 msgid "We're thrilled to have you and hope you love your experience with Formidable Forms"
@@ -6852,7 +6852,7 @@ msgstr "Ein Formular erstellen"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:14
 msgid "Formidable Onboarding Wizard Logo"
-msgstr "Formidable Onboarding Wizard Logo"
+msgstr "Logo des Formidable-Einrichtungsassistenten"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:18
 msgid "Welcome to Formidable Forms!"
@@ -6860,11 +6860,11 @@ msgstr "Willkommen bei Formidable Forms!"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:20
 msgid "This quick setup wizard will guide you through the basic settings and get you started in 2 minutes."
-msgstr "Dieser Schnelleinrichtungsassistent führt dich durch die Grundeinstellungen und bringt dich in 2 Minuten zum Laufen."
+msgstr "Dieser Schnelleinrichtungsassistent führt dich durch die grundlegenden Einstellungen und ermöglicht es dir, in 2 Minuten loszulegen."
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:33
 msgid "Proceed without Account"
-msgstr "Ohne Konto vorgehen"
+msgstr "Ohne Konto fortfahren"
 
 #. translators: %1$s: Heart icon
 #: classes/views/shared/admin-footer-links.php:18
