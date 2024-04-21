@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-19 22:49\n"
+"PO-Revision-Date: 2024-04-21 17:13\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -6738,32 +6738,32 @@ msgstr "フォームのエントリーデータと収益データを含む月次
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:20
 msgid "Install Formidable Add-ons"
-msgstr "Formidableアドオンをインストール"
+msgstr "Formidable アドオンをインストール"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:24
 msgid "A few of our add-ons come with every installation. But more are available on the add-ons page!"
-msgstr "私たちのいくつかのアドオンはすべてのインストールで提供されます。しかし、アドオンページでさらに提供されています！"
+msgstr "アドオンのいくつかは各インストール時に提供されますが、その他多くのアドオンをアドオンページでご利用いただけます !"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:26
 msgid "Here's just a few of our most popular add-ons! You'll find even more on the add-ons page."
-msgstr "これは私たちの最も人気のあるアドオンの一部です！アドオンページでさらに見つけることができます。"
+msgstr "これは、当社で最も人気があるアドオンのごく一部です ! アドオンページでその他多くのアドオンをご覧ください。"
 
 #. translators: %s: The count of add-ons
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:52
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:49
 msgid "Get access to %s more add-ons"
-msgstr "%s個のアドオンを使用可能にします"
+msgstr "さらに%s個のアドオンにアクセスしましょう"
 
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:62
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:58
 msgid "%1$sUpgrade to PRO%2$s and get more out of Formidable Forms"
-msgstr "%1$sPROにアップグレード%2$sし、Formidable Formsをもっと活用しましょう"
+msgstr "%1$sPRO にアップグレード%2$sして、Formidable Forms をさらに活用しましょう"
 
 #. translators: %1$s: Open anchor tag, %2$s: Close anchor tag
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:69
 msgid "Check them all out on the %1$sadd-ons%2$s page."
-msgstr "すべてを%1$sアドオン%2$sページでチェックしてください。"
+msgstr "%1$sアドオン%2$sページですべてのアドオンをご確認ください。"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:82
 msgid "Install & Finish Setup"
@@ -6771,15 +6771,15 @@ msgstr "インストールして設定を終了"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:20
 msgid "Install Formidable Pro"
-msgstr "Formidable Proをインストール"
+msgstr "Formidable Pro をインストール"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:21
 msgid "It’s time to install Formidable Forms Pro, to get access to the premium features."
-msgstr "プレミアム機能にアクセスするために、Formidable Forms Proをインストールする時です。"
+msgstr "今すぐ Formidable Forms Pro をインストールして、プレミアム機能にアクセスしましょう。"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:24
 msgid "1. Download PRO"
-msgstr "1. PROをダウンロード"
+msgstr "1. PRO をダウンロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:26
 msgid "Download"
@@ -6787,7 +6787,7 @@ msgstr "ダウンロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:32
 msgid "2. Install on your website"
-msgstr "2. あなたのウェブサイトにインストール"
+msgstr "2. サイトにインストール"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:34
 msgid "Upload Plugin"
@@ -6795,7 +6795,7 @@ msgstr "プラグインをアップロード"
 
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:41
 msgid "Formidable Pro is currently inactive!"
-msgstr "Formidable Proは現在非アクティブです！"
+msgstr "現在、Formidable Pro は無効です !"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:20
 msgid "License Management"
@@ -6811,7 +6811,7 @@ msgstr "ライセンスキー"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:26
 msgid "Enter your license key"
-msgstr "ライセンスキーの入力"
+msgstr "ライセンスキーを入力"
 
 #: classes/views/onboarding-wizard/steps/license-management-step.php:34
 msgid "Activate & Continue"
@@ -6819,11 +6819,11 @@ msgstr "有効化して続行"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:20
 msgid "You're All Set!"
-msgstr "すべて準備ができました！"
+msgstr "準備が整いました !"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:22
 msgid "We're thrilled to have you and hope you love your experience with Formidable Forms"
-msgstr "私たちはあなたを歓迎し、あなたがFormidable Formsとの経験を愛することを願っています"
+msgstr "Formidable Forms の体験をご活用いただければ幸いです。"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:31
 msgid "Go to Dashboard"
@@ -6835,19 +6835,19 @@ msgstr "フォームを作成"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:14
 msgid "Formidable Onboarding Wizard Logo"
-msgstr "Formidableオンボーディングウィザードロゴ"
+msgstr "Formidable オンボーディングウィザードのロゴ"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:18
 msgid "Welcome to Formidable Forms!"
-msgstr "Formidable Formsへようこそ！"
+msgstr "Formidable Forms へようこそ !"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:20
 msgid "This quick setup wizard will guide you through the basic settings and get you started in 2 minutes."
-msgstr "このクイックセットアップウィザードは、基本設定を案内し、あなたを2分で始めることができます。"
+msgstr "このクイックセットアップウィザードでは、基本設定の説明を見て、2分で始めることができます。"
 
 #: classes/views/onboarding-wizard/steps/welcome-step.php:33
 msgid "Proceed without Account"
-msgstr "アカウントなしで進行"
+msgstr "アカウントなしで続行"
 
 #. translators: %1$s: Heart icon
 #: classes/views/shared/admin-footer-links.php:18
