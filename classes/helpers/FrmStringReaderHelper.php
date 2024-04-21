@@ -53,13 +53,13 @@ class FrmStringReaderHelper {
 		$value = '';
 
 		if ( $discard_char ) {
-			while ( $this->pos <= $this->max && ( $one = $this->string[$this->pos++] ) !== $char ) {
+			while ( $this->pos <= $this->max && ! is_null( $one = $this->string[$this->pos++] ) && $one !== $char ) {
 				$value .= $one;
 			}
 			return $value;
 		}
 
-		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) ) {
+		while ( $this->pos <= $this->max && ! is_null( $one = $this->string[ $this->pos++ ] ) ) {
 			$value .= $one;
 			if ( $one === $char ) {
 				break;
