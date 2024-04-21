@@ -53,18 +53,19 @@ class FrmStringReaderHelper {
 		$value = '';
 
 		if ( $discard_char ) {
-			while ( ! is_null( $one = $this->read_one() ) && $one !== $char ) {
+			while ( $this->pos <= $this->max && ( $one = $this->string[$this->pos++] ) !== $char ) {
 				$value .= $one;
 			}
 			return $value;
 		}
 
-		while ( ! is_null( $one = $this->read_one() ) ) {
+		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) ) {
 			$value .= $one;
 			if ( $one === $char ) {
 				break;
 			}
 		}
+
 		return $value;
 	}
 
@@ -79,10 +80,11 @@ class FrmStringReaderHelper {
 	public function read( $count ) {
 		$value = '';
 
-		while ( $count > 0 && ! is_null( $one = $this->read_one() ) ) {
+		while ($count > 0 && $this->pos <= $this->max && ($one = $this->string[$this->pos]) !== null) {
 			$value .= $one;
+			$this->pos += 1;
 			--$count;
-		}
+		}		
 
 		/**
 		 * Remove a single set of double-quotes from around a string.
@@ -111,20 +113,5 @@ class FrmStringReaderHelper {
 	 */
 	public function increment_position( $count = 0 ) {
 		$this->pos += $count;
-	}
-
-	/**
-	 * Read the next character from the supplied string.
-	 * Return null when we have run out of characters.
-	 *
-	 * @return string|null
-	 */
-	private function read_one() {
-		if ( $this->pos <= $this->max ) {
-			$value      = $this->string[ $this->pos ];
-			$this->pos += 1;
-			return $value;
-		}
-		return null;
 	}
 }
