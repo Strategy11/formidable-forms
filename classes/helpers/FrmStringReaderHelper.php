@@ -52,24 +52,19 @@ class FrmStringReaderHelper {
 	public function read_until( $char, $discard_char = true ) {
 		$value = '';
 
-		if ( ! $discard_char ) {
-			while ( null !== ( $one = $this->read_one() ) ) {
+		if ( $discard_char ) {
+			while ( ! is_null( $one = $this->read_one() ) && $one !== $char ) {
 				$value .= $one;
-				if ( $one === $char ) {
-					break;
-				}
 			}
 			return $value;
 		}
 
-		while ( null !== ( $one = $this->read_one() ) ) {
-			if ( $one !== $char ) {
-				$value .= $one;
-				continue;
+		while ( ! is_null( $one = $this->read_one() ) ) {
+			$value .= $one;
+			if ( $one === $char ) {
+				break;
 			}
-			break;
 		}
-
 		return $value;
 	}
 
