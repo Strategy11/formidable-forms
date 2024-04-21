@@ -46,26 +46,13 @@ class FrmStringReaderHelper {
 	 * By default, discard that final matching character and return the rest.
 	 *
 	 * @param string $char
-	 * @param bool   $discard_char
 	 * @return string
 	 */
-	public function read_until( $char, $discard_char = true ) {
+	public function read_until( $char ) {
 		$value = '';
-
-		if ( $discard_char ) {
-			while ( $this->pos <= $this->max && ! is_null( $one = $this->string[$this->pos++] ) && $one !== $char ) {
-				$value .= $one;
-			}
-			return $value;
-		}
-
-		while ( $this->pos <= $this->max && ! is_null( $one = $this->string[ $this->pos++ ] ) ) {
+		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) !== $char ) {
 			$value .= $one;
-			if ( $one === $char ) {
-				break;
-			}
 		}
-
 		return $value;
 	}
 
@@ -80,7 +67,7 @@ class FrmStringReaderHelper {
 	public function read( $count ) {
 		$value = '';
 
-		while ($count > 0 && $this->pos <= $this->max && ($one = $this->string[$this->pos]) !== null) {
+		while ( $count > 0 && $this->pos <= $this->max && ( ( $one = $this->string[ $this->pos ] ) || '0' === $one ) ) {
 			$value .= $one;
 			$this->pos += 1;
 			--$count;
