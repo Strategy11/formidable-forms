@@ -167,7 +167,7 @@ class FrmFormAction {
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
-		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
+		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
 		}
 
@@ -490,7 +490,7 @@ class FrmFormAction {
 	 * @since 3.04
 	 *
 	 * @param array          $new_instance
-	 * @param stdClass|array $old_instance
+	 * @param array|stdClass $old_instance
 	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
@@ -689,7 +689,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param WP_Post|array $action
+	 * @param array|WP_Post $action
 	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
@@ -838,7 +838,7 @@ class FrmFormAction {
 		$stop         = false;
 		$met          = array();
 
-		if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
+		if ( empty( $notification['conditions'] ) ) {
 			return $stop;
 		}
 

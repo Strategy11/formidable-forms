@@ -143,7 +143,7 @@ class FrmFieldsController {
 	/**
 	 * @since 3.0
 	 *
-	 * @param int|array|object $field_object
+	 * @param array|int|object $field_object
 	 * @param array            $values
 	 * @param int              $form_id
 	 */
@@ -481,7 +481,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_input_classes( $field, array &$class ) {
-		if ( isset( $field['input_class'] ) && ! empty( $field['input_class'] ) ) {
+		if ( ! empty( $field['input_class'] ) ) {
 			$class[] = $field['input_class'];
 		}
 
@@ -770,7 +770,7 @@ class FrmFieldsController {
 	 * @since 5.0.03
 	 *
 	 * @param array $field
-	 * @return stdClass|false false if there is no form object found with JS validation active.
+	 * @return false|stdClass false if there is no form object found with JS validation active.
 	 */
 	private static function get_form_for_js_validation( $field ) {
 		global $frm_vars;
@@ -789,7 +789,7 @@ class FrmFieldsController {
 	 * @param stdClass $form
 	 * @param array    $field
 	 * @param array    $errors
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function pull_custom_error_body_from_custom_html( $form, $field, $errors = array() ) {
 		if ( empty( $field['custom_html'] ) ) {

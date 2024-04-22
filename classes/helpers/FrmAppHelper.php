@@ -573,7 +573,7 @@ class FrmAppHelper {
 	 * @param string $sanitize
 	 * @param string $default
 	 *
-	 * @return string|array
+	 * @return array|string
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request(
@@ -593,7 +593,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $args
 	 *
-	 * @return string|array
+	 * @return array|string
 	 */
 	public static function get_simple_request( $args ) {
 		$defaults = array(
@@ -1057,7 +1057,7 @@ class FrmAppHelper {
 	 * Check the WP query for a parameter
 	 *
 	 * @since 2.0
-	 * @return string|array
+	 * @return array|string
 	 */
 	public static function get_query_var( $value, $param ) {
 		if ( $value != '' ) {
@@ -1266,7 +1266,7 @@ class FrmAppHelper {
 	 */
 	public static function get_admin_header( $atts ) {
 		$has_nav = ! empty( $atts['form'] ) && empty( $atts['is_template'] );
-		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
+		if ( empty( $atts['close'] ) ) {
 			$atts['close'] = admin_url( 'admin.php?page=formidable' );
 		}
 		if ( ! isset( $atts['import_link'] ) ) {
@@ -1715,7 +1715,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string       $field_name
-	 * @param string|array $capability
+	 * @param array|string $capability
 	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
@@ -1742,7 +1742,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string|array $capability
+	 * @param array|string $capability
 	 */
 	public static function roles_options( $capability ) {
 		global $frm_vars;
@@ -1756,7 +1756,7 @@ class FrmAppHelper {
 		foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_attr( $name ); ?> </option>
+			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_html( $name ); ?> </option>
 			<?php
 			unset( $role, $details );
 		}
@@ -1852,7 +1852,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string|array $needed_role
+	 * @param array|string $needed_role
 	 * @return bool
 	 */
 	public static function user_has_permission( $needed_role ) {
@@ -2154,7 +2154,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $filename
 	 * @param array  $atts
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_file_contents( $filename, $atts = array() ) {
 		if ( ! is_file( $filename ) ) {
@@ -2306,7 +2306,7 @@ class FrmAppHelper {
 	 * @param array        $post_values
 	 * @param array        $args
 	 *
-	 * @return bool|array
+	 * @return array|bool
 	 */
 	public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array(), $args = array() ) {
 		if ( ! $record ) {
@@ -2434,7 +2434,7 @@ class FrmAppHelper {
 	 * @param array  $values
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
-		if ( $table == 'entries' ) {
+		if ( $table === 'entries' ) {
 			$form = $record->form_id;
 			FrmForm::maybe_get_form( $form );
 		} else {
@@ -2508,13 +2508,20 @@ class FrmAppHelper {
 		return $custom_style;
 	}
 
+	/**
+	 * @param mixed      $original_string
+	 * @param int|string $length
+	 * @param int        $minword
+	 * @param string     $continue
+	 * @return string
+	 */
 	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
-		if ( ! is_string( $original_string ) ) {
+		if ( ! is_string( $original_string ) && ! is_int( $original_string ) ) {
 			return '';
 		}
 
 		$length       = (int) $length;
-		$str          = wp_strip_all_tags( $original_string );
+		$str          = wp_strip_all_tags( (string) $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length == 0 ) {
@@ -3879,7 +3886,7 @@ class FrmAppHelper {
 	 * @since 5.0.17
 	 *
 	 * @param string $plugin
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_plan_required( $plugin ) {
 		$link = FrmAddonsController::install_link( $plugin );
@@ -3973,7 +3980,7 @@ class FrmAppHelper {
 	 * @since 5.2.07
 	 *
 	 * @param mixed $num Number.
-	 * @return int|false Returns `false` if the passed parameter is not number.
+	 * @return false|int Returns `false` if the passed parameter is not number.
 	 */
 	public static function count_decimals( $num ) {
 		if ( ! is_numeric( $num ) ) {

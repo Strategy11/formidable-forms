@@ -10,7 +10,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return int|bool $entry_id
+	 * @return bool|int $entry_id
 	 */
 	public static function create( $values ) {
 		$entry_id = self::create_entry( $values, 'standard' );
@@ -24,7 +24,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return int|bool $entry_id
+	 * @return bool|int $entry_id
 	 */
 	private static function create_entry( $values, $type ) {
 		$new_values = self::before_insert_entry_in_database( $values, $type );
@@ -254,7 +254,7 @@ class FrmEntry {
 	/**
 	 * Delete an entry.
 	 *
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @return bool True on success, false if nothing was deleted.
 	 */
 	public static function destroy( $id ) {
@@ -580,7 +580,7 @@ class FrmEntry {
 
 	// Pagination Methods
 	/**
-	 * @param int|array|string $where If int, use the form id.
+	 * @param array|int|string $where If int, use the form id.
 	 */
 	public static function getRecordCount( $where = '' ) {
 		global $wpdb;
@@ -603,7 +603,7 @@ class FrmEntry {
 	}
 
 	/**
-	 * @param string|int $p_size
+	 * @param int|string $p_size
 	 * @return int
 	 */
 	public static function getPageCount( $p_size, $where = '' ) {
@@ -810,7 +810,7 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_entry_description( $values ) {
-		if ( isset( $values['description'] ) && ! empty( $values['description'] ) ) {
+		if ( ! empty( $values['description'] ) ) {
 			$description = FrmAppHelper::maybe_json_encode( $values['description'] );
 		} else {
 			$description = json_encode(
@@ -851,7 +851,7 @@ class FrmEntry {
 	 *
 	 * @param array $new_values
 	 *
-	 * @return int|bool $entry_id
+	 * @return bool|int $entry_id
 	 */
 	private static function insert_entry_into_database( $new_values ) {
 		global $wpdb;
@@ -1059,7 +1059,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return int|bool $entry_id
+	 * @return bool|int $entry_id
 	 */
 	public static function create_entry_from_xml( $values ) {
 		$entry_id = self::create_entry( $values, 'xml' );
@@ -1076,7 +1076,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return int|bool $updated
+	 * @return bool|int $updated
 	 */
 	public static function update_entry_from_xml( $id, $values ) {
 		$updated = self::update_entry( $id, $values, 'xml' );

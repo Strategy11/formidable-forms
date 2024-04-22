@@ -115,7 +115,7 @@ class FrmField {
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
+				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_url( $images_url ) . 'scale_field.png" alt="Scale Field" />',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -137,12 +137,12 @@ class FrmField {
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
+				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
-				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_attr( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
+				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -210,7 +210,7 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
-					<img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
+					<img src="' . esc_url( $images_url ) . 'appointments.png" alt="Scheduling" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
@@ -293,7 +293,7 @@ class FrmField {
 	 * @since 6.8.3
 	 *
 	 * @param string $plugin
-	 * @return string|false String version. False if the plugin is not installed.
+	 * @return false|string String version. False if the plugin is not installed.
 	 */
 	private static function get_installed_version( $plugin ) {
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -360,7 +360,7 @@ class FrmField {
 	 *
 	 * @param array $values
 	 * @param bool  $return
-	 * @return int|false
+	 * @return false|int
 	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
@@ -659,7 +659,7 @@ class FrmField {
 	}
 
 	/**
-	 * @param string|int $id The field id or key.
+	 * @param int|string $id The field id or key.
 	 * @param bool       $filter When true, run the frm_field filter.
 	 */
 	public static function getOne( $id, $filter = false ) {
@@ -1204,7 +1204,7 @@ class FrmField {
 	/**
 	 * @since 2.0.18
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
 	 * @param string       $option
 	 * @return mixed
 	 */
@@ -1269,7 +1269,7 @@ class FrmField {
 	/**
 	 * @param string $id
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );

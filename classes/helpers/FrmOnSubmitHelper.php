@@ -411,7 +411,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.1.1
 	 *
-	 * @param string|array $event Uses 'create' or 'update'.
+	 * @param array|string $event Uses 'create' or 'update'.
 	 *
 	 * @return object
 	 */
@@ -432,7 +432,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.3.1
 	 *
-	 * @param string|array $event Uses 'create' or 'update'.
+	 * @param array|string $event Uses 'create' or 'update'.
 	 * @return object
 	 */
 	public static function get_fallback_action_after_open_in_new_tab( $event ) {

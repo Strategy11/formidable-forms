@@ -75,7 +75,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param string|object|false $selected - The label for the placeholder, or the form object.
+	 * @param false|object|string $selected - The label for the placeholder, or the form object.
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -928,7 +928,7 @@ BEFORE_HTML;
 	 * Check if a field's label position is set to "top"
 	 *
 	 * @param array              $field
-	 * @param object|string|bool $form
+	 * @param bool|object|string $form
 	 *
 	 * @return bool
 	 */
@@ -939,7 +939,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|array|string|bool $form
+	 * @param array|bool|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -1015,7 +1015,7 @@ BEFORE_HTML;
 			echo '<div id="' . esc_attr( $id ) . '_error">';
 
 			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
-				echo '<img src="' . esc_attr( $args['img'] ) . '" alt="" />';
+				echo '<img src="' . esc_url( $args['img'] ) . '" alt="" />';
 			} else {
 				$args['show_img'] = true;
 			}
@@ -1495,7 +1495,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $item
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_plan_required( &$item ) {
 		if ( ! isset( $item['categories'] ) || ! is_array( $item['categories'] ) || ! empty( $item['url'] ) ) {

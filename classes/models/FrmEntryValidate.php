@@ -7,7 +7,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array         $values
-	 * @param string[]|bool $exclude
+	 * @param bool|string[] $exclude
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -174,7 +174,7 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param string|array $value Field value.
+	 * @param array|string $value Field value.
 	 * @param object       $field Field object.
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
@@ -303,7 +303,7 @@ class FrmEntryValidate {
 	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
-		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}

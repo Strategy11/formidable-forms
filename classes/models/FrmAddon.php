@@ -408,12 +408,12 @@ class FrmAddon {
 	 */
 	private function prepare_update_details( &$transient ) {
 		$version_info = $transient;
-		$has_beta_url = isset( $version_info->beta ) && ! empty( $version_info->beta );
+		$has_beta_url = ! empty( $version_info->beta );
 		if ( $this->get_beta && ! $has_beta_url ) {
 			$version_info = (object) $this->get_api_info( $this->license );
 		}
 
-		if ( isset( $version_info->new_version ) && ! empty( $version_info->new_version ) ) {
+		if ( ! empty( $version_info->new_version ) ) {
 			$this->clear_old_plugin_version( $version_info );
 			if ( $version_info === false ) {
 				// Was cleared with timeout.
@@ -472,10 +472,10 @@ class FrmAddon {
 	 * @since 3.04.03
 	 */
 	private function maybe_use_beta_url( &$version_info ) {
-		if ( $this->get_beta && isset( $version_info->beta ) && ! empty( $version_info->beta ) ) {
+		if ( $this->get_beta && ! empty( $version_info->beta ) ) {
 			$version_info->new_version = $version_info->beta['version'];
 			$version_info->package     = $version_info->beta['package'];
-			if ( isset( $version_info->plugin ) && ! empty( $version_info->plugin ) ) {
+			if ( ! empty( $version_info->plugin ) ) {
 				$version_info->plugin = $version_info->beta['plugin'];
 			}
 		}
@@ -486,7 +486,7 @@ class FrmAddon {
 			return false;
 		}
 
-		$response = ! isset( $transient->response ) || empty( $transient->response );
+		$response = empty( $transient->response );
 		if ( $response ) {
 			return true;
 		}

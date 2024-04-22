@@ -319,7 +319,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
 	 * @param string       $error
 	 *
 	 * @return string
@@ -455,7 +455,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param array        $atts
-	 * @param string|array $value
+	 * @param array|string $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
@@ -997,7 +997,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $atts
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	private static function get_field_shortcode_value( $atts ) {
 		$field = FrmField::getOne( $atts['tag'] );
@@ -1061,7 +1061,7 @@ class FrmFieldsHelper {
 	 * Process the [get] shortcode
 	 *
 	 * @since 2.0
-	 * @return string|array
+	 * @return array|string
 	 */
 	public static function process_get_shortcode( $atts, $return_array = false ) {
 		if ( ! isset( $atts['param'] ) ) {
@@ -1450,7 +1450,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param string      $type    Field type.
 	 * @param string      $html_id
-	 * @param string|bool $opt_key
+	 * @param bool|string $opt_key
 	 *
 	 * @return string $other_id
 	 */
@@ -2244,7 +2244,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 6.8
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param array      $field_ids If this is not empty, the results will be filtered by field id.
 	 * @return array
 	 */
@@ -2283,7 +2283,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 6.8
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	public static function get_all_draft_field_ids( $form_id ) {
@@ -2355,7 +2355,7 @@ class FrmFieldsHelper {
 	 * @param string       $html
 	 * @param array        $field
 	 * @param array        $errors
-	 * @param object|false $form
+	 * @param false|object $form
 	 * @param array        $args
 	 *
 	 * @return string

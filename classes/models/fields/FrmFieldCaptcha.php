@@ -394,9 +394,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @return string
-	 *
 	 * @param FrmSettings $frm_settings
+	 * @return string
 	 */
 	protected function captcha_size( $frm_settings ) {
 		_deprecated_function( __METHOD__, '6.8.4' );

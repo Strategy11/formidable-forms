@@ -80,7 +80,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @return string|false
+	 * @return false|string
 	 */
 	protected function get_inner_content() {
 		$args = $this->get_content_args();
@@ -197,7 +197,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Gets formatted price.
 	 *
 	 * @param float        $amount Amount.
-	 * @param string|array $currency Currency string value or array.
+	 * @param array|string $currency Currency string value or array.
 	 * @return string
 	 */
 	protected function get_formatted_price( $amount, $currency ) {

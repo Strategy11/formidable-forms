@@ -367,7 +367,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function get_key_or_id( $field_value ) {
 		return $this->array_key == 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
@@ -875,7 +875,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param mixed $display_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
@@ -889,9 +889,9 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param array|string|int $value
+	 * @param array|int|string $value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {

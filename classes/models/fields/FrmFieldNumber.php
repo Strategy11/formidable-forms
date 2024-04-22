@@ -130,7 +130,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param numeric $value The value.
 	 * @param numeric $step  The step.
-	 * @return int|array     Return `0` if valid. Otherwise, return an array contains two nearest values.
+	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
 	private function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.

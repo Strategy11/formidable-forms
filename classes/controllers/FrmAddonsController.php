@@ -498,12 +498,12 @@ class FrmAddonsController {
 					'url'   => $addon['plugin'],
 					'class' => 'frm-activate-addon',
 				);
-			} elseif ( isset( $addon['url'] ) && ! empty( $addon['url'] ) ) {
+			} elseif ( ! empty( $addon['url'] ) ) {
 				$link = array(
 					'url'   => $addon['url'],
 					'class' => 'frm-install-addon',
 				);
-			} elseif ( isset( $addon['categories'] ) && ! empty( $addon['categories'] ) ) {
+			} elseif ( ! empty( $addon['categories'] ) ) {
 				$link = array(
 					'categories' => $addon['categories'],
 				);
@@ -649,7 +649,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @return string|false either 'visual-views' or 'views', false if one is not found.
+	 * @return false|string either 'visual-views' or 'views', false if one is not found.
 	 */
 	private static function get_active_views_version() {
 		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
@@ -922,7 +922,7 @@ class FrmAddonsController {
 	 * @param string $redirect
 	 * @param bool   $network_wide
 	 * @param bool   $silent
-	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 * @return WP_Error|null Null on success, WP_Error on invalid file.
 	 */
 	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
 		if ( ! function_exists( 'activate_plugin' ) ) {
@@ -989,7 +989,7 @@ class FrmAddonsController {
 	/**
 	 * @since 4.08
 	 *
-	 * @return void|array
+	 * @return array|void
 	 */
 	protected static function download_and_activate() {
 		if ( is_admin() ) {
@@ -1182,7 +1182,7 @@ class FrmAddonsController {
 	 *
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
-	 * @return void|array
+	 * @return array|void
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
 		if ( ! $installed || ! $action ) {
@@ -1374,7 +1374,7 @@ class FrmAddonsController {
 	/**
 	 * @since 6.8.3
 	 *
-	 * @return true|array
+	 * @return array|true
 	 */
 	private static function maybe_download_and_activate() {
 		if ( ! self::$plugin ) {
@@ -1433,7 +1433,7 @@ class FrmAddonsController {
 	 *     Button attributes.
 	 *
 	 *     @type array $addon
-	 *     @type string|false $license_type
+	 *     @type false|string $license_type
 	 *     @type string $plan_required
 	 *     @type string $upgrade_link
 	 * }
@@ -1452,7 +1452,7 @@ class FrmAddonsController {
 	 * @since 4.09.01
 	 *
 	 * @param array|false  $addon
-	 * @param string|array $upgrade_link
+	 * @param array|string $upgrade_link
 	 *
 	 * @return void
 	 */

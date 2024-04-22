@@ -89,7 +89,7 @@ class FrmSettings {
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var false|string|null
 	 */
 	public $custom_css;
 
@@ -297,7 +297,7 @@ class FrmSettings {
 			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
+		if ( empty( $this->re_msg ) ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 

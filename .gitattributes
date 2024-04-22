@@ -12,6 +12,8 @@
 .jshintignore export-ignore
 .wordpress-org export-ignore
 .phpunit.result.cache export-ignore
+.php-cs-fixer.php
+.php-cs-fixer.cache
 /bin/ export-ignore
 changelog.txt export-ignore
 codesniffer.xml export-ignore

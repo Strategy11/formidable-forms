@@ -11,7 +11,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 4.07
-	 * @var int|bool
+	 * @var bool|int
 	 */
 	public $total_items = 0;
 

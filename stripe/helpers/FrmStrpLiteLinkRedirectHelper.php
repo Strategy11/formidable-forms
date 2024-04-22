@@ -37,7 +37,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Set the entry ID to pull referer data from.
 	 * This is separate from the constructor as the entry ID isn't known for some error cases.
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	public function set_entry_id( $entry_id ) {
@@ -130,8 +130,8 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Try to get the referer URL from the entry meta.
 	 * If it is found, it will also be deleted as it is only required once.
 	 *
-	 * @param string|int $entry_id
-	 * @return string|false
+	 * @param int|string $entry_id
+	 * @return false|string
 	 */
 	private function get_referer_url( $entry_id ) {
 		$row = FrmDb::get_row(

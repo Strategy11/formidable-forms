@@ -114,9 +114,9 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param array      $values
-	 * @return int|false
+	 * @return false|int
 	 */
 	public function update( $id, $values ) {
 		global $wpdb;
@@ -129,8 +129,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return int|bool
+	 * @param int|string $id
+	 * @return bool|int
 	 */
 	public function &destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
@@ -156,8 +156,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return array|object|null|void
+	 * @param int|string $id
+	 * @return array|object|void|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
@@ -172,7 +172,7 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param string     $field
 	 * @return object|null
 	 */

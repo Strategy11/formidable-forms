@@ -106,4 +106,61 @@
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 
+	<!-- Set rules for Cognitive Complexity -->
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+		<properties>
+			<property name="warningThreshold" value="30" />
+			<property name="errorThreshold" value="10" />
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPressVIPMinimum">
+		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.chmod_chmod" />
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.NotAbsolutePath" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules" />
+		<exclude name="WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.term_exists_term_exists" />
+		<exclude name="WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
+		<exclude name="WordPressVIPMinimum.UserExperience.AdminBarRemoval.HidingDetected" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite" />
+	</rule>
+	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log_error_log">
+		<exclude-pattern>FrmTransLiteLog.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink">
+		<exclude-pattern>test_FrmCSVExportHelper.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Security.ExitAfterRedirect.NoExit">
+		<exclude-pattern>FrmEntriesController.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.custom_role_add_role">
+		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
+	</rule>
+
+	<!-- Treat these warnings as errors -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 </ruleset>

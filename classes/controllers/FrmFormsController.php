@@ -55,7 +55,7 @@ class FrmFormsController {
 	public static function logic_tip() {
 		$images_url    = FrmAppHelper::plugin_url() . '/images/';
 		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
-		$data_message .= ' <img src="' . esc_attr( $images_url ) . '/survey-logic.png" srcset="' . esc_attr( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
+		$data_message .= ' <img src="' . esc_url( $images_url ) . '/survey-logic.png" srcset="' . esc_url( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
 		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link frm-collapsed frm-flex-justify" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
 		esc_html_e( 'Conditional Logic', 'formidable' );
 		FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
@@ -97,7 +97,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.02.11
 	 *
-	 * @param object|int $form
+	 * @param int|object $form
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
@@ -114,7 +114,7 @@ class FrmFormsController {
 	 *
 	 * @since 6.0.0
 	 *
-	 * @param object|int $form Form object or ID.
+	 * @param int|object $form Form object or ID.
 	 */
 	private static function create_default_on_submit_action( $form ) {
 		FrmForm::maybe_get_form( $form );
@@ -1424,7 +1424,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param string     $class
 	 * @return void
 	 */
@@ -1625,8 +1625,8 @@ class FrmFormsController {
 
 	/**
 	 * @param string                    $content
-	 * @param stdClass|string|int       $form
-	 * @param stdClass|string|int|false $entry
+	 * @param int|stdClass|string       $form
+	 * @param false|int|stdClass|string $entry
 	 * @return string
 	 */
 	public static function filter_content( $content, $form, $entry = false ) {
@@ -1652,9 +1652,9 @@ class FrmFormsController {
 	 *
 	 * @since 5.5
 	 *
-	 * @param string|array        $string
-	 * @param stdClass|string|int $form
-	 * @return string|array
+	 * @param array|string        $string
+	 * @param int|stdClass|string $form
+	 * @return array|string
 	 */
 	public static function replace_form_name_shortcodes( $string, $form ) {
 		if ( ! is_string( $string ) ) {
@@ -1674,7 +1674,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param stdClass|string|int|false $entry
+	 * @param false|int|stdClass|string $entry
 	 * @return void
 	 */
 	private static function get_entry_by_param( &$entry ) {
@@ -1736,7 +1736,7 @@ class FrmFormsController {
 				$message = self::bulk_untrash( $ids );
 		}
 
-		if ( isset( $message ) && ! empty( $message ) ) {
+		if ( ! empty( $message ) ) {
 			$errors['message'] = $message;
 		}
 
@@ -2021,9 +2021,9 @@ class FrmFormsController {
 	/**
 	 * @since 5.2.01
 	 *
-	 * @param string|int|false $id
-	 * @param string|false     $key
-	 * @return stdClass|false
+	 * @param false|int|string $id
+	 * @param false|string     $key
+	 * @return false|stdClass
 	 */
 	private static function maybe_get_form_by_id_or_key( $id, $key ) {
 		if ( ! $id ) {
@@ -2033,10 +2033,10 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param string|int|false $id
-	 * @param string|false     $key
-	 * @param string|int|bool  $title may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
-	 * @param string|int|bool  $description may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param false|int|string $id
+	 * @param false|string     $key
+	 * @param bool|int|string  $title may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param bool|int|string  $description may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
 	 * @param array            $atts
 	 * @return string
 	 */
@@ -2086,8 +2086,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param string|int|false $id
-	 * @return stdClass|false
+	 * @param false|int|string $id
+	 * @return false|stdClass
 	 */
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
@@ -2216,7 +2216,7 @@ class FrmFormsController {
 	 *     @type object $form     Form object.
 	 *     @type int    $entry_id Entry ID.
 	 * }
-	 * @return string|array
+	 * @return array|string
 	 */
 	private static function get_confirmation_method( $atts ) {
 		$action = FrmOnSubmitHelper::current_event( $atts );
@@ -3033,7 +3033,7 @@ class FrmFormsController {
 	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
-		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+		return ! empty( $atts['minimize'] );
 	}
 
 	/**
