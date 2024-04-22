@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldsController {
 
+	/**
+	 * This is stored statically so we can re-use this data for every field.
+	 *
+	 * @var FrmFieldSelectionData|null
+	 */
+	private static $field_selection_data;
+
 	public static function load_field() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -304,10 +311,10 @@ class FrmFieldsController {
 
 		$field_types = FrmFieldsHelper::get_field_types( $field['type'] );
 
-		$pro_field_selection = FrmField::pro_field_selection();
-		$all_field_types     = array_merge( $pro_field_selection, FrmField::field_selection() );
-		$disabled_fields     = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
-		$frm_settings        = FrmAppHelper::get_settings();
+		$field_selection_data = self::maybe_define_field_selection_data();
+		$all_field_types      = $field_selection_data->all_field_types;
+		$disabled_fields      = $field_selection_data->disabled_fields;
+		$frm_settings         = FrmAppHelper::get_settings();
 
 		if ( ! isset( $all_field_types[ $field['type'] ] ) ) {
 			// Add fallback for an add-on field type that has been deactivated.
@@ -334,6 +341,18 @@ class FrmFieldsController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return FrmFieldSelectionData
+	 */
+	private static function maybe_define_field_selection_data() {
+		if ( ! isset( self::$field_selection_data ) ) {
+			self::$field_selection_data = new FrmFieldSelectionData();
+		}
+		return self::$field_selection_data;
 	}
 
 	/**
