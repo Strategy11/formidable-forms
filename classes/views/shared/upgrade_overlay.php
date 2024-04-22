@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php
 					printf(
 						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag. */
-						esc_html__( '%1$s %2$sare not installed%3$s', 'formidable' ),
+						esc_html__( '%1$s %2$sare not available%3$s', 'formidable' ),
 						'<span class="frm_feature_label"></span>',
 						'<span class="frm_are_not_installed">',
 						'</span>'
