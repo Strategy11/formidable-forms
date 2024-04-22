@@ -4204,17 +4204,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.08
-	 * @deprecated 4.09.01
-	 */
-	public static function expiring_message() {
-		_deprecated_function( __METHOD__, '4.09.01', 'FrmProAddonsController::expiring_message' );
-		if ( is_callable( 'FrmProAddonsController::expiring_message' ) ) {
-			FrmProAddonsController::expiring_message();
-		}
-	}
-
-	/**
 	 * @since 2.0
 	 * @deprecated 5.0.13
 	 *
