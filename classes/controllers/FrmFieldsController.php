@@ -12,11 +12,6 @@ class FrmFieldsController {
 	 */
 	private static $field_selection_data;
 
-	/**
-	 * @var array
-	 */
-	private static $field_type_data = array();
-
 	public static function load_field() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
