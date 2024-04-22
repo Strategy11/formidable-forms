@@ -282,8 +282,6 @@ class FrmFieldsController {
 		wp_die();
 	}
 
-	private static $pro_field_selection;
-
 	/**
 	 * @since 4.0
 	 *
@@ -306,11 +304,7 @@ class FrmFieldsController {
 
 		$field_types = FrmFieldsHelper::get_field_types( $field['type'] );
 
-		if ( ! isset( self::$pro_field_selection ) ) {
-			self::$pro_field_selection = FrmField::pro_field_selection();
-		}
-
-		$pro_field_selection = self::$pro_field_selection;
+		$pro_field_selection = FrmField::pro_field_selection();
 		$all_field_types     = array_merge( $pro_field_selection, FrmField::field_selection() );
 		$disabled_fields     = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 		$frm_settings        = FrmAppHelper::get_settings();
