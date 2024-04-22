@@ -68,14 +68,15 @@ class FrmStringReaderHelper {
 		$value = '';
 
 		while ( $count > 0 && $this->pos <= $this->max && ( ( $one = $this->string[ $this->pos ] ) || '0' === $one ) ) {
-			$value .= $one;
+			$value     .= $one;
 			$this->pos += 1;
 			--$count;
-		}		
+		}
 
 		/**
 		 * Remove a single set of double-quotes from around a string.
 		 *
+		 * Examples:
 		 * abc => abc
 		 * "abc" => abc
 		 * ""abc"" => "abc"

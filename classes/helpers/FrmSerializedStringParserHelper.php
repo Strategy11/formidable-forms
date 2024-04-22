@@ -144,5 +144,4 @@ class FrmSerializedStringParserHelper {
 		$string->skip_next_character();
 		return $val;
 	}
-
 }
