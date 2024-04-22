@@ -162,23 +162,23 @@ class FrmFieldsController {
 		$display   = self::display_field_options( array(), $field_obj );
 
 		$ajax_loading    = ! empty( $values['ajax_load'] );
-		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
+		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php';
-		} else {
-			if ( ! isset( $field ) && is_object( $field_object ) ) {
-				$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
-
-				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
-			}
-
-			$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
-			$li_classes .= ' ui-state-default widgets-holder-wrap';
-
-			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+			return;
 		}
+
+		if ( ! isset( $field ) && is_object( $field_object ) ) {
+			$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
+			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
+		}
+
+		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
+		$li_classes .= ' ui-state-default widgets-holder-wrap';
+
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
 	}
 
 	/**
