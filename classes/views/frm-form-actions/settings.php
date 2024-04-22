@@ -87,5 +87,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="clear"></div>
 </div>
 
-<?php FrmFormActionsController::list_actions( $form, $values ); ?>
-<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
+<?php
+FrmFormActionsController::list_actions( $form, $values );
+FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' );

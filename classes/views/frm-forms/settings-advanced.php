@@ -43,10 +43,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 	</p>
 
-<?php if ( ! $values['is_template'] ) { ?>
-	<?php $first_h3 = ''; ?>
+<?php
+if ( ! $values['is_template'] ) {
+	$first_h3 = '';
 
-	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
+	if ( has_action( 'frm_settings_buttons' ) ) {
+		?>
 		<h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 			<?php esc_html_e( 'Form Settings', 'formidable' ); ?>
 		</h3>
@@ -54,9 +56,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'frm_settings_buttons', $values ); ?>
 			<div class="clear"></div>
 		</div>
-		<?php $first_h3 = ''; ?>
-	<?php } ?>
-<?php } ?>
+		<?php
+		$first_h3 = '';
+	}
+}
+?>
 
 <h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 	<?php esc_html_e( 'On Submit', 'formidable' ); ?>
@@ -115,9 +119,9 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 </table>
 
 <!--Permissions Section-->
-<?php do_action( 'frm_add_form_perm_options', $values ); ?>
-
 <?php
+do_action( 'frm_add_form_perm_options', $values );
+
 /*
  * We keep this section to make the frm_add_form_msg_options hook still work after we moved the Success message option
  * to the On Submit action, and moved the Draft message option to the below of its checkbox.
