@@ -339,6 +339,9 @@ class FrmFieldsController {
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $field
+	 * @param array $atts
 	 * @return array
 	 */
 	private static function default_value_types( $field, $atts ) {
@@ -372,11 +375,6 @@ class FrmFieldsController {
 		);
 
 		$types = apply_filters( 'frm_default_value_types', $types, $atts );
-
-		if ( FrmAppHelper::pro_is_installed() && ! FrmAppHelper::meets_min_pro_version( '4.0' ) ) {
-			// Prevent settings from showing in 2 spots.
-			unset( $types['calc'], $types['get_values_field'] );
-		}
 
 		// Set active class.
 		$settings = array_keys( $types );
