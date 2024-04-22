@@ -1160,15 +1160,14 @@ class FrmFieldsHelper {
 
 	/**
 	 * @param string $type
-	 * @return array $field_types
+	 * @return array
 	 */
 	public static function get_field_types( $type ) {
-		$single_input   = self::single_input_fields();
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
-
+		$single_input    = self::single_input_fields();
+		$multiple_input  = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$field_selection = FrmField::all_field_selection();
+		$field_types     = array();
 
-		$field_types = array();
 		if ( in_array( $type, $single_input, true ) ) {
 			self::field_types_for_input( $single_input, $field_selection, $field_types );
 		} elseif ( in_array( $type, $multiple_input, true ) ) {

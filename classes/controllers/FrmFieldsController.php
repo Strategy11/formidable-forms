@@ -12,6 +12,11 @@ class FrmFieldsController {
 	 */
 	private static $field_selection_data;
 
+	/**
+	 * @var array
+	 */
+	private static $field_type_data = array();
+
 	public static function load_field() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -309,12 +314,11 @@ class FrmFieldsController {
 			$field['read_only'] = false;
 		}
 
-		$field_types = FrmFieldsHelper::get_field_types( $field['type'] );
-
 		$field_selection_data = self::maybe_define_field_selection_data();
 		$all_field_types      = $field_selection_data->all_field_types;
 		$disabled_fields      = $field_selection_data->disabled_fields;
 		$frm_settings         = FrmAppHelper::get_settings();
+		$field_types          = FrmFieldTypeOptionData::get_field_types( $field['type'] );
 
 		if ( ! isset( $all_field_types[ $field['type'] ] ) ) {
 			// Add fallback for an add-on field type that has been deactivated.
