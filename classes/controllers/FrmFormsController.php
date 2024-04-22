@@ -1317,11 +1317,6 @@ class FrmFormsController {
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
-		if ( FrmAppHelper::pro_is_installed() && ! FrmAppHelper::meets_min_pro_version( '4.0' ) ) {
-			// Prevent settings from showing in 2 spots.
-			unset( $sections['permissions'], $sections['scheduling'] );
-		}
-
 		foreach ( $sections as $key => $section ) {
 			$defaults = array(
 				'html_class' => '',
