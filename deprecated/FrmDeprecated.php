@@ -396,14 +396,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 3.01
-	 */
-	public static function sanitize_array( &$values ) {
-		_deprecated_function( __FUNCTION__, '3.01', 'FrmAppHelper::sanitize_value' );
-		FrmAppHelper::sanitize_value( 'wp_kses_post', $values );
-	}
-
-	/**
 	 * @deprecated 3.0
 	 *
 	 * @param string $html

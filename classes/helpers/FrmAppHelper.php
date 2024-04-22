@@ -4097,63 +4097,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.08
-	 * @deprecated 4.09.01
-	 */
-	public static function expiring_message() {
-		_deprecated_function( __METHOD__, '4.09.01', 'FrmProAddonsController::expiring_message' );
-		if ( is_callable( 'FrmProAddonsController::expiring_message' ) ) {
-			FrmProAddonsController::expiring_message();
-		}
-	}
-
-	/**
-	 * Use the WP 4.7 wp_doing_ajax function
-	 *
-	 * @since 2.05.07
-	 * @deprecated 4.04.04
-	 */
-	public static function wp_doing_ajax() {
-		_deprecated_function( __METHOD__, '4.04.04', 'wp_doing_ajax' );
-		return wp_doing_ajax();
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function insert_opt_html( $args ) {
-		_deprecated_function( __METHOD__, '4.0', 'FrmFormsHelper::insert_opt_html' );
-		FrmFormsHelper::insert_opt_html( $args );
-	}
-
-	/**
-	 * @deprecated 3.01
-	 * @codeCoverageIgnore
-	 */
-	public static function sanitize_array( &$values ) {
-		FrmDeprecated::sanitize_array( $values );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 5.0.13
-	 *
-	 * @return string The base Google APIS url for the current version of jQuery UI
-	 */
-	public static function jquery_ui_base_url() {
-		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
-		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
-	}
-
-	/**
-	 * @since 4.07
-	 * @deprecated 6.0
-	 */
-	public static function renewal_message() {
-		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
-	}
-
-	/**
 	 * Display a dismissable warning message and save its dismissal state.
 	 *
 	 * @since 6.3
@@ -4247,5 +4190,35 @@ class FrmAppHelper {
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	/**
+	 * Use the WP 4.7 wp_doing_ajax function
+	 *
+	 * @since 2.05.07
+	 * @deprecated 4.04.04
+	 */
+	public static function wp_doing_ajax() {
+		_deprecated_function( __METHOD__, '4.04.04', 'wp_doing_ajax' );
+		return wp_doing_ajax();
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 5.0.13
+	 *
+	 * @return string The base Google APIS url for the current version of jQuery UI
+	 */
+	public static function jquery_ui_base_url() {
+		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
+		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
+	}
+
+	/**
+	 * @since 4.07
+	 * @deprecated 6.0
+	 */
+	public static function renewal_message() {
+		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
 	}
 }
