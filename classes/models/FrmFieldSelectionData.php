@@ -23,8 +23,8 @@ class FrmFieldSelectionData {
 	public $disabled_fields;
 
 	public function __construct() {
-		$pro_field_selection = FrmField::pro_field_selection();
-		$this->all_field_types     = array_merge( $pro_field_selection, FrmField::field_selection() );
-		$this->disabled_fields     = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
+		$pro_field_selection   = FrmField::pro_field_selection();
+		$this->all_field_types = array_merge( $pro_field_selection, FrmField::field_selection() );
+		$this->disabled_fields = FrmAppHelper::pro_is_installed() ? array() : $pro_field_selection;
 	}
 }
