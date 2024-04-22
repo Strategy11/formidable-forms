@@ -349,6 +349,8 @@ class FrmField {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function all_field_selection() {
 		$pro_field_selection = self::pro_field_selection();
