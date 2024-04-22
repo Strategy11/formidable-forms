@@ -1028,10 +1028,17 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param string $type
+	 * @return bool
+	 */
 	public static function is_no_save_field( $type ) {
-		return in_array( $type, self::no_save_fields() );
+		return in_array( $type, self::no_save_fields(), true );
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public static function no_save_fields() {
 		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
 	}
