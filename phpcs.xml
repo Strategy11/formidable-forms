@@ -43,23 +43,23 @@
 	<rule ref="Squiz.Scope.StaticThisUsage" />
 
 	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
-		<exclude-pattern>classes/views/frm-forms/preview/header.php</exclude-pattern>
+		<exclude-pattern>views/frm-forms/preview/header.php</exclude-pattern>
 	</rule>
 
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
-		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
 	</rule>
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd">
-		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.WP.GlobalVariablesOverride">
 		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
-		<exclude-pattern>classes/views/*</exclude-pattern>
-		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmEntriesListHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
+		<exclude-pattern>models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsListHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
@@ -88,20 +88,80 @@
 	<!-- These rules likely won't see any changes for compatibility -->
 	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
 		<!-- the getOne and getAll functions all break this rule -->
-		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntry.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
 		<!-- wpmuBaseTablePrefix breaks this rule -->
-		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmDb.php</exclude-pattern>
 	</rule>
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+
+	<rule ref="SlevomatCodingStandard.Files.LineLength">
+		<properties>
+			<property name="lineLengthLimit" value="180" />
+		</properties>
+		<exclude-pattern>views/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>fields/FrmFieldUserID.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>fields/FrmFieldType.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStrpLiteAppHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsListHelper.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSMTPController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmInboxController.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSettingsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmAddonsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmAppController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmDashboardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmEntriesController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmOnboardingWizardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEmailSummaryHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormMigratorsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormTemplatesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStylesCardHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>models/FrmInbox.php</exclude-pattern>
+		<exclude-pattern>models/FrmMigrate.php</exclude-pattern>
+		<exclude-pattern>models/FrmPluginSearch.php</exclude-pattern>
+		<exclude-pattern>models/FrmRecaptchaSettings.php</exclude-pattern>
+		<exclude-pattern>models/FrmReviews.php</exclude-pattern>
+		<exclude-pattern>models/FrmSettings.php</exclude-pattern>
+		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>models/FrmTurnstileSettings.php</exclude-pattern>
+		<exclude-pattern>widgets/FrmShowForm.php</exclude-pattern>
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmStrpLiteConnectHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmTransLiteAction.php</exclude-pattern>
+	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->
 	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
@@ -111,17 +171,17 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
-		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmXMLController.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
 		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
 	</rule>
 
