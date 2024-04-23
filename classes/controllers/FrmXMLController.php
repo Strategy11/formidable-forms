@@ -189,12 +189,11 @@ class FrmXMLController {
 	 * @since 4.06.02
 	 *
 	 * @param array $form The posted form values.
-	 *
-	 * @return array The array of created pages.
+	 * @return array|null The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
 		if ( empty( $form['pages'] ) ) {
-			return;
+			return null;
 		}
 
 		$form_key  = self::get_selected_in_form( $form, 'form' );

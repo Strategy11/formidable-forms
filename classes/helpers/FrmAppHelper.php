@@ -3385,8 +3385,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$pro_version = FrmProDb::$plug_version;
-		$expired     = FrmAddonsController::is_license_expired();
+		$expired = FrmAddonsController::is_license_expired();
 		?>
 		<div class="frm-banner-alert frm_error_style frm_previous_install">
 			<?php
@@ -3880,17 +3879,6 @@ class FrmAppHelper {
 			'screenshot' => 'landing.png',
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
-	}
-
-	/**
-	 * @since 5.0.17
-	 *
-	 * @param string $plugin
-	 * @return false|string
-	 */
-	private static function get_plan_required( $plugin ) {
-		$link = FrmAddonsController::install_link( $plugin );
-		return FrmFormsHelper::get_plan_required( $link );
 	}
 
 	/**
