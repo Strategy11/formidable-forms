@@ -166,7 +166,7 @@ class FrmEntriesController {
 		}
 
 		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
-		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] == 'post_status';
+		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
 		if ( $has_separate_value && ! $is_post_status ) {
 			$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
 		}
@@ -269,7 +269,7 @@ class FrmEntriesController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_entries_per_page' ) {
+		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
 		}
 

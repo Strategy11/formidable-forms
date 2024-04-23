@@ -63,7 +63,7 @@ class FrmDeprecated {
 	public static function builder_submit_button( $values ) {
 		_deprecated_function( __FUNCTION__, '4.0' );
 		$page_action = FrmAppHelper::get_param( 'frm_action' );
-		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
+		$label = ( $page_action == 'edit' || $page_action === 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
 
 		?>
 		<div class="postbox">

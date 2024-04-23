@@ -224,7 +224,7 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_array_key( $atts ) {
-		if ( isset( $atts['array_key'] ) && $atts['array_key'] == 'id' ) {
+		if ( isset( $atts['array_key'] ) && $atts['array_key'] === 'id' ) {
 			$this->array_key = 'id';
 		}
 	}

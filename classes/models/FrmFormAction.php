@@ -333,7 +333,7 @@ class FrmFormAction {
 	 * @return int $post_id
 	 */
 	public function maybe_create_action( $action, $forms ) {
-		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
+		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
 			$post_id                = $this->save_settings( $action );
@@ -857,16 +857,16 @@ class FrmFormAction {
 
 			$stop = FrmFieldsHelper::value_meets_condition( $observed_value, $condition['hide_field_cond'], $condition['hide_opt'] );
 
-			if ( $notification['conditions']['send_stop'] == 'send' ) {
+			if ( $notification['conditions']['send_stop'] === 'send' ) {
 				$stop = $stop ? false : true;
 			}
 
 			$met[ $stop ] = $stop;
 		}//end foreach
 
-		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
-			$stop = ( $notification['conditions']['send_stop'] == 'send' );
-		} elseif ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset( $met[0] ) ) {
+		if ( $notification['conditions']['any_all'] === 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
+			$stop = ( $notification['conditions']['send_stop'] === 'send' );
+		} elseif ( $notification['conditions']['any_all'] === 'any' && $notification['conditions']['send_stop'] === 'send' && isset( $met[0] ) ) {
 			$stop = false;
 		}
 
@@ -889,7 +889,7 @@ class FrmFormAction {
 			$logic_value = reset( $logic_value );
 		}
 
-		if ( $logic_value == 'current_user' ) {
+		if ( $logic_value === 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
 

@@ -1065,7 +1065,7 @@ class FrmFormsController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_per_page' ) {
+		if ( $option === 'formidable_page_formidable_per_page' ) {
 			$save = (int) $value;
 		}
 
