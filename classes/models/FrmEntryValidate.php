@@ -832,36 +832,4 @@ class FrmEntryValidate {
 
 		return $form_ids;
 	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_url_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_url_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_email_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_number_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_number_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		FrmDeprecated::validate_recaptcha( $errors, $field, $args );
-	}
 }

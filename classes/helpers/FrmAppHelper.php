@@ -2502,7 +2502,7 @@ class FrmAppHelper {
 			$custom_style = absint( $post_values['options']['custom_style'] );
 		} else {
 			$frm_settings = self::get_settings();
-			$custom_style = ( $frm_settings->load_style != 'none' );
+			$custom_style = ( $frm_settings->load_style !== 'none' );
 		}
 
 		return $custom_style;
