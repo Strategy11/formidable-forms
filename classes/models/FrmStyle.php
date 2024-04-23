@@ -301,10 +301,8 @@ class FrmStyle {
 	private function trim_braces( $input ) {
 		$output = $input;
 		// Remove any ( from the start of the string as no CSS values expect at the first character.
-		if ( $output ) {
-			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
-				$output = ltrim( $output, '()' );
-			}
+		if ( $output && in_array( $output[0], array( '(', ')' ), true ) ) {
+			$output = ltrim( $output, '()' );
 		}
 		// Remove extra braces from the end.
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {

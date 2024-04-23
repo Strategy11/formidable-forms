@@ -699,9 +699,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			} else {
-				$m = $m === false ? false : true;
+				$m = $m !== false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -739,7 +739,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = empty( $m ) ? false : true;
+				$m = ! empty( $m );
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
@@ -761,7 +761,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with

@@ -155,7 +155,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<div class="frm-has-modal">
 				<?php if ( count( $default_value_types ) > 1 ) { ?>
 				<span class="frm-default-switcher">
-					<?php foreach ( $default_value_types as $def_name => $link ) { ?>
+					<?php foreach ( $default_value_types as $link ) { ?>
 					<a href="#" title="<?php echo esc_attr( $link['title'] ); ?>" class="<?php echo esc_attr( $link['class'] ); ?>" data-toggleclass="frm_hidden frm-open"
 						<?php foreach ( $link['data'] as $data_key => $data_value ) { ?>
 							data-<?php echo esc_attr( $data_key ); ?>="<?php echo esc_attr( $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' ) ); ?>"
