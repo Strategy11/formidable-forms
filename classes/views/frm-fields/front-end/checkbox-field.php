@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
-if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
+if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {

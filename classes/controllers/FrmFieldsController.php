@@ -502,7 +502,7 @@ class FrmFieldsController {
 			$class[] = $field['input_class'];
 		}
 
-		if ( $field['type'] == 'hidden' || $field['type'] == 'user_id' ) {
+		if ( $field['type'] === 'hidden' || $field['type'] === 'user_id' ) {
 			return;
 		}
 
@@ -903,7 +903,7 @@ class FrmFieldsController {
 		$has_format   = FrmField::is_option_true_in_array( $field, 'format' );
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
-		if ( $field['type'] == 'phone' || ( $has_format && $format_field ) ) {
+		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
 
 			if ( $frm_settings->use_html ) {

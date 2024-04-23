@@ -474,7 +474,7 @@ class FrmFieldsHelper {
 	 */
 	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
-			if ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
 			}
 
@@ -486,7 +486,7 @@ class FrmFieldsHelper {
 			$position = 'top';
 		} elseif ( $position == 'no_label' ) {
 			$position = 'none';
-		} elseif ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+		} elseif ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 			$position = 'top';
 		}
 
@@ -1428,7 +1428,7 @@ class FrmFieldsHelper {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $args['field']['type'] == 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] === 'select' && $args['field']['multiple'] ) {
 			$classes[] = 'frm_other_full';
 		}
 
@@ -1461,7 +1461,7 @@ class FrmFieldsHelper {
 		$other_id = $html_id;
 
 		// If hidden radio field, add an opt key of 0
-		if ( $type == 'radio' && $opt_key === false ) {
+		if ( $type === 'radio' && $opt_key === false ) {
 			$opt_key = 0;
 		}
 

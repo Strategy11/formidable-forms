@@ -49,7 +49,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 		foreach ( $expected as $name => $value ) {
 			$menu_page = menu_page_url( $name, false );
-			if ( $allow == 'allow' ) {
+			if ( $allow === 'allow' ) {
 				$this->assertEquals( $value, $menu_page );
 			} else {
 				$this->assertNotEquals( $value, $menu_page );

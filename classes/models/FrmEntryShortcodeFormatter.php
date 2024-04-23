@@ -159,7 +159,7 @@ class FrmEntryShortcodeFormatter {
 			return '';
 		}
 
-		if ( $this->format == 'array' ) {
+		if ( $this->format === 'array' ) {
 			$content = $this->get_array();
 		} elseif ( $this->is_plain_text_format() ) {
 			$content = $this->get_plain_text();

@@ -221,7 +221,7 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		if ( $field->type === 'phone' || ( $field->type === 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
 
 			$pattern = self::phone_format( $field );
 
@@ -463,7 +463,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] == 'true' );
+		return ( is_array( $response ) && $response[1] === 'true' );
 	}
 
 	/**

@@ -491,7 +491,7 @@ class FrmForm {
 			$fallback_html = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type );
 
 			$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ? $values['field_options'][ 'custom_html_' . $field->id ] : $fallback_html;
-		} elseif ( $field->type == 'hidden' || $field->type == 'user_id' ) {
+		} elseif ( $field->type === 'hidden' || $field->type === 'user_id' ) {
 			$prev_opts = $field->field_options;
 		}
 
@@ -999,7 +999,7 @@ class FrmForm {
 		if ( $form->id == $values['posted_form_id'] ) {
 			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
-				if ( $var == 'action' ) {
+				if ( $var === 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
 				} else {
 					$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
@@ -1152,7 +1152,7 @@ class FrmForm {
 	}
 
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status == 'published' && ! FrmAppHelper::is_admin() );
+		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 
 		return $show;

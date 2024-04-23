@@ -828,7 +828,7 @@ BEFORE_HTML;
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->load_style == 'none' ) {
 			echo ' style="display:none;"';
-		} elseif ( $frm_settings->load_style == 'dynamic' ) {
+		} elseif ( $frm_settings->load_style === 'dynamic' ) {
 			FrmStylesController::enqueue_style();
 		}
 	}
@@ -1009,7 +1009,7 @@ BEFORE_HTML;
 
 		$line_break_first = $args['show_img'];
 		foreach ( $args['errors'] as $error_key => $error ) {
-			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key == 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
 				continue;
 			}
 
@@ -1159,7 +1159,7 @@ BEFORE_HTML;
 			}
 
 			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
-			if ( $length == 'icon' && isset( $link_details[ $length ] ) ) {
+			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
 				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
 			}
