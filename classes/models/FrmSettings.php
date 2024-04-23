@@ -423,7 +423,7 @@ class FrmSettings {
 			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
 
 			// Make sure administrators always have permissions
-			if ( ! in_array( 'administrator', $this->$frm_role ) ) {
+			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {
 				array_push( $this->$frm_role, 'administrator' );
 			}
 

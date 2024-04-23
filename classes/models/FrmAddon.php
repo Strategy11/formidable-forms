@@ -299,7 +299,7 @@ class FrmAddon {
 			$cap_roles = (array) ( isset( $settings->$cap ) ? $settings->$cap : 'administrator' );
 
 			// Make sure administrators always have permissions.
-			if ( ! in_array( 'administrator', $cap_roles ) ) {
+			if ( ! in_array( 'administrator', $cap_roles, true ) ) {
 				array_push( $cap_roles, 'administrator' );
 			}
 
