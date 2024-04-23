@@ -559,7 +559,7 @@ class FrmFormActionsController {
 				 *
 				 * @since x.x
 				 *
-				 * @param array  $skip   Skip default trigger.
+				 * @param bool   $skip   Skip default trigger.
 				 * @param object $action Action object.
 				 * @param object $entry  Entry object.
 				 * @param object $form   Form object.
