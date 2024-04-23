@@ -11,6 +11,23 @@ use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQue
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Php70\Rector\FuncCall\RandomFunctionRector;
 use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
+use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
+use Rector\Php71\Rector\List_\ListToArrayDestructRector;
+use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
+use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php80\Rector\Identical\StrStartsWithRector;
+use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
+use Rector\Php80\Rector\NotIdentical\StrContainsRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php80\Rector\Identical\StrEndsWithRector;
+use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
+use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
+use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Php81\Rector\Array_\FirstClassCallableRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 
 define( 'ABSPATH', '' );
 
@@ -21,7 +38,7 @@ return RectorConfig::configure()
 	])
     // register single rule
     ->withSets([
-        LevelSetList::UP_TO_PHP_70,
+        LevelSetList::UP_TO_PHP_84,
     ])
     ->withSkip([
         // This rule changes array() to [].
@@ -38,5 +55,34 @@ return RectorConfig::configure()
         TernaryToNullCoalescingRector::class,
         // This changes rand() to random_int().
         RandomFunctionRector::class,
+        // This rule uses the second param of dirname().
         MultiDirnameRector::class,
+        // This rule adds public to all constants missing scope.
+        PublicConstantVisibilityRector::class,
+        // This rule changes list( $var1, $var2 ) = to [ $var1, $var2 ] =.
+        ListToArrayDestructRector::class,
+        // This rule enforces array_key_first.
+        ArrayKeyFirstLastRector::class,
+        // This casts cost to strings before they are passed as a string parameter.
+        StringifyStrNeedlesRector::class,
+        // This converts closures to arrow functions.
+        ClosureToArrowFunctionRector::class,
+        // This changes strpos to str_starts_with.
+        StrStartsWithRector::class,
+        // This adds mixed type to params
+        MixedTypeRector::class,
+        // This changes strpos to str_contains.
+        StrContainsRector::class,
+        // This implmenets PHP 8.0 constructor promotion.
+        ClassPropertyAssignToConstructorPromotionRector::class,
+        // This changes strpos to str_ends_with.
+        StrEndsWithRector::class,
+        // This changes switch statements to match.
+        ChangeSwitchToMatchRector::class,
+        RemoveUnusedVariableInCatchRector::class,
+        ClassOnObjectRector::class,
+        NullToStrictStringFuncCallArgRector::class,
+        FirstClassCallableRector::class,
+        ReturnNeverTypeRector::class,
+        AddOverrideAttributeToOverriddenMethodsRector::class,
     ]);
