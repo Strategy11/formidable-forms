@@ -1396,7 +1396,7 @@ class FrmXMLHelper {
 			}
 		}
 
-		if ( $message == '<ul>' ) {
+		if ( $message === '<ul>' ) {
 			$message  = '';
 			$errors[] = __( 'Nothing was imported or updated', 'formidable' );
 		} else {

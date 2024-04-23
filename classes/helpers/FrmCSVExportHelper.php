@@ -99,7 +99,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param array $atts
-	 * @return false|string|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 * @return false|string|null returns a string file path or false if $atts['mode'] is set to 'file'.
 	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;
@@ -158,6 +158,8 @@ class FrmCSVExportHelper {
 			fclose( self::$fp );
 			return $filepath;
 		}
+
+		return null;
 	}
 
 	/**
@@ -410,7 +412,7 @@ class FrmCSVExportHelper {
 		);
 		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
 
-		foreach ( $entries as $k => $entry ) {
+		foreach ( $entries as $entry ) {
 			self::$entry = $entry;
 			unset( $entry );
 

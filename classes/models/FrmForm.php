@@ -1069,7 +1069,7 @@ class FrmForm {
 	}
 
 	public static function get_current_form_id( $default_form = 'none' ) {
-		if ( 'first' == $default_form ) {
+		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
 		} else {
 			$form = self::maybe_get_current_form();

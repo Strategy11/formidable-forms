@@ -44,10 +44,8 @@ class FrmStrpLiteAppHelper {
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
-		if ( self::should_use_stripe_connect() ) {
-			if ( is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
-				return FrmStrpLiteConnectApiAdapter::$function( ...$params );
-			}
+		if ( self::should_use_stripe_connect() && is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
+			return FrmStrpLiteConnectApiAdapter::$function( ...$params );
 		}
 		return false;
 	}

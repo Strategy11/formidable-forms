@@ -365,7 +365,7 @@ class FrmAddonsController {
 		$transient->last_checked = time();
 		$wp_plugins              = self::get_plugins();
 
-		foreach ( $version_info as $id => $plugin ) {
+		foreach ( $version_info as $plugin ) {
 			$plugin = (object) $plugin;
 
 			if ( ! isset( $plugin->new_version ) || ! isset( $plugin->package ) ) {
@@ -565,7 +565,7 @@ class FrmAddonsController {
 		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) == strtolower( $addon['title'] ) ) {
+				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
 				}
 			}

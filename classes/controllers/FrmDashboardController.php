@@ -370,7 +370,7 @@ class FrmDashboardController {
 	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		return false !== in_array( $email, $subscribed_emails, true );
+		return in_array( $email, $subscribed_emails, true );
 	}
 
 	/**

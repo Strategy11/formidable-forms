@@ -114,7 +114,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 			</ul>
 			<div class="clear"></div>
 
-			<?php foreach ( $field_sections as $section => $section_fields ) { ?>
+			<?php foreach ( $field_sections as $section_fields ) { ?>
 				<h3 class="frm-with-line">
 					<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
 				</h3>

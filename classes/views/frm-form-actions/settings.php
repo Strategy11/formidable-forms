@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 	<?php
 	$displayed_actions = array();
-	foreach ( $groups as $group_name => $group ) {
+	foreach ( $groups as $group ) {
 		if ( ! empty( $group['name'] ) ) {
 			?>
 			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>

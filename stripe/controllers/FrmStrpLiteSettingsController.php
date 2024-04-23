@@ -75,11 +75,6 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function process_form() {
-		$atts = array(
-			'errors'  => array(),
-			'message' => '',
-		);
-
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$settings->update( $_POST );

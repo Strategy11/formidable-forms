@@ -361,7 +361,7 @@ class FrmEntriesController {
 			if ( ! empty( $r ) ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
-				if ( (int) $form_prefix == (int) $form_id ) {
+				if ( (int) $form_prefix === (int) $form_id ) {
 					$hidden[] = $r;
 				}
 

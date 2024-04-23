@@ -80,7 +80,7 @@ class FrmStyle {
 
 		$action_ids = array();
 
-		foreach ( $all_instances as $number => $new_instance ) {
+		foreach ( $all_instances as $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 
@@ -223,21 +223,6 @@ class FrmStyle {
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
-	}
-
-	/**
-	 * Unslash everything in post_content but custom_css
-	 *
-	 * @since 5.0.13
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private function unslash_post_content( $settings ) {
-		$custom_css             = isset( $settings['custom_css'] ) ? $settings['custom_css'] : '';
-		$settings               = wp_unslash( $settings );
-		$settings['custom_css'] = $custom_css;
-		return $settings;
 	}
 
 	/**
