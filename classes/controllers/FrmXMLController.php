@@ -579,12 +579,12 @@ class FrmXMLController {
 	 */
 	private static function prepare_types_array( &$type ) {
 		$type = (array) $type;
-		if ( ! in_array( 'forms', $type ) && ( in_array( 'items', $type ) || in_array( 'posts', $type ) ) ) {
+		if ( ! in_array( 'forms', $type, true ) && ( in_array( 'items', $type, true ) || in_array( 'posts', $type, true ) ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
