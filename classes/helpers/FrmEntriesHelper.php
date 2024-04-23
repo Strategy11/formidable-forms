@@ -321,7 +321,7 @@ class FrmEntriesHelper {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
 
-		if ( $atts['truncate'] && $atts['type'] != 'url' ) {
+		if ( $atts['truncate'] && $atts['type'] !== 'url' ) {
 			$value = FrmAppHelper::truncate( $value, 50 );
 		}
 

@@ -534,59 +534,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_url_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url' ) ) ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $field->type != 'email' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_number_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		//validate the number format
-		if ( $field->type != 'number' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $field->type != 'captcha' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, '', $args );
-	}
-
-	/**
 	 * @deprecated 2.02.07
 	 */
 	public static function dropdown_categories( $args ) {
