@@ -2,9 +2,6 @@
 <ruleset name="Formidable Forms">
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
-	<!-- This is required to run PHPCS in PHP 8 -->
-	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
-
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
