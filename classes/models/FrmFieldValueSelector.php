@@ -30,7 +30,7 @@ class FrmFieldValueSelector {
 	 *
 	 * @since 2.03.05
 	 */
-	protected $field_settings = null;
+	protected $field_settings;
 
 	/**
 	 * @var array
@@ -68,11 +68,11 @@ class FrmFieldValueSelector {
 	protected $blank_option_label = '';
 
 	/**
-	 * @var object
+	 * @var object|null
 	 *
 	 * @since 2.03.05
 	 */
-	protected $db_row = null;
+	protected $db_row;
 
 	/**
 	 * FrmFieldValueSelector constructor
@@ -255,8 +255,7 @@ class FrmFieldValueSelector {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
 		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
-		if ( ! empty( $this->options ) ) {
-			foreach ( $this->options as $key => $value ) {
+		foreach ( $this->options as $key => $value ) {
 				if ( $value == '' ) {
 					continue;
 				}
@@ -264,7 +263,6 @@ class FrmFieldValueSelector {
 				$option = $this->get_single_field_option( $key, $value );
 				$option->print_single_option( $this->value, 25 );
 			}
-		}
 
 		echo '</select>';
 	}

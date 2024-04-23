@@ -13,7 +13,7 @@ class FrmFieldValue {
 	 *
 	 * @var stdClass
 	 */
-	protected $field = null;
+	protected $field;
 
 	/**
 	 * @since 4.03

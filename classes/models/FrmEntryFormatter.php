@@ -12,13 +12,13 @@ class FrmEntryFormatter {
 	 * @var stdClass
 	 * @since 2.04
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var FrmEntryValues
 	 * @since 2.04
 	 */
-	protected $entry_values = null;
+	protected $entry_values;
 
 	/**
 	 * @var bool
@@ -60,7 +60,7 @@ class FrmEntryFormatter {
 	 * @var FrmTableHTMLGenerator
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var bool
@@ -451,7 +451,7 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_field_values_to_content( &$content ) {
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+		foreach ( $this->entry_values->get_field_values() as $field_value ) {
 
 			/**
 			 * @var FrmFieldValue $field_value

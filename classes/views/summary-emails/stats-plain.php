@@ -40,7 +40,7 @@ if ( $args['top_forms'] ) {
 
 	echo "\r\n\r\n";
 
-	foreach ( $args['top_forms'] as $index => $top_form ) {
+	foreach ( $args['top_forms'] as $top_form ) {
 		FrmEmailSummaryHelper::plain_text_echo( $top_form->form_name );
 		echo ': ';
 

@@ -11,7 +11,7 @@ class FrmEntryValues {
 	/**
 	 * @var stdClass
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var int

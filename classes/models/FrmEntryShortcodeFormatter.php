@@ -48,7 +48,7 @@ class FrmEntryShortcodeFormatter {
 	 * @var FrmTableHTMLGenerator
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var array

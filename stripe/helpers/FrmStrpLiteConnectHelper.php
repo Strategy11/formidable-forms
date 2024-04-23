@@ -291,8 +291,6 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function maybe_unschedule_crons() {
-		$mode = self::get_mode_value_from_post();
-
 		if ( self::at_least_one_mode_is_setup() ) {
 			// Don't unschedule if a mode is still on.
 			return;
@@ -507,7 +505,7 @@ class FrmStrpLiteConnectHelper {
 		// Remove protocol from url (our url cannot include the colon).
 		$site_url = preg_replace( '#^https?://#', '', $site_url );
 		// Remove port from url (mostly helpful in development).
-		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );
+		$site_url = preg_replace( '/:\d+/', '', $site_url );
 		$site_url = self::strip_lang_from_url( $site_url );
 
 		// $password is either a Pro license or a uuid (See FrmUsage::uuid).

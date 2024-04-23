@@ -268,7 +268,7 @@ DEFAULT_HTML;
 				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 			</span>
 		</label>
-		<?php
+<?php
 	}
 
 	/**
@@ -674,7 +674,6 @@ DEFAULT_HTML;
 	 * New field
 	 */
 	public function get_new_field_defaults() {
-		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
 			'name'          => $this->get_new_field_name(),
 			'description'   => '',
