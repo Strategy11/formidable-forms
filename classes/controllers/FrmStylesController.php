@@ -192,7 +192,7 @@ class FrmStylesController {
 				}
 
 				$load_on_all = ! FrmAppHelper::is_admin() && 'all' === $frm_settings->load_style;
-				if ( $load_on_all || $register != 'register' ) {
+				if ( $load_on_all || $register !== 'register' ) {
 					wp_enqueue_style( $css_key );
 				}
 				unset( $css_key, $file );
@@ -1086,7 +1086,7 @@ class FrmStylesController {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->load_style != 'none' ) {
+		if ( $frm_settings->load_style !== 'none' ) {
 			wp_enqueue_style( 'formidable' );
 			$frm_vars['css_loaded'] = true;
 		}

@@ -64,7 +64,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	public function validate( $args ) {
 		$value = $args['value'];
-		if ( trim( $value ) == 'http://' || empty( $value ) ) {
+		if ( trim( $value ) === 'http://' || empty( $value ) ) {
 			$value = '';
 		} else {
 			$value = esc_url_raw( $value );

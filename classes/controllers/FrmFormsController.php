@@ -1065,7 +1065,7 @@ class FrmFormsController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_per_page' ) {
+		if ( $option === 'formidable_page_formidable_per_page' ) {
 			$save = (int) $value;
 		}
 
@@ -1317,11 +1317,6 @@ class FrmFormsController {
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
-		if ( FrmAppHelper::pro_is_installed() && ! FrmAppHelper::meets_min_pro_version( '4.0' ) ) {
-			// Prevent settings from showing in 2 spots.
-			unset( $sections['permissions'], $sections['scheduling'] );
-		}
-
 		foreach ( $sections as $key => $section ) {
 			$defaults = array(
 				'html_class' => '',
@@ -1442,7 +1437,7 @@ class FrmFormsController {
 		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
 		$linked_forms = array();
 		$col          = 'one';
-		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' ) ? true : false;
+		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' );
 
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
 		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
@@ -3012,7 +3007,7 @@ class FrmFormsController {
 
 		FrmStylesController::enqueue_css();
 
-		if ( ! FrmAppHelper::is_admin() && $location != 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
+		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
 		}

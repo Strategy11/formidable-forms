@@ -30,7 +30,7 @@ class FrmEntry {
 		$new_values = self::before_insert_entry_in_database( $values, $type );
 
 		// Don't check XML entries for duplicates
-		if ( $type != 'xml' && self::is_duplicate( $new_values, $values ) ) {
+		if ( $type !== 'xml' && self::is_duplicate( $new_values, $values ) ) {
 			return false;
 		}
 
@@ -633,7 +633,7 @@ class FrmEntry {
 
 		self::sanitize_entry_post( $values );
 
-		if ( $type != 'xml' ) {
+		if ( $type !== 'xml' ) {
 			$values = apply_filters( 'frm_pre_create_entry', $values );
 		}
 
@@ -972,7 +972,7 @@ class FrmEntry {
 			$update = false;
 		}
 
-		if ( $update && $update_type != 'xml' ) {
+		if ( $update && $update_type !== 'xml' ) {
 			$values = apply_filters( 'frm_pre_update_entry', $values, $id );
 		}
 

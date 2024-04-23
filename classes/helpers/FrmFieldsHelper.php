@@ -113,7 +113,7 @@ class FrmFieldsHelper {
 
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
-		if ( $args['action'] == 'edit' ) {
+		if ( $args['action'] === 'edit' ) {
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
@@ -474,7 +474,7 @@ class FrmFieldsHelper {
 	 */
 	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
-			if ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
 			}
 
@@ -486,7 +486,7 @@ class FrmFieldsHelper {
 			$position = 'top';
 		} elseif ( $position == 'no_label' ) {
 			$position = 'none';
-		} elseif ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+		} elseif ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 			$position = 'top';
 		}
 
@@ -1158,16 +1158,19 @@ class FrmFieldsHelper {
 		return $info;
 	}
 
+	/**
+	 * @param string $type
+	 * @return array
+	 */
 	public static function get_field_types( $type ) {
-		$single_input   = self::single_input_fields();
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
-
+		$single_input    = self::single_input_fields();
+		$multiple_input  = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$field_selection = FrmField::all_field_selection();
+		$field_types     = array();
 
-		$field_types = array();
-		if ( in_array( $type, $single_input ) ) {
+		if ( in_array( $type, $single_input, true ) ) {
 			self::field_types_for_input( $single_input, $field_selection, $field_types );
-		} elseif ( in_array( $type, $multiple_input ) ) {
+		} elseif ( in_array( $type, $multiple_input, true ) ) {
 			self::field_types_for_input( $multiple_input, $field_selection, $field_types );
 		} elseif ( isset( $field_selection[ $type ] ) ) {
 			$field_types[ $type ] = $field_selection[ $type ];
@@ -1425,7 +1428,7 @@ class FrmFieldsHelper {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $args['field']['type'] == 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] === 'select' && $args['field']['multiple'] ) {
 			$classes[] = 'frm_other_full';
 		}
 
@@ -1458,7 +1461,7 @@ class FrmFieldsHelper {
 		$other_id = $html_id;
 
 		// If hidden radio field, add an opt key of 0
-		if ( $type == 'radio' && $opt_key === false ) {
+		if ( $type === 'radio' && $opt_key === false ) {
 			$opt_key = 0;
 		}
 

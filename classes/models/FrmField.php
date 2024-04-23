@@ -349,6 +349,8 @@ class FrmField {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function all_field_selection() {
 		$pro_field_selection = self::pro_field_selection();
@@ -826,7 +828,7 @@ class FrmField {
 	 * @param array  $where      Pass by reference.
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
-		if ( $inc_repeat == 'include' ) {
+		if ( $inc_repeat === 'include' ) {
 			$form_id = $where['fi.form_id'];
 			$where[] = array(
 				'or'                => 1,
@@ -855,7 +857,7 @@ class FrmField {
 				continue;
 			}
 
-			if ( $type == 'all' ) {
+			if ( $type === 'all' ) {
 				$sub_fields = self::get_all_for_form( $field->field_options['form_select'] );
 			} else {
 				$sub_fields = self::get_all_types_in_form( $field->field_options['form_select'], $type );
@@ -916,7 +918,7 @@ class FrmField {
 			// if the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-			$function_name = $query_type == 'row' ? 'get_row' : 'get_results';
+			$function_name = $query_type === 'row' ? 'get_row' : 'get_results';
 			$results       = $wpdb->$function_name( $query );
 		}
 		unset( $where );
@@ -1028,10 +1030,17 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param string $type
+	 * @return bool
+	 */
 	public static function is_no_save_field( $type ) {
-		return in_array( $type, self::no_save_fields() );
+		return in_array( $type, self::no_save_fields(), true );
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public static function no_save_fields() {
 		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
 	}
@@ -1054,7 +1063,7 @@ class FrmField {
 
 		$is_multi_value_field = (
 			self::is_checkbox( $field ) ||
-			$field_type == 'address' ||
+			$field_type === 'address' ||
 			self::is_multiple_select( $field )
 		);
 
@@ -1278,7 +1287,7 @@ class FrmField {
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
 
-		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
+		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
 	}
 
 	/**

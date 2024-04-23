@@ -834,7 +834,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$label       = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
 
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
+		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
 			$html .= $field_value;
 			$html .= $label;
 		} else {
@@ -870,7 +870,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			return '';
 		}
 
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
+		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
 			$content = $field_value . ': ' . $field->name;
 		} else {
 			$content = $field->name . ': ' . $field_value;
@@ -974,7 +974,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 */
 	protected function get_field_value( $entry, $field, $atts ) {
 
-		if ( $field->field_key == 'free-html-field' ) {
+		if ( $field->field_key === 'free-html-field' ) {
 			$field_value = 'Lorem ipsum.';
 		} else {
 			$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : '';

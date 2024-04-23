@@ -587,7 +587,7 @@ class FrmXMLHelper {
 		}
 
 		// If we're starting a new section, switch $in_section to ID of divider
-		if ( $f['type'] == 'divider' ) {
+		if ( $f['type'] === 'divider' ) {
 			$in_section = $f['id'];
 		}
 	}
@@ -605,7 +605,7 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( $f['type'] == 'form' || ( $f['type'] == 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
+		if ( $f['type'] === 'form' || ( $f['type'] === 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
 			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
 				$form_select = (int) $f['field_options']['form_select'];
 				if ( isset( $imported['forms'][ $form_select ] ) ) {

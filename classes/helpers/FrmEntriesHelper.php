@@ -283,7 +283,7 @@ class FrmEntriesHelper {
 
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( FrmField::is_image( $field ) || $field->type == 'star' ) {
+		if ( FrmField::is_image( $field ) || $field->type === 'star' ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
 		}
@@ -298,7 +298,7 @@ class FrmEntriesHelper {
 			$field->field_options['custom_field'] = '';
 		}
 
-		if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] == 'tag' ) ) {
+		if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] === 'tag' ) ) {
 			$atts['pre_truncate'] = $atts['truncate'];
 			$atts['truncate']     = true;
 			$atts['exclude_cat']  = isset( $field->field_options['exclude_cat'] ) ? $field->field_options['exclude_cat'] : 0;
@@ -321,7 +321,7 @@ class FrmEntriesHelper {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
 
-		if ( $atts['truncate'] && $atts['type'] != 'url' ) {
+		if ( $atts['truncate'] && $atts['type'] !== 'url' ) {
 			$value = FrmAppHelper::truncate( $value, 50 );
 		}
 
@@ -687,7 +687,7 @@ class FrmEntriesHelper {
 			);
 		}
 
-		if ( $page == 'show' ) {
+		if ( $page === 'show' ) {
 			$actions['frm_print'] = array(
 				'url'   => '#',
 				'label' => __( 'Print Entry', 'formidable' ),

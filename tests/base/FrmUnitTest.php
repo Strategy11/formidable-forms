@@ -363,7 +363,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			),
 		);
 
-		if ( $page == 'formidable-edit' ) {
+		if ( $page === 'formidable-edit' ) {
 			$form             = $this->factory->form->get_object_by_id( $this->contact_form_key );
 			$page             = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
 			$screens[ $page ] = $screens['admin.php?page=formidable'];

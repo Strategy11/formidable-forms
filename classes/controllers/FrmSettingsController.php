@@ -317,7 +317,7 @@ class FrmSettingsController {
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
-		if ( $action == 'process-form' ) {
+		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
 		} elseif ( $stop_load != 'stop_load' ) {
 			self::display_form();
