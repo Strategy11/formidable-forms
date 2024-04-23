@@ -255,7 +255,8 @@ class FrmFieldValueSelector {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
 		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
-		foreach ( $this->options as $key => $value ) {
+		if ( ! empty( $this->options ) ) {
+			foreach ( $this->options as $key => $value ) {
 				if ( $value == '' ) {
 					continue;
 				}
@@ -263,6 +264,7 @@ class FrmFieldValueSelector {
 				$option = $this->get_single_field_option( $key, $value );
 				$option->print_single_option( $this->value, 25 );
 			}
+		}
 
 		echo '</select>';
 	}

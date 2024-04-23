@@ -268,7 +268,7 @@ DEFAULT_HTML;
 				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 			</span>
 		</label>
-<?php
+		<?php
 	}
 
 	/**

@@ -9,13 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryFormatter {
 
 	/**
-	 * @var stdClass
 	 * @since 2.04
+	 *
+	 * @var stdClass|null
 	 */
 	protected $entry;
 
 	/**
-	 * @var FrmEntryValues
+	 * @var FrmEntryValues|null
 	 * @since 2.04
 	 */
 	protected $entry_values;
@@ -57,7 +58,7 @@ class FrmEntryFormatter {
 	protected $direction = 'ltr';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
 	protected $table_generator;

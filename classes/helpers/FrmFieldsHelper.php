@@ -2075,7 +2075,7 @@ class FrmFieldsHelper {
 		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 		</li>
-<?php
+		<?php
 	}
 
 	/**

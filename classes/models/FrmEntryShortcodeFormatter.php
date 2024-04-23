@@ -45,7 +45,7 @@ class FrmEntryShortcodeFormatter {
 	protected $format = 'text';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
 	protected $table_generator;

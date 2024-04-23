@@ -11,7 +11,7 @@ class FrmFieldValue {
 	/**
 	 * @since 2.04
 	 *
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	protected $field;
 
