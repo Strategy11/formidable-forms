@@ -1298,7 +1298,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ) ) ) {
+		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
 			$status = 'publish';
 		}
 

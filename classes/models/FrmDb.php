@@ -526,7 +526,7 @@ class FrmDb {
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
-		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
+		if ( ! in_array( strtolower( $order_by ), $sort_options, true ) ) {
 			$order_by = 'asc';
 		}
 	}

@@ -956,7 +956,7 @@ class FrmFieldsHelper {
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
-		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
+		} elseif ( in_array( $atts['tag'], $dynamic_default, true ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;

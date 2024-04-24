@@ -904,8 +904,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function is_field_included( $atts, $field, $field_value ) {
 		$include = true;
 
-		if ( in_array( $field->type, $this->extra_fields ) ) {
-			$include = in_array( $field->type, $this->include_extras );
+		if ( in_array( $field->type, $this->extra_fields, true ) ) {
+			$include = in_array( $field->type, $this->include_extras, true );
 		}
 
 		if ( $include === true ) {
@@ -926,7 +926,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function is_self_or_parent_in_array( $field_key, $array ) {
-		return in_array( $field_key, array_keys( $array ) );
+		return in_array( $field_key, array_keys( $array ), true );
 	}
 
 	protected function user_info_rows( $atts ) {
