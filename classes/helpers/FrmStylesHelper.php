@@ -321,10 +321,9 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 2.3
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
-	 *
-	 * @since 2.3
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );

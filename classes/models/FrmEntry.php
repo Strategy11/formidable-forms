@@ -337,9 +337,8 @@ class FrmEntry {
 	/**
 	 * If $entry is numeric, get the entry object
 	 *
-	 * @param int|object $entry By reference.
-	 *
 	 * @since 2.0.9
+	 * @param int|object $entry By reference.
 	 */
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
