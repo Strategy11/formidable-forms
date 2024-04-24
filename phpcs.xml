@@ -163,6 +163,28 @@
 		<exclude-pattern>stripe/models/FrmTransLiteAction.php</exclude-pattern>
 	</rule>
 
+	<rule ref="SlevomatCodingStandard.Functions.FunctionLength">
+		<properties>
+			<property name="maxLinesLength" value="100" />
+		</properties>
+		<exclude-pattern>controllers/FrmAddonsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmOnboardingWizardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSettingsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSMTPController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCurrencyHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmStrpLiteLinkController.php</exclude-pattern>
+		<exclude-pattern>tests/database/test_FrmMigrate.php</exclude-pattern>
+		<exclude-pattern>tests/fields/test_FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>tests/fields/test_FrmFieldType.php</exclude-pattern>
+	</rule>
+
 	<!-- Set rules for Cognitive Complexity -->
 	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
 		<properties>
