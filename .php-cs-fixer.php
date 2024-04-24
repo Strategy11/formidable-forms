@@ -3,7 +3,9 @@
 $finder = ( new PhpCsFixer\Finder() )->in( __DIR__ );
 $rules  = array(
 	// Keep these rules for sure.
-	'phpdoc_order'                => true,
+	'phpdoc_order'                => array(
+		'order' => array( 'since', 'param', 'throws', 'return' ),
+	),
 	'phpdoc_scalar'               => true,
 	'phpdoc_trim'                 => true,
 	'phpdoc_var_without_name'     => true,

@@ -1360,10 +1360,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
 		// Set up name for other field
@@ -1381,10 +1380,10 @@ class FrmFieldsHelper {
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
-	 * @param array $args
-	 * @param array $other_args
 	 *
 	 * @since 2.0.6
+	 * @param array $args
+	 * @param array $other_args
 	 */
 	private static function set_other_value( $args, &$other_args ) {
 		$parent  = '';
@@ -1413,9 +1412,9 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param array $args
 	 *
 	 * @since 2.0.6
+	 * @param array $args
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {

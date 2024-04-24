@@ -1146,10 +1146,9 @@ class FrmStylesController {
 	}
 
 	/**
+	 * @since 3.0
 	 * @param object $style
 	 * @param string $class
-	 *
-	 * @since 3.0
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
