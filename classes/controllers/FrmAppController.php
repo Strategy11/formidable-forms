@@ -1275,6 +1275,15 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
+			add_action(
+				'frm_update_settings',
+				function ( $params ) {
+					if ( ! empty( $params['frm_use_html'] ) ) {
+						$inbox = new FrmInbox();
+						$inbox->dismiss( 'deprecated_use_html' );
+					}
+				}
+			);
 			// Don't show the message on global settings.
 			return;
 		}
