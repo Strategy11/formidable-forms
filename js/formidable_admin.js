@@ -6796,8 +6796,15 @@ function frmAdminBuildJS() {
 
 			button.className   = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
 			button.className   = button.className + ' ' + oneclick.class;
-			button.textContent = __( 'Activate', 'formidable' );
 			button.rel = oneclick.url;
+
+			if ( oneclick.class === 'frm-activate-addon' ) {
+				oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
+				button.textContent = __( 'Activate', 'formidable' );
+			} else {
+				oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
+				button.textContent = __( 'Install', 'formidable' );
+			}
 		}
 
 		if ( ! newMessage ) {
