@@ -969,7 +969,6 @@ BEFORE_HTML;
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
-	 *
 	 * @since 2.0.6
 	 * @param array $args Includes img, errors.
 	 */
@@ -996,7 +995,6 @@ BEFORE_HTML;
 	 * Display the error message in the front-end along with the image if set
 	 * The image was removed from the styling settings, but it may still be set with a hook
 	 * If the message in the global settings is empty, show every validation message in the error box
-	 *
 	 *
 	 * @since 2.0.6
 	 * @param array $args Includes img, errors, and show_img.

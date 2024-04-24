@@ -1380,7 +1380,6 @@ class FrmFieldsHelper {
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
-	 *
 	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
@@ -1411,7 +1410,6 @@ class FrmFieldsHelper {
 
 	/**
 	 * If this field includes an other option, show it
-	 *
 	 *
 	 * @since 2.0.6
 	 * @param array $args

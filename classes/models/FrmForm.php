@@ -759,7 +759,6 @@ class FrmForm {
 	/**
 	 * If $form is numeric, get the form object
 	 *
-	 *
 	 * @since 2.0.9
 	 * @param int|object $form
 	 */

@@ -337,7 +337,6 @@ class FrmEntry {
 	/**
 	 * If $entry is numeric, get the entry object
 	 *
-	 *
 	 * @since 2.0.9
 	 * @param int|object $entry By reference.
 	 */

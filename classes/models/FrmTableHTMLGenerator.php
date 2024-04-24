@@ -176,7 +176,6 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Determine if setting is for a color, e.g. text color, background color, or border color
 	 *
-	 *
 	 * @since 2.05
 	 * @param string $setting_key Name of setting.
 	 *
@@ -188,7 +187,6 @@ class FrmTableHTMLGenerator {
 
 	/**
 	 * Get color markup from color setting value
-	 *
 	 *
 	 * @since 2.05
 	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.

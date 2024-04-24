@@ -600,7 +600,6 @@ class FrmDb {
 	/**
 	 * Prepare and save settings in styles and actions
 	 *
-	 *
 	 * @since 2.05.06
 	 * @param array  $settings
 	 * @param string $group

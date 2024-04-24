@@ -26,7 +26,6 @@ class FrmPluginSearch {
 	/**
 	 * Add actions and filters only if this is the plugin installation screen and it's the first page.
 	 *
-	 *
 	 * @since 4.12
 	 * @param object $screen WP Screen object.
 	 *
@@ -182,7 +181,6 @@ class FrmPluginSearch {
 
 	/**
 	 * Modify URL used to fetch to plugin information so it pulls Formidable plugin page.
-	 *
 	 *
 	 * @since 4.12
 	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
