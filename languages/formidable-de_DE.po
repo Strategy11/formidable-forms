@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-21 17:13\n"
+"PO-Revision-Date: 2024-04-24 20:45\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -2441,7 +2441,7 @@ msgstr "Berechnete Felder und Mathematik"
 
 #: classes/helpers/FrmDashboardHelper.php:241
 msgid "Quizzes"
-msgstr "Quizze"
+msgstr "Quiz"
 
 #: classes/helpers/FrmDashboardHelper.php:242
 msgid "Save and Continue"
