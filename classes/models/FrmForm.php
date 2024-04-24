@@ -560,7 +560,7 @@ class FrmForm {
 		}
 
 		$statuses = array( 'published', 'draft', 'trash' );
-		if ( ! in_array( $status, $statuses ) ) {
+		if ( ! in_array( $status, $statuses, true ) ) {
 			return false;
 		}
 
