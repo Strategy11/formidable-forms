@@ -8327,7 +8327,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
@@ -8335,7 +8335,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 		} else {
@@ -8344,7 +8344,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 		}
@@ -10424,7 +10424,7 @@ function frmAdminBuildJS() {
 							htmlTab.show();
 							htmlTab.siblings().hide();
 							jQuery( '#frm_html_tab a' ).trigger( 'click' );
-							toggleAllowedHTML( this, e.type );
+							toggleAllowedHTML( this );
 						} else {
 							showElement( jQuery( '.frm-category-tabs li' ) );
 							insertFieldsTab.click();
@@ -10433,7 +10433,7 @@ function frmAdminBuildJS() {
 						}
 					} else if ( viewPage ) {
 						// Run on view page.
-						toggleAllowedShortcodes( this.id, e.type );
+						toggleAllowedShortcodes( this.id );
 					}
 				}
 			});

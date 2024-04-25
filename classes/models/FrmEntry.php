@@ -338,7 +338,9 @@ class FrmEntry {
 	 * If $entry is numeric, get the entry object
 	 *
 	 * @since 2.0.9
+	 *
 	 * @param int|object $entry By reference.
+	 * @return void
 	 */
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
@@ -468,7 +470,7 @@ class FrmEntry {
 		}
 		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
-		return ( $id && $id > 0 );
+		return $id && $id > 0;
 	}
 
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
