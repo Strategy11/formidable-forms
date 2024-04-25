@@ -91,7 +91,7 @@ zip -r $zipname $destination \
 	-x "*.zip" \
 	-x "*/rector.php" \
 	-x "*/sonar-project.properties" \
-	-x "*.sonar_lock" \
+	-x "*/.sonar_lock" \
 	-x "*/report-task.txt"
 
 if [ ! -z "$3" ]; then
