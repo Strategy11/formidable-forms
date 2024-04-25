@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-25 08:41\n"
+"PO-Revision-Date: 2024-04-25 20:42\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -479,7 +479,7 @@ msgstr "フォーム合計"
 
 #: classes/controllers/FrmDashboardController.php:131
 msgid "Total Entries"
-msgstr "すべての回答"
+msgstr "すべてのエントリー"
 
 #: classes/controllers/FrmDashboardController.php:133
 msgid "Add Entry"
@@ -5392,7 +5392,7 @@ msgstr "すべての機能をチェック"
 
 #: classes/views/dashboard/templates/pro-features-list.php:15
 msgid "Unlock all the Powerful Features to Defy the Limits"
-msgstr "強力な機能をすべてアンロックして、可能性を最大限に引き出しましょう"
+msgstr "強力な機能をすべて利用して、可能性を最大限に引き出しましょう"
 
 #: classes/views/dashboard/templates/pro-features-list.php:25
 msgid "Upgrade to Pro & Get 50% Off"
@@ -5962,7 +5962,7 @@ msgstr "無効な形式"
 #: classes/views/frm-fields/back-end/smart-values.php:10
 #: classes/views/shared/upgrade_overlay.php:45
 msgid "%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?"
-msgstr "%s はお客様のプランではご利用いただけません。PRO にアップグレードすると、さらに素晴らしい機能をアンロックできることをご存知ですか ?"
+msgstr "このプランでは %s はご利用いただけません。PRO にアップグレードして、さらに多くの素晴らしい機能を活用してみませんか ?"
 
 #: classes/views/frm-fields/back-end/smart-values.php:20
 #: classes/views/shared/upgrade_overlay.php:79
@@ -5999,7 +5999,7 @@ msgstr "Twilio SMS"
 
 #: classes/views/frm-form-actions/default_actions.php:147
 msgid "The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?"
-msgstr "このプランでは HubSpot との連携はご利用いただけません。アップグレードすると、さらに素晴らしい機能をアンロックできることをご存知ですか ?"
+msgstr "このプランでは HubSpot との連携はご利用いただけません。アップグレードして、さらに多くの素晴らしい機能を活用してみませんか ?"
 
 #: classes/views/frm-form-actions/default_actions.php:175
 msgid "Send API data"
@@ -6660,7 +6660,7 @@ msgstr "Formidable Forms Pro を入手して、すべての強力な機能のロ
 
 #: classes/views/frm-settings/settings_cta.php:15
 msgid "Thanks for being a loyal Formidable Forms user. Upgrade to Formidable Forms Pro to unlock all the awesome features and learn how others are defying the limits by taking on big projects without big resources."
-msgstr "いつも Formidable Forms をご利用いただきありがとうございます。Formidable Forms Pro にアップグレードして、すばらしい機能をすべてアンロックしてください。また、他のユーザーが枠にとらわれず、豊富なリソースなしに大規模なプロジェクトに取り組んでいるかをご確認ください。"
+msgstr "いつも Formidable Forms をご利用いただきありがとうございます。Formidable Forms Pro にアップグレードして、すべてのすばらしい機能をご利用ください。また、他のユーザーが限界を覆し、大きなリソースがなくてもどのように大規模なプロジェクトに取り組んでいるかをご覧ください。"
 
 #: classes/views/frm-settings/settings_cta.php:17
 msgid "We know that you will truly love Formidable Forms."
@@ -6672,7 +6672,7 @@ msgstr "PRO バージョンの機能"
 
 #: classes/views/frm-settings/settings_cta.php:33
 msgid "Get Formidable Forms Pro Today and Unlock all the Powerful Features »"
-msgstr "今すぐ Formidable Forms Pro を入手して、すべての強力な機能をアンロックしましょう »"
+msgstr "今すぐ Formidable Forms Pro を入手して、すべての強力な機能をご利用ください」"
 
 #: classes/views/frm-settings/_currency.php:7
 msgid "Select the currency to be used by Formidable globally."
