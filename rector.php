@@ -56,8 +56,10 @@ return RectorConfig::configure()
 	)
 	// here we can define, what prepared sets of rules will be applied
 	->withPreparedSets(
-		true, // deadCode
-		true // codeQuality
+		// deadCode
+		true,
+		// codeQuality
+		true
 	)
 	->withSkip(
 		array(
