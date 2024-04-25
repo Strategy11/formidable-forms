@@ -494,10 +494,12 @@ class FrmAddon {
 		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] === $transient->response[ $this->plugin_folder ]->new_version;
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function has_been_cleared() {
 		$last_cleared = get_option( 'frm_last_cleared' );
-
-		return ( $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
+		return $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) );
 	}
 
 	private function cleared_plugins() {

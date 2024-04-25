@@ -28,3 +28,5 @@ composer.lock
 
 # Sonar Qube / Sonar Source
 sonar-project.properties
+.sonar_lock
+report-task.txt

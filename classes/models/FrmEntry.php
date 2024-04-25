@@ -110,7 +110,6 @@ class FrmEntry {
 			foreach ( $diff as $meta_value ) {
 				if ( ! empty( $meta_value ) ) {
 					$is_duplicate = false;
-					continue;
 				}
 			}
 
