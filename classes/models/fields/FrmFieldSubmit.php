@@ -94,7 +94,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$form = FrmForm::getOne( $this->field['form_id'] );
+		$form = $args['form'];
 		if ( ! FrmForm::show_submit( $form ) ) {
 			return '';
 		}
