@@ -925,8 +925,8 @@ class FrmEntry {
 	 * @param array $new_values
 	 */
 	private static function after_entry_created_actions( $entry_id, $values, $new_values ) {
-		// this is a child entry
-		$is_child = isset( $values['parent_form_id'] ) && isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
+		// This is a child entry.
+		$is_child = isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
 		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
