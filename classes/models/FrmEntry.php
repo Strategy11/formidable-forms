@@ -580,6 +580,7 @@ class FrmEntry {
 	// Pagination Methods
 	/**
 	 * @param array|int|string $where If int, use the form id.
+	 * @return int|string
 	 */
 	public static function getRecordCount( $where = '' ) {
 		global $wpdb;
@@ -967,7 +968,7 @@ class FrmEntry {
 
 		global $frm_vars;
 
-		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, (array) $frm_vars['saved_entries'] ) ) {
+		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, $frm_vars['saved_entries'] ) ) {
 			$update = false;
 		}
 
@@ -1099,7 +1100,7 @@ class FrmEntry {
 	 *
 	 * @since 6.8
 	 *
-	 * @return int
+	 * @return int|string
 	 */
 	public static function get_entries_count() {
 		$args = array(

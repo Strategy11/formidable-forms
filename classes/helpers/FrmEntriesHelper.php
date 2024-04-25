@@ -249,10 +249,10 @@ class FrmEntriesHelper {
 		}
 
 		$sep = ', ';
-		if ( strpos( implode( ' ', (array) $field_value ), '<img' ) !== false ) {
+		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
 			$sep = '<br/>';
 		}
-		$val = implode( $sep, (array) $field_value );
+		$val = implode( $sep, $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
 	}

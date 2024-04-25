@@ -347,7 +347,7 @@ class FrmDashboardController {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
 
-		if ( ! empty( $banner_closed_by_users ) && false !== array_search( $user_id, $banner_closed_by_users, true ) ) {
+		if ( ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true ) ) {
 			return true;
 		}
 		return false;
@@ -464,7 +464,7 @@ class FrmDashboardController {
 	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		if ( false === array_search( $email, $subscribed_emails, true ) ) {
+		if ( ! in_array( $email, $subscribed_emails, true ) ) {
 			$subscribed_emails[] = $email;
 			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
 		}
@@ -527,7 +527,7 @@ class FrmDashboardController {
 	private static function add_welcome_closed_banner_user_id() {
 		$users_list = self::get_closed_welcome_banner_user_ids();
 		$user_id    = get_current_user_id();
-		if ( false === array_search( $user_id, $users_list, true ) ) {
+		if ( ! in_array( $user_id, $users_list, true ) ) {
 			$users_list[] = $user_id;
 			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
 		}

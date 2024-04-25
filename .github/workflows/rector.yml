@@ -9,14 +9,14 @@ on:
 
 name: Inspections
 jobs:
-  runPHPCSFixerInspection:
+  runRectorInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
-    name: Run PHP CS Fixer inspection
+    name: Run Rector inspection
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 
-      - name: PHPCSFixer check
-        run: ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --verbose
+      - name: Rector check
+        run: ./vendor/bin/rector process --dry-run

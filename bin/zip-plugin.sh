@@ -88,7 +88,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/js/iframe-embed.js" \
 	-x "formidable-hubspot/js/admin.js" \
 	-x "*/webpack.config.js" \
-	-x "*.zip"
+	-x "*.zip" \
+	-x "*/rector.php"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
