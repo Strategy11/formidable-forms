@@ -953,10 +953,10 @@ class FrmXMLHelper {
 				++$imported['imported'][ $this_type ];
 			}
 
-			$imported['posts'][ (int) $old_id ] = $post_id;
+			$imported['posts'][ $old_id ] = $post_id;
 
 			if ( $post['post_type'] === 'frm_display' ) {
-				$view_ids[ (int) $old_id ] = $post_id;
+				$view_ids[ $old_id ] = $post_id;
 			}
 
 			do_action( 'frm_after_import_view', $post_id, $post );

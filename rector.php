@@ -1,88 +1,110 @@
 <?php
 
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
-use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
-use Rector\Php56\Rector\FuncCall\PowToExpRector;
-use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
-use Rector\Php70\Rector\StmtsAwareInterface\IfIssetToCoalescingRector;
-use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
-use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
-use Rector\Php70\Rector\FuncCall\RandomFunctionRector;
-use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
-use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
-use Rector\Php71\Rector\List_\ListToArrayDestructRector;
-use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
-use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
-use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
-use Rector\Php80\Rector\Identical\StrStartsWithRector;
-use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
-use Rector\Php80\Rector\NotIdentical\StrContainsRector;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\Identical\StrEndsWithRector;
-use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
-use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
-use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
+use Rector\Instanceof_\Rector\Ternary\FlipNegatedTernaryInstanceofRector;
+use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
+use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
+use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
+use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
+use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
+use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
+use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
+use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
+use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
+use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
+use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
+use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
+use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
+use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
+use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
+use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
+use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
+use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
+use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
+use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
+use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
+use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
+use Rector\CodeQuality\Rector\If_\CombineIfRector;
+use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
+use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
+use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
+use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
+use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
+use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
+use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
+use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 
 define( 'ABSPATH', '' );
 
 return RectorConfig::configure()
-	->withPaths([
-		__DIR__ . '/classes',
-		__DIR__ . '/stripe',
-	])
-    // register single rule
-    ->withSets([
-        LevelSetList::UP_TO_PHP_84,
-    ])
-    ->withSkip([
-        // This rule changes array() to [].
-        LongArrayToShortArrayRector::class,
-        // This rule changes ternaries to elvis.
-        TernaryToElvisRector::class,
-        // This rule changes pow() to **.
-        PowToExpRector::class,
-        // This rule changes __CLASS__ to self::class
-        ClassConstantToSelfClassRector::class,
-        // This rule changes isset checks to ??.
-        IfIssetToCoalescingRector::class,
-        ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class,
-        TernaryToNullCoalescingRector::class,
-        // This changes rand() to random_int().
-        RandomFunctionRector::class,
-        // This rule uses the second param of dirname().
-        MultiDirnameRector::class,
-        // This rule adds public to all constants missing scope.
-        PublicConstantVisibilityRector::class,
-        // This rule changes list( $var1, $var2 ) = to [ $var1, $var2 ] =.
-        ListToArrayDestructRector::class,
-        // This rule enforces array_key_first.
-        ArrayKeyFirstLastRector::class,
-        // This casts cost to strings before they are passed as a string parameter.
-        StringifyStrNeedlesRector::class,
-        // This converts closures to arrow functions.
-        ClosureToArrowFunctionRector::class,
-        // This changes strpos to str_starts_with.
-        StrStartsWithRector::class,
-        // This adds mixed type to params
-        MixedTypeRector::class,
-        // This changes strpos to str_contains.
-        StrContainsRector::class,
-        // This implmenets PHP 8.0 constructor promotion.
-        ClassPropertyAssignToConstructorPromotionRector::class,
-        // This changes strpos to str_ends_with.
-        StrEndsWithRector::class,
-        // This changes switch statements to match.
-        ChangeSwitchToMatchRector::class,
-        RemoveUnusedVariableInCatchRector::class,
-        ClassOnObjectRector::class,
-        NullToStrictStringFuncCallArgRector::class,
-        FirstClassCallableRector::class,
-        ReturnNeverTypeRector::class,
-        AddOverrideAttributeToOverriddenMethodsRector::class,
-    ]);
+	->withPaths(
+		array(
+			__DIR__ . '/classes',
+			__DIR__ . '/stripe',
+		)
+	)
+	// here we can define, what prepared sets of rules will be applied
+	->withPreparedSets(
+		deadCode: true,
+		codeQuality: true
+	)
+	->withSkip(
+		array(
+			FlipNegatedTernaryInstanceofRector::class,
+			SwitchNegatedTernaryRector::class,
+			CompactToVariablesRector::class,
+			IssetOnPropertyObjectToPropertyExistsRector::class,
+			ExplicitBoolCompareRector::class,
+			UnusedForeachValueToArrayKeysRector::class,
+			CombinedAssignRector::class,
+			ExplicitReturnNullRector::class,
+			SimplifyEmptyCheckOnEmptyArrayRector::class,
+			UseIdenticalOverEqualWithSameTypeRector::class,
+			SimplifyUselessVariableRector::class,
+			ReduceAlwaysFalseIfOrRector::class,
+			CountArrayToEmptyArrayComparisonRector::class,
+			DisallowedEmptyRuleFixerRector::class,
+			SimplifyIfReturnBoolRector::class,
+			SimplifyIfElseToTernaryRector::class,
+			LocallyCalledStaticMethodToNonStaticRector::class,
+			JoinStringConcatRector::class,
+			ChangeArrayPushToArrayAssignRector::class,
+			CallableThisArrayToAnonymousFunctionRector::class,
+			RemoveUselessParamTagRector::class,
+			RemoveDeadStmtRector::class,
+			RemoveDeadReturnRector::class,
+			RemoveAlwaysTrueIfConditionRector::class,
+			RemoveUnreachableStatementRector::class,
+			SimplifyEmptyArrayCheckRector::class,
+			CompleteDynamicPropertiesRector::class,
+			TypedPropertyFromStrictConstructorRector::class,
+			// TODO: Try this for some files and not others.
+			RemoveUnusedPrivateMethodRector::class,
+			ShortenElseIfRector::class,
+			// Fix these.
+			CombineIfRector::class,
+			SingleInArrayToCompareRector::class,
+			RemoveUnusedForeachKeyRector::class,
+			SingularSwitchToIfRector::class,
+			RemoveUnusedPrivateMethodParameterRector::class,
+			RenameFunctionRector::class,
+			InlineConstructorDefaultToPropertyRector::class,
+			SimplifyRegexPatternRector::class,
+			RemoveUnusedVariableAssignRector::class,
+			RemoveNonExistingVarAnnotationRector::class,
+			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
+			RemoveUnusedConstructorParamRector::class,
+			UnnecessaryTernaryExpressionRector::class,
+		)
+	);
