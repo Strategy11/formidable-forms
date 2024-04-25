@@ -104,7 +104,19 @@ DEFAULT_HTML;
 		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
 
 		ob_start();
+
+		/**
+		 * @since 5.5.1
+		 */
+		do_action( 'frm_before_submit_btn', compact( 'form' ) );
+
 		FrmFormsHelper::get_custom_submit( $values['submit_html'], $form, $submit, $form_action, $values );
+
+		/**
+		 * @since 5.5.1
+		 */
+		do_action( 'frm_after_submit_btn', compact( 'form' ) );
+
 		return ob_get_clean();
 	}
 }
