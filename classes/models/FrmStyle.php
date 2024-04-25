@@ -634,7 +634,7 @@ class FrmStyle {
 			'title_margin_top'           => '10px',
 			'title_margin_bottom'        => '60px',
 			'form_desc_size'             => '14px',
-			'form_desc_color'            => '666666',
+			'form_desc_color'            => '98A2B3',
 			'form_desc_margin_top'       => '10px',
 			'form_desc_margin_bottom'    => '25px',
 			'form_desc_padding'          => '0',
@@ -651,7 +651,7 @@ class FrmStyle {
 			'label_padding'              => '0 0 5px 0',
 
 			'description_font_size'      => '12px',
-			'description_color'          => '666666',
+			'description_color'          => '667085',
 			'description_weight'         => 'normal',
 			'description_style'          => 'normal',
 			'description_align'          => 'left',
@@ -730,8 +730,8 @@ class FrmStyle {
 			'submit_active_border_color' => 'cccccc',
 
 			'border_radius'              => '8px',
-			'error_bg'                   => 'F2DEDE',
-			'error_border'               => 'EBCCD1',
+			'error_bg'                   => 'FEE4E2',
+			'error_border'               => 'F5B8AA',
 			'error_text'                 => 'F04438',
 			'error_font_size'            => '14px',
 

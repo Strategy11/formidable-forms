@@ -87,6 +87,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> .frm_pro_max_limit_desc{
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
+	<?php } else { ?>
+		margin-top:6px;
 	<?php } ?>
 	padding:0;
 	<?php if ( ! empty( $font ) ) { ?>
@@ -206,7 +208,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):focus,
+.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
 .<?php echo esc_html( $style_class ); ?> textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
@@ -227,7 +229,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
-	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
+	box-shadow:0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
 }
 
@@ -406,7 +408,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_blank_field label,
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	color:<?php echo esc_html( $border_color_error . $important ); ?>;
