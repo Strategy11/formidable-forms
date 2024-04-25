@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-24 20:45\n"
+"PO-Revision-Date: 2024-04-25 20:42\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -553,7 +553,7 @@ msgstr "Erstellt am"
 #: classes/views/frm-entries/form.php:76
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
-msgstr "Eingabe Schlüssel"
+msgstr "Eingabe-Schlüssel"
 
 #: classes/controllers/FrmEntriesController.php:87
 msgid "Entry Name"
@@ -624,7 +624,7 @@ msgstr "Abfrage Felder"
 #: classes/controllers/FrmFormActionsController.php:20
 #: classes/views/frm-form-actions/settings.php:21
 msgid "Form Actions"
-msgstr "Formular Aktionen"
+msgstr "Formularaktionen"
 
 #: classes/controllers/FrmFormActionsController.php:149
 #: classes/views/frm-form-actions/default_actions.php:197
@@ -642,7 +642,7 @@ msgstr "CRM"
 #. translators: %s: Name of form action
 #: classes/controllers/FrmFormActionsController.php:213
 msgid "%s form actions"
-msgstr "%s Formular Aktionen"
+msgstr "%s Formularaktionen"
 
 #: classes/controllers/FrmFormsController.php:19
 #: classes/controllers/FrmFormsController.php:1022
@@ -692,7 +692,7 @@ msgstr "Dieses Formular ist sehr umfangreich und könnte %1$sServer Limits%2$s �
 
 #: classes/controllers/FrmFormsController.php:579
 msgid "Form Preview"
-msgstr "Formular Vorschau"
+msgstr "Formularvorschau"
 
 #. translators: %1$s: Number of forms
 #: classes/controllers/FrmFormsController.php:641
@@ -753,7 +753,7 @@ msgstr "Formular-HTML minimieren"
 #: classes/views/styles/_sample_form.php:12
 #: classes/views/xml/import_form.php:145
 msgid "Form Title"
-msgstr "Formular Titel"
+msgstr "Formular-Titel"
 
 #: classes/controllers/FrmFormsController.php:1015
 #: classes/helpers/FrmCSVExportHelper.php:373
@@ -884,7 +884,7 @@ msgstr "Datums-Format"
 #: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
 msgid "Field Label"
-msgstr "Feld Beschriftung"
+msgstr "Feld-Label"
 
 #: classes/controllers/FrmFormsController.php:1507
 msgid "No Auto P"
@@ -1174,11 +1174,11 @@ msgstr "Captcha"
 
 #: classes/controllers/FrmSettingsController.php:85
 msgid "White Labeling"
-msgstr "White Label"
+msgstr "White Labeling"
 
 #: classes/controllers/FrmSettingsController.php:90
 msgid "White labeling options"
-msgstr "White labeling Optionen"
+msgstr "White-Labeling-Optionen"
 
 #: classes/controllers/FrmSettingsController.php:95
 #: classes/views/inbox/list.php:11
@@ -1418,7 +1418,7 @@ msgstr "Die Styling-Einstellungen wurden gespeichert"
 #: classes/helpers/FrmFormsHelper.php:558
 #: classes/views/frm-forms/settings-advanced.php:27
 msgid "Form Description"
-msgstr "Formular Beschreibung"
+msgstr "Formular-Beschreibung"
 
 #: classes/controllers/FrmStylesController.php:945
 msgid "Field Labels"
@@ -1715,7 +1715,7 @@ msgstr "(Leer)"
 
 #: classes/helpers/FrmAppHelper.php:3227
 msgid "(no label)"
-msgstr "(ohne Bezeichnung)"
+msgstr "(ohne Label)"
 
 #: classes/helpers/FrmAppHelper.php:3228
 msgid "OK"
@@ -3857,11 +3857,11 @@ msgstr "Feld Name"
 #: classes/helpers/FrmFormsHelper.php:522
 #: classes/views/frm-fields/back-end/settings.php:278
 msgid "Label Position"
-msgstr "Position der Beschriftung"
+msgstr "Label-Position"
 
 #: classes/helpers/FrmFormsHelper.php:526
 msgid "Required Label"
-msgstr "Beschriftung erforderlich"
+msgstr "Label erforderlich"
 
 #: classes/helpers/FrmFormsHelper.php:530
 msgid "Input Field"
@@ -3877,7 +3877,7 @@ msgstr "Zeige eine einzelne Radio- oder Checkbox-Option an, indem du die 1 durch
 
 #: classes/helpers/FrmFormsHelper.php:539
 msgid "Hide Option Label"
-msgstr "Verstecke Auswahlmöglickeit Beschriftung"
+msgstr "Optionsbeschriftungen ausblenden"
 
 #: classes/helpers/FrmFormsHelper.php:543
 msgid "Required Class"
@@ -3906,7 +3906,7 @@ msgstr "Eintrags-Link löschen"
 
 #: classes/helpers/FrmFormsHelper.php:571
 msgid "Button Label"
-msgstr "Beschriftung der Schaltfläche"
+msgstr "Button-Label"
 
 #: classes/helpers/FrmFormsHelper.php:575
 msgid "Button Hook"
@@ -3984,7 +3984,7 @@ msgstr "Fall es viele Radiobutton- oder Checkbox-Optionen gibt, kann diese Klass
 #: classes/helpers/FrmFormsHelper.php:1246
 #: classes/models/fields/FrmFieldName.php:36
 msgid "First"
-msgstr "Erste"
+msgstr "Vorname"
 
 #: classes/helpers/FrmFormsHelper.php:1247
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
@@ -4625,7 +4625,7 @@ msgstr[1] "%1$s Terme"
 #: classes/helpers/FrmXMLHelper.php:1441
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
-msgstr[0] "%1$s Formular Aktion"
+msgstr[0] "%1$s Formularaktionen"
 msgstr[1] "%1$s Formular Aktionen"
 
 #: classes/helpers/FrmXMLHelper.php:1479
@@ -4701,7 +4701,7 @@ msgstr "Mittig"
 
 #: classes/models/fields/FrmFieldName.php:38
 msgid "Last"
-msgstr "Letzte"
+msgstr "Nachname"
 
 #: classes/models/fields/FrmFieldNumber.php:80
 msgid "Please select a higher number"
@@ -5082,11 +5082,11 @@ msgstr "Der Entwurf ist gespeichert"
 
 #: classes/models/FrmFormAction.php:951
 msgid "Entry is created"
-msgstr "Der Eintrag ist erstellt"
+msgstr "Der Eintrag erstellt ist"
 
 #: classes/models/FrmFormAction.php:952
 msgid "Entry is updated"
-msgstr "Der Eintrag ist aktualisiert"
+msgstr "Der Eintrag aktualisiert ist"
 
 #: classes/models/FrmFormAction.php:953
 msgid "Entry is deleted"
@@ -5888,15 +5888,15 @@ msgstr "Einzigartig"
 
 #: classes/views/frm-fields/back-end/settings.php:86
 msgid "Read Only: Show this field but do not allow the field value to be edited from the front-end."
-msgstr "Nur Lesen: Zeige dieses Feld, aber verbiete das Bearbeiten/Editieren des Feldwertes im Front-End."
+msgstr "Nur lesen: Zeige dieses Feld, aber verbiete das Bearbeiten/Editieren des Feldwertes im Frontend."
 
 #: classes/views/frm-fields/back-end/settings.php:88
 msgid "Read Only"
-msgstr "Nur Lesen"
+msgstr "Nur lesen"
 
 #: classes/views/frm-fields/back-end/settings.php:108
 msgid "Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row."
-msgstr "Füge eine CSS Klasse zum Feld Container hinzu. Verwenden Sie unsere vordefinierten Klassen, um mehrere Felder in einer Zeile anzuordnen."
+msgstr "Füge dem Feldcontainer eine CSS-Klasse hinzu. Verwende unsere vordefinierten Klassen, um mehrere Felder in einer Zeile auszurichten."
 
 #: classes/views/frm-fields/back-end/settings.php:109
 msgid "CSS Layout Classes"
@@ -5996,7 +5996,7 @@ msgstr "Gespeicherter Wert"
 
 #: classes/views/frm-form-actions/default_actions.php:14
 msgid "Create Post"
-msgstr "Post erstellen"
+msgstr "Beitrag erstellen"
 
 #: classes/views/frm-form-actions/default_actions.php:26
 msgid "Register User"
@@ -6058,11 +6058,11 @@ msgstr "Seiteninhalt anzeigen"
 
 #: classes/views/frm-form-actions/settings.php:7
 msgid "Add form actions to your form to perform tasks when an entry is created, updated, imported, and more."
-msgstr "Formular-Aktionen hinzufügen, um Aufgaben auszuführen, wenn ein Eintrag erstellt, aktualisiert, importiert etc. wird."
+msgstr "Formularaktionen hinzufügen, um Aufgaben auszuführen, wenn ein Eintrag erstellt, aktualisiert, importiert etc. wird."
 
 #: classes/views/frm-form-actions/settings.php:15
 msgid "Search Form Actions"
-msgstr "Formular-Aktionen durchsuchen"
+msgstr "Formularaktionen durchsuchen"
 
 #: classes/views/frm-form-actions/settings.php:23
 msgid "(click an action to add it to your form)"
@@ -6070,11 +6070,11 @@ msgstr "Klick auf eine Aktion um sie zu diesem Formular hinzuzufügen"
 
 #: classes/views/frm-form-actions/settings.php:82
 msgid "Show all form actions"
-msgstr "Alle Formular-Aktionen anzeigen"
+msgstr "Alle Formularaktionen anzeigen"
 
 #: classes/views/frm-form-actions/settings.php:85
 msgid "Hide extra form actions"
-msgstr "Zusätzliche Formular-Aktionen verbergen"
+msgstr "Zusätzliche Formularaktionen verbergen"
 
 #: classes/views/frm-form-actions/_action_inside.php:13
 msgid "Action Name"
@@ -6082,7 +6082,7 @@ msgstr "Name der Aktion"
 
 #: classes/views/frm-form-actions/_action_inside.php:37
 msgid "Trigger this action when"
-msgstr "Starte die Aktion danach"
+msgstr "Diese Aktion auslösen, wenn"
 
 #: classes/views/frm-form-actions/_action_inside.php:71
 msgid "Email attachments"
@@ -6309,7 +6309,7 @@ msgstr "Arbeit soll im Hintergrund ablaufen, ohne Aktualisierung der Seite"
 
 #: classes/views/frm-forms/settings-advanced.php:89
 msgid "Load and save form builder page with AJAX"
-msgstr "Lade und speichere Formularerstellungsseite mit AJAX"
+msgstr "Form-Builder-Seite mit AJAX laden und speichern"
 
 #: classes/views/frm-forms/settings-advanced.php:90
 msgid "Recommended for long forms."
@@ -6329,7 +6329,7 @@ msgstr "Formular mit Javascript validieren"
 
 #: classes/views/frm-forms/settings-advanced.php:111
 msgid "Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields."
-msgstr "Erforderliche Felder, Email Format und Nummern Format können sofort im Browser überprüft werden. Vielleicht möchtest Du diese Option ausschalten, falls die irgendwelche Anpassungen vorgenommen hast, um Validierungsnachrichten bei bestimmten Feldern zu entfernen."
+msgstr "Erforderliche Felder, E-Mail- und Zahlenformat können sofort in deinem Browser überprüft werden. Du solltest diese Option deaktivieren, wenn du Anpassungen vorgenommen hast, um Validierungsnachrichten für bestimmte Felder zu verhindern."
 
 #: classes/views/frm-forms/settings-buttons.php:7
 msgid "Set your button text."
@@ -6393,7 +6393,7 @@ msgstr "Honeypot für Spamüberprüfung verwenden"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:8
 msgid "Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers."
-msgstr "Füge ein unsichtbares Feld in dein Formular ein, um Bots auszutricksen. Einstellung auf \"Strikt\" wird mehr Spam ausfiltern, aber Probleme mit dem Auto-Ausfüllen könnten reale Benutzer auf einigen Browsern hindern, Nachrichten abzusenden."
+msgstr "Füge ein unsichtbares Feld in dein Formular ein, um Bots auszutricksen. Die Einstellung \"Strikt\" fängt mehr Spam ab, aber Probleme mit der Autovervollständigung können bei manchen Browsern verhindern, dass echte Menschen das Formular ausfüllen."
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:11
 msgid "Off"
@@ -6898,7 +6898,7 @@ msgstr "Felder"
 
 #: classes/views/shared/mb_adv_info.php:16
 msgid "Conditionals"
-msgstr "Konditionale"
+msgstr "Bedingungen"
 
 #: classes/views/shared/mb_adv_info.php:28
 msgid "HTML Tags"
@@ -7003,7 +7003,7 @@ msgstr "Einträge mit Ansichten anzeigen und bearbeiten"
 
 #: classes/views/shared/views-info.php:19
 msgid "Bring entries to the front-end of your site for full-featured applications or just to show the content."
-msgstr "Einträge im Front-End der Website anzeigen für vollständige Auswertungen oder einfach, um die Inhalte zu präsentieren."
+msgstr "Einträge im Frontend der Website anzeigen für vollständige Auswertungen oder einfach, um die Inhalte zu präsentieren."
 
 #: classes/views/styles/custom_css.php:8
 msgid "You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded."
@@ -7023,7 +7023,7 @@ msgstr "Deaktivieren des Stylings des Senden Buttons"
 
 #: classes/views/styles/_buttons.php:10
 msgid "Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click \"Update Options\"."
-msgstr "Hinweis: Wenn deaktiviert, sehen Sie vllt. keinen Effekt, solange Sie nicht 2 weitere Styling- Änderungen machen oder \"Optionen Updaten\" klicken."
+msgstr "Hinweis: Wenn diese Funktion deaktiviert ist, wird die Änderung möglicherweise erst wirksam, wenn du 2 weitere Stylingänderungen vornimmst oder auf \"Optionen aktualisieren\" klickst."
 
 #: classes/views/styles/_buttons.php:15
 #: classes/views/styles/_check-box-radio-fields.php:45
@@ -7185,7 +7185,7 @@ msgstr "Fehler Style"
 
 #: classes/views/styles/_field-colors.php:100
 msgid "Read Only Style"
-msgstr "\"Nur Lesen\" Stil"
+msgstr "Nur-lesen-Stil"
 
 #: classes/views/styles/_field-description.php:25
 msgid "italic"
@@ -7236,11 +7236,11 @@ msgstr "Fehlermeldungen"
 
 #: classes/views/styles/_general.php:7
 msgid "This will add !important to many of the lines in the Formidable styling to make sure it will be used."
-msgstr "Dies wird !important zu vielen Zeilen im Formidable Stil hinzufügen, um sicherzustellen, dass es genutzt werden wird."
+msgstr "Dies wird !important an die meisten Zeilen des Formidable-Stils anhängen, um sicherzustellen, dass es verwendet wird."
 
 #: classes/views/styles/_general.php:9
 msgid "Override theme styling"
-msgstr "Stil des Theme ausser Kraft setzen"
+msgstr "Stil des Themes außer Kraft setzen"
 
 #: classes/views/styles/_general.php:14
 msgid "This will center your form on the page where it is published if the form width is less than the available width on the page."
@@ -7256,7 +7256,7 @@ msgstr "Ausrichtung"
 
 #: classes/views/styles/_general.php:30
 msgid "center"
-msgstr "mitte"
+msgstr "mittig"
 
 #: classes/views/styles/_general.php:36
 msgid "Max Width"
@@ -7341,7 +7341,7 @@ msgstr "Der aktivierte Status wird ersichtlich, wenn das Feld angeklickt ist."
 
 #: classes/views/styles/_sample_form.php:44
 msgid "Read-only field"
-msgstr "Read-Only Feld"
+msgstr "Nur-lesen-Feld"
 
 #: classes/views/styles/_sample_form.php:45
 msgid "This field is not editable"
@@ -7916,7 +7916,7 @@ msgstr "Es kann mehrere Tage dauern, bis die Zahlung abgeschlossen ist."
 
 #: stripe/models/FrmTransLiteAction.php:20
 msgid "Collect a Payment"
-msgstr "Zahlung einnehmen"
+msgstr "Eine Zahlung erhalten"
 
 #: stripe/models/FrmTransLiteAction.php:168
 msgid "&mdash; Select &mdash;"
