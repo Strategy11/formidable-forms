@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-21 17:13\n"
+"PO-Revision-Date: 2024-04-25 08:41\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -387,7 +387,7 @@ msgstr "設定"
 #: classes/controllers/FrmXMLController.php:311
 #: classes/views/xml/import_form.php:148
 msgid "Entries"
-msgstr "投稿"
+msgstr "エントリー"
 
 #: classes/controllers/FrmAppController.php:303
 #: classes/controllers/FrmEntriesController.php:15
@@ -5318,7 +5318,7 @@ msgstr "警告: このファイルに加えた変更は、Formidable の設定�
 
 #: classes/models/FrmStyle.php:519
 msgid "Formidable Style"
-msgstr "Formidable のスタイル"
+msgstr "Formidable スタイル"
 
 #: classes/models/FrmStyle.php:777
 #: classes/views/styles/_field-description.php:22
@@ -5480,7 +5480,7 @@ msgstr "新規テンプレートのフォームを選択"
 
 #: classes/views/form-templates/modals/create-template-modal.php:30
 msgid "You have not created any forms yet."
-msgstr "フォームはまだ作成されていません。"
+msgstr "フォームをまだ作成していません。"
 
 #: classes/views/form-templates/modals/create-template-modal.php:47
 msgid "Template name"
@@ -5629,7 +5629,7 @@ msgstr "エントリーが見つかりませんでした"
 #: classes/views/frm-entries/no_entries.php:46
 #: classes/views/frm-forms/list.php:46
 msgid "You have not created any forms yet"
-msgstr "フォームはまだ作成されていません"
+msgstr "フォームをまだ作成していません"
 
 #: classes/views/frm-entries/no_entries.php:47
 #: classes/views/frm-forms/list.php:47
@@ -6129,7 +6129,7 @@ msgstr "警告: ユーザーにメールを送信する場合、宛先フィー�
 
 #: classes/views/frm-form-actions/_email_settings.php:70
 msgid "Subject"
-msgstr "題名"
+msgstr "件名"
 
 #: classes/views/frm-form-actions/_email_settings.php:77
 msgid "Message"
@@ -6982,7 +6982,7 @@ msgstr "%s にアップグレード"
 
 #: classes/views/shared/views-info.php:17
 msgid "Show and Edit Entries with Views"
-msgstr "ビューによるエントリーの表示と編集"
+msgstr "ビューでエントリーを表示・編集"
 
 #: classes/views/shared/views-info.php:19
 msgid "Bring entries to the front-end of your site for full-featured applications or just to show the content."
