@@ -89,7 +89,8 @@ zip -r $zipname $destination \
 	-x "formidable-hubspot/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
-	-x "*/rector.php"
+	-x "*/rector.php" \
+	-x "*/sonar-project.properties"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

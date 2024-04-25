@@ -1056,9 +1056,7 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function url_is_allowed( $download_url ) {
-		return (
-			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::allowed_external_urls(), true )
-		);
+		return FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::allowed_external_urls(), true );
 	}
 
 	/**
