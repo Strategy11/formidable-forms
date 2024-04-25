@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-22 17:12\n"
+"PO-Revision-Date: 2024-04-25 20:42\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -4107,7 +4107,7 @@ msgstr "Formulaire intégré"
 #: classes/helpers/FrmFormsListHelper.php:390
 #: classes/views/frm-forms/_publish_box.php:20
 msgid "Preview"
-msgstr "Prévisualier"
+msgstr "Prévisualiser"
 
 #: classes/helpers/FrmFormsListHelper.php:455
 msgid "ALL selected forms and their entries will be permanently deleted. Want to proceed?"
@@ -6510,15 +6510,15 @@ msgstr "Style de chargement du formulaire"
 
 #: classes/views/frm-settings/general.php:23
 msgid "on every page of my site"
-msgstr "sur chaque page du site"
+msgstr "Sur chaque page du site"
 
 #: classes/views/frm-settings/general.php:26
 msgid "only on applicable pages"
-msgstr "uniquement sur les pages applicables"
+msgstr "Uniquement sur les pages applicables"
 
 #: classes/views/frm-settings/general.php:29
 msgid "Don't use form styling on any page"
-msgstr "N’utiliser les styles de formulaire sur aucune page."
+msgstr "N’utiliser les styles de formulaire sur aucune page"
 
 #: classes/views/frm-settings/general.php:36
 msgid "Other"
