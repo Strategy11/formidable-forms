@@ -542,7 +542,7 @@ class FrmXMLController {
 			unset( $tb_type );
 		}//end foreach
 
-		$filename = self::get_file_name( $args, $type, $records );
+		$filename = self::get_file_name( $args, $records );
 
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
@@ -596,12 +596,10 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param array $args
-	 * @param array $type
 	 * @param array $records
-	 *
 	 * @return string
 	 */
-	private static function get_file_name( $args, $type, $records ) {
+	private static function get_file_name( $args, $records ) {
 		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 		if ( $has_one_form ) {
 			// one form is being exported

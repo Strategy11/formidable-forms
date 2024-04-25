@@ -30,7 +30,7 @@ class FrmFieldValueSelector {
 	 *
 	 * @since 2.03.05
 	 */
-	protected $field_settings = null;
+	protected $field_settings;
 
 	/**
 	 * @var array
@@ -68,11 +68,11 @@ class FrmFieldValueSelector {
 	protected $blank_option_label = '';
 
 	/**
-	 * @var object
+	 * @var object|null
 	 *
 	 * @since 2.03.05
 	 */
-	protected $db_row = null;
+	protected $db_row;
 
 	/**
 	 * FrmFieldValueSelector constructor

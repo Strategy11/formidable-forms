@@ -291,8 +291,6 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function maybe_unschedule_crons() {
-		$mode = self::get_mode_value_from_post();
-
 		if ( self::at_least_one_mode_is_setup() ) {
 			// Don't unschedule if a mode is still on.
 			return;

@@ -2822,9 +2822,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @return string - 'before', 'after', or 'submit'
-	 *
 	 * @since 4.05.02
+	 * @return string - 'before', 'after', or 'submit'
 	 */
 	private static function message_placement( $form, $message ) {
 		$place = 'before';
@@ -2838,9 +2837,8 @@ class FrmFormsController {
 		}
 
 		/**
-		 * @return string - 'before' or 'after'
-		 *
 		 * @since 4.05.02
+		 * @return string - 'before' or 'after'
 		 */
 		return apply_filters( 'frm_message_placement', $place, compact( 'form', 'message' ) );
 	}

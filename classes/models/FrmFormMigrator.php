@@ -15,7 +15,7 @@ abstract class FrmFormMigrator {
 	public $tracking = 'frm_forms_imported';
 
 	protected $fields_map          = array();
-	protected $current_source_form = null;
+	protected $current_source_form;
 	protected $current_section     = array();
 
 	/**
@@ -128,7 +128,7 @@ abstract class FrmFormMigrator {
 
 		if ( is_array( $forms ) ) {
 			$imported = array();
-			foreach ( (array) $forms as $form_id ) {
+			foreach ( $forms as $form_id ) {
 				$imported[] = $this->import_form( $form_id );
 			}
 		} else {

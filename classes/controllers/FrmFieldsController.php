@@ -521,7 +521,7 @@ class FrmFieldsController {
 			'lookup',
 		);
 
-		if ( ! isset( $field['size'] ) || $field['size'] <= 0 || in_array( $field['type'], $size_fields ) ) {
+		if ( ! isset( $field['size'] ) || $field['size'] <= 0 || in_array( $field['type'], $size_fields, true ) ) {
 			return;
 		}
 
@@ -574,7 +574,7 @@ class FrmFieldsController {
 			'file',
 		);
 
-		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], $fields ) ) {
+		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], $fields, true ) ) {
 			return;
 		}
 

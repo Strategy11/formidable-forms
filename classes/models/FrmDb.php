@@ -526,15 +526,14 @@ class FrmDb {
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
-		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
+		if ( ! in_array( strtolower( $order_by ), $sort_options, true ) ) {
 			$order_by = 'asc';
 		}
 	}
 
 	/**
-	 * @param string $limit
-	 *
 	 * @since 2.05.06
+	 * @param string $limit
 	 */
 	public static function esc_limit( $limit ) {
 		if ( empty( $limit ) ) {
@@ -601,10 +600,9 @@ class FrmDb {
 	/**
 	 * Prepare and save settings in styles and actions
 	 *
+	 * @since 2.05.06
 	 * @param array  $settings
 	 * @param string $group
-	 *
-	 * @since 2.05.06
 	 */
 	public static function save_settings( $settings, $group ) {
 		$settings                 = (array) $settings;

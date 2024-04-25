@@ -699,9 +699,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			} else {
-				$m = $m === false ? false : true;
+				$m = $m !== false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -739,7 +739,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = empty( $m ) ? false : true;
+				$m = ! empty( $m );
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
@@ -761,7 +761,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -956,7 +956,7 @@ class FrmFieldsHelper {
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
-		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
+		} elseif ( in_array( $atts['tag'], $dynamic_default, true ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;
@@ -1360,10 +1360,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
 		// Set up name for other field
@@ -1381,10 +1380,9 @@ class FrmFieldsHelper {
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
 		$parent  = '';
@@ -1413,9 +1411,8 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param array $args
-	 *
 	 * @since 2.0.6
+	 * @param array $args
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {
