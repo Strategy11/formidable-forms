@@ -574,8 +574,8 @@ class FrmFormActionsController {
 				if ( $action->post_excerpt === 'wppost' && $event === 'create' ) {
 					$entry = FrmEntry::getOne( $entry->id, true );
 				}
-			}
-		}
+			} //end foreach
+		} // end if
 	}
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
