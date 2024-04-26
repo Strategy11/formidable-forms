@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-25 20:42\n"
+"PO-Revision-Date: 2024-04-26 08:46\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -6572,7 +6572,7 @@ msgstr "Échec/Double entrée"
 
 #: classes/views/frm-settings/messages.php:13
 msgid "The message seen when a form is submitted and passes validation, but something goes wrong."
-msgstr "Le message affiché quand un formulaire est soumis et passe la validation, mais que quelque chose se passe mal."
+msgstr "Ce message s'affiche quand un formulaire est envoyé et passe la validation, mais qu'un problème se produit."
 
 #: classes/views/frm-settings/messages.php:21
 msgid "Blank Field"
@@ -6620,7 +6620,7 @@ msgstr "Message Ouvrir dans un nouvel onglet"
 
 #: classes/views/frm-settings/messages.php:81
 msgid "The default message seen after opening the redirect URL in new tab when a form is submitted."
-msgstr "Le message par défaut affiché après l’ouverture de l’URL de redirection dans un nouvel onglet lorsqu’un formulaire est soumis."
+msgstr "Ce message par défaut s'affiche après l’ouverture de l’URL de redirection dans un nouvel onglet lorsqu’un formulaire est envoyé."
 
 #: classes/views/frm-settings/messages.php:89
 msgid "Submit Button Text"
