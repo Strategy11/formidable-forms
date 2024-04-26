@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-25 20:42\n"
+"PO-Revision-Date: 2024-04-26 20:43\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -507,7 +507,7 @@ msgstr "Installierte Apps"
 #: classes/controllers/FrmDashboardController.php:241
 #: classes/views/frm-entries/no_entries.php:37
 msgid "See the %1$sform documentation%2$s for instructions on publishing your form"
-msgstr "Siehe die %1$sDokumentation%2$s für Anleitungen zum Veröffentlichen Deines Formulares "
+msgstr "In der %1$sDokumentation%2$s findest du Anweisungen zur Veröffentlichung deines Formulars"
 
 #: classes/controllers/FrmDashboardController.php:247
 #: classes/controllers/FrmDashboardController.php:264
@@ -1275,7 +1275,7 @@ msgstr "Formulardaten mit Statistiken und Grafiken analysieren"
 
 #: classes/controllers/FrmSMTPController.php:162
 msgid "Making Email Deliverability Easy for WordPress"
-msgstr "E-Mail-Auslieferung leicht gemacht für WordPress"
+msgstr "E-Mail-Zustellbarkeit für WordPress leicht gemacht"
 
 #: classes/controllers/FrmSMTPController.php:163
 msgid "WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications."
@@ -6223,7 +6223,7 @@ msgstr "Intelligente Standardwerte"
 
 #: classes/views/frm-forms/add_field_links.php:161
 msgid "Add Layout Classes"
-msgstr "Layout Klassen hinzufügen"
+msgstr "Layout-Klassen hinzufügen"
 
 #: classes/views/frm-forms/add_field_links.php:169
 msgid "Input Mask Format"
@@ -6293,7 +6293,7 @@ msgstr "Beim Absenden"
 
 #: classes/views/frm-forms/settings-advanced.php:63
 msgid "Choose what will happen after the user submits this form."
-msgstr "Festlegen, was geschehen soll, sobald Benutzer das Formular angeschickt haben"
+msgstr "Lege fest, was passieren soll, nachdem der Benutzer das Formular abgeschickt hat."
 
 #: classes/views/frm-forms/settings-advanced.php:71
 msgid "Do not store entries submitted from this form"
@@ -6337,11 +6337,11 @@ msgstr "Lege den Text der Schaltfläche fest."
 
 #: classes/views/frm-forms/settings-buttons.php:22
 msgid "Submit button settings were moved to the Submit button in the form builder."
-msgstr "Die Einstellungen für den Button \"Absenden\" wurden in den Button \"Absenden\" im Formular-Builder verschoben."
+msgstr "Die Einstellungen für den Button \"Senden\" wurden in den Button \"Senden\" im Formular-Builder verschoben."
 
 #: classes/views/frm-forms/settings-html.php:8
 msgid "Form Classes"
-msgstr "Form Klassen"
+msgstr "Formular-Klassen"
 
 #: classes/views/frm-forms/settings-html.php:14
 msgid "Before Fields"
@@ -6353,7 +6353,7 @@ msgstr "Nach den Feldern"
 
 #: classes/views/frm-forms/settings-html.php:42
 msgid "Submit Button"
-msgstr "Senden Button"
+msgstr "Senden-Button"
 
 #: classes/views/frm-forms/shortcode_opts.php:8
 msgid "Select a form:"
@@ -6624,11 +6624,11 @@ msgstr "Die Standardmeldung, die nach dem Öffnen der Weiterleitungs-URL in eine
 
 #: classes/views/frm-settings/messages.php:89
 msgid "Submit Button Text"
-msgstr "Senden Button Text"
+msgstr "Text für Senden-Button"
 
 #: classes/views/frm-settings/messages.php:91
 msgid "The default label for the submit button."
-msgstr "Das Standard-Label für den Absenden-Button."
+msgstr "Das Standard-Label für den Senden-Button."
 
 #: classes/views/frm-settings/misc.php:9
 msgid "Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings."
@@ -7019,7 +7019,7 @@ msgstr "Verwendete Style-Vorlagen"
 
 #: classes/views/styles/_buttons.php:9
 msgid "Disable submit button styling"
-msgstr "Deaktivieren des Stylings des Senden Buttons"
+msgstr "Deaktivieren des Stylings des Senden-Buttons"
 
 #: classes/views/styles/_buttons.php:10
 msgid "Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click \"Update Options\"."
@@ -7308,7 +7308,7 @@ msgstr "Styling deaktiviert"
 
 #: classes/views/styles/_sample_form.php:14
 msgid "This is an example form description for styling purposes."
-msgstr "Das ist eine Beispiel für eine Formular Beschreibung, nur für das Styling"
+msgstr "Das ist ein Beispiel für eine Formular-Beschreibung, die der Gestaltung dient."
 
 #: classes/views/styles/_sample_form.php:18
 msgid "Text field"
@@ -7519,7 +7519,7 @@ msgstr "Exportiere deine Formulare, Einträge, Ansichten und Styles, um sie einf
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
-msgstr "Format exportieren"
+msgstr "Export-Format"
 
 #: classes/views/xml/import_form.php:90
 msgid "If your CSV special characters are not working correctly, try a different formatting option."
