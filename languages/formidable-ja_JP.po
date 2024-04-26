@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-25 20:42\n"
+"PO-Revision-Date: 2024-04-26 08:46\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -395,7 +395,7 @@ msgstr "エントリー"
 #: classes/views/shared/views-info.php:10
 #: js/admin/applications.js:349
 msgid "Views"
-msgstr "表示数"
+msgstr "ビュー"
 
 #: classes/controllers/FrmAppController.php:317
 #: classes/views/shared/reports-info.php:10
@@ -507,7 +507,7 @@ msgstr "インストール済みアプリ"
 #: classes/controllers/FrmDashboardController.php:241
 #: classes/views/frm-entries/no_entries.php:37
 msgid "See the %1$sform documentation%2$s for instructions on publishing your form"
-msgstr "フォームを公開する手順については、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。"
+msgstr "フォーム公開の手順は、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。"
 
 #: classes/controllers/FrmDashboardController.php:247
 #: classes/controllers/FrmDashboardController.php:264
@@ -521,7 +521,7 @@ msgstr "新規フォームを追加"
 #. translators: %1$s: HTML start of a tag, %2$s: HTML close a tag
 #: classes/controllers/FrmDashboardController.php:258
 msgid "See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you'll see it here."
-msgstr "フォームを公開する手順については、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。エントリーが少なくとも1つあると、ここに表示されます。"
+msgstr "フォーム公開の手順は、%1$sフォームについてのドキュメンテーション%2$sをご覧ください。エントリーが少なくとも1つあると、ここに表示されます。"
 
 #: classes/controllers/FrmDashboardController.php:334
 #: classes/controllers/FrmEntriesController.php:86
@@ -942,7 +942,7 @@ msgstr "ユーザー IP"
 
 #: classes/controllers/FrmFormsController.php:1547
 msgid "Entry created"
-msgstr "エントリーが作成されました"
+msgstr "エントリーを作成"
 
 #: classes/controllers/FrmFormsController.php:1548
 msgid "Entry updated"
@@ -2416,7 +2416,7 @@ msgstr "ウルグアイ・ペソ"
 #: classes/helpers/FrmDashboardHelper.php:201
 #: classes/views/onboarding-wizard/steps/welcome-step.php:29
 msgid "Connect Account"
-msgstr "アカウントを連携"
+msgstr "アカウントを接続"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
@@ -3779,7 +3779,7 @@ msgstr "ラジオボタンやチェックボックスの代わりに画像を表
 
 #: classes/helpers/FrmFieldsHelper.php:2118
 msgid "Button Options"
-msgstr "ボタン設定:"
+msgstr "ボタンオプション"
 
 #: classes/helpers/FrmFieldsHelper.php:2119
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
@@ -3910,7 +3910,7 @@ msgstr "テンプレートからフォームを作成"
 
 #: classes/helpers/FrmFormsHelper.php:1079
 msgid "Duplicate Form"
-msgstr "複製フォーム"
+msgstr "フォームを複製"
 
 #: classes/helpers/FrmFormsHelper.php:1200
 msgid "Restore from Trash"
@@ -3959,7 +3959,7 @@ msgstr "これを読み取り専用フィールドに追加すると、枠線や
 
 #: classes/helpers/FrmFormsHelper.php:1238
 msgid "Big Total"
-msgstr "合計"
+msgstr "総計"
 
 #: classes/helpers/FrmFormsHelper.php:1239
 msgid "Add this to a read-only field to display the text in large, bold text without a border or background."
@@ -3976,7 +3976,7 @@ msgstr "チェックボックスやラジオボタンが多い場合は、この
 #: classes/helpers/FrmFormsHelper.php:1246
 #: classes/models/fields/FrmFieldName.php:36
 msgid "First"
-msgstr "最初"
+msgstr "名"
 
 #: classes/helpers/FrmFormsHelper.php:1247
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
@@ -4573,7 +4573,7 @@ msgstr[0] "%1$s フォーム"
 #: classes/models/FrmFormMigrator.php:586
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
-msgstr[0] "%1$s フィールド"
+msgstr[0] "%1$sフィールド"
 
 #. translators: %1$s: Number of items
 #: classes/helpers/FrmXMLHelper.php:1431
@@ -4684,7 +4684,7 @@ msgstr "ミドルネーム"
 
 #: classes/models/fields/FrmFieldName.php:38
 msgid "Last"
-msgstr "最後"
+msgstr "姓"
 
 #: classes/models/fields/FrmFieldNumber.php:80
 msgid "Please select a higher number"
@@ -4705,7 +4705,7 @@ msgstr "国際電話フィールド"
 
 #: classes/models/fields/FrmFieldPhone.php:71
 msgid "International"
-msgstr "海外"
+msgstr "インターナショナル"
 
 #: classes/models/fields/FrmFieldType.php:268
 msgid "(Collapsed)"
@@ -4861,7 +4861,7 @@ msgstr "今月の上位のフォーム"
 
 #: classes/models/FrmEmailStats.php:106
 msgid "Entries created"
-msgstr "エントリーが作成されました"
+msgstr "エントリーを作成"
 
 #: classes/models/FrmEmailStats.php:145
 msgid "Payments collected"
@@ -5515,11 +5515,11 @@ msgstr "コードを取得"
 
 #: classes/views/form-templates/modals/name-your-form-modal.php:15
 msgid "Name your form"
-msgstr "フォームに名前を付ける"
+msgstr "フォームに名前をつける"
 
 #: classes/views/form-templates/modals/name-your-form-modal.php:20
 msgid "Before we save this form, do you want to name it first?"
-msgstr "このフォームが保存される前にまず名前を付けますか ?"
+msgstr "このフォームを保存する前に、名前をつけてください。"
 
 #: classes/views/form-templates/modals/name-your-form-modal.php:24
 msgid "Form Name (Optional)"
@@ -5848,7 +5848,7 @@ msgstr "%s フィールド"
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:32
 msgid "Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s."
-msgstr "Captcha は、サイトキーとシークレットキーが%1$s設定%2$sされるまで使用されません。"
+msgstr "Captcha は、サイトキーとシークレットキーが%1$s設定%2$sされるまで使用できません。"
 
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
@@ -6967,7 +6967,7 @@ msgstr "%1$s は%2$sインストールされていません%3$s"
 
 #: classes/views/shared/upgrade_overlay.php:31
 msgid "That add-on is not installed. Would you like to install it now?"
-msgstr "そのアドオンはインストールされていません。今すぐインストールしますか ?"
+msgstr "このアドオンはインストールされていません。今すぐインストールしますか ?"
 
 #. translators: %s: Feature name
 #: classes/views/shared/upgrade_overlay.php:42
