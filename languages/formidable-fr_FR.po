@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 08:46\n"
+"PO-Revision-Date: 2024-04-26 20:43\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -884,7 +884,7 @@ msgstr "Format de date"
 #: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
 msgid "Field Label"
-msgstr "Etiquette du champ"
+msgstr "Étiquette  du champ"
 
 #: classes/controllers/FrmFormsController.php:1507
 msgid "No Auto P"
@@ -1211,7 +1211,7 @@ msgstr "Paramètres enregistrés"
 #: classes/views/summary-emails/stats.php:117
 #: deprecated/FrmDeprecated.php:66
 msgid "Update"
-msgstr "Mise à jour"
+msgstr "Mettre à jour"
 
 #: classes/controllers/FrmSettingsController.php:339
 msgid "Extra form features like file uploads, pagination, etc"
@@ -1422,7 +1422,7 @@ msgstr "Description du formulaire"
 
 #: classes/controllers/FrmStylesController.php:945
 msgid "Field Labels"
-msgstr "Etiquettes de champ"
+msgstr "Étiquette s de champ"
 
 #: classes/controllers/FrmStylesController.php:946
 #: classes/helpers/FrmFormsHelper.php:518
@@ -1437,7 +1437,7 @@ msgstr "Couleurs de champ"
 #: classes/controllers/FrmStylesController.php:948
 #: js/formidable_admin.js:2393
 msgid "Field Settings"
-msgstr "Paramètres de champ"
+msgstr "Réglages du champ"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
@@ -1523,11 +1523,11 @@ msgstr "Recherche"
 
 #: classes/helpers/FrmAppHelper.php:1779
 msgid "Add Entries from Admin Area"
-msgstr "Ajouter des données de la zone d'administration:"
+msgstr "Ajouter des données de la zone d’administration"
 
 #: classes/helpers/FrmAppHelper.php:1780
 msgid "Edit Entries from Admin Area"
-msgstr "Modifier les entrées de la Zone d'administration"
+msgstr "Modifier les entrées de la zone d’administration"
 
 #: classes/helpers/FrmAppHelper.php:1781
 msgid "View Reports"
@@ -1551,15 +1551,15 @@ msgstr "Supprimer les formulaires"
 
 #: classes/helpers/FrmAppHelper.php:1815
 msgid "Access this Settings Page"
-msgstr "Accédez à cette page de configuration"
+msgstr "Accès à cette page de réglages"
 
 #: classes/helpers/FrmAppHelper.php:1816
 msgid "View Entries from Admin Area"
-msgstr "Voir les entrées de la Zone d'administration"
+msgstr "Voir les entrées de la zone d’administration"
 
 #: classes/helpers/FrmAppHelper.php:1817
 msgid "Delete Entries from Admin Area"
-msgstr "Supprimer les entrées de la Zone d'administration"
+msgstr "Supprimer les entrées de la zone d’administration"
 
 #: classes/helpers/FrmAppHelper.php:2621
 msgid "at"
@@ -4247,7 +4247,7 @@ msgstr "Sélectionner une page"
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:147
 msgid "Your responses were successfully submitted. Thank you!"
-msgstr "Vos réponses ont été soumises avec succès. Merci !"
+msgstr "Vos réponses ont été bien été envoyées. Merci !"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
@@ -4921,7 +4921,7 @@ msgstr "Votre entrée semble être un spam bloqué !"
 #: classes/views/styles/_form-messages.php:16
 #: classes/views/styles/_form-messages.php:36
 msgid "Text"
-msgstr "texte"
+msgstr "Texte"
 
 #: classes/models/FrmField.php:18
 msgid "Paragraph"
@@ -5001,7 +5001,7 @@ msgstr "Champ dynamique"
 
 #: classes/models/FrmField.php:138
 msgid "Lookup"
-msgstr "Rechercher un champ"
+msgstr "Champ de recherche"
 
 #: classes/models/FrmField.php:143
 msgid "Repeater"
@@ -5222,11 +5222,11 @@ msgstr "Nous sommes désolés. Il semble que vous avez déjà envoyé cela"
 
 #: classes/models/FrmSettings.php:155
 msgid "You do not have permission to view this form."
-msgstr "Vous n'avez pas la permission de voir ce formulaire."
+msgstr "Vous n'avez pas le droit de voir ce formulaire."
 
 #: classes/models/FrmSettings.php:156
 msgid "You do not have permission to do that"
-msgstr "Vous n'avez pas la permission de faire cela"
+msgstr "Vous n'avez pas les droits requis pour cette action."
 
 #: classes/models/FrmSettings.php:157
 msgid "The page has been opened in a new tab."
@@ -5364,7 +5364,7 @@ msgstr "Des modules manquent ?"
 
 #: classes/views/addons/list.php:32
 msgid "Check now for a recent upgrade or renewal"
-msgstr "Vérifier maintenant la disponibilité d’une mise à niveau ou d’un renouvellement récent·e"
+msgstr "Vérifiez maintenant si une nouvelle mise à niveau ou un renouvellement récent sont disponibles."
 
 #: classes/views/addons/list.php:62
 #: classes/views/addons/list.php:63
@@ -5493,7 +5493,7 @@ msgstr "Créer un nouveau modèle"
 
 #: classes/views/form-templates/modals/create-template-modal.php:22
 msgid "Select form for a new template"
-msgstr "Sélectionner le formulaire pour un nouveau modèle"
+msgstr "Sélectionnez le formulaire pour un créer un nouveau modèle :"
 
 #: classes/views/form-templates/modals/create-template-modal.php:30
 msgid "You have not created any forms yet."
@@ -5641,7 +5641,7 @@ msgstr "Aucune entrée pour le formulaire : %s"
 
 #: classes/views/frm-entries/no_entries.php:29
 msgid "No Entries found"
-msgstr "Aucun entrée trouvée"
+msgstr "Aucune entrée trouvée"
 
 #: classes/views/frm-entries/no_entries.php:46
 #: classes/views/frm-forms/list.php:46
@@ -5875,11 +5875,11 @@ msgstr "Les cartes de crédit ne fonctionneront pas sans %1$sajouter une action 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
 msgid "Required"
-msgstr "Requis"
+msgstr "Obligatoire"
 
 #: classes/views/frm-fields/back-end/settings.php:78
 msgid "Unique: Do not allow the same response multiple times. For example, if one user enters 'Joe', then no one else will be allowed to enter the same name."
-msgstr "Unique&nbsp;: Ne permet pas plusieurs fois la même réponse. Par exemple, si un utilisateur saisi « Joe » alors plus personne ne sera autorisé à saisir le même nom."
+msgstr "Unique : une même réponse peut être saisie une seule fois. Par exemple, si une personne indique « Joe » alors aucune autre personne ne sera autorisée à saisir le même nom."
 
 #: classes/views/frm-fields/back-end/settings.php:79
 #: classes/views/frm-fields/back-end/settings.php:380
@@ -5888,7 +5888,7 @@ msgstr "Unique"
 
 #: classes/views/frm-fields/back-end/settings.php:86
 msgid "Read Only: Show this field but do not allow the field value to be edited from the front-end."
-msgstr "Voir uniquement: Montrer ce champ, mais ne pas permettre d’éditer la valeur du champ depuis le front end."
+msgstr "Lecture seule : afficher ce champ, mais ne pas autoriser à éditer la valeur du champ depuis le front end."
 
 #: classes/views/frm-fields/back-end/settings.php:88
 msgid "Read Only"
@@ -5949,7 +5949,7 @@ msgstr "Auto"
 
 #: classes/views/frm-fields/back-end/settings.php:270
 msgid "Required Field Indicator"
-msgstr "Indicateur de Champ Obligatoire"
+msgstr "Indicateur de champ obligatoire"
 
 #: classes/views/frm-fields/back-end/settings.php:296
 msgid "Center"
@@ -6158,7 +6158,7 @@ msgstr "Ajoutez l'adresse IP, navigateur, et l'URL de référent au message"
 
 #: classes/views/frm-form-actions/_email_settings.php:117
 msgid "Append Browser and Referring URL to message"
-msgstr "Ajoute le navigateur et l’URL de soumission au message"
+msgstr "Ajoute le navigateur et l’URL de référence au message"
 
 #: classes/views/frm-form-actions/_email_settings.php:124
 msgid "Send Emails in Plain Text"
@@ -6211,7 +6211,7 @@ msgstr "Rechercher des champs"
 
 #: classes/views/frm-forms/add_field_links.php:119
 msgid "Pricing Fields"
-msgstr "Champs Tarifaires"
+msgstr "Champs tarifaires"
 
 #: classes/views/frm-forms/add_field_links.php:138
 msgid "Select a field to see the options"
@@ -6580,7 +6580,7 @@ msgstr "Champ vide"
 
 #: classes/views/frm-settings/messages.php:23
 msgid "The message seen when a required field is left blank."
-msgstr "Le message vu quand une réponse dans ce champ est incorrecte ou manquante."
+msgstr "Ce message s'affiche quand une réponse dans ce champ est incorrecte ou manquante."
 
 #: classes/views/frm-settings/messages.php:31
 msgid "Incorrect Field"
@@ -6588,7 +6588,7 @@ msgstr "Champ incorrect"
 
 #: classes/views/frm-settings/messages.php:33
 msgid "The message seen when a field response is either incorrect or missing."
-msgstr "Le message vu quand une réponse de champ est incorrecte ou manquante."
+msgstr "Ce message s'affiche quand une réponse de champ est incorrecte ou manquante."
 
 #: classes/views/frm-settings/messages.php:41
 msgid "Requires Privileged Access"
@@ -6612,7 +6612,7 @@ msgstr "Message de réussite"
 
 #: classes/views/frm-settings/messages.php:71
 msgid "The default message seen after a form is submitted."
-msgstr "Le message par défaut vu après un formulaire soumis."
+msgstr "Ce message est le message par défaut affiché quand un formulaire est envoyé."
 
 #: classes/views/frm-settings/messages.php:79
 msgid "Open In New Tab Message"
@@ -6632,11 +6632,11 @@ msgstr "Le libellé par défaut du bouton d’envoi."
 
 #: classes/views/frm-settings/misc.php:9
 msgid "Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings."
-msgstr "Autorisez Formidable Forms à suivre l’utilisation de l’extension pour nous aider à assurer la compatibilité et simplifier nos réglages."
+msgstr "Autoriser Formidable Forms à suivre l’utilisation de l’extension pour nous aider à assurer la compatibilité et simplifier nos réglages"
 
 #: classes/views/frm-settings/misc.php:23
 msgid "Send monthly and yearly summary emails with form and payment stats."
-msgstr "Envoyez des e-mails récapitulatifs mensuels et annuels avec des statistiques de formulaires et de paiements."
+msgstr "Envoyer des e-mails récapitulatifs mensuels et annuels avec des statistiques de formulaires et de paiements"
 
 #: classes/views/frm-settings/misc.php:28
 msgid "Summary email recipients"
@@ -6657,7 +6657,7 @@ msgstr "Nous recommandons l’utilisation du HTML5 pour vos formulaires. Cela aj
 
 #: classes/views/frm-settings/misc.php:61
 msgid "Uninstall Formidable Forms and permanently delete all data."
-msgstr "Supprimer de manière définitive le plugin Formidable Forms et toutes les données associées."
+msgstr "Supprimer de manière définitive l’extension Formidable Forms et toutes les données associées"
 
 #: classes/views/frm-settings/misc.php:63
 msgid "Are you sure you want to delete all forms, form data, and all other Formidable data. There is no Undo."
@@ -6669,7 +6669,7 @@ msgstr "Désinstaller Maintenant"
 
 #: classes/views/frm-settings/permissions.php:7
 msgid "Select users that are allowed access to Formidable. Without access to View Forms List, users will be unable to see the Formidable menu."
-msgstr "Sélectionnez les comptes autorisés à accéder à Formidable. Sans accès à Voir la liste des formulaires, les utilisateurs ne pourront pas voir le menu Formidable."
+msgstr "Sélectionnez les comptes autorisés à accéder à Formidable. Si les utilisateurs/utilisatrices n'ont pas accès à Voir la liste des formulaires, ils/elles ne peuvent pas voir le menu Formidable."
 
 #: classes/views/frm-settings/settings_cta.php:14
 msgid "Get Formidable Forms Pro and Unlock all the Powerful Features"
@@ -6984,7 +6984,7 @@ msgstr "%1$s %2$sne sont pas installés%3$s"
 
 #: classes/views/shared/upgrade_overlay.php:31
 msgid "That add-on is not installed. Would you like to install it now?"
-msgstr "Cet add-on n'est pas installé. Voulez-vous l'installer maintenant ?"
+msgstr "Ce module n'est pas installé. Voulez-vous l'installer maintenant ?"
 
 #. translators: %s: Feature name
 #: classes/views/shared/upgrade_overlay.php:42
