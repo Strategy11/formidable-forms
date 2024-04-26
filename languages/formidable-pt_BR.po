@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-19 22:50\n"
+"PO-Revision-Date: 2024-04-26 20:44\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -361,7 +361,7 @@ msgstr "Atualizar agora"
 
 #: classes/controllers/FrmAppController.php:270
 msgid "Build"
-msgstr "Construir"
+msgstr "Criar"
 
 #: classes/controllers/FrmAppController.php:277
 #: classes/controllers/FrmStylesController.php:52
@@ -395,7 +395,7 @@ msgstr "Entradas"
 #: classes/views/shared/views-info.php:10
 #: js/admin/applications.js:349
 msgid "Views"
-msgstr "Cenários"
+msgstr "Visualizações"
 
 #: classes/controllers/FrmAppController.php:317
 #: classes/views/shared/reports-info.php:10
@@ -467,7 +467,7 @@ msgstr "Você ainda não configurou um formulário de pagamento."
 
 #: classes/controllers/FrmDashboardController.php:100
 msgid "Create a Payment Form"
-msgstr "Crie um formulário de pagamento"
+msgstr "Criar um formulário de pagamento"
 
 #: classes/controllers/FrmDashboardController.php:105
 msgid "Total Earnings"
@@ -553,7 +553,7 @@ msgstr "Criado em"
 #: classes/views/frm-entries/form.php:76
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
-msgstr "Chave da Entrada"
+msgstr "Chave de entrada"
 
 #: classes/controllers/FrmEntriesController.php:87
 msgid "Entry Name"
@@ -665,7 +665,7 @@ msgstr "Opções de lógica condicional"
 
 #: classes/controllers/FrmFormsController.php:60
 msgid "Conditional Logic"
-msgstr "Condicional Lógica"
+msgstr "Lógica condicional"
 
 #: classes/controllers/FrmFormsController.php:156
 #: classes/helpers/FrmSubmitHelper.php:153
@@ -851,7 +851,7 @@ msgstr "Faça uma pergunta de cada vez para conversas automatizadas."
 
 #: classes/controllers/FrmFormsController.php:1290
 msgid "Form Abandonment"
-msgstr "Abando de formulários"
+msgstr "Abandono de formulários"
 
 #: classes/controllers/FrmFormsController.php:1296
 msgid "Form abandonment settings"
@@ -884,7 +884,7 @@ msgstr "Formato da Data"
 #: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
 msgid "Field Label"
-msgstr "Rótulo do Campo"
+msgstr "Rótulo do campo"
 
 #: classes/controllers/FrmFormsController.php:1507
 msgid "No Auto P"
@@ -907,7 +907,7 @@ msgstr "Primeiro nome"
 #: classes/controllers/FrmFormsController.php:1525
 #: stripe/views/action-settings/payments-options.php:130
 msgid "Last Name"
-msgstr "Último Nome"
+msgstr "Sobrenome"
 
 #: classes/controllers/FrmFormsController.php:1526
 msgid "Display Name"
@@ -938,7 +938,7 @@ msgstr "ID Entrada"
 
 #: classes/controllers/FrmFormsController.php:1545
 msgid "Post ID"
-msgstr "ID do Post"
+msgstr "ID do post"
 
 #: classes/controllers/FrmFormsController.php:1546
 msgid "User IP"
@@ -1428,7 +1428,7 @@ msgstr "Etiquetas de campo"
 #: classes/helpers/FrmFormsHelper.php:518
 #: classes/views/frm-fields/back-end/field-description.php:8
 msgid "Field Description"
-msgstr "Descrição do Campo"
+msgstr "Descrição do campo"
 
 #: classes/controllers/FrmStylesController.php:947
 msgid "Field Colors"
@@ -1441,7 +1441,7 @@ msgstr "Configurações do Campo"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
-msgstr "Caixa de seleção e campos de rádio"
+msgstr "Caixa de seleção e campos de opção"
 
 #: classes/controllers/FrmStylesController.php:951
 msgid "Form Messages"
@@ -1535,7 +1535,7 @@ msgstr "Ver relatórios"
 
 #: classes/helpers/FrmAppHelper.php:1793
 msgid "Add/Edit Views"
-msgstr "Adicionar/Editar Cenários"
+msgstr "Adicionar/Editar visualizações"
 
 #: classes/helpers/FrmAppHelper.php:1812
 msgid "View Forms List"
@@ -2428,7 +2428,7 @@ msgstr "Conectar conta"
 
 #: classes/helpers/FrmDashboardHelper.php:206
 msgid "Get Formidable PRO"
-msgstr "Obtenha o Formidable Pro"
+msgstr "Obter o Formidable Pro"
 
 #. translators: %d: number of form templates
 #: classes/helpers/FrmDashboardHelper.php:237
@@ -3675,7 +3675,7 @@ msgstr "Idade"
 
 #: classes/helpers/FrmFieldsHelper.php:1897
 msgid "Very Unsatisfied"
-msgstr "Muito Insatisfeito"
+msgstr "Muito insatisfeito"
 
 #: classes/helpers/FrmFieldsHelper.php:1898
 msgid "Unsatisfied"
@@ -3694,7 +3694,7 @@ msgstr "Satisfeito"
 
 #: classes/helpers/FrmFieldsHelper.php:1901
 msgid "Very Satisfied"
-msgstr "Muito Satisfeito"
+msgstr "Muito satisfeito"
 
 #: classes/helpers/FrmFieldsHelper.php:1902
 #: classes/helpers/FrmFieldsHelper.php:1917
@@ -3709,7 +3709,7 @@ msgstr "Satisfação"
 
 #: classes/helpers/FrmFieldsHelper.php:1912
 msgid "Not at all Important"
-msgstr "Nenhum pouco importante"
+msgstr "Nem um pouco importante"
 
 #: classes/helpers/FrmFieldsHelper.php:1913
 msgid "Somewhat Important"
@@ -3721,7 +3721,7 @@ msgstr "Importante"
 
 #: classes/helpers/FrmFieldsHelper.php:1916
 msgid "Very Important"
-msgstr "Muito Importante"
+msgstr "Muito importante"
 
 #: classes/helpers/FrmFieldsHelper.php:1923
 msgid "Importance"
@@ -3783,7 +3783,7 @@ msgstr "Opções de imagem"
 
 #: classes/helpers/FrmFieldsHelper.php:2111
 msgid "Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
-msgstr "Mostre imagens em vez de botões de rádio ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
+msgstr "Mostre imagens em vez de botões de opção ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
 
 #: classes/helpers/FrmFieldsHelper.php:2118
 msgid "Button Options"
@@ -3791,7 +3791,7 @@ msgstr "Opções de botão"
 
 #: classes/helpers/FrmFieldsHelper.php:2119
 msgid "Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more."
-msgstr "Mostrar botões para botões de rádio ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
+msgstr "Mostrar botões para botões de opção ou caixas de seleção. Essa opção é ideal para enquetes, pesquisas, questionários de segmentação e muito mais."
 
 #. translators: Add-on name.
 #: classes/helpers/FrmFieldsHelper.php:2200
@@ -3848,7 +3848,7 @@ msgstr "ID do Campo"
 #: classes/helpers/FrmFormsHelper.php:510
 #: classes/views/frm-fields/back-end/settings.php:307
 msgid "Field Key"
-msgstr "Chave do Campo"
+msgstr "Campo da chave"
 
 #: classes/helpers/FrmFormsHelper.php:514
 msgid "Field Name"
@@ -3857,7 +3857,7 @@ msgstr "Nome do Campo"
 #: classes/helpers/FrmFormsHelper.php:522
 #: classes/views/frm-fields/back-end/settings.php:278
 msgid "Label Position"
-msgstr "Posição do Rótulo"
+msgstr "Posição do rótulo"
 
 #: classes/helpers/FrmFormsHelper.php:526
 msgid "Required Label"
@@ -3898,7 +3898,7 @@ msgstr "Adicione o nome da classe se o campo tem um erro ao submeter o formulár
 #: classes/helpers/FrmFormsHelper.php:562
 #: classes/views/frm-forms/settings-advanced.php:20
 msgid "Form Key"
-msgstr "Chave do Formulário"
+msgstr "Chave do formulário"
 
 #: classes/helpers/FrmFormsHelper.php:566
 msgid "Delete Entry Link"
@@ -3931,13 +3931,13 @@ msgstr "Restaurar"
 
 #: classes/helpers/FrmFormsHelper.php:1205
 msgid "Move Form to Trash"
-msgstr "Mover formulário para o lixo"
+msgstr "Mover formulário para a lixeira"
 
 #: classes/helpers/FrmFormsHelper.php:1206
 #: classes/helpers/FrmFormsHelper.php:1298
 #: classes/helpers/FrmFormsListHelper.php:167
 msgid "Trash"
-msgstr "Lixo"
+msgstr "Lixeira"
 
 #: classes/helpers/FrmFormsHelper.php:1210
 msgid "Do you want to move this form to the trash?"
@@ -3979,12 +3979,12 @@ msgstr "Caixa de rolagem"
 
 #: classes/helpers/FrmFormsHelper.php:1243
 msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
-msgstr "Se você tiver muitas opções de caixa de seleção ou botão de rádio, poderá adicionar essa classe para permitir que o usuário percorra facilmente as opções. Ou adicione uma área de rolagem ao redor do conteúdo em um campo HTML."
+msgstr "Se você tiver muitas opções de caixa de seleção ou botão de opção, poderá adicionar essa classe para permitir que o usuário percorra facilmente as opções. Ou adicione uma área de rolagem ao redor do conteúdo em um campo HTML."
 
 #: classes/helpers/FrmFormsHelper.php:1246
 #: classes/models/fields/FrmFieldName.php:36
 msgid "First"
-msgstr "Primeiro"
+msgstr "Nome"
 
 #: classes/helpers/FrmFormsHelper.php:1247
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
@@ -4071,7 +4071,7 @@ msgstr "Nenhum formulário encontrado"
 #: classes/helpers/FrmFormsListHelper.php:137
 #: classes/views/form-templates/template.php:57
 msgid "Move to Trash"
-msgstr "Mover para o Lixo"
+msgstr "Mover para a lixeira"
 
 #: classes/helpers/FrmFormsListHelper.php:156
 msgid "Empty Trash"
@@ -4102,12 +4102,12 @@ msgstr "A opção de salvar entradas está desativada para esse formulário"
 #: classes/helpers/FrmFormsListHelper.php:328
 #: classes/models/FrmField.php:161
 msgid "Embed Form"
-msgstr "Inserir formulário"
+msgstr "Incorporar formulário"
 
 #: classes/helpers/FrmFormsListHelper.php:390
 #: classes/views/frm-forms/_publish_box.php:20
 msgid "Preview"
-msgstr "Prévia"
+msgstr "Pré-visualização"
 
 #: classes/helpers/FrmFormsListHelper.php:455
 msgid "ALL selected forms and their entries will be permanently deleted. Want to proceed?"
@@ -4159,7 +4159,7 @@ msgstr "Ações agendadas"
 #: classes/helpers/FrmListHelper.php:398
 #: js/admin/style.js:605
 msgid "Apply"
-msgstr "Candidatar-se"
+msgstr "Aplicar"
 
 #: classes/helpers/FrmListHelper.php:471
 #: classes/helpers/FrmListHelper.php:1190
@@ -4247,7 +4247,7 @@ msgstr "Selecione uma página"
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:147
 msgid "Your responses were successfully submitted. Thank you!"
-msgstr "Suas respostas foram enviados com sucesso. Obrigado!"
+msgstr "Suas respostas foram enviadas com sucesso. Obrigado!"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
@@ -4295,7 +4295,7 @@ msgstr "Esquerda"
 
 #: classes/helpers/FrmStylesHelper.php:46
 msgid "Inline (left without a set width)"
-msgstr "Em linha (deixe sem configurar a largura)"
+msgstr "Embutido (sem configuração de largura)"
 
 #: classes/helpers/FrmStylesHelper.php:47
 #: classes/views/frm-fields/back-end/phone/phone-type.php:32
@@ -4309,7 +4309,7 @@ msgstr "Oculto (mas deixa um espaço)"
 
 #: classes/helpers/FrmStylesHelper.php:49
 msgid "Placeholder inside the field"
-msgstr "Placeholder dentro do campo"
+msgstr "Espaço reservado dentro do campo"
 
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
@@ -4338,7 +4338,7 @@ msgstr "As alterações feitas nesse estilo serão aplicadas a todos os formulá
 
 #: classes/helpers/FrmTipsHelper.php:87
 msgid "Upgrade to Pro."
-msgstr "Atualizar para Pro."
+msgstr "Atualizar para a versão Pro."
 
 #: classes/helpers/FrmTipsHelper.php:100
 msgid "Use conditional logic to shorten your forms and increase conversions."
@@ -4634,7 +4634,7 @@ msgstr "Ir para formulário importado"
 
 #: classes/helpers/FrmXMLHelper.php:1718
 msgid "Create Posts"
-msgstr "Criar Posts"
+msgstr "Criar posts"
 
 #: classes/helpers/FrmXMLHelper.php:1847
 msgid "Email Notification"
@@ -4701,7 +4701,7 @@ msgstr "Meio"
 
 #: classes/models/fields/FrmFieldName.php:38
 msgid "Last"
-msgstr "Último"
+msgstr "Sobrenome"
 
 #: classes/models/fields/FrmFieldNumber.php:80
 msgid "Please select a higher number"
@@ -4934,15 +4934,15 @@ msgstr "Caixas de seleção"
 #: classes/models/FrmField.php:26
 #: classes/views/styles/_sample_form.php:55
 msgid "Radio Buttons"
-msgstr "Botões de Rádio"
+msgstr "Botões de opção"
 
 #: classes/models/FrmField.php:30
 msgid "Dropdown"
-msgstr "Menu Dropdown"
+msgstr "Menu suspenso"
 
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
-msgstr "Site / URL"
+msgstr "Site/URL"
 
 #: classes/models/FrmField.php:42
 msgid "Number"
@@ -5022,7 +5022,7 @@ msgstr "Quebra de página"
 
 #: classes/models/FrmField.php:165
 msgid "Likert Scale"
-msgstr "Escala de Likert"
+msgstr "Escala Likert"
 
 #: classes/models/FrmField.php:170
 msgid "NPS"
@@ -5618,7 +5618,7 @@ msgstr "Opa!"
 #. translators: %1$s: HTML open link, %2$s: HTML close link
 #: classes/views/frm-entries/form.php:14
 msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
-msgstr "Você não adicionou nenhum campo ao seu formulário. %1$sVolte%2$s e adicione alguns."
+msgstr "Você não adicionou nenhum campo ao seu formulário. %1$sVolte%2$s e adicione."
 
 #: classes/views/frm-entries/list.php:14
 #: classes/views/frm-entries/list.php:31
@@ -5806,7 +5806,7 @@ msgstr "Layout do nome"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:35
 msgid "First Last"
-msgstr "O último primeiro"
+msgstr "Nome Sobrenome"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:38
 msgid "Last First"
@@ -5814,7 +5814,7 @@ msgstr "Sobrenome Nome"
 
 #: classes/views/frm-fields/back-end/name/primary-options.php:41
 msgid "First Middle Last"
-msgstr "Do meio primeiro"
+msgstr "Nome Sobrenome do meio Sobrenome"
 
 #: classes/views/frm-fields/back-end/number-range.php:7
 msgid "Set the number range the field validation should allow. Browsers that support the HTML5 number field require a number range to determine the numbers seen when clicking the arrows next to the field."
@@ -5822,11 +5822,11 @@ msgstr "Defina o intervalo de números que a validação do campo deve permitir.
 
 #: classes/views/frm-fields/back-end/number-range.php:8
 msgid "Number Range"
-msgstr "Faixa numérica"
+msgstr "Intervalo de números"
 
 #: classes/views/frm-fields/back-end/number-range.php:21
 msgid "Step"
-msgstr "Passo"
+msgstr "Etapa"
 
 #: classes/views/frm-fields/back-end/phone/phone-type.php:22
 #: classes/views/frm-fields/back-end/value-format.php:8
@@ -5835,7 +5835,7 @@ msgstr "Formato"
 
 #: classes/views/frm-fields/back-end/pixels-wide.php:8
 msgid "Field Size"
-msgstr "Tamanho do Campo"
+msgstr "Tamanho do campo"
 
 #: classes/views/frm-fields/back-end/pixels-wide.php:10
 msgid "(%, px, em)"
@@ -5892,11 +5892,11 @@ msgstr "Somente leitura: Mostrar esse campo, mas não permitir que o valor dele 
 
 #: classes/views/frm-fields/back-end/settings.php:88
 msgid "Read Only"
-msgstr "Somente Leitura"
+msgstr "Somente leitura"
 
 #: classes/views/frm-fields/back-end/settings.php:108
 msgid "Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row."
-msgstr "Adicionar uma classe de CSS ao contêiner do campo. Use nossas classes pré-definidas para alinhar múltiplos campos numa linha única."
+msgstr "Adicionar uma classe de CSS ao contêiner do campo. Use nossas classes predefinidas para alinhar múltiplos campos numa linha única."
 
 #: classes/views/frm-fields/back-end/settings.php:109
 msgid "CSS Layout Classes"
@@ -5957,7 +5957,7 @@ msgstr "Centro"
 
 #: classes/views/frm-fields/back-end/settings.php:306
 msgid "The field key can be used as an alternative to the field ID in many cases."
-msgstr "O campo chave pode ser usado como uma alternativa para o campo ID, em muitos casos."
+msgstr "O campo da chave pode ser usado como uma alternativa para o campo da ID, em muitos casos."
 
 #: classes/views/frm-fields/back-end/settings.php:315
 msgid "Field Type"
@@ -6162,7 +6162,7 @@ msgstr "Anexar navegador e URL de referência à mensagem"
 
 #: classes/views/frm-form-actions/_email_settings.php:124
 msgid "Send Emails in Plain Text"
-msgstr "Enviar emails em texto claro"
+msgstr "Enviar e-mails com texto sem formatação"
 
 #: classes/views/frm-forms/actions-dropdown.php:7
 msgid "Show options"
@@ -6243,7 +6243,7 @@ msgstr "Deslizar verticalmente"
 
 #: classes/views/frm-forms/edit.php:13
 msgid "Build Form"
-msgstr "Construir Formulário"
+msgstr "Criar formulário"
 
 #. translators: %s: The page number
 #: classes/views/frm-forms/form.php:31
@@ -6289,7 +6289,7 @@ msgstr "Configurações do formulário"
 
 #: classes/views/frm-forms/settings-advanced.php:62
 msgid "On Submit"
-msgstr "No envio"
+msgstr "Após o envio"
 
 #: classes/views/frm-forms/settings-advanced.php:63
 msgid "Choose what will happen after the user submits this form."
@@ -6305,7 +6305,7 @@ msgstr "AJAX"
 
 #: classes/views/frm-forms/settings-advanced.php:82
 msgid "Make stuff happen in the background without a page refresh"
-msgstr "Faça coisas acontecerem em segundo plano sem uma atualização de página"
+msgstr "As atividades ocorrem em segundo plano sem a necessidade de atualizar a página"
 
 #: classes/views/frm-forms/settings-advanced.php:89
 msgid "Load and save form builder page with AJAX"
@@ -6337,7 +6337,7 @@ msgstr "Definir o texto do seu botão."
 
 #: classes/views/frm-forms/settings-buttons.php:22
 msgid "Submit button settings were moved to the Submit button in the form builder."
-msgstr "As configurações do botão Enviar foram movidas para o botão Enviar no editor de formulários."
+msgstr "As configurações do botão de envio foram movidas para o botão de envio no editor de formulários."
 
 #: classes/views/frm-forms/settings-html.php:8
 msgid "Form Classes"
@@ -6345,15 +6345,15 @@ msgstr "Classes de formulário"
 
 #: classes/views/frm-forms/settings-html.php:14
 msgid "Before Fields"
-msgstr "Antes dos Campos"
+msgstr "Antes dos campos"
 
 #: classes/views/frm-forms/settings-html.php:37
 msgid "After Fields"
-msgstr "Depois dos Campos"
+msgstr "Depois dos campos"
 
 #: classes/views/frm-forms/settings-html.php:42
 msgid "Submit Button"
-msgstr "Botão de Enviar"
+msgstr "Botão de envio"
 
 #: classes/views/frm-forms/shortcode_opts.php:8
 msgid "Select a form:"
@@ -6389,7 +6389,7 @@ msgstr "Verificar registros de spam nas entradas usando JavaScript"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:7
 msgid "Use Honeypot to check entries for spam"
-msgstr "Use o Honeypot para marcar se spam nas entradas"
+msgstr "Use o Honeypot para verificar a presença de spam nas entradas"
 
 #: classes/views/frm-forms/spam-settings/honeypot.php:8
 msgid "Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers."
@@ -6702,7 +6702,7 @@ msgstr "Moeda"
 
 #: classes/views/inbox/list.php:15
 msgid "Dismissed"
-msgstr "Dispensado"
+msgstr "Dispensadas"
 
 #: classes/views/inbox/list.php:34
 msgid "You don't have any new messages"
@@ -7019,7 +7019,7 @@ msgstr "Modelos de estilo atribuídos"
 
 #: classes/views/styles/_buttons.php:9
 msgid "Disable submit button styling"
-msgstr "Desabilitar mudança de estilo do botão de envio"
+msgstr "Desativar o estilo do botão de envio"
 
 #: classes/views/styles/_buttons.php:10
 msgid "Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click \"Update Options\"."
@@ -7484,12 +7484,12 @@ msgstr "Plugins desatualizados"
 
 #: classes/views/xml/import_form.php:21
 msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Envie seu arquivo XML do Formidable para importar formulários para este site. Se a chave de formulário importada e a data de criação corresponderem a um formulário em seu site, esse formulário será atualizado."
+msgstr "Envie seu arquivo XML do Formidable para importar formulários para este site. Se a chave do formulário importada e a data de criação corresponderem a um formulário em seu site, esse formulário será atualizado."
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
 msgid "Upload your %1$s XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Carregue seu arquivo XML %1$s para importar formulários para este site. Se a chave do formulário importado e a data de criação corresponderem a um formulário em seu site, ele será atualizado."
+msgstr "Carregue seu arquivo XML %1$s para importar formulários para este site. Se a chave do formulário importada e a data de criação corresponderem a um formulário em seu site, ele será atualizado."
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
@@ -7916,7 +7916,7 @@ msgstr "Esse pagamento poder levar vários dias para ser concluído."
 
 #: stripe/models/FrmTransLiteAction.php:20
 msgid "Collect a Payment"
-msgstr "Receba um pagamento"
+msgstr "Receber um pagamento"
 
 #: stripe/models/FrmTransLiteAction.php:168
 msgid "&mdash; Select &mdash;"
@@ -7961,7 +7961,7 @@ msgstr "Período de avaliação"
 
 #: stripe/views/action-settings/payments-options.php:95
 msgid "Customer Information"
-msgstr "Informação ao cliente"
+msgstr "Informação do cliente"
 
 #: stripe/views/payments/show.php:12
 msgid "View Payment"
