@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 08:46\n"
+"PO-Revision-Date: 2024-04-26 20:44\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -361,7 +361,7 @@ msgstr "今すぐアップグレード"
 
 #: classes/controllers/FrmAppController.php:270
 msgid "Build"
-msgstr "ビルド"
+msgstr "作成"
 
 #: classes/controllers/FrmAppController.php:277
 #: classes/controllers/FrmStylesController.php:52
@@ -819,7 +819,7 @@ msgstr "編集の許可、フォームとファイルの保護、エントリー
 
 #: classes/controllers/FrmFormsController.php:1255
 msgid "Form Scheduling"
-msgstr "フォームのスケジューリング"
+msgstr "フォームのスケジュール"
 
 #: classes/controllers/FrmFormsController.php:1260
 msgid "Form scheduling settings"
@@ -839,7 +839,7 @@ msgstr "フォームランディングページ"
 #: classes/controllers/FrmFormsController.php:1277
 #: classes/controllers/FrmFormsController.php:1283
 msgid "Conversational Forms"
-msgstr "会話形式"
+msgstr "会話フォーム"
 
 #: classes/controllers/FrmFormsController.php:1284
 msgid "Ask one question at a time for automated conversations."
@@ -1017,7 +1017,7 @@ msgstr "ページを選択"
 #: classes/controllers/FrmFormTemplatesController.php:163
 #: classes/views/form-templates/index.php:17
 msgid "Form Templates"
-msgstr "フォームのテンプレート"
+msgstr "フォームテンプレート"
 
 #: classes/controllers/FrmFormTemplatesController.php:368
 msgid "There was an error creating a template."
@@ -1084,7 +1084,7 @@ msgstr "Stripe 決済"
 
 #: classes/controllers/FrmOnboardingWizardController.php:539
 msgid "Collect donations and payments with your forms. Offer physical products, digital goods, services, and more."
-msgstr "フォームを使用して寄付や決済を収集します。物理的な商品、デジタル製品、サービスなどを提供できます。"
+msgstr "フォームを使用して寄付や決済を回収します。物理的な商品、デジタル製品、サービスなどを提供できます。"
 
 #: classes/controllers/FrmOnboardingWizardController.php:543
 msgid "Visual Styler"
@@ -2513,7 +2513,7 @@ msgstr "reCAPTCHA スコア"
 
 #: classes/helpers/FrmEntriesHelper.php:837
 msgid "Submitted"
-msgstr "送信日時"
+msgstr "送信済み"
 
 #: classes/helpers/FrmEntriesHelper.php:838
 #: classes/helpers/FrmFormsHelper.php:1297
@@ -2540,11 +2540,11 @@ msgstr "スパムフォームを防ぐ方法を学びましょう。"
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
 msgid "View all forms"
-msgstr "全フォームを閲覧する"
+msgstr "全フォームを表示"
 
 #: classes/helpers/FrmEntriesListHelper.php:241
 msgid "Filter"
-msgstr "絞り込み検索"
+msgstr "絞り込み"
 
 #: classes/helpers/FrmEntriesListHelper.php:420
 #: classes/views/frm-entries/sidebar-shared.php:43
@@ -4274,7 +4274,7 @@ msgstr "なし"
 
 #: classes/helpers/FrmStylesHelper.php:37
 msgid "inside"
-msgstr "屋内"
+msgstr "内側"
 
 #: classes/helpers/FrmStylesHelper.php:43
 msgid "Top"
@@ -4390,7 +4390,7 @@ msgstr "一定の期間だけフォームが開くようにしたいですか ?"
 
 #: classes/helpers/FrmTipsHelper.php:175
 msgid "Add form scheduling."
-msgstr "フォームのスケジューリングを追加できます。"
+msgstr "フォームのスケジュールを追加します。"
 
 #: classes/helpers/FrmTipsHelper.php:192
 msgid "Save time by sending the email to the right person automatically."
@@ -4865,7 +4865,7 @@ msgstr "エントリーを作成"
 
 #: classes/models/FrmEmailStats.php:145
 msgid "Payments collected"
-msgstr "支払いを受け取りました"
+msgstr "支払いを回収しました"
 
 #. translators: currency name.
 #: classes/models/FrmEmailStats.php:154
@@ -5061,23 +5061,23 @@ msgstr "このアクションにはオプションがありません。"
 
 #: classes/models/FrmFormAction.php:950
 msgid "Draft is saved"
-msgstr "下書きが保存されました"
+msgstr "下書きを保存"
 
 #: classes/models/FrmFormAction.php:951
 msgid "Entry is created"
-msgstr "エントリーが作成されました"
+msgstr "エントリーを作成"
 
 #: classes/models/FrmFormAction.php:952
 msgid "Entry is updated"
-msgstr "エントリーが更新されました"
+msgstr "エントリーを更新"
 
 #: classes/models/FrmFormAction.php:953
 msgid "Entry is deleted"
-msgstr "エントリーが削除されました"
+msgstr "エントリーを削除"
 
 #: classes/models/FrmFormAction.php:954
 msgid "Entry is imported"
-msgstr "エントリーがインポートされました"
+msgstr "エントリーをインポート"
 
 #: classes/models/FrmFormAction.php:967
 msgid "Use Conditional Logic"
@@ -5169,7 +5169,7 @@ msgstr "reCAPTCHA は無料でアクセス可能な CAPTCHA サービスであ�
 #. translators: %s: User name, %2$d: number of entries
 #: classes/models/FrmReviews.php:114
 msgid "Congratulations%1$s! You have collected %2$d form submissions."
-msgstr "%1$s さん、おめでとうございます。%2$d件のフォーム送信を受け取りました。"
+msgstr "%1$s さん、おめでとうございます。%2$d件のフォーム送信を回収しました。"
 
 #: classes/models/FrmReviews.php:157
 msgid "If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?"
@@ -5606,7 +5606,7 @@ msgstr "フォームにフィールドが追加されていません。%1$s前�
 #: classes/views/frm-entries/list.php:14
 #: classes/views/frm-entries/list.php:31
 msgid "Form Entries"
-msgstr "フォーム項目"
+msgstr "フォームのエントリー"
 
 #: classes/views/frm-entries/no_entries.php:8
 msgid "This form is not set to save any entries."
@@ -5853,7 +5853,7 @@ msgstr "Captcha は、サイトキーとシークレットキーが%1$s設定%2$
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
 msgid "Credit Cards will not work without %1$sadding a Collect Payment action%2$s."
-msgstr "クレジットカードは、%1$s支払い回収アクションを追加%2$sしないと機能しません。"
+msgstr "クレジットカード機能を使用するには、%1$s支払い回収アクションを追加%2$sしてください。"
 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
@@ -6057,7 +6057,7 @@ msgstr "すべてのフォームアクションを表示する"
 
 #: classes/views/frm-form-actions/settings.php:85
 msgid "Hide extra form actions"
-msgstr "余分なフォームアクションを非表示にする"
+msgstr "追加のフォームアクションを非表示"
 
 #: classes/views/frm-form-actions/_action_inside.php:13
 msgid "Action Name"
@@ -6112,7 +6112,7 @@ msgstr "BCC"
 
 #: classes/views/frm-form-actions/_email_settings.php:18
 msgid "To"
-msgstr "終了日"
+msgstr "送信先"
 
 #: classes/views/frm-form-actions/_email_settings.php:43
 #: classes/views/frm-form-actions/_email_settings.php:61
@@ -6865,7 +6865,7 @@ msgstr "ドキュメンテーション"
 
 #: classes/views/shared/confirm-overlay.php:23
 msgid "Confirm"
-msgstr "確認画面へ"
+msgstr "確認"
 
 #: classes/views/shared/errors.php:46
 msgid "Warning:"
@@ -7038,7 +7038,7 @@ msgstr "高さ"
 #: classes/views/styles/_field-labels.php:62
 #: classes/views/styles/_field-sizes.php:42
 msgid "Weight"
-msgstr "重さ"
+msgstr "ウェイト"
 
 #: classes/views/styles/_buttons.php:39
 #: classes/views/styles/_field-sizes.php:37
@@ -7223,7 +7223,7 @@ msgstr "これを選択すると、Formidable スタイルのほとんどの行�
 
 #: classes/views/styles/_general.php:9
 msgid "Override theme styling"
-msgstr "テーマのスタイルを上書きする"
+msgstr "テーマのスタイルを上書き"
 
 #: classes/views/styles/_general.php:14
 msgid "This will center your form on the page where it is published if the form width is less than the available width on the page."
@@ -7231,7 +7231,7 @@ msgstr "これを選択すると、フォームの幅がページで利用可能
 
 #: classes/views/styles/_general.php:16
 msgid "Center form on page"
-msgstr "フォームをページの中央に配置する"
+msgstr "フォームをページの中央に配置"
 
 #: classes/views/styles/_general.php:21
 msgid "Alignment"
@@ -7263,7 +7263,7 @@ msgstr "フォントファミリー"
 
 #: classes/views/styles/_general.php:76
 msgid "Leave blank to inherit from theme"
-msgstr "テーマから継承する場合は空白のままにする"
+msgstr "テーマから継承する場合は空白にします"
 
 #: classes/views/styles/_general.php:80
 msgid "Direction"
@@ -7542,7 +7542,7 @@ msgstr "子フォーム (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
-msgstr "選択したものをエクスポート"
+msgstr "選択をエクスポート"
 
 #: classes/widgets/FrmShowForm.php:9
 msgid "Display a Formidable Form"
@@ -7761,7 +7761,7 @@ msgstr "アップグレードして手数料を節約しましょう。"
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "クレジットカードは、まず%1$s Stripe に接続%2$sしないと機能しません。"
+msgstr "クレジットカード機能を使用するには、まず%1$s Stripe に接続%2$sしてください。"
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
@@ -7931,7 +7931,7 @@ msgstr "一括払い"
 
 #: stripe/views/action-settings/payments-options.php:39
 msgid "Recurring"
-msgstr "繰り返し"
+msgstr "継続"
 
 #: stripe/views/action-settings/payments-options.php:47
 msgid "Repeat Every"
@@ -8091,7 +8091,7 @@ msgstr "アプリケーションでワークフローを改善しましょう"
 
 #: js/admin/applications.js:115
 msgid "Applications help to organize your workspace by combining forms, Views, and pages into a full solution."
-msgstr "アプリケーションは、フォーム、ビュー、ページを組み合わせて完全なソリューションにすることで、ワークスペースを整理するのに役立ちます。"
+msgstr "アプリケーションは、フォーム、ビュー、ページを組み合わせて総合的なソリューションにすることで、ワークスペースを整理するのに役立ちます。"
 
 #. translators: %d: Number of application templates.
 #: js/admin/applications.js:213
