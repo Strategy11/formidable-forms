@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-21 05:08\n"
+"PO-Revision-Date: 2024-04-27 20:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -395,7 +395,7 @@ msgstr "Voci"
 #: classes/views/shared/views-info.php:10
 #: js/admin/applications.js:349
 msgid "Views"
-msgstr "Visualizzazioni"
+msgstr "Viste"
 
 #: classes/controllers/FrmAppController.php:317
 #: classes/views/shared/reports-info.php:10
@@ -487,7 +487,7 @@ msgstr "Aggiungi voce"
 
 #: classes/controllers/FrmDashboardController.php:143
 msgid "All Views"
-msgstr "Tutte le Views"
+msgstr "Tutte le viste"
 
 #: classes/controllers/FrmDashboardController.php:145
 #: classes/controllers/FrmDashboardController.php:152
@@ -1535,7 +1535,7 @@ msgstr "Visualizza resoconti"
 
 #: classes/helpers/FrmAppHelper.php:1793
 msgid "Add/Edit Views"
-msgstr "Aggiungi/Modifica Visualizzazioni"
+msgstr "Aggiungi/Modifica Viste"
 
 #: classes/helpers/FrmAppHelper.php:1812
 msgid "View Forms List"
@@ -4309,7 +4309,7 @@ msgstr "Nascosto (ma lascia lo spazio)"
 
 #: classes/helpers/FrmStylesHelper.php:49
 msgid "Placeholder inside the field"
-msgstr "Segnaposto all'interno del campo"
+msgstr "Placeholder all'interno del campo"
 
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
@@ -4597,8 +4597,8 @@ msgstr[1] "%1$s Voci"
 #: classes/helpers/FrmXMLHelper.php:1433
 msgid "%1$s View"
 msgid_plural "%1$s Views"
-msgstr[0] "%1$s Visualizzazione"
-msgstr[1] "%1$s Visualizzazioni"
+msgstr[0] "%1$s vista"
+msgstr[1] "%1$s viste"
 
 #. translators: %1$s: Number of items
 #: classes/helpers/FrmXMLHelper.php:1435
@@ -4686,7 +4686,7 @@ msgstr "Valore predefinito"
 #: classes/models/fields/FrmFieldCombo.php:198
 #: classes/views/frm-fields/back-end/settings.php:184
 msgid "Placeholder Text"
-msgstr "Testo del segnaposto"
+msgstr "Testo placeholder"
 
 #: classes/models/fields/FrmFieldCombo.php:199
 #: classes/views/form-templates/modals/create-template-modal.php:54
@@ -5280,11 +5280,11 @@ msgstr "Installa e attiva"
 
 #: classes/models/FrmSolution.php:330
 msgid "Setup Forms, Views, and Pages"
-msgstr "Configura moduli, visualizzazioni e pagine"
+msgstr "Configura moduli, viste e pagine"
 
 #: classes/models/FrmSolution.php:331
 msgid "Build the forms, views, and pages automatically."
-msgstr "Crea moduli, visualizzazioni e pagine in modo automatico."
+msgstr "Crea moduli, viste e pagine in modo automatico."
 
 #: classes/models/FrmSolution.php:332
 msgid "Create Now"
@@ -5949,7 +5949,7 @@ msgstr "Automatico"
 
 #: classes/views/frm-fields/back-end/settings.php:270
 msgid "Required Field Indicator"
-msgstr "Indicatore del campo necessario"
+msgstr "Indicatore del campo obbligatorio"
 
 #: classes/views/frm-fields/back-end/settings.php:296
 msgid "Center"
@@ -6199,7 +6199,7 @@ msgstr "Aggiungi i campi qui"
 
 #: classes/views/frm-forms/add_field_links.php:11
 msgid "Add Fields"
-msgstr "Tutti i campi"
+msgstr "Aggiungi i campi"
 
 #: classes/views/frm-forms/add_field_links.php:16
 msgid "Field Options"
@@ -6211,7 +6211,7 @@ msgstr "Campi di ricerca"
 
 #: classes/views/frm-forms/add_field_links.php:119
 msgid "Pricing Fields"
-msgstr "Campi del prezzo"
+msgstr "Campi di prezzo"
 
 #: classes/views/frm-forms/add_field_links.php:138
 msgid "Select a field to see the options"
@@ -6535,7 +6535,7 @@ msgstr "L'indirizzo email predefinito per ricevere le notifiche di invio di nuov
 
 #: classes/views/frm-settings/general.php:73
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
-msgstr "Non memorizzare gli IP con gli invii dei moduli. Seleziona questa casella per rispettare il GDPR."
+msgstr "Non memorizzare gli IP con gli invii dei moduli. Seleziona questa casella per rispettare la GDPR."
 
 #: classes/views/frm-settings/general.php:86
 msgid "Use custom headers when retrieving IPs with form submissions."
@@ -6608,7 +6608,7 @@ msgstr "Il messaggio che appare quando un utente seleziona un valore in un campo
 
 #: classes/views/frm-settings/messages.php:69
 msgid "Success Message"
-msgstr "Messaggio di conferma"
+msgstr "Messaggio di successo"
 
 #: classes/views/frm-settings/messages.php:71
 msgid "The default message seen after a form is submitted."
@@ -6999,7 +6999,7 @@ msgstr "Passa a %s"
 
 #: classes/views/shared/views-info.php:17
 msgid "Show and Edit Entries with Views"
-msgstr "Mostra e modifica le voci con le visualizzazioni"
+msgstr "Mostra e modifica le voci con le viste"
 
 #: classes/views/shared/views-info.php:19
 msgid "Bring entries to the front-end of your site for full-featured applications or just to show the content."
@@ -7120,7 +7120,7 @@ msgstr "Al passaggio del mouse"
 
 #: classes/views/styles/_buttons.php:102
 msgid "On Click"
-msgstr "Facendo clic"
+msgstr "Al clic"
 
 #: classes/views/styles/_check-box-radio-fields.php:7
 msgid "Radio"
@@ -7248,7 +7248,7 @@ msgstr "Questo centra il modulo nella pagina in cui è pubblicato se la larghezz
 
 #: classes/views/styles/_general.php:16
 msgid "Center form on page"
-msgstr "Centra il modulo nella pagina"
+msgstr "Centra modulo nella pagina"
 
 #: classes/views/styles/_general.php:21
 msgid "Alignment"
@@ -7260,7 +7260,7 @@ msgstr "centro"
 
 #: classes/views/styles/_general.php:36
 msgid "Max Width"
-msgstr "Larghezza massima"
+msgstr "Lg. massima"
 
 #: classes/views/styles/_general.php:41
 msgid "Background"
@@ -7515,7 +7515,7 @@ msgstr "Esporta"
 
 #: classes/views/xml/import_form.php:72
 msgid "Export your forms, entries, views, and styles so you can easily import them on another site."
-msgstr "Esporta moduli, voci, visualizzazioni e stili per poterli importare facilmente su un altro sito."
+msgstr "Esporta moduli, voci, viste e stili per poterli importare facilmente su un altro sito."
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
@@ -7547,7 +7547,7 @@ msgstr "Seleziona un modulo"
 
 #: classes/views/xml/import_form.php:146
 msgid "ID / Form Key"
-msgstr "Chiave ID / Modulo"
+msgstr "ID / Chiave modulo"
 
 #: classes/views/xml/import_form.php:147
 msgid "Type"
@@ -8109,7 +8109,7 @@ msgstr "Migliora il tuo flusso di lavoro con le applicazioni"
 
 #: js/admin/applications.js:115
 msgid "Applications help to organize your workspace by combining forms, Views, and pages into a full solution."
-msgstr "Le applicazioni aiutano a organizzare il tuo spazio di lavoro combinando moduli, Views e pagine in una soluzione completa."
+msgstr "Le applicazioni aiutano a organizzare il tuo spazio di lavoro combinando moduli, viste e pagine in una soluzione completa."
 
 #. translators: %d: Number of application templates.
 #: js/admin/applications.js:213
