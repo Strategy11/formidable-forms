@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 20:44\n"
+"PO-Revision-Date: 2024-04-27 08:48\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -879,7 +879,7 @@ msgstr "Usar um separador diferentes para os campos checkbox"
 
 #: classes/controllers/FrmFormsController.php:1501
 msgid "Date Format"
-msgstr "Formato da Data"
+msgstr "Formato da data"
 
 #: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
@@ -1035,7 +1035,7 @@ msgstr "Favoritos"
 #: classes/views/form-templates/list.php:38
 #: classes/views/frm-fields/back-end/phone/phone-type.php:36
 msgid "Custom"
-msgstr "Personalizado"
+msgstr "Personalizados"
 
 #: classes/controllers/FrmFormTemplatesController.php:520
 msgid "Available Templates"
@@ -1736,11 +1736,11 @@ msgstr "Não limpar o valor padrão ao digitar"
 
 #: classes/helpers/FrmAppHelper.php:3233
 msgid "Default value will pass form validation"
-msgstr "O valor padrão passará na validação do formulário"
+msgstr "O valor padrão será aprovado na validação do formulário"
 
 #: classes/helpers/FrmAppHelper.php:3234
 msgid "Default value will NOT pass form validation"
-msgstr "O valor padrão NÃO passará na validação do formulário"
+msgstr "O valor padrão NÃO será aprovado na validação do formulário"
 
 #: classes/helpers/FrmAppHelper.php:3235
 #: classes/views/shared/confirm-overlay.php:15
@@ -5214,7 +5214,7 @@ msgstr "%s deve ser único."
 
 #: classes/models/FrmSettings.php:152
 msgid "There was a problem with your submission. Errors are marked below."
-msgstr "Houve um problema com sua submissão. Erros estão marcados abaixo."
+msgstr "Houve um problema com seu envio. Os erros estão assinalados abaixo."
 
 #: classes/models/FrmSettings.php:153
 msgid "We're sorry. It looks like you've already submitted that."
@@ -5226,7 +5226,7 @@ msgstr "Você não tem permissão para ver este formulário."
 
 #: classes/models/FrmSettings.php:156
 msgid "You do not have permission to do that"
-msgstr "Você não tem permissão de fazer isso"
+msgstr "Você não tem permissão para isso"
 
 #: classes/models/FrmSettings.php:157
 msgid "The page has been opened in a new tab."
@@ -5397,7 +5397,7 @@ msgstr "Exibir formulários"
 #: classes/views/dashboard/templates/license-management.php:8
 #: classes/views/frm-settings/general.php:7
 msgid "License Key"
-msgstr "Chave da licença"
+msgstr "Chave de licença"
 
 #: classes/views/dashboard/templates/notification-banner.php:14
 msgid "Whether you're looking to create simple contact forms or complex survey forms, Formidable Forms has you covered."
@@ -5423,7 +5423,7 @@ msgstr "Categoria %1$s , itens %2$d"
 #: classes/views/form-templates/index.php:31
 #: js/admin/applications.js:237
 msgid "Search Templates"
-msgstr "Modelos de pesquisa"
+msgstr "Pesquisar modelos"
 
 #: classes/views/form-templates/index.php:45
 msgctxt "form templates: create a blank form"
@@ -6518,7 +6518,7 @@ msgstr "apenas nas páginas aplicáveis"
 
 #: classes/views/frm-settings/general.php:29
 msgid "Don't use form styling on any page"
-msgstr "Não use estilo de formulário em nenhuma página "
+msgstr "não usar estilo de formulário em nenhuma página"
 
 #: classes/views/frm-settings/general.php:36
 msgid "Other"
@@ -6568,11 +6568,11 @@ msgstr "Essas mensagens serão usadas por padrão para novos formulários. Muito
 
 #: classes/views/frm-settings/messages.php:11
 msgid "Failed/Duplicate Entry"
-msgstr "Entrada Falha/Duplicada"
+msgstr "Entrada falha/Duplicada"
 
 #: classes/views/frm-settings/messages.php:13
 msgid "The message seen when a form is submitted and passes validation, but something goes wrong."
-msgstr "A mensagem é exibida quando um formulário é enviado e passa na validação, mas alguma coisa dá errado."
+msgstr "A mensagem vista quando um formulário é enviado e aprovado na validação, mas algo dá errado."
 
 #: classes/views/frm-settings/messages.php:21
 msgid "Blank Field"
@@ -6580,11 +6580,11 @@ msgstr "Campo em branco"
 
 #: classes/views/frm-settings/messages.php:23
 msgid "The message seen when a required field is left blank."
-msgstr "A mensagem é exibida quando um campo obirtório é deixado em branco."
+msgstr "A mensagem é exibida quando um campo obrigatório é deixado em branco."
 
 #: classes/views/frm-settings/messages.php:31
 msgid "Incorrect Field"
-msgstr "Campo Incorreto"
+msgstr "Campo incorreto"
 
 #: classes/views/frm-settings/messages.php:33
 msgid "The message seen when a field response is either incorrect or missing."
@@ -7476,7 +7476,7 @@ msgstr "Nome do formulário"
 
 #: classes/views/summary-emails/stats.php:66
 msgid "Submissions"
-msgstr "Submissões"
+msgstr "Envios"
 
 #: classes/views/summary-emails/stats.php:102
 msgid "Out of date plugins"
