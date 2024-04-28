@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 20:43\n"
+"PO-Revision-Date: 2024-04-28 20:50\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -220,7 +220,7 @@ msgstr "Optionen"
 #: classes/widgets/FrmElementorWidget.php:53
 #: js/formidable_blocks.js:551
 msgid "Show Form Title"
-msgstr "Formular-Titel anzeigen"
+msgstr "Formulartitel anzeigen"
 
 #: js/src/form/inspector.js:73
 #: classes/widgets/FrmElementorWidget.php:54
@@ -736,7 +736,7 @@ msgstr "Ein Formular einfügen"
 
 #: classes/controllers/FrmFormsController.php:941
 msgid "Display form title"
-msgstr "Formular-Titel anzeigen"
+msgstr "Formulartitel anzeigen"
 
 #: classes/controllers/FrmFormsController.php:945
 msgid "Display form description"
@@ -753,7 +753,7 @@ msgstr "Formular-HTML minimieren"
 #: classes/views/styles/_sample_form.php:12
 #: classes/views/xml/import_form.php:145
 msgid "Form Title"
-msgstr "Formular-Titel"
+msgstr "Formulartitel"
 
 #: classes/controllers/FrmFormsController.php:1015
 #: classes/helpers/FrmCSVExportHelper.php:373
@@ -1153,7 +1153,7 @@ msgstr "Allgemeine Einstellungen"
 
 #: classes/controllers/FrmSettingsController.php:57
 msgid "Message Defaults"
-msgstr "Nachrichten Standards"
+msgstr "Standardwerte für Nachrichten"
 
 #: classes/controllers/FrmSettingsController.php:63
 msgid "Permissions"
@@ -2453,7 +2453,7 @@ msgstr "Intelligente Formulare mit bedingter Logik"
 
 #: classes/helpers/FrmDashboardHelper.php:244
 msgid "Ecommerce Pricing Fields"
-msgstr "Ecommerce Preisfelder"
+msgstr "E-Commerce Preisfelder"
 
 #: classes/helpers/FrmDashboardHelper.php:245
 #: classes/views/frm-forms/add_field_links.php:55
@@ -2593,7 +2593,7 @@ msgstr "%s ist ungültig"
 #. translators: %s: Field name
 #: classes/helpers/FrmFieldsHelper.php:336
 msgid "%s must be unique"
-msgstr "%s muss einzigartig sein"
+msgstr "%s muss einmalig sein"
 
 #: classes/helpers/FrmFieldsHelper.php:339
 msgid "This field is invalid"
@@ -4133,7 +4133,7 @@ msgstr "Hole Dir Superkräfte mit %1$s%2$s weiteren vorgefertigten Formularen"
 
 #: classes/helpers/FrmFormTemplatesHelper.php:193
 msgid "Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities."
-msgstr "Nutze das Potenzial Hunderter zusätzlicher Formularvorlagen und spare wertvolle Zeit. Führe noch heute ein Upgrade durch und profitiere von unvergleichlichen Möglichkeiten zur Formularerstellung."
+msgstr "Nutze das Potenzial von Hunderten zusätzlicher Formular-Templates und spare wertvolle Zeit. Aktualisiere noch heute und erhalte unvergleichliche Möglichkeiten zur Formularerstellung."
 
 #: classes/helpers/FrmFormTemplatesHelper.php:194
 #: classes/views/form-templates/modals/upgrade-modal.php:87
@@ -4247,7 +4247,7 @@ msgstr "Eine Seite auswählen"
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:147
 msgid "Your responses were successfully submitted. Thank you!"
-msgstr "Ihre Mitteilung wurde erfolgreich übermittelt. Vielen Dank!"
+msgstr "Deine Antworten wurden erfolgreich übermittelt. Vielen Dank!"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
@@ -4379,7 +4379,7 @@ msgstr "Formulare automatisch ausfüllen!"
 #: classes/helpers/FrmTipsHelper.php:158
 #: classes/helpers/FrmTipsHelper.php:340
 msgid "A site with dynamic, user-generated content is within reach."
-msgstr "Eine Site mit dynamischem, von Usern erstelltem Inhalt ist in Reichweite."
+msgstr "Eine Website mit dynamischen, von Benutzern erstellten Inhalten ist in Reichweite."
 
 #: classes/helpers/FrmTipsHelper.php:159
 msgid "Add front-end editing."
@@ -5210,23 +5210,23 @@ msgstr "%s kann nicht leer sein."
 #. translators: %s: [field_name] shortcode.
 #: classes/models/FrmSettings.php:151
 msgid "%s must be unique."
-msgstr "%s muss einzigartig sein."
+msgstr "%s muss einmalig sein."
 
 #: classes/models/FrmSettings.php:152
 msgid "There was a problem with your submission. Errors are marked below."
-msgstr "Es gab ein Problem mit Ihrer Eingabe. Die Fehler sind deutlich vermerkt."
+msgstr "Es gab ein Problem mit deiner Anmeldung. Die Fehler sind unten markiert."
 
 #: classes/models/FrmSettings.php:153
 msgid "We're sorry. It looks like you've already submitted that."
-msgstr "Entschuldigung. Es scheint, als hättest Du das bereits abgesendet."
+msgstr "Entschuldigung. Es scheint, als hättest du das bereits gesendet."
 
 #: classes/models/FrmSettings.php:155
 msgid "You do not have permission to view this form."
-msgstr "Sie haben keine Berechtigung dieses Formular zu sehen."
+msgstr "Du hast keine Berechtigung, dieses Formular zu sehen."
 
 #: classes/models/FrmSettings.php:156
 msgid "You do not have permission to do that"
-msgstr "Sie haben keine Berechtigung das zu tun."
+msgstr "Du hast keine Berechtigung, das zu tun"
 
 #: classes/models/FrmSettings.php:157
 msgid "The page has been opened in a new tab."
@@ -5884,7 +5884,7 @@ msgstr "Einmalig: Erlaube nicht die mehrfache Abgabe der gleichen Antwort. Zum B
 #: classes/views/frm-fields/back-end/settings.php:79
 #: classes/views/frm-fields/back-end/settings.php:380
 msgid "Unique"
-msgstr "Einzigartig"
+msgstr "Einmalig"
 
 #: classes/views/frm-fields/back-end/settings.php:86
 msgid "Read Only: Show this field but do not allow the field value to be edited from the front-end."
@@ -6203,7 +6203,7 @@ msgstr "Felder hinzufügen"
 
 #: classes/views/frm-forms/add_field_links.php:16
 msgid "Field Options"
-msgstr "Feld Optionen"
+msgstr "Feldoptionen"
 
 #: classes/views/frm-forms/add_field_links.php:27
 msgid "Search Fields"
@@ -6277,7 +6277,7 @@ msgstr "Hier werden die generell Formulare-Einstellungen geändert"
 
 #: classes/views/frm-forms/settings-advanced.php:35
 msgid "Show the form title"
-msgstr "Formular-Titel anzeigen"
+msgstr "Formulartitel anzeigen"
 
 #: classes/views/frm-forms/settings-advanced.php:42
 msgid "Show the form description"
@@ -6469,7 +6469,7 @@ msgstr "reCAPTCHA Schwellenwert"
 
 #: classes/views/frm-settings/captcha/captcha.php:75
 msgid "A score of 0 is likely to be a bot and a score of 1 is likely not a bot. Setting a lower threshold will allow more bots, but it will also stop fewer real users."
-msgstr "Ein Score 0 ist wahrscheinlich ein Bot und ein Score von 1 ist wahrscheinlich kein Bot. Ein niedriger Schwellenwert wird mehr Bots erlauben, aber auch weniger reale Benutzer ausfiltern."
+msgstr "Bei einer Punktzahl von 0 handelt es sich wahrscheinlich um einen Bot und bei einer Punktzahl von 1 wahrscheinlich nicht um einen Bot. Wenn du einen niedrigeren Schwellenwert festlegst, werden zwar mehr Bots zugelassen, aber es werden auch weniger echte Benutzer aufgehalten."
 
 #: classes/views/frm-settings/captcha/captcha.php:86
 msgid "Allow multiple reCAPTCHAs to be used on a single page"
@@ -6486,7 +6486,7 @@ msgstr "Turnstile Einstellungen"
 #. translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML
 #: classes/views/frm-settings/captcha/captcha_keys.php:14
 msgid "%1$s requires a Site and Private API key. Sign up for a %2$sfree %1$s key%3$s."
-msgstr "%1$s erfordert eine Website und einen privaten API-Schlüssel. Melde Dich für einen %2$skostenlosen %1$s-Schlüssel%3$s an."
+msgstr "%1$s Erfordert eine Website und einen privaten API-Schlüssel. Melde Dich für einen %2$skostenlosen%1$s-Schlüssel%3$s an."
 
 #: classes/views/frm-settings/captcha/captcha_keys.php:23
 msgid "Site Key"
@@ -6572,7 +6572,7 @@ msgstr "Gescheitert/Doppelter Eintrag"
 
 #: classes/views/frm-settings/messages.php:13
 msgid "The message seen when a form is submitted and passes validation, but something goes wrong."
-msgstr "Die Nachricht, die angezeigt wird, wenn das Formular übermittelt wird und die Überprüfung der Daten erfolgreich ist, jedoch irgendetwas schief läuft."
+msgstr "Diese Meldung wird angezeigt, wenn ein Formular abgeschickt wurde und die Überprüfung der Daten erfolgreich ist, aber ein Problem auftritt."
 
 #: classes/views/frm-settings/messages.php:21
 msgid "Blank Field"
@@ -6604,7 +6604,7 @@ msgstr "Einmaliger Wert"
 
 #: classes/views/frm-settings/messages.php:54
 msgid "The message seen when a user selects a value in a unique field that has already been used."
-msgstr "Die angezeigte Nachricht, wenn ein User einen Wert in einem einmaligen Feld auswählt, der schon genutzt wurde."
+msgstr "Die Meldung, die angezeigt wird, wenn ein Benutzer einen Wert in einem eindeutigen Feld auswählt, der bereits verwendet wurde."
 
 #: classes/views/frm-settings/messages.php:69
 msgid "Success Message"
@@ -6669,7 +6669,7 @@ msgstr "Deinstallieren:"
 
 #: classes/views/frm-settings/permissions.php:7
 msgid "Select users that are allowed access to Formidable. Without access to View Forms List, users will be unable to see the Formidable menu."
-msgstr "Wähle die Benutzer aus, die auf Formidable zugreifen dürfen. Ohne die Berechtigung, Formulare anzusehen, können diese Benutzer das Formidable-Menü nicht sehen."
+msgstr "Wähle Benutzer aus, die Zugriff auf Formidable haben. Ohne Zugriff auf die Formularliste können die Benutzer das Formidable-Menü nicht sehen."
 
 #: classes/views/frm-settings/settings_cta.php:14
 msgid "Get Formidable Forms Pro and Unlock all the Powerful Features"
@@ -7011,7 +7011,7 @@ msgstr "Du kannst eigenes CSS hier hinzufügen oder im Stylesheet Deines Themes.
 
 #: classes/views/styles/manage.php:8
 msgid "Easily change which style your forms are using by making changes below."
-msgstr "Ändere einfach, welchen Style Deine Formulare verwenden, durch Änderungen unten."
+msgstr "Du kannst ganz einfach ändern, welchen Stil deine Formulare verwenden, indem du unten Änderungen vornimmst."
 
 #: classes/views/styles/manage.php:20
 msgid "Assigned Style Templates"
@@ -7484,7 +7484,7 @@ msgstr "Veraltete Plugins"
 
 #: classes/views/xml/import_form.php:21
 msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Laden Sie Ihre Formidable XML Datei für den Import von Formularen in diese Webseite hoch. Falls Ihr importierter Formularschlüssel und Erstellungsdatum einem Formular auf Ihrer Webseite entsprechen, wird dieses Formular aktualisiert."
+msgstr "Lade deine Formidable XML-Datei hoch, um Formulare auf diese Website zu importieren. Wenn der Schlüssel deines importierten Formulars und das Datum seiner Kreation mit einem Formular auf deiner Website übereinstimmen, wird dieses Formular aktualisiert."
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
@@ -7493,7 +7493,7 @@ msgstr "Lade Deine %1$s XML-Datei hoch, um Formulare in diese Site zu importiere
 
 #: classes/views/xml/import_form.php:40
 msgid "Choose a Formidable XML file"
-msgstr "Wählen Sie eine Formidable XML Datei"
+msgstr "Wähle eine formidable XML-Datei"
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:44
@@ -7779,7 +7779,7 @@ msgstr "Upgrade, um Gebühren zu sparen."
 #. translators: %1$s: Link HTML, %2$s: End link
 #: stripe/helpers/FrmStrpLiteAppHelper.php:142
 msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
-msgstr "Kreditkarten funktionieren nicht, ohne vorher mit %1$stripe zu verbinden%2$s."
+msgstr "Kreditkarten funktionieren nicht, ohne vorher mit %1$sStripe zu verbinden%2$s."
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
 msgid "Unable to retrieve customer through Stripe Connect."
