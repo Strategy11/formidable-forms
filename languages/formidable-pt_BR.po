@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-27 08:48\n"
+"PO-Revision-Date: 2024-04-28 08:47\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1174,7 +1174,7 @@ msgstr "Captcha"
 
 #: classes/controllers/FrmSettingsController.php:85
 msgid "White Labeling"
-msgstr "Rotulagem Branca"
+msgstr "Etiqueta branca"
 
 #: classes/controllers/FrmSettingsController.php:90
 msgid "White labeling options"
@@ -1196,7 +1196,7 @@ msgstr "Licenças de Plugin"
 #: classes/controllers/FrmSettingsController.php:134
 #: classes/views/frm-forms/settings-advanced.php:134
 msgid "Miscellaneous"
-msgstr "Miscelânea"
+msgstr "Diversos"
 
 #: classes/controllers/FrmSettingsController.php:291
 #: classes/controllers/FrmSettingsController.php:294
@@ -1523,11 +1523,11 @@ msgstr "Pesquisa"
 
 #: classes/helpers/FrmAppHelper.php:1779
 msgid "Add Entries from Admin Area"
-msgstr "Adicionar Entradas da Área Ádministrativa"
+msgstr "Adicionar entradas da área do administrador"
 
 #: classes/helpers/FrmAppHelper.php:1780
 msgid "Edit Entries from Admin Area"
-msgstr "Editar entradas da Área de Admin"
+msgstr "Editar entradas da área do administrador"
 
 #: classes/helpers/FrmAppHelper.php:1781
 msgid "View Reports"
@@ -1555,11 +1555,11 @@ msgstr "Acessar a página de Configurações"
 
 #: classes/helpers/FrmAppHelper.php:1816
 msgid "View Entries from Admin Area"
-msgstr "Ver entradas da Área de Admin"
+msgstr "Ver entradas da área do administrador"
 
 #: classes/helpers/FrmAppHelper.php:1817
 msgid "Delete Entries from Admin Area"
-msgstr "Apagar entradas da área de Administração"
+msgstr "Apagar entradas da área do administrador"
 
 #: classes/helpers/FrmAppHelper.php:2621
 msgid "at"
@@ -3832,7 +3832,7 @@ msgstr "Trocar Formulário"
 #: classes/helpers/FrmFormsHelper.php:154
 #: classes/views/xml/import_form.php:132
 msgid "Search Forms"
-msgstr "Formulários de pesquisa"
+msgstr "Pesquisar formulários"
 
 #. translators: %d: Form ID
 #. translators: %d: Entry ID
@@ -4851,7 +4851,7 @@ msgstr "Formulário %1$s enviado de %2$s"
 #: classes/models/FrmEmail.php:412
 #: classes/views/frm-entries/sidebar-shared.php:76
 msgid "User Information"
-msgstr "Informações do Usuário"
+msgstr "Informações do usuário"
 
 #: classes/models/FrmEmail.php:414
 #: classes/models/FrmEntryValues.php:274
@@ -5181,7 +5181,7 @@ msgstr "Essa sugestão foi feita pelo Formidable Forms, o editor de formulários
 
 #: classes/models/FrmRecaptchaSettings.php:54
 msgid "reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot."
-msgstr "reCAPTCHA é um serviço gratuito e acessível que ajuda a digitalizar livros ao passo que bloqueia o spam no seu blog. reCAPTCHA pede que os usuários redigitem duas palavras escaneados de um livro para provar que elas são humanas. Isso comprova que elas não são spambots."
+msgstr "O reCAPTCHA é um serviço CAPTCHA gratuito e acessível que ajuda a digitalizar livros e, ao mesmo tempo, bloqueia spam em seu blog. O reCAPTCHA pede aos usuários que digitem novamente duas palavras digitalizadas de um livro para provar que são humanos. Isso confirma que não se trata de um spambot."
 
 #. translators: %s: User name, %2$d: number of entries
 #: classes/models/FrmReviews.php:114
@@ -6669,7 +6669,7 @@ msgstr "Desinstalar agora"
 
 #: classes/views/frm-settings/permissions.php:7
 msgid "Select users that are allowed access to Formidable. Without access to View Forms List, users will be unable to see the Formidable menu."
-msgstr "Selecione os usuários que têm permissão de acesso ao Formidable. Sem acesso a Visualizar lista de formulários, os usuários não poderão ver o menu Formidable."
+msgstr "Selecione os usuários que têm permissão de acesso ao Formidable. Sem acesso à visualização da lista de formulários, os usuários não poderão ver o menu Formidable."
 
 #: classes/views/frm-settings/settings_cta.php:14
 msgid "Get Formidable Forms Pro and Unlock all the Powerful Features"
@@ -6755,7 +6755,7 @@ msgstr "Envie-me e-mails de resumo mensal e anual com dados de entrada e receita
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:20
 msgid "Install Formidable Add-ons"
-msgstr "Instalar complementos do Formidable"
+msgstr "Instalar complementos Formidable"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:24
 msgid "A few of our add-ons come with every installation. But more are available on the add-ons page!"
