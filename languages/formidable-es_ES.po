@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-27 20:47\n"
+"PO-Revision-Date: 2024-04-28 20:50\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -479,7 +479,7 @@ msgstr "Formularios totales"
 
 #: classes/controllers/FrmDashboardController.php:131
 msgid "Total Entries"
-msgstr "Envíos totales"
+msgstr "Registros totales"
 
 #: classes/controllers/FrmDashboardController.php:133
 msgid "Add Entry"
@@ -884,7 +884,7 @@ msgstr "Formato de fecha"
 #: classes/controllers/FrmFormsController.php:1504
 #: classes/views/frm-fields/back-end/settings.php:59
 msgid "Field Label"
-msgstr "Etiqueta campo"
+msgstr "Etiqueta del campo"
 
 #: classes/controllers/FrmFormsController.php:1507
 msgid "No Auto P"
@@ -1428,7 +1428,7 @@ msgstr "Etiquetas de campo"
 #: classes/helpers/FrmFormsHelper.php:518
 #: classes/views/frm-fields/back-end/field-description.php:8
 msgid "Field Description"
-msgstr "Descripción del Campo"
+msgstr "Descripción del campo"
 
 #: classes/controllers/FrmStylesController.php:947
 msgid "Field Colors"
@@ -1441,7 +1441,7 @@ msgstr "Ajustes de campo"
 
 #: classes/controllers/FrmStylesController.php:949
 msgid "Check Box & Radio Fields"
-msgstr "Campos de checkbox y radio"
+msgstr "Campos de casilla y radio"
 
 #: classes/controllers/FrmStylesController.php:951
 msgid "Form Messages"
@@ -1523,11 +1523,11 @@ msgstr "Buscar"
 
 #: classes/helpers/FrmAppHelper.php:1779
 msgid "Add Entries from Admin Area"
-msgstr "Añadir entradas del Área del Admin"
+msgstr "Añadir registros desde el escritorio"
 
 #: classes/helpers/FrmAppHelper.php:1780
 msgid "Edit Entries from Admin Area"
-msgstr "Editar entradas del Área del Admin"
+msgstr "Editar registros desde el escritorio"
 
 #: classes/helpers/FrmAppHelper.php:1781
 msgid "View Reports"
@@ -1551,7 +1551,7 @@ msgstr "Eliminar formularios"
 
 #: classes/helpers/FrmAppHelper.php:1815
 msgid "Access this Settings Page"
-msgstr "Acceso a esta página de ajustes"
+msgstr "Acceder a esta página de ajustes"
 
 #: classes/helpers/FrmAppHelper.php:1816
 msgid "View Entries from Admin Area"
@@ -2543,7 +2543,7 @@ msgstr "¿Estás recibiendo formularios con spam?"
 
 #: classes/helpers/FrmEntriesListHelper.php:221
 msgid "Learn how to prevent them."
-msgstr "Aprende cómo evitarlos."
+msgstr "Aprende a evitarlos."
 
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
@@ -3848,7 +3848,7 @@ msgstr "ID del Campo"
 #: classes/helpers/FrmFormsHelper.php:510
 #: classes/views/frm-fields/back-end/settings.php:307
 msgid "Field Key"
-msgstr "Clave del Campo"
+msgstr "Clave del campo"
 
 #: classes/helpers/FrmFormsHelper.php:514
 msgid "Field Name"
@@ -4247,7 +4247,7 @@ msgstr "Selecciona una página"
 #: classes/helpers/FrmOnSubmitHelper.php:194
 #: classes/models/FrmSettings.php:147
 msgid "Your responses were successfully submitted. Thank you!"
-msgstr "Sus respuestas fueron enviadas con éxito. ¡Gracias!"
+msgstr "El formulario se ha enviado correctamente. ¡Gracias!"
 
 #: classes/helpers/FrmOnSubmitHelper.php:198
 msgid "Please wait while you are redirected."
@@ -4484,7 +4484,7 @@ msgstr "Resalta tu formulario de barra lateral o pie de página."
 
 #: classes/helpers/FrmTipsHelper.php:291
 msgid "Use multiple style templates."
-msgstr "Utilice múltiples plantillas de estilo."
+msgstr "Utiliza múltiples plantillas de estilo."
 
 #: classes/helpers/FrmTipsHelper.php:298
 msgid "Want to add a background image?"
@@ -4744,11 +4744,11 @@ msgstr "Alternar opciones"
 #: classes/models/fields/FrmFieldType.php:540
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:10
 msgid "Bulk Edit Options"
-msgstr "Opciones de edición en lote"
+msgstr "Editar opciones por lotes"
 
 #: classes/models/fields/FrmFieldType.php:547
 msgid "Add Option"
-msgstr "Añade opción"
+msgstr "Añadir opción"
 
 #: classes/models/fields/FrmFieldType.php:699
 msgid "Untitled"
@@ -5218,7 +5218,7 @@ msgstr "Ha habido un problema con el envío. Los errores se marcan a continuaci�
 
 #: classes/models/FrmSettings.php:153
 msgid "We're sorry. It looks like you've already submitted that."
-msgstr "Lo sentimos. Parece que ya has enviado eso."
+msgstr "Lo siento. Parece que ya has enviado eso."
 
 #: classes/models/FrmSettings.php:155
 msgid "You do not have permission to view this form."
@@ -5226,11 +5226,11 @@ msgstr "Usted no tiene permiso para ver este formulario."
 
 #: classes/models/FrmSettings.php:156
 msgid "You do not have permission to do that"
-msgstr "Usted no tiene permiso para hacer eso"
+msgstr "No tienes permiso para hacer eso"
 
 #: classes/models/FrmSettings.php:157
 msgid "The page has been opened in a new tab."
-msgstr "La página ha sido abierta en una nueva pestaña."
+msgstr "Se ha abierto la página en una nueva pestaña."
 
 #: classes/models/FrmSettings.php:301
 msgid "The CAPTCHA was not entered correctly"
@@ -5352,7 +5352,7 @@ msgstr "Turnstile es una herramienta gratuita para sustituir los CAPTCHA. Turnst
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
-msgstr "Complementos de Formidable"
+msgstr "Extensiones de Formidable"
 
 #: classes/views/addons/list.php:22
 msgid "Search Add-ons"
@@ -5397,7 +5397,7 @@ msgstr "Ver formularios"
 #: classes/views/dashboard/templates/license-management.php:8
 #: classes/views/frm-settings/general.php:7
 msgid "License Key"
-msgstr "Llave de la licencia"
+msgstr "Clave de licencia"
 
 #: classes/views/dashboard/templates/notification-banner.php:14
 msgid "Whether you're looking to create simple contact forms or complex survey forms, Formidable Forms has you covered."
@@ -5667,7 +5667,7 @@ msgstr "Mostrar campos vacíos"
 #: stripe/views/payments/show.php:45
 #: stripe/views/subscriptions/show.php:44
 msgid "Entry"
-msgstr "Registros"
+msgstr "Registro"
 
 #: classes/views/frm-entries/sidebar-shared.php:8
 msgid "Entry Actions"
@@ -5742,7 +5742,7 @@ msgstr "Actualizar Opciones"
 #: classes/views/frm-fields/back-end/field-captcha.php:10
 #: classes/views/frm-fields/back-end/field-credit-card.php:10
 msgid "This field is not set up yet."
-msgstr "Este campo aún no está establecido."
+msgstr "Este campo aún no está configurado."
 
 #: classes/views/frm-fields/back-end/field-hidden.php:8
 msgid "Note: This field will not show in the form. Enter the value to be hidden."
@@ -5865,7 +5865,7 @@ msgstr "Campo %s"
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:32
 msgid "Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s."
-msgstr "Los captchas no se utilizarán hasta que el sitio y las claves secretas estén %1$sestablecidos%2$s."
+msgstr "Los captchas no funcionarán hasta que la clave secreta y la del sitio estén %1$sconfiguradas%2$s."
 
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
@@ -5900,7 +5900,7 @@ msgstr "Añadir una clase CSS para el contenedor de campo. Utilice nuestras clas
 
 #: classes/views/frm-fields/back-end/settings.php:109
 msgid "CSS Layout Classes"
-msgstr "Clases CSS del diseño"
+msgstr "Clases CSS de disposición"
 
 #: classes/views/frm-fields/back-end/settings.php:148
 msgid "Collapsible Advanced Settings"
@@ -6203,7 +6203,7 @@ msgstr "Añadir campos"
 
 #: classes/views/frm-forms/add_field_links.php:16
 msgid "Field Options"
-msgstr "Opciones de Campo"
+msgstr "Opciones del campo"
 
 #: classes/views/frm-forms/add_field_links.php:27
 msgid "Search Fields"
@@ -6535,11 +6535,11 @@ msgstr "La dirección de correo electrónico por defecto para recibir avisos de 
 
 #: classes/views/frm-settings/general.php:73
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
-msgstr "No almacenes las IPs con los formularios enviados. Marca esta casilla para que te ayude a cumplir con el RGPD."
+msgstr "No almacenar las IPs con los formularios enviados. Marca esta casilla para que te ayude a cumplir con el RGPD."
 
 #: classes/views/frm-settings/general.php:86
 msgid "Use custom headers when retrieving IPs with form submissions."
-msgstr "Utiliza cabeceras personalizadas al recuperar IPs con envíos de formularios."
+msgstr "Utilizar cabeceras personalizadas al recuperar IPs con envíos de formularios."
 
 #: classes/views/frm-settings/general.php:87
 msgid "Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address."
@@ -6555,7 +6555,7 @@ msgstr "o"
 
 #: classes/views/frm-settings/license_box.php:13
 msgid "Get Formidable Now"
-msgstr "Obtener Formidable ahora"
+msgstr "Obtén Formidable ya"
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
 #: classes/views/frm-settings/license_box.php:25
@@ -6669,7 +6669,7 @@ msgstr "Desinstalar"
 
 #: classes/views/frm-settings/permissions.php:7
 msgid "Select users that are allowed access to Formidable. Without access to View Forms List, users will be unable to see the Formidable menu."
-msgstr "Selecciona los usuarios que tienen permitido el acceso a Formidable. Sin acceso a la vista Lista de formularios, los usuarios serán capaces de ver el menú Formidable."
+msgstr "Selecciona los usuarios que tienen permitido el acceso a Formidable. Si no tienen acceso a ver la lista de formularios, los usuarios no podrán ver el menú Formidable."
 
 #: classes/views/frm-settings/settings_cta.php:14
 msgid "Get Formidable Forms Pro and Unlock all the Powerful Features"
@@ -6984,7 +6984,7 @@ msgstr "%1$s %2$sno están instalados%3$s"
 
 #: classes/views/shared/upgrade_overlay.php:31
 msgid "That add-on is not installed. Would you like to install it now?"
-msgstr "Ese complemento no está instalado. ¿Quieres instalarlo ahora?"
+msgstr "Esa extensión no está instalada. ¿Quieres instalarla ahora?"
 
 #. translators: %s: Feature name
 #: classes/views/shared/upgrade_overlay.php:42
@@ -6999,7 +6999,7 @@ msgstr "Actualizar a %s"
 
 #: classes/views/shared/views-info.php:17
 msgid "Show and Edit Entries with Views"
-msgstr "Crear y editar los registros con vistas"
+msgstr "Crea y edita los registros con Views"
 
 #: classes/views/shared/views-info.php:19
 msgid "Bring entries to the front-end of your site for full-featured applications or just to show the content."
@@ -7007,7 +7007,7 @@ msgstr "Lleva los registros a la portada de tu sitio para aplicaciones con todas
 
 #: classes/views/styles/custom_css.php:8
 msgid "You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded."
-msgstr "Aquí puedes añadir CSS personalizado o en el archivo «style.css» de tu tema. Cualquier CSS añadido aquí será usado en cualquier parte en la que sea cargado el CSS de Formidable."
+msgstr "Puedes añadir CSS personalizado aquí o en el archivo «style.css» de tu tema. Cualquier CSS añadido aquí será usado en cualquier lugar donde se cargue el CSS de Formidable."
 
 #: classes/views/styles/manage.php:8
 msgid "Easily change which style your forms are using by making changes below."
@@ -7019,7 +7019,7 @@ msgstr "Plantillas de estilos asignadas"
 
 #: classes/views/styles/_buttons.php:9
 msgid "Disable submit button styling"
-msgstr "Desactivar estilo botón de enviar"
+msgstr "Desactivar estilos del botón de enviar"
 
 #: classes/views/styles/_buttons.php:10
 msgid "Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click \"Update Options\"."
@@ -7072,7 +7072,7 @@ msgstr "Esquinas"
 #: classes/views/styles/_form-messages.php:8
 #: classes/views/styles/_form-messages.php:28
 msgid "BG color"
-msgstr "Color BG"
+msgstr "Color de fondo"
 
 #: classes/views/styles/_buttons.php:54
 #: classes/views/styles/_buttons.php:97
@@ -7099,7 +7099,7 @@ msgstr "Sombra"
 
 #: classes/views/styles/_buttons.php:69
 msgid "BG Image"
-msgstr "Imagen BG"
+msgstr "Imagen de fondo"
 
 #: classes/views/styles/_buttons.php:74
 #: classes/views/styles/_field-description.php:46
@@ -7260,7 +7260,7 @@ msgstr "centrar"
 
 #: classes/views/styles/_general.php:36
 msgid "Max Width"
-msgstr "Max Ancho"
+msgstr "Ancho máximo"
 
 #: classes/views/styles/_general.php:41
 msgid "Background"
@@ -7484,7 +7484,7 @@ msgstr "Plugins obsoletos"
 
 #: classes/views/xml/import_form.php:21
 msgid "Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated."
-msgstr "Cargar su archivo XML Formidable para importar formularios en este sitio. Si su clave de formulario importada y la fecha de creación coinciden con un formulario en su sitio, ese formulario se actualizará."
+msgstr "Sube tu archivo XML de Formidable para importar formularios en este sitio. Si la clave de formulario importada y la fecha de creación coinciden con un formulario de tu sitio, ese formulario se actualizará."
 
 #. Translators: 1: Menu name
 #: classes/views/xml/import_form.php:25
@@ -7503,11 +7503,11 @@ msgstr "Elige un archivo XML de %1$s"
 #. translators: %s: File size
 #: classes/views/xml/import_form.php:52
 msgid "Maximum size: %s"
-msgstr "Tamaño Máximo: %s"
+msgstr "Tamaño máximo: %s"
 
 #: classes/views/xml/import_form.php:62
 msgid "Upload file and import"
-msgstr "Cargar archivo e importar"
+msgstr "Subir archivo e importar"
 
 #: classes/views/xml/import_form.php:70
 msgid "Export"
@@ -7519,11 +7519,11 @@ msgstr "Exporta tus formularios, entradas, vistas y estilos para que puedas impo
 
 #: classes/views/xml/import_form.php:79
 msgid "Export Format"
-msgstr "Exportar Formato"
+msgstr "Formato de exportación"
 
 #: classes/views/xml/import_form.php:90
 msgid "If your CSV special characters are not working correctly, try a different formatting option."
-msgstr "Si sus caracteres especiales CSV no están funcionando correctamente, pruebe con una opción de formato diferente."
+msgstr "Si no funcionan correctamente los caracteres especiales de tu CSV, prueba con una opción de formato diferente."
 
 #: classes/views/xml/import_form.php:91
 msgid "CSV Encoding Format"
@@ -7539,7 +7539,7 @@ msgstr "Incluya lo siguiente en el archivo de exportación"
 
 #: classes/views/xml/import_form.php:122
 msgid "Select Form(s)"
-msgstr "Seleccionar formulario (s)"
+msgstr "Selecciona uno o más formularios"
 
 #: classes/views/xml/import_form.php:125
 msgid "Select a Form"
@@ -8024,7 +8024,7 @@ msgstr "Mostrar pago"
 
 #: stripe/views/payments/sidebar_list.php:37
 msgid "Amount:"
-msgstr "Cantidad:"
+msgstr "Importe:"
 
 #: stripe/views/payments/sidebar_list.php:49
 msgid "Status:"
