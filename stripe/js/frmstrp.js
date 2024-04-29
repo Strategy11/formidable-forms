@@ -446,8 +446,10 @@
 			return false;
 		}
 
-		disableSubmit( stripeLinkForm );
 		loadStripeLinkElements( intentField.value );
+		disableSubmit( stripeLinkForm );
+		listenForSubmitButtonMutations( stripeLinkForm );
+		listenForFieldMutations( stripeLinkForm );
 
 		triggerCustomEvent(
 			document,
@@ -461,6 +463,147 @@
 	}
 
 	/**
+	 * Listen for changes to the submit button disabled attribute.
+	 * This is for compatibility with conditional logic on submit.
+	 * The submit button should only be enabled if both the conditional logic passes and if the Stripe payment element is complete.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @returns {void}
+	 */
+	function listenForSubmitButtonMutations( form ) {
+		var submitButton = form.querySelector( '.frm_button_submit' );
+		if ( ! submitButton ) {
+			return;
+		}
+
+		observeAttributeMutations( submitButton, handleMutation );
+
+		function handleMutation( mutation ) {
+			if ( mutation.attributeName === 'disabled' && ! mutation.target.disabled && ! stripeLinkElementIsComplete ) {
+				disableSubmit( form );
+			}
+		}
+	}
+
+	/**
+	 * Possibly toggle on and off the submit button when a Stripe Link payment field is conditionally shown or hidden.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @returns {void}
+	 */
+	function listenForFieldMutations( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return;
+		}
+
+		observeAttributeMutations( fieldContainer, handleMutation );
+
+		const section = fieldContainer.closest( '.frm_section_heading' );
+		if ( section ) {
+			observeAttributeMutations( section, handleMutation );
+		}
+
+		const formId = getFormIdForForm( form );
+
+		/**
+		 * Handle a style attribute change for either a payment field container
+		 * or the field container of its parent section.
+		 *
+		 * @param {MutationRecord} mutation
+		 * @returns {void}
+		 */
+		function handleMutation( mutation ) {
+			if ( mutation.attributeName !== 'style' ) {
+				return;
+			}
+
+			if ( submitButtonIsConditionallyDisabled( formId ) ) {
+				return;
+			}
+
+			const shouldEnable = 'none' === mutation.target.display || readyToSubmitStripeLink( form ) || stripeLinkIsConditionallyDisabled( form );
+			if ( ! shouldEnable ) {
+				disableSubmit( form );
+				return;
+			}
+
+			thisForm = form;
+			running  = 0;
+			enableSubmit();
+		}
+	}
+
+	/**
+	 * @param {HTMLElement} element
+	 * @returns {void}
+	 */
+	function observeAttributeMutations( element, mutationHandler ) {
+		const observer = new MutationObserver(
+			( mutations ) => each( mutations, mutationHandler )
+		);
+		observer.observe(
+			element,
+			{ attributes: true }
+		);
+	};
+
+	/**
+	 * Try to get the field container for a Stripe link payment element.
+	 * The field container is checked to determine if the field is conditionally hidden or not.
+	 *
+	 * @param {HTMLElement} form
+	 * @returns {HTMLElement|null}
+	 */
+	function getPaymentElementFieldContainer( form ) {
+		const paymentElement = form.querySelector( '.frm-payment-element' );
+		if ( ! paymentElement ) {
+			return null;
+		}
+		return paymentElement.parentElement.closest( '.frm_form_field' );
+	}
+
+	/**
+	 * Check a form's form_id input for a form ID value.
+	 *
+	 * @param {HTMLElement} form
+	 * @returns {number}
+	 */
+	function getFormIdForForm( form ) {
+		return parseInt( form.querySelector( '[name="form_id"]' ).value );
+	}
+
+	/**
+	 * Check if the submit button is conditionally disabled.
+	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
+	 *
+	 * @since 3.0
+	 *
+	 * @param {String} formId
+	 * @returns {bool}
+	 */
+	function submitButtonIsConditionallyDisabled( formId ) {
+		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ 'submit_' + formId ].hideDisable;
+	}
+
+	/**
+	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
+	 *
+	 * @since 3.0
+	 *
+	 * @param {String} formId
+	 * @returns bool
+	 */
+	function submitButtonIsConditionallyNotAvailable( formId ) {
+		var hideFields = document.getElementById( 'frm_hide_fields_' + formId );
+		return hideFields && -1 !== hideFields.value.indexOf( '["frm_form_' + formId + '_container .frm_final_submit"]' );
+	}
+
+	/**
 	 * Disable submit button for a target form.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
@@ -469,8 +612,44 @@
 	 * @returns {void}
 	 */
 	function disableSubmit( form ) {
+		if ( stripeLinkIsConditionallyDisabled( form ) ) {
+			thisForm = form;
+			running  = 0;
+			enableSubmit();
+			return;
+		}
+
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
 		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
+	}
+
+	/**
+	 * Check if a Stripe link element is conditionally hidden.
+	 * If it is, we should not be disabling the submit button.
+	 *
+	 * @since 3.1.5
+	 *
+	 * @param {HTMLElement} form
+	 * @returns {boolean}
+	 */
+	function stripeLinkIsConditionallyDisabled( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return false;
+		}
+
+		// Field is conditionally hidden.
+		if ( 'none' === fieldContainer.style.display ) {
+			return true;
+		}
+
+		// Section parent is conditionally hidden.
+		const parentSection = fieldContainer.closest( '.frm_section_heading' );
+		if ( parentSection && 'none' === parentSection.style.display ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
