@@ -36,7 +36,7 @@
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
-				<directory name="classes" />
+				<file name="classes/controllers/FrmSMTPController.php" />
 			</errorLevel>
 		</UndefinedDocblockClass>
 		<UndefinedFunction>
@@ -47,11 +47,6 @@
 				<referencedFunction name="__autoload" />
 			</errorLevel>
 		</UndefinedFunction>
-		<InvalidParamDefault>
-			<errorLevel type="suppress">
-				<directory name="deprecated" />
-			</errorLevel>
-		</InvalidParamDefault>
 		<!-- Add exceptions for classes/views files. -->
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
@@ -130,8 +125,12 @@
 		</InvalidArgument>
 		<PossiblyUndefinedVariable>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="stripe/views/action-settings/payments-options.php" />
+				<file name="classes/controllers/FrmApplicationsController.php" />
+				<file name="classes/controllers/FrmFieldsController.php" />
+				<file name="classes/controllers/FrmStylesController.php" />
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
 			</errorLevel>
 		</PossiblyUndefinedVariable>
 		<MissingClosureParamType>
@@ -294,12 +293,6 @@
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantCondition>
-		<PossiblyNullIterator>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</PossiblyNullIterator>
 		<MoreSpecificImplementedParamType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -413,12 +406,6 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</UnsafeInstantiation>
-		<InvalidMethodCall>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</InvalidMethodCall>
 		<InvalidArrayAccess>
 			<errorLevel type="suppress">
 				<directory name="classes" />

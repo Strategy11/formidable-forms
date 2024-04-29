@@ -517,16 +517,6 @@ class FrmEntriesController {
 		self::display_list( $message );
 	}
 
-	/**
-	 * @deprecated 4.02.04 - Moved to Pro since it was unused in Lite.
-	 */
-	public static function destroy_all() {
-		_deprecated_function( __METHOD__, '4.02.04', 'FrmProEntriesController::destroy_all' );
-		if ( is_callable( 'FrmProEntriesController::destroy_all' ) ) {
-			FrmProEntriesController::destroy_all();
-		}
-	}
-
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing

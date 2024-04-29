@@ -398,11 +398,11 @@ class FrmDeprecated {
 	/**
 	 * @deprecated 3.0
 	 *
-	 * @param string $html
-	 * @param array $field
-	 * @param array $errors
-	 * @param object $form
-	 * @param array $args
+	 * @param string       $html
+	 * @param array        $field
+	 * @param array        $errors
+	 * @param object|false $form
+	 * @param array        $args
 	 *
 	 * @return string
 	 */
