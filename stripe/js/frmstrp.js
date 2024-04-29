@@ -119,7 +119,11 @@
 		running = 0;
 		submitForm();
 
-		function confirmPayment() {
+		function confirmPayment( event ) {
+			if ( ! checkEventDataForError( event ) ) {
+				return;
+			}
+
 			var params, confirmFunction;
 
 			window.onpageshow = function( event ) {
@@ -170,7 +174,7 @@
 			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
-			if ( 'card_error' === error.type || 'invalid_request_error' === error.type ) {
+			if ( 'card_error' === error.type || 'invalid_request_error' === error.type || 'form_submit_error' === error.type ) {
 				cardErrors = object.querySelector( '.frm-card-errors' );
 				if ( cardErrors ) {
 					cardErrors.textContent = error.message;
@@ -179,6 +183,37 @@
 		}
 	}
 
+	/**
+	 * Check the event content for any possible errors.
+	 * Some types of errors will appear here, like the errors added when calling FrmStrpActionsController::trigger_gateway.
+	 *
+	 * @since x.x
+	 *
+	 * @param {CustomEvent} event
+	 * @returns {boolean}
+	 */
+	function checkEventDataForError( event ) {
+		var element, error;
+
+		if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			return true;
+		}
+
+		element = document.createElement( 'div' );
+		element.innerHTML = event.frmData.content;
+
+		error = element.querySelector( '.frm_error_style' );
+		if ( error ) {
+			handleConfirmPaymentError({
+				type: 'form_submit_error',
+				message: error.textContent
+			});
+			return false;
+		}
+
+		return true;
+	}
+	
 	/**
 	 * Check if the stripe setting is for a recurring payment.
 	 *
