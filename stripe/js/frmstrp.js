@@ -120,6 +120,8 @@
 		submitForm();
 
 		function confirmPayment( event ) {
+			var params, confirmFunction;
+
 			if ( ! checkEventDataForError( event ) ) {
 				return;
 			}
@@ -444,7 +446,11 @@
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {
-					response = JSON.parse( response );
+					try {
+						response = JSON.parse( response );
+					} catch ( error ) {
+						response = '';
+					}
 				}
 				success( response );
 			}
