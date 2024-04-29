@@ -166,7 +166,7 @@ namespace {
 		public static function get_active_style_for_form( $form_id ) {
 		}
 		/**
-		 * @param WP_Post|stdClass $active_style
+		 * @param stdClass|WP_Post $active_style
 		 * @return array<WP_Post>
 		 */
 		public static function get_styles_for_styler( $active_style ) {
