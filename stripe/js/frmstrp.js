@@ -581,7 +581,7 @@
 	 * Check if the submit button is conditionally disabled.
 	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
 	 *
-	 * @since 3.0
+	 * @since x.x
 	 *
 	 * @param {String} formId
 	 * @returns {bool}
@@ -593,7 +593,7 @@
 	/**
 	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
 	 *
-	 * @since 3.0
+	 * @since x.x
 	 *
 	 * @param {String} formId
 	 * @returns bool
