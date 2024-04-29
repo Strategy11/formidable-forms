@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 20:43\n"
+"PO-Revision-Date: 2024-04-29 09:01\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -475,11 +475,11 @@ msgstr "Total des revenus"
 
 #: classes/controllers/FrmDashboardController.php:129
 msgid "Total Forms"
-msgstr "Total des formulaires"
+msgstr "Nombre total de formulaires"
 
 #: classes/controllers/FrmDashboardController.php:131
 msgid "Total Entries"
-msgstr "Total des entrées"
+msgstr "Nombre total d’entrées"
 
 #: classes/controllers/FrmDashboardController.php:133
 msgid "Add Entry"
@@ -1462,7 +1462,7 @@ msgstr "Une fois par semaine"
 #: classes/controllers/FrmXMLController.php:12
 #: classes/views/xml/import_form.php:10
 msgid "Import/Export"
-msgstr "Importation / Exportation"
+msgstr "Importer / Exporter"
 
 #: classes/controllers/FrmXMLController.php:52
 msgid "Your server is missing the Simple XML extension. This is required to install a template."
@@ -5086,7 +5086,7 @@ msgstr "L'Entrée est créée"
 
 #: classes/models/FrmFormAction.php:952
 msgid "Entry is updated"
-msgstr "L'Entrée est mise à jour"
+msgstr "L'entrée est mise à jour"
 
 #: classes/models/FrmFormAction.php:953
 msgid "Entry is deleted"
@@ -5360,7 +5360,7 @@ msgstr "Rechercher des modules"
 
 #: classes/views/addons/list.php:30
 msgid "Missing add-ons?"
-msgstr "Des modules manquent ?"
+msgstr "Vous cherchez d’autres modules qui ne figurent pas dans cette liste ?"
 
 #: classes/views/addons/list.php:32
 msgid "Check now for a recent upgrade or renewal"
@@ -7535,7 +7535,7 @@ msgstr "Colonne de séparation"
 
 #: classes/views/xml/import_form.php:110
 msgid "Include the following in the export file"
-msgstr "Inclure ce qui suit dans le fichier d'exportation"
+msgstr "Inclure les éléments suivants dans le fichier d'exportation"
 
 #: classes/views/xml/import_form.php:122
 msgid "Select Form(s)"
@@ -7560,7 +7560,7 @@ msgstr "Formulaire Enfant (%1$s)"
 
 #: classes/views/xml/import_form.php:208
 msgid "Export Selection"
-msgstr "Exporter la séléction"
+msgstr "Exporter la sélection"
 
 #: classes/widgets/FrmShowForm.php:9
 msgid "Display a Formidable Form"
