@@ -305,6 +305,17 @@ legend.frm_hidden{
 	display: none; /* 2021 conflict */
 }
 
+.with_frm_style input[type=radio]:not(:checked):focus,
+.with_frm_style input[type=checkbox]:not(:checked):focus {
+	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?> !important;
+	border-color:var(--border-color)<?php echo esc_html( $important ); ?> !important;
+}
+
+.with_frm_style input[type=radio]:focus,
+.with_frm_style input[type=checkbox]:focus {
+	box-shadow:0px 0px 0px 3px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.4) !important;
+}
+
 .with_frm_style input[type=text],
 .with_frm_style input[type=password],
 .with_frm_style input[type=email],
@@ -820,7 +831,7 @@ a.frm_save_draft{
 
 .horizontal_radio .frm_checkbox{
 	margin:0;
-	margin-right:5px;
+	margin-right:12px;
 }
 
 .vertical_radio .frm_checkbox,
@@ -850,6 +861,7 @@ a.frm_save_draft{
 .with_frm_style .vertical_radio .frm_radio,
 .vertical_radio .frm_catlevel_1{
 	display:block<?php echo esc_html( $important ); ?>;
+	margin-bottom: 10px;
 }
 
 .with_frm_style .horizontal_radio .frm_checkbox,
@@ -860,15 +872,20 @@ a.frm_save_draft{
 
 .with_frm_style .frm_checkbox label,
 .with_frm_style .frm_radio label{
-	display: inline;
-	white-space:normal;
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	white-space: normal;
+}
+
+.with_frm_style .frm_checkbox label:not(.frm-label-disabled),
+.with_frm_style .frm_radio label:not(.frm-label-disabled) {
+	cursor: pointer;
 }
 
 .with_frm_style .vertical_radio .frm_checkbox label,
 .with_frm_style .vertical_radio .frm_radio label{
-	display: block;
-	padding-left: 20px;
-	text-indent: -20px;
+	width: 100%;
 }
 
 .with_frm_style .frm_radio label,
@@ -910,7 +927,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius:0;
+	border-radius: calc(var(--border-radius) / 2);
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -922,42 +939,83 @@ a.frm_save_draft{
 	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block !important;
-	margin: 0 5px 0 0;
+	width: 16px;
+	min-width: 16px;
+	height: 16px;
 	color: var(--border-color);
-	width: 18px;
-	min-width: 18px;
-	height: 18px;
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
 	vertical-align: middle;
 	position: initial; /* override Bootstrap */
 	padding: 0;
+	margin: 0;
 }
 
-.with_frm_style .frm_radio input[type=radio]:before,
+.with_frm_style .frm_radio input[type=radio]:not([disabled]):checked,
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.with_frm_style .frm_scale input[type=radio]:before,
+.with_frm_style .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
-.with_frm_style .frm_checkbox input[type=checkbox]:before {
-	content: '';
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	transform: scale(0);
-	transition: 120ms transform ease-in-out;
-	box-shadow: inset 10px 10px var(--text-color);
-	display: block;
-	margin: 2px 0 0 2px;
+.with_frm_style .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+	border-color: <?php echo esc_html( $defaults['border_color_active'] ); ?> !important;
+	border-color: var(--border-color-active) !important;
 }
 
-.with_frm_style .frm_checkbox input[type=checkbox]:before{
-	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-	border-radius: 0;
+.with_frm_style .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+	background-color: <?php echo esc_html( $defaults['border_color_active'] ); ?> !important;
+	background-color: var(--border-color-active) !important;
+}
+
+.with_frm_style .frm_radio input[type=radio][disabled]:checked,
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio][disabled]:checked,
+<?php endif; ?>
+.with_frm_style .frm_checkbox input[type=checkbox][disabled]:checked {
+	border-color: <?php echo esc_html( $defaults['border_color'] ); ?> !important;
+	border-color: var(--border-color) !important; /* Override Style Preview */
+}
+
+.with_frm_style .frm_checkbox input[type=checkbox][disabled]:checked {
+	background-color: <?php echo esc_html( $defaults['border_color'] ); ?> !important;
+	background-color: var(--border-color) !important;
 }
 
 .with_frm_style .frm_radio input[type=radio]:checked:before,
+<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+.with_frm_style .frm_scale input[type=radio]:checked:before,
+<?php } ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:checked:before {
-	transform: scale(1);
+	position: static !important; /* Override Style Preview */
+	content: '';
+	display: block;
+}
+
+.with_frm_style .frm_checkbox input[type=checkbox]:before{
+	width: 100%;
+	height: 100%;
+	background-image: url("data:image/svg+xml,%3Csvg width='12' height='9' viewBox='0 0 12 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.6667 1.5L4.25001 7.91667L1.33334 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+	background-size: 9px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+.with_frm_style .frm_scale input[type=radio]:before,
+<?php } ?>
+.with_frm_style .frm_radio input[type=radio]:before {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: <?php echo esc_html( $defaults['border_color_active'] ); ?>;
+	background-color: var(--border-color-active);
+	margin: 3px;
+}
+
+<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+.with_frm_style .frm_scale input[type=radio][disabled]:before,
+<?php } ?>
+.with_frm_style .frm_radio input[type=radio][disabled]:before {
+	background-color: <?php echo esc_html( $defaults['border_color'] ); ?>;
+	background-color: var(--border-color);
 }
 
 .with_frm_style :invalid,
@@ -1499,9 +1557,7 @@ select.frm_loading_lookup{
 }
 
 .frm_form_field .frm_checkbox,
-.frm_form_field .frm_checkbox + .frm_checkbox,
-.frm_form_field .frm_radio,
-.frm_form_field .frm_radio + .frm_radio{
+.frm_form_field .frm_radio {
 	margin-top: 0;
 	margin-bottom: 0;
 }
