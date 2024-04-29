@@ -401,7 +401,7 @@ class FrmDeprecated {
 	 * @param string       $html
 	 * @param array        $field
 	 * @param array        $errors
-	 * @param object|false $form
+	 * @param false|object $form
 	 * @param array        $args
 	 *
 	 * @return string
