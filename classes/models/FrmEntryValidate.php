@@ -7,7 +7,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array         $values
-	 * @param string[]|bool $exclude
+	 * @param bool|string[] $exclude
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -174,7 +174,7 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param string|array $value Field value.
+	 * @param array|string $value Field value.
 	 * @param object       $field Field object.
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
@@ -221,7 +221,7 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		if ( $field->type === 'phone' || ( $field->type === 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
 
 			$pattern = self::phone_format( $field );
 
@@ -303,7 +303,7 @@ class FrmEntryValidate {
 	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
-		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}
@@ -463,7 +463,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] == 'true' );
+		return ( is_array( $response ) && $response[1] === 'true' );
 	}
 
 	/**
@@ -831,37 +831,5 @@ class FrmEntryValidate {
 		}//end foreach
 
 		return $form_ids;
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_url_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_url_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_email_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_number_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_number_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		FrmDeprecated::validate_recaptcha( $errors, $field, $args );
 	}
 }

@@ -9,14 +9,14 @@ on:
 
 name: Inspections
 jobs:
-  runPHPCSInspection:
+  runRectorInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
-    name: Run PHPCS inspection
+    name: Run Rector inspection
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 
-      - name: PHPCS check
-        run: ./vendor/bin/phpcs --parallel=10 ./
+      - name: Rector check
+        run: ./vendor/bin/rector process --dry-run

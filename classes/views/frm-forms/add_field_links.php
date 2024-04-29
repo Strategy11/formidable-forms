@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 					?>
 					<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
-						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ); ?>">
+						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_attr( $field_label ); ?>">
 							<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 							<span><?php echo esc_html( $field_label ); ?></span>
 						</a>
@@ -87,7 +87,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 
 		?>
 				<li class="frmbutton frm6 <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
-					<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ); ?>">
+					<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_attr( $field_label ); ?>">
 						<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 						<span><?php echo esc_html( $field_label ); ?> <b class="caret"></b></span>
 					</a>
@@ -114,7 +114,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 			</ul>
 			<div class="clear"></div>
 
-			<?php foreach ( $field_sections as $section => $section_fields ) { ?>
+			<?php foreach ( $field_sections as $section_fields ) { ?>
 				<h3 class="frm-with-line">
 					<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
 				</h3>
@@ -178,6 +178,6 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
+		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ! empty( $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
 	</form>
 </div>

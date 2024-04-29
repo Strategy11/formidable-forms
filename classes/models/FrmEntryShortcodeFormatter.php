@@ -45,10 +45,10 @@ class FrmEntryShortcodeFormatter {
 	protected $format = 'text';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var array
@@ -159,7 +159,7 @@ class FrmEntryShortcodeFormatter {
 			return '';
 		}
 
-		if ( $this->format == 'array' ) {
+		if ( $this->format === 'array' ) {
 			$content = $this->get_array();
 		} elseif ( $this->is_plain_text_format() ) {
 			$content = $this->get_plain_text();

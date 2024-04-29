@@ -117,7 +117,7 @@ class FrmDashboardController {
 	/**
 	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
-	 * @param object|false $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param false|object $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
 	 * @param array        $counters_value The counter values for "Total Forms" & "Total Entries".
 	 *
 	 * @return array
@@ -272,7 +272,7 @@ class FrmDashboardController {
 	 *
 	 * @param string       $counter_type
 	 * @param int          $counter_value
-	 * @param object|false $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
 	 * @return array
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
@@ -347,7 +347,7 @@ class FrmDashboardController {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
 
-		if ( ! empty( $banner_closed_by_users ) && false !== array_search( $user_id, $banner_closed_by_users, true ) ) {
+		if ( ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true ) ) {
 			return true;
 		}
 		return false;
@@ -370,7 +370,7 @@ class FrmDashboardController {
 	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		return false !== in_array( $email, $subscribed_emails, true );
+		return in_array( $email, $subscribed_emails, true );
 	}
 
 	/**
@@ -464,7 +464,7 @@ class FrmDashboardController {
 	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		if ( false === array_search( $email, $subscribed_emails, true ) ) {
+		if ( ! in_array( $email, $subscribed_emails, true ) ) {
 			$subscribed_emails[] = $email;
 			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
 		}
@@ -527,7 +527,7 @@ class FrmDashboardController {
 	private static function add_welcome_closed_banner_user_id() {
 		$users_list = self::get_closed_welcome_banner_user_ids();
 		$user_id    = get_current_user_id();
-		if ( false === array_search( $user_id, $users_list, true ) ) {
+		if ( ! in_array( $user_id, $users_list, true ) ) {
 			$users_list[] = $user_id;
 			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
 		}

@@ -101,7 +101,7 @@ class FrmXMLController {
 				$pages = self::create_pages_for_import( $form );
 			}
 
-			if ( isset( $pages ) && ! empty( $pages ) ) {
+			if ( ! empty( $pages ) ) {
 				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
@@ -178,7 +178,7 @@ class FrmXMLController {
 	 * @param string $value
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -189,12 +189,11 @@ class FrmXMLController {
 	 * @since 4.06.02
 	 *
 	 * @param array $form The posted form values.
-	 *
-	 * @return array The array of created pages.
+	 * @return array|null The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
-		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
-			return;
+		if ( empty( $form['pages'] ) ) {
+			return null;
 		}
 
 		$form_key  = self::get_selected_in_form( $form, 'form' );
@@ -543,7 +542,7 @@ class FrmXMLController {
 			unset( $tb_type );
 		}//end foreach
 
-		$filename = self::get_file_name( $args, $type, $records );
+		$filename = self::get_file_name( $args, $records );
 
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
@@ -579,12 +578,12 @@ class FrmXMLController {
 	 */
 	private static function prepare_types_array( &$type ) {
 		$type = (array) $type;
-		if ( ! in_array( 'forms', $type ) && ( in_array( 'items', $type ) || in_array( 'posts', $type ) ) ) {
+		if ( ! in_array( 'forms', $type, true ) && ( in_array( 'items', $type, true ) || in_array( 'posts', $type, true ) ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
@@ -597,13 +596,11 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param array $args
-	 * @param array $type
 	 * @param array $records
-	 *
 	 * @return string
 	 */
-	private static function get_file_name( $args, $type, $records ) {
-		$has_one_form = isset( $records['forms'] ) && ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
+	private static function get_file_name( $args, $records ) {
+		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );

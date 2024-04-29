@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
-				if ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) {
+				if ( $f->type === 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] === 'data' || $f->field_options['data_type'] == '' ) ) {
 					continue;
 				}
 
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				do_action( 'frm_field_code_tab', array( 'field' => $f ) );
 
-				if ( $f->type == 'user_id' ) {
+				if ( $f->type === 'user_id' ) {
 					$uid = $f->id;
 				}
 				unset( $f );
@@ -120,11 +120,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</option>
 					<?php
 					foreach ( $fields as $f ) {
-						?>
-						<option value="<?php echo esc_attr( $f->id ); ?>">
-							<?php echo esc_html( $f->name ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$f->name,
+							false,
+							array(
+								'value' => $f->id,
+							)
+						);
 					}
 					?>
 				</select>
@@ -134,11 +136,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</option>
 					<?php
 					foreach ( $fields as $f ) {
-						?>
-						<option value="<?php echo esc_attr( $f->field_key ); ?>">
-							<?php echo esc_html( $f->name ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$f->name,
+							false,
+							array(
+								'value' => $f->field_key,
+							)
+						);
 					}
 					?>
 				</select>
@@ -149,11 +153,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<select id="frm-is-condition" class="frm-build-logic">
 					<?php
 					foreach ( $cond_shortcodes as $skey => $sname ) {
-						?>
-						<option value="<?php echo esc_attr( $skey ); ?>">
-							<?php echo esc_html( $sname ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$sname,
+							false,
+							array(
+								'value' => $skey,
+							)
+						);
 						unset( $skey, $sname );
 					}
 					?>
@@ -195,14 +201,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul class="frm_code_list frm-full-hover">
 		<?php
 		foreach ( $entry_shortcodes as $skey => $sname ) {
-			if ( empty( $skey ) ) {
+			if ( ! $skey ) {
 				echo '<li class="clear frm_block"></li>';
 				continue;
 			}
 
 			$classes  = 'frm-advanced-list';
-			$classes .= ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? ' show_before_content show_after_content' : '';
-			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? ' hide_frm_not_email_subject' : '';
+			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
+			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
 
 			FrmFormsHelper::insert_code_html(
 				array(
@@ -220,7 +226,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				continue;
 			}
 
-			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
+			if ( ! empty( $helper['heading'] ) ) {
 				?>
 				<li style="padding:0 25px;">
 					<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>

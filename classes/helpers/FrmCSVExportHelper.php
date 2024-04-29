@@ -99,7 +99,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param array $atts
-	 * @return string|false|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 * @return false|string|null returns a string file path or false if $atts['mode'] is set to 'file'.
 	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;
@@ -158,6 +158,8 @@ class FrmCSVExportHelper {
 			fclose( self::$fp );
 			return $filepath;
 		}
+
+		return null;
 	}
 
 	/**
@@ -410,7 +412,7 @@ class FrmCSVExportHelper {
 		);
 		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
 
-		foreach ( $entries as $k => $entry ) {
+		foreach ( $entries as $entry ) {
 			self::$entry = $entry;
 			unset( $entry );
 
@@ -581,7 +583,7 @@ class FrmCSVExportHelper {
 				'show_icon'         => false,
 				'entry_id'          => self::$entry->id,
 				'sep'               => self::$separator,
-				'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
 			)
 		);
 	}

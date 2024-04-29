@@ -166,7 +166,7 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
@@ -321,10 +321,9 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 2.3
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
-	 *
-	 * @since 2.3
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
@@ -654,7 +653,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return string
 	 */
 	public static function get_list_url( $form_id ) {
@@ -664,8 +663,8 @@ class FrmStylesHelper {
 	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
-	 * @param WP_Post|stdClass $style
-	 * @param string|int       $form_id Used for the back button and preview form target.
+	 * @param stdClass|WP_Post $style
+	 * @param int|string       $form_id Used for the back button and preview form target.
 	 * @return string
 	 */
 	public static function get_edit_url( $style, $form_id = 0 ) {
@@ -689,7 +688,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param bool       $is_default
 	 * @return int
 	 */
@@ -721,7 +720,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param mixed      $conversational_style_id
 	 * @return int
 	 */

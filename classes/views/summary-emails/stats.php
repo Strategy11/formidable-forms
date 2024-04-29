@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<?php
-				foreach ( $args['stats'] as $key => $stat ) {
+				foreach ( $args['stats'] as $stat ) {
 					?>
 					<td>
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>

@@ -135,7 +135,6 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
-		$action   = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
 		$atts     = array(
 			'trigger'  => $atts['status'],
@@ -182,7 +181,7 @@ class FrmTransLiteActionsController {
 
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
-			$trigger_event = ( $payment->status === 'complete' ) ? 'payment-success' : 'payment-failed';
+			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}
@@ -412,7 +411,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	private static function destroy_entry_later( $entry_id ) {
@@ -425,7 +424,7 @@ class FrmTransLiteActionsController {
 			/**
 			 * Destroy an entry and remove this action so it only tries to destroy the entry once.
 			 *
-			 * @param string|int $entry_id
+			 * @param int|string $entry_id
 			 * @param Closure    $destroy_callback
 			 * @return void
 			 */

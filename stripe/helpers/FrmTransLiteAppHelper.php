@@ -181,7 +181,7 @@ class FrmTransLiteAppHelper {
 	 * Allow entry values, default values, and other shortcodes
 	 *
 	 * @param array $atts Includes value (required), form, entry.
-	 * @return string|int
+	 * @return int|string
 	 */
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
@@ -287,7 +287,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @since 6.7
 	 *
-	 * @param string|float|object|array $payment Payment object, payment array or amount.
+	 * @param array|float|object|string $payment Payment object, payment array or amount.
 	 * @return array Return the array with the first element is the amount, the second one is the currency value.
 	 */
 	public static function get_amount_and_currency_from_payment( $payment ) {
@@ -430,7 +430,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @param string|int $amount
+	 * @param int|string $amount
 	 * @param WP_Post    $action
 	 *
 	 * @return string
@@ -442,7 +442,7 @@ class FrmTransLiteAppHelper {
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
 		if ( ! empty( $currency['decimals'] ) ) {
-			$amount = number_format( ( $amount / 100 ), 2, '.', '' );
+			$amount = number_format( $amount / 100, 2, '.', '' );
 		}
 
 		return $amount;

@@ -247,7 +247,7 @@ class FrmFieldFormHtml {
 	 * Pull the HTML between [if error] and [/if error] shortcodes.
 	 *
 	 * @param string $html
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_error_body( $html ) {
 		$start = strpos( $html, '[if error]' );
@@ -356,9 +356,9 @@ class FrmFieldFormHtml {
 
 			$replace_with = '';
 
-			if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
+			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
-			} elseif ( $tag == 'input' ) {
+			} elseif ( $tag === 'input' ) {
 				$replace_with = $this->replace_input_shortcode( $shortcode_atts );
 			}
 
@@ -430,7 +430,7 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column( 'type' ) == 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $this->html );
 		}

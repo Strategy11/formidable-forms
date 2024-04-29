@@ -50,7 +50,7 @@ class FrmFormsHelper {
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
 			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
-				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
+				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
@@ -62,11 +62,10 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
-	 *
-	 * @since 2.0.6
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -75,7 +74,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param string|object|false $selected - The label for the placeholder, or the form object.
+	 * @param false|object|string $selected - The label for the placeholder, or the form object.
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -118,7 +117,7 @@ class FrmFormsHelper {
 			$selected = $selected->name;
 		}
 
-		$name           = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
+		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
 		$name           = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
@@ -212,8 +211,8 @@ class FrmFormsHelper {
 	}
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
-		echo ( $sort_col == $col ) ? 'sorted' : 'sortable';
-		echo ( $sort_col == $col && $sort_dir === 'desc' ) ? ' asc' : ' desc';
+		echo $sort_col == $col ? 'sorted' : 'sortable';
+		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
 	}
 
 	/**
@@ -321,7 +320,7 @@ class FrmFormsHelper {
 		unset( $defaults );
 
 		if ( ! isset( $values['form_key'] ) ) {
-			$values['form_key'] = ( $post_values && isset( $post_values['form_key'] ) ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
+			$values['form_key'] = $post_values && isset( $post_values['form_key'] ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
 		}
 
 		$values                 = self::fill_default_opts( $values, false, $post_values );
@@ -353,15 +352,15 @@ class FrmFormsHelper {
 		foreach ( $defaults as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
-					$values[ $var ] = ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : array();
+					$values[ $var ] = $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : array();
 				}
 
 				foreach ( $default as $k => $v ) {
-					$values[ $var ][ $k ] = ( $post_values && isset( $post_values[ $var ][ $k ] ) ) ? $post_values[ $var ][ $k ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ) ? $record->options[ $var ][ $k ] : $v );
+					$values[ $var ][ $k ] = $post_values && isset( $post_values[ $var ][ $k ] ) ? $post_values[ $var ][ $k ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ? $record->options[ $var ][ $k ] : $v );
 
 					if ( is_array( $v ) ) {
 						foreach ( $v as $k1 => $v1 ) {
-							$values[ $var ][ $k ][ $k1 ] = ( $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ) ? $post_values[ $var ][ $k ][ $k1 ] : ( ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
+							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
 							unset( $k1, $v1 );
 						}
 					}
@@ -369,7 +368,7 @@ class FrmFormsHelper {
 					unset( $k, $v );
 				}
 			} else {
-				$values[ $var ] = ( $post_values && isset( $post_values['options'][ $var ] ) ) ? $post_values['options'][ $var ] : ( ( $record && isset( $record->options[ $var ] ) ) ? $record->options[ $var ] : $default );
+				$values[ $var ] = $post_values && isset( $post_values['options'][ $var ] ) ? $post_values['options'][ $var ] : ( $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : $default );
 			}
 
 			unset( $var, $default );
@@ -407,10 +406,9 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $options
 	 * @param array $values
-	 *
-	 * @since 2.0.6
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
@@ -585,7 +583,9 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args
+	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
 		$class  = isset( $args['class'] ) ? $args['class'] : '';
@@ -826,7 +826,7 @@ BEFORE_HTML;
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->load_style == 'none' ) {
 			echo ' style="display:none;"';
-		} elseif ( $frm_settings->load_style == 'dynamic' ) {
+		} elseif ( $frm_settings->load_style === 'dynamic' ) {
 			FrmStylesController::enqueue_style();
 		}
 	}
@@ -838,9 +838,8 @@ BEFORE_HTML;
 		if ( empty( $style ) ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
-			} else {
-				return;
 			}
+			return;
 		}
 
 		// If submit button needs to be inline or centered.
@@ -929,7 +928,7 @@ BEFORE_HTML;
 	 * Check if a field's label position is set to "top"
 	 *
 	 * @param array              $field
-	 * @param object|string|bool $form
+	 * @param bool|object|string $form
 	 *
 	 * @return bool
 	 */
@@ -940,14 +939,16 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param object|array|string|bool $form
+	 * @param array|bool|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
 		if ( empty( $form ) || 'default' === $form ) {
 			return $style;
-		} elseif ( is_object( $form ) && $form->parent_form_id ) {
+		}
+
+		if ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
@@ -960,7 +961,7 @@ BEFORE_HTML;
 			$form = FrmForm::getOne( $form );
 		}
 
-		$style = ( $form && is_object( $form ) && isset( $form->options['custom_style'] ) ) ? $form->options['custom_style'] : $style;
+		$style = $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
 
 		return $style;
 	}
@@ -968,9 +969,8 @@ BEFORE_HTML;
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
-	 * @param array $args Includes img, errors.
-	 *
 	 * @since 2.0.6
+	 * @param array $args Includes img, errors.
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -996,9 +996,8 @@ BEFORE_HTML;
 	 * The image was removed from the styling settings, but it may still be set with a hook
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
-	 * @param array $args Includes img, errors, and show_img.
-	 *
 	 * @since 2.0.6
+	 * @param array $args Includes img, errors, and show_img.
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
@@ -1006,7 +1005,7 @@ BEFORE_HTML;
 
 		$line_break_first = $args['show_img'];
 		foreach ( $args['errors'] as $error_key => $error ) {
-			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key == 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
 				continue;
 			}
 
@@ -1014,7 +1013,7 @@ BEFORE_HTML;
 			echo '<div id="' . esc_attr( $id ) . '_error">';
 
 			if ( $args['show_img'] && ! empty( $args['img'] ) ) {
-				echo '<img src="' . esc_attr( $args['img'] ) . '" alt="" />';
+				echo '<img src="' . esc_url( $args['img'] ) . '" alt="" />';
 			} else {
 				$args['show_img'] = true;
 			}
@@ -1156,7 +1155,7 @@ BEFORE_HTML;
 			}
 
 			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
-			if ( $length == 'icon' && isset( $link_details[ $length ] ) ) {
+			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
 				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
 			}
@@ -1299,7 +1298,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ) ) ) {
+		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
 			$status = 'publish';
 		}
 
@@ -1494,7 +1493,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $item
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_plan_required( &$item ) {
 		if ( ! isset( $item['categories'] ) || ! is_array( $item['categories'] ) || ! empty( $item['url'] ) ) {
@@ -1557,7 +1556,7 @@ BEFORE_HTML;
 		$options = $values['options'];
 		FrmAppHelper::sanitize_with_html( $options );
 
-		if ( ( ! isset( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
+		if ( ! isset( $options['success_action'] ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
 			return false;
 		}
 

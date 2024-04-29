@@ -64,7 +64,7 @@ class FrmFieldsHelper {
 
 		self::fill_field_array( $field, $values );
 
-		$values['custom_html'] = ( isset( $field->field_options['custom_html'] ) ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+		$values['custom_html'] = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
 
 		return $values;
 	}
@@ -113,7 +113,7 @@ class FrmFieldsHelper {
 
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
-		if ( $args['action'] == 'edit' ) {
+		if ( $args['action'] === 'edit' ) {
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
@@ -319,14 +319,13 @@ class FrmFieldsHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
 	 * @param string       $error
 	 *
 	 * @return string
 	 */
 	public static function get_error_msg( $field, $error ) {
-		$frm_settings     = FrmAppHelper::get_settings();
-		$default_settings = $frm_settings->default_options();
+		$frm_settings = FrmAppHelper::get_settings();
 
 		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
@@ -455,7 +454,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param array        $atts
-	 * @param string|array $value
+	 * @param array|string $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
@@ -474,7 +473,7 @@ class FrmFieldsHelper {
 	 */
 	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
-			if ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
 			}
 
@@ -486,12 +485,12 @@ class FrmFieldsHelper {
 			$position = 'top';
 		} elseif ( $position == 'no_label' ) {
 			$position = 'none';
-		} elseif ( $position == 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
+		} elseif ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 			$position = 'top';
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = ( ! empty( $position ) ) ? $position : 'top';
+		$position = ! empty( $position ) ? $position : 'top';
 
 		return $position;
 	}
@@ -700,9 +699,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false;
 			} else {
-				$m = ( $m === false ) ? false : true;
+				$m = $m !== false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -740,7 +739,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = empty( $m ) ? false : true;
+				$m = ! empty( $m );
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
@@ -762,7 +761,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = ( $m === false ) ? true : false;
+				$m = $m === false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -957,7 +956,7 @@ class FrmFieldsHelper {
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
-		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
+		} elseif ( in_array( $atts['tag'], $dynamic_default, true ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;
@@ -997,7 +996,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $atts
 	 *
-	 * @return null|string
+	 * @return string|null
 	 */
 	private static function get_field_shortcode_value( $atts ) {
 		$field = FrmField::getOne( $atts['tag'] );
@@ -1061,7 +1060,7 @@ class FrmFieldsHelper {
 	 * Process the [get] shortcode
 	 *
 	 * @since 2.0
-	 * @return string|array
+	 * @return array|string
 	 */
 	public static function process_get_shortcode( $atts, $return_array = false ) {
 		if ( ! isset( $atts['param'] ) ) {
@@ -1158,16 +1157,19 @@ class FrmFieldsHelper {
 		return $info;
 	}
 
+	/**
+	 * @param string $type
+	 * @return array
+	 */
 	public static function get_field_types( $type ) {
-		$single_input   = self::single_input_fields();
-		$multiple_input = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
-
+		$single_input    = self::single_input_fields();
+		$multiple_input  = array( 'radio', 'checkbox', 'select', 'scale', 'star', 'lookup' );
 		$field_selection = FrmField::all_field_selection();
+		$field_types     = array();
 
-		$field_types = array();
-		if ( in_array( $type, $single_input ) ) {
+		if ( in_array( $type, $single_input, true ) ) {
 			self::field_types_for_input( $single_input, $field_selection, $field_types );
-		} elseif ( in_array( $type, $multiple_input ) ) {
+		} elseif ( in_array( $type, $multiple_input, true ) ) {
 			self::field_types_for_input( $multiple_input, $field_selection, $field_types );
 		} elseif ( isset( $field_selection[ $type ] ) ) {
 			$field_types[ $type ] = $field_selection[ $type ];
@@ -1260,8 +1262,9 @@ class FrmFieldsHelper {
 			}
 
 			return $other_val;
+		}
 
-		} elseif ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
@@ -1357,10 +1360,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
 		// Set up name for other field
@@ -1378,10 +1380,9 @@ class FrmFieldsHelper {
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
 		$parent  = '';
@@ -1410,9 +1411,8 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param array $args
-	 *
 	 * @since 2.0.6
+	 * @param array $args
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {
@@ -1424,7 +1424,7 @@ class FrmFieldsHelper {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $args['field']['type'] == 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] === 'select' && $args['field']['multiple'] ) {
 			$classes[] = 'frm_other_full';
 		}
 
@@ -1449,7 +1449,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param string      $type    Field type.
 	 * @param string      $html_id
-	 * @param string|bool $opt_key
+	 * @param bool|string $opt_key
 	 *
 	 * @return string $other_id
 	 */
@@ -1457,7 +1457,7 @@ class FrmFieldsHelper {
 		$other_id = $html_id;
 
 		// If hidden radio field, add an opt key of 0
-		if ( $type == 'radio' && $opt_key === false ) {
+		if ( $type === 'radio' && $opt_key === false ) {
 			$opt_key = 0;
 		}
 
@@ -2243,7 +2243,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 6.8
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param array      $field_ids If this is not empty, the results will be filtered by field id.
 	 * @return array
 	 */
@@ -2282,7 +2282,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 6.8
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	public static function get_all_draft_field_ids( $form_id ) {
@@ -2354,7 +2354,7 @@ class FrmFieldsHelper {
 	 * @param string       $html
 	 * @param array        $field
 	 * @param array        $errors
-	 * @param object|false $form
+	 * @param false|object $form
 	 * @param array        $args
 	 *
 	 * @return string

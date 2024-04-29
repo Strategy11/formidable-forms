@@ -258,7 +258,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	public function get_all_fields_for_form_key( $form_key ) {
 		$field_totals       = array(
-			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
+			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : $this->all_field_types_count - 3,
 			$this->create_post_form_key => 10,
 			$this->contact_form_key     => $this->contact_form_field_count,
 			$this->repeat_sec_form_key  => 3,
@@ -363,7 +363,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			),
 		);
 
-		if ( $page == 'formidable-edit' ) {
+		if ( $page === 'formidable-edit' ) {
 			$form             = $this->factory->form->get_object_by_id( $this->contact_form_key );
 			$page             = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
 			$screens[ $page ] = $screens['admin.php?page=formidable'];
@@ -468,12 +468,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 
 		$type = (array) $type;
-		if ( in_array( 'items', $type ) && ! in_array( 'forms', $type ) ) {
+		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}

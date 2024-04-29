@@ -14,7 +14,7 @@ class FrmListHelper {
 
 	/**
 	 * @since 4.07
-	 * @var int|bool
+	 * @var bool|int
 	 */
 	public $total_items = false;
 
@@ -367,9 +367,9 @@ class FrmListHelper {
 			return;
 		}
 
-		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_attr__( 'Select bulk action', 'formidable' ) . '</label>';
+		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_html__( 'Select bulk action', 'formidable' ) . '</label>';
 		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "'>\n";
-		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions', 'formidable' ) . "</option>\n";
+		echo "<option value='-1' selected='selected'>" . esc_html__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
 			$params = array(
@@ -410,10 +410,10 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return string|false The action name or False if no action was selected
+	 * @return false|string The action name or False if no action was selected
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) ) {
+		if ( ! empty( $_REQUEST['filter_action'] ) ) {
 			return false;
 		}
 
@@ -462,8 +462,8 @@ class FrmListHelper {
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			( $i == $action_count ) ? $sep = '' : $sep = ' | ';
-			$out                          .= "<span class='$action'>$link$sep</span>";
+			$sep  = $i == $action_count ? '' : ' | ';
+			$out .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
 
@@ -638,7 +638,7 @@ class FrmListHelper {
 		if ( ! empty( $infinite_scroll ) ) {
 			$pagination_links_class = ' hide-if-js';
 		}
-		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . join( "\n", $page_links ) . '</span>';
+		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . implode( "\n", $page_links ) . '</span>';
 
 		if ( $total_pages ) {
 			$page_class = $total_pages < 2 ? ' one-page' : '';
@@ -966,12 +966,12 @@ class FrmListHelper {
 				);
 			}//end if
 
-			$tag   = ( 'cb' === $column_key ) ? 'td' : 'th';
-			$scope = ( 'th' === $tag ) ? 'scope="col"' : '';
+			$tag   = 'cb' === $column_key ? 'td' : 'th';
+			$scope = 'th' === $tag ? 'scope="col"' : '';
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
 			if ( ! empty( $class ) ) {
-				$class = "class='" . esc_attr( join( ' ', $class ) ) . "'";
+				$class = "class='" . esc_attr( implode( ' ', $class ) ) . "'";
 			}
 
 			if ( ! $this->has_min_items() && ! $with_id ) {

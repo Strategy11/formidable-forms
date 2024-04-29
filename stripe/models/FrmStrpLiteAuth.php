@@ -79,7 +79,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array|false
 	 */
 	private static function check_request_params( $form_id ) {
@@ -105,7 +105,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5
 	 *
 	 * @param string $html
-	 * @return int|false Matching form id or false if there is no match.
+	 * @return false|int Matching form id or false if there is no match.
 	 */
 	private static function check_html_for_form_id_match( $html ) {
 		foreach ( self::$form_ids as $form_id ) {
@@ -419,7 +419,7 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function maybe_create_intents( $form_id ) {
@@ -518,7 +518,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $payment_method_types
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function create_setup_intent( $payment_method_types ) {
 		$payment_info = array(
@@ -537,7 +537,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param array      $actions
 	 * @return void
 	 */
@@ -639,9 +639,9 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @param bool       $delete_meta
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_referer_url( $entry_id, $delete_meta = true ) {
 		$row = FrmDb::get_row(

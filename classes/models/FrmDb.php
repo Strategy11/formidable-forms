@@ -91,7 +91,7 @@ class FrmDb {
 
 	/**
 	 * @param string       $key
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param string       $where
 	 * @param array        $values
 	 * @return void
@@ -204,7 +204,7 @@ class FrmDb {
 	 * @param string $limit
 	 * @param string $type
 	 *
-	 * @return array|null|string|object
+	 * @return array|object|string|null
 	 */
 	public static function get_var( $table, $where = array(), $field = 'id', $args = array(), $limit = '', $type = 'var' ) {
 		$group = '';
@@ -526,15 +526,14 @@ class FrmDb {
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
-		if ( ! in_array( strtolower( $order_by ), $sort_options ) ) {
+		if ( ! in_array( strtolower( $order_by ), $sort_options, true ) ) {
 			$order_by = 'asc';
 		}
 	}
 
 	/**
-	 * @param string $limit
-	 *
 	 * @since 2.05.06
+	 * @param string $limit
 	 */
 	public static function esc_limit( $limit ) {
 		if ( empty( $limit ) ) {
@@ -573,7 +572,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string       $starts_with
-	 * @param string|array $where
+	 * @param array|string $where
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
@@ -601,10 +600,9 @@ class FrmDb {
 	/**
 	 * Prepare and save settings in styles and actions
 	 *
+	 * @since 2.05.06
 	 * @param array  $settings
 	 * @param string $group
-	 *
-	 * @since 2.05.06
 	 */
 	public static function save_settings( $settings, $group ) {
 		$settings                 = (array) $settings;

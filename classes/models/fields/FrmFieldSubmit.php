@@ -94,13 +94,29 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$form        = FrmForm::getOne( $this->field['form_id'] );
+		$form = $args['form'];
+		if ( ! FrmForm::show_submit( $form ) ) {
+			return '';
+		}
+
 		$submit      = $this->field['name'];
 		$form_action = FrmSubmitHelper::get_current_action_from_global_var( $form->id );
 		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
 
 		ob_start();
+
+		/**
+		 * @since 5.5.1
+		 */
+		do_action( 'frm_before_submit_btn', compact( 'form' ) );
+
 		FrmFormsHelper::get_custom_submit( $values['submit_html'], $form, $submit, $form_action, $values );
+
+		/**
+		 * @since 5.5.1
+		 */
+		do_action( 'frm_after_submit_btn', compact( 'form' ) );
+
 		return ob_get_clean();
 	}
 }

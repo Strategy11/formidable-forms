@@ -405,7 +405,7 @@ class FrmSMTPController {
 	 *
 	 * @since 4.04.04
 	 *
-	 * @return \WPMailSMTP\Providers\MailCatcherInterface|PHPMailer Instance of PHPMailer.
+	 * @return PHPMailer|\WPMailSMTP\Providers\MailCatcherInterface Instance of PHPMailer.
 	 */
 	protected function get_phpmailer() {
 		global $phpmailer;

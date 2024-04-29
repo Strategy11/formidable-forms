@@ -48,7 +48,7 @@ class FrmStylesCardHelper {
 	/**
 	 * @param stdClass|WP_Post $active_style
 	 * @param WP_Post          $default_style
-	 * @param string|int       $form_id
+	 * @param int|string       $form_id
 	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
@@ -132,7 +132,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @param WP_Post|stdClass $style
+	 * @param stdClass|WP_Post $style
 	 * @return bool
 	 */
 	private static function has_dark_background( $style ) {
@@ -196,7 +196,7 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $args {
-			 *     @type WP_Post|stdClass $style
+			 *     @type stdClass|WP_Post $style
 			 * }
 			 * @param stdClass $style_object
 			 * @param array    $style
@@ -246,7 +246,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style (including duplicated styles) is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style (including duplicated styles) is not a WP_Post object.
 	 *                                Template cards also use an stdClss instead of a WP_Post object.
 	 * @return string
 	 */
@@ -424,7 +424,7 @@ class FrmStylesCardHelper {
 			 * @return void
 			 */
 			function ( $style ) use ( &$count ) {
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				$hidden = $count > self::PAGE_SIZE - 1;
 				$this->echo_style_card( $style, $hidden );
 				++$count;
 			}

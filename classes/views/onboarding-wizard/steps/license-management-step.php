@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm_form_field frm-mt-lg">
 			<p>
 				<label for="edd_formidable_pro_license_key"><?php esc_html_e( 'License key', 'formidable' ); ?></label>
-				<input id="edd_formidable_pro_license_key" name="proplug-license" class="frm-mt-2xs" type="text" placeholder="<?php esc_html_e( 'Enter your license key', 'formidable' ); ?>" />
+				<input id="edd_formidable_pro_license_key" name="proplug-license" class="frm-mt-2xs" type="text" placeholder="<?php esc_attr_e( 'Enter your license key', 'formidable' ); ?>" />
 			</p>
 		</div>
 	</div>

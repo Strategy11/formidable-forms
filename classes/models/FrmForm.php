@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|bool id on success or false on failure.
+	 * @return bool|int id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -70,7 +70,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool ID on success or false on failure
+	 * @return bool|int ID on success or false on failure
 	 */
 	public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
 		global $wpdb;
@@ -159,7 +159,7 @@ class FrmForm {
 		$keys     = array( 'default_value', 'field_options' );
 		$sql_cols = 'fi.id';
 		foreach ( $keys as $key ) {
-			$sql_cols .= ( ',fi.' . $key );
+			$sql_cols .= ',fi.' . $key;
 		}
 
 		$fields = FrmDb::get_results(
@@ -219,7 +219,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function update( $id, $values, $create_link = false ) {
 		global $wpdb;
@@ -244,7 +244,7 @@ class FrmForm {
 			}
 		}
 
-		if ( isset( $values['new_status'] ) && ! empty( $values['new_status'] ) ) {
+		if ( ! empty( $values['new_status'] ) ) {
 			$new_values['status'] = $values['new_status'];
 		}
 
@@ -283,7 +283,7 @@ class FrmForm {
 		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;
 		$options['before_html']  = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
-		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
+		$options['submit_html']  = isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		/**
 		 * Allows modifying form options before updating or creating.
@@ -491,7 +491,7 @@ class FrmForm {
 			$fallback_html = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type );
 
 			$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ? $values['field_options'][ 'custom_html_' . $field->id ] : $fallback_html;
-		} elseif ( $field->type == 'hidden' || $field->type == 'user_id' ) {
+		} elseif ( $field->type === 'hidden' || $field->type === 'user_id' ) {
 			$prev_opts = $field->field_options;
 		}
 
@@ -514,7 +514,7 @@ class FrmForm {
 			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = ( $default === '' ) ? $field->{$col} : $default;
+			$default = $default === '' ? $field->{$col} : $default;
 
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
 		}
@@ -552,7 +552,7 @@ class FrmForm {
 	 * @param int    $id
 	 * @param string $status
 	 *
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function set_status( $id, $status ) {
 		if ( 'trash' == $status ) {
@@ -560,7 +560,7 @@ class FrmForm {
 		}
 
 		$statuses = array( 'published', 'draft', 'trash' );
-		if ( ! in_array( $status, $statuses ) ) {
+		if ( ! in_array( $status, $statuses, true ) ) {
 			return false;
 		}
 
@@ -589,7 +589,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function trash( $id ) {
 		if ( ! EMPTY_TRASH_DAYS ) {
@@ -635,7 +635,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return int|bool
+	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
 		global $wpdb;
@@ -759,9 +759,8 @@ class FrmForm {
 	/**
 	 * If $form is numeric, get the form object
 	 *
-	 * @param object|int $form
-	 *
 	 * @since 2.0.9
+	 * @param int|object $form
 	 */
 	public static function maybe_get_form( &$form ) {
 		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
@@ -770,8 +769,8 @@ class FrmForm {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @param int|false  $blog_id
+	 * @param int|string $id
+	 * @param false|int  $blog_id
 	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
@@ -836,7 +835,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @return object|array of objects
+	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
@@ -999,7 +998,7 @@ class FrmForm {
 		if ( $form->id == $values['posted_form_id'] ) {
 			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
-				if ( $var == 'action' ) {
+				if ( $var === 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );
 				} else {
 					$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
@@ -1069,7 +1068,7 @@ class FrmForm {
 	}
 
 	public static function get_current_form_id( $default_form = 'none' ) {
-		if ( 'first' == $default_form ) {
+		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
 		} else {
 			$form = self::maybe_get_current_form();
@@ -1152,7 +1151,7 @@ class FrmForm {
 	}
 
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status == 'published' && ! FrmAppHelper::is_admin() );
+		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 
 		return $show;
@@ -1248,7 +1247,7 @@ class FrmForm {
 	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
 	 * @codeCoverageIgnore
 	 *
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @return string
 	 */
 	public static function getKeyById( $id ) {

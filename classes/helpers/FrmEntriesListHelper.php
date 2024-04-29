@@ -11,7 +11,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 4.07
-	 * @var int|bool
+	 * @var bool|int
 	 */
 	public $total_items = 0;
 
@@ -258,7 +258,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			if ( 'cb' != $column_key && ! in_array( $column_key, $hidden ) ) {
+			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden ) ) {
 				$primary_column = $column_key;
 				break;
 			}

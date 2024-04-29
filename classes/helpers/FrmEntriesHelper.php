@@ -106,7 +106,7 @@ class FrmEntriesHelper {
 	 * @param bool   $reset
 	 * @param array  $args
 	 *
-	 * @return string|array $new_value
+	 * @return array|string $new_value
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
@@ -249,10 +249,10 @@ class FrmEntriesHelper {
 		}
 
 		$sep = ', ';
-		if ( strpos( implode( ' ', (array) $field_value ), '<img' ) !== false ) {
+		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
 			$sep = '<br/>';
 		}
-		$val = implode( $sep, (array) $field_value );
+		$val = implode( $sep, $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
 	}
@@ -283,7 +283,7 @@ class FrmEntriesHelper {
 
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( FrmField::is_image( $field ) || $field->type == 'star' ) {
+		if ( FrmField::is_image( $field ) || $field->type === 'star' ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
 		}
@@ -298,7 +298,7 @@ class FrmEntriesHelper {
 			$field->field_options['custom_field'] = '';
 		}
 
-		if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] == 'tag' ) ) {
+		if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] === 'tag' ) ) {
 			$atts['pre_truncate'] = $atts['truncate'];
 			$atts['truncate']     = true;
 			$atts['exclude_cat']  = isset( $field->field_options['exclude_cat'] ) ? $field->field_options['exclude_cat'] : 0;
@@ -321,7 +321,7 @@ class FrmEntriesHelper {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
 
-		if ( $atts['truncate'] && $atts['type'] != 'url' ) {
+		if ( $atts['truncate'] && $atts['type'] !== 'url' ) {
 			$value = FrmAppHelper::truncate( $value, 50 );
 		}
 
@@ -403,7 +403,7 @@ class FrmEntriesHelper {
 	 * @since 2.0
 	 *
 	 * @param object       $field
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $args
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
@@ -444,7 +444,7 @@ class FrmEntriesHelper {
 	 * @since 2.0
 	 *
 	 * @param object       $field
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $args
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
@@ -475,8 +475,8 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string|array $value
-	 * @param string|array $other_vals (usually of posted values).
+	 * @param array|string $value
+	 * @param array|string $other_vals (usually of posted values).
 	 * @param object       $field
 	 * @param array        $args
 	 */
@@ -687,7 +687,7 @@ class FrmEntriesHelper {
 			);
 		}
 
-		if ( $page == 'show' ) {
+		if ( $page === 'show' ) {
 			$actions['frm_print'] = array(
 				'url'   => '#',
 				'label' => __( 'Print Entry', 'formidable' ),
@@ -762,7 +762,7 @@ class FrmEntriesHelper {
 	/**
 	 * @since 5.0.15
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	public static function maybe_render_captcha_score( $entry_id ) {

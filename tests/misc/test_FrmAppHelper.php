@@ -27,7 +27,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_plugin_folder() {
 		$folder   = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
-		$this->assertTrue( in_array( $folder, $expected ) );
+		$this->assertTrue( in_array( $folder, $expected, true ) );
 	}
 
 	/**

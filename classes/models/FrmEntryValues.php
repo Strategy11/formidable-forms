@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValues {
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var int
@@ -115,22 +115,18 @@ class FrmEntryValues {
 	 */
 	protected function init_include_fields( $atts ) {
 
-		// For reverse compatibility with the fields parameter
-		if ( ! isset( $atts['include_fields'] ) || empty( $atts['include_fields'] ) ) {
+		// For reverse compatibility with the fields parameter.
+		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
+			if ( ! is_array( $atts['fields'] ) ) {
+				$atts['include_fields'] = $atts['fields'];
+			} else {
+				$atts['include_fields'] = '';
 
-			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
-
-				if ( ! is_array( $atts['fields'] ) ) {
-					$atts['include_fields'] = $atts['fields'];
-				} else {
-					$atts['include_fields'] = '';
-
-					foreach ( $atts['fields'] as $included_field ) {
-						$atts['include_fields'] .= $included_field->id . ',';
-					}
-
-					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				foreach ( $atts['fields'] as $included_field ) {
+					$atts['include_fields'] .= $included_field->id . ',';
 				}
+
+				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
 			}
 		}
 
@@ -181,7 +177,7 @@ class FrmEntryValues {
 	 * @return array
 	 */
 	private function prepare_array_property( $index, $atts ) {
-		if ( isset( $atts[ $index ] ) && ! empty( $atts[ $index ] ) ) {
+		if ( ! empty( $atts[ $index ] ) ) {
 
 			if ( is_array( $atts[ $index ] ) ) {
 				$property = $atts[ $index ];

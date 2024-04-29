@@ -2,9 +2,6 @@
 <ruleset name="Formidable Forms">
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
-	<!-- This is required to run PHPCS in PHP 8 -->
-	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
-
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
@@ -12,7 +9,7 @@
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
 
-	<arg name="extensions" value="php" />
+	<arg name="extensions" value="php,css" />
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
@@ -46,23 +43,23 @@
 	<rule ref="Squiz.Scope.StaticThisUsage" />
 
 	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
-		<exclude-pattern>classes/views/frm-forms/preview/header.php</exclude-pattern>
+		<exclude-pattern>views/frm-forms/preview/header.php</exclude-pattern>
 	</rule>
 
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
-		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
 	</rule>
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd">
-		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.WP.GlobalVariablesOverride">
 		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
-		<exclude-pattern>classes/views/*</exclude-pattern>
-		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmEntriesListHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
+		<exclude-pattern>views/*</exclude-pattern>
+		<exclude-pattern>models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsListHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
@@ -91,15 +88,158 @@
 	<!-- These rules likely won't see any changes for compatibility -->
 	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
 		<!-- the getOne and getAll functions all break this rule -->
-		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntry.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
 		<!-- wpmuBaseTablePrefix breaks this rule -->
-		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmDb.php</exclude-pattern>
+	</rule>
+
+	<!-- Add some rules from the Slevomat Coding Standard -->
+	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+
+	<rule ref="SlevomatCodingStandard.Files.LineLength">
+		<properties>
+			<property name="lineLengthLimit" value="180" />
+		</properties>
+		<exclude-pattern>views/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>fields/FrmFieldUserID.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>fields/FrmFieldType.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStrpLiteAppHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsListHelper.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSMTPController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmInboxController.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSettingsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmAddonsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmAppController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmDashboardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmEntriesController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmOnboardingWizardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEmailSummaryHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormMigratorsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormTemplatesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStylesCardHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>models/FrmInbox.php</exclude-pattern>
+		<exclude-pattern>models/FrmMigrate.php</exclude-pattern>
+		<exclude-pattern>models/FrmPluginSearch.php</exclude-pattern>
+		<exclude-pattern>models/FrmRecaptchaSettings.php</exclude-pattern>
+		<exclude-pattern>models/FrmReviews.php</exclude-pattern>
+		<exclude-pattern>models/FrmSettings.php</exclude-pattern>
+		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>models/FrmTurnstileSettings.php</exclude-pattern>
+		<exclude-pattern>widgets/FrmShowForm.php</exclude-pattern>
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmStrpLiteConnectHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmTransLiteAction.php</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Functions.FunctionLength">
+		<properties>
+			<property name="maxLinesLength" value="100" />
+		</properties>
+		<exclude-pattern>controllers/FrmAddonsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmOnboardingWizardController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSettingsController.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmSMTPController.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCurrencyHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmField.php</exclude-pattern>
+		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmStrpLiteLinkController.php</exclude-pattern>
+		<exclude-pattern>tests/database/test_FrmMigrate.php</exclude-pattern>
+		<exclude-pattern>tests/fields/test_FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>tests/fields/test_FrmFieldType.php</exclude-pattern>
+	</rule>
+
+	<!-- Set rules for Cognitive Complexity -->
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+		<properties>
+			<property name="warningThreshold" value="30" />
+			<property name="errorThreshold" value="10" />
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPressVIPMinimum">
+		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.chmod_chmod" />
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.NotAbsolutePath" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules" />
+		<exclude name="WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.term_exists_term_exists" />
+		<exclude name="WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
+		<exclude name="WordPressVIPMinimum.UserExperience.AdminBarRemoval.HidingDetected" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite" />
+	</rule>
+	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log_error_log">
+		<exclude-pattern>FrmTransLiteLog.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink">
+		<exclude-pattern>test_FrmCSVExportHelper.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Security.ExitAfterRedirect.NoExit">
+		<exclude-pattern>FrmEntriesController.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.custom_role_add_role">
+		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
+	</rule>
+
+	<!-- Treat these warnings as errors -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>8</severity>
+		<type>error</type>
 	</rule>
 </ruleset>

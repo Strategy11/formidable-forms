@@ -6796,8 +6796,15 @@ function frmAdminBuildJS() {
 
 			button.className   = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
 			button.className   = button.className + ' ' + oneclick.class;
-			button.textContent = __( 'Activate', 'formidable' );
 			button.rel = oneclick.url;
+
+			if ( oneclick.class === 'frm-activate-addon' ) {
+				oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
+				button.textContent = __( 'Activate', 'formidable' );
+			} else {
+				oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
+				button.textContent = __( 'Install', 'formidable' );
+			}
 		}
 
 		if ( ! newMessage ) {
@@ -8320,7 +8327,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
@@ -8328,7 +8335,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 		} else {
@@ -8337,7 +8344,7 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( this.id ) {
-					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
+					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
 			});
 		}
@@ -10417,7 +10424,7 @@ function frmAdminBuildJS() {
 							htmlTab.show();
 							htmlTab.siblings().hide();
 							jQuery( '#frm_html_tab a' ).trigger( 'click' );
-							toggleAllowedHTML( this, e.type );
+							toggleAllowedHTML( this );
 						} else {
 							showElement( jQuery( '.frm-category-tabs li' ) );
 							insertFieldsTab.click();
@@ -10426,7 +10433,7 @@ function frmAdminBuildJS() {
 						}
 					} else if ( viewPage ) {
 						// Run on view page.
-						toggleAllowedShortcodes( this.id, e.type );
+						toggleAllowedShortcodes( this.id );
 					}
 				}
 			});

@@ -258,7 +258,7 @@ class FrmSettingsController {
 	/**
 	 * Save form data submitted from the Global settings page.
 	 *
-	 * @param string|bool $stop_load
+	 * @param bool|string $stop_load
 	 *
 	 * @return void
 	 */
@@ -317,7 +317,7 @@ class FrmSettingsController {
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
-		if ( $action == 'process-form' ) {
+		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
 		} elseif ( $stop_load != 'stop_load' ) {
 			self::display_form();

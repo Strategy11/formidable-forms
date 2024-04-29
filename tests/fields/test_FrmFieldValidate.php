@@ -50,7 +50,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$error_field_ids = array_keys( $errors );
 			foreach ( $error_field_ids as $error_field ) {
 				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
-				$error_fields[] = ( $field ) ? $field->type : $error_field;
+				$error_fields[] = $field ? $field->type : $error_field;
 			}
 		}
 

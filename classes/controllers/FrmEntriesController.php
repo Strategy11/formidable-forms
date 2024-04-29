@@ -128,7 +128,7 @@ class FrmEntriesController {
 				continue;
 			}
 
-			$has_child_fields = $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] );
+			$has_child_fields = $form_col->type === 'form' && ! empty( $form_col->field_options['form_select'] );
 			if ( $has_child_fields ) {
 				self::add_subform_cols( $form_col, $form_id, $columns );
 			} else {
@@ -166,7 +166,7 @@ class FrmEntriesController {
 		}
 
 		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
-		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] == 'post_status';
+		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
 		if ( $has_separate_value && ! $is_post_status ) {
 			$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
 		}
@@ -192,7 +192,7 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		// Add a check so we don't create a loop.
-		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
+		$frm_vars['prev_hidden_cols'] = ! empty( $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
 	}
@@ -269,7 +269,7 @@ class FrmEntriesController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_entries_per_page' ) {
+		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
 		}
 
@@ -361,7 +361,7 @@ class FrmEntriesController {
 			if ( ! empty( $r ) ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
-				if ( (int) $form_prefix == (int) $form_id ) {
+				if ( (int) $form_prefix === (int) $form_id ) {
 					$hidden[] = $r;
 				}
 
@@ -442,9 +442,9 @@ class FrmEntriesController {
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
 
 			/* translators: %1$s: Time string */
 			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );

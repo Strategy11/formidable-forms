@@ -102,7 +102,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @param string       $capability
-	 * @param string|array $visibility
+	 * @param array|string $visibility
 	 * @return bool
 	 */
 	private function form_is_visible( $capability, $visibility ) {
@@ -117,7 +117,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @param string       $capability
-	 * @param string|array $visibility
+	 * @param array|string $visibility
 	 * @param string       $message
 	 */
 	private function assert_form_is_visible( $capability, $visibility, $message = '' ) {
@@ -126,7 +126,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @param string       $capability
-	 * @param string|array $visibility
+	 * @param array|string $visibility
 	 * @param string       $message
 	 */
 	private function assert_form_is_hidden( $capability, $visibility, $message = '' ) {
