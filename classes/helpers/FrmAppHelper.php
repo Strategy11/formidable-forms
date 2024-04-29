@@ -4192,17 +4192,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 2.0
-	 * @deprecated 5.0.13
-	 *
-	 * @return string The base Google APIS url for the current version of jQuery UI
-	 */
-	public static function jquery_ui_base_url() {
-		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
-		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
-	}
-
-	/**
 	 * @since 4.07
 	 * @deprecated 6.0
 	 */

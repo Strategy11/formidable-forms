@@ -78,13 +78,15 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 		if ( 'frm_display' === $post->post_type && is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
 			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
-			foreach ( $layouts as $layout ) {
-				?>
+			if ( is_array( $layouts ) ) {
+				foreach ( $layouts as $layout ) {
+					?>
 		<layout>
 			<type><?php echo esc_html( $layout->type ); ?></type>
 			<data><?php echo FrmXMLHelper::cdata( $layout->data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></data>
 		</layout>
 <?php
+				}
 			}
 		}
 		?>

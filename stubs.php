@@ -27,6 +27,11 @@ namespace {
 	}
 	class FrmProApplicationsHelper {
 		public static function get_custom_applications_capability() {}
+		/**
+		 * @return string
+		 */
+		public static function get_required_templates_capability() {
+		}
 	}
 	class FrmProFileImport {
 		public static function import_attachment( $val, $field ) {
@@ -47,6 +52,29 @@ namespace {
 		 */
 		public static function plugin_path() {
 		}
+		/**
+		 * @return bool
+		 */
+		public static function use_chosen_js() {
+		}
+		/**
+		 * @param array|string $selected
+		 * @param string       $current
+		 * @param bool         $echo
+		 * @return string
+		 */
+		public static function selected( $selected, $current, $echo = true ) {
+		}
+		/**
+		 * @return string
+		 */
+		public static function plugin_url() {
+		}
+		/**
+		 * @return FrmProEddController
+		 */
+		public static function get_updater() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
@@ -63,19 +91,96 @@ namespace {
 		}
 	}
 	class FrmProFormActionsController {
+		/**
+		 * @param WP_Post  $action
+		 * @param stdClass $entry
+		 * @return bool
+		 */
+		public static function action_conditions_met( $action, $entry ) {
+		}
 	}
 	class FrmViewsLayout {
+		/**
+		 * @param int    $view_id
+		 * @param string $listing_layout
+		 * @param string $detail_layout
+		 */
+		public static function maybe_create_layouts_for_view( $view_id, $listing_layout, $detail_layout ) {
+		}
+		/**
+		 * @param int          $view_id
+		 * @param false|string $type
+		 * @return array|false|object
+		 */
+		public static function get_layouts_for_view( $view_id, $type = false ) {
+		}
 	}
 	class FrmProDisplaysHelper {
 		public static function get_shortcodes( $content, $form_id ) {
 		}
 	}
 	class FrmProAddonsController {
+		/**
+		 * @param bool $force_type
+		 * @return string
+		 */
+		public static function license_type( $force_type = false ) {
+		}
+		/**
+		 * @return bool|int
+		 */
+		public static function is_license_expiring() {
+		}
+		/**
+		 * @param string       $plugin
+		 * @param array|string $upgrade_link_args
+		 * @return void
+		 */
+		public static function conditional_action_button( $plugin, $upgrade_link_args ) {
+		}
+		/**
+		 * @param array $atts
+		 * @return void
+		 */
+		public static function show_conditional_action_button( $atts ) {
+		}
+		/**
+		 * @return bool
+		 */
+		public static function admin_banner() {
+		}
+		/**
+		 * @return string
+		 */
+		public static function get_readable_license_type() {
+		}
 	}
 	class FrmProDb {
 		public static $plug_version;
 	}
 	class FrmProStylesController extends FrmStylesController {
+		/**
+		 * @param int $form_id
+		 * @return WP_Post
+		 */
+		public static function get_active_style_for_form( $form_id ) {
+		}
+		/**
+		 * @param stdClass|WP_Post $active_style
+		 * @return array<WP_Post>
+		 */
+		public static function get_styles_for_styler( $active_style ) {
+		}
+		/**
+		 * @return array<string>
+		 */
+		public static function get_notes_for_styler_preview() {
+		}
+		/**
+		 * @return false|string
+		 */
+		public static function get_disabled_javascript_features() {
+		}
 	}
 	class FrmProPost {
 		/**
@@ -95,9 +200,35 @@ namespace {
 		 */
 		public static function entry_delete_link( $atts ) {
 		}
+		/**
+		 * @param string   $method
+		 * @param stdClass $form
+		 * @param int      $entry_id
+		 * @param array    $args
+		 */
+		public static function confirmation( $method, $form, $form_options, $entry_id, $args = array() ) {
+		}
+		/**
+		 * @param object $form
+		 * @return bool
+		 */
+		public static function is_form_displayed_after_edit( $form ) {
+		}
+		/**
+		 * @param object $entry
+		 * @param array  $args
+		 * @return void
+		 */
+		public static function show_front_end_form_with_entry( $entry, $args ) {
+		}
 	}
 	class FrmProFormsHelper {
 		public static function &post_type( $form ) {
+		}
+		/**
+		 * @return array
+		 */
+		public static function get_default_opts() {
 		}
 	}
 	class FrmProEntry {
@@ -139,6 +270,11 @@ namespace {
 		}
 	}
 	class FrmViewsAppHelper {
+		/**
+		 * @return string
+		 */
+		public static function plugin_version() {
+		}
 	}
 	class FrmProCreditCardsController {
 		/**
@@ -177,6 +313,31 @@ namespace {
 		public static $db_opt_name = 'frm_pay_db_version';
 	}
 	class FrmProDashboardHelper {
+		/**
+		 * @return bool
+		 */
+		public static function should_display_videos() {
+		}
+		/**
+		 * @param array $entries_template
+		 * @return void
+		 */
+		public static function get_main_widget( $entries_template ) {
+		}
+		/**
+		 * @param array $entries_template
+		 * @return void
+		 */
+		public static function get_bottom_widget( $entries_template ) {
+		}
+		/**
+		 * @param array $template
+		 * @return void
+		 */
+		public static function load_license_management( $template ) {
+		}
+	}
+	class FrmProEddController extends FrmAddon {
 	}
 	function load_formidable_pro() {
 	}

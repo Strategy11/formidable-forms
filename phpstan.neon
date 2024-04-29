@@ -41,7 +41,6 @@ parameters:
 		- '#might not be defined.#'
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
-		- '#Call to an undefined static method#'
 		- '#on an unknown class (Elementor)#'
 		- '#get_mailer\(\) expects#'
 		- '#only iterables are supported#'
