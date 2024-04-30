@@ -528,6 +528,11 @@ class FrmField {
 		}//end foreach
 	}
 
+	/**
+	 * @param string|int $id
+	 * @param array      $values
+	 * @return false|int
+	 */
 	public static function update( $id, $values ) {
 		global $wpdb;
 
@@ -653,6 +658,9 @@ class FrmField {
 
 	/**
 	 * If $field is numeric, get the field object
+	 *
+	 * @param int|object|string
+	 * @return void
 	 */
 	public static function maybe_get_field( &$field ) {
 		if ( ! is_object( $field ) ) {
@@ -729,6 +737,12 @@ class FrmField {
 		return $type;
 	}
 
+	/**
+	 * @param string|int $form_id
+	 * @param string     $type
+	 * @param string|int $limit
+	 * @param string     $inc_sub
+	 */
 	public static function get_all_types_in_form( $form_id, $type, $limit = '', $inc_sub = 'exclude' ) {
 		if ( ! $form_id ) {
 			return array();
@@ -780,6 +794,13 @@ class FrmField {
 		return $results;
 	}
 
+	/**
+	 * @param string|int $form_id
+	 * @param string|int $limit
+	 * @param string     $inc_embed
+	 * @param string     $inc_repeat
+	 * @return array
+	 */
 	public static function get_all_for_form( $form_id, $limit = '', $inc_embed = 'exclude', $inc_repeat = 'include' ) {
 		if ( ! (int) $form_id ) {
 			return array();
@@ -1072,6 +1093,7 @@ class FrmField {
 
 	/**
 	 * @since 3.0
+	 * @param array|object $field
 	 * @return string
 	 */
 	public static function get_field_type( $field ) {
@@ -1112,11 +1134,13 @@ class FrmField {
 	 * but disabled with the shortcode options
 	 *
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field
+	 * @return bool
 	 */
 	public static function is_read_only( $field ) {
 		global $frm_vars;
-
-		return ( self::is_option_true( $field, 'read_only' ) && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] != 'disabled' ) );
+		return self::is_option_true( $field, 'read_only' ) && ( ! isset( $frm_vars['readonly'] ) || $frm_vars['readonly'] !== 'disabled' );
 	}
 
 	/**
@@ -1244,6 +1268,11 @@ class FrmField {
 		return $this_option;
 	}
 
+	/**
+	 * @param object $field
+	 * @param string $option
+	 * @return mixed
+	 */
 	public static function get_option_in_object( $field, $option ) {
 		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
 	}
