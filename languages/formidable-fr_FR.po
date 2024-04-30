@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-29 21:16\n"
+"PO-Revision-Date: 2024-04-30 09:15\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -507,7 +507,7 @@ msgstr "Apps installées"
 #: classes/controllers/FrmDashboardController.php:241
 #: classes/views/frm-entries/no_entries.php:37
 msgid "See the %1$sform documentation%2$s for instructions on publishing your form"
-msgstr "Voir la %1$sdocumentation du formulaire%2$s pour les instructions de publication de votre formulaire."
+msgstr "Consultez la %1$sdocumentation sur les formulaires%2$s pour obtenir des instructions sur la publication d’un formulaire."
 
 #: classes/controllers/FrmDashboardController.php:247
 #: classes/controllers/FrmDashboardController.php:264
@@ -678,7 +678,7 @@ msgstr "Envoyer"
 
 #: classes/controllers/FrmFormsController.php:222
 msgid "Settings Successfully Updated"
-msgstr "Parametres soumis avec succès"
+msgstr "Réglages bien mis à jour "
 
 #: classes/controllers/FrmFormsController.php:260
 #: classes/controllers/FrmFormsController.php:1141
@@ -979,7 +979,7 @@ msgstr "Nom du formulaire"
 
 #: classes/controllers/FrmFormsController.php:1710
 msgid "No forms were specified"
-msgstr "Vous n’avez pas spécidié de formulaire"
+msgstr "Vous n’avez pas spécifié de formulaire."
 
 #: classes/controllers/FrmFormsController.php:1818
 msgid "There was a problem duplicating the form"
@@ -1324,7 +1324,7 @@ msgstr "Configurer WP Mail SMTP"
 
 #: classes/controllers/FrmSMTPController.php:287
 msgid "Select and configure your mailer."
-msgstr "Sélectionnez et configurez votre mailer."
+msgstr "Sélectionnez et configurez votre service d’envoi."
 
 #: classes/controllers/FrmSMTPController.php:319
 msgid "Install WP Mail SMTP"
@@ -1635,7 +1635,7 @@ msgstr "secondes"
 
 #: classes/helpers/FrmAppHelper.php:2896
 msgid "Give this action a label for easy reference."
-msgstr "Donnez à cette action une étiquette facile à memoriser."
+msgstr "Donnez à cette action une étiquette facile à mémoriser."
 
 #: classes/helpers/FrmAppHelper.php:2897
 msgid "Add one or more recipient addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings."
@@ -1673,7 +1673,7 @@ msgstr "Veuillez patienter pendant la mise à jour de votre site."
 
 #: classes/helpers/FrmAppHelper.php:3172
 msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
-msgstr "Etes-vous sûr que vous voulez retirer l’autorisation formulaire Formidables Pro sur ce site?"
+msgstr "Voulez-vous vraiment retirer l’autorisation pour le formulaire Formidables Pro sur ce site ?"
 
 #: classes/helpers/FrmAppHelper.php:3177
 #: classes/helpers/FrmAppHelper.php:3205
@@ -1954,7 +1954,7 @@ msgstr "Chinois Hong Kong"
 
 #: classes/helpers/FrmAppHelper.php:3449
 msgid "Chinese Simplified"
-msgstr "Chinois simplifilé"
+msgstr "Chinois simplifié"
 
 #: classes/helpers/FrmAppHelper.php:3450
 msgid "Chinese Traditional"
@@ -1974,7 +1974,7 @@ msgstr "Danois"
 
 #: classes/helpers/FrmAppHelper.php:3454
 msgid "Dutch"
-msgstr "Neérlandais"
+msgstr "Néerlandais"
 
 #: classes/helpers/FrmAppHelper.php:3455
 msgid "English/UK"
@@ -2196,7 +2196,7 @@ msgstr "Swahili"
 
 #: classes/helpers/FrmAppHelper.php:3511
 msgid "Swedish"
-msgstr "Suèdois"
+msgstr "Suédois"
 
 #: classes/helpers/FrmAppHelper.php:3512
 msgid "Tamil"
@@ -2505,7 +2505,7 @@ msgstr "Télécharger en PDF"
 
 #: classes/helpers/FrmEntriesHelper.php:725
 msgid "Edit Entry"
-msgstr "Modifier l’Entrée"
+msgstr "Modifier l’entrée"
 
 #: classes/helpers/FrmEntriesHelper.php:728
 msgid "Entry edits"
@@ -2643,7 +2643,7 @@ msgstr "Îles Samoa Américaines"
 
 #: classes/helpers/FrmFieldsHelper.php:1589
 msgid "Andorra"
-msgstr "Andore"
+msgstr "Andorre"
 
 #: classes/helpers/FrmFieldsHelper.php:1590
 msgid "Angola"
@@ -2655,7 +2655,7 @@ msgstr "Anguilla"
 
 #: classes/helpers/FrmFieldsHelper.php:1592
 msgid "Antarctica"
-msgstr "Antartique"
+msgstr "Antarctique"
 
 #: classes/helpers/FrmFieldsHelper.php:1593
 msgid "Antigua and Barbuda"
@@ -2859,7 +2859,7 @@ msgstr "République Tchèque"
 
 #: classes/helpers/FrmFieldsHelper.php:1643
 msgid "Denmark"
-msgstr "Danemarque"
+msgstr "Danemark"
 
 #: classes/helpers/FrmFieldsHelper.php:1644
 msgid "Djibouti"
@@ -3375,7 +3375,7 @@ msgstr "Saint-Christophe-et-Niévès"
 
 #: classes/helpers/FrmFieldsHelper.php:1772
 msgid "Saint Lucia"
-msgstr "Sante Lucie"
+msgstr "Sainte-Lucie"
 
 #: classes/helpers/FrmFieldsHelper.php:1773
 msgid "Saint Martin (French part)"
@@ -3527,7 +3527,7 @@ msgstr "Tonga"
 
 #: classes/helpers/FrmFieldsHelper.php:1810
 msgid "Trinidad and Tobago"
-msgstr "Trinité et Tobago"
+msgstr "Trinité-et-Tobago"
 
 #: classes/helpers/FrmFieldsHelper.php:1811
 msgid "Tunisia"
@@ -3607,7 +3607,7 @@ msgstr "Îles Vierges des États-Unis"
 
 #: classes/helpers/FrmFieldsHelper.php:1830
 msgid "Wallis and Futuna"
-msgstr "Wallis et Futuna"
+msgstr "Wallis-et-Futuna"
 
 #: classes/helpers/FrmFieldsHelper.php:1831
 msgid "Western Sahara"
@@ -5618,7 +5618,7 @@ msgstr "Oups !"
 #. translators: %1$s: HTML open link, %2$s: HTML close link
 #: classes/views/frm-entries/form.php:14
 msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
-msgstr "Vous n’avez ajouté aucun champ à votre formulaire. %1$sRevenez%2$s et ajoutez en"
+msgstr "Vous n’avez ajouté aucun champ à votre formulaire. %1$sRevenez%2$s et ajoutez-en."
 
 #: classes/views/frm-entries/list.php:14
 #: classes/views/frm-entries/list.php:31
@@ -6518,7 +6518,7 @@ msgstr "Uniquement sur les pages applicables"
 
 #: classes/views/frm-settings/general.php:29
 msgid "Don't use form styling on any page"
-msgstr "N’utiliser les styles de formulaire sur aucune page"
+msgstr "N’utiliser les styles de formulaires sur aucune page."
 
 #: classes/views/frm-settings/general.php:36
 msgid "Other"
