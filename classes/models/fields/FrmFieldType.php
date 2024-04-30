@@ -299,6 +299,10 @@ DEFAULT_HTML;
 		return '';
 	}
 
+	/**
+	 * @param string $name
+	 * @return string
+	 */
 	protected function builder_text_field( $name = '' ) {
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
@@ -409,6 +413,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 * @return void
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
@@ -589,6 +594,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.02.01
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
 		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
@@ -608,6 +616,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function field_choices_heading_attrs( $args ) {
 		return;
@@ -617,6 +628,9 @@ DEFAULT_HTML;
 	 * Show settings above the multiple options settings.
 	 *
 	 * @since 4.06
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
 		return;
@@ -626,7 +640,9 @@ DEFAULT_HTML;
 	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 * @return void
 	 */
 	public function show_extra_field_choices( $args ) {
 		return;
@@ -636,7 +652,9 @@ DEFAULT_HTML;
 	 * This is called right after the default value settings.
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $args - Includes 'field', 'display'.
+	 * @return void
 	 */
 	public function show_after_default( $args ) {
 		return;
@@ -1362,6 +1380,11 @@ DEFAULT_HTML;
 		$frm_validated_unique_values[ $field_id ][] = $value;
 	}
 
+	/**
+	 * @param array|string $value
+	 * @param array        $atts
+	 * @return array|string
+	 */
 	public function get_value_to_save( $value, $atts ) {
 		return $value;
 	}
