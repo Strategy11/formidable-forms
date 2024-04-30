@@ -659,7 +659,7 @@ class FrmField {
 	/**
 	 * If $field is numeric, get the field object
 	 *
-	 * @param int|object|string
+	 * @param int|object|string $field
 	 * @return void
 	 */
 	public static function maybe_get_field( &$field ) {
