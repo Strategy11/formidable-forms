@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-30 09:15\n"
+"PO-Revision-Date: 2024-04-30 21:20\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -2548,7 +2548,7 @@ msgstr "Apprenez comment les empêcher."
 #: classes/helpers/FrmEntriesListHelper.php:240
 #: stripe/helpers/FrmTransLiteListHelper.php:191
 msgid "View all forms"
-msgstr "Découvre toutes les formes"
+msgstr "Tous les formulaires"
 
 #: classes/helpers/FrmEntriesListHelper.php:241
 msgid "Filter"
