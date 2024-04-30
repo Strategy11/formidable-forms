@@ -529,7 +529,7 @@ class FrmField {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param array      $values
 	 * @return false|int
 	 */
@@ -738,9 +738,9 @@ class FrmField {
 	}
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param string     $type
-	 * @param string|int $limit
+	 * @param int|string $limit
 	 * @param string     $inc_sub
 	 */
 	public static function get_all_types_in_form( $form_id, $type, $limit = '', $inc_sub = 'exclude' ) {
@@ -795,8 +795,8 @@ class FrmField {
 	}
 
 	/**
-	 * @param string|int $form_id
-	 * @param string|int $limit
+	 * @param int|string $form_id
+	 * @param int|string $limit
 	 * @param string     $inc_embed
 	 * @param string     $inc_repeat
 	 * @return array
