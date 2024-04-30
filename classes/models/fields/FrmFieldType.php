@@ -1009,6 +1009,8 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
