@@ -756,34 +756,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Check if a classname is already in the inline style of a stylesheet.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $classname The classname to check for.
-	 * @param string $style_handle The style handle to check.
-	 * @return boolean
-	 */
-	public static function has_classname_in_inline_style( $classname, $style_handle ) {
-		if ( ! wp_style_is( $style_handle, 'registered' ) ) {
-			return false;
-		}
-		$stylesheet = wp_styles()->registered[ $style_handle ];
-
-		foreach ( $stylesheet->extra as $extra ) {
-			if ( is_array( $extra ) ) {
-				$extra = implode( ' ', $extra );
-			}
-
-			if ( false !== strpos( $extra, $classname ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
