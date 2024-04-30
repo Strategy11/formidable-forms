@@ -62,7 +62,12 @@ parameters:
 		- '#of method FrmFieldName::\_\_construct#'
 		- '#callback of function spl_autoload_register expects#'
 		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
-		- '#should be contravariant with#'
+		-
+			message: '#should be contravariant with#'
+			paths:
+				- classes/helpers/FrmFormsListHelper.php
+				- classes/models/FrmInstallerSkin.php
+				- stripe/controllers/FrmStrpLiteActionsController.php
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
 		-
 			message: '#Foreach overwrites \$ip with its value variable.#'
