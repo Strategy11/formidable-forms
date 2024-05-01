@@ -372,9 +372,11 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.9.1 =
+* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
 * Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
 * Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
 * Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* The parser for serialized string data has been optimized to be approximately 30% faster than before.
 * Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
 * Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
 
