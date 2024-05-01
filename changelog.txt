@@ -1,4 +1,11 @@
 == Changelog ==
+= 6.9.1 =
+* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
+* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
+* Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
+* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
+
 = 6.9 =
 * New: A new onboarding wizard has been added to help improve the initial set up process.
 * New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
