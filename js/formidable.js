@@ -518,7 +518,13 @@ function frmFrontFormJS() {
 			if ( ! ( fieldID in errors ) ) {
 				format = new RegExp( '^' + format + '$', 'i' );
 				if ( format.test( text ) === false ) {
-					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
+						if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
+							errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+						}
+					} else {
+						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					}
 				}
 			}
 		}
