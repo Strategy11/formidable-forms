@@ -17,8 +17,8 @@
 		"rector": "./vendor/bin/rector process",
 		"phpstan": "./vendor/bin/phpstan analyze ./ --memory-limit 2G",
 		"phpunit": "./vendor/bin/phpunit",
-		"phpcs": "./vendor/bin/phpcs ./",
-		"phpcbf": "./vendor/bin/phpcbf ./"
+		"phpcs": "./vendor/bin/phpcs --parallel=10 ./",
+		"phpcbf": "./vendor/bin/phpcbf --parallel=10 ./"
 	},
 	"engines": {
 		"node": ">=18.0.0",
