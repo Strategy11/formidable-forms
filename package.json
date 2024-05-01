@@ -51,6 +51,7 @@
 		"babel-plugin-styled-components": "^2.1.4",
 		"copy-webpack-plugin": "^11.0.0",
 		"cross-env": "^7.0.3",
+		"cypress": "^13.8.1",
 		"eslint": "^8.49.0",
 		"eslint-config-wordpress": "^2.0.0",
 		"eslint-plugin-jsx-a11y": "^6.7.1",
