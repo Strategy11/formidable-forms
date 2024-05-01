@@ -42,9 +42,12 @@ class FrmFormMigratorsHelper {
 	 * @return void
 	 */
 	public static function maybe_add_to_inbox() {
-		$inbox = new FrmInbox();
 		$forms = self::import_links();
+		if ( ! $forms ) {
+			return;
+		}
 
+		$inbox = new FrmInbox();
 		foreach ( $forms as $form ) {
 			$inbox->add_message(
 				array(
