@@ -16,7 +16,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$version = FrmAppHelper::plugin_version();
 		$this->assertNotEmpty( $version );
 
-		$plugin_data      = get_plugin_data( dirname( __DIR__ ) . '/../formidable.php' );
+		$plugin_data      = get_plugin_data( dirname( __DIR__ ) . '/../../formidable.php' );
 		$expected_version = $plugin_data['Version'];
 		$this->assertEquals( $version, $expected_version );
 	}
