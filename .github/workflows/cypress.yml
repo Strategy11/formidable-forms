@@ -1,44 +1,45 @@
-name: E2E Test
-
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
-    types: [opened, labeled, synchronize]
+    types: [ opened, labeled, synchronize ]
 
+name: E2E Test
 jobs:
-  cypress_local:
+  cypress:
     name: Cypress - Local
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      - name: Set PHP version
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          tools: 'cs2pr'
-          coverage: 'none'
+    - name: Set PHP version
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: 'cs2pr'
+        coverage: 'none'
 
-      - name: composer install
-        run: composer install
+    - name: composer install
+      run: composer install
 
-      - name: Install node v18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Install node v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: Install dependencies
-        run: npm ci --include=dev
+    - name: Install dependencies
+      run: npm ci --include=dev
 
-      - name: Set up WP environment
-        run: npm run env:start  # This is corrected from 'npm run env start' to 'npm run env:start'
+    - name: Set up WP environment
+      run: npm run env:start  # This is corrected from 'npm run env start' to 'npm run env:start'
 
-      - name: Build asset
-        run: npm run build
+    - name: Build asset
+      run: npm run build
 
-      - name: Test
-        run: npm run e2e:run
+    - name: Test
+      run: npm run e2e:run
