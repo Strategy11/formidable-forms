@@ -35,7 +35,7 @@ jobs:
           sudo chmod o+w /usr/src/wordpress/
           cd /usr/src/wordpress/
           wp core download --version=${{ env.WP_VERSION }}
-          wp config create --dbname=wordpress --dbuser=root --dbpass=root --allow-root --debug
+          wp config create --dbname=wordpress_tests --dbuser=root --dbpass=root --allow-root --debug
           wp core install --url=http://localhost:8080 --title=Test --admin_user=admin --admin_password=password \
             --admin_email=admin@local.test --skip-email --allow-root
           wp rewrite structure '/%postname%'
