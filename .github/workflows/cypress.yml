@@ -9,16 +9,6 @@ jobs:
       matrix:
         php: [7.4]
         wp: ['trunk']
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_DATABASE: wordpress
-          MYSQL_USER: root
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.4
