@@ -37,6 +37,7 @@
 		"styled-components": "^5.3.5"
 	},
 	"devDependencies": {
+		"@10up/cypress-wp-utils": "^0.3.0",
 		"@babel/core": "^7.22.17",
 		"@babel/eslint-parser": "^7.22.15",
 		"@babel/plugin-syntax-jsx": "^7.22.5",

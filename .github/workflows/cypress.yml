@@ -40,7 +40,7 @@ jobs:
           cd /usr/src/wordpress/
           wp core download --version=${{ env.WP_VERSION }}
           wp config create --dbname=wordpress_tests --dbuser=root --dbpass=root --allow-root --debug
-          wp core install --url=http://localhost:8080 --title=Test --admin_user=admin --admin_password=password \
+          wp core install --url=http://localhost:8889 --title=Test --admin_user=admin --admin_password=password \
             --admin_email=admin@local.test --skip-email --allow-root
           wp rewrite structure '/%postname%'
           cd ${{ github.workspace }}
@@ -54,7 +54,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Start PHP server
-          start: php -S localhost:8080
-          wait-on: 'http://localhost:8080'
+          start: npm run env:start --silent
+          wait-on: 'http://localhost:8889'
           # wait for 2 minutes for the server to respond
           wait-on-timeout: 120

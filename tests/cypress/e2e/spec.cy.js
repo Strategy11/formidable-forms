@@ -1,16 +1,9 @@
+import '@10up/cypress-wp-utils';
+
 const login = name => {
     cy.session( name, () => {
-        cy.visit( '/wp-login.php' ).wait( 10 );
-
-        // User login.
-        cy.get( '#user_login' ).type( name );
-
-        // User pass.
-        cy.get( '#user_pass' ).type( 'password' );
-
-        // WP submit.
-        cy.get( '#wp-submit' ).click();
-
+        cy.login();
+        cy.visit( '/wp-admin' );
         cy.url().should('include', 'wp-admin');
         cy.get( 'h1' ).should('contain.text', 'Dashboard');
     });
