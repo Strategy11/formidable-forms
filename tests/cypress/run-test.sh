@@ -4,10 +4,9 @@ set -e
 
 if [[ -z "$GITHUB_WORKSPACE" ]]; then
 	GITHUB_WORKSPACE = '~'
-fi
 
-if [[ -z "$WORDPRESS_VERSION" ]]; then
-	WORDPRESS_VERSION = 'latest'
+WORDPRESS_VERSION = 'trunk'
+
 fi
 echo "ℹ︎ WORDPRESS_VERSION is $WORDPRESS_VERSION"
 
