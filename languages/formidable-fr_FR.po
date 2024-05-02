@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-30 21:20\n"
+"PO-Revision-Date: 2024-05-02 13:37\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -446,7 +446,7 @@ msgstr "continue"
 #: classes/controllers/FrmApplicationsController.php:17
 #: classes/views/applications/index.php:8
 msgid "Applications"
-msgstr "Candidatures"
+msgstr "Applications"
 
 #: classes/controllers/FrmDashboardController.php:33
 #: classes/views/dashboard/dashboard.php:11
@@ -1145,11 +1145,11 @@ msgstr "Migrez facilement vos formulaires de Gravity Forms vers Formidable."
 
 #: classes/controllers/FrmSettingsController.php:12
 msgid "Global Settings"
-msgstr "Paramètres globaux"
+msgstr "Réglages globaux"
 
 #: classes/controllers/FrmSettingsController.php:51
 msgid "General Settings"
-msgstr "Paramètres Généraux"
+msgstr "Réglages généraux"
 
 #: classes/controllers/FrmSettingsController.php:57
 msgid "Message Defaults"
@@ -1535,7 +1535,7 @@ msgstr "Voir les rapports"
 
 #: classes/helpers/FrmAppHelper.php:1793
 msgid "Add/Edit Views"
-msgstr "Ajout/édition des vues"
+msgstr "Ajouter/modifier des vues"
 
 #: classes/helpers/FrmAppHelper.php:1812
 msgid "View Forms List"
@@ -1551,7 +1551,7 @@ msgstr "Supprimer les formulaires"
 
 #: classes/helpers/FrmAppHelper.php:1815
 msgid "Access this Settings Page"
-msgstr "Accès à cette page de réglages"
+msgstr "Accèder à cette page de réglages"
 
 #: classes/helpers/FrmAppHelper.php:1816
 msgid "View Entries from Admin Area"
@@ -3954,7 +3954,7 @@ msgstr "Confirmez-vous la suppression de ce formulaire et de toutes ses entrées
 
 #: classes/helpers/FrmFormsHelper.php:1221
 msgid "This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?"
-msgstr "Vous allez supprimer le formulaire et toutes ses entrées de manière définitive. Cette action est irréversible.Êtes-vous sûr de vouloir continuer ?"
+msgstr "Vous allez supprimer le formulaire et toutes ses entrées de manière définitive. Cette action est irréversible. Voulez-vous vraiment continuer ?"
 
 #: classes/helpers/FrmFormsHelper.php:1234
 #: classes/models/FrmField.php:227
@@ -5078,23 +5078,23 @@ msgstr "Il n’y a pas d’options pour cette action."
 
 #: classes/models/FrmFormAction.php:950
 msgid "Draft is saved"
-msgstr "Brouillon enregistré."
+msgstr "Brouillon enregistré"
 
 #: classes/models/FrmFormAction.php:951
 msgid "Entry is created"
-msgstr "L’entrée est créée"
+msgstr "Création de l’entrée"
 
 #: classes/models/FrmFormAction.php:952
 msgid "Entry is updated"
-msgstr "L’entrée est mise à jour"
+msgstr "Mise à jour de l’entrée"
 
 #: classes/models/FrmFormAction.php:953
 msgid "Entry is deleted"
-msgstr "L’Entrée est supprimée"
+msgstr "Suppression de l’entrée"
 
 #: classes/models/FrmFormAction.php:954
 msgid "Entry is imported"
-msgstr "L’Entrée est importée"
+msgstr "Import de l’entrée"
 
 #: classes/models/FrmFormAction.php:967
 msgid "Use Conditional Logic"
@@ -6082,7 +6082,7 @@ msgstr "Nom de l’action"
 
 #: classes/views/frm-form-actions/_action_inside.php:37
 msgid "Trigger this action when"
-msgstr "Déclencher cette action après"
+msgstr "Circonstances pour déclencher l’action"
 
 #: classes/views/frm-form-actions/_action_inside.php:71
 msgid "Email attachments"
@@ -6273,7 +6273,7 @@ msgstr "%1$s est fièrement propulsé par %2$s"
 
 #: classes/views/frm-forms/settings-advanced.php:7
 msgid "Modify the basic form settings here."
-msgstr "Modifier les réglages basiques du formulaire ici."
+msgstr "Modifiez les réglages basiques du formulaire ici."
 
 #: classes/views/frm-forms/settings-advanced.php:35
 msgid "Show the form title"
@@ -6417,7 +6417,7 @@ msgstr "Sur une page vierge"
 
 #: classes/views/frm-forms/_publish_box.php:31
 msgid "In Theme"
-msgstr "dans le thème"
+msgstr "Dans le thème"
 
 #: classes/views/frm-forms/_publish_box.php:47
 msgid "Embed"
@@ -6518,7 +6518,7 @@ msgstr "Uniquement sur les pages applicables"
 
 #: classes/views/frm-settings/general.php:29
 msgid "Don't use form styling on any page"
-msgstr "N’utiliser les styles de formulaires sur aucune page."
+msgstr "N’utiliser les styles de formulaire sur aucune page."
 
 #: classes/views/frm-settings/general.php:36
 msgid "Other"
@@ -6535,11 +6535,11 @@ msgstr "L’adresse e-mail par défaut pour recevoir les notifications de nouvea
 
 #: classes/views/frm-settings/general.php:73
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
-msgstr "Ne stockez pas les adresses IP avec les soumissions de formulaires. Cochez cette case pour aider à la conformité avec le RGPD."
+msgstr "Ne pas stocker les adresses IP lors de l’envoi des formulaires. Cochez cette case pour contribuer à la conformité avec le RGPD."
 
 #: classes/views/frm-settings/general.php:86
 msgid "Use custom headers when retrieving IPs with form submissions."
-msgstr "Utilisez des en-têtes personnalisés lors de la récupération des IP avec les soumissions de formulaires."
+msgstr "Utiliser des en-têtes personnalisés lors de la récupération des IP avec les envois de formulaires"
 
 #: classes/views/frm-settings/general.php:87
 msgid "Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address."
