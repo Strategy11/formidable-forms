@@ -25,12 +25,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mysql, zip
           coverage: none
-          tools: composer, wp-cli
-
-      - name: Install dependencies
-        run: COMPOSER_ROOT_VERSION=dev-master composer install --prefer-dist --no-progress
+          tools: wp-cli
 
       - name: Creating database
         run: |
