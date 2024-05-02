@@ -1,5 +1,13 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, synchronize ]
+
 name: Cypress Tests
-on: [push, pull_request]
 jobs:
   plugin:
     name: Plugin (PHP ${{ matrix.php }} - WP ${{ matrix.wp }})
@@ -40,8 +48,8 @@ jobs:
             --admin_email=admin@local.test --skip-email --allow-root
           wp rewrite structure '/%postname%'
           cd ${{ github.workspace }}
-          cp -R ${{ github.workspace }} /usr/src/wordpress/wp-content/plugins/testing-wp-install
-          sudo rm -rf /usr/src/wordpress/wp-content/plugins/testing-wp-install/cypress
+          cp -R ${{ github.workspace }} /usr/src/wordpress/wp-content/plugins/formidable
+          sudo rm -rf /usr/src/wordpress/wp-content/plugins/formidable/tests/cypress
           sudo mv /usr/src/wordpress/* ${{ github.workspace }}
         env:
           WP_VERSION: ${{ matrix.wp }}
