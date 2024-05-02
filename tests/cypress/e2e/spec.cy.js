@@ -1,6 +1,6 @@
 const login = name => {
     cy.session( name, () => {
-        cy.visit( 'http://devsite.formidableforms.com:8889/wp-login.php' );
+        cy.visit( '/wp-login.php' ).wait( 10 );
 
         // User login.
         cy.get( '#user_login' ).type( name );
@@ -22,7 +22,7 @@ describe( 'Configure WordPress', function() {
     });
 
     it('Can visit forms list and navigate to form templates page', () => {
-        cy.visit( 'http://devsite.formidableforms.com:8889/wp-admin/admin.php?page=formidable' );
+        cy.visit( '/wp-admin/admin.php?page=formidable' );
         cy.get( 'h1' ).should('contain.text', 'Forms');
         const submitButton = cy.get( '#frm-publishing a.frm-button-primary' );
         submitButton.should( 'contain.text', 'Add New' );
