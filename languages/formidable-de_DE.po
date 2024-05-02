@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-28 20:50\n"
+"PO-Revision-Date: 2024-05-02 13:37\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -851,11 +851,11 @@ msgstr "Stelle eine Frage nach der anderen für automatisierte Konversationen. "
 
 #: classes/controllers/FrmFormsController.php:1290
 msgid "Form Abandonment"
-msgstr "Deaktivieren des Formulares"
+msgstr "Form Abandonment"
 
 #: classes/controllers/FrmFormsController.php:1296
 msgid "Form abandonment settings"
-msgstr "Einstellungen zum Deaktivieren des Formulares"
+msgstr "Einstellungen für Form Abandonment"
 
 #: classes/controllers/FrmFormsController.php:1297
 msgid "Unlock the power of data capture to boost lead generation and master the art of form optimization."
