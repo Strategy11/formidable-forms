@@ -53,13 +53,5 @@ jobs:
       - name: Start PHP server
         run: nohup php -S localhost:8080 > php.log 2>&1 &
 
-      - name: Install NPM packages
-        run: npm ci
-        env:
-          CYPRESS_INSTALL_BINARY: "0"
-
       - name: Run Cypress
-        run: npx cypress install && npx cypress cache list
       - uses: cypress-io/github-action@v6
-        with:
-          install: false
