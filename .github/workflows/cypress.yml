@@ -1,13 +1,11 @@
+name: E2E Test
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
-      - master
+      - main
   pull_request:
     types: [opened, labeled, synchronize]
-
-name: E2E Test
 
 jobs:
   cypress_local:
@@ -28,7 +26,7 @@ jobs:
       - name: composer install
         run: composer install
 
-      - name: "Install node v18"
+      - name: Install node v18
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -37,7 +35,7 @@ jobs:
         run: npm ci --include=dev
 
       - name: Set up WP environment
-        run: npm run env:start  # Corrected 'npm run env start' to 'npm run env:start'
+        run: npm run env:start  # This is corrected from 'npm run env start' to 'npm run env:start'
 
       - name: Build asset
         run: npm run build
