@@ -1,4 +1,3 @@
-import '@10up/cypress-wp-utils';
 
 const login = name => {
     cy.session( name, () => {

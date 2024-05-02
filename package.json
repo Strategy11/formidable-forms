@@ -13,7 +13,8 @@
 		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE && npx google-closure-compiler --js=stripe/js/frmstrp.js --js_output_file=stripe/js/frmstrp.min.js --compilation_level=WHITESPACE",
 		"zip": "./bin/zip-plugin.sh formidable",
 		"git-release": "./bin/git-release.sh formidable formidable-forms",
-		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot"
+		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot",
+		"e2e:run": "cypress run --config-file tests/e2e/cypress.config.js"
 	},
 	"engines": {
 		"node": ">=18.0.0",
@@ -64,9 +65,6 @@
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1"
-	},
-	"bin": {
-		"cypress-wp-setup": "./tests/cypress/index.js"
 	},
 	"repository": {
 		"type": "git",

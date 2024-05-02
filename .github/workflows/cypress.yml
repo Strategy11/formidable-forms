@@ -7,16 +7,40 @@ on:
   pull_request:
     types: [ opened, labeled, synchronize ]
 
-name: Cypress Tests
-jobs:
-  plugin:
-    name: Some Cypress e2e Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4.1.4
+name: E2E Test
 
-      - name: Run test
-        run: ./tests/cypress/run-test.sh
-        env:
-          GITHUB_WORKSPACE: ${{ github.workspace }}
+jobs:
+  cypress_local:
+    name: Cypress - Local
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set PHP version
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: cs2pr
+        coverage: none
+
+    - name: composer install
+      run: composer install
+
+    - name: "Install node v${{ env.NODE_VERSION }}"
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci --include=dev
+
+    - name: Set up WP environment
+      run: npm run env start
+
+    - name: Build asset
+      run: npm run build
+
+    - name: Test
+      run: npm run e2e:run
