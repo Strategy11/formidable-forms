@@ -30,12 +30,9 @@
 		"@wordpress/eslint-plugin": "^12.6.0",
 		"@wordpress/i18n": "^3.14.0",
 		"@wordpress/url": "^2.17.0",
-		"ansi-regex": "^6.0.1",
 		"classnames": "^2.2.6",
-		"fs-extra": "^11.2.0",
 		"google-closure-compiler": "^20181210.0.0",
 		"npm": "^10.5.2",
-		"npm-add-script": "^1.1.0",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"styled-components": "^5.3.5"
