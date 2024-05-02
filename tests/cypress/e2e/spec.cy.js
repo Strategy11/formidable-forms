@@ -12,10 +12,6 @@ describe( 'Run some basic Formidale tests', function() {
     before( login );
 
     it('Can visit forms list and navigate to form templates page', () => {
-        cy.visit( '/wp-admin/plugins.php' );
-        cy.get( 'h1' ).should('contain.text', 'Plugins');
-        cy.activatePlugin( 'formidable' );
-
         cy.visit( '/wp-admin/admin.php?page=formidable' );
         cy.get( 'h1' ).should('contain.text', 'Forms');
         const submitButton = cy.get( '#frm-publishing a.frm-button-primary' );
