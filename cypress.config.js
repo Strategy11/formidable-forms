@@ -11,6 +11,21 @@ module.exports = defineConfig({
     video: false,
     retries: {
       runMode: 1,
-    }
+    },
+    async setupNodeEvents(on, config) {
+			const { loadConfig } = require('@wordpress/env/lib/config');
+
+			const wpEnvConfig = await loadConfig('../..');
+
+			if (wpEnvConfig) {
+				const port = wpEnvConfig.env.tests.port || null;
+
+				if (port) {
+					config.baseUrl = wpEnvConfig.env.tests.config.WP_SITEURL;
+				}
+			}
+
+			return config;
+		}
   },
 });

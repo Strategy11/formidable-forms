@@ -28,30 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm ci --include=dev
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@2.30.4
-        with:
-          php-version: 7.4
-          tools: wp-cli
-
-      - name: Install WordPress
-        run: |
-          wp core install
-          wp option update siteurl http://localhost:8889
-          wp option update home http://localhost:8889
-
-      - name: Install Plugins
-        run: |
-          wp plugin uninstall --deactivate --all
-          wp plugin install formidable --force
-
-      - name: Set permalinks
-        run: |
-          wp rewrite structure '/%postname%/' --hard
-          wp rewrite flush --hard
-
-      - name: Start PHP web server
-        run: sudo php -S localhost:8889 -t /usr/share/nginx/html &
+      - name: Set up WP environment
+        run: npm run env start
 
       - name: Build asset
         run: npm run build
