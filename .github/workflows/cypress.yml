@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --include=dev
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.30.4
+        with:
+          php-version: 7.4
+          tools: wp-cli
+
       - name: Set up WP environment
         run: npm run env start
 
