@@ -29,7 +29,9 @@ jobs:
         run: npm ci --include=dev
 
       - name: Copy Formidable to Plugins Dir
-        run: cp -r "${GITHUB_REPOSITORY#*/}" "/tmp/wordpress/src/wp-content/plugins/formidable"
+        run: |
+          cd ..
+          cp -r "${GITHUB_REPOSITORY#*/}" "/tmp/wordpress/src/wp-content/plugins/formidable"
 
       - name: Set up WP environment
         run: npm run env start
