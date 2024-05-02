@@ -12,49 +12,11 @@ jobs:
   plugin:
     name: Plugin (PHP ${{ matrix.php }} - WP ${{ matrix.wp }})
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: [7.4]
-        wp: ['trunk']
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '${{ matrix.php }}'
-          coverage: none
-          tools: wp-cli
-
-      - name: Creating database
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -u root -proot -e "CREATE DATABASE wordpress_tests;"
-
-      - name: Install WordPress
-        run: |
-          sudo mkdir -p /usr/src/wordpress/
-          sudo chmod o+w /usr/src/wordpress/
-          cd /usr/src/wordpress/
-          wp core download --version=${{ env.WP_VERSION }}
-          wp config create --dbname=wordpress_tests --dbuser=root --dbpass=root --allow-root --debug
-          wp core install --url=http://localhost:8889 --title=Test --admin_user=admin --admin_password=password \
-            --admin_email=admin@local.test --skip-email --allow-root
-          wp rewrite structure '/%postname%'
-          cd ${{ github.workspace }}
-          cp -R ${{ github.workspace }} /usr/src/wordpress/wp-content/plugins/formidable
-          sudo rm -rf /usr/src/wordpress/wp-content/plugins/formidable/tests/cypress
-          sudo mv /usr/src/wordpress/* ${{ github.workspace }}
+      - name: Run test
+        run: ./tests/cypress/run-test.sh
         env:
-          WP_VERSION: ${{ matrix.wp }}
-
-      - name: Run Cypress
-        uses: cypress-io/github-action@v6
-        with:
-          # Start PHP server
-          start: npm run env:start --silent
-          wait-on: 'http://localhost:8889'
-          # wait for 2 minutes for the server to respond
-          wait-on-timeout: 120
+          GITHUB_WORKSPACE: ${{ github.workspace }}
