@@ -1,20 +1,15 @@
 
-const login = name => {
-    cy.session( name, () => {
+const login = () => {
+    cy.session('admin', () => {
         cy.login();
         cy.visit( '/wp-admin' );
         cy.url().should('include', 'wp-admin');
         cy.get( 'h1' ).should('contain.text', 'Dashboard');
-        cy.visit( '/wp-admin/plugins.php' );
-        cy.get( 'h1' ).should('contain.text', 'Plugins');
-        cy.activatePlugin( 'formidable' );
     });
 };
 
 describe( 'Configure WordPress', function() {
-    before(() => {
-        login( 'admin' );
-    });
+    before( login );
 
     it('Can visit forms list and navigate to form templates page', () => {
         cy.visit( '/wp-admin/admin.php?page=formidable' );

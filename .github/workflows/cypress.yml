@@ -31,6 +31,11 @@ jobs:
       - name: Set up WP environment
         run: npm run env start
 
+      - name: Install Plugins
+        run: |
+          wp plugin uninstall --deactivate --all
+          wp plugin install formidable --force
+
       - name: Build asset
         run: npm run build
 
