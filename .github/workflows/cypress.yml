@@ -1,4 +1,4 @@
-name: Build And Test
+name: Cypress Tests
 on: [push, pull_request]
 jobs:
   plugin:
@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [7.3, 7.4]
+        php: [7.4]
         wp: ['trunk']
     services:
       mysql:
@@ -34,16 +34,10 @@ jobs:
       - name: Install dependencies
         run: COMPOSER_ROOT_VERSION=dev-master composer install --prefer-dist --no-progress
 
-      - name: Start MySQL server
-        run: sudo service mysql start
-
-      - name: Prepare test database
+      - name: Creating database
         run: |
-          export MYQSL_HOST=127.0.0.1
-          export MYSQL_TCP_PORT=${{ job.services.mysql.ports['3306'] }}
-          mysql -e 'CREATE DATABASE IF NOT EXISTS wordpress;' -uroot -proot
-          mysql -e 'GRANT ALL PRIVILEGES ON wordpress.* TO "wordpress"@"127.0.0.1" IDENTIFIED BY "password1"' -uroot -proot
-          mysql -e 'GRANT ALL PRIVILEGES ON wordpress_scaffold.* TO "wordpress"@"127.0.0.1" IDENTIFIED BY "password1"' -uroot -proot
+          sudo /etc/init.d/mysql start
+          mysql -u root -proot -e "CREATE DATABASE wordpress_tests;"
 
       - name: Install WordPress
         run: |
