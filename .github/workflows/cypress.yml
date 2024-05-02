@@ -10,8 +10,9 @@ on:
 name: E2E Test
 jobs:
   cypress:
-    name: Cypress - Local
     runs-on: ubuntu-latest
+
+    name: Cypress - Local
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,8 +21,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: 'cs2pr'
-          coverage: 'none'
 
       - name: composer install
         run: composer install
