@@ -14,7 +14,7 @@
 		"zip": "./bin/zip-plugin.sh formidable",
 		"git-release": "./bin/git-release.sh formidable formidable-forms",
 		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot",
-		"e2e:run": "cypress run --config-file tests/e2e/cypress.config.js"
+		"e2e:run": "cypress run --config-file cypress.config.js"
 	},
 	"engines": {
 		"node": ">=18.0.0",
@@ -51,6 +51,7 @@
 		"@svgr/webpack": "^8.1.0",
 		"@wordpress/babel-plugin-makepot": "^5.25.0",
 		"@wordpress/babel-preset-default": "^7.25.0",
+		"@wordpress/env": "^9.8.0",
 		"@wordpress/eslint-plugin": "^15.1.0",
 		"babel-loader": "^9.1.3",
 		"babel-plugin-styled-components": "^2.1.4",

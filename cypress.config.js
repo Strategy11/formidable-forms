@@ -5,16 +5,27 @@ module.exports = defineConfig({
   defaultCommandTimeout: 10000,
   e2e: {
     //baseUrl: 'http://localhost:8889',
-    baseUrl: 'http://devsite.formidableforms.com:8889',
+    //baseUrl: 'http://devsite.formidableforms.com:8889',
     supportFile: "tests/cypress/support/index.js",
     specPattern: "tests/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
-
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    video: false,
+    retries: {
+      runMode: 1,
     },
+    async setupNodeEvents(on, config) {
+			const { loadConfig } = require('@wordpress/env/lib/config');
 
-    env: {
+			const wpEnvConfig = await loadConfig('../..');
 
-    }
+			if (wpEnvConfig) {
+				const port = wpEnvConfig.env.tests.port || null;
+
+				if (port) {
+					config.baseUrl = wpEnvConfig.env.tests.config.WP_SITEURL;
+				}
+			}
+
+			return config;
+		}
   },
 });
