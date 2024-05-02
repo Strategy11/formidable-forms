@@ -33,8 +33,10 @@ jobs:
 
       - name: Copy Formidable to Plugins Dir
         run: |
+          wordpress_path=$(find . -name wp-config.php -exec dirname {} \;)
+          echo "WordPress is installed at: $wordpress_path"
           cd ..
-          cp -r "${GITHUB_REPOSITORY#*/}" "/tmp/wordpress/src/wp-content/plugins/formidable"
+          cp -r "${GITHUB_REPOSITORY#*/}" "$wordpress_path/wp-content/plugins/formidable"
 
       - name: Build asset
         run: npm run build
