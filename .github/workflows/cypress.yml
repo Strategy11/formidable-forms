@@ -10,7 +10,7 @@ on:
 name: Cypress Tests
 jobs:
   plugin:
-    name: Plugin (PHP ${{ matrix.php }} - WP ${{ matrix.wp }})
+    name: Some Cypress e2e Tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out source code
