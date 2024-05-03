@@ -272,7 +272,7 @@ class test_FrmFieldType extends FrmUnitTest {
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
 
 			// Make sure that a duplicate description ID is not added.
-			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"'
+			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"',
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
