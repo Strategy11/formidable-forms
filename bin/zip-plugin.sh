@@ -39,6 +39,7 @@ zip -r $zipname $destination \
 	-x "*/.phpunit.result.cache" \
 	-x "*/.php-cs-fixer.yml" \
 	-x "*/.php-cs-fixer.cache" \
+	-x "*/.wp-env.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -92,7 +93,8 @@ zip -r $zipname $destination \
 	-x "*/rector.php" \
 	-x "*/sonar-project.properties" \
 	-x "*/.sonar_lock" \
-	-x "*/report-task.txt"
+	-x "*/report-task.txt" \
+	-x "*/cypress.config.js"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
