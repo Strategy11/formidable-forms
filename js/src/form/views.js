@@ -2,6 +2,8 @@
 import FormidableIcon from '../common/components/icon';
 import { frmAddonAPI } from '../api/index';
 
+import buttonStyles from './css/button.module.css';
+
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
@@ -10,7 +12,8 @@ const { useState, useEffect } = wp.element;
 const blockData = formidable_form_selector; // eslint-disable-line camelcase
 const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link : blockData.link;
 
-registerBlockType( 'formidable/simple-view', {
+registerBlockType( 'formidable/simple-view-placeholder', {
+
 	title: __( 'Formidable Views', 'formidable' ),
 	description: __( 'Display a Visual View', 'formidable' ),
 	icon: FormidableIcon,
@@ -24,7 +27,7 @@ registerBlockType( 'formidable/simple-view', {
 
 		const [ addonActivateButton, updateAddonActivateButton ] = useState({
 			defaultClassname: 'frm-activate-addon frm-button-primary button button-primary',
-			loadingClassname: 'frm-loading',
+			loadingClassname: buttonStyles['frm-loading'],
 			classnames: 'frm-activate-addon frm-button-primary button button-primary',
 			label: ! blockData.viewsAddon.installed && blockData.viewsAddon.hasAccess ? __( 'Install', 'formidable' ) : __( 'Activate', 'formidable' ),
 			isLoading: false
