@@ -13,7 +13,7 @@
 		}
 	},
 	"extends": [
-		"wordpress",
+		"plugin:@wordpress/eslint-plugin/recommended",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended"
 	],
@@ -56,6 +56,16 @@
 		"react/prop-types": "off",
 		"vars-on-top": "warn",
 		"yoda": "off",
-		"linebreak-style": "off"
+		"linebreak-style": "off",
+		"prettier/prettier": "off",
+		"object-shorthand": "off",
+		"no-unused-vars": "off",
+		"no-console": "off",
+		"eqeqeq": "off",
+		"@wordpress/no-global-active-element": "off",
+		"no-alert": "off",
+		"no-undef": "off",
+		"jsdoc/no-undefined-types": "off",
+		"no-shadow": "off"
 	}
 }
