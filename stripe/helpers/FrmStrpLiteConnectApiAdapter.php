@@ -164,7 +164,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $new_charge
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_subscription( $new_charge ) {
 		return FrmStrpLiteConnectHelper::create_subscription( $new_charge );
@@ -195,7 +195,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 *
 	 * @param string      $customer_id Customer ID beginning with cus_.
 	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
 		return FrmStrpLiteConnectHelper::create_setup_intent( $customer_id, $payment_method_types );
@@ -207,7 +207,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {
 		return FrmStrpLiteConnectHelper::get_setup_intent( $setup_id );

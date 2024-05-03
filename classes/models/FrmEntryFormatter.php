@@ -9,16 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryFormatter {
 
 	/**
-	 * @var stdClass
 	 * @since 2.04
+	 *
+	 * @var stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
-	 * @var FrmEntryValues
+	 * @var FrmEntryValues|null
 	 * @since 2.04
 	 */
-	protected $entry_values = null;
+	protected $entry_values;
 
 	/**
 	 * @var bool
@@ -57,10 +58,10 @@ class FrmEntryFormatter {
 	protected $direction = 'ltr';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var bool
@@ -224,7 +225,7 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_array_key( $atts ) {
-		if ( isset( $atts['array_key'] ) && $atts['array_key'] == 'id' ) {
+		if ( isset( $atts['array_key'] ) && $atts['array_key'] === 'id' ) {
 			$this->array_key = 'id';
 		}
 	}
@@ -367,7 +368,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function get_key_or_id( $field_value ) {
 		return $this->array_key == 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
@@ -451,7 +452,7 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_field_values_to_content( &$content ) {
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+		foreach ( $this->entry_values->get_field_values() as $field_value ) {
 
 			/**
 			 * @var FrmFieldValue $field_value
@@ -875,7 +876,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param mixed $display_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
@@ -889,9 +890,9 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param array|string|int $value
+	 * @param array|int|string $value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {

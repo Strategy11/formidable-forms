@@ -39,12 +39,12 @@ class FrmSimpleBlocksController {
 		$views_addon_info = self::get_addon_info( 28027505 );
 
 		$script_vars = array(
-			'forms' => self::get_forms_options(),
-			'icon'  => $icon,
-			'name'  => $block_name,
-			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
-			'url'   => FrmAppHelper::plugin_url(),
-			'modalAddon' => array(
+			'forms'       => self::get_forms_options(),
+			'icon'        => $icon,
+			'name'        => $block_name,
+			'link'        => FrmAppHelper::admin_upgrade_link( 'block' ),
+			'url'         => FrmAppHelper::plugin_url(),
+			'modalAddon'  => array(
 				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
 			),

@@ -782,7 +782,7 @@ legend.frm_hidden{
 
 <?php
 foreach ( $styles as $style ) {
-	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
+	include __DIR__ . '/_single_theme.css.php';
 	unset( $style );
 }
 
@@ -1234,7 +1234,7 @@ select.frm_loading_lookup{
 	color: transparent !important;
 }
 
-<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
 .frm_conf_field.frm_left_container .frm_primary_label{
 	display:none;

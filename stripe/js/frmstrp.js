@@ -945,10 +945,10 @@
 
 	window.frmStripeLiteForm = {
 		readyToSubmitStripeLink: readyToSubmitStripeLink,
-		processForm: function( cardElement, e, form ) {
+		processForm: function( _, e, form ) {
 			event = e;
 			thisForm = form;
-			processForm( cardElement );
+			processForm();
 		}
 	};
 }() ); 

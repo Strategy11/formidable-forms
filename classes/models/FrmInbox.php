@@ -48,7 +48,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param false|array $filter
+	 * @param array|false $filter
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
@@ -463,7 +463,7 @@ class FrmInbox extends FrmFormApi {
 		$inbox = new self();
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
-			function( $message ) use ( $key ) {
+			function ( $message ) use ( $key ) {
 				return ! empty( $message[ $key ] );
 			}
 		);
@@ -510,8 +510,8 @@ class FrmInbox extends FrmFormApi {
 
 		return array_reduce(
 			$keys_to_return,
-			function( $total, $key ) use ( $message ) {
-				$total[ $key ] = $message[ $key ];
+			function ( $total, $key ) use ( $message ) {
+				$total[ $key ] = isset( $message[ $key ] ) ? $message[ $key ] : '';
 				return $total;
 			},
 			array()

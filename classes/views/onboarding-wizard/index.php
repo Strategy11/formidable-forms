@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm-onboarding-wizard-page" class="frm_wrap" data-current-step="welcome">
 	<div id="frm-onboarding-bg">
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/onboarding-wizard/onboarding-bg.svg' ); ?>" alt="<?php esc_html_e( 'Onboarding Wizard Background', 'formidable' ); ?>">
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/onboarding-wizard/onboarding-bg.svg' ); ?>" alt="<?php esc_attr_e( 'Onboarding Wizard Background', 'formidable' ); ?>">
 	</div>
 
 	<div id="frm-onboarding-container" class="frm-flex-col frm-justify-center frm-items-center">

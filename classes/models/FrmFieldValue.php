@@ -11,9 +11,9 @@ class FrmFieldValue {
 	/**
 	 * @since 2.04
 	 *
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	protected $field = null;
+	protected $field;
 
 	/**
 	 * @since 4.03
@@ -56,7 +56,7 @@ class FrmFieldValue {
 
 		$this->entry    = $entry;
 		$this->entry_id = $entry->id;
-		$field = apply_filters( 'frm_field_value_object', $field );
+		$field          = apply_filters( 'frm_field_value_object', $field );
 		$this->field    = $field;
 		$this->init_saved_value( $entry );
 	}

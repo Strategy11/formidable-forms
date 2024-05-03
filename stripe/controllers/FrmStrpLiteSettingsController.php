@@ -24,7 +24,7 @@ class FrmStrpLiteSettingsController {
 			 * @param object $frm_settings
 			 * @return void
 			 */
-			function( $frm_settings ) {
+			function ( $frm_settings ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings()->settings;
 				require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/messages.php';
 			}
@@ -75,15 +75,9 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function process_form() {
-		$atts = array(
-			'errors'  => array(),
-			'message' => '',
-		);
-
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$settings->update( $_POST );
 		$settings->store();
 	}
-
 }

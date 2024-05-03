@@ -89,7 +89,7 @@ class FrmSettings {
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var false|string|null
 	 */
 	public $custom_css;
 
@@ -133,41 +133,41 @@ class FrmSettings {
 	 */
 	public function default_options() {
 		return array(
-			'menu'         => apply_filters( 'frm_default_menu', 'Formidable' ),
-			'mu_menu'      => 0,
-			'use_html'     => true,
-			'jquery_css'   => false,
-			'accordion_js' => false,
-			'fade_form'    => false,
-			'old_css'      => false,
-			'admin_bar'    => false,
+			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
+			'mu_menu'                   => 0,
+			'use_html'                  => true,
+			'jquery_css'                => false,
+			'accordion_js'              => false,
+			'fade_form'                 => false,
+			'old_css'                   => false,
+			'admin_bar'                 => false,
 
-			're_multi' => 1,
+			're_multi'                  => 1,
 
-			'success_msg'      => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			'success_msg'               => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
 			// translators: %s: [field_name] shortcode.
-			'blank_msg'        => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
+			'blank_msg'                 => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
 			// translators: %s: [field_name] shortcode.
-			'unique_msg'       => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
-			'invalid_msg'      => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
-			'failed_msg'       => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
-			'submit_value'     => __( 'Submit', 'formidable' ),
-			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
-			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
-			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
+			'unique_msg'                => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
+			'invalid_msg'               => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
+			'failed_msg'                => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
+			'submit_value'              => __( 'Submit', 'formidable' ),
+			'login_msg'                 => __( 'You do not have permission to view this form.', 'formidable' ),
+			'admin_permission'          => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
 
-			'email_to'         => '[admin_email]',
-			'no_ips'           => 0,
+			'email_to'                  => '[admin_email]',
+			'no_ips'                    => 0,
 			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip' => false,
-			'tracking'         => FrmAppHelper::pro_is_installed(),
+			'custom_header_ip'          => false,
+			'tracking'                  => FrmAppHelper::pro_is_installed(),
 			// Only enable this by default for the main site.
-			'summary_emails'   => get_current_blog_id() === get_main_site_id(),
+			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
 			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
-			'custom_css' => false,
+			'custom_css'                => false,
 		);
 	}
 
@@ -297,7 +297,7 @@ class FrmSettings {
 			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
+		if ( empty( $this->re_msg ) ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
@@ -423,7 +423,7 @@ class FrmSettings {
 			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
 
 			// Make sure administrators always have permissions
-			if ( ! in_array( 'administrator', $this->$frm_role ) ) {
+			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {
 				array_push( $this->$frm_role, 'administrator' );
 			}
 
@@ -440,7 +440,7 @@ class FrmSettings {
 	/**
 	 * Updates a single setting with specified sanitization.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $key The setting key to update.
 	 * @param mixed  $value The new value for the setting.

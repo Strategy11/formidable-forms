@@ -5,12 +5,12 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+    types: [ opened, labeled, synchronize ]
 
 name: PHPUnit
 jobs:
   build-test:
+    if: contains(github.event.pull_request.labels.*.name, 'run tests')
     runs-on: ubuntu-20.04
     env:
       WP_MULTISITE: ${{ matrix.multisite }}
@@ -18,10 +18,10 @@ jobs:
       matrix:
         include:
           - php: 7.4
-            wordpress: master
+            wordpress: trunk
             multisite: 0
           - php: 8.0
-            wordpress: master
+            wordpress: trunk
             multisite: 0
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}

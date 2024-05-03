@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
-if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
+if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
@@ -21,7 +21,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
-		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
 		/**
 		 * Allows changing the HTML of option label in choice field (radio, checkbox,...).
@@ -40,7 +40,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 
-		$other_opt = false;
+		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );
 		?>
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
@@ -50,7 +50,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$other_args = array(

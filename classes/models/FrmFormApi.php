@@ -5,14 +5,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormApi {
 
+	/**
+	 * @var string
+	 */
 	protected $license = '';
+
+	/**
+	 * @var string
+	 */
 	protected $cache_key = '';
+
+	/**
+	 * @var string
+	 */
 	protected $cache_timeout = '+6 hours';
 
 	/**
 	 * The number of days an add-on is new.
 	 *
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 90;
 
@@ -202,6 +213,10 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
+		if ( empty( $this->license ) ) {
+			// Direct traffic to Cloudflare worker when there is no license.
+			return 'https://plapi.formidableforms.com/list/';
+		}
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
 	}
 

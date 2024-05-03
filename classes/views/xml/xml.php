@@ -31,9 +31,9 @@ foreach ( $type as $tb_type ) {
 	$item_ids = $records[ $tb_type ];
 
 	if ( in_array( $tb_type, array( 'styles', 'actions' ), true ) ) {
-		include dirname( __FILE__ ) . '/posts_xml.php';
-	} elseif ( file_exists( dirname( __FILE__ ) . '/' . $tb_type . '_xml.php' ) ) {
-		include dirname( __FILE__ ) . '/' . $tb_type . '_xml.php';
+		include __DIR__ . '/posts_xml.php';
+	} elseif ( file_exists( __DIR__ . '/' . $tb_type . '_xml.php' ) ) {
+		include __DIR__ . '/' . $tb_type . '_xml.php';
 	} elseif ( FrmAppHelper::pro_is_installed() && file_exists( FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php' ) ) {
 		include FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php';
 	}

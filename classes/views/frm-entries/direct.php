@@ -13,7 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php FrmFormsController::maybe_load_css( $form, 1, false ); ?>
 </head>
 <body class="frm_preview_page">
-	<?php echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+	<?php
+	if ( is_callable( 'twentynineteen_setup' ) ) {
+		?>
+	<div class="site-branding frm_hidden"></div>
+		<?php
+	}
+	echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	?>
 	<?php wp_footer(); ?>
 </body>
 </html>

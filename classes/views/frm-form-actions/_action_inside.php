@@ -56,10 +56,10 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 $action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 $pass_args = array(
-	'form'       => $form,
+	'form'           => $form,
 	'action_control' => $action_control,
-	'action_key' => $action_key,
-	'values'     => $values,
+	'action_key'     => $action_key,
+	'values'         => $values,
 );
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 

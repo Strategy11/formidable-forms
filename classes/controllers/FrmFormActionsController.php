@@ -375,7 +375,7 @@ class FrmFormActionsController {
 	 */
 	private static function should_show_log_message( $action_type ) {
 		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
-		return in_array( $action_type, $logging ) && ! function_exists( 'frm_log_autoloader' );
+		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
 	private static function fields_to_values( $form_id, array &$values ) {
@@ -410,10 +410,10 @@ class FrmFormActionsController {
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
-			$error_args = array(
-				'title'       => __( 'Verification failed', 'formidable' ),
-				'body'        => $frm_settings->admin_permission,
-				'cancel_url'  => add_query_arg(
+			$error_args   = array(
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $frm_settings->admin_permission,
+				'cancel_url' => add_query_arg(
 					array(
 						'page'       => 'formidable',
 						'frm_action' => 'settings',

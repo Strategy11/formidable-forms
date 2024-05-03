@@ -1,0 +1,14 @@
+{
+  "port": 3000,
+  "testsPort": 3001,
+  "plugins": [
+    "."
+  ],
+  "env": {
+    "tests": {
+      "mappings": {
+        "wp-cli.yml": "./tests/bin/wp-cli.yml"
+      }
+    }
+  }
+}

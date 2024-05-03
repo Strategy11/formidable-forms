@@ -21,9 +21,9 @@ class FrmInstallPlugin {
 	protected $plugin_slug;
 
 	public function __construct( $atts ) {
-		$this->plugin_file = $atts['plugin_file'];
+		$this->plugin_file   = $atts['plugin_file'];
 		list( $slug, $file ) = explode( '/', $this->plugin_file );
-		$this->plugin_slug = $slug;
+		$this->plugin_slug   = $slug;
 	}
 
 	public function get_activate_link() {
@@ -70,7 +70,7 @@ class FrmInstallPlugin {
 	/**
 	 * Handles the AJAX request to install a plugin.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -129,7 +129,7 @@ class FrmInstallPlugin {
 	/**
 	 * Checks plugin activation status via AJAX.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
