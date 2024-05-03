@@ -73,4 +73,10 @@ describe( 'Run some basic Formidale tests', function() {
         cy.visit( '/wp-admin/admin.php?page=formidable-entries' );
         cy.get( 'h1' ).should( 'contain.text', 'Form Entries' );
     });
+
+    it('Can access dashboard', () => {
+        cy.visit( '/wp-admin/admin.php?page=formidable-dashboard' );
+        cy.get( 'h1' ).should( 'contain.text', 'Dashboard' );
+        cy.get( 'h2' ).should( 'contain.text', 'Latest Entries' );
+    })
 });
