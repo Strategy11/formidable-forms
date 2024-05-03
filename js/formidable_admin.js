@@ -1,4 +1,5 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
+/* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions */
 
 var frmAdminBuild;
 
@@ -357,9 +358,9 @@ function frmAdminBuildJS() {
 		 * Triggers the pre-open action for a confirmation modal. This action passes
 		 * relevant modal information and associated link to any listening hooks.
 		 *
-		 * @param {Object} options An object containing modal elements and data.
+		 * @param {Object}      options       An object containing modal elements and data.
 		 * @param {HTMLElement} options.$info The HTML element containing modal information.
-		 * @param {string} options.link The link associated with the modal action.
+		 * @param {string}      options.link  The link associated with the modal action.
 		 */
 		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link });
 
@@ -752,18 +753,16 @@ function frmAdminBuildJS() {
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
-		} else {
-			if ( document.getElementById( 'form_global_settings' ) !== null ) {
-				/* global settings */
-				var ajax = link.data( 'frmajax' );
-				link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
-				if ( typeof ajax !== 'undefined' && ajax == '1' ) {
-					loadSettingsTab( t );
-				}
-			} else {
-				/* form settings page */
-				jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
+		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
+			/* global settings */
+			var ajax = link.data( 'frmajax' );
+			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
+			if ( typeof ajax !== 'undefined' && ajax == '1' ) {
+				loadSettingsTab( t );
 			}
+		} else {
+			/* form settings page */
+			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
 		jQuery( t ).show();
 		jQuery( c ).show();
@@ -1747,7 +1746,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {HTMLElement} draggable
 	 * @param {HTMLElement} droppable
-	 * @param {Event} event
+	 * @param {Event}       event
 	 * @returns {Boolean}
 	 */
 	function allowDrop( draggable, droppable, event ) {
@@ -2678,7 +2677,7 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
-	 * @param formula
+	 * @param  formula
 	 * @returns {string}
 	 */
 	function checkMatchingParens( formula ) {
@@ -2719,8 +2718,8 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
-	 * @param calculation
-	 * @param inputElement
+	 * @param  calculation
+	 * @param  inputElement
 	 * @returns {string}
 	 */
 	function checkShortcodes( calculation, inputElement ) {
@@ -2732,9 +2731,9 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
-	 * @param calculation
+	 * @param  calculation
 	 *
-	 * @param inputElement
+	 * @param  inputElement
 	 * @returns {string}
 	 */
 	function checkNonNumericShortcodes( calculation, inputElement ) {
@@ -2773,7 +2772,7 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
-	 * @param formula
+	 * @param  formula
 	 * @returns {string}
 	 */
 	function checkNonFormShortcodes( formula ) {
@@ -3028,9 +3027,8 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
-		} else {
-			return '';
-		}
+		} 
+		return '';
 	}
 
 	function liveChanges() {
@@ -4006,9 +4004,9 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @param {int} size 2-6.
-	 * @param {string} type even, middle, left, or right.
-	 * @param {int} index 0-5.
+	 * @param {int}    size  2-6.
+	 * @param {string} type  even, middle, left, or right.
+	 * @param {int}    index 0-5.
 	 * @returns string
 	 */
 	function getClassForBlock( size, type, index ) {
@@ -4389,9 +4387,9 @@ function frmAdminBuildJS() {
 					hoverTarget.classList.remove( 'frm-selected-field-group' );
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
-				} else {
-					++numberOfSelectedGroups;
 				}
+ 
+				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
@@ -5510,19 +5508,17 @@ function frmAdminBuildJS() {
 					if ( node.tagName === 'INPUT' ) {
 						firstInputIndex = index;
 					}
-				} else {
-					if ( index === firstInputIndex + 1 ) {
-						let nodeValue = '';
+				} else if ( index === firstInputIndex + 1 ) {
+					let nodeValue = '';
 
-						if ( buttonsAsOptions( fieldId ) ) {
-							nodeValue = div({ className: 'frm_label_button_container', text: ' ' + label.val() });
-							single[0].replaceChild( nodeValue, node );
-						} else {
-							node.nodeValue = ' ' + label.val();
-						}
+					if ( buttonsAsOptions( fieldId ) ) {
+						nodeValue = div({ className: 'frm_label_button_container', text: ' ' + label.val() });
+						single[0].replaceChild( nodeValue, node );
 					} else {
-						single[0].removeChild( node );
+						node.nodeValue = ' ' + label.val();
 					}
+				} else {
+					single[0].removeChild( node );
 				}
 			});
 		}
@@ -5970,9 +5966,8 @@ function frmAdminBuildJS() {
 		var field = document.getElementById( id );
 		if ( field === null ) {
 			return false;
-		} else {
-			return field.checked;
 		}
+		return field.checked;
 	}
 
 	function checkUniqueOpt( targetInput ) {
@@ -6758,8 +6753,8 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow addons to be installed from the upgrade modal.
 	 *
-	 * @param {Element} link
-	 * @param {String} context Either 'modal' or 'tab'.
+	 * @param {Element}          link
+	 * @param {String}           context      Either 'modal' or 'tab'.
 	 * @param {String|undefined} upgradeLabel
 	 */
 	function addOneClick( link, context, upgradeLabel ) {
@@ -8668,9 +8663,8 @@ function frmAdminBuildJS() {
 		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
 		if ( exportFormatSelect ) {
 			return exportFormatSelect.value;
-		} else {
-			return '';
-		}
+		} 
+		return '';
 	}
 
 	function exportTypeChanged( event ) {
@@ -9428,13 +9422,16 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * @param {Number | string} fieldId
+	 * @return {boolean} True if the field is a product field.
+	 */
 	function isProductField( fieldId ) {
 		var field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
-		} else {
-			return 'product' === field.getAttribute( 'data-type' );
-		}
+		} 
+		return 'product' === field.getAttribute( 'data-type' );
 	}
 
 	/**
