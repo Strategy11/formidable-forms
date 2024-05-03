@@ -32,8 +32,5 @@ jobs:
       - name: Set up WP environment
         run: npm run env start
 
-      - name: Build asset
-        run: npm run build
-
       - name: Test
         run: npm run e2e:run
