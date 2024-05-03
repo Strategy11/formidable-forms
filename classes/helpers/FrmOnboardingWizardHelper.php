@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for managing onboarding wizard in the admin area.
  *
- * @since x.x
+ * @since 6.9
  */
 class FrmOnboardingWizardHelper {
 
 	/**
 	 * Echo attributes for the addon's label tag.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
@@ -52,7 +52,7 @@ class FrmOnboardingWizardHelper {
 	/**
 	 * Echo attributes for the addon's input tag.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
@@ -79,31 +79,31 @@ class FrmOnboardingWizardHelper {
 	/**
 	 * Renders the Onboarding Wizard page footer in the WordPress admin area.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param array $args
 	 * @return void
 	 */
 	public static function print_footer( $args = array() ) {
 		$defaults = array(
-			'footer-class'             => '',
-			'display-back-button'      => true,
+			'footer-class'               => '',
+			'display-back-button'        => true,
 			// Primary Button Args.
-			'primary-button-text'      => esc_html__( 'Next Step', 'formidable' ),
-			'primary-button-class'     => '',
-			'primary-button-href'      => '#',
-			'primary-button-role'      => 'button',
+			'primary-button-text'        => esc_html__( 'Next Step', 'formidable' ),
+			'primary-button-class'       => '',
+			'primary-button-href'        => '#',
+			'primary-button-role'        => 'button',
 			// Secondary Button Args.
-			'secondary-button-text'    => esc_html__( 'Skip', 'formidable' ),
-			'secondary-button-class'   => '',
-			'secondary-button-href'    => '#',
-			'secondary-button-role'    => 'button',
+			'secondary-button-text'      => esc_html__( 'Skip', 'formidable' ),
+			'secondary-button-class'     => '',
+			'secondary-button-href'      => '#',
+			'secondary-button-role'      => 'button',
 			'secondary-button-skip-step' => true,
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args     = wp_parse_args( $args, $defaults );
 
 		// Set the primary button attributes.
-		$primary_button_attributes = array(
+		$primary_button_attributes          = array(
 			'href' => $args['primary-button-href'],
 		);
 		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary ' . $args['primary-button-class'] );
@@ -118,7 +118,7 @@ class FrmOnboardingWizardHelper {
 		}
 
 		// Set the secondary button attributes.
-		$secondary_button_attributes = array(
+		$secondary_button_attributes          = array(
 			'href' => $args['secondary-button-href'],
 		);
 		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary ' . $args['secondary-button-class'] );

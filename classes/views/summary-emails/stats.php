@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<table width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<?php
-				foreach ( $args['stats'] as $key => $stat ) {
+				foreach ( $args['stats'] as $stat ) {
 					?>
 					<td>
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					// translators: the list of out-of-date plugins.
 					esc_html__( 'The following plugins are out of date: %s', 'formidable' ),
 					'<span style="font-style: italic;">' . esc_html( implode( ', ', $args['out_of_date_plugins'] ) ) . '</span>'
-				)
+				);
 				?>
 			</p>
 

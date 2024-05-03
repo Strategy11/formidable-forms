@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class FrmFieldType {
 
 	/**
-	 * @var object|array|int
+	 * @var array|int|object
 	 * @since 3.0
 	 */
 	protected $field;
@@ -88,7 +88,7 @@ abstract class FrmFieldType {
 	private static $should_hide_draft_fields;
 
 	/**
-	 * @param object|array|int $field
+	 * @param array|int|object $field
 	 * @param string           $type
 	 */
 	public function __construct( $field = 0, $type = '' ) {
@@ -133,7 +133,7 @@ abstract class FrmFieldType {
 
 		if ( is_array( $this->field ) ) {
 			$this->field_id = isset( $this->field['id'] ) ? $this->field['id'] : 0;
-		} else if ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
+		} elseif ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
 			$this->field_id = $this->field->id;
 		} elseif ( is_numeric( $this->field ) ) {
 			$this->field_id = $this->field;
@@ -143,7 +143,7 @@ abstract class FrmFieldType {
 	/**
 	 * @param string $column
 	 *
-	 * @return string|array
+	 * @return array|string
 	 */
 	public function get_field_column( $column ) {
 		$field_val = '';
@@ -252,7 +252,7 @@ DEFAULT_HTML;
 	/**
 	 * Shows field label on form builder.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @return void
 	 */
@@ -284,12 +284,12 @@ DEFAULT_HTML;
 		$html_id    = $this->html_id();
 		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
-		$field['html_name']     = $field_name;
-		$field['html_id']       = $html_id;
+		$field['html_name'] = $field_name;
+		$field['html_id']   = $html_id;
 		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
-		include( $this->include_form_builder_file() );
+		include $this->include_form_builder_file();
 	}
 
 	/**
@@ -299,6 +299,10 @@ DEFAULT_HTML;
 		return '';
 	}
 
+	/**
+	 * @param string $name
+	 * @return string
+	 */
 	protected function builder_text_field( $name = '' ) {
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
@@ -409,6 +413,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 * @return void
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
@@ -430,7 +435,7 @@ DEFAULT_HTML;
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
 		$this->show_priority_field_choices( $args );
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php';
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
 	}
@@ -462,7 +467,7 @@ DEFAULT_HTML;
 		 */
 		$should_hide_bulk_edit = apply_filters( 'frm_should_hide_bulk_edit', $display_format === '1', $display_format, $args );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php';
 	}
 
 	/**
@@ -589,6 +594,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.02.01
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
 		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
@@ -608,6 +616,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function field_choices_heading_attrs( $args ) {
 		return;
@@ -617,6 +628,9 @@ DEFAULT_HTML;
 	 * Show settings above the multiple options settings.
 	 *
 	 * @since 4.06
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
 		return;
@@ -626,7 +640,9 @@ DEFAULT_HTML;
 	 * This is called for any fields with set options (radio, checkbox, select, dynamic, lookup).
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 * @return void
 	 */
 	public function show_extra_field_choices( $args ) {
 		return;
@@ -636,7 +652,9 @@ DEFAULT_HTML;
 	 * This is called right after the default value settings.
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $args - Includes 'field', 'display'.
+	 * @return void
 	 */
 	public function show_after_default( $args ) {
 		return;
@@ -666,7 +684,7 @@ DEFAULT_HTML;
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
 		if ( $use_style ) {
 			$field = $args['field'];
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
 		}
 	}
 
@@ -674,7 +692,6 @@ DEFAULT_HTML;
 	 * New field
 	 */
 	public function get_new_field_defaults() {
-		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
 			'name'          => $this->get_new_field_name(),
 			'description'   => '',
@@ -1002,7 +1019,7 @@ DEFAULT_HTML;
 		unset( $args['form'] );
 
 		ob_start();
-		include( $include_file );
+		include $include_file;
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
@@ -1010,6 +1027,8 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -1120,7 +1139,7 @@ DEFAULT_HTML;
 			}
 		} else {
 			$args['save_array'] = $this->is_readonly_array();
-			$hidden             .= $this->show_single_hidden( $selected_value, $args );
+			$hidden            .= $this->show_single_hidden( $selected_value, $args );
 		}
 
 		return $hidden;
@@ -1129,7 +1148,7 @@ DEFAULT_HTML;
 	protected function show_single_hidden( $selected, $args ) {
 		if ( $args['save_array'] ) {
 			$args['field_name'] .= '[]';
-			$id                 = '';
+			$id                  = '';
 		} else {
 			$id = ' id="' . esc_attr( $args['html_id'] ) . '"';
 		}
@@ -1146,7 +1165,7 @@ DEFAULT_HTML;
 
 		if ( isset( $values['combo_name'] ) ) {
 			$options  = $options[ $values['combo_name'] ];
-			$selected = ( is_array( $selected ) && isset( $selected[ $values['combo_name'] ] ) ) ? $selected[ $values['combo_name'] ] : '';
+			$selected = is_array( $selected ) && isset( $selected[ $values['combo_name'] ] ) ? $selected[ $values['combo_name'] ] : '';
 		}
 
 		$input = $this->select_tag( $values );
@@ -1361,6 +1380,11 @@ DEFAULT_HTML;
 		$frm_validated_unique_values[ $field_id ][] = $value;
 	}
 
+	/**
+	 * @param array|string $value
+	 * @param array        $atts
+	 * @return array|string
+	 */
 	public function get_value_to_save( $value, $atts ) {
 		return $value;
 	}
@@ -1368,9 +1392,9 @@ DEFAULT_HTML;
 	/**
 	 * Prepare value last thing before saving in the db
 	 *
-	 * @param string|array $value
+	 * @param array|string $value
 	 *
-	 * @return string|array|float|integer
+	 * @return array|float|int|string
 	 */
 	public function set_value_before_save( $value ) {
 		return $value;
@@ -1379,8 +1403,7 @@ DEFAULT_HTML;
 	/** Prepare value for display **/
 
 	/**
-	 *
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $atts
 	 *
 	 * @return string
@@ -1454,7 +1477,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 6.8
 	 *
-	 * @param string|int $user_id
+	 * @param int|string $user_id
 	 * @return bool
 	 */
 	private function user_id_is_privileged( $user_id ) {
@@ -1511,7 +1534,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param string|array $value
+	 * @param array|string $value
 	 * @param array        $atts {
 	 *     Details about the field to show.
 	 *

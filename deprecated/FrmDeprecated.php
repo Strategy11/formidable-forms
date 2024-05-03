@@ -63,12 +63,12 @@ class FrmDeprecated {
 	public static function builder_submit_button( $values ) {
 		_deprecated_function( __FUNCTION__, '4.0' );
 		$page_action = FrmAppHelper::get_param( 'frm_action' );
-		$label = ( $page_action == 'edit' || $page_action == 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
+		$label = ( $page_action == 'edit' || $page_action === 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
 
 		?>
 		<div class="postbox">
 			<p class="inside">
-				<button class="frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
+				<button class="frm_submit_<?php echo esc_attr( ( ! empty( $values['ajax_load'] ) ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
 					<?php echo esc_html( $label ); ?>
 				</button>
 			</p>
@@ -228,10 +228,10 @@ class FrmDeprecated {
 	 * @since 2.03.08
 	 * @deprecated 3.04.03
 	 *
-	 * @param boolean $return
+	 * @param bool $return
 	 * @param string $package
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function add_shorten_edd_filename_filter( $return, $package ) {
 		_deprecated_function( __FUNCTION__, '3.04.03' );
@@ -396,21 +396,13 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 3.01
-	 */
-	public static function sanitize_array( &$values ) {
-		_deprecated_function( __FUNCTION__, '3.01', 'FrmAppHelper::sanitize_value' );
-		FrmAppHelper::sanitize_value( 'wp_kses_post', $values );
-	}
-
-	/**
 	 * @deprecated 3.0
 	 *
-	 * @param string $html
-	 * @param array $field
-	 * @param array $errors
-	 * @param object $form
-	 * @param array $args
+	 * @param string       $html
+	 * @param array        $field
+	 * @param array        $errors
+	 * @param false|object $form
+	 * @param array        $args
 	 *
 	 * @return string
 	 */
@@ -459,9 +451,9 @@ class FrmDeprecated {
 		return FrmStylesHelper::get_single_label_positions();
 	}
 
-	/**
-	 * @deprecated 3.02.03
-	 */
+    /**
+     * @deprecated 3.02.03
+     */
     public static function jquery_themes() {
 		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::jquery_themes' );
 
@@ -496,9 +488,9 @@ class FrmDeprecated {
         return $themes;
     }
 
-	/**
-	 * @deprecated 3.02.03
-	 */
+    /**
+     * @deprecated 3.02.03
+     */
     public static function enqueue_jquery_css() {
 		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::enqueue_jquery_css' );
 
@@ -539,59 +531,6 @@ class FrmDeprecated {
 			}
 		}
 		return $form_id;
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_url_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $value == '' || ! in_array( $field->type, array( 'website', 'url' ) ) ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $field->type != 'email' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_number_field( &$errors, $field, $value, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		//validate the number format
-		if ( $field->type != 'number' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::validate' );
-
-		if ( $field->type != 'captcha' ) {
-			return;
-		}
-
-		FrmEntryValidate::validate_field_types( $errors, $field, '', $args );
 	}
 
 	/**

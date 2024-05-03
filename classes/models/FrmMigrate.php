@@ -36,7 +36,7 @@ class FrmMigrate {
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$old_db_version = get_option( 'frm_db_version' );
 
@@ -413,7 +413,7 @@ class FrmMigrate {
 
 		foreach ( (array) $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
-			$size             = $f->field_options['size'];
+			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
 
 			if ( $size === $f->field_options['size'] ) {
@@ -583,7 +583,7 @@ class FrmMigrate {
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
 
-		$size = round( $pixel_conversion * (int) $size );
+		$size  = round( $pixel_conversion * (int) $size );
 		$size .= 'px';
 	}
 
@@ -657,7 +657,7 @@ DEFAULT_HTML;
 		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
-			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
+			if ( empty( $form->options['submit_html'] ) ) {
 				continue;
 			}
 

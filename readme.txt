@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5
+Tested up to: 6.5.2
 Requires PHP: 5.6
-Stable tag: 6.8.4
+Stable tag: 6.9
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.9 =
+* New: A new onboarding wizard has been added to help improve the initial set up process.
+* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
+* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
+* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
+* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
+* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
+* Fix: A confirmation field wouldn't validate with JS when left empty.
+* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
+
 = 6.8.4 =
 * New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
 * New: A new filter has been added to enable support for bulk editing options for a Ranking field.

@@ -12,6 +12,10 @@
 .jshintignore export-ignore
 .wordpress-org export-ignore
 .phpunit.result.cache export-ignore
+.php-cs-fixer.php export-ignore
+.php-cs-fixer.cache export-ignore
+.wp-env.json export-ignore
+cypress.config.js export-ignore
 /bin/ export-ignore
 changelog.txt export-ignore
 codesniffer.xml export-ignore
@@ -33,3 +37,4 @@ readme.md export-ignore
 tests export-ignore
 webpack.config.js export-ignore
 /stripe/js/frmstrp.js export-ignore
+rector.php export-ignore

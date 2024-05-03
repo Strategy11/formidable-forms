@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 	<div class="wrap">
-		<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+		<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto">

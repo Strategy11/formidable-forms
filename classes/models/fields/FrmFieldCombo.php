@@ -446,7 +446,6 @@ class FrmFieldCombo extends FrmFieldType {
 	}
 
 	/**
-	 *
 	 * Get a list of all field settings that should be translated
 	 * on a multilingual site.
 	 *

@@ -30,7 +30,7 @@ $args = wp_parse_args( $args, $defaults );
 	</div>
 
 	<div class="inside frm_grid_container frm-fields frm-px-md frm-py-0 frm-mt-xs frm-mb-0">
-		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_attr( $args['api_url'] ); ?>">
+		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_url( $args['api_url'] ); ?>">
 			<span class="frm-wait"></span>
 		</div>
 
@@ -47,7 +47,7 @@ $args = wp_parse_args( $args, $defaults );
 		<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset frm_form_field">
 			<span class="frm-with-left-icon">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
-				<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
+				<input id="frm_leave_email" type="email" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 			</span>
 
 			<span id="frm_leave_email_error" class="frm-validation-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">

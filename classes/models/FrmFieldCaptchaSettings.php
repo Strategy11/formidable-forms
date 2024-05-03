@@ -58,7 +58,7 @@ class FrmFieldCaptchaSettings {
 	 * @return void
 	 */
 	protected function set_secret() {
-		$key = $this->get_key_for_privkey();
+		$key          = $this->get_key_for_privkey();
 		$this->secret = ! empty( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
 	}
 

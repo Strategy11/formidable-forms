@@ -549,7 +549,7 @@
 					'click', '#' + editor.id + '-html',
 					function() {
 						editor.style.visibility = 'visible';
-						initQuickTagsButtons( editor );
+						initQuickTagsButtons();
 					}
 				);
 			}

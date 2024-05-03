@@ -146,7 +146,7 @@ class FrmTableHTMLGenerator {
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
 
-			$this->table_style = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
+			$this->table_style  = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
 		}
@@ -165,7 +165,7 @@ class FrmTableHTMLGenerator {
 	private function init_td_style() {
 		if ( $this->use_inline_style === true ) {
 
-			$td_style_attributes = 'text-align:' . ( $this->direction == 'rtl' ? 'right' : 'left' ) . ';';
+			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
 			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:7px 9px;vertical-align:top;';
 			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
 
@@ -176,11 +176,10 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Determine if setting is for a color, e.g. text color, background color, or border color
 	 *
+	 * @since 2.05
 	 * @param string $setting_key Name of setting.
 	 *
-	 * @since 2.05
-	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_color_setting( $setting_key ) {
 		return strpos( $setting_key, 'color' ) !== false;
@@ -189,9 +188,8 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Get color markup from color setting value
 	 *
-	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.
-	 *
 	 * @since 2.05
+	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.
 	 *
 	 * @return string
 	 */
@@ -285,7 +283,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
-		$row = '<tr' . $this->tr_style();
+		$row  = '<tr' . $this->tr_style();
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
@@ -317,7 +315,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_single_cell_table_row( $value ) {
-		$row = '<tr' . $this->tr_style();
+		$row  = '<tr' . $this->tr_style();
 		$row .= $this->add_row_class();
 		$row .= '>';
 		$row .= '<td colspan="2"' . $this->td_style . '>' . $value . '</td>';

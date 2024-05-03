@@ -219,7 +219,7 @@ class FrmFieldFormHtml {
 		if ( is_string( $inner_html[2] ) ) {
 			$has_id = strpos( $inner_html[2], ' id=' );
 			if ( ! $has_id ) {
-				$id = 'frm_' . $id . '_' . $this->html_id;
+				$id         = 'frm_' . $id . '_' . $this->html_id;
 				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 			}
 		}
@@ -247,7 +247,7 @@ class FrmFieldFormHtml {
 	 * Pull the HTML between [if error] and [/if error] shortcodes.
 	 *
 	 * @param string $html
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_error_body( $html ) {
 		$start = strpos( $html, '[if error]' );
@@ -356,9 +356,9 @@ class FrmFieldFormHtml {
 
 			$replace_with = '';
 
-			if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
+			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
-			} elseif ( $tag == 'input' ) {
+			} elseif ( $tag === 'input' ) {
 				$replace_with = $this->replace_input_shortcode( $shortcode_atts );
 			}
 
@@ -384,7 +384,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt'] --;
+			--$shortcode_atts['opt'];
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
@@ -430,7 +430,7 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column( 'type' ) == 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $this->html );
 		}
@@ -452,7 +452,7 @@ class FrmFieldFormHtml {
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
-			$classes .= ' frm_' . $label_position . '_container';
+			$classes       .= ' frm_' . $label_position . '_container';
 
 			// Add class if field has value, to be used for floating label styling.
 			if ( 'inside' === $label_position && $this->field_obj->get_field_column( 'value' ) ) {

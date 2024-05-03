@@ -8,10 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'       => __( 'View Entry', 'formidable' ),
-				'form'        => $form,
-				'hide_title'  => true,
-				'close'       => '?page=formidable-entries&form=' . $form->id,
+				'label'      => __( 'View Entry', 'formidable' ),
+				'form'       => $form,
+				'hide_title' => true,
+				'close'      => '?page=formidable-entries&form=' . $form->id,
 			)
 		);
 		?>

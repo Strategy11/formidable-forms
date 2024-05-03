@@ -22,7 +22,7 @@ class FrmStrpLiteUrlParamHelper {
 	 * Get some associated payment objects based on the URL param data.
 	 * This includes the intent, the entry, and the payments table model instance.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array|false
 	 */
 	public static function get_details_for_form( $form_id ) {
@@ -44,7 +44,7 @@ class FrmStrpLiteUrlParamHelper {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return void
 	 */
 	private static function set_details_for_form( $form_id ) {

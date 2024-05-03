@@ -42,9 +42,12 @@ class FrmFormMigratorsHelper {
 	 * @return void
 	 */
 	public static function maybe_add_to_inbox() {
-		$inbox = new FrmInbox();
 		$forms = self::import_links();
+		if ( ! $forms ) {
+			return;
+		}
 
+		$inbox = new FrmInbox();
 		foreach ( $forms as $form ) {
 			$inbox->add_message(
 				array(
@@ -74,7 +77,7 @@ class FrmFormMigratorsHelper {
 				continue;
 			}
 
-			$installer = new FrmInstallPlugin( array( 'plugin_file' => $form['importer'] ) );
+			$installer         = new FrmInstallPlugin( array( 'plugin_file' => $form['importer'] ) );
 			$form['installed'] = $installer->is_installed();
 			$form['link']      = $installer->get_activate_link();
 

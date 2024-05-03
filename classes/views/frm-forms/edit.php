@@ -7,13 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_page_container">
 
 	<?php
-	include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php';
+	require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php';
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Build Form', 'formidable' ),
-			'form'        => $form,
-			'hide_title'  => true,
-			'publish'     => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
+			'label'      => __( 'Build Form', 'formidable' ),
+			'form'       => $form,
+			'hide_title' => true,
+			'publish'    => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);
 	?>
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_form_builder with_frm_style">
 
 		<p class="frm_hidden frm-no-margin">
-			<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">
+			<button class="frm_submit_<?php echo ! empty( $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">
 				<?php esc_attr_e( 'Update', 'formidable' ); ?>"
 			</button>
 		</p>

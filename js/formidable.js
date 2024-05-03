@@ -518,7 +518,13 @@ function frmFrontFormJS() {
 			if ( ! ( fieldID in errors ) ) {
 				format = new RegExp( '^' + format + '$', 'i' );
 				if ( format.test( text ) === false ) {
-					errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
+						if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
+							errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+						}
+					} else {
+						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					}
 				}
 			}
 		}
@@ -865,7 +871,7 @@ function frmFrontFormJS() {
 	/**
 	 * Trigger an event before the form is replaced with a success message.
 	 *
-	 * @since x.x
+	 * @since 6.9
 	 *
 	 * @param {HTMLElement} object The form.
 	 * @param {object} response The response from submitting the form with AJAX.
@@ -1138,51 +1144,6 @@ function frmFrontFormJS() {
 			jQuery( div ).slideDown( 'fast' );
 		}
 		return false;
-	}
-
-	/**********************************************
-	 * Fallback functions
-	 *********************************************/
-
-	function addTrimFallbackForIE() {
-		if ( typeof String.prototype.trim !== 'function' ) {
-			String.prototype.trim = function() {
-				return this.replace( /^\s+|\s+$/g, '' );
-			};
-		}
-	}
-
-	function addFilterFallbackForIE() {
-		var t, len, res, thisp, i, val;
-
-		if ( ! Array.prototype.filter ) {
-
-			Array.prototype.filter = function( fun /*, thisp */ ) {
-
-				if ( this === void 0 || this === null ) {
-					throw new TypeError();
-				}
-
-				t = Object( this );
-				len = t.length >>> 0;
-				if ( typeof fun !== 'function' ) {
-					throw new TypeError();
-				}
-
-				res = [];
-				thisp = arguments[1];
-				for ( i = 0; i < len; i++ ) {
-					if ( i in t ) {
-						val = t[i]; // in case fun mutates this
-						if ( fun.call( thisp, val, i, t ) ) {
-							res.push( val );
-						}
-					}
-				}
-
-				return res;
-			};
-		}
 	}
 
 	/**
@@ -1581,10 +1542,6 @@ function frmFrontFormJS() {
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
-
-			// Add fallbacks for IE.
-			addTrimFallbackForIE(); // Trim only works in IE10+.
-			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();

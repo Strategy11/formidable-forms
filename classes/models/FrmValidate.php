@@ -6,12 +6,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class FrmValidate {
 
 	/**
-	 * @var int $form_id
+	 * @var int
 	 */
 	protected $form_id;
 
 	/**
-	 * @var object $form
+	 * @var object
 	 */
 	protected $form;
 
@@ -42,7 +42,7 @@ abstract class FrmValidate {
 	}
 
 	/**
-	 * @return bool
+	 * @return bool|string
 	 */
 	abstract public function validate();
 
