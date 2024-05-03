@@ -23,10 +23,29 @@ describe( 'Run some basic Formidale tests', function() {
         cy.get( 'h2' ).should( 'contain.text', 'General Form Settings' );
     });
 
-    if('Can access global settings', () => {
+    it('Can access global settings', () => {
         cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
         cy.get( 'h1' ).should( 'contain.text', 'Settings' );
         cy.get( 'h2' ).should( 'contain.text', 'General Settings' );
+    });
+
+    it('Can access style settings', () => {
+        cy.login();
+        cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
+        cy.get( '#general-style h3' ).should( 'contain.text', 'General' );
+        cy.get( '#frm_submit_side_top' ).should( 'contain.text', 'Update' );
+    });
+
+    it('Can access import/export', () => {
+        cy.login();
+        cy.visit( '/wp-admin/admin.php?page=formidable-import' );
+        cy.get( 'h1' ).should( 'contain.text', 'Import/Export' );
+    });
+
+    it('Can access applications', () => {
+        cy.login();
+        cy.visit( '/wp-admin/admin.php?page=formidable-applications' );
+        cy.get( 'h1' ).should( 'contain.text', 'Applications' );
     });
 });
