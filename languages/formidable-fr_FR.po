@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-05-02 13:37\n"
+"PO-Revision-Date: 2024-05-03 13:37\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -313,7 +313,7 @@ msgstr "Il n’y a aucune extension qui requiert une licence sur votre site"
 #: classes/controllers/FrmAddonsController.php:693
 #: classes/helpers/FrmAppHelper.php:3271
 msgid "Installed"
-msgstr "Installés"
+msgstr "Installé"
 
 #: classes/controllers/FrmAddonsController.php:698
 #: classes/helpers/FrmAppHelper.php:3270
@@ -815,7 +815,7 @@ msgstr "Actions et notifications"
 #: classes/controllers/FrmFormsController.php:1244
 #: classes/controllers/FrmFormsController.php:1249
 msgid "Form Permissions"
-msgstr "Permissions du formulaire"
+msgstr "Droits du formulaire"
 
 #: classes/controllers/FrmFormsController.php:1250
 msgid "Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions."
@@ -843,7 +843,7 @@ msgstr "Page de destination du formulaire"
 #: classes/controllers/FrmFormsController.php:1277
 #: classes/controllers/FrmFormsController.php:1283
 msgid "Conversational Forms"
-msgstr "Formulaires de conversation"
+msgstr "Formulaires conversationnels"
 
 #: classes/controllers/FrmFormsController.php:1284
 msgid "Ask one question at a time for automated conversations."
