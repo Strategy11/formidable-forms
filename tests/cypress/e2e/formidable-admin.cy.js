@@ -1,18 +1,16 @@
 describe( 'Run some basic Formidale tests', function() {
+    beforeEach( cy.login );
+
     it('Can visit forms list and navigate to form templates page', () => {
-        cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable' );
         cy.get( 'h1' ).should('contain.text', 'Forms');
-        const submitButton = cy.get( '#frm-publishing a.frm-button-primary' );
-        submitButton.should( 'contain.text', 'Add New' );
-        submitButton.click();
+        cy.get( '#frm-publishing a.frm-button-primary' ).should( 'contain.text', 'Add New' ).click();
 
         cy.url().should('include', 'admin.php?page=formidable-form-templates');
         cy.get( 'h1' ).should( 'contain.text', 'Form Templates' );
     });
 
-    it('Can create a new form', () => {
-        cy.login();
+    it('Can create a new form, visit settings, preview the form and submit it.', () => {
         cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
         cy.get( '#frm-form-templates-create-form' ).click();
         cy.url().should('include', 'wp-admin/admin.php?page=formidable&frm_action=edit&id=' );
@@ -45,28 +43,34 @@ describe( 'Run some basic Formidale tests', function() {
     });
 
     it('Can access global settings', () => {
-        cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
         cy.get( 'h1' ).should( 'contain.text', 'Settings' );
         cy.get( 'h2' ).should( 'contain.text', 'General Settings' );
     });
 
     it('Can access style settings', () => {
-        cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
         cy.get( '#general-style h3' ).should( 'contain.text', 'General' );
         cy.get( '#frm_submit_side_top' ).should( 'contain.text', 'Update' );
     });
 
     it('Can access import/export', () => {
-        cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-import' );
         cy.get( 'h1' ).should( 'contain.text', 'Import/Export' );
     });
 
     it('Can access applications', () => {
-        cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-applications' );
         cy.get( 'h1' ).should( 'contain.text', 'Applications' );
+    });
+
+    it('Can access addons', () => {
+        cy.visit( '/wp-admin/admin.php?page=formidable-addons' );
+        cy.get( 'h1' ).should( 'contain.text', 'Formidable Add-Ons' );
+    });
+
+    it('Can access entries', () => {
+        cy.visit( '/wp-admin/admin.php?page=formidable-entries' );
+        cy.get( 'h1' ).should( 'contain.text', 'Form Entries' );
     });
 });
