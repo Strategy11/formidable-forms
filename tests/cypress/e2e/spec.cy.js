@@ -17,5 +17,16 @@ describe( 'Run some basic Formidale tests', function() {
         cy.get( '#frm-form-templates-create-form' ).click();
         cy.url().should('include', 'wp-admin/admin.php?page=formidable&frm_action=edit&id=' );
         cy.get( '#text' ).should( 'contain.text', 'Text' );
+
+        // Check if we can access form settings for the new form after clicking on the settings tab.
+        cy.get( 'a[href*="/wp-admin/admin.php?page=formidable&frm_action=settings&id="]' ).click();
+        cy.get( 'h2' ).should( 'contain.text', 'General Form Settings' );
+    });
+
+    if('Can access global settings', () => {
+        cy.login();
+        cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
+        cy.get( 'h1' ).should( 'contain.text', 'Settings' );
+        cy.get( 'h2' ).should( 'contain.text', 'General Settings' );
     });
 });
