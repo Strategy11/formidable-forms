@@ -12,7 +12,7 @@ const { useState, useEffect } = wp.element;
 const blockData = formidable_form_selector; // eslint-disable-line camelcase
 const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link : blockData.link;
 
-registerBlockType( 'formidable/simple-view-placeholder', {
+registerBlockType( 'formidable/simple-view', {
 
 	title: __( 'Formidable Views', 'formidable' ),
 	description: __( 'Display a Visual View', 'formidable' ),
