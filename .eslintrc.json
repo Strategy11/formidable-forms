@@ -65,6 +65,8 @@
 		"eqeqeq": "off",
 		"@wordpress/no-global-active-element": "off",
 		"no-alert": "off",
-		"no-undef": "off"
+		"no-undef": "off",
+		"jsdoc/no-undefined-types": "off",
+		"no-shadow": "off"
 	}
 }

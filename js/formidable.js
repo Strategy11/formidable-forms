@@ -272,7 +272,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {Object} element
 	 * @param {string} targetClass
-	 * @return {boolean}
+	 * @return {boolean} True if the element has the target class.
 	 */
 	function hasClass( element, targetClass ) {
 		var className = ' ' + element.className + ' ';
@@ -1256,7 +1256,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 5.4
 	 *
-	 * @return {boolean}
+	 * @return {boolean} True if the user agent matches for IE.
 	 */
 	function isIE() {
 		return navigator.userAgent.indexOf( 'MSIE' ) > -1 || navigator.userAgent.indexOf( 'Trident' ) > -1;
