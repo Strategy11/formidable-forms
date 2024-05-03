@@ -1,4 +1,5 @@
 /* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
+/* eslint-disable no-var */
 
 var frmFrontForm;
 
