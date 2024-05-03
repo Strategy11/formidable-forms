@@ -602,9 +602,8 @@ function frmFrontFormJS() {
 			} catch ( e ) {
 				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
 					return errors;
-				} 
-					response = '';
-				
+				}
+				response = '';
 			}
 
 			if ( response.length === 0 ) {
