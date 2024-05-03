@@ -2,9 +2,9 @@ button.frm-loading {
 	cursor: progress;
 	opacity: 0.7;
 	position: relative;
-    text-indent: -999px;
-    min-width: 70px;
-    overflow: hidden;
+	text-indent: -999px;
+	min-width: 70px;
+	overflow: hidden;
 }
 button.frm-loading:before {
 	content: '';
