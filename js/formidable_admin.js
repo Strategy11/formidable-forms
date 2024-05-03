@@ -3028,8 +3028,7 @@ function frmAdminBuildJS() {
 		if ( field !== null ) {
 			return field.value;
 		} 
-			return '';
-		
+		return '';
 	}
 
 	function liveChanges() {
@@ -4388,9 +4387,9 @@ function frmAdminBuildJS() {
 					hoverTarget.classList.remove( 'frm-selected-field-group' );
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
-				} 
-					++numberOfSelectedGroups;
-				
+				}
+ 
+				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
@@ -5967,9 +5966,8 @@ function frmAdminBuildJS() {
 		var field = document.getElementById( id );
 		if ( field === null ) {
 			return false;
-		} 
-			return field.checked;
-		
+		}
+		return field.checked;
 	}
 
 	function checkUniqueOpt( targetInput ) {
@@ -8666,8 +8664,7 @@ function frmAdminBuildJS() {
 		if ( exportFormatSelect ) {
 			return exportFormatSelect.value;
 		} 
-			return '';
-		
+		return '';
 	}
 
 	function exportTypeChanged( event ) {
@@ -9425,13 +9422,16 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * @param {Number | string} fieldId
+	 * @return {boolean} True if the field is a product field.
+	 */
 	function isProductField( fieldId ) {
 		var field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
 		} 
-			return 'product' === field.getAttribute( 'data-type' );
-		
+		return 'product' === field.getAttribute( 'data-type' );
 	}
 
 	/**
