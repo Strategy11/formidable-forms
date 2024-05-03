@@ -64,25 +64,25 @@
 
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
 	<rule ref="WordPress.Security.NonceVerification.Missing">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.DB.PreparedSQL">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 	<rule ref="Squiz.Commenting">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 
 	<!-- These rules likely won't see any changes for compatibility -->
@@ -108,7 +108,7 @@
 			<property name="lineLengthLimit" value="180" />
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
 		<exclude-pattern>fields/FrmFieldUserID.php</exclude-pattern>
 		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
@@ -180,9 +180,9 @@
 		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
 		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmStrpLiteLinkController.php</exclude-pattern>
-		<exclude-pattern>tests/database/test_FrmMigrate.php</exclude-pattern>
-		<exclude-pattern>tests/fields/test_FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>tests/fields/test_FrmFieldType.php</exclude-pattern>
+		<exclude-pattern>tests/phpunit/database/test_FrmMigrate.php</exclude-pattern>
+		<exclude-pattern>tests/phpunit/fields/test_FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>tests/phpunit/fields/test_FrmFieldType.php</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Files.FileLength">
@@ -206,7 +206,7 @@
 		<exclude-pattern>models/FrmForm.php</exclude-pattern>
 		<exclude-pattern>models/fields/FrmFieldType.php</exclude-pattern>
 		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
-		<exclude-pattern>tests/entries/test_FrmShowEntryShortcode.php</exclude-pattern>
+		<exclude-pattern>tests/phpunit/entries/test_FrmShowEntryShortcode.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->
@@ -228,7 +228,7 @@
 		<exclude-pattern>models/FrmForm.php</exclude-pattern>
 		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
 		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>tests/base/FrmUnitTest.php</exclude-pattern>
+		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPressVIPMinimum">
