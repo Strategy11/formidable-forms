@@ -1,9 +1,9 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
-/* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions */
+/* eslint-disable jsdoc/require-param, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions */
 
 let frmAdminBuild;
 
-let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
+const FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
@@ -49,10 +49,10 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		/* Manual license authorization */
 		authorize: function() {
 			/*jshint validthis:true */
-			let button = this;
-			let pluginSlug = this.getAttribute( 'data-plugin' );
-			let input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
-			let license = input.value;
+			const button = this;
+			const pluginSlug = this.getAttribute( 'data-plugin' );
+			const input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
+			const license = input.value;
 			let wpmu = document.getElementById( 'proplug-wpmu' );
 			this.classList.add( 'frm_loading_button' );
 			if ( wpmu === null ) {
@@ -94,7 +94,7 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				el.setElements();
 			}
 
-			let messageBox = el.messageBox;
+			const messageBox = el.messageBox;
 			if ( messageBox === null ) {
 				return;
 			}
@@ -115,7 +115,7 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				// In case the message box was added after page load.
 				el.setElements();
 			}
-			let messageBox = el.messageBox;
+			const messageBox = el.messageBox;
 
 			if ( msg.success === true ) {
 				app.showAuthorized( true );
@@ -135,7 +135,7 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					messageBox.classList.add( 'frm_hidden' );
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
-				let refreshPage = document.querySelector( '.frm-admin-page-dashboard' );
+				const refreshPage = document.querySelector( '.frm-admin-page-dashboard' );
 				if ( refreshPage ) {
 					setTimeout( function() {
 						window.location.reload();
@@ -147,7 +147,7 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		showAuthorized: function( show ) {
 			const from = show ? 'unauthorized' : 'authorized';
 			const to = show ? 'authorized' : 'unauthorized';
-			let container = document.querySelectorAll( '.frm_' + from + '_box' );
+			const container = document.querySelectorAll( '.frm_' + from + '_box' );
 			if ( container.length ) {
 				// Replace all authorized boxes with unauthorized boxes.
 				container.forEach( function( box ) {
@@ -197,7 +197,7 @@ let FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			if ( ! confirm( frmGlobal.deauthorize ) ) {
 				return false;
 			}
-			let pluginSlug = this.getAttribute( 'data-plugin' ),
+			const pluginSlug = this.getAttribute( 'data-plugin' ),
 				input = document.getElementById( 'edd_' + pluginSlug + '_license_key' ),
 				license = input.value,
 				link = this;
@@ -307,7 +307,7 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmLinkClick( link ) {
-		let message    = link.getAttribute( 'data-frmverify' ),
+		const message    = link.getAttribute( 'data-frmverify' ),
 			loadedFrom = link.getAttribute( 'data-loaded-from' ) ;
 
 		if ( message === null || link.id === 'frm-confirmed-click' ) {
@@ -370,7 +370,7 @@ function frmAdminBuildJS() {
 	}
 
 	function infoModal( msg ) {
-		let $info = initModal( '#frm_info_modal', '400px' );
+		const $info = initModal( '#frm_info_modal', '400px' );
 
 		if ( $info === false ) {
 			return false;
@@ -384,7 +384,7 @@ function frmAdminBuildJS() {
 
 	function toggleItem( e ) {
 		/*jshint validthis:true */
-		let toggle = this.getAttribute( 'data-frmtoggle' ),
+		const toggle = this.getAttribute( 'data-frmtoggle' ),
 			text = this.getAttribute( 'data-toggletext' ),
 			items = jQuery( toggle );
 
@@ -438,7 +438,7 @@ function frmAdminBuildJS() {
 			jQuery( show ).removeClass( toggleClass );
 		}
 
-		let current = this.parentNode.querySelectorAll( 'a.current' );
+		const current = this.parentNode.querySelectorAll( 'a.current' );
 		if ( current !== null ) {
 			for ( let i = 0; i < current.length; i++ ) {
 				current[ i ].classList.remove( 'current' );
@@ -459,28 +459,28 @@ function frmAdminBuildJS() {
 	}
 
 	function setMenuOffset() {
-		let fields = document.getElementById( 'frm_adv_info' );
+		const fields = document.getElementById( 'frm_adv_info' );
 		if ( fields === null ) {
 			return;
 		}
 
-		let currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
+		const currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
 		if ( currentOffset === 0 ) {
 			fields.classList.remove( 'frm_fixed' );
 			return;
 		}
 
-		let posEle = document.getElementById( 'frm_position_ele' );
+		const posEle = document.getElementById( 'frm_position_ele' );
 		if ( posEle === null ) {
 			return;
 		}
 
-		let eleOffset = jQuery( posEle ).offset();
-		let offset = eleOffset.top;
+		const eleOffset = jQuery( posEle ).offset();
+		const offset = eleOffset.top;
 		let desiredOffset = offset - currentOffset;
 		let menuHeight = 0;
 
-		let menu = document.getElementById( 'wpadminbar' );
+		const menu = document.getElementById( 'wpadminbar' );
 		if ( menu !== null ) {
 			menuHeight = menu.offsetHeight;
 		}
@@ -526,7 +526,7 @@ function frmAdminBuildJS() {
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
 		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
-			let isTop = this.id === 'doaction',
+			const isTop = this.id === 'doaction',
 				suffix = isTop ? 'top' : 'bottom',
 				bulkActionSelector = document.getElementById( 'bulk-action-selector-' + suffix ),
 				confirmBulkDelete = document.getElementById( 'confirm-bulk-delete-' + suffix );
@@ -722,7 +722,7 @@ function frmAdminBuildJS() {
 
 	function clickNewTab() {
 		/*jshint validthis:true */
-		let t = this.getAttribute( 'href' ),
+		const t = this.getAttribute( 'href' ),
 			c = t.replace( '#', '.' ),
 			$link = jQuery( this );
 
@@ -743,19 +743,19 @@ function frmAdminBuildJS() {
 
 	function clickTab( link, auto ) {
 		link = jQuery( link );
-		let t = link.attr( 'href' );
+		const t = link.attr( 'href' );
 		if ( typeof t === 'undefined' ) {
 			return;
 		}
 
-		let c = t.replace( '#', '.' );
+		const c = t.replace( '#', '.' );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
-			let ajax = link.data( 'frmajax' );
+			const ajax = link.data( 'frmajax' );
 			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 			if ( typeof ajax !== 'undefined' && ajax == '1' ) {
 				loadSettingsTab( t );
@@ -1329,7 +1329,7 @@ function frmAdminBuildJS() {
 				};
 			} else {
 				classToAddFunction = function( index ) {
-					let size = type[ index ];
+					const size = type[ index ];
 					return getLayoutClassForSize( size );
 				};
 			}
@@ -1501,7 +1501,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setupFieldOptionSorting( sort ) {
-		let opts = {
+		const opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
 			opacity: 0.65,
@@ -1513,7 +1513,7 @@ function frmAdminBuildJS() {
 			},
 			stop: function( e, ui ) {
 				copyHelper && copyHelper.remove();
-				let fieldId = ui.item.attr( 'id' ).replace( 'frm_delete_field_', '' ).replace( '-' + ui.item.data( 'optkey' ) + '_container', '' );
+				const fieldId = ui.item.attr( 'id' ).replace( 'frm_delete_field_', '' ).replace( '-' + ui.item.data( 'optkey' ) + '_container', '' );
 				resetDisplayedOpts( fieldId );
 				fieldUpdated();
 			}
@@ -1535,10 +1535,10 @@ function frmAdminBuildJS() {
 		let formId = '';
 
 		if ( typeof section[0] !== 'undefined' ) {
-			let sDivide = section.children( '.start_divider' );
+			const sDivide = section.children( '.start_divider' );
 			sDivide.children( '.edit_field_type_end_divider' ).appendTo( sDivide );
 			if ( typeof section.attr( 'data-formid' ) !== 'undefined' ) {
-				let fieldId = section.attr( 'data-fid' );
+				const fieldId = section.attr( 'data-fid' );
 				formId = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
 			}
 		}
@@ -2261,7 +2261,7 @@ function frmAdminBuildJS() {
 	}
 
 	function closeOpenFieldDropdowns() {
-		let openSettings = document.querySelector( '.frm-field-settings-open' );
+		const openSettings = document.querySelector( '.frm-field-settings-open' );
 		if ( null !== openSettings ) {
 			openSettings.classList.remove( 'frm-field-settings-open' );
 			jQuery( document ).off( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
@@ -2276,7 +2276,7 @@ function frmAdminBuildJS() {
 	}
 
 	function checkForMultiselectKeysOnMouseMove( event ) {
-		let keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
+		const keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
 		jQuery( builderPage ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
 		checkForActiveHoverTarget( event );
 	}
@@ -2330,7 +2330,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeRemoveHoverTargetOnMouseMove( event ) {
-		let elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		const elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
 		if ( null !== elementFromPoint && null !== elementFromPoint.closest( '#frm-show-fields' ) ) {
 			return;
 		}
@@ -2416,13 +2416,13 @@ function frmAdminBuildJS() {
 	}
 
 	function getDeleteActionOption( isFieldGroup ) {
-		let option = { class: 'frm_delete', icon: 'frm_delete_icon' };
+		const option = { class: 'frm_delete', icon: 'frm_delete_icon' };
 		option.label = isFieldGroup ? __( 'Delete Group', 'formidable' ) : __( 'Delete', 'formidable' );
 		return option;
 	}
 
 	function getDuplicateActionOption( isFieldGroup ) {
-		let option = { class: 'frm_clone', icon: 'frm_clone_icon' };
+		const option = { class: 'frm_clone', icon: 'frm_clone_icon' };
 		option.label = isFieldGroup ? __( 'Duplicate Group', 'formidable' ) : __( 'Duplicate', 'formidable' );
 		return option;
 	}
@@ -2520,7 +2520,7 @@ function frmAdminBuildJS() {
 		}, 1000 );
 
 		if ( addFocus ) {
-			let bounding = field.getBoundingClientRect(),
+			const bounding = field.getBoundingClientRect(),
 				container = document.getElementById( 'post-body-content' ),
 				inView = ( bounding.top >= 0 &&
 					bounding.left >= 0 &&
@@ -2603,7 +2603,7 @@ function frmAdminBuildJS() {
 	}
 
 	function scrollToField( field ) {
-		let newPos = field.getBoundingClientRect().top,
+		const newPos = field.getBoundingClientRect().top,
 			container = document.getElementById( 'post-body-content' );
 
 		if ( typeof animate === 'undefined' ) {
@@ -2615,7 +2615,7 @@ function frmAdminBuildJS() {
 	}
 
 	function checkCalculationCreatedByUser() {
-		let calculation = this.value;
+		const calculation = this.value;
 		let warningMessage = checkMatchingParens( calculation );
 		warningMessage += checkShortcodes( calculation, this );
 
@@ -2744,7 +2744,7 @@ function frmAdminBuildJS() {
 			return msg;
 		}
 
-		let nonNumericShortcodes = getNonNumericShortcodes();
+		const nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
 			msg = frmAdminJs.text_shortcodes + '\n\n';
@@ -2797,12 +2797,12 @@ function frmAdminBuildJS() {
 	}
 
 	function isCalcBoxType( box, listClass ) {
-		let list = jQuery( box ).find( '.frm_code_list' );
+		const list = jQuery( box ).find( '.frm_code_list' );
 		return 1 === list.length && list.hasClass( listClass );
 	}
 
 	function extractExcludedOptions( exclude ) {
-		let opts = [];
+		const opts = [];
 		if ( ! Array.isArray( exclude ) ) {
 			return opts;
 		}
@@ -2823,7 +2823,7 @@ function frmAdminBuildJS() {
 	function hasExcludedOption( field, excludedOpts ) {
 		let hasOption = false;
 		for ( let i = 0; i < excludedOpts.length; i++ ) {
-			let inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
+			const inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
 			// 2nd condition checks that there's at least one non-empty value
 			if ( inputs.length && jQuery( inputs[0]).val() ) {
 				hasOption = true;
@@ -2834,7 +2834,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldOptionInputName( opt, fieldId ) {
-		let at = opt.indexOf( ']' );
+		const at = opt.indexOf( ']' );
 		return 'field_options' + opt.substring( 0, at ) + '_' + fieldId + opt.substring( at );
 	}
 
@@ -2847,9 +2847,9 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		let isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
+		const isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
 
-		let fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
+		const fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
 
 		if ( force ) {
 			box = v;
@@ -2858,7 +2858,7 @@ function frmAdminBuildJS() {
 		}
 
 		exclude = getExcludeArray( box, isSummary );
-		let excludedOpts = extractExcludedOptions( exclude );
+		const excludedOpts = extractExcludedOptions( exclude );
 
 		fields = getFieldList();
 		list = document.getElementById( 'frm-calc-list-' + fieldId );
@@ -2870,17 +2870,17 @@ function frmAdminBuildJS() {
 				continue;
 			}
 
-			let span = document.createElement( 'span' );
+			const span = document.createElement( 'span' );
 			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
 
-			let a = document.createElement( 'a' );
+			const a = document.createElement( 'a' );
 			a.setAttribute( 'href', '#' );
 			a.setAttribute( 'data-code', fields[i].fieldId );
 			a.classList.add( 'frm_insert_code' );
 			a.appendChild( span );
 			a.appendChild( document.createTextNode( fields[i].fieldName ) );
 
-			let li = document.createElement( 'li' );
+			const li = document.createElement( 'li' );
 			li.classList.add( 'frm-field-list-' + fieldId );
 			li.classList.add( 'frm-field-list-' + fields[i].fieldType );
 			li.appendChild( a );
@@ -2889,12 +2889,12 @@ function frmAdminBuildJS() {
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
-		let exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		const exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
 			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
 			// when they have been chosen to be included, then they can now be manually excluded in the calc box.
-			let includedExtras = getIncludedExtras();
+			const includedExtras = getIncludedExtras();
 			if ( includedExtras.length ) {
 				for ( let i = 0; i < exclude.length; i++ ) {
 					if ( includedExtras.includes( exclude[ i ]) ) {
@@ -2911,8 +2911,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getIncludedExtras() {
-		let checked = [];
-		let checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
+		const checked = [];
+		const checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
 
 		for ( let i = 0; i < checkboxes.length; i++ ) {
 			if ( checkboxes[i].checked ) {
@@ -2939,7 +2939,7 @@ function frmAdminBuildJS() {
 				continue;
 			}
 
-			let fieldId = allFields[ i ].getAttribute( 'data-fid' );
+			const fieldId = allFields[ i ].getAttribute( 'data-fid' );
 			if ( typeof fieldId !== 'undefined' && fieldId ) {
 				fields.push({
 					'fieldId': fieldId,
@@ -2989,7 +2989,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getCurrentProductFields( prodFieldOpt ) {
-		let products = prodFieldOpt.querySelectorAll( '[type="checkbox"]:checked' ),
+		const products = prodFieldOpt.querySelectorAll( '[type="checkbox"]:checked' ),
 			idsArray = [];
 
 		for ( let i = 0; i < products.length; i++ ) {
@@ -3000,14 +3000,14 @@ function frmAdminBuildJS() {
 	}
 
 	function popAllProductFields() {
-		let opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
+		const opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
 		for ( let i = 0; i < opts.length; i++ ) {
 			popProductFields( opts[ i ]);
 		}
 	}
 
 	function maybeSetProductField( field ) {
-		let fieldId = field.getAttribute( 'data-fid' ),
+		const fieldId = field.getAttribute( 'data-fid' ),
 			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
 
 		if ( null === productFieldOpt ) {
@@ -3126,7 +3126,7 @@ function frmAdminBuildJS() {
 			value = '';
 
 		[ 'field_options_max_', 'frm_format_' ].forEach( function( id ) {
-			let input = document.getElementById( id + fieldId );
+			const input = document.getElementById( id + fieldId );
 			if ( ! input ) {
 				return;
 			}
@@ -3144,7 +3144,7 @@ function frmAdminBuildJS() {
 
 	function markRequired() {
 		/*jshint validthis:true */
-		let thisid = this.id.replace( 'frm_', '' ),
+		const thisid = this.id.replace( 'frm_', '' ),
 			fieldId = thisid.replace( 'req_field_', '' ),
 			checked = this.checked,
 			label = jQuery( '#field_label_' + fieldId + ' .frm_required' );
@@ -3152,7 +3152,7 @@ function frmAdminBuildJS() {
 		toggleValidationBox( checked, '.frm_required_details' + fieldId );
 
 		if ( checked ) {
-			let $reqBox = jQuery( 'input[name="field_options[required_indicator_' + fieldId + ']"]' );
+			const $reqBox = jQuery( 'input[name="field_options[required_indicator_' + fieldId + ']"]' );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
 			}
@@ -3168,7 +3168,7 @@ function frmAdminBuildJS() {
 			$msg.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 		} else {
 			//Fade out validation options
-			let v = $msg.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(' + messageClass + '):visible' ).length;
+			const v = $msg.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(' + messageClass + '):visible' ).length;
 			if ( v === 0 ) {
 				$msg.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
@@ -3177,8 +3177,8 @@ function frmAdminBuildJS() {
 
 	function markUnique() {
 		/*jshint validthis:true */
-		let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		let $thisField = jQuery( '.frm_unique_details' + fieldId );
+		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const $thisField = jQuery( '.frm_unique_details' + fieldId );
 		if ( this.checked ) {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
@@ -3186,7 +3186,7 @@ function frmAdminBuildJS() {
 				$unqDetail.val( frmAdminJs.default_unique );
 			}
 		} else {
-			let v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
+			const v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
 			if ( v === 0 ) {
 				$thisField.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
@@ -3196,15 +3196,15 @@ function frmAdminBuildJS() {
 	//Fade confirmation field and validation option in or out
 	function addConf() {
 		/*jshint validthis:true */
-		let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		let val = jQuery( this ).val();
-		let $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) );
+		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const val = jQuery( this ).val();
+		const $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) );
 
 		toggleValidationBox( val !== '', '.frm_conf_details' + fieldId );
 
 		if ( val !== '' ) {
 			//Add default validation message if empty
-			let valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
+			const valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
 				valMsg.val( frmAdminJs.default_conf );
 			}
@@ -3227,16 +3227,16 @@ function frmAdminBuildJS() {
 	}
 
 	function setConfirmationFieldDescriptions( fieldId ) {
-		let fieldType = document.getElementsByName( 'field_options[type_' + fieldId + ']' )[0].value;
+		const fieldType = document.getElementsByName( 'field_options[type_' + fieldId + ']' )[0].value;
 
-		let fieldDescription = document.getElementById( 'field_description_' + fieldId );
-		let hiddenDescName = 'field_options[description_' + fieldId + ']';
-		let newValue = frmAdminJs['enter_' + fieldType];
+		const fieldDescription = document.getElementById( 'field_description_' + fieldId );
+		const hiddenDescName = 'field_options[description_' + fieldId + ']';
+		const newValue = frmAdminJs['enter_' + fieldType];
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
-		let confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
-		let hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
-		let newConfValue = frmAdminJs['confirm_' + fieldType];
+		const confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
+		const hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
+		const newConfValue = frmAdminJs['confirm_' + fieldType];
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
@@ -3251,7 +3251,7 @@ function frmAdminBuildJS() {
 
 	function initBulkOptionsOverlay() {
 		/*jshint validthis:true */
-		let $info = initModal( '#frm-bulk-modal', '700px' );
+		const $info = initModal( '#frm-bulk-modal', '700px' );
 		if ( $info === false ) {
 			return;
 		}
@@ -3304,8 +3304,8 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( '#frm-update-bulk-opts' ).on( 'click', function() {
-			let fieldId    = document.getElementById( 'bulk-field-id' ).value;
-			let optionType = document.getElementById( 'bulk-option-type' ).value;
+			const fieldId    = document.getElementById( 'bulk-field-id' ).value;
+			const optionType = document.getElementById( 'bulk-option-type' ).value;
 
 			if ( optionType ) {
 				// Use custom handler for custom option type.
@@ -3320,7 +3320,7 @@ function frmAdminBuildJS() {
 
 	function insertBulkPreset( event ) {
 		/*jshint validthis:true */
-		let opts = JSON.parse( this.getAttribute( 'data-opts' ) );
+		const opts = JSON.parse( this.getAttribute( 'data-opts' ) );
 		event.preventDefault();
 		document.getElementById( 'frm_bulk_options' ).value = opts.join( '\n' );
 		return false;
@@ -3345,12 +3345,12 @@ function frmAdminBuildJS() {
 			document.getElementById( 'other_input_' + fieldId ).value = 1;
 
 			//Hide "Add Other" option now if this is radio field
-			let ftype = jQuery( this ).data( 'ftype' );
+			const ftype = jQuery( this ).data( 'ftype' );
 			if ( ftype === 'radio' || ftype === 'select' ) {
 				jQuery( this ).fadeOut( 'slow' );
 			}
 
-			let data = {
+			const data = {
 				action: 'frm_add_field_option',
 				field_id: fieldId,
 				opt_key: optKey,
@@ -3401,12 +3401,12 @@ function frmAdminBuildJS() {
 
 	function toggleMultSel() {
 		/*jshint validthis:true */
-		let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		toggleMultiSelect( fieldId, this.value );
 	}
 
 	function toggleMultiSelect( fieldId, value ) {
-		let setting = jQuery( '.frm_multiple_cont_' + fieldId );
+		const setting = jQuery( '.frm_multiple_cont_' + fieldId );
 		if ( value === 'select' ) {
 			setting.fadeIn( 'fast' );
 		} else {
@@ -3416,7 +3416,7 @@ function frmAdminBuildJS() {
 
 	function toggleSepValues() {
 		/*jshint validthis:true */
-		let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		toggle( jQuery( '.field_' + fieldId + '_option_key' ) );
 		jQuery( '.field_' + fieldId + '_option' ).toggleClass( 'frm_with_key' );
 	}
@@ -3462,7 +3462,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setImageSize() {
-		let $field = jQuery( this ).closest( '.frm-single-settings' ),
+		const $field = jQuery( this ).closest( '.frm-single-settings' ),
 			fieldId = $field.data( 'fid' ),
 			displayField = document.getElementById( 'frm_field_id_' + fieldId );
 
@@ -3476,7 +3476,7 @@ function frmAdminBuildJS() {
 	}
 
 	function refreshOptionDisplayNow( object ) {
-		let $field = object.closest( '.frm-single-settings' ),
+		const $field = object.closest( '.frm-single-settings' ),
 			fieldID = $field.data( 'fid' );
 		jQuery( '.field_' + fieldID + '_option' ).trigger( 'change' );
 	}
@@ -3522,7 +3522,7 @@ function frmAdminBuildJS() {
 	}
 
 	function removeImageFromOption( event ) {
-		let $this = jQuery( this ),
+		const $this = jQuery( this ),
 			previewWrapper = $this.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
@@ -3536,7 +3536,7 @@ function frmAdminBuildJS() {
 
 	function toggleMultiselect() {
 		/*jshint validthis:true */
-		let dropdown = jQuery( this ).closest( 'li' ).find( '.frm_form_fields select' );
+		const dropdown = jQuery( this ).closest( 'li' ).find( '.frm_form_fields select' );
 		if ( this.checked ) {
 			dropdown.attr( 'multiple', 'multiple' );
 		} else {
@@ -3548,7 +3548,7 @@ function frmAdminBuildJS() {
 	 * Allow typing on form switcher click without an extra click to search.
 	 */
 	function focusSearchBox() {
-		let searchBox = document.getElementById( 'dropform-search-input' );
+		const searchBox = document.getElementById( 'dropform-search-input' );
 		if ( searchBox !== null ) {
 			setTimeout( function() {
 				searchBox.focus();
@@ -3591,7 +3591,7 @@ function frmAdminBuildJS() {
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			jQuery( parentLi ).remove();
 
-			let hasOther = jQuery( parentUl ).find( '.frm_other_option' );
+			const hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
 				otherInput = document.getElementById( 'other_input_' + fieldId );
 				if ( otherInput !== null ) {
@@ -3820,7 +3820,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getSizeOfFieldGroupFromChildElement( element ) {
-		let $ul = jQuery( element ).closest( 'ul' );
+		const $ul = jQuery( element ).closest( 'ul' );
 		if ( $ul.length ) {
 			return getFieldsInRow( $ul ).length;
 		}
@@ -3875,12 +3875,12 @@ function frmAdminBuildJS() {
 	}
 
 	function separator() {
-		let hr = document.createElement( 'hr' );
+		const hr = document.createElement( 'hr' );
 		return hr;
 	}
 
 	function getCustomLayoutOption() {
-		let option = div();
+		const option = div();
 		option.textContent = __( 'Custom layout', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_gear_svg' ) );
 		option.classList.add( 'frm-custom-field-group-layout' );
@@ -3897,13 +3897,13 @@ function frmAdminBuildJS() {
 	}
 
 	function getIconClone( iconId ) {
-		let clone = document.getElementById( iconId ).cloneNode( true );
+		const clone = document.getElementById( iconId ).cloneNode( true );
 		clone.id = '';
 		return clone;
 	}
 
 	function getBreakIntoDifferentRowsOption() {
-		let option = div();
+		const option = div();
 		option.textContent = __( 'Break into rows', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_break_field_group_svg' ) );
 		option.classList.add( 'frm-break-field-group' );
@@ -3912,7 +3912,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getRowLayoutTitle() {
-		let rowLayoutTitle = div();
+		const rowLayoutTitle = div();
 		rowLayoutTitle.classList.add( 'frm-row-layout-title' );
 		rowLayoutTitle.textContent = __( 'Row Layout', 'formidable' );
 		return rowLayoutTitle;
@@ -4066,7 +4066,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getEmptyGridContainer() {
-		let wrapper = div();
+		const wrapper = div();
 		wrapper.classList.add( 'frm_grid_container' );
 		return wrapper;
 	}
@@ -4098,13 +4098,13 @@ function frmAdminBuildJS() {
 	}
 
 	function mergeSelectedFieldGroups() {
-		let $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
+		const $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
 			$firstGroupUl = $selectedFieldGroups.first();
 		$selectedFieldGroups.not( $firstGroupUl ).each(
 			function() {
 				getFieldsInRow( jQuery( this ) ).each(
 					function() {
-						let previousParent = this.parentNode;
+						const previousParent = this.parentNode;
 						getFieldsInRow( $firstGroupUl ).last().after( this );
 						if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
 							// clean up the previous field group if we've removed all of its fields.
@@ -4215,19 +4215,19 @@ function frmAdminBuildJS() {
 	}
 
 	function getPrimaryButton() {
-		let button = getButton();
+		const button = getButton();
 		button.classList.add( 'button-primary', 'frm-button-primary' );
 		return button;
 	}
 
 	function getSecondaryButton() {
-		let button = getButton();
+		const button = getButton();
 		button.classList.add( 'button-secondary', 'frm-button-secondary' );
 		return button;
 	}
 
 	function getButton() {
-		let button = document.createElement( 'a' );
+		const button = document.createElement( 'a' );
 		button.setAttribute( 'href', '#' );
 		button.classList.add( 'button' );
 		button.style.textDecoration = 'none';
@@ -4275,7 +4275,7 @@ function frmAdminBuildJS() {
 	}
 
 	function breakFieldGroupClick() {
-		let row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = document.querySelector( '.frm-field-group-hover-target' );
 		breakRow( row );
 		destroyFieldGroupPopup();
 	}
@@ -4403,7 +4403,7 @@ function frmAdminBuildJS() {
 
 				$range.each(
 					function() {
-						let $fieldGroup = jQuery( this ).closest( 'li' ).find( 'ul.frm_sorting' );
+						const $fieldGroup = jQuery( this ).closest( 'li' ).find( 'ul.frm_sorting' );
 						if ( ! $fieldGroup.hasClass( 'frm-selected-field-group' ) ) {
 							++numberOfSelectedGroups;
 							$fieldGroup.addClass( 'frm-selected-field-group' );
@@ -4597,7 +4597,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeRemoveMultiselectPopup() {
-		let popup = document.getElementById( 'frm_field_multiselect_popup' );
+		const popup = document.getElementById( 'frm_field_multiselect_popup' );
 		if ( null !== popup ) {
 			popup.remove();
 		}
@@ -4721,7 +4721,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getSelectedFieldIds() {
-		let deleteFieldIds = [];
+		const deleteFieldIds = [];
 		jQuery( '.frm-selected-field-group > li.form-field' )
 			.each(
 				function() {
@@ -4752,7 +4752,7 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFields( fieldId ) {
-		let field = jQuery( '#frm_field_id_' + fieldId );
+		const field = jQuery( '#frm_field_id_' + fieldId );
 
 		deleteField( fieldId );
 
@@ -4801,7 +4801,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function() {
-				let $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) ),
+				const $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) ),
 					settings = jQuery( '#frm-single-settings-' + fieldId );
 
 				// Remove settings from sidebar.
@@ -4856,7 +4856,7 @@ function frmAdminBuildJS() {
 
 	function addFieldLogicRow() {
 		/*jshint validthis:true */
-		let id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
 			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' );
 		jQuery.ajax({
@@ -4872,7 +4872,7 @@ function frmAdminBuildJS() {
 			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {
-					let logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
+					const logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					logicRow.append( html );
 					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
 				});
@@ -4905,7 +4905,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( newRow ) {
-				let watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
+				const watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
 			}
@@ -5062,14 +5062,14 @@ function frmAdminBuildJS() {
 
 	function updateGetValueFieldSelection() {
 		/*jshint validthis:true */
-		let fieldID = this.id.replace( 'get_values_form_', '' );
-		let fieldSelect = document.getElementById( 'get_values_field_' + fieldID );
-		let fieldType = this.getAttribute( 'data-fieldtype' );
+		const fieldID = this.id.replace( 'get_values_form_', '' );
+		const fieldSelect = document.getElementById( 'get_values_field_' + fieldID );
+		const fieldType = this.getAttribute( 'data-fieldtype' );
 
 		if ( this.value === '' ) {
 			fieldSelect.options.length = 1;
 		} else {
-			let formID = this.value;
+			const formID = this.value;
 			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
@@ -5144,7 +5144,7 @@ function frmAdminBuildJS() {
 	// The fake field works differently than real fields.
 	function maybeCollapsePage() {
 		/*jshint validthis:true */
-		let field = jQuery( this ).closest( '.frm_field_box[data-ftype=break]' );
+		const field = jQuery( this ).closest( '.frm_field_box[data-ftype=break]' );
 		if ( field.length ) {
 			toggleCollapsePage( field );
 		} else {
@@ -5154,12 +5154,12 @@ function frmAdminBuildJS() {
 
 	// Find all fields in a page and hide/show them
 	function toggleCollapsePage( field ) {
-		let toCollapse = getAllFieldsForPage( field.get( 0 ).parentNode.closest( 'li.frm_field_box' ).nextElementSibling );
+		const toCollapse = getAllFieldsForPage( field.get( 0 ).parentNode.closest( 'li.frm_field_box' ).nextElementSibling );
 		togglePage( field, toCollapse );
 	}
 
 	function toggleCollapseFakePage() {
-		let topLevel = document.getElementById( 'frm-fake-page' ),
+		const topLevel = document.getElementById( 'frm-fake-page' ),
 			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
 			toCollapse = getAllFieldsForPage( firstField );
 
@@ -5227,7 +5227,7 @@ function frmAdminBuildJS() {
 
 	function maybeCollapseSection() {
 		/*jshint validthis:true */
-		let parentCont = this.parentNode.parentNode.parentNode.parentNode;
+		const parentCont = this.parentNode.parentNode.parentNode.parentNode;
 
 		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
@@ -5237,7 +5237,7 @@ function frmAdminBuildJS() {
 		this.classList.toggle( 'frm-collapsed' );
 
 		// Toggles the "aria-expanded" attribute
-		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
+		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
 	}
 
@@ -5273,7 +5273,7 @@ function frmAdminBuildJS() {
 
 	function clickDescription() {
 		/*jshint validthis:true */
-		let setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0];
+		const setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0];
 		if ( typeof setting !== 'undefined' ) {
 			setTimeout( function() {
 				setting.focus();
@@ -5283,7 +5283,7 @@ function frmAdminBuildJS() {
 	}
 
 	function autoExpandSettings( setting ) {
-		let inSection = setting.closest( '.frm-collapse-me' );
+		const inSection = setting.closest( '.frm-collapse-me' );
 		if ( inSection !== null ) {
 			inSection.previousElementSibling.classList.remove( 'frm-collapsed' );
 		}
@@ -5355,13 +5355,13 @@ function frmAdminBuildJS() {
 	 * Open Advanced settings on double click.
 	 */
 	function openAdvanced() {
-		let fieldId = this.getAttribute( 'data-fid' );
+		const fieldId = this.getAttribute( 'data-fid' );
 		autoExpandSettings( document.getElementById( 'field_options_field_key_' + fieldId ) );
 	}
 
 	function toggleRepeatButtons() {
 		/*jshint validthis:true */
-		let $thisField = jQuery( this ).closest( '.frm_field_box' );
+		const $thisField = jQuery( this ).closest( '.frm_field_box' );
 		$thisField.find( '.repeat_icon_links' ).removeClass( 'repeat_format repeat_formatboth repeat_formattext' ).addClass( 'repeat_format' + this.value );
 		if ( this.value === 'text' || this.value === 'both' ) {
 			$thisField.find( '.frm_repeat_text' ).show();
@@ -5374,7 +5374,7 @@ function frmAdminBuildJS() {
 
 	function checkRepeatLimit() {
 		/*jshint validthis:true */
-		let val = this.value;
+		const val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
 			infoModal( frmAdminJs.repeat_limit_min );
 			this.value = '';
@@ -5383,7 +5383,7 @@ function frmAdminBuildJS() {
 
 	function checkCheckboxSelectionsLimit() {
 		/*jshint validthis:true */
-		let val = this.value;
+		const val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
 			infoModal( frmAdminJs.checkbox_limit );
 			this.value = '';
@@ -5391,12 +5391,12 @@ function frmAdminBuildJS() {
 	}
 
 	function updateRepeatText( obj, addRemove ) {
-		let $thisField = jQuery( obj ).closest( '.frm_field_box' );
+		const $thisField = jQuery( obj ).closest( '.frm_field_box' );
 		$thisField.find( '.frm_' + addRemove + '_form_row .frm_repeat_label' ).text( obj.value );
 	}
 
 	function fieldsInSection( id ) {
-		let children = [];
+		const children = [];
 		jQuery( document.getElementById( 'frm_field_id_' + id ) ).find( 'li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)' ).each( function() {
 			children.push( jQuery( this ).data( 'fid' ) );
 		});
@@ -5405,10 +5405,10 @@ function frmAdminBuildJS() {
 
 	function toggleFormTax() {
 		/*jshint validthis:true */
-		let id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		let val = this.value;
-		let $showFields = document.getElementById( 'frm_show_selected_fields_' + id );
-		let $showForms = document.getElementById( 'frm_show_selected_forms_' + id );
+		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const val = this.value;
+		const $showFields = document.getElementById( 'frm_show_selected_fields_' + id );
+		const $showForms = document.getElementById( 'frm_show_selected_forms_' + id );
 
 		jQuery( $showForms ).find( 'select' ).val( '' );
 		if ( val === 'form' ) {
@@ -5592,7 +5592,7 @@ function frmAdminBuildJS() {
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 
-			let container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
+			const container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
 				hasImageOptions = imagesAsOptions( fieldId ),
 				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
 				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
@@ -5710,7 +5710,7 @@ function frmAdminBuildJS() {
 		if ( field === null ) {
 			return;
 		}
-		let sourceID = atts.sourceID,
+		const sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
 			isProduct = isProductField( sourceID ),
 			showOther = atts.other;
@@ -5731,7 +5731,7 @@ function frmAdminBuildJS() {
 			hasPlaceholder = false;
 
 			if ( ! isOther || showOther ) {
-				let opt = document.createElement( 'option' );
+				const opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
 				opt.innerHTML = purifyHtml( label );
 
@@ -5745,7 +5745,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addBlankSelectOption( field, placeholder ) {
-		let opt = document.createElement( 'option' ),
+		const opt = document.createElement( 'option' ),
 			firstChild = field.firstChild;
 
 		opt.value = '';
@@ -5817,7 +5817,7 @@ function frmAdminBuildJS() {
 	}
 
 	function radioOrCheckbox( fieldId ) {
-		let settings = document.getElementById( 'frm-single-settings-' + fieldId );
+		const settings = document.getElementById( 'frm-single-settings-' + fieldId );
 		if ( settings === null ) {
 			return 'radio';
 		}
@@ -5963,7 +5963,7 @@ function frmAdminBuildJS() {
 	}
 
 	function isChecked( id ) {
-		let field = document.getElementById( id );
+		const field = document.getElementById( id );
 		if ( field === null ) {
 			return false;
 		}
@@ -5997,17 +5997,17 @@ function frmAdminBuildJS() {
 			val = this.value;
 
 		if ( val ) {
-			let parentIDs = this.parentNode.id.replace( 'frm_logic_', '' ).split( '_' );
-			let fieldID = parentIDs[0];
-			let metaKey = parentIDs[1];
-			let valueField = document.getElementById( 'frm_field_id_' + val );
-			let valueFieldType = valueField.getAttribute( 'data-ftype' );
-			let fill = document.getElementById( 'frm_show_selected_values_' + fieldID + '_' + metaKey );
-			let optionName = 'field_options[hide_opt_' + fieldID + '][]';
-			let optionID = 'frm_field_logic_opt_' + fieldID;
+			const parentIDs = this.parentNode.id.replace( 'frm_logic_', '' ).split( '_' );
+			const fieldID = parentIDs[0];
+			const metaKey = parentIDs[1];
+			const valueField = document.getElementById( 'frm_field_id_' + val );
+			const valueFieldType = valueField.getAttribute( 'data-ftype' );
+			const fill = document.getElementById( 'frm_show_selected_values_' + fieldID + '_' + metaKey );
+			const optionName = 'field_options[hide_opt_' + fieldID + '][]';
+			const optionID = 'frm_field_logic_opt_' + fieldID;
 			let input = false;
 			let showSelect = ( valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
-			let showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
+			const showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
 
 			if ( showSelect ) {
 				isTaxonomy = document.getElementById( 'frm_has_hidden_options_' + val );
@@ -6030,7 +6030,7 @@ function frmAdminBuildJS() {
 				fill.appendChild( input );
 
 				if ( showSelect ) {
-					let fillField = document.getElementById( input.id );
+					const fillField = document.getElementById( input.id );
 					fillDropdownOpts( fillField, {
 						sourceID: val,
 						placeholder: '',
@@ -6038,7 +6038,7 @@ function frmAdminBuildJS() {
 					});
 				}
 			} else {
-				let thisType = this.getAttribute( 'data-type' );
+				const thisType = this.getAttribute( 'data-type' );
 				frmGetFieldValues( val, fieldID, metaKey, thisType );
 			}
 		}
@@ -6046,9 +6046,9 @@ function frmAdminBuildJS() {
 
 	function getFieldSelection() {
 		/*jshint validthis:true */
-		let formId = this.value;
+		const formId = this.value;
 		if ( formId ) {
-			let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+			const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 			getTaxOrFieldSelection( formId, fieldId );
 		}
 	}
@@ -6136,8 +6136,8 @@ function frmAdminBuildJS() {
 
 	function slideDown() {
 		/*jshint validthis:true */
-		let id = jQuery( this ).data( 'slidedown' );
-		let $thisId = jQuery( document.getElementById( id ) );
+		const id = jQuery( this ).data( 'slidedown' );
+		const $thisId = jQuery( document.getElementById( id ) );
 		if ( $thisId.is( ':hidden' ) ) {
 			$thisId.slideDown( 'fast' );
 			this.style.display = 'none';
@@ -6147,8 +6147,8 @@ function frmAdminBuildJS() {
 
 	function slideUp() {
 		/*jshint validthis:true */
-		let id = jQuery( this ).data( 'slideup' );
-		let $thisId = jQuery( document.getElementById( id ) );
+		const id = jQuery( this ).data( 'slideup' );
+		const $thisId = jQuery( document.getElementById( id ) );
 		$thisId.slideUp( 'fast' );
 		$thisId.siblings( 'a' ).show();
 		return false;
@@ -6242,7 +6242,7 @@ function frmAdminBuildJS() {
 	}
 
 	function showInlineModal( icon, input ) {
-		let box = document.getElementById( icon.getAttribute( 'data-open' ) ),
+		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
 			container = jQuery( icon ).closest( 'p' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
@@ -6304,7 +6304,7 @@ function frmAdminBuildJS() {
 	 * When the saved value is changed, update the default value radio.
 	 */
 	function changeDefaultRadioValue( input ) {
-		let parentLi = getOptionParent( input ),
+		const parentLi = getOptionParent( input ),
 			key = parentLi.getAttribute( 'data-optkey' ),
 			fieldId = getOptionFieldId( parentLi, key ),
 			defaultRadio = parentLi.querySelector( 'input[name="default_value_' + fieldId + '"]' );
@@ -6342,14 +6342,14 @@ function frmAdminBuildJS() {
 	}
 
 	function getOptionFieldId( li, key ) {
-		let liId = li.id;
+		const liId = li.id;
 
 		return liId.replace( 'frm_delete_field_', '' ).replace( '-' + key + '_container', '' );
 	}
 
 	function submitBuild() {
 		/*jshint validthis:true */
-		let $thisEle = this;
+		const $thisEle = this;
 
 		if ( showNameYourFormModal() ) {
 			return;
@@ -6357,8 +6357,8 @@ function frmAdminBuildJS() {
 
 		preFormSave( this );
 
-		let $form = jQuery( builderForm );
-		let v = JSON.stringify( $form.serializeArray() );
+		const $form = jQuery( builderForm );
+		const v = JSON.stringify( $form.serializeArray() );
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
 		jQuery.ajax({
@@ -6368,8 +6368,8 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				afterFormSave( $thisEle );
 
-				let $postStuff = document.getElementById( 'post-body-content' );
-				let $html = document.createElement( 'div' );
+				const $postStuff = document.getElementById( 'post-body-content' );
+				const $html = document.createElement( 'div' );
 				$html.setAttribute( 'class', 'frm_updated_message' );
 				$html.innerHTML = msg;
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
@@ -6382,7 +6382,7 @@ function frmAdminBuildJS() {
 	}
 
 	function triggerSubmit( form ) {
-		let button = form.ownerDocument.createElement( 'input' );
+		const button = form.ownerDocument.createElement( 'input' );
 		button.style.display = 'none';
 		button.type = 'submit';
 		form.appendChild( button ).click();
@@ -6867,7 +6867,7 @@ function frmAdminBuildJS() {
 		if ( this.name === 'options[edit_action]' ) {
 			c = 'edit';
 		}
-		let v = jQuery( this ).val();
+		const v = jQuery( this ).val();
 		jQuery( '.' + c + '_action_box' ).hide();
 		if ( v === 'redirect' ) {
 			jQuery( '.' + c + '_action_redirect_box.' + c + '_action_box' ).fadeIn( 'slow' );
@@ -6973,7 +6973,7 @@ function frmAdminBuildJS() {
 
 	function newActionId( currentID ) {
 		let newID = parseInt( currentID, 10 ) + 11;
-		let exists = document.getElementById( 'frm_form_action_' + newID );
+		const exists = document.getElementById( 'frm_form_action_' + newID );
 		if ( exists !== null ) {
 			newID++;
 			newID = newActionId( newID );
@@ -7064,7 +7064,7 @@ function frmAdminBuildJS() {
 
 	function toggleActionGroups() {
 		/*jshint validthis:true */
-		let actions = document.getElementById( 'frm_email_addon_menu' ).classList,
+		const actions = document.getElementById( 'frm_email_addon_menu' ).classList,
 			search = document.getElementById( 'actions-search-input' );
 
 		if ( actions.contains( 'frm-all-actions' ) ) {
@@ -7094,7 +7094,7 @@ function frmAdminBuildJS() {
 	}
 
 	function clickAction( obj ) {
-		let $thisobj = jQuery( obj );
+		const $thisobj = jQuery( obj );
 
 		if ( obj.className.indexOf( 'selected' ) !== -1 ) {
 			return;
@@ -7214,17 +7214,17 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		let classes = singleField.parentElement.classList;
+		const classes = singleField.parentElement.classList;
 		if ( classes.contains( 'frm_field_box' ) || classes.contains( 'divider_section_only' ) ) {
-			let endMarker = document.getElementById( 'frm-end-form-marker' );
+			const endMarker = document.getElementById( 'frm-end-form-marker' );
 			builderForm.insertBefore( singleField, endMarker );
 		}
 	}
 
 	function showEmailRow() {
 		/*jshint validthis:true */
-		let actionKey = jQuery( this ).closest( '.frm_form_action_settings' ).data( 'actionkey' );
-		let rowType = this.getAttribute( 'data-emailrow' );
+		const actionKey = jQuery( this ).closest( '.frm_form_action_settings' ).data( 'actionkey' );
+		const rowType = this.getAttribute( 'data-emailrow' );
 
 		jQuery( '#frm_form_action_' + actionKey + ' .frm_' + rowType + '_row' ).fadeIn( 'slow' );
 		jQuery( this ).fadeOut( 'slow' );
@@ -7232,7 +7232,7 @@ function frmAdminBuildJS() {
 
 	function hideEmailRow() {
 		/*jshint validthis:true */
-		let actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
+		const actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
 			rowType = this.getAttribute( 'data-emailrow' ),
 			emailRowSelector = '.frm_' + rowType + '_row',
 			emailButtonSelector = '.frm_' + rowType + '_button';
@@ -7245,7 +7245,7 @@ function frmAdminBuildJS() {
 
 	function showEmailWarning() {
 		/*jshint validthis:true */
-		let actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
+		const actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
 			emailRowSelector = '.frm_from_to_match_row',
 			fromVal = actionBox.find( 'input[name$="[post_content][from]"]' ).val(),
 			toVal = actionBox.find( 'input[name$="[post_content][email_to]"]' ).val();
@@ -7383,7 +7383,7 @@ function frmAdminBuildJS() {
 	 */
 	function addSubmitLogic() {
 		/*jshint validthis:true */
-		let formId = thisFormId,
+		const formId = thisFormId,
 			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
 		jQuery.ajax({
 			type: 'POST',
@@ -7395,7 +7395,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				let $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
+				const $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
 				$logicRow.append( html );
 				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
 			}
@@ -7407,11 +7407,11 @@ function frmAdminBuildJS() {
 	 *  When the user selects a field for a submit condition, update corresponding options field accordingly.
 	 */
 	function addSubmitLogicOpts() {
-		let fieldOpt = jQuery( this );
-		let fieldId = fieldOpt.find( ':selected' ).val();
+		const fieldOpt = jQuery( this );
+		const fieldId = fieldOpt.find( ':selected' ).val();
 
 		if ( fieldId ) {
-			let row = fieldOpt.data( 'row' );
+			const row = fieldOpt.data( 'row' );
 			frmGetFieldValues( fieldId, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
 		}
 	}
@@ -7428,10 +7428,10 @@ function frmAdminBuildJS() {
 
 	function checkDupPost() {
 		/*jshint validthis:true */
-		let postField = jQuery( 'select.frm_single_post_field' );
+		const postField = jQuery( 'select.frm_single_post_field' );
 		postField.css( 'border-color', '' );
-		let $t = this;
-		let v = jQuery( $t ).val();
+		const $t = this;
+		const v = jQuery( $t ).val();
 		if ( v === '' || v === 'checkbox' ) {
 			return false;
 		}
@@ -7447,7 +7447,7 @@ function frmAdminBuildJS() {
 
 	function togglePostContent() {
 		/*jshint validthis:true */
-		let v = jQuery( this ).val();
+		const v = jQuery( this ).val();
 		if ( '' === v ) {
 			jQuery( '.frm_post_content_opt, select.frm_dyncontent_opt' ).hide().val( '' );
 			jQuery( '.frm_dyncontent_opt' ).hide();
@@ -7463,8 +7463,8 @@ function frmAdminBuildJS() {
 
 	function fillDyncontent() {
 		/*jshint validthis:true */
-		let v = jQuery( this ).val();
-		let $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
+		const v = jQuery( this ).val();
+		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
 		if ( '' === v || 'new' === v ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
@@ -7653,7 +7653,7 @@ function frmAdminBuildJS() {
 
 		jQuery( this ).closest( '.frm_posttax_row' ).find( '.frm_posttax_opt_list' ).html( '<div class="spinner frm_spinner" style="display:block"></div>' );
 
-		let postType = jQuery( this ).closest( '.frm_form_action_settings' ).find( 'select[name$="[post_content][post_type]"]' ).val(),
+		const postType = jQuery( this ).closest( '.frm_form_action_settings' ).find( 'select[name$="[post_content][post_type]"]' ).val(),
 			actionKey = jQuery( this ).closest( '.frm_form_action_settings' ).data( 'actionkey' ),
 			taxKey = jQuery( this ).closest( '.frm_posttax_row' ).attr( 'id' ).replace( 'frm_posttax_', '' ),
 			metaName = jQuery( this ).val(),
@@ -7676,7 +7676,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				let $tax = jQuery( document.getElementById( 'frm_posttax_' + taxKey ) );
+				const $tax = jQuery( document.getElementById( 'frm_posttax_' + taxKey ) );
 				$tax.replaceWith( html );
 			}
 		});
@@ -7684,9 +7684,9 @@ function frmAdminBuildJS() {
 
 	function toggleCfOpts() {
 		/*jshint validthis:true */
-		let row = jQuery( this ).closest( '.frm_postmeta_row' );
-		let cancel = row.find( '.frm_cancelnew' );
-		let select = row.find( '.frm_enternew' );
+		const row = jQuery( this ).closest( '.frm_postmeta_row' );
+		const cancel = row.find( '.frm_cancelnew' );
+		const select = row.find( '.frm_enternew' );
 		if ( row.find( 'select.frm_cancelnew' ).is( ':visible' ) ) {
 			cancel.hide();
 			select.show();
@@ -7701,7 +7701,7 @@ function frmAdminBuildJS() {
 
 	function toggleFormOpts() {
 		/*jshint validthis:true */
-		let changedOpt = jQuery( this );
+		const changedOpt = jQuery( this );
 		let val = changedOpt.val();
 		if ( changedOpt.attr( 'type' ) === 'checkbox' ) {
 			if ( this.checked === false ) {
@@ -7709,7 +7709,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		let toggleClass = changedOpt.data( 'toggleclass' );
+		const toggleClass = changedOpt.data( 'toggleclass' );
 		if ( val === '' ) {
 			jQuery( '.' + toggleClass ).hide();
 		} else {
@@ -7731,10 +7731,10 @@ function frmAdminBuildJS() {
 	/* View Functions */
 	function showCount() {
 		/*jshint validthis:true */
-		let value = jQuery( this ).val();
+		const value = jQuery( this ).val();
 
-		let $cont = document.getElementById( 'date_select_container' );
-		let tab = document.getElementById( 'frm_listing_tab' );
+		const $cont = document.getElementById( 'date_select_container' );
+		const tab = document.getElementById( 'frm_listing_tab' );
 		let label = tab.getAttribute( 'data-label' );
 		if ( value === 'calendar' ) {
 			jQuery( '.hide_dyncontent, .hide_single_content' ).removeClass( 'frm_hidden' );
@@ -7758,7 +7758,7 @@ function frmAdminBuildJS() {
 
 	function displayFormSelected() {
 		/*jshint validthis:true */
-		let formId = jQuery( this ).val();
+		const formId = jQuery( this ).val();
 		thisFormId = formId; // set the global form id
 		if ( formId === '' ) {
 			return;
@@ -7793,7 +7793,7 @@ function frmAdminBuildJS() {
 
 	function clickTabsAfterAjax() {
 		/*jshint validthis:true */
-		let t = jQuery( this ).attr( 'href' );
+		const t = jQuery( this ).attr( 'href' );
 		jQuery( this ).parent().addClass( 'tabs' ).siblings( 'li' ).removeClass( 'tabs' );
 		jQuery( t ).show().siblings( '.tabs-panel' ).hide();
 		return false;
@@ -7802,12 +7802,12 @@ function frmAdminBuildJS() {
 	function clickContentTab() {
 		/*jshint validthis:true */
 		link = jQuery( this );
-		let t = link.attr( 'href' );
+		const t = link.attr( 'href' );
 		if ( typeof t === 'undefined' ) {
 			return false;
 		}
 
-		let c = t.replace( '#', '.' );
+		const c = t.replace( '#', '.' );
 		link.closest( '.nav-tab-wrapper' ).find( 'a' ).removeClass( 'nav-tab-active' );
 		link.addClass( 'nav-tab-active' );
 		jQuery( '.nav-menu-content' ).not( t ).not( c ).hide();
@@ -7817,7 +7817,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addOrderRow() {
-		let logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' );
+		const logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -7834,7 +7834,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addWhereRow() {
-		let rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' );
+		const rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -7852,7 +7852,7 @@ function frmAdminBuildJS() {
 
 	function insertWhereOptions() {
 		/*jshint validthis:true */
-		let value = this.value,
+		const value = this.value,
 			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
 		jQuery.ajax({
@@ -7872,7 +7872,7 @@ function frmAdminBuildJS() {
 
 	function hideWhereOptions() {
 		/*jshint validthis:true */
-		let value = this.value,
+		const value = this.value,
 			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
 		if ( value === 'group_by' || value === 'group_by_newest' ) {
@@ -7883,7 +7883,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setDefaultPostStatus() {
-		let urlQuery = window.location.search.substring( 1 );
+		const urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
 			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
@@ -7934,10 +7934,10 @@ function frmAdminBuildJS() {
 			rich = jQuery( '#wp-' + elementId + '-wrap.wp-editor-wrap' ).length > 0;
 		}
 
-		let contentBox = jQuery( document.getElementById( elementId ) );
+		const contentBox = jQuery( document.getElementById( elementId ) );
 		if ( typeof element.attr( 'data-shortcode' ) === 'undefined' && ( ! contentBox.length || typeof contentBox.attr( 'data-shortcode' ) === 'undefined' ) ) {
 			// this helps to exclude those that don't want shortcode-like inserted content e.g. frm-pro's summary field
-			let doShortcode = element.parents( 'ul.frm_code_list' ).attr( 'data-shortcode' );
+			const doShortcode = element.parents( 'ul.frm_code_list' ).attr( 'data-shortcode' );
 			if ( doShortcode === 'undefined' || doShortcode !== 'no' ) {
 				variable = '[' + variable + ']';
 			}
@@ -7967,7 +7967,7 @@ function frmAdminBuildJS() {
 				elementId: elementId,
 				success: function( msg ) {
 					if ( rich ) {
-						let p = document.createElement( 'p' );
+						const p = document.createElement( 'p' );
 						p.innerText = msg;
 						send_to_editor( p.innerHTML );
 					} else {
@@ -8010,12 +8010,12 @@ function frmAdminBuildJS() {
 			document.selection.createRange().text = variable;
 		} else {
 			obj = contentBox[0];
-			let e = obj.selectionEnd;
+			const e = obj.selectionEnd;
 
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
-			let s = e + variable.length;
+			const s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
@@ -8023,19 +8023,19 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
-		let separator = input.data( 'sep' );
+		const separator = input.data( 'sep' );
 		if ( undefined === separator ) {
 			return textToInsert;
 		}
 
-		let value = input.val();
+		const value = input.val();
 
 		if ( ! value.trim().length ) {
 			return textToInsert;
 		}
 
-		let startPattern = new RegExp( separator + '\\s*$' );
-		let endPattern = new RegExp( '^\\s*' + separator );
+		const startPattern = new RegExp( separator + '\\s*$' );
+		const endPattern = new RegExp( '^\\s*' + separator );
 
 		if ( value.substr( 0, selectionStart ).trim().length && false === startPattern.test( value.substr( 0, selectionStart ) ) ) {
 			textToInsert = separator + textToInsert;
@@ -8050,7 +8050,7 @@ function frmAdminBuildJS() {
 
 	function resetLogicBuilder() {
 		/*jshint validthis:true */
-		let id = document.getElementById( 'frm-id-condition' ),
+		const id = document.getElementById( 'frm-id-condition' ),
 			key = document.getElementById( 'frm-key-condition' );
 
 		if ( this.checked ) {
@@ -8080,7 +8080,7 @@ function frmAdminBuildJS() {
 
 	function showBuilderModal() {
 		/*jshint validthis:true */
-		let moreIcon = getIconForInput( this );
+		const moreIcon = getIconForInput( this );
 		showInlineModal( moreIcon, this );
 	}
 
@@ -8357,7 +8357,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( id !== '' ) {
-			let $ele = jQuery( document.getElementById( id ) );
+			const $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
 				let d = $ele.attr( 'class' ).split( ' ' )[0];
 				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
@@ -8371,12 +8371,12 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).attr( 'data-fills', c.trim() );
-		let a = [
+		const a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
 			'frm_not_email_subject'
 		];
-		let b = [
+		const b = [
 			'before_content', 'after_content', 'frm_not_email_to',
 			'dyn_default_value'
 		];
@@ -8446,8 +8446,8 @@ function frmAdminBuildJS() {
 
 	/* Global settings page */
 	function loadSettingsTab( anchor ) {
-		let holder = anchor.replace( '#', '' );
-		let holderContainer = jQuery( '.frm_' + holder + '_ajax' );
+		const holder = anchor.replace( '#', '' );
+		const holderContainer = jQuery( '.frm_' + holder + '_ajax' );
 		if ( holderContainer.length ) {
 			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
@@ -8482,16 +8482,16 @@ function frmAdminBuildJS() {
 
 	function saveAddonLicense() {
 		/*jshint validthis:true */
-		let button = jQuery( this );
-		let buttonName = this.name;
-		let pluginSlug = this.getAttribute( 'data-plugin' );
-		let action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
+		const button = jQuery( this );
+		const buttonName = this.name;
+		const pluginSlug = this.getAttribute( 'data-plugin' );
+		const action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		let license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl, dataType: 'json',
 			data: {action: 'frm_addon_' + action, license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
 			success: function( msg ) {
-				let thisRow = button.closest( '.edd_frm_license_row' );
+				const thisRow = button.closest( '.edd_frm_license_row' );
 				if ( action === 'deactivate' ) {
 					license = '';
 					document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value = '';
@@ -8502,7 +8502,7 @@ function frmAdminBuildJS() {
 					thisRow.find( 'div.alignleft' ).toggleClass( 'frm_hidden', 1000 );
 				}
 
-				let messageBox = thisRow.find( '.frm_license_msg' );
+				const messageBox = thisRow.find( '.frm_license_msg' );
 				messageBox.html( msg.message );
 				if ( msg.message !== '' ) {
 					setTimeout( function() {
@@ -8518,12 +8518,12 @@ function frmAdminBuildJS() {
 	function startFormMigration( event ) {
 		event.preventDefault();
 
-		let checkedBoxes = jQuery( event.target ).find( 'input:checked' );
+		const checkedBoxes = jQuery( event.target ).find( 'input:checked' );
 		if ( ! checkedBoxes.length ) {
 			return;
 		}
 
-		let ids = [];
+		const ids = [];
 		checkedBoxes.each( function( i ) {
 			ids[i] = this.value;
 		});
@@ -8538,7 +8538,7 @@ function frmAdminBuildJS() {
 	function importForms( forms, targetForm ) {
 
 		// Hide the form select section.
-		let $form = jQuery( targetForm ),
+		const $form = jQuery( targetForm ),
 			$processSettings = $form.next( '.frm-importer-process' );
 
 		// Display total number of forms we have to import.
@@ -8564,7 +8564,7 @@ function frmAdminBuildJS() {
 	 * Imports a single form from the import queue.
 	 */
 	function importForm( $processSettings ) {
-		let formID = s.importQueue[0],
+		const formID = s.importQueue[0],
 			provider = jQuery( '#welcome-panel' ).find( 'input[name="slug"]' ).val(),
 			data = {
 				action: 'frm_import_' + provider,
@@ -8611,14 +8611,14 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 
 		let s = false;
-		let $exportForms = jQuery( 'input[name="frm_export_forms[]"]' );
+		const $exportForms = jQuery( 'input[name="frm_export_forms[]"]' );
 
 		if ( ! jQuery( 'input[name="frm_export_forms[]"]:checked' ).val() ) {
 			$exportForms.closest( '.frm-table-box' ).addClass( 'frm_blank_field' );
 			s = 'stop';
 		}
 
-		let $exportType = jQuery( 'input[name="type[]"]' );
+		const $exportType = jQuery( 'input[name="type[]"]' );
 		if ( ! jQuery( 'input[name="type[]"]:checked' ).val() && $exportType.attr( 'type' ) === 'checkbox' ) {
 			$exportType.closest( 'p' ).addClass( 'frm_blank_field' );
 			s = 'stop';
@@ -8634,12 +8634,12 @@ function frmAdminBuildJS() {
 
 	function removeExportError() {
 		/*jshint validthis:true */
-		let t = jQuery( this ).closest( '.frm_blank_field' );
+		const t = jQuery( this ).closest( '.frm_blank_field' );
 		if ( typeof t === 'undefined' ) {
 			return;
 		}
 
-		let $thisName = this.name;
+		const $thisName = this.name;
 		if ( $thisName === 'type[]' && jQuery( 'input[name="type[]"]:checked' ).val() ) {
 			t.removeClass( 'frm_blank_field' );
 		} else if ( $thisName === 'frm_export_forms[]' && jQuery( this ).val() ) {
@@ -8650,8 +8650,8 @@ function frmAdminBuildJS() {
 
 	function checkCSVExtension() {
 		/*jshint validthis:true */
-		let f = jQuery( this ).val();
-		let re = /\.csv$/i;
+		const f = jQuery( this ).val();
+		const re = /\.csv$/i;
 		if ( f.match( re ) !== null ) {
 			jQuery( '.show_csv' ).fadeIn();
 		} else {
@@ -8686,11 +8686,11 @@ function frmAdminBuildJS() {
 
 	function checkExportTypes() {
 		/*jshint validthis:true */
-		let $dropdown = jQuery( this );
-		let $selected = $dropdown.find( ':selected' );
-		let s = $selected.data( 'support' );
+		const $dropdown = jQuery( this );
+		const $selected = $dropdown.find( ':selected' );
+		const s = $selected.data( 'support' );
 
-		let multiple = s.indexOf( '|' );
+		const multiple = s.indexOf( '|' );
 		jQuery( 'input[name="type[]"]' ).each( function() {
 			this.checked = false;
 			if ( s.indexOf( this.value ) >= 0 ) {
@@ -8711,8 +8711,8 @@ function frmAdminBuildJS() {
 			jQuery( '.xml_opts' ).show();
 		}
 
-		let c = $selected.data( 'count' );
-		let exportField = jQuery( 'input[name="frm_export_forms[]"]' );
+		const c = $selected.data( 'count' );
+		const exportField = jQuery( 'input[name="frm_export_forms[]"]' );
 		if ( c === 'single' ) {
 			exportField.prop( 'multiple', false );
 			exportField.prop( 'checked', false );
@@ -8747,7 +8747,7 @@ function frmAdminBuildJS() {
 	}
 
 	function preventMultipleExport() {
-		let type = jQuery( 'select[name=format]' ),
+		const type = jQuery( 'select[name=format]' ),
 			selected = type.find( ':selected' ),
 			count = selected.data( 'count' ),
 			exportField = jQuery( 'input[name="frm_export_forms[]"]' );
@@ -8946,7 +8946,7 @@ function frmAdminBuildJS() {
 	}
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
-		let button = document.createElement( 'button' );
+		const button = document.createElement( 'button' );
 		button.classList.add( 'frm-save-and-reload', 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
 		button.addEventListener( 'click', () => {
@@ -8960,7 +8960,7 @@ function frmAdminBuildJS() {
 	}
 
 	function closePopupButton() {
-		let a = document.createElement( 'a' );
+		const a = document.createElement( 'a' );
 		a.setAttribute( 'href', '#' );
 		a.classList.add( 'button', 'button-secondary', 'frm-button-secondary', 'dismiss' );
 		a.textContent = __( 'Close', 'formidable' );
@@ -9048,7 +9048,7 @@ function frmAdminBuildJS() {
 
 	function installTemplateFieldset( e ) {
 		/*jshint validthis:true */
-		let fieldset = this.parentNode.parentNode,
+		const fieldset = this.parentNode.parentNode,
 			action = fieldset.elements.type.value,
 			button = this;
 		e.preventDefault();
@@ -9058,7 +9058,7 @@ function frmAdminBuildJS() {
 
 	function installTemplate( e ) {
 		/*jshint validthis:true */
-		let action = this.elements.type.value,
+		const action = this.elements.type.value,
 			button = this.querySelector( 'button' );
 		e.preventDefault();
 		button.classList.add( 'frm_loading_button' );
@@ -9133,7 +9133,7 @@ function frmAdminBuildJS() {
 
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
-		let id = this.getAttribute( 'data-id' );
+		const id = this.getAttribute( 'data-id' );
 		e.preventDefault();
 
 		data = {
@@ -9142,7 +9142,7 @@ function frmAdminBuildJS() {
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, function() {
-			let card = document.getElementById( 'frm-template-custom-' + id );
+			const card = document.getElementById( 'frm-template-custom-' + id );
 			fadeOut( card, function() {
 				card.parentNode.removeChild( card );
 			});
@@ -9164,13 +9164,13 @@ function frmAdminBuildJS() {
 		}
 
 		if ( toSearch === 'frm-action' && searchText !== '' ) {
-			let addons = document.getElementById( 'frm_email_addon_menu' ).classList;
+			const addons = document.getElementById( 'frm_email_addon_menu' ).classList;
 			addons.remove( 'frm-all-actions' );
 			addons.add( 'frm-limited-actions' );
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
-			let innerText = items[i].innerText.toLowerCase();
+			const innerText = items[i].innerText.toLowerCase();
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
@@ -9244,7 +9244,7 @@ function frmAdminBuildJS() {
 	}
 
 	function triggerEvent( element, event ) {
-		let evt = document.createEvent( 'HTMLEvents' );
+		const evt = document.createEvent( 'HTMLEvents' );
 		evt.initEvent( event, false, true );
 		element.dispatchEvent( evt );
 	}
@@ -9334,15 +9334,15 @@ function frmAdminBuildJS() {
 
 	function toggle( cname, id ) {
 		if ( id === '#' ) {
-			let cont = document.getElementById( cname );
-			let hidden = cont.style.display;
+			const cont = document.getElementById( cname );
+			const hidden = cont.style.display;
 			if ( hidden === 'none' ) {
 				cont.style.display = 'block';
 			} else {
 				cont.style.display = 'none';
 			}
 		} else {
-			let vis = cname.is( ':visible' );
+			const vis = cname.is( ':visible' );
 			if ( vis ) {
 				cname.hide();
 			} else {
@@ -9353,7 +9353,7 @@ function frmAdminBuildJS() {
 
 	function removeWPUnload() {
 		window.onbeforeunload = null;
-		let w = jQuery( window );
+		const w = jQuery( window );
 		w.off( 'beforeunload.widgets' );
 		w.off( 'beforeunload.edit-post' );
 	}
@@ -9386,7 +9386,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeChangeEmbedFormMsg() {
-		let fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		let fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( null === fieldItem || 'form' !== fieldItem.dataset.type ) {
 			return;
@@ -9396,7 +9396,7 @@ function frmAdminBuildJS() {
 
 		if ( this.options[ this.selectedIndex ].value ) {
 			fieldItem.find( '.frm-not-set' )[0].classList.add( 'frm_hidden' );
-			let embedMsg = fieldItem.find( '.frm-embed-message' );
+			const embedMsg = fieldItem.find( '.frm-embed-message' );
 			embedMsg.html( embedMsg.data( 'embedmsg' ) + this.options[ this.selectedIndex ].text );
 			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.remove( 'frm_hidden' );
 		} else {
@@ -9406,7 +9406,7 @@ function frmAdminBuildJS() {
 	}
 
 	function toggleProductType() {
-		let settings = jQuery( this ).closest( '.frm-single-settings' ),
+		const settings = jQuery( this ).closest( '.frm-single-settings' ),
 			container = settings.find( '.frmjs_product_choices' ),
 			heading = settings.find( '.frm_prod_options_heading' ),
 			currentVal = this.options[ this.selectedIndex ].value;
@@ -9427,7 +9427,7 @@ function frmAdminBuildJS() {
 	 * @return {boolean} True if the field is a product field.
 	 */
 	function isProductField( fieldId ) {
-		let field = document.getElementById( 'frm_field_id_' + fieldId );
+		const field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
 		} 
@@ -9641,7 +9641,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		let options = [ ...fieldOptions ].slice( 1 );
+		const options = [ ...fieldOptions ].slice( 1 );
 		options.forEach( ( li, _key ) => {
 			if ( li.classList.contains( 'frm_other_option' ) ) {
 				return;
@@ -9887,8 +9887,8 @@ function frmAdminBuildJS() {
 
 			// Bootstrap dropdown button
 			jQuery( '.wp-admin' ).on( 'click', function( e ) {
-				let t = jQuery( e.target );
-				let $openDrop = jQuery( '.dropdown.open' );
+				const t = jQuery( e.target );
+				const $openDrop = jQuery( '.dropdown.open' );
 				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && ! t.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
@@ -9942,7 +9942,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
 			initSelectDependencies();
 
-			let $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
+			const $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			if ( $advInfo.length > 0 || jQuery( '.frm_field_list' ).length > 0 ) {
 				// only load on the form, form settings, and view settings pages
 				frmAdminBuild.panelInit();
@@ -9952,7 +9952,7 @@ function frmAdminBuildJS() {
 			initUpgradeModal();
 
 			// used on build, form settings, and view settings
-			let $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
+			const $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
 			if ( $shortCodeDiv.length > 0 ) {
 				jQuery( 'a.edit-frm_shortcode' ).on( 'click', function() {
 					if ( $shortCodeDiv.is( ':hidden' ) ) {
@@ -9988,7 +9988,7 @@ function frmAdminBuildJS() {
 
 			// submit the search form with dropdown
 			jQuery( document ).on( 'click', '#frm-fid-search-menu a', function() {
-				let val = this.id.replace( 'fid-', '' );
+				const val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
 				triggerSubmit( document.getElementById( 'posts-filter' ) );
 				return false;
@@ -10000,7 +10000,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
-			let autoSearch = jQuery( '.frm-auto-search' );
+			const autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
 				autoSearch.trigger( 'keyup' );
 			}
@@ -10052,7 +10052,7 @@ function frmAdminBuildJS() {
 
 			document.querySelectorAll( '#frm-show-fields > li, .frm_grid_container li' ).forEach( ( el, _key ) => {
 				el.addEventListener( 'click', function() {
-					let fieldId     = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
+					const fieldId     = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
@@ -10318,7 +10318,7 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			let $singleEntry = document.getElementById( 'single_entry' );
+			const $singleEntry = document.getElementById( 'single_entry' );
 			jQuery( $singleEntry ).on( 'change', function() {
 				if ( this.checked ) {
 					visible( '.hide_single_entry' );
@@ -10335,7 +10335,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.hide_save_draft' ).hide();
 
-			let $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
+			const $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
 			$saveDraft.on( 'change', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_save_draft' ).fadeIn( 'slow' );
@@ -10686,7 +10686,7 @@ function frmAdminBuildJS() {
 		},
 
 		updateOpts: function( fieldId, opts, modal ) {
-			let separate = usingSeparateValues( fieldId ),
+			const separate = usingSeparateValues( fieldId ),
 				action = isProductField( fieldId ) ? 'frm_bulk_products' : 'frm_import_options';
 			jQuery.ajax({
 				type: 'POST',
@@ -10806,7 +10806,7 @@ function frmCheckAll( checked, n ) {
 }
 
 function frmCheckAllLevel( checked, n, level ) {
-	let $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
+	const $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
 	$kids.children( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
 }
 
@@ -10833,9 +10833,9 @@ function frmImportCsv( formID ) {
 		type: 'POST', url: ajaxurl,
 		data: 'action=frm_import_csv&nonce=' + frmGlobal.nonce + '&frm_skip_cookie=1' + urlVars,
 		success: function( count ) {
-			let max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
-			let imported = max - count;
-			let percent = ( imported / max ) * 100;
+			const max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
+			const imported = max - count;
+			const percent = ( imported / max ) * 100;
 			jQuery( '.frm_admin_progress_bar' ).css( 'width', percent + '%' ).attr( 'aria-valuenow', imported );
 
 			if ( parseInt( count, 10 ) > 0 ) {
