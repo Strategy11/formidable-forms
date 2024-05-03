@@ -16,7 +16,6 @@
 
 	/**
 	 * @param {Event} e
-	 * @returns 
 	 */
 	function validateForm( e ) {
 		thisForm = this;
@@ -951,4 +950,4 @@
 			processForm();
 		}
 	};
-}() ); 
+}() );

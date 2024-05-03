@@ -55,7 +55,7 @@ function frmFrontFormJS() {
 	 * @since 5.5.3
 	 *
 	 * @param {HTMLElement} el        The HTML element.
-	 * @param {String}      eventName Event name.
+	 * @param {string}      eventName Event name.
 	 * @param {mixed}       data      The passed data.
 	 */
 	function triggerCustomEvent( el, eventName, data ) {
@@ -162,7 +162,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 2.03.02
 	 *
-	 * @param {object} $form
+	 * @param {Object} $form
 	 */
 	function disableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"], button.frm_save_draft' ).attr( 'disabled', 'disabled' );
@@ -173,7 +173,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 2.03.02
 	 *
-	 * @param {object} $form
+	 * @param {Object} $form
 	 */
 	function enableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
@@ -184,7 +184,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {object} $form
+	 * @param {Object} $form
 	 */
 	function disableSaveDraft( $form ) {
 		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', 'none' );
@@ -195,7 +195,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {object} $form
+	 * @param {Object} $form
 	 */
 	function enableSaveDraft( $form ) {
 		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', '' );
@@ -247,8 +247,8 @@ function frmFrontFormJS() {
 	 * If it is invalid, show an error for it.
 	 *
 	 * @param {HTMLElement} field
-	 * @param {Array} errors
-	 * @returns
+	 * @param {Array}       errors
+	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
 		var fieldID;
@@ -270,9 +270,9 @@ function frmFrontFormJS() {
 	/**
 	 * @since 5.0.10
 	 *
-	 * @param {object} element
+	 * @param {Object} element
 	 * @param {string} targetClass
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	function hasClass( element, targetClass ) {
 		var className = ' ' + element.className + ' ';
@@ -580,12 +580,9 @@ function frmFrontFormJS() {
 			alreadyChecked = grecaptcha.getResponse( recaptchaID );
 			if ( alreadyChecked.length === 0 ) {
 				return recaptcha;
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
@@ -605,9 +602,9 @@ function frmFrontFormJS() {
 			} catch ( e ) {
 				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
 					return errors;
-				} else {
+				} 
 					response = '';
-				}
+				
 			}
 
 			if ( response.length === 0 ) {
@@ -873,8 +870,8 @@ function frmFrontFormJS() {
 	 *
 	 * @since 6.9
 	 *
-	 * @param {HTMLElement} object The form.
-	 * @param {object} response The response from submitting the form with AJAX.
+	 * @param {HTMLElement} object   The form.
+	 * @param {Object}      response The response from submitting the form with AJAX.
 	 * @return {void}
 	 */
 	function afterFormSubmittedBeforeReplace( object, response ) {
@@ -1259,7 +1256,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 5.4
 	 *
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	function isIE() {
 		return navigator.userAgent.indexOf( 'MSIE' ) > -1 || navigator.userAgent.indexOf( 'Trident' ) > -1;
@@ -1270,10 +1267,10 @@ function frmFrontFormJS() {
 	 *
 	 * @since 5.4
 	 *
-	 * @param {String}         event    Event name.
-	 * @param {String}         selector Selector.
-	 * @param {Function}       handler  Handler.
-	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 * @param {string}           event    Event name.
+	 * @param {string}           selector Selector.
+	 * @param {Function}         handler  Handler.
+	 * @param {boolean | Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 */
 	function documentOn( event, selector, handler, options ) {
 		if ( 'undefined' === typeof options ) {
@@ -1319,11 +1316,9 @@ function frmFrontFormJS() {
 						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
 						firstOpt.removeAttribute( 'data-label' );
 					}
-				} else {
-					if ( firstOpt.textContent ) {
-						firstOpt.setAttribute( 'data-label', firstOpt.textContent );
-						firstOpt.textContent = '';
-					}
+				} else if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
 				}
 			} else if ( isIE() ) {
 				checkPlaceholderIE( input );
@@ -1352,11 +1347,9 @@ function frmFrontFormJS() {
 					input.placeholder = input.getAttribute( 'data-placeholder' );
 					input.removeAttribute( 'data-placeholder' );
 				}
-			} else {
-				if ( input.placeholder ) {
-					input.setAttribute( 'data-placeholder', input.placeholder );
-					input.placeholder = '';
-				}
+			} else if ( input.placeholder ) {
+				input.setAttribute( 'data-placeholder', input.placeholder );
+				input.placeholder = '';
 			}
 		};
 
