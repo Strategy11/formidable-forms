@@ -1,8 +1,6 @@
-/*global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
+/* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
 /* eslint-disable prefer-const */
-
-let frmWidgets, frmAdminPopup;
 
 jQuery( document ).ready( function() {
     let deauthLink, submenuItem, li,
@@ -241,7 +239,8 @@ function frmAdminPopupJS() {
         }
     };
 }
-frmAdminPopup = frmAdminPopupJS();
+
+window.frmAdminPopup = frmAdminPopupJS();
 
 function frmWidgetsJS() {
     function toggleCatOpt() {
@@ -296,6 +295,6 @@ function frmWidgetsJS() {
     };
 }
 if ( typeof adminpage !== 'undefined' && adminpage === 'widgets-php' ) {
-    frmWidgets = frmWidgetsJS();
-    frmWidgets.init();
+    window.frmWidgets = frmWidgetsJS();
+    window.frmWidgets.init();
 }

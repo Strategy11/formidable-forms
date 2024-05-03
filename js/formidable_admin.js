@@ -1,8 +1,6 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions */
 
-let frmAdminBuild;
-
 const FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -10755,7 +10753,7 @@ function frmAdminBuildJS() {
 	};
 }
 
-frmAdminBuild = frmAdminBuildJS();
+window.frmAdminBuild = frmAdminBuildJS();
 
 jQuery( document ).ready(
 	() => {
