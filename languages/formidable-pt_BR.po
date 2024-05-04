@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-05-03 01:38\n"
+"PO-Revision-Date: 2024-05-04 01:38\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -557,7 +557,7 @@ msgstr "Chave de entrada"
 
 #: classes/controllers/FrmEntriesController.php:87
 msgid "Entry Name"
-msgstr "Nome de entrada"
+msgstr "Nome da entrada"
 
 #: classes/controllers/FrmEntriesController.php:88
 #: classes/helpers/FrmCSVExportHelper.php:368
@@ -567,11 +567,11 @@ msgstr "Criado por"
 #: classes/controllers/FrmEntriesController.php:91
 #: classes/helpers/FrmCSVExportHelper.php:370
 msgid "Entry Status"
-msgstr "Status de entrada"
+msgstr "Status da entrada"
 
 #: classes/controllers/FrmEntriesController.php:92
 msgid "Entry creation date"
-msgstr "Data de criação da Entrada"
+msgstr "Data de criação da entrada"
 
 #: classes/controllers/FrmEntriesController.php:93
 msgid "Entry update date"
@@ -942,7 +942,7 @@ msgstr "ID do post"
 
 #: classes/controllers/FrmFormsController.php:1546
 msgid "User IP"
-msgstr "IP do Usuário"
+msgstr "IP do usuário"
 
 #: classes/controllers/FrmFormsController.php:1547
 msgid "Entry created"
@@ -1635,7 +1635,7 @@ msgstr "segundos"
 
 #: classes/helpers/FrmAppHelper.php:2896
 msgid "Give this action a label for easy reference."
-msgstr "Dê a esta ação um rótulo para uma fácil referência."
+msgstr "Crie um rótulo para esta ação e facilite a referência."
 
 #: classes/helpers/FrmAppHelper.php:2897
 msgid "Add one or more recipient addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings."
@@ -2480,7 +2480,7 @@ msgstr "Desconhecido"
 #: classes/helpers/FrmEntriesHelper.php:674
 #: classes/views/frm-entries/show.php:11
 msgid "View Entry"
-msgstr "Ver Entrada"
+msgstr "Ver entrada"
 
 #: classes/helpers/FrmEntriesHelper.php:682
 msgid "Delete Entry"
@@ -2521,7 +2521,7 @@ msgstr "Pontuação do reCAPTCHA"
 
 #: classes/helpers/FrmEntriesHelper.php:837
 msgid "Submitted"
-msgstr "Submetido"
+msgstr "Enviado"
 
 #: classes/helpers/FrmEntriesHelper.php:838
 #: classes/helpers/FrmFormsHelper.php:1297
@@ -2539,7 +2539,7 @@ msgstr "Não foram encontradas entradas"
 
 #: classes/helpers/FrmEntriesListHelper.php:219
 msgid "Getting spam form submissions?"
-msgstr "Está recebendo envios de formulários de spam?"
+msgstr "Recebendo envios de formulários como spam?"
 
 #: classes/helpers/FrmEntriesListHelper.php:221
 msgid "Learn how to prevent them."
@@ -5671,7 +5671,7 @@ msgstr "Entrada"
 
 #: classes/views/frm-entries/sidebar-shared.php:8
 msgid "Entry Actions"
-msgstr "Ações de Entrada"
+msgstr "Ações da entrada"
 
 #: classes/views/frm-entries/sidebar-shared.php:28
 msgid "Entry Details"
@@ -6012,7 +6012,7 @@ msgstr "Resultado do questionário"
 
 #: classes/views/frm-form-actions/default_actions.php:104
 msgid "Twilio SMS"
-msgstr "SMS da Twilio"
+msgstr "SMS do Twilio"
 
 #: classes/views/frm-form-actions/default_actions.php:147
 msgid "The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?"
