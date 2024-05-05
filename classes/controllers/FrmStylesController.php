@@ -541,6 +541,7 @@ class FrmStylesController {
 
 		wp_print_styles( 'formidable' );
 		wp_enqueue_script( 'formidable_style' );
+		wp_set_script_translations( 'formidable_style', 'formidable' );
 	}
 
 	/**
