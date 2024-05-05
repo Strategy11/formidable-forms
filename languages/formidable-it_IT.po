@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-27 20:48\n"
+"PO-Revision-Date: 2024-05-05 01:47\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5957,7 +5957,7 @@ msgstr "Centra"
 
 #: classes/views/frm-fields/back-end/settings.php:306
 msgid "The field key can be used as an alternative to the field ID in many cases."
-msgstr "Il campo chiave può essere utilizzata come alternativa al campo ID in molti casi."
+msgstr "La chiave del campo può essere utilizzata come alternativa al campo ID in molti casi."
 
 #: classes/views/frm-fields/back-end/settings.php:315
 msgid "Field Type"
@@ -6082,7 +6082,7 @@ msgstr "Nome dell'azione"
 
 #: classes/views/frm-form-actions/_action_inside.php:37
 msgid "Trigger this action when"
-msgstr "Attiva questa azione quando"
+msgstr "Attiva questa azione per"
 
 #: classes/views/frm-form-actions/_action_inside.php:71
 msgid "Email attachments"
@@ -6154,7 +6154,7 @@ msgstr "Messaggio"
 
 #: classes/views/frm-form-actions/_email_settings.php:115
 msgid "Append IP Address, Browser, and Referring URL to message"
-msgstr "Aggiunge indirizzo IP, browser, e URL di riferimento al messaggio"
+msgstr "Aggiungi indirizzo IP, browser, e URL di riferimento al messaggio"
 
 #: classes/views/frm-form-actions/_email_settings.php:117
 msgid "Append Browser and Referring URL to message"
@@ -6162,7 +6162,7 @@ msgstr "Aggiungi il browser e l'URL di riferimento al messaggio"
 
 #: classes/views/frm-form-actions/_email_settings.php:124
 msgid "Send Emails in Plain Text"
-msgstr "Invia e-mail in testo semplice"
+msgstr "Invia email in testo semplice"
 
 #: classes/views/frm-forms/actions-dropdown.php:7
 msgid "Show options"
@@ -6297,7 +6297,7 @@ msgstr "Decidi cosa deve accadere dopo che l'utente ha inviato questo modulo."
 
 #: classes/views/frm-forms/settings-advanced.php:71
 msgid "Do not store entries submitted from this form"
-msgstr "Non memorizzare le voci inserite da questo modulo"
+msgstr "Non memorizzare le voci inviate da questo modulo"
 
 #: classes/views/frm-forms/settings-advanced.php:81
 msgid "AJAX"
