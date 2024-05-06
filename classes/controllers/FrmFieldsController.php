@@ -343,7 +343,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.9.1
 	 *
 	 * @return FrmFieldSelectionData
 	 */

@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This is a simple data object for field selection data.
  * Used in the form builder.
  *
- * @since x.x
+ * @since 6.9.1
  */
 class FrmFieldSelectionData {
 
