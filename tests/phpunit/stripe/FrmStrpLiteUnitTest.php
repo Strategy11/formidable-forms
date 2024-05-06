@@ -64,7 +64,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		parent::setUp();
 
 		// Reset settings so modified settings in one test don't break other tests.
-		$this->set_private_property( 'FrmStrpAppHelper', 'settings', null );
+		$this->set_private_property( 'FrmStrpLiteAppHelper', 'settings', null );
 	}
 
 	protected function initialize_legacy_api() {
@@ -77,7 +77,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		$options->process     = 'after';
 		$options->test_secret = $this->get_secret_key();
 		update_option( 'frm_strp_options', $options, 'no' );
-		return FrmStrpApiHelper::initialize_api();
+		return FrmStrLitepApiHelper::initialize_api();
 	}
 
 	protected function initialize_connect_api( $user_id = 1 ) {
@@ -89,13 +89,13 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		}
 
 		update_option( 'frm_strp_connect_details_submitted_test', true, 'no' );
-		FrmStrpAppHelper::should_use_stripe_connect(); // this line loads FrmStrpConnectApiAdapter if it does not exist.
+		FrmStrpLiteAppHelper::should_use_stripe_connect(); // this line loads FrmStrpLiteConnectApiAdapter if it does not exist.
 
 		if ( ! empty( self::$shared_account_id ) ) {
 			return $this->reuse_static_account_details();
 		}
 
-		$initialized = $this->run_private_method( array( 'FrmStrpConnectHelper', 'initialize' ), array() );
+		$initialized = $this->run_private_method( array( 'FrmStrpLiteConnectHelper', 'initialize' ), array() );
 		if ( ! $initialized ) {
 			$this->fail();
 		}
@@ -140,15 +140,15 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 
 	protected function get_customer( $options = array() ) {
 		if ( 'legacy' === $this->active_api_type ) {
-			return FrmStrpApiHelper::get_customer( $options );
+			return FrmStrpLiteApiHelper::get_customer( $options );
 		}
 		$this->include_adapter();
-		return FrmStrpConnectApiAdapter::get_customer( $options );
+		return FrmStrpLiteConnectApiAdapter::get_customer( $options );
 	}
 
 	protected function include_adapter() {
-		if ( ! class_exists( 'FrmStrpConnectApiAdapter' ) ) {
-			require dirname( dirname( __FILE__ ) ) . '/helpers/FrmStrpConnectApiAdapter.php';
+		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
+			require dirname( dirname( __FILE__ ) ) . '/helpers/FrmStrpLiteConnectApiAdapter.php';
 		}
 	}
 
@@ -225,7 +225,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			'confirm'        => true,
 			'metadata'       => $metadata,
 		);
-		return FrmStrpConnectHelper::run_new_charge( $new_charge );
+		return FrmStrpLiteConnectHelper::run_new_charge( $new_charge );
 	}
 
 	/**
@@ -233,7 +233,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	 */
 	protected function get_customer_id() {
 		$options = array();
-		return FrmStrpConnectHelper::get_customer_id( $options );
+		return FrmStrpLiteConnectHelper::get_customer_id( $options );
 	}
 
 	protected function get_new_charge_data( $action_id = 0 ) {
@@ -287,7 +287,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		$atts = array(
 			'entry' => $entry,
 		);
-		return $this->run_private_method( array( 'FrmStrpAuth', 'return_url' ), array( $atts ) );
+		return $this->run_private_method( array( 'FrmStrpLiteAuth', 'return_url' ), array( $atts ) );
 	}
 
 	protected function create_subscription() {
@@ -301,14 +301,14 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 				'expand'           => array( 'latest_invoice.payment_intent' ),
 				'off_session'      => true,
 			);
-			return FrmStrpApiHelper::create_subscription( $new_charge );
+			return FrmStrpLiteApiHelper::create_subscription( $new_charge );
 		}
 		$this->customer_id = $this->get_customer_id();
 		$this->add_card( $this->customer_id );
 		$plan       = $this->get_plan_options();
-		$plan_id    = FrmStrpConnectHelper::maybe_create_plan( $plan );
+		$plan_id    = FrmStrpLiteConnectHelper::maybe_create_plan( $plan );
 		$new_charge = $this->get_subscription_charge_options( $this->customer_id, $plan_id );
-		return FrmStrpConnectHelper::create_subscription( $new_charge );
+		return FrmStrpLiteConnectHelper::create_subscription( $new_charge );
 	}
 
 	private function get_subscription_charge_options( $customer_id, $plan_id ) {
@@ -332,7 +332,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			$this->fail( 'an unsupported function was called' );
 		}
 		$plan = $this->get_plan_options();
-		return FrmStrpApiHelper::create_plan( $plan );
+		return FrmStrpLiteApiHelper::create_plan( $plan );
 	}
 
 	/**
@@ -371,7 +371,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @param array $cards the result of a call to get_cards (either FrmStrpConnectHelper or FrmStrpApiHelper).
+	 * @param array $cards the result of a call to get_cards (either FrmStrpLiteConnectHelper or FrmStrpLiteApiHelper).
 	 */
 	protected function assert_get_cards( $cards ) {
 		$this->assertTrue( is_array( $cards ) );
@@ -506,7 +506,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		$options->process   = 'after';
 		update_option( 'frm_strp_options', $options, 'no' );
 
-		$this->set_private_property( 'FrmStrpAppHelper', 'settings', null );
+		$this->set_private_property( 'FrmStrpLiteAppHelper', 'settings', null );
 	}
 
 	/**
@@ -539,6 +539,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	protected function maybe_create_plan() {
 		$customer = $this->get_customer();
 		$plan     = $this->get_plan_options();
-		return FrmStrpSubscriptionHelper::maybe_create_plan( $plan );
+		return FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan );
 	}
 }
