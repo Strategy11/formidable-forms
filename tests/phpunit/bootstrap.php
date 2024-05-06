@@ -33,7 +33,7 @@ require_once __DIR__ . '/base/FrmUnitTest.php';
 require_once __DIR__ . '/base/FrmAjaxUnitTest.php';
 
 // include our Stripe unit helper base class
-require dirname( __FILE__ ) . '/stripe/FrmStrpLiteUnitTest.php';
+require_once __DIR__ . '/tests/stripe/FrmStrpLiteUnitTest.php';
 
 // Ensure that the plugin has been installed and activated.
 FrmUnitTest::frm_install();
