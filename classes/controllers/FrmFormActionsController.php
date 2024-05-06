@@ -254,6 +254,9 @@ class FrmFormActionsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
+	/**
+	 * @param string $action
+	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 		if ( empty( $temp_actions ) ) {
@@ -266,7 +269,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' != $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base == $action ) {
 				return $a;
 			}
 

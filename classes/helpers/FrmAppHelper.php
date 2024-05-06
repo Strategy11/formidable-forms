@@ -194,6 +194,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.05
+	 *
+	 * @param array $atts
+	 * @return string
 	 */
 	public static function svg_logo( $atts = array() ) {
 		$defaults = array(
@@ -212,6 +215,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function show_logo( $atts = array() ) {
 		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -219,6 +225,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.03.02
+	 *
+	 * @return void
 	 */
 	public static function show_header_logo() {
 		$icon = self::svg_logo(
@@ -242,6 +250,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.02.04
+	 *
+	 * @return bool
 	 */
 	public static function ips_saved() {
 		$frm_settings = self::get_settings();
@@ -249,8 +259,11 @@ class FrmAppHelper {
 		return ! $frm_settings->no_ips;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function pro_is_installed() {
-		return apply_filters( 'frm_pro_installed', false );
+		return (bool) apply_filters( 'frm_pro_installed', false );
 	}
 
 	/**
@@ -266,6 +279,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06.02
+	 *
+	 * @return bool
 	 */
 	public static function pro_is_connected() {
 		global $frm_vars;
@@ -274,12 +289,17 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return bool
 	 */
 	public static function is_form_builder_page() {
 		$action = self::simple_get( 'frm_action', 'sanitize_title' );
 		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
 		$is_formidable = strpos( $page, 'formidable' ) !== false;
