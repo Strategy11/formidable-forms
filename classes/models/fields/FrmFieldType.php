@@ -1247,6 +1247,10 @@ DEFAULT_HTML;
 	 * Link input to field description for screen readers
 	 *
 	 * @since 3.0
+	 *
+	 * @param array  $args
+	 * @param string $input_html
+	 * @return void
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
@@ -1277,7 +1281,7 @@ DEFAULT_HTML;
 			}
 		}
 
-		if ( $this->get_field_column( 'description' ) !== '' ) {
+		if ( $this->get_field_column( 'description' ) !== '' && ! in_array( 'frm_desc_' . $args['html_id'], $describedby, true ) ) {
 			if ( ! $error_comes_first ) {
 				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
 			} else {
