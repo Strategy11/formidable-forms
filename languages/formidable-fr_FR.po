@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-05-03 13:37\n"
+"PO-Revision-Date: 2024-05-06 13:58\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -293,7 +293,7 @@ msgstr "Équipe du constructeur de formulaires de Strategy11"
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:24
 msgid "Add-Ons"
-msgstr "Extensions"
+msgstr "Modules"
 
 #: classes/controllers/FrmAddonsController.php:32
 #: classes/controllers/FrmAddonsController.php:33
@@ -942,7 +942,7 @@ msgstr "ID d’article"
 
 #: classes/controllers/FrmFormsController.php:1546
 msgid "User IP"
-msgstr "IP Utilisateur"
+msgstr "IP de l’utilisateur"
 
 #: classes/controllers/FrmFormsController.php:1547
 msgid "Entry created"
@@ -970,7 +970,7 @@ msgstr "HTML par défaut"
 
 #: classes/controllers/FrmFormsController.php:1561
 msgid "Default Plain"
-msgstr "Uni par défaut"
+msgstr "Texte brut"
 
 #: classes/controllers/FrmFormsController.php:1562
 #: classes/helpers/FrmFormsHelper.php:554
@@ -1165,7 +1165,7 @@ msgstr "CSS personnalisé"
 
 #: classes/controllers/FrmSettingsController.php:75
 msgid "Manage Styles"
-msgstr "Gérer les Styles"
+msgstr "Gérer les styles"
 
 #: classes/controllers/FrmSettingsController.php:81
 #: classes/models/fields/FrmFieldCaptcha.php:389
@@ -5042,7 +5042,7 @@ msgstr "Adresse"
 
 #: classes/models/FrmField.php:193
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Récapitulatif"
 
 #: classes/models/FrmField.php:198
 msgid "Signature"
@@ -5352,7 +5352,7 @@ msgstr "Turnstile est un outil gratuit pour remplacer les CAPTCHA. Il offre des 
 
 #: classes/views/addons/list.php:10
 msgid "Formidable Add-Ons"
-msgstr "Extensions Formidable"
+msgstr "Formidable Add-Ons"
 
 #: classes/views/addons/list.php:22
 msgid "Search Add-ons"
@@ -6910,7 +6910,7 @@ msgstr "ID"
 
 #: classes/views/shared/mb_adv_info.php:51
 msgid "Keys"
-msgstr "Clefs"
+msgstr "Clés"
 
 #: classes/views/shared/mb_adv_info.php:99
 msgid "Use IDs"
@@ -7011,7 +7011,7 @@ msgstr "Vous pouvez ajouter du CSS personnalisé ici ou dans votre thème style.
 
 #: classes/views/styles/manage.php:8
 msgid "Easily change which style your forms are using by making changes below."
-msgstr "Changez facilement le modèle utilisé par vos formulaires en faisant les changements ci-dessous."
+msgstr "Modifiez facilement le style utilisé par vos formulaires à l’aide des champs ci-dessous."
 
 #: classes/views/styles/manage.php:20
 msgid "Assigned Style Templates"
@@ -7808,7 +7808,7 @@ msgstr "en attendant"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:93
 msgid "Completed"
-msgstr "Termin&eacute;!"
+msgstr "Terminé"
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:97
 msgid "Processing"
@@ -7937,7 +7937,7 @@ msgstr "Capturer le paiement"
 
 #: stripe/views/action-settings/capture-payments-upsell.php:11
 msgid "When entry is submitted"
-msgstr "Quand l’entrée est soumise"
+msgstr "Lors de l’envoi de l’entrée"
 
 #: stripe/views/action-settings/payments-options.php:35
 msgid "Payment Type"
@@ -7975,7 +7975,7 @@ msgstr "Utilisateur/utilisatrice"
 #: stripe/views/payments/show.php:53
 #: stripe/views/subscriptions/show.php:52
 msgid "Receipt"
-msgstr "Justificatif"
+msgstr "Reçu"
 
 #: stripe/views/payments/show.php:60
 msgid "Invoice #"
