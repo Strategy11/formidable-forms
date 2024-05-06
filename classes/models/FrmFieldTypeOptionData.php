@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class keeps a static record of field type options for each type.
  * The result is stored in memory so it can be re-used.
  *
- * @since x.x
+ * @since 6.9.1
  */
 class FrmFieldTypeOptionData {
 
