@@ -1,6 +1,6 @@
 <?php
 
-class FrmStrpUnitTest extends FrmUnitTest {
+class FrmStrpLiteUnitTest extends FrmUnitTest {
 
 	public static function wpSetUpBeforeClass() {
 		parent::wpSetUpBeforeClass();
