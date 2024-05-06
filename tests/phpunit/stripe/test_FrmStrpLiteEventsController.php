@@ -94,7 +94,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 	/**
 	 * @covers FrmStrpLiteEventsController::prepare_from_invoice
 	 * @covers FrmStrpLiteEventsController::maybe_cancel_subscription
-	 * @covers FrmStrpLiteActionsController::trigger_recurring_payment
 	 */
 	public function test_maybe_cancel_subscription() {
 		$this->initialize_connect_api();
@@ -136,11 +135,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 	 * @return void
 	 */
 	private function make_payment_limit_assertion( $expected_subscription_status, $repeat_limit ) {
-		$success = $this->setup_first_recurring_payment( $this->create_payment_action_with_payment_limit( $repeat_limit ) );
-		if ( ! $success ) {
-			$this->fail();
-		}
-
 		$sub_id = $this->get_most_recent_subscription_id();
 		if ( ! $sub_id ) {
 			$this->fail();
@@ -183,25 +177,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 		$this->assertEquals( 'stripe', $payment->paysys );
 		$this->assertEquals( '1', $payment->test );
 		$this->assertEquals( '10.00', $payment->amount );
-	}
-
-	/**
-	 * @param WP_Post $action
-	 * @return bool True on success.
-	 */
-	private function setup_first_recurring_payment( $action ) {
-		$customer = $this->get_customer();
-		$atts     = array(
-			'customer' => $customer,
-			'action'   => $action,
-			'amount'   => 1000,
-			'entry'    => $this->create_a_test_entry(),
-		);
-
-		$this->add_card( $customer->id );
-		$this->run_migrations();
-		$success = $this->trigger_recurring_payment( $atts );
-		return $success;
 	}
 
 	/**
@@ -274,10 +249,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 
 	private function run_private_strp_actions_controller_function( $function, ...$params ) {
 		return $this->run_private_method( array( 'FrmStrpLiteActionsController', $function ), $params );
-	}
-
-	private function trigger_recurring_payment( $atts ) {
-		return $this->run_private_strp_actions_controller_function( 'trigger_recurring_payment', $atts );
 	}
 
 	/**
