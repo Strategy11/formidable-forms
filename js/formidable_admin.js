@@ -7324,7 +7324,21 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		if ( frmAdminJs.quiz_action_type_limit && shouldShowQuizActionLimitMessage( this ) ) {
+			message = frmAdminJs.quiz_action_type_limit;
+		}
+
 		infoModal( message );
+	}
+
+	function shouldShowQuizActionLimitMessage( actionLi ) {
+		if ( actionLi.dataset.actiontype !== 'quiz_outcome' && actionLi.dataset.actiontype !== 'quiz' ) {
+			return false;
+		}
+		if ( actionLi.dataset.actiontype === 'quiz_outcome' && document.querySelector( '.frm_form_action_settings.frm_single_quiz_settings' ) ) {
+			return true;
+		}
+		return actionLi.dataset.actiontype === 'quiz' && document.querySelector( '.frm_form_action_settings.frm_single_quiz_outcome_settings' );
 	}
 
 	function addFormLogicRow() {
