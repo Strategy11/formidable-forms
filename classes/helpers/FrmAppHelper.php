@@ -224,7 +224,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.03.0
+	 * @since 4.03.02
 	 *
 	 * @return void
 	 */
