@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-04-17T13:29:06+00:00\n"
-"PO-Revision-Date: 2024-04-26 20:44\n"
+"PO-Revision-Date: 2024-05-06 13:58\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -946,7 +946,7 @@ msgstr "エントリーを作成"
 
 #: classes/controllers/FrmFormsController.php:1548
 msgid "Entry updated"
-msgstr "エントリーが更新されました"
+msgstr "エントリーを更新済み"
 
 #: classes/controllers/FrmFormsController.php:1550
 msgid "Site URL"
@@ -6065,7 +6065,7 @@ msgstr "アクション名"
 
 #: classes/views/frm-form-actions/_action_inside.php:37
 msgid "Trigger this action when"
-msgstr "以下の場合にこのアクションをトリガーします"
+msgstr "以下の場合にこのアクションをトリガー"
 
 #: classes/views/frm-form-actions/_action_inside.php:71
 msgid "Email attachments"
@@ -6615,7 +6615,7 @@ msgstr "送信ボタンのデフォルトラベル。"
 
 #: classes/views/frm-settings/misc.php:9
 msgid "Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings."
-msgstr "Formidable Forms によるプラグインの使用状況のトラッキングを許可する。これは当社が互換性の確保と設定の簡素化を図る際に参考にさせて頂きます。"
+msgstr "Formidable Forms が互換性の確保と設定の簡素化を図れるように、プラグインの使用状況のトラッキングを許可する。"
 
 #: classes/views/frm-settings/misc.php:23
 msgid "Send monthly and yearly summary emails with form and payment stats."
@@ -6628,7 +6628,7 @@ msgstr "要約メールの受信者"
 #. translators: %1$s the opening link tag, %2$s the closing link tag
 #: classes/views/frm-settings/misc.php:35
 msgid "Summary emails can be disabled across multiple sites from %1$sFormidableForms.com%2$s."
-msgstr "要約メールは、%1$sFormidableForms.com%2$s から複数のサイトにわたり無効化できます。"
+msgstr "要約メールは、%1$sFormidableForms.com%2$s から、複数の対象サイトで無効化できます。"
 
 #: classes/views/frm-settings/misc.php:51
 msgid "Use HTML5 in forms"
