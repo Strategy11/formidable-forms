@@ -238,10 +238,81 @@ class FrmStrpLiteEventsController {
 			$payment_id = $frm_payment->create( $payment_values );
 		}
 
+		$this->maybe_cancel_subscription( $sub );
 		$this->update_next_bill_date( $sub, $payment_values );
 
 		$payment = $frm_payment->get_one( $payment_id );
 		return $payment;
+	}
+
+	/**
+	 * Check if a subscription has reached its payment limit.
+	 * If it has, the subscription will be cancelled by period end.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $sub
+	 * @return void
+	 */
+	private function maybe_cancel_subscription( $sub ) {
+		$action = FrmFormAction::get_single_action_type( $sub->action_id, 'payment' );
+		if ( ! ( $action instanceof WP_Post ) || empty( $action->post_content['payment_limit'] ) ) {
+			return;
+		}
+
+		$payment_limit = FrmStrpLiteSubscriptionHelper::prepare_payment_limit(
+			$action->post_content['payment_limit'],
+			// Form ID.
+			(int) $action->menu_order,
+			(int) $sub->item_id
+		);
+		if ( $payment_limit instanceof WP_Error ) {
+			FrmTransLiteLog::log_message( 'Invalid payment limit value ' . $payment_limit->get_error_message() );
+			return;
+		}
+
+		if ( $this->get_payments_count( $sub->id ) < $payment_limit ) {
+			return;
+		}
+
+		// Flag to cancel subscription at period end.
+		// In this case, we do not want to cancel immediately.
+		$hook   = 'frm_stripe_cancel_subscription_at_period_end';
+		$filter = function() {
+			return true;
+		};
+
+		add_filter( $hook, $filter, 99 );
+		$cancelled = FrmStrpLiteApiHelper::cancel_subscription( $sub->sub_id );
+		if ( $cancelled ) {
+			FrmTransLiteSubscriptionsController::change_subscription_status(
+				array(
+					'status' => 'future_cancel',
+					'sub'    => $sub,
+				)
+			);
+		}
+		remove_filter( $hook, $filter, 99 );
+	}
+
+	/**
+	 * Get the count of completed payments.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sub_id Stripe subscriptino id prefixed with 'sub_'.
+	 * @return int
+	 */
+	private function get_payments_count( $sub_id ) {
+		$frm_payment  = new FrmTransPayment();
+		$all_payments = $frm_payment->get_all_by( $sub_id, 'sub_id' );
+		$count        = 0;
+		foreach ( $all_payments as $payment ) {
+			if ( $payment->status === 'complete' ) {
+				$count++;
+			}
+		}
+		return $count;
 	}
 
 	/**
