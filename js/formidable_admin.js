@@ -7324,7 +7324,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( frmAdminJs.quiz_action_type_limit && shouldShowQuizActionLimitMessage( this ) ) {
+		if ( frmAdminJs.quiz_action_type_limit && shouldShowQuizTypeLimitMessage( this ) ) {
 			message = frmAdminJs.quiz_action_type_limit;
 		}
 
@@ -7337,7 +7337,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} addActionButton
 	 * @returns {Boolean}
 	 */
-	function shouldShowQuizActionLimitMessage( addActionButton ) {
+	function shouldShowQuizTypeLimitMessage( addActionButton ) {
 		if ( addActionButton.dataset.actiontype !== 'quiz_outcome' && addActionButton.dataset.actiontype !== 'quiz' ) {
 			return false;
 		}
