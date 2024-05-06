@@ -990,7 +990,7 @@ class FrmFormAction {
 		$form_fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 		return array_filter(
 			$form_fields,
-			function( $form_field ) {
+			function ( $form_field ) {
 				return ! FrmField::is_no_save_field( $form_field->type );
 			}
 		);
