@@ -254,6 +254,10 @@ class FrmFormActionsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
+	/**
+	 * @param string $action
+	 * @return array|FrmFormAction
+	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 		if ( empty( $temp_actions ) ) {
