@@ -7331,14 +7331,20 @@ function frmAdminBuildJS() {
 		infoModal( message );
 	}
 
-	function shouldShowQuizActionLimitMessage( actionLi ) {
-		if ( actionLi.dataset.actiontype !== 'quiz_outcome' && actionLi.dataset.actiontype !== 'quiz' ) {
+	/**
+	 * Returns true if user is trying to add a quiz action while another type is already added.
+	 *
+	 * @param {HTMLElement} addActionButton
+	 * @returns {Boolean}
+	 */
+	function shouldShowQuizActionLimitMessage( addActionButton ) {
+		if ( addActionButton.dataset.actiontype !== 'quiz_outcome' && addActionButton.dataset.actiontype !== 'quiz' ) {
 			return false;
 		}
-		if ( actionLi.dataset.actiontype === 'quiz_outcome' && document.querySelector( '.frm_form_action_settings.frm_single_quiz_settings' ) ) {
+		if ( addActionButton.dataset.actiontype === 'quiz_outcome' && document.querySelector( '.frm_single_quiz_settings' ) ) {
 			return true;
 		}
-		return actionLi.dataset.actiontype === 'quiz' && document.querySelector( '.frm_form_action_settings.frm_single_quiz_outcome_settings' );
+		return addActionButton.dataset.actiontype === 'quiz' && document.querySelector( '.frm_single_quiz_outcome_settings' );
 	}
 
 	function addFormLogicRow() {
