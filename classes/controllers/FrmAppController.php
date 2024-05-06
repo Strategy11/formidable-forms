@@ -637,7 +637,7 @@ class FrmAppController {
 		$message              = sprintf(
 			// Translators: 1: Global Settings Link
 			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
-			'<a href="' . esc_url( $global_settings_link ) . '">' . __( 'Global Settings', 'formidable') . '</a>'
+			'<a href="' . esc_url( $global_settings_link ) . '">' . __( 'Global Settings', 'formidable' ) . '</a>'
 		);
 		$option_name = 'frm_dismiss_ip_address_notice';
 		FrmAppHelper::add_dismissable_warning_message( $message, $option_name );
