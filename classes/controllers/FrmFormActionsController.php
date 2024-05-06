@@ -256,7 +256,6 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
-	 * @return array|FrmFormAction
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
