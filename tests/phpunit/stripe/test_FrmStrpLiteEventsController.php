@@ -1,6 +1,6 @@
 <?php
 
-class test_FrmStrpLiteEventsController extends FrmUnitTest {
+class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 
 	/**
 	 * @var FrmStrpLiteEventsController|null
