@@ -242,7 +242,8 @@ class FrmStrpLiteSubscriptionHelper {
 	private static function get_invalid_payment_limit_error( $payment_limit ) {
 		return new WP_Error(
 			'invalid_payment_limit',
-			sprintf( __( 'Invalid payment limit value %s', 'formidable-stripe' ), $payment_limit )
+			/* translators: %s: Invalid payment limit value title */
+			sprintf( __( 'Invalid payment limit value %s', 'formidable' ), $payment_limit )
 		);
 	}
 }

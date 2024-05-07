@@ -127,7 +127,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 
 	protected function include_adapter() {
 		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
-			require dirname( dirname( __FILE__ ) ) . '/helpers/FrmStrpLiteConnectApiAdapter.php';
+			require dirname( __DIR__ ) . '/helpers/FrmStrpLiteConnectApiAdapter.php';
 		}
 	}
 
@@ -347,29 +347,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			'capture'  => false,
 		);
 		return $new_charge;
-	}
-
-	/**
-	 * @param array $cards the result of a call to get_cards (either FrmStrpLiteConnectHelper or FrmStrpLiteApiHelper).
-	 */
-	protected function assert_get_cards( $cards ) {
-		$this->assertTrue( is_array( $cards ) );
-		$this->assertEquals( 1, count( $cards ) );
-
-		$instance = reset( $cards );
-		$this->assertTrue( is_array( $instance ) );
-		$card = $instance['card'];
-		$this->assertTrue( is_object( $card ) );
-		$this->assertTrue( ! empty( $card->id ) );
-		$this->assertTrue( ! empty( $card->brand ) );
-		$this->assertTrue( ! empty( $card->country ) );
-		$this->assertEquals( 2, strlen( $card->country ) );
-		$this->assertTrue( ! empty( $card->customer ) );
-		$this->assertTrue( is_string( $card->customer ) );
-		$this->assertTrue( ! empty( $card->exp_month ) );
-		$this->assertTrue( ! empty( $card->exp_year ) );
-		$this->assertTrue( ! empty( $card->funding ) );
-		$this->assertTrue( ! empty( $card->last4 ) );
 	}
 
 	protected function assert_run_new_charge( $charge ) {

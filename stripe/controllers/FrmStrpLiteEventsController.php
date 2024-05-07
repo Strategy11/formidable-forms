@@ -256,7 +256,8 @@ class FrmStrpLiteEventsController {
 	 */
 	private function maybe_cancel_subscription( $sub ) {
 		$action = FrmFormAction::get_single_action_type( $sub->action_id, 'payment' );
-		if ( ! ( $action instanceof WP_Post ) || empty( $action->post_content['payment_limit'] ) ) { // @phpstan-ignore-line
+		// @phpstan-ignore-next-line
+		if ( ! ( $action instanceof WP_Post ) || empty( $action->post_content['payment_limit'] ) ) {
 			return;
 		}
 
@@ -278,7 +279,7 @@ class FrmStrpLiteEventsController {
 		// Flag to cancel subscription at period end.
 		// In this case, we do not want to cancel immediately.
 		$hook   = 'frm_stripe_cancel_subscription_at_period_end';
-		$filter = function() {
+		$filter = function () {
 			return true;
 		};
 
