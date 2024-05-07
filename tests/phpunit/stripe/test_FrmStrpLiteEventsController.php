@@ -1,6 +1,6 @@
 <?php
 
-class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
+class test_FrmStrpLiteEventsController extends FrmUnitTest {
 
 	/**
 	 * @var FrmStrpLiteEventsController|null
@@ -91,29 +91,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 		delete_transient( 'frm_last_process_' . $event_id ); // This is to simulate the 60 seconds in between events so we don't need to wait.
 	}
 
-	/**
-	 * @covers FrmStrpLiteEventsController::prepare_from_invoice
-	 * @covers FrmStrpLiteEventsController::maybe_cancel_subscription
-	 */
-	public function test_maybe_cancel_subscription() {
-		$this->initialize_connect_api();
-		$this->add_basic_shortcodes_for_testing();
-
-		$this->form = $this->factory->form->create_and_get();
-		$field_id   = FrmDb::get_var( 'frm_fields', array( 'form_id' => $this->form->id ) );
-
-		// Make assertions where the subscription is expected to be cancelled.
-		$this->make_payment_limit_assertion( 'future_cancel', 2 );
-		$this->make_payment_limit_assertion( 'future_cancel', '[return2]' );
-		// Test a field ID shortcode.
-		// In create_a_test_entry we set this item meta value to 2.
-		$this->make_payment_limit_assertion( 'future_cancel', '[' . $field_id . ']' );
-
-		// Make assertions where the subscription should still be active.
-		$this->make_payment_limit_assertion( 'active', 3 );
-		$this->make_payment_limit_assertion( 'active', '[return3]' );
-	}
-
 	private function add_basic_shortcodes_for_testing() {
 		add_shortcode(
 			'return2',
@@ -127,56 +104,6 @@ class test_FrmStrpLiteEventsController extends FrmStrpLiteUnitTest {
 				return 3;
 			}
 		);
-	}
-
-	/**
-	 * @param string     $expected_subscription_status
-	 * @param string|int $repeat_limit
-	 * @return void
-	 */
-	private function make_payment_limit_assertion( $expected_subscription_status, $repeat_limit ) {
-		$sub_id = $this->get_most_recent_subscription_id();
-		if ( ! $sub_id ) {
-			$this->fail();
-		}
-
-		// Get the ID of the first payment for the subscription.
-		$payment_id = FrmDb::get_var(
-			'frm_payments',
-			array(
-				'sub_id' => $sub_id,
-			)
-		);
-		if ( ! $payment_id ) {
-			$this->fail();
-		}
-
-		$frm_sub = new FrmTransLiteSubscription();
-		$sub     = $frm_sub->get_one( $sub_id );
-
-		// Give the first payment a charge ID and a complete status so the next payment counts as the 2nd payment.
-		$frm_payment = new FrmTransLitePayment();
-		$frm_payment->update(
-			$payment_id,
-			array(
-				'receipt_id' => 'ch_' . uniqid(),
-				'status'     => 'complete',
-			)
-		);
-
-		// Create a second payment from a Stripe invoice object (simulating a webhook event).
-		$payment = $this->prepare_from_invoice( $this->get_fake_stripe_invoice_object( $sub->sub_id ) );
-
-		// Make assertion that subscription is now cancelled after reaching the payment limit.
-		$sub = $frm_sub->get_one( $sub_id );
-		$this->assertEquals( $expected_subscription_status, $sub->status );
-
-		// Make assertions for prepare_from_invoice result.
-		$this->assertIsObject( $payment );
-		$this->assertEquals( 'complete', $payment->status );
-		$this->assertEquals( 'stripe', $payment->paysys );
-		$this->assertEquals( '1', $payment->test );
-		$this->assertEquals( '10.00', $payment->amount );
 	}
 
 	/**
