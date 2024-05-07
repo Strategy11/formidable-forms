@@ -944,12 +944,7 @@ function frmFrontFormJS() {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
 
-			// Key is a field ID, but we expect the error to use field key.
-			if ( ! isNaN( key ) && input.length && input.get( 0 ).id ) {
-				id = getErrorElementId( input.get( 0 ) );
-			} else {
-				id = 'frm_error_field_' + key;
-			}
+			id = getErrorElementId( key, input.get( 0 ) );
 
 			describedBy = input.attr( 'aria-describedby' );
 
@@ -986,11 +981,19 @@ function frmFrontFormJS() {
 	/**
 	 * Get the ID to use for an error element added when submitting with AJAX.
 	 *
+	 * @param {string}      key
 	 * @param {HTMLElement} input
 	 * @return {string}
 	 */
-	function getErrorElementId( input ) {
-		var split = input.id.split( '_' );
+	function getErrorElementId( key, input ) {
+		var split;
+
+		if ( isNaN( key ) || ! input.id ) {
+			// If key isn't a number, assume it's already in the right format.
+			return 'frm_error_field_' + key;
+		}
+
+		split = input.id.split( '_' );
 		split.shift();
 		return 'frm_error_field_' + split.join( '_' );
 	}
