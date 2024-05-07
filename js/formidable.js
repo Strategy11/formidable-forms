@@ -982,7 +982,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {string}      key
 	 * @param {HTMLElement} input
-	 * @return {string}
+	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input.id ) {
