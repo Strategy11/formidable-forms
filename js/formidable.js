@@ -943,7 +943,14 @@ function frmFrontFormJS() {
 		if ( $fieldCont.length && $fieldCont.is( ':visible' ) ) {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
-			id = 'frm_error_field_' + key;
+
+			// Key is a field ID, but we expect the error to use field key.
+			if ( ! isNaN( key ) && input.length && input.get( 0 ).id ) {
+				id = getErrorElementId( input.get( 0 ) );
+			} else {
+				id = 'frm_error_field_' + key;
+			}
+
 			describedBy = input.attr( 'aria-describedby' );
 
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
@@ -974,6 +981,18 @@ function frmFrontFormJS() {
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
+	}
+
+	/**
+	 * Get the ID to use for an error element added when submitting with AJAX.
+	 *
+	 * @param {HTMLElement} input
+	 * @return {string}
+	 */
+	function getErrorElementId( input ) {
+		var split = input.id.split( '_' );
+		split.shift();
+		return 'frm_error_field_' + split.join( '_' );
 	}
 
 	function removeFieldError( $fieldCont ) {
