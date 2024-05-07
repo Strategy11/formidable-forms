@@ -183,37 +183,38 @@
 				}
 			}
 		}
-	}
 
-	/**
-	 * Check the event content for any possible errors.
-	 * Some types of errors will appear here, like the errors added when calling FrmStrpActionsController::trigger_gateway.
-	 *
-	 * @since x.x
-	 *
-	 * @param {CustomEvent} event
-	 * @returns {boolean}
-	 */
-	function checkEventDataForError( event ) {
-		var element, error;
+		/**
+		 * Check the event content for any possible errors.
+		 * Some types of errors will appear here, like the errors added when calling FrmStrpActionsController::trigger_gateway.
+		 *
+		 * @since x.x
+		 *
+		 * @param {CustomEvent} event
+		 * @returns {boolean}
+		 */
+		function checkEventDataForError( event ) {
+			var element, error;
 
-		if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			console.log(event.frmData.content.indexOf( '<div class="frm_error_style' ));
+			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+				return true;
+			}
+
+			element = document.createElement( 'div' );
+			element.innerHTML = event.frmData.content;
+
+			error = element.querySelector( '.frm_error_style' );
+			if ( error ) {
+				handleConfirmPaymentError({
+					type: 'form_submit_error',
+					message: error.textContent
+				});
+				return false;
+			}
+
 			return true;
 		}
-
-		element = document.createElement( 'div' );
-		element.innerHTML = event.frmData.content;
-
-		error = element.querySelector( '.frm_error_style' );
-		if ( error ) {
-			handleConfirmPaymentError({
-				type: 'form_submit_error',
-				message: error.textContent
-			});
-			return false;
-		}
-
-		return true;
 	}
 	
 	/**
