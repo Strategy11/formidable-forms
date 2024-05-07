@@ -20,3 +20,4 @@ import './commands'
 // require('./commands')
 
 import '@10up/cypress-wp-utils';
+import 'cypress-axe'

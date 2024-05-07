@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
-				<label>
+				<label for="frm_import_file">
 					<?php
 					if ( FrmAppHelper::is_formidable_branding() ) {
 						$file_section_title = esc_html__( 'Choose a Formidable XML file', 'formidable' );
@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>)
 				</label>
 				<br/>
-				<input type="file" name="frm_import_file" size="25" accept="<?php echo esc_attr( implode( ', ', FrmXMLHelper::get_supported_upload_file_types() ) ); ?>" />
+				<input id="frm_import_file" type="file" name="frm_import_file" size="25" accept="<?php echo esc_attr( implode( ', ', FrmXMLHelper::get_supported_upload_file_types() ) ); ?>" />
 			</p>
 
 			<?php do_action( 'frm_csv_opts', $forms ); ?>
@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<p class="frm4 frm_form_field">
 				<label for="format"><?php esc_html_e( 'Export Format', 'formidable' ); ?></label>
-				<select name="format">
+				<select id="format" name="format">
 					<?php foreach ( $export_format as $t => $type ) { ?>
 						<option value="<?php echo esc_attr( $t ); ?>" data-support="<?php echo esc_attr( $type['support'] ); ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
 							<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ); ?>
