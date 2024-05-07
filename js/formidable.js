@@ -985,16 +985,11 @@ function frmFrontFormJS() {
 	 * @return {string}
 	 */
 	function getErrorElementId( key, input ) {
-		var split;
-
 		if ( isNaN( key ) || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
-
-		split = input.id.split( '_' );
-		split.shift();
-		return 'frm_error_field_' + split.join( '_' );
+		return 'frm_error_' + input.id;
 	}
 
 	function removeFieldError( $fieldCont ) {
