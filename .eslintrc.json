@@ -15,7 +15,8 @@
 	"extends": [
 		"plugin:@wordpress/eslint-plugin/recommended",
 		"plugin:react/recommended",
-		"plugin:jsx-a11y/recommended"
+		"plugin:jsx-a11y/recommended",
+		"plugin:sonarjs/recommended-legacy"
 	],
 	"env": {
 		"browser": true,
@@ -29,7 +30,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y"],
+	"plugins": ["react", "jsx-a11y", "sonarjs"],
 	"settings": {
 		"react": {
 			"pragma": "wp"
@@ -66,6 +67,11 @@
 		"no-alert": "off",
 		"no-undef": "off",
 		"jsdoc/no-undefined-types": "off",
-		"no-shadow": "off"
+		"no-shadow": "off",
+		"sonarjs/no-duplicate-string": "off",
+		"sonarjs/prefer-single-boolean-return": "off",
+		"sonarjs/no-collapsible-if": "off",
+		"sonarjs/no-duplicated-branches": "off",
+		"sonarjs/no-nested-template-literals": "off"
 	}
 }
