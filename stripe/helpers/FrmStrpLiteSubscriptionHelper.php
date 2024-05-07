@@ -208,7 +208,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @param string $payment_limit The raw payment value string. It is not empty.
 	 * @param int    $form_id       Required for processing shortcodes.
 	 * @param int    $entry_id      Required for processing shortcodes.
-	 * @return WP_Error|int
+	 * @return int|WP_Error
 	 */
 	public static function prepare_payment_limit( $payment_limit, $form_id, $entry_id ) {
 		if ( is_numeric( $payment_limit ) ) {

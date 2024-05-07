@@ -490,7 +490,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @return string|false
+	 * @return false|string
 	 */
 	protected function maybe_create_plan() {
 		$customer = $this->get_customer();
