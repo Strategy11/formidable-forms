@@ -3873,8 +3873,7 @@ function frmAdminBuildJS() {
 	}
 
 	function separator() {
-		const hr = document.createElement( 'hr' );
-		return hr;
+		return document.createElement( 'hr' );
 	}
 
 	function getCustomLayoutOption() {
