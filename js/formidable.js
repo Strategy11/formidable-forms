@@ -943,7 +943,6 @@ function frmFrontFormJS() {
 		if ( $fieldCont.length && $fieldCont.is( ':visible' ) ) {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
-
 			id = getErrorElementId( key, input.get( 0 ) );
 
 			describedBy = input.attr( 'aria-describedby' );
