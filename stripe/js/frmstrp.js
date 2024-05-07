@@ -196,7 +196,6 @@
 		function checkEventDataForError( event ) {
 			var element, error;
 
-			console.log(event.frmData.content.indexOf( '<div class="frm_error_style' ));
 			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
 				return true;
 			}
