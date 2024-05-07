@@ -507,6 +507,10 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
 

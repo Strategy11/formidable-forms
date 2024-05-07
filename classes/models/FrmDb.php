@@ -603,6 +603,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 * @param array  $settings
 	 * @param string $group
+	 * @return int|WP_Error
 	 */
 	public static function save_settings( $settings, $group ) {
 		$settings                 = (array) $settings;
