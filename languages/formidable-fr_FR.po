@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-05-06T15:22:32+00:00\n"
-"PO-Revision-Date: 2024-05-07 02:01\n"
+"PO-Revision-Date: 2024-05-07 14:06\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -724,12 +724,12 @@ msgstr "Envoyer"
 
 #: classes/controllers/FrmFormsController.php:222
 msgid "Settings Successfully Updated"
-msgstr "Réglages bien mis à jour "
+msgstr "Les réglages ont bien été mis à jour. "
 
 #: classes/controllers/FrmFormsController.php:261
 #: classes/controllers/FrmFormsController.php:1145
 msgid "Form was successfully updated."
-msgstr "Formulaire correctement mis à jour"
+msgstr "Le formulaire a bien été mis à jour."
 
 #. translators: %1$s: Start link HTML, %2$s: end link HTML
 #: classes/controllers/FrmFormsController.php:266
@@ -1791,7 +1791,7 @@ msgstr "Avertissement : Si vous avez des entrées avec plusieurs lignes, toutes
 #: classes/helpers/FrmAppHelper.php:3251
 #: classes/helpers/FrmFieldsHelper.php:330
 msgid "The entered values do not match"
-msgstr "Les valeurs saisies ne correspondent pas"
+msgstr "Les valeurs saisies ne correspondent pas."
 
 #: classes/helpers/FrmAppHelper.php:3252
 msgid "Enter Email"
@@ -2616,7 +2616,7 @@ msgstr "TOUTES les entrées dans ce formulaire seront définitivement supprimée
 #: classes/helpers/FrmFieldsHelper.php:340
 #: classes/helpers/FrmXMLHelper.php:1563
 msgid "%s is invalid"
-msgstr "%s n’est pas valide"
+msgstr "%s n’est pas valide."
 
 #. translators: %s: Field name
 #: classes/helpers/FrmFieldsHelper.php:335
@@ -4012,7 +4012,7 @@ msgstr "Si vous avez de nombreuses options de cases à cocher ou de boutons radi
 #: classes/helpers/FrmFormsHelper.php:1245
 #: classes/models/fields/FrmFieldName.php:36
 msgid "First"
-msgstr "Premier"
+msgstr "Prénom"
 
 #: classes/helpers/FrmFormsHelper.php:1246
 msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
@@ -5977,7 +5977,7 @@ msgstr "Auto"
 
 #: classes/views/frm-fields/back-end/settings.php:270
 msgid "Required Field Indicator"
-msgstr "Indicateur de champ obligatoire"
+msgstr "Symbole pour le champ obligatoire"
 
 #: classes/views/frm-fields/back-end/settings.php:296
 msgid "Center"
@@ -6090,7 +6090,7 @@ msgstr "Ajoutez des actions de formulaire à votre formulaire pour effectuer des
 
 #: classes/views/frm-form-actions/settings.php:15
 msgid "Search Form Actions"
-msgstr "Actions de recherche du formulaire"
+msgstr "Rechercher des actions pour les formulaires"
 
 #: classes/views/frm-form-actions/settings.php:23
 msgid "(click an action to add it to your form)"
