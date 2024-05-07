@@ -18,7 +18,8 @@
 		"plugin:jsx-a11y/recommended",
 		"plugin:sonarjs/recommended-legacy",
 		"plugin:cypress/recommended",
-		"plugin:no-jquery/deprecated"
+		"plugin:no-jquery/deprecated",
+		"plugin:compat/recommended"
 	],
 	"env": {
 		"browser": true,
@@ -32,7 +33,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "ie11"],
 	"settings": {
 		"react": {
 			"pragma": "wp"
@@ -119,6 +120,10 @@
 		"no-jquery/no-trim": "error",
 		"no-jquery/no-type": "error",
 		"no-jquery/no-unique": "error",
-		"no-jquery/no-when": "error"
+		"no-jquery/no-when": "error",
+		"ie11/no-collection-args": [ "error" ],
+		"ie11/no-for-in-const": [ "error" ],
+		"ie11/no-loop-func": [ "warn" ],
+		"ie11/no-weak-collections": [ "error" ]
 	}
 }

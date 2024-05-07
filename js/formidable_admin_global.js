@@ -1,6 +1,6 @@
 /* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
-/* eslint-disable prefer-const */
+/* eslint-disable prefer-const, compat/compat */
 
 jQuery( document ).ready( function() {
     let deauthLink, submenuItem, li,
