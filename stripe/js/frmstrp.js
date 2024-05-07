@@ -186,7 +186,7 @@
 
 		/**
 		 * Check the event content for any possible errors.
-		 * Some types of errors will appear here, like the errors added when calling FrmStrpActionsController::trigger_gateway.
+		 * Some types of errors will appear here, like the errors added when calling FrmStrpLiteActionsController::trigger_gateway.
 		 *
 		 * @since x.x
 		 *
