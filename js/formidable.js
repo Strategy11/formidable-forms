@@ -903,7 +903,8 @@ function frmFrontFormJS() {
 		if ( $fieldCont.length && $fieldCont.is( ':visible' ) ) {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
-			id = 'frm_error_field_' + key;
+			id = getErrorElementId( key, input.get( 0 ) );
+
 			describedBy = input.attr( 'aria-describedby' );
 
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
@@ -934,6 +935,21 @@ function frmFrontFormJS() {
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
+	}
+
+	/**
+	 * Get the ID to use for an error element added when submitting with AJAX.
+	 *
+	 * @param {string}      key
+	 * @param {HTMLElement} input
+	 * @return {string} The ID to use for the error element.
+	 */
+	function getErrorElementId( key, input ) {
+		if ( isNaN( key ) || ! input.id ) {
+			// If key isn't a number, assume it's already in the right format.
+			return 'frm_error_field_' + key;
+		}
+		return 'frm_error_' + input.id;
 	}
 
 	function removeFieldError( $fieldCont ) {
