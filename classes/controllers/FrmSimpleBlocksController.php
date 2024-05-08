@@ -33,8 +33,10 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
-		$modal_addon  = self::get_addon_info( 185013 );
-		$charts_addon = self::get_addon_info( 28248560 );
+		$modal_addon      = self::get_addon_info( 185013 );
+		$charts_addon     = self::get_addon_info( 28248560 );
+		$views_addon      = FrmAddonsController::get_addon( 'views' );
+		$views_addon_info = self::get_addon_info( 28027505 );
 
 		$script_vars = array(
 			'forms'       => self::get_forms_options(),
@@ -45,6 +47,12 @@ class FrmSimpleBlocksController {
 			'modalAddon'  => array(
 				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
+			),
+			'viewsAddon'  => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $views_addon_info['link'] ),
+				'hasAccess' => ! empty( $views_addon_info['url'] ),
+				'url'       => ! empty( $views_addon_info['url'] ) ? $views_addon_info['url'] : '',
+				'installed' => 'installed' === $views_addon['status']['type'],
 			),
 			'chartsAddon' => array(
 				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ),

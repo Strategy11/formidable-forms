@@ -111,6 +111,9 @@ class FrmDashboardController {
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
+
+		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
+
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
 

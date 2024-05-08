@@ -82,10 +82,10 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param string $value
-	 * @param array  $atts
+	 * @param array|string $value
+	 * @param array        $atts
 	 *
-	 * @return string
+	 * @return array|string A string is returned, but the return signature should match FrmFieldType.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );

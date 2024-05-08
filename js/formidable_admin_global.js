@@ -1,11 +1,9 @@
-/*global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
-
+/* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
-
-var frmWidgets, frmAdminPopup;
+/* eslint-disable prefer-const */
 
 jQuery( document ).ready( function() {
-    var deauthLink, submenuItem, li,
+    let deauthLink, submenuItem, li,
 		installLink = document.getElementById( 'frm_install_link' );
     if ( installLink !== null ) {
         jQuery( installLink ).on( 'click', frmInstallPro );
@@ -30,7 +28,7 @@ jQuery( document ).ready( function() {
 });
 
 function frm_install_now() { // eslint-disable-line camelcase
-	var $msg = jQuery( document.getElementById( 'frm_install_message' ) );
+	const $msg = jQuery( document.getElementById( 'frm_install_message' ) );
 	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
 	jQuery.ajax({
 		type: 'POST',
@@ -47,7 +45,7 @@ function frm_install_now() { // eslint-disable-line camelcase
 }
 
 function frmInstallPro( e ) {
-	var $msg,
+	let $msg,
 		plugin = this.getAttribute( 'data-prourl' );
 	if ( plugin === '' ) {
 		return true;
@@ -101,7 +99,7 @@ function frmDeauthorizeNow() {
 }
 
 function frmSelectSubnav() {
-    var frmMenu = document.getElementById( 'toplevel_page_formidable' );
+    const frmMenu = document.getElementById( 'toplevel_page_formidable' );
     jQuery( frmMenu ).removeClass( 'wp-not-current-submenu' ).addClass( 'wp-has-current-submenu wp-menu-open' );
     jQuery( '#toplevel_page_formidable a.wp-has-submenu' ).removeClass( 'wp-not-current-submenu' ).addClass( 'wp-has-current-submenu wp-menu-open' );
 }
@@ -125,7 +123,7 @@ function frmCreatePostEntry( id, postId ) {
 
 function frmAdminPopupJS() {
     function switchSc() {
-		var val;
+		let val;
         jQuery( '.frm_switch_sc' ).removeClass( 'active' );
         jQuery( this ).addClass( 'active' );
         toggleMenu();
@@ -136,7 +134,7 @@ function frmAdminPopupJS() {
     }
 
     function populateOpts( val ) {
-		var $settings, $scOpts, $spinner,
+		let $settings, $scOpts, $spinner,
 			sc = document.getElementById( 'frm_complete_shortcode' );
 		if ( sc !== null ) {
 			sc.value = '[' + val + ']';
@@ -169,11 +167,11 @@ function frmAdminPopupJS() {
 	}
 
     function addToShortcode() {
-        var sc = jQuery( 'input[name=frmsc]:checked' ).val();
-        var inputs = jQuery( document.getElementById( 'sc-opts-' + sc ) ).find( 'input, select' );
-        var output = '[' + sc;
+        const sc = jQuery( 'input[name=frmsc]:checked' ).val();
+        const inputs = jQuery( document.getElementById( 'sc-opts-' + sc ) ).find( 'input, select' );
+        let output = '[' + sc;
         inputs.each( function() {
-            var attrName, attrVal,
+            let attrName, attrVal,
 				$thisInput = jQuery( this ),
 				attrId = this.id;
             if ( attrId.indexOf( 'frmsc_' ) === 0 ) {
@@ -191,12 +189,12 @@ function frmAdminPopupJS() {
     }
 
     function insertShortcode() {
-        var win = window.dialogArguments || opener || parent || top;
+        const win = window.dialogArguments || opener || parent || top;
         win.send_to_editor( document.getElementById( 'frm_complete_shortcode' ).value );
     }
 
     function getFieldSelection() {
-		var thisId,
+		let thisId,
 			formId = this.value;
         if ( formId ) {
             thisId = this.id;
@@ -210,7 +208,7 @@ function frmAdminPopupJS() {
 					nonce: frmGlobal.nonce
 				},
                 success: function( msg ) {
-                    var baseId = thisId.replace( '_form', '' );
+                    const baseId = thisId.replace( '_form', '' );
                     msg = msg.replace( 'name="field_options[form_select_0]"', 'id="frmsc_' + baseId + '_fields"' );
                     jQuery( document.getElementById( baseId + '_fields_container' ) ).html( msg );
                 }
@@ -224,7 +222,7 @@ function frmAdminPopupJS() {
 
     return {
         init: function() {
-			var $scOptsDiv;
+			let $scOptsDiv;
 
             jQuery( '.frm_switch_sc' ).on( 'click', switchSc );
             jQuery( '.button.frm_insert_form' ).on( 'click', function() {
@@ -241,11 +239,12 @@ function frmAdminPopupJS() {
         }
     };
 }
-frmAdminPopup = frmAdminPopupJS();
+
+window.frmAdminPopup = frmAdminPopupJS();
 
 function frmWidgetsJS() {
     function toggleCatOpt() {
-        var catOpts = jQuery( this ).closest( '.widget-content' ).children( '.frm_list_items_hide_cat_opts' );
+        const catOpts = jQuery( this ).closest( '.widget-content' ).children( '.frm_list_items_hide_cat_opts' );
         if ( this.checked ) {
             catOpts.fadeIn();
         } else {
@@ -254,7 +253,7 @@ function frmWidgetsJS() {
     }
 
     function getFields() {
-		var widget,
+		let widget,
 			displayId = this.value;
         if ( displayId !== '' ) {
 			widget = jQuery( this ).closest( '.widget-content' );
@@ -269,7 +268,7 @@ function frmWidgetsJS() {
 					nonce: frmGlobal.nonce
 				},
                 success: function( opts ) {
-					var titleField,
+					let titleField,
 						catField = widget.find( '.frm_list_items_cat_id' );
                     catField.find( 'option' ).remove().end();
                     catField.append( jQuery( '<option></option>' ) );
@@ -296,6 +295,6 @@ function frmWidgetsJS() {
     };
 }
 if ( typeof adminpage !== 'undefined' && adminpage === 'widgets-php' ) {
-    frmWidgets = frmWidgetsJS();
-    frmWidgets.init();
+    window.frmWidgets = frmWidgetsJS();
+    window.frmWidgets.init();
 }

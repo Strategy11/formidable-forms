@@ -267,7 +267,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param object $field
 	 *
-	 * @return array
+	 * @return FrmFieldType
 	 */
 	private static function get_original_field( $field ) {
 		$original_type = FrmField::get_option( $field, 'original_type' );
