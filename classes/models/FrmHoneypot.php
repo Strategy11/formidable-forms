@@ -102,7 +102,7 @@ class FrmHoneypot extends FrmValidate {
 		);
 
 		if ( 'strict' !== $honeypot ) {
-			$input_attrs['autocomplete'] = 'false';
+			$input_attrs['autocomplete'] = 'off';
 		}
 		?>
 			<div class="<?php echo esc_attr( $class_name ); ?>">
