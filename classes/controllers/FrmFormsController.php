@@ -3139,37 +3139,11 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_key() {
-		FrmDeprecated::edit_key();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_description() {
-		FrmDeprecated::edit_description();
-	}
-
-	/**
 	 * @deprecated 4.08
 	 * @since 3.06
 	 */
 	public static function add_new() {
 		_deprecated_function( __FUNCTION__, '4.08' );
-	}
-
-	/**
-	 * Create a custom template from a form
-	 *
-	 * @since 3.06
-	 * @deprecated 6.7
-	 */
-	public static function build_template() {
-		_deprecated_function( __METHOD__, '6.7' );
 	}
 
 	/**
@@ -3180,25 +3154,5 @@ class FrmFormsController {
 	public static function expired() {
 		_deprecated_function( __METHOD__, '6.7' );
 		return FrmAddonsController::is_license_expired();
-	}
-
-	/**
-	 * Get data from api before rendering it so that we can flag the modal as expired
-	 *
-	 * @deprecated 6.7
-	 *
-	 * @return void
-	 */
-	public static function before_list_templates() {
-		_deprecated_function( __METHOD__, '6.7' );
-	}
-
-	/**
-	 * @deprecated 6.7
-	 *
-	 * @return void
-	 */
-	public static function list_templates() {
-		_deprecated_function( __METHOD__, '6.7' );
 	}
 }

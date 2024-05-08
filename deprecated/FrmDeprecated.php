@@ -106,26 +106,6 @@ class FrmDeprecated {
 	/**
 	 * @deprecated 3.0
 	 */
-	public static function edit_key() {
-		_deprecated_function( __FUNCTION__, '3.0' );
-		$values = self::edit_in_place_value( 'form_key' );
-		echo wp_kses( stripslashes( FrmForm::get_key_by_id( $values['form_id'] ) ), array() );
-		wp_die();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function edit_description() {
-		_deprecated_function( __FUNCTION__, '3.0' );
-		$values = self::edit_in_place_value( 'description' );
-		echo wp_kses_post( FrmAppHelper::use_wpautop( stripslashes( $values['description'] ) ) );
-		wp_die();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
 	private static function edit_in_place_value( $field ) {
 		_deprecated_function( __FUNCTION__, '3.0' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -156,21 +136,6 @@ class FrmDeprecated {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::prepare_field_html' );
 		$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
 		return $field_obj->prepare_field_html( compact( 'errors', 'form' ) );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
-		if ( $limit ) {
-			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field_options' );
-			$field_options = FrmFieldsHelper::get_default_field_options( $type );
-		} else {
-			_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldHelper::get_default_field' );
-			$field_options = FrmFieldsHelper::get_default_field( $type );
-		}
-
-		return $field_options;
 	}
 
 	/**
