@@ -2291,47 +2291,6 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_icon_link_js( $atts ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		$atts['icon'] .= $atts['is_selected'] ? ' ' : ' frm_inactive_icon ';
-		if ( isset( $atts['has_default'] ) && ! $atts['has_default'] ) {
-			$atts['icon'] .= 'frm_hidden ';
-		}
-		echo '<a href="javascript:void(0)" class="frm_bstooltip ' . esc_attr( $atts['icon'] ) . 'frm_default_val_icons frm_action_icon frm_icon_font" title="' . esc_attr( $atts['message'] ) . '"></a>';
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_default_blank_js( $is_selected, $has_default_value = true ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function clear_on_focus_html( $field, $display, $id = '' ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_onfocus_js( $is_selected, $has_default_value = true ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function display_recaptcha() {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
-	}
-
-	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 *
