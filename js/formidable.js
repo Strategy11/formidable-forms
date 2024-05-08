@@ -1786,46 +1786,6 @@ function frmFrontFormJS() {
 			}
 		},
 
-		goingToPreviousPage: function( object ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.goingToPreviousPage in v3.0 use frmProForm.goingToPreviousPage' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				return frmProForm.goingToPreviousPage( object );
-			}
-		},
-
-		hideOrShowFields: function() {
-			console.warn( 'DEPRECATED: function frmFrontForm.hideOrShowFields in v3.0 use frmProForm.hideOrShowFields' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.hideOrShowFields();
-			}
-		},
-
-		hidePreviouslyHiddenFields: function() {
-			console.warn( 'DEPRECATED: function frmFrontForm.hidePreviouslyHiddenFields in v3.0 use frmProForm.hidePreviouslyHiddenFields' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.hidePreviouslyHiddenFields();
-			}
-		},
-
-		checkDependentDynamicFields: function( ids ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.checkDependentDynamicFields in v3.0 use frmProForm.checkDependentDynamicFields' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.checkDependentDynamicFields( ids );
-			}
-		},
-
-		checkDependentLookupFields: function( ids ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.checkDependentLookupFields in v3.0 use frmProForm.checkDependentLookupFields' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.checkDependentLookupFields( ids );
-			}
-		},
-
-		loadGoogle: function() {
-			console.warn( 'DEPRECATED: function frmFrontForm.loadGoogle in v3.0 use frmProForm.loadGoogle' );
-			frmProForm.loadGoogle();
-		},
-
 		escapeHtml: function( text ) {
 			return text
 				.replace( /&/g, '&amp;' )
@@ -1887,6 +1847,7 @@ function frmAfterRecaptcha( token ) {
 
 if ( frm_js.include_update_field ) { // eslint-disable-line camelcase
 	window.frmUpdateField = function( entryId, fieldId, value, message, num ) {
+		console.warn( 'DEPRECATED: function frmUpdateField please update to Formidable Pro v6.9.2' );
 		jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 		jQuery.ajax({
 			type: 'POST',
