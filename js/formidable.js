@@ -20,17 +20,11 @@ function frmFrontFormJS() {
 	 * @param {mixed}       data      The passed data.
 	 */
 	function triggerCustomEvent( el, eventName, data ) {
-		let event;
-
-		if ( typeof window.CustomEvent === 'function' ) {
-			event = new CustomEvent( eventName );
-		} else if ( document.createEvent ) {
-			event = document.createEvent( 'HTMLEvents' );
-			event.initEvent( eventName, false, true );
-		} else {
+		if ( typeof window.CustomEvent !== 'function' ) {
 			return;
 		}
 
+		const event = new CustomEvent( eventName );
 		event.frmData = data;
 
 		el.dispatchEvent( event );
