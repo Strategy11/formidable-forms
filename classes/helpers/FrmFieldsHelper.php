@@ -2342,14 +2342,6 @@ class FrmFieldsHelper {
 	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
-	 */
-	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		return FrmDeprecated::get_shortcode_tag( $shortcodes, $short_key, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 *
 	 * @param string       $html
 	 * @param array        $field

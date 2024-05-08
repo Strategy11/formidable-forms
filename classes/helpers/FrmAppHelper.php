@@ -4215,23 +4215,4 @@ class FrmAppHelper {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
-
-	/**
-	 * Use the WP 4.7 wp_doing_ajax function
-	 *
-	 * @since 2.05.07
-	 * @deprecated 4.04.04
-	 */
-	public static function wp_doing_ajax() {
-		_deprecated_function( __METHOD__, '4.04.04', 'wp_doing_ajax' );
-		return wp_doing_ajax();
-	}
-
-	/**
-	 * @since 4.07
-	 * @deprecated 6.0
-	 */
-	public static function renewal_message() {
-		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
-	}
 }

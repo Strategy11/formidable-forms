@@ -1645,17 +1645,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @deprecated 3.04.03
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function get_licenses() {
-		FrmDeprecated::get_licenses();
-	}
-
-	/**
 	 * @since 4.02.05
 	 * @deprecated 6.8.3
 	 *
