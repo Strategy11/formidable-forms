@@ -327,14 +327,4 @@ class FrmHooksController {
 		// Drop tables when mu site is deleted.
 		add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
 	}
-
-	/**
-	 * @deprecated 5.0.06 use FrmElementorController::register_elementor_hooks directly.
-	 *
-	 * @return void
-	 */
-	public static function register_elementor_hooks() {
-		_deprecated_function( __FUNCTION__, '5.0.06', 'FrmElementorController::register_elementor_hooks' );
-		FrmElementorController::register_elementor_hooks();
-	}
 }

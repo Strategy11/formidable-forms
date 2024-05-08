@@ -177,13 +177,4 @@ class FrmFormMigratorsHelper {
 		update_option( 'frm_dismissed', array_filter( $dismissed ), 'no' );
 		wp_die();
 	}
-
-	/**
-	 * @deprecated 4.05
-	 *
-	 * @return void
-	 */
-	public static function notification_count() {
-		_deprecated_function( __METHOD__, '4.05' );
-	}
 }

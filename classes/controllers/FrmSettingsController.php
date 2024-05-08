@@ -407,12 +407,4 @@ class FrmSettingsController {
 
 		wp_send_json( $results );
 	}
-
-	/**
-	 * @deprecated 6.0 use FrmSettingsController::captcha_settings().
-	 */
-	public static function recaptcha_settings() {
-		_deprecated_function( __FUNCTION__, '6.0', 'FrmSettingsController::captcha_settings()' );
-		self::captcha_settings();
-	}
 }

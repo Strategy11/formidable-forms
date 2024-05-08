@@ -1755,8 +1755,6 @@ class FrmFormsController {
 		FrmAppHelper::trigger_hook_load( 'form' );
 
 		switch ( $action ) {
-			case 'new':
-				return self::new_form( $vars );
 			case 'create':
 			case 'edit':
 			case 'update':
@@ -3126,40 +3124,9 @@ class FrmFormsController {
 	/**
 	 * @deprecated 4.0
 	 */
-	public static function new_form( $values = array() ) {
-		FrmDeprecated::new_form( $values );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function bulk_create_template( $ids ) {
-		return FrmDeprecated::bulk_create_template( $ids );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_key() {
-		FrmDeprecated::edit_key();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_description() {
-		FrmDeprecated::edit_description();
 	}
 
 	/**
@@ -3171,16 +3138,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Create a custom template from a form
-	 *
-	 * @since 3.06
-	 * @deprecated 6.7
-	 */
-	public static function build_template() {
-		_deprecated_function( __METHOD__, '6.7' );
-	}
-
-	/**
 	 * @deprecated 6.7
 	 *
 	 * @return bool
@@ -3188,25 +3145,5 @@ class FrmFormsController {
 	public static function expired() {
 		_deprecated_function( __METHOD__, '6.7' );
 		return FrmAddonsController::is_license_expired();
-	}
-
-	/**
-	 * Get data from api before rendering it so that we can flag the modal as expired
-	 *
-	 * @deprecated 6.7
-	 *
-	 * @return void
-	 */
-	public static function before_list_templates() {
-		_deprecated_function( __METHOD__, '6.7' );
-	}
-
-	/**
-	 * @deprecated 6.7
-	 *
-	 * @return void
-	 */
-	public static function list_templates() {
-		_deprecated_function( __METHOD__, '6.7' );
 	}
 }
