@@ -1497,7 +1497,7 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
 			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
-			if ( frm_js.should_include_resend_email_code ) { // eslint-disable-line camelcase
+			if ( frm_js.include_resend_email ) { // eslint-disable-line camelcase
 				jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 			}
 
