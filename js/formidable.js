@@ -1066,6 +1066,8 @@ function frmFrontFormJS() {
 	}
 
 	function resendEmail() {
+		console.warn( 'DEPRECATED: function resendEmail in vx.x please update to Formidable Pro vx.x' );
+
 		/*jshint validthis:true */
 		let $link = jQuery( this ),
 			entryId = this.getAttribute( 'data-eid' ),
@@ -1495,7 +1497,9 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
 			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
-			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
+			if ( frm_js.include_resend_email ) { // eslint-disable-line camelcase
+				jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
+			}
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 

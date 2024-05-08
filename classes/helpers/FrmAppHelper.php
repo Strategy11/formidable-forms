@@ -3245,6 +3245,7 @@ class FrmAppHelper {
 			'focus_first_error'    => self::should_focus_first_error(),
 			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
 			'include_update_field' => self::should_include_update_field_function(),
+			'include_resend_email' => self::should_include_resend_email_code(),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3378,6 +3379,24 @@ class FrmAppHelper {
 			return false;
 		}
 		return ! self::meets_min_pro_version( '6.9.2' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_include_resend_email_code() {
+		if ( ! self::pro_is_installed() ) {
+			return false;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro vx.x.
+		 */
+		return apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}
 
 	/**
