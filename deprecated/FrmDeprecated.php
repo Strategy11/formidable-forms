@@ -139,16 +139,6 @@ class FrmDeprecated {
 	/**
 	 * @since 3.04.03
 	 * @deprecated 3.06
-	 */
-	public static function reset_cached_addons( $license = '' ) {
-		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
-		$api = new FrmFormApi( $license );
-		$api->reset_cached();
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
 	 * @return string
 	 */
 	public static function get_cache_key( $license ) {
@@ -167,58 +157,6 @@ class FrmDeprecated {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_api_info' );
 		$api = new FrmFormApi( $license );
 		return $api->get_api_info();
-	}
-
-	/**
-	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
-	 *
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 *
-	 * @param bool $return
-	 * @param string $package
-	 *
-	 * @return bool
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		_deprecated_function( __FUNCTION__, '3.04.03' );
-
-		if ( strpos( $package, '/edd-sl/package_download/' ) !== false && strpos( $package, 'formidableforms.com' ) !== false ) {
-			add_filter( 'wp_unique_filename', 'FrmDeprecated::shorten_edd_filename', 10, 2 );
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Shorten the EDD filename for automatic updates
-	 * Decreases size of file path so file path limit is not hit on Windows servers
-	 *
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		_deprecated_function( __FUNCTION__, '3.04.03' );
-
-		$filename = substr( $filename, 0, 50 ) . $ext;
-		remove_filter( 'wp_unique_filename', 'FrmDeprecated::shorten_edd_filename', 10 );
-
-		return $filename;
-	}
-
-	/**
-	 * @deprecated 3.0.04
-	 */
-	public static function activation_install() {
-		_deprecated_function( __FUNCTION__, '3.0.04', 'FrmAppController::install' );
-		FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
-		FrmFormActionsController::actions_init();
-		FrmAppController::install();
 	}
 
 	/**

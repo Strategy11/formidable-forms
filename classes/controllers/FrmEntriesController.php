@@ -706,12 +706,4 @@ class FrmEntriesController {
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
 	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function contextual_help( $help, $screen_id, $screen ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		return $help;
-	}
 }

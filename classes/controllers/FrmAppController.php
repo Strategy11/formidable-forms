@@ -1339,18 +1339,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 3.0.04
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function activation_install() {
-		FrmDeprecated::activation_install();
-	}
-
-	/**
-	 * @deprecated 3.0
+	 * @deprecated 3.0 This is still referenced in https://formidableforms.com/knowledgebase/php-examples/ as of May 8, 2024.
 	 * @codeCoverageIgnore
 	 */
 	public static function page_route( $content ) {
