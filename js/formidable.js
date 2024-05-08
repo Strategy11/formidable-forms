@@ -1909,7 +1909,7 @@ function frmAfterRecaptcha( token ) {
 	frmFrontForm.afterSingleRecaptcha( token );
 }
 
-if ( frm_js.include_update_field ) {
+if ( frm_js.include_update_field ) { // eslint-disable-line camelcase
 	window.frmUpdateField = function( entryId, fieldId, value, message, num ) {
 		jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 		jQuery.ajax({
