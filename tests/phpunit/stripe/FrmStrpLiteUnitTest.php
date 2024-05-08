@@ -9,52 +9,52 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @var string $shared_account_id used to limit the number of accounts when testing: the static scope variables stick around from test to test.
+	 * @var string Used to limit the number of accounts when testing: the static scope variables stick around from test to test.
 	 */
 	protected static $shared_account_id;
 
 	/**
-	 * @var string $shared_connect_url used to limit the number of accounts when testing: the static scope variables stick around from test to test.
+	 * @var string Used to limit the number of accounts when testing: the static scope variables stick around from test to test.
 	 */
 	protected static $shared_connect_url;
 
 	/**
-	 * @var string $shared_client_side_token used to limit the number of accounts when testing: the static scope variables stick around from test to test.
+	 * @var string Used to limit the number of accounts when testing: the static scope variables stick around from test to test.
 	 */
 	protected static $shared_client_side_token;
 
 	/**
-	 * @var string $shared_server_side_token used to limit the number of accounts when testing: the static scope variables stick around from test to test.
+	 * @var string Used to limit the number of accounts when testing: the static scope variables stick around from test to test.
 	 */
 	protected static $shared_server_side_token;
 
 	/**
-	 * @var string $active_api_type either 'legacy' or 'connect'.
+	 * @var string Either 'legacy' or 'connect'.
 	 */
 	protected $active_api_type;
 
 	/**
-	 * @var string $customer_id the active customer we're testing with (might be null if no customer has been created)
+	 * @var string The active customer we're testing with (might be null if no customer has been created)
 	 */
 	protected $customer_id;
 
 	/**
-	 * @var string $account_id the active test account id.
+	 * @var string The active test account id.
 	 */
 	protected $account_id;
 
 	/**
-	 * @var array $plan_options
+	 * @var array
 	 */
 	protected $plan_options;
 
 	/**
-	 * @var WP_Post|null $action Used in self::get_simple_stripe_action.
+	 * @var WP_Post|null Used in self::get_simple_stripe_action.
 	 */
 	protected $action;
 
 	/**
-	 * @var array $subscription_charge_options
+	 * @var array
 	 */
 	protected $subscription_charge_options;
 
