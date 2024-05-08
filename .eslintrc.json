@@ -33,7 +33,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "ie11"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
 	"settings": {
 		"react": {
 			"pragma": "wp"
@@ -120,10 +120,6 @@
 		"no-jquery/no-trim": "error",
 		"no-jquery/no-type": "error",
 		"no-jquery/no-unique": "error",
-		"no-jquery/no-when": "error",
-		"ie11/no-collection-args": [ "error" ],
-		"ie11/no-for-in-const": [ "error" ],
-		"ie11/no-loop-func": [ "warn" ],
-		"ie11/no-weak-collections": [ "error" ]
+		"no-jquery/no-when": "error"
 	}
 }
