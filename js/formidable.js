@@ -236,8 +236,7 @@ function frmFrontFormJS() {
 	 * @return {boolean} True if the element has the target class.
 	 */
 	function hasClass( element, targetClass ) {
-		const className = ' ' + element.className + ' ';
-		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
+		return element.classList.contains( targetClass );
 	}
 
 	function maybeValidateChange( field ) {
