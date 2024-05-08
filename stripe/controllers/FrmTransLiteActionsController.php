@@ -129,7 +129,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$message = isset( $frm_vars['frm_trans']['error'] ) ? $frm_vars['frm_trans']['error'] : '';
 		if ( empty( $message ) ) {
-			$message = __( 'There was an error processing your payment.', 'formidable-payments' );
+			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
 
 		$message = '<div class="frm_error_style">' . $message . '</div>';
