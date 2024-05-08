@@ -33,7 +33,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "ie11"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
 	"settings": {
 		"react": {
 			"pragma": "wp"
