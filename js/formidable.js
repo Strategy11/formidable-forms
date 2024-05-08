@@ -1,4 +1,5 @@
 /* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
+/* eslint-disable prefer-const */
 
 function frmFrontFormJS() {
 	'use strict';
