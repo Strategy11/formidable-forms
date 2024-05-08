@@ -86,15 +86,15 @@ class FrmTransLiteActionsController {
 	public static function trigger_action( $action, $entry, $form ) {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
 		$response = FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
-		if ( ! $response['success'] ) {
+		if ( ! $response['success'] && $response['show_errors'] ) {
 			// the payment failed
-			if ( $response['show_errors'] ) {
-				self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
-			}
+			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param array $args
 	 * @return void
 	 */
