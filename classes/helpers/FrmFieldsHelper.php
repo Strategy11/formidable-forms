@@ -2289,31 +2289,4 @@ class FrmFieldsHelper {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
 		return wp_list_pluck( $draft_field_rows, 'id' );
 	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param string       $html
-	 * @param array        $field
-	 * @param array        $errors
-	 * @param false|object $form
-	 * @param array        $args
-	 *
-	 * @return string
-	 */
-	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
-		return FrmDeprecated::replace_shortcodes( $html, $field, $errors, $form, $args );
-	}
-
-	/**
-	 * @deprecated 2.02.07 This is still referenced in the Highrise add on as of v1.06.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $args
-	 * @return string
-	 */
-	public static function dropdown_categories( $args ) {
-		return FrmDeprecated::dropdown_categories( $args );
-	}
 }
