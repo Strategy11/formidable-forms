@@ -1604,58 +1604,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since 3.04.03
-	 *
-	 * @deprecated 3.06
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function reset_cached_addons( $license = '' ) {
-		FrmDeprecated::reset_cached_addons( $license );
-	}
-
-	/**
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 *
-	 * @param bool   $return
-	 * @param string $package
-	 *
-	 * @return bool
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		return FrmDeprecated::add_shorten_edd_filename_filter( $return, $package );
-	}
-
-	/**
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		return FrmDeprecated::shorten_edd_filename( $filename, $ext );
-	}
-
-	/**
-	 * @deprecated 3.04.03
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function get_licenses() {
-		FrmDeprecated::get_licenses();
-	}
-
-	/**
 	 * @since 4.02.05
 	 * @deprecated 6.8.3
 	 *

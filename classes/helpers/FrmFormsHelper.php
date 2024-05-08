@@ -200,16 +200,6 @@ class FrmFormsHelper {
 		<?php
 	}
 
-	/**
-	 * @since 3.05
-	 * @deprecated 4.0
-	 *
-	 * @param array $values The form array.
-	 */
-	public static function builder_submit_button( $values ) {
-		FrmDeprecated::builder_submit_button( $values );
-	}
-
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo $sort_col == $col ? 'sorted' : 'sortable';
 		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
@@ -1760,27 +1750,5 @@ BEFORE_HTML;
 		} else {
 			esc_html_e( 'Update', 'formidable' );
 		}
-	}
-
-	/**
-	 * @since 4.02
-	 * @deprecated 6.7
-	 */
-	public static function template_install_html( $link, $class = '' ) {
-		_deprecated_function( __METHOD__, '6.7' );
-	}
-
-	/**
-	 * Check an array of templates, determine how many the logged in user can use
-	 *
-	 * @deprecated 6.7
-	 *
-	 * @param array $templates
-	 * @param array $args
-	 * @return int
-	 */
-	public static function available_count( $templates, $args ) {
-		_deprecated_function( __METHOD__, '6.7' );
-		return 0;
 	}
 }

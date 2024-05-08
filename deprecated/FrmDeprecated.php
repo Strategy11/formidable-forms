@@ -57,59 +57,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 4.0
-	 * @param array $values - The form array
-	 */
-	public static function builder_submit_button( $values ) {
-		_deprecated_function( __FUNCTION__, '4.0' );
-		$page_action = FrmAppHelper::get_param( 'frm_action' );
-		$label = ( $page_action == 'edit' || $page_action === 'update' ) ? __( 'Update', 'formidable' ) : __( 'Create', 'formidable' );
-
-		?>
-		<div class="postbox">
-			<p class="inside">
-				<button class="frm_submit_<?php echo esc_attr( ( ! empty( $values['ajax_load'] ) ) ? '' : 'no_' ); ?>ajax button-primary frm_button_submit" type="button">
-					<?php echo esc_html( $label ); ?>
-				</button>
-			</p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * @deprecated 3.04.03
-	 */
-	public static function get_licenses() {
-		_deprecated_function( __FUNCTION__, '3.04.03' );
-
-		$allow_autofill = self::allow_autofill();
-		$required_role = $allow_autofill ? 'setup_network' : 'frm_change_settings';
-		FrmAppHelper::permission_check( $required_role );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		if ( is_multisite() && get_site_option( 'frmpro-wpmu-sitewide' ) ) {
-			$license = get_site_option( 'frmpro-credentials' );
-		} else {
-			$license = get_option( 'frmpro-credentials' );
-		}
-
-		if ( $license && is_array( $license ) && isset( $license['license'] ) ) {
-			$url = 'https://formidableforms.com/frm-edd-api/licenses?l=' . urlencode( base64_encode( $license['license'] ) );
-			$licenses = self::send_api_request(
-				$url,
-				array(
-					'name'    => 'frm_api_licence',
-					'expires' => 60 * 60 * 5,
-				)
-			);
-			echo json_encode( $licenses );
-		}
-
-		wp_die();
-	}
-
-
-	/**
 	 * Don't allow subsite addon licenses to be fetched
 	 * unless the current user has super admin permissions
 	 *
@@ -192,16 +139,6 @@ class FrmDeprecated {
 	/**
 	 * @since 3.04.03
 	 * @deprecated 3.06
-	 */
-	public static function reset_cached_addons( $license = '' ) {
-		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
-		$api = new FrmFormApi( $license );
-		$api->reset_cached();
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
 	 * @return string
 	 */
 	public static function get_cache_key( $license ) {
@@ -220,58 +157,6 @@ class FrmDeprecated {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_api_info' );
 		$api = new FrmFormApi( $license );
 		return $api->get_api_info();
-	}
-
-	/**
-	 * Add a filter to shorten the EDD filename for Formidable plugin, and add-on, updates
-	 *
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 *
-	 * @param bool $return
-	 * @param string $package
-	 *
-	 * @return bool
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		_deprecated_function( __FUNCTION__, '3.04.03' );
-
-		if ( strpos( $package, '/edd-sl/package_download/' ) !== false && strpos( $package, 'formidableforms.com' ) !== false ) {
-			add_filter( 'wp_unique_filename', 'FrmDeprecated::shorten_edd_filename', 10, 2 );
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Shorten the EDD filename for automatic updates
-	 * Decreases size of file path so file path limit is not hit on Windows servers
-	 *
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		_deprecated_function( __FUNCTION__, '3.04.03' );
-
-		$filename = substr( $filename, 0, 50 ) . $ext;
-		remove_filter( 'wp_unique_filename', 'FrmDeprecated::shorten_edd_filename', 10 );
-
-		return $filename;
-	}
-
-	/**
-	 * @deprecated 3.0.04
-	 */
-	public static function activation_install() {
-		_deprecated_function( __FUNCTION__, '3.0.04', 'FrmAppController::install' );
-		FrmDb::delete_cache_and_transient( 'frm_plugin_version' );
-		FrmFormActionsController::actions_init();
-		FrmAppController::install();
 	}
 
 	/**
@@ -436,105 +321,7 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @deprecated 3.0
-	 */
-	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::get_shortcode_tag' );
-        return FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key, $args );
-    }
-
-	/**
-	 * @deprecated 3.01
-	 */
-	public static function get_sigle_label_postitions() {
-		_deprecated_function( __FUNCTION__, '3.01', 'FrmStylesHelper::get_single_label_positions' );
-		return FrmStylesHelper::get_single_label_positions();
-	}
-
-    /**
-     * @deprecated 3.02.03
-     */
-    public static function jquery_themes() {
-		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::jquery_themes' );
-
-        $themes = array(
-            'ui-lightness'  => 'UI Lightness',
-            'ui-darkness'   => 'UI Darkness',
-            'smoothness'    => 'Smoothness',
-            'start'         => 'Start',
-            'redmond'       => 'Redmond',
-            'sunny'         => 'Sunny',
-            'overcast'      => 'Overcast',
-            'le-frog'       => 'Le Frog',
-            'flick'         => 'Flick',
-			'pepper-grinder' => 'Pepper Grinder',
-            'eggplant'      => 'Eggplant',
-            'dark-hive'     => 'Dark Hive',
-            'cupertino'     => 'Cupertino',
-            'south-street'  => 'South Street',
-            'blitzer'       => 'Blitzer',
-            'humanity'      => 'Humanity',
-            'hot-sneaks'    => 'Hot Sneaks',
-            'excite-bike'   => 'Excite Bike',
-            'vader'         => 'Vader',
-            'dot-luv'       => 'Dot Luv',
-            'mint-choc'     => 'Mint Choc',
-            'black-tie'     => 'Black Tie',
-            'trontastic'    => 'Trontastic',
-            'swanky-purse'  => 'Swanky Purse',
-        );
-
-		$themes = apply_filters( 'frm_jquery_themes', $themes );
-        return $themes;
-    }
-
-    /**
-     * @deprecated 3.02.03
-     */
-    public static function enqueue_jquery_css() {
-		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::enqueue_jquery_css' );
-
-		$form = self::get_form_for_page();
-		$theme_css = FrmStylesController::get_style_val( 'theme_css', $form );
-        if ( $theme_css != -1 ) {
-			wp_enqueue_style( 'jquery-theme', self::jquery_css_url( $theme_css ), array(), FrmAppHelper::plugin_version() );
-        }
-    }
-
-	/**
-	 * @deprecated 3.02.03
-	 */
-	public static function jquery_css_url( $theme_css ) {
-		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::jquery_css_url' );
-
-		if ( ! is_callable( 'FrmProStylesController::jquery_css_url' ) ) {
-			return;
-		}
-
-		return FrmProStylesController::jquery_css_url( $theme_css );
-    }
-
-	/**
-	 * @deprecated 3.02.03
-	 */
-	public static function get_form_for_page() {
-		_deprecated_function( __FUNCTION__, '3.02.03' );
-
-		global $frm_vars;
-		$form_id = 'default';
-		if ( ! empty( $frm_vars['forms_loaded'] ) ) {
-			foreach ( $frm_vars['forms_loaded'] as $form ) {
-				if ( is_object( $form ) ) {
-					$form_id = $form->id;
-					break;
-				}
-			}
-		}
-		return $form_id;
-	}
-
-	/**
-	 * @deprecated 2.02.07
+	 * @deprecated 2.02.07 This is still referenced in the Highrise add-on. It is not safe to remove.
 	 */
 	public static function dropdown_categories( $args ) {
 		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );

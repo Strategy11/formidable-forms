@@ -317,30 +317,6 @@ class FrmFormsController {
 		return empty( $values['frm_end'] );
 	}
 
-	/**
-	 * Redirect to the url for creating from a template
-	 * Also delete the current form
-	 *
-	 * @since 2.0
-	 * @deprecated 3.06
-	 */
-	public static function _create_from_template() {
-		_deprecated_function( __FUNCTION__, '3.06' );
-
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$current_form = FrmAppHelper::get_param( 'this_form', '', 'get', 'absint' );
-		$template_id  = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-
-		if ( $current_form ) {
-			FrmForm::destroy( $current_form );
-		}
-
-		echo esc_url_raw( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template_id ) ) );
-		wp_die();
-	}
-
 	public static function duplicate() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$nonce = FrmAppHelper::simple_get( '_wpnonce' );
