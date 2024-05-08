@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-05-06T15:22:32+00:00\n"
-"PO-Revision-Date: 2024-05-07 14:06\n"
+"PO-Revision-Date: 2024-05-08 02:11\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -608,7 +608,7 @@ msgstr "Nom de l’entrée"
 #: classes/controllers/FrmEntriesController.php:88
 #: classes/helpers/FrmCSVExportHelper.php:370
 msgid "Created By"
-msgstr "Créé par"
+msgstr "Créé(e) par"
 
 #: classes/controllers/FrmEntriesController.php:91
 #: classes/helpers/FrmCSVExportHelper.php:372
@@ -2512,7 +2512,7 @@ msgstr "Voir l’entrée"
 
 #: classes/helpers/FrmEntriesHelper.php:682
 msgid "Delete Entry"
-msgstr "Supprimer l’Entrée"
+msgstr "Supprimer l’entrée"
 
 #: classes/helpers/FrmEntriesHelper.php:685
 msgid "Delete this form entry?"
@@ -2520,7 +2520,7 @@ msgstr "Supprimer cette entrée du formulaire ?"
 
 #: classes/helpers/FrmEntriesHelper.php:693
 msgid "Print Entry"
-msgstr "Imprimer l’Entrée"
+msgstr "Imprimer l’entrée"
 
 #: classes/helpers/FrmEntriesHelper.php:703
 #: classes/helpers/FrmEntriesHelper.php:706
@@ -4329,7 +4329,7 @@ msgstr "En ligne (à gauche sans largeur définie)"
 #: classes/views/frm-fields/back-end/phone/phone-type.php:32
 #: stripe/controllers/FrmStrpLiteEventsController.php:293
 msgid "None"
-msgstr "Aucune"
+msgstr "Aucun(e)"
 
 #: classes/helpers/FrmStylesHelper.php:48
 msgid "Hidden (but leave the space)"
@@ -4879,7 +4879,7 @@ msgstr "%1$s Formulaire soumis le %2$s"
 #: classes/models/FrmEmail.php:412
 #: classes/views/frm-entries/sidebar-shared.php:76
 msgid "User Information"
-msgstr "Informations sur l’utilisateur"
+msgstr "Info sur l’utilisateur/utilisatrice"
 
 #: classes/models/FrmEmail.php:414
 #: classes/models/FrmEntryValues.php:270
@@ -5013,7 +5013,7 @@ msgstr "Échelle"
 
 #: classes/models/FrmField.php:121
 msgid "Star Rating"
-msgstr "Vote 5 étoiles"
+msgstr "Évaluation en étoiles"
 
 #: classes/models/FrmField.php:125
 msgid "Slider"
@@ -5699,11 +5699,11 @@ msgstr "Entrée"
 
 #: classes/views/frm-entries/sidebar-shared.php:8
 msgid "Entry Actions"
-msgstr "Actions d’entrée"
+msgstr "Actions de l’entrée"
 
 #: classes/views/frm-entries/sidebar-shared.php:28
 msgid "Entry Details"
-msgstr "Détails d’entrée"
+msgstr "Détails de l’entrée"
 
 #: classes/views/frm-entries/sidebar-shared.php:36
 msgid "Post"
@@ -6280,7 +6280,7 @@ msgstr "Page %s"
 
 #: classes/views/frm-forms/form.php:82
 msgid "Click or drag a field from the sidebar to add it to your form"
-msgstr "Cliquez ou glissez-déplacez un champ depuis la barre latérale pour l’ajouter à votre formulaire"
+msgstr "Cliquez sur un champ depuis la barre latérale ou faites-le glisser puis déposez-le pour l’ajouter à votre formulaire."
 
 #: classes/views/frm-forms/insert_form_popup.php:11
 msgid "Close panel"
@@ -7652,7 +7652,7 @@ msgstr "Paiement réussi"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:58
 msgid "Failed Payment"
-msgstr "Paiement échoué"
+msgstr "Échec du paiement"
 
 #: stripe/controllers/FrmTransLiteActionsController.php:59
 msgid "Refunded Payment"
