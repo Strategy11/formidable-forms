@@ -1755,8 +1755,6 @@ class FrmFormsController {
 		FrmAppHelper::trigger_hook_load( 'form' );
 
 		switch ( $action ) {
-			case 'new':
-				return self::new_form( $vars );
 			case 'create':
 			case 'edit':
 			case 'update':
@@ -3121,13 +3119,6 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function new_form( $values = array() ) {
-		FrmDeprecated::new_form( $values );
 	}
 
 	/**

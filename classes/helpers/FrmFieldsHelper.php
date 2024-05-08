@@ -2334,14 +2334,6 @@ class FrmFieldsHelper {
 	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
-	 */
-	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
-		FrmDeprecated::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
 	 *
 	 * @param string       $html
 	 * @param array        $field

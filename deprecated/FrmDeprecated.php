@@ -12,36 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDeprecated {
 
 	/**
-	 * @deprecated 2.3
-	 */
-	public static function deprecated( $function, $version ) {
-		_deprecated_function( $function, $version );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function new_form( $values = array() ) {
-		_deprecated_function( __FUNCTION__, '4.0', 'FrmFormsController::edit' );
-
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-
-		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
-
-		if ( $action === 'create' ) {
-			FrmFormsController::update( $values );
-			return;
-		}
-
-		$values = FrmFormsHelper::setup_new_vars( $values );
-		$id   = FrmForm::create( $values );
-		$values['id'] = $id;
-
-		FrmFormsController::edit( $values );
-	}
-
-	/**
 	 * Don't allow subsite addon licenses to be fetched
 	 * unless the current user has super admin permissions
 	 *
@@ -136,14 +106,6 @@ class FrmDeprecated {
 		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldType::prepare_field_html' );
 		$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
 		return $field_obj->prepare_field_html( compact( 'errors', 'form' ) );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 */
-	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmShortcodeHelper::remove_inline_conditions' );
-		FrmShortcodeHelper::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
 	}
 
 	/**
