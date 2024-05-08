@@ -3142,14 +3142,6 @@ class FrmFormsController {
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 */
-	public static function bulk_create_template( $ids ) {
-		return FrmDeprecated::bulk_create_template( $ids );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
 	public static function edit_key() {
 		FrmDeprecated::edit_key();
 	}
