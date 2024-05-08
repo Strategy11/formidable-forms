@@ -1230,17 +1230,6 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Checks if is on IE browser.
-	 *
-	 * @since 5.4
-	 *
-	 * @return {boolean} True if the user agent matches for IE.
-	 */
-	function isIE() {
-		return navigator.userAgent.indexOf( 'MSIE' ) > -1 || navigator.userAgent.indexOf( 'Trident' ) > -1;
-	}
-
-	/**
 	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
 	 *
 	 * @since 5.4
@@ -1269,7 +1258,7 @@ function frmFrontFormJS() {
 	}
 
 	function initFloatingLabels() {
-		let checkFloatLabel, checkDropdownLabel, checkPlaceholderIE, runOnLoad, selector, floatClass;
+		let checkFloatLabel, checkDropdownLabel, runOnLoad, selector, floatClass;
 
 		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
 		floatClass = 'frm_label_float_top';
@@ -1298,8 +1287,6 @@ function frmFrontFormJS() {
 					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
 					firstOpt.textContent = '';
 				}
-			} else if ( isIE() ) {
-				checkPlaceholderIE( input );
 			}
 		};
 
@@ -1312,23 +1299,6 @@ function frmFrontFormJS() {
 					firstOpt.textContent = '';
 				}
 			});
-		};
-
-		checkPlaceholderIE = function( input ) {
-			if ( input.value ) {
-				// Don't need to handle this case because placeholder isn't shown.
-				return;
-			}
-
-			if ( document.activeElement === input ) {
-				if ( input.hasAttribute( 'data-placeholder' ) ) {
-					input.placeholder = input.getAttribute( 'data-placeholder' );
-					input.removeAttribute( 'data-placeholder' );
-				}
-			} else if ( input.placeholder ) {
-				input.setAttribute( 'data-placeholder', input.placeholder );
-				input.placeholder = '';
-			}
 		};
 
 		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
@@ -1361,12 +1331,6 @@ function frmFrontFormJS() {
 			}
 
 			checkDropdownLabel();
-
-			if ( isIE() ) {
-				document.querySelectorAll( selector ).forEach( function( input ) {
-					checkPlaceholderIE( input );
-				});
-			}
 		};
 
 		runOnLoad( true );
