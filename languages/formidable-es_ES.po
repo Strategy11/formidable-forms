@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-05-06T15:22:32+00:00\n"
-"PO-Revision-Date: 2024-05-07 02:02\n"
+"PO-Revision-Date: 2024-05-09 02:11\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -5397,7 +5397,7 @@ msgstr "Comprobar ahora si hay una actualización o renovación reciente"
 #: classes/views/addons/list.php:62
 #: classes/views/addons/list.php:63
 msgid "View Docs"
-msgstr "Ver los documentos"
+msgstr "Ver la documentación"
 
 #. translators: %s: Status name
 #: classes/views/addons/list.php:79
@@ -5810,7 +5810,7 @@ msgstr "Ejemplo:"
 
 #: classes/views/frm-fields/back-end/input-mask-info.php:29
 msgid "See more examples and docs"
-msgstr "Ver más ejemplos y documentos"
+msgstr "Ver más ejemplos y documentación"
 
 #: classes/views/frm-fields/back-end/layout-classes.php:8
 msgid "Click on any box below to set the width for your selected field."
@@ -5898,7 +5898,7 @@ msgstr "Los captchas no funcionarán hasta que la clave secreta y la del sitio e
 #. translators: %1$s: Link HTML, %2$s: End link
 #: classes/views/frm-fields/back-end/settings.php:48
 msgid "Credit Cards will not work without %1$sadding a Collect Payment action%2$s."
-msgstr "Las tarjetas de crédito no funcionarán sin que %1$sañada una acción de recoger pago%2$s."
+msgstr "Las tarjetas de crédito no funcionarán sin que %1$sañada una acción de cobrar pago%2$s."
 
 #: classes/views/frm-fields/back-end/settings.php:71
 #: classes/views/frm-fields/back-end/settings.php:360
