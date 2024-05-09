@@ -6,6 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
+	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
+	 *
+	 * @since x.x
+	 *
 	 * @var array|null
 	 */
 	static $field_type_data_for_insert_opt_html;
