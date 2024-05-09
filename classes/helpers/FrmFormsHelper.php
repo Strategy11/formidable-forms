@@ -12,7 +12,7 @@ class FrmFormsHelper {
 	 *
 	 * @var array|null
 	 */
-	static $field_type_data_for_insert_opt_html;
+	private static $field_type_data_for_insert_opt_html;
 
 	/**
 	 * @since 2.2.10
