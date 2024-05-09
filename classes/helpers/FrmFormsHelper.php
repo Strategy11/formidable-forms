@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
+	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
+	 *
+	 * @since x.x
+	 *
+	 * @var array|null
+	 */
+	private static $field_type_data_for_insert_opt_html;
+
+	/**
 	 * @since 2.2.10
 	 */
 	public static function form_error_class() {
@@ -579,7 +588,7 @@ BEFORE_HTML;
 	 */
 	public static function insert_opt_html( $args ) {
 		$class  = isset( $args['class'] ) ? $args['class'] : '';
-		$fields = FrmField::all_field_selection();
+		$fields = self::get_field_type_data_for_insert_opt_html();
 		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
 
 		self::prepare_field_type( $field );
@@ -614,6 +623,21 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Store and re-use field selection data for use when outputting shortcodes options in shortcode pop up.
+	 * This significantly improves performance by avoiding repeat calls to FrmField::all_field_selection.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_field_type_data_for_insert_opt_html() {
+		if ( ! isset( self::$field_type_data_for_insert_opt_html ) ) {
+			self::$field_type_data_for_insert_opt_html = FrmField::all_field_selection();
+		}
+		return self::$field_type_data_for_insert_opt_html;
 	}
 
 	/**
