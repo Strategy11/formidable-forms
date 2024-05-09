@@ -98,7 +98,7 @@ class FrmTransLiteActionsController {
 	 * @param array $args
 	 * @return void
 	 */
-	public static function show_failed_message( $args ) {
+	private static function show_failed_message( $args ) {
 		global $frm_vars;
 		$frm_vars['frm_trans'] = array(
 			'pay_entry' => $args['entry'],
