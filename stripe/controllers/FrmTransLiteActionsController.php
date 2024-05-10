@@ -275,8 +275,14 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = count( $amount_parts ) === 2 && strlen( $amount_parts[1] ) === 2;
+		$amount_parts = explode( '.', $amount );
+		if ( 2 !== count( $amount_parts ) ) {
+			return;
+		}
+
+		$strlen           = strlen( $amount_parts[1] );
+		$used_for_decimal = $strlen === 1 || $strlen === 2;
+
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}
