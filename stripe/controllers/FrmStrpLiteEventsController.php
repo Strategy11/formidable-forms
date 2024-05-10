@@ -307,12 +307,28 @@ class FrmStrpLiteEventsController {
 	private function get_payments_count( $sub_id ) {
 		$frm_payment  = new FrmTransLitePayment();
 		$all_payments = $frm_payment->get_all_by( $sub_id, 'sub_id' );
-		$count        = 0;
-		foreach ( $all_payments as $payment ) {
+		$count        = self::count_completed_payments( $all_payments );
+
+		return $count;
+	}
+
+	/**
+	 * Returns the count of completed payments.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $payments
+	 *
+	 * @return int
+	 */
+	public static function count_completed_payments( $payments ) {
+		$count = 0;
+		foreach ( $payments as $payment ) {
 			if ( $payment->status === 'complete' ) {
 				$count++;
 			}
 		}
+
 		return $count;
 	}
 
