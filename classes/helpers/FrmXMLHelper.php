@@ -1173,6 +1173,14 @@ class FrmXMLHelper {
 						}
 					}
 
+					if ( ! empty( $m['value']['map_address_fields'] ) ) {
+						foreach ( $m['value']['map_address_fields'] as $address_field_key => $address_field_id ) {
+							if ( isset( $frm_duplicate_ids[ $address_field_id ] ) ) {
+								$m['value']['map_address_fields'][ $address_field_key ] = $frm_duplicate_ids[ $address_field_id ];
+							}
+						}
+					}
+
 					$check_dup_array = array();
 					if ( ! empty( $m['value']['order_by'] ) ) {
 						if ( is_numeric( $m['value']['order_by'] ) && isset( $frm_duplicate_ids[ $m['value']['order_by'] ] ) ) {
