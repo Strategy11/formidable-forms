@@ -281,7 +281,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$strlen           = strlen( $amount_parts[1] );
-		$used_for_decimal = $strlen >= 1 && $strlen <= 2;
+		$used_for_decimal = $strlen === 1 || $strlen === 2;
 
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
