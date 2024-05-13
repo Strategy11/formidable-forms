@@ -1607,8 +1607,6 @@ select.frm_loading_lookup{
 
 
 <?php
-FrmStylesHelper::maybe_include_font_icon_css();
-
 /**
  * Call action so other plugins can add additional CSS.
  *
