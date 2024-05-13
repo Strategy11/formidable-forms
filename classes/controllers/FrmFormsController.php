@@ -164,12 +164,15 @@ class FrmFormsController {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function edit( $values = false ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
-		return self::get_edit_vars( $id );
+		self::get_edit_vars( $id );
 	}
 
 	public static function settings( $id = false, $message = '' ) {
@@ -233,6 +236,9 @@ class FrmFormsController {
 		return ! empty( $form->options['antispam'] );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function update( $values = array() ) {
 		if ( empty( $values ) ) {
 			$values = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -252,7 +258,8 @@ class FrmFormsController {
 		$id = isset( $values['id'] ) ? absint( $values['id'] ) : FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
 		if ( count( $errors ) > 0 ) {
-			return self::get_edit_vars( $id, $errors );
+			self::get_edit_vars( $id, $errors );
+			return;
 		}
 
 		self::maybe_remove_draft_option_from_fields( $id );
@@ -273,7 +280,7 @@ class FrmFormsController {
 			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-		return self::get_edit_vars( $id, array(), $message );
+		self::get_edit_vars( $id, array(), $message );
 	}
 
 	/**
