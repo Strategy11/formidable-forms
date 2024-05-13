@@ -447,6 +447,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private static function load_theme_preview() {
 		add_filter( 'wp_title', 'FrmFormsController::preview_title', 9999 );
@@ -480,6 +482,8 @@ class FrmFormsController {
 	/**
 	 * Not every theme supports get_template_part( 'page' ).
 	 * When this is not supported, false is returned, and we can handle a fallback.
+	 *
+	 * @return void
 	 */
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
 		if ( have_posts() ) {
@@ -551,9 +555,12 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Set the page title for the theme preview page
+	 * Set the page title for the theme preview page.
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $title
+	 * @return string
 	 */
 	public static function preview_title( $title ) {
 		return __( 'Form Preview', 'formidable' );
@@ -716,6 +723,10 @@ class FrmFormsController {
 		self::display_forms_list( $params, $message );
 	}
 
+	/**
+	 * @param array $ids
+	 * @return string
+	 */
 	public static function bulk_trash( $ids ) {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
@@ -762,6 +773,10 @@ class FrmFormsController {
 		self::display_forms_list( $params, $message );
 	}
 
+	/**
+	 * @param array $ids
+	 * @return string
+	 */
 	public static function bulk_destroy( $ids ) {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
@@ -851,6 +866,8 @@ class FrmFormsController {
 	 * Before creating a new form, get the name and description from the modal.
 	 *
 	 * @since 4.0
+	 *
+	 * @return array<string,string>
 	 */
 	public static function get_modal_values() {
 		$name = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
@@ -867,6 +884,8 @@ class FrmFormsController {
 	 * Hook exists since 2.5.0
 	 *
 	 * @since 2.0.15
+	 *
+	 * @return void
 	 */
 	public static function insert_form_button() {
 		if ( current_user_can( 'frm_view_forms' ) ) {
@@ -1035,6 +1054,9 @@ class FrmFormsController {
 		return $columns;
 	}
 
+	/**
+	 * @return array<string,string>
+	 */
 	public static function get_sortable_columns() {
 		return array(
 			'id'          => 'id',
@@ -1077,6 +1099,13 @@ class FrmFormsController {
 		return $save;
 	}
 
+	/**
+	 * @param int|string $id
+	 * @param array      $errors
+	 * @param string     $message
+	 * @param bool       $create_link
+	 * @return void
+	 */
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
 		global $frm_vars;
 
@@ -1162,6 +1191,10 @@ class FrmFormsController {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php';
 	}
 
+	/**
+	 * @param array $fields
+	 * @return array
+	 */
 	public static function update_form_builder_fields( $fields, $form ) {
 		foreach ( $fields as $field ) {
 			$field->do_not_include_icons = true;
@@ -1175,6 +1208,12 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @param int|string   $id
+	 * @param array        $errors
+	 * @param array|string $args
+	 * @return void
+	 */
 	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -1464,7 +1503,7 @@ class FrmFormsController {
 		);
 
 		$user_fields = self::user_shortcodes();
-		if ( ! empty( $user_fields ) ) {
+		if ( $user_fields ) {
 			$user_helpers = array();
 			foreach ( $user_fields as $uk => $uf ) {
 				$user_helpers[ '|user_id| show="' . $uk . '"' ] = $uf;
@@ -1691,6 +1730,10 @@ class FrmFormsController {
 		return FrmFieldsHelper::replace_content_shortcodes( $content, $entry, $shortcodes );
 	}
 
+	/**
+	 * @param array $errors
+	 * @return array
+	 */
 	public static function process_bulk_form_actions( $errors ) {
 		if ( ! $_REQUEST ) {
 			return $errors;
@@ -1758,7 +1801,7 @@ class FrmFormsController {
 			if ( empty( $json_vars ) ) {
 				// json decoding failed so we should return an error message.
 				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-				if ( 'edit' == $action ) {
+				if ( 'edit' === $action ) {
 					$action = 'update';
 				}
 
@@ -1991,7 +2034,7 @@ class FrmFormsController {
 	 */
 	public static function get_form_shortcode( $atts ) {
 		global $frm_vars;
-		if ( isset( $frm_vars['skip_shortcode'] ) && $frm_vars['skip_shortcode'] ) {
+		if ( ! empty( $frm_vars['skip_shortcode'] ) ) {
 			$sc  = '[formidable';
 			$sc .= FrmAppHelper::array_to_html_params( $atts );
 			return $sc . ']';
