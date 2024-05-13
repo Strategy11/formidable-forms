@@ -596,7 +596,34 @@ class FrmFormsController {
 			$form = FrmForm::getAll( array(), '', 1 );
 		}
 
+		self::fix_deprecated_null_param_warning();
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php';
+	}
+
+	/**
+	 * Some themes have a null $src value.
+	 * This function adds a filter to ensure that $src is not null.
+	 * WP will call str_starts_with with the null value triggering a deprecated message otherwise.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function fix_deprecated_null_param_warning() {
+		add_filter(
+			'script_loader_src',
+			/**
+			 * @param string|null $src
+			 * @return string
+			 */
+			function ( $src ) {
+				if ( is_null( $src ) ) {
+					$src = '';
+				}
+				return $src;
+			}
+		);
 	}
 
 	public static function untrash() {
