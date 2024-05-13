@@ -617,38 +617,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since 5.5.1
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		$signature_add_on_is_active = class_exists( 'FrmSigAppHelper', false );
-
-		if ( ! FrmAppHelper::pro_is_installed() && ! $signature_add_on_is_active ) {
-			// If Pro and Signatures are both not active, there is no need to include the font icon CSS in lite.
-			return;
-		}
-
-		$pro_version_will_handle_loading = false;
-
-		if ( class_exists( 'FrmProDb', false ) ) {
-			$pro_version_that_includes_font_icons_css = '5.5.1';
-
-			// Include font icons in Lite for backward compatibility with older version of Pro.
-			$pro_version_will_handle_loading = version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '>=' );
-		}
-
-		$load_it_here = false;
-		if ( ! $pro_version_will_handle_loading ) {
-			// If Pro is not handling it, we still need to include it for the Signature add on.
-			$load_it_here = $signature_add_on_is_active;
-		}
-
-		if ( $load_it_here ) {
-			readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
-		}
-	}
-
-	/**
 	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
 	 *
 	 * @since 6.0
@@ -752,5 +720,14 @@ class FrmStylesHelper {
 		}
 
 		return FrmDb::get_count( 'frm_forms', $where );
+	}
+
+	/**
+	 * @since 5.5.1
+	 * @deprecated x.x
+	 * @return void
+	 */
+	public static function maybe_include_font_icon_css() {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
