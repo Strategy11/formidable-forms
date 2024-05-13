@@ -617,7 +617,7 @@ class FrmFormsController {
 			 * @param string|null $src
 			 * @return string
 			 */
-			function( $src ) {
+			function ( $src ) {
 				if ( is_null( $src ) ) {
 					$src = '';
 				}
