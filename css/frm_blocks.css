@@ -4,13 +4,9 @@
  */
 
 .frm-block-intro-screen .frm-block-intro-content {
-	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-direction: column;
 	flex-direction: column;
-	-ms-flex-pack: center;
 	justify-content: center;
-	-ms-flex-align: center;
 	align-items: center;
 	text-align: center;
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
