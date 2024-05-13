@@ -175,6 +175,11 @@ class FrmFormsController {
 		self::get_edit_vars( $id );
 	}
 
+	/**
+	 * @param mixed  $id
+	 * @param string $message
+	 * @return void
+	 */
 	public static function settings( $id = false, $message = '' ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -184,7 +189,7 @@ class FrmFormsController {
 
 		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $id );
 
-		return self::get_settings_vars( $id, array(), $message );
+		self::get_settings_vars( $id, array(), $message );
 	}
 
 	public static function update_settings() {
@@ -208,7 +213,8 @@ class FrmFormsController {
 		$warnings = FrmFormsHelper::check_for_warnings( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( count( $errors ) > 0 ) {
-			return self::get_settings_vars( $id, $errors, compact( 'warnings' ) );
+			self::get_settings_vars( $id, $errors, compact( 'warnings' ) );
+			return;
 		}
 
 		do_action( 'frm_before_update_form_settings', $id );
@@ -224,7 +230,7 @@ class FrmFormsController {
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
-		return self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
+		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
 	}
 
 	/**
