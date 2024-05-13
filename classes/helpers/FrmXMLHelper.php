@@ -1181,6 +1181,14 @@ class FrmXMLHelper {
 						}
 					}
 
+					if ( ! empty( $m['value']['calendar_options'] ) ) {
+						foreach ( $m['value']['calendar_options'] as $calendar_option_group_key => $calendar_option ) {
+							if ( isset( $frm_duplicate_ids[ $calendar_option['value'] ] ) ) {
+								$m['value']['calendar_options'][ $calendar_option_group_key ]['value'] = $frm_duplicate_ids[ $calendar_option['value'] ];
+							}
+						}
+					}
+
 					$check_dup_array = array();
 					if ( ! empty( $m['value']['order_by'] ) ) {
 						if ( is_numeric( $m['value']['order_by'] ) && isset( $frm_duplicate_ids[ $m['value']['order_by'] ] ) ) {
