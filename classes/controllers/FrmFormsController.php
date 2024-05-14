@@ -1481,7 +1481,8 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function mb_tags_box( $form_id, $class = '' ) {
-		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ) );
+		FrmField::include_sub_fields( $fields, 'include', 'all', $form_id  );
 
 		/**
 		 * Allows modifying the list of fields in the tags box.
