@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.5.2
 Requires PHP: 5.6
-Stable tag: 6.9
+Stable tag: 6.9.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,15 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.9.1 =
+* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
+* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
+* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
+* Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* The parser for serialized string data has been optimized to be approximately 30% faster than before.
+* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
+* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
+
 = 6.9 =
 * New: A new onboarding wizard has been added to help improve the initial set up process.
 * New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
@@ -410,33 +419,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 = 6.8.2 =
 * Fix: The process of connecting an account to formidableforms.com would fail in some web browsers.
-
-= 6.8.1 =
-* Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
-* New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
-* Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
-* Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
-* Fix: The action limit error message would always show the action limit as one.
-
-= 6.8 =
-* Security: Nonce validation was missing when saving changes on the form settings page.
-* New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
-* New: New fields will no longer appear on the front end until the form is saved. This way a form can be used without partial incomplete changes while a form is being worked on.
-* New: An HSL color value can now be used in the visual styler. Previously these values would be prepended by # and PHP warnings would cause styles to break.
-* New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately. This can be reverted to the previous behaviour using add_filter( 'frm_stripe_cancel_subscription_at_period_end', '__return_false' );.
-* New: Summary emails will no longer send by default on multisite for sites that are not the main site.
-* New: Summary emails can now be disabled from your profile on your Formidable Forms account for Pro users.
-* Fix: On some sites, while using Google Chrome, some style card menu options would be missing. This includes the option to Delete a style or to Set a style as default.
-* Fix: Long forms loaded with AJAX were loading in smaller batches than intended, usually pulling only a few fields at a time. This has been restored to the intended batch size of 15 fields at a time.
-* Fix: A styling issue in some search search inputs has been fixed.
-* Fix: The view payment page was appearing blank, and table column options were missing when editing a table view.
-* Fix: An error message wouldn't properly appear when using a 3D secure card and failing the payment.
-* Fix: A subscription with a failed payment would incorrectly redirect like a confirmed payment.
-* Fix: The toggle to disable form styling would still appear active when disabled through the Manage Styling global setting.
-* Fix: Encoded characters would appear in plain text summary emails.
-* List tag types include ul, ol, and li are now allowed in form input HTML by default.
-* Form input HTML will no longer be filtered to strip most HTML on display if the entry was created by or edited by a privileged user.
-* Summary emails are no longer sent when there are no new entries.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

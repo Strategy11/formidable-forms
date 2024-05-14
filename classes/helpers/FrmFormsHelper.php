@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
+	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
+	 *
+	 * @since x.x
+	 *
+	 * @var array|null
+	 */
+	private static $field_type_data_for_insert_opt_html;
+
+	/**
 	 * @since 2.2.10
 	 */
 	public static function form_error_class() {
@@ -62,11 +71,10 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
-	 *
-	 * @since 2.0.6
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -199,16 +207,6 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
-	}
-
-	/**
-	 * @since 3.05
-	 * @deprecated 4.0
-	 *
-	 * @param array $values The form array.
-	 */
-	public static function builder_submit_button( $values ) {
-		FrmDeprecated::builder_submit_button( $values );
 	}
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
@@ -407,10 +405,9 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $options
 	 * @param array $values
-	 *
-	 * @since 2.0.6
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
@@ -591,7 +588,7 @@ BEFORE_HTML;
 	 */
 	public static function insert_opt_html( $args ) {
 		$class  = isset( $args['class'] ) ? $args['class'] : '';
-		$fields = FrmField::all_field_selection();
+		$fields = self::get_field_type_data_for_insert_opt_html();
 		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
 
 		self::prepare_field_type( $field );
@@ -626,6 +623,21 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Store and re-use field selection data for use when outputting shortcodes options in shortcode pop up.
+	 * This significantly improves performance by avoiding repeat calls to FrmField::all_field_selection.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_field_type_data_for_insert_opt_html() {
+		if ( ! isset( self::$field_type_data_for_insert_opt_html ) ) {
+			self::$field_type_data_for_insert_opt_html = FrmField::all_field_selection();
+		}
+		return self::$field_type_data_for_insert_opt_html;
 	}
 
 	/**
@@ -971,9 +983,8 @@ BEFORE_HTML;
 	/**
 	 * Display the validation error messages when an entry is submitted
 	 *
-	 * @param array $args Includes img, errors.
-	 *
 	 * @since 2.0.6
+	 * @param array $args Includes img, errors.
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -999,9 +1010,8 @@ BEFORE_HTML;
 	 * The image was removed from the styling settings, but it may still be set with a hook
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
-	 * @param array $args Includes img, errors, and show_img.
-	 *
 	 * @since 2.0.6
+	 * @param array $args Includes img, errors, and show_img.
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
@@ -1302,7 +1312,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ) ) ) {
+		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
 			$status = 'publish';
 		}
 
@@ -1764,27 +1774,5 @@ BEFORE_HTML;
 		} else {
 			esc_html_e( 'Update', 'formidable' );
 		}
-	}
-
-	/**
-	 * @since 4.02
-	 * @deprecated 6.7
-	 */
-	public static function template_install_html( $link, $class = '' ) {
-		_deprecated_function( __METHOD__, '6.7' );
-	}
-
-	/**
-	 * Check an array of templates, determine how many the logged in user can use
-	 *
-	 * @deprecated 6.7
-	 *
-	 * @param array $templates
-	 * @param array $args
-	 * @return int
-	 */
-	public static function available_count( $templates, $args ) {
-		_deprecated_function( __METHOD__, '6.7' );
-		return 0;
 	}
 }

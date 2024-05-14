@@ -7907,7 +7907,6 @@ input[disabled],
 li.frm_noallow.button,
 .frm_noallow {
 	opacity: .5;
-	filter: alpha(opacity=50);
 }
 
 .frm_actions_list a.frm_show_upgrade.frm_inactive_action:before,

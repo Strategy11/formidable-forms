@@ -113,6 +113,10 @@ class FrmApplicationTemplate {
 	 * @return array
 	 */
 	public function as_js_object() {
+		if ( ! is_array( self::$keys ) ) {
+			return array();
+		}
+
 		$application = array();
 		foreach ( self::$keys as $key ) {
 			if ( ! isset( $this->api_data[ $key ] ) ) {

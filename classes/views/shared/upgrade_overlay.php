@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php
 					printf(
 						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag. */
-						esc_html__( '%1$s %2$sare not installed%3$s', 'formidable' ),
+						esc_html__( '%1$s %2$sare not available%3$s', 'formidable' ),
 						'<span class="frm_feature_label"></span>',
 						'<span class="frm_are_not_installed">',
 						'</span>'
@@ -27,9 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</h2>
 				<div class="cta-inside">
-					<p class="frm-oneclick frm_hidden">
-						<?php esc_html_e( 'That add-on is not installed. Would you like to install it now?', 'formidable' ); ?>
-					</p>
+					<p class="frm-oneclick frm_hidden"></p>
 					<p class="frm-addon-status"></p>
 
 					<a class="button button-primary frm-button-primary frm_hidden frm-oneclick-button">

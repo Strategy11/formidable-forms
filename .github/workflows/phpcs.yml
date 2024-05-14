@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
       - name: Install dependencies
-        run: composer install --dev --prefer-dist --no-progress --no-suggest
+        run: composer install --dev --prefer-dist --no-progress
 
       - name: PHPCS check
         run: ./vendor/bin/phpcs --parallel=10 ./

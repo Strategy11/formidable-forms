@@ -80,7 +80,7 @@ class FrmStyle {
 
 		$action_ids = array();
 
-		foreach ( $all_instances as $number => $new_instance ) {
+		foreach ( $all_instances as $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 
@@ -226,21 +226,6 @@ class FrmStyle {
 	}
 
 	/**
-	 * Unslash everything in post_content but custom_css
-	 *
-	 * @since 5.0.13
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private function unslash_post_content( $settings ) {
-		$custom_css             = isset( $settings['custom_css'] ) ? $settings['custom_css'] : '';
-		$settings               = wp_unslash( $settings );
-		$settings['custom_css'] = $custom_css;
-		return $settings;
-	}
-
-	/**
 	 * @since 5.0.13
 	 *
 	 * @param array $settings
@@ -316,10 +301,8 @@ class FrmStyle {
 	private function trim_braces( $input ) {
 		$output = $input;
 		// Remove any ( from the start of the string as no CSS values expect at the first character.
-		if ( $output ) {
-			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
-				$output = ltrim( $output, '()' );
-			}
+		if ( $output && in_array( $output[0], array( '(', ')' ), true ) ) {
+			$output = ltrim( $output, '()' );
 		}
 		// Remove extra braces from the end.
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {

@@ -560,7 +560,7 @@ class FrmForm {
 		}
 
 		$statuses = array( 'published', 'draft', 'trash' );
-		if ( ! in_array( $status, $statuses ) ) {
+		if ( ! in_array( $status, $statuses, true ) ) {
 			return false;
 		}
 
@@ -759,9 +759,8 @@ class FrmForm {
 	/**
 	 * If $form is numeric, get the form object
 	 *
-	 * @param int|object $form
-	 *
 	 * @since 2.0.9
+	 * @param int|object $form
 	 */
 	public static function maybe_get_form( &$form ) {
 		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
@@ -1069,7 +1068,7 @@ class FrmForm {
 	}
 
 	public static function get_current_form_id( $default_form = 'none' ) {
-		if ( 'first' == $default_form ) {
+		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
 		} else {
 			$form = self::maybe_get_current_form();

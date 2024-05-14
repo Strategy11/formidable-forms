@@ -14,6 +14,6 @@ class test_FrmFormActionsController extends FrmUnitTest {
 	public function test_register_post_types() {
 		$post_types       = get_post_types();
 		$action_post_type = FrmFormActionsController::$action_post_type;
-		$this->assertTrue( in_array( $action_post_type, $post_types ), 'The ' . $action_post_type . ' is missing' );
+		$this->assertTrue( in_array( $action_post_type, $post_types, true ), 'The ' . $action_post_type . ' is missing' );
 	}
 }

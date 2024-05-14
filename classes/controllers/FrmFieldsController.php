@@ -343,7 +343,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.9.1
 	 *
 	 * @return FrmFieldSelectionData
 	 */
@@ -521,7 +521,7 @@ class FrmFieldsController {
 			'lookup',
 		);
 
-		if ( ! isset( $field['size'] ) || $field['size'] <= 0 || in_array( $field['type'], $size_fields ) ) {
+		if ( ! isset( $field['size'] ) || $field['size'] <= 0 || in_array( $field['type'], $size_fields, true ) ) {
 			return;
 		}
 
@@ -574,7 +574,7 @@ class FrmFieldsController {
 			'file',
 		);
 
-		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], $fields ) ) {
+		if ( FrmField::is_option_empty( $field, 'max' ) || in_array( $field['type'], $fields, true ) ) {
 			return;
 		}
 
@@ -933,83 +933,5 @@ class FrmFieldsController {
 		}
 
 		return $opt;
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function update_ajax_option() {
-		_deprecated_function( __METHOD__, '4.0' );
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
-		if ( ! $field_id ) {
-			wp_die();
-		}
-
-		$field = FrmField::getOne( $field_id );
-
-		if ( isset( $_POST['separate_value'] ) ) {
-			$new_val = FrmField::is_option_true( $field, 'separate_value' ) ? 0 : 1;
-
-			$field->field_options['separate_value'] = $new_val;
-			unset( $new_val );
-		}
-
-		FrmField::update(
-			$field_id,
-			array(
-				'field_options' => $field->field_options,
-				'form_id'       => $field->form_id,
-			)
-		);
-		wp_die();
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function import_choices() {
-		_deprecated_function( __METHOD__, '4.0' );
-		wp_die();
-	}
-
-	/**
-	 * Add Single Option or Other Option.
-	 *
-	 * @deprecated 4.0 Moved to Pro for Other option only.
-	 */
-	public static function add_option() {
-		_deprecated_function( __METHOD__, '4.0', 'FrmProFieldsController::add_other_option' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function update_order() {
-		FrmDeprecated::update_order();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_name( $field = 'name', $id = '' ) {
-		FrmDeprecated::edit_name( $field, $id );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param int   $field_id
-	 * @param array $values
-	 * @param int   $form_id
-	 *
-	 * @return array
-	 */
-	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
-		return FrmDeprecated::include_single_field( $field_id, $values, $form_id );
 	}
 }

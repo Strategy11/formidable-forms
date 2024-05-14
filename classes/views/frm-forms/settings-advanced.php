@@ -77,7 +77,9 @@ if ( ! $values['is_template'] ) {
 </p>
 
 <?php
-is_callable( 'FrmFormsController::render_spam_settings' ) && FrmFormsController::render_spam_settings( $values );
+if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
+	FrmFormsController::render_spam_settings( $values );
+}
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 

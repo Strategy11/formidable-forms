@@ -94,7 +94,7 @@ class FrmStringReaderHelper {
 	/**
 	 * Shift the position. This is used to skip a character that we don't need to read.
 	 *
-	 * @since x.x This was added as an optimization.
+	 * @since 6.9.1 This was added as an optimization.
 	 *
 	 * @return void
 	 */

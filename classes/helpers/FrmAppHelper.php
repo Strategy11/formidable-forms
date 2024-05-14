@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.9';
+	public static $plug_version = '6.9.1';
 
 	/**
 	 * @var bool
@@ -194,6 +194,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.05
+	 *
+	 * @param array $atts
+	 * @return string
 	 */
 	public static function svg_logo( $atts = array() ) {
 		$defaults = array(
@@ -212,6 +215,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function show_logo( $atts = array() ) {
 		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -219,6 +225,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.03.02
+	 *
+	 * @return void
 	 */
 	public static function show_header_logo() {
 		$icon = self::svg_logo(
@@ -242,6 +250,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.02.04
+	 *
+	 * @return bool
 	 */
 	public static function ips_saved() {
 		$frm_settings = self::get_settings();
@@ -249,8 +259,11 @@ class FrmAppHelper {
 		return ! $frm_settings->no_ips;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function pro_is_installed() {
-		return apply_filters( 'frm_pro_installed', false );
+		return (bool) apply_filters( 'frm_pro_installed', false );
 	}
 
 	/**
@@ -266,6 +279,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06.02
+	 *
+	 * @return bool
 	 */
 	public static function pro_is_connected() {
 		global $frm_vars;
@@ -274,12 +289,17 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return bool
 	 */
 	public static function is_form_builder_page() {
 		$action = self::simple_get( 'frm_action', 'sanitize_title' );
 		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
 		$is_formidable = strpos( $page, 'formidable' ) !== false;
@@ -3211,19 +3231,21 @@ class FrmAppHelper {
 		global $wp_scripts;
 
 		$script_strings = array(
-			'ajax_url'           => esc_url_raw( self::get_ajax_url() ),
-			'images_url'         => self::plugin_url() . '/images',
-			'loading'            => __( 'Loading&hellip;', 'formidable' ),
-			'remove'             => __( 'Remove', 'formidable' ),
-			'offset'             => apply_filters( 'frm_scroll_offset', 4 ),
-			'nonce'              => wp_create_nonce( 'frm_ajax' ),
-			'id'                 => __( 'ID', 'formidable' ),
-			'no_results'         => __( 'No results match', 'formidable' ),
-			'file_spam'          => __( 'That file looks like Spam.', 'formidable' ),
-			'calc_error'         => __( 'There is an error in the calculation in the field with key', 'formidable' ),
-			'empty_fields'       => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
-			'focus_first_error'  => self::should_focus_first_error(),
-			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
+			'ajax_url'             => esc_url_raw( self::get_ajax_url() ),
+			'images_url'           => self::plugin_url() . '/images',
+			'loading'              => __( 'Loading&hellip;', 'formidable' ),
+			'remove'               => __( 'Remove', 'formidable' ),
+			'offset'               => apply_filters( 'frm_scroll_offset', 4 ),
+			'nonce'                => wp_create_nonce( 'frm_ajax' ),
+			'id'                   => __( 'ID', 'formidable' ),
+			'no_results'           => __( 'No results match', 'formidable' ),
+			'file_spam'            => __( 'That file looks like Spam.', 'formidable' ),
+			'calc_error'           => __( 'There is an error in the calculation in the field with key', 'formidable' ),
+			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
+			'focus_first_error'    => self::should_focus_first_error(),
+			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
+			'include_update_field' => self::should_include_update_field_function(),
+			'include_resend_email' => self::should_include_resend_email_code(),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3345,6 +3367,39 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * As of x.x the frmUpdateField function is now included in Pro.
+	 * This was originally included in Lite but was removed because the feature is only supoprted in Pro.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_include_update_field_function() {
+		if ( ! self::pro_is_installed() ) {
+			return false;
+		}
+		return ! self::meets_min_pro_version( '6.9.2' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_include_resend_email_code() {
+		if ( ! self::pro_is_installed() ) {
+			return false;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro vx.x.
+		 */
+		return apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
+	}
+
+	/**
 	 * Echo the message on the plugins listing page
 	 *
 	 * @since 1.07.10
@@ -3385,8 +3440,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$pro_version = FrmProDb::$plug_version;
-		$expired     = FrmAddonsController::is_license_expired();
+		$expired = FrmAddonsController::is_license_expired();
 		?>
 		<div class="frm-banner-alert frm_error_style frm_previous_install">
 			<?php
@@ -3885,17 +3939,6 @@ class FrmAppHelper {
 	/**
 	 * @since 5.0.17
 	 *
-	 * @param string $plugin
-	 * @return false|string
-	 */
-	private static function get_plan_required( $plugin ) {
-		$link = FrmAddonsController::install_link( $plugin );
-		return FrmFormsHelper::get_plan_required( $link );
-	}
-
-	/**
-	 * @since 5.0.17
-	 *
 	 * @param string $feature
 	 * @return bool
 	 */
@@ -4190,35 +4233,5 @@ class FrmAppHelper {
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
-	}
-
-	/**
-	 * Use the WP 4.7 wp_doing_ajax function
-	 *
-	 * @since 2.05.07
-	 * @deprecated 4.04.04
-	 */
-	public static function wp_doing_ajax() {
-		_deprecated_function( __METHOD__, '4.04.04', 'wp_doing_ajax' );
-		return wp_doing_ajax();
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 5.0.13
-	 *
-	 * @return string The base Google APIS url for the current version of jQuery UI
-	 */
-	public static function jquery_ui_base_url() {
-		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
-		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
-	}
-
-	/**
-	 * @since 4.07
-	 * @deprecated 6.0
-	 */
-	public static function renewal_message() {
-		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
 	}
 }

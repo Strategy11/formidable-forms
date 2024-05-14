@@ -226,22 +226,6 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * @return bool True if saving a draft.
-	 */
-	private function is_saving_a_draft() {
-		global $frm_vars;
-		if ( empty( $frm_vars['form_params'] ) ) {
-			return false;
-		}
-		$form_params = $frm_vars['form_params'];
-		if ( ! isset( $form_params[ $this->form_id ] ) ) {
-			return false;
-		}
-		$this_form_params = $form_params[ $this->form_id ];
-		return ! empty( $this_form_params['action'] ) && 'update' === $this_form_params['action'];
-	}
-
-	/**
 	 * Helper to run our filter on all the responses for the antispam checks.
 	 *
 	 * @since 4.11

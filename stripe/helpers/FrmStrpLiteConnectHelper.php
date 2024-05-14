@@ -291,8 +291,6 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function maybe_unschedule_crons() {
-		$mode = self::get_mode_value_from_post();
-
 		if ( self::at_least_one_mode_is_setup() ) {
 			// Don't unschedule if a mode is still on.
 			return;
@@ -645,7 +643,6 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$version = FrmAppHelper::plugin_version();
 		wp_register_script( 'formidable_stripe_settings', FrmStrpLiteAppHelper::plugin_url() . '/js/connect_settings.js', array( 'formidable_dom' ), FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_stripe_settings' );
 	}

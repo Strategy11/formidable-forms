@@ -365,7 +365,7 @@ class FrmAddonsController {
 		$transient->last_checked = time();
 		$wp_plugins              = self::get_plugins();
 
-		foreach ( $version_info as $id => $plugin ) {
+		foreach ( $version_info as $plugin ) {
 			$plugin = (object) $plugin;
 
 			if ( ! isset( $plugin->new_version ) || ! isset( $plugin->package ) ) {
@@ -565,7 +565,7 @@ class FrmAddonsController {
 		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) == strtolower( $addon['title'] ) ) {
+				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -1056,9 +1056,7 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function url_is_allowed( $download_url ) {
-		return (
-			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::allowed_external_urls(), true )
-		);
+		return FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::allowed_external_urls(), true );
 	}
 
 	/**
@@ -1551,110 +1549,6 @@ class FrmAddonsController {
 		}
 
 		return $requires;
-	}
-
-	/**
-	 * @since 4.06.02
-	 *
-	 * @deprecated 4.09.01
-	 *
-	 * @return void
-	 */
-	public static function ajax_multiple_addons() {
-		FrmDeprecated::ajax_multiple_addons();
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
-	 * @codeCoverageIgnore
-	 * @return array
-	 */
-	public static function error_for_license( $license ) {
-		return FrmDeprecated::error_for_license( $license );
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
-	 * @codeCoverageIgnore
-	 */
-	public static function get_pro_updater() {
-		return FrmDeprecated::get_pro_updater();
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
-	 * @codeCoverageIgnore
-	 *
-	 * @return array
-	 */
-	public static function get_addon_info( $license = '' ) {
-		return FrmDeprecated::get_addon_info( $license );
-	}
-
-	/**
-	 * @since 3.04.03
-	 * @deprecated 3.06
-	 * @codeCoverageIgnore
-	 *
-	 * @return string
-	 */
-	public static function get_cache_key( $license ) {
-		return FrmDeprecated::get_cache_key( $license );
-	}
-
-	/**
-	 * @since 3.04.03
-	 *
-	 * @deprecated 3.06
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function reset_cached_addons( $license = '' ) {
-		FrmDeprecated::reset_cached_addons( $license );
-	}
-
-	/**
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 *
-	 * @param bool   $return
-	 * @param string $package
-	 *
-	 * @return bool
-	 */
-	public static function add_shorten_edd_filename_filter( $return, $package ) {
-		return FrmDeprecated::add_shorten_edd_filename_filter( $return, $package );
-	}
-
-	/**
-	 * @since 2.03.08
-	 * @deprecated 3.04.03
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $filename
-	 * @param string $ext
-	 *
-	 * @return string
-	 */
-	public static function shorten_edd_filename( $filename, $ext ) {
-		return FrmDeprecated::shorten_edd_filename( $filename, $ext );
-	}
-
-	/**
-	 * @deprecated 3.04.03
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function get_licenses() {
-		FrmDeprecated::get_licenses();
 	}
 
 	/**

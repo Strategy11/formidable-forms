@@ -254,6 +254,9 @@ class FrmFormActionsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
+	/**
+	 * @param string $action
+	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 		if ( empty( $temp_actions ) ) {
@@ -266,7 +269,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' != $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base == $action ) {
 				return $a;
 			}
 
@@ -375,7 +378,7 @@ class FrmFormActionsController {
 	 */
 	private static function should_show_log_message( $action_type ) {
 		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
-		return in_array( $action_type, $logging ) && ! function_exists( 'frm_log_autoloader' );
+		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
 	private static function fields_to_values( $form_id, array &$values ) {

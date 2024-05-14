@@ -1662,8 +1662,6 @@ select.frm_loading_lookup{
 
 
 <?php
-FrmStylesHelper::maybe_include_font_icon_css();
-
 /**
  * Call action so other plugins can add additional CSS.
  *
@@ -1719,7 +1717,6 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 		border-right:1px solid #d3d3d3;
 		border-radius:4px;
 		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
-		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
 
 	.with_frm_style .g-recaptcha iframe,

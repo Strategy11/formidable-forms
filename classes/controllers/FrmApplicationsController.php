@@ -197,6 +197,7 @@ class FrmApplicationsController {
 		wp_localize_script( 'formidable_applications', 'frmApplicationsVars', $js_vars );
 
 		wp_enqueue_script( 'formidable_applications' );
+		wp_set_script_translations( 'formidable_applications', 'formidable' );
 		wp_enqueue_style( 'formidable_applications' );
 
 		do_action( 'frm_applications_assets' );

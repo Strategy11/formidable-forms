@@ -953,10 +953,10 @@ class FrmXMLHelper {
 				++$imported['imported'][ $this_type ];
 			}
 
-			$imported['posts'][ (int) $old_id ] = $post_id;
+			$imported['posts'][ $old_id ] = $post_id;
 
 			if ( $post['post_type'] === 'frm_display' ) {
-				$view_ids[ (int) $old_id ] = $post_id;
+				$view_ids[ $old_id ] = $post_id;
 			}
 
 			do_action( 'frm_after_import_view', $post_id, $post );
@@ -1170,6 +1170,22 @@ class FrmXMLHelper {
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
 							$m['value'][ $setting_name ] = $frm_duplicate_ids[ $m['value'][ $setting_name ] ];
+						}
+					}
+
+					if ( ! empty( $m['value']['map_address_fields'] ) ) {
+						foreach ( $m['value']['map_address_fields'] as $address_field_key => $address_field_id ) {
+							if ( isset( $frm_duplicate_ids[ $address_field_id ] ) ) {
+								$m['value']['map_address_fields'][ $address_field_key ] = $frm_duplicate_ids[ $address_field_id ];
+							}
+						}
+					}
+
+					if ( ! empty( $m['value']['calendar_options'] ) ) {
+						foreach ( $m['value']['calendar_options'] as $calendar_option_group_key => $calendar_option ) {
+							if ( isset( $frm_duplicate_ids[ $calendar_option['value'] ] ) ) {
+								$m['value']['calendar_options'][ $calendar_option_group_key ]['value'] = $frm_duplicate_ids[ $calendar_option['value'] ];
+							}
 						}
 					}
 
@@ -1396,7 +1412,7 @@ class FrmXMLHelper {
 			}
 		}
 
-		if ( $message == '<ul>' ) {
+		if ( $message === '<ul>' ) {
 			$message  = '';
 			$errors[] = __( 'Nothing was imported or updated', 'formidable' );
 		} else {

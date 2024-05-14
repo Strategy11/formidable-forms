@@ -107,10 +107,9 @@ class FrmEntry {
 			}
 
 			$diff = array_diff_assoc( $field_metas, $new_meta );
-			foreach ( $diff as $field_id => $meta_value ) {
+			foreach ( $diff as $meta_value ) {
 				if ( ! empty( $meta_value ) ) {
 					$is_duplicate = false;
-					continue;
 				}
 			}
 
@@ -337,9 +336,10 @@ class FrmEntry {
 	/**
 	 * If $entry is numeric, get the entry object
 	 *
-	 * @param int|object $entry By reference.
-	 *
 	 * @since 2.0.9
+	 *
+	 * @param int|object $entry By reference.
+	 * @return void
 	 */
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
@@ -469,7 +469,7 @@ class FrmEntry {
 		}
 		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
-		return ( $id && $id > 0 );
+		return $id && $id > 0;
 	}
 
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
@@ -581,6 +581,7 @@ class FrmEntry {
 	// Pagination Methods
 	/**
 	 * @param array|int|string $where If int, use the form id.
+	 * @return int|string
 	 */
 	public static function getRecordCount( $where = '' ) {
 		global $wpdb;
@@ -925,8 +926,8 @@ class FrmEntry {
 	 * @param array $new_values
 	 */
 	private static function after_entry_created_actions( $entry_id, $values, $new_values ) {
-		// this is a child entry
-		$is_child = isset( $values['parent_form_id'] ) && isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
+		// This is a child entry.
+		$is_child = isset( $values['parent_nonce'] ) && ! empty( $values['parent_form_id'] ) && wp_verify_nonce( $values['parent_nonce'], 'parent' );
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
 		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
@@ -968,7 +969,7 @@ class FrmEntry {
 
 		global $frm_vars;
 
-		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, (array) $frm_vars['saved_entries'] ) ) {
+		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, $frm_vars['saved_entries'] ) ) {
 			$update = false;
 		}
 
@@ -1100,7 +1101,7 @@ class FrmEntry {
 	 *
 	 * @since 6.8
 	 *
-	 * @return int
+	 * @return int|string
 	 */
 	public static function get_entries_count() {
 		$args = array(

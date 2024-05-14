@@ -638,7 +638,7 @@ class FrmListHelper {
 		if ( ! empty( $infinite_scroll ) ) {
 			$pagination_links_class = ' hide-if-js';
 		}
-		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . join( "\n", $page_links ) . '</span>';
+		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . implode( "\n", $page_links ) . '</span>';
 
 		if ( $total_pages ) {
 			$page_class = $total_pages < 2 ? ' one-page' : '';
@@ -971,7 +971,7 @@ class FrmListHelper {
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
 			if ( ! empty( $class ) ) {
-				$class = "class='" . esc_attr( join( ' ', $class ) ) . "'";
+				$class = "class='" . esc_attr( implode( ' ', $class ) ) . "'";
 			}
 
 			if ( ! $this->has_min_items() && ! $with_id ) {

@@ -361,7 +361,7 @@ class FrmEntriesController {
 			if ( ! empty( $r ) ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
-				if ( (int) $form_prefix == (int) $form_id ) {
+				if ( (int) $form_prefix === (int) $form_id ) {
 					$hidden[] = $r;
 				}
 
@@ -515,16 +515,6 @@ class FrmEntriesController {
 		}
 
 		self::display_list( $message );
-	}
-
-	/**
-	 * @deprecated 4.02.04 - Moved to Pro since it was unused in Lite.
-	 */
-	public static function destroy_all() {
-		_deprecated_function( __METHOD__, '4.02.04', 'FrmProEntriesController::destroy_all' );
-		if ( is_callable( 'FrmProEntriesController::destroy_all' ) ) {
-			FrmProEntriesController::destroy_all();
-		}
 	}
 
 	public static function process_entry( $errors = '', $ajax = false ) {
@@ -715,13 +705,5 @@ class FrmEntriesController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function contextual_help( $help, $screen_id, $screen ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		return $help;
 	}
 }

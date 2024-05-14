@@ -267,7 +267,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param object $field
 	 *
-	 * @return array
+	 * @return FrmFieldType
 	 */
 	private static function get_original_field( $field ) {
 		$original_type = FrmField::get_option( $field, 'original_type' );
@@ -325,8 +325,7 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function get_error_msg( $field, $error ) {
-		$frm_settings     = FrmAppHelper::get_settings();
-		$default_settings = $frm_settings->default_options();
+		$frm_settings = FrmAppHelper::get_settings();
 
 		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
@@ -700,9 +699,9 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			} else {
-				$m = $m === false ? false : true;
+				$m = $m !== false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -740,7 +739,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = empty( $m ) ? false : true;
+				$m = ! empty( $m );
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
@@ -762,7 +761,7 @@ class FrmFieldsHelper {
 			}
 
 			if ( $cond === 'not LIKE' ) {
-				$m = $m === false ? true : false;
+				$m = $m === false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -957,7 +956,7 @@ class FrmFieldsHelper {
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
-		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
+		} elseif ( in_array( $atts['tag'], $dynamic_default, true ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag === 'user_agent' ) {
 			$description  = $atts['entry']->description;
@@ -1361,10 +1360,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
 		// Set up name for other field
@@ -1382,10 +1380,9 @@ class FrmFieldsHelper {
 	/**
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
+	 * @since 2.0.6
 	 * @param array $args
 	 * @param array $other_args
-	 *
-	 * @since 2.0.6
 	 */
 	private static function set_other_value( $args, &$other_args ) {
 		$parent  = '';
@@ -1414,9 +1411,8 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param array $args
-	 *
 	 * @since 2.0.6
+	 * @param array $args
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {
@@ -2292,97 +2288,5 @@ class FrmFieldsHelper {
 	public static function get_all_draft_field_ids( $form_id ) {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
 		return wp_list_pluck( $draft_field_rows, 'id' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_icon_link_js( $atts ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		$atts['icon'] .= $atts['is_selected'] ? ' ' : ' frm_inactive_icon ';
-		if ( isset( $atts['has_default'] ) && ! $atts['has_default'] ) {
-			$atts['icon'] .= 'frm_hidden ';
-		}
-		echo '<a href="javascript:void(0)" class="frm_bstooltip ' . esc_attr( $atts['icon'] ) . 'frm_default_val_icons frm_action_icon frm_icon_font" title="' . esc_attr( $atts['message'] ) . '"></a>';
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_default_blank_js( $is_selected, $has_default_value = true ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function clear_on_focus_html( $field, $display, $id = '' ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function show_onfocus_js( $is_selected, $has_default_value = true ) {
-		_deprecated_function( __METHOD__, '4.0' );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function display_recaptcha() {
-		_deprecated_function( __FUNCTION__, '3.0', 'FrmFieldCaptcha::field_input' );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
-		FrmDeprecated::remove_inline_conditions( $no_vars, $code, $replace_with, $html );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function get_shortcode_tag( $shortcodes, $short_key, $args ) {
-		return FrmDeprecated::get_shortcode_tag( $shortcodes, $short_key, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param string       $html
-	 * @param array        $field
-	 * @param array        $errors
-	 * @param false|object $form
-	 * @param array        $args
-	 *
-	 * @return string
-	 */
-	public static function replace_shortcodes( $html, $field, $errors = array(), $form = false, $args = array() ) {
-		return FrmDeprecated::replace_shortcodes( $html, $field, $errors, $form, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
-		return FrmDeprecated::get_default_field_opts( $type, $field, $limit );
-	}
-
-	/**
-	 * @deprecated 2.02.07 This is still referenced in the Highrise add on as of v1.06.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $args
-	 * @return string
-	 */
-	public static function dropdown_categories( $args ) {
-		return FrmDeprecated::dropdown_categories( $args );
 	}
 }

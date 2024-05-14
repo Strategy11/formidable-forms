@@ -468,12 +468,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 
 		$type = (array) $type;
-		if ( in_array( 'items', $type ) && ! in_array( 'forms', $type ) ) {
+		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}

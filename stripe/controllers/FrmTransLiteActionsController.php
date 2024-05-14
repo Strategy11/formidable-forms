@@ -135,7 +135,6 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
-		$action   = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
 		$atts     = array(
 			'trigger'  => $atts['status'],
@@ -276,8 +275,14 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = count( $amount_parts ) === 2 && strlen( $amount_parts[1] ) === 2;
+		$amount_parts = explode( '.', $amount );
+		if ( 2 !== count( $amount_parts ) ) {
+			return;
+		}
+
+		$strlen           = strlen( $amount_parts[1] );
+		$used_for_decimal = $strlen === 1 || $strlen === 2;
+
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}

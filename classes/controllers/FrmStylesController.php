@@ -265,8 +265,13 @@ class FrmStylesController {
 		return $this_version;
 	}
 
+	/**
+	 * @param string $tag
+	 * @param string $handle
+	 * @return string
+	 */
 	public static function add_tags_to_css( $tag, $handle ) {
-		if ( ( 'formidable' == $handle || 'jquery-theme' == $handle ) && strpos( $tag, ' property=' ) === false ) {
+		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			if ( $frm_settings->use_html ) {
 				$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
@@ -536,6 +541,7 @@ class FrmStylesController {
 
 		wp_print_styles( 'formidable' );
 		wp_enqueue_script( 'formidable_style' );
+		wp_set_script_translations( 'formidable_style', 'formidable' );
 	}
 
 	/**
@@ -652,7 +658,6 @@ class FrmStylesController {
 	 */
 	public static function save_style() {
 		$frm_style   = new FrmStyle();
-		$message     = '';
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
 
@@ -1142,10 +1147,9 @@ class FrmStylesController {
 	}
 
 	/**
+	 * @since 3.0
 	 * @param object $style
 	 * @param string $class
-	 *
-	 * @since 3.0
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];

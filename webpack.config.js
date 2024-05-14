@@ -41,6 +41,10 @@ const config = {
 			{
 				test: /\.svg$/,
 				use: [ '@svgr/webpack' ]
+			},
+			{
+				test: /\.css$/i,
+				use: [ { loader: 'style-loader' }, 'css-loader' ]
 			}
 		]
 	},

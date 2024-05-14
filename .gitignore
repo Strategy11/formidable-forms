@@ -25,3 +25,8 @@ composer.lock
 
 # PHP CS Fixer
 .php-cs-fixer.cache
+
+# Sonar Qube / Sonar Source
+sonar-project.properties
+.sonar_lock
+report-task.txt

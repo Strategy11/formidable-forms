@@ -507,6 +507,10 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
 
@@ -878,8 +882,6 @@ class FrmFormAction {
 	 *
 	 * @since 2.01.02
 	 *
-	 * @deprecated 4.06.02
-	 *
 	 * @param array|string $logic_value
 	 *
 	 * @return void
@@ -905,7 +907,6 @@ class FrmFormAction {
 	 * Get the value from a specific field and entry
 	 *
 	 * @since 2.01.02
-	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
 	 * @param int    $field_id

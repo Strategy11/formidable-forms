@@ -321,10 +321,9 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 2.3
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
-	 *
-	 * @since 2.3
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
@@ -618,38 +617,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since 5.5.1
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		$signature_add_on_is_active = class_exists( 'FrmSigAppHelper', false );
-
-		if ( ! FrmAppHelper::pro_is_installed() && ! $signature_add_on_is_active ) {
-			// If Pro and Signatures are both not active, there is no need to include the font icon CSS in lite.
-			return;
-		}
-
-		$pro_version_will_handle_loading = false;
-
-		if ( class_exists( 'FrmProDb', false ) ) {
-			$pro_version_that_includes_font_icons_css = '5.5.1';
-
-			// Include font icons in Lite for backward compatibility with older version of Pro.
-			$pro_version_will_handle_loading = version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '>=' );
-		}
-
-		$load_it_here = false;
-		if ( ! $pro_version_will_handle_loading ) {
-			// If Pro is not handling it, we still need to include it for the Signature add on.
-			$load_it_here = $signature_add_on_is_active;
-		}
-
-		if ( $load_it_here ) {
-			readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
-		}
-	}
-
-	/**
 	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
 	 *
 	 * @since 6.0
@@ -756,88 +723,11 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @deprecated 3.01
-	 * @codeCoverageIgnore
-	 */
-	public static function get_sigle_label_postitions() {
-		return FrmDeprecated::get_sigle_label_postitions();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_themes() {
-		return FrmDeprecated::jquery_themes();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_css_url( $theme_css ) {
-		return FrmDeprecated::jquery_css_url( $theme_css );
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function enqueue_jquery_css() {
-		FrmDeprecated::enqueue_jquery_css();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_for_page() {
-		return FrmDeprecated::get_form_for_page();
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
-	 * @return string
-	 */
-	public static function get_style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
-		return '';
-	}
-
-	/**
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
+	 * @since 5.5.1
+	 * @deprecated x.x
 	 * @return void
 	 */
-	public static function style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
-	}
-
-	/**
-	 * Either get the heading or the style switcher.
-	 *
-	 * @since 4.0
-	 * @deprecated 6.0 The style switcher was replaced with a form switcher and is no longer used.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_switcher( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_save_button( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
+	public static function maybe_include_font_icon_css() {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.9
+ * Version: 6.9.1
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -78,7 +78,7 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater', 'FrmWelcomeController' );
+	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater' );
 	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
 
