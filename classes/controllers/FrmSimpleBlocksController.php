@@ -30,7 +30,7 @@ class FrmSimpleBlocksController {
 
 		$block_name = FrmAppHelper::get_menu_name();
 		if ( $block_name === 'Formidable' ) {
-			$block_name = 'Formidable Forms';
+			$block_name = __( 'Formidable Forms', 'formidable' );
 		}
 
 		$modal_addon      = self::get_addon_info( 185013 );
@@ -42,6 +42,13 @@ class FrmSimpleBlocksController {
 			'forms'       => self::get_forms_options(),
 			'icon'        => $icon,
 			'name'        => $block_name,
+			'description' => __( 'Display a Formidable Form', 'formidable' ),
+			'modal_name'  => __( 'Formidable Forms Modal', 'formidable' ),
+			'modal_description' => __( 'Display a modal', 'formidable' ),
+			'chart_name'  => __( 'Formidable Chart', 'formidable' ),
+			'chart_description' => __( 'Display a chart or graph', 'formidable' ),
+			'views_name'  => __( 'Formidable Views', 'formidable' ),
+			'views_description' => __( 'Display a View', 'formidable' ),
 			'link'        => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'         => FrmAppHelper::plugin_url(),
 			'modalAddon'  => array(

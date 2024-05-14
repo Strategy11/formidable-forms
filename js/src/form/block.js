@@ -17,7 +17,7 @@ const { serverSideRender: ServerSideRender } = wp;
 
 registerBlockType( 'formidable/simple-form', {
 	title: formidable_form_selector.name,
-	description: __( 'Display a Form', 'formidable' ),
+	description: formidable_form_selector.description,
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [
