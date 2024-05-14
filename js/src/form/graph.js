@@ -23,11 +23,11 @@ import FormidableIcon from '../common/components/icon';
 		</Notice>
 	);
 
-	const blockName = formidable_form_selector.chart_name;
+	const blockName = formidable_form_selector.chart_block_name;
 
 	registerBlockType( 'frm-charts/graph', {
 		title: blockName,
-		description: formidable_form_selector.chart_description,
+		description: formidable_form_selector.chart_block_description,
 		icon: (
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 23">
 				<path stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" d="M23 2v19m-7-7.5V21M9 10.8V21m-7-2.9V21"/>

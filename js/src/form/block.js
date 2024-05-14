@@ -16,8 +16,8 @@ const { Notice } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
 
 registerBlockType( 'formidable/simple-form', {
-	title: formidable_form_selector.name,
-	description: formidable_form_selector.description,
+	title: formidable_form_selector.form_block_name,
+	description: formidable_form_selector.form_block_description,
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [

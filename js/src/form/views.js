@@ -14,8 +14,8 @@ const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link :
 
 registerBlockType( 'formidable/simple-view', {
 
-	title: formidable_form_selector.views_name,
-	description: formidable_form_selector.views_description,
+	title: formidable_form_selector.views_block_name,
+	description: formidable_form_selector.views_block_description,
 	icon: FormidableIcon,
 	category: 'widgets',
 	keywords: [
