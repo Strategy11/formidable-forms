@@ -1161,16 +1161,17 @@ class FrmFormsController {
 
 		$frm_field_selection = FrmField::field_selection();
 
-		$fields = FrmField::get_all_for_form( $form->id );
+		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form->id ) );
+
+		foreach ( $fields as $field ) {
+			FrmAppHelper::unserialize_or_decode( $field->field_options );
+		}
+		$fields = wp_unslash( $fields );
 
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
 		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
-
-		if ( $reset_fields ) {
-			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
-		}
 
 		unset( $reset_fields );
 
@@ -1481,8 +1482,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function mb_tags_box( $form_id, $class = '' ) {
-		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ) );
-		FrmField::include_sub_fields( $fields, 'include', 'all', $form_id  );
+		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
 		 * Allows modifying the list of fields in the tags box.
