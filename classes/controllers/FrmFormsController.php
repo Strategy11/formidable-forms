@@ -1161,17 +1161,16 @@ class FrmFormsController {
 
 		$frm_field_selection = FrmField::field_selection();
 
-		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form->id ) );
-
-		foreach ( $fields as $field ) {
-			FrmAppHelper::unserialize_or_decode( $field->field_options );
-		}
-		$fields = wp_unslash( $fields );
+		$fields = self::get_fields_for_form( $form->id );
 
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
 		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
+
+		if ( $reset_fields ) {
+			$fields = self::get_fields_for_form( $form->id );
+		}
 
 		unset( $reset_fields );
 
@@ -1203,6 +1202,21 @@ class FrmFormsController {
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return array
+	 */
+	private static function get_fields_for_form( $form_id ) {
+		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ) );
+
+		foreach ( $fields as $field ) {
+			FrmAppHelper::unserialize_or_decode( $field->field_options );
+		}
+		return wp_unslash( $fields );
 	}
 
 	/**
