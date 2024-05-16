@@ -307,8 +307,8 @@ legend.frm_hidden{
 
 .with_frm_style input[type=radio]:not(:checked):focus,
 .with_frm_style input[type=checkbox]:not(:checked):focus {
-	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?> !important;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?> !important;
+	border-color:<?php echo esc_html( $defaults['border_color'] ); ?> !important;
+	border-color:var(--border-color) !important;
 }
 
 .with_frm_style input[type=radio]:focus,
@@ -743,7 +743,6 @@ legend.frm_hidden{
 .with_frm_style .frm_loading_prev .frm_prev_page,
 .with_frm_style .frm_loading_form .frm_button_submit {
 	position: relative;
-	opacity: .8;
 	color: transparent !important;
 	text-shadow: none !important;
 }
@@ -771,7 +770,7 @@ legend.frm_hidden{
 	border-left-color: transparent;
 	border-radius: 50%;
 	box-sizing: border-box;
-	<?php $loader_size = 20; ?>
+	<?php $loader_size = 12; ?>
 	top: 50%;
 	left: 50%;
 	margin-top: -<?php echo absint( $loader_size / 2 ); ?>px;

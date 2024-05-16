@@ -88,7 +88,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
 	<?php } else { ?>
-		margin-top:6px;
+		margin-top: 6px;
 	<?php } ?>
 	padding:0;
 	<?php if ( ! empty( $font ) ) { ?>
@@ -325,6 +325,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ); ?>;
 	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
+	border-color: <?php echo esc_html( $submit_bg_color . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
