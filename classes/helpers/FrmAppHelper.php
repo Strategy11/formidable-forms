@@ -2001,7 +2001,9 @@ class FrmAppHelper {
 	public static function check_selected( $values, $current ) {
 		$values  = self::recursive_function_map( $values, 'trim' );
 		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
-		$current = htmlspecialchars_decode( trim( $current ) );
+		if ( $current ) {
+			$current = htmlspecialchars_decode( trim( $current ) );
+		}
 
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
