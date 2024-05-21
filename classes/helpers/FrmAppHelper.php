@@ -574,6 +574,15 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Get a value from $_POST data.
+	 *
+	 * @param string   $param      The key we are trying to access data from in $_POST.
+	 * @param mixed    $default    The default if nothing is being sent.
+	 * @param callable $sanitize   Make sure to pass a sanitize method here. This function will NOT sanitize by default.
+	 * @param bool     $serialized
+	 * @return mixed
+	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
@@ -677,7 +686,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function sanitize_value( $sanitize, &$value ) {
-		if ( ! $sanitize ) {
+		if ( ! $sanitize ) { 
 			return;
 		}
 

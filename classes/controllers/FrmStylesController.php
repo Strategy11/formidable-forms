@@ -470,7 +470,7 @@ class FrmStylesController {
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
 
-		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
+		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' ) ) {
 			// "0" is a special value used for the enable/disable toggle.
 			wp_die( esc_html__( 'Invalid style value', 'formidable' ), esc_html__( 'Invalid style value', 'formidable' ), 400 );
 			return;
