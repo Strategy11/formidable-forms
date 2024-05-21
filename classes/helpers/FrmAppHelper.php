@@ -686,7 +686,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function sanitize_value( $sanitize, &$value ) {
-		if ( ! $sanitize ) { 
+		if ( ! $sanitize ) {
 			return;
 		}
 
