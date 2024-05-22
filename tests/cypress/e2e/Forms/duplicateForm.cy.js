@@ -1,9 +1,10 @@
 describe("Duplicating a form from the form list page", () => {
-    beforeEach(cy.login);
+    beforeEach(() => {
+        cy.login();
+        cy.visit('/wp-admin/admin.php?page=formidable');
+    });
 
     it("should create a duplicate form", () => {
-        cy.visit('/wp-admin/admin.php?page=formidable');
-
         // Create a blank form
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
@@ -35,7 +36,7 @@ describe("Duplicating a form from the form list page", () => {
 
         // Teardown: Delete Test Form and its duplicate
         cy.log("Teardown");
-        cy.log("Delete Test Form and it's duplicate");
+        cy.log("Delete Test Form and its duplicate");
         cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
             console.log('Hovered Row:', $row);
 
@@ -46,6 +47,7 @@ describe("Duplicating a form from the form list page", () => {
             cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
             cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
 
+            // To ensure elements are not chained from previous action's results
             cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
                 cy.wrap($row).within(() => {
                     cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
