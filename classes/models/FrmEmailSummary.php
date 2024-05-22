@@ -29,7 +29,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets inner content.
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	abstract protected function get_inner_content();
 
@@ -76,7 +76,7 @@ abstract class FrmEmailSummary {
 	 *
 	 * @since 6.8 This can return `false` to skip sending email.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	protected function get_content() {
 		$args = $this->get_content_args();

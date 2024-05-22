@@ -119,7 +119,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function fix_woocommerce_conflict() {
 		add_action(
 			'wp_print_footer_scripts',
-			function() {
+			function () {
 				if ( ! function_exists( 'get_current_screen' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/screen.php';
 				}
@@ -198,7 +198,7 @@ class FrmEntriesAJAXSubmitController {
 	 * @since 6.2
 	 *
 	 * @param array      $response
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function check_for_failed_form_submission( $response, $form_id ) {

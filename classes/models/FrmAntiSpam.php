@@ -108,9 +108,9 @@ class FrmAntiSpam extends FrmValidate {
 			'frm_form_token_check_before_today',
 			array(
 				// Two days ago.
-				( 2 * DAY_IN_SECONDS ),
+				2 * DAY_IN_SECONDS,
 				// One day ago.
-				( 1 * DAY_IN_SECONDS ),
+				1 * DAY_IN_SECONDS,
 			)
 		);
 
@@ -120,7 +120,7 @@ class FrmAntiSpam extends FrmValidate {
 			'frm_form_token_check_after_today',
 			array(
 				// Add in 45 minutes past today to catch some midnight edge cases.
-				( 45 * MINUTE_IN_SECONDS ),
+				45 * MINUTE_IN_SECONDS,
 			)
 		);
 
@@ -223,22 +223,6 @@ class FrmAntiSpam extends FrmValidate {
 		}
 
 		return $this->process_antispam_filter( true );
-	}
-
-	/**
-	 * @return bool True if saving a draft.
-	 */
-	private function is_saving_a_draft() {
-		global $frm_vars;
-		if ( empty( $frm_vars['form_params'] ) ) {
-			return false;
-		}
-		$form_params = $frm_vars['form_params'];
-		if ( ! isset( $form_params[ $this->form_id ] ) ) {
-			return false;
-		}
-		$this_form_params = $form_params[ $this->form_id ];
-		return ! empty( $this_form_params['action'] ) && 'update' === $this_form_params['action'];
 	}
 
 	/**

@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Reports', 'formidable' ),
-			'form'        => $form,
-			'close'       => $form ? admin_url( 'admin.php?page=formidable&frm_action=reports&form=' . $form->id ) : '',
+			'label' => __( 'Reports', 'formidable' ),
+			'form'  => $form,
+			'close' => $form ? admin_url( 'admin.php?page=formidable&frm_action=reports&form=' . $form->id ) : '',
 		)
 	);
 	?>
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/tab.svg' ); ?>" />
 			</div>
 			<div>
-				<img src="<?php echo esc_attr( FrmAppHelper::plugin_url() . '/images/screenshots/reports.png' ); ?>" alt="<?php esc_attr_e( 'View reports', 'formidable' ); ?>" height="243" />
+				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/screenshots/reports.png' ); ?>" alt="<?php esc_attr_e( 'View reports', 'formidable' ); ?>" height="243" />
 			</div>
 		</div>
 	</div>

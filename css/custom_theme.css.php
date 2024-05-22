@@ -782,7 +782,7 @@ legend.frm_hidden{
 
 <?php
 foreach ( $styles as $style ) {
-	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
+	include __DIR__ . '/_single_theme.css.php';
 	unset( $style );
 }
 
@@ -1234,7 +1234,7 @@ select.frm_loading_lookup{
 	color: transparent !important;
 }
 
-<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
 .frm_conf_field.frm_left_container .frm_primary_label{
 	display:none;
@@ -1607,8 +1607,6 @@ select.frm_loading_lookup{
 
 
 <?php
-FrmStylesHelper::maybe_include_font_icon_css();
-
 /**
  * Call action so other plugins can add additional CSS.
  *
@@ -1664,7 +1662,6 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 		border-right:1px solid #d3d3d3;
 		border-radius:4px;
 		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
-		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
 
 	.with_frm_style .g-recaptcha iframe,

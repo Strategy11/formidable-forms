@@ -34,4 +34,3 @@ wp_head();
 		</div>
 	</div>
 	<hr />
-<?php

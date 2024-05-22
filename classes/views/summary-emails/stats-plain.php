@@ -24,7 +24,7 @@ FrmEmailSummaryHelper::plain_text_echo( __( 'Statistics', 'formidable' ) );
 
 echo "\r\n\r\n";
 
-foreach ( $args['stats'] as $key => $stat ) {
+foreach ( $args['stats'] as $stat ) {
 	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( isset( $stat['display'] ) ? $stat['display'] : intval( $stat['count'] ) ) . "\r\n" );
 }
 
@@ -40,7 +40,7 @@ if ( $args['top_forms'] ) {
 
 	echo "\r\n\r\n";
 
-	foreach ( $args['top_forms'] as $index => $top_form ) {
+	foreach ( $args['top_forms'] as $top_form ) {
 		FrmEmailSummaryHelper::plain_text_echo( $top_form->form_name );
 		echo ': ';
 

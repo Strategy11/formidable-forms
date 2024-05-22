@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$should_show_add_new_button = class_exists( 'FrmPaymentsController', false );
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'    => __( 'Payments', 'formidable' ),
-			'form'     => FrmAppHelper::simple_get( 'form', 'absint', 0 ),
-			'publish'  => ! $should_show_add_new_button ? true : array(
+			'label'   => __( 'Payments', 'formidable' ),
+			'form'    => FrmAppHelper::simple_get( 'form', 'absint', 0 ),
+			'publish' => ! $should_show_add_new_button ? true : array(
 				'FrmAppHelper::add_new_item_link',
 				array(
 					'new_link' => admin_url( 'admin.php?page=formidable-payments&amp;action=new' ),

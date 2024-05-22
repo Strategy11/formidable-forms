@@ -135,9 +135,8 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
-		$action = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
-		$atts = array(
+		$atts     = array(
 			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
 		);
@@ -182,7 +181,7 @@ class FrmTransLiteActionsController {
 
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
-			$trigger_event = ( $payment->status === 'complete' ) ? 'payment-success' : 'payment-failed';
+			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}
@@ -213,7 +212,7 @@ class FrmTransLiteActionsController {
 	public static function prepare_amount( $amount, $atts = array() ) {
 		if ( isset( $atts['form'] ) ) {
 			$atts['value'] = $amount;
-			$amount = FrmTransLiteAppHelper::process_shortcodes( $atts );
+			$amount        = FrmTransLiteAppHelper::process_shortcodes( $atts );
 		}
 
 		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] == '[' && substr( $amount, -1 ) == ']' ) {
@@ -276,8 +275,14 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = count( $amount_parts ) === 2 && strlen( $amount_parts[1] ) === 2;
+		$amount_parts = explode( '.', $amount );
+		if ( 2 !== count( $amount_parts ) ) {
+			return;
+		}
+
+		$strlen           = strlen( $amount_parts[1] );
+		$used_for_decimal = $strlen === 1 || $strlen === 2;
+
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}
@@ -319,7 +324,7 @@ class FrmTransLiteActionsController {
 			 * @param WP_Post $payment_action
 			 */
 			$settings_for_action = apply_filters( 'frm_trans_settings_for_js', $settings_for_action, $payment_action );
-			$action_settings[] = $settings_for_action;
+			$action_settings[]   = $settings_for_action;
 		}
 
 		return $action_settings;
@@ -412,7 +417,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	private static function destroy_entry_later( $entry_id ) {
@@ -425,11 +430,11 @@ class FrmTransLiteActionsController {
 			/**
 			 * Destroy an entry and remove this action so it only tries to destroy the entry once.
 			 *
-			 * @param string|int $entry_id
+			 * @param int|string $entry_id
 			 * @param Closure    $destroy_callback
 			 * @return void
 			 */
-			function() use ( $entry_id, &$destroy_callback ) {
+			function () use ( $entry_id, &$destroy_callback ) {
 				FrmEntry::destroy( $entry_id );
 				// Only call this once.
 				remove_action( 'frm_entry_form', $destroy_callback );

@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<ul class="frm_code_list frm-full-hover">
 		<?php
 		foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
-			$title = ( ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ) ? $d['title'] : '';
+			$title = ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ? $d['title'] : '';
 			?>
 			<li>
 				<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
