@@ -1274,6 +1274,8 @@ class FrmFormsController {
 	/**
 	 * Print WordPress media templates email actions does not trigger a "Uncaught Error: Template not found: #tmpl-media-selection" error when the media button is clicked.
 	 *
+	 * @since x.x
+	 *
 	 * @return void
 	 */
 	private static function maybe_print_media_templates() {
