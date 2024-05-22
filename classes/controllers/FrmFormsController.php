@@ -1229,8 +1229,10 @@ class FrmFormsController {
 	 */
 	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
-
+		
 		global $frm_vars;
+
+		self::maybe_print_media_templates();
 
 		if ( ! is_array( $args ) ) {
 			// For reverse compatibility.
@@ -1267,6 +1269,25 @@ class FrmFormsController {
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php';
+	}
+
+	/**
+	 * Print WordPress media templates email actions does not trigger a "Uncaught Error: Template not found: #tmpl-media-selection" error when the media button is clicked.
+	 *
+	 * @return void
+	 */
+	private static function maybe_print_media_templates() {
+		if ( FrmAppHelper::pro_is_included() ) {
+			// This issue does not exist when Pro is active so exit early.
+			return;
+		}
+
+		add_action(
+			'wp_enqueue_editor',
+			function() {
+				wp_print_media_templates();
+			}
+		);
 	}
 
 	/**
