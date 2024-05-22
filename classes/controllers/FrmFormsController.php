@@ -1229,7 +1229,7 @@ class FrmFormsController {
 	 */
 	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		
+
 		global $frm_vars;
 
 		self::maybe_print_media_templates();
