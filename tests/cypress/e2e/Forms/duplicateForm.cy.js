@@ -6,7 +6,7 @@ describe("Duplicating a form from the form list page", () => {
         cy.visit('/wp-admin/admin.php?page=formidable');
 
         cy.log("Create a blank form");
-        cy.get(".frm_nav_bar .button-primary").should("contain", "Add New").click();
+        cy.contains(".frm_nav_bar .button-primary", "Add New").click();
         cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
         cy.get("#frm_submit_side_top").should("contain", "Save").click();
         cy.get("#frm-form-templates-modal").should("exist")
