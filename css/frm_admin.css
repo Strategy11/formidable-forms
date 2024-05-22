@@ -6829,7 +6829,7 @@ tr.frm_options_heading td {
 	border: 1px dashed var(--grey-300);
 }
 
-.ui-droppable-active ~ .frm_no_fields {
+.frm-over-droppable + .frm_no_fields {
 	border-style: solid;
 }
 
