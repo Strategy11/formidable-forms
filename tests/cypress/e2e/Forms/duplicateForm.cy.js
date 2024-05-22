@@ -20,6 +20,10 @@ describe("Duplicating a form from the form list page", () => {
         cy.log("Duplicate the newly created form");
         cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
             console.log('Hovered Row:', $row);
+            // Any interaction with $row goes here
+            cy.wrap($row).find('.some-button').click();
+        
+        
 
             // Find the visible element with class "duplicate" within the hovered row and click it
             cy.wrap($row).within(() => {
