@@ -476,7 +476,7 @@ class FrmStylesController {
 			return;
 		}
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
 			wp_die( esc_html__( 'No form specified', 'formidable' ), esc_html__( 'No form specified', 'formidable' ), 400 );
 			return;
