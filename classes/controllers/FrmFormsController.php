@@ -1286,7 +1286,7 @@ class FrmFormsController {
 
 		add_action(
 			'wp_enqueue_editor',
-			function() {
+			function () {
 				wp_print_media_templates();
 			}
 		);
