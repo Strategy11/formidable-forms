@@ -19,8 +19,7 @@ describe("Duplicating a form from the form list page", () => {
         cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
             console.log('Hovered Row:', $row);
 
-            // Wait a moment to ensure the hover effect has time to display the duplicate element
-            cy.wait(500);
+
 
             // Find the visible element with class "duplicate" within the hovered row and click it
             cy.wrap($row).within(() => {
@@ -44,8 +43,7 @@ describe("Duplicating a form from the form list page", () => {
             cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
                 console.log('Hovered Row:', $row);
 
-                // Wait a moment to ensure the hover effect has time to display the trash element
-                cy.wait(500);
+
 
                 // Find the visible element with class "trash" within the hovered row and click it
                 cy.wrap($row).within(() => {
@@ -63,7 +61,6 @@ describe("Duplicating a form from the form list page", () => {
 
             cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
                 console.log('Hovered Row:', $row);
-                cy.wait(500);
                 cy.wrap($row).within(() => {
                     cy.get('.row-actions .trash .frm-trash-link').should('be.visible').then(($duplicate) => {
                         console.log('Duplicate Element:', $duplicate);
