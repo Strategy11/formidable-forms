@@ -319,7 +319,7 @@ class FrmDashboardController {
 				break;
 
 			case 'save-subscribed-email':
-				$email = FrmAppHelper::get_post_param( 'email' );
+				$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 				self::save_subscribed_email( $email );
 				wp_send_json_success();
 				break;

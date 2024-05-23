@@ -49,19 +49,31 @@ class FrmAppHelper {
 		return self::$plug_version;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_folder() {
 		return basename( self::plugin_path() );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_path() {
 		return dirname( dirname( __DIR__ ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_url() {
 		// Prevously FRM_URL constant.
 		return plugins_url( '', self::plugin_path() . '/formidable.php' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function relative_plugin_url() {
 		return str_replace( array( 'https:', 'http:' ), '', self::plugin_url() );
 	}
@@ -84,6 +96,10 @@ class FrmAppHelper {
 		return get_option( 'blogname' );
 	}
 
+	/**
+	 * @param string $url
+	 * @return string
+	 */
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
@@ -94,6 +110,9 @@ class FrmAppHelper {
 		return $url;
 	}
 
+	/**
+	 * @return int
+	 */
 	public static function get_affiliate() {
 		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
@@ -255,7 +274,6 @@ class FrmAppHelper {
 	 */
 	public static function ips_saved() {
 		$frm_settings = self::get_settings();
-
 		return ! $frm_settings->no_ips;
 	}
 
@@ -338,6 +356,8 @@ class FrmAppHelper {
 	 * Returns false for the views listing page.
 	 *
 	 * @since 4.0
+	 *
+	 * @return bool
 	 */
 	public static function is_view_builder_page() {
 		global $pagenow;
@@ -382,17 +402,20 @@ class FrmAppHelper {
 		return wp_doing_ajax() && ! self::is_preview_page();
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function js_suffix() {
 		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	}
 
 	/**
 	 * @since 2.0.8
+	 * @return bool
 	 */
 	public static function prevent_caching() {
 		global $frm_vars;
-
-		return isset( $frm_vars['prevent_caching'] ) && $frm_vars['prevent_caching'];
+		return ! empty( $frm_vars['prevent_caching'] );
 	}
 
 	/**
@@ -426,6 +449,11 @@ class FrmAppHelper {
 		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
 	}
 
+	/**
+	 * @param mixed  $value
+	 * @param string $empty
+	 * @return bool
+	 */
 	public static function is_not_empty_value( $value, $empty = '' ) {
 		return ! self::is_empty_value( $value, $empty );
 	}
@@ -574,6 +602,15 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Get a value from $_POST data.
+	 *
+	 * @param string          $param      The key we are trying to access data from in $_POST.
+	 * @param mixed           $default    The default if nothing is being sent.
+	 * @param callable|string $sanitize   Make sure to pass a sanitize method here. This function will NOT sanitize by default.
+	 * @param bool            $serialized
+	 * @return mixed
+	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
@@ -4229,6 +4266,7 @@ class FrmAppHelper {
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
 	 * @since 6.9
+	 * @return void
 	 */
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );

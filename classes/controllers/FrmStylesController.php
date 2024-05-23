@@ -470,13 +470,13 @@ class FrmStylesController {
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
 
-		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
+		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' ) ) {
 			// "0" is a special value used for the enable/disable toggle.
 			wp_die( esc_html__( 'Invalid style value', 'formidable' ), esc_html__( 'Invalid style value', 'formidable' ), 400 );
 			return;
 		}
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
 			wp_die( esc_html__( 'No form specified', 'formidable' ), esc_html__( 'No form specified', 'formidable' ), 400 );
 			return;
