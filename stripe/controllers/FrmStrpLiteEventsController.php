@@ -313,26 +313,6 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * Returns the count of completed payments.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $payments
-	 *
-	 * @return int
-	 */
-	public static function count_completed_payments( $payments ) {
-		$count = 0;
-		foreach ( $payments as $payment ) {
-			if ( $payment->status === 'complete' ) {
-				$count++;
-			}
-		}
-
-		return $count;
-	}
-
-	/**
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param stdClass $payment

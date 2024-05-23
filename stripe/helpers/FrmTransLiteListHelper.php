@@ -462,7 +462,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$limit              = $item->end_count >= 9999 ? __( 'unlimited', 'formidable' ) : $item->end_count;
 		$frm_payment        = new FrmTransLitePayment();
 		$completed_payments = $frm_payment->get_all_by( $item->id, 'sub_id' );
-		$count              = FrmStrpLiteEventsController::count_completed_payments( $completed_payments );
+		$count              = FrmTransLiteAppHelper::count_completed_payments( $completed_payments );
 
 		// translators: %1$s: Count, %2$s: Limit.
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
