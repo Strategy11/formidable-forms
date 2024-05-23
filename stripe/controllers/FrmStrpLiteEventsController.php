@@ -307,7 +307,7 @@ class FrmStrpLiteEventsController {
 	private function get_payments_count( $sub_id ) {
 		$frm_payment  = new FrmTransLitePayment();
 		$all_payments = $frm_payment->get_all_by( $sub_id, 'sub_id' );
-		$count        = self::count_completed_payments( $all_payments );
+		$count        = FrmTransLiteAppHelper::count_completed_payments( $all_payments );
 
 		return $count;
 	}
