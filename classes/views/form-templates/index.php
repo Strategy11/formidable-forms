@@ -45,6 +45,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
 						<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
 					</button>
+					<?php
+					/**
+					 * Trigger an action so the AI add-on can include a "Create with AI" button.
+					 *
+					 * @since x.x
+					 */
+					do_action( 'frm_after_create_blank_form_button' );
+					?>
 				</div>
 				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider frm-mt-xs frm-mb-xs"></span>
 
