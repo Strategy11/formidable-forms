@@ -3845,6 +3845,14 @@ input[type="checkbox"] {
 	display: inline-block;
 }
 
+.frm_form_builder .frm_opt_container .frm_radio.frm_image_option label,
+.frm_form_builder .frm_opt_container .frm_checkbox.frm_image_option label {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	white-space: normal;
+}
+
 .frm_form_field.frm_two_col .frm_opt_container,
 .frm_form_field.frm_three_col .frm_opt_container,
 .frm_form_field.frm_four_col .frm_opt_container{
