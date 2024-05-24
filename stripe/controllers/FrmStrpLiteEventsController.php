@@ -257,7 +257,7 @@ class FrmStrpLiteEventsController {
 	private function maybe_cancel_subscription( $sub ) {
 		$action = FrmFormAction::get_single_action_type( $sub->action_id, 'payment' );
 		// @phpstan-ignore-next-line
-		if ( ! ( $action instanceof WP_Post ) || empty( $action->post_content['payment_limit'] ) ) {
+		if ( ! is_object( $action ) || empty( $action->post_content['payment_limit'] ) ) {
 			return;
 		}
 
@@ -267,7 +267,7 @@ class FrmStrpLiteEventsController {
 			(int) $action->menu_order,
 			(int) $sub->item_id
 		);
-		if ( $payment_limit instanceof WP_Error ) {
+		if ( is_wp_error( $payment_limit ) ) {
 			FrmTransLiteLog::log_message( 'Invalid payment limit value', $payment_limit->get_error_message() );
 			return;
 		}
