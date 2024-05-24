@@ -1693,6 +1693,11 @@ class FrmFormsController {
 			$form = $form->id;
 		}
 
+		if ( ! empty( $entry->parent_entry ) ) {
+			// If $entry is a repeater entry, the main form field shortcodes won't work. So we use the main form ID.
+			$form = $entry->parent_entry->form_id;
+		}
+
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
 		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
