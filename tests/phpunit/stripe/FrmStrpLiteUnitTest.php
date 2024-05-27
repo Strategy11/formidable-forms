@@ -29,11 +29,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	protected static $shared_server_side_token;
 
 	/**
-	 * @var string Either 'legacy' or 'connect'.
-	 */
-	protected $active_api_type;
-
-	/**
 	 * @var string The active customer we're testing with (might be null if no customer has been created)
 	 */
 	protected $customer_id;
@@ -68,8 +63,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	protected function initialize_connect_api( $user_id = 1 ) {
-		$this->active_api_type = 'connect';
-
 		wp_set_current_user( $user_id );
 		if ( 1 === $user_id ) {
 			$this->set_user_by_role( 'administrator' );
@@ -118,9 +111,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	protected function get_customer( $options = array() ) {
-		if ( 'legacy' === $this->active_api_type ) {
-			return FrmStrpLiteApiHelper::get_customer( $options );
-		}
 		$this->include_adapter();
 		return FrmStrpLiteConnectApiAdapter::get_customer( $options );
 	}
@@ -132,15 +122,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	protected function add_card( $customer_id ) {
-		if ( 'legacy' === $this->active_api_type ) {
-			$stripe = $this->get_authenticated_stripe_client();
-			return $stripe->customers->createSource(
-				$customer_id,
-				array(
-					'source' => 'tok_mastercard',
-				)
-			);
-		}
 		$stripe = $this->get_authenticated_stripe_client();
 		$card   = $stripe->customers->createSource(
 			$customer_id,
@@ -270,18 +251,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	protected function create_subscription() {
-		if ( 'legacy' === $this->active_api_type ) {
-			$customer   = $this->get_customer();
-			$plan_id    = $this->create_plan();
-			$new_charge = array(
-				'customer'         => $customer->id,
-				'plan'             => $plan_id,
-				'payment_behavior' => 'allow_incomplete',
-				'expand'           => array( 'latest_invoice.payment_intent' ),
-				'off_session'      => true,
-			);
-			return FrmStrpLiteApiHelper::create_subscription( $new_charge );
-		}
 		$this->customer_id = $this->get_customer_id();
 		$this->add_card( $this->customer_id );
 		$plan       = $this->get_plan_options();
@@ -306,14 +275,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		);
 	}
 
-	protected function create_plan() {
-		if ( 'legacy' !== $this->active_api_type ) {
-			$this->fail( 'an unsupported function was called' );
-		}
-		$plan = $this->get_plan_options();
-		return FrmStrpLiteApiHelper::create_plan( $plan );
-	}
-
 	/**
 	 * @return PaymentMethod
 	 */
@@ -325,10 +286,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			'card' => $this->get_test_credit_card(),
 		);
 
-		$account_details = array();
-		if ( 'connect' === $this->active_api_type ) {
-			$account_details = $this->get_stripe_account_id_details( $this->account_id );
-		}
+		$account_details = $this->get_stripe_account_id_details( $this->account_id );
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		return $stripe->paymentMethods->create( $card_details, $account_details );
@@ -406,11 +364,6 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		$this->assertTrue( ! empty( $charge->status ) );
 		$this->assertTrue( isset( $charge->paid ) );
 		$this->assertTrue( isset( $charge->captured ) );
-	}
-
-	protected function assert_delete_card_response( $response ) {
-		$this->assertTrue( is_array( $response ) );
-		$this->assertTrue( ! empty( $response['success'] ) );
 	}
 
 	protected function assert_get_intent( $payment_intent ) {
