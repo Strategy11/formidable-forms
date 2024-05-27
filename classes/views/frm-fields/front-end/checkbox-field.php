@@ -52,13 +52,14 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+			$label_attributes = array(
+				'for' => $html_id . '-' . $opt_key,
+			);
+			if ( $read_only ) {
+				$label_attributes['class'] = 'frm-label-disabled';
+			}
 			?>
-			<label
-				for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"
-				<?php if ( $read_only ) { ?>
-					class="frm-label-disabled"
-				<?php } ?>
-			>
+			<label <?php FrmAppHelper::array_to_html_params( $label_attributes, true ); ?>>
 			<?php
 		}
 
