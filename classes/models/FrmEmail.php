@@ -390,8 +390,7 @@ class FrmEmail {
 			$this->message = html_entity_decode( $this->message );
 		}
 
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
-
+		$this->message  = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 		$prev_mail_body = $this->message;
 
 		// Make a copy to prevent changes by reference.
