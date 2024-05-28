@@ -1232,6 +1232,8 @@ class FrmFormsController {
 
 		global $frm_vars;
 
+		self::maybe_print_media_templates();
+
 		if ( ! is_array( $args ) ) {
 			// For reverse compatibility.
 			$args = array(
@@ -1267,6 +1269,27 @@ class FrmFormsController {
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php';
+	}
+
+	/**
+	 * Print WordPress media templates email actions does not trigger a "Uncaught Error: Template not found: #tmpl-media-selection" error when the media button is clicked.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_print_media_templates() {
+		if ( FrmAppHelper::pro_is_included() ) {
+			// This issue does not exist when Pro is active so exit early.
+			return;
+		}
+
+		add_action(
+			'wp_enqueue_editor',
+			function () {
+				wp_print_media_templates();
+			}
+		);
 	}
 
 	/**
@@ -1406,6 +1429,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 * @return void
 	 */
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
@@ -1415,6 +1439,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $values
+	 * @return void
 	 */
 	public static function render_spam_settings( $values ) {
 		if ( function_exists( 'akismet_http_post' ) ) {
@@ -1428,13 +1453,9 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 * @return void
 	 */
 	public static function buttons_settings( $values ) {
-		$styles = apply_filters( 'frm_get_style_opts', array() );
-
-		$frm_settings    = FrmAppHelper::get_settings();
-		$no_global_style = $frm_settings->load_style === 'none';
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php';
 	}
 
@@ -1442,6 +1463,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 * @return void
 	 */
 	public static function html_settings( $values ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-html.php';
@@ -1453,6 +1475,7 @@ class FrmFormsController {
 	 * @since 2.03.08
 	 *
 	 * @param array|bool $values
+	 * @return void
 	 */
 	private static function clean_submit_html( &$values ) {
 		if ( is_array( $values ) && isset( $values['submit_html'] ) ) {
@@ -1924,6 +1947,7 @@ class FrmFormsController {
 	 * Education for premium features.
 	 *
 	 * @since 4.05
+	 * @return void
 	 */
 	public static function add_form_style_tab_options() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
@@ -3210,14 +3234,6 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * @deprecated 4.08
-	 * @since 3.06
-	 */
-	public static function add_new() {
-		_deprecated_function( __FUNCTION__, '4.08' );
 	}
 
 	/**
