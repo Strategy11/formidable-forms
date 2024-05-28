@@ -627,6 +627,10 @@ DEFAULT_HTML;
 
 	/**
 	 * Store $all_field_types in memory on first call and re-use it to improve the performance of the form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
 	 */
 	private static function get_all_field_types() {
 		if ( ! isset( self::$all_field_types ) ) {
