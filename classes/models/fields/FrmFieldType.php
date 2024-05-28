@@ -88,6 +88,13 @@ abstract class FrmFieldType {
 	private static $should_hide_draft_fields;
 
 	/**
+	 * @since x.x
+	 *
+	 * @var array|null
+	 */
+	private static $all_field_types;
+
+	/**
 	 * @param array|int|object $field
 	 * @param string           $type
 	 */
@@ -434,9 +441,13 @@ DEFAULT_HTML;
 		$this->field_choices_heading( $args );
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
+		do_action( 'qm/start', 'show_priority_field_choices' );
 		$this->show_priority_field_choices( $args );
+		do_action( 'qm/stop', 'show_priority_field_choices' );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php';
+		do_action( 'qm/start', 'show_extra_field_choices' );
 		$this->show_extra_field_choices( $args );
+		do_action( 'qm/stop', 'show_extra_field_choices' );
 		echo '</div>';
 	}
 
@@ -599,7 +610,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
-		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		$all_field_types = self::get_all_field_types();
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
@@ -612,6 +623,16 @@ DEFAULT_HTML;
 			?>
 		</h3>
 		<?php
+	}
+
+	/**
+	 * Store $all_field_types in memory on first call and re-use it to improve the performance of the form builder.
+	 */
+	private static function get_all_field_types() {
+		if ( ! isset( self::$all_field_types ) ) {
+			self::$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		}
+		return self::$all_field_types;
 	}
 
 	/**
