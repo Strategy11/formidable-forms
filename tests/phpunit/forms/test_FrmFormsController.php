@@ -148,7 +148,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		global $wp_scripts;
 		$formidable_js = $wp_scripts->registered['formidable'];
 
-		if ( FrmAppHelper::js_suffix() == '.min' ) {
+		if ( FrmAppHelper::js_suffix() === '.min' ) {
 			$file = 'frm.min.js';
 			if ( strpos( $formidable_js->src, $file ) === false ) {
 				$file = 'formidable.min.js';
