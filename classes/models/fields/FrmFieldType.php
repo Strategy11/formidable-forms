@@ -441,13 +441,9 @@ DEFAULT_HTML;
 		$this->field_choices_heading( $args );
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
-		do_action( 'qm/start', 'show_priority_field_choices' );
 		$this->show_priority_field_choices( $args );
-		do_action( 'qm/stop', 'show_priority_field_choices' );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php';
-		do_action( 'qm/start', 'show_extra_field_choices' );
 		$this->show_extra_field_choices( $args );
-		do_action( 'qm/stop', 'show_extra_field_choices' );
 		echo '</div>';
 	}
 
