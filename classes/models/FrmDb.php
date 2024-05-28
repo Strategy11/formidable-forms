@@ -136,7 +136,7 @@ class FrmDb {
 			 */
 			$start = '%';
 			$end   = '%';
-			if ( $lowercase_key == 'like%' ) {
+			if ( $lowercase_key === 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
 			} elseif ( $lowercase_key == '%like' ) {
@@ -152,7 +152,7 @@ class FrmDb {
 			$where .= ' IS NULL';
 		} else {
 			// allow a - to prevent = from being added
-			if ( substr( $key, - 1 ) == '-' ) {
+			if ( substr( $key, - 1 ) === '-' ) {
 				$where = rtrim( $where, '-' );
 			} else {
 				$where .= '=';
@@ -319,7 +319,7 @@ class FrmDb {
 		}
 
 		// > and < need a little more work since we don't want them switched to >= and <=
-		if ( $where_is == '>' || $where_is == '<' ) {
+		if ( $where_is === '>' || $where_is === '<' ) {
 			// The - indicates that the = should not be added later.
 			return ' ' . $where_is . '-';
 		}
@@ -459,9 +459,9 @@ class FrmDb {
 	 */
 	private static function esc_query_args( &$args ) {
 		foreach ( $args as $param => $value ) {
-			if ( $param == 'order_by' ) {
+			if ( $param === 'order_by' ) {
 				$args[ $param ] = self::esc_order( $value );
-			} elseif ( $param == 'limit' ) {
+			} elseif ( $param === 'limit' ) {
 				$args[ $param ] = self::esc_limit( $value );
 			}
 

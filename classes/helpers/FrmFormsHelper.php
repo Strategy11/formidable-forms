@@ -838,7 +838,7 @@ BEFORE_HTML;
 	 */
 	public static function maybe_hide_inline() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->load_style == 'none' ) {
+		if ( $frm_settings->load_style === 'none' ) {
 			echo ' style="display:none;"';
 		} elseif ( $frm_settings->load_style === 'dynamic' ) {
 			FrmStylesController::enqueue_style();
