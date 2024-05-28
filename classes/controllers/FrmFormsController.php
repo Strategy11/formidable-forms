@@ -1944,6 +1944,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Education for premium features.
+	 *
 	 * @since 4.05
 	 * @return void
 	 */
