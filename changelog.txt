@@ -1,8 +1,10 @@
 == Changelog ==
 = 6.10 =
 * New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
+* New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
 * Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
 * Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
+* The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
 * Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
 * Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
 * Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
