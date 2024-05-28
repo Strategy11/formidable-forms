@@ -3193,6 +3193,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.02.03
+	 *
+	 * @param array|string $value
+	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
 		if ( is_array( $value ) ) {
@@ -3257,6 +3260,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0.9
+	 * @return void
 	 */
 	public static function load_font_style() {
 		wp_enqueue_style( 'frm_fonts', self::plugin_url() . '/css/frm_fonts.css', array(), self::plugin_version() );
@@ -3264,6 +3268,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $location
+	 * @return void
 	 */
 	public static function localize_script( $location ) {
 		global $wp_scripts;
@@ -3434,7 +3439,7 @@ class FrmAppHelper {
 		 *
 		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro vx.x.
 		 */
-		return apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
+		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}
 
 	/**
@@ -3443,6 +3448,7 @@ class FrmAppHelper {
 	 * @since 1.07.10
 	 *
 	 * @param float $min_version The version the add-on requires.
+	 * @return void
 	 */
 	public static function min_version_notice( $min_version ) {
 		$frm_version = self::plugin_version();
@@ -3497,6 +3503,9 @@ class FrmAppHelper {
 	 * If Pro is installed, check the version number.
 	 *
 	 * @since 4.0.01
+	 *
+	 * @param string $min_version
+	 * @return bool
 	 */
 	public static function meets_min_pro_version( $min_version ) {
 		return ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, $min_version, '>=' );
@@ -3506,6 +3515,7 @@ class FrmAppHelper {
 	 * Show a message if the browser or PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
+	 * @return void
 	 */
 	private static function php_version_notice() {
 		$message = array();
@@ -3647,15 +3657,6 @@ class FrmAppHelper {
 		$locales = apply_filters( 'frm_locales', $locales, compact( 'type' ) );
 
 		return $locales;
-	}
-
-	/**
-	 * Output HTML containing reference text for accessibility
-	 *
-	 * @deprecated 5.1
-	 */
-	public static function multiselect_accessibility() {
-		_deprecated_function( __METHOD__, '5.1' );
 	}
 
 	/**
