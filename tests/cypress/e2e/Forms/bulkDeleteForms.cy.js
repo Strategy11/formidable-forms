@@ -1,4 +1,3 @@
-import { createNewForm } from "../../support/commonActions.cy";
 describe("Bulk delete forms from the form list page", () => {
     beforeEach(() => {
         cy.login();
@@ -8,7 +7,7 @@ describe("Bulk delete forms from the form list page", () => {
     it("should create multiple forms and bulk delete them", () => {
         cy.log("Create 5 new forms");
         for (let i = 0; i < 5; i++) {
-            createNewForm();
+            cy.createNewForm();
         }
 
         cy.log("Bulk delete all 5 new forms");

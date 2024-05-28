@@ -1,4 +1,3 @@
-import { createNewForm, deleteForm } from "../../support/commonActions.cy";
 describe("Duplicating a form from the form list page", () => {
     beforeEach(() => {
         cy.login();
@@ -7,7 +6,7 @@ describe("Duplicating a form from the form list page", () => {
 
     it("should create a duplicate form", () => {
         // Create a blank form
-        createNewForm();
+        cy.createNewForm();
 
         // Duplicate the newly created form
         cy.log("Duplicate the newly created form");
@@ -29,8 +28,8 @@ describe("Duplicating a form from the form list page", () => {
 
         // Teardown: Delete Test Form and its duplicate
         cy.log("Teardown");
-        deleteForm();
-        
+        cy.deleteForm();
+
         cy.log("Delete duplicated form")
         cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
             cy.wrap($row).within(() => {
