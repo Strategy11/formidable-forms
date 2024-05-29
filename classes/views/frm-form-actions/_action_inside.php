@@ -62,7 +62,7 @@ $pass_args = array(
 /**
  * Fires before form action settings.
  *
- * @since x.x
+ * @since 6.10
  *
  * @param object $form_action Form action object.
  * @param array  $pass_args   Pass args.

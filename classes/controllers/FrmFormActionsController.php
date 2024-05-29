@@ -560,7 +560,7 @@ class FrmFormActionsController {
 				/**
 				 * Allows custom form action trigger.
 				 *
-				 * @since x.x
+				 * @since 6.10
 				 *
 				 * @param bool   $skip   Skip default trigger.
 				 * @param object $action Action object.

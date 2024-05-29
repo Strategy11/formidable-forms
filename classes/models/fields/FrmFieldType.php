@@ -88,7 +88,7 @@ abstract class FrmFieldType {
 	private static $should_hide_draft_fields;
 
 	/**
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @var array|null
 	 */
@@ -624,7 +624,7 @@ DEFAULT_HTML;
 	/**
 	 * Store $all_field_types in memory on first call and re-use it to improve the performance of the form builder.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return array
 	 */

@@ -626,7 +626,7 @@ class FrmFormsController {
 	 * This function adds a filter to ensure that $src is not null.
 	 * WP will call str_starts_with with the null value triggering a deprecated message otherwise.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return void
 	 */
@@ -1274,7 +1274,7 @@ class FrmFormsController {
 	/**
 	 * Print WordPress media templates email actions does not trigger a "Uncaught Error: Template not found: #tmpl-media-selection" error when the media button is clicked.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return void
 	 */

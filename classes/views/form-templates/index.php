@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					/**
 					 * Trigger an action so the AI add-on can include a "Create with AI" button.
 					 *
-					 * @since x.x
+					 * @since 6.10
 					 */
 					do_action( 'frm_after_create_blank_form_button' );
 					?>

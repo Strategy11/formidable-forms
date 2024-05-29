@@ -8,7 +8,7 @@ class FrmFormsHelper {
 	/**
 	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @var array|null
 	 */
@@ -629,7 +629,7 @@ BEFORE_HTML;
 	 * Store and re-use field selection data for use when outputting shortcodes options in shortcode pop up.
 	 * This significantly improves performance by avoiding repeat calls to FrmField::all_field_selection.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return array
 	 */
