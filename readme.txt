@@ -376,6 +376,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
 * Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
 * Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
+* Fix: In some cases, a Stripe redirect would happen after failing to create an entry, resulting in an unexpected redirect to stripe.com.
 * The minimum supported PHP version has been updated to 7.0, ending official support for PHP 5.6.
 * The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
 * Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
