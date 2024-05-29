@@ -927,7 +927,7 @@ class FrmField {
 		$limit = FrmDb::esc_limit( $limit );
 
 		$query      = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = $limit == ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
+		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
 
 		if ( is_array( $where ) ) {
 			$args    = array(

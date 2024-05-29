@@ -85,9 +85,58 @@ class FrmTransLiteActionsController {
 	 */
 	public static function trigger_action( $action, $entry, $form ) {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
-		FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
+		$response = FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
+		if ( ! $response['success'] && $response['show_errors'] ) {
+			// the payment failed
+			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
+		}
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	private static function show_failed_message( $args ) {
+		global $frm_vars;
+		$frm_vars['frm_trans'] = array(
+			'pay_entry' => $args['entry'],
+			'error'     => isset( $args['response']['error'] ) ? $args['response']['error'] : '',
+		);
+
+		add_filter( 'frm_success_filter', 'FrmTransLiteActionsController::force_message_after_create' );
+		add_filter( 'frm_pre_display_form', 'FrmTransLiteActionsController::include_form_with_success' );
+		add_filter( 'frm_main_feedback', 'FrmTransLiteActionsController::replace_success_message', 5 );
+		add_filter( 'frm_setup_new_fields_vars', 'FrmTransLiteActionsController::fill_entry_from_previous', 20, 2 );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 * @return stdClass
+	 */
+	public static function include_form_with_success( $form ) {
+		$form->options['show_form'] = 1;
+		return $form;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function replace_success_message() {
+		global $frm_vars;
+		$message = isset( $frm_vars['frm_trans']['error'] ) ? $frm_vars['frm_trans']['error'] : '';
+		if ( empty( $message ) ) {
+			$message = __( 'There was an error processing your payment.', 'formidable' );
+		}
+
+		$message = '<div class="frm_error_style">' . $message . '</div>';
+
+		return $message;
+	}
+	
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
@@ -215,7 +264,7 @@ class FrmTransLiteActionsController {
 			$amount        = FrmTransLiteAppHelper::process_shortcodes( $atts );
 		}
 
-		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] == '[' && substr( $amount, -1 ) == ']' ) {
+		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] === '[' && substr( $amount, -1 ) === ']' ) {
 			// Make sure we don't use a field id as the amount.
 			$amount = 0;
 		}

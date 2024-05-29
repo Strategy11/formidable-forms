@@ -27,7 +27,6 @@
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: auto;
 	line-height: 1.5;
-	-moz-transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	-webkit-transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	font-size: 18px;
