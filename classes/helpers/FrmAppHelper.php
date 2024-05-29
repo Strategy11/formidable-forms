@@ -3410,10 +3410,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * As of x.x the frmUpdateField function is now included in Pro.
+	 * As of 6.10 the frmUpdateField function is now included in Pro.
 	 * This was originally included in Lite but was removed because the feature is only supoprted in Pro.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return bool
 	 */
@@ -3425,7 +3425,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return bool
 	 */
@@ -3435,9 +3435,9 @@ class FrmAppHelper {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.10
 		 *
-		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro vx.x.
+		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro v6.10.
 		 */
 		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}

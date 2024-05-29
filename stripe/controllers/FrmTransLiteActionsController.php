@@ -93,7 +93,7 @@ class FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @param array $args
 	 * @return void
@@ -112,7 +112,7 @@ class FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @param stdClass $form
 	 * @return stdClass

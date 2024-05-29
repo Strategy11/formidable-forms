@@ -1059,7 +1059,7 @@ function frmFrontFormJS() {
 	}
 
 	function resendEmail() {
-		console.warn( 'DEPRECATED: function resendEmail in vx.x please update to Formidable Pro vx.x' );
+		console.warn( 'DEPRECATED: function resendEmail in v6.10 please update to Formidable Pro v6.10' );
 
 		/*jshint validthis:true */
 		let $link = jQuery( this ),
