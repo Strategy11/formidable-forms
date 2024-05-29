@@ -41,6 +41,10 @@ $important     = empty( $defaults['important_style'] ) ? '' : ' !important';
 	text-align:var(--form-align)<?php echo esc_html( $important ); ?>;
 }
 
+.with_frm_style .frm-show-form {
+	overflow-x:clip;
+}
+
 /* Keep this. This is used for Honeypot */
 input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0 30px white inset;
