@@ -16,6 +16,11 @@ class FrmFormsController {
 	private static $redirected_in_new_tab = array();
 
 	/**
+	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
+	 * is stored here and re-used as an optimization.
+	 *
+	 * @since x.x
+	 *
 	 * @var string|null
 	 */
 	private static $formidable_tinymce_button;
