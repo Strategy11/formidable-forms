@@ -194,10 +194,14 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 	opacity: 1;
+	font-size: 14px;
+	font-size: var(--field-font-size);
 }
 .<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
 <?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
+	font-size: 14px;
+	font-size: var(--field-font-size);
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
