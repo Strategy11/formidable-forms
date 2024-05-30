@@ -922,7 +922,7 @@ class FrmFormsController {
 				$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>';
 			}
-			echo self::$formidable_tinymce_button;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
