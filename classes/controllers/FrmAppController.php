@@ -760,6 +760,7 @@ class FrmAppController {
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 
+				// Avoid loading dropzone CSS on the form list page. It isn't required there.
 				$should_avoid_loading_dropzone = 'formidable' === $page && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 				if ( ! $should_avoid_loading_dropzone ) {
 					wp_enqueue_style( 'formidable-dropzone' );
