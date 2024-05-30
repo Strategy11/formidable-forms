@@ -759,7 +759,11 @@ class FrmAppController {
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
-				wp_enqueue_style( 'formidable-dropzone' );
+
+				$should_avoid_loading_dropzone = 'formidable' === $page && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+				if ( ! $should_avoid_loading_dropzone ) {
+					wp_enqueue_style( 'formidable-dropzone' );
+				}
 			} else {
 				wp_enqueue_style( 'formidable-grids' );
 			}
