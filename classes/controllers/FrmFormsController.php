@@ -15,6 +15,11 @@ class FrmFormsController {
 	 */
 	private static $redirected_in_new_tab = array();
 
+	/**
+	 * @var string|null
+	 */
+	private static $formidable_tinymce_button;
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -902,12 +907,19 @@ class FrmFormsController {
 	 */
 	public static function insert_form_button() {
 		if ( current_user_can( 'frm_view_forms' ) ) {
-			FrmAppHelper::load_admin_wide_js();
-			$menu_name = FrmAppHelper::get_menu_name();
-			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				FrmAppHelper::kses( $icon, 'all' ) . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				' ' . esc_html( $menu_name ) . '</a>';
+			// Store the result in memory and re-use it when this function is called multiple times.
+			// This helps speed up the form builder when there are a lot of HTML fields, where this
+			// button is inserted once per HTML field.
+			// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
+			if ( ! isset( self::$formidable_tinymce_button ) ) {
+				do_action( 'qm/start', 'foo' );
+				FrmAppHelper::load_admin_wide_js();
+				$menu_name = FrmAppHelper::get_menu_name();
+				$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
+				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>';
+				do_action( 'qm/stop', 'foo' );
+			}
+			echo self::$formidable_tinymce_button;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
