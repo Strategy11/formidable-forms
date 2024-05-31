@@ -611,8 +611,12 @@ BEFORE_HTML;
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
-				<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_attr( $truncated_name ); ?>
+				<?php
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+				echo esc_attr( $truncated_name );
+				?>
 				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
@@ -677,6 +681,9 @@ BEFORE_HTML;
 	 * a field type and name.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array|string $field
+	 * @return void
 	 */
 	public static function prepare_field_type( &$field ) {
 		if ( ! is_array( $field ) ) {
