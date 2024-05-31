@@ -608,7 +608,13 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 		if ( isset( $field['icon'] ) ) {
-			$icon = FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true', 'echo' => false ) );
+			$icon = FrmAppHelper::icon_by_class(
+				$field['icon'],
+				array(
+					'aria-hidden' => 'true',
+					'echo'        => false,
+				)
+			);
 		} else {
 			$icon = '';
 		}
