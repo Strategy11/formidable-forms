@@ -605,20 +605,23 @@ BEFORE_HTML;
 		if ( 'url' === $args['type'] ) {
 			$class .= ' frm_insert_url';
 		}
+
+		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
+				<?php echo esc_attr( $truncated_name ); ?>
 				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
 			</a>
-			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden"
-				data-code="<?php echo esc_attr( $args['key'] ); ?>">
-				<?php if ( isset( $field['icon'] ) ) { ?>
-					<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php } ?>
-				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
+			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
+				<?php
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+				echo esc_attr( $truncated_name );
+				?>
 				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
