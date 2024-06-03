@@ -398,6 +398,10 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
+		if ( isset( $args['value'] ) && ! is_array( $args['value'] ) ) {
+			return parent::validate( $args );
+		}
+
 		$errors = isset( $args['errors'] ) ? $args['errors'] : array();
 
 		if ( ! $this->field->required ) {
