@@ -33,42 +33,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 <?php } ?>
 
-<?php if ( ! empty( $label_color ) ) { ?>
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font{
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-}
-<?php } ?>
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['-'] : $minus_icons[1]['-'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['+'] : $minus_icons[1]['+'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before,
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	<?php if ( ! empty( $submit_text_color ) ) { ?>
-		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
-	<?php } ?>
-	vertical-align:middle;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['-'] : $arrow_icons[1]['-'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['+'] : $arrow_icons[1]['+'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
 <?php if ( ! empty( $field_margin ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field{
 	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
