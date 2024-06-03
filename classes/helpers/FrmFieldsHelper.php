@@ -1205,6 +1205,9 @@ class FrmFieldsHelper {
 
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {
 		foreach ( $inputs as $input ) {
+			if ( ! isset( $field_types[ $input ] ) ) {
+				continue;
+			}
 			$field_types[ $input ] = $fields[ $input ];
 			unset( $input );
 		}
