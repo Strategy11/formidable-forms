@@ -1073,19 +1073,6 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 */
-	public static function actions_dropdown( $atts ) {
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			$status     = $atts['status'];
-			$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
-			$trash_link = self::delete_trash_info( $form_id, $status );
-			$links      = self::get_action_links( $form_id, $status );
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
-		}
-	}
-
-	/**
-	 * @since 3.0
-	 */
 	public static function get_action_links( $form_id, $form ) {
 		if ( ! is_object( $form ) ) {
 			$form = FrmForm::getOne( $form_id );
@@ -1795,5 +1782,26 @@ BEFORE_HTML;
 		} else {
 			esc_html_e( 'Update', 'formidable' );
 		}
+	}
+
+	/**
+	 * @since 3.0
+	 * @deprecated x.x
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	public static function actions_dropdown( $atts ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+
+		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
+
+		$status     = $atts['status'];
+		$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$trash_link = self::delete_trash_info( $form_id, $status );
+		$links      = self::get_action_links( $form_id, $status );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
 	}
 }
