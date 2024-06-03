@@ -852,7 +852,7 @@ BEFORE_HTML;
 	 *
 	 * @since 2.03.05
 	 *
-	 * @return string
+	 * @return void
 	 */
 	public static function maybe_hide_inline() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -863,6 +863,9 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public static function get_form_style_class( $form = false ) {
 		$style = self::get_form_style( $form );
 		$class = ' with_frm_style';
