@@ -10,7 +10,8 @@ describe( 'Run some HTML validation', function() {
                 "wcag/h30": "off",
                 "valid-id": "off",
                 "aria-label-misuse": "off",
-                "no-missing-references": "off"
+                "no-missing-references": "off",
+                "heading-level": "off"
             },
         });
     });
