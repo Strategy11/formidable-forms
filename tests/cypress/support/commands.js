@@ -37,16 +37,15 @@ Cypress.Commands.add("createNewForm", () => {
 })
 
 Cypress.Commands.add("deleteForm", () => {
-    
-    cy.log("Delete Test Form and its duplicate");
+    cy.log("Delete Form");
     cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
         console.log('Hovered Row:', $row);
         // Find the visible element with class "trash" within the hovered row and click it
-        cy.wrap($row).within(() => {
-            cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
+    cy.wrap($row).within(() => {
+        cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
         });
-        cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
-        cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
+    cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
+    cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
     })
 })
 
