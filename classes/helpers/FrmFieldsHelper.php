@@ -481,9 +481,9 @@ class FrmFieldsHelper {
 		}
 
 		$position = FrmStylesController::get_style_val( 'position', $form );
-		if ( $position == 'none' ) {
+		if ( $position === 'none' ) {
 			$position = 'top';
-		} elseif ( $position == 'no_label' ) {
+		} elseif ( $position === 'no_label' ) {
 			$position = 'none';
 		} elseif ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 			$position = 'top';

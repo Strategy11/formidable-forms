@@ -981,7 +981,7 @@ class FrmFormAction {
 	/**
 	 * Gets form fields for form action settings.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @param int $form_id Form ID.
 	 * @return object[]

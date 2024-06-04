@@ -88,6 +88,13 @@ abstract class FrmFieldType {
 	private static $should_hide_draft_fields;
 
 	/**
+	 * @since 6.10
+	 *
+	 * @var array|null
+	 */
+	private static $all_field_types;
+
+	/**
 	 * @param array|int|object $field
 	 * @param string           $type
 	 */
@@ -599,7 +606,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
-		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		$all_field_types = self::get_all_field_types();
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
@@ -612,6 +619,20 @@ DEFAULT_HTML;
 			?>
 		</h3>
 		<?php
+	}
+
+	/**
+	 * Store $all_field_types in memory on first call and re-use it to improve the performance of the form builder.
+	 *
+	 * @since 6.10
+	 *
+	 * @return array
+	 */
+	private static function get_all_field_types() {
+		if ( ! isset( self::$all_field_types ) ) {
+			self::$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		}
+		return self::$all_field_types;
 	}
 
 	/**

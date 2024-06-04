@@ -13,7 +13,6 @@
 
 .frm_inactive_menu{
 	opacity:.5;
-	filter:alpha(opacity=50);
 }
 
 /* media box button */

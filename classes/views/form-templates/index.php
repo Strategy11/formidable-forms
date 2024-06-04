@@ -41,10 +41,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-md frm-hide-js">
 				<div class="frm-form-templates-grid-layout">
-					<button id="frm-form-templates-create-form" class="frm-flex-box frm-items-center">
+					<button id="frm-form-templates-create-form" class="frm-flex-box frm-items-center frm-form-templates-create-button">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
 						<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
 					</button>
+					<?php
+					/**
+					 * Trigger an action so the AI add-on can include a "Create with AI" button.
+					 *
+					 * @since 6.10
+					 */
+					do_action( 'frm_after_create_blank_form_button' );
+					?>
 				</div>
 				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider frm-mt-xs frm-mb-xs"></span>
 

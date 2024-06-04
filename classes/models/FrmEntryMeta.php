@@ -499,7 +499,7 @@ class FrmEntryMeta {
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
 			$query  = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 		} else {
-			if ( $operator == 'LIKE' ) {
+			if ( $operator === 'LIKE' ) {
 				$search = '%' . $search . '%';
 			}
 			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared

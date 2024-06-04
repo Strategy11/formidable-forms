@@ -3,10 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<p class="howto">
-	<?php esc_html_e( 'Set your button text.', 'formidable' ); ?>
-</p>
-
 <input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
