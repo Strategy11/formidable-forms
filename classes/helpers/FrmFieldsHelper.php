@@ -1203,9 +1203,17 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_single_input_fields', $fields );
 	}
 
+	/**
+	 * @param string[] $inputs
+	 * @param array    $fields
+	 * @param array    $field_types
+	 * @return void
+	 */
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {
 		foreach ( $inputs as $input ) {
-			$field_types[ $input ] = $fields[ $input ];
+			if ( array_key_exists( $input, $fields ) ) {
+				$field_types[ $input ] = $fields[ $input ];
+			}
 			unset( $input );
 		}
 	}
