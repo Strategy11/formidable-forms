@@ -502,6 +502,12 @@ legend.frm_hidden{
 	transition: opacity 0.3s ease-in;
 }
 
+.with_frm_style input::placeholder,
+.with_frm_style textarea::placeholder {
+	font-size: <?php echo esc_html( $defaults['field_font_size'] . $important ); ?>;
+	font-size: var(--field-font-size);
+}
+
 .with_frm_style .frm_inside_container > label {
 	transition: all 0.3s ease-in;
 

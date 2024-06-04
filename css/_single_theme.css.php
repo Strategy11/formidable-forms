@@ -181,8 +181,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input::placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-	font-size: 14px;
-	font-size: var(--field-font-size);
 }
 .<?php echo esc_html( $style_class ); ?> input::-webkit-input-placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::-webkit-input-placeholder{
