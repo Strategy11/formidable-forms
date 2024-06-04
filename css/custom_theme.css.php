@@ -227,6 +227,7 @@ legend.frm_hidden{
 .with_frm_style input[type=phone],
 .with_frm_style input[type=search],
 .with_frm_style select,
+.wp-admin .with_frm_style select,
 .with_frm_style textarea,
 .frm_form_fields_style,
 .with_frm_style .frm_scroll_box .frm_opt_container,
@@ -315,6 +316,7 @@ legend.frm_hidden{
 .with_frm_style input[type=file],
 .with_frm_style input[type=search],
 .with_frm_style select,
+.wp-admin .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
 	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
 	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
