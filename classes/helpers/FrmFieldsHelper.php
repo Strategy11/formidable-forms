@@ -1211,6 +1211,7 @@ class FrmFieldsHelper {
 	 */
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {
 		foreach ( $inputs as $input ) {
+			// This may not be set if a field type was removed using the frm_available_fields or frm_pro_available_fields filters.
 			if ( array_key_exists( $input, $fields ) ) {
 				$field_types[ $input ] = $fields[ $input ];
 			}
