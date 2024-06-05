@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
-		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" role="link" tabindex="0" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" tabindex="0" aria-label="<?php echo esc_attr( $aria_label ); ?>">
 			<span class="frm-form-templates-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
 			<span class="frm-form-templates-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
 		</li>

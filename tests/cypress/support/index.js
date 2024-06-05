@@ -22,5 +22,6 @@ import './commands';
 import '@10up/cypress-wp-utils';
 import 'cypress-axe'
 
-require('cypress-xpath');
+import "cypress-html-validate/commands";
 
+require('cypress-xpath');
