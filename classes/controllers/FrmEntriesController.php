@@ -128,7 +128,7 @@ class FrmEntriesController {
 				continue;
 			}
 
-			$has_child_fields = $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] );
+			$has_child_fields = $form_col->type === 'form' && ! empty( $form_col->field_options['form_select'] );
 			if ( $has_child_fields ) {
 				self::add_subform_cols( $form_col, $form_id, $columns );
 			} else {
@@ -166,7 +166,7 @@ class FrmEntriesController {
 		}
 
 		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
-		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] == 'post_status';
+		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
 		if ( $has_separate_value && ! $is_post_status ) {
 			$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
 		}
@@ -192,7 +192,7 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		// Add a check so we don't create a loop.
-		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
+		$frm_vars['prev_hidden_cols'] = ! empty( $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
 	}
@@ -269,7 +269,7 @@ class FrmEntriesController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_entries_per_page' ) {
+		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
 		}
 
@@ -288,6 +288,12 @@ class FrmEntriesController {
 			$form_id . '_item_key'   => 'item_key',
 			$form_id . '_is_draft'   => 'is_draft',
 		);
+
+		if ( ! $form_id ) {
+			$columns[ $form_id . '_user_id' ] = 'user_id';
+			$columns[ $form_id . '_name' ]    = 'name';
+			$columns[ $form_id . '_form_id' ] = 'form_id';
+		}
 
 		foreach ( $fields as $field ) {
 			if ( self::field_supports_sorting( $field ) ) {
@@ -355,7 +361,7 @@ class FrmEntriesController {
 			if ( ! empty( $r ) ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
-				if ( (int) $form_prefix == (int) $form_id ) {
+				if ( (int) $form_prefix === (int) $form_id ) {
 					$hidden[] = $r;
 				}
 
@@ -389,7 +395,7 @@ class FrmEntriesController {
 
 			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
-				$i--;
+				--$i;
 			}
 
 			unset( $col_key, $col );
@@ -436,12 +442,12 @@ class FrmEntriesController {
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
 
 			/* translators: %1$s: Time string */
-			$errors['trash']  = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 		}
 	}
 
@@ -476,7 +482,7 @@ class FrmEntriesController {
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
 		$form   = FrmForm::getOne( $entry->form_id );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php';
 	}
 
 	/**
@@ -489,9 +495,9 @@ class FrmEntriesController {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
 			$error_args = array(
-				'title'       => __( 'Verification failed', 'formidable' ),
-				'body'        => $permission_error,
-				'cancel_url'  => admin_url( 'admin.php?page=formidable-entries' ),
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $permission_error,
+				'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
 			return;
@@ -509,16 +515,6 @@ class FrmEntriesController {
 		}
 
 		self::display_list( $message );
-	}
-
-	/**
-	 * @deprecated 4.02.04 - Moved to Pro since it was unused in Lite.
-	 */
-	public static function destroy_all() {
-		_deprecated_function( __METHOD__, '4.02.04', 'FrmProEntriesController::destroy_all' );
-		if ( is_callable( 'FrmProEntriesController::destroy_all' ) ) {
-			FrmProEntriesController::destroy_all();
-		}
 	}
 
 	public static function process_entry( $errors = '', $ajax = false ) {
@@ -708,14 +704,6 @@ class FrmEntriesController {
 			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function contextual_help( $help, $screen_id, $screen ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		return $help;
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
 	}
 }

@@ -18,19 +18,19 @@ class FrmUsage {
 			return;
 		}
 
-		$ep   = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
+		$ep = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
 		// Setup variable for wp_remote_request.
 		$post = array(
-			'method'    => 'POST',
-			'headers'   => array(
+			'method'  => 'POST',
+			'headers' => array(
 				'Accept'         => 'application/json',
 				'Content-Type'   => 'application/json',
 				'Content-Length' => strlen( $body ),
 			),
-			'body'      => $body,
+			'body'    => $body,
 		);
 
 		wp_remote_request( base64_decode( $ep ), $post );
@@ -65,28 +65,30 @@ class FrmUsage {
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
-			'uuid'           => $this->uuid(),
+			'uuid'              => $this->uuid(),
 			// Let's keep it anonymous.
-			'admin_email'    => '',
-			'wp_version'     => $wp_version,
-			'php_version'    => phpversion(),
-			'mysql_version'  => $wpdb->db_version(),
-			'os'             => FrmAppHelper::get_server_os(),
-			'locale'         => get_locale(),
+			'admin_email'       => '',
+			'wp_version'        => $wp_version,
+			'php_version'       => phpversion(),
+			'mysql_version'     => $wpdb->db_version(),
+			'os'                => FrmAppHelper::get_server_os(),
+			'locale'            => get_locale(),
 
-			'active_license' => FrmAppHelper::pro_is_installed(),
-			'form_count'     => $form_counts->published,
-			'entry_count'    => FrmEntry::getRecordCount(),
-			'timestamp'      => gmdate( 'c' ),
+			'active_license'    => FrmAppHelper::pro_is_installed(),
+			'form_count'        => $form_counts->published,
+			'entry_count'       => FrmEntry::getRecordCount(),
+			'timestamp'         => gmdate( 'c' ),
 
-			'theme_name'     => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
-			'plugins'        => $this->plugins(),
-			'settings'       => array(
+			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
+			'plugins'           => $this->plugins(),
+			'settings'          => array(
 				$this->settings(),
 			),
-			'forms'          => $this->forms(),
-			'fields'         => $this->fields(),
-			'actions'        => $this->actions(),
+			'forms'             => $this->forms(),
+			'fields'            => $this->fields(),
+			'actions'           => $this->actions(),
+
+			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
@@ -102,10 +104,10 @@ class FrmUsage {
 		$plugins = array();
 		foreach ( $plugin_list as $slug => $info ) {
 			$plugins[] = array(
-				'name'        => $info['Name'],
-				'slug'        => $slug,
-				'version'     => $info['Version'],
-				'active'      => is_plugin_active( $slug ),
+				'name'    => $info['Name'],
+				'slug'    => $slug,
+				'version' => $info['Version'],
+				'active'  => is_plugin_active( $slug ),
 			);
 		}
 
@@ -119,8 +121,8 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function settings() {
-		$settings_list  = FrmAppHelper::get_settings();
-		$settings       = array(
+		$settings_list = FrmAppHelper::get_settings();
+		$settings      = array(
 			'messages'    => $this->messages( $settings_list ),
 			'permissions' => $this->permissions( $settings_list ),
 		);
@@ -210,8 +212,8 @@ class FrmUsage {
 	private function forms() {
 		$s_query = array(
 			array(
-				'or' => 1,
-				'parent_form_id' => null,
+				'or'               => 1,
+				'parent_form_id'   => null,
 				'parent_form_id <' => 1,
 			),
 		);
@@ -255,13 +257,13 @@ class FrmUsage {
 
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
-				'form_id'     => $form->id,
-				'description' => $form->description,
-				'logged_in'   => $form->logged_in,
-				'editable'    => $form->editable,
-				'is_template' => $form->is_template,
-				'entry_count' => FrmEntry::getRecordCount( $form->id ),
-				'field_count' => $this->form_field_count( $form->id ),
+				'form_id'           => $form->id,
+				'description'       => $form->description,
+				'logged_in'         => $form->logged_in,
+				'editable'          => $form->editable,
+				'is_template'       => $form->is_template,
+				'entry_count'       => FrmEntry::getRecordCount( $form->id ),
+				'field_count'       => $this->form_field_count( $form->id ),
 				'form_action_count' => $this->form_action_count( $form->id ),
 			);
 
@@ -318,7 +320,7 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function fields() {
-		$args   = array(
+		$args = array(
 			'limit'    => 50,
 			'order_by' => 'id DESC',
 		);
@@ -373,4 +375,3 @@ class FrmUsage {
 		return is_array( $value ) ? json_encode( $value ) : $value;
 	}
 }
-

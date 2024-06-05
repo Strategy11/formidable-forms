@@ -2,7 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$cta = str_replace( 'button-secondary', 'button-primary', $message['cta'] );
 ?>
 <div id="frm_banner" data-key="<?php echo esc_attr( $message['key'] ); ?>">
 	<?php if ( ! empty( $message['emoji'] ) ) { ?>

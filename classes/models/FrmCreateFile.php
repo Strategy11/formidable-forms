@@ -10,8 +10,8 @@ class FrmCreateFile {
 	public $error_message;
 	public $uploads;
 	private $new_file_path;
-	public $chmod_dir = 0755;
-	public $chmod_file = 0644;
+	public $chmod_dir       = 0755;
+	public $chmod_file      = 0644;
 	private $has_permission = false;
 
 	public function __construct( $atts ) {
@@ -166,7 +166,7 @@ class FrmCreateFile {
 
 		$next_dir = '';
 		foreach ( $dir_names as $dir ) {
-			$next_dir      .= '/' . $dir;
+			$next_dir     .= '/' . $dir;
 			$needed_dirs[] = $this->uploads['basedir'] . $next_dir;
 		}
 
@@ -175,7 +175,7 @@ class FrmCreateFile {
 
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
 		$access_type = get_filesystem_method();

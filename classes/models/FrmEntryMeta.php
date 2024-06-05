@@ -10,6 +10,7 @@ class FrmEntryMeta {
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
 	 * @param mixed  $meta_value
+	 * @return int
 	 */
 	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
@@ -202,13 +203,16 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 2.0.9
+	 *
+	 * @param stdClass   $entry
+	 * @param int|string $field_id
+	 * @return mixed
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
 		if ( isset( $entry->metas ) ) {
 			return isset( $entry->metas[ $field_id ] ) ? $entry->metas[ $field_id ] : false;
-		} else {
-			return self::get_entry_meta_by_field( $entry->id, $field_id );
 		}
+		return self::get_entry_meta_by_field( $entry->id, $field_id );
 	}
 
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
@@ -234,7 +238,7 @@ class FrmEntryMeta {
 		if ( is_numeric( $field_id ) ) {
 			$query['field_id'] = $field_id;
 		} else {
-			$get_table             .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+			$get_table            .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 			$query['fi.field_key'] = $field_id;
 		}
 
@@ -275,7 +279,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @param string|int $field_id
+	 * @param int|string $field_id
 	 * @param string     $order
 	 * @param string     $limit
 	 * @param array      $args
@@ -311,6 +315,13 @@ class FrmEntryMeta {
 		return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id ) );
 	}
 
+	/**
+	 * @param array  $where
+	 * @param string $order_by
+	 * @param string $limit
+	 * @param bool   $stripslashes
+	 * @return array
+	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
 		$query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
@@ -365,7 +376,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @param string|array $where
+	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
 	 */
@@ -407,7 +418,7 @@ class FrmEntryMeta {
 			} elseif ( false !== strpos( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
-					function( $total, $current ) {
+					function ( $total, $current ) {
 						if ( is_numeric( $current ) ) {
 							$total[] = absint( $current );
 						}
@@ -486,9 +497,9 @@ class FrmEntryMeta {
 				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
-			$query = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
+			$query  = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 		} else {
-			if ( $operator == 'LIKE' ) {
+			if ( $operator === 'LIKE' ) {
 				$search = '%' . $search . '%';
 			}
 			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared

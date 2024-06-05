@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 	<?php
 	$displayed_actions = array();
-	foreach ( $groups as $group_name => $group ) {
+	foreach ( $groups as $group ) {
 		if ( ! empty( $group['name'] ) ) {
 			?>
 			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
@@ -87,5 +87,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="clear"></div>
 </div>
 
-<?php FrmFormActionsController::list_actions( $form, $values ); ?>
-<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
+<?php
+FrmFormActionsController::list_actions( $form, $values );
+FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' );

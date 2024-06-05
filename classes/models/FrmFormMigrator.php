@@ -15,7 +15,7 @@ abstract class FrmFormMigrator {
 	public $tracking = 'frm_forms_imported';
 
 	protected $fields_map          = array();
-	protected $current_source_form = null;
+	protected $current_source_form;
 	protected $current_section     = array();
 
 	/**
@@ -27,7 +27,7 @@ abstract class FrmFormMigrator {
 		}
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
 		$this->source_active = is_plugin_active( $this->path );
@@ -128,7 +128,7 @@ abstract class FrmFormMigrator {
 
 		if ( is_array( $forms ) ) {
 			$imported = array();
-			foreach ( (array) $forms as $form_id ) {
+			foreach ( $forms as $form_id ) {
 				$imported[] = $this->import_form( $form_id );
 			}
 		} else {
@@ -234,14 +234,14 @@ abstract class FrmFormMigrator {
 
 			// This may occassionally skip one level/order e.g. after adding a
 			// list field, as field_order would already be prepared to be used.
-			$field_order ++;
+			++$field_order;
 
-			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
+			if ( ! empty( $new_field['fields'] ) && is_array( $new_field['fields'] ) ) {
 				// we have (inner) fields to merge
 
 				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
 				// set the new field_order as it would have changed
-				$field_order    = $new_field['current_order'];
+				$field_order = $new_field['current_order'];
 			}
 		}//end foreach
 	}
@@ -272,7 +272,7 @@ abstract class FrmFormMigrator {
 
 		$order = 0;
 		foreach ( $fields as $field ) {
-			$order ++;
+			++$order;
 			$type     = $this->get_field_type( $field );
 			$new_type = $this->convert_field_type( $type, $field );
 			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
@@ -302,7 +302,7 @@ abstract class FrmFormMigrator {
 		$sub['name'] = __( 'Section Buttons', 'formidable' );
 		$subs        = array( $sub );
 		$this->insert_fields_in_array( $subs, $order, 0, $fields );
-		$order ++;
+		++$order;
 	}
 
 	/**
@@ -543,7 +543,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return string
 	 */
@@ -552,7 +552,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return array
 	 */

@@ -20,8 +20,7 @@ if ( isset( $message ) && $message != '' ) {
 	}
 }
 
-if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
-
+if ( ! empty( $errors ) && is_array( $errors ) ) {
 	if ( isset( $form ) && is_object( $form ) ) {
 		FrmFormsHelper::get_scroll_js( $form->id );
 	}

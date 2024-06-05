@@ -91,12 +91,12 @@
 		bgHoverColor: '#F5FAFF',
 		logoIcon: `
 			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
-				<g clip-path="url(#a)">
+				<g clip-path="url(#floatingLinksClipPath)">
 					<path fill="#F15A24" d="M19.265 25.641h9.401v4.957h-9.401v-4.957Z"/>
 					<path fill="#5E5E5F" d="M26.702 9.743H13.368a2.12 2.12 0 0 0-2.136 2.12V14.7h17.436V9.743h-1.966Zm-.171 7.864H11.249v12.991h4.957v-8.034h10.36a2.154 2.154 0 0 0 2.016-1.419 1.67 1.67 0 0 0 .103-.598v-2.94H26.53ZM20 40a20 20 0 0 1-6.748-38.827 20 20 0 0 1 14.526 37.254A19.847 19.847 0 0 1 20 40Zm0-37.35A17.35 17.35 0 0 0 7.727 32.272 17.358 17.358 0 0 0 32.275 7.726 17.232 17.232 0 0 0 20 2.666V2.65Z"/>
 				</g>
 				<defs>
-					<clipPath id="a">
+					<clipPath id="floatingLinksClipPath">
 					<path fill="#fff" d="M0 0h40v40H0z"/>
 					</clipPath>
 				</defs>

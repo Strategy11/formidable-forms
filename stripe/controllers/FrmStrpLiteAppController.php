@@ -204,7 +204,7 @@ class FrmStrpLiteAppController {
 			 * @param int    $entry_id
 			 * @return string
 			 */
-			function( $html ) use ( $entry_id ) {
+			function ( $html ) use ( $entry_id ) {
 				global $wpdb;
 				$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => 1 ), array( 'id' => $entry_id ) );
 				return $html;

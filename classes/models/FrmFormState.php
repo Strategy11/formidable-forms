@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormState {
 
 	/**
-	 * @var FrmFormState $instance
+	 * @var FrmFormState
 	 */
 	private static $instance;
 

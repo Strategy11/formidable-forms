@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="divider_section_only">
 <?php } ?>
 
-	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
+<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
 
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
 	<div class="frm-field-action-icons frm-show-hover">
@@ -42,15 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</div>
 
-	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
-			<?php echo esc_html( $field['required_indicator'] ); ?>
-		</span>
-		<span class="frm-sub-label frm-collapsed-label">
-			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
-		</span>
-	</label>
+	<?php $field_obj->show_label_on_form_builder(); ?>
 
 	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>

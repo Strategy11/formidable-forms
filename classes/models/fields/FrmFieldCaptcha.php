@@ -190,17 +190,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return string
 	 */
 	protected function turnstile_api_url() {
-		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile';
 
 		/**
 		 * Allows updating hcaptcha js api url.
 		 *
-		 * @since x.x
+		 * @since 6.8.4
 		 *
 		 * @param string $api_js_url
 		 */
@@ -322,7 +322,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.8.4
 	 *
 	 * @return bool
 	 */
@@ -394,12 +394,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @return string
-	 *
 	 * @param FrmSettings $frm_settings
+	 * @return string
 	 */
 	protected function captcha_size( $frm_settings ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.8.4' );
 		return 'normal';
 	}
 }

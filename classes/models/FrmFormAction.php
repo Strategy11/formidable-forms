@@ -165,9 +165,9 @@ class FrmFormAction {
 
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
-		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
+		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
 		}
 
@@ -235,7 +235,7 @@ class FrmFormAction {
 	 * @return string Name attribute for $field_name
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		$name = $this->option_name . '[' . $this->number . ']';
+		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
 		$name .= '[' . $field_name . ']';
 
@@ -330,10 +330,10 @@ class FrmFormAction {
 	 * @since 2.0
 	 *
 	 * @param array $action
-	 * @return integer $post_id
+	 * @return int $post_id
 	 */
 	public function maybe_create_action( $action, $forms ) {
-		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
+		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
 			$post_id                = $this->save_settings( $action );
@@ -453,7 +453,7 @@ class FrmFormAction {
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
-			$instance = $this->update( $new_instance, $old_instance );
+			$instance                   = $this->update( $new_instance, $old_instance );
 
 			/**
 			 * Filter an action's settings before saving.
@@ -490,7 +490,7 @@ class FrmFormAction {
 	 * @since 3.04
 	 *
 	 * @param array          $new_instance
-	 * @param stdClass|array $old_instance
+	 * @param array|stdClass $old_instance
 	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
@@ -507,6 +507,10 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
 
@@ -638,8 +642,8 @@ class FrmFormAction {
 		$frm_vars['action_type'] = $type;
 
 		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
-		$query = self::action_args( $form_id, $limit );
-		$query['post_status'] = $atts['post_status'];
+		$query                     = self::action_args( $form_id, $limit );
+		$query['post_status']      = $atts['post_status'];
 		$query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( json_encode( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
@@ -689,7 +693,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param WP_Post|array $action
+	 * @param array|WP_Post $action
 	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
@@ -788,7 +792,7 @@ class FrmFormAction {
 	 * Migrate settings from form->options into new action.
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
-		$action        = $this->prepare_new( $form->id );
+		$action = $this->prepare_new( $form->id );
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
 		// fill with existing options
@@ -838,7 +842,7 @@ class FrmFormAction {
 		$stop         = false;
 		$met          = array();
 
-		if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
+		if ( empty( $notification['conditions'] ) ) {
 			return $stop;
 		}
 
@@ -857,16 +861,16 @@ class FrmFormAction {
 
 			$stop = FrmFieldsHelper::value_meets_condition( $observed_value, $condition['hide_field_cond'], $condition['hide_opt'] );
 
-			if ( $notification['conditions']['send_stop'] == 'send' ) {
+			if ( $notification['conditions']['send_stop'] === 'send' ) {
 				$stop = $stop ? false : true;
 			}
 
 			$met[ $stop ] = $stop;
 		}//end foreach
 
-		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
-			$stop = ( $notification['conditions']['send_stop'] == 'send' );
-		} elseif ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset( $met[0] ) ) {
+		if ( $notification['conditions']['any_all'] === 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
+			$stop = ( $notification['conditions']['send_stop'] === 'send' );
+		} elseif ( $notification['conditions']['any_all'] === 'any' && $notification['conditions']['send_stop'] === 'send' && isset( $met[0] ) ) {
 			$stop = false;
 		}
 
@@ -878,8 +882,6 @@ class FrmFormAction {
 	 *
 	 * @since 2.01.02
 	 *
-	 * @deprecated 4.06.02
-	 *
 	 * @param array|string $logic_value
 	 *
 	 * @return void
@@ -889,7 +891,7 @@ class FrmFormAction {
 			$logic_value = reset( $logic_value );
 		}
 
-		if ( $logic_value == 'current_user' ) {
+		if ( $logic_value === 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
 
@@ -905,7 +907,6 @@ class FrmFormAction {
 	 * Get the value from a specific field and entry
 	 *
 	 * @since 2.01.02
-	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
 	 * @param int    $field_id
@@ -975,5 +976,24 @@ class FrmFormAction {
 	 */
 	protected function get_upgrade_text() {
 		return __( 'Conditional form actions', 'formidable' );
+	}
+
+	/**
+	 * Gets form fields for form action settings.
+	 *
+	 * @since 6.10
+	 *
+	 * @param int $form_id Form ID.
+	 * @return object[]
+	 */
+	protected function get_form_fields( $form_id ) {
+		// Get form fields, include embedded and repeater child fields.
+		$form_fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+		return array_filter(
+			$form_fields,
+			function ( $form_field ) {
+				return ! FrmField::is_no_save_field( $form_field->type );
+			}
+		);
 	}
 }

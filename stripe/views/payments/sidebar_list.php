@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			if ( $payment->status === 'complete' ) {
-				$entry_total += $payment->amount;
+				$entry_total  += $payment->amount;
 				$total_payment = $payment;
 			}
 			?>

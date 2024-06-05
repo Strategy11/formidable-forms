@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 	<input type="radio" name="frm_active_captcha" id="frm-turnstile" value="turnstile" data-frmhide="#recaptcha_settings,#hcaptcha_settings" data-frmshow="#turnstile_settings" <?php checked( $frm_settings->active_captcha, 'turnstile' ); ?> />
 	<label for="frm-turnstile">
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 65.6 30"><g clip-path="url(#a)"><path fill="#FBAD41" d="M52.7 13H52a.4.4 0 0 0-.3.3l-1 3.3c-.3 1.4-.2 2.7.5 3.6.6.9 1.6 1.4 2.9 1.5l5 .3c.2 0 .3 0 .4.2a.5.5 0 0 1 0 .4.6.6 0 0 1-.5.4l-5.3.3c-2.8.2-5.9 2.5-7 5.3l-.3 1a.3.3 0 0 0 .2.4h18a.5.5 0 0 0 .5-.4 13.1 13.1 0 0 0 .5-3.5 13 13 0 0 0-12.9-13"/><path fill="#F6821F" d="m44.8 29.6.3-1.2c.4-1.4.3-2.7-.4-3.6a3.6 3.6 0 0 0-2.9-1.5L18.2 23a.5.5 0 0 1-.4-.2.5.5 0 0 1 0-.4.6.6 0 0 1 .5-.4l23.9-.4a8.5 8.5 0 0 0 7-5.2l1.3-3.6a1 1 0 0 0 0-.5C49 5.3 42.9 0 35.5 0c-6.9 0-12.7 4.5-14.8 10.7a7 7 0 0 0-4.9-1.4 7 7 0 0 0-6.2 6.3 7.1 7.1 0 0 0 .2 2.5A10 10 0 0 0 0 29.6a.5.5 0 0 0 .5.4h43.7a.6.6 0 0 0 .5-.4"/></g><defs><clipPath id="a"><path fill="#FFF" d="M0 0h204v30H0z"/></clipPath></defs></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 65.6 30"><g clip-path="url(#turnstileClipPath)"><path fill="#FBAD41" d="M52.7 13H52a.4.4 0 0 0-.3.3l-1 3.3c-.3 1.4-.2 2.7.5 3.6.6.9 1.6 1.4 2.9 1.5l5 .3c.2 0 .3 0 .4.2a.5.5 0 0 1 0 .4.6.6 0 0 1-.5.4l-5.3.3c-2.8.2-5.9 2.5-7 5.3l-.3 1a.3.3 0 0 0 .2.4h18a.5.5 0 0 0 .5-.4 13.1 13.1 0 0 0 .5-3.5 13 13 0 0 0-12.9-13"/><path fill="#F6821F" d="m44.8 29.6.3-1.2c.4-1.4.3-2.7-.4-3.6a3.6 3.6 0 0 0-2.9-1.5L18.2 23a.5.5 0 0 1-.4-.2.5.5 0 0 1 0-.4.6.6 0 0 1 .5-.4l23.9-.4a8.5 8.5 0 0 0 7-5.2l1.3-3.6a1 1 0 0 0 0-.5C49 5.3 42.9 0 35.5 0c-6.9 0-12.7 4.5-14.8 10.7a7 7 0 0 0-4.9-1.4 7 7 0 0 0-6.2 6.3 7.1 7.1 0 0 0 .2 2.5A10 10 0 0 0 0 29.6a.5.5 0 0 0 .5.4h43.7a.6.6 0 0 0 .5-.4"/></g><defs><clipPath id="turnstileClipPath"><path fill="#FFF" d="M0 0h204v30H0z"/></clipPath></defs></svg>
 		<?php esc_html_e( 'Turnstile', 'formidable' ); ?>
 	</label>
 </div>
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 	<p>
-		<label for="frm_re_multi">
+		<label>
 			<input type="checkbox" name="frm_re_multi" id="frm_re_multi"
 			value="1" <?php checked( $frm_settings->re_multi, 1 ); ?> />
 			<?php esc_html_e( 'Allow multiple reCAPTCHAs to be used on a single page', 'formidable' ); ?>
