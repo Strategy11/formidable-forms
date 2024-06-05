@@ -37,8 +37,7 @@ $important     = empty( $defaults['important_style'] ) ? '' : ' !important';
 .with_frm_style,
 .with_frm_style form,
 .with_frm_style .frm-show-form div.frm_description p{
-	text-align:<?php echo esc_html( $defaults['form_align'] . $important ); ?>;
-	text-align:var(--form-align)<?php echo esc_html( $important ); ?>;
+	text-align: var(--form-align)<?php echo esc_html( $important ); ?>;
 }
 
 /* Keep this. This is used for Honeypot */
@@ -49,24 +48,19 @@ input:-webkit-autofill {
 /* Form description */
 .with_frm_style .frm-show-form div.frm_description p{
 <?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['form_desc_size'] . $important ); ?>;
-	font-size:var(--form-desc-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--form-desc-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['form_desc_color'] . $important ); ?>;
-	color:var(--form-desc-color)<?php echo esc_html( $important ); ?>;
+	color: var(--form-desc-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_margin_top'] ) ) { ?>
-	margin-top:<?php echo esc_html( $defaults['form_desc_margin_top'] . $important ); ?>;
-	margin-top:var(--form-desc-margin-top)<?php echo esc_html( $important ); ?>;
+	margin-top: var(--form-desc-margin-top)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_margin_bottom'] ) ) { ?>
-	margin-bottom:<?php echo esc_html( $defaults['form_desc_margin_bottom'] . $important ); ?>;
-	margin-bottom:var(--form-desc-margin-bottom)<?php echo esc_html( $important ); ?>;
+	margin-bottom: var(--form-desc-margin-bottom)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( isset( $defaults['form_desc_padding'] ) ) { ?>
-	padding:<?php echo esc_html( $defaults['form_desc_padding'] . $important ); ?>;
-	padding:var(--form-desc-padding)<?php echo esc_html( $important ); ?>;
+	padding: var(--form-desc-padding)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
@@ -91,22 +85,18 @@ form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
 
 .with_frm_style .frm_form_fields > fieldset{
 <?php if ( isset( $defaults['fieldset'] ) && ( $defaults['fieldset'] || '0' === $defaults['fieldset'] ) ) { ?>
-	border-width:<?php echo esc_html( $defaults['fieldset'] . $important ); ?>;
-	border-width:var(--fieldset)<?php echo esc_html( $important ); ?>;
+	border-width: var(--fieldset)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 	border-style:solid;
 <?php if ( ! empty( $defaults['fieldset_color'] ) ) { ?>
-	border-color:<?php echo esc_html( $defaults['fieldset_color'] . $important ); ?>;
-	border-color:var(--fieldset-color)<?php echo esc_html( $important ); ?>;
+	border-color: var(--fieldset-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 	margin:0;
 <?php if ( ! empty( $defaults['fieldset_padding'] ) ) { ?>
-	padding:<?php echo esc_html( $defaults['fieldset_padding'] . $important ); ?>;
-	padding:var(--fieldset-padding)<?php echo esc_html( $important ); ?>;
+	padding: var(--fieldset-padding)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['fieldset_bg_color'] ) ) { ?>
-	background-color:<?php echo esc_html( $defaults['fieldset_bg_color'] ); ?>;
-	background-color:var(--fieldset-bg-color)<?php echo esc_html( $important ); ?>;
+	background-color: var(--fieldset-bg-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family:var(--font);
@@ -132,65 +122,53 @@ legend.frm_hidden{
 .with_frm_style legend + h3,
 .with_frm_style h3.frm_form_title{
 <?php if ( ! empty( $defaults['title_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['title_size'] . $important ); ?>;
-	font-size:var(--title-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--title-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['title_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['title_color'] . $important ); ?>;
-	color:var(--title-color)<?php echo esc_html( $important ); ?>;
+	color: var(--title-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font);
+	font-family: var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['title_margin_top'] ) ) { ?>
-	margin-top:<?php echo esc_html( $defaults['title_margin_top'] . $important ); ?>;
-	margin-top:var(--title-margin-top)<?php echo esc_html( $important ); ?>;
+	margin-top: var(--title-margin-top)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['title_margin_bottom'] ) ) { ?>
-	margin-bottom:<?php echo esc_html( $defaults['title_margin_bottom'] . $important ); ?>;
-	margin-bottom:var(--title-margin-bottom)<?php echo esc_html( $important ); ?>;
+	margin-bottom: var(--title-margin-bottom)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
 .with_frm_style .frm_form_field.frm_html_container,
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font);
+	font-family: var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['form_desc_color'] . $important ); ?>;
-	color:var(--form-desc-color)<?php echo esc_html( $important ); ?>;
+	color: var(--form-desc-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
 <?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 .with_frm_style .frm_form_field.frm_html_container{
-	font-size:<?php echo esc_html( $defaults['form_desc_size'] . $important ); ?>;
-	font-size:var(--form-desc-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--form-desc-size)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
 
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['field_font_size'] . $important ); ?>;
-	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['field_weight'] ) ) { ?>
-	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;
-	font-weight:var(--field-weight)<?php echo esc_html( $important ); ?>;
+	font-weight: var(--field-weight)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
 .with_frm_style .frm_required{
 <?php if ( ! empty( $defaults['required_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['required_color'] . $important ); ?>;
-	color:var(--required-color)<?php echo esc_html( $important ); ?>;
+	color: var(--required-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['required_weight'] ) ) { ?>
-	font-weight:<?php echo esc_html( $defaults['required_weight'] . $important ); ?>;
-	font-weight:var(--required-weight)<?php echo esc_html( $important ); ?>;
+	font-weight: var(--required-weight)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
@@ -207,8 +185,7 @@ legend.frm_hidden{
 .with_frm_style .chosen-container{
 	font-family:var(--font)<?php echo esc_html( $important ); ?>;
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
@@ -236,29 +213,19 @@ legend.frm_hidden{
 .with_frm_style .chosen-container-multi .chosen-choices,
 .with_frm_style .chosen-container-single .chosen-single,
 .with_frm_style .frm_slimselect.ss-main {
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
-	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
-	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
-	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
-	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
-	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
-	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
-	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
-	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
-	width:<?php echo esc_html( $defaults['field_width'] ); ?>;
-	width:var(--field-width)<?php echo esc_html( $important ); ?>;
-	max-width:100%;
-	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
-	padding:<?php echo esc_html( $defaults['field_pad'] ); ?>;
-	padding:var(--field-pad)<?php echo esc_html( $important ); ?>;
-	box-sizing:border-box;
-	outline:none<?php echo esc_html( $important ); ?>;
-	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;
-	font-weight:var(--field-weight);
+	color: var(--text-color)<?php echo esc_html( $important ); ?>;
+	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
+	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-width: var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-style: var(--field-border-style)<?php echo esc_html( $important ); ?>;
+	border-radius: var(--border-radius)<?php echo esc_html( $important ); ?>;
+	width: var(--field-width)<?php echo esc_html( $important ); ?>;
+	max-width: 100%;
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
+	padding: var(--field-pad)<?php echo esc_html( $important ); ?>;
+	box-sizing: border-box;
+	outline: none<?php echo esc_html( $important ); ?>;
+	font-weight: var(--field-weight);
 }
 
 <?php if ( ! empty( $important ) ) { ?>
@@ -283,20 +250,17 @@ legend.frm_hidden{
 <?php } ?>
 
 .with_frm_style select option {
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style select option.frm-select-placeholder {
-	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
-	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+	color: var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
-	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
-	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
+	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
+	box-shadow: var(--box-shadow)<?php echo esc_html( $important ); ?>;
 	float: none;
 }
 
@@ -307,8 +271,7 @@ legend.frm_hidden{
 
 .with_frm_style input[type=radio]:not(:checked):focus,
 .with_frm_style input[type=checkbox]:not(:checked):focus {
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?> !important;
-	border-color:var(--border-color) !important;
+	border-color: var(--border-color) !important;
 }
 
 .with_frm_style input[type=radio]:focus,
@@ -326,8 +289,7 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height: var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
@@ -344,15 +306,13 @@ legend.frm_hidden{
 }
 
 .with_frm_style input[type=file]{
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
-	padding:0px;
+	color: var(--text-color)<?php echo esc_html( $important ); ?>;
+	padding: 0px;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:var(--font)<?php echo esc_html( $important ); ?>;
+	font-family: var(--font)<?php echo esc_html( $important ); ?>;
 <?php } ?>
-	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
-	display:initial;
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
+	display: initial;
 }
 
 .with_frm_style input[type=file].frm_transparent{
@@ -360,8 +320,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style .wp-editor-wrap{
-	width:<?php echo esc_html( $defaults['field_width'] . $important ); ?>;
-	width:var(--field-width)<?php echo esc_html( $important ); ?>;
+	width: var(--field-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
 }
 
@@ -371,13 +330,11 @@ legend.frm_hidden{
 }
 
 .with_frm_style .mceIframeContainer{
-	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
-	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
+	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style select{
-	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
-	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
+	width: var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
 	background-position-y: calc(50% + 3px);
 }
@@ -387,13 +344,10 @@ legend.frm_hidden{
 .with_frm_style textarea[disabled],
 .with_frm_style input[readonly],
 .with_frm_style select[readonly],
-.with_frm_style textarea[readonly]{
-	background-color:<?php echo esc_html( $defaults['bg_color_disabled'] ); ?>;
-	background-color:var(--bg-color-disabled)<?php echo esc_html( $important ); ?>;
-	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
-	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
-	border-color:<?php echo esc_html( $defaults['border_color_disabled'] ); ?>;
-	border-color:var(--border-color-disabled)<?php echo esc_html( $important ); ?>;
+.with_frm_style textarea[readonly] {
+	background-color: var(--bg-color-disabled)<?php echo esc_html( $important ); ?>;
+	color: var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+	border-color: var(--border-color-disabled)<?php echo esc_html( $important ); ?>;
 }
 
 .frm_preview_page:before{
@@ -407,28 +361,22 @@ legend.frm_hidden{
 .with_frm_style .frm_primary_label{
 	max-width:100%;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font);
+	font-family: var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['font_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['font_size'] . $important ); ?>;
-	font-size:var(--font-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['label_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['label_color'] . $important ); ?>;
-	color:var(--label-color)<?php echo esc_html( $important ); ?>;
+	color: var(--label-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['weight'] ) ) { ?>
-	font-weight:<?php echo esc_html( $defaults['weight'] . $important ); ?>;
-	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
+	font-weight: var(--weight)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['align'] ) ) { ?>
-	text-align:<?php echo esc_html( $defaults['align'] . $important ); ?>;
-	text-align:var(--align)<?php echo esc_html( $important ); ?>;
+	text-align: var(--align)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['label_padding'] ) ) { ?>
-	padding:<?php echo esc_html( $defaults['label_padding'] . $important ); ?>;
-	padding:var(--label-padding)<?php echo esc_html( $important ); ?>;
+	padding: var(--label-padding)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 	margin:0;
 	width:auto;
@@ -620,8 +568,7 @@ legend.frm_hidden{
 	border:1px solid #eee;
 	display:inline-block;
 <?php if ( ! empty( $defaults['submit_padding'] ) ) { ?>
-	padding:<?php echo esc_html( $defaults['submit_padding'] . $important ); ?>;
-	padding:var(--submit-padding)<?php echo esc_html( $important ); ?>;
+	padding: var(--submit-padding)<?php echo esc_html( $important ); ?>;
 <?php } else { ?>
 	padding:5px;
 <?php } ?>
@@ -630,36 +577,28 @@ legend.frm_hidden{
 	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_font_size'] ) ) { ?>
-	font-size:<?php echo esc_html( $defaults['submit_font_size'] . $important ); ?>;
-	font-size:var(--submit-font-size)<?php echo esc_html( $important ); ?>;
+	font-size: var(--submit-font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font)<?php echo esc_html( $important ); ?>;
+	font-family: var(--font)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_weight'] ) ) { ?>
-	font-weight:<?php echo esc_html( $defaults['submit_weight'] . $important ); ?>;
-	font-weight:var(--submit-weight)<?php echo esc_html( $important ); ?>;
+	font-weight: var(--submit-weight)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_text_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['submit_text_color'] . $important ); ?>;
-	color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
+	color: var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_bg_color'] ) ) { ?>
-	background:<?php echo esc_html( $defaults['submit_bg_color'] . $important ); ?>;
-	background:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
+	background: var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_border_width'] ) ) { ?>
-	border-width:<?php echo esc_html( $defaults['submit_border_width'] ); ?>;
-	border-width:var(--submit-border-width)<?php echo esc_html( $important ); ?>;
+	border-width: var(--submit-border-width)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_border_color'] ) ) { ?>
-	border-color:<?php echo esc_html( $defaults['submit_border_color'] . $important ); ?>;
-	border-color:var(--submit-border-color)<?php echo esc_html( $important ); ?>;
+	border-color: var(--submit-border-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_height'] ) ) { ?>
-	height:<?php echo esc_html( $defaults['submit_height'] . $important ); ?>;
-	height:var(--submit-height)<?php echo esc_html( $important ); ?>;
+	height: var(--submit-height)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
@@ -815,13 +754,10 @@ a.frm_save_draft{
 .with_frm_style a.frm_save_draft,
 .with_frm_style a.frm_start_over{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font);
+	font-family: var(--font);
 <?php } ?>
-	font-size:<?php echo esc_html( $defaults['submit_font_size'] ); ?>;
-	font-size:var(--submit-font-size);
-	font-weight:<?php echo esc_html( $defaults['submit_weight'] ); ?>;
-	font-weight:var(--submit-weight);
+	font-size: var(--submit-font-size);
+	font-weight: var(--submit-weight);
 }
 
 .horizontal_radio .frm_radio{
@@ -847,13 +783,11 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio{
-	display:<?php echo esc_html( $defaults['radio_align'] . $important ); ?>;
-	display:var(--radio-align)<?php echo esc_html( $important ); ?>;
+	display: var(--radio-align)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_checkbox{
-	display:<?php echo esc_html( $defaults['check_align'] . $important ); ?>;
-	display:var(--check-align)<?php echo esc_html( $important ); ?>;
+	display: var(--check-align)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .vertical_radio .frm_checkbox,
@@ -888,25 +822,20 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio label,
-.with_frm_style .frm_checkbox label{
+.with_frm_style .frm_checkbox label {
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	font-family:var(--font);
+	font-family: var(--font);
 <?php } ?>
-	font-size:<?php echo esc_html( $defaults['check_font_size'] . $important ); ?>;
-	font-size:var(--check-font-size)<?php echo esc_html( $important ); ?>;
-	color:<?php echo esc_html( $defaults['check_label_color'] . $important ); ?>;
-	color:var(--check-label-color)<?php echo esc_html( $important ); ?>;
-	font-weight:<?php echo esc_html( $defaults['check_weight'] . $important ); ?>;
-	font-weight:var(--check-weight)<?php echo esc_html( $important ); ?>;
+	font-size: var(--check-font-size)<?php echo esc_html( $important ); ?>;
+	color: var(--check-label-color)<?php echo esc_html( $important ); ?>;
+	font-weight: var(--check-weight)<?php echo esc_html( $important ); ?>;
 	line-height: 1.3;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox] {
-	font-size:<?php echo esc_html( $defaults['check_font_size'] . $important ); ?>;
-	font-size:var(--check-font-size)<?php echo esc_html( $important ); ?>;
-	position:static<?php echo esc_html( $important ); ?>;
+	font-size: var(--check-font-size)<?php echo esc_html( $important ); ?>;
+	position: static<?php echo esc_html( $important ); ?>;
 }
 
 .frm_file_container .frm_file_link,
@@ -955,12 +884,10 @@ a.frm_save_draft{
 .with_frm_style .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:not([disabled]):checked {
-	border-color: <?php echo esc_html( $defaults['border_color_active'] ); ?> !important;
 	border-color: var(--border-color-active) !important;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]:not([disabled]):checked {
-	background-color: <?php echo esc_html( $defaults['border_color_active'] ); ?> !important;
 	background-color: var(--border-color-active) !important;
 }
 
@@ -969,12 +896,10 @@ a.frm_save_draft{
 .with_frm_style .frm_scale input[type=radio][disabled]:checked,
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox][disabled]:checked {
-	border-color: <?php echo esc_html( $defaults['border_color'] ); ?> !important;
 	border-color: var(--border-color) !important; /* Override Style Preview */
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox][disabled]:checked {
-	background-color: <?php echo esc_html( $defaults['border_color'] ); ?> !important;
 	background-color: var(--border-color) !important;
 }
 
@@ -1004,7 +929,6 @@ a.frm_save_draft{
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
-	background-color: <?php echo esc_html( $defaults['border_color_active'] ); ?>;
 	background-color: var(--border-color-active);
 	margin: 3px;
 }
@@ -1013,7 +937,6 @@ a.frm_save_draft{
 .with_frm_style .frm_scale input[type=radio][disabled]:before,
 <?php } ?>
 .with_frm_style .frm_radio input[type=radio][disabled]:before {
-	background-color: <?php echo esc_html( $defaults['border_color'] ); ?>;
 	background-color: var(--border-color);
 }
 
@@ -1040,25 +963,19 @@ a.frm_save_draft{
 	padding:15px;
 }
 
-.with_frm_style .frm_message p{
-	margin-bottom:5px;
-	color:<?php echo esc_html( $defaults['success_text_color'] ); ?>;
-	color:var(--success-text-color)<?php echo esc_html( $important ); ?>;
+.with_frm_style .frm_message p {
+	margin-bottom: 5px;
+	color: var(--success-text-color)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_message,
-.frm_success_style{
-	margin:5px 0 15px;
-	border:1px solid <?php echo esc_html( $defaults['success_border_color'] ); ?>;
-	border-color:var(--success-border-color);
-	background-color:<?php echo esc_html( $defaults['success_bg_color'] ); ?>;
-	background-color:var(--success-bg-color);
-	color:<?php echo esc_html( $defaults['success_text_color'] ); ?>;
-	color:var(--success-text-color)<?php echo esc_html( $important ); ?>;
-	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
-	border-radius:var(--border-radius);
-	font-size:<?php echo esc_html( $defaults['success_font_size'] ); ?>;
-	font-size:var(--success-font-size)<?php echo esc_html( $important ); ?>;
+.frm_success_style {
+	margin: 5px 0 15px;
+	border: 1px solid var(--success-border-color);
+	background-color: var(--success-bg-color);
+	color: var(--success-text-color)<?php echo esc_html( $important ); ?>;
+	border-radius: var(--border-radius);
+	font-size: var(--success-font-size)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_plain_success .frm_message {
@@ -1096,8 +1013,7 @@ a.frm_save_draft{
 	border-width:1px;
 	border-style:solid;
 	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-		border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-		border-color:var(--border-color);
+		border-color: var(--border-color);
 	<?php } ?>
 	border-top:none;
 	border-left:none;
@@ -1114,8 +1030,7 @@ a.frm_save_draft{
 
 <?php if ( ! empty( $defaults['border_color'] ) ) { ?>
 .with_frm_style .frm-alt-table{
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-color:var(--border-color);
+	border-color: var(--border-color);
 }
 <?php } ?>
 
@@ -1141,22 +1056,21 @@ a.frm_save_draft{
 }
 
 table.form_results.with_frm_style{
-	border:<?php echo esc_html( $defaults['field_border_width'] ); ?> solid <?php echo esc_html( $defaults['border_color'] . $important ); ?>;
-	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-style: solid;
+	border-width: var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
 }
 
 table.form_results.with_frm_style tr td{
 	text-align:left;
 	padding:7px 9px;
 <?php if ( ! empty( $defaults['text_color'] ) ) { ?>
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-	border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-top-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
-	border-top-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-top-style: solid
+	border-top-width: var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-top-color: var(--border-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
@@ -1168,9 +1082,8 @@ table.form_results.with_frm_style tr.frm_even,
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 table.form_results.with_frm_style tr.frm_odd,
-.frm-grid .frm_odd{
-	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
-	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
+.frm-grid .frm_odd {
+	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
 
@@ -1254,24 +1167,23 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
-#frm_loading .progress-striped .progress-bar{
+#frm_loading .progress-striped .progress-bar {
 	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-		background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+		background-image: linear-gradient(45deg, var(--border-color) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, var(--border-color) 50%, var(--border-color) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 	<?php } ?>
 	background-size:40px 40px;
 }
 <?php } ?>
 
-#frm_loading .progress-bar{
-	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
-	background-color:var(--bg-color);
-	box-shadow:0 -1px 0 rgba(0, 0, 0, 0.15) inset;
-	float:left;
-	height:100%;
-	line-height:20px;
-	text-align:center;
-	transition:width 0.6s ease 0s;
-	width:100%;
+#frm_loading .progress-bar {
+	background-color: var(--bg-color);
+	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+	float: left;
+	height: 100%;
+	line-height: 20px;
+	text-align: center;
+	transition: width 0.6s ease 0s;
+	width: 100%;
 }
 
 .frm_image_from_url{
@@ -1311,8 +1223,7 @@ select.frm_loading_lookup{
 	border-width:1px;
 	border-style:solid;
 <?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 	border-left:none;
 	border-right:none;
@@ -1349,26 +1260,22 @@ select.frm_loading_lookup{
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 .frm_grid_first,
-.frm_grid_odd{
-	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
-	background-color:var(--bg-color);
+.frm_grid_odd {
+	background-color: var(--bg-color);
 }
 <?php } ?>
 
 <?php if ( ! empty( $defaults['bg_color_active'] ) ) { ?>
-.frm_grid{
-	background-color:<?php echo esc_html( $defaults['bg_color_active'] . $important ); ?>;
-	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
+.frm_grid {
+	background-color: var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
 
 .with_frm_style .frm_grid.frm_blank_field,
 .with_frm_style .frm_grid_first.frm_blank_field,
 .with_frm_style .frm_grid_odd.frm_blank_field{
-	background-color:<?php echo esc_html( $defaults['error_bg'] . $important ); ?>;
 	background-color:var(--error-bg)<?php echo esc_html( $important ); ?>;
-	border-color:<?php echo esc_html( $defaults['error_border'] ); ?>;
-	border-color:var(--error-bg);
+	border-color: var(--error-border);
 }
 
 .frm_grid .frm_primary_label,
@@ -1567,30 +1474,22 @@ select.frm_loading_lookup{
 }
 
 .frm_html_container.frm_scroll_box,
-.frm_form_field.frm_html_scroll_box{
-	height:100px;
-	overflow:auto;
-	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
-	background-color:var(--bg-color);
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
-	border-color:var(--border-color);
-	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
-	border-width:var(--field-border-width);
-	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
-	border-style:var(--field-border-style);
-	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
-	border-radius:var(--border-radius);
-	width:<?php echo esc_html( $defaults['field_width'] ); ?>;
-	width:var(--field-width);
-	max-width:100%;
-	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-	font-size:var(--field-font-size);
-	padding:<?php echo esc_html( $defaults['field_pad'] ); ?>;
-	padding:var(--field-pad);
-	box-sizing:border-box;
-	outline:none<?php echo esc_html( $important ); ?>;
-	font-weight:normal;
-	box-shadow:var(--box-shadow);
+.frm_form_field.frm_html_scroll_box {
+	height: 100px;
+	overflow: auto;
+	background-color: var(--bg-color);
+	border-color: var(--border-color);
+	border-width: var(--field-border-width);
+	border-style: var(--field-border-style);
+	border-radius: var(--border-radius);
+	width: var(--field-width);
+	max-width: 100%;
+	font-size: var(--field-font-size);
+	padding: var(--field-pad);
+	box-sizing: border-box;
+	outline: none<?php echo esc_html( $important ); ?>;
+	font-weight: normal;
+	box-shadow: var(--box-shadow);
 }
 
 .frm_form_field.frm_total_big input,
