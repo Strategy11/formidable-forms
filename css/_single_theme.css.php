@@ -231,7 +231,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	text-shadow:none;
 	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
 	box-sizing:border-box;
-	-ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
 	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>
