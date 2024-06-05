@@ -524,7 +524,6 @@ legend.frm_hidden{
 	font-weight: normal;
 	font-weight: var(--field-weight);
 
-	-ms-pointer-events: none;
 	pointer-events: none;
 }
 
