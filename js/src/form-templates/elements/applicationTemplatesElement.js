@@ -100,7 +100,7 @@ function createTemplateItem( template ) {
 export function addApplicationTemplatesElement() {
 	const elements = getElements();
 
-	if ( elements.applicationTemplates ) {
+	if ( elements.applicationTemplates || undefined === applicationTemplates ) {
 		return;
 	}
 
