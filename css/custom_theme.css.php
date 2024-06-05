@@ -17,10 +17,11 @@ if ( ! isset( $frm_style ) ) {
 	$frm_style = new FrmStyle();
 }
 
-$styles        = $frm_style->get_all();
-$default_style = $frm_style->get_default_style( $styles );
-$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
-$important     = empty( $defaults['important_style'] ) ? '' : ' !important';
+$styles           = $frm_style->get_all();
+$default_style    = $frm_style->get_default_style( $styles );
+$defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
+$important        = empty( $defaults['important_style'] ) ? '' : ' !important';
+$pro_is_installed = FrmAppHelper::pro_is_installed();
 
 ?>
 .with_frm_style{
@@ -847,7 +848,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 , .with_frm_style .frm_scale input[type=radio]
 <?php endif; ?>
 {
@@ -859,7 +860,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio],
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 .with_frm_style .frm_scale input[type=radio],
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
@@ -880,7 +881,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:not([disabled]):checked,
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 .with_frm_style .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:not([disabled]):checked {
@@ -892,7 +893,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio][disabled]:checked,
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 .with_frm_style .frm_scale input[type=radio][disabled]:checked,
 <?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox][disabled]:checked {
@@ -904,7 +905,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]:checked:before,
-<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_scale input[type=radio]:checked:before,
 <?php } ?>
 .with_frm_style .frm_checkbox input[type=checkbox]:checked:before {
@@ -922,7 +923,7 @@ a.frm_save_draft{
 	background-position: center;
 }
 
-<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_scale input[type=radio]:before,
 <?php } ?>
 .with_frm_style .frm_radio input[type=radio]:before {
@@ -933,7 +934,7 @@ a.frm_save_draft{
 	margin: 3px;
 }
 
-<?php if ( FrmAppHelper::pro_is_installed() ) { ?>
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_scale input[type=radio][disabled]:before,
 <?php } ?>
 .with_frm_style .frm_radio input[type=radio][disabled]:before {
