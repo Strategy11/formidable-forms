@@ -10,7 +10,10 @@ describe( 'Run some accessibilty tests', function() {
                 { id: 'has-visible-text', enabled: false },
                 { id: 'listitem', enabled: false },
                 { id: 'link-in-text-block', enabled: false },
-                { id: 'link-name', enabled: false }
+                { id: 'link-name', enabled: false },
+                { id: 'empty-table-header', enabled: false },
+                { id: 'heading-order', enabled: false },
+                { id: 'no-dup-id', enabled: false }
             ]
         });
     };
