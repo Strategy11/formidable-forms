@@ -22,6 +22,7 @@ $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
 $important        = empty( $defaults['important_style'] ) ? '' : ' !important';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
+$use_chosen_js    = $pro_is_installed && FrmProAppHelper::use_chosen_js();
 
 ?>
 .with_frm_style{
@@ -164,7 +165,7 @@ legend.frm_hidden{
 <?php } ?>
 }
 
-.with_frm_style .frm_required{
+.with_frm_style .frm_required {
 <?php if ( ! empty( $defaults['required_color'] ) ) { ?>
 	color: var(--required-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
@@ -173,6 +174,9 @@ legend.frm_hidden{
 <?php } ?>
 }
 
+<?php if ( $use_chosen_js ) { ?>
+.with_frm_style .chosen-container,
+<?php } ?>
 .with_frm_style input[type=text],
 .with_frm_style input[type=password],
 .with_frm_style input[type=email],
@@ -182,8 +186,7 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style textarea,
-.with_frm_style .frm-card-element.StripeElement,
-.with_frm_style .chosen-container{
+.with_frm_style .frm-card-element.StripeElement {
 	font-family:var(--font)<?php echo esc_html( $important ); ?>;
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
 	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
@@ -211,8 +214,10 @@ legend.frm_hidden{
 .frm_form_fields_active_style,
 .frm_form_fields_error_style,
 .with_frm_style .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .with_frm_style .chosen-container-multi .chosen-choices,
 .with_frm_style .chosen-container-single .chosen-single,
+<?php } ?>
 .with_frm_style .frm_slimselect.ss-main {
 	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
@@ -229,7 +234,11 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
-<?php if ( ! empty( $important ) ) { ?>
+<?php if ( ! empty( $important ) ) : ?>
+	<?php if ( $use_chosen_js ) { ?>
+	.with_frm_style .chosen-container-multi .chosen-choices,
+	.with_frm_style .chosen-container-single .chosen-single,
+	<?php } ?>
 .with_frm_style input[type=text],
 .with_frm_style input[type=password],
 .with_frm_style input[type=email],
@@ -243,12 +252,10 @@ legend.frm_hidden{
 .with_frm_style .frm_scroll_box .frm_opt_container,
 .frm_form_fields_active_style,
 .frm_form_fields_error_style,
-.with_frm_style .frm-card-element.StripeElement,
-.with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single{
+.with_frm_style .frm-card-element.StripeElement {
 	background-image:none !important;
 }
-<?php } ?>
+<?php endif; ?>
 
 .with_frm_style select option {
 	color: var(--text-color)<?php echo esc_html( $important ); ?>;

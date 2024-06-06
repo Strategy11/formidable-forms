@@ -166,9 +166,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
 .<?php echo esc_html( $style_class ); ?> textarea.frm_default,
 .<?php echo esc_html( $style_class ); ?> select.frm_default,
-.<?php echo esc_html( $style_class ); ?> .placeholder,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-multi .chosen-choices li.search-field .default,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .placeholder {
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
@@ -183,9 +185,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=tel],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
-.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-single.chosen-container-active .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement {
 	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
 	color: var(--text-color);
@@ -353,9 +357,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-multi .chosen-choices,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-single .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid{
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid {
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
