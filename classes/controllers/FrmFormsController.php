@@ -1693,10 +1693,10 @@ class FrmFormsController {
 			$form = $form->id;
 		}
 
-        /*
-         * Repeater actions adds `parent_entry` to `$entry` store the parent entry data. If `parent_entry` is not empty,
-         * use the parent form ID instead of repeater form ID to fix the parent form field shortcodes doesn't work.
-         */
+		/*
+		 * Repeater actions adds `parent_entry` to `$entry` store the parent entry data. If `parent_entry` is not empty,
+		 * use the parent form ID instead of repeater form ID to fix the parent form field shortcodes doesn't work.
+		 */
 		if ( ! empty( $entry->parent_entry ) ) {
 			$form = $entry->parent_entry->form_id;
 		}
