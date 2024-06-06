@@ -1068,7 +1068,7 @@ table.form_results.with_frm_style tr td{
 	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-	border-top-style: solid
+	border-top-style: solid;
 	border-top-width: var(--field-border-width)<?php echo esc_html( $important ); ?>;
 	border-top-color: var(--border-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
