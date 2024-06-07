@@ -1894,9 +1894,11 @@ class FrmFormsController {
 			case 'update_settings':
 				return self::$action( $vars );
 			case 'lite-reports':
-				return self::no_reports( $vars );
+				self::no_reports( $vars );
+				return;
 			case 'views':
-				return self::no_views( $vars );
+				self::no_views( $vars );
+				return;
 			default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1980,6 +1982,8 @@ class FrmFormsController {
 	 * Add education about views.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
 		FrmAppHelper::include_svg();
@@ -1993,6 +1997,8 @@ class FrmFormsController {
 	 * Add education about reports.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
 		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
