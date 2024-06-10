@@ -7875,18 +7875,7 @@ input[disabled],
 	opacity: 1;
 }
 
-.frm-field-group-count {
-	background-color: var(--sidebar-hover);
-	padding: 5px;
-	color: #fff !important;
-	border-radius: 10px;
-}
-
 /* End dragging */
-
-.field_type_list .frm_icon_font:before {
-	font-size: 20px;
-}
 
 li.frm_noallow.button,
 .frm_noallow {
