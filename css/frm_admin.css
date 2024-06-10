@@ -6997,29 +6997,6 @@ ul.frm-category-tabs {
 	border-right: none;
 }
 
-.postbox .frm-help-tabs.inside,
-#poststuff .frm-help-tabs.inside {
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 12px;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-.postbox .frm-help-tabs.inside {
-	padding-bottom: inherit;
-}
-
-.frm-help-tabs form > .submit {
-	margin-left: 154px;
-	padding-left: 0.9em;
-}
-
-#poststuff h3.frm_no_bg {
-	background: none;
-	cursor: default;
-}
-
 .frm-postbox-no-h3 {
 	padding-top: 10px;
 }
