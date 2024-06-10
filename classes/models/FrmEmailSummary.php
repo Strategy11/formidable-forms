@@ -120,8 +120,6 @@ abstract class FrmEmailSummary {
 			'support_url'      => FrmEmailSummaryHelper::get_frm_url( 'new-topic', 'contact_support' ),
 		);
 
-		// FrmAbandonmentHooksController::load_admin_hooks(); // TODO: should be changed
-
 		if ( is_callable( 'FrmAbandonmentReportsController::update_email_args' ) ) {
 			$args = FrmAbandonmentReportsController::update_email_args( $args, array( 'email_obj' => $this ) );
 		}
