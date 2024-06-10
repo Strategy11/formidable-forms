@@ -95,9 +95,11 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 		$entries_count = FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date );
 		$entries_stat  = array(
-			'label'   => __( 'Entries created', 'formidable' ),
-			'count'   => $entries_count,
-			'compare' => 0,
+			'entries' => array(
+				'label'   => __( 'Entries created', 'formidable' ),
+				'count'   => $entries_count,
+				'compare' => 0,
+			),
 		);
 
 		$args['inbox_msg']       = $this->has_inbox_msg ? FrmEmailSummaryHelper::get_latest_inbox_message() : false;
@@ -106,11 +108,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args['top_forms']       = FrmEmailSummaryHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
-		if ( isset( $args['stats'] ) ) {
-			$args['stats'] = array_merge( $args['stats'], array( 'entries' => $entries_stat ) );
-		} else {
-			$args['stats'] = array( 'entries' => $entries_stat );
-		}
+		$args['stats']           = isset( $args['stats'] ) ? array_merge( $args['stats'], $entries_stat ) : $entries_stat;
 
 		if ( $this->has_out_of_date_plugins ) {
 			$args['out_of_date_plugins'] = FrmEmailSummaryHelper::get_out_of_date_plugins();
