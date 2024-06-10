@@ -117,7 +117,16 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$this->add_entries_comparison_data( $args['stats'] );
 		$this->add_payments_data( $args['stats'] );
 
-		return $args;
+		require_once WP_PLUGIN_DIR . '/formidable-abandonment/formidable-abandonment.php';
+		FrmAbandonmentHooksController::load_admin_hooks();
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array         $args
+		 * @param FrmEmailStats $this
+		 */
+		return apply_filters( 'frm_email_stats_args', $args, $this );
 	}
 
 	/**
