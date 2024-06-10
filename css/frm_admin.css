@@ -2587,10 +2587,6 @@ h2.frm-h2 + .howto {
 
 /* Form Templates */
 
-.frm-featured-form .frm-inner-circle {
-	margin: 0 auto 5px;
-}
-
 .frm-new-template.plugin-card-bottom {
 	overflow: visible;
 }
@@ -2717,6 +2713,7 @@ body.frm-body-with-open-modal {
 	overflow-y: hidden;
 }
 
+/* These template list styles are still used to list the View types in the New View modal. */
 .frm-templates-list {
 	margin-top: 0;
 }
@@ -2773,8 +2770,7 @@ body.frm-body-with-open-modal {
 	vertical-align: middle;
 }
 
-.frm-templates-list .frm-inner-circle,
-.frm-category-icon, /* Deprecated */
+.frm-category-icon,
 .frm-icon-wrapper {
 	background: var(--primary-500);
 	border-radius: var(--small-radius);
@@ -2789,21 +2785,8 @@ body.frm-body-with-open-modal {
 	display: inline-flex;
 }
 
-.frm-templates-list .frm-inner-circle .frmsvg {
-	vertical-align: top;
-}
-
 .frm-templates-list li .frm-category-icon {
 	overflow: hidden;
-}
-
-.frm-templates-list .frm-template-details {
-	/* the content container to the right of the icon in Create new form modal */
-	display: inline-block;
-	width: calc( 100% - 40px );
-	padding-left: var(--gap-sm);
-	box-sizing: border-box;
-	transform: translateY(-2px);
 }
 
 .frm-templates-list li h3,
