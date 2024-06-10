@@ -756,12 +756,13 @@ class FrmEntry {
 	 * Get the is_draft value for a new entry
 	 *
 	 * @since 2.0.16
+	 * @since x.x Function went from private to public
 	 *
 	 * @param array $values
 	 *
 	 * @return int
 	 */
-	private static function get_is_draft_value( $values ) {
+	public static function get_is_draft_value( $values ) {
 		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
 			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
