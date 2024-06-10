@@ -94,6 +94,11 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args = parent::get_content_args();
 
 		$entries_count = FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date );
+		$entries_stat  = array(
+			'label'   => __( 'Entries created', 'formidable' ),
+			'count'   => $entries_count,
+			'compare' => 0,
+		);
 
 		$args['inbox_msg']       = $this->has_inbox_msg ? FrmEmailSummaryHelper::get_latest_inbox_message() : false;
 		$args['from_date']       = $this->from_date;
@@ -101,13 +106,11 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args['top_forms']       = FrmEmailSummaryHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
-		$args['stats']           = array(
-			'entries' => array(
-				'label'   => __( 'Entries created', 'formidable' ),
-				'count'   => $entries_count,
-				'compare' => 0,
-			),
-		);
+		if ( isset( $args['stats'] ) ) {
+			$args['stats'] = array_merge( $args['stats'], array( 'entries' => $entries_stat ) );
+		} else {
+			$args['stats'] = array( 'entries' => $entries_stat );
+		}
 
 		if ( $this->has_out_of_date_plugins ) {
 			$args['out_of_date_plugins'] = FrmEmailSummaryHelper::get_out_of_date_plugins();
@@ -117,16 +120,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$this->add_entries_comparison_data( $args['stats'] );
 		$this->add_payments_data( $args['stats'] );
 
-		require_once WP_PLUGIN_DIR . '/formidable-abandonment/formidable-abandonment.php';
-		FrmAbandonmentHooksController::load_admin_hooks();
-
-		/**
-		 * @since x.x
-		 *
-		 * @param array         $args
-		 * @param FrmEmailStats $this
-		 */
-		return apply_filters( 'frm_email_stats_args', $args, $this );
+		return $args;
 	}
 
 	/**

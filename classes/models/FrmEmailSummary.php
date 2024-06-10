@@ -120,6 +120,9 @@ abstract class FrmEmailSummary {
 			'support_url'      => FrmEmailSummaryHelper::get_frm_url( 'new-topic', 'contact_support' ),
 		);
 
+		require_once WP_PLUGIN_DIR . '/formidable-abandonment/formidable-abandonment.php';
+		FrmAbandonmentHooksController::load_admin_hooks();
+
 		/**
 		 * Filters the summary email content args.
 		 *
