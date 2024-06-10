@@ -756,7 +756,6 @@ class FrmEntry {
 	 * Get the is_draft value for a new entry
 	 *
 	 * @since 2.0.16
-	 * @since x.x Function went from private to public
 	 *
 	 * @param array $values
 	 *
