@@ -237,6 +237,15 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 */
 	abstract protected function get_top_forms_label();
 
+	/**
+	 * Allows reading class object properties.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $prop
+	 *
+	 * @return mixed
+	 */
 	public function get_prop( $prop ) {
 		return $this->$prop ? $this->$prop : '';
 	}
