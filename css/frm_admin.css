@@ -2607,6 +2607,7 @@ h2.frm-h2 + .howto {
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,
 .frm-white-body .notice,
+.frm_wrap > .wrap > .notice,
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
