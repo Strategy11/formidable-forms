@@ -11,6 +11,63 @@ class FrmAddonsController {
 	protected static $plugin;
 
 	/**
+	 * @since x.x
+	 */
+	public static function load_admin_hooks() {
+		add_action( 'admin_menu', __CLASS__ . '::menu', 100 );
+		add_filter( 'pre_set_site_transient_update_plugins', __CLASS__ . '::check_update' );
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_filter( 'frm_show_footer_links', '__return_false' );
+		}
+	}
+
+	/**
+	 * Enqueues the Onboarding Wizard page scripts and styles.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function enqueue_assets() {
+		$plugin_url      = FrmAppHelper::plugin_url();
+		$version         = FrmAppHelper::plugin_version();
+		$js_dependencies = array(
+			'wp-i18n',
+			// This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			'wp-hooks',
+			'formidable_dom',
+		);
+
+		// Enqueue styles that needed.
+		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_style( 'formidable-grids' );
+
+		// Register and enqueue Onboarding Wizard style.
+		// wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/onboarding-wizard.css', array(), $version );
+		// wp_enqueue_style( self::SCRIPT_HANDLE );
+
+		// Register and enqueue Onboarding Wizard script.
+		// wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/onboarding-wizard.js', $js_dependencies, $version, true );
+		// wp_localize_script( self::SCRIPT_HANDLE, 'frmOnboardingWizardVars', self::get_js_variables() );
+		// wp_enqueue_script( self::SCRIPT_HANDLE );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+	}
+
+	/**
+	 * Get the Onboarding Wizard JS variables as an array.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_js_variables() {
+		return array( 'proIsIncluded' => FrmAppHelper::pro_is_included() );
+	}
+
+	/**
 	 * @return void
 	 */
 	public static function menu() {
@@ -46,11 +103,12 @@ class FrmAddonsController {
 	 */
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
-		$installed_addons = apply_filters( 'frm_installed_addons', array() );
-		$license_type     = '';
 
-		$addons = self::get_api_addons();
-		$errors = array();
+		$view_path        = FrmAppHelper::plugin_path() . '/classes/views/addons/';
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		$addons           = self::get_api_addons();
+		$errors           = array();
+		$license_type     = '';
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
@@ -73,7 +131,7 @@ class FrmAddonsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
-		include FrmAppHelper::plugin_path() . '/classes/views/addons/list.php';
+		include $view_path . 'index.php';
 	}
 
 	/**

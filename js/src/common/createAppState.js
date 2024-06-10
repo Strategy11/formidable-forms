@@ -53,7 +53,7 @@ export const createAppState = ( initializer ) => {
 	 * Updates a specific property in the application state with a new value.
 	 *
 	 * @param {string} propertyName The name of the property to update.
-	 * @param {*} value The new value to set for the property.
+	 * @param {*}      value        The new value to set for the property.
 	 * @return {void}
 	 */
 	const setAppStateProperty = ( propertyName, value ) => {
