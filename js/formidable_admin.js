@@ -6476,7 +6476,7 @@ function frmAdminBuildJS() {
 			}
 
 			// Trigger the 'Save' button click using jQuery
-			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
+			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).trigger("click");
 		});
 	};
 
@@ -8031,7 +8031,7 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} obj
-	 * @param {string} variable
+	 * @param {string}      variable
 	 * @return {void}
 	 */
 	function maybeRemoveLayoutClasses( obj, variable ) {
@@ -8054,20 +8054,20 @@ function frmAdminBuildJS() {
 	 * @return {boolean}
 	 */
 	function isALayoutClass( className ) {
-		var layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
+		let layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
 		return -1 !== layoutClasses.indexOf( className.trim() );
 	}
 
 	/**
 	 * @since x.x
 	 *
-	 * @param {string} beforeValue 
-	 * @param {Array} removeClasses 
-	 * @param {string} variable 
+	 * @param {string} beforeValue
+	 * @param {Array}  removeClasses
+	 * @param {string} variable
 	 * @return {string}
 	 */
 	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
-		var currentClasses = beforeValue.split( ' ' ).filter(
+		let currentClasses = beforeValue.split( ' ' ).filter(
 			currentClass => {
 				return currentClass.length && -1 === removeClasses.indexOf( currentClass );
 			}
