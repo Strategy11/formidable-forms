@@ -8015,12 +8015,7 @@ function frmAdminBuildJS() {
 
 			const s = e + variable.length;
 
-			if ( obj.classList.contains( 'frm_classes' ) && isALayoutClass( variable ) ) {
-				var removeClasses = obj.value.split( ' ' ).filter( isALayoutClass );
-				if ( removeClasses.length ) {
-					obj.value = maybeRemoveClasses( obj.value, removeClasses, variable.trim() );
-				}
-			}
+			maybeRemoveLayoutClasses( obj, variable );
 
 			obj.focus();
 			obj.setSelectionRange( s, s );
@@ -8028,11 +8023,49 @@ function frmAdminBuildJS() {
 		triggerChange( contentBox );
 	}
 
+	/**
+	 * When a layout class is added, remove any previous layout classes to avoid conflicts.
+	 * We only expect one layout class to exist for a given field.
+	 * For example, if a field has frm_half and we set it to frm_third, frm_half will be removed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} obj
+	 * @param {string} variable
+	 * @return {void}
+	 */
+	function maybeRemoveLayoutClasses( obj, variable ) {
+		if ( ! obj.classList.contains( 'frm_classes' ) || ! isALayoutClass( variable ) ) {
+			return;
+		}
+
+		const removeClasses = obj.value.split( ' ' ).filter( isALayoutClass );
+		if ( removeClasses.length ) {
+			obj.value = maybeRemoveClasses( obj.value, removeClasses, variable.trim() );
+		}
+	}
+
+	/**
+	 * Check if a given class is a layout class.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} className
+	 * @return {boolean}
+	 */
 	function isALayoutClass( className ) {
 		var layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
 		return -1 !== layoutClasses.indexOf( className.trim() );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} beforeValue 
+	 * @param {Array} removeClasses 
+	 * @param {string} variable 
+	 * @return {string}
+	 */
 	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
 		var currentClasses = beforeValue.split( ' ' ).filter(
 			currentClass => {
