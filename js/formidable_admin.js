@@ -7634,14 +7634,6 @@ function frmAdminBuildJS() {
 		return ! isNaN( parseFloat( value ) ) && isFinite( value );
 	}
 
-	function getMetaValue( id, metaName ) {
-		let newMeta = metaName;
-		if ( jQuery( document.getElementById( id + metaName ) ).length > 0 ) {
-			newMeta = getMetaValue( id, metaName + 1 );
-		}
-		return newMeta;
-	}
-
 	function changePosttaxRow() {
 		/*jshint validthis:true */
 		if ( ! jQuery( this ).closest( '.frm_posttax_row' ).find( '.frm_posttax_opt_list' ).length ) {
