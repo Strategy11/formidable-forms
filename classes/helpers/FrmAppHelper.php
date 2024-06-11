@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.9.1';
+	public static $plug_version = '6.10';
 
 	/**
 	 * @var bool
@@ -49,19 +49,31 @@ class FrmAppHelper {
 		return self::$plug_version;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_folder() {
 		return basename( self::plugin_path() );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_path() {
 		return dirname( dirname( __DIR__ ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_url() {
 		// Prevously FRM_URL constant.
 		return plugins_url( '', self::plugin_path() . '/formidable.php' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function relative_plugin_url() {
 		return str_replace( array( 'https:', 'http:' ), '', self::plugin_url() );
 	}
@@ -84,6 +96,10 @@ class FrmAppHelper {
 		return get_option( 'blogname' );
 	}
 
+	/**
+	 * @param string $url
+	 * @return string
+	 */
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 		if ( ! empty( $affiliate_id ) ) {
@@ -94,6 +110,9 @@ class FrmAppHelper {
 		return $url;
 	}
 
+	/**
+	 * @return int
+	 */
 	public static function get_affiliate() {
 		return absint( apply_filters( 'frm_affiliate_id', 0 ) );
 	}
@@ -255,7 +274,6 @@ class FrmAppHelper {
 	 */
 	public static function ips_saved() {
 		$frm_settings = self::get_settings();
-
 		return ! $frm_settings->no_ips;
 	}
 
@@ -338,6 +356,8 @@ class FrmAppHelper {
 	 * Returns false for the views listing page.
 	 *
 	 * @since 4.0
+	 *
+	 * @return bool
 	 */
 	public static function is_view_builder_page() {
 		global $pagenow;
@@ -382,17 +402,20 @@ class FrmAppHelper {
 		return wp_doing_ajax() && ! self::is_preview_page();
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function js_suffix() {
 		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	}
 
 	/**
 	 * @since 2.0.8
+	 * @return bool
 	 */
 	public static function prevent_caching() {
 		global $frm_vars;
-
-		return isset( $frm_vars['prevent_caching'] ) && $frm_vars['prevent_caching'];
+		return ! empty( $frm_vars['prevent_caching'] );
 	}
 
 	/**
@@ -426,6 +449,11 @@ class FrmAppHelper {
 		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
 	}
 
+	/**
+	 * @param mixed  $value
+	 * @param string $empty
+	 * @return bool
+	 */
 	public static function is_not_empty_value( $value, $empty = '' ) {
 		return ! self::is_empty_value( $value, $empty );
 	}
@@ -574,6 +602,15 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * Get a value from $_POST data.
+	 *
+	 * @param string          $param      The key we are trying to access data from in $_POST.
+	 * @param mixed           $default    The default if nothing is being sent.
+	 * @param callable|string $sanitize   Make sure to pass a sanitize method here. This function will NOT sanitize by default.
+	 * @param bool            $serialized
+	 * @return mixed
+	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
@@ -1130,9 +1167,7 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
-				<use xlink:href="#' . esc_attr( $icon ) . '" />
-			</svg>';
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use xlink:href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
 		if ( $echo ) {
@@ -1999,9 +2034,10 @@ class FrmAppHelper {
 	}
 
 	public static function check_selected( $values, $current ) {
-		$values  = self::recursive_function_map( $values, 'trim' );
-		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
-		$current = htmlspecialchars_decode( trim( $current ) );
+		$values = self::recursive_function_map( $values, 'trim' );
+		$values = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
+
+		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
@@ -3155,6 +3191,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.02.03
+	 *
+	 * @param array|string $value
+	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
 		if ( is_array( $value ) ) {
@@ -3219,6 +3258,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0.9
+	 * @return void
 	 */
 	public static function load_font_style() {
 		wp_enqueue_style( 'frm_fonts', self::plugin_url() . '/css/frm_fonts.css', array(), self::plugin_version() );
@@ -3226,6 +3266,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $location
+	 * @return void
 	 */
 	public static function localize_script( $location ) {
 		global $wp_scripts;
@@ -3367,10 +3408,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * As of x.x the frmUpdateField function is now included in Pro.
+	 * As of 6.10 the frmUpdateField function is now included in Pro.
 	 * This was originally included in Lite but was removed because the feature is only supoprted in Pro.
 	 *
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return bool
 	 */
@@ -3382,7 +3423,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.10
 	 *
 	 * @return bool
 	 */
@@ -3392,11 +3433,11 @@ class FrmAppHelper {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.10
 		 *
-		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro vx.x.
+		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro v6.10.
 		 */
-		return apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
+		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}
 
 	/**
@@ -3405,6 +3446,7 @@ class FrmAppHelper {
 	 * @since 1.07.10
 	 *
 	 * @param float $min_version The version the add-on requires.
+	 * @return void
 	 */
 	public static function min_version_notice( $min_version ) {
 		$frm_version = self::plugin_version();
@@ -3459,6 +3501,9 @@ class FrmAppHelper {
 	 * If Pro is installed, check the version number.
 	 *
 	 * @since 4.0.01
+	 *
+	 * @param string $min_version
+	 * @return bool
 	 */
 	public static function meets_min_pro_version( $min_version ) {
 		return ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, $min_version, '>=' );
@@ -3468,10 +3513,11 @@ class FrmAppHelper {
 	 * Show a message if the browser or PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
+	 * @return void
 	 */
 	private static function php_version_notice() {
 		$message = array();
-		if ( version_compare( phpversion(), '5.6', '<' ) ) {
+		if ( version_compare( phpversion(), '7.0', '<' ) ) {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' );
 		}
 
@@ -3609,15 +3655,6 @@ class FrmAppHelper {
 		$locales = apply_filters( 'frm_locales', $locales, compact( 'type' ) );
 
 		return $locales;
-	}
-
-	/**
-	 * Output HTML containing reference text for accessibility
-	 *
-	 * @deprecated 5.1
-	 */
-	public static function multiselect_accessibility() {
-		_deprecated_function( __METHOD__, '5.1' );
 	}
 
 	/**
@@ -4229,6 +4266,7 @@ class FrmAppHelper {
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
 	 * @since 6.9
+	 * @return void
 	 */
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );

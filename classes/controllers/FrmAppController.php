@@ -759,7 +759,7 @@ class FrmAppController {
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
-				wp_enqueue_style( 'formidable-dropzone' );
+				self::maybe_enqueue_dropzone_css( $page );
 			} else {
 				wp_enqueue_style( 'formidable-grids' );
 			}
@@ -797,6 +797,25 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+	}
+
+	/**
+	 * Avoid loading dropzone CSS on the form list page. It isn't required there.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $page
+	 * @return void
+	 */
+	private static function maybe_enqueue_dropzone_css( $page ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+
+		$should_avoid_loading_dropzone = 'formidable' === $page && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( ! $should_avoid_loading_dropzone ) {
+			wp_enqueue_style( 'formidable-dropzone' );
 		}
 	}
 

@@ -556,15 +556,29 @@ class FrmFormActionsController {
 
 			foreach ( $action_priority as $action_id => $priority ) {
 				$action = $stored_actions[ $action_id ];
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+
+				/**
+				 * Allows custom form action trigger.
+				 *
+				 * @since 6.10
+				 *
+				 * @param bool   $skip   Skip default trigger.
+				 * @param object $action Action object.
+				 * @param object $entry  Entry object.
+				 * @param object $form   Form object.
+				 * @param string $event  Event ('create' or 'update').
+				 */
+				if ( false === apply_filters( 'frm_custom_trigger_action', false, $action, $entry, $form, $event ) ) {
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+				}
 
 				// If post is created, get updated $entry object.
 				if ( $action->post_excerpt === 'wppost' && $event === 'create' ) {
 					$entry = FrmEntry::getOne( $entry->id, true );
 				}
-			}
-		}
+			}//end foreach
+		}//end if
 	}
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {

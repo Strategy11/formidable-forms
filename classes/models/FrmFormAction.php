@@ -977,4 +977,23 @@ class FrmFormAction {
 	protected function get_upgrade_text() {
 		return __( 'Conditional form actions', 'formidable' );
 	}
+
+	/**
+	 * Gets form fields for form action settings.
+	 *
+	 * @since 6.10
+	 *
+	 * @param int $form_id Form ID.
+	 * @return object[]
+	 */
+	protected function get_form_fields( $form_id ) {
+		// Get form fields, include embedded and repeater child fields.
+		$form_fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+		return array_filter(
+			$form_fields,
+			function ( $form_field ) {
+				return ! FrmField::is_no_save_field( $form_field->type );
+			}
+		);
+	}
 }
