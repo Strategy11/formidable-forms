@@ -8019,7 +8019,6 @@ function frmAdminBuildJS() {
 				var removeClasses = obj.value.split( ' ' ).filter( isALayoutClass );
 				if ( removeClasses.length ) {
 					obj.value = maybeRemoveClasses( obj.value, removeClasses, variable.trim() );
-					// TODO what about "s"?
 				}
 			}
 
@@ -8030,7 +8029,7 @@ function frmAdminBuildJS() {
 	}
 
 	function isALayoutClass( className ) {
-		var layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm10', 'frm12' ];
+		var layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
 		return -1 !== layoutClasses.indexOf( className.trim() );
 	}
 
