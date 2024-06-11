@@ -8067,7 +8067,7 @@ function frmAdminBuildJS() {
 	 * @return {string}
 	 */
 	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
-		let currentClasses = beforeValue.split( ' ' ).filter(
+		const currentClasses = beforeValue.split( ' ' ).filter(
 			currentClass => {
 				currentClass = currentClass.trim();
 				return currentClass.length && ! removeClasses.includes( currentClass );
