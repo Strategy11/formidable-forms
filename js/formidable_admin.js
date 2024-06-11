@@ -6476,7 +6476,7 @@ function frmAdminBuildJS() {
 			}
 
 			// Trigger the 'Save' button click using jQuery
-			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).trigger("click");
+			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).trigger( 'click' );
 		});
 	};
 
