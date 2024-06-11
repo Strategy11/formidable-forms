@@ -8073,7 +8073,7 @@ function frmAdminBuildJS() {
 				return currentClass.length && ! removeClasses.includes( currentClass );
 			}
 		);
-		if ( -1 === currentClasses.indexOf( variable ) ) {
+		if ( ! currentClasses.includes( variable ) ) {
 			currentClasses.push( variable );
 		}
 		return currentClasses.join( ' ' );
