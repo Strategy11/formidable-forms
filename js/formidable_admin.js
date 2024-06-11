@@ -8055,7 +8055,7 @@ function frmAdminBuildJS() {
 	 */
 	function isALayoutClass( className ) {
 		let layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
-		return -1 !== layoutClasses.indexOf( className.trim() );
+		return layoutClasses.includes( className.trim() );
 	}
 
 	/**
@@ -8069,7 +8069,8 @@ function frmAdminBuildJS() {
 	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
 		let currentClasses = beforeValue.split( ' ' ).filter(
 			currentClass => {
-				return currentClass.length && -1 === removeClasses.indexOf( currentClass );
+				currentClass = currentClass.trim();
+				return currentClass.length && ! removeClasses.includes( currentClass );
 			}
 		);
 		if ( -1 === currentClasses.indexOf( variable ) ) {
