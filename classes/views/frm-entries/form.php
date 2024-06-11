@@ -3,7 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
+$only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
 		<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
@@ -30,8 +31,14 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
-<?php echo FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ); // WPCS: XSS ok. ?>
-<div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); // WPCS: XSS ok. ?>>
+<?php
+/**
+ * @since 5.5.1
+ */
+do_action( 'frm_before_title', compact( 'form' ) );
+echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+?>
+<div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 <?php do_action( 'frm_after_title', compact( 'form' ) ); ?>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr( $form_action ); ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr( $form->id ); ?>" />
@@ -43,51 +50,63 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
-if ( $values['fields'] ) {
-	FrmFieldsHelper::show_fields( $values['fields'], $errors, $form, $form_action );
+if ( ! $only_contain_submit ) {
+	/**
+	 * Allows modifying the list of fields in the frontend form.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $fields Array of fields.
+	 * @param array $args   The arguments. Contains `form`.
+	 */
+	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], compact( 'form' ) );
+
+	if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+		// Remove submit field when add or edit entry in backend.
+		FrmSubmitHelper::remove_submit_field_from_list( $fields_to_show );
+	}
+
+	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }
 
 $frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() ) {
 	?>
-<div class="frm_form_field form-field">
-<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
-<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
-</div>
-<?php } else { ?>
-<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<div class="frm_form_field form-field">
+	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
+	<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	</div>
 	<?php
-	$honeypot = apply_filters( 'frm_run_honeypot', true, compact( 'form' ) );
-	if ( $honeypot ) {
-		?>
-<div class="frm_verify" <?php echo ( $honeypot === true ) ? '' : 'aria-hidden="true"'; ?>>
-	<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
-		<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
-	</label>
-	<input type="email" class="frm_verify" id="frm_email_<?php echo esc_attr( $form->id ); ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param( 'frm_verify', '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
-</div>
-		<?php
-	}
+} else {
+	?>
+	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<?php
+	FrmHoneypot::maybe_render_field( $form->id );
+	FrmFormState::maybe_render_state_field( $form );
 }
 
 do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;
 // close open section div
-if ( isset( $frm_vars['div'] ) && $frm_vars['div'] ) {
+if ( ! empty( $frm_vars['div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['div'] );
 }
 
 // close open collapsible toggle div
-if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
+if ( ! empty( $frm_vars['collapse_div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['collapse_div'] );
 }
 
-echo FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ); // WPCS: XSS ok.
+echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_current_page( $values ) ) {
+	/**
+	 * @since 5.5.1
+	 */
+	do_action( 'frm_before_submit_btn', compact( 'form' ) );
 
-if ( FrmForm::show_submit( $form ) ) {
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
@@ -102,11 +121,16 @@ if ( FrmForm::show_submit( $form ) ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 		$message = ob_get_clean();
 
-		echo preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $message . '</div>', $clip ); // WPCS: XSS ok.
+		echo preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $message . '</div>', $clip ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 	}
-}
+
+	/**
+	 * @since 5.5.1
+	 */
+	do_action( 'frm_after_submit_btn', compact( 'form' ) );
+}//end if
 ?>
 </div>
 </fieldset>

@@ -5,6 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmTipsHelper {
 
+	/**
+	 * @param string $callback
+	 * @param string $html
+	 *
+	 * @return void
+	 */
 	public static function pro_tip( $callback, $html = '' ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return;
@@ -13,42 +19,77 @@ class FrmTipsHelper {
 		$tips = self::$callback();
 		$tip  = self::get_random_tip( $tips );
 
-		if ( 'p' === $html ) {
-			echo '<p class="frmcenter frm_no_top_margin">';
-		}
+		self::show_tip( $tip, $html );
+	}
 
-		if ( ! isset( $tip['page'] ) ) {
-			$tip['page'] = '';
-		}
-		if ( ! isset( $tip['link']['medium'] ) ) {
+	/**
+	 * Shows tip.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $tip {
+	 *      Tip args.
+	 *
+	 *     @type array  $link Tip link data. See the first parameter of {@see FrmAppHelper::admin_upgrade_link()} for more details.
+	 *     @type string $page The based link of the tip. If this is empty, `https://formidableforms.com/lite-upgrade/` will
+	 *                        be used. Otherwise, `https://formidableforms.com/{$page}` will be used.
+	 *     @type string $tip  Tip text.
+	 *     @type string $call Call to action text.
+	 * }
+	 * @param string $html
+	 *
+	 * @return void
+	 */
+	public static function show_tip( $tip, $html = '' ) {
+		$defaults = array(
+			'page'  => '',
+			'class' => 'frm-mt-0',
+		);
+		$tip      = array_merge( $defaults, $tip );
+
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
 			$tip['link']['medium'] = 'tip';
 		}
 
-		$link = FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
+		if ( 'p' === $html ) {
+			echo '<p class="frmcenter ' . esc_attr( $tip['class'] ) . '">';
+		}
+
+		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_star_full_icon', array( 'aria-hidden' => 'true' ) ); ?>
-			<span class="pro-tip">
-				<?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
-			</span>
+		<span class="frm_pro_tip">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<?php echo esc_html( $tip['tip'] ); ?>
-				<span class="frm-tip-cta">
-					<?php echo esc_html( $tip['call'] ); ?>
-				</span>
-			<?php } else { ?>
-				<span class="frm-tip-cta">
+				<span class="frm-tip-info">
 					<?php echo esc_html( $tip['tip'] ); ?>
 				</span>
 			<?php } ?>
-		</a>
+			<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm-tip-cta">
+				<?php echo esc_html( $tip['call'] ? $tip['call'] : $tip['tip'] ); ?>
+			</a>
+		</span>
 		<?php
+
 		if ( 'p' === $html ) {
 			echo '</p>';
 		}
 	}
 
+	/**
+	 * Use the correct label for the license.
+	 *
+	 * @since 6.5.1
+	 *
+	 * @return string
+	 */
+	private static function cta_label() {
+		return FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro.', 'formidable' );
+	}
+
+	/**
+	 * @return array
+	 */
 	public static function get_builder_tip() {
 		$tips = array(
 			array(
@@ -57,7 +98,7 @@ class FrmTipsHelper {
 					'param'   => 'conditional-logic-wordpress-forms',
 				),
 				'tip'  => __( 'Use conditional logic to shorten your forms and increase conversions.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -73,7 +114,7 @@ class FrmTipsHelper {
 					'param'   => 'wordpress-multi-page-forms',
 				),
 				'tip'  => __( 'Use page breaks for easier forms.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -89,7 +130,7 @@ class FrmTipsHelper {
 					'param'   => 'field-calculations-wordpress-form',
 				),
 				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -104,6 +145,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_form_settings_tip() {
 		$tips = array(
 			array(
@@ -124,13 +168,6 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'ajax',
-				),
-				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
-				'call' => __( 'Get ajax form submit.', 'formidable' ),
-			),
-			array(
-				'link' => array(
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
@@ -142,6 +179,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_form_action_tip() {
 		$tips = array(
 			array(
@@ -158,7 +198,7 @@ class FrmTipsHelper {
 					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Create blog posts or pages from the front-end.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -166,7 +206,7 @@ class FrmTipsHelper {
 					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Let your users submit posts on the front-end.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -174,7 +214,7 @@ class FrmTipsHelper {
 					'page'    => 'mailchimp-tip',
 				),
 				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
-				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
+				'call' => __( 'Send leads straight to Mailchimp.', 'formidable' ),
 			),
 			array(
 				'link' => array(
@@ -224,11 +264,22 @@ class FrmTipsHelper {
 				'tip'  => __( 'Send an SMS message when a form is submitted.', 'formidable' ),
 				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
+			array(
+				'link' => array(
+					'content' => 'acf-tip',
+					'param'   => 'acf-tip',
+				),
+				'tip'  => __( 'Fill Advanced Custom Fields from a form.', 'formidable' ),
+				'call' => __( 'Add ACF Integration', 'formidable' ),
+			),
 		);
 
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_styling_tip() {
 		$tips = array(
 			array(
@@ -239,11 +290,30 @@ class FrmTipsHelper {
 				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to add a background image?', 'formidable' ),
+				'call' => self::cta_label(),
+			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'duplicate-style',
+				),
+				'tip'  => __( 'Want to duplicate a style?', 'formidable' ),
+				'call' => self::cta_label(),
+			),
 		);
 
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_entries_tip() {
 		$tips = array(
 			array(
@@ -260,7 +330,7 @@ class FrmTipsHelper {
 					'param'   => 'form-entry-management-wordpress',
 				),
 				'tip'  => __( 'Want to search submitted entries?', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -276,6 +346,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_import_tip() {
 		$tips = array(
 			array(
@@ -284,13 +357,16 @@ class FrmTipsHelper {
 					'param'   => 'importing-exporting-wordpress-forms',
 				),
 				'tip'  => __( 'Want to import entries into your forms?', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 		);
 
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_banner_tip() {
 		$tips       = array(
 			array(
@@ -315,7 +391,7 @@ class FrmTipsHelper {
 					'content' => 'automate',
 				),
 				'tip'  => __( 'Automate your business and increase revenue.', 'formidable' ),
-				'call' => __( 'Collect instant payments, and send leads to MailChimp.', 'formidable' ),
+				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
 			),
 		);
 		$random     = rand( 0, count( $tips ) - 1 );
@@ -329,5 +405,52 @@ class FrmTipsHelper {
 		$random = rand( 0, count( $tips ) - 1 );
 
 		return $tips[ $random ];
+	}
+
+	/**
+	 * Displays a call-to-action section in the admin area.
+	 *
+	 * @since 6.7
+	 *
+	 * @param array $args {
+	 *     An array of arguments to configure the call-to-action section.
+	 *
+	 *     @type string $title       The title of the section.
+	 *     @type string $description The description of the section.
+	 *     @type string $link_text   The text for the link.
+	 *     @type string $link_url    The URL for the link.
+	 *     @type string $role        The required user role to view the section. Default 'administrator'.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function show_admin_cta( $args ) {
+		$role = ! empty( $args['role'] ) ? $args['role'] : 'administrator';
+
+		if ( ! current_user_can( $role ) ) {
+			// Return early if the user doesn't have the required capability.
+			return;
+		}
+
+		$defaults = array(
+			'title'       => '',
+			'description' => '',
+			'link_text'   => '',
+			'link_url'    => '#',
+			'class'       => '',
+			'id'          => '',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$attributes = array(
+			'class' => trim( 'frm-cta frm-flex frm-p-sm ' . $args['class'] ),
+		);
+
+		if ( $args['id'] ) {
+			$attributes['id'] = $args['id'];
+		}
+
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
 	}
 }

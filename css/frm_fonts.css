@@ -8,23 +8,22 @@
 }
 
 .wp-media-buttons-icon.dashicons-feedback:before {
-    content: "\f175" !important;
+	content: "\f175" !important;
 }
 
 .frm_inactive_menu{
-    opacity:.5;
-    filter:alpha(opacity=50);
+	opacity:.5;
 }
 
 /* media box button */
 .wp-media-buttons .button.frm_insert_form{padding-left:5px;}
 
 /* Upgrade notice */
-#frm_install_message, .frm_previous_install{padding:7px;}
+#frm_install_message{padding:7px;}
 .frm_deauthorize_link .spinner{
-    display:inline-block;
-    margin-top:0;
-    float:none;
+	display:inline-block;
+	margin-top:0;
+	float:none;
 }
 .frm_plugin_updating{line-height:24px;}
 .frm_plugin_updating .frm_spinner{float:left;display:block;visibility:visible;}

@@ -5,13 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmXMLController {
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function add_default_templates() {
 		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
-			// XML import is not enabled on your server
+			// XML import is not enabled on your server.
 			return;
 		}
 
@@ -35,15 +41,31 @@ class FrmXMLController {
 	 * Use the template link to install the XML template
 	 *
 	 * @since 3.06
+	 * @return void
 	 */
 	public static function install_template() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
+		if ( ! function_exists( 'simplexml_load_string' ) ) {
+			$response = array(
+				'message' => __( 'Your server is missing the Simple XML extension. This is required to install a template.', 'formidable' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
+		}
 
 		$form = self::get_posted_form();
+		$url  = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
 		self::override_url( $form, $url );
+
+		if ( ! self::validate_xml_url( $url ) ) {
+			$response = array(
+				'message' => __( 'The template you are trying to install could not be validated.', 'formidable' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
+		}
 
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
@@ -51,7 +73,7 @@ class FrmXMLController {
 
 		if ( ! $xml ) {
 			$response = array(
-				'message' => __( 'There was an error reading the form template', 'formidable' ),
+				'message' => __( 'There was an error reading the form template.', 'formidable' ),
 			);
 			echo wp_json_encode( $response );
 			wp_die();
@@ -59,14 +81,14 @@ class FrmXMLController {
 
 		self::set_new_form_name( $xml );
 
-		$imported = FrmXMLHelper::import_xml_now( $xml );
-		if ( isset( $imported['form_status'] ) && ! empty( $imported['form_status'] ) ) {
+		$imported = FrmXMLHelper::import_xml_now( $xml, true );
+		if ( ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
 			end( $imported['form_status'] );
 			$form_id  = key( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
-				'redirect' => FrmForm::get_edit_link( $form_id ),
+				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
 				'success'  => 1,
 			);
 			if ( ! empty( $imported['imported']['posts'] ) ) {
@@ -79,8 +101,8 @@ class FrmXMLController {
 				$pages = self::create_pages_for_import( $form );
 			}
 
-			if ( isset( $pages ) && ! empty( $pages ) ) {
-				$post_id = end( $pages );
+			if ( ! empty( $pages ) ) {
+				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
@@ -93,7 +115,7 @@ class FrmXMLController {
 				'message' => $message,
 			);
 
-		}
+		}//end if
 
 		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
 
@@ -102,7 +124,22 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Make sure that the XML file we're trying to load is in fact an XML file, and that it's coming from our S3 bucket.
+	 * This is to make sure that the URL can't be exploited for a SSRF attack.
+	 *
+	 * @since 5.5.5
+	 * @param string $url
+	 *
+	 * @return bool True on success, False on error.
+	 */
+	private static function validate_xml_url( $url ) {
+		return FrmAppHelper::validate_url_is_in_s3_bucket( $url, 'xml' );
+	}
+
+	/**
 	 * @since 4.06.02
+	 *
+	 * @return mixed
 	 */
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
@@ -117,6 +154,8 @@ class FrmXMLController {
 	 * Get a different URL depending on the selection in the form.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return void
 	 */
 	private static function override_url( $form, &$url ) {
 		$selected_form = self::get_selected_in_form( $form, 'form' );
@@ -124,7 +163,7 @@ class FrmXMLController {
 			return;
 		}
 
-		$selected_xml  = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
+		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
 			return;
 		}
@@ -134,9 +173,12 @@ class FrmXMLController {
 
 	/**
 	 * @since 4.06.02
+	 *
+	 * @param array  $form
+	 * @param string $value
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -147,15 +189,14 @@ class FrmXMLController {
 	 * @since 4.06.02
 	 *
 	 * @param array $form The posted form values.
-	 *
-	 * @return array The array of created pages.
+	 * @return array|null The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
-		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
-			return;
+		if ( empty( $form['pages'] ) ) {
+			return null;
 		}
 
-		$form_key = self::get_selected_in_form( $form, 'form' );
+		$form_key  = self::get_selected_in_form( $form, 'form' );
 		$view_keys = self::get_selected_in_form( $form, 'view' );
 
 		$page_ids = array();
@@ -169,7 +210,7 @@ class FrmXMLController {
 				$item_key  = is_array( $view_keys ) ? $view_keys[ $form_key ] : $view_keys;
 				$shortcode = '[display-frm-data id=%1$s filter=limited]';
 			} elseif ( $for === 'form' ) {
-				$item_key = $form_key;
+				$item_key  = $form_key;
 				$shortcode = '[formidable id=%1$s]';
 			} else {
 				$item_key  = self::get_selected_in_form( $form, 'form' );
@@ -188,7 +229,7 @@ class FrmXMLController {
 					'post_content' => sprintf( $shortcode, $item_key ),
 				)
 			);
-		}
+		}//end foreach
 
 		return $page_ids;
 	}
@@ -201,6 +242,7 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param object $xml The values included in the XML.
+	 * @return void
 	 */
 	private static function set_new_form_name( &$xml ) {
 		if ( ! isset( $xml->form ) ) {
@@ -209,45 +251,54 @@ class FrmXMLController {
 
 		$name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
 		$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
-		if ( empty( $name ) && empty( $description ) ) {
+		if ( ! $name && ! $description ) {
 			return;
 		}
 
 		// Get the main form ID.
 		$set_name = 0;
 		foreach ( $xml->form as $form ) {
-			if ( ! isset( $form->parent_form_id ) || empty( $form->parent_form_id ) ) {
-				$set_name = $form->id;
+			if ( empty( $form->parent_form_id ) ) {
+				$set_name = (int) $form->id;
 			}
 		}
 
 		foreach ( $xml->form as $form ) {
 			// Maybe set the form name if this isn't a child form.
-			if ( $set_name == $form->id ) {
+			if ( $set_name === (int) $form->id ) {
 				$form->name        = $name;
 				$form->description = $description;
 			}
 
 			// Use a unique key to prevent editing existing form.
-			$name           = sanitize_title( $form->name );
-			$form->form_key = FrmAppHelper::get_unique_key( $name, 'frm_forms', 'form_key' );
+			$sanitized_form_name = sanitize_title( $form->name );
+			$form->form_key      = FrmAppHelper::get_unique_key( $sanitized_form_name, 'frm_forms', 'form_key' );
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
 		if ( 'import_xml' === $action ) {
-			return self::import_xml();
+			self::import_xml();
 		} elseif ( 'export_xml' === $action ) {
-			return self::export_xml();
+			self::export_xml();
 		} elseif ( apply_filters( 'frm_xml_route', true, $action ) ) {
-			return self::form();
+			self::form();
 		}
 	}
 
+	/**
+	 * @param string[] $errors
+	 * @param string   $message
+	 *
+	 * @return void
+	 */
 	public static function form( $errors = array(), $message = '' ) {
 		$where = array(
 			'status' => array( null, '', 'published' ),
@@ -274,9 +325,12 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/xml/import_form.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/xml/import_form.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function import_xml() {
 		$errors  = array();
 		$message = '';
@@ -289,7 +343,8 @@ class FrmXMLController {
 			return;
 		}
 
-		$has_file = isset( $_FILES ) && isset( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
 		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
 			self::form( $errors );
@@ -297,7 +352,7 @@ class FrmXMLController {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? sanitize_option( 'upload_path', $_FILES['frm_import_file']['tmp_name'] ) : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
@@ -308,8 +363,6 @@ class FrmXMLController {
 			return;
 		}
 
-		//add_filter('upload_mimes', 'FrmXMLController::allow_mime');
-
 		$export_format = array(
 			'xml' => array(
 				'name'    => 'XML',
@@ -319,7 +372,7 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file_type = sanitize_option( 'upload_path', $_FILES['frm_import_file']['name'] );
 		$file_type = strtolower( pathinfo( $file_type, PATHINFO_EXTENSION ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {
@@ -351,6 +404,9 @@ class FrmXMLController {
 		self::form( $errors, $message );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function export_xml() {
 		$error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'export-xml', 'export-xml-nonce' );
 		if ( ! empty( $error ) ) {
@@ -377,6 +433,14 @@ class FrmXMLController {
 		wp_die();
 	}
 
+	/**
+	 * @param string[] $type
+	 * @param array    $args
+	 *
+	 * @psalm-param array{ids?: mixed} $args
+	 *
+	 * @return void
+	 */
 	public static function generate_xml( $type, $args = array() ) {
 		global $wpdb;
 
@@ -412,7 +476,7 @@ class FrmXMLController {
 
 			switch ( $tb_type ) {
 				case 'forms':
-					//add forms
+					// Add forms.
 					if ( $args['ids'] ) {
 						$where[] = array(
 							'or'                       => 1,
@@ -472,30 +536,54 @@ class FrmXMLController {
 					} else {
 						$where['pm.meta_value'] = $args['ids'];
 					}
-			}
+			}//end switch
 
 			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
 			unset( $tb_type );
-		}
+		}//end foreach
 
-		$filename = self::get_file_name( $args, $type, $records );
+		$filename = self::get_file_name( $args, $records );
 
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 
 		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
-		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
 	}
 
+	/**
+	 * Returns an array that has parent term slugs for the terms provided.
+	 *
+	 * @since 6.8.3
+	 * @param array $terms
+	 * @return array
+	 */
+	public static function get_parent_terms_slugs( $terms ) {
+		$parent_term_ids = array_filter( array_unique( wp_list_pluck( $terms, 'parent' ) ) );
+		$parent_slugs    = array();
+
+		if ( ! $parent_term_ids ) {
+			return $parent_slugs;
+		}
+
+		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
+		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
+
+		return $parent_slugs;
+	}
+
+	/**
+	 * @return void
+	 */
 	private static function prepare_types_array( &$type ) {
 		$type = (array) $type;
-		if ( ! in_array( 'forms', $type ) && ( in_array( 'items', $type ) || in_array( 'posts', $type ) ) ) {
+		if ( ! in_array( 'forms', $type, true ) && ( in_array( 'items', $type, true ) || in_array( 'posts', $type, true ) ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
@@ -507,10 +595,12 @@ class FrmXMLController {
 	 *
 	 * @since 3.06
 	 *
+	 * @param array $args
+	 * @param array $records
 	 * @return string
 	 */
-	private static function get_file_name( $args, $type, $records ) {
-		$has_one_form = isset( $records['forms'] ) && ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
+	private static function get_file_name( $args, $records ) {
+		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );
@@ -520,7 +610,8 @@ class FrmXMLController {
 				$filename = 'form-' . $form_id . '.xml';
 				if ( $selected_form_id === $form_id ) {
 					$form     = FrmForm::getOne( $form_id );
-					$filename = sanitize_title( $form->name ) . '-form.xml';
+					$filename = $form->name !== '' ? $form->name : $form->form_key;
+					$filename = sanitize_title( $filename ) . '-form.xml';
 					break;
 				}
 			}
@@ -531,11 +622,21 @@ class FrmXMLController {
 				$sitename .= '.';
 			}
 			$filename = $sitename . 'formidable.' . gmdate( 'Y-m-d' ) . '.xml';
-		}
+		}//end if
 
-		return $filename;
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $filename
+		 */
+		return apply_filters( 'frm_xml_filename', $filename );
 	}
 
+	/**
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
 	public static function generate_csv( $atts ) {
 		$form_ids = $atts['ids'];
 		if ( empty( $form_ids ) ) {
@@ -548,6 +649,8 @@ class FrmXMLController {
 	 * Export to CSV
 	 *
 	 * @since 2.0.19
+	 *
+	 * @return void
 	 */
 	public static function csv( $form_id = false, $search = '', $fid = '' ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
@@ -558,7 +661,10 @@ class FrmXMLController {
 			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
-		set_time_limit( 0 ); //Remove time limit to execute this function
+		// Remove time limit to execute this function.
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();
@@ -566,9 +672,14 @@ class FrmXMLController {
 
 		global $wpdb;
 
-		$form    = FrmForm::getOne( $form_id );
-		$form_id = $form->id;
+		$form = FrmForm::getOne( $form_id );
 
+		if ( ! $form ) {
+			esc_html_e( 'Form not found.', 'formidable' );
+			wp_die();
+		}
+
+		$form_id   = $form->id;
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
@@ -608,13 +719,14 @@ class FrmXMLController {
 	 * Get the fields that should be included in the CSV export
 	 *
 	 * @since 2.0.19
+	 * @since 5.0.16 function went from private to public.
 	 *
-	 * @param int $form_id
+	 * @param int    $form_id
 	 * @param object $form
 	 *
 	 * @return array $csv_fields
 	 */
-	private static function get_fields_for_csv_export( $form_id, $form ) {
+	public static function get_fields_for_csv_export( $form_id, $form ) {
 		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
 		$no_export_fields = FrmField::no_save_fields();
 		foreach ( $csv_fields as $k => $f ) {
@@ -623,7 +735,7 @@ class FrmXMLController {
 			}
 		}
 
-		return $csv_fields;
+		return apply_filters( 'frm_fields_for_csv_export', $csv_fields, compact( 'form' ) );
 	}
 
 	public static function allow_mime( $mimes ) {

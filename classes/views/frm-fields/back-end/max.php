@@ -13,5 +13,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 	</label>
-	<input type="text" name="field_options[max_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" id="field_options_max_<?php echo esc_attr( $field['id'] ); ?>" size="5" />
+	<input type="text" class="frm_max_length_opt" name="field_options[max_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" id="field_options_max_<?php echo esc_attr( $field['id'] ); ?>" size="5" data-fid="<?php echo intval( $field['id'] ); ?>" />
 </p>

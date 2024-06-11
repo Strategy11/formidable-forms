@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm_wrap wrap upgrade_to_pro frm-fields">
 	<h1 class="frm_pro_heading">
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
+		<img width="265" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
 		<span class="alignright">Take on bigger projects, earn more clients and grow your business.<br/>
 			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
 		<span class="clear"></span>
@@ -60,7 +60,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
 							</span>
 							<?php } else { ?>
-							<span class="frm-nope">&#10008;</span>
+							<span class="frm-nope">
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon' ); ?>
+							</span>
 							<?php } ?>
 						</td>
 						<td class="<?php echo esc_attr( 'frm-checked' ); ?> frmcenter">
@@ -69,8 +71,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</span>
 						</td>
 					</tr>
-				<?php } ?>
-			<?php } ?>
+					<?php
+				}//end foreach
+				?>
+				<?php
+			}//end foreach
+			?>
 		</tbody>
 	</table>
 

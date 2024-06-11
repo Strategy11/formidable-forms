@@ -7,9 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'                  => $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Forms', 'formidable' ),
-			'trigger_new_form_modal' => ! $params['template'] && current_user_can( 'frm_edit_forms' ),
-			'import_link'            => true,
+			'label'       => __( 'Forms', 'formidable' ),
+
+			'import_link' => true,
+			'publish'     => array(
+				'FrmAppHelper::add_new_item_link',
+				array(
+					'create_form' => current_user_can( 'frm_edit_forms' ),
+					'new_link'    => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&return_page=forms' ),
+				),
+			),
 		)
 	);
 	?>
@@ -17,11 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 $wp_list_table->views();
+$form_type = FrmAppHelper::simple_get( 'form_type', 'sanitize_title', 'published' );
 ?>
 
 <form id="posts-filter" method="get">
 	<input type="hidden" name="page" value="<?php echo esc_attr( FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ); ?>" />
 	<input type="hidden" name="frm_action" value="list" />
+	<input type="hidden" name="form_type"  value="<?php echo esc_attr( $form_type ); ?>" />
 <?php
 
 $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' );

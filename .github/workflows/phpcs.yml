@@ -1,21 +1,22 @@
-on: [push]
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, synchronize ]
 
 name: Inspections
 jobs:
   runPHPCSInspection:
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run PHPCS inspection
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Analyze code style
-        run: |
-          export PHPCS_DIR=/tmp/phpcs
-          export SNIFFS_DIR=/tmp/sniffs
-          git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git $PHPCS_DIR
-          git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git $SNIFFS_DIR
-          git clone -b master --depth 1 https://github.com/wimg/PHPCompatibility.git $SNIFFS_DIR/PHPCompatibility
-          $PHPCS_DIR/bin/phpcs --config-set installed_paths $SNIFFS_DIR
-          $PHPCS_DIR/bin/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php
-      - name: Check PHP syntax
-        run: find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+      - uses: actions/checkout@v4.1.1
+      - name: Install dependencies
+        run: composer install --dev --prefer-dist --no-progress
+
+      - name: PHPCS check
+        run: ./vendor/bin/phpcs --parallel=10 ./

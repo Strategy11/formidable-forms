@@ -1,0 +1,195 @@
+.s11-floating-links,
+.s11-floating-links::before,
+.s11-floating-links::after,
+.s11-floating-links *,
+.s11-floating-links *::before,
+.s11-floating-links *::after {
+	box-sizing: border-box;
+}
+
+.s11-floating-links {
+	position: fixed;
+	right: 48px;
+	bottom: 48px;
+	z-index: 1000;
+	display: none;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 16px;
+}
+
+.s11-floating-links.s11-fadein,
+.s11-floating-links.s11-fading {
+	display: flex;
+}
+
+.s11-floating-links-logo-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	padding: 12px;
+	background-color: #fff;
+	border: 1px solid #f2f4f7;
+	border-radius: 50%;
+	box-shadow: var(--box-shadow-xxl);
+	cursor: pointer;
+}
+
+.s11-floating-links-nav-menu {
+	display: none;
+	grid-template-columns: 1fr;
+	background-color: #fff;
+	padding: 16px;
+	border: 1px solid #f2f4f7;
+	border-radius: 8px;
+	box-shadow: var(--box-shadow-xxl);
+}
+
+.s11-floating-links-nav-item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin: 16px 0;
+	text-decoration: none;
+	z-index: 1;
+}
+
+.s11-floating-links-nav-item:first-child {
+	margin-top: 0;
+}
+
+.s11-floating-links-nav-item:last-child {
+	margin-bottom: 0;
+}
+
+.s11-floating-links-nav-item:focus {
+	outline: 0;
+	box-shadow: none;
+}
+
+.s11-floating-links-nav-item::before {
+	content: '';
+	position: absolute;
+	top: -4px;
+	left: -6px;
+	width: calc(100% + 12px);
+	height: calc(100% + 8px);
+	z-index: 0;
+	border-radius: 8px;
+	background-color: transparent;
+	transition: background-color 240ms ease-in;
+	cursor: pointer;
+}
+
+.s11-floating-links-nav-item:hover::before {
+	 background-color: var(--floating-links-bg-hover-color);
+}
+
+.s11-floating-links-nav-text {
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	color: #1D2939;
+	font-weight: 500;
+	z-index: 2;
+	transition: color 240ms ease-out;
+}
+
+.s11-floating-links-nav-item:hover .s11-floating-links-nav-text {
+	 color: var(--floating-links-hover-color);
+}
+
+.s11-floating-links-nav-icon {
+	display: flex;
+	z-index: 2;
+}
+
+.s11-floating-links-nav-icon > svg path {
+	transition: stroke 240ms ease-out;
+}
+
+.s11-floating-links-nav-item:hover .s11-floating-links-nav-icon > svg path {
+	 stroke: var(--floating-links-hover-color);
+}
+
+.s11-fadein {
+	display: block;
+	animation: fadeInUp 240ms ease-in-out forwards;
+}
+
+.s11-fadeout {
+	display: none;
+	animation: fadeOutDown 240ms ease-in-out forwards;
+}
+
+.s11-fading {
+	display: block;
+}
+
+@keyframes fadeInUp {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeOutDown {
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}
+
+/* Breakpoints */
+@media only screen and (max-width: 782px) {
+	.s11-floating-links {
+		right: 20px;
+		bottom: 20px;
+	}
+
+	.s11-floating-links-logo-icon {
+		width: 50px;
+		height: 50px;
+	}
+}
+
+/* Inbox slide-in */
+#frm_inbox_slide_in {
+	position: fixed;
+	/* Use the same bottom/right values as floating links. */
+	bottom: 127px;
+	right: 48px;
+	min-width: 280px;
+	max-width: 360px;
+	flex-direction: column;
+	align-items: center;
+	z-index: 4; /* We want the pop up to appear above the license section in the dashboard. */
+	padding-bottom: 0;
+}
+#frm_inbox_slide_in img {
+	max-width: 100%;
+	border-radius: var(--small-radius);
+}
+#frm_inbox_slide_in .frm-button-primary {
+	margin: auto;
+}
+#frm_inbox_slide_in h3 {
+	margin: 0;
+	font-weight: 600;
+	line-height: 1 !important;
+}
+#frm_inbox_slide_in h3 + span {
+	text-align: center;
+}
+/* End Inbox slide-in */

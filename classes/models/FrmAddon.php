@@ -3,6 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/** @phpstan-consistent-constructor */
 class FrmAddon {
 	public $store_url = 'https://formidableforms.com';
 	public $download_id;
@@ -12,12 +13,40 @@ class FrmAddon {
 	public $plugin_slug;
 	public $option_name;
 	public $version;
-	public $author = 'Strategy11';
+	public $author            = 'Strategy11';
 	public $is_parent_licence = false;
-	public $needs_license = true;
+	public $needs_license     = true;
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
+	protected $save_status;
+
+	/**
+	 * This is used to decide whether the license checks should continue.
+	 * The point is to avoid license issues when a site url changes.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @var array
+	 */
+	private $save_response = array();
+
+	/**
+	 * This is used to flag other add ons not to send a request.
+	 * We only want to send a single API request per page load.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @var string
+	 */
+	private $transient_lock_key = 'frm_activate_request_lock';
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @var bool
+	 */
+	protected $should_clear_cache = true;
 
 	public function __construct() {
 
@@ -37,7 +66,7 @@ class FrmAddon {
 
 	public static function load_hooks() {
 		add_filter( 'frm_include_addon_page', '__return_true' );
-		//new static();
+		new static();
 	}
 
 	public function insert_installed_addon( $plugins ) {
@@ -78,7 +107,7 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed $_data
+	 * @param mixed  $_data
 	 * @param string $_action
 	 * @param object $_args
 	 *
@@ -90,8 +119,9 @@ class FrmAddon {
 			return $_data;
 		}
 
-		$slug = basename( $this->plugin_file, '.php' );
-		if ( ! isset( $_args->slug ) || $_args->slug != $slug ) {
+		$slug  = basename( $this->plugin_file, '.php' );
+		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
+		if ( empty( $_args->slug ) || ( $_args->slug != $slug && $_args->slug !== $slug2 ) ) {
 			return $_data;
 		}
 
@@ -169,9 +199,8 @@ class FrmAddon {
 	 */
 	public function activate_defined_license() {
 		$license = $this->get_defined_license();
-		if ( ! empty( $license ) && ! $this->is_active() && $this->is_time_to_auto_activate() ) {
+		if ( ! empty( $license ) && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
 			$response = $this->activate_license( $license );
-			$this->set_auto_activate_time();
 			if ( ! $response['success'] ) {
 				$license = '';
 			}
@@ -195,22 +224,6 @@ class FrmAddon {
 		update_option( $this->option_name . 'key', $license );
 	}
 
-	/**
-	 * If the license is in the config, limit the frequency of checks.
-	 * The license may be entered incorrectly, so we don't want to check on every page load.
-	 *
-	 * @since 2.04
-	 */
-	private function is_time_to_auto_activate() {
-		$last_try = get_option( $this->option_name . 'last_activate' );
-
-		return ( ! $last_try || $last_try < strtotime( '-1 day' ) );
-	}
-
-	private function set_auto_activate_time() {
-		update_option( $this->option_name . 'last_activate', time() );
-	}
-
 	public function is_active() {
 		return get_option( $this->option_name . 'active' );
 	}
@@ -218,10 +231,10 @@ class FrmAddon {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array error
+	 * @param array|string $error
 	 */
 	public function maybe_clear_license( $error ) {
-		if ( $error['code'] === 'disabled' && $error['license'] === $this->license ) {
+		if ( is_array( $error ) && $error['code'] === 'disabled' && $error['license'] === $this->license ) {
 			$this->clear_license();
 		}
 	}
@@ -229,15 +242,75 @@ class FrmAddon {
 	public function clear_license() {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
-		delete_site_option( $this->transient_key() );
-		delete_option( $this->transient_key() );
-		$this->delete_cache();
+
+		if ( $this->should_clear_cache ) {
+			delete_site_option( $this->transient_key() );
+			delete_option( $this->transient_key() );
+			$this->delete_cache();
+			$this->should_clear_cache = true;
+		}
+	}
+
+	/**
+	 * Don't save an invalid license.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param bool $is_valid If license activation was successful.
+	 *
+	 * @return void
+	 */
+	protected function maybe_set_active( $is_valid ) {
+		update_option( $this->option_name . 'active', $is_valid );
+		if ( $is_valid ) {
+			$this->set_active( $is_valid );
+			return;
+		}
+
+		// Don't save the license if it's invalid.
+		$this->should_clear_cache = false;
+		$this->clear_license();
+		delete_option( $this->option_name . 'key' );
+		$this->license = '';
 	}
 
 	public function set_active( $is_active ) {
-		update_option( $this->option_name . 'active', $is_active );
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
+		$this->update_pro_capabilities();
+	}
+
+	/**
+	 * Updates roles capabilities after pro license is active.
+	 *
+	 * @since 5.0
+	 */
+	protected function update_pro_capabilities() {
+		global $wp_roles;
+
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
+		$caps     = FrmAppHelper::frm_capabilities( 'pro_only' );
+		$roles    = get_editable_roles();
+		$settings = new FrmSettings();
+		foreach ( $caps as $cap => $cap_desc ) {
+			$cap_roles = (array) ( isset( $settings->$cap ) ? $settings->$cap : 'administrator' );
+
+			// Make sure administrators always have permissions.
+			if ( ! in_array( 'administrator', $cap_roles, true ) ) {
+				array_push( $cap_roles, 'administrator' );
+			}
+
+			foreach ( $roles as $role => $details ) {
+				if ( in_array( $role, $cap_roles ) ) {
+					$wp_roles->add_cap( $role, $cap );
+				} else {
+					$wp_roles->remove_cap( $role, $cap );
+				}
+			}
+		}
 	}
 
 	/**
@@ -246,10 +319,16 @@ class FrmAddon {
 	protected function delete_cache() {
 		delete_transient( 'frm_api_licence' );
 
+		// Cleanup option that has been removed.
+		delete_option( $this->option_name . 'last_activate' );
+
 		$api = new FrmFormApi( $this->license );
 		$api->reset_cached();
 
 		$api = new FrmFormTemplateApi( $this->license );
+		$api->reset_cached();
+
+		$api = new FrmApplicationApi( $this->license );
 		$api->reset_cached();
 	}
 
@@ -289,7 +368,7 @@ class FrmAddon {
 		$id            = sanitize_title( $plugin['Name'] ) . '-next';
 
 		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
-		echo FrmAppHelper::kses( $message, 'a' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $message, 'a' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
 		echo '</p></div></td></tr>';
 	}
@@ -300,7 +379,7 @@ class FrmAddon {
 		}
 
 		if ( $this->is_current_version( $transient ) ) {
-			//make sure it doesn't show there is an update if plugin is up-to-date
+			// Make sure it doesn't show there is an update if plugin is up-to-date.
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
@@ -325,18 +404,19 @@ class FrmAddon {
 	 *
 	 * @since 3.04.03
 	 *
-	 * @param object $transient - the current plugin info saved for update
+	 * @param object $transient The current plugin info saved for update.
 	 */
 	private function prepare_update_details( &$transient ) {
 		$version_info = $transient;
-		$has_beta_url = isset( $version_info->beta ) && ! empty( $version_info->beta );
+		$has_beta_url = ! empty( $version_info->beta );
 		if ( $this->get_beta && ! $has_beta_url ) {
 			$version_info = (object) $this->get_api_info( $this->license );
 		}
 
-		if ( isset( $version_info->new_version ) && ! empty( $version_info->new_version ) ) {
+		if ( ! empty( $version_info->new_version ) ) {
 			$this->clear_old_plugin_version( $version_info );
-			if ( $version_info === false ) { // was cleared with timeout
+			if ( $version_info === false ) {
+				// Was cleared with timeout.
 				$transient = false;
 			} else {
 				$this->maybe_use_beta_url( $version_info );
@@ -360,7 +440,7 @@ class FrmAddon {
 		// if there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
 			$this->is_parent_licence = true;
-		} elseif ( isset( $addons['error'] ) ) {
+		} elseif ( isset( $addon['error'] ) ) {
 			// if the license is expired, we must assume all add-ons were packaged
 			$this->is_parent_licence = true;
 			$this->is_expired_addon  = true;
@@ -376,9 +456,10 @@ class FrmAddon {
 	 * @since 2.05.05
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
-		$timeout = ( isset( $version_info->timeout ) && ! empty( $version_info->timeout ) ) ? $version_info->timeout : 0;
+		$timeout = ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
 		if ( ! empty( $timeout ) && time() > $timeout ) {
-			$version_info = false; // Cache is expired
+			// Cache is expired.
+			$version_info = false;
 			$api          = new FrmFormApi( $this->license );
 			$api->reset_cached();
 		}
@@ -391,10 +472,10 @@ class FrmAddon {
 	 * @since 3.04.03
 	 */
 	private function maybe_use_beta_url( &$version_info ) {
-		if ( $this->get_beta && isset( $version_info->beta ) && ! empty( $version_info->beta ) ) {
+		if ( $this->get_beta && ! empty( $version_info->beta ) ) {
 			$version_info->new_version = $version_info->beta['version'];
 			$version_info->package     = $version_info->beta['package'];
-			if ( isset( $version_info->plugin ) && ! empty( $version_info->plugin ) ) {
+			if ( ! empty( $version_info->plugin ) ) {
 				$version_info->plugin = $version_info->beta['plugin'];
 			}
 		}
@@ -405,7 +486,7 @@ class FrmAddon {
 			return false;
 		}
 
-		$response = ! isset( $transient->response ) || empty( $transient->response );
+		$response = empty( $transient->response );
 		if ( $response ) {
 			return true;
 		}
@@ -413,10 +494,12 @@ class FrmAddon {
 		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] === $transient->response[ $this->plugin_folder ]->new_version;
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function has_been_cleared() {
 		$last_cleared = get_option( 'frm_last_cleared' );
-
-		return ( $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
+		return $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) );
 	}
 
 	private function cleared_plugins() {
@@ -424,30 +507,80 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // WPCS: CSRF ok.
+		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
+		if ( $this->get_defined_license() ) {
+			// Don't check if the license is defined in wp-config.php since we can't remove it.
+			return;
+		}
+
+		// Only check weekly.
+		if ( $this->checked_recently( '7 days', 'valid' ) || $this->is_running() ) {
+			return;
+		}
+
+		$response = $this->get_license_status();
+		if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
+			$this->clear_license();
+		}
+	}
+
+	/**
+	 * Has this been checked too recently?
+	 *
+	 * @param string $time            ie. '1 day'.
+	 * @param string $required_status Return false if the last check does not match. ie 'valid'.
+	 *
+	 * @return bool
+	 */
+	private function checked_recently( $time, $required_status = '' ) {
+		$last_checked = $this->last_checked();
+		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
+		if ( $is_429 ) {
+			// If the last check was a a rate limit, we'll need to check again sooner.
+			$time            = '5 minutes';
+			$required_status = '';
+		}
+
+		if ( $required_status && ( ! isset( $last_checked['status'] ) || $last_checked['status'] !== $required_status ) ) {
+			// If the last check was invalid, we don't need to check again.
+			return true;
+		}
+
+		$checked_time = isset( $last_checked['time'] ) ? $last_checked['time'] : false;
+		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
+		return $checked_time && $checked_time > $time_ago;
+	}
+
+	/**
+	 * @since 6.8.3 Switched to an array to store extra response info.
+	 *
+	 * @return array
+	 */
+	private function last_checked() {
 		if ( is_multisite() ) {
 			$last_checked = get_site_option( $this->transient_key() );
 		} else {
 			$last_checked = get_option( $this->transient_key() );
 		}
+		if ( $last_checked && ! is_array( $last_checked ) ) {
+			// Get string into array for existing values.
+			$last_checked = array( 'time' => $last_checked );
+		}
+		return $last_checked ? (array) $last_checked : array();
+	}
 
-		$seven_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
-
-		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
-			// check weekly
-			if ( is_multisite() ) {
-				update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
-			} else {
-				update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
-			}
-
-			$response = $this->get_license_status();
-			if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] ) {
-				$this->clear_license();
-			}
+	/**
+	 * @return void
+	 */
+	private function update_last_checked() {
+		$this->save_response['time'] = gmdate( 'Y-m-d H:i:s' );
+		if ( is_multisite() ) {
+			update_site_option( $this->transient_key(), $this->save_response );
+		} else {
+			update_option( $this->transient_key(), $this->save_response );
 		}
 	}
 
@@ -464,12 +597,10 @@ class FrmAddon {
 
 		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 		if ( empty( $license ) ) {
-			wp_die(
-				json_encode(
-					array(
-						'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
-						'success' => false,
-					)
+			wp_send_json(
+				array(
+					'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
+					'success' => false,
 				)
 			);
 		}
@@ -477,8 +608,7 @@ class FrmAddon {
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -492,6 +622,8 @@ class FrmAddon {
 	private function activate_license( $license ) {
 		$this->set_license( $license );
 		$this->license = $license;
+
+		$this->die_if_not_allowed();
 
 		$response            = $this->get_license_status();
 		$response['message'] = '';
@@ -512,13 +644,36 @@ class FrmAddon {
 				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
-			$this->set_active( $is_valid );
+			$this->maybe_set_active( $is_valid );
 		}
+
+		$this->update_last_checked();
 
 		return $response;
 	}
 
+	/**
+	 * Prevent this check from happening more than once per minute with the same license.
+	 *
+	 * @return void
+	 */
+	private function die_if_not_allowed() {
+		if ( ! $this->checked_recently( '2 minutes' ) ) {
+			return;
+		}
+
+		// Don't check more than once per minute.
+		wp_send_json(
+			array(
+				'message' => __( 'Please wait two minutes before trying again.', 'formidable' ),
+				'success' => false,
+			)
+		);
+	}
+
 	private function get_license_status() {
+		$this->set_running();
+
 		$response = array(
 			'status' => 'missing',
 			'error'  => true,
@@ -535,8 +690,9 @@ class FrmAddon {
 
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
-				if ( in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
-					$response['status'] = $license_data['license'];
+				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
+					$response['status']          = $license_data['license'];
+					$this->save_status['status'] = $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
@@ -545,6 +701,8 @@ class FrmAddon {
 			$response['status'] = $e->getMessage();
 		}
 
+		$this->update_last_checked();
+		$this->done_running();
 		return $response;
 	}
 
@@ -575,8 +733,7 @@ class FrmAddon {
 			'message' => __( 'Cache cleared', 'formidable' ),
 		);
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	public static function deactivate() {
@@ -604,8 +761,7 @@ class FrmAddon {
 
 		$this_plugin->clear_license();
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -619,6 +775,9 @@ class FrmAddon {
 		return $this_plugin;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function send_mothership_request( $action ) {
 		$api_params = array(
 			'edd_action' => $action,
@@ -637,14 +796,18 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp = wp_remote_post( $this->store_url, $arg_array );
-		$body = wp_remote_retrieve_body( $resp );
+		$resp              = wp_remote_post(
+			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
+			$arg_array
+		);
+		$body              = wp_remote_retrieve_body( $resp );
+		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 		if ( is_wp_error( $resp ) ) {
 			$link = FrmAppHelper::admin_upgrade_link( 'api', 'knowledgebase/why-cant-i-activate-formidable-pro/' );
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			$message = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' );
+			$message  = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' );
 			$message .= ' ' . $resp->get_error_message();
 		} elseif ( 'error' === $body || is_wp_error( $body ) ) {
 			$message = __( 'You had an HTTP error connecting to the Formidable API', 'formidable' );
@@ -656,16 +819,68 @@ class FrmAddon {
 				} else {
 					$message = $json_res;
 				}
-			} elseif ( isset( $resp['response'] ) && isset( $resp['response']['code'] ) ) {
-				/* translators: %1$s: Error code, %2$s: Error message */
-				$message = sprintf( __( 'There was a %1$s error: %2$s', 'formidable' ), $resp['response']['code'], $resp['response']['message'] . ' ' . $resp['body'] );
+			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
+				$resp['body'] = wp_strip_all_tags( $resp['body'] );
+
+				$message = sprintf(
+					/* translators: %1$s: Error code, %2$s: Error message */
+					esc_html__( 'There was a %1$s error: %2$s', 'formidable' ),
+					esc_html( $resp['response']['code'] ),
+					$resp['response']['message'] . ' ' . $resp['body']
+				);
 			}
-		}
+		}//end if
 
 		return $message;
 	}
 
 	public function manually_queue_update() {
-		set_site_transient( 'update_plugins', null );
+		$updates               = new stdClass();
+		$updates->last_checked = 0;
+		$updates->response     = array();
+		$updates->translations = array();
+		$updates->no_update    = array();
+		$updates->checked      = array();
+		set_site_transient( 'update_plugins', $updates );
+	}
+
+	/**
+	 * Set the transient key for the lock. It should be unique to the license.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	protected function lock_key() {
+		return $this->transient_lock_key . '_' . $this->license;
+	}
+
+	/**
+	 * Prevent multiple requests from running at the same time.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return bool
+	 */
+	protected function is_running() {
+		return get_transient( $this->lock_key() );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @return void
+	 */
+	protected function set_running() {
+		set_transient( $this->lock_key(), true, 2 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * @since 6.8.3
+	 *
+	 * @return void
+	 */
+	protected function done_running() {
+		delete_transient( $this->lock_key() );
 	}
 }

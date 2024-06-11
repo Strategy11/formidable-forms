@@ -3,12 +3,30 @@ pro
 .idea
 .phpintel
 frm.min.js
+frmstrp.min.js
 formidableforms.css
+formidableforms1.css
 formidable.zip
 languages/formidable-js.pot
 languages/formidable-js-strings.php
+js/*.js.LICENSE.txt
 
 # Node
 node_modules
 node_modules/*
 npm-debug.log
+
+# Composer
+vendor
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+
+# Sonar Qube / Sonar Source
+sonar-project.properties
+.sonar_lock
+report-task.txt

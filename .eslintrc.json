@@ -1,22 +1,32 @@
 {
 	"root": true,
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"requireConfigFile": false,
+		"sourceType": "module",
+		"babelOptions": {
+			"presets": ["@babel/preset-env", "@babel/preset-react"],
+			"plugins": ["@babel/plugin-syntax-jsx"]
+		},
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
 	"extends": [
-		"wordpress",
+		"plugin:@wordpress/eslint-plugin/recommended",
 		"plugin:react/recommended",
-		"plugin:jsx-a11y/recommended"
+		"plugin:jsx-a11y/recommended",
+		"plugin:sonarjs/recommended-legacy",
+		"plugin:cypress/recommended",
+		"plugin:no-jquery/deprecated",
+		"plugin:compat/recommended"
 	],
 	"env": {
 		"browser": true,
 		"es6": true,
 		"node": true,
-		"mocha": true
-	},
-	"parserOptions": {
-		"sourceType": "module",
-		"ecmaFeatures": {
-			"jsx": true
-		}
+		"mocha": true,
+		"cypress/globals": true
 	},
 	"globals": {
 		"wp": true,
@@ -24,13 +34,15 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
 	"settings": {
 		"react": {
 			"pragma": "wp"
 		}
 	},
 	"rules": {
+		"cypress/unsafe-to-chain-command": "off",
+		"cypress/no-assigning-return-values": "off",
 		"camelcase": ["error", { "properties": "never" }],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
@@ -50,6 +62,67 @@
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
 		"vars-on-top": "warn",
-		"yoda": "off"
+		"yoda": "off",
+		"linebreak-style": "off",
+		"prettier/prettier": "off",
+		"object-shorthand": "off",
+		"no-unused-vars": "off",
+		"no-console": "off",
+		"eqeqeq": "off",
+		"@wordpress/no-global-active-element": "off",
+		"no-alert": "off",
+		"no-undef": "off",
+		"jsdoc/no-undefined-types": "off",
+		"no-shadow": "off",
+		"sonarjs/no-duplicate-string": "off",
+		"sonarjs/prefer-single-boolean-return": "off",
+		"sonarjs/no-collapsible-if": "off",
+		"sonarjs/no-duplicated-branches": "off",
+		"sonarjs/no-nested-template-literals": "off",
+		"no-jquery/no-ready-shorthand": "off",
+		"no-jquery/no-ajax-events": "error",
+		"no-jquery/no-animate-toggle": "error",
+		"no-jquery/no-bind": "error",
+		"no-jquery/no-box-model": "error",
+		"no-jquery/no-browser": "error",
+		"no-jquery/no-camel-case": "error",
+		"no-jquery/no-constructor-attributes": "error",
+		"no-jquery/no-contains": "error",
+		"no-jquery/no-deferred": "error",
+		"no-jquery/no-delegate": "error",
+		"no-jquery/no-error": "error",
+		"no-jquery/no-escape-selector": "error",
+		"no-jquery/no-extend": "error",
+		"no-jquery/no-fx-interval": "error",
+		"no-jquery/no-global-eval": "error",
+		"no-jquery/no-has": "error",
+		"no-jquery/no-hold-ready": "error",
+		"no-jquery/no-is-array": "error",
+		"no-jquery/no-is-empty-object": "error",
+		"no-jquery/no-is-function": "error",
+		"no-jquery/no-is-numeric": "error",
+		"no-jquery/no-is-plain-object": "error",
+		"no-jquery/no-is-window": "error",
+		"no-jquery/no-load": "error",
+		"no-jquery/no-load-shorthand": "error",
+		"no-jquery/no-map": "error",
+		"no-jquery/no-map-collection": "error",
+		"no-jquery/no-map-util": "error",
+		"no-jquery/no-merge": "error",
+		"no-jquery/no-node-name": "error",
+		"no-jquery/no-noop": "error",
+		"no-jquery/no-now": "error",
+		"no-jquery/no-other-utils": "error",
+		"no-jquery/no-param": "error",
+		"no-jquery/no-parse-json": "error",
+		"no-jquery/no-parse-xml": "error",
+		"no-jquery/no-proxy": "error",
+		"no-jquery/no-selector-prop": "error",
+		"no-jquery/no-sizzle": "error",
+		"no-jquery/no-sub": "error",
+		"no-jquery/no-trim": "error",
+		"no-jquery/no-type": "error",
+		"no-jquery/no-unique": "error",
+		"no-jquery/no-when": "error"
 	}
 }

@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p class="frm4 frm_form_field">
-	<label><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
+	<label><?php esc_html_e( 'Bottom Margin', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'field_margin' ) ); ?>" id="frm_field_margin" value="<?php echo esc_attr( $style->post_content['field_margin'] ); ?>" />
 </p>
 
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'field_weight' ) ); ?>" id="frm_field_weight">
 		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
-			<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $style->post_content['field_weight'], $value ); ?>><?php echo esc_attr( $name ); ?></option>
+			<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $style->post_content['field_weight'], $value ); ?>><?php echo esc_html( $name ); ?></option>
 		<?php } ?>
 	</select>
 </p>

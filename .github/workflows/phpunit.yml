@@ -5,46 +5,39 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+    types: [ opened, labeled, synchronize ]
 
 name: PHPUnit
 jobs:
   build-test:
-    runs-on: ubuntu-16.04
+    if: contains(github.event.pull_request.labels.*.name, 'run tests')
+    runs-on: ubuntu-20.04
+    env:
+      WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
       matrix:
         include:
           - php: 7.4
-            wordpress: master
-            phpunit: 6.5.14
-          - php: 7.3
-            wordpress: master
-            phpunit: 6.5.14
-          - php: 7.1
-            wordpress: master
-            phpunit: 6.5.14
-          - php: 7.0.33
-            wordpress: 4.9
-            phpunit: 6.5.14
-          - php: 5.6.20
-            wordpress: 4.7
-            phpunit: 5.7.27
+            wordpress: trunk
+            multisite: 0
+          - php: 8.0
+            wordpress: trunk
+            multisite: 0
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.5.0
 
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.24.0
         with:
           php-version: ${{ matrix.php }}
-          tools: phpunit:${{ matrix.phpunit }}
+          tools: phpunit-polyfills
 
       - name: Installing WordPress
         run: |
           export WP_DEVELOP_DIR=/tmp/wordpress/
-          git clone --depth=50 --branch="${{ matrix.wordpress }}" git://develop.git.wordpress.org/ /tmp/wordpress
+          git clone --depth=1 --branch="${{ matrix.wordpress }}" git://develop.git.wordpress.org/ /tmp/wordpress
           cd ..
           cp -r "${GITHUB_REPOSITORY#*/}" "/tmp/wordpress/src/wp-content/plugins/formidable"
           cd /tmp/wordpress/
@@ -63,6 +56,6 @@ jobs:
           pwd
           phpunit --coverage-clover=coverage.xml
       - name: Send code coverage report to Codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           files: /tmp/wordpress/src/wp-content/plugins/formidable/coverage.xml

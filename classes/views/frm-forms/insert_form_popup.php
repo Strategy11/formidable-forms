@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<div class="media-toolbar-primary search-form">
 									<a href="javascript:void(0);" class="button-primary button media-button-group" id="frm_insert_shortcode">
 										<?php esc_html_e( 'Insert into Post', 'formidable' ); ?>
-								   </a>
+									</a>
 								</div>
 							</div>
 						</div>

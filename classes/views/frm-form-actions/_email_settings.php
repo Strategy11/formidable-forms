@@ -4,13 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<p class="frm_has_shortcodes frm_to_row frm_email_row">
-	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>>
-		<?php esc_html_e( 'To', 'formidable' ); ?>
-	</label>
-	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
-</p>
-
 <p class="frm_bcc_cc_container">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo esc_attr( ! empty( $form_action->post_content['cc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="cc">
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
@@ -18,6 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_bcc_button <?php echo esc_attr( ! empty( $form_action->post_content['bcc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="bcc">
 		<?php esc_html_e( 'BCC', 'formidable' ); ?>
 	</a>
+</p>
+
+<p class="frm_has_shortcodes frm_to_row frm_email_row">
+	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>>
+		<?php esc_html_e( 'To', 'formidable' ); ?>
+	</label>
+	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
 
 <p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>" >
@@ -38,6 +38,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'bcc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['bcc'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'bcc', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" />
 </p>
 
+<p class="frm_reply_to_container">
+	<a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="reply_to">
+		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
+	</a>
+</p>
+
 <p class="frm_has_shortcodes frm_from_row frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'from' ); ?>>
 		<?php esc_html_e( 'From', 'formidable' ); ?>
@@ -46,14 +52,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'from', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
 </p>
 
-<p class="frm_error_style frm_from_to_match_row <?php echo ( ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">
+<p class="frm_error_style frm_from_to_match_row <?php echo ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">
 	<?php esc_html_e( 'Warning: If you are sending an email to the user, the To and From fields should not match.', 'formidable' ); ?>
-</p>
-
-<p class="frm_reply_to_container">
-	<a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="reply_to">
-		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
-	</a>
 </p>
 
 <p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo empty( $form_action->post_content['reply_to'] ) ? ' frm_hidden' : ''; ?>">
@@ -76,7 +76,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>">
 		<?php esc_html_e( 'Message', 'formidable' ); ?>
 	</label>
-	<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // WPCS: XSS ok. ?></textarea>
+	<?php
+	$rich_text_emails = empty( $form_action->post_content['plain_text'] );
+
+	/**
+	 * @since 5.5.2
+	 *
+	 * @param bool  $rich_text_emails True by default unless plain text is selected.
+	 * @param array $args {
+	 *     @type stdClass $form
+	 *     @type WP_Post  $form_action
+	 * }
+	 */
+	$rich_text_emails = apply_filters( 'frm_rich_text_emails', $rich_text_emails, compact( 'form', 'form_action' ) );
+
+	if ( $rich_text_emails ) {
+		$editor_args = array(
+			'textarea_name' => $this->get_field_name( 'email_message' ),
+			'textarea_rows' => 6,
+			'editor_class'  => 'frm_not_email_message',
+		);
+		wp_editor(
+			$form_action->post_content['email_message'],
+			$this->get_field_id( 'email_message' ),
+			$editor_args
+		);
+	} else {
+		?>
+		<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+		<?php
+	}
+	?>
 </p>
 
 <label for="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>">

@@ -11,9 +11,9 @@ class FrmFieldValue {
 	/**
 	 * @since 2.04
 	 *
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	protected $field = null;
+	protected $field;
 
 	/**
 	 * @since 4.03
@@ -56,9 +56,19 @@ class FrmFieldValue {
 
 		$this->entry    = $entry;
 		$this->entry_id = $entry->id;
-		$field = apply_filters( 'frm_field_value_object', $field );
+		$field          = apply_filters( 'frm_field_value_object', $field );
 		$this->field    = $field;
 		$this->init_saved_value( $entry );
+	}
+
+	/**
+	 * Gets entry property.
+	 *
+	 * @since 5.0.16
+	 * @return stdClass
+	 */
+	public function get_entry() {
+		return $this->entry;
 	}
 
 	/**
@@ -67,6 +77,8 @@ class FrmFieldValue {
 	 * @since 2.04
 	 *
 	 * @param stdClass $entry
+	 *
+	 * @return void
 	 */
 	protected function init_saved_value( $entry ) {
 		if ( $this->field->type === 'html' ) {
@@ -86,10 +98,13 @@ class FrmFieldValue {
 	 * @since 2.05
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
-		unset( $atts['class'] ); // This class shouldn't affect values.
+		// This class shouldn't affect values.
+		unset( $atts['class'] );
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
@@ -98,6 +113,8 @@ class FrmFieldValue {
 	 * Get a value from the field settings
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param string $value
 	 */
 	public function get_field_option( $value ) {
 		return FrmField::get_option( $this->field, $value );
@@ -105,6 +122,8 @@ class FrmFieldValue {
 
 	/**
 	 * @since 4.03
+	 *
+	 * @param string $option
 	 */
 	public function get_field_attr( $option ) {
 		return is_object( $this->field ) ? $this->field->{$option} : '';
@@ -112,6 +131,8 @@ class FrmFieldValue {
 
 	/**
 	 * @since 4.03
+	 *
+	 * @return stdClass
 	 */
 	public function get_field() {
 		return $this->field;
@@ -182,7 +203,7 @@ class FrmFieldValue {
 	 *
 	 * @param array $atts
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	protected function generate_displayed_value_for_field_type( $atts ) {
 		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
@@ -198,6 +219,8 @@ class FrmFieldValue {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function filter_displayed_value( $atts ) {
 		if ( ! is_object( $this->entry ) || empty( $this->entry->metas ) ) {
@@ -229,7 +252,7 @@ class FrmFieldValue {
 					)
 				);
 			}
-		}
+		}//end if
 
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters(
@@ -245,14 +268,17 @@ class FrmFieldValue {
 	}
 
 	/**
-	 * Clean a field's saved value
+	 * Clean a field's saved value.
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
 			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
-				FrmAppHelper::unserialize_or_decode( $this->saved_value );
+				$field_type = FrmField::get_field_type( $this->field );
+				FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
 			}
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {

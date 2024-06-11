@@ -5,4 +5,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 _deprecated_file( esc_html( basename( __FILE__ ) ), '4.0', 'formidable/classes/views/frm-forms/mb_insert_fields.php' );
 
-include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php';
+require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php';

@@ -13,11 +13,11 @@ class FrmShowForm extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-		echo FrmAppHelper::kses( $args['before_widget'], 'all' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $args['before_widget'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo '<div class="frm_form_widget">';
 		if ( $title ) {
-			echo FrmAppHelper::kses( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' ); // WPCS: XSS ok.
+			echo FrmAppHelper::kses( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$form_atts = array(
@@ -26,16 +26,28 @@ class FrmShowForm extends WP_Widget {
 			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
 		);
 
-		echo FrmFormsController::get_form_shortcode( $form_atts ); // WPCS: XSS ok.
+		echo FrmFormsController::get_form_shortcode( $form_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo '</div>';
-		echo FrmAppHelper::kses( $args['after_widget'], 'all' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $args['after_widget'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	/**
+	 * @param array $new_instance New settings for this instance as input by the user via
+	 *                            WP_Widget::form().
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Settings to save or bool false to cancel saving.
+	 */
 	public function update( $new_instance, $old_instance ) {
 		return $new_instance;
 	}
 
+	/**
+	 * Outputs the settings update form.
+	 *
+	 * @param array $instance Current settings.
+	 * @return string Default return is 'noform'.
+	 */
 	public function form( $instance ) {
 		$defaults = array(
 			'title'       => false,
@@ -80,5 +92,6 @@ class FrmShowForm extends WP_Widget {
 			</label>
 		</p>
 		<?php
+		return '';
 	}
 }

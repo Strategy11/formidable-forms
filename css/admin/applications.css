@@ -1,0 +1,253 @@
+.frm-application-cards-grid,
+#frm-application-search,
+.frm-application-card hr {
+	width: 100%;
+}
+
+.frm-application-card img,
+.frm-application-image-wrapper img,
+#frm_custom_applications_placeholder img {
+	max-width: 100%;
+}
+
+.frm-application-image-wrapper img {
+	background: url(../../images/applications/toolbar.png) no-repeat top center;
+	background-size: contain;
+	padding-top: 19px;
+}
+
+.frm-application-card > div:first-child,
+#frm_custom_applications_placeholder {
+	position: relative;
+}
+
+.frm-admin-page-applications #wpcontent {
+	padding-left: 0;
+}
+
+.frm-application-cards-grid {
+	padding-top: var(--gap-md);
+	padding-bottom: 50px;
+	grid-gap: var(--gap-md);
+}
+
+.frm-application-cards-grid:last-child {
+	padding-bottom: 100px;
+}
+
+.frm-admin-page-applications #wpbody-content {
+	padding-bottom: 0;
+}
+
+.frm-application-card {
+	grid-column: span 3/span 3; /* treat as frm3 */
+	flex-direction: column;
+	gap: 0;
+}
+
+.frm-application-template-card {
+	cursor: pointer;
+}
+
+.frm-application-template-card:hover {
+	box-shadow: var(--box-shadow-lg);
+}
+
+.frm-application-template-card:hover h3 {
+	color: var(--primary-500);
+}
+
+/* Card title */
+.frm-application-card h3 {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: var(--gap-xs);
+	margin: 0;
+	font-size: var(--text-sm) !important;
+	font-weight: 500;
+}
+
+.frm-application-card h3 .frmsvg {
+	width: 11px;
+	height: 13px;
+}
+
+.frm-application-card h3 .frm-inner-text {
+	max-width: calc( 100% - 50px );
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.frm-application-card h3 .frm-meta-tag {
+	margin: 0;
+}
+
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
+	display: flex;
+	flex-direction: row;
+}
+
+.frm-application-card .frm-button-secondary .frmsvg {
+	width: 11px;
+	height: 11px;
+	position: relative;
+	right: 2px;
+	align-self: center;
+}
+
+/* Use template anchor */
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
+	position: absolute;
+	right: 10px;
+	bottom: 0;
+}
+
+/* Card description */
+.frm-application-card > div:first-child > div {
+	font-size: var(--text-xs);
+}
+
+.frm-application-item-count {
+	font-size: var(--text-xs);
+	color: var(--grey-500);
+	margin-top: var(--gap-xs);
+}
+
+#frm_view_application_modal .frm_warning_style {
+	border: none aliceblue;
+	margin-top: 0;
+	padding: 20px;
+	border-radius: 0;
+	display: flex;
+}
+
+#frm_view_application_modal .frm_warning_style span {
+	flex: 1;
+}
+
+#frm_view_application_modal .frm_warning_style a:focus {
+	box-shadow: none;
+}
+
+.frm-application-card-image-wrapper {
+	min-height: 130px;
+	display: flex;
+	align-items: center;
+	align-self: center;
+}
+
+.frm-flex {
+	flex: 1;
+}
+
+.frm-application-modal-details {
+	padding: 25px 30px;
+}
+
+.frm-admin-page-applications .ui-widget-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--grey-border);
+	z-index: 2;
+}
+
+#frm_view_application_modal .frm-application-image-wrapper {
+	background-color: #F6F7FB;
+	padding: 20px 30px 15px;
+}
+
+#frm_view_application_modal img {
+	height: 245px;
+}
+
+#frm_view_application_modal .frm_modal_content {
+	flex: 1;
+	overflow-y: auto;
+}
+
+.frm-application-modal-label {
+	opacity: 0.65;
+	margin-bottom: 5px;
+}
+
+.frm-admin-page-applications #frm_bs_dropdown .install-now {
+	vertical-align: bottom;
+}
+
+#frm_application_category_filter {
+	display: inline-block;
+}
+
+#frm_application_category_filter > a {
+	padding: 0 8px;
+}
+
+#frm_application_category_filter > a:first-child {
+	padding-left: 0;
+}
+
+#frm_application_category_filter > a:last-child {
+	padding-right: 0;
+}
+
+.frm-admin-page-applications #frm_top_bar h1 {
+	width: auto;
+}
+
+.frm-admin-page-applications #frm_top_bar .install-now {
+	vertical-align: bottom;
+}
+
+.frm-application-templates-nav .frm-search {
+	margin-top: 0;
+}
+
+.frm-application-templates-nav.wrap {
+	margin-right: 0;
+}
+
+#frm_custom_applications_placeholder > div:first-child {
+	position: absolute;
+}
+
+#frm_custom_applications_placeholder > div:last-child {
+	text-align: center;
+	max-width: 500px;
+	margin: var(--gap-md) auto;
+	position: relative;
+}
+
+#frm_custom_applications_placeholder > div a {
+	margin-top: var(--gap-md);
+}
+
+@media only screen and (max-width: 1200px) {
+	.frm-application-card {
+		grid-column: span 4/span 4; /* treat as frm4 */
+	}
+}
+
+@media only screen and (max-width: 800px) {
+	.frm-application-card {
+		grid-column: span 6/span 6; /* treat as frm6 */
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	#frm_application_category_filter {
+		display: block;
+		margin-left: 0;
+	}
+
+	.frm-application-card {
+		grid-column: span 12/span 12; /* treat as frm12 */
+	}
+}

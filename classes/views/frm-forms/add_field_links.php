@@ -20,13 +20,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</ul>
 
 		<div id="frm-insert-fields" class="tabs-panel">
-			<ul class="field_type_list">
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'field-list',
+					'placeholder' => __( 'Search Fields', 'formidable' ),
+					'tosearch'    => 'frmbutton',
+				)
+			);
+			?>
+			<ul class="field_type_list frm_grid_container">
 				<?php
 				foreach ( $frm_field_selection as $field_key => $field_type ) {
 					$field_label = FrmFormsHelper::get_field_link_name( $field_type );
+					$classes     = 'frmbutton frm6 frm_t' . $field_key;
+					if ( ! empty( $field_type['hide'] ) ) {
+						$classes .= ' frm_hidden';
+					}
 					?>
-					<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
-						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ); ?>">
+					<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
+						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_attr( $field_label ); ?>">
 							<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 							<span><?php echo esc_html( $field_label ); ?></span>
 						</a>
@@ -41,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h3 class="frm-with-line">
 				<span><?php esc_html_e( 'Advanced Fields', 'formidable' ); ?></span>
 			</h3>
-			<ul class="field_type_list">
+			<ul class="field_type_list frm_grid_container">
 <?php
 
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
@@ -50,6 +63,9 @@ if ( $no_allow_class === 'frm_noallow' ) {
 }
 
 $pro_fields = FrmField::pro_field_selection();
+// This is a Lite field. It's kept in pro_field_selection for backward compatibility.
+unset( $pro_fields['credit_card'] );
+
 $field_sections = array();
 foreach ( $pro_fields as $field_key => $field_type ) {
 
@@ -70,8 +86,8 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 		$field_label = $field_type['name'];
 
 		?>
-				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
-					<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ); ?>">
+				<li class="frmbutton frm6 <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
+					<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_attr( $field_label ); ?>">
 						<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 						<span><?php echo esc_html( $field_label ); ?> <b class="caret"></b></span>
 					</a>
@@ -79,7 +95,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ); ?>Drop">
 					<?php foreach ( $field_type['types'] as $k => $type ) { ?>
 						<li class="frm_t<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>|<?php echo esc_attr( $k ); ?>">
-							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok. ?>
+							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</li>
 						<?php
 						unset( $k, $type );
@@ -90,19 +106,19 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 		<?php
 	} else {
 		FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
-	}
+	}//end if
 
 	unset( $field_key, $field_type, $field_label );
-}
+}//end foreach
 ?>
 			</ul>
 			<div class="clear"></div>
 
-			<?php foreach ( $field_sections as $section => $section_fields ) { ?>
+			<?php foreach ( $field_sections as $section_fields ) { ?>
 				<h3 class="frm-with-line">
 					<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
 				</h3>
-				<ul class="field_type_list">
+				<ul class="field_type_list frm_grid_container">
 					<?php
 					foreach ( $section_fields as $field_key => $field_type ) {
 						FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
@@ -127,6 +143,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 				<input type="hidden" name="frm_action" value="update" />
 				<input type="hidden" name="action" value="update" />
 				<input type="hidden" name="id" id="form_id" value="<?php echo esc_attr( $values['id'] ); ?>" />
+				<input type="hidden" name="draft_fields" id="draft_fields" value="<?php echo esc_attr( implode( ',', FrmFieldsHelper::get_all_draft_field_ids( $values['id'] ) ) ); ?>" />
 				<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
 				<input type="hidden" id="frm-end-form-marker" name="frm_end" value="1" />
 
@@ -161,6 +178,6 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 
 	<form method="post" id="frm_js_build_form">
 		<input type="hidden" id="frm_compact_fields" name="frm_compact_fields" value="" />
-		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
+		<button class="frm_submit_form frm_submit_<?php echo esc_attr( ! empty( $values['ajax_load'] ) ? '' : 'no_' ); ?>ajax frm_hidden frm_button_submit" type="button" id="frm_submit_side"><?php esc_html_e( 'Update', 'formidable' ); ?></button>
 	</form>
 </div>

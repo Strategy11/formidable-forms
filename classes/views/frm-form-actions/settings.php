@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 	<?php
 	$displayed_actions = array();
-	foreach ( $groups as $group_name => $group ) {
+	foreach ( $groups as $group ) {
 		if ( ! empty( $group['name'] ) ) {
 			?>
 			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
@@ -45,7 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				$displayed_actions[] = $action_control->id_base;
 				FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
-				unset( $actions_icon, $classes );
 			}
 
 			foreach ( $group['actions'] as $action ) {
@@ -56,14 +55,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
-								<span class="frm-inner-circle" <?php
-									echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
-								?>>
+								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
 								<?php
 								$icon_atts = array();
 								if ( isset( $group['color'] ) ) {
 									$icon_atts = array(
-										'style' => '--primary-hover:' . $group['color'],
+										'style' => '--primary-700:' . $group['color'],
 									);
 								}
 								FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );
@@ -74,11 +71,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</a>
 					</li>
 				<?php
-			}
+			}//end foreach
 			?>
 		</ul>
 		<?php
-	}
+	}//end foreach
 	?>
 	<div class="clear"></div>
 	<a href="#" id="frm-show-groups">
@@ -90,5 +87,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="clear"></div>
 </div>
 
-<?php FrmFormActionsController::list_actions( $form, $values ); ?>
-<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
+<?php
+FrmFormActionsController::list_actions( $form, $values );
+FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' );

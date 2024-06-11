@@ -49,8 +49,6 @@ class FrmEDD_SL_Plugin_Updater {
 		/**
 		 * Fires after the $frm_edd_plugin_data is setup.
 		 *
-		 * @since x.x.x
-		 *
 		 * @param array $frm_edd_plugin_data Array of EDD SL plugin data.
 		 */
 		do_action( 'post_edd_sl_plugin_updater_setup', $frm_edd_plugin_data );
@@ -83,7 +81,8 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @uses api_request()
 	 *
 	 * @param array   $_transient_data Update array build by WordPress.
-	 * @return array Modified update array with custom plugin data.
+	 *
+	 * @return stdClass Modified update array with custom plugin data.
 	 */
 	public function check_update( $_transient_data ) {
 
@@ -213,7 +212,8 @@ class FrmEDD_SL_Plugin_Updater {
 	 *
 	 * @param array   $args
 	 * @param string  $url
-	 * @return object $array
+	 *
+	 * @return array $array
 	 */
 	public function http_request_args( $args, $url ) {
 
@@ -303,11 +303,11 @@ class FrmEDD_SL_Plugin_Updater {
 
 		global $frm_edd_plugin_data;
 
-		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) { // WPCS: CSRF ok.
+		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
-		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) { // WPCS: CSRF ok.
+		if ( empty( $_REQUEST['plugin'] ) || empty( $_REQUEST['slug'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -315,10 +315,10 @@ class FrmEDD_SL_Plugin_Updater {
 			wp_die( esc_html__( 'You do not have permission to install plugin updates', 'formidable' ), esc_html__( 'Error', 'formidable' ), array( 'response' => 403 ) );
 		}
 
-		$slug         = sanitize_text_field( $_REQUEST['slug'] ); // WPCS: CSRF ok.
+		$slug         = sanitize_text_field( $_REQUEST['slug'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$data         = $frm_edd_plugin_data[ $slug ];
 		$beta         = ! empty( $data['beta'] ) ? true : false;
-		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' ); // WPCS: CSRF ok.
+		$cache_key    = md5( 'edd_plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_' . $beta . '_version_info' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$version_info = $this->get_cached_version_info( $cache_key );
 
 		if ( false === $version_info ) {
@@ -364,7 +364,7 @@ class FrmEDD_SL_Plugin_Updater {
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . FrmAppHelper::kses( $version_info->sections['changelog'], 'all' ) . '</div>'; // WPCS: XSS ok.
+			echo '<div style="background:#fff;padding:10px;">' . FrmAppHelper::kses( $version_info->sections['changelog'], 'all' ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		exit;

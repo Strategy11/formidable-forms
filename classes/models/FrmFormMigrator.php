@@ -15,7 +15,7 @@ abstract class FrmFormMigrator {
 	public $tracking = 'frm_forms_imported';
 
 	protected $fields_map          = array();
-	protected $current_source_form = null;
+	protected $current_source_form;
 	protected $current_section     = array();
 
 	/**
@@ -27,7 +27,7 @@ abstract class FrmFormMigrator {
 		}
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
 		$this->source_active = is_plugin_active( $this->path );
@@ -54,8 +54,8 @@ abstract class FrmFormMigrator {
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
 			<p class="howto">Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>.</p>
-			<div class="welcome-panel" id="welcome-panel">
-				<div class="welcome-panel-content" style="text-align:center;margin-bottom:10px;">
+			<div id="welcome-panel">
+				<div style="margin-bottom:10px;">
 					<p class="about-description">
 						Select the forms to import.
 					</p>
@@ -64,7 +64,7 @@ abstract class FrmFormMigrator {
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
-						<div style="margin:10px auto;max-width:400px;text-align:left;">
+						<div style="max-width:400px;text-align:left;">
 							<?php
 							if ( empty( $this->get_forms() ) ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
@@ -86,7 +86,7 @@ abstract class FrmFormMigrator {
 								</p>
 							<?php } ?>
 						</div>
-						<button type="submit" class="button button-primary button-hero">Start Import</button>
+						<p class="submit"><button type="submit" class="button button-primary frm-button-primary">Start Import</button></p>
 					</form>
 					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
@@ -128,7 +128,7 @@ abstract class FrmFormMigrator {
 
 		if ( is_array( $forms ) ) {
 			$imported = array();
-			foreach ( (array) $forms as $form_id ) {
+			foreach ( $forms as $form_id ) {
 				$imported[] = $this->import_form( $form_id );
 			}
 		} else {
@@ -234,16 +234,16 @@ abstract class FrmFormMigrator {
 
 			// This may occassionally skip one level/order e.g. after adding a
 			// list field, as field_order would already be prepared to be used.
-			$field_order ++;
+			++$field_order;
 
-			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
+			if ( ! empty( $new_field['fields'] ) && is_array( $new_field['fields'] ) ) {
 				// we have (inner) fields to merge
 
 				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
 				// set the new field_order as it would have changed
-				$field_order    = $new_field['current_order'];
+				$field_order = $new_field['current_order'];
 			}
-		}
+		}//end foreach
 	}
 
 	protected function prepare_field( $field, &$new_field ) {
@@ -272,7 +272,7 @@ abstract class FrmFormMigrator {
 
 		$order = 0;
 		foreach ( $fields as $field ) {
-			$order ++;
+			++$order;
 			$type     = $this->get_field_type( $field );
 			$new_type = $this->convert_field_type( $type, $field );
 			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
@@ -302,7 +302,7 @@ abstract class FrmFormMigrator {
 		$sub['name'] = __( 'Section Buttons', 'formidable' );
 		$subs        = array( $sub );
 		$this->insert_fields_in_array( $subs, $order, 0, $fields );
-		$order ++;
+		++$order;
 	}
 
 	/**
@@ -337,7 +337,7 @@ abstract class FrmFormMigrator {
 	 * Add the new form to the database and return AJAX data.å
 	 *
 	 * @param array $form Form to import.
-	 * @param array $upgrade_omit No field alternative
+	 * @param array $upgrade_omit No field alternative.
 	 */
 	protected function add_form( $form, $upgrade_omit = array() ) {
 
@@ -370,7 +370,7 @@ abstract class FrmFormMigrator {
 	 *              the name key is a must. The keys are the column
 	 *              names of the forms table in the DB.
 	 *
-	 * @return int The ID of the newly created form.
+	 * @return bool|int The ID of the newly created form or false on failure.
 	 */
 	protected function create_form( $form ) {
 		$form['form_key'] = $form['name'];
@@ -393,7 +393,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $form
 	 */
 	protected function create_fields( $form_id, &$form ) {
@@ -417,7 +417,9 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
+	 * @param array $action
 	 * @param array $form
+	 * @param int   $form_id
 	 */
 	protected function save_action( $action, $form, $form_id ) {
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
@@ -445,8 +447,8 @@ abstract class FrmFormMigrator {
 	 * future we can alert users if they try to import a form that has already
 	 * been imported.
 	 *
-	 * @param int $source_id Imported plugin form ID
-	 * @param int $new_form_id Formidable form ID
+	 * @param int $source_id Imported plugin form ID.
+	 * @param int $new_form_id Formidable form ID.
 	 */
 	protected function track_import( $source_id, $new_form_id ) {
 
@@ -465,7 +467,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param int $source_id Imported plugin form ID
+	 * @param int $source_id Imported plugin form ID.
 	 *
 	 * @return int the ID of the created form or 0
 	 */
@@ -519,7 +521,7 @@ abstract class FrmFormMigrator {
 	 * Replace 3rd-party form provider tags/shortcodes with our own Tags.
 	 *
 	 * @param string $string String to process the smart tag in.
-	 * @param array $fields List of fields for the form.
+	 * @param array  $fields List of fields for the form.
 	 *
 	 * @return string
 	 */
@@ -541,7 +543,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return string
 	 */
@@ -550,7 +552,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $source_form
+	 * @param array|object $source_form
 	 *
 	 * @return array
 	 */

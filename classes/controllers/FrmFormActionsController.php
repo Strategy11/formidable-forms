@@ -39,32 +39,38 @@ class FrmFormActionsController {
 		do_action( 'frm_form_actions_init' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function register_actions() {
 		$action_classes = array(
-			'email'     => 'FrmEmailAction',
-			'wppost'    => 'FrmDefPostAction',
-			'register'  => 'FrmDefRegAction',
-			'paypal'    => 'FrmDefPayPalAction',
-			'payment'   => 'FrmDefHrsAction',
-			'mailchimp' => 'FrmDefMlcmpAction',
-			'api'       => 'FrmDefApiAction',
-
-			'salesforce'      => 'FrmDefSalesforceAction',
-			'activecampaign'  => 'FrmDefActiveCampaignAction',
-			'constantcontact' => 'FrmDefConstContactAction',
-			'getresponse'     => 'FrmDefGetResponseAction',
-			'hubspot'         => 'FrmDefHubspotAction',
-			'zapier'          => 'FrmDefZapierAction',
-			'twilio'          => 'FrmDefTwilioAction',
-			'highrise'        => 'FrmDefHighriseAction',
-			'mailpoet'        => 'FrmDefMailpoetAction',
-			'aweber'          => 'FrmDefAweberAction',
+			'on_submit'         => 'FrmOnSubmitAction',
+			'email'             => 'FrmEmailAction',
+			'wppost'            => 'FrmDefPostAction',
+			'register'          => 'FrmDefRegAction',
+			'paypal'            => 'FrmDefPayPalAction',
+			'payment'           => 'FrmTransLiteAction',
+			'quiz'              => 'FrmDefQuizAction',
+			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
+			'mailchimp'         => 'FrmDefMlcmpAction',
+			'api'               => 'FrmDefApiAction',
+			'salesforce'        => 'FrmDefSalesforceAction',
+			'activecampaign'    => 'FrmDefActiveCampaignAction',
+			'constantcontact'   => 'FrmDefConstContactAction',
+			'getresponse'       => 'FrmDefGetResponseAction',
+			'hubspot'           => 'FrmDefHubspotAction',
+			'zapier'            => 'FrmDefZapierAction',
+			'twilio'            => 'FrmDefTwilioAction',
+			'highrise'          => 'FrmDefHighriseAction',
+			'mailpoet'          => 'FrmDefMailpoetAction',
+			'aweber'            => 'FrmDefAweberAction',
+			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 
-		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php' );
-		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php' );
+		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
+		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
 
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
@@ -85,7 +91,7 @@ class FrmFormActionsController {
 
 		$allowed = self::active_actions( $action_controls );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php';
 	}
 
 	/**
@@ -127,13 +133,15 @@ class FrmFormActionsController {
 	 */
 	public static function form_action_groups() {
 		$groups = array(
-			'misc'        => array(
+			'misc'      => array(
 				'name'    => '',
 				'icon'    => 'frm_icon_font frm_shuffle_icon',
 				'actions' => array(
 					'email',
 					'wppost',
 					'register',
+					'quiz',
+					'quiz_outcome',
 					'twilio',
 				),
 			),
@@ -204,7 +212,7 @@ class FrmFormActionsController {
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
 
-		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'mailchimp' );
+		$default_shown    = array( 'wppost', 'register', 'payment', 'quiz', 'hubspot' );
 		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
 		$default_position = array_search( $action_control->id_base, $default_shown );
 		$allowed_count    = count( $allowed );
@@ -224,19 +232,31 @@ class FrmFormActionsController {
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
 			}
-		}
+
+			if ( isset( $action_control->action_options['message'] ) ) {
+				$data['data-message'] = $action_control->action_options['message'];
+			}
+
+			$requires = FrmFormsHelper::get_plan_required( $upgrading );
+			if ( $requires && 'free' !== $requires ) {
+				$data['data-requires'] = $requires;
+			}
+		}//end if
 
 		// HTML to include on the icon.
 		$icon_atts = array();
-		if ( $action_control->action_options['color'] !== 'var(--primary-hover)' ) {
+		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
 			$icon_atts = array(
-				'style' => '--primary-hover:' . $action_control->action_options['color'],
+				'style' => '--primary-700:' . $action_control->action_options['color'],
 			);
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
+	/**
+	 * @param string $action
+	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 		if ( empty( $temp_actions ) ) {
@@ -249,7 +269,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' != $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base == $action ) {
 				return $a;
 			}
 
@@ -302,7 +322,7 @@ class FrmFormActionsController {
 
 		$use_logging = self::should_show_log_message( $form_action->post_excerpt );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 	}
 
 	public static function add_form_action() {
@@ -325,7 +345,7 @@ class FrmFormActionsController {
 		$values = array();
 		$form   = self::fields_to_values( $form_id, $values );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
 	}
 
@@ -348,7 +368,7 @@ class FrmFormActionsController {
 
 		$use_logging = self::should_show_log_message( $action_type );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php';
 		wp_die();
 	}
 
@@ -358,7 +378,7 @@ class FrmFormActionsController {
 	 */
 	private static function should_show_log_message( $action_type ) {
 		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
-		return in_array( $action_type, $logging ) && ! function_exists( 'frm_log_autoloader' );
+		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
 	private static function fields_to_values( $form_id, array &$values ) {
@@ -384,11 +404,29 @@ class FrmFormActionsController {
 		return $form;
 	}
 
+	/**
+	 * @param int $form_id
+	 * @return void
+	 */
 	public static function update_settings( $form_id ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
-			wp_die( esc_html__( 'You do not have permission to do that', 'formidable' ) );
+			$frm_settings = FrmAppHelper::get_settings();
+			$error_args   = array(
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $frm_settings->admin_permission,
+				'cancel_url' => add_query_arg(
+					array(
+						'page'       => 'formidable',
+						'frm_action' => 'settings',
+						'id'         => $form_id,
+					),
+					admin_url( 'admin.php?' )
+				),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		global $wpdb;
@@ -419,6 +457,8 @@ class FrmFormActionsController {
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );
+
+		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
 	public static function delete_missing_actions( $old_actions ) {
@@ -447,7 +487,7 @@ class FrmFormActionsController {
 		$action_status = array(
 			'post_status' => 'publish',
 		);
-		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
+		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
 
 		if ( empty( $form_actions ) ) {
 			return;
@@ -463,7 +503,7 @@ class FrmFormActionsController {
 		$stored_actions  = array();
 		$action_priority = array();
 
-		if ( in_array( $event, array( 'create', 'update' ) ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+		if ( in_array( $event, array( 'create', 'update' ), true ) && defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			$this_event = 'import';
 		} else {
 			$this_event = $event;
@@ -471,7 +511,7 @@ class FrmFormActionsController {
 
 		foreach ( $form_actions as $action ) {
 
-			$skip_this_action = ( ! in_array( $this_event, $action->post_content['event'] ) );
+			$skip_this_action = ! in_array( $this_event, $action->post_content['event'], true ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
 			if ( $skip_this_action ) {
 				continue;
@@ -481,7 +521,7 @@ class FrmFormActionsController {
 				$entry = FrmEntry::getOne( $entry, true );
 			}
 
-			if ( empty( $entry ) || ( $entry->is_draft && $event != 'draft' ) ) {
+			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
 				continue;
 			}
 
@@ -506,7 +546,7 @@ class FrmFormActionsController {
 			$action_priority[ $action->ID ] = $link_settings[ $action->post_excerpt ]->action_options['priority'];
 
 			unset( $action );
-		}
+		}//end foreach
 
 		if ( ! empty( $stored_actions ) ) {
 			asort( $action_priority );
@@ -516,19 +556,33 @@ class FrmFormActionsController {
 
 			foreach ( $action_priority as $action_id => $priority ) {
 				$action = $stored_actions[ $action_id ];
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+
+				/**
+				 * Allows custom form action trigger.
+				 *
+				 * @since 6.10
+				 *
+				 * @param bool   $skip   Skip default trigger.
+				 * @param object $action Action object.
+				 * @param object $entry  Entry object.
+				 * @param object $form   Form object.
+				 * @param string $event  Event ('create' or 'update').
+				 */
+				if ( false === apply_filters( 'frm_custom_trigger_action', false, $action, $entry, $form, $event ) ) {
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+				}
 
 				// If post is created, get updated $entry object.
-				if ( $action->post_excerpt == 'wppost' && $event == 'create' ) {
+				if ( $action->post_excerpt === 'wppost' && $event === 'create' ) {
 					$entry = FrmEntry::getOne( $entry->id, true );
 				}
-			}
-		}
+			}//end foreach
+		}//end if
 	}
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
-		if ( ! isset( $args['old_id'] ) || empty( $args['old_id'] ) ) {
+		if ( empty( $args['old_id'] ) ) {
 			// Continue if we know which actions to copy.
 			return;
 		}

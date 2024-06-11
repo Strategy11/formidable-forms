@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValues {
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var int
@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
@@ -76,15 +76,29 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
+	 *
+	 * @return void
 	 */
 	protected function init_entry( $entry_id ) {
 		$this->entry = FrmEntry::getOne( $entry_id, true );
 	}
 
 	/**
+	 * Gets entry property.
+	 *
+	 * @since 5.0.16
+	 * @return stdClass
+	 */
+	public function get_entry() {
+		return $this->entry;
+	}
+
+	/**
 	 * Set the form_id property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_form_id() {
 		$this->form_id = (int) $this->entry->form_id;
@@ -96,29 +110,37 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
 
-		// For reverse compatibility with the fields parameter
-		if ( ! isset( $atts['include_fields'] ) || empty( $atts['include_fields'] ) ) {
+		// For reverse compatibility with the fields parameter.
+		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
+			if ( ! is_array( $atts['fields'] ) ) {
+				$atts['include_fields'] = $atts['fields'];
+			} else {
+				$atts['include_fields'] = '';
 
-			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
-
-				if ( ! is_array( $atts['fields'] ) ) {
-					$atts['include_fields'] = $atts['fields'];
-				} else {
-					$atts['include_fields'] = '';
-
-					foreach ( $atts['fields'] as $included_field ) {
-						$atts['include_fields'] .= $included_field->id . ',';
-					}
-
-					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				foreach ( $atts['fields'] as $included_field ) {
+					$atts['include_fields'] .= $included_field->id . ',';
 				}
+
+				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
 			}
 		}
 
 		$this->include_fields = $this->prepare_array_property( 'include_fields', $atts );
+
+		/**
+		 * Allows modifying the IDs of include_fields used in the entry values.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $field_ids The list of field IDs.
+		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
+		 */
+		$this->include_fields = apply_filters( 'frm_entry_values_include_fields', $this->include_fields, $atts );
 	}
 
 	/**
@@ -127,9 +149,21 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
+
+		/**
+		 * Allows modifying the IDs of exclude_fields used in the entry values.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $field_ids The list of field IDs.
+		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
+		 */
+		$this->exclude_fields = apply_filters( 'frm_entry_values_exclude_fields', $this->exclude_fields, $atts );
 	}
 
 	/**
@@ -138,12 +172,12 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param string $index
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return array
 	 */
 	private function prepare_array_property( $index, $atts ) {
-		if ( isset( $atts[ $index ] ) && ! empty( $atts[ $index ] ) ) {
+		if ( ! empty( $atts[ $index ] ) ) {
 
 			if ( is_array( $atts[ $index ] ) ) {
 				$property = $atts[ $index ];
@@ -161,15 +195,36 @@ class FrmEntryValues {
 	 * Set the fields property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
+
+		/**
+		 * Allows modifying the list of all field in the form that is used in the entry values.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields The list of fields.
+		 * @param array $args   The arguments. Contains `form_id`, `entry`.
+		 */
+		$this->fields = apply_filters(
+			'frm_entry_values_fields',
+			$this->fields,
+			array(
+				'form_id' => $this->form_id,
+				'entry'   => $this->entry,
+			)
+		);
 	}
 
 	/**
 	 * Set the field_values property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_field_values() {
 		foreach ( $this->fields as $field ) {
@@ -194,6 +249,8 @@ class FrmEntryValues {
 	 * Set the user_info property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
@@ -205,20 +262,29 @@ class FrmEntryValues {
 			);
 		}
 
-		$ip = array(
+		$ip       = array(
 			'label' => __( 'IP Address', 'formidable' ),
 			'value' => $this->entry->ip,
 		);
-
-		$browser = array(
+		$browser  = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
-			'value' => FrmEntriesHelper::get_browser( $entry_description['browser'] ),
+			'value' => isset( $entry_description['browser'] ) ? FrmEntriesHelper::get_browser( $entry_description['browser'] ) : '',
 		);
-
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => $entry_description['referrer'],
+			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
 		);
+
+		/**
+		 * Allow the referrer to be modified.
+		 *
+		 * @since 5.5.1
+		 *
+		 * @param array  $referrer
+		 * @param array  $entry_description
+		 * @param object $entry
+		 */
+		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
 		$this->user_info = array(
 			'ip'       => $ip,
@@ -269,7 +335,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param array $array
+	 * @param array    $array
 	 *
 	 * @return bool
 	 */
@@ -283,6 +349,8 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
+	 *
+	 * @return void
 	 */
 	protected function add_field_values( $field ) {
 		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry );

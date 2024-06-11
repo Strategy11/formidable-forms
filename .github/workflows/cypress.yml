@@ -1,0 +1,36 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ opened, labeled, synchronize ]
+
+name: E2E Test
+jobs:
+  cypress:
+    if: contains(github.event.pull_request.labels.*.name, 'run tests')
+    runs-on: ubuntu-latest
+
+    name: Cypress
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Composer install
+        run: composer install
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --include=dev
+
+      - name: Set up WP environment
+        run: npm run env start
+
+      - name: Test
+        run: npm run e2e:run

@@ -13,8 +13,15 @@ class FrmFieldUrl extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'url';
-	protected $display_type = 'text';
 
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -33,10 +40,16 @@ class FrmFieldUrl extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function get_field_name() {
 		return __( 'Website', 'formidable' );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep'  => ', ',
@@ -51,7 +64,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	public function validate( $args ) {
 		$value = $args['value'];
-		if ( trim( $value ) == 'http://' || empty( $value ) ) {
+		if ( trim( $value ) === 'http://' || empty( $value ) ) {
 			$value = '';
 		} else {
 			$value = esc_url_raw( $value );
@@ -79,7 +92,7 @@ class FrmFieldUrl extends FrmFieldType {
 				$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
 				$is_image    = preg_match( $image_regex, $url );
 				if ( $is_image ) {
-					$images .= '<img src="' . esc_attr( $url ) . '" class="frm_image_from_url" alt="" /> ';
+					$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
 				} else {
 					$images .= strip_tags( $url );
 				}
@@ -92,6 +105,8 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'esc_url_raw', $value );

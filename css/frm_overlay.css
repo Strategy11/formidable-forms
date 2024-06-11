@@ -1,0 +1,66 @@
+.frm-overlay--wrapper {
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+	min-height: 100%;
+	z-index: 1002;
+	color:white;
+}
+.frm-overlay--wrapper:before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba( 16, 24, 40, 0.85 );
+	z-index: 1;
+}
+.frm-overlay--close {
+	position: absolute;
+	top: 32px; right: 32px;
+	z-index:10;
+	display:block;
+	width: 32px;
+	height: 32px;
+	background: url( '../images/overlay/close-overlay.svg' ) no-repeat;
+	cursor: pointer;
+}
+body.admin-bar:not(.frm-full-screen) .frm-overlay--close {
+	top:40px;
+}
+.frm-overlay--container {
+	text-align: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	z-index:8;
+	max-width: 468px;
+	height: 260px;
+}
+.frm-overlay--container .frm-overlay--heading {
+	margin-bottom: var( --gap-xs );
+	font-weight: 600;
+	color: white;
+}
+
+.frm-overlay--container .frm-overlay--cta {
+	margin-top: var(--gap-lg);
+	justify-content: center;
+	gap: var( --gap-sm );
+}
+
+.frm-overlay--container .frm-overlay--cta a:nth-child(2){
+	color: white;
+	background: var( --primary-color );
+}
+.frm-overlay--hero-image,
+.frm-overlay--heading,
+.frm-overlay--copy,
+.frm-overlay--cta a {
+	opacity: 0.0;
+}

@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<p class="frm_no_top_margin">
+<p class="frm-mt-0">
 	<label for="frm_submit_style">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_style' ) ); ?>" id="frm_submit_style" <?php checked( $style->post_content['submit_style'], 1 ); ?> value="1" />
 		<?php esc_html_e( 'Disable submit button styling', 'formidable' ); ?>
@@ -42,17 +42,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_bg_color' ) ); ?>" id="frm_submit_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_bg_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_bg_color' ) ); ?>" id="frm_submit_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_bg_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_bg_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
 	<label for="frm_submit_text_color"><?php esc_html_e( 'Text', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_text_color' ) ); ?>" id="frm_submit_text_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_text_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_text_color' ) ); ?>" id="frm_submit_text_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_text_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_text_color' ); ?> />
 </p>
 
 <p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_border_color"><?php esc_html_e( 'Border', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_border_color' ) ); ?>" id="frm_submit_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_border_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_border_color' ) ); ?>" id="frm_submit_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_border_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_border_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm4 frm_end frm_form_field">
 	<label for="frm_submit_shadow_color"><?php esc_html_e( 'Shadow', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_shadow_color' ) ); ?>" id="frm_submit_shadow_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_shadow_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_shadow_color' ) ); ?>" id="frm_submit_shadow_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_shadow_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_shadow_color' ); ?> />
 </p>
 
 <p class="frm_clear">
@@ -85,17 +85,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 </h4>
 <p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_hover_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_bg_color' ) ); ?>" id="frm_submit_hover_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_bg_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_bg_color' ) ); ?>" id="frm_submit_hover_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_bg_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_hover_bg_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
 	<label for="frm_submit_hover_color"><?php esc_html_e( 'Text', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_color' ) ); ?>" id="frm_submit_hover_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_color' ) ); ?>" id="frm_submit_hover_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_hover_color' ); ?> />
 </p>
 
 <p class="frm4 frm_end frm_form_field">
 	<label for="frm_submit_hover_border_color"><?php esc_html_e( 'Border', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_border_color' ) ); ?>" id="frm_submit_hover_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_border_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_border_color' ) ); ?>" id="frm_submit_hover_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_border_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_hover_border_color' ); ?> />
 </p>
 
 <h4 class="frm_clear">
@@ -103,15 +103,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 </h4>
 <p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_active_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_bg_color' ) ); ?>" id="frm_submit_active_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_bg_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_bg_color' ) ); ?>" id="frm_submit_active_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_bg_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_active_bg_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
 	<label for="frm_submit_active_color"><?php esc_html_e( 'Text', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_color' ) ); ?>" id="frm_submit_active_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_color' ) ); ?>" id="frm_submit_active_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_active_color' ); ?> />
 </p>
 
 <p class="frm4 frm_end frm_form_field">
 	<label for="frm_submit_active_border_color"><?php esc_html_e( 'Border', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_border_color' ) ); ?>" id="frm_submit_active_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_border_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_border_color' ) ); ?>" id="frm_submit_active_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_border_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'submit_active_border_color' ); ?> />
 </p>

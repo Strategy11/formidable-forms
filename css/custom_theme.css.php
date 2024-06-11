@@ -6,8 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
-	if ( isset( $css ) && $css ) {
-		echo strip_tags( $css, 'all' ); // WPCS: XSS ok.
+	if ( ! empty( $css ) ) {
+		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
 }
@@ -16,10 +17,10 @@ if ( ! isset( $frm_style ) ) {
 	$frm_style = new FrmStyle();
 }
 
-$styles = $frm_style->get_all();
+$styles        = $frm_style->get_all();
 $default_style = $frm_style->get_default_style( $styles );
-$defaults = FrmStylesHelper::get_settings_for_output( $default_style );
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
+$important     = empty( $defaults['important_style'] ) ? '' : ' !important';
 
 ?>
 .with_frm_style{
@@ -40,6 +41,7 @@ $important = empty( $defaults['important_style'] ) ? '' : ' !important';
 	text-align:var(--form-align)<?php echo esc_html( $important ); ?>;
 }
 
+/* Keep this. This is used for Honeypot */
 input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0 30px white inset;
 }
@@ -62,15 +64,22 @@ input:-webkit-autofill {
 	margin-bottom:<?php echo esc_html( $defaults['form_desc_margin_bottom'] . $important ); ?>;
 	margin-bottom:var(--form-desc-margin-bottom)<?php echo esc_html( $important ); ?>;
 <?php } ?>
+<?php if ( isset( $defaults['form_desc_padding'] ) ) { ?>
+	padding:<?php echo esc_html( $defaults['form_desc_padding'] . $important ); ?>;
+	padding:var(--form-desc-padding)<?php echo esc_html( $important ); ?>;
+<?php } ?>
 }
 
-form input.frm_verify{
-	position:absolute;
-	left:-3000px;
+form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
+	overflow: hidden;
+	width: 0;
+	height: 0;
+	position: absolute;
 }
 
 .with_frm_style fieldset{
 	min-width:0;
+	display: block; /* Override 2021 theme */
 }
 
 .with_frm_style fieldset fieldset{
@@ -81,7 +90,7 @@ form input.frm_verify{
 }
 
 .with_frm_style .frm_form_fields > fieldset{
-<?php if ( ! empty( $defaults['fieldset'] ) ) { ?>
+<?php if ( isset( $defaults['fieldset'] ) && ( $defaults['fieldset'] || '0' === $defaults['fieldset'] ) ) { ?>
 	border-width:<?php echo esc_html( $defaults['fieldset'] . $important ); ?>;
 	border-width:var(--fieldset)<?php echo esc_html( $important ); ?>;
 <?php } ?>
@@ -131,7 +140,7 @@ legend.frm_hidden{
 	color:var(--title-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['title_margin_top'] ) ) { ?>
@@ -147,7 +156,7 @@ legend.frm_hidden{
 .with_frm_style .frm_form_field.frm_html_container,
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_color'] ) ) { ?>
@@ -225,22 +234,18 @@ legend.frm_hidden{
 .frm_form_fields_error_style,
 .with_frm_style .frm-card-element.StripeElement,
 .with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single{
+.with_frm_style .chosen-container-single .chosen-single,
+.with_frm_style .frm_slimselect.ss-main {
 	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:<?php echo esc_html( $defaults['bg_color'] . $important ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
-<?php if ( ! empty( $important ) ) { ?>
-	background-image:none !important;
-<?php } ?>
 	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	border-width:<?php echo esc_html( $defaults['field_border_width'] ); ?>;
 	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
 	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
 	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
 	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 	width:<?php echo esc_html( $defaults['field_width'] ); ?>;
@@ -250,8 +255,6 @@ legend.frm_hidden{
 	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
 	padding:<?php echo esc_html( $defaults['field_pad'] ); ?>;
 	padding:var(--field-pad)<?php echo esc_html( $important ); ?>;
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
 	box-sizing:border-box;
 	outline:none<?php echo esc_html( $important ); ?>;
 	font-weight:<?php echo esc_html( $defaults['field_weight'] ); ?>;
@@ -259,11 +262,48 @@ legend.frm_hidden{
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( ! empty( $important ) ) { ?>
+.with_frm_style input[type=text],
+.with_frm_style input[type=password],
+.with_frm_style input[type=email],
+.with_frm_style input[type=number],
+.with_frm_style input[type=url],
+.with_frm_style input[type=tel],
+.with_frm_style input[type=phone],
+.with_frm_style input[type=search],
+.with_frm_style textarea,
+.frm_form_fields_style,
+.with_frm_style .frm_scroll_box .frm_opt_container,
+.frm_form_fields_active_style,
+.frm_form_fields_error_style,
+.with_frm_style .frm-card-element.StripeElement,
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single{
+	background-image:none !important;
+}
+<?php } ?>
+
+.with_frm_style select option {
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style select option.frm-select-placeholder {
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style input[type=radio],
 .with_frm_style input[type=checkbox]{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
+	float: none;
+}
+
+.with_frm_style input[type=radio]:after,
+.with_frm_style input[type=checkbox]:after {
+	display: none; /* 2021 conflict */
 }
 
 .with_frm_style input[type=text],
@@ -276,8 +316,8 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
+	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
@@ -317,6 +357,7 @@ legend.frm_hidden{
 
 .with_frm_style .wp-editor-container textarea{
 	border:none<?php echo esc_html( $important ); ?>;
+	box-shadow:none !important;
 }
 
 .with_frm_style .mceIframeContainer{
@@ -328,6 +369,7 @@ legend.frm_hidden{
 	width:<?php echo esc_html( $defaults['auto_width'] ); ?>;
 	width:var(--auto-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
+	background-position-y: calc(50% + 3px);
 }
 
 .with_frm_style input[disabled],
@@ -355,7 +397,7 @@ legend.frm_hidden{
 .with_frm_style .frm_primary_label{
 	max-width:100%;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['font_size'] ) ) { ?>
@@ -424,17 +466,101 @@ legend.frm_hidden{
 	white-space:nowrap;
 }
 
-.with_frm_style .frm_inside_container .frm_primary_label{
-	opacity:0;
-	transition: opacity 0.1s linear;
-}
-
-.with_frm_style .frm_inside_container label.frm_visible,
 .frm_visible{
 	opacity:1;
 }
 
-.with_frm_style .frm_description{
+/* Floating labels */
+.with_frm_style .frm_inside_container {
+	position: relative;
+	padding-top: 16px;
+	padding-top: calc(0.5 * var(--field-height));
+}
+
+.with_frm_style .frm_inside_container > input,
+.with_frm_style .frm_inside_container > select,
+.with_frm_style .frm_inside_container > textarea {
+	display: block;
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container > input::-moz-placeholder,
+.with_frm_style .frm_inside_container > textarea::-moz-placeholder {
+	opacity: 0 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container > textarea:-ms-input-placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input::placeholder,
+.with_frm_style .frm_inside_container > textarea::placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > label {
+	transition: all 0.3s ease-in;
+
+	position: absolute;
+	top: 17px;
+	top: calc(1px + .5 * var(--field-height));
+	left: 3px;
+	width: 100%;
+
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
+	padding: 6px 10px;
+	padding: var(--field-pad);
+
+	font-size: 14px;
+	font-size: var(--field-font-size);
+	font-weight: normal;
+	font-weight: var(--field-weight);
+
+	pointer-events: none;
+}
+
+.with_frm_style.frm_style_lines-no-boxes .frm_inside_container > label {
+	line-height: 1;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > label {
+	top: 0;
+	left: 0;
+	padding: 0;
+	font-size: 12px;
+	font-size: calc(0.85 * var(--field-font-size));
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container.frm_label_float_top > input::-moz-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::-moz-placeholder {
+	opacity: 1 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea:-ms-input-placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+/* End floating label */
+
+.with_frm_style .frm_description,
+.with_frm_style .frm_pro_max_limit_desc{
 	clear:both;
 }
 
@@ -489,8 +615,6 @@ legend.frm_hidden{
 	padding:5px;
 <?php } ?>
 <?php if ( ! empty( $defaults['border_radius'] ) ) { ?>
-	-moz-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
 	border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
 	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 <?php } ?>
@@ -499,7 +623,7 @@ legend.frm_hidden{
 	font-size:var(--submit-font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_weight'] ) ) { ?>
@@ -557,6 +681,10 @@ legend.frm_hidden{
 
 .with_frm_style.frm_center_submit .frm_submit{
 	text-align:center;
+}
+
+.with_frm_style.frm_center_submit .frm_flex.frm_submit {
+	justify-content: center;
 }
 
 .with_frm_style .frm_inline_success .frm_submit{
@@ -639,15 +767,21 @@ legend.frm_hidden{
 	margin-left: -<?php echo absint( $loader_size / 2 ); ?>px;
 	width: <?php echo absint( $loader_size ); ?>px;
 	height: <?php echo absint( $loader_size ); ?>px;
-	-webkit-animation: spin 2s linear infinite;
-	-moz-animation:    spin 2s linear infinite;
-	-o-animation:      spin 2s linear infinite;
-	animation:         spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}
+
+.with_frm_style .frm_submit.frm_flex {
+	align-items: center;
+	gap: 2%;
+}
+
+.with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
+	order: -1;
 }
 
 <?php
 foreach ( $styles as $style ) {
-	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
+	include __DIR__ . '/_single_theme.css.php';
 	unset( $style );
 }
 
@@ -668,9 +802,10 @@ a.frm_save_draft{
 	cursor:pointer;
 }
 
-.with_frm_style a.frm_save_draft{
+.with_frm_style a.frm_save_draft,
+.with_frm_style a.frm_start_over{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 	font-size:<?php echo esc_html( $defaults['submit_font_size'] ); ?>;
@@ -739,7 +874,7 @@ a.frm_save_draft{
 .with_frm_style .frm_radio label,
 .with_frm_style .frm_checkbox label{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 	font-size:<?php echo esc_html( $defaults['check_font_size'] . $important ); ?>;
@@ -748,6 +883,7 @@ a.frm_save_draft{
 	color:var(--check-label-color)<?php echo esc_html( $important ); ?>;
 	font-weight:<?php echo esc_html( $defaults['check_weight'] . $important ); ?>;
 	font-weight:var(--check-weight)<?php echo esc_html( $important ); ?>;
+	line-height: 1.3;
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -765,25 +901,63 @@ a.frm_save_draft{
 	vertical-align:middle;
 }
 
-.with_frm_style .frm_radio input[type=radio]{
-	-webkit-appearance:radio;
+.with_frm_style .frm_radio input[type=radio]
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+, .with_frm_style .frm_scale input[type=radio]
+<?php endif; ?>
+{
 	border-radius:50%;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-	-webkit-appearance:checkbox;
 	border-radius:0;
 }
 
 .with_frm_style .frm_radio input[type=radio],
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio],
+<?php endif; ?>
 .with_frm_style .frm_checkbox input[type=checkbox]{
+	appearance: none;
+	background-color: var(--bg-color);
 	flex: none;
-	display:inline-block;
-	margin:4px 5px 0 0;
-	width:auto;
-	border:none;
-	vertical-align:baseline;
+	display:inline-block !important;
+	margin: 0 5px 0 0;
+	color: var(--border-color);
+	width: 18px;
+	min-width: 18px;
+	height: 18px;
+	border: 1px solid currentColor;
+	border-color: var(--border-color);
+	vertical-align: middle;
 	position: initial; /* override Bootstrap */
+	padding: 0;
+}
+
+.with_frm_style .frm_radio input[type=radio]:before,
+<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+.with_frm_style .frm_scale input[type=radio]:before,
+<?php endif; ?>
+.with_frm_style .frm_checkbox input[type=checkbox]:before {
+	content: '';
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 10px 10px var(--text-color);
+	display: block;
+	margin: 2px 0 0 2px;
+}
+
+.with_frm_style .frm_checkbox input[type=checkbox]:before{
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+	border-radius: 0;
+}
+
+.with_frm_style .frm_radio input[type=radio]:checked:before,
+.with_frm_style .frm_checkbox input[type=checkbox]:checked:before {
+	transform: scale(1);
 }
 
 .with_frm_style :invalid,
@@ -805,8 +979,6 @@ a.frm_save_draft{
 .with_frm_style .frm_error_style,
 .with_frm_style .frm_message,
 .frm_success_style{
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
 	border-radius:4px;
 	padding:15px;
 }
@@ -1061,7 +1233,7 @@ select.frm_loading_lookup{
 	color: transparent !important;
 }
 
-<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
 .frm_conf_field.frm_left_container .frm_primary_label{
 	display:none;
@@ -1070,8 +1242,6 @@ select.frm_loading_lookup{
 .wp-editor-wrap *,
 .wp-editor-wrap *:after,
 .wp-editor-wrap *:before{
-	-webkit-box-sizing:content-box;
-	-moz-box-sizing:content-box;
 	box-sizing:content-box;
 }
 
@@ -1098,7 +1268,10 @@ select.frm_loading_lookup{
 
 .frm_grid .frm_error,
 .frm_grid_first .frm_error,
-.frm_grid_odd .frm_error{
+.frm_grid_odd .frm_error,
+.frm_grid .frm_limit_error,
+.frm_grid_first .frm_limit_error,
+.frm_grid_odd .frm_limit_error{
 	display:none;
 }
 
@@ -1350,8 +1523,6 @@ select.frm_loading_lookup{
 	border-width:var(--field-border-width);
 	border-style:<?php echo esc_html( $defaults['field_border_style'] ); ?>;
 	border-style:var(--field-border-style);
-	-moz-border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
 	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
 	border-radius:var(--border-radius);
 	width:<?php echo esc_html( $defaults['field_width'] ); ?>;
@@ -1361,8 +1532,6 @@ select.frm_loading_lookup{
 	font-size:var(--field-font-size);
 	padding:<?php echo esc_html( $defaults['field_pad'] ); ?>;
 	padding:var(--field-pad);
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
 	box-sizing:border-box;
 	outline:none<?php echo esc_html( $important ); ?>;
 	font-weight:normal;
@@ -1377,8 +1546,6 @@ select.frm_loading_lookup{
 	background-color:transparent !important;
 	border:none !important;
 	font-weight:bold;
-	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
 	width:auto !important;
 	height:auto !important;
 	box-shadow:none !important;
@@ -1400,8 +1567,6 @@ select.frm_loading_lookup{
 .frm_form_field.frm_total textarea:focus{
 	background-color:transparent;
 	border:none;
-	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
 	box-shadow:none;
 }
 
@@ -1428,9 +1593,23 @@ select.frm_loading_lookup{
 	display:block;
 }
 
-/* Fonts */
-<?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
-<?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-middle,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-last {
+	margin-bottom: 0 !important;
+}
+
+
+<?php
+/**
+ * Call action so other plugins can add additional CSS.
+ *
+ * @param array $args {
+ *     @type array $defaults
+ * }
+ */
+do_action( 'frm_include_front_css', compact( 'defaults' ) );
+?>
 
 /* Responsive */
 
@@ -1477,7 +1656,6 @@ select.frm_loading_lookup{
 		border-right:1px solid #d3d3d3;
 		border-radius:4px;
 		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
-		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
 
 	.with_frm_style .g-recaptcha iframe,
@@ -1487,9 +1665,4 @@ select.frm_loading_lookup{
 }
 <?php
 
-$frm_settings = FrmAppHelper::get_settings();
-if ( $frm_settings->old_css ) {
-	readfile( dirname( __FILE__ ) . '/frm_old_grids.css' );
-}
-
-echo strip_tags( $defaults['custom_css'] ); // WPCS: XSS ok.
+echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

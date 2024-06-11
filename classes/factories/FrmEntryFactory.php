@@ -18,13 +18,23 @@ class FrmEntryFactory {
 	 * @return FrmEntryFormatter|FrmProEntryFormatter
 	 */
 	public static function entry_formatter_instance( $atts ) {
+		$formatter_class = 'FrmEntryFormatter';
+
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$entry_formatter = new FrmProEntryFormatter( $atts );
-		} else {
-			$entry_formatter = new FrmEntryFormatter( $atts );
+			$formatter_class = 'FrmProEntryFormatter';
 		}
 
-		return $entry_formatter;
+		/**
+		 * Allows changing entry formatter class name.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $formatter_class Entry formatter class name.
+		 * @param array  $atts            See {@see FrmEntriesController::show_entry_shortcode()}.
+		 */
+		$formatter_class = apply_filters( 'frm_entry_formatter_class', $formatter_class, $atts );
+
+		return new $formatter_class( $atts );
 	}
 
 	/**
@@ -33,7 +43,7 @@ class FrmEntryFactory {
 	 * @since 2.04
 	 *
 	 * @param int|string $form_id
-	 * @param array $atts
+	 * @param array      $atts
 	 *
 	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */

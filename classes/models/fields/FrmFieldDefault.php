@@ -15,7 +15,9 @@ class FrmFieldDefault extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	/**
-	 * @param $type string
+	 * @param string $type
+	 *
+	 * @return void
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $type ) ) {
@@ -24,6 +26,9 @@ class FrmFieldDefault extends FrmFieldType {
 		parent::set_type( $type );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 
@@ -34,12 +39,16 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_end_clean();
 
 		if ( empty( $input_html ) ) {
-			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
+			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
-			echo $input_html; // WPCS: XSS ok.
+			echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
+	/**
+	 * @param array $args
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$pass_args = array(
 			'errors'  => $args['errors'],
@@ -51,6 +60,6 @@ class FrmFieldDefault extends FrmFieldType {
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
-		return $input_html;
+		return is_string( $input_html ) ? $input_html : '';
 	}
 }

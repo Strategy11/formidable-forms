@@ -16,12 +16,11 @@ if ( isset( $message ) && $message != '' ) {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
 		// we need to allow scripts here for javascript in the success message
-		echo $message; // WPCS: XSS ok.
+		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 
-if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
-
+if ( ! empty( $errors ) && is_array( $errors ) ) {
 	if ( isset( $form ) && is_object( $form ) ) {
 		FrmFormsHelper::get_scroll_js( $form->id );
 	}
@@ -41,7 +40,7 @@ if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
 	?>
 </div>
 	<?php
-}
+}//end if
 
 if ( isset( $include_extra_container ) ) {
 	?>

@@ -9,16 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryFormatter {
 
 	/**
-	 * @var stdClass
 	 * @since 2.04
+	 *
+	 * @var stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
-	 * @var FrmEntryValues
+	 * @var FrmEntryValues|null
 	 * @since 2.04
 	 */
-	protected $entry_values = null;
+	protected $entry_values;
 
 	/**
 	 * @var bool
@@ -57,10 +58,10 @@ class FrmEntryFormatter {
 	protected $direction = 'ltr';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var bool
@@ -91,7 +92,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 */
 	public function __construct( $atts ) {
 		$this->init_entry( $atts );
@@ -196,6 +197,23 @@ class FrmEntryFormatter {
 				$this->format = 'table';
 			}
 		}
+
+		/**
+		 * Allows modifying the format property of FrmEntryFormatter object.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $format The format.
+		 * @param array  $args   Includes `atts`, `entry`.
+		 */
+		$this->format = apply_filters(
+			'frm_entry_formatter_format',
+			$this->format,
+			array(
+				'atts'  => $atts,
+				'entry' => $this->entry,
+			)
+		);
 	}
 
 	/**
@@ -207,7 +225,7 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_array_key( $atts ) {
-		if ( isset( $atts['array_key'] ) && $atts['array_key'] == 'id' ) {
+		if ( isset( $atts['array_key'] ) && $atts['array_key'] === 'id' ) {
 			$this->array_key = 'id';
 		}
 	}
@@ -332,14 +350,15 @@ class FrmEntryFormatter {
 		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format' );
+		$unset = array( 'id', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
 			}
 		}
 
-		$this->atts = $atts;
+		$this->atts          = $atts;
+		$this->atts['entry'] = $this->entry;
 	}
 
 	/**
@@ -349,10 +368,10 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function get_key_or_id( $field_value ) {
-		return $this->array_key == 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
+		return $this->array_key === 'key' ? $field_value->get_field_key() : $field_value->get_field_id();
 	}
 
 	/**
@@ -383,7 +402,24 @@ class FrmEntryFormatter {
 			$content = '';
 		}
 
-		return $content;
+		/**
+		 * Allows modifying the formatted entry values content.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $content The formatted entry values content.
+		 * @param array  $args    Includes `entry`, `atts`, `format`, `entry_values`.
+		 */
+		return apply_filters(
+			'frm_formatted_entry_values_content',
+			$content,
+			array(
+				'entry'        => $this->entry,
+				'atts'         => $this->atts,
+				'format'       => $this->format,
+				'entry_values' => $this->entry_values,
+			)
+		);
 	}
 
 	/**
@@ -416,7 +452,7 @@ class FrmEntryFormatter {
 	 * @param string $content
 	 */
 	protected function add_field_values_to_content( &$content ) {
-		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
+		foreach ( $this->entry_values->get_field_values() as $field_value ) {
 
 			/**
 			 * @var FrmFieldValue $field_value
@@ -481,7 +517,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param array $output
+	 * @param array         $output
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
@@ -503,7 +539,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param string $label
-	 * @param mixed $display_value
+	 * @param mixed  $display_value
 	 * @param string $content
 	 */
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
@@ -522,7 +558,7 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_field_value_to_content( $field_value, &$content ) {
 		if ( $this->is_extra_field( $field_value ) ) {
@@ -539,7 +575,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_row_for_extra_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -559,7 +595,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_row_for_standard_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -580,7 +616,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_html_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_html_display_value_for_extra_fields( $field_value, $display_value );
@@ -599,7 +635,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param string $content
+	 * @param string        $content
 	 */
 	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
@@ -644,7 +680,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param mixed $display_value
+	 * @param mixed         $display_value
 	 */
 	protected function prepare_html_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value();
@@ -656,7 +692,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param FrmFieldValue $field_value
-	 * @param mixed $display_value
+	 * @param mixed         $display_value
 	 */
 	protected function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value() . "\r\n";
@@ -667,8 +703,8 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param FrmProFieldValue $field_value
-	 * @param string $content
+	 * @param FrmFieldValue $field_value
+	 * @param string        $content
 	 */
 	protected function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
@@ -787,7 +823,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param array $value_args
+	 * @param array  $value_args
 	 *   $value_args = [
 	 *     'label' => (string) The label. Required
 	 *     'value' => (mixed) The value to add. Required
@@ -819,7 +855,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param mixed $display_value
+	 * @param mixed  $display_value
 	 * @param string $field_type
 	 *
 	 * @return mixed|string
@@ -840,7 +876,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param mixed $display_value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
@@ -854,13 +890,14 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param array|string|int $value
+	 * @param array|int|string $value
 	 *
-	 * @return string|int
+	 * @return int|string
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
+			$separator = isset( $this->atts['array_separator'] ) ? $this->atts['array_separator'] : ', ';
+			$value     = implode( $separator, $value );
 		}
 
 		return $value;

@@ -5,16 +5,68 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormAction {
 
-	public $id_base;         // Root id for all actions of this type.
-	public $name;            // Name for this action type.
-	public $option_name;
-	public $action_options;  // Option array passed to wp_register_sidebar_widget()
-	public $control_options; // Option array passed to wp_register_widget_control()
+	/**
+	 * Root id for all actions of this type.
+	 *
+	 * @var string
+	 */
+	public $id_base;
 
-	public $form_id;         // The ID of the form to evaluate
-	public $number = false;  // Unique ID number of the current instance.
-	public $id = '';         // Unique ID string of the current instance (id_base-number)
-	public $updated = false; // Set true when we update the data after a POST submit - makes sure we don't do it twice.
+	/**
+	 * Name for this action type.
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * Name of the option used to store the settings for this action type.
+	 *
+	 * @var string
+	 */
+	public $option_name;
+
+	/**
+	 * Option array passed to wp_register_sidebar_widget().
+	 *
+	 * @var array
+	 */
+	public $action_options;
+
+	/**
+	 * Option array passed to wp_register_widget_control().
+	 *
+	 * @var array
+	 */
+	public $control_options;
+
+	/**
+	 * The ID of the form to evaluate.
+	 *
+	 * @var int
+	 */
+	public $form_id;
+
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @var int
+	 */
+	public $number = false;
+
+	/**
+	 * Unique ID string of the current instance (id_base-number).
+	 *
+	 * @var string
+	 */
+	public $id = '';
+
+	/**
+	 * Set true when we update the data after a POST submit - makes sure we don't do it twice.
+	 *
+	 * @var bool
+	 */
+	public $updated = false;
 
 	// Member functions that you must over-ride.
 
@@ -23,8 +75,8 @@ class FrmFormAction {
 	 * The newly calculated value of $instance should be returned.
 	 * If "false" is returned, the instance won't be saved/updated.
 	 *
-	 * @param array $new_instance New settings for this instance as input by the user via form()
-	 * @param array $old_instance Old settings for this instance
+	 * @param array $new_instance New settings for this instance as input by the user via form().
+	 * @param array $old_instance Old settings for this instance.
 	 *
 	 * @return array Settings to save or bool false to cancel saving
 	 */
@@ -35,7 +87,8 @@ class FrmFormAction {
 	/**
 	 * Echo the settings update form
 	 *
-	 * @param array $instance Current settings
+	 * @param WP_Post $instance Current settings.
+	 * @param array   $args
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -50,6 +103,9 @@ class FrmFormAction {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_switch_fields() {
 		return array();
 	}
@@ -66,12 +122,12 @@ class FrmFormAction {
 	 * @param string $id_base Optional Base ID for the widget, lower case,
 	 * if left empty a portion of the widget's class name will be used. Has to be unique.
 	 * @param string $name Name for the widget displayed on the configuration page.
-	 * @param array $action_options Optional Passed to wp_register_sidebar_widget()
-	 *   - description: shown on the configuration page
-	 *   - classname
-	 * @param array $control_options Optional Passed to wp_register_widget_control()
-	 *   - width: required if more than 250px
-	 *   - height: currently not used but may be needed in the future
+	 * @param array  $action_options Optional Passed to wp_register_sidebar_widget().
+	 *    - description: shown on the configuration page.
+	 *    - classname.
+	 * @param array  $control_options Optional Passed to wp_register_widget_control().
+	 *    - width: required if more than 250px.
+	 *    - height: currently not used but may be needed in the future.
 	 */
 	public function __construct( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -94,6 +150,7 @@ class FrmFormAction {
 			'tooltip'     => $name,
 			'group'       => $id_base,
 			'color'       => '',
+			'keywords'    => '',
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
@@ -106,11 +163,11 @@ class FrmFormAction {
 			$action_options['color'] = 'var(--' . reset( $colors ) . ')';
 		}
 
-		$upgrade_class = $action_options['classes'] === 'frm_show_upgrade';
+		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
-		} elseif ( ! isset( $action_options['classes'] ) || empty( $action_options['classes'] ) || $upgrade_class ) {
+		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
 		}
 
@@ -132,7 +189,7 @@ class FrmFormAction {
 	/**
 	 * Help to switch old field id by new field id for duplicate form
 	 *
-	 * @param  string $action id of the field that needs to be switched
+	 * @param string $action id of the field that needs to be switched.
 	 *
 	 * @return string
 	 */
@@ -173,12 +230,12 @@ class FrmFormAction {
 	 *
 	 * This function should be used in form() methods to create name attributes for fields to be saved by update()
 	 *
-	 * @param string $field_name Field name
+	 * @param string $field_name Field name.
 	 *
 	 * @return string Name attribute for $field_name
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		$name = $this->option_name . '[' . $this->number . ']';
+		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
 		$name .= '[' . $field_name . ']';
 
@@ -190,7 +247,7 @@ class FrmFormAction {
 	 *
 	 * This function should be used in form() methods to create id attributes for fields to be saved by update()
 	 *
-	 * @param string $field_name Field name
+	 * @param string $field_name Field name.
 	 *
 	 * @return string ID attribute for $field_name
 	 */
@@ -198,13 +255,18 @@ class FrmFormAction {
 		return $field_name . '_' . $this->number;
 	}
 
-	// Private Function. Don't worry about this.
-
+	/**
+	 * @param int|string $number
+	 * @return void
+	 */
 	public function _set( $number ) {
 		$this->number = $number;
 		$this->id     = $this->id_base . '-' . $number;
 	}
 
+	/**
+	 * @return object
+	 */
 	public function prepare_new( $form_id = false ) {
 		if ( $form_id ) {
 			$this->form_id = $form_id;
@@ -243,6 +305,9 @@ class FrmFormAction {
 		return $this->save_settings( $action );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
@@ -259,15 +324,16 @@ class FrmFormAction {
 		}
 	}
 
-	/* Check if imported action should be created or updated
+	/**
+	 * Check if imported action should be created or updated.
 	 *
 	 * @since 2.0
 	 *
 	 * @param array $action
-	 * @return integer $post_id
+	 * @return int $post_id
 	 */
 	public function maybe_create_action( $action, $forms ) {
-		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] == 'updated' ) {
+		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
 			$post_id                = $this->save_settings( $action );
@@ -280,6 +346,9 @@ class FrmFormAction {
 		return $post_id;
 	}
 
+	/**
+	 * @param object $action
+	 */
 	public function duplicate_one( $action, $form_id ) {
 		global $frm_duplicate_ids;
 
@@ -332,7 +401,7 @@ class FrmFormAction {
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
-		}
+		}//end if
 
 		return $action;
 	}
@@ -352,9 +421,10 @@ class FrmFormAction {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {
 			// Sanitizing removes scripts and <email> type of values.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
 			return;
@@ -383,8 +453,7 @@ class FrmFormAction {
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
-
-			$instance = $this->update( $new_instance, $old_instance );
+			$instance                   = $this->update( $new_instance, $old_instance );
 
 			/**
 			 * Filter an action's settings before saving.
@@ -397,12 +466,11 @@ class FrmFormAction {
 			 * @param array $instance The current widget instance's settings.
 			 * @param array $new_instance Array of new widget settings.
 			 * @param array $old_instance Array of old widget settings.
-			 * @param WP_Widget $this The current widget instance.
 			 */
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
 			$instance['post_content'] = apply_filters( 'frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
-			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this );
+			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
 
 			if ( false !== $instance ) {
 				$all_instances[ $number ] = $instance;
@@ -411,7 +479,7 @@ class FrmFormAction {
 			$action_ids[] = $this->save_settings( $instance );
 
 			$this->updated = true;
-		}
+		}//end foreach
 
 		return $action_ids;
 	}
@@ -420,19 +488,29 @@ class FrmFormAction {
 	 * If the status of the action has changed, update it
 	 *
 	 * @since 3.04
+	 *
+	 * @param array          $new_instance
+	 * @param array|stdClass $old_instance
+	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
-		if ( $new_instance['post_status'] !== $old_instance->post_status ) {
-			self::clear_cache();
-			wp_update_post(
-				array(
-					'ID'          => $new_instance['ID'],
-					'post_status' => $new_instance['post_status'],
-				)
-			);
+		if ( ! is_object( $old_instance ) || $new_instance['post_status'] === $old_instance->post_status ) {
+			return;
 		}
+
+		self::clear_cache();
+		wp_update_post(
+			array(
+				'ID'          => $new_instance['ID'],
+				'post_status' => $new_instance['post_status'],
+			)
+		);
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
 
@@ -502,8 +580,11 @@ class FrmFormAction {
 
 	/**
 	 * @since 3.04
+	 *
 	 * @param array  $args
 	 * @param string $default_status
+	 *
+	 * @return void
 	 */
 	protected static function prepare_get_action( &$args, $default_status = 'publish' ) {
 		if ( is_numeric( $args ) ) {
@@ -543,7 +624,12 @@ class FrmFormAction {
 	}
 
 	public function get_all( $form_id = false, $atts = array() ) {
+		if ( is_array( $atts ) && ! isset( $atts['limit'] ) && $this->action_options['limit'] > 99 ) {
+			$atts['limit'] = $this->action_options['limit'];
+		}
+
 		self::prepare_get_action( $atts, 'any' );
+
 		$limit = $atts['limit'];
 
 		if ( $form_id ) {
@@ -556,8 +642,8 @@ class FrmFormAction {
 		$frm_vars['action_type'] = $type;
 
 		add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
-		$query = self::action_args( $form_id, $limit );
-		$query['post_status'] = $atts['post_status'];
+		$query                     = self::action_args( $form_id, $limit );
+		$query['post_status']      = $atts['post_status'];
 		$query['suppress_filters'] = false;
 
 		$actions = FrmDb::check_cache( json_encode( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
@@ -587,6 +673,9 @@ class FrmFormAction {
 		return $settings;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function action_args( $form_id = 0, $limit = 99 ) {
 		$args = array(
 			'post_type'   => FrmFormActionsController::$action_post_type,
@@ -603,6 +692,9 @@ class FrmFormAction {
 		return $args;
 	}
 
+	/**
+	 * @param array|WP_Post $action
+	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
 		$action->post_excerpt = sanitize_title( $action->post_excerpt );
@@ -614,7 +706,7 @@ class FrmFormAction {
 
 		foreach ( $default_values as $k => $vals ) {
 			if ( is_array( $vals ) && ! empty( $vals ) ) {
-				if ( 'event' == $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
 				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
@@ -628,6 +720,9 @@ class FrmFormAction {
 		return $action;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function destroy( $form_id = false, $type = 'default' ) {
 		global $wpdb;
 
@@ -653,6 +748,8 @@ class FrmFormAction {
 	 * Delete the action cache when a form action is created, deleted, or updated
 	 *
 	 * @since 2.0.5
+	 *
+	 * @return void
 	 */
 	public static function clear_cache() {
 		FrmDb::cache_delete_group( 'frm_actions' );
@@ -662,6 +759,9 @@ class FrmFormAction {
 		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_global_defaults() {
 		$defaults = $this->get_defaults();
 
@@ -692,7 +792,7 @@ class FrmFormAction {
 	 * Migrate settings from form->options into new action.
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
-		$action        = $this->prepare_new( $form->id );
+		$action = $this->prepare_new( $form->id );
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
 		// fill with existing options
@@ -742,7 +842,7 @@ class FrmFormAction {
 		$stop         = false;
 		$met          = array();
 
-		if ( ! isset( $notification['conditions'] ) || empty( $notification['conditions'] ) ) {
+		if ( empty( $notification['conditions'] ) ) {
 			return $stop;
 		}
 
@@ -761,16 +861,16 @@ class FrmFormAction {
 
 			$stop = FrmFieldsHelper::value_meets_condition( $observed_value, $condition['hide_field_cond'], $condition['hide_opt'] );
 
-			if ( $notification['conditions']['send_stop'] == 'send' ) {
+			if ( $notification['conditions']['send_stop'] === 'send' ) {
 				$stop = $stop ? false : true;
 			}
 
 			$met[ $stop ] = $stop;
-		}
+		}//end foreach
 
-		if ( $notification['conditions']['any_all'] == 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
-			$stop = ( $notification['conditions']['send_stop'] == 'send' );
-		} elseif ( $notification['conditions']['any_all'] == 'any' && $notification['conditions']['send_stop'] == 'send' && isset( $met[0] ) ) {
+		if ( $notification['conditions']['any_all'] === 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
+			$stop = ( $notification['conditions']['send_stop'] === 'send' );
+		} elseif ( $notification['conditions']['any_all'] === 'any' && $notification['conditions']['send_stop'] === 'send' && isset( $met[0] ) ) {
 			$stop = false;
 		}
 
@@ -781,16 +881,17 @@ class FrmFormAction {
 	 * Prepare the logic value for comparison against the entered value
 	 *
 	 * @since 2.01.02
-	 * @deprecated 4.06.02
 	 *
 	 * @param array|string $logic_value
+	 *
+	 * @return void
 	 */
 	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
 		if ( is_array( $logic_value ) ) {
 			$logic_value = reset( $logic_value );
 		}
 
-		if ( $logic_value == 'current_user' ) {
+		if ( $logic_value === 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
 
@@ -806,10 +907,9 @@ class FrmFormAction {
 	 * Get the value from a specific field and entry
 	 *
 	 * @since 2.01.02
-	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
-	 * @param int $field_id
+	 * @param int    $field_id
 	 *
 	 * @return array|bool|mixed|string
 	 */
@@ -833,6 +933,11 @@ class FrmFormAction {
 		return $observed_value;
 	}
 
+	/**
+	 * @param string $class
+	 *
+	 * @return array
+	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
 			'classes' => 'frm_icon_font ' . $class,
@@ -853,6 +958,9 @@ class FrmFormAction {
 		return apply_filters( 'frm_action_triggers', $triggers );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function render_conditional_logic_call_to_action() {
 		?>
 			<h3>
@@ -863,7 +971,29 @@ class FrmFormAction {
 		<?php
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function get_upgrade_text() {
 		return __( 'Conditional form actions', 'formidable' );
+	}
+
+	/**
+	 * Gets form fields for form action settings.
+	 *
+	 * @since 6.10
+	 *
+	 * @param int $form_id Form ID.
+	 * @return object[]
+	 */
+	protected function get_form_fields( $form_id ) {
+		// Get form fields, include embedded and repeater child fields.
+		$form_fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+		return array_filter(
+			$form_fields,
+			function ( $form_field ) {
+				return ! FrmField::is_no_save_field( $form_field->type );
+			}
+		);
 	}
 }

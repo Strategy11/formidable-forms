@@ -4,13 +4,9 @@
  */
 
 .frm-block-intro-screen .frm-block-intro-content {
-	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-direction: column;
 	flex-direction: column;
-	-ms-flex-pack: center;
 	justify-content: center;
-	-ms-flex-align: center;
 	align-items: center;
 	text-align: center;
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
@@ -28,6 +24,10 @@
 	color: #4d4d4d;
 }
 
+.frm-block-intro-content select + span svg {
+	margin: unset;
+}
+
 .editor-styles-wrapper h2.frm-block-title {
 	color: #4d4d4d;
 	font-weight: 500;
@@ -42,6 +42,16 @@
 	fill: #f05a24;
 }
 
+.frm-block-intro-content .dashicons-feedback,
+.frm-block-intro-content .frm_white_label_icon {
+	width:120px;
+	height:120px;
+}
+.frm-block-intro-content .dashicons-feedback:before,
+.frm-block-intro-content .frm_white_label_icon:before {
+	font-size:120px;
+}
+
 .frm-block-selector-screen {
 	margin-bottom: 15px;
 }
@@ -53,6 +63,9 @@
 .frm-view-filter-component label {
 	font-weight: 600;
 }
+.frm-view-filter-component .components-radio-control__option {
+	flex-wrap: wrap;
+}
 
 .components-panel__row.frm-row-small-top-margin {
 	margin-top: 5px;
@@ -60,4 +73,21 @@
 
 .frm-admin-loading {
 	width: 200px;
+}
+
+.editor-styles-wrapper .frm_repeat_buttons i {
+	/* Avoid font-style: italic conflicts. The +/- icon should not be italic */
+	font-style: unset;
+}
+
+.editor-styles-wrapper .wp-block-post-content .with_frm_style .frm_repeat_buttons .frm_button {
+	/* Prevent blue anchor text in Add/Remove buttons */
+	color: var(--submit-text-color) !important;
+	/* Ensure consistent background color on focus for Add/Remove buttons */
+	background: var(--submit-bg-color) !important;
+}
+
+/* Disables all interactions with form fields */
+.editor-styles-wrapper .frm_form_fields * {
+	pointer-events: none;
 }

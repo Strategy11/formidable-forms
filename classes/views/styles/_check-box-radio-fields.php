@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'check_label_color' ) ); ?>" id="frm_check_label_color" class="hex" value="<?php echo esc_attr( $style->post_content['check_label_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'check_label_color' ) ); ?>" id="frm_check_label_color" class="hex" value="<?php echo esc_attr( $style->post_content['check_label_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'check_label_color' ); ?> />
 </p>
 <p class="frm4 frm_form_field">
 	<label><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
