@@ -570,10 +570,9 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * 
 	 * @param {HTMLElement} field
 	 * @param {string}      messageType
-	 * @return {string}
+	 * @return {string} The error message to display.
 	 */
 	function getFieldValidationMessage( field, messageType ) {
 		let msg = field.getAttribute( messageType );
@@ -591,7 +590,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {string}      msg
 	 * @param {HTMLElement} field
-	 * @return {string}
+	 * @return {string} The error HTML to use.
 	 */
 	function wrapErrorHtml( msg, field ) {
 		let errorHtml = field.getAttribute( 'data-error-html' );
