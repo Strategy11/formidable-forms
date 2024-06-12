@@ -761,7 +761,7 @@ class FrmEntry {
 	 *
 	 * @return int
 	 */
-	public static function get_is_draft_value( $values ) {
+	private static function get_is_draft_value( $values ) {
 		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
 			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
