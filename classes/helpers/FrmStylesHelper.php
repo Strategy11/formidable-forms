@@ -724,10 +724,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 5.5.1
-	 * @deprecated x.x
+	 * @deprecated 6.10
 	 * @return void
 	 */
 	public static function maybe_include_font_icon_css() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.10' );
 	}
 }

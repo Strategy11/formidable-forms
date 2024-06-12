@@ -52,15 +52,25 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 ?>
 </div>
 <?php
-
-$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
-
 $pass_args = array(
 	'form'           => $form,
 	'action_control' => $action_control,
 	'action_key'     => $action_key,
 	'values'         => $values,
 );
+
+/**
+ * Fires before form action settings.
+ *
+ * @since 6.10
+ *
+ * @param object $form_action Form action object.
+ * @param array  $pass_args   Pass args.
+ */
+do_action( 'frm_before_action_settings', $form_action, $pass_args );
+
+$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
+
 do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 // Show Conditional logic indicator.
