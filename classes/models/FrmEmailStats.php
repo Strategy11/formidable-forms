@@ -247,6 +247,6 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @return mixed
 	 */
 	public function get_prop( $prop ) {
-		return $this->$prop ? $this->$prop : '';
+		return $this->$prop;
 	}
 }
