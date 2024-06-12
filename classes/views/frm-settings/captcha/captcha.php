@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 	<p>
-		<label for="frm_re_multi">
+		<label>
 			<input type="checkbox" name="frm_re_multi" id="frm_re_multi"
 			value="1" <?php checked( $frm_settings->re_multi, 1 ); ?> />
 			<?php esc_html_e( 'Allow multiple reCAPTCHAs to be used on a single page', 'formidable' ); ?>

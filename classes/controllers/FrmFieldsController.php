@@ -83,7 +83,7 @@ class FrmFieldsController {
 	 * @param string $field_type
 	 * @param int    $form_id
 	 *
-	 * @return array|bool
+	 * @return array|false
 	 */
 	public static function include_new_field( $field_type, $form_id ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
@@ -190,6 +190,11 @@ class FrmFieldsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array        $field
+	 * @param array        $display
+	 * @param FrmFieldType $field_info
+	 * @return string
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
 		$li_classes  = $field_info->form_builder_classes( $display['type'] );
@@ -252,7 +257,7 @@ class FrmFieldsController {
 		$opts  = array_map( 'trim', $opts );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
-		$field['separate_value'] = ( $separate === 'true' );
+		$field['separate_value'] = $separate === 'true';
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
@@ -293,6 +298,7 @@ class FrmFieldsController {
 	 * @since 4.0
 	 *
 	 * @param array $atts - Includes field array, field_obj, display array, values array.
+	 * @return void
 	 */
 	public static function load_single_field_settings( $atts ) {
 		$field     = $atts['field'];
@@ -411,6 +417,10 @@ class FrmFieldsController {
 		return $types;
 	}
 
+	/**
+	 * @param string $type
+	 * @return string
+	 */
 	public static function change_type( $type ) {
 		$type_switch = array(
 			'scale'   => 'radio',
@@ -437,8 +447,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array  $settings
-	 * @param object $field_info
+	 * @param array       $settings
+	 * @param object|null $field_info
 	 *
 	 * @return array
 	 */
@@ -457,6 +467,7 @@ class FrmFieldsController {
 	 * @since 3.0
 	 *
 	 * @param array $field
+	 * @return void
 	 */
 	public static function show_format_option( $field ) {
 		$attributes          = array();
@@ -497,6 +508,11 @@ class FrmFieldsController {
 		return $add_html;
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $class
+	 * @return void
+	 */
 	private static function add_input_classes( $field, array &$class ) {
 		if ( ! empty( $field['input_class'] ) ) {
 			$class[] = $field['input_class'];
@@ -511,6 +527,11 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @return void
+	 */
 	private static function add_html_size( $field, array &$add_html ) {
 		$size_fields = array(
 			'select',
@@ -540,6 +561,11 @@ class FrmFieldsController {
 		self::add_html_cols( $field, $add_html );
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @return void
+	 */
 	private static function add_html_cols( $field, array &$add_html ) {
 		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ), true ) ) {
 			return;
@@ -565,6 +591,11 @@ class FrmFieldsController {
 		$add_html['cols'] = 'cols="' . absint( $size ) . '"';
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @return void
+	 */
 	private static function add_html_length( $field, array &$add_html ) {
 		// Check for max setting and if this field accepts maxlength.
 		$fields = array(
@@ -586,6 +617,12 @@ class FrmFieldsController {
 		$add_html['maxlength'] = 'maxlength="' . esc_attr( $field['max'] ) . '"';
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @param array $class
+	 * @return void
+	 */
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
 		if ( $field['default_value'] != '' ) {
 			if ( is_array( $field['default_value'] ) ) {
@@ -688,10 +725,11 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Use HMTL5 placeholder with js fallback
+	 * Use HMTL5 placeholder with js fallback.
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 * @return void
 	 */
 	private static function add_placeholder_to_input( $field, &$add_html ) {
 		if ( FrmFieldsHelper::is_placeholder_field_type( $field['type'] ) ) {
@@ -699,6 +737,11 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @return void
+	 */
 	private static function add_frmval_to_input( $field, &$add_html ) {
 		if ( $field['placeholder'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
@@ -769,6 +812,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 * @return void
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
 		$form = self::get_form_for_js_validation( $field );
@@ -849,6 +893,7 @@ class FrmFieldsController {
 	 * @since 3.06.01
 	 * @param array $field
 	 * @param array $add_html
+	 * @return void
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
 		$excluded_field_types =
@@ -865,6 +910,11 @@ class FrmFieldsController {
 		$add_html['aria-required'] = 'aria-required="true"';
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 * @return void
+	 */
 	private static function add_shortcodes_to_html( $field, array &$add_html ) {
 		if ( FrmField::is_option_empty( $field, 'shortcodes' ) ) {
 			return;
@@ -892,12 +942,13 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Add pattern attribute
+	 * Add pattern attribute.
 	 *
 	 * @since 3.0
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 * @return void
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
 		$has_format   = FrmField::is_option_true_in_array( $field, 'format' );
@@ -929,7 +980,7 @@ class FrmFieldsController {
 
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
-			$opt = ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+			$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
 		}
 
 		return $opt;
