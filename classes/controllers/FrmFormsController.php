@@ -1211,10 +1211,20 @@ class FrmFormsController {
 	 * @return array
 	 */
 	private static function get_fields_for_form( $form_id ) {
-		$fields = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ) );
+		global $wpdb;
+
+		$fields = FrmDb::get_results(
+			"{$wpdb->prefix}frm_forms AS fr LEFT OUTER JOIN {$wpdb->prefix}frm_fields AS fi ON fi.form_id = fr.id",
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			)
+		);
 
 		foreach ( $fields as $field ) {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
+			FrmAppHelper::unserialize_or_decode( $field->options );
 		}
 		return wp_unslash( $fields );
 	}
