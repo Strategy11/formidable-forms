@@ -569,24 +569,45 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * 
+	 * @param {HTMLElement} field
+	 * @param {string}      messageType
+	 * @return {string}
+	 */
 	function getFieldValidationMessage( field, messageType ) {
-		let msg, errorHtml;
-
-		msg = field.getAttribute( messageType );
+		let msg = field.getAttribute( messageType );
 		if ( null === msg ) {
 			msg = '';
 		}
 
 		if ( '' !== msg && shouldWrapErrorHtmlAroundMessageType( messageType ) ) {
-			errorHtml = field.getAttribute( 'data-error-html' );
-			if ( null !== errorHtml ) {
-				errorHtml = errorHtml.replace( /\+/g, '%20' );
-				msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
-				msg = msg.replace( '[key]', getFieldId( field, false ) );
-			}
+			msg = wrapErrorHtml( msg, field );
 		}
 
 		return msg;
+	}
+
+	/**
+	 * @param {string}      msg
+	 * @param {HTMLElement} field
+	 * @return {string}
+	 */
+	function wrapErrorHtml( msg, field ) {
+		let errorHtml = field.getAttribute( 'data-error-html' );
+		if ( null === errorHtml ) {
+			return msg;
+		}
+
+		errorHtml          = errorHtml.replace( /\+/g, '%20' );
+		msg                = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+		const fieldId      = getFieldId( field, false );
+		const split        = fieldId.split( '-' );
+		const fieldIdParts = field.id.split( '_' );
+		fieldIdParts.shift(); // Drop the "field" value from the front.
+		split[0]       = fieldIdParts.join( '_' );
+		const errorKey = split.join( '-' );
+		return msg.replace( '[key]', errorKey );
 	}
 
 	function shouldWrapErrorHtmlAroundMessageType( type ) {
