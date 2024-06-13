@@ -33,4 +33,4 @@ jobs:
         run: npm run env start
 
       - name: Test
-        run: npm run e2e:run
+        run: npm run e2e:run --env FORMIDABLE_FOLDER=formidable
