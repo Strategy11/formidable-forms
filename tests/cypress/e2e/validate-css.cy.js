@@ -53,7 +53,7 @@ describe( 'Run some CSS validation', function() {
         validateCSS( '/wp-content/plugins/' + formidableFolder + '/css/frm_admin.css' );
     });
 
-    it('Check genarated CSS for valid CSS', () => {
+    it('Check generated CSS for valid CSS', () => {
         validateCSS( '/wp-content/plugins/' + formidableFolder + '/css/formidableforms.css' );
     });
 
