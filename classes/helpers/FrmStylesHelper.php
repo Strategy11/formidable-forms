@@ -64,7 +64,7 @@ class FrmStylesHelper {
 		 * @param array        $label_positions
 		 * @param array|object $field
 		 */
-		return apply_filters( 'frm_label_positions', $label_positions, $field );
+		return apply_filters( 'frm_single_label_positions', $label_positions, $field );
 	}
 
 	public static function minus_icons() {
