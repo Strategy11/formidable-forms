@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { CURRENT_CLASS } from 'core/constants';
+import { onClickPreventDefault, frmAnimate } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { CURRENT_CLASS, getAppState, setAppState } from '../shared';
-import { onClickPreventDefault, frmAnimate } from '../utils';
+import { getState, setState } from '../shared';
 import { resetSearchInput } from '.';
 
 /**
@@ -15,7 +20,7 @@ function addCategoryEvents() {
 	const { categoryItems } = getElements();
 
 	// Attach click and keyboard event listeners to each sidebar category
-	categoryItems.forEach( category => {
+	categoryItems.forEach( ( category ) => {
 		onClickPreventDefault( category, onCategoryClick );
 		category.addEventListener( 'keydown', onCategoryKeydown );
 	});
@@ -30,7 +35,7 @@ function addCategoryEvents() {
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, hasSearchQuery } = getAppState();
+	let { selectedCategory, selectedCategoryEl, hasSearchQuery } = getState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -51,7 +56,7 @@ const onCategoryClick = ( event ) => {
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );
 	selectedCategoryEl = clickedCategory;
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
-	setAppState({ selectedCategory, selectedCategoryEl });
+	setState( { selectedCategory, selectedCategoryEl });
 
 	// Reset the search input if it contains text
 	if ( hasSearchQuery ) {
@@ -59,11 +64,14 @@ const onCategoryClick = ( event ) => {
 	}
 
 	/**
-	 * Trigger an action to display the body of the selected category.
+	 * Trigger custom event to update category content in the sidebar.
 	 *
-	 * @param {string} selectedCategory The selected category.
+	 * @param {Object} detail                  The detail object to pass with the event.
+	 * @param {string} detail.selectedCategory The selected category.
 	 */
-	wp.hooks.doAction( 'frmPageSidebar.displayCategoryBody', { selectedCategory } );
+	dispatchCustomEvent( 'layout:sidebar:updateCategoryContent', {
+		selectedCategory,
+	});
 
 	// Smoothly display the updated UI elements
 	const { bodyContent } = getElements();
@@ -77,11 +85,11 @@ const onCategoryClick = ( event ) => {
  * @return {void}
  */
 function onCategoryKeydown( event ) {
-    // Only respond to 'Enter' or 'Space' key presses
-    if ( event.key === 'Enter' || event.key === ' ' ) {
-        event.preventDefault(); // Prevent default action
-        onCategoryClick( event );
-    }
+	// Only respond to 'Enter' or 'Space' key presses
+	if ( event.key === 'Enter' || event.key === ' ' ) {
+		event.preventDefault();
+		onCategoryClick( event );
+	}
 }
 
 export default addCategoryEvents;

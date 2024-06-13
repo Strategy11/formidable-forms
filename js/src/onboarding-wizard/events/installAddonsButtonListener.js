@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState, nonce, setAppStateProperty } from '../shared';
-import { addToRequestQueue, navigateToNextStep, onClickPreventDefault } from '../utils';
+import { getState, nonce, setSingleState } from '../shared';
+import { addToRequestQueue, navigateToNextStep } from '../utils';
 
 /**
  * Manages event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.
@@ -26,7 +31,7 @@ function addInstallAddonsButtonEvents() {
  */
 const onInstallAddonsButtonClick = async( event ) => {
 	const addons = document.querySelectorAll( '.frm-option-box.frm-checked:not(.frm-disabled)' );
-	const { installedAddons } = getAppState();
+	const { installedAddons } = getState();
 	const installAddonsButton = event.currentTarget;
 
 	installAddonsButton.classList.add( 'frm_loading_button' );
@@ -47,7 +52,7 @@ const onInstallAddonsButtonClick = async( event ) => {
 
 	installAddonsButton.classList.remove( 'frm_loading_button' );
 
-	setAppStateProperty( 'installedAddons', installedAddons );
+	setSingleState( 'installedAddons', installedAddons );
 	navigateToNextStep();
 };
 
@@ -55,10 +60,10 @@ const onInstallAddonsButtonClick = async( event ) => {
  * Installs an add-on or plugin based on the provided plugin name and vendor status.
  *
  * @private
- * @param {string} plugin The unique identifier or name of the plugin or add-on to be installed.
- * @param {Object} options An object containing additional options for the installation.
+ * @param {string}  plugin           The unique identifier or name of the plugin or add-on to be installed.
+ * @param {Object}  options          An object containing additional options for the installation.
  * @param {boolean} options.isVendor Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
- * @returns {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
+ * @return {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
  */
 async function installAddon( plugin, {isVendor}) {
 	// Prepare FormData for the POST request

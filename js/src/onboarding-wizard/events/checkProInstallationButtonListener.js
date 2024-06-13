@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { nonce } from '../shared';
-import { navigateToNextStep, onClickPreventDefault, show } from '../utils';
+import { navigateToNextStep, show } from '../utils';
 
 /**
  * Manages event handling for the "Continue" button in the "Install Formidable Pro" step.

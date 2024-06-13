@@ -6,6 +6,20 @@
  */
 
 /**
+* Empty State Styles
+*
+* Provides styles for when the Sidebar Layout page is empty.
+*/
+#frm-page-sidebar-empty-state {
+	height: 100%;
+	margin-top: calc(-1 * var(--gap-md));
+}
+
+#frm-page-sidebar-empty-state .frm-page-sidebar-text {
+	max-width: 420px;
+}
+
+/**
  * Core Styles for the Page
  *
  * Defines the base typography and structural styles for the page.
@@ -254,20 +268,6 @@ p.frm-form-templates-item-description {
 
 .frm-form-templates-application-item {
 	cursor: pointer;
-}
-
-/**
-* Empty State Styles
-*
-* Provides styles for when the Sidebar Layout page is empty.
-*/
-#frm-form-templates-empty-state {
-	height: 100%;
-	margin-top: calc(-1 * var(--gap-md));
-}
-
-#frm-form-templates-empty-state .frm-form-templates-text {
-	max-width: 420px;
 }
 
 /**

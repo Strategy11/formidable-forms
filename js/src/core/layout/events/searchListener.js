@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { SEARCH_RESULT_ITEM, getAppState, setAppStateProperty } from '../shared';
+import { SEARCH_RESULT_ITEM, getState, setSingleState } from '../shared';
 import { showSearchState } from '../ui';
 
 const { init: initSearch } = window.frmDom.search;
@@ -16,7 +16,7 @@ const { init: initSearch } = window.frmDom.search;
 function addSearchEvents() {
 	const { searchInput } = getElements();
 
-	initSearch( searchInput, SEARCH_RESULT_ITEM, { handleSearchResult });
+	initSearch( searchInput, SEARCH_RESULT_ITEM, { handleSearchResult } );
 }
 
 /**
@@ -29,14 +29,14 @@ function addSearchEvents() {
  * @param {Event}   event                   The event object from input, search, or change events.
  * @return {void}
  */
-function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
+function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	// Avoid double calls from 'input' and 'search' events triggered by the 'clear' button.
 	if ( event && event.type === 'search' && event.target.value === '' ) {
 		return;
 	}
 
-	const appState = getAppState();
-	setAppStateProperty( 'hasSearchQuery', notEmptySearchText );
+	const appState = getState();
+	setSingleState( 'hasSearchQuery', notEmptySearchText );
 
 	// Show ALL_ITEMS if both the search query and the selected category are empty
 	if ( ! appState.hasSearchQuery && ! appState.selectedCategory ) {
@@ -52,7 +52,7 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 
 		// Setting "selectedCategory" to an empty string as a flag for search state
 		if ( notEmptySearchText ) {
-			setAppStateProperty( 'selectedCategory', '' );
+			setSingleState( 'selectedCategory', '' );
 		}
 	}
 
@@ -62,7 +62,10 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 	 * @param {boolean} foundSomething     True if search yielded results.
 	 * @param {boolean} notEmptySearchText True if search input is not empty.
 	 */
-    wp.hooks.doAction( 'frmPageSidebar.displaySearchElements', { foundSomething, notEmptySearchText } );
+	wp.hooks.doAction( 'frmPageSidebar.displaySearchElements', {
+		foundSomething,
+		notEmptySearchText,
+	} );
 }
 
 /**

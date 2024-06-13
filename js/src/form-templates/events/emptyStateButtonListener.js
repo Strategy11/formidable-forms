@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
-*/
+ */
 import { getElements } from '../elements';
-import { getAppState, setAppStateProperty } from '../shared';
-import { isCustomCategory, onClickPreventDefault } from '../utils';
+import { getState, setSingleState } from '../shared';
+import { isCustomCategory } from '../utils';
 import { resetSearchInput } from './';
 
 /**
@@ -26,14 +31,14 @@ function addEmptyStateButtonEvents() {
  * @return {void}
  */
 const onEmptyStateButtonClick = () => {
-	const { selectedCategory } = getAppState();
+	const { selectedCategory } = getState();
 	if ( isCustomCategory( selectedCategory ) ) {
 		return;
 	}
 
 	// Set selectedCategory to '' as search state flag that triggers 'allTemplates' category if search input is empty
 	// @see searchListener.js: handleSearchResult method
-	setAppStateProperty( 'selectedCategory', '' );
+	setSingleState( 'selectedCategory', '' );
 	resetSearchInput();
 
 	const { searchInput } = getElements();

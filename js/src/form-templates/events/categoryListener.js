@@ -1,10 +1,14 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault, frmAnimate } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
+import { PREFIX, CURRENT_CLASS, getState, setState } from '../shared';
 import { showSelectedCategory } from '../ui';
-import { onClickPreventDefault, frmAnimate } from '../utils';
 import { resetSearchInput } from './';
 
 /**
@@ -31,7 +35,7 @@ function addCategoryEvents() {
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getAppState();
+	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -52,7 +56,7 @@ const onCategoryClick = ( event ) => {
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );
 	selectedCategoryEl = clickedCategory;
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
-	setAppState({ selectedCategory, selectedCategoryEl });
+	setState({ selectedCategory, selectedCategoryEl });
 
 	// Reset the search input if it contains text
 	if ( notEmptySearchText ) {

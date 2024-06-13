@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { STEPS } from '../shared';
-import { onClickPreventDefault, setQueryParam } from '../utils';
+import { setQueryParam } from '../utils';
 
 /**
  * Manages event handling for the "Active & continue" button in the "License Management" step.

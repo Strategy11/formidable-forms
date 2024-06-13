@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, VIEW_SLUGS, getAppState } from '../shared';
+import { PREFIX, VIEW_SLUGS, getState } from '../shared';
 import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
 import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState, showAvailableTemplatesEmptyState } from './';
@@ -73,7 +73,7 @@ export function showAllTemplates() {
  * @return {void}
  */
 export function showFavoriteTemplates() {
-	const { favoritesCount } = getAppState();
+	const { favoritesCount } = getState();
 
 	if ( 0 === favoritesCount.total ) {
 		showFavoritesEmptyState();
@@ -131,7 +131,7 @@ export function showFavoriteTemplates() {
  * @return {void}
  */
 export function showCustomTemplates() {
-	const { customCount } = getAppState();
+	const { customCount } = getState();
 
 	if ( 0 === customCount ) {
 		showCustomTemplatesEmptyState();
@@ -157,7 +157,7 @@ export function showCustomTemplates() {
  * @return {void}
  */
 export function showAvailableTemplates() {
-	const { availableTemplatesCount } = getAppState();
+	const { availableTemplatesCount } = getState();
 
 	if ( 0 === availableTemplatesCount ) {
 		showAvailableTemplatesEmptyState();

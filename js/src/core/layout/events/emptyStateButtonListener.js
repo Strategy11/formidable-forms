@@ -1,9 +1,13 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { setAppStateProperty } from '../shared';
-import { onClickPreventDefault } from '../utils';
+import { setSingleState } from '../shared';
 import { resetSearchInput } from '.';
 
 /**
@@ -27,7 +31,7 @@ function addEmptyStateButtonEvents() {
 const onEmptyStateButtonClick = () => {
 	// Set selectedCategory to '' as search state flag that triggers ALL_ITEMS category if search input is empty
 	// @see searchListener.js: handleSearchResult method
-	setAppStateProperty( 'selectedCategory', '' );
+	setSingleState( 'selectedCategory', '' );
 	resetSearchInput();
 
 	const { searchInput } = getElements();

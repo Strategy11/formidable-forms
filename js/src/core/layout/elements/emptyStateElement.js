@@ -4,9 +4,14 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { PLUGIN_URL, HIDDEN_CLASS } from 'core';
+
+/**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS } from '../shared';
+import { PREFIX } from '../constants';
 
 const { tag, div, a, img } = window.frmDom;
 
@@ -57,6 +62,6 @@ export function getEmptyStateElements() {
 		emptyState,
 		emptyStateTitle: emptyState?.querySelector( `.${PREFIX}-title` ),
 		emptyStateText: emptyState?.querySelector( `.${PREFIX}-text` ),
-		emptyStateButton: emptyState?.querySelector( '.button' )
+		emptyStateButton: emptyState?.querySelector( '.button' ),
 	};
 }

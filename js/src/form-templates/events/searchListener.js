@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState, setAppStateProperty } from '../shared';
+import { getState, setSingleState } from '../shared';
 import { showSearchState, displaySearchElements } from '../ui';
 
 const { init: initSearch } = window.frmDom.search;
@@ -25,8 +25,9 @@ function addSearchEvents() {
  * Manages UI state based on search results and input value.
  *
  * @private
- * @param {Object} args Contains flags for search status.
- * @param {boolean} args.foundSomething True if search yielded results.
+ * @param {Object}  args                    Contains flags for search status.
+ * @param {boolean} args.foundSomething     True if search yielded results.
+ * @param           event
  * @param {boolean} args.notEmptySearchText True if search input is not empty.
  * @return {void}
  */
@@ -37,13 +38,13 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 		return;
 	}
 
-	const appState = getAppState();
+	const state = getState();
 	const { allTemplatesCategory } = getElements();
 
-	setAppStateProperty( 'notEmptySearchText', notEmptySearchText );
+	setSingleState( 'notEmptySearchText', notEmptySearchText );
 
 	// Revert to 'All Templates' if search and selected category are both empty
-	if ( ! appState.notEmptySearchText && ! appState.selectedCategory ) {
+	if ( ! state.notEmptySearchText && ! state.selectedCategory ) {
 		allTemplatesCategory.dispatchEvent(
 			new Event( 'click', { bubbles: true })
 		);
@@ -52,12 +53,12 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 	}
 
 	// Display search state if a category is selected
-	if ( appState.selectedCategory ) {
+	if ( state.selectedCategory ) {
 		showSearchState( notEmptySearchText );
 
 		// Setting "selectedCategory" to an empty string as a flag for search state
 		if ( notEmptySearchText ) {
-			setAppStateProperty( 'selectedCategory', '' );
+			setSingleState( 'selectedCategory', '' );
 		}
 	}
 

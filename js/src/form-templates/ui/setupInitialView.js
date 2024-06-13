@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { frmAnimate } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS, getAppState } from '../shared';
-import { show, hide, hideElements, frmAnimate, hasQueryParam } from '../utils';
+import { HIDE_JS_CLASS, getState } from '../shared';
+import { show, hide, hideElements, hasQueryParam } from '../utils';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -32,12 +37,12 @@ function setupInitialView() {
 
 	// Set the 'Available Templates' count if it is present
 	if ( availableTemplatesCategory ) {
-		const { availableTemplatesCount } = getAppState();
+		const { availableTemplatesCount } = getState();
 		availableTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = availableTemplatesCount;
 	}
 
 	// Update the 'Free Templates' count and hide the category if count is zero
-	const { freeTemplatesCount } = getAppState();
+	const { freeTemplatesCount } = getState();
 	freeTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = freeTemplatesCount;
 	if ( 0 === freeTemplatesCount ) {
 		hide( freeTemplatesCategory );
@@ -45,7 +50,7 @@ function setupInitialView() {
 
 	// Update extra templates count
 	const { extraTemplateCountElements } = getElements();
-	const { extraTemplatesCount } = getAppState();
+	const { extraTemplatesCount } = getState();
 	extraTemplateCountElements.forEach( element => element.textContent = extraTemplatesCount );
 
 	// Smoothly display the updated UI elements

@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppStateProperty } from '../shared';
+import { getSingleState } from '../shared';
 
 /**
  * Sets the page title based on a given string or the currently selected category.
@@ -15,7 +15,7 @@ export function updatePageTitle( title ) {
 
 	const newTitle =
 		title ||
-		getAppStateProperty( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
+		getSingleState( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
 
 	pageTitleText.textContent = newTitle;
 }
