@@ -486,8 +486,7 @@ legend.frm_hidden{
 /* These do not work if they are combined */
 .with_frm_style input::placeholder,
 .with_frm_style textarea::placeholder {
-	font-size: <?php echo esc_html( $defaults['field_font_size'] . $important ); ?>;
-	font-size: var(--field-font-size);
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_inside_container > input::-moz-placeholder,
