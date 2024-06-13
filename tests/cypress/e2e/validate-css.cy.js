@@ -1,4 +1,10 @@
-describe( 'Run some CSS validation', function() {
+describe( 'Run some CSS validation', () => {
+
+    const arrayBufferToJsonObject = arrayBuffer => {
+        const decoder    = new TextDecoder( 'utf-8' );
+        const jsonString = decoder.decode( arrayBuffer );
+        return JSON.parse( jsonString );
+    };
 
     const validateCSS = url => {
         return cy.request( url ).then( response => {
@@ -18,10 +24,7 @@ describe( 'Run some CSS validation', function() {
             }).then( validationResponse => {
                 expect( validationResponse.status ).to.eq( 200 );
 
-                const arrayBuffer = validationResponse.body;
-                const decoder     = new TextDecoder( 'utf-8' );
-                const jsonString  = decoder.decode( arrayBuffer );
-                const jsonObject  = JSON.parse( jsonString );
+               const jsonObject = arrayBufferToJsonObject( validationResponse.body );
 
                 expect( jsonObject.cssvalidation ).to.be.an( 'object' );
                 const validationResults = jsonObject.cssvalidation;
