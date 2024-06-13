@@ -52,6 +52,9 @@ describe( 'Run some CSS validation', function() {
     });
 
     it('Check genarated CSS for valid CSS', () => {
+        cy.login();
+        cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
+        cy.get( '#frm_submit_side_top' ).click();
         validateCSS( '/wp-content/plugins/formidable/css/formidableforms.css' );
     });
 
