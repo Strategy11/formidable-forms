@@ -37,6 +37,10 @@ class FrmTransLiteAction extends FrmFormAction {
 		$currencies          = FrmCurrencyHelper::get_currencies();
 		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
 
+		if ( ! isset( $form_action->post_content['payment_limit'] ) ) {
+			$form_action->post_content['payment_limit'] = '';
+		}
+
 		include FrmTransLiteAppHelper::plugin_path() . '/views/action-settings/payments-options.php';
 	}
 

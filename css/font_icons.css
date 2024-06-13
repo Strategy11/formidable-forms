@@ -1,7 +1,6 @@
 @font-face {
 	font-family: 's11-fp';
-	src: url('../fonts/s11-fp.ttf?v=7') format('truetype'),
-		url('../fonts/s11-fp.woff?v=7') format('woff'),
+	src: url('../fonts/s11-fp.woff?v=7') format('woff'),
 		url('../fonts/s11-fp.svg?v=7#s11-fp') format('svg');
 	font-weight: normal;
 	font-style: normal;

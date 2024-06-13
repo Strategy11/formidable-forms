@@ -15,6 +15,16 @@ class FrmFormsController {
 	 */
 	private static $redirected_in_new_tab = array();
 
+	/**
+	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
+	 * is stored here and re-used as an optimization.
+	 *
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	private static $formidable_tinymce_button;
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -902,12 +912,17 @@ class FrmFormsController {
 	 */
 	public static function insert_form_button() {
 		if ( current_user_can( 'frm_view_forms' ) ) {
-			FrmAppHelper::load_admin_wide_js();
-			$menu_name = FrmAppHelper::get_menu_name();
-			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				FrmAppHelper::kses( $icon, 'all' ) . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				' ' . esc_html( $menu_name ) . '</a>';
+			// Store the result in memory and re-use it when this function is called multiple times.
+			// This helps speed up the form builder when there are a lot of HTML fields, where this
+			// button is inserted once per HTML field.
+			// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
+			if ( ! isset( self::$formidable_tinymce_button ) ) {
+				FrmAppHelper::load_admin_wide_js();
+				$menu_name                       = FrmAppHelper::get_menu_name();
+				$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
+				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>';
+			}
+			echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -1716,6 +1731,14 @@ class FrmFormsController {
 			$form = $form->id;
 		}
 
+		/*
+		 * Repeater actions adds `parent_entry` to `$entry` store the parent entry data. If `parent_entry` is not empty,
+		 * use the parent form ID instead of repeater form ID to fix the parent form field shortcodes doesn't work.
+		 */
+		if ( ! empty( $entry->parent_entry ) ) {
+			$form = $entry->parent_entry->form_id;
+		}
+
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
 		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
@@ -1871,9 +1894,11 @@ class FrmFormsController {
 			case 'update_settings':
 				return self::$action( $vars );
 			case 'lite-reports':
-				return self::no_reports( $vars );
+				self::no_reports( $vars );
+				return;
 			case 'views':
-				return self::no_views( $vars );
+				self::no_views( $vars );
+				return;
 			default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1957,6 +1982,8 @@ class FrmFormsController {
 	 * Add education about views.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
 		FrmAppHelper::include_svg();
@@ -1970,6 +1997,8 @@ class FrmFormsController {
 	 * Add education about reports.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
 		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );

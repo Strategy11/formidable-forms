@@ -11,6 +11,10 @@ import { getElements } from '../elements';
 export function addApplicationTemplateEvents() {
 	const { applicationTemplateItems } = getElements();
 
+	if ( undefined === applicationTemplateItems ) {
+		return;
+	}
+
 	// Attach click event listener
 	applicationTemplateItems.forEach( template => {
 		template.addEventListener( 'click', onApplicationTemplateClick );
