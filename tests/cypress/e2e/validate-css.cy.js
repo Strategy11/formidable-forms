@@ -48,14 +48,14 @@ describe( 'Run some CSS validation', function() {
     };
 
     it('Check frm_admin.css for valid CSS', () => {
-        validateCSS( '/wp-content/plugins/formidable/css/frm_admin.css' );
+        validateCSS( '/wp-content/plugins/formidable-forms/css/frm_admin.css' );
     });
 
     it('Check genarated CSS for valid CSS', () => {
         cy.login();
         cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
         cy.get( '#frm_submit_side_top' ).click();
-        validateCSS( '/wp-content/plugins/formidable/css/formidableforms.css' );
+        validateCSS( '/wp-content/plugins/formidable-forms/css/formidableforms.css' );
     });
 
 });
