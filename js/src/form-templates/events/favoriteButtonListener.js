@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { onClickPreventDefault } from 'core/utils';
+import { onClickPreventDefault, addToRequestQueue } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -14,8 +14,7 @@ import {
 	isFavoriteTemplate,
 	isCustomTemplate,
 	isFeaturedTemplate,
-	isFavoritesCategory,
-	addToRequestQueue
+	isFavoritesCategory
 } from '../utils';
 
 const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
