@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * External dependencies
  */
-import { PLUGIN_URL, HIDDEN_CLASS } from 'core';
+import { PLUGIN_URL, HIDDEN_CLASS } from 'core/constants';
 
 /**
  * Internal dependencies

@@ -6,13 +6,14 @@ import { __ } from '@wordpress/i18n';
 /**
  * External dependencies
  */
+import { CURRENT_CLASS } from 'core/constants';
 import { frmAnimate, showElements, hideElements, show, hide, isVisible } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { CURRENT_CLASS, getSingleState } from '../shared';
+import { getSingleState } from '../shared';
 import { showSearchEmptyState, updatePageTitle } from '.';
 
 /**

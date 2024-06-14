@@ -1,13 +1,14 @@
 /**
  * External dependencies
  */
+import { nonce } from 'core/constants';
 import { onClickPreventDefault, removeQueryParam, hasQueryParam, hideElements, show, hide } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getState, nonce  } from '../shared';
+import { PREFIX, getState  } from '../shared';
 import { showConfirmEmailAddressError } from '../ui';
 
 /**

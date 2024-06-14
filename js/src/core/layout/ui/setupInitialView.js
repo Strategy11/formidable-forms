@@ -1,13 +1,13 @@
 /**
  * External dependencies
  */
+import { HIDE_JS_CLASS } from 'core/constants';
 import { frmAnimate, show } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS } from '../shared';
 
 /**
  * Sets up the initial view, performing any necessary

@@ -1,13 +1,13 @@
 /**
  * External dependencies
  */
+import { nonce } from 'core/constants';
 import { onClickPreventDefault, show } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { nonce } from '../shared';
 import { navigateToNextStep } from '../utils';
 
 /**

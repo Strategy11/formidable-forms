@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { CHECKED_CLASS } from '../constants';
+import { CHECKED_CLASS } from 'core/constants';
 
 const OPTION_BOX_CLASS = '.frm-option-box';
 

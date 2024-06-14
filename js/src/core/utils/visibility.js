@@ -1,3 +1,6 @@
+/**
+ * Internal dependencies
+ */
 import { HIDDEN_CLASS } from '../constants';
 
 /**

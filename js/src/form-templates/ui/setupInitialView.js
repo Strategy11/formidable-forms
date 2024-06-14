@@ -1,13 +1,14 @@
 /**
  * External dependencies
  */
+import { HIDE_JS_CLASS } from 'core/constants';
 import { frmAnimate, hasQueryParam, hideElements, show, hide } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS, getState } from '../shared';
+import { getState } from '../shared';
 import { showHeaderCancelButton } from './';
 
 /**

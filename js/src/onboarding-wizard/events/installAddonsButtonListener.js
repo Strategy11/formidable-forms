@@ -1,13 +1,14 @@
 /**
  * External dependencies
  */
+import { nonce } from 'core/constants';
 import { onClickPreventDefault, addToRequestQueue } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getState, nonce, setSingleState } from '../shared';
+import { getState, setSingleState } from '../shared';
 import { navigateToNextStep } from '../utils';
 
 /**

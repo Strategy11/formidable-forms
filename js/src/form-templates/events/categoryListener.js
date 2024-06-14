@@ -1,13 +1,14 @@
 /**
  * External dependencies
  */
+import { CURRENT_CLASS } from 'core/constants';
 import { onClickPreventDefault, frmAnimate } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, CURRENT_CLASS, getState, setState } from '../shared';
+import { PREFIX, getState, setState } from '../shared';
 import { showSelectedCategory } from '../ui';
 import { resetSearchInput } from './';
 

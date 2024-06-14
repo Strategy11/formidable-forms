@@ -4,9 +4,14 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { PLUGIN_URL, HIDDEN_CLASS } from 'core/constants';
+
+/**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, applicationsUrl } from '../shared';
+import { PREFIX, applicationsUrl } from '../shared';
 import { addElements, getElements } from './elements';
 
 const { tag, div, span, a, img } = window.frmDom;

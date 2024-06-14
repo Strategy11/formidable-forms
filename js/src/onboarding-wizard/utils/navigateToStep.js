@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { CURRENT_CLASS } from 'core/constants';
 import { frmAnimate, setQueryParam, hide, show } from 'core/utils';
 
 /**
@@ -8,7 +9,7 @@ import { frmAnimate, setQueryParam, hide, show } from 'core/utils';
  */
 import { setupUsageData } from '../dataUtils';
 import { getElements } from '../elements';
-import { CURRENT_CLASS, getState, PREFIX, setSingleState } from '../shared';
+import { getState, PREFIX, setSingleState } from '../shared';
 
 /**
  * Navigates to the given step in the onboarding sequence.
