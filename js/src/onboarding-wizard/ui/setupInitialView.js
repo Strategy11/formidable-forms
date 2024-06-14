@@ -1,14 +1,14 @@
 /**
  * External dependencies
  */
-import { frmAnimate } from 'core/utils';
+import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { STEPS, WELCOME_STEP_ID, proIsIncluded } from '../shared';
-import { getQueryParam, hasQueryParam, navigateToStep, removeQueryParam } from '../utils';
+import { navigateToStep } from '../utils';
 import { addProgressToCardBoxes } from '../../common/components';
 
 /**

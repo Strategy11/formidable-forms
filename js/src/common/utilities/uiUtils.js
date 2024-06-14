@@ -6,9 +6,9 @@ import { hide, show } from '.';
 /**
  * Displays form validation error messages.
  *
- * @param {string} inputId The ID selector for the input field with the error.
- * @param {string} errorId The ID selector for the error message display element.
- * @param {string} type The categorization of the error (e.g., "invalid", "empty").
+ * @param {string} inputId   The ID selector for the input field with the error.
+ * @param {string} errorId   The ID selector for the error message display element.
+ * @param {string} type      The categorization of the error (e.g., "invalid", "empty").
  * @param {string} [message] Optional. The specific error message to display.
  * @return {void}
  */

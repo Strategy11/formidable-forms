@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { addOptionBoxEvents } from 'core/events';
+import { getQueryParam } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -13,7 +14,7 @@ import addInstallAddonsButtonEvents from './installAddonsButtonListener';
 import addCheckProInstallationButtonEvents from './checkProInstallationButtonListener';
 import addSkipProInstallationButtonEvents from './skipProInstallationButtonListener';
 import addSaveLicenseButtonEvents from './saveLicenseButtonListener';
-import { getQueryParam, navigateToStep } from '../utils';
+import { navigateToStep } from '../utils';
 
 /**
  * Attaches event listeners for handling user interactions.

@@ -27,8 +27,8 @@ export const removeQueryParam = ( paramName ) => {
 /**
  * Sets the value of a query parameter in the current URL and optionally updates the browser's history state.
  *
- * @param {string} paramName The name of the query parameter to set.
- * @param {string} paramValue The value to set for the query parameter.
+ * @param {string} paramName                  The name of the query parameter to set.
+ * @param {string} paramValue                 The value to set for the query parameter.
  * @param {string} [updateMethod='pushState'] The method to use for updating the history state. Accepts 'pushState' or 'replaceState'.
  * @return {string} The updated URL string.
  */
