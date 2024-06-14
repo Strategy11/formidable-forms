@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { onClickPreventDefault, addToRequestQueue } from 'core/utils';
+import { onClickPreventDefault, addToRequestQueue, hide } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -9,13 +9,7 @@ import { onClickPreventDefault, addToRequestQueue } from 'core/utils';
 import { getElements } from '../elements';
 import { PREFIX, getState, setSingleState } from '../shared';
 import { showFavoritesEmptyState } from '../ui';
-import {
-	hide,
-	isFavoriteTemplate,
-	isCustomTemplate,
-	isFeaturedTemplate,
-	isFavoritesCategory
-} from '../utils';
+import { isFavoriteTemplate, isCustomTemplate, isFeaturedTemplate, isFavoritesCategory } from '../utils';
 
 const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
 const HEART_ICON_SELECTOR = `${FAVORITE_BUTTON_CLASS} use`;

@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { hide, show } from '.';
+import { hide, show } from 'core/utils';
 
 /**
  * Displays form validation error messages.

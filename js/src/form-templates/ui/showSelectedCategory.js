@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { showElements, hideElements, show, hide } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { PREFIX, VIEW_SLUGS, getState } from '../shared';
-import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
+import { isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
 import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState, showAvailableTemplatesEmptyState } from './';
 

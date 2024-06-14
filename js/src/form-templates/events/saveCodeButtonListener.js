@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { onClickPreventDefault, removeQueryParam, hasQueryParam } from 'core/utils';
+import { onClickPreventDefault, removeQueryParam, hasQueryParam, hideElements, show, hide } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -9,7 +9,6 @@ import { onClickPreventDefault, removeQueryParam, hasQueryParam } from 'core/uti
 import { getElements } from '../elements';
 import { PREFIX, getState, nonce  } from '../shared';
 import { showConfirmEmailAddressError } from '../ui';
-import { show, hide, hideElements } from '../utils';
 
 /**
  * Manages event handling for the "Save Code" button.

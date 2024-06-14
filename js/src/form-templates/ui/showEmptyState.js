@@ -4,11 +4,15 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { showElements, hideElements, show, hide } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { VIEW_SLUGS, getState } from '../shared';
-import { show, hide, showElements, hideElements } from '../utils';
 
 /**
  * Display the search-empty state.

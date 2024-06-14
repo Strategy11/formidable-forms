@@ -1,4 +1,5 @@
-export * from './event';
 export * from './animation';
 export * from './async';
-export * from './url'
+export * from './event';
+export * from './url';
+export * from './visibility';

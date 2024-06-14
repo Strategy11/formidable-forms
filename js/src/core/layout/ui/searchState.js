@@ -6,14 +6,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * External dependencies
  */
-import { frmAnimate } from 'core/utils';
+import { frmAnimate, hideElements } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { CURRENT_CLASS, getSingleState } from '../shared';
-import { hideElements } from '../utils';
 
 /**
  * Updates the UI to display the search state.

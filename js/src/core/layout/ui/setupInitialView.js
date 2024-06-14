@@ -1,14 +1,13 @@
 /**
  * External dependencies
  */
-import { frmAnimate } from 'core/utils';
+import { frmAnimate, show } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { HIDE_JS_CLASS } from '../shared';
-import { show } from '../utils';
 
 /**
  * Sets up the initial view, performing any necessary
