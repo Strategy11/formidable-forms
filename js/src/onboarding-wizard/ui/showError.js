@@ -1,8 +1,12 @@
 /**
+ * External dependencies
+ */
+import { showFormError } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { PREFIX } from '../shared';
-import { showFormError } from '../utils';
 
 /**
  * Displays errors related to the email address field.
