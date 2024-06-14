@@ -133,58 +133,6 @@ var CHECKED_CLASS = 'frm-checked';
 
 /***/ }),
 
-/***/ "./js/src/common/events/index.js":
-/*!***************************************!*\
-  !*** ./js/src/common/events/index.js ***!
-  \***************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addOptionBoxEvents: function() { return /* reexport safe */ _optionBoxListener__WEBPACK_IMPORTED_MODULE_0__["default"]; }
-/* harmony export */ });
-/* harmony import */ var _optionBoxListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./optionBoxListener */ "./js/src/common/events/optionBoxListener.js");
-
-
-/***/ }),
-
-/***/ "./js/src/common/events/optionBoxListener.js":
-/*!***************************************************!*\
-  !*** ./js/src/common/events/optionBoxListener.js ***!
-  \***************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./js/src/common/constants.js");
-/**
- * Internal dependencies
- */
-
-
-/**
- * Manages event handling for an option-box.
- *
- * @return {void}
- */
-function addOptionBoxEvents() {
-  var optionBoxes = document.querySelectorAll('.frm-option-box');
-
-  // Attach click event listeners to each option-boxes.
-  optionBoxes.forEach(function (optionBox) {
-    optionBox.addEventListener('click', onOptionBoxClick);
-  });
-}
-function onOptionBoxClick(event) {
-  if (event.target.tagName.toLowerCase() !== 'input') {
-    return;
-  }
-  var optionBox = event.currentTarget.closest('.frm-option-box');
-  optionBox.classList.toggle(_constants__WEBPACK_IMPORTED_MODULE_0__.CHECKED_CLASS);
-}
-/* harmony default export */ __webpack_exports__["default"] = (addOptionBoxEvents);
-
-/***/ }),
-
 /***/ "./js/src/common/utilities/index.js":
 /*!******************************************!*\
   !*** ./js/src/common/utilities/index.js ***!
@@ -494,6 +442,89 @@ var isVisible = function isVisible(element) {
   var styles = window.getComputedStyle(element);
   return styles.getPropertyValue('display') !== 'none';
 };
+
+/***/ }),
+
+/***/ "./js/src/core/constants.js":
+/*!**********************************!*\
+  !*** ./js/src/core/constants.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CHECKED_CLASS: function() { return /* binding */ CHECKED_CLASS; },
+/* harmony export */   CURRENT_CLASS: function() { return /* binding */ CURRENT_CLASS; },
+/* harmony export */   HIDDEN_CLASS: function() { return /* binding */ HIDDEN_CLASS; },
+/* harmony export */   HIDE_JS_CLASS: function() { return /* binding */ HIDE_JS_CLASS; },
+/* harmony export */   PLUGIN_URL: function() { return /* binding */ PLUGIN_URL; }
+/* harmony export */ });
+var PLUGIN_URL = window.frmGlobal.url;
+
+var HIDDEN_CLASS = 'frm_hidden';
+var HIDE_JS_CLASS = 'frm-hide-js';
+var CURRENT_CLASS = 'frm-current';
+var CHECKED_CLASS = 'frm-checked';
+
+/***/ }),
+
+/***/ "./js/src/core/events/index.js":
+/*!*************************************!*\
+  !*** ./js/src/core/events/index.js ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addOptionBoxEvents: function() { return /* reexport safe */ _optionBoxListener__WEBPACK_IMPORTED_MODULE_0__.addOptionBoxEvents; }
+/* harmony export */ });
+/* harmony import */ var _optionBoxListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./optionBoxListener */ "./js/src/core/events/optionBoxListener.js");
+
+
+/***/ }),
+
+/***/ "./js/src/core/events/optionBoxListener.js":
+/*!*************************************************!*\
+  !*** ./js/src/core/events/optionBoxListener.js ***!
+  \*************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addOptionBoxEvents: function() { return /* binding */ addOptionBoxEvents; }
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./js/src/core/constants.js");
+/**
+ * Internal dependencies
+ */
+
+var OPTION_BOX_CLASS = '.frm-option-box';
+
+/**
+ * Manages event handling for an option-box.
+ *
+ * @return {void}
+ */
+function addOptionBoxEvents() {
+  var optionBoxes = document.querySelectorAll(OPTION_BOX_CLASS);
+  optionBoxes.forEach(function (optionBox) {
+    optionBox.addEventListener('click', onOptionBoxClick);
+  });
+}
+
+/**
+ * Handles the click event on a option box item.
+ *
+ * @private
+ * @param {Event} event The click event object.
+ */
+function onOptionBoxClick(event) {
+  if (event.target.tagName.toLowerCase() !== 'input') {
+    return;
+  }
+  var optionBox = event.currentTarget.closest(OPTION_BOX_CLASS);
+  optionBox.classList.toggle(_constants__WEBPACK_IMPORTED_MODULE_0__.CHECKED_CLASS);
+}
 
 /***/ }),
 
@@ -1222,19 +1253,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addEventListeners: function() { return /* binding */ addEventListeners; }
 /* harmony export */ });
-/* harmony import */ var _skipStepButtonListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./skipStepButtonListener */ "./js/src/onboarding-wizard/events/skipStepButtonListener.js");
-/* harmony import */ var _backButtonListener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./backButtonListener */ "./js/src/onboarding-wizard/events/backButtonListener.js");
-/* harmony import */ var _setupEmailStepButtonListener__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setupEmailStepButtonListener */ "./js/src/onboarding-wizard/events/setupEmailStepButtonListener.js");
-/* harmony import */ var _installAddonsButtonListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./installAddonsButtonListener */ "./js/src/onboarding-wizard/events/installAddonsButtonListener.js");
-/* harmony import */ var _checkProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./checkProInstallationButtonListener */ "./js/src/onboarding-wizard/events/checkProInstallationButtonListener.js");
-/* harmony import */ var _skipProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./skipProInstallationButtonListener */ "./js/src/onboarding-wizard/events/skipProInstallationButtonListener.js");
-/* harmony import */ var _saveLicenseButtonListener__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./saveLicenseButtonListener */ "./js/src/onboarding-wizard/events/saveLicenseButtonListener.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
-/* harmony import */ var _common_events__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../common/events */ "./js/src/common/events/index.js");
+/* harmony import */ var core_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/events */ "./js/src/core/events/index.js");
+/* harmony import */ var _skipStepButtonListener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./skipStepButtonListener */ "./js/src/onboarding-wizard/events/skipStepButtonListener.js");
+/* harmony import */ var _backButtonListener__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./backButtonListener */ "./js/src/onboarding-wizard/events/backButtonListener.js");
+/* harmony import */ var _setupEmailStepButtonListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setupEmailStepButtonListener */ "./js/src/onboarding-wizard/events/setupEmailStepButtonListener.js");
+/* harmony import */ var _installAddonsButtonListener__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./installAddonsButtonListener */ "./js/src/onboarding-wizard/events/installAddonsButtonListener.js");
+/* harmony import */ var _checkProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./checkProInstallationButtonListener */ "./js/src/onboarding-wizard/events/checkProInstallationButtonListener.js");
+/* harmony import */ var _skipProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./skipProInstallationButtonListener */ "./js/src/onboarding-wizard/events/skipProInstallationButtonListener.js");
+/* harmony import */ var _saveLicenseButtonListener__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./saveLicenseButtonListener */ "./js/src/onboarding-wizard/events/saveLicenseButtonListener.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
+/**
+ * External dependencies
+ */
+
+
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -1251,23 +1286,23 @@ __webpack_require__.r(__webpack_exports__);
  */
 function addEventListeners() {
   // Add event handling for the "Skip" and "Back" buttons
-  (0,_skipStepButtonListener__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  (0,_backButtonListener__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_skipStepButtonListener__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_backButtonListener__WEBPACK_IMPORTED_MODULE_2__["default"])();
 
   // Add event handling for the "Next Step" button in the "Default Email Address" step
-  (0,_setupEmailStepButtonListener__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  (0,_setupEmailStepButtonListener__WEBPACK_IMPORTED_MODULE_3__["default"])();
 
   // Add event handling for the "Active & continue" button in the "License Management" step.
-  (0,_saveLicenseButtonListener__WEBPACK_IMPORTED_MODULE_6__["default"])();
+  (0,_saveLicenseButtonListener__WEBPACK_IMPORTED_MODULE_7__["default"])();
 
   // Add event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step
-  (0,_installAddonsButtonListener__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  (0,_installAddonsButtonListener__WEBPACK_IMPORTED_MODULE_4__["default"])();
   // Add event handling for an option-box
-  (0,_common_events__WEBPACK_IMPORTED_MODULE_8__.addOptionBoxEvents)();
+  (0,core_events__WEBPACK_IMPORTED_MODULE_0__.addOptionBoxEvents)();
 
   // Add event handling for the "Continue" and "Skip" buttons in the "Install Formidable Pro" step
-  (0,_checkProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_4__["default"])();
-  (0,_skipProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  (0,_checkProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  (0,_skipProInstallationButtonListener__WEBPACK_IMPORTED_MODULE_6__["default"])();
 }
 
 /**
@@ -1278,9 +1313,9 @@ function addEventListeners() {
  */
 window.addEventListener('popstate', function (event) {
   var _event$state;
-  var stepName = ((_event$state = event.state) === null || _event$state === void 0 ? void 0 : _event$state.step) || (0,_utils__WEBPACK_IMPORTED_MODULE_7__.getQueryParam)('step');
+  var stepName = ((_event$state = event.state) === null || _event$state === void 0 ? void 0 : _event$state.step) || (0,_utils__WEBPACK_IMPORTED_MODULE_8__.getQueryParam)('step');
   // Navigate to the specified step without adding to browser history
-  (0,_utils__WEBPACK_IMPORTED_MODULE_7__.navigateToStep)(stepName, 'replaceState');
+  (0,_utils__WEBPACK_IMPORTED_MODULE_8__.navigateToStep)(stepName, 'replaceState');
 });
 
 /***/ }),

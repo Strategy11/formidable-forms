@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { addOptionBoxEvents } from 'core/events';
+
+/**
  * Internal dependencies
  */
 import addSkipStepButtonEvents from './skipStepButtonListener';
@@ -9,7 +14,6 @@ import addCheckProInstallationButtonEvents from './checkProInstallationButtonLis
 import addSkipProInstallationButtonEvents from './skipProInstallationButtonListener';
 import addSaveLicenseButtonEvents from './saveLicenseButtonListener';
 import { getQueryParam, navigateToStep } from '../utils';
-import { addOptionBoxEvents } from '../../common/events';
 
 /**
  * Attaches event listeners for handling user interactions.
