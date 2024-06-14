@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { HIDDEN_CLASS } from '../constants';
+import { HIDDEN_CLASS } from 'core/constants';
 
 /**
  * Shows specified elements by removing the hidden class.
