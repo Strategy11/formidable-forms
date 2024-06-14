@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { onClickPreventDefault } from 'core/utils';
+import { onClickPreventDefault, isValidEmail } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -9,7 +9,7 @@ import { onClickPreventDefault } from 'core/utils';
 import { getElements } from '../elements';
 import { getState, setSingleState } from '../shared';
 import { showEmailAddressError } from '../ui';
-import { isValidEmail, navigateToNextStep } from '../utils';
+import { navigateToNextStep } from '../utils';
 
 /**
  * Manages event handling for the "Next Step" button in the "Default Email Address" step.

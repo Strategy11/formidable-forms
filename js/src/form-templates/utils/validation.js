@@ -1,8 +1,12 @@
 /**
+ * External dependencies
+ */
+import { isHTMLElement } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { PREFIX, VIEW_SLUGS, FEATURED_TEMPLATES_KEYS } from '../shared';
-import { isHTMLElement } from './';
 
 /**
  * Checks if the category is "All Templates".

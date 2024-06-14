@@ -1,7 +1,11 @@
 /**
+ * External dependencies
+ */
+import { isEmptyObject } from 'core/utils';
+
+/**
  * Internal Dependencies
  */
-import { isEmptyObject } from '../utils';
 import { getState, STEPS } from '../shared';
 
 /**
