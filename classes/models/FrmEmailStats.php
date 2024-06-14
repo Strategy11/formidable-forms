@@ -108,7 +108,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args['top_forms']       = FrmEmailSummaryHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
-		$args['stats']           = isset( $args['stats'] ) ? array_merge( $args['stats'], $entries_stat ) : $entries_stat;
+		$args['stats']           = isset( $args['stats'] ) ? array_merge( $entries_stat, $args['stats'] ) : $entries_stat;
 
 		if ( $this->has_out_of_date_plugins ) {
 			$args['out_of_date_plugins'] = FrmEmailSummaryHelper::get_out_of_date_plugins();
