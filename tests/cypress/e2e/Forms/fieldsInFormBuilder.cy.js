@@ -5,6 +5,23 @@ describe("Fields in the form builder", () => {
         cy.createNewForm();
         cy.viewport(1280, 720);
     });
+
+        const openForm = () => {
+            cy.log("Click on the created form");
+            cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
+                cy.wrap($row).within(() => {
+                    cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
+                        console.log('Element is:', $elem);
+                        cy.wrap($elem).click({ force: true });
+                    });
+                });
+            });
+
+            cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
+            cy.get('.current_page').should("contain", "Build");
+            cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
+        };
+
     it("should create, duplicate a field from each type and delete them", () => {
 
         const createAndDuplicateField = (fieldId, fieldType) => {
@@ -68,23 +85,7 @@ describe("Fields in the form builder", () => {
 
 
     it("should rename a field from each type", () => {
-
-        const openForm = () => {
-            cy.log("Click on the created form");
-            cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
-                cy.wrap($row).within(() => {
-                    cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
-                        console.log('Element is:', $elem);
-                        cy.wrap($elem).click({ force: true });
-                    });
-                });
-            });
-
-            cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
-            cy.get('.current_page').should("contain", "Build");
-            cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
-        };
-
+        
         const createField = (fieldId, fieldType) => {
             cy.log(`Create a ${fieldType} field`);
             cy.get(`li[id="${fieldId}"] a[title="${fieldType}"]`).click({ force: true });
@@ -126,22 +127,6 @@ describe("Fields in the form builder", () => {
     it("should set fields as required and validate them in frontend", () => {
 
         const fieldTypes = ['Text','Paragraph','Checkboxes','Radio Buttons','Dropdown','Email','Website/URL','Number','Name','Phone'];
-
-        const openForm = () => {
-            cy.log("Click on the created form");
-            cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
-                cy.wrap($row).within(() => {
-                    cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
-                        console.log('Element is:', $elem);
-                        cy.wrap($elem).click({ force: true });
-                    });
-                });
-            });
-
-            cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
-            cy.get('.current_page').should("contain", "Build");
-            cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
-        };
 
         const createField = (fieldId, fieldType) => {
             cy.log(`Create a ${fieldType} field`);
