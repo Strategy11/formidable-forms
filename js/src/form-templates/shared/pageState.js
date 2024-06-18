@@ -21,13 +21,7 @@ const {
 
 const availableTemplatesCount = availableTemplateItems.length;
 
-export const {
-	initializePageState,
-	getState,
-	getSingleState,
-	setState,
-	setSingleState,
-} = createPageState({
+export const { getState, getSingleState, setState, setSingleState } = createPageState({
 	selectedCategory: VIEW_SLUGS.ALL_TEMPLATES,
 	selectedCategoryEl: allTemplatesCategory,
 	selectedTemplate: firstLockedFreeTemplate,

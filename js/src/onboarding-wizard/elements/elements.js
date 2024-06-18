@@ -58,11 +58,7 @@ const successStep = {
 	successStep: document.getElementById( `${PREFIX}-success-step` )
 };
 
-export const {
-	initializePageElements,
-	getElements,
-	addElements
-} = createPageElements({
+export const { getElements, addElements } = createPageElements({
 	...bodyElements,
 	...installFormidableProStep,
 	...licenseManagementStep,

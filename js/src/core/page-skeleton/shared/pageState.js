@@ -7,17 +7,11 @@ import { createPageState } from 'core/factory';
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { VIEW_SLUGS } from '.';
+import { VIEW_SLUGS } from '../constants';
 
 const { allItemsCategory } = getElements();
 
-export const {
-	initializePageState,
-	getState,
-	getSingleState,
-	setState,
-	setSingleState,
-} = createPageState({
+export const { getState, getSingleState, setState, setSingleState } = createPageState({
 	hasSearchQuery: false,
 	selectedCategory: VIEW_SLUGS.ALL_ITEMS,
 	selectedCategoryEl: allItemsCategory,

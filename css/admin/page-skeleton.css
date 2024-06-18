@@ -1,21 +1,20 @@
 /**
- * Sidebar Layout CSS
+ * Page Skeleton CSS
  *
- * Contains styles to manage the layout and appearance
- * of the sidebar and content area for the page.
+ * Manages the layout and appearance of the page's content area.
  */
 
 /**
-* Empty State Styles
-*
-* Provides styles for when the Sidebar Layout page is empty.
-*/
-#frm-page-sidebar-empty-state {
+ * Empty State Styles
+ *
+ * Provides styles for the content page when a category is empty.
+ */
+#frm-page-skeleton-empty-state {
 	height: 100%;
 	margin-top: calc(-1 * var(--gap-md));
 }
 
-#frm-page-sidebar-empty-state .frm-page-sidebar-text {
+#frm-page-skeleton-empty-state .frm-page-skeleton-text {
 	max-width: 420px;
 }
 

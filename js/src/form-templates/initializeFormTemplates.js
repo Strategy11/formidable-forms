@@ -1,8 +1,6 @@
 /**
  * Internal dependencies
  */
-import { initializeElements } from './elements';
-import { initializePageState } from './shared';
 import { setupInitialView, initializeModal } from './ui';
 import { buildCategorizedTemplates, maybeAddApplicationTemplates } from './templates';
 import { addEventListeners } from './events';
@@ -13,9 +11,6 @@ import { addEventListeners } from './events';
  * @return {void}
  */
 function initializeFormTemplates() {
-	initializeElements();
-	initializePageState();
-
 	maybeAddApplicationTemplates();
 
 	initializeModal();

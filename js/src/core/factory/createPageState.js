@@ -6,23 +6,13 @@
  * @return {Object} An object with methods to initialize, get, and set the page state.
  */
 export function createPageState( initialState = {} ) {
-	let state = null;
+	if ( typeof initialState !== 'object' || initialState === null ) {
+		throw new Error(
+			'createPageState: initialState must be a non-null object'
+		);
+	}
 
-	/**
-	 * Initializes the page state with the provided initial state.
-	 *
-	 * @throws {Error} Throws an error if `initialState` is not a plain object.
-	 * @return {void}
-	 */
-	const initializePageState = () => {
-		if ( typeof initialState !== 'object' || initialState === null ) {
-			throw new Error(
-				'initializePageState: initialState must be a non-null object'
-			);
-		}
-
-		state = initialState;
-	};
+	let state = initialState;
 
 	/**
 	 * Returns the current page state.
@@ -68,11 +58,5 @@ export function createPageState( initialState = {} ) {
 		}
 	};
 
-	return {
-		initializePageState,
-		getState,
-		getSingleState,
-		setState,
-		setSingleState,
-	};
+	return { getState, getSingleState, setState, setSingleState };
 }

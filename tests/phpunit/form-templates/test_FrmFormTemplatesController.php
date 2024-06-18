@@ -54,7 +54,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Assertions for verifying specific elements in the rendered output.
 		$this->assertStringContainsString( 'id="frm-form-templates-page"', $output, 'The output does not contain the page ID.' );
 		$this->assertStringContainsString( 'id="frm-new-template"', $output, 'The hidden form (frm-new-template) is missing from the output.' );
-		$this->assertStringContainsString( 'id="frm-page-sidebar-panel"', $output, 'The sidebar (frm-page-sidebar-panel) is missing from the output.' );
+		$this->assertStringContainsString( 'id="frm-page-skeleton-sidebar"', $output, 'The sidebar (frm-page-skeleton-sidebar) is missing from the output.' );
 		$this->assertStringContainsString( 'id="post-body-content"', $output, 'The post body content (post-body-content) is missing from the output.' );
 	}
 

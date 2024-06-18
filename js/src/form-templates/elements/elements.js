@@ -1,66 +1,121 @@
 /**
+ * External dependencies
+ */
+import { getElements, addElements } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
-import { createEmptyStateElement, getEmptyStateElements } from './emptyStateElement';
-import getDOMElements from './getDOMElements';
+import { PREFIX, VIEW_SLUGS } from '../shared';
 
-let elements = null;
+const { bodyContent } = getElements();
+
+const bodyElements = {
+	headerCancelButton: document.getElementById( 'frm-publishing' ).querySelector( 'a' ),
+	createFormButton: document.getElementById( `${PREFIX}-create-form` ),
+	pageTitle: document.getElementById( `${PREFIX}-page-title` ),
+	pageTitleText: document.getElementById( `${PREFIX}-page-title-text` ),
+	pageTitleDivider: document.getElementById( `${PREFIX}-page-title-divider` ),
+	upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` ),
+	extraTemplateCountElements: document.querySelectorAll( `.${PREFIX}-extra-templates-count` )
+};
+
+// Templates Elements
+const templatesList = document.getElementById( `${PREFIX}-list` );
+const templates = {
+	templatesList,
+	templateItems: templatesList.querySelectorAll( '.frm-card-item' ),
+	availableTemplateItems: templatesList.querySelectorAll( `.frm-card-item:not(.${PREFIX}-locked-item)` ),
+	freeTemplateItems: templatesList.querySelectorAll( '.frm-card-item.frm-free-template' ),
+	twinFeaturedTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-featured-item` ),
+	firstLockedFreeTemplate: templatesList.querySelector( '.frm-free-template' ),
+	featuredTemplatesList: document.getElementById( `${PREFIX}-featured-list` )
+};
+
+// Custom Templates Section Element
+const customTemplatesSection = document.getElementById( `${PREFIX}-custom-list-section` );
+const customTemplates = {
+	customTemplatesSection,
+	customTemplateItems: customTemplatesSection.querySelectorAll( '.frm-card-item' ),
+	customTemplatesTitle: document.getElementById( `${PREFIX}-custom-list-title` ),
+	customTemplatesList: document.getElementById( `${PREFIX}-custom-list` )
+};
+
+// Sidebar Elements
+const favoritesCategory = document.querySelector(
+	`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FAVORITES}"]`
+);
+const sidebarElements = {
+	favoritesCategory,
+	favoritesCategoryCountEl: favoritesCategory.querySelector(
+		`.${PREFIX}-cat-count`
+	),
+	allTemplatesCategory: document.querySelector(
+		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.ALL_TEMPLATES}"]`
+	),
+	availableTemplatesCategory: document.querySelector(
+		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
+	),
+	freeTemplatesCategory: document.querySelector(
+		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
+	)
+};
+
+// Modal Elements
+const modal = document.getElementById( `${PREFIX}-modal` );
+const modalElements = {
+	modal,
+	modalItems: modal?.querySelectorAll( `.${PREFIX}-modal-item` ),
+	// Create New Template Modal
+	showCreateTemplateModalButton: document.getElementById( 'frm-show-create-template-modal' ),
+	createTemplateModal: document.getElementById( 'frm-create-template-modal' ),
+	createTemplateFormsDropdown: document.getElementById( 'frm-create-template-modal-forms-select' ),
+	createTemplateName: document.getElementById( 'frm_create_template_name' ),
+	createTemplateDescription: document.getElementById( 'frm_create_template_description' ),
+	createTemplateButton: document.getElementById( 'frm-create-template-button' ),
+	// Renew Account Modal
+	renewAccountModal: document.getElementById( 'frm-renew-modal' ),
+	// Leave Email Modal
+	leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
+	leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
+	leaveEmailModalApiEmailForm: document.getElementById( 'frmapi-email-form' ),
+	leaveEmailModalGetCodeButton: document.getElementById( 'frm-get-code-button' ),
+	// Code from Email Modal
+	codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
+	codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
+	// Upgrade Modal
+	upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
+	upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
+	upgradeModalPlansIcons: modal?.querySelectorAll( '.frm-upgrade-modal-plan-icon' ),
+	upgradeModalLink: document.getElementById( 'frm-upgrade-modal-link' )
+};
+
+// New Template Form Elements
+const newTemplateForm = document.getElementById( 'frm-new-template' );
+const newTemplateFormElements = {
+	newTemplateForm,
+	newTemplateNameInput: document.getElementById( 'frm_template_name' ),
+	newTemplateDescriptionInput: document.getElementById( 'frm_template_desc' ),
+	newTemplateLinkInput: document.getElementById( 'frm_link' ),
+	newTemplateActionInput: document.getElementById( 'frm_action_type' )
+};
+
+// Add children of the bodyContent to the elements object.
+const bodyContentChildren = bodyContent?.children;
 
 /**
  * Initialize the elements.
  *
  * @return {void}
  */
-export function initializeElements() {
-	elements = getDOMElements();
-	addEmptyStateElements();
-	addBodyContentChildren();
-}
+addElements({
+	...bodyElements,
+	...templates,
+	...customTemplates,
+	...sidebarElements,
+	...modalElements,
+	...newTemplateFormElements,
+	bodyContentChildren
+});
 
-/**
- * Retrieve the initialized essential DOM elements.
- *
- * @return {Object|null} The initialized elements object or null.
- */
-export function getElements() {
-	return elements;
-}
-
-/**
- * Add new elements to the elements object.
- *
- * @param {Object} newElements An object containing new elements to be added.
- * @return {void} Updates the global `elements` object by merging the new elements into it.
- */
-export function addElements( newElements ) {
-	elements = { ...elements, ...newElements };
-}
-
-/**
- * Inject empty state elements into the DOM and the elements object.
- *
- * @private
- * @return {void}
- */
-function addEmptyStateElements() {
-	if ( elements.emptyState ) {
-		return;
-	}
-
-	const emptyState = createEmptyStateElement();
-	elements.bodyContent?.appendChild( emptyState );
-
-	const emptyStateElements = getEmptyStateElements();
-	elements = { ...elements, ...emptyStateElements };
-}
-
-/**
- * Add children of the bodyContent to the elements object.
- *
- * @private
- * @return {void}
- */
-function addBodyContentChildren() {
-	const bodyContentChildren = elements.bodyContent?.children;
-	elements = { ...elements, bodyContentChildren };
-}
+export { getElements, addElements };

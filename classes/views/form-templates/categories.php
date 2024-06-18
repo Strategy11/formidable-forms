@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <ul class="frm-form-templates-categories frm-flex-col frm-gap-xs" aria-label="<?php esc_attr_e( 'Categories', 'formidable' ); ?>">
 	<?php foreach ( $categories as $category_slug => $category_data ) { ?>
 		<?php
-		$classes    = 'frm-page-sidebar-cat frm-form-templates-cat-item frm-flex-box frm-justify-between frm-font-medium';
+		$classes    = 'frm-page-skeleton-cat frm-form-templates-cat-item frm-flex-box frm-justify-between frm-font-medium';
 		$aria_label = sprintf(
 			// translators: %1$s: category name, %2$d: number of items in the category
 			esc_html__( '%1$s category, %2$d items', 'formidable' ),

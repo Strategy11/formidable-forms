@@ -6,23 +6,13 @@
  * @return {Object} An object with methods to get and add elements.
  */
 export function createPageElements( initialElements = {} ) {
-	let elements = null;
+	if ( typeof initialElements !== 'object' || initialElements === null ) {
+		throw new Error(
+			'createPageElements: initialElements must be a non-null object'
+		);
+	}
 
-	/**
-	 * Initializes the page elements with the provided initial elements.
-	 *
-	 * @throws {Error} Throws an error if `initialElements` is not a plain object.
-	 * @return {void}
-	 */
-	const initializePageElements = () => {
-		if ( typeof initialElements !== 'object' || initialElements === null ) {
-			throw new Error(
-				'initializePageElements: initialElements must be a non-null object'
-			);
-		}
-
-		elements = initialElements;
-	};
+	let elements = initialElements;
 
 	/**
 	 * Retrieve the initialized essential DOM elements.
@@ -50,5 +40,5 @@ export function createPageElements( initialElements = {} ) {
 		elements = { ...elements, ...newElements };
 	}
 
-	return { initializePageElements, getElements, addElements };
+	return { getElements, addElements };
 }

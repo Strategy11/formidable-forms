@@ -16,7 +16,7 @@ const { init: initSearch } = window.frmDom.search;
 function addSearchEvents() {
 	const { searchInput } = getElements();
 
-	initSearch( searchInput, SEARCH_RESULT_ITEM, { handleSearchResult } );
+	initSearch( searchInput, SEARCH_RESULT_ITEM, { handleSearchResult });
 }
 
 /**
@@ -41,7 +41,7 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	// Show ALL_ITEMS if both the search query and the selected category are empty
 	if ( ! appState.hasSearchQuery && ! appState.selectedCategory ) {
 		const { allItemsCategory } = getElements();
-		allItemsCategory.dispatchEvent( new Event( 'click', { bubbles: true } ) );
+		allItemsCategory.dispatchEvent( new Event( 'click', { bubbles: true }) );
 
 		return;
 	}
@@ -65,7 +65,7 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	wp.hooks.doAction( 'frmPageSidebar.displaySearchElements', {
 		foundSomething,
 		notEmptySearchText,
-	} );
+	});
 }
 
 /**
@@ -77,7 +77,7 @@ export function resetSearchInput() {
 	const { searchInput } = getElements();
 
 	searchInput.value = '';
-	searchInput.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+	searchInput.dispatchEvent( new Event( 'input', { bubbles: true }) );
 }
 
 export default addSearchEvents;
