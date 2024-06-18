@@ -5923,6 +5923,13 @@ p.frm-inline-select,
 	margin-bottom: 5px;
 }
 
+.frm-single-settings .frm_add_opt_container svg.frm_add_tag,
+.frm-single-settings .frm-add-other svg.frm_add_tag {
+	position: relative;
+	top: 5px;
+	margin-right: 4px;
+}
+
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
 }
@@ -6270,7 +6277,6 @@ span.howto {
 	background: var(--sidebar-color);
 }
 
-/* */
 #frm_form_editor_container #frm_form_key_box {
 	width: 13em;
 	max-width: 30%
