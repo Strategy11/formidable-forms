@@ -1825,28 +1825,3 @@ function getSelectedCaptcha( captchaSelector ) {
 function frmAfterRecaptcha( token ) {
 	frmFrontForm.afterSingleRecaptcha( token );
 }
-
-if ( frm_js.include_update_field ) { // eslint-disable-line camelcase
-	window.frmUpdateField = function( entryId, fieldId, value, message, num ) {
-		console.warn( 'DEPRECATED: function frmUpdateField please update to Formidable Pro v6.9.2' );
-		jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
-		jQuery.ajax({
-			type: 'POST',
-			url: frm_js.ajax_url, // eslint-disable-line camelcase
-			data: {
-				action: 'frm_entries_update_field_ajax',
-				entry_id: entryId,
-				field_id: fieldId,
-				value: value,
-				nonce: frm_js.nonce // eslint-disable-line camelcase
-			},
-			success: function() {
-				if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
-					jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
-				} else {
-					jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
-				}
-			}
-		});
-	};
-}
