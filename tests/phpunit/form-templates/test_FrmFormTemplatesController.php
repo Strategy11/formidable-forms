@@ -180,7 +180,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		}
 
 		// Define and validate the presence of specific categories.
-		$expected_categories = array( 'favorites', 'custom', 'all-templates', 'free-templates' );
+		$expected_categories = array( 'favorites', 'custom', 'all-items', 'free-templates' );
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$expected_categories[] = 'available-templates';
 		}
@@ -199,7 +199,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 					case 'custom':
 						$expected_count = count( $this->controller::get_custom_templates() );
 						break;
-					case 'all-templates':
+					case 'all-items':
 						$expected_count = count( $this->controller::get_templates() );
 						break;
 					case 'free-templates':

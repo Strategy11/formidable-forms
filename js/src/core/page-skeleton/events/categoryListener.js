@@ -16,7 +16,7 @@ import { resetSearchInput } from '.';
  *
  * @return {void}
  */
-function addCategoryEvents() {
+export function addCategoryEvents() {
 	const { categoryItems } = getElements();
 
 	// Attach click and keyboard event listeners to each sidebar category
@@ -35,7 +35,7 @@ function addCategoryEvents() {
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, hasSearchQuery } = getState();
+	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -43,12 +43,12 @@ const onCategoryClick = ( event ) => {
 	}
 
 	/**
-	 * Filter hook to modify the selected category
+	 * Filter hook to modify the selected category.
 	 *
 	 * @param {string} selectedCategory The selected category
 	 */
 	selectedCategory = wp.hooks.applyFilters(
-		'frmPageSidebar.selectedCategory',
+		'frmPageSkeleton.selectedCategory',
 		newSelectedCategory
 	);
 
@@ -56,22 +56,19 @@ const onCategoryClick = ( event ) => {
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );
 	selectedCategoryEl = clickedCategory;
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
-	setState( { selectedCategory, selectedCategoryEl });
+	setState({ selectedCategory, selectedCategoryEl });
 
 	// Reset the search input if it contains text
-	if ( hasSearchQuery ) {
+	if ( notEmptySearchText ) {
 		resetSearchInput();
 	}
 
 	/**
-	 * Trigger custom event to update category content in the sidebar.
+	 * Trigger custom action to update category content.
 	 *
-	 * @param {Object} detail                  The detail object to pass with the event.
-	 * @param {string} detail.selectedCategory The selected category.
+	 * @param {string} selectedCategory The selected category.
 	 */
-	dispatchCustomEvent( 'layout:sidebar:updateCategoryContent', {
-		selectedCategory,
-	});
+	wp.hooks.doAction( 'frmPageSkeleton.onCategoryClick', selectedCategory );
 
 	// Smoothly display the updated UI elements
 	const { bodyContent } = getElements();
@@ -91,5 +88,3 @@ function onCategoryKeydown( event ) {
 		onCategoryClick( event );
 	}
 }
-
-export default addCategoryEvents;

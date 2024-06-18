@@ -18,12 +18,12 @@ import { getSingleState } from '../shared';
 /**
  * Updates the UI to display the search state.
  *
- * @param {boolean} hasSearchQuery True if search input is not empty.
+ * @param {boolean} notEmptySearchText True if search input is not empty.
  * @return {void}
  */
-export function showSearchState( hasSearchQuery ) {
+export function showSearchState( notEmptySearchText ) {
 	// Remove highlighting from the currently selected category if the search text is not empty
-	if ( hasSearchQuery ) {
+	if ( notEmptySearchText ) {
 		getSingleState( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
 	}
 
@@ -35,9 +35,9 @@ export function showSearchState( hasSearchQuery ) {
 	/**
 	 * Action to update the UI to display the search state.
 	 *
-	 * @param {boolean} hasSearchQuery True if search input is not empty.
+	 * @param {boolean} notEmptySearchText True if search input is not empty.
 	 */
-	wp.hooks.doAction( 'frmPageSidebar.updateSearchUI', { hasSearchQuery } );
+	wp.hooks.doAction( 'frmPageSkeleton.updateSearchUI', { notEmptySearchText } );
 
 	// Smoothly display the updated UI elements
 	new frmAnimate( bodyContent ).fadeIn();

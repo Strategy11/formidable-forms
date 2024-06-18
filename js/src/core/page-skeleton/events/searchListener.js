@@ -1,9 +1,10 @@
 /**
  * Internal dependencies
  */
+import { SEARCH_RESULT_ITEM } from '../constants';
 import { getElements } from '../elements';
-import { SEARCH_RESULT_ITEM, getState, setSingleState } from '../shared';
-import { showSearchState } from '../ui';
+import { getState, setSingleState } from '../shared';
+// import { showSearchState } from '../ui';
 
 const { init: initSearch } = window.frmDom.search;
 
@@ -36,10 +37,10 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	}
 
 	const appState = getState();
-	setSingleState( 'hasSearchQuery', notEmptySearchText );
+	setSingleState( 'notEmptySearchText', notEmptySearchText );
 
 	// Show ALL_ITEMS if both the search query and the selected category are empty
-	if ( ! appState.hasSearchQuery && ! appState.selectedCategory ) {
+	if ( ! appState.notEmptySearchText && ! appState.selectedCategory ) {
 		const { allItemsCategory } = getElements();
 		allItemsCategory.dispatchEvent( new Event( 'click', { bubbles: true }) );
 
@@ -48,7 +49,7 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 
 	// Display the search state if a category is selected
 	if ( appState.selectedCategory ) {
-		showSearchState( notEmptySearchText );
+		// showSearchState( notEmptySearchText );
 
 		// Setting "selectedCategory" to an empty string as a flag for search state
 		if ( notEmptySearchText ) {
@@ -62,7 +63,7 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	 * @param {boolean} foundSomething     True if search yielded results.
 	 * @param {boolean} notEmptySearchText True if search input is not empty.
 	 */
-	wp.hooks.doAction( 'frmPageSidebar.displaySearchElements', {
+	wp.hooks.doAction( 'frmPageSkeleton.displaySearchElements', {
 		foundSomething,
 		notEmptySearchText,
 	});
@@ -77,7 +78,7 @@ export function resetSearchInput() {
 	const { searchInput } = getElements();
 
 	searchInput.value = '';
-	searchInput.dispatchEvent( new Event( 'input', { bubbles: true }) );
+	searchInput.dispatchEvent( new Event( 'input', { bubbles: true } ) );
 }
 
 export default addSearchEvents;

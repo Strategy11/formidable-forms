@@ -9,9 +9,9 @@ import { addEventListeners } from './events';
  *
  * @return {void}
  */
-function initializePageSidebar() {
+function initializePageSkeleton() {
 	setupInitialView();
 	addEventListeners();
 }
 
-export default initializePageSidebar;
+export default initializePageSkeleton;

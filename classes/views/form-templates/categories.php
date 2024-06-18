@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $category_data['count'] )
 		);
 
-		if ( 'all-templates' === $category_slug ) {
+		if ( 'all-items' === $category_slug ) {
 			echo '<li class="frm-form-templates-divider"></li>';
 			$classes .= ' frm-current';
 		}

@@ -691,6 +691,7 @@ class FrmAppController {
 
 		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
+		wp_register_style( 'formidable-page-skeleton', $plugin_url . '/css/admin/page-skeleton.css', array(), $version );
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );

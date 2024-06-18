@@ -26,7 +26,7 @@ function setupInitialView() {
 	 *
 	 * @return {void}
 	 */
-	wp.hooks.doAction( 'frmPageSidebar.setupInitialView' );
+	wp.hooks.doAction( 'frmPageSkeleton.setupInitialView' );
 
 	// Display the UI elements with smooth transitions
 	bodyContent.classList.remove( HIDE_JS_CLASS );

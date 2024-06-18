@@ -4,7 +4,6 @@ export const { FEATURED_TEMPLATES_KEYS, upgradeLink } = window.frmFormTemplatesV
 export const PREFIX = 'frm-form-templates';
 
 export const VIEW_SLUGS = {
-	ALL_TEMPLATES: 'all-templates',
 	AVAILABLE_TEMPLATES: 'available-templates',
 	FREE_TEMPLATES: 'free-templates',
 	FAVORITES: 'favorites',

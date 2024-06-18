@@ -1,9 +1,9 @@
 /**
  * Internal dependencies
  */
-import addCategoryEvents from './categoryListener';
-import addSearchEvents from './searchListener';
-import addEmptyStateButtonEvents from './emptyStateButtonListener';
+import { addCategoryEvents } from './categoryListener';
+// import addSearchEvents from './searchListener';
+// import addEmptyStateButtonEvents from './emptyStateButtonListener';
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -12,8 +12,8 @@ import addEmptyStateButtonEvents from './emptyStateButtonListener';
  */
 export function addEventListeners() {
 	addCategoryEvents();
-	addSearchEvents();
-	addEmptyStateButtonEvents();
+	// addSearchEvents();
+	// addEmptyStateButtonEvents();
 }
 
 export { resetSearchInput } from './searchListener';

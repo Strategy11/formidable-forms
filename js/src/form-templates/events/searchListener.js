@@ -39,13 +39,13 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 	}
 
 	const state = getState();
-	const { allTemplatesCategory } = getElements();
+	const { allItemsCategory } = getElements();
 
 	setSingleState( 'notEmptySearchText', notEmptySearchText );
 
 	// Revert to 'All Templates' if search and selected category are both empty
 	if ( ! state.notEmptySearchText && ! state.selectedCategory ) {
-		allTemplatesCategory.dispatchEvent(
+		allItemsCategory.dispatchEvent(
 			new Event( 'click', { bubbles: true })
 		);
 

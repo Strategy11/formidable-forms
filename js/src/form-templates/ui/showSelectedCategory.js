@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { showElements, hideElements, show, hide } from 'core/utils';
+import { VIEWS as SKELETON_VIEWS } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
@@ -21,7 +22,7 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
 export function showSelectedCategory( selectedCategory ) {
 	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems } = getElements();
 
-	if ( VIEW_SLUGS.ALL_TEMPLATES !== selectedCategory ) {
+	if ( SKELETON_VIEWS.ALL_ITEMS !== selectedCategory ) {
 		hideElements( bodyContentChildren );
 	}
 
@@ -30,7 +31,7 @@ export function showSelectedCategory( selectedCategory ) {
 	show( pageTitle );
 
 	switch ( selectedCategory ) {
-		case VIEW_SLUGS.ALL_TEMPLATES:
+		case SKELETON_VIEWS.ALL_ITEMS:
 			showAllTemplates();
 			break;
 		case VIEW_SLUGS.AVAILABLE_TEMPLATES:

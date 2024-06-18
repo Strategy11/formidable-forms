@@ -50,9 +50,6 @@ const sidebarElements = {
 	favoritesCategoryCountEl: favoritesCategory.querySelector(
 		`.${PREFIX}-cat-count`
 	),
-	allTemplatesCategory: document.querySelector(
-		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.ALL_TEMPLATES}"]`
-	),
 	availableTemplatesCategory: document.querySelector(
 		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
 	),

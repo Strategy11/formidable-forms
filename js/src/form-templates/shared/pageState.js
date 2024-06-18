@@ -1,34 +1,24 @@
 /**
  * External dependencies
  */
-import { createPageState } from 'core/factory';
+import { getState, getSingleState, setState, setSingleState } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { VIEW_SLUGS } from '.';
 
-const { templatesCount, favoritesCount, customCount } =
-	window.frmFormTemplatesVars;
-
-const {
-	allTemplatesCategory,
-	availableTemplateItems,
-	freeTemplateItems,
-	firstLockedFreeTemplate,
-} = getElements();
-
+const { templatesCount, favoritesCount, customCount } = window.frmFormTemplatesVars;
+const { availableTemplateItems, freeTemplateItems, firstLockedFreeTemplate } = getElements();
 const availableTemplatesCount = availableTemplateItems.length;
 
-export const { getState, getSingleState, setState, setSingleState } = createPageState({
-	selectedCategory: VIEW_SLUGS.ALL_TEMPLATES,
-	selectedCategoryEl: allTemplatesCategory,
-	selectedTemplate: firstLockedFreeTemplate,
-	notEmptySearchText: false,
-	favoritesCount,
-	customCount: Number( customCount ),
+setState({
 	availableTemplatesCount,
-	freeTemplatesCount: freeTemplateItems.length,
+	customCount: Number( customCount ),
 	extraTemplatesCount: templatesCount - availableTemplatesCount,
+	favoritesCount,
+	freeTemplatesCount: freeTemplateItems.length,
+	selectedTemplate: firstLockedFreeTemplate,
 });
+
+export { getState, getSingleState, setState, setSingleState };
