@@ -31,7 +31,7 @@ export function createEmptyStateElement() {
 		className: `frm-flex-col frm-flex-center frm-gap-md ${HIDDEN_CLASS}`,
 		children: [
 			img({
-				src: `${PLUGIN_URL}/images/form-templates/empty-state.svg`,
+				src: `${PLUGIN_URL}/images/page-skeleton/empty-state.svg`,
 				alt: __( 'Empty State', 'formidable' )
 			}),
 			div({
