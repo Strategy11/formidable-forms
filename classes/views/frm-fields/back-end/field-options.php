@@ -19,7 +19,9 @@ $field_option_count = is_array( $args['field']['options'] ) ? count( $args['fiel
 
 <div class="frm6 frm_form_field frm_add_opt_container">
 	<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $args['field']['id'] ); ?>">
-		<span class="frm_icon_font frm_add_tag"></span>
-		<?php echo esc_html( $this->get_add_option_string() ); ?>
+		<?php
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm_plus1_icon frm_add_tag frm_svg13' );
+		echo esc_html( $this->get_add_option_string() );
+		?>
 	</a>
 </div>
