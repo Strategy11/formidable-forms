@@ -60,8 +60,8 @@ class FrmFieldUserID extends FrmFieldType {
 		$user_ID      = ( $user_ID ? $user_ID : '' );
 		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
-		$updating     = $action == 'update';
-		return ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
+		$updating     = $action === 'update';
+		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
 
 	public function validate( $args ) {
@@ -82,10 +82,10 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param string $value
-	 * @param array  $atts
+	 * @param array|string $value
+	 * @param array        $atts
 	 *
-	 * @return false|mixed|string
+	 * @return array|string A string is returned, but the return signature should match FrmFieldType.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );

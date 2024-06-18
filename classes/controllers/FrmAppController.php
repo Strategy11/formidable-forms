@@ -68,7 +68,7 @@ class FrmAppController {
 
 		if ( FrmAppHelper::is_full_screen() ) {
 			$full_screen_on = self::get_full_screen_setting();
-			$add_class = '';
+			$add_class      = '';
 			if ( $full_screen_on ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
 
@@ -143,6 +143,7 @@ class FrmAppController {
 			'formidable-styles2',
 			'formidable-inbox',
 			FrmFormTemplatesController::PAGE_SLUG,
+			FrmOnboardingWizardController::PAGE_SLUG,
 		);
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
@@ -238,7 +239,7 @@ class FrmAppController {
 		$current_page = self::get_current_page();
 		$nav_items    = self::get_form_nav_items( $form );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php';
 	}
 
 	/**
@@ -298,12 +299,12 @@ class FrmAppController {
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
-				'label'   => __( 'Views', 'formidable' ),
-				'current' => array(),
-				'page'    => 'formidable-views',
+				'link'       => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
+				'label'      => __( 'Views', 'formidable' ),
+				'current'    => array(),
+				'page'       => 'formidable-views',
 				'permission' => 'frm_view_entries',
-				'atts'    => array(
+				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
 			);
@@ -312,12 +313,12 @@ class FrmAppController {
 		// Let people know reports and views exist.
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
-				'label'   => __( 'Reports', 'formidable' ),
-				'current' => array( 'reports' ),
-				'page'    => 'formidable',
+				'link'       => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
+				'label'      => __( 'Reports', 'formidable' ),
+				'current'    => array( 'reports' ),
+				'page'       => 'formidable',
 				'permission' => 'frm_view_entries',
-				'atts'    => array(
+				'atts'       => array(
 					'class' => 'frm_noallow',
 				),
 			);
@@ -432,8 +433,8 @@ class FrmAppController {
 	 * @param string $description
 	 * @return void
 	 */
-	public static function api_email_form( $form_key, $title, $description ) {
-		$user        = wp_get_current_user();
+	public static function api_email_form( $form_key, $title = '', $description = '' ) {
+		$user = wp_get_current_user();
 		$args = array(
 			'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/' . $form_key . '?return=html&exclude_script=jquery&exclude_style=formidable-css',
 			'title'       => $title,
@@ -489,7 +490,7 @@ class FrmAppController {
 	 * Check if the database is outdated
 	 *
 	 * @since 2.0.1
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function needs_update() {
 		$needs_upgrade = self::compare_for_update(
@@ -568,11 +569,11 @@ class FrmAppController {
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
 			// This provides backward compatibility for old addons that use legacy modal templates.
-			$action = FrmAppHelper::get_param( 'frm_action' );
+			$action             = FrmAppHelper::get_param( 'frm_action' );
 			$trigger_name_modal = FrmAppHelper::get_param( 'triggerNewFormModal' );
 			if ( $trigger_name_modal || in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
 				$application_id = FrmAppHelper::simple_get( 'applicationId', 'absint' );
-				$url_param = $application_id ? '&applicationId=' . $application_id : '';
+				$url_param      = $application_id ? '&applicationId=' . $application_id : '';
 
 				wp_safe_redirect( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . $url_param ) );
 				exit;
@@ -582,6 +583,7 @@ class FrmAppController {
 		}
 
 		self::maybe_add_ip_warning();
+		self::maybe_add_deprecated_message();
 	}
 
 	/**
@@ -632,10 +634,10 @@ class FrmAppController {
 		}
 
 		$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
-		$message = sprintf(
+		$message              = sprintf(
 			// Translators: 1: Global Settings Link
 			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
-			'<a href="' . esc_url( $global_settings_link ) . '">Global Settings</a>'
+			'<a href="' . esc_url( $global_settings_link ) . '">' . __( 'Global Settings', 'formidable' ) . '</a>'
 		);
 		$option_name = 'frm_dismiss_ip_address_notice';
 		FrmAppHelper::add_dismissable_warning_message( $message, $option_name );
@@ -757,7 +759,7 @@ class FrmAppController {
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
-				wp_enqueue_style( 'formidable-dropzone' );
+				self::maybe_enqueue_dropzone_css( $page );
 			} else {
 				wp_enqueue_style( 'formidable-grids' );
 			}
@@ -795,6 +797,25 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+	}
+
+	/**
+	 * Avoid loading dropzone CSS on the form list page. It isn't required there.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $page
+	 * @return void
+	 */
+	private static function maybe_enqueue_dropzone_css( $page ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+
+		$should_avoid_loading_dropzone = 'formidable' === $page && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( ! $should_avoid_loading_dropzone ) {
+			wp_enqueue_style( 'formidable-dropzone' );
 		}
 	}
 
@@ -959,16 +980,16 @@ class FrmAppController {
 	 */
 	public static function create_rest_routes() {
 		$args = array(
-			'methods'  => 'GET',
-			'callback' => 'FrmAppController::api_install',
+			'methods'             => 'GET',
+			'callback'            => 'FrmAppController::api_install',
 			'permission_callback' => __CLASS__ . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );
 
 		$args = array(
-			'methods'  => 'GET',
-			'callback' => 'FrmAddonsController::install_addon_api',
+			'methods'             => 'GET',
+			'callback'            => 'FrmAddonsController::install_addon_api',
 			'permission_callback' => 'FrmAddonsController::can_install_addon_api',
 		);
 
@@ -1220,48 +1241,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 3.0.04
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function activation_install() {
-		FrmDeprecated::activation_install();
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function page_route( $content ) {
-		return FrmDeprecated::page_route( $content );
-	}
-
-	/**
-	 * Include icons on page for Embed Form modal.
-	 *
-	 * @since 5.2
-	 *
-	 * @return void
-	 */
-	public static function include_embed_form_icons() {
-		_deprecated_function( __METHOD__, '5.3' );
-	}
-
-	/**
-	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $atts
-	 * @return string
-	 */
-	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
-		return FrmFormsController::get_form_shortcode( $atts );
-	}
-
-	/**
 	 * Handles Floating Links' scripts and styles enqueueing.
 	 *
 	 * @since 6.4
@@ -1301,5 +1280,88 @@ class FrmAppController {
 		 * @since 6.8.4
 		 */
 		do_action( 'frm_enqueue_floating_links' );
+	}
+
+	/**
+	 * @return void
+	 */
+	private static function maybe_add_deprecated_message() {
+		$settings = FrmAppHelper::get_settings();
+
+		if ( ! empty( $settings->use_html ) ) {
+			// Dont' show a message if Use HTML 5 is already enabled.
+			return;
+		}
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
+			add_action(
+				'frm_update_settings',
+				function ( $params ) {
+					if ( ! empty( $params['frm_use_html'] ) ) {
+						$inbox = new FrmInbox();
+						$inbox->dismiss( 'deprecated_use_html' );
+					}
+				}
+			);
+			// Don't show the message on global settings.
+			return;
+		}
+
+		$url = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
+
+		add_filter(
+			'frm_message_list',
+			/**
+			 * @param array $messages
+			 * @return array
+			 */
+			function ( $messages ) use ( $url ) {
+				$messages[] = '<p>The option to use HTML5 in forms is currently disabled. In a future release, this setting will be removed and using HTML5 will be a requirement. <a href="' . esc_url( $url ) . '">Click here to enable it in Global Settings now</a>.</p>';
+				return $messages;
+			}
+		);
+
+		$inbox = new FrmInbox();
+		$inbox->add_message(
+			array(
+				'key'     => 'deprecated_use_html',
+				'force'   => true,
+				'subject' => 'The option to use HTML5 in forms will soon be removed',
+				'message' => 'The option to use HTML5 in forms is currently disabled. In a future release, this setting will be removed and using HTML5 will be a requirement.',
+				'icon'    => 'frm_report_problem_icon',
+				'cta'     => '<a class="button-secondary frm-button-secondary" href="' . esc_url( $url ) . '">Enable in Global Settings</a>',
+			)
+		);
+	}
+
+	/**
+	 * Include icons on page for Embed Form modal.
+	 *
+	 * @since 5.2
+	 *
+	 * @return void
+	 */
+	public static function include_embed_form_icons() {
+		_deprecated_function( __METHOD__, '5.3' );
+	}
+
+	/**
+	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
+	 * @codeCoverageIgnore
+	 *
+	 * @param array $atts
+	 * @return string
+	 */
+	public static function get_form_shortcode( $atts ) {
+		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
+		return FrmFormsController::get_form_shortcode( $atts );
+	}
+
+	/**
+	 * @deprecated 3.0 This is still referenced in https://formidableforms.com/knowledgebase/php-examples/ as of May 8, 2024.
+	 * @codeCoverageIgnore
+	 */
+	public static function page_route( $content ) {
+		return FrmDeprecated::page_route( $content );
 	}
 }

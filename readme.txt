@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5
-Requires PHP: 5.6
-Stable tag: 6.8.4
+Tested up to: 6.5.3
+Requires PHP: 7.0
+Stable tag: 6.10
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,37 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.10 =
+* New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
+* New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
+* Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
+* Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
+* Fix: In some cases, a Stripe redirect would happen after failing to create an entry, resulting in an unexpected redirect to stripe.com.
+* The minimum supported PHP version has been updated to 7.0, ending official support for PHP 5.6.
+* The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
+* Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
+* Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
+* Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
+
+= 6.9.1 =
+* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
+* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
+* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
+* Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* The parser for serialized string data has been optimized to be approximately 30% faster than before.
+* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
+* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
+
+= 6.9 =
+* New: A new onboarding wizard has been added to help improve the initial set up process.
+* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
+* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
+* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
+* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
+* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
+* Fix: A confirmation field wouldn't validate with JS when left empty.
+* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
+
 = 6.8.4 =
 * New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
 * New: A new filter has been added to enable support for bulk editing options for a Ranking field.
@@ -383,50 +414,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Icons were missing for collapsible sections in the visual views builder.
 * Monthly summary emails will no longer get sent when there are no new entries to report on.
 * The global JS function frm_add_logic_row used on admin pages has been removed.
-
-= 6.8.3 =
-* New: HTML field descriptions now support the shortcode pop up used in email actions.
-* New: Exported posts from entries will now include <term_parent> tags when applicable.
-* New: The collapsible sections used in the visual styler are now more accessible, including new aria-expanded attributes.
-* New: Error messages should now be more descriptive. "This field" and "This value" strings will now be dynamically replaced with the name of the field. To partially revert this, a new frm_error_substrings_to_replace_with_field_name filter has been added as well.
-* Fix: Form objects with missing option data would trigger fatal errors during various actions, including when deleting the form.
-* Fix: HTML tags would get stripped of most HTML when displayed in a summary for a unprivileged or logged out user.
-* Fix: A Uncaught TypeError: Cannot access offset of type string on string error has been fixed when checking for add-on data.
-* Fix: License expired emails would get incorrectly sent for rate limited API requests.
-* Fix: Some color style settings would output invalid RGB values when using a RGB color as the style setting value.
-* API requests sent for retreiving add-on and template data will now happen less frequently.
-* A few old deprecated global JavaScript functions have been removed including frm_resend_email, frmOnSubmit, and frmDeleteEntry.
-* Some old CSS rules using -webkit- and -moz- prefixes have been removed, helping to reduce CSS file size.
-
-= 6.8.2 =
-* Fix: The process of connecting an account to formidableforms.com would fail in some web browsers.
-
-= 6.8.1 =
-* Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
-* New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
-* Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
-* Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
-* Fix: The action limit error message would always show the action limit as one.
-
-= 6.8 =
-* Security: Nonce validation was missing when saving changes on the form settings page.
-* New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
-* New: New fields will no longer appear on the front end until the form is saved. This way a form can be used without partial incomplete changes while a form is being worked on.
-* New: An HSL color value can now be used in the visual styler. Previously these values would be prepended by # and PHP warnings would cause styles to break.
-* New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately. This can be reverted to the previous behaviour using add_filter( 'frm_stripe_cancel_subscription_at_period_end', '__return_false' );.
-* New: Summary emails will no longer send by default on multisite for sites that are not the main site.
-* New: Summary emails can now be disabled from your profile on your Formidable Forms account for Pro users.
-* Fix: On some sites, while using Google Chrome, some style card menu options would be missing. This includes the option to Delete a style or to Set a style as default.
-* Fix: Long forms loaded with AJAX were loading in smaller batches than intended, usually pulling only a few fields at a time. This has been restored to the intended batch size of 15 fields at a time.
-* Fix: A styling issue in some search search inputs has been fixed.
-* Fix: The view payment page was appearing blank, and table column options were missing when editing a table view.
-* Fix: An error message wouldn't properly appear when using a 3D secure card and failing the payment.
-* Fix: A subscription with a failed payment would incorrectly redirect like a confirmed payment.
-* Fix: The toggle to disable form styling would still appear active when disabled through the Manage Styling global setting.
-* Fix: Encoded characters would appear in plain text summary emails.
-* List tag types include ul, ol, and li are now allowed in form input HTML by default.
-* Form input HTML will no longer be filtered to strip most HTML on display if the entry was created by or edited by a privileged user.
-* Summary emails are no longer sent when there are no new entries.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

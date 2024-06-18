@@ -135,14 +135,14 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @return null|string
+	 * @return string|null
 	 */
 	public static function list_subscriptions_shortcode() {
 		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
-		$frm_sub = new FrmTransLiteSubscription();
+		$frm_sub       = new FrmTransLiteSubscription();
 		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
 		if ( empty( $subscriptions ) ) {
 			return;

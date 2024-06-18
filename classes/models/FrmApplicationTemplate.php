@@ -9,22 +9,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmApplicationTemplate {
 
 	/**
-	 * @var array<string>|null $keys
+	 * @var array<string>|null
 	 */
 	private static $keys;
 
 	/**
-	 * @var array<string>|null $keys_with_images
+	 * @var array<string>|null
 	 */
 	private static $keys_with_images;
 
 	/**
-	 * @var array<string>|null $categories
+	 * @var array<string>|null
 	 */
 	private static $categories;
 
 	/**
-	 * @var array $api_data
+	 * @var array
 	 */
 	private $api_data;
 
@@ -113,6 +113,10 @@ class FrmApplicationTemplate {
 	 * @return array
 	 */
 	public function as_js_object() {
+		if ( ! is_array( self::$keys ) ) {
+			return array();
+		}
+
 		$application = array();
 		foreach ( self::$keys as $key ) {
 			if ( ! isset( $this->api_data[ $key ] ) ) {
@@ -128,7 +132,7 @@ class FrmApplicationTemplate {
 				$application[ $key ] = array_values(
 					array_filter(
 						$value,
-						function( $category ) {
+						function ( $category ) {
 							return false === strpos( $category, '+Views' );
 						}
 					)

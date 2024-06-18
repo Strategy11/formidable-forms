@@ -704,7 +704,7 @@
 	 * @returns {HTMLElement}
 	 */
 	function getRenameOption( styleId ) {
-		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
+		const renameOption = a( __( 'Rename', 'formidable' ) );
 		addIconToOption( renameOption, 'frm_signature_icon' );
 
 		let titleTarget;
@@ -723,7 +723,7 @@
 				stylerModal(
 					'frm_rename_style_modal',
 					{
-						title: __( 'Rename style', 'formidable-pro' ),
+						title: __( 'Rename style', 'formidable' ),
 						content: getStyleInputNameModalContent( 'rename', styleName ),
 						footer: getRenameStyleModalFooter( styleId )
 					}
@@ -761,7 +761,7 @@
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable-pro' ), 'style_name' )
+				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
@@ -811,10 +811,10 @@
 	 * @returns {HTMLELement}
 	 */
 	 function getRenameStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable-pro' ), buttonType: 'cancel' });
+		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' });
 		cancelButton.classList.add( 'dismiss' );
 
-		const renameButton = footerButton({ text: __( 'Rename style', 'formidable-pro' ), buttonType: 'primary' });
+		const renameButton = footerButton({ text: __( 'Rename style', 'formidable' ), buttonType: 'primary' });
 		onClickPreventDefault( renameButton, () => renameStyle( styleId ) );
 
 		return div({

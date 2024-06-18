@@ -49,7 +49,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
-<?php
+		<?php
 		endif;
 
 		$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
@@ -78,13 +78,15 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 		if ( 'frm_display' === $post->post_type && is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
 			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
-			foreach ( $layouts as $layout ) {
-				?>
+			if ( is_array( $layouts ) ) {
+				foreach ( $layouts as $layout ) {
+					?>
 		<layout>
 			<type><?php echo esc_html( $layout->type ); ?></type>
 			<data><?php echo FrmXMLHelper::cdata( $layout->data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></data>
 		</layout>
 <?php
+				}
 			}
 		}
 		?>
@@ -110,7 +112,7 @@ foreach ( (array) $terms as $term ) {
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
+	$label         = 'category' === $term->taxonomy || 'tag' === $term->taxonomy ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {

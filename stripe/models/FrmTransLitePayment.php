@@ -27,7 +27,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 			),
 			'item_id'     => array(
 				'sanitize' => 'absint',
-				'default' => '',
+				'default'  => '',
 			),
 			'amount'      => array(
 				'sanitize' => 'float',

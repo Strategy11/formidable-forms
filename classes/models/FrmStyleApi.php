@@ -9,17 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStyleApi extends FrmFormApi {
 
 	/**
-	 * @var string $base_api_url
+	 * @var string
 	 */
 	private static $base_api_url = 'https://formidableforms.com/wp-json/style-templates/v1/list';
 
 	/**
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 30;
 
 	/**
-	 * @var string $cache_timeout
+	 * @var string
 	 */
 	protected $cache_timeout = '+12 hours';
 

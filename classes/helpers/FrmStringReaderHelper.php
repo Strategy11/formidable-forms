@@ -46,22 +46,13 @@ class FrmStringReaderHelper {
 	 * By default, discard that final matching character and return the rest.
 	 *
 	 * @param string $char
-	 * @param bool   $discard_char
 	 * @return string
 	 */
-	public function read_until( $char, $discard_char = true ) {
+	public function read_until( $char ) {
 		$value = '';
-
-		while ( null !== ( $one = $this->read_one() ) ) {
-			if ( $one !== $char || ! $discard_char ) {
-				$value .= $one;
-			}
-
-			if ( $one === $char ) {
-				break;
-			}
+		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) !== $char ) {
+			$value .= $one;
 		}
-
 		return $value;
 	}
 
@@ -76,48 +67,38 @@ class FrmStringReaderHelper {
 	public function read( $count ) {
 		$value = '';
 
-		while ( $count > 0 && ! is_null( $one = $this->read_one() ) ) {
-			$value .= $one;
+		while ( $count > 0 && $this->pos <= $this->max && ( ( $one = $this->string[ $this->pos ] ) || '0' === $one ) ) {
+			$value     .= $one;
+			$this->pos += 1;
 			--$count;
 		}
 
-		return $this->strip_quotes( $value );
-	}
-
-	/**
-	 * Read the next character from the supplied string.
-	 * Return null when we have run out of characters.
-	 *
-	 * @return string|null
-	 */
-	private function read_one() {
-		if ( $this->pos <= $this->max ) {
-			$value = $this->string[ $this->pos ];
-			$this->pos += 1;
-		} else {
-			$value = null;
-		}
-		return $value;
-	}
-
-	/**
-	 * Remove a single set of double-quotes from around a string.
-	 *  abc => abc
-	 *  "abc" => abc
-	 *  ""abc"" => "abc"
-	 *
-	 * @param string $string
-	 * @return string
-	 */
-	private function strip_quotes( $string ) {
-		// Only remove exactly one quote from the start and the end and then only if there is one at each end.
-
-		if ( strlen( $string ) < 2 || substr( $string, 0, 1 ) !== '"' || substr( $string, -1, 1 ) !== '"' ) {
+		/**
+		 * Remove a single set of double-quotes from around a string.
+		 *
+		 * Examples:
+		 * abc => abc
+		 * "abc" => abc
+		 * ""abc"" => "abc"
+		 */
+		if ( strlen( $value ) < 2 || substr( $value, 0, 1 ) !== '"' || substr( $value, -1, 1 ) !== '"' ) {
+			// Only remove exactly one quote from the start and the end and then only if there is one at each end.
 			// Too short, or does not start or end with a quote.
-			return $string;
+			return $value;
 		}
 
 		// Return the middle of the string, from the second character to the second-but-last.
-		return substr( $string, 1, -1 );
+		return substr( $value, 1, -1 );
+	}
+
+	/**
+	 * Shift the position. This is used to skip a character that we don't need to read.
+	 *
+	 * @since 6.9.1 This was added as an optimization.
+	 *
+	 * @return void
+	 */
+	public function skip_next_character() {
+		$this->pos += 1;
 	}
 }

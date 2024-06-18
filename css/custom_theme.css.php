@@ -484,6 +484,11 @@ legend.frm_hidden{
 }
 
 /* These do not work if they are combined */
+.with_frm_style input::placeholder,
+.with_frm_style textarea::placeholder {
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style .frm_inside_container > input::-moz-placeholder,
 .with_frm_style .frm_inside_container > textarea::-moz-placeholder {
 	opacity: 0 !important;
@@ -524,7 +529,6 @@ legend.frm_hidden{
 	font-weight: normal;
 	font-weight: var(--field-weight);
 
-	-ms-pointer-events: none;
 	pointer-events: none;
 }
 
@@ -782,7 +786,7 @@ legend.frm_hidden{
 
 <?php
 foreach ( $styles as $style ) {
-	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
+	include __DIR__ . '/_single_theme.css.php';
 	unset( $style );
 }
 
@@ -1234,7 +1238,7 @@ select.frm_loading_lookup{
 	color: transparent !important;
 }
 
-<?php readfile( dirname( __FILE__ ) . '/frm_grids.css' ); ?>
+<?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
 .frm_conf_field.frm_left_container .frm_primary_label{
 	display:none;
@@ -1594,11 +1598,6 @@ select.frm_loading_lookup{
 	display:block;
 }
 
-.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm_icon_font::before {
-	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
-	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
-}
-
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-middle,
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-last {
@@ -1607,8 +1606,6 @@ select.frm_loading_lookup{
 
 
 <?php
-FrmStylesHelper::maybe_include_font_icon_css();
-
 /**
  * Call action so other plugins can add additional CSS.
  *
@@ -1664,7 +1661,6 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 		border-right:1px solid #d3d3d3;
 		border-radius:4px;
 		box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
-		-moz-box-shadow:2px 0px 4px -1px rgba(0,0,0,.08);
 	}
 
 	.with_frm_style .g-recaptcha iframe,

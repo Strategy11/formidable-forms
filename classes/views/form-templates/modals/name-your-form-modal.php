@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="frm_new_form_name_input">
 				<?php esc_html_e( 'Form Name (Optional)', 'formidable' ); ?>
 			</label>
-			<input type="text" name="frm_new_form_name_input" id="frm_new_form_name_input" placeholder="<?php esc_html_e( 'Enter your form name', 'formidable' ); ?>" />
+			<input type="text" name="frm_new_form_name_input" id="frm_new_form_name_input" placeholder="<?php esc_attr_e( 'Enter your form name', 'formidable' ); ?>" />
 		</div>
 	</div>
 

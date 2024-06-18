@@ -13,7 +13,7 @@ $classname = 'frm-counter-card-wrapper frm-flex-box';
 			<div class="frm-counter-card frm-dashboard-widget frm-card-item">
 				<h4><?php echo esc_html( $counter['heading'] ); ?></h4>
 				<?php if ( isset( $counter['cta'] ) && isset( $counter['cta']['display'] ) && true === $counter['cta']['display'] ) : ?>
-					<a href="<?php echo esc_url( $counter['cta']['link'] ); ?>"><?php echo esc_attr( $counter['cta']['title'] ); ?></a>
+					<a href="<?php echo esc_url( $counter['cta']['link'] ); ?>"><?php echo esc_html( $counter['cta']['title'] ); ?></a>
 				<?php else : ?>
 					<?php if ( 'currency' === $counter['type'] ) : ?>
 						<div class="frm-flex-box frm-gap-md">

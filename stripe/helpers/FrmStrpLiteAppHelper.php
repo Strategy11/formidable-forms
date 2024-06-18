@@ -44,10 +44,8 @@ class FrmStrpLiteAppHelper {
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
-		if ( self::should_use_stripe_connect() ) {
-			if ( is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
-				return FrmStrpLiteConnectApiAdapter::$function( ...$params );
-			}
+		if ( self::should_use_stripe_connect() && is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
+			return FrmStrpLiteConnectApiAdapter::$function( ...$params );
 		}
 		return false;
 	}
@@ -57,7 +55,7 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function should_use_stripe_connect() {
 		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
-			require dirname( __FILE__ ) . '/FrmStrpLiteConnectApiAdapter.php';
+			require __DIR__ . '/FrmStrpLiteConnectApiAdapter.php';
 		}
 		return FrmStrpLiteConnectApiAdapter::initialize_api();
 	}

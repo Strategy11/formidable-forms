@@ -2,6 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+/**
+ * @var bool $should_display_videos
+ */
 ?>
 <div class="frm_wrap frm-dashboard-wrapper">
 	<?php
@@ -32,7 +35,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
-			<?php $dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' ); ?>
+			<?php
+			if ( $should_display_videos ) {
+				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );
+			}
+			?>
 			<div class="frm-dashboard-widget frm-card-item frm-inbox-widget frm-px-0">
 				<?php $dashboard_view->get_inbox(); ?>
 			</div>

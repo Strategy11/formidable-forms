@@ -119,7 +119,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function fix_woocommerce_conflict() {
 		add_action(
 			'wp_print_footer_scripts',
-			function() {
+			function () {
 				if ( ! function_exists( 'get_current_screen' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/screen.php';
 				}
@@ -163,18 +163,11 @@ class FrmEntriesAJAXSubmitController {
 	 * @return string
 	 */
 	private static function maybe_modify_ajax_error( $error, $field_id, $form, $errors ) {
-		if ( false !== strpos( $field_id, '-' ) ) {
-			// repeated fields look like field_id-repeater_id-iteration, so pull the first value for the field id.
-			list( $use_field_id ) = explode( '-', $field_id );
-		} else {
-			$use_field_id = $field_id;
-		}
-
-		if ( ! is_numeric( $use_field_id ) ) {
+		if ( ! is_numeric( $field_id ) ) {
 			return $error;
 		}
 
-		$use_field = FrmField::getOne( $use_field_id );
+		$use_field = FrmField::getOne( $field_id );
 
 		if ( ! $use_field ) {
 			return $error;
@@ -185,7 +178,7 @@ class FrmEntriesAJAXSubmitController {
 
 		if ( false !== $error_body ) {
 			$error = str_replace( '[error]', $error, $error_body );
-			$error = str_replace( '[key]', $field_id, $error );
+			$error = str_replace( '[key]', $use_field['field_key'], $error );
 		}
 
 		return $error;
@@ -198,7 +191,7 @@ class FrmEntriesAJAXSubmitController {
 	 * @since 6.2
 	 *
 	 * @param array      $response
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function check_for_failed_form_submission( $response, $form_id ) {

@@ -4,19 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <tr>
-	<td>
-		<label for="frm_option_transition" class="frm_show_upgrade frm_noallow" data-medium="transitions" data-upgrade="Form transitions">
-			<?php esc_html_e( 'Page Turn Transitions', 'formidable' ); ?>
-		</label>
-	</td>
-	<td>
-		<select id="frm_option_transition" >
-			<option disabled>
-				<?php esc_html_e( 'Slide horizontally', 'formidable' ); ?>
-			</option>
-			<option disabled>
-				<?php esc_html_e( 'Slide vertically', 'formidable' ); ?>
-			</option>
-		</select>
+	<td colspan="2">
+		<div class="frm_note_style" style="margin-top: 0;">
+			<?php esc_html_e( 'Page Turn Transitions setting was moved to the page break field settings in the form builder.', 'formidable' ); ?>
+		</div>
 	</td>
 </tr>

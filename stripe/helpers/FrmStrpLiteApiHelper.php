@@ -18,7 +18,7 @@ class FrmStrpLiteApiHelper {
 	 */
 	public static function refund_payment( $payment_id ) {
 		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
-			require dirname( __FILE__ ) . '/FrmStrpLiteConnectApiAdapter.php';
+			require __DIR__ . '/FrmStrpLiteConnectApiAdapter.php';
 		}
 		return FrmStrpLiteConnectApiAdapter::refund_payment( $payment_id );
 	}
@@ -32,7 +32,7 @@ class FrmStrpLiteApiHelper {
 	 */
 	public static function cancel_subscription( $sub_id ) {
 		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
-			require dirname( __FILE__ ) . '/FrmStrpLiteConnectApiAdapter.php';
+			require __DIR__ . '/FrmStrpLiteConnectApiAdapter.php';
 		}
 		return FrmStrpLiteConnectApiAdapter::cancel_subscription( $sub_id );
 	}

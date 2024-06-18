@@ -36,7 +36,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 
 	<div class="frm-form-templates-item-body">
 		<h3 class="frm-form-templates-item-title frm-font-medium">
-			<div class="frm-form-templates-item-title-text">
+			<span class="frm-form-templates-item-title-text">
 				<?php if ( $template['plan_required'] ) { ?>
 					<span class="frm-form-templates-item-lock-icon">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
@@ -46,12 +46,12 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 				<span class="frm-form-template-name">
 					<?php echo esc_html( $template['name'] ); ?>
 				</span>
-			</div>
+			</span>
 
-			<div class="frm-flex-box frm-gap-xs frm-items-center frm-ml-auto">
+			<span class="frm-flex-box frm-gap-xs frm-items-center frm-ml-auto">
 				<?php
 				if ( $template['is_custom'] ) {
-					$trash_links = FrmFormsHelper::delete_trash_links( $template['id'] )
+					$trash_links = FrmFormsHelper::delete_trash_links( $template['id'] );
 					?>
 					<a href="<?php echo esc_url( $trash_links['trash']['url'] ); ?>" class="frm-form-templates-custom-item-trash-button frm-flex-center frm-fadein" data-frmverify="<?php esc_attr_e( 'Do you want to move this form template to the trash?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" role="button" aria-label="<?php esc_attr_e( 'Move to the trash button', 'formidable' ); ?>">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon', array( 'aria-label' => __( 'Move to Trash', 'formidable' ) ) ); ?>
@@ -65,7 +65,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 					FrmAppHelper::icon_by_class( 'frmfont ' . $favorite_button_icon );
 					?>
 				</a>
-			</div>
+			</span>
 		</h3>
 
 		<div class="frm-form-templates-item-content">

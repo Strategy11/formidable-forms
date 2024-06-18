@@ -29,7 +29,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets inner content.
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	abstract protected function get_inner_content();
 
@@ -76,23 +76,13 @@ abstract class FrmEmailSummary {
 	 *
 	 * @since 6.8 This can return `false` to skip sending email.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	protected function get_content() {
 		$args = $this->get_content_args();
 		if ( false === $args ) {
 			return false;
 		}
-
-		/**
-		 * Filters the summary email content args.
-		 *
-		 * @since 6.7
-		 *
-		 * @param array $args        Content args.
-		 * @param array $filter_args Contains `email_obj`: summary email object.
-		 */
-		$args = apply_filters( 'frm_summary_email_content_args', $args, array( 'email_obj' => $this ) );
 
 		ob_start();
 		include $this->get_include_file( 'base' );
@@ -122,13 +112,23 @@ abstract class FrmEmailSummary {
 	 * @return array|false
 	 */
 	protected function get_content_args() {
-		return array(
+		$args = array(
 			'subject'          => $this->get_subject(),
 			'site_url'         => home_url( '/' ),
 			'site_url_display' => home_url( '/' ),
 			'unsubscribe_url'  => site_url() . '/wp-admin/admin.php?page=formidable-settings&t=misc_settings',
 			'support_url'      => FrmEmailSummaryHelper::get_frm_url( 'new-topic', 'contact_support' ),
 		);
+
+		/**
+		 * Filters the summary email content args.
+		 *
+		 * @since 6.7
+		 *
+		 * @param array $args        Content args.
+		 * @param array $filter_args Contains `email_obj`: summary email object.
+		 */
+		return apply_filters( 'frm_summary_email_content_args', $args, array( 'email_obj' => $this ) );
 	}
 
 	/**

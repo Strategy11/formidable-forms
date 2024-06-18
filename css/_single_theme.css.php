@@ -33,42 +33,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 <?php } ?>
 
-<?php if ( ! empty( $label_color ) ) { ?>
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font{
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-}
-<?php } ?>
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['-'] : $minus_icons[1]['-'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['+'] : $minus_icons[1]['+'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before,
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	<?php if ( ! empty( $submit_text_color ) ) { ?>
-		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
-	<?php } ?>
-	vertical-align:middle;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['-'] : $arrow_icons[1]['-'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['+'] : $arrow_icons[1]['+'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
 <?php if ( ! empty( $field_margin ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field{
 	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
@@ -188,7 +152,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 .<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 	opacity: 1;
 }
 .<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
@@ -267,7 +230,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	text-shadow:none;
 	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
 	box-sizing:border-box;
-	-ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
 	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>

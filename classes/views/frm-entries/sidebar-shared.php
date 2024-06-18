@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Entry Details', 'formidable' ); ?>
 	</h3>
 	<div class="inside">
-		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
+		<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php'; ?>
 
 		<?php if ( $entry->post_id ) { ?>
 			<div class="misc-pub-section frm_no_print">

@@ -16,7 +16,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * This is used to determine if a specific entry is deleted.
 	 * When an entry is deleted, there is no link to the deleted entry.
 	 *
-	 * @var int[] $valid_entry_ids
+	 * @var int[]
 	 */
 	private $valid_entry_ids = array();
 
@@ -36,8 +36,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	public function prepare_items() {
 		global $wpdb;
 
-		$orderby  = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
-		$order    = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
+		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
+		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
 		if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
 			$order = 'DESC';
 		}
@@ -203,8 +203,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$alt = 0;
 
-		$form_ids              = $this->get_form_ids();
-		$args                  = compact( 'form_ids', 'date_format' );
+		$form_ids = $this->get_form_ids();
+		$args     = compact( 'form_ids', 'date_format' );
 		// $form_ids is indexed by entry ID.
 		$this->valid_entry_ids = array_keys( $form_ids );
 
@@ -212,7 +212,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" ';
 
 			$is_alternate = 0 === $alt % 2;
-			$alt++;
+			++$alt;
 
 			if ( $is_alternate ) {
 				echo 'class="alternate"';
@@ -354,7 +354,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'href'  => esc_url( $link ),
 			'title' => __( 'View', 'formidable' ),
 		);
-		$link = '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>'
+		$link        = '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>'
 			. $item->{$field}
 			. '</a>';
 
@@ -372,8 +372,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
 		$delete_link = $base_link . 'destroy&id=' . $item->id . '&type=' . $this->table;
 
-		$actions           = array();
-		$actions['view']   = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
+		$actions         = array();
+		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
 		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
@@ -462,13 +462,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$limit              = $item->end_count >= 9999 ? __( 'unlimited', 'formidable' ) : $item->end_count;
 		$frm_payment        = new FrmTransLitePayment();
 		$completed_payments = $frm_payment->get_all_by( $item->id, 'sub_id' );
-		$count              = 0;
-
-		foreach ( $completed_payments as $completed_payment ) {
-			if ( $completed_payment->status === 'complete' ) {
-				$count++;
-			}
-		}
+		$count              = FrmTransLiteAppHelper::count_completed_payments( $completed_payments );
 
 		// translators: %1$s: Count, %2$s: Limit.
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
@@ -491,7 +485,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_processing_tooltip() {
 		return FrmAppHelper::clip(
-			function() {
+			function () {
 				$params = array(
 					'class' => 'frm_help frm_icon_font frm_tooltip_icon',
 					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable' ),
