@@ -261,6 +261,23 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * Returns the message announced when a form is submitted.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_submit_speak_message() {
+		/**
+		 * Allows updating a message announced when a form is submitted.
+		 *
+		 * @since x.x
+		 * @param string $submit_speak_message
+		 */
+		return apply_filters( 'frm_submit_speak_message', __( 'Form submitted', 'formidable' ) );
+	}
+
+	/**
 	 * @param array $atts {
 	 *     The success message details.
 	 *
