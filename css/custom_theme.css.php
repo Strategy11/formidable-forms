@@ -484,6 +484,11 @@ legend.frm_hidden{
 }
 
 /* These do not work if they are combined */
+.with_frm_style input::placeholder,
+.with_frm_style textarea::placeholder {
+	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style .frm_inside_container > input::-moz-placeholder,
 .with_frm_style .frm_inside_container > textarea::-moz-placeholder {
 	opacity: 0 !important;
@@ -524,7 +529,6 @@ legend.frm_hidden{
 	font-weight: normal;
 	font-weight: var(--field-weight);
 
-	-ms-pointer-events: none;
 	pointer-events: none;
 }
 
@@ -1592,11 +1596,6 @@ select.frm_loading_lookup{
 
 .frm_clearfix{
 	display:block;
-}
-
-.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm_icon_font::before {
-	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
-	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,

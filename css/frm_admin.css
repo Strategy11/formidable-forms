@@ -2587,10 +2587,6 @@ h2.frm-h2 + .howto {
 
 /* Form Templates */
 
-.frm-featured-form .frm-inner-circle {
-	margin: 0 auto 5px;
-}
-
 .frm-new-template.plugin-card-bottom {
 	overflow: visible;
 }
@@ -2607,6 +2603,7 @@ h2.frm-h2 + .howto {
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,
 .frm-white-body .notice,
+.frm_wrap > .wrap > .notice,
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
@@ -2716,6 +2713,7 @@ body.frm-body-with-open-modal {
 	overflow-y: hidden;
 }
 
+/* These template list styles are still used to list the View types in the New View modal. */
 .frm-templates-list {
 	margin-top: 0;
 }
@@ -2772,8 +2770,7 @@ body.frm-body-with-open-modal {
 	vertical-align: middle;
 }
 
-.frm-templates-list .frm-inner-circle,
-.frm-category-icon, /* Deprecated */
+.frm-category-icon,
 .frm-icon-wrapper {
 	background: var(--primary-500);
 	border-radius: var(--small-radius);
@@ -2788,21 +2785,8 @@ body.frm-body-with-open-modal {
 	display: inline-flex;
 }
 
-.frm-templates-list .frm-inner-circle .frmsvg {
-	vertical-align: top;
-}
-
 .frm-templates-list li .frm-category-icon {
 	overflow: hidden;
-}
-
-.frm-templates-list .frm-template-details {
-	/* the content container to the right of the icon in Create new form modal */
-	display: inline-block;
-	width: calc( 100% - 40px );
-	padding-left: var(--gap-sm);
-	box-sizing: border-box;
-	transform: translateY(-2px);
 }
 
 .frm-templates-list li h3,
@@ -5278,9 +5262,6 @@ label.frm-example-icon {
 	margin-right: 8px;
 	font-size: 11px;
 	text-align: center;
-}
-
-.frm_inbox_count {
 	min-width: 18px;
 	height: 18px;
 	margin-left: 2px;
@@ -5942,6 +5923,22 @@ p.frm-inline-select,
 	margin-bottom: 5px;
 }
 
+.frm-single-settings .frm_add_opt_container svg.frm_add_tag,
+.frm-single-settings .frm-add-other svg.frm_add_tag {
+	position: relative;
+	top: 5px;
+	margin-right: 4px;
+}
+
+.frm-single-settings .frm_single_option .frm_remove_tag {
+	position: relative;
+	bottom: 3px;
+}
+
+.frm-single-settings .frm_single_option .frm_remove_tag:before {
+	content: "";
+}
+
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
 }
@@ -6185,6 +6182,11 @@ span.howto {
 	text-align: start;
 }
 
+.frm_form_action_settings .frm_email_row .frm_remove_field svg {
+	position: relative;
+	bottom: 2px;
+}
+
 /* Entries Page */
 .frm_no_entries_form {
 	padding: 60px 0;
@@ -6284,7 +6286,6 @@ span.howto {
 	background: var(--sidebar-color);
 }
 
-/* */
 #frm_form_editor_container #frm_form_key_box {
 	width: 13em;
 	max-width: 30%
@@ -7011,29 +7012,6 @@ ul.frm-category-tabs {
 	border-top: none;
 	border-left: none;
 	border-right: none;
-}
-
-.postbox .frm-help-tabs.inside,
-#poststuff .frm-help-tabs.inside {
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 12px;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-.postbox .frm-help-tabs.inside {
-	padding-bottom: inherit;
-}
-
-.frm-help-tabs form > .submit {
-	margin-left: 154px;
-	padding-left: 0.9em;
-}
-
-#poststuff h3.frm_no_bg {
-	background: none;
-	cursor: default;
 }
 
 .frm-postbox-no-h3 {
@@ -7891,18 +7869,7 @@ input[disabled],
 	opacity: 1;
 }
 
-.frm-field-group-count {
-	background-color: var(--sidebar-hover);
-	padding: 5px;
-	color: #fff !important;
-	border-radius: 10px;
-}
-
 /* End dragging */
-
-.field_type_list .frm_icon_font:before {
-	font-size: 20px;
-}
 
 li.frm_noallow.button,
 .frm_noallow {

@@ -21,7 +21,8 @@
 		"phpcbf": "./vendor/bin/phpcbf --parallel=10 ./",
 		"env": "wp-env",
 		"start": "wp-scripts start assets/js/scripts.js --webpack-no-externals --output-path=dist",
-		"e2e:run": "cypress run --config-file cypress.config.js"
+		"e2e:run": "cypress run --config-file cypress.config.js",
+		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms"
 	},
 	"engines": {
 		"node": ">=18.0.0",
@@ -63,6 +64,7 @@
 		"cross-env": "^7.0.3",
 		"cypress": "^13.8.1",
 		"cypress-axe": "^1.5.0",
+		"cypress-html-validate": "^6.1.0",
 		"cypress-xpath": "^2.0.1",
 		"eslint": "^8.57.0",
 		"eslint-plugin-compat": "^4.2.0",
@@ -73,6 +75,7 @@
 		"eslint-plugin-prettier": "^5.0.0",
 		"eslint-plugin-react": "^7.20.6",
 		"eslint-plugin-sonarjs": "^1.0.3",
+		"html-validate": "^8.20.0",
 		"serialize-javascript": "^6.0.1",
 		"style-loader": "^3.3.4",
 		"webpack": "^5.88.2",

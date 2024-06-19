@@ -100,10 +100,10 @@ class FrmFormsHelper {
 		}
 
 		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy', 'destroy_all' ) ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy', 'destroy_all' ), true ) ) {
 			$args['frm_action'] = 'list';
 			$args['form']       = 0;
-		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
+		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ), true ) ) {
 			$args['frm_action'] = 'edit';
 		} elseif ( FrmAppHelper::is_style_editor_page() ) {
 			// Avoid passing style into form switcher on style page.
@@ -773,7 +773,7 @@ BEFORE_HTML;
 
 		FrmField::create( $end_section_values );
 
-		if ( $move == 'move' ) {
+		if ( $move === 'move' ) {
 			// bump the order of current field unless we're at the end of the form
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
@@ -851,6 +851,8 @@ BEFORE_HTML;
 	 * use inline styling to hide the element
 	 *
 	 * @since 2.03.05
+	 *
+	 * @return void
 	 */
 	public static function maybe_hide_inline() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -861,6 +863,9 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public static function get_form_style_class( $form = false ) {
 		$style = self::get_form_style( $form );
 		$class = ' with_frm_style';
@@ -1068,19 +1073,6 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 */
-	public static function actions_dropdown( $atts ) {
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			$status     = $atts['status'];
-			$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
-			$trash_link = self::delete_trash_info( $form_id, $status );
-			$links      = self::get_action_links( $form_id, $status );
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
-		}
-	}
-
-	/**
-	 * @since 3.0
-	 */
 	public static function get_action_links( $form_id, $form ) {
 		if ( ! is_object( $form ) ) {
 			$form = FrmForm::getOne( $form_id );
@@ -1202,7 +1194,7 @@ BEFORE_HTML;
 	public static function delete_trash_info( $id, $status ) {
 		$labels = self::delete_trash_links( $id );
 
-		if ( 'trash' == $status ) {
+		if ( 'trash' === $status ) {
 			$info = $labels['restore'];
 		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
 			if ( EMPTY_TRASH_DAYS ) {
@@ -1790,5 +1782,26 @@ BEFORE_HTML;
 		} else {
 			esc_html_e( 'Update', 'formidable' );
 		}
+	}
+
+	/**
+	 * @since 3.0
+	 * @deprecated 6.11
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	public static function actions_dropdown( $atts ) {
+		_deprecated_function( __METHOD__, '6.11' );
+
+		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
+
+		$status     = $atts['status'];
+		$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$trash_link = self::delete_trash_info( $form_id, $status );
+		$links      = self::get_action_links( $form_id, $status );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
 	}
 }

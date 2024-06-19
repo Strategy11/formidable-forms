@@ -494,7 +494,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Returns the count of completed payments.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param array $payments
 	 *
