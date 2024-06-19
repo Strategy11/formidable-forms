@@ -192,7 +192,73 @@ describe("Fields in the form builder", () => {
 
             cy.log("Navigate back to the formidable form page");
             cy.go(-2);
-        });    
+        });
+        
+    it("should validate forms with javascript setting", () => {
+
+        openForm();
+    
+            cy.log(`Create a text field and set it as required`);
+            cy.get(`li[id="text"] a[title="Text"]`).click({ force: true });
+            cy.get(`li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 }).click({ force: true });
+            cy.get(`li[data-ftype="text"] .frm_select_field > span`).should("contain", "Field Settings").click({ force: true });
+            cy.get('.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 }).check({ force: true });
+
+            cy.log("Create a phone and email field");
+            cy.get(`li[id="email"] a[title="Email"]`).click({ force: true });
+            cy.get(`li[id="phone"] a[title="Phone"]`).click({ force: true });
+                                
+            cy.log("Update form");
+            cy.get('#frm_submit_side_top').should("contain", "Update").click();
+    
+            cy.log("Enabling the 'Validate this form with javascript' setting");
+            cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
+            cy.get(':nth-child(3) > td > .frm_inline_block',{timeout:5000}).should("contain","Validate this form with javascript");
+            cy.get('#js_validate').click({force: true});
+            cy.get('#frm_submit_side_top').should("contain", "Update").click();
+
+            cy.log("Click on Preview - Blank Page");
+            cy.get("#frm-previewDrop",{timeout:5000}).should("contain", "Preview").click();
+            cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
+
+            cy.log("Check error messages on real time - Blank Page");
+
+            cy.get('[id^="field_"]').filter('input, textarea').first().type("Test");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(1).type("Test");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(2).type("Test");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(0).clear();
+            cy.get('[id^="field_"]').filter('input, textarea').eq(1).click();
+
+            cy.get(`[id^="frm_error_field_"]`).eq(0).should("contain",`Text cannot be blank.`);
+            cy.get(`[id^="frm_error_field_"]`).eq(1).should("contain",`Email is invalid`);
+            cy.get(`[id^="frm_error_field_"]`).eq(2).should("contain",`Phone is invalid`);
+            cy.get("button[type='submit']").should("contain", "Submit").click();   
+
+            cy.log("Navigate back to the formidable form page");
+            cy.go('back');
+
+            cy.log("Click on Preview - In Theme");
+            cy.get("#frm-previewDrop",{timeout:5000}).should("contain", "Preview").click();
+            cy.get('.preview > .frm-dropdown-menu > :nth-child(2) > a').should("contain", "In Theme").invoke('removeAttr', 'target').click();
+
+            cy.log("Check error messages on real time - In Theme");
+            cy.get('[id^="field_"]').filter('input, textarea').first().type("Test");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(1).type("Test@gmail.com");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(2).type("+12312312333");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(0).clear();
+            cy.get('[id^="field_"]').filter('input, textarea').eq(1).click();
+            cy.get("button[type='submit']").should("contain", "Submit").click();
+
+            cy.get(`[id^="frm_error_field_"]`).eq(0).should("contain",`Text cannot be blank.`);
+            cy.get(`[id^="frm_error_field_"]`).eq(1).should("not.exist");
+            cy.get(`[id^="frm_error_field_"]`).eq(2).should("not.exist");
+            cy.get('[id^="field_"]').filter('input, textarea').eq(1).clear();
+            cy.get('[id^="field_"]').filter('input, textarea').eq(2).clear(); 
+            cy.get("button[type='submit']").should("contain", "Submit").click();          
+
+            cy.log("Navigate back to the formidable form page");
+            cy.go('back');
+    });  
     
     afterEach(() => {
 
