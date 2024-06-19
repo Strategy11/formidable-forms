@@ -203,7 +203,7 @@ class FrmStrpLiteSubscriptionHelper {
 	/**
 	 * Get an end_count value to use for our subscription.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param string $payment_limit The raw payment value string. It is not empty.
 	 * @param int    $form_id       Required for processing shortcodes.
@@ -234,7 +234,7 @@ class FrmStrpLiteSubscriptionHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param string $payment_limit
 	 * @return WP_Error

@@ -8020,7 +8020,7 @@ function frmAdminBuildJS() {
 	 * We only expect one layout class to exist for a given field.
 	 * For example, if a field has frm_half and we set it to frm_third, frm_half will be removed.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param {HTMLElement} obj
 	 * @param {string}      variable
@@ -8040,7 +8040,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Check if a given class is a layout class.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param {string} className
 	 * @return {boolean}
@@ -8051,7 +8051,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param {string} beforeValue
 	 * @param {Array}  removeClasses
