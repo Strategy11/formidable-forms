@@ -39,7 +39,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since x.x Added $field param.
+	 * @since 6.11 Added $field param.
 	 *
 	 * @param array|object $field
 	 *
@@ -59,7 +59,7 @@ class FrmStylesHelper {
 		/**
 		 * Allows updating label positions in field settings.
 		 *
-		 * @since x.x
+		 * @since 6.11
 		 *
 		 * @param array        $label_positions
 		 * @param array|object $field
