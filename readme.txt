@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5.3
+Tested up to: 6.5.4
 Requires PHP: 7.0
-Stable tag: 6.10
+Stable tag: 6.11
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,19 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.11 =
+* New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
+* New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
+* New: An optimization has been added to help reduce form builder load times for forms with many HTML or Rich Text fields.
+* New: A styling update has been made to make field placeholder font sizes more consistent.
+* New: Stripe actions included in this plugin now support a Recurring Payment Limit setting. When this setting is defined, and the number of payments has been reached, the subscription will be cancelled automatically.
+* Fix: References to JavaScript map files have been removed from bootstrap and popper scripts to prevent 404 error messages that appear when using Safari.
+* Fix: An Undefined array key PHP Warning would get logged when trying to remove fields using the frm_available_fields or frm_pro_available_fields filters.
+* Fix: Form previews would include two conflicting title tags in the source HTML.
+* Fix: A small update has been made to properly support sending data for repeated API actions.
+* Some old CSS styles have been removed, helping to reduce file size.
+* An old TTF file used for icon fonts has been removed as it was only required for supporting Internet Explorer and is no longer required, helping to reduce overall file size.
+
 = 6.10 =
 * New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
 * New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
@@ -401,19 +414,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
 * Fix: A confirmation field wouldn't validate with JS when left empty.
 * Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
-
-= 6.8.4 =
-* New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
-* New: A new filter has been added to enable support for bulk editing options for a Ranking field.
-* New: The trigger to save draft entries has been updated to a button in new forms.
-* New: A new frm_after_generate_csv action has been added. This can be used to track which entries have already been exported as CSV to avoid exporting an entry more than once.
-* Fix: hCaptcha was not properly resetting after clicking the previous button and returning to the page with the hCaptcha field.
-* Fix: A trim(): Passing null to parameter #1 PHP Deprecated message has been fixed.
-* Fix: Checks have been added to avoid fatal errors when trying to extend the time limit when the function is disabled.
-* Fix: A Creation of dynamic property FrmProEddController::$save_status is deprecated PHP Deprecated message has been fixed.
-* Fix: Icons were missing for collapsible sections in the visual views builder.
-* Monthly summary emails will no longer get sent when there are no new entries to report on.
-* The global JS function frm_add_logic_row used on admin pages has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
