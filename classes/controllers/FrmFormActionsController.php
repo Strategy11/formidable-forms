@@ -64,6 +64,7 @@ class FrmFormActionsController {
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
 			'aweber'            => 'FrmDefAweberAction',
+			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
