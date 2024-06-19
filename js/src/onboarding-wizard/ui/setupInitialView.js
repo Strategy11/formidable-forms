@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core/utils';
+import { addProgressToCardBoxes } from 'core/ui';
 
 /**
  * Internal dependencies
@@ -9,7 +10,6 @@ import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core
 import { getElements } from '../elements';
 import { STEPS, WELCOME_STEP_ID, proIsIncluded } from '../shared';
 import { navigateToStep } from '../utils';
-import { addProgressToCardBoxes } from '../../common/components';
 
 /**
  * Initializes the onboarding wizard's UI, sets up the initial step based on certain conditions,

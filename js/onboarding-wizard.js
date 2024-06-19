@@ -60,63 +60,6 @@ function domReady(callback) {
 
 /***/ }),
 
-/***/ "./js/src/common/components/addProgressToCardBoxes.js":
-/*!************************************************************!*\
-  !*** ./js/src/common/components/addProgressToCardBoxes.js ***!
-  \************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/**
- * Internal Dependencies
- */
-var span = window.frmDom.span;
-
-/**
- * Adds a progress bar to each card box element to visually indicate its position in the sequence.
- *
- * @param {Element[]} cardBoxes Collection of card box elements to enhance with progress bars.
- * @return {void}
- */
-function addProgressToCardBoxes(cardBoxes) {
-  if (!Array.isArray(cardBoxes) || !cardBoxes.length) {
-    console.warn('addProgressToCardBoxes: Expected a non-empty array of cardBoxes.');
-    return;
-  }
-  cardBoxes.forEach(function (element, index) {
-    // Exclude cards that either don't require a progress bar or already include one
-    if (!element.classList.contains('frm-has-progress-bar') || element.querySelector('.frm-card-box-progress-bar')) {
-      return;
-    }
-    var progressBar = span();
-    var widthPercentage = (index + 1) / cardBoxes.length * 100;
-    progressBar.style.width = "".concat(widthPercentage, "%");
-    var progressBarContainer = span({
-      className: 'frm-card-box-progress-bar',
-      child: progressBar
-    });
-    element.insertAdjacentElement('afterbegin', progressBarContainer);
-  });
-}
-/* harmony default export */ __webpack_exports__["default"] = (addProgressToCardBoxes);
-
-/***/ }),
-
-/***/ "./js/src/common/components/index.js":
-/*!*******************************************!*\
-  !*** ./js/src/common/components/index.js ***!
-  \*******************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addProgressToCardBoxes: function() { return /* reexport safe */ _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__["default"]; }
-/* harmony export */ });
-/* harmony import */ var _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addProgressToCardBoxes */ "./js/src/common/components/addProgressToCardBoxes.js");
-
-
-/***/ }),
-
 /***/ "./js/src/core/constants.js":
 /*!**********************************!*\
   !*** ./js/src/core/constants.js ***!
@@ -363,6 +306,63 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _createPageElements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createPageElements */ "./js/src/core/factory/createPageElements.js");
 /* harmony import */ var _createPageState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createPageState */ "./js/src/core/factory/createPageState.js");
 
+
+
+/***/ }),
+
+/***/ "./js/src/core/ui/addProgressToCardBoxes.js":
+/*!**************************************************!*\
+  !*** ./js/src/core/ui/addProgressToCardBoxes.js ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/**
+ * Internal Dependencies
+ */
+var span = window.frmDom.span;
+
+/**
+ * Adds a progress bar to each card box element to visually indicate its position in the sequence.
+ *
+ * @param {Element[]} cardBoxes Collection of card box elements to enhance with progress bars.
+ * @return {void}
+ */
+function addProgressToCardBoxes(cardBoxes) {
+  if (!Array.isArray(cardBoxes) || !cardBoxes.length) {
+    console.warn('addProgressToCardBoxes: Expected a non-empty array of cardBoxes.');
+    return;
+  }
+  cardBoxes.forEach(function (element, index) {
+    // Exclude cards that either don't require a progress bar or already include one
+    if (!element.classList.contains('frm-has-progress-bar') || element.querySelector('.frm-card-box-progress-bar')) {
+      return;
+    }
+    var progressBar = span();
+    var widthPercentage = (index + 1) / cardBoxes.length * 100;
+    progressBar.style.width = "".concat(widthPercentage, "%");
+    var progressBarContainer = span({
+      className: 'frm-card-box-progress-bar',
+      child: progressBar
+    });
+    element.insertAdjacentElement('afterbegin', progressBarContainer);
+  });
+}
+/* harmony default export */ __webpack_exports__["default"] = (addProgressToCardBoxes);
+
+/***/ }),
+
+/***/ "./js/src/core/ui/index.js":
+/*!*********************************!*\
+  !*** ./js/src/core/ui/index.js ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addProgressToCardBoxes: function() { return /* reexport safe */ _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__["default"]; }
+/* harmony export */ });
+/* harmony import */ var _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addProgressToCardBoxes */ "./js/src/core/ui/addProgressToCardBoxes.js");
 
 
 /***/ }),
@@ -1909,10 +1909,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": function() { return /* binding */ setupInitialView; }
 /* harmony export */ });
 /* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/onboarding-wizard/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/onboarding-wizard/shared/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
-/* harmony import */ var _common_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/components */ "./js/src/common/components/index.js");
+/* harmony import */ var core_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/ui */ "./js/src/core/ui/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/onboarding-wizard/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/src/onboarding-wizard/shared/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./js/src/onboarding-wizard/utils/index.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1924,10 +1924,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
  */
 
 
+
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -1957,7 +1957,7 @@ function setupInitialView() {
 function navigateToInitialStep() {
   var initialStepName = determineInitialStep();
   clearOnboardingQueryParams();
-  (0,_utils__WEBPACK_IMPORTED_MODULE_3__.navigateToStep)(initialStepName, 'replaceState');
+  (0,_utils__WEBPACK_IMPORTED_MODULE_4__.navigateToStep)(initialStepName, 'replaceState');
 }
 
 /**
@@ -1968,7 +1968,7 @@ function navigateToInitialStep() {
  * @return {string} The name of the initial step to navigate to.
  */
 function determineInitialStep() {
-  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
     hiddenLicenseKeyInput = _getElements.hiddenLicenseKeyInput,
     installFormidableProStep = _getElements.installFormidableProStep,
     licenseManagementStep = _getElements.licenseManagementStep;
@@ -1979,14 +1979,14 @@ function determineInitialStep() {
     // Handle the case where 'success' query parameter is present
     installFormidableProStep.remove();
     licenseManagementStep.remove();
-    return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.DEFAULT_EMAIL_ADDRESS;
+    return _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.DEFAULT_EMAIL_ADDRESS;
   }
-  var stepQueryParam = (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.getQueryParam)('step') || _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.INITIAL;
+  var stepQueryParam = (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.getQueryParam)('step') || _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.INITIAL;
   switch (stepQueryParam) {
-    case _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.LICENSE_MANAGEMENT:
+    case _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.LICENSE_MANAGEMENT:
       installFormidableProStep.remove();
       break;
-    case _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.INSTALL_FORMIDABLE_PRO:
+    case _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.INSTALL_FORMIDABLE_PRO:
       break;
     default:
       // Remove both steps as they are not needed
@@ -2007,14 +2007,14 @@ function determineInitialStep() {
  * @return {string} The name of the next step to navigate to.
  */
 function handleLicenseKeyInput(hiddenLicenseKeyInput, installFormidableProStep, licenseManagementStep) {
-  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
+  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
     licenseKeyInput = _getElements2.licenseKeyInput;
   licenseKeyInput.value = hiddenLicenseKeyInput.value;
-  if (_shared__WEBPACK_IMPORTED_MODULE_2__.proIsIncluded) {
+  if (_shared__WEBPACK_IMPORTED_MODULE_3__.proIsIncluded) {
     installFormidableProStep.remove(); // Remove install Pro step if Pro is installed
-    return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.LICENSE_MANAGEMENT;
+    return _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.LICENSE_MANAGEMENT;
   }
-  return _shared__WEBPACK_IMPORTED_MODULE_2__.STEPS.INSTALL_FORMIDABLE_PRO;
+  return _shared__WEBPACK_IMPORTED_MODULE_3__.STEPS.INSTALL_FORMIDABLE_PRO;
 }
 
 /**
@@ -2035,10 +2035,10 @@ function clearOnboardingQueryParams() {
  * @return {void}
  */
 function enhanceStepsWithProgress() {
-  var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
+  var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
     steps = _getElements3.steps;
-  (0,_common_components__WEBPACK_IMPORTED_MODULE_4__.addProgressToCardBoxes)(_toConsumableArray(steps).filter(function (step) {
-    return step.id !== _shared__WEBPACK_IMPORTED_MODULE_2__.WELCOME_STEP_ID;
+  (0,core_ui__WEBPACK_IMPORTED_MODULE_1__.addProgressToCardBoxes)(_toConsumableArray(steps).filter(function (step) {
+    return step.id !== _shared__WEBPACK_IMPORTED_MODULE_3__.WELCOME_STEP_ID;
   }));
 }
 
@@ -2049,7 +2049,7 @@ function enhanceStepsWithProgress() {
  * @return {void}
  */
 function fadeInPageElements() {
-  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(),
+  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
     pageBackground = _getElements4.pageBackground,
     container = _getElements4.container;
   new core_utils__WEBPACK_IMPORTED_MODULE_0__.frmAnimate(pageBackground).fadeIn();
