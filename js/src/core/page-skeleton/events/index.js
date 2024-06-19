@@ -1,19 +1,18 @@
 /**
  * Internal dependencies
  */
-import { addCategoryEvents } from './categoryListener';
-// import addSearchEvents from './searchListener';
-// import addEmptyStateButtonEvents from './emptyStateButtonListener';
+import { getElements } from '../elements';
 
 /**
- * Attaches event listeners for handling user interactions.
+ * Resets the value of the search input and triggers an input event.
  *
  * @return {void}
  */
-export function addEventListeners() {
-	addCategoryEvents();
-	// addSearchEvents();
-	// addEmptyStateButtonEvents();
+export function resetSearchInput() {
+	const { searchInput } = getElements();
+
+	searchInput.value = '';
+	searchInput.dispatchEvent( new Event( 'input', { bubbles: true } ) );
 }
 
-export { resetSearchInput } from './searchListener';
+export * from './categoryListener';
