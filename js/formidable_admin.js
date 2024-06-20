@@ -6411,7 +6411,7 @@ function frmAdminBuildJS() {
 	 */
 	function showNameYourFormModal() {
 		// Exit early if the 'new_template' URL parameter is not set to 'true'
-		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+		if ( ! shouldShowNameYourFormNameModal() ) {
 			return false;
 		}
 
@@ -6424,6 +6424,22 @@ function frmAdminBuildJS() {
 		offsetModalY( modalWidget, '72px' );
 		modalWidget.dialog( 'open' );
 
+		return true;
+	}
+
+	/**
+	 * Returns true if 'Name Your Form' modal should be displayed.
+	 *
+	 * @returns {Boolean}
+	 */
+	function shouldShowNameYourFormNameModal() {
+		const formNameInput = document.getElementById( 'frm_form_name' );
+		if ( formNameInput ) {
+			return formNameInput.value.trim() === ''
+		}
+		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+			return false;
+		}
 		return true;
 	}
 
