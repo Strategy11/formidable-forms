@@ -372,6 +372,12 @@ namespace Elementor {
 		public static function instance() {
 		}
 	}
+
+	class Controls_Manager {
+		const TAB_CONTENT = 'content';
+		const SELECT2     = 'select2';
+		const SWITCHER    = 'switcher';
+	}
 }
 
 namespace WPMailSMTP {
