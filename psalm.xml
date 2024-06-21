@@ -437,17 +437,7 @@
 		</PossiblyFalseIterator>
 		<DeprecatedMethod>
 			<errorLevel type="suppress">
-				<directory name="deprecated" />
-				<file name="classes/helpers/FrmFieldsHelper.php" />
-				<file name="classes/helpers/FrmStylesHelper.php" />
-				<file name="classes/helpers/FrmFormsHelper.php" />
-				<file name="classes/controllers/FrmAddonsController.php" />
-				<file name="classes/models/FrmFormAction.php" />
-				<file name="classes/controllers/FrmFormsController.php" />
-				<file name="classes/controllers/FrmFieldsController.php" />
 				<file name="classes/controllers/FrmAppController.php" />
-				<file name="classes/helpers/FrmAppHelper.php" />
-				<file name="classes/models/FrmEntryValidate.php" />
 			</errorLevel>
 		</DeprecatedMethod>
 		<DeprecatedFunction>
@@ -464,8 +454,6 @@
 		</UndefinedThisPropertyAssignment>
 		<UndefinedMethod>
 			<errorLevel type="suppress">
-				<directory name="deprecated" />
-				<file name="classes/models/FrmFieldValueSelector.php" />
 				<file name="classes/helpers/FrmXMLHelper.php" />
 				<file name="classes/models/FrmFormTemplateApi.php" />
 			</errorLevel>
