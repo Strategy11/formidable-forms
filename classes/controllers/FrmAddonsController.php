@@ -29,7 +29,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Enqueues the Onboarding Wizard page scripts and styles.
+	 * Enqueues the Add-Ons page scripts and styles.
 	 *
 	 * @since x.x
 	 *
@@ -63,7 +63,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Get the Onboarding Wizard JS variables as an array.
+	 * Get the Add-Ons page JS variables as an array.
 	 *
 	 * @since x.x
 	 *
