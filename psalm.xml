@@ -384,57 +384,48 @@
 		</InvalidCast>
 		<PropertyTypeCoercion>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmEmail.php" />
+				<file name="classes/models/FrmEntryFormatter.php" />
+				<file name="classes/models/FrmEntryValues.php" />
+				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</PropertyTypeCoercion>
 		<DirectConstructorCall>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmFormAction.php" />
 			</errorLevel>
 		</DirectConstructorCall>
 		<NoValue>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmEntryValidate.php" />
 			</errorLevel>
 		</NoValue>
 		<UnsafeInstantiation>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmAddon.php" />
 			</errorLevel>
 		</UnsafeInstantiation>
 		<InvalidArrayAccess>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmStylesHelper.php" />
+				<file name="classes/helpers/FrmStylesHelper.php" />
 			</errorLevel>
 		</InvalidArrayAccess>
 		<PossiblyFalseReference>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/models/FrmAddon.php" />
 			</errorLevel>
 		</PossiblyFalseReference>
-		<LessSpecificImplementedReturnType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</LessSpecificImplementedReturnType>
 		<PossiblyNullReference>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmEntryFormatter.php" />
+				<file name="classes/controllers/FrmSMTPController.php" />
+				<file name="classes/models/FrmEntryShortcodeFormatter.php" />
+				<file name="classes/helpers/FrmAppHelper.php" />
 			</errorLevel>
 		</PossiblyNullReference>
-		<PossiblyFalseIterator>
-			<errorLevel type="suppress">
-				<file name="classes/helpers/FrmXMLHelper.php" />
-			</errorLevel>
-		</PossiblyFalseIterator>
 		<DeprecatedMethod>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmAppController.php" />
