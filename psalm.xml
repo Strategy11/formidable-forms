@@ -158,8 +158,7 @@
 		</InvalidArrayOffset>
 		<PossiblyNullPropertyAssignment>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="stripe/models/FrmStrpLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -182,20 +181,24 @@
 		</PossiblyNullPropertyFetch>
 		<InvalidScalarArgument>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/controllers/FrmAddonsController.php" />
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmField.php" />
+				<file name="classes/models/FrmMigrate.php" />
+				<file name="classes/models/FrmStyle.php" />
+				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
-		<PossiblyInvalidOperand>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</PossiblyInvalidOperand>
 		<PossiblyInvalidIterator>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/controllers/FrmFieldsController.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="classes/models/FrmMigrate.php" />
+				<file name="classes/models/fields/FrmFieldType.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
 			</errorLevel>
 		</PossiblyInvalidIterator>
 		<ArgumentTypeCoercion>
@@ -303,6 +306,8 @@
 				<file name="classes/models/FrmEmailStats.php" />
 				<file name="classes/models/fields/FrmFieldType.php" />
 				<file name="classes/controllers/FrmFormsController.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
 			</errorLevel>
 		</PossiblyInvalidArrayAssignment>
 		<PossiblyInvalidArrayAccess>
