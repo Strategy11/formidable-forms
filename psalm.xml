@@ -62,7 +62,7 @@
 		<InvalidScope>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
-				<directory name="stripe" />
+				<directory name="stripe/views" />
 			</errorLevel>
 		</InvalidScope>
 		<InaccessibleMethod>
