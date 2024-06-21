@@ -1983,6 +1983,9 @@ class FrmXMLHelper {
 	private static function format_email_to_data( &$atts, $notification ) {
 		if ( isset( $notification['email_to'] ) ) {
 			$atts['email_to'] = preg_split( '/ (,|;) /', $notification['email_to'] );
+			if ( false === $atts['email_to'] ) {
+				$atts['email_to'] = array();
+			}
 		} else {
 			$atts['email_to'] = array();
 		}
@@ -1993,19 +1996,17 @@ class FrmXMLHelper {
 			unset( $email_fields );
 		}
 
-		if ( is_array( $atts['email_to'] ) ) {
-			foreach ( $atts['email_to'] as $key => $email_field ) {
-				if ( is_numeric( $email_field ) ) {
-					$atts['email_to'][ $key ] = '[' . $email_field . ']';
-				}
+		foreach ( $atts['email_to'] as $key => $email_field ) {
+			if ( is_numeric( $email_field ) ) {
+				$atts['email_to'][ $key ] = '[' . $email_field . ']';
+			}
 
-				if ( strpos( $email_field, '|' ) ) {
-					$email_opt = explode( '|', $email_field );
-					if ( isset( $email_opt[0] ) ) {
-						$atts['email_to'][ $key ] = '[' . $email_opt[0] . ' show=' . $email_opt[1] . ']';
-					}
-					unset( $email_opt );
+			if ( strpos( $email_field, '|' ) ) {
+				$email_opt = explode( '|', $email_field );
+				if ( isset( $email_opt[0] ) ) {
+					$atts['email_to'][ $key ] = '[' . $email_opt[0] . ' show=' . $email_opt[1] . ']';
 				}
+				unset( $email_opt );
 			}
 		}
 
