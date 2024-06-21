@@ -300,8 +300,9 @@
 		</MissingClosureReturnType>
 		<PossiblyInvalidArrayAssignment>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmEmailStats.php" />
+				<file name="classes/models/fields/FrmFieldType.php" />
+				<file name="classes/controllers/FrmFormsController.php" />
 			</errorLevel>
 		</PossiblyInvalidArrayAssignment>
 		<PossiblyInvalidArrayAccess>
@@ -310,24 +311,6 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</PossiblyInvalidArrayAccess>
-		<ImplementedReturnTypeMismatch>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</ImplementedReturnTypeMismatch>
-		<NonInvariantDocblockPropertyType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</NonInvariantDocblockPropertyType>
-		<RedundantCastGivenDocblockType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</RedundantCastGivenDocblockType>
 		<UndefinedPropertyFetch>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -342,8 +325,7 @@
 		</RiskyCast>
 		<PossiblyInvalidPropertyAssignment>
 			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
+				<file name="classes/models/FrmFormAction.php" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignment>
 		<PossiblyInvalidArgument>
@@ -351,12 +333,6 @@
 				<directory name="deprecated" />
 			</errorLevel>
 		</PossiblyInvalidArgument>
-		<PossiblyFalsePropertyAssignmentValue>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-			</errorLevel>
-		</PossiblyFalsePropertyAssignmentValue>
 		<InvalidPropertyAssignmentValue>
 			<errorLevel type="suppress">
 				<directory name="classes" />
