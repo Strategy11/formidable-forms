@@ -8,6 +8,11 @@ class FrmAddonsController {
 	/**
 	 * @var string
 	 */
+	const SCRIPT_HANDLE = 'frm-addons-page';
+
+	/**
+	 * @var string
+	 */
 	protected static $plugin;
 
 	/**
@@ -43,15 +48,16 @@ class FrmAddonsController {
 		// Enqueue styles that needed.
 		wp_enqueue_style( 'formidable-admin' );
 		wp_enqueue_style( 'formidable-grids' );
+		wp_enqueue_style( 'formidable-page-skeleton' );
 
-		// Register and enqueue Onboarding Wizard style.
-		// wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/onboarding-wizard.css', array(), $version );
-		// wp_enqueue_style( self::SCRIPT_HANDLE );
+		// Register and enqueue Add-Ons page style.
+		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/addons-page.css', array(), $version );
+		wp_enqueue_style( self::SCRIPT_HANDLE );
 
-		// Register and enqueue Onboarding Wizard script.
-		// wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/onboarding-wizard.js', $js_dependencies, $version, true );
-		// wp_localize_script( self::SCRIPT_HANDLE, 'frmOnboardingWizardVars', self::get_js_variables() );
-		// wp_enqueue_script( self::SCRIPT_HANDLE );
+		// Register and enqueue Add-Ons page script.
+		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/addons-page.js', $js_dependencies, $version, true );
+		wp_localize_script( self::SCRIPT_HANDLE, 'frmAddonsVars', self::get_js_variables() );
+		wp_enqueue_script( self::SCRIPT_HANDLE );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
 	}

@@ -23,7 +23,8 @@ const config = {
 		formidable_overlay: './js/src/overlay.js',
 		'form-templates': './js/src/form-templates/index.js',
 		formidable_dashboard: './js/src/dashboard.js',
-		'onboarding-wizard': './js/src/onboarding-wizard/index.js'
+		'onboarding-wizard': './js/src/onboarding-wizard/index.js',
+		'addons-page': './js/src/addons-page/index.js'
 	},
 	output: {
 		filename: '[name].js',

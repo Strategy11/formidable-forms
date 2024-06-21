@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-addons-page" class="frm_wrap">
+<div id="frm-addons-page" class="frm_wrap frm-page-skeleton">
 	<div class="frm_page_container">
 		<?php
 		FrmAppHelper::get_admin_header(
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<div class="columns-2">
-			<div id="frm-addons-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
+			<div id="frm-page-skeleton-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
 				<div class="frm-scrollbar-wrapper frm-flex-col frm-gap-sm">
 					<?php
 					// Search box.
