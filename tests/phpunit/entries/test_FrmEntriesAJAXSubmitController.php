@@ -14,6 +14,7 @@ class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 		$field_id = $this->factory->field->create(
 			array(
 				'form_id'       => $form->id,
+				'field_key'     => 'modify_ajax_error_test_key',
 				'type'          => 'text',
 				'field_options' => array(
 					'custom_html' => '
@@ -30,7 +31,7 @@ class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 			)
 		);
 		$this->assertEquals(
-			'<div class="frm_error my_custom_error_class" id="frm_error_field_' . $field_id . '">My custom error label: This field cannot be blank.</div>',
+			'<div class="frm_error my_custom_error_class" id="frm_error_field_modify_ajax_error_test_key">My custom error label: This field cannot be blank.</div>',
 			$this->maybe_modify_ajax_error( $error, $field_id, $form )
 		);
 	}

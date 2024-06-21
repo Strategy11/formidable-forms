@@ -21,7 +21,8 @@
 		"phpcbf": "./vendor/bin/phpcbf --parallel=10 ./",
 		"env": "wp-env",
 		"start": "wp-scripts start assets/js/scripts.js --webpack-no-externals --output-path=dist",
-		"e2e:run": "cypress run --config-file cypress.config.js"
+		"e2e:run": "cypress run --config-file cypress.config.js",
+		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms"
 	},
 	"engines": {
 		"node": ">=18.0.0",

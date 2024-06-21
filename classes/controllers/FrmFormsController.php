@@ -19,7 +19,7 @@ class FrmFormsController {
 	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
 	 * is stored here and re-used as an optimization.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @var string|null
 	 */

@@ -804,7 +804,7 @@ class FrmAppController {
 	/**
 	 * Avoid loading dropzone CSS on the form list page. It isn't required there.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param string $page
 	 * @return void
