@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { getElements, addElements } from 'core/page-skeleton';
+import { getElements, addElements, PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
@@ -43,18 +43,18 @@ const customTemplates = {
 
 // Sidebar Elements
 const favoritesCategory = document.querySelector(
-	`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FAVORITES}"]`
+	`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.FAVORITES}"]`
 );
 const sidebarElements = {
 	favoritesCategory,
 	favoritesCategoryCountEl: favoritesCategory.querySelector(
-		`.${PREFIX}-cat-count`
+		`.${SKELETON_PREFIX}-cat-count`
 	),
 	availableTemplatesCategory: document.querySelector(
-		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
+		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
 	),
 	freeTemplatesCategory: document.querySelector(
-		`.${PREFIX}-cat-item[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
+		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
 	)
 };
 
@@ -100,11 +100,6 @@ const newTemplateFormElements = {
 // Add children of the bodyContent to the elements object.
 const bodyContentChildren = bodyContent?.children;
 
-/**
- * Initialize the elements.
- *
- * @return {void}
- */
 addElements({
 	...bodyElements,
 	...templates,

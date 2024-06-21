@@ -3,6 +3,7 @@
  */
 import { HIDE_JS_CLASS } from 'core/constants';
 import { frmAnimate, hasQueryParam, hideElements, show, hide } from 'core/utils';
+import {PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
@@ -38,12 +39,12 @@ function setupInitialView() {
 	// Set the 'Available Templates' count if it is present
 	if ( availableTemplatesCategory ) {
 		const { availableTemplatesCount } = getState();
-		availableTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = availableTemplatesCount;
+		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
 	}
 
 	// Update the 'Free Templates' count and hide the category if count is zero
 	const { freeTemplatesCount } = getState();
-	freeTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = freeTemplatesCount;
+	freeTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = freeTemplatesCount;
 	if ( 0 === freeTemplatesCount ) {
 		hide( freeTemplatesCategory );
 	}

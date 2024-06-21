@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
  * External dependencies
  */
 import { PLUGIN_URL, HIDDEN_CLASS } from 'core/constants';
+import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
@@ -44,7 +45,7 @@ export function createApplicationTemplates( applications ) {
 				className: 'frm-text-sm frm-mb-sm'
 			}),
 			tag( 'ul', {
-				className: `${PREFIX}-list ${PREFIX}-grid-layout`,
+				className: `${PREFIX}-list ${SKELETON_PREFIX}-grid-layout`,
 				children: templateItems
 			})
 		]

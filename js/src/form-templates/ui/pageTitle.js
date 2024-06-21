@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
@@ -15,7 +20,7 @@ export function updatePageTitle( title ) {
 
 	const newTitle =
 		title ||
-		getSingleState( 'selectedCategoryEl' ).querySelector( '.frm-form-templates-cat-text' ).textContent;
+		getSingleState( 'selectedCategoryEl' ).querySelector( `.${SKELETON_PREFIX}-cat-text` ).textContent;
 
 	pageTitleText.textContent = newTitle;
 }
