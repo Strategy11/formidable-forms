@@ -4,7 +4,6 @@
 	findUnusedCode="false"
 	findUnusedBaselineEntry="true"
 	resolveFromConfigFile="true"
-	skipChecksOnUnresolvableIncludes="true"
 	findUnusedIssueHandlerSuppression="false"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="https://getpsalm.org/schema/config"
@@ -437,6 +436,13 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</UndefinedThisPropertyAssignment>
+		<UnresolvableInclude>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</UnresolvableInclude>
 		<PossiblyFalseIterator>
 			<errorLevel type="suppress">
 				<file name="classes/helpers/FrmXMLHelper.php" />
