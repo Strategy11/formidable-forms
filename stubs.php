@@ -338,17 +338,6 @@ namespace {
 		}
 	}
 
-	class FrmAbandonmentReportsController {
-		/**
-		 * @param array $args
-		 * @param array $params
-		 *
-		 * @return array
-		 */
-		public static function update_email_args( $args, $params ) {
-		}
-	}
-
 	class FrmProEddController extends FrmAddon {
 	}
 	function load_formidable_pro() {
