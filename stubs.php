@@ -337,7 +337,6 @@ namespace {
 		public static function load_license_management( $template ) {
 		}
 	}
-
 	class FrmProEddController extends FrmAddon {
 	}
 	function load_formidable_pro() {
