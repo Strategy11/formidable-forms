@@ -916,6 +916,9 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function register_popper1() {
+		if ( defined( 'WPB_VC_VERSION' ) ) {
+			return;
+		}
 		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
 	}
 
