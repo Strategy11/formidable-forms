@@ -86,12 +86,6 @@
 	flex-shrink: 0;
 }
 
-.frm-form-templates-item-title-text > span {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 a.frm-form-templates-item-favorite-button {
 	display: none;
 	transition: color 200ms ease-out;
@@ -147,12 +141,6 @@ p.frm-form-templates-item-description {
 	font-size: var(--text-xs);
 	margin: 0;
 	min-height: var(--h-md);
-
-	display: -webkit-box;         /* Required for line-clamp to work */
-	-webkit-box-orient: vertical; /* Required for line-clamp to work */
-	-webkit-line-clamp: 2;
-	text-overflow: ellipsis;
-	overflow: hidden;
 }
 
 .frm-card-item:hover .frm-form-templates-item-description,

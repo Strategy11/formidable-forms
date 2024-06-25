@@ -102,8 +102,7 @@
 /**
  * Helper Classes
  *
- * Provides helper classes for common layout patterns and animations in the
- * Form Templates page.
+ * Provides helper classes for common layout patterns.
  */
 .frm-page-skeleton-divider {
 	border-top: 1px solid var(--grey-200);

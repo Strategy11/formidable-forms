@@ -38,14 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 
-			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-md frm-hide-js">
-				<?php
-				// TODO: Clarify this old code.
-				// require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
-
-				// Add-Ons list.
-				require $view_path . 'list.php';
-				?>
+			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-xl frm-hide-js">
+				<?php require $view_path . 'list.php'; ?>
 			</div>
 		</div>
 	</div>

@@ -3,3 +3,35 @@
  *
  * This file includes all CSS rules specifically for the Add-Ons page.
  */
+
+/**
+ * Page General Styles
+ *
+ * This section defines the basic typography and layout styles for the Form Templates page.
+ */
+#frm-addons-page .frm-upgrade-bar {
+	display: none;
+}
+
+.frm-page-skeleton-grid-layout {
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+/* Card */
+#frm-addons-page .frm-card-item {
+	padding: var(--gap-sm) var(--gap-md);
+	gap: 12px;
+}
+
+.frm-card-item p,
+.frm-card-item h3 {
+	margin: 0;
+}
+
+.frm-border-icon > svg {
+	width: 24px;
+}
+
+#frm-addons-page .frm-addon-button {
+	display: none;
+}
