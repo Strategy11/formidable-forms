@@ -9492,7 +9492,8 @@ Responsive Design
 }
 
 .frm-right-panel .inside .frm_pro_tip,
-.frm_pro_tip {
+.frm_pro_tip,
+.stripe_settings .frm-light-tip .frm_pro_tip {
 	color: var(--grey-700);
 	background: #FFE7DE;
 	margin: 0 auto;
