@@ -56,6 +56,30 @@ class FrmAddonsHelper {
 		}
 	}
 
+	/**
+	 * Show the CTA for activating Formidable Forms Pro.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	public static function show_pro_inactive_cta() {
+		global $frm_vars;
+		if ( ! FrmAppHelper::pro_is_included() || $frm_vars['pro_is_authorized'] ) {
+			return;
+		}
+
+		FrmTipsHelper::show_admin_cta(
+			array(
+				'title'       => esc_html__( 'Formidable Forms Pro installed, but not yet activated.', 'formidable' ),
+				'description' => esc_html__( 'Add your license key now to start enjoying all the premium features.', 'formidable' ),
+				'link_text'   => esc_html__( 'Go to Settings', 'formidable' ),
+				'link_url'    => admin_url( 'admin.php?page=formidable-settings' ),
+				'target'      => '_self',
+				'id'          => 'frm-pro-inactive-banner',
+				'class'       => 'frm-cta-red',
+			)
+		);
+	}
 
 	/**
 	 * Displays a reconnect link for checking add-ons status.

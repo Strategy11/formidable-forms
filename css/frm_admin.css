@@ -34,6 +34,7 @@
 	--error-500: #F04438;
 	--error-300: #FECDCA;
 	--error-100: #FEE4E2;
+	--error-25: #FFF5F4;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -4995,7 +4996,8 @@ input:checked + .frm_toggle .frm_toggle_slider:before {
 	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
 }
 
-input[disabled] + .frm_toggle_slider {
+input[disabled] + .frm_toggle_slider,
+input[disabled] + .frm_toggle .frm_toggle_slider {
 	pointer-events: none;
 	cursor: text;
 	opacity: .5;
@@ -9496,6 +9498,14 @@ Responsive Design
 
 .frm-cta-green.frm-cta-border {
 	border-color: var(--success-100)
+}
+
+.frm-cta-red {
+	background-color: var(--error-25);
+}
+
+.frm-cta-red.frm-cta-border {
+	border-color: var(--error-100)
 }
 
 .frm-right-panel .inside .frm_pro_tip,

@@ -194,6 +194,7 @@
 <title>arrowup6</title>
 <path d="m15 14-5-5-5 5-2-1 7-7 7 7-2 1Z"/>
 </symbol>
+<symbol id="frm_arrowup8_icon" viewBox="0 0 24 24"><title>arrowup8</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 10.25L12 4.75L6.75 10.25"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19.25V5.75"></path></symbol>
 <symbol id="frm_arrowdown_icon" viewBox="0 0 20 20">
 <title>arrowdown</title>
 <path d="M10 .3a9.7 9.7 0 1 0 0 19.4A9.7 9.7 0 0 0 10 .3zm0 17.5a7.8 7.8 0 1 1 0-15.6 7.8 7.8 0 0 1 0 15.6zm5-8l-.7-.8a.5.5 0 0 0-.7 0L11 11.7V5.5c0-.3-.2-.5-.5-.5h-1c-.3 0-.5.2-.5.5v6.3L6.4 9a.5.5 0 0 0-.7 0l-.8.8c-.2.1-.2.4 0 .6l4.8 4.8c.2.2.4.2.6 0l4.8-4.8c.2-.2.2-.5 0-.6z"/>

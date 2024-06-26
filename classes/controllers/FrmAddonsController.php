@@ -1518,7 +1518,7 @@ class FrmAddonsController {
 	 *
 	 * @return void
 	 */
-	protected static function addon_upgrade_link( $addon, $upgrade_link ) {
+	public static function addon_upgrade_link( $addon, $upgrade_link ) {
 		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
 		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
 
