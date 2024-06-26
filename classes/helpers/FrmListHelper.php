@@ -116,6 +116,10 @@ class FrmListHelper {
 
 		$this->screen = convert_to_screen( $args['screen'] );
 
+		if ( ! empty( $this->screen_reader_content ) ) {
+			$this->screen->set_screen_reader_content( $this->screen_reader_content );
+		}
+
 		add_filter( "manage_{$this->screen->id}_columns", array( $this, 'get_columns' ), 0 );
 
 		if ( ! $args['plural'] ) {
@@ -997,6 +1001,8 @@ class FrmListHelper {
 		if ( $this->should_display( $args, 'display-top-nav' ) ) {
 			$this->display_tablenav( 'top' );
 		}
+		$this->screen->render_screen_reader_content( 'heading_list' )
+
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
