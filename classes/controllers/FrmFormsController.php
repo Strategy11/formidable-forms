@@ -1041,7 +1041,7 @@ class FrmFormsController {
 		 *
 		 * @param string $table_class Class name for List Helper.
 		 */
-		$table_class = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
+		$table_class   = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
 		$wp_list_table = new $table_class( compact( 'params' ) );
 
 		$pagenum = $wp_list_table->get_pagenum();
