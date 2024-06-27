@@ -31,29 +31,26 @@ $is_formidable_pro = $addon['slug'] === 'formidable-pro';
 			?>
 		</h3>
 
-		<?php if ( ! $plan_required && FrmAppHelper::pro_is_installed() ) { ?>
-			<div class="frm-ml-auto">
-				<?php
-				FrmHtmlHelper::toggle(
-					'frm-' . $addon['slug'],
-					'frm-' . $addon['slug'],
-					array(
-						'checked'  => $addon['status']['type'] === 'active',
-						'disabled' => $is_formidable_pro,
-						'echo'     => true,
-					)
-				);
-				FrmAddonsController::show_conditional_action_button(
-					array(
-						'addon'         => $addon,
-						'license_type'  => ! empty( $license_type ) ? $license_type : false,
-						'plan_required' => 'plan_required',
-						'upgrade_link'  => $pricing,
-					)
-				);
-				?>
-			</div>
-			<?php
+		<?php
+		if ( ! $plan_required && FrmAppHelper::pro_is_installed() ) {
+			FrmAddonsController::show_conditional_action_button(
+				array(
+					'addon'         => $addon,
+					'license_type'  => ! empty( $license_type ) ? $license_type : false,
+					'plan_required' => 'plan_required',
+					'upgrade_link'  => $pricing,
+				)
+			);
+			FrmHtmlHelper::toggle(
+				'frm-' . $addon['slug'],
+				'frm-' . $addon['slug'],
+				array(
+					'div_class' => 'with_frm_style frm_toggle frm-ml-auto',
+					'checked'   => $addon['status']['type'] === 'active',
+					'disabled'  => $is_formidable_pro,
+					'echo'      => true,
+				)
+			);
 		}//end if
 		?>
 	</div>

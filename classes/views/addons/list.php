@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 
-FrmAddonsHelper::show_pro_inactive_cta();
 FrmAddonsHelper::show_upgrade_renew_cta();
 FrmAddonsHelper::get_reconnect_link();
 ?>
