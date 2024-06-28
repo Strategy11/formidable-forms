@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					);
 
 					// Categories list.
-					// require $view_path . 'categories.php';
+					require $view_path . 'categories.php';
 					?>
 				</div>
 			</div>
