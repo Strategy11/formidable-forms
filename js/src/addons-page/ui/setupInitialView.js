@@ -25,6 +25,8 @@ function setupInitialView() {
 		availableAddons,
 		activeCategory,
 		activeAddons,
+		allItemsCategory,
+		addons,
 	} = getElements();
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
@@ -41,6 +43,10 @@ function setupInitialView() {
 	activeCategory.querySelector(
 		`.${ SKELETON_PREFIX }-cat-count`
 	).textContent = activeAddons.length;
+	allItemsCategory.querySelector(
+		`.${ SKELETON_PREFIX }-cat-count`
+	).textContent = addons.length;
+
 
 	// Smoothly display the updated UI elements
 	bodyContent.classList.remove( HIDE_JS_CLASS );
