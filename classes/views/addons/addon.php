@@ -15,8 +15,13 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 
 $plan_required     = FrmFormsHelper::get_plan_required( $addon );
 $is_formidable_pro = $addon['slug'] === 'formidable-pro';
+$addon_class       = 'frm-card-item frm-flex-col plugin-card-' . $addon['slug'] . ' frm-addon-' . $addon['status']['type'];
+$is_locked         = $plan_required || ! FrmAppHelper::pro_is_installed();
+if ( $is_locked ) {
+	$addon_class .= ' frm-locked-item';
+}
 ?>
-<li class="frm-card-item frm-flex-col plugin-card-<?php echo esc_attr( $addon['slug'] ); ?> frm-no-thumb frm-addon-<?php echo esc_attr( $addon['status']['type'] ); ?>">
+<li class="<?php echo esc_attr( trim( $addon_class ) ); ?>">
 	<div class="frm-flex frm-gap-xs frm-items-center frm-mb-2xs">
 		<span class="frm-border-icon">
 			<?php FrmAddonsHelper::get_addon_icon( $addon['slug'] ); ?>
@@ -32,7 +37,7 @@ $is_formidable_pro = $addon['slug'] === 'formidable-pro';
 		</h3>
 
 		<?php
-		if ( ! $plan_required && FrmAppHelper::pro_is_installed() ) {
+		if ( ! $is_locked ) {
 			FrmAddonsController::show_conditional_action_button(
 				array(
 					'addon'         => $addon,
