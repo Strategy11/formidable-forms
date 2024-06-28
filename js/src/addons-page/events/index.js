@@ -7,6 +7,7 @@ import { addCategoryEvents } from 'core/page-skeleton';
  * Internal dependencies
  */
 import addAddonToggle from './addonToggleListener';
+import { showSelectedCategory } from '../ui';
 
 /**
  * Attaches event listeners for handling user interactions.
