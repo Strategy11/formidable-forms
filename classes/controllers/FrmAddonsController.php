@@ -11,6 +11,11 @@ class FrmAddonsController {
 	const SCRIPT_HANDLE = 'frm-addons-page';
 
 	/**
+	 * @var array
+	 */
+	protected static $categories = array();
+
+	/**
 	 * @var string
 	 */
 	protected static $plugin;
@@ -137,7 +142,80 @@ class FrmAddonsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
+		static::organize_and_get_categories();
+		$categories = self::$categories;
+
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Organize and set categories.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected static function organize_and_get_categories() {
+		unset( self::$categories['strategy11'] );
+		ksort( self::$categories );
+
+		$special_categories    = array();
+
+		if ( 'elite' !== self::license_type() ) {
+			$special_categories['available-addons'] = array(
+				'name'  => __( 'Available', 'formidable' ),
+				// To be assigned via JavaScript.
+				'count' => 0,
+			);
+		}
+
+		$special_categories['active-addons'] = array(
+			'name'  => __( 'Active', 'formidable' ),
+			// To be assigned via JavaScript.
+			'count' => 0,
+		);
+
+		$special_categories['all-items'] = array(
+			'name'  => __( 'All Add-Ons', 'formidable' ),
+			// To be assigned via JavaScript.
+			'count' => 0,
+		);
+
+		self::$categories = array_merge(
+			$special_categories,
+			self::$categories
+		);
+	}
+
+	/**
+	 * Organize and set categories.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected static function set_categories( &$addon ) {
+		if ( ! isset( $addon['categories'] ) ) {
+			return;
+		}
+
+		$addon['category-slugs'] = array();
+
+		foreach ( $addon['categories'] as $category ) {
+			$category_slug = sanitize_title( $category );
+
+			// Add the slug to the new array.
+			$addon['category-slugs'][] = $category_slug;
+
+			if ( ! isset( self::$categories[ $category_slug ] ) ) {
+				self::$categories[ $category_slug ] = array(
+					'name'  => $category,
+					'count' => 0,
+				);
+			}
+
+			++self::$categories[ $category_slug ]['count'];
+		}
 	}
 
 	/**
@@ -695,9 +773,11 @@ class FrmAddonsController {
 			if ( ! isset( $addon['link'] ) ) {
 				$addon['link'] = 'downloads/' . $slug . '/';
 			}
-			self::prepare_addon_link( $addon['link'] );
 
+			self::prepare_addon_link( $addon['link'] );
 			self::set_addon_status( $addon );
+			self::set_categories( $addon );
+
 			$addons[ $id ] = $addon;
 		}//end foreach
 	}

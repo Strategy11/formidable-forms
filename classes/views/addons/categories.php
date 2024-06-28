@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $category_data['count'] )
 		);
 
-		if ( 'all-addons' === $category_slug ) {
+		if ( 'all-items' === $category_slug ) {
 			echo '<li class="frm-page-skeleton-divider"></li>';
 			$classes .= ' frm-current';
 		}
