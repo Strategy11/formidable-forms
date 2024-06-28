@@ -32,6 +32,12 @@
 	width: 24px;
 }
 
+.frm-card-lock-icon svg {
+	width: 13px;
+	height: 13px;
+	color: var(--grey-800);
+}
+
 #frm-addons-page .frm-addon-button {
 	display: none;
 }

@@ -51,6 +51,12 @@ $is_formidable_pro = $addon['slug'] === 'formidable-pro';
 					'echo'      => true,
 				)
 			);
+		} else {
+			?>
+			<span class="frm-card-lock-icon frm-ml-auto">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
+			</span>
+			<?php
 		}//end if
 		?>
 	</div>
