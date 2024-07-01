@@ -4261,11 +4261,7 @@ __webpack_require__.r(__webpack_exports__);
 function initializeFormTemplates() {
   (0,_templates__WEBPACK_IMPORTED_MODULE_1__.maybeAddApplicationTemplates)();
   (0,_ui__WEBPACK_IMPORTED_MODULE_0__.initializeModal)();
-
-  // Generate a categorized list of templates
   (0,_templates__WEBPACK_IMPORTED_MODULE_1__.buildCategorizedTemplates)();
-
-  // Set up the initial view, including any required DOM manipulations for proper presentation
   (0,_ui__WEBPACK_IMPORTED_MODULE_0__.setupInitialView)();
   (0,_events__WEBPACK_IMPORTED_MODULE_2__.addEventListeners)();
 }

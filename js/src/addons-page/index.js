@@ -8,8 +8,10 @@ import domReady from '@wordpress/dom-ready';
  */
 import { setupInitialView } from './ui';
 import { addEventListeners } from './events';
+import { buildCategorizedAddons } from './addons';
 
 domReady( () => {
+	buildCategorizedAddons();
 	setupInitialView();
 	addEventListeners();
 });

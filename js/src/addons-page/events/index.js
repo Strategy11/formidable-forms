@@ -8,6 +8,7 @@ import { addCategoryEvents } from 'core/page-skeleton';
  */
 import addAddonToggle from './addonToggleListener';
 import { showSelectedCategory } from '../ui';
+import addSearchEvents from './searchListener';
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -21,4 +22,5 @@ export function addEventListeners() {
 	});
 
 	addAddonToggle();
+	addSearchEvents();
 }

@@ -13,15 +13,8 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 	return;
 }
 
-$plan_required     = FrmFormsHelper::get_plan_required( $addon );
-$is_formidable_pro = $addon['slug'] === 'formidable-pro';
-$addon_class       = 'frm-card-item frm-flex-col plugin-card-' . $addon['slug'] . ' frm-addon-' . $addon['status']['type'];
-$is_locked         = $plan_required || ! FrmAppHelper::pro_is_installed();
-if ( $is_locked ) {
-	$addon_class .= ' frm-locked-item';
-}
 ?>
-<li class="<?php echo esc_attr( trim( $addon_class ) ); ?>">
+<li <?php FrmAddonsHelper::add_addon_attributes( $addon ); ?>>
 	<div class="frm-flex frm-gap-xs frm-items-center frm-mb-2xs">
 		<span class="frm-border-icon">
 			<?php FrmAddonsHelper::get_addon_icon( $addon['slug'] ); ?>
@@ -37,7 +30,7 @@ if ( $is_locked ) {
 		</h3>
 
 		<?php
-		if ( ! $is_locked ) {
+		if ( ! FrmAddonsHelper::is_locked( $addon ) ) {
 			FrmAddonsController::show_conditional_action_button(
 				array(
 					'addon'         => $addon,
@@ -52,7 +45,7 @@ if ( $is_locked ) {
 				array(
 					'div_class' => 'with_frm_style frm_toggle frm-ml-auto',
 					'checked'   => $addon['status']['type'] === 'active',
-					'disabled'  => $is_formidable_pro,
+					'disabled'  => $addon['slug'] === 'formidable-pro',
 					'echo'      => true,
 				)
 			);
@@ -74,7 +67,7 @@ if ( $is_locked ) {
 
 	<div class="frm-flex frm-items-center frm-justify-between">
 		<?php
-		if ( ! empty( $addon['docs'] ) && ! $plan_required ) {
+		if ( ! empty( $addon['docs'] ) && ! FrmAddonsHelper::get_plan() ) {
 			?>
 			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
 				<?php esc_html_e( 'View Docs', 'formidable' ); ?>
@@ -82,7 +75,7 @@ if ( $is_locked ) {
 			</a>
 			<?php
 		} else {
-			FrmFormsHelper::show_plan_required( $plan_required, $pricing . ' & utm_content = ' . $addon['slug'] );
+			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . ' & utm_content = ' . $addon['slug'] );
 			?>
 			<div>
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>

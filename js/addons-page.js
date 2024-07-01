@@ -1880,6 +1880,75 @@ function sprintf(format) {
 
 /***/ }),
 
+/***/ "./js/src/addons-page/addons/categorizeAddons.js":
+/*!*******************************************************!*\
+  !*** ./js/src/addons-page/addons/categorizeAddons.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   buildCategorizedAddons: function() { return /* binding */ buildCategorizedAddons; },
+/* harmony export */   categorizedAddons: function() { return /* binding */ categorizedAddons; }
+/* harmony export */ });
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ "./js/src/addons-page/constants.js");
+/**
+ * Internal dependencies
+ */
+
+
+var categorizedAddons = {};
+categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.AVAILABLE] = [];
+categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ACTIVE] = [];
+
+/**
+ * Builds a categorized list of addons.
+ *
+ * @return {void}
+ */
+function buildCategorizedAddons() {
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
+    addons = _getElements.addons;
+  addons.forEach(function (addon) {
+    // Extract and split the categories from data attribute
+    var dataCategories = addon.getAttribute('data-categories');
+    if (!dataCategories) {
+      return;
+    }
+    var categories = dataCategories.split(',');
+    categories.forEach(function (category) {
+      // Initialize the category array if not already done
+      if (!categorizedAddons[category]) {
+        categorizedAddons[category] = [];
+      }
+
+      // Add the addon to the appropriate category
+      categorizedAddons[category].push(addon);
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./js/src/addons-page/addons/index.js":
+/*!********************************************!*\
+  !*** ./js/src/addons-page/addons/index.js ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   buildCategorizedAddons: function() { return /* reexport safe */ _categorizeAddons__WEBPACK_IMPORTED_MODULE_0__.buildCategorizedAddons; },
+/* harmony export */   categorizedAddons: function() { return /* reexport safe */ _categorizeAddons__WEBPACK_IMPORTED_MODULE_0__.categorizedAddons; }
+/* harmony export */ });
+/* harmony import */ var _categorizeAddons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./categorizeAddons */ "./js/src/addons-page/addons/categorizeAddons.js");
+
+
+/***/ }),
+
 /***/ "./js/src/addons-page/constants.js":
 /*!*****************************************!*\
   !*** ./js/src/addons-page/constants.js ***!
@@ -1941,22 +2010,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 var _getElements = (0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.getElements)(),
   bodyContent = _getElements.bodyContent,
   sidebar = _getElements.sidebar;
-var addonsToggle = bodyContent.querySelectorAll('.frm_toggle_block');
 var categories = {
   availableCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.AVAILABLE, "\"]")),
   activeCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ACTIVE, "\"]"))
 };
 var cards = {
   addons: bodyContent.querySelectorAll('.frm-card-item'),
-  activeAddons: bodyContent.querySelectorAll('.frm-addon-active:not(.frm-locked-item)'),
-  availableAddons: bodyContent.querySelectorAll('.frm-card-item:not(.frm-locked-item)')
+  availableAddons: bodyContent.querySelectorAll('.frm-card-item:not(.frm-locked-item)'),
+  addonsToggle: bodyContent.querySelectorAll('.frm_toggle_block')
 };
+var upgradeBanner = document.getElementById('frm-upgrade-banner');
 
 // Add children of the bodyContent to the elements object.
 var bodyContentChildren = bodyContent === null || bodyContent === void 0 ? void 0 : bodyContent.children;
-(0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.addElements)(_objectSpread(_objectSpread(_objectSpread({
-  addonsToggle: addonsToggle
-}, categories), cards), {}, {
+(0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.addElements)(_objectSpread(_objectSpread(_objectSpread({}, categories), cards), {}, {
+  upgradeBanner: upgradeBanner,
   bodyContentChildren: bodyContentChildren
 }));
 
@@ -1989,6 +2057,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _ui___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/ */ "./js/src/addons-page/ui/index.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
@@ -2000,7 +2069,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
  * Internal dependencies
  */
 
-var previousAction;
+
+var targetButton;
 
 /**
  * Manages event handling for addons toggle.
@@ -2013,6 +2083,9 @@ function addAddonToggleEvents() {
   addonsToggle.forEach(function (addonToggle) {
     return addonToggle.addEventListener('click', onAddonToggleClick);
   });
+  wp.hooks.addAction('frmAdmin.updateAddonState', 'frmAddonPage', function (response) {
+    (0,_ui___WEBPACK_IMPORTED_MODULE_1__.setupActiveCategory)();
+  });
 }
 
 /**
@@ -2023,7 +2096,7 @@ function addAddonToggleEvents() {
  * @return {void}
  */
 var onAddonToggleClick = function onAddonToggleClick(event) {
-  if (previousAction && previousAction.classList.contains('frm_loading_button')) {
+  if (targetButton && targetButton.classList.contains('frm_loading_button')) {
     return;
   }
   var addonToggle = event.currentTarget;
@@ -2037,8 +2110,8 @@ var onAddonToggleClick = function onAddonToggleClick(event) {
         className = _step$value[0],
         selector = _step$value[1];
       if (addon.classList.contains(className)) {
-        previousAction = addon.querySelector(selector);
-        previousAction.click();
+        targetButton = addon.querySelector(selector);
+        targetButton.click();
         break;
       }
     }
@@ -2066,6 +2139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
 /* harmony import */ var _addonToggleListener__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addonToggleListener */ "./js/src/addons-page/events/addonToggleListener.js");
 /* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./js/src/addons-page/ui/index.js");
+/* harmony import */ var _searchListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./searchListener */ "./js/src/addons-page/events/searchListener.js");
 /**
  * External dependencies
  */
@@ -2074,6 +2148,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -2088,7 +2163,138 @@ function addEventListeners() {
     (0,_ui__WEBPACK_IMPORTED_MODULE_2__.showSelectedCategory)(selectedCategory);
   });
   (0,_addonToggleListener__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_searchListener__WEBPACK_IMPORTED_MODULE_3__["default"])();
 }
+
+/***/ }),
+
+/***/ "./js/src/addons-page/events/searchListener.js":
+/*!*****************************************************!*\
+  !*** ./js/src/addons-page/events/searchListener.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/src/addons-page/shared/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ui */ "./js/src/addons-page/ui/index.js");
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+var initSearch = window.frmDom.search.init;
+
+/**
+ * Adds search-related event listeners by calling the 'initSearch' function.
+ *
+ * @see frmDom.search method
+ * @return {void}
+ */
+function addSearchEvents() {
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    searchInput = _getElements.searchInput;
+  initSearch(searchInput, 'frm-card-item', {
+    handleSearchResult: handleSearchResult
+  });
+}
+
+/**
+ * Manages UI state based on search results and input value.
+ *
+ * @private
+ * @param {Object}  args                    Contains flags for search status.
+ * @param {boolean} args.foundSomething     True if search yielded results.
+ * @param {boolean} args.notEmptySearchText True if search input is not empty.
+ * @param {Event}   event                   The event object (input, search, or change event).
+ * @return {void}
+ */
+function handleSearchResult(_ref, event) {
+  var foundSomething = _ref.foundSomething,
+    notEmptySearchText = _ref.notEmptySearchText;
+  // Prevent double calls as window.frmDom.search.init attaches both 'input' and 'search' events,
+  // triggering this method twice on 'x' button click.
+  if (event && event.type === 'search' && event.target.value === '') {
+    return;
+  }
+  var state = (0,_shared__WEBPACK_IMPORTED_MODULE_3__.getState)();
+  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    allItemsCategory = _getElements2.allItemsCategory;
+  (0,_shared__WEBPACK_IMPORTED_MODULE_3__.setSingleState)('notEmptySearchText', notEmptySearchText);
+
+  // Revert to 'All Templates' if search and selected category are both empty
+  if (!state.notEmptySearchText && !state.selectedCategory) {
+    allItemsCategory.dispatchEvent(new Event('click', {
+      bubbles: true
+    }));
+    return;
+  }
+
+  // Display search state if a category is selected
+  if (state.selectedCategory) {
+    (0,_ui__WEBPACK_IMPORTED_MODULE_4__.showSearchState)(notEmptySearchText);
+
+    // Setting "selectedCategory" to an empty string as a flag for search state
+    if (notEmptySearchText) {
+      (0,_shared__WEBPACK_IMPORTED_MODULE_3__.setSingleState)('selectedCategory', '');
+    }
+  }
+  (0,_ui__WEBPACK_IMPORTED_MODULE_4__.displaySearchElements)(foundSomething);
+}
+/* harmony default export */ __webpack_exports__["default"] = (addSearchEvents);
+
+/***/ }),
+
+/***/ "./js/src/addons-page/shared/index.js":
+/*!********************************************!*\
+  !*** ./js/src/addons-page/shared/index.js ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getSingleState: function() { return /* reexport safe */ _pageState__WEBPACK_IMPORTED_MODULE_0__.getSingleState; },
+/* harmony export */   getState: function() { return /* reexport safe */ _pageState__WEBPACK_IMPORTED_MODULE_0__.getState; },
+/* harmony export */   setSingleState: function() { return /* reexport safe */ _pageState__WEBPACK_IMPORTED_MODULE_0__.setSingleState; },
+/* harmony export */   setState: function() { return /* reexport safe */ _pageState__WEBPACK_IMPORTED_MODULE_0__.setState; }
+/* harmony export */ });
+/* harmony import */ var _pageState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pageState */ "./js/src/addons-page/shared/pageState.js");
+
+
+/***/ }),
+
+/***/ "./js/src/addons-page/shared/pageState.js":
+/*!************************************************!*\
+  !*** ./js/src/addons-page/shared/pageState.js ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getSingleState: function() { return /* reexport safe */ core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.getSingleState; },
+/* harmony export */   getState: function() { return /* reexport safe */ core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.getState; },
+/* harmony export */   setSingleState: function() { return /* reexport safe */ core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.setSingleState; },
+/* harmony export */   setState: function() { return /* reexport safe */ core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.setState; }
+/* harmony export */ });
+/* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
+/**
+ * External dependencies
+ */
+
+(0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.setState)({});
+
 
 /***/ }),
 
@@ -2102,9 +2308,9 @@ function addEventListeners() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   displaySearchElements: function() { return /* reexport safe */ _searchState__WEBPACK_IMPORTED_MODULE_2__.displaySearchElements; },
-/* harmony export */   setupInitialView: function() { return /* reexport safe */ _setupInitialView__WEBPACK_IMPORTED_MODULE_0__["default"]; },
-/* harmony export */   showAllAddons: function() { return /* reexport safe */ _showSelectedCategory__WEBPACK_IMPORTED_MODULE_1__.showAllAddons; },
-/* harmony export */   showSearchEmptyState: function() { return /* reexport safe */ _showEmptyState__WEBPACK_IMPORTED_MODULE_3__.showSearchEmptyState; },
+/* harmony export */   setupActiveCategory: function() { return /* reexport safe */ _setupInitialView__WEBPACK_IMPORTED_MODULE_0__.setupActiveCategory; },
+/* harmony export */   setupInitialView: function() { return /* reexport safe */ _setupInitialView__WEBPACK_IMPORTED_MODULE_0__.setupInitialView; },
+/* harmony export */   showEmptyState: function() { return /* reexport safe */ _showEmptyState__WEBPACK_IMPORTED_MODULE_3__.showEmptyState; },
 /* harmony export */   showSearchState: function() { return /* reexport safe */ _searchState__WEBPACK_IMPORTED_MODULE_2__.showSearchState; },
 /* harmony export */   showSelectedCategory: function() { return /* reexport safe */ _showSelectedCategory__WEBPACK_IMPORTED_MODULE_1__.showSelectedCategory; }
 /* harmony export */ });
@@ -2131,13 +2337,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   displaySearchElements: function() { return /* binding */ displaySearchElements; },
 /* harmony export */   showSearchState: function() { return /* binding */ showSearchState; }
 /* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var core_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/constants */ "./js/src/core/constants.js");
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared */ "./js/src/addons-page/shared/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! . */ "./js/src/addons-page/ui/index.js");
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
 /**
  * Updates the UI to display the search state.
  *
  * @param {boolean} notEmptySearchText True if search input is not empty.
  * @return {void}
  */
-function showSearchState(notEmptySearchText) {}
+function showSearchState(notEmptySearchText) {
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    bodyContent = _getElements.bodyContent,
+    bodyContentChildren = _getElements.bodyContentChildren;
+  var bodyContentAnimate = new core_utils__WEBPACK_IMPORTED_MODULE_2__.frmAnimate(bodyContent);
+
+  // Remove highlighting from the currently selected category if the search text is not empty
+  if (notEmptySearchText) {
+    (0,_shared__WEBPACK_IMPORTED_MODULE_4__.getSingleState)('selectedCategoryEl').classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_1__.CURRENT_CLASS);
+  }
+
+  // Hide non-relevant elements in the body content
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_2__.hideElements)(bodyContentChildren);
+
+  // Smoothly display the updated UI elements
+  bodyContentAnimate.fadeIn();
+}
 
 /**
  * Displays search results based on search outcome.
@@ -2145,7 +2391,20 @@ function showSearchState(notEmptySearchText) {}
  * @param {boolean} foundSomething True if search yielded results.
  * @return {void}
  */
-function displaySearchElements(foundSomething) {}
+function displaySearchElements(foundSomething) {
+  // Show empty state if no templates found
+  if (!foundSomething) {
+    (0,___WEBPACK_IMPORTED_MODULE_5__.showEmptyState)();
+    return;
+  }
+
+  // Hide empty state if currently displayed
+  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    emptyState = _getElements2.emptyState;
+  if ((0,core_utils__WEBPACK_IMPORTED_MODULE_2__.isVisible)(emptyState)) {
+    (0,core_utils__WEBPACK_IMPORTED_MODULE_2__.hide)(emptyState);
+  }
+}
 
 /***/ }),
 
@@ -2157,10 +2416,16 @@ function displaySearchElements(foundSomething) {}
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   setupActiveCategory: function() { return /* binding */ setupActiveCategory; },
+/* harmony export */   setupInitialView: function() { return /* binding */ setupInitialView; }
+/* harmony export */ });
 /* harmony import */ var core_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/constants */ "./js/src/core/constants.js");
 /* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
 /* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _addons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../addons */ "./js/src/addons-page/addons/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../constants */ "./js/src/addons-page/constants.js");
 /**
  * External dependencies
  */
@@ -2173,6 +2438,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+
 /**
  * Sets up the initial view, performing any required
  * DOM manipulations for proper element presentation.
@@ -2183,21 +2450,14 @@ function setupInitialView() {
   var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
     sidebar = _getElements.sidebar,
     searchInput = _getElements.searchInput,
-    bodyContent = _getElements.bodyContent,
-    availableCategory = _getElements.availableCategory,
-    availableAddons = _getElements.availableAddons,
-    activeCategory = _getElements.activeCategory,
-    activeAddons = _getElements.activeAddons;
+    bodyContent = _getElements.bodyContent;
   var bodyContentAnimate = new core_utils__WEBPACK_IMPORTED_MODULE_1__.frmAnimate(bodyContent);
 
   // Clear the value in the search input
   searchInput.value = '';
-
-  // Set count of categories
-  if (availableCategory) {
-    availableCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = availableAddons.length;
-  }
-  activeCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = activeAddons.length;
+  setupAvailableCategory();
+  setupActiveCategory();
+  setupAllAddonsCategory();
 
   // Smoothly display the updated UI elements
   bodyContent.classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS);
@@ -2205,7 +2465,57 @@ function setupInitialView() {
   bodyContentAnimate.fadeIn();
   (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.show)(sidebar);
 }
-/* harmony default export */ __webpack_exports__["default"] = (setupInitialView);
+
+/**
+ * Sets up the "Available" category, updating the
+ * categorizedAddons object and the category count.
+ *
+ * @private
+ * @return {void}
+ */
+function setupAvailableCategory() {
+  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    availableCategory = _getElements2.availableCategory,
+    availableAddons = _getElements2.availableAddons;
+  _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.AVAILABLE] = availableAddons;
+
+  // Set "Available" category count
+  if (availableCategory) {
+    availableCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = availableAddons.length;
+  }
+}
+
+/**
+ * Sets up the "Active" category, updating the
+ * categorizedAddons object and the category count.
+ *
+ * @return {void}
+ */
+function setupActiveCategory() {
+  var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    activeCategory = _getElements3.activeCategory;
+  var activeAddons = document.querySelectorAll('.frm-addon-active:not(.frm-locked-item)');
+  _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.ACTIVE] = activeAddons;
+
+  // Set "Active" category count
+  activeCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = activeAddons.length;
+}
+
+/**
+ * Sets up the "All Add-Ons" category, updating the
+ * category count.
+ *
+ * @private
+ * @return {void}
+ */
+function setupAllAddonsCategory() {
+  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    allItemsCategory = _getElements4.allItemsCategory,
+    addons = _getElements4.addons;
+
+  // Set "All Add-Ons" category count
+  allItemsCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = addons.length;
+}
 
 /***/ }),
 
@@ -2218,14 +2528,53 @@ function setupInitialView() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   showSearchEmptyState: function() { return /* binding */ showSearchEmptyState; }
+/* harmony export */   showEmptyState: function() { return /* binding */ showEmptyState; }
 /* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/src/addons-page/shared/index.js");
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
 /**
  * Display the search-empty state.
  *
  * @return {void}
  */
-function showSearchEmptyState() {}
+function showEmptyState() {
+  var _getState = (0,_shared__WEBPACK_IMPORTED_MODULE_3__.getState)(),
+    selectedCategory = _getState.selectedCategory;
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    emptyState = _getElements.emptyState,
+    emptyStateButton = _getElements.emptyStateButton,
+    emptyStateTitle = _getElements.emptyStateTitle,
+    emptyStateText = _getElements.emptyStateText;
+
+  // Assign state attributes
+  emptyState.setAttribute('data-view', selectedCategory);
+
+  // Update text content
+  emptyStateTitle.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No add-ons found', 'formidable');
+  emptyStateText.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Sorry, we didn\'t find any add-ons that match your criteria.', 'formidable');
+  emptyStateButton.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Request Add-On', 'formidable');
+
+  // Display the empty state
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.showElements)([emptyState, emptyStateButton]);
+}
 
 /***/ }),
 
@@ -2238,23 +2587,54 @@ function showSearchEmptyState() {}
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   showAllAddons: function() { return /* binding */ showAllAddons; },
 /* harmony export */   showSelectedCategory: function() { return /* binding */ showSelectedCategory; }
 /* harmony export */ });
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
+/* harmony import */ var _addons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../addons */ "./js/src/addons-page/addons/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! . */ "./js/src/addons-page/ui/index.js");
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
 /**
  * Show addons based on selected category.
  *
  * @param {string} selectedCategory The selected category to display addons for.
  * @return {void}
  */
-function showSelectedCategory(selectedCategory) {}
-
-/**
- * Shows all addons when 'All Addons' is the selected category.
- *
- * @return {void}
- */
-function showAllAddons() {}
+function showSelectedCategory(selectedCategory) {
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    addons = _getElements.addons,
+    emptyState = _getElements.emptyState,
+    upgradeBanner = _getElements.upgradeBanner;
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hide)(emptyState);
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.show)(upgradeBanner);
+  switch (selectedCategory) {
+    case core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ALL_ITEMS:
+      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(addons);
+      break;
+    default:
+      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(addons);
+      if (_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory].length === 0) {
+        (0,___WEBPACK_IMPORTED_MODULE_4__.showEmptyState)();
+        (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hide)(upgradeBanner);
+      } else {
+        (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory]);
+      }
+      break;
+  }
+}
 /* harmony default export */ __webpack_exports__["default"] = (showSelectedCategory);
 
 /***/ }),
@@ -4304,9 +4684,10 @@ var __webpack_exports__ = {};
   !*** ./js/src/addons-page/index.js ***!
   \*************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/dom-ready */ "./node_modules/@wordpress/dom-ready/build-module/index.js");
+/* harmony import */ var _wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/dom-ready */ "./node_modules/@wordpress/dom-ready/build-module/index.js");
 /* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ui */ "./js/src/addons-page/ui/index.js");
 /* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./events */ "./js/src/addons-page/events/index.js");
+/* harmony import */ var _addons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addons */ "./js/src/addons-page/addons/index.js");
 /**
  * WordPress dependencies
  */
@@ -4317,7 +4698,9 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-(0,_wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_2__["default"])(function () {
+
+(0,_wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_3__["default"])(function () {
+  (0,_addons__WEBPACK_IMPORTED_MODULE_2__.buildCategorizedAddons)();
   (0,_ui__WEBPACK_IMPORTED_MODULE_0__.setupInitialView)();
   (0,_events__WEBPACK_IMPORTED_MODULE_1__.addEventListeners)();
 });

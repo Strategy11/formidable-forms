@@ -3025,7 +3025,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
-		} 
+		}
 		return '';
 	}
 
@@ -4385,7 +4385,7 @@ function frmAdminBuildJS() {
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
 				}
- 
+
 				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
@@ -8712,7 +8712,7 @@ function frmAdminBuildJS() {
 		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
 		if ( exportFormatSelect ) {
 			return exportFormatSelect.value;
-		} 
+		}
 		return '';
 	}
 
@@ -8877,6 +8877,13 @@ function frmAdminBuildJS() {
 				}
 
 				afterAddonInstall( response, button, message, el, saveAndReload, action );
+
+				/**
+				 * Trigger an action after successfully toggling the addon state.
+				 *
+				 * @param {Object} response
+				 */
+				wp.hooks.doAction( 'frmAdmin.updateAddonState', response );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -9479,7 +9486,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
-		} 
+		}
 		return 'product' === field.getAttribute( 'data-type' );
 	}
 

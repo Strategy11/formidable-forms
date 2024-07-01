@@ -58,6 +58,7 @@
 
 .frm-page-skeleton-cat-text {
 	color: var(--grey-900);
+	text-transform: capitalize;
 }
 
 .frm-page-skeleton-cat-count {

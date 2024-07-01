@@ -20,8 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $category_data['count'] )
 		);
 
-		if ( 'all-items' === $category_slug ) {
+		if ( 'all-items' === $category_slug || 'basic' === $category_slug ) {
 			echo '<li class="frm-page-skeleton-divider"></li>';
+		}
+		if ( 'all-items' === $category_slug ) {
 			$classes .= ' frm-current';
 		}
 		?>

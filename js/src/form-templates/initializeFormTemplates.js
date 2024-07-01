@@ -12,13 +12,8 @@ import { addEventListeners } from './events';
  */
 function initializeFormTemplates() {
 	maybeAddApplicationTemplates();
-
 	initializeModal();
-
-	// Generate a categorized list of templates
 	buildCategorizedTemplates();
-
-	// Set up the initial view, including any required DOM manipulations for proper presentation
 	setupInitialView();
 	addEventListeners();
 }

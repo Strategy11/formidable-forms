@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since x.x
  */
 class FrmAddonsHelper {
+	private static $plan_required;
 
 	/**
 	 * Show the CTA to upgrade or renew.
@@ -115,5 +116,91 @@ class FrmAddonsHelper {
 		}
 
 		FrmAppHelper::icon_by_class( 'frmfont ' . $icon );
+	}
+
+	/**
+	 * Echo attributes for a given addon.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 * @return void
+	 */
+	public static function add_addon_attributes( $addon ) {
+		self::set_plan_required( $addon );
+
+		$attributes = array(
+			'tabindex'        => '0',
+			'frm-search-text' => strtolower( $addon['title'] ),
+		);
+
+		// Set 'data-slug' attribute.
+		if ( ! empty( $addon['slug'] ) ) {
+			$attributes['data-slug'] = $addon['slug'];
+		}
+
+		// Set 'data-categories' attribute.
+		if ( ! empty( $addon['category-slugs'] ) ) {
+			$attributes['data-categories'] = implode( ',', $addon['category-slugs'] );
+		}
+
+		$attributes['class'] = self::prepare_single_addon_classes( $addon );
+
+		FrmAppHelper::array_to_html_params( $attributes, true );
+	}
+
+	/**
+	 * Add classes for a given addon.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 * @return string
+	 */
+	private static function prepare_single_addon_classes( $addon ) {
+		$class_names   = array( 'frm-card-item frm-flex-col' );
+		$class_names[] = 'plugin-card-' . $addon['slug'];
+		$class_names[] = 'frm-addon-' . $addon['status']['type'];
+
+		if ( self::is_locked( $addon ) ) {
+			$class_names[] = 'frm-locked-item';
+		}
+
+		return implode( ' ', $class_names );
+	}
+
+	/**
+	 * Check if a given addon is locked.
+	 *
+	 * @return bool
+	 */
+	public static function is_locked() {
+		return ! FrmAppHelper::pro_is_installed() || self::$plan_required;
+	}
+
+	/**
+	 * Set the required plan for the given addon.
+	 *
+	 * @note
+	 * Because the `FrmFormsHelper::get_plan_required` changes $addon by reference,
+	 * we save the result inside a static field called `$plan_required`.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addon The addon array that will be modified by reference.
+	 */
+	private static function set_plan_required( $addon ) {
+		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
+	}
+
+	/**
+	 * Get the required plan.
+	 *
+	 * @since x.x
+	 *
+	 * @return string|false
+	 */
+	public static function get_plan() {
+		return self::$plan_required;
 	}
 }

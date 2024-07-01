@@ -130,11 +130,12 @@ class FrmAddonsController {
 
 		$pro    = array(
 			'pro' => array(
-				'title'    => 'Formidable Forms Pro',
-				'slug'     => 'formidable-pro',
-				'released' => '2011-02-05',
-				'docs'     => 'knowledgebase/',
-				'excerpt'  => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
+				'title'      => 'Formidable Forms Pro',
+				'slug'       => 'formidable-pro',
+				'released'   => '2011-02-05',
+				'docs'       => 'knowledgebase/',
+				'categories' => array( 'basic', 'business', 'elite' ),
+				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
 		$addons = $pro + $addons;
@@ -159,8 +160,18 @@ class FrmAddonsController {
 		unset( self::$categories['strategy11'] );
 		ksort( self::$categories );
 
-		$special_categories    = array();
+		$plans             = array( 'basic', 'business', 'elite' );
+		$bottom_categories = array();
 
+		// Extract the elements to move
+		foreach ( $plans as $plan ) {
+			if ( isset( self::$categories[ $plan ] ) ) {
+				$bottom_categories[ $plan ] = self::$categories[ $plan ];
+				unset( self::$categories[ $plan ] );
+			}
+		}
+
+		$special_categories = array();
 		if ( 'elite' !== self::license_type() ) {
 			$special_categories['available-addons'] = array(
 				'name'  => __( 'Available', 'formidable' ),
@@ -183,7 +194,8 @@ class FrmAddonsController {
 
 		self::$categories = array_merge(
 			$special_categories,
-			self::$categories
+			self::$categories,
+			$bottom_categories
 		);
 	}
 

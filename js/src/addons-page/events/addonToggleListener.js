@@ -2,8 +2,9 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
+import { setupActiveCategory } from '../ui/';
 
-let previousAction;
+let targetButton;
 
 /**
  * Manages event handling for addons toggle.
@@ -16,6 +17,10 @@ function addAddonToggleEvents() {
 	addonsToggle.forEach( addonToggle =>
 		addonToggle.addEventListener( 'click', onAddonToggleClick )
 	);
+
+	wp.hooks.addAction( 'frmAdmin.updateAddonState', 'frmAddonPage', response => {
+		setupActiveCategory();
+	});
 }
 
 /**
@@ -26,7 +31,7 @@ function addAddonToggleEvents() {
  * @return {void}
  */
 const onAddonToggleClick = ( event ) => {
-	if ( previousAction && previousAction.classList.contains( 'frm_loading_button' ) ) {
+	if ( targetButton && targetButton.classList.contains( 'frm_loading_button' ) ) {
 		return;
 	}
 
@@ -41,8 +46,8 @@ const onAddonToggleClick = ( event ) => {
 
 	for ( const [ className, selector ] of actionMap.entries() ) {
 		if ( addon.classList.contains( className ) ) {
-			previousAction = addon.querySelector( selector );
-			previousAction.click();
+			targetButton = addon.querySelector( selector );
+			targetButton.click();
 			break;
 		}
 	}
