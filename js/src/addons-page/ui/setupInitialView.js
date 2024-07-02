@@ -10,7 +10,7 @@ import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
  */
 import { getElements } from '../elements';
 import { categorizedAddons } from '../addons';
-import { VIEWS } from '../constants';
+import { PREFIX, VIEWS } from '../constants';
 
 /**
  * Sets up the initial view, performing any required
@@ -67,7 +67,7 @@ export function setupActiveCategory() {
  * @return {void}
  */
 function setupAvailableCategory() {
-	const { availableCategory, availableAddons } = getElements();
+	const { bodyContent, availableCategory, availableAddons } = getElements();
 
 	categorizedAddons[ VIEWS.AVAILABLE ] = availableAddons;
 
@@ -76,6 +76,11 @@ function setupAvailableCategory() {
 		availableCategory.querySelector(
 			`.${ SKELETON_PREFIX }-cat-count`
 		).textContent = availableAddons.length;
+
+		const upgradeBannerAvailableCount = bodyContent.querySelector(`.${PREFIX}-available-count`);
+		if ( upgradeBannerAvailableCount ) {
+			upgradeBannerAvailableCount.textContent = availableAddons.length;
+		}
 	}
 }
 
