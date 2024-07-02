@@ -6437,10 +6437,10 @@ function frmAdminBuildJS() {
 		if ( formNameInput ) {
 			return formNameInput.value.trim() === ''
 		}
-		if ( 'true' !== urlParams.get( 'new_template' ) ) {
-			return false;
+		if ( 'true' === urlParams.get( 'new_template' ) ) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
