@@ -28,11 +28,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			)
 		);
 
-		$this->screen_reader_content = array(
-			'heading_list' => __( 'Payments list', 'formidable-forms' ),
-		);
-
 		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => __( 'Payments list', 'formidable-forms' ),
+			)
+		);
 	}
 
 	/**

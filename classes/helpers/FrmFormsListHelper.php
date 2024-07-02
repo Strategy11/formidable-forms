@@ -11,11 +11,12 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
-		$this->screen_reader_content = array(
-			'heading_list' => __( 'Forms list', 'formidable-forms' ),
-		);
-
 		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => __( 'Forms list', 'formidable-forms' ),
+			)
+		);
 	}
 
 	/**

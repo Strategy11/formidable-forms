@@ -116,10 +116,6 @@ class FrmListHelper {
 
 		$this->screen = convert_to_screen( $args['screen'] );
 
-		if ( ! empty( $this->screen_reader_content ) ) {
-			$this->screen->set_screen_reader_content( $this->screen_reader_content );
-		}
-
 		add_filter( "manage_{$this->screen->id}_columns", array( $this, 'get_columns' ), 0 );
 
 		if ( ! $args['plural'] ) {

@@ -17,11 +17,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 
 	public function __construct( $args ) {
-		$this->screen_reader_content = array(
-			'heading_list' => __( 'Entries list', 'formidable-forms' ),
-		);
-
 		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => __( 'Entries list', 'formidable-forms' ),
+			)
+		);
 	}
 
 	/**
