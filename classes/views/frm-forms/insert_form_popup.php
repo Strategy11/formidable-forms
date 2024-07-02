@@ -30,17 +30,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</div>
 
 						<div class="media-frame-title">
-							<h1><?php esc_html_e( 'Insert a Form', 'formidable' ); ?>
-								<span class="spinner"></span>
-								<span class="frm_icon_font frm_arrowdown4_icon"></span>
-							</h1>
+							<h1><?php esc_html_e( 'Insert a Form', 'formidable' ); ?></h1>
 						</div>
 
 						<div class="media-frame-content">
 							<div class="attachments-browser">
-								<div id="frm_shortcode_options" class="media-embed">
-
-								</div>
+								<div id="frm_shortcode_options" class="media-embed"></div>
 							</div>
 						</div>
 
