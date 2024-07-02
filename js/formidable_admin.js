@@ -6434,13 +6434,10 @@ function frmAdminBuildJS() {
 	 */
 	function shouldShowNameYourFormNameModal() {
 		const formNameInput = document.getElementById( 'frm_form_name' );
-		if ( formNameInput ) {
-			return formNameInput.value.trim() === ''
+		if ( formNameInput && formNameInput.value.trim() !== '' ) {
+			return false;
 		}
-		if ( 'true' === urlParams.get( 'new_template' ) ) {
-			return true;
-		}
-		return false;
+		return 'true' === urlParams.get( 'new_template' );
 	}
 
 	/**
