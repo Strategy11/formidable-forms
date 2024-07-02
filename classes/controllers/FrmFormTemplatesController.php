@@ -522,7 +522,7 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
-		$special_categories['all-templates']  = array(
+		$special_categories['all-items']      = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);
@@ -656,6 +656,7 @@ class FrmFormTemplatesController {
 		wp_enqueue_style( 'formidable-admin' );
 		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( 'formidable-grids' );
+		wp_enqueue_style( 'formidable-page-skeleton' );
 
 		// Register and enqueue "Form Templates" style.
 		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/form-templates.css', array(), $version );

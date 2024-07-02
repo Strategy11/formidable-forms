@@ -8,7 +8,75 @@ class FrmAddonsController {
 	/**
 	 * @var string
 	 */
+	const SCRIPT_HANDLE = 'frm-addons-page';
+
+	/**
+	 * @var array
+	 */
+	protected static $categories = array();
+
+	/**
+	 * @var string
+	 */
 	protected static $plugin;
+
+	/**
+	 * @since x.x
+	 */
+	public static function load_admin_hooks() {
+		add_action( 'admin_menu', __CLASS__ . '::menu', 100 );
+		add_filter( 'pre_set_site_transient_update_plugins', __CLASS__ . '::check_update' );
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_filter( 'frm_show_footer_links', '__return_false' );
+		}
+	}
+
+	/**
+	 * Enqueues the Add-Ons page scripts and styles.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function enqueue_assets() {
+		$plugin_url      = FrmAppHelper::plugin_url();
+		$version         = FrmAppHelper::plugin_version();
+		$js_dependencies = array(
+			'wp-i18n',
+			// This prevents a console error "wp.hooks is undefined" in WP versions older than 5.7.
+			'wp-hooks',
+			'formidable_dom',
+		);
+
+		// Enqueue styles that needed.
+		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_style( 'formidable-grids' );
+		wp_enqueue_style( 'formidable-page-skeleton' );
+
+		// Register and enqueue Add-Ons page style.
+		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/addons-page.css', array(), $version );
+		wp_enqueue_style( self::SCRIPT_HANDLE );
+
+		// Register and enqueue Add-Ons page script.
+		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/addons-page.js', $js_dependencies, $version, true );
+		wp_localize_script( self::SCRIPT_HANDLE, 'frmAddonsVars', self::get_js_variables() );
+		wp_enqueue_script( self::SCRIPT_HANDLE );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+	}
+
+	/**
+	 * Get the Add-Ons page JS variables as an array.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_js_variables() {
+		return array( 'proIsIncluded' => FrmAppHelper::pro_is_included() );
+	}
 
 	/**
 	 * @return void
@@ -46,11 +114,12 @@ class FrmAddonsController {
 	 */
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
-		$installed_addons = apply_filters( 'frm_installed_addons', array() );
-		$license_type     = '';
 
-		$addons = self::get_api_addons();
-		$errors = array();
+		$view_path        = FrmAppHelper::plugin_path() . '/classes/views/addons/';
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		$addons           = self::get_api_addons();
+		$errors           = array();
+		$license_type     = '';
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
@@ -61,11 +130,12 @@ class FrmAddonsController {
 
 		$pro    = array(
 			'pro' => array(
-				'title'    => 'Formidable Forms Pro',
-				'slug'     => 'formidable-pro',
-				'released' => '2011-02-05',
-				'docs'     => 'knowledgebase/',
-				'excerpt'  => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
+				'title'      => 'Formidable Forms Pro',
+				'slug'       => 'formidable-pro',
+				'released'   => '2011-02-05',
+				'docs'       => 'knowledgebase/',
+				'categories' => array( 'basic', 'business', 'elite' ),
+				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
 		$addons = $pro + $addons;
@@ -73,7 +143,91 @@ class FrmAddonsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
-		include FrmAppHelper::plugin_path() . '/classes/views/addons/list.php';
+		static::organize_and_get_categories();
+		$categories = self::$categories;
+
+		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Organize and set categories.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected static function organize_and_get_categories() {
+		unset( self::$categories['strategy11'] );
+		ksort( self::$categories );
+
+		$plans             = array( 'basic', 'business', 'elite' );
+		$bottom_categories = array();
+
+		// Extract the elements to move
+		foreach ( $plans as $plan ) {
+			if ( isset( self::$categories[ $plan ] ) ) {
+				$bottom_categories[ $plan ] = self::$categories[ $plan ];
+				unset( self::$categories[ $plan ] );
+			}
+		}
+
+		$special_categories = array();
+		if ( 'elite' !== self::license_type() ) {
+			$special_categories['available-addons'] = array(
+				'name'  => __( 'Available', 'formidable' ),
+				// To be assigned via JavaScript.
+				'count' => 0,
+			);
+		}
+
+		$special_categories['active-addons'] = array(
+			'name'  => __( 'Active', 'formidable' ),
+			// To be assigned via JavaScript.
+			'count' => 0,
+		);
+
+		$special_categories['all-items'] = array(
+			'name'  => __( 'All Add-Ons', 'formidable' ),
+			// To be assigned via JavaScript.
+			'count' => 0,
+		);
+
+		self::$categories = array_merge(
+			$special_categories,
+			self::$categories,
+			$bottom_categories
+		);
+	}
+
+	/**
+	 * Organize and set categories.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected static function set_categories( &$addon ) {
+		if ( ! isset( $addon['categories'] ) ) {
+			return;
+		}
+
+		$addon['category-slugs'] = array();
+
+		foreach ( $addon['categories'] as $category ) {
+			$category_slug = sanitize_title( $category );
+
+			// Add the slug to the new array.
+			$addon['category-slugs'][] = $category_slug;
+
+			if ( ! isset( self::$categories[ $category_slug ] ) ) {
+				self::$categories[ $category_slug ] = array(
+					'name'  => $category,
+					'count' => 0,
+				);
+			}
+
+			++self::$categories[ $category_slug ]['count'];
+		}
 	}
 
 	/**
@@ -618,9 +772,11 @@ class FrmAddonsController {
 			if ( ! isset( $addon['link'] ) ) {
 				$addon['link'] = 'downloads/' . $slug . '/';
 			}
-			self::prepare_addon_link( $addon['link'] );
 
+			self::prepare_addon_link( $addon['link'] );
 			self::set_addon_status( $addon );
+			self::set_categories( $addon );
+
 			$addons[ $id ] = $addon;
 		}//end foreach
 	}
@@ -1441,7 +1597,7 @@ class FrmAddonsController {
 	 *
 	 * @return void
 	 */
-	protected static function addon_upgrade_link( $addon, $upgrade_link ) {
+	public static function addon_upgrade_link( $addon, $upgrade_link ) {
 		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
 		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
 

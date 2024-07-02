@@ -20,6 +20,7 @@ $off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
 $on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
 $value        = isset( $args['value'] ) ? $args['value'] : $on_label;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
+$disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
 $input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
 
@@ -55,6 +56,9 @@ if ( $use_container ) {
 			<?php checked( $checked, true ); ?>
 			<?php if ( $show_labels && $off_label ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
+			<?php } ?>
+			<?php if ( $disabled ) { ?>
+				disabled
 			<?php } ?>
 			<?php
 			if ( is_array( $input_html ) ) {

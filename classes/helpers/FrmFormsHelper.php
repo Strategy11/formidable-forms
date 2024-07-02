@@ -1503,7 +1503,7 @@ BEFORE_HTML;
 
 		?>
 		<p class="frm_plan_required">
-			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
 			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
 				<?php echo esc_html( $requires ); ?>
 			</a>

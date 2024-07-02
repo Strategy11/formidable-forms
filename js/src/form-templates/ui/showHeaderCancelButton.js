@@ -1,8 +1,12 @@
 /**
+ * External dependencies
+ */
+import { frmAnimate } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { frmAnimate } from '../utils';
 
 /**
  * Display the "Cancel" button in the header.

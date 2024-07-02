@@ -1,6 +1,6 @@
 /**
  * Internal dependencies
-*/
+ */
 import { getElements } from '../elements';
 
 /**

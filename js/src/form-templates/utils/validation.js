@@ -1,8 +1,13 @@
 /**
+ * External dependencies
+ */
+import { isHTMLElement } from 'core/utils';
+import { VIEWS as SKELETON_VIEWS } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
 import { PREFIX, VIEW_SLUGS, FEATURED_TEMPLATES_KEYS } from '../shared';
-import { isHTMLElement } from './';
 
 /**
  * Checks if the category is "All Templates".
@@ -10,7 +15,7 @@ import { isHTMLElement } from './';
  * @param {string} category The category slug.
  * @return {boolean} True if the category is "All Templates", otherwise false.
  */
-export const isAllTemplatesCategory = category => VIEW_SLUGS.ALL_TEMPLATES === category;
+export const isAllTemplatesCategory = category => SKELETON_VIEWS.ALL_ITEMS === category;
 
 /**
  * Checks if the category is "Favorites".

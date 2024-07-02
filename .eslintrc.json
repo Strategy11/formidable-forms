@@ -36,6 +36,11 @@
 	},
 	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
 	"settings": {
+		"import/resolver": {
+			"webpack": {
+				"config": "webpack.config.js"
+			}
+		},
 		"react": {
 			"pragma": "wp"
 		}

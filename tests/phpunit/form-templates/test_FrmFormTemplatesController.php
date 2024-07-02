@@ -54,7 +54,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Assertions for verifying specific elements in the rendered output.
 		$this->assertStringContainsString( 'id="frm-form-templates-page"', $output, 'The output does not contain the page ID.' );
 		$this->assertStringContainsString( 'id="frm-new-template"', $output, 'The hidden form (frm-new-template) is missing from the output.' );
-		$this->assertStringContainsString( 'id="frm-form-templates-sidebar"', $output, 'The sidebar (frm-form-templates-sidebar) is missing from the output.' );
+		$this->assertStringContainsString( 'id="frm-page-skeleton-sidebar"', $output, 'The sidebar (frm-page-skeleton-sidebar) is missing from the output.' );
 		$this->assertStringContainsString( 'id="post-body-content"', $output, 'The post body content (post-body-content) is missing from the output.' );
 	}
 
@@ -180,7 +180,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		}
 
 		// Define and validate the presence of specific categories.
-		$expected_categories = array( 'favorites', 'custom', 'all-templates', 'free-templates' );
+		$expected_categories = array( 'favorites', 'custom', 'all-items', 'free-templates' );
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$expected_categories[] = 'available-templates';
 		}
@@ -199,7 +199,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 					case 'custom':
 						$expected_count = count( $this->controller::get_custom_templates() );
 						break;
-					case 'all-templates':
+					case 'all-items':
 						$expected_count = count( $this->controller::get_templates() );
 						break;
 					case 'free-templates':

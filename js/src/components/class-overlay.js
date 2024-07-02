@@ -1,4 +1,7 @@
-import { frmAnimate } from '../common/utilities/animation';
+/**
+ * External dependencies
+ */
+import { frmAnimate } from 'core/utils';
 
 export class frmOverlay {
 

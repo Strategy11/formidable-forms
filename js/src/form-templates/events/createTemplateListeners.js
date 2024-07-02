@@ -4,12 +4,17 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
 */
 import { getElements } from '../elements';
-import { getAppState } from '../shared';
+import { getState } from '../shared';
 import { showCreateTemplateModal } from '../ui';
-import { isCustomCategory, onClickPreventDefault } from '../utils';
+import { isCustomCategory } from '../utils';
 
 /**
  * Manages event handling for the 'Create New Template' modal.
@@ -43,7 +48,7 @@ function addCreateTemplateEvents() {
  * @return {void}
  */
 const onShowCreateTemplateModalButtonClick = () => {
-	const { selectedCategory } = getAppState();
+	const { selectedCategory } = getState();
 	if ( ! isCustomCategory( selectedCategory ) ) {
 		return;
 	}
