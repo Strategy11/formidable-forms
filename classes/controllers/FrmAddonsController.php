@@ -134,7 +134,7 @@ class FrmAddonsController {
 				'slug'       => 'formidable-pro',
 				'released'   => '2011-02-05',
 				'docs'       => 'knowledgebase/',
-				'categories' => array( 'basic', 'business', 'elite' ),
+				'categories' => array( 'basic', 'plus', 'business', 'elite' ),
 				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
@@ -160,7 +160,7 @@ class FrmAddonsController {
 		unset( self::$categories['strategy11'] );
 		ksort( self::$categories );
 
-		$plans             = array( 'basic', 'business', 'elite' );
+		$plans             = array( 'basic', 'plus', 'business', 'elite' );
 		$bottom_categories = array();
 
 		// Extract the elements to move
@@ -214,6 +214,10 @@ class FrmAddonsController {
 		$addon['category-slugs'] = array();
 
 		foreach ( $addon['categories'] as $category ) {
+			if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
+				$category = 'Plus';
+			}
+
 			$category_slug = sanitize_title( $category );
 
 			// Add the slug to the new array.

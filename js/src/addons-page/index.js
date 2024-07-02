@@ -11,7 +11,7 @@ import { addEventListeners } from './events';
 import { buildCategorizedAddons } from './addons';
 
 domReady( () => {
-	buildCategorizedAddons();
 	setupInitialView();
+	buildCategorizedAddons();
 	addEventListeners();
 });

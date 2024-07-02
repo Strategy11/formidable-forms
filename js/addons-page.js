@@ -1971,9 +1971,7 @@ var PLANS = {
   BASIC: 'basic',
   PLUS: 'plus',
   BUSINESS: 'business',
-  ELITE: 'elite',
-  RENEW: 'renew',
-  FREE: 'free'
+  ELITE: 'elite'
 };
 
 /***/ }),
@@ -2012,8 +2010,29 @@ var _getElements = (0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.getElement
   sidebar = _getElements.sidebar;
 var categories = {
   availableCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.AVAILABLE, "\"]")),
-  activeCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ACTIVE, "\"]"))
+  activeCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ACTIVE, "\"]")),
+  categoriesTopDivider: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-divider")),
+  basicPlanCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BASIC, "\"]")),
+  plusPlanCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.PLUS, "\"]")),
+  businessPlanCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BUSINESS, "\"]")),
+  elitePlanCategory: sidebar.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.ELITE, "\"]"))
 };
+bodyContent.querySelectorAll('.frm-card-item:not(.plugin-card-formidable-pro)').forEach(function (addon) {
+  var categories = addon.dataset.categories;
+  switch (true) {
+    case categories.includes(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BUSINESS):
+      addon.setAttribute('data-categories', "".concat(categories, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.ELITE));
+      break;
+    case categories.includes(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.PLUS):
+      addon.setAttribute('data-categories', "".concat(categories, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BUSINESS, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.ELITE));
+      break;
+    case categories.includes(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BASIC):
+      addon.setAttribute('data-categories', "".concat(categories, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.PLUS, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.BUSINESS, ",").concat(_constants__WEBPACK_IMPORTED_MODULE_1__.PLANS.ELITE));
+      break;
+    default:
+      break;
+  }
+});
 var cards = {
   addons: bodyContent.querySelectorAll('.frm-card-item'),
   availableAddons: bodyContent.querySelectorAll('.frm-card-item:not(.frm-locked-item)'),
@@ -2455,15 +2474,38 @@ function setupInitialView() {
 
   // Clear the value in the search input
   searchInput.value = '';
-  setupAvailableCategory();
   setupActiveCategory();
+  setupAvailableCategory();
   setupAllAddonsCategory();
+  setupPlansCategory();
 
   // Smoothly display the updated UI elements
   bodyContent.classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS);
   sidebar.classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS);
   bodyContentAnimate.fadeIn();
   (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.show)(sidebar);
+}
+
+/**
+ * Sets up the "Active" category, updating the
+ * categorizedAddons object and the category count.
+ *
+ * @return {void}
+ */
+function setupActiveCategory() {
+  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    activeCategory = _getElements2.activeCategory,
+    availableCategory = _getElements2.availableCategory,
+    categoriesTopDivider = _getElements2.categoriesTopDivider;
+  var activeAddons = document.querySelectorAll('.frm-addon-active:not(.frm-locked-item)');
+  if (activeAddons.length === 0) {
+    (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.hideElements)([activeCategory, availableCategory, categoriesTopDivider]);
+    return;
+  }
+  _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.ACTIVE] = activeAddons;
+
+  // Set "Active" category count
+  activeCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = activeAddons.length;
 }
 
 /**
@@ -2474,31 +2516,15 @@ function setupInitialView() {
  * @return {void}
  */
 function setupAvailableCategory() {
-  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
-    availableCategory = _getElements2.availableCategory,
-    availableAddons = _getElements2.availableAddons;
+  var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    availableCategory = _getElements3.availableCategory,
+    availableAddons = _getElements3.availableAddons;
   _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.AVAILABLE] = availableAddons;
 
   // Set "Available" category count
   if (availableCategory) {
     availableCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = availableAddons.length;
   }
-}
-
-/**
- * Sets up the "Active" category, updating the
- * categorizedAddons object and the category count.
- *
- * @return {void}
- */
-function setupActiveCategory() {
-  var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
-    activeCategory = _getElements3.activeCategory;
-  var activeAddons = document.querySelectorAll('.frm-addon-active:not(.frm-locked-item)');
-  _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.ACTIVE] = activeAddons;
-
-  // Set "Active" category count
-  activeCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = activeAddons.length;
 }
 
 /**
@@ -2515,6 +2541,35 @@ function setupAllAddonsCategory() {
 
   // Set "All Add-Ons" category count
   allItemsCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = addons.length;
+}
+
+/**
+ * Sets up the "All Add-Ons" category, updating the
+ * category count.
+ *
+ * @private
+ * @return {void}
+ */
+function setupPlansCategory() {
+  var _getElements5 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    basicPlanCategory = _getElements5.basicPlanCategory,
+    plusPlanCategory = _getElements5.plusPlanCategory,
+    businessPlanCategory = _getElements5.businessPlanCategory,
+    elitePlanCategory = _getElements5.elitePlanCategory;
+  var getCount = function getCount(category) {
+    return parseInt(category.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent, 10) || 0;
+  };
+
+  // The "Formidable Pro" add-on is included in all plans, so we just consider that in the basicCount
+  var basicCount = getCount(basicPlanCategory);
+  var plusCount = getCount(plusPlanCategory) - 1;
+  var businessCount = getCount(businessPlanCategory) - 1;
+  var eliteCount = getCount(elitePlanCategory) - 1;
+
+  // Update the text content for each category
+  plusPlanCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = basicCount + plusCount;
+  businessPlanCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = basicCount + plusCount + businessCount;
+  elitePlanCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = basicCount + plusCount + businessCount + eliteCount;
 }
 
 /***/ }),
@@ -4700,8 +4755,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (0,_wordpress_dom_ready__WEBPACK_IMPORTED_MODULE_3__["default"])(function () {
-  (0,_addons__WEBPACK_IMPORTED_MODULE_2__.buildCategorizedAddons)();
   (0,_ui__WEBPACK_IMPORTED_MODULE_0__.setupInitialView)();
+  (0,_addons__WEBPACK_IMPORTED_MODULE_2__.buildCategorizedAddons)();
   (0,_events__WEBPACK_IMPORTED_MODULE_1__.addEventListeners)();
 });
 }();

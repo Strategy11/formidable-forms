@@ -10,6 +10,4 @@ export const PLANS = {
 	PLUS: 'plus',
 	BUSINESS: 'business',
 	ELITE: 'elite',
-	RENEW: 'renew',
-	FREE: 'free'
 };
