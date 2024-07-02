@@ -802,11 +802,11 @@ class FrmField {
 	 * @return array
 	 */
 	public static function get_all_for_form( $form_id, $limit = '', $inc_embed = 'exclude', $inc_repeat = 'include' ) {
-		if ( is_string( $form_id ) ) {
+		if ( ! is_numeric( $form_id ) ) {
 			$form_id = self::get_id_by_key( $form_id );
 		}
 
-		if ( ! is_int( $form_id ) ) {
+		if ( ! (int) $form_id ) {
 			return array();
 		}
 
