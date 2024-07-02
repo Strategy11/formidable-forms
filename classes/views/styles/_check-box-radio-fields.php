@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
-	<?php new FrmColorpickerStyleComponent(
+	<?php new FrmColorPickerStyleComponent(
 		$frm_style->get_field_name( 'check_label_color' ),
 		$style->post_content['check_label_color'],
 		array(
