@@ -92,7 +92,10 @@ function frm_class_autoloader( $class_name, $filepath ) {
 			$filepath .= 'controllers/';
 		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
 			$filepath .= 'factories/';
-		} else {
+		} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
+			$filepath .= 'views/styles/components/';
+		}
+		else {
 			$filepath .= 'models/';
 			if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
 				$filepath .= 'fields/';

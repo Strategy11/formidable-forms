@@ -13,11 +13,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	padding-bottom: 0;
 }
 
-#frm_style_sidebar .control-section:hover .accordion-section-title {
-	/* Normally an accordion has a white background but this doesn't look great with the padding on the accordion. */
-	background-color: transparent !important;
-}
-
 #frm_style_sidebar .accordion-section-title::after {
 	right: 0;
 	color: var(--grey-400);
@@ -309,7 +304,6 @@ The label in the preview should use the label color setting.
 	position: relative;
 	bottom: 2px;
 }
-
 .frm-style-card-separator {
 	background-color: var(--grey-300);
 	width: 2px;

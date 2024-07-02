@@ -1071,7 +1071,6 @@ p.frm_has_shortcodes {
 	color: var(--grey-700);
 	font-size: var(--text-lg);
 	font-weight: 400;
-	border-top: 2px solid var(--sidebar-hover);
 	margin: 0;
 }
 
@@ -1818,6 +1817,7 @@ input.frm_insert_in_template {
 	display: flex;
 	gap: var(--gap-sm);
 }
+
 
 .frm-flex-col {
 	display: flex;
@@ -3455,7 +3455,9 @@ a.frm_option_icon:hover::before {
 .frm-right-panel .accordion-section-content > .inside {
 	padding: 0 0 var(--gap-xs);
 }
-
+.frm-right-panel .accordion-section-content > .inside .frm-style-item-heading {
+	line-height: 36px;
+}
 .frm-right-panel .accordion-section-content .inside a {
 	font-size: inherit;
 }
@@ -3473,8 +3475,10 @@ a.frm_option_icon:hover::before {
 .js .frm-right-panel .control-section.open .accordion-section-title,
 .js .frm-right-panel .control-section .accordion-section-title:focus,
 .js .frm-right-panel .control-section .accordion-section-title:hover {
-	background: transparent;
+	background: white;
+	border-radius: var(--small-radius);
 	color: var(--grey-900);
+	box-shadow: 0px 0.47px 0.94px 0px rgba(16, 24, 40, 0.06), 0px 0.47px 1.47px 0px rgba(16, 24, 40, 0.1);
 }
 
 .js .frm-right-panel .control-section .accordion-section-title:hover:before {
@@ -3552,6 +3556,7 @@ a.frm_option_icon:hover::before {
 .frm-right-panel .accordion-section {
 	border: none;
 	position: relative;
+	padding-bottom: 2px; /* Add extra space for heading background shadow to show on hover */
 }
 .frm-right-panel .accordion-section-title > .frmsvg:first-child {
 	margin: 0 10px 0 0;
@@ -3560,17 +3565,25 @@ a.frm_option_icon:hover::before {
 .frm-right-panel .accordion-section-title:hover > .frmsvg:first-child {
 	color: var(--grey-900);
 }
-
+.frm-right-panel .accordion-section-title > .frmsvg:last-child {
+	margin-right: 15px!important;
+}
 .frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
 	transform: rotate(180deg);
+}
+.frm-right-panel .open.accordion-section {
+	border-bottom: 1px solid var(--grey-300);
+}
+.frm-right-panel .accordion-section .accordion-section-content {
+	padding-top: 25px;
 }
 #frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
 	padding: 15px 20px;
 	background: var(--sidebar-color);
 	line-height: var(--leading);
-	color: var(--grey-700);
-	font-size: var(--text-lg);
+	color: var(--grey-500);
+	font-size: var(--text-md);
 	font-weight: 400;
 }
 
@@ -4274,7 +4287,7 @@ label input[type="checkbox"], label input[type="radio"] {
 
 #frm_style_sidebar h3,
 #frm_view_editor_left.frm-right-panel .accordion-section-title {
-	padding: 15px 0;
+	padding: 15px 15px;
 }
 
 .frm_field_key {
