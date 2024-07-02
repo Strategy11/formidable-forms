@@ -17,6 +17,11 @@
 	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 
+#post-body-content[data-category="active-addons"] .frm-addons-request-addon,
+#post-body-content[data-category="available-addons"] .frm-addons-request-addon {
+	display: none;
+}
+
 /* Card */
 #frm-addons-page .frm-card-item {
 	padding: var(--gap-sm) var(--gap-md);

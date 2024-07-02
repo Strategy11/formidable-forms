@@ -2517,6 +2517,7 @@ function setupActiveCategory() {
  */
 function setupAvailableCategory() {
   var _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+    bodyContent = _getElements3.bodyContent,
     availableCategory = _getElements3.availableCategory,
     availableAddons = _getElements3.availableAddons;
   _addons__WEBPACK_IMPORTED_MODULE_4__.categorizedAddons[_constants__WEBPACK_IMPORTED_MODULE_5__.VIEWS.AVAILABLE] = availableAddons;
@@ -2524,6 +2525,10 @@ function setupAvailableCategory() {
   // Set "Available" category count
   if (availableCategory) {
     availableCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = availableAddons.length;
+    var upgradeBannerAvailableCount = bodyContent.querySelector(".".concat(_constants__WEBPACK_IMPORTED_MODULE_5__.PREFIX, "-available-count"));
+    if (upgradeBannerAvailableCount) {
+      upgradeBannerAvailableCount.textContent = availableAddons.length;
+    }
   }
 }
 
@@ -2670,24 +2675,23 @@ __webpack_require__.r(__webpack_exports__);
  */
 function showSelectedCategory(selectedCategory) {
   var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    bodyContent = _getElements.bodyContent,
     addons = _getElements.addons,
     emptyState = _getElements.emptyState,
     upgradeBanner = _getElements.upgradeBanner;
   (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hide)(emptyState);
   (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.show)(upgradeBanner);
-  switch (selectedCategory) {
-    case core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ALL_ITEMS:
-      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(addons);
-      break;
-    default:
-      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(addons);
-      if (_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory].length === 0) {
-        (0,___WEBPACK_IMPORTED_MODULE_4__.showEmptyState)();
-        (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hide)(upgradeBanner);
-      } else {
-        (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory]);
-      }
-      break;
+  bodyContent.dataset.category = selectedCategory;
+  if (core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ALL_ITEMS === selectedCategory) {
+    (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(addons);
+    return;
+  }
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(addons);
+  if (_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory].length === 0) {
+    (0,___WEBPACK_IMPORTED_MODULE_4__.showEmptyState)();
+    (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hide)(upgradeBanner);
+  } else {
+    (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)(_addons__WEBPACK_IMPORTED_MODULE_3__.categorizedAddons[selectedCategory]);
   }
 }
 /* harmony default export */ __webpack_exports__["default"] = (showSelectedCategory);

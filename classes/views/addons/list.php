@@ -16,3 +16,8 @@ FrmAddonsHelper::get_reconnect_link();
 	}
 	?>
 </ul>
+
+<div class="frm-addons-request-addon frm-py-2xs frm-mt-xs">
+	<span><?php esc_html_e( 'Not finding what you need?', 'formidable' ); ?></span>
+	<a class="frm-font-semibold" href="#" target="_blank"><?php esc_html_e( 'Request Add-On', 'formidable' ); ?></a>
+</div>

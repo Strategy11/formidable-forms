@@ -18,24 +18,25 @@ import { showEmptyState } from '.';
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
-	const { addons, emptyState, upgradeBanner } = getElements();
+	const { bodyContent, addons, emptyState, upgradeBanner } = getElements();
 
 	hide( emptyState );
 	show( upgradeBanner )
 
-	switch (selectedCategory) {
-		case SKELETON_VIEWS.ALL_ITEMS:
-			showElements( addons );
-			break;
-		default:
-			hideElements( addons );
-			if ( categorizedAddons[ selectedCategory ].length === 0 ) {
-				showEmptyState();
-				hide( upgradeBanner );
-			} else {
-				showElements( categorizedAddons[ selectedCategory ] );
-			}
-			break;
+	bodyContent.dataset.category = selectedCategory;
+
+	if ( SKELETON_VIEWS.ALL_ITEMS === selectedCategory ) {
+		showElements( addons );
+		return;
+	}
+
+	hideElements( addons );
+
+	if ( categorizedAddons[ selectedCategory ].length === 0 ) {
+		showEmptyState();
+		hide( upgradeBanner );
+	} else {
+		showElements( categorizedAddons[ selectedCategory ] );
 	}
 }
 
