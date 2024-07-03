@@ -187,7 +187,7 @@ class FrmAddonsHelper {
 		$class_names[] = 'plugin-card-' . $addon['slug'];
 		$class_names[] = 'frm-addon-' . $addon['status']['type'];
 
-		if ( self::is_locked( $addon ) ) {
+		if ( self::is_locked() ) {
 			$class_names[] = 'frm-locked-item';
 		}
 

@@ -30,7 +30,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 		</h3>
 
 		<?php
-		if ( ! FrmAddonsHelper::is_locked( $addon ) ) {
+		if ( ! FrmAddonsHelper::is_locked() ) {
 			FrmAddonsController::show_conditional_action_button(
 				array(
 					'addon'         => $addon,

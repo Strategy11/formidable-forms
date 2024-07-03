@@ -26,6 +26,13 @@
 #frm-addons-page .frm-card-item {
 	padding: var(--gap-sm) var(--gap-md);
 	gap: 12px;
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-sm);
+	transition: box-shadow 200ms ease-in-out;
+}
+
+#frm-addons-page .frm-card-item:hover {
+	box-shadow: var(--box-shadow-md);
 }
 
 .frm-card-item p,
@@ -66,18 +73,18 @@
 	opacity: 0.7;
 	pointer-events: none;
 	background: linear-gradient(90deg, var(--grey-200) 25%, var(--grey-300) 50%, var(--grey-200) 75%);
-    background-size: 400% 100%;
-    animation: skeleton-animation 3s infinite ease-in-out;
+	background-size: 400% 100%;
+	animation: skeleton-animation 3s infinite ease-in-out;
 }
 
 @keyframes skeleton-animation {
-    0% {
-        background-position: 0% 0%;
-    }
-    50% {
-        background-position: 100% 100%;
-    }
+	0% {
+		background-position: 0% 0%;
+	}
+	50% {
+		background-position: 100% 100%;
+	}
 	100% {
-        background-position: 0% 0%;
-    }
+		background-position: 0% 0%;
+	}
 }
