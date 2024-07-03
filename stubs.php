@@ -339,6 +339,8 @@ namespace {
 	}
 	class FrmProEddController extends FrmAddon {
 	}
+	class FrmProFieldSettings {
+	}
 	function load_formidable_pro() {
 	}
 	/**
