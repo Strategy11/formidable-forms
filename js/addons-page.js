@@ -1960,8 +1960,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   PLANS: function() { return /* binding */ PLANS; },
 /* harmony export */   PREFIX: function() { return /* binding */ PREFIX; },
-/* harmony export */   VIEWS: function() { return /* binding */ VIEWS; }
+/* harmony export */   VIEWS: function() { return /* binding */ VIEWS; },
+/* harmony export */   addonRequestURL: function() { return /* binding */ addonRequestURL; }
 /* harmony export */ });
+var addonRequestURL = window.frmAddonsVars.addonRequestURL;
+
 var PREFIX = 'frm-addons';
 var VIEWS = {
   AVAILABLE: 'available-addons',
@@ -2594,6 +2597,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
 /* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/addons-page/elements/index.js");
 /* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared */ "./js/src/addons-page/shared/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../constants */ "./js/src/addons-page/constants.js");
 /**
  * WordPress dependencies
  */
@@ -2610,6 +2614,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Display the search-empty state.
  *
@@ -2623,16 +2628,12 @@ function showEmptyState() {
     emptyStateButton = _getElements.emptyStateButton,
     emptyStateTitle = _getElements.emptyStateTitle,
     emptyStateText = _getElements.emptyStateText;
-
-  // Assign state attributes
   emptyState.setAttribute('data-view', selectedCategory);
-
-  // Update text content
   emptyStateTitle.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No add-ons found', 'formidable');
   emptyStateText.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Sorry, we didn\'t find any add-ons that match your criteria.', 'formidable');
   emptyStateButton.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Request Add-On', 'formidable');
-
-  // Display the empty state
+  emptyStateButton.href = _constants__WEBPACK_IMPORTED_MODULE_4__.addonRequestURL;
+  emptyStateButton.setAttribute('target', '_blank');
   (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.showElements)([emptyState, emptyStateButton]);
 }
 

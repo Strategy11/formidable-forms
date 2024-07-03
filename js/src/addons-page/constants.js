@@ -1,3 +1,4 @@
+export const { addonRequestURL } = window.frmAddonsVars;
 export const PREFIX = 'frm-addons';
 
 export const VIEWS = {

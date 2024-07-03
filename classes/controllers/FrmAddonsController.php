@@ -18,6 +18,11 @@ class FrmAddonsController {
 	/**
 	 * @var string
 	 */
+	protected static $request_addon_url;
+
+	/**
+	 * @var string
+	 */
 	protected static $plugin;
 
 	/**
@@ -28,6 +33,8 @@ class FrmAddonsController {
 		add_filter( 'pre_set_site_transient_update_plugins', __CLASS__ . '::check_update' );
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
+			static::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
+
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
@@ -75,7 +82,10 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	private static function get_js_variables() {
-		return array( 'proIsIncluded' => FrmAppHelper::pro_is_included() );
+		return array(
+			'proIsIncluded'   => FrmAppHelper::pro_is_included(),
+			'addonRequestURL' => static::$request_addon_url,
+		);
 	}
 
 	/**
@@ -115,11 +125,12 @@ class FrmAddonsController {
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
 
-		$view_path        = FrmAppHelper::plugin_path() . '/classes/views/addons/';
-		$installed_addons = apply_filters( 'frm_installed_addons', array() );
-		$addons           = self::get_api_addons();
-		$errors           = array();
-		$license_type     = '';
+		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/addons/';
+		$installed_addons  = apply_filters( 'frm_installed_addons', array() );
+		$addons            = self::get_api_addons();
+		$errors            = array();
+		$license_type      = '';
+		$request_addon_url = static::$request_addon_url;
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
