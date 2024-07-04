@@ -69,9 +69,12 @@
 	color: var(--grey-900);
 }
 
+.frm_loading_button ~ .frm_toggle {
+	pointer-events: none;
+}
+
 .frm_loading_button ~ .frm_toggle .frm_toggle_slider {
 	opacity: 0.7;
-	pointer-events: none;
 	background: linear-gradient(90deg, var(--grey-200) 25%, var(--grey-300) 50%, var(--grey-200) 75%);
 	background-size: 400% 100%;
 	animation: skeleton-animation 3s infinite ease-in-out;
