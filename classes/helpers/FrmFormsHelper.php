@@ -1786,13 +1786,13 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
-	 * @deprecated x.x
+	 * @deprecated 6.11
 	 *
 	 * @param array $atts
 	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.11' );
 
 		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			return;

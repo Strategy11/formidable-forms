@@ -19,7 +19,7 @@ class FrmFormsController {
 	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
 	 * is stored here and re-used as an optimization.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @var string|null
 	 */
@@ -1731,6 +1731,14 @@ class FrmFormsController {
 			$form = $form->id;
 		}
 
+		/*
+		 * Repeater actions adds `parent_entry` to `$entry` store the parent entry data. If `parent_entry` is not empty,
+		 * use the parent form ID instead of repeater form ID to fix the parent form field shortcodes doesn't work.
+		 */
+		if ( ! empty( $entry->parent_entry ) ) {
+			$form = $entry->parent_entry->form_id;
+		}
+
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
 		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
@@ -1886,9 +1894,11 @@ class FrmFormsController {
 			case 'update_settings':
 				return self::$action( $vars );
 			case 'lite-reports':
-				return self::no_reports( $vars );
+				self::no_reports( $vars );
+				return;
 			case 'views':
-				return self::no_views( $vars );
+				self::no_views( $vars );
+				return;
 			default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1972,6 +1982,8 @@ class FrmFormsController {
 	 * Add education about views.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
 		FrmAppHelper::include_svg();
@@ -1985,6 +1997,8 @@ class FrmFormsController {
 	 * Add education about reports.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
 		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );

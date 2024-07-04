@@ -42,6 +42,7 @@
 	},
 	"rules": {
 		"cypress/unsafe-to-chain-command": "off",
+		"cypress/no-assigning-return-values": "off",
 		"camelcase": ["error", { "properties": "never" }],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
