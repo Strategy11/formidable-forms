@@ -29,62 +29,88 @@ class FrmAddonsHelper {
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta() {
-		// Show 'renew' banner for expired users.
 		if ( FrmAddonsController::is_license_expired() ) {
-			FrmTipsHelper::show_admin_cta(
-				array(
-					'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
-					'description' => esc_html__( 'Renew your subscription today and access our library of add-ons to supercharge your forms.', 'formidable' ),
-					'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
-					'link_url'    => FrmAddonsController::is_license_expired(),
-					'id'          => 'frm-renew-subscription-banner',
-				)
-			);
-
+			self::show_expired_cta();
 			return;
 		}
 
 		if ( ! FrmAppHelper::pro_is_connected() ) {
-			FrmTipsHelper::show_admin_cta(
-				array(
-					'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
-					'description' => esc_html__( 'Upgrade to Pro and access our library of add-ons to supercharge your forms.', 'formidable' ),
-					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
-					'link_url'    => FrmAppHelper::admin_upgrade_link(
-						array(
-							'medium'  => 'addons',
-							'content' => 'upgrade-cta',
-						)
-					),
-					'id'          => 'frm-upgrade-banner',
-				)
-			);
-
+			self::show_lite_cta();
 			return;
 		}
 
-		// Show 'upgrade' banner for non-elite users.
-		if ( ! in_array( FrmAddonsController::license_type(), array( 'elite' ), true ) ) {
-			FrmTipsHelper::show_admin_cta(
-				array(
-					'title'       => esc_html__( 'Unlock Even More Add-ons', 'formidable' ),
-					'description' => sprintf(
-						/* translators: %1$s: Open span tag, %2$s: Close span tag */
-						esc_html__( 'Your plan includes %1$s%2$s add-ons. Upgrade to take your forms even farther', 'formidable' ),
-						'<span class="frm-addons-available-count">',
-						'</span>'
-					),
-					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
-					'link_url'    => FrmAppHelper::admin_upgrade_link(
-						array(
-							'medium'  => 'addons',
-							'content' => 'upgrade-cta',
-						)
-					),
-					'id'          => 'frm-upgrade-banner',
-				)
-			);
-		}//end if
+		if ( 'elite' !== FrmAddonsController::license_type() ) {
+			self::show_elite_cta();
+		}
+	}
+
+	/**
+	 * Show 'renew' banner for expired users.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	private static function show_expired_cta() {
+		FrmTipsHelper::show_admin_cta(
+			array(
+				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
+				'description' => esc_html__( 'Renew your subscription today and access our library of add-ons to supercharge your forms.', 'formidable' ),
+				'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
+				'link_url'    => FrmAddonsController::is_license_expired(),
+				'id'          => 'frm-renew-subscription-banner',
+			)
+		);
+	}
+
+	/**
+	 * Show 'Upgrade to Pro' banner for users not connected to Pro.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	private static function show_lite_cta() {
+		FrmTipsHelper::show_admin_cta(
+			array(
+				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
+				'description' => esc_html__( 'Upgrade to Pro and access our library of add-ons to supercharge your forms.', 'formidable' ),
+				'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+				'link_url'    => FrmAppHelper::admin_upgrade_link(
+					array(
+						'medium'  => 'addons',
+						'content' => 'upgrade-cta',
+					)
+				),
+				'id'          => 'frm-upgrade-banner',
+			)
+		);
+	}
+
+	/**
+	 * Show 'Upgrade' banner for non-elite users.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	private static function show_elite_cta() {
+		FrmTipsHelper::show_admin_cta(
+			array(
+				'title'       => esc_html__( 'Unlock Even More Add-ons', 'formidable' ),
+				'description' => sprintf(
+					/* translators: %1$s: Open span tag, %2$s: Close span tag */
+					esc_html__( 'Your plan includes %1$s%2$s add-ons. Upgrade to take your forms even farther', 'formidable' ),
+					'<span class="frm-addons-available-count">',
+					'</span>'
+				),
+				'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+				'link_url'    => FrmAppHelper::admin_upgrade_link(
+					array(
+						'medium'  => 'addons',
+						'content' => 'upgrade-cta',
+					)
+				),
+				'id'          => 'frm-upgrade-banner',
+			)
+		);
 	}
 
 	/**
