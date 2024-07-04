@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { CURRENT_CLASS } from 'core/constants';
-import { onClickPreventDefault, frmAnimate, dispatchCustomEvent } from 'core/utils';
+import { onClickPreventDefault, frmAnimate } from 'core/utils';
 
 /**
  * Internal dependencies
