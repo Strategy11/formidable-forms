@@ -3,7 +3,7 @@
  */
 import { HIDE_JS_CLASS } from 'core/constants';
 import { frmAnimate, hasQueryParam, hideElements, show, hide } from 'core/utils';
-import {PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
+import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies

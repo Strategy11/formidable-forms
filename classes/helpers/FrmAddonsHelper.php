@@ -45,7 +45,7 @@ class FrmAddonsHelper {
 	}
 
 	/**
-	 * Show 'renew' banner for expired users.
+	 * Show 'Renew' banner for expired users.
 	 *
 	 * @since x.x
 	 * @return void
