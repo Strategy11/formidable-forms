@@ -13,12 +13,12 @@ class FrmAddonsController {
 	/**
 	 * @var array
 	 */
-	protected static $categories = array();
+	private static $categories = array();
 
 	/**
 	 * @var string
 	 */
-	protected static $request_addon_url;
+	private static $request_addon_url;
 
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class FrmAddonsController {
 		add_filter( 'pre_set_site_transient_update_plugins', __CLASS__ . '::check_update' );
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
-			static::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
+			self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
 
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
@@ -84,7 +84,7 @@ class FrmAddonsController {
 	private static function get_js_variables() {
 		return array(
 			'proIsIncluded'   => FrmAppHelper::pro_is_included(),
-			'addonRequestURL' => static::$request_addon_url,
+			'addonRequestURL' => self::$request_addon_url,
 		);
 	}
 
@@ -130,7 +130,7 @@ class FrmAddonsController {
 		$addons            = self::get_api_addons();
 		$errors            = array();
 		$license_type      = '';
-		$request_addon_url = static::$request_addon_url;
+		$request_addon_url = self::$request_addon_url;
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
@@ -154,7 +154,7 @@ class FrmAddonsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
-		static::organize_and_get_categories();
+		self::organize_and_get_categories();
 		$categories = self::$categories;
 
 		include $view_path . 'index.php';
@@ -215,6 +215,7 @@ class FrmAddonsController {
 	 *
 	 * @since x.x
 	 *
+	 * @param array $addon The addon array that will be modified by reference.
 	 * @return void
 	 */
 	protected static function set_categories( &$addon ) {
