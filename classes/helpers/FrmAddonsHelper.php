@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since x.x
  */
 class FrmAddonsHelper {
+	/**
+	 * Stores the result of `FrmFormsHelper::get_plan_required`.
+	 *
+	 * @var string
+	 */
 	private static $plan_required;
 
 	/**
