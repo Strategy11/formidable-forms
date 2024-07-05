@@ -12,6 +12,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
 		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Forms list', 'formidable' ),
+			)
+		);
 	}
 
 	/**
