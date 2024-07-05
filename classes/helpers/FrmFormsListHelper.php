@@ -14,7 +14,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		parent::__construct( $args );
 		$this->screen->set_screen_reader_content(
 			array(
-				'heading_list' => __( 'Forms list', 'formidable' ),
+				'heading_list' => esc_html__( 'Forms list', 'formidable' ),
 			)
 		);
 	}

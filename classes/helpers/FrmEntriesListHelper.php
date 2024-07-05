@@ -19,7 +19,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		parent::__construct( $args );
 		$this->screen->set_screen_reader_content(
 			array(
-				'heading_list' => __( 'Entries list', 'formidable' ),
+				'heading_list' => esc_html__( 'Entries list', 'formidable' ),
 			)
 		);
 	}
