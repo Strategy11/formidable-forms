@@ -238,15 +238,37 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	abstract protected function get_top_forms_label();
 
 	/**
-	 * Allows reading class object properties.
-	 *
 	 * @since x.x
-	 *
-	 * @param string $prop
-	 *
-	 * @return mixed
 	 */
-	public function get_prop( $prop ) {
-		return $this->$prop;
+	public function get_date_range() {
+		return $this->date_range;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public function get_from_date() {
+		return $this->from_date;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public function get_to_date() {
+		return $this->to_date;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public function get_prev_from_date() {
+		return $this->prev_from_date;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public function get_prev_to_date() {
+		return $this->prev_to_date;
 	}
 }
