@@ -107,7 +107,7 @@ class FrmEmailSummaryHelper {
 
 		// Do not send any email if it isn't enough 30 days from the last stats email.
 		if ( $last_stats && self::MONTHLY_PERIOD > self::get_date_diff( $current_date, $last_stats ) ) {
-			// return $emails;
+			return $emails;
 		}
 
 		if ( $last_yearly ) {
