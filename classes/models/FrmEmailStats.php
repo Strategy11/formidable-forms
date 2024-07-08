@@ -239,6 +239,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 	/**
 	 * @since x.x
+	 *
+	 * @return int
 	 */
 	public function get_date_range() {
 		return $this->date_range;
@@ -246,6 +248,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 	/**
 	 * @since x.x
+	 *
+	 * @return string
 	 */
 	public function get_from_date() {
 		return $this->from_date;
@@ -253,6 +257,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 	/**
 	 * @since x.x
+	 *
+	 * @return string
 	 */
 	public function get_to_date() {
 		return $this->to_date;
@@ -260,6 +266,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 	/**
 	 * @since x.x
+	 *
+	 * @return string
 	 */
 	public function get_prev_from_date() {
 		return $this->prev_from_date;
@@ -267,6 +275,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 
 	/**
 	 * @since x.x
+	 *
+	 * @return string
 	 */
 	public function get_prev_to_date() {
 		return $this->prev_to_date;
