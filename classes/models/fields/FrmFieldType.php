@@ -1086,7 +1086,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Add paramters to an input value as an alterntative to
+	 * Add parameters to an input value as an alterntative to
 	 * using the frm_field_input_html hook
 	 *
 	 * @since 3.01.03

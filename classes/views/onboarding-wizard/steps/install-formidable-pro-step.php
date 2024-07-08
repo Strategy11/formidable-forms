@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</a>
 		</div>
 
-		<!-- Error Handleing -->
+		<!-- Error Handling -->
 		<span id="frm-onboarding-check-pro-installation-error" class="frm-validation-error frm-mt-xs frm_hidden">
 			<span><?php esc_html_e( 'Formidable Pro is currently inactive!', 'formidable' ); ?></span>
 		</span>

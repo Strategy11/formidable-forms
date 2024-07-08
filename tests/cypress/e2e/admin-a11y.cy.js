@@ -1,4 +1,4 @@
-describe( 'Run some accessibilty tests', function() {
+describe( 'Run some accessibility tests', function() {
     beforeEach( cy.login );
 
     const configureAxeWithBaselineIgnoredRuleset = () => {

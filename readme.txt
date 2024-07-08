@@ -183,7 +183,7 @@ When you do not receive emails, try the following steps:
    2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notifications will not work either.
    3. Check your SPAM box.
    4. Try a different address in your settings.
-   5. Install WP Mail SMPT or another similar emailing alternative and configure the SMTP settings.
+   5. Install WP Mail SMTP or another similar emailing alternative and configure the SMTP settings.
    6. If these steps do not fix the problem and other WP signup emails are not going out, please reach out to your web host.
 
 [Read more about WordPress emails not sending](https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) in our blog.
