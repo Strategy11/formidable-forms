@@ -371,6 +371,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.11.1 =
+* New: Screen reader text has been updated on some admin pages to improve accessibility.
+* New: Hover styling has been updated for modal close icons to improve user experience.
+* Fix: The reCaptcha settings name was missing in a global settings string.
+* The minimum supported version of Formidable Pro has been bumped to version 6.0.
+* The function FrmAddonsController::is_license_expiring has been deprecated.
+
 = 6.11 =
 * New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
 * New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
