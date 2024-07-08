@@ -18,8 +18,8 @@ check-file = false
 # Pevent North Dakota from changing to "AND".
 ND = "ND"
 datas = "datas"
-# This typo fix requires deprecating a method. There is an open issue to fix this.
-get_select_atributes = "get_select_atributes"
+# This typo fix requires deprecating a method (get_select_atributes). There is an open issue to fix this.
+atributes = "atributes"
 # This is used like 7ths, 8ths. It is not a typo for the or this.
 ths = "ths"
 # This is part of a #66afe9 color setting. Typos corrects the "afe" to "safe".

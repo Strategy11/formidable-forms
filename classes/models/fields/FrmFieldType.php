@@ -1207,7 +1207,7 @@ DEFAULT_HTML;
 	protected function select_tag( $values ) {
 		$field       = isset( $values['field'] ) ? $values['field'] : $this->field;
 		$input_html  = $this->get_field_input_html_hook( $field );
-		$select_atts = $this->get_select_attributes( $values );
+		$select_atts = $this->get_select_atributes( $values );
 		$select      = FrmAppHelper::array_to_html_params( $select_atts ) . ' ';
 
 		return '<select' . $select . $input_html . '>';
@@ -1216,7 +1216,7 @@ DEFAULT_HTML;
 	/**
 	 * @since 3.0
 	 */
-	protected function get_select_attributes( $values ) {
+	protected function get_select_atributes( $values ) {
 		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
 		$select_atts = array();
 		if ( ! $readonly ) {
