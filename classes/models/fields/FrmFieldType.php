@@ -1215,6 +1215,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values
+	 *
+	 * @return array
 	 */
 	protected function get_select_attributes( $values ) {
 		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
