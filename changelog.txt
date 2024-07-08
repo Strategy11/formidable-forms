@@ -854,7 +854,7 @@
 * Fix: In some cases, a PHP warning was shown when redirecting after submit.
 
 = 4.04 =
-* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
+* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintended results.
 * New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
 * New: Show the new pricing fields in the builder for product education.
 
@@ -1055,7 +1055,7 @@
 = 3.06 =
 * New: Add one-click form creation from a form template and adjust the way a new form is created
 * New: Add a new process for creating a custom form template
-* Tweak: Create smaller XML fiels when exporting forms
+* Tweak: Create smaller XML fields when exporting forms
 * Tweak: Use the name of the form for XML exports when a single form is exported
 * Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
 * Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
@@ -2434,7 +2434,7 @@
 = 2.0.09 =
 * Add frm_time_to_check duplicate entries filter
 * Allow custom JavaScript validation
-* Add frm_do_html_shortcodes fiter
+* Add frm_do_html_shortcodes filter
 * Fix the duplicate entry check
 * Include get_columns function in list tables for 4.3
 * Use relative URLs in the stylesheet
@@ -2796,7 +2796,7 @@
 * PRO: Added drafts parameter to view shortcode to show draft entries. [display-frm-data id=40 drafts=1]
 * PRO: Switched star ratings to icon font
 * PRO: Added multiple="multiple" into multiple file upload fields
-* PRO: Allow field keys in the exlude_fields shortcode option
+* PRO: Allow field keys in the exclude_fields shortcode option
 * PRO: Allow updated-at, created-at, updated-by to by used in conditional statements
 * PRO: Added update message and button to global default messages
 * PRO: Added progress bar to csv import

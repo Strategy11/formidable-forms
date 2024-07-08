@@ -1,0 +1,30 @@
+[type.po]
+extend-glob = ["*.po"]
+check-file = false
+
+[type.map]
+extend-glob = ["*.map"]
+check-file = false
+
+[type.js]
+extend-glob = ["*/bootstrap-multiselect.js","*.min.js"]
+check-file = false
+
+[type.xml]
+extend-glob = ["*.xml"]
+check-file = false
+
+[default.extend-words]
+# Pevent North Dakota from changing to "AND".
+ND = "ND"
+datas = "datas"
+# This typo fix requires deprecating a method (get_select_atributes). There is an open issue to fix this.
+atributes = "atributes"
+# This is used like 7ths, 8ths. It is not a typo for the or this.
+ths = "ths"
+# This is part of a #66afe9 color setting. Typos corrects the "afe" to "safe".
+afe = "afe"
+# This is used in a regex. It is not intended to be "miss" or "mist".
+mis = "mis"
+# This is used for the Faroese locale. It is not a typo.
+fo = "fo"
