@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * We need this style_name field for calls made from the changeStyling function.
 	 * Without it, some styles (including background image opacity and repeater button icons) don't properly sync when updated.
 	 * It isn't required for frm_styling_form so it's left out of the form.
-	 * It is targetted in JavaScript by its #frm_style_sidebar parent though, so it's important that it's inside the sidebar.
+	 * It is targeted in JavaScript by its #frm_style_sidebar parent though, so it's important that it's inside the sidebar.
 	 */
 	?>
 	<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
