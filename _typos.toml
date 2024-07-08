@@ -26,8 +26,8 @@ extend-ignore-re = [
 datas = "datas"
 # This typo fix requires deprecating a method (get_select_atributes). There is an open issue to fix this.
 atributes = "atributes"
-# This is used for the Faroese locale. It is not a typo.
+# fo is used for the Faroese locale. It is not a typo.
+# fo is also used for a table alias in SQL queries.
 fo = "fo"
-
 [default.extend-identifiers]
 66afe9 = "66afe9"
