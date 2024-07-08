@@ -18,14 +18,13 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since 6.8.4
+	 * @since x.x
 	 *
 	 * @return string
 	 */
-	public function getName() {
+	public function get_name() {
 		return 'reCAPTCHA';
 	}
-
 
 	/**
 	 * @since 6.8.4
@@ -114,5 +113,15 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 */
 	private function captcha_is_invisible() {
 		return in_array( $this->frm_settings->re_type, array( 'invisible', 'v3' ), true );
+	}
+
+	/**
+	 * @since 6.8.4
+	 * @deprecated x.x
+	 * @return string
+	 */
+	public function getName() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return $this->get_name();
 	}
 }
