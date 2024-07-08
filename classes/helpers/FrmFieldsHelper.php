@@ -1568,7 +1568,7 @@ class FrmFieldsHelper {
 			'NM' => 'New Mexico',
 			'NY' => 'New York',
 			'NC' => 'North Carolina',
-			'AND' => 'North Dakota',
+			'ND' => 'North Dakota',
 			'OH' => 'Ohio',
 			'OK' => 'Oklahoma',
 			'OR' => 'Oregon',
