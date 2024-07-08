@@ -67,7 +67,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function plugin_url() {
-		// Prevously FRM_URL constant.
+		// Previously FRM_URL constant.
 		return plugins_url( '', self::plugin_path() . '/formidable.php' );
 	}
 
@@ -171,7 +171,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param array $args - May include the form id when values need translation.
-	 * @return FrmSettings $frm_setings
+	 * @return FrmSettings $frm_settings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
@@ -1980,7 +1980,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if the user has permision for action.
+	 * Check if the user has permission for action.
 	 * Return permission message and stop the action if no permission
 	 *
 	 * @since 2.0
@@ -2822,7 +2822,7 @@ class FrmAppHelper {
 
 	/**
 	 * Get the translatable time strings. The untranslated version is a failsafe
-	 * in case langauges are changing for the unit set in the shortcode.
+	 * in case languages are changing for the unit set in the shortcode.
 	 *
 	 * @since 2.0.20
 	 * @return array
@@ -3917,7 +3917,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Some back end fields allow privleged users to add scripts.
+	 * Some back end fields allow privileged users to add scripts.
 	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
 	 *
 	 * @since 5.0.13

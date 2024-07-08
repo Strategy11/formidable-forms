@@ -993,7 +993,7 @@ class FrmField {
 	}
 
 	/**
-	 * If a form has too many fields, thay won't all save into a single transient.
+	 * If a form has too many fields, they won't all save into a single transient.
 	 * We'll break them into groups of 200
 	 *
 	 * @since 2.0.1
