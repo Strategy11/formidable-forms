@@ -18,7 +18,7 @@ describe("Updating form settings", () => {
         cy.log("Update form");
         cy.get('#frm_submit_side_top').should("contain", "Update").click();
 
-        cy.log("Go to Settings tab and enable the option to show the title and decription in the form preview");
+        cy.log("Go to Settings tab and enable the option to show the title and description in the form preview");
         cy.get(".frm_form_nav",{ timeout: 5000 }).should("be.visible");
         cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
         cy.get('#frm_form_description').should("be.visible").type("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.")
@@ -46,7 +46,7 @@ describe("Updating form settings", () => {
         cy.log("Navigate back to the formidable form page");
         cy.go('back');
 
-        cy.log("Go to Settings tab and disable the option to show the title and decription in the form preview");
+        cy.log("Go to Settings tab and disable the option to show the title and description in the form preview");
         cy.get(".frm_form_nav",{ timeout: 5000 }).should("be.visible");
         cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
         cy.get(':nth-child(4) > .frm_inline_block').should("contain","Show the form title");
