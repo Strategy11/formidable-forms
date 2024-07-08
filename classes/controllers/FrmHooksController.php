@@ -301,7 +301,7 @@ class FrmHooksController {
 		add_filter( 'frm_field_label_seen', 'FrmFieldsController::check_label' );
 
 		// Forms Controller.
-		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
+		add_action( 'frm_form_classes', 'FrmFormsController::form_classes' );
 		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_button_classes' );
 		add_filter( 'frm_back_button_class', 'FrmFormsController::update_button_classes' );
 
