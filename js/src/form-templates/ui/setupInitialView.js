@@ -30,7 +30,6 @@ function setupInitialView() {
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
 
-	// Clear the value in the search input
 	searchInput.value = '';
 
 	// Hide the twin featured template items

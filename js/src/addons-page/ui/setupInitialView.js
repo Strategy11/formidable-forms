@@ -23,7 +23,6 @@ export function setupInitialView() {
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
 
-	// Clear the value in the search input
 	searchInput.value = '';
 
 	setupActiveCategory();
