@@ -923,6 +923,9 @@ class FrmAppController {
 	}
 
 	/**
+	 * Only register popper on Formidable pages.
+	 * This helps to avoid popper conflicts on other plugin pages, including the WP Bakery page editor.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
