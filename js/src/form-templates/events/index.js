@@ -22,7 +22,7 @@ import { showSelectedCategory } from '../ui';
  */
 export function addEventListeners() {
 	addCategoryEvents();
-	wp.hooks.addAction( 'frmPageSkeleton.onCategoryClick', 'frmFormTemplates', selectedCategory => {
+	wp.hooks.addAction( 'frmPage.onCategoryClick', 'frmFormTemplates', selectedCategory => {
 		// Display templates of the selected category
 		showSelectedCategory( selectedCategory );
 	});

@@ -48,7 +48,7 @@ const onCategoryClick = ( event ) => {
 	 * @param {string} selectedCategory The selected category
 	 */
 	selectedCategory = wp.hooks.applyFilters(
-		'frmPageSkeleton.selectedCategory',
+		'frmPage.selectedCategory',
 		newSelectedCategory
 	);
 
@@ -68,7 +68,7 @@ const onCategoryClick = ( event ) => {
 	 *
 	 * @param {string} selectedCategory The selected category.
 	 */
-	wp.hooks.doAction( 'frmPageSkeleton.onCategoryClick', selectedCategory );
+	wp.hooks.doAction( 'frmPage.onCategoryClick', selectedCategory );
 
 	// Smoothly display the updated UI elements
 	const { bodyContent } = getElements();

@@ -17,7 +17,7 @@ import addSearchEvents from './searchListener';
  */
 export function addEventListeners() {
 	addCategoryEvents();
-	wp.hooks.addAction( 'frmPageSkeleton.onCategoryClick', 'frmAddonsPage', selectedCategory => {
+	wp.hooks.addAction( 'frmPage.onCategoryClick', 'frmAddonsPage', selectedCategory => {
 		showSelectedCategory( selectedCategory );
 	});
 
