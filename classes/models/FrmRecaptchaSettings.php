@@ -18,7 +18,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
@@ -117,11 +117,11 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 
 	/**
 	 * @since 6.8.4
-	 * @deprecated x.x
+	 * @deprecated 6.11.1
 	 * @return string
 	 */
 	public function getName() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.11.1' );
 		return $this->get_name();
 	}
 }

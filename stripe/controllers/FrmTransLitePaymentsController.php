@@ -31,7 +31,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
