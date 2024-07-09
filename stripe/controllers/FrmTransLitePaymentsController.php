@@ -27,14 +27,20 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$menu_route = 'FrmTransLitePaymentsController::route';
 		}
 
+		add_submenu_page( 'formidable', $frm_settings->menu . ' | Payments', self::payments_menu_title(), 'frm_view_entries', 'formidable-payments', $menu_route );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function payments_menu_title() {
 		ob_start();
 		esc_html_e( 'Payments', 'formidable' );
 		FrmAppHelper::show_pill_text();
-		$menu_title = ob_get_clean();
-
-		add_submenu_page( 'formidable', $frm_settings->menu . ' | Payments', $menu_title, 'frm_view_entries', 'formidable-payments', $menu_route );
+		return ob_get_clean();
 	}
-
 	/**
 	 * @return void
 	 */
