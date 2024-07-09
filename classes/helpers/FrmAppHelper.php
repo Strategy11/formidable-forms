@@ -1546,10 +1546,10 @@ class FrmAppHelper {
 	 *
 	 * @param string $value The value to compare.
 	 *
-	 * @return bool True or False
+	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return ( true === $value || 1 == $value || 'true' == $value || 'yes' == $value );
+		return true === $value || 1 == $value || 'true' === $value || 'yes' === $value;
 	}
 
 	/**
