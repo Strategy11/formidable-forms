@@ -27,8 +27,13 @@ export function createPageState( initialState = {} ) {
 	 * @param {string} propertyName The name of the property to retrieve.
 	 * @return {*} The value of the specified property, or null if it doesn't exist.
 	 */
-	const getSingleState = ( propertyName ) =>
-		Reflect.get( state, propertyName ) ?? null;
+	const getSingleState = ( propertyName ) => {
+		const value = Reflect.get( state, propertyName );
+
+		// We convert `undefined` to `null` for a consistent API.
+		// This makes it easier for users to handle the results since all missing properties return `null`.
+		return value === undefined ? null : value;
+	};
 
 	/**
 	 * Updates the page state with new values.
