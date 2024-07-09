@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-09T13:43:23+00:00\n"
+"POT-Creation-Date: 2024-07-09T14:07:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
@@ -4904,17 +4904,17 @@ msgstr ""
 msgid "Top forms this month"
 msgstr ""
 
-#: classes/models/FrmEmailStats.php:106
+#: classes/models/FrmEmailStats.php:99
 msgid "Entries created"
 msgstr ""
 
-#: classes/models/FrmEmailStats.php:145
+#: classes/models/FrmEmailStats.php:146
 msgid "Payments collected"
 msgstr ""
 
 #. translators: currency name.
-#: classes/models/FrmEmailStats.php:154
-#: classes/models/FrmEmailStats.php:187
+#: classes/models/FrmEmailStats.php:155
+#: classes/models/FrmEmailStats.php:188
 msgid "Total %s"
 msgstr ""
 
