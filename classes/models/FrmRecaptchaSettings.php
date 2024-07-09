@@ -18,7 +18,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
