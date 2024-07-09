@@ -60,7 +60,6 @@ class FrmAddonsController {
 		// Enqueue styles that needed.
 		wp_enqueue_style( 'formidable-admin' );
 		wp_enqueue_style( 'formidable-grids' );
-		wp_enqueue_style( 'formidable-page-skeleton' );
 
 		// Register and enqueue Add-Ons page style.
 		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/addons-page.css', array(), $version );

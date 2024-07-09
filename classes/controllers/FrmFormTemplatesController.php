@@ -656,7 +656,6 @@ class FrmFormTemplatesController {
 		wp_enqueue_style( 'formidable-admin' );
 		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( 'formidable-grids' );
-		wp_enqueue_style( 'formidable-page-skeleton' );
 
 		// Register and enqueue "Form Templates" style.
 		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/form-templates.css', array(), $version );
