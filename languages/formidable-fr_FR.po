@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-06-19T13:41:17+00:00\n"
-"PO-Revision-Date: 2024-06-19 14:00\n"
+"POT-Creation-Date: 2024-07-09T14:07:24+00:00\n"
+"PO-Revision-Date: 2024-07-09 21:16\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -350,48 +350,48 @@ msgstr "Mettre à niveau"
 msgid "There are no plugins on your site that require a license"
 msgstr "Il n’y a aucune extension qui requiert une licence sur votre site"
 
-#: classes/controllers/FrmAddonsController.php:693
+#: classes/controllers/FrmAddonsController.php:680
 #: classes/helpers/FrmAppHelper.php:3344
 msgid "Installed"
 msgstr "Installé"
 
-#: classes/controllers/FrmAddonsController.php:698
+#: classes/controllers/FrmAddonsController.php:685
 #: classes/helpers/FrmAppHelper.php:3343
 #: stripe/helpers/FrmTransLiteAppHelper.php:107
 msgid "Active"
 msgstr "Actif"
 
-#: classes/controllers/FrmAddonsController.php:703
+#: classes/controllers/FrmAddonsController.php:690
 #: classes/helpers/FrmAppHelper.php:3345
 msgid "Not Installed"
 msgstr "Non installé"
 
-#: classes/controllers/FrmAddonsController.php:960
+#: classes/controllers/FrmAddonsController.php:947
 msgid "Current user cannot delete plugins."
 msgstr "L’utilisateur/utilisatrice actuel·le ne peut pas supprimer les extensions."
 
-#: classes/controllers/FrmAddonsController.php:1036
+#: classes/controllers/FrmAddonsController.php:1023
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
 msgstr "Désolé, votre site nécessite une authentification FTP. Veuillez télécharger les extensions depuis FormidableForms.com et les installer manuellement."
 
-#: classes/controllers/FrmAddonsController.php:1225
+#: classes/controllers/FrmAddonsController.php:1212
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
 msgstr "Votre extension a été activée. Souhaitez-vous enregistrer et recharger la page maintenant ?"
 
-#: classes/controllers/FrmAddonsController.php:1225
+#: classes/controllers/FrmAddonsController.php:1212
 msgid "Your plugin has been activated."
 msgstr "Votre extension a été activée."
 
-#: classes/controllers/FrmAddonsController.php:1334
+#: classes/controllers/FrmAddonsController.php:1321
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
 msgstr "Impossible d’installer une mise à niveau. Veuillez télécharger depuis formidableforms.com et installer manuellement."
 
-#: classes/controllers/FrmAddonsController.php:1381
+#: classes/controllers/FrmAddonsController.php:1368
 msgid "The plugin download was not found."
 msgstr "Le téléchargement de l’extension n’a pas été trouvé."
 
-#: classes/controllers/FrmAddonsController.php:1475
-#: classes/controllers/FrmAddonsController.php:1476
+#: classes/controllers/FrmAddonsController.php:1462
+#: classes/controllers/FrmAddonsController.php:1463
 #: classes/views/form-templates/modals/upgrade-modal.php:89
 #: classes/views/shared/reports-info.php:22
 #: js/admin/applications.js:397
@@ -414,7 +414,7 @@ msgid "Style"
 msgstr "Style"
 
 #: classes/controllers/FrmAppController.php:284
-#: classes/helpers/FrmFormsListHelper.php:388
+#: classes/helpers/FrmFormsListHelper.php:393
 #: classes/views/frm-forms/settings.php:13
 #: classes/views/frm-settings/form.php:14
 msgid "Settings"
@@ -468,7 +468,7 @@ msgstr "Les adresses IP dans les envois de formulaire peuvent ne plus être exa
 msgid "Global Settings"
 msgstr "Réglages globaux"
 
-#: classes/controllers/FrmAppController.php:1233
+#: classes/controllers/FrmAppController.php:1253
 #: classes/controllers/FrmFormsController.php:214
 #: classes/controllers/FrmFormTemplatesController.php:612
 #: classes/controllers/FrmSettingsController.php:275
@@ -484,7 +484,7 @@ msgstr "Réglages globaux"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: classes/controllers/FrmAppController.php:1237
+#: classes/controllers/FrmAppController.php:1257
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:70
 msgid "Continue"
 msgstr "continue"
@@ -637,7 +637,7 @@ msgid "You are trying to view an entry that does not exist."
 msgstr "Vous essayez d’afficher une entrée qui n’existe pas."
 
 #: classes/controllers/FrmEntriesController.php:498
-#: classes/controllers/FrmFormActionsController.php:417
+#: classes/controllers/FrmFormActionsController.php:418
 #: classes/controllers/FrmFormsController.php:212
 #: classes/controllers/FrmSettingsController.php:273
 msgid "Verification failed"
@@ -672,21 +672,21 @@ msgstr "Champs de recherche"
 msgid "Form Actions"
 msgstr "Actions de formulaire"
 
-#: classes/controllers/FrmFormActionsController.php:149
+#: classes/controllers/FrmFormActionsController.php:150
 #: classes/views/frm-form-actions/default_actions.php:197
 msgid "eCommerce"
 msgstr "E-commerce"
 
-#: classes/controllers/FrmFormActionsController.php:157
+#: classes/controllers/FrmFormActionsController.php:158
 msgid "Email Marketing"
 msgstr "Marketing Email"
 
-#: classes/controllers/FrmFormActionsController.php:169
+#: classes/controllers/FrmFormActionsController.php:170
 msgid "CRM"
 msgstr "CRM"
 
 #. translators: %s: Name of form action
-#: classes/controllers/FrmFormActionsController.php:213
+#: classes/controllers/FrmFormActionsController.php:214
 msgid "%s form actions"
 msgstr "%s actions du formulaire"
 
@@ -1040,8 +1040,8 @@ msgstr "Caractères HTML anormaux, ils ont empêché votre formulaire de s’enr
 #: classes/helpers/FrmFormsHelper.php:130
 #: classes/helpers/FrmFormsHelper.php:186
 #: classes/helpers/FrmFormsHelper.php:1126
-#: classes/helpers/FrmFormsListHelper.php:241
-#: classes/helpers/FrmFormsListHelper.php:406
+#: classes/helpers/FrmFormsListHelper.php:246
+#: classes/helpers/FrmFormsListHelper.php:411
 #: classes/views/frm-entries/direct.php:9
 #: classes/views/styles/_manage-styles-row.php:6
 #: classes/views/xml/import_form.php:160
@@ -1396,10 +1396,10 @@ msgid "Styles"
 msgstr "Styles"
 
 #: classes/controllers/FrmStylesController.php:54
-#: classes/helpers/FrmFormsListHelper.php:387
+#: classes/helpers/FrmFormsListHelper.php:392
 #: classes/views/form-templates/template.php:74
 #: classes/views/frm-entries/sidebar-shared.php:40
-#: stripe/helpers/FrmTransLiteListHelper.php:380
+#: stripe/helpers/FrmTransLiteListHelper.php:386
 #: js/admin/style.js:616
 msgid "Edit"
 msgstr "Modifier"
@@ -2552,7 +2552,7 @@ msgstr "Envoyée "
 
 #: classes/helpers/FrmEntriesHelper.php:838
 #: classes/helpers/FrmFormsHelper.php:1318
-#: classes/helpers/FrmFormsListHelper.php:436
+#: classes/helpers/FrmFormsListHelper.php:441
 msgid "Draft"
 msgstr "Brouillon"
 
@@ -2560,44 +2560,48 @@ msgstr "Brouillon"
 msgid "Entry status must be return in array format."
 msgstr "L’état de l’entrée doit être renvoyé au format tableau."
 
-#: classes/helpers/FrmEntriesListHelper.php:182
+#: classes/helpers/FrmEntriesListHelper.php:22
+msgid "Entries list"
+msgstr ""
+
+#: classes/helpers/FrmEntriesListHelper.php:191
 msgid "No Entries Found"
 msgstr "Aucune entrée trouvée"
 
-#: classes/helpers/FrmEntriesListHelper.php:220
+#: classes/helpers/FrmEntriesListHelper.php:229
 msgid "Getting spam form submissions?"
 msgstr "Vous recevez des soumissions de formulaire indésirables ?"
 
-#: classes/helpers/FrmEntriesListHelper.php:222
+#: classes/helpers/FrmEntriesListHelper.php:231
 msgid "Learn how to prevent them."
 msgstr "Apprenez comment les empêcher."
 
-#: classes/helpers/FrmEntriesListHelper.php:241
-#: stripe/helpers/FrmTransLiteListHelper.php:191
+#: classes/helpers/FrmEntriesListHelper.php:250
+#: stripe/helpers/FrmTransLiteListHelper.php:197
 msgid "View all forms"
 msgstr "Tous les formulaires"
 
-#: classes/helpers/FrmEntriesListHelper.php:242
+#: classes/helpers/FrmEntriesListHelper.php:251
 msgid "Filter"
 msgstr "Filtre"
 
-#: classes/helpers/FrmEntriesListHelper.php:421
+#: classes/helpers/FrmEntriesListHelper.php:430
 #: classes/views/frm-entries/sidebar-shared.php:43
-#: stripe/helpers/FrmTransLiteListHelper.php:355
-#: stripe/helpers/FrmTransLiteListHelper.php:376
+#: stripe/helpers/FrmTransLiteListHelper.php:361
+#: stripe/helpers/FrmTransLiteListHelper.php:382
 #: js/admin/applications.js:349
 msgid "View"
 msgstr "Voir"
 
-#: classes/helpers/FrmEntriesListHelper.php:425
+#: classes/helpers/FrmEntriesListHelper.php:434
 msgid "Permanently delete this entry?"
 msgstr "Supprimer cette entrée définitivement ?"
 
-#: classes/helpers/FrmEntriesListHelper.php:425
+#: classes/helpers/FrmEntriesListHelper.php:434
 #: classes/helpers/FrmFormsHelper.php:1237
-#: classes/helpers/FrmFormsListHelper.php:139
+#: classes/helpers/FrmFormsListHelper.php:144
 #: classes/views/frm-form-actions/form_action.php:36
-#: stripe/helpers/FrmTransLiteListHelper.php:383
+#: stripe/helpers/FrmTransLiteListHelper.php:389
 #: stripe/views/payments/show.php:156
 #: stripe/views/subscriptions/show.php:129
 #: js/formidable_admin.js:2418
@@ -2605,7 +2609,7 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #. translators: %1$s: HTML break line, %2$s: HTML bold text
-#: classes/helpers/FrmEntriesListHelper.php:482
+#: classes/helpers/FrmEntriesListHelper.php:491
 msgid "ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below."
 msgstr "TOUTES les entrées dans ce formulaire seront définitivement supprimées. %1$sSouhaitez-vous continuer ? Tapez %2$s ci-dessous."
 
@@ -3952,7 +3956,7 @@ msgid "Restore from Trash"
 msgstr "Restaurer à partir de la corbeille"
 
 #: classes/helpers/FrmFormsHelper.php:1222
-#: classes/helpers/FrmFormsListHelper.php:130
+#: classes/helpers/FrmFormsListHelper.php:135
 msgid "Restore"
 msgstr "Restaurer"
 
@@ -3962,7 +3966,7 @@ msgstr "Déplacer Formulaire vers la Corbeille"
 
 #: classes/helpers/FrmFormsHelper.php:1227
 #: classes/helpers/FrmFormsHelper.php:1319
-#: classes/helpers/FrmFormsListHelper.php:169
+#: classes/helpers/FrmFormsListHelper.php:174
 msgid "Trash"
 msgstr "Corbeille"
 
@@ -3971,7 +3975,7 @@ msgid "Do you want to move this form to the trash?"
 msgstr "Souhaitez-vous déplacer ce formulaire dans la corbeille ?"
 
 #: classes/helpers/FrmFormsHelper.php:1236
-#: classes/helpers/FrmFormsListHelper.php:134
+#: classes/helpers/FrmFormsListHelper.php:139
 msgid "Delete Permanently"
 msgstr "Supprimer définitivement"
 
@@ -4082,61 +4086,65 @@ msgstr "L’URL de redirection utilise les paramètres « %s », qui sont rés
 msgid "Save"
 msgstr "Enregistrer"
 
-#: classes/helpers/FrmFormsListHelper.php:112
+#: classes/helpers/FrmFormsListHelper.php:17
+msgid "Forms list"
+msgstr ""
+
+#: classes/helpers/FrmFormsListHelper.php:117
 msgid "No forms found in the trash."
 msgstr "Aucun formulaire ne semble se trouver dans la corbeille."
 
-#: classes/helpers/FrmFormsListHelper.php:115
+#: classes/helpers/FrmFormsListHelper.php:120
 msgid "See all forms."
 msgstr "Tous les formulaires."
 
-#: classes/helpers/FrmFormsListHelper.php:120
+#: classes/helpers/FrmFormsListHelper.php:125
 #: classes/views/styles/manage.php:50
 msgid "No Forms Found"
 msgstr "Pas de formulaire trouvé"
 
-#: classes/helpers/FrmFormsListHelper.php:137
+#: classes/helpers/FrmFormsListHelper.php:142
 #: classes/views/form-templates/template.php:57
 msgid "Move to Trash"
 msgstr "Mettre à la corbeille"
 
-#: classes/helpers/FrmFormsListHelper.php:156
+#: classes/helpers/FrmFormsListHelper.php:161
 msgid "Empty Trash"
 msgstr "Vider la corbeille"
 
-#: classes/helpers/FrmFormsListHelper.php:167
+#: classes/helpers/FrmFormsListHelper.php:172
 msgid "My Forms"
 msgstr "Mes formulaires"
 
-#: classes/helpers/FrmFormsListHelper.php:168
+#: classes/helpers/FrmFormsListHelper.php:173
 msgid "Drafts"
 msgstr "Brouillons"
 
 #. translators: %1$s: Status, %2$s: Number of items
-#: classes/helpers/FrmFormsListHelper.php:197
+#: classes/helpers/FrmFormsListHelper.php:202
 msgid "%1$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s <span class=\"count\">(%2$s)</span>"
 
 #. translators: Form title
-#: classes/helpers/FrmFormsListHelper.php:240
+#: classes/helpers/FrmFormsListHelper.php:245
 msgid "Select %s"
 msgstr "Sélectionner %s"
 
-#: classes/helpers/FrmFormsListHelper.php:292
+#: classes/helpers/FrmFormsListHelper.php:297
 msgid "Saving entries is disabled for this form"
 msgstr "La sauvegarde des entrées est désactivée pour ce formulaire"
 
-#: classes/helpers/FrmFormsListHelper.php:331
+#: classes/helpers/FrmFormsListHelper.php:336
 #: classes/models/FrmField.php:161
 msgid "Embed Form"
 msgstr "Formulaire intégré"
 
-#: classes/helpers/FrmFormsListHelper.php:392
+#: classes/helpers/FrmFormsListHelper.php:397
 #: classes/views/frm-forms/_publish_box.php:20
 msgid "Preview"
 msgstr "Prévisualiser"
 
-#: classes/helpers/FrmFormsListHelper.php:457
+#: classes/helpers/FrmFormsListHelper.php:462
 msgid "ALL selected forms and their entries will be permanently deleted. Want to proceed?"
 msgstr "TOUS les formulaires sélectionnés et leurs entrées seront définitivement supprimés. Confirmez-vous ?"
 
@@ -4189,13 +4197,13 @@ msgid "Apply"
 msgstr "Appliquer"
 
 #: classes/helpers/FrmListHelper.php:470
-#: classes/helpers/FrmListHelper.php:1189
+#: classes/helpers/FrmListHelper.php:1191
 msgid "Show more details"
 msgstr "Afficher plus de détails"
 
 #. translators: %s: Number of items
 #: classes/helpers/FrmListHelper.php:574
-#: classes/helpers/FrmListHelper.php:1214
+#: classes/helpers/FrmListHelper.php:1216
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] "%s élément"
@@ -4890,7 +4898,7 @@ msgstr "User-Agent (Navigateur/OS)"
 msgid "Referrer"
 msgstr "Référent"
 
-#: classes/models/FrmEmail.php:452
+#: classes/models/FrmEmail.php:453
 #: classes/models/FrmEntryValues.php:266
 msgid "IP Address"
 msgstr "Adresse IP"
@@ -4903,17 +4911,17 @@ msgstr "Quelles ont été les performances de vos formulaires ce mois-ci"
 msgid "Top forms this month"
 msgstr "Formulaires les plus utilisés ce mois-ci"
 
-#: classes/models/FrmEmailStats.php:106
+#: classes/models/FrmEmailStats.php:99
 msgid "Entries created"
 msgstr "Entrées créées"
 
-#: classes/models/FrmEmailStats.php:145
+#: classes/models/FrmEmailStats.php:146
 msgid "Payments collected"
 msgstr "Paiements reçus"
 
 #. translators: currency name.
-#: classes/models/FrmEmailStats.php:154
-#: classes/models/FrmEmailStats.php:187
+#: classes/models/FrmEmailStats.php:155
+#: classes/models/FrmEmailStats.php:188
 msgid "Total %s"
 msgstr "%s en tout"
 
@@ -5206,7 +5214,7 @@ msgstr "Masquer cette suggestion"
 msgid "This suggestion was made by Formidable Forms, the form builder and application plugin already installed on your site."
 msgstr "Cette suggestion a été faite par Formidable Forms, le constructeur de formulaires et l’extension d’application déjà installés sur votre site."
 
-#: classes/models/FrmRecaptchaSettings.php:54
+#: classes/models/FrmRecaptchaSettings.php:53
 msgid "reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot."
 msgstr "reCAPTCHA est un service CAPTCHA gratuit et accessible qui permet de numériser des livres tout en bloquant le spam sur votre blog. reCAPTCHA demande aux commentateurs de saisir deux mots numérisés à partir d’un livre pour prouver qu’ils sont humains. Cela permet de vérifier qu’il ne s’agit pas d’un spambot."
 
@@ -5735,7 +5743,7 @@ msgid "Referrer:"
 msgstr "Référent :"
 
 #: classes/views/frm-entries/_sidebar-shared-pub.php:14
-#: stripe/controllers/FrmTransLitePaymentsController.php:57
+#: stripe/controllers/FrmTransLitePaymentsController.php:69
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:13
 msgid "M j, Y @ G:i"
 msgstr "j M Y @ G:i"
@@ -6277,7 +6285,7 @@ msgstr "Cliquez sur un champ depuis la barre latérale ou faites-le glisser puis
 msgid "Close panel"
 msgstr "Fermer le panneau"
 
-#: classes/views/frm-forms/insert_form_popup.php:54
+#: classes/views/frm-forms/insert_form_popup.php:49
 msgid "Insert into Post"
 msgstr "Insérer dans l’article"
 
@@ -7658,7 +7666,8 @@ msgid "Payment was Successfully Deleted"
 msgstr "Le paiement a bien été supprimé"
 
 #: stripe/controllers/FrmTransLiteListsController.php:29
-#: stripe/helpers/FrmTransLiteListHelper.php:108
+#: stripe/controllers/FrmTransLitePaymentsController.php:40
+#: stripe/helpers/FrmTransLiteListHelper.php:114
 #: stripe/views/lists/list.php:12
 msgid "Payments"
 msgstr "Paiements"
@@ -7726,30 +7735,30 @@ msgstr "Mode"
 
 #. translators: %d: Entry ID.
 #. translators: %d: ID of the deleted entry.
-#: stripe/controllers/FrmTransLitePaymentsController.php:117
-#: stripe/helpers/FrmTransLiteListHelper.php:400
+#: stripe/controllers/FrmTransLitePaymentsController.php:129
+#: stripe/helpers/FrmTransLiteListHelper.php:406
 msgid "%d (Deleted)"
 msgstr "%d (supprimé)"
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:136
-#: stripe/controllers/FrmTransLitePaymentsController.php:191
+#: stripe/controllers/FrmTransLitePaymentsController.php:148
+#: stripe/controllers/FrmTransLitePaymentsController.php:203
 #: stripe/helpers/FrmTransLiteAppHelper.php:95
 msgid "Refunded"
 msgstr "Remboursé"
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:138
+#: stripe/controllers/FrmTransLitePaymentsController.php:150
 msgid "Are you sure you want to refund that payment?"
 msgstr "Confirmez-vous le remboursement de ce paiement ?"
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:142
+#: stripe/controllers/FrmTransLitePaymentsController.php:154
 msgid "Refund"
 msgstr "Rembourser"
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:182
+#: stripe/controllers/FrmTransLitePaymentsController.php:194
 msgid "Oops! No payment was selected for refund."
 msgstr "Oups ! Aucun paiement n’a été sélectionné pour le remboursement."
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:193
+#: stripe/controllers/FrmTransLitePaymentsController.php:205
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:110
 #: stripe/helpers/FrmTransLiteAppHelper.php:94
 msgid "Failed"
@@ -7855,34 +7864,38 @@ msgstr "Test"
 msgid "Live"
 msgstr "En direct"
 
-#: stripe/helpers/FrmTransLiteListHelper.php:100
+#: stripe/helpers/FrmTransLiteListHelper.php:34
+msgid "Payments list"
+msgstr ""
+
+#: stripe/helpers/FrmTransLiteListHelper.php:106
 msgid "No payments found."
 msgstr "Aucun paiement trouvé."
 
-#: stripe/helpers/FrmTransLiteListHelper.php:109
+#: stripe/helpers/FrmTransLiteListHelper.php:115
 msgid "Subscriptions"
 msgstr "Abonnements"
 
 #. translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %3$s: Span close tag.
-#: stripe/helpers/FrmTransLiteListHelper.php:138
+#: stripe/helpers/FrmTransLiteListHelper.php:144
 msgid "%1$s %2$s(%3$s)%4$s"
 msgstr "%1$s %2$s(%3$s)%4$s"
 
-#: stripe/helpers/FrmTransLiteListHelper.php:383
+#: stripe/helpers/FrmTransLiteListHelper.php:389
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
 msgstr "Supprimer définitivement ce paiement ?"
 
-#: stripe/helpers/FrmTransLiteListHelper.php:462
+#: stripe/helpers/FrmTransLiteListHelper.php:468
 msgid "unlimited"
 msgstr "illimité"
 
 #. translators: %1$s: Count, %2$s: Limit.
-#: stripe/helpers/FrmTransLiteListHelper.php:468
+#: stripe/helpers/FrmTransLiteListHelper.php:474
 msgid "%1$s of %2$s"
 msgstr "%1$s sur %2$s"
 
-#: stripe/helpers/FrmTransLiteListHelper.php:491
+#: stripe/helpers/FrmTransLiteListHelper.php:497
 msgid "This payment method may take between 4-5 business days to process."
 msgstr "Ce moyen de paiement peut prendre entre 4 à 5 jours ouvrables pour être traité."
 
