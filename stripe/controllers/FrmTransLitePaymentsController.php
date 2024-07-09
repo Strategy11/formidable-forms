@@ -41,6 +41,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		FrmAppHelper::show_pill_text();
 		return ob_get_clean();
 	}
+
 	/**
 	 * @return void
 	 */
