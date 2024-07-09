@@ -622,7 +622,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * If the form should should a message, apend it to the success url.
+	 * If the form should should a message, append it to the success url.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *

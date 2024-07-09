@@ -2676,7 +2676,13 @@ body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-chi
 .frm-modal .postbox .frm-modal-title + div:last-child a,
 .frm-modal a.dismiss .frmsvg,
 .frm_common_modal .frm_modal_top a .frmsvg {
-	color: var(--grey-800);
+	color: var(--grey-500);
+}
+
+.frm-modal .postbox .frm-modal-title + div:last-child a:hover,
+.frm-modal a.dismiss .frmsvg:hover,
+.frm_common_modal .frm_modal_top a .frmsvg:hover {
+	color: var(--grey-700);
 }
 
 .frm-modal .frm_modal_content > div.inside,

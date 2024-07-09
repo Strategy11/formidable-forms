@@ -183,7 +183,7 @@ When you do not receive emails, try the following steps:
    2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notifications will not work either.
    3. Check your SPAM box.
    4. Try a different address in your settings.
-   5. Install WP Mail SMPT or another similar emailing alternative and configure the SMTP settings.
+   5. Install WP Mail SMTP or another similar emailing alternative and configure the SMTP settings.
    6. If these steps do not fix the problem and other WP signup emails are not going out, please reach out to your web host.
 
 [Read more about WordPress emails not sending](https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) in our blog.
@@ -371,6 +371,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.11.1 =
+* New: Screen reader text has been updated on some admin pages to improve accessibility.
+* New: Hover styling has been updated for modal close icons to improve user experience.
+* Fix: The reCaptcha settings name was missing in a global settings string.
+* The minimum supported version of Formidable Pro has been bumped to version 6.0.
+* The function FrmAddonsController::is_license_expiring has been deprecated.
+
 = 6.11 =
 * New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
 * New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
