@@ -238,7 +238,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	abstract protected function get_top_forms_label();
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return int
 	 */
@@ -247,7 +247,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
@@ -256,7 +256,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
@@ -265,7 +265,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
@@ -274,7 +274,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.1
 	 *
 	 * @return string
 	 */
