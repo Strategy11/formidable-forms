@@ -44,8 +44,6 @@ bodyContent.querySelectorAll( '.frm-card-item:not(.plugin-card-formidable-pro)' 
 		case categories.includes(PLANS.BASIC):
 			addon.setAttribute('data-categories', `${categories},${PLANS.PLUS},${PLANS.BUSINESS},${PLANS.ELITE}`);
 			break;
-		default:
-			break;
 	}
 });
 
