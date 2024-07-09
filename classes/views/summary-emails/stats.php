@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				foreach ( $args['stats'] as $stat ) {
 					?>
-					<td>
+					<td style="padding:0 0.375em;">
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
 						<div>
 							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;">
