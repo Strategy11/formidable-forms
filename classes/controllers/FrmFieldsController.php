@@ -725,7 +725,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Use HMTL5 placeholder with js fallback.
+	 * Use HTML5 placeholder with js fallback.
 	 *
 	 * @param array $field
 	 * @param array $add_html

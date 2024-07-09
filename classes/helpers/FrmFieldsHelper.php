@@ -676,8 +676,8 @@ class FrmFieldsHelper {
 	}
 
 	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
-		$hide_opt       = self::get_value_for_comparision( $hide_opt );
-		$observed_value = self::get_value_for_comparision( $observed_value );
+		$hide_opt       = self::get_value_for_comparison( $hide_opt );
+		$observed_value = self::get_value_for_comparison( $observed_value );
 
 		if ( is_array( $observed_value ) ) {
 			return self::array_value_condition( $observed_value, $cond, $hide_opt );
@@ -723,7 +723,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.05
 	 */
-	private static function get_value_for_comparision( $value ) {
+	private static function get_value_for_comparison( $value ) {
 		// Remove white space from hide_opt
 		if ( ! is_array( $value ) ) {
 			$value = trim( $value );

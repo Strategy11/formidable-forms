@@ -15,6 +15,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	public function __construct( $args ) {
+		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Entries list', 'formidable' ),
+			)
+		);
+	}
+
 	/**
 	 * @return void
 	 */
