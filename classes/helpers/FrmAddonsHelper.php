@@ -254,7 +254,7 @@ class FrmAddonsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_plan() {
 		return self::$plan_required;
