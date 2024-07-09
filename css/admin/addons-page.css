@@ -13,7 +13,7 @@
 	display: none;
 }
 
-.frm-page-skeleton-grid-layout {
+.frm-list-grid-layout {
 	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 

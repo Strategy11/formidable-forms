@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <span id="frm-form-templates-page-title-divider" class="frm-page-skeleton-divider frm-mb-xs frm_hidden"></span>
 
-<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-page-skeleton-grid-layout">
+<ul id="frm-form-templates-featured-list" class="frm-form-templates-list frm-list-grid-layout">
 	<?php
 	foreach ( $featured_templates as $template ) {
 		require $view_path . 'template.php';
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php FrmFormTemplatesHelper::show_upgrade_renew_cta( compact( 'expired', 'upgrade_link', 'renew_link' ) ); ?>
 
-<ul id="frm-form-templates-list" class="frm-form-templates-list frm-page-skeleton-grid-layout frm-mb-xs">
+<ul id="frm-form-templates-list" class="frm-form-templates-list frm-list-grid-layout frm-mb-xs">
 	<?php
 	foreach ( $templates as $template ) {
 		require $view_path . 'template.php';
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2 id="frm-form-templates-custom-list-title" class="frm-text-sm frm-mb-sm frm_hidden">
 		<?php esc_html_e( 'Custom', 'formidable' ); ?>
 	</h2>
-	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm-page-skeleton-grid-layout frm-mb-xs frm_hidden">
+	<ul id="frm-form-templates-custom-list" class="frm-form-templates-list frm-list-grid-layout frm-mb-xs frm_hidden">
 		<?php
 		foreach ( $custom_templates as $template ) {
 			require $view_path . 'template.php';

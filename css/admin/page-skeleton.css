@@ -75,14 +75,14 @@
  *
  * Focuses on the main content area, laying out the various elements and components.
  */
- .frm-page-skeleton-grid-layout {
+.frm-list-grid-layout {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
 	grid-auto-rows: max-content;
 	gap: var(--gap-sm);
 }
 
-.frm-page-skeleton-grid-layout > * {
+.frm-list-grid-layout > * {
 	grid-column: span 1;
 }
 

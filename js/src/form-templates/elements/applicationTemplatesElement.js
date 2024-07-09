@@ -45,7 +45,7 @@ export function createApplicationTemplates( applications ) {
 				className: 'frm-text-sm frm-mb-sm'
 			}),
 			tag( 'ul', {
-				className: `${PREFIX}-list ${SKELETON_PREFIX}-grid-layout`,
+				className: `${PREFIX}-list frm-list-grid-layout`,
 				children: templateItems
 			})
 		]

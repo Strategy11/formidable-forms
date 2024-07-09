@@ -7,7 +7,7 @@ describe("Updating form settings", () => {
     it("should 'Show the form title' and 'Show the form description' on the preview form", () => {
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-        cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+        cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
         cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
         cy.get("#frm_new_form_name_input").type("Test Form");
         cy.get("#frm-save-form-name-button").should("contain", "Save").click();
@@ -75,8 +75,8 @@ describe("Updating form settings", () => {
     afterEach(() => {
 
         cy.log("Teardown - Save the form and delete it");
-        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
-        cy.deleteForm();        
+        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });
+        cy.deleteForm();
     });
 
 });
