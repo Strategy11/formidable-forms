@@ -47,7 +47,7 @@ const favoritesCategory = document.querySelector(
 );
 const sidebarElements = {
 	favoritesCategory,
-	favoritesCategoryCountEl: favoritesCategory.querySelector(
+	favoritesCategoryCountEl: favoritesCategory?.querySelector(
 		`.${SKELETON_PREFIX}-cat-count`
 	),
 	availableTemplatesCategory: document.querySelector(
