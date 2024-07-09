@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5.4
+Tested up to: 6.5.5
 Requires PHP: 7.0
-Stable tag: 6.11
+Stable tag: 6.11.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -374,6 +374,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.11.1 =
 * New: Screen reader text has been updated on some admin pages to improve accessibility.
 * New: Hover styling has been updated for modal close icons to improve user experience.
+* Fix: The way Popper scripts are registered have been updated to help avoid a new conflict introduced in a recent WP Bakery update.
 * Fix: The reCaptcha settings name was missing in a global settings string.
 * The minimum supported version of Formidable Pro has been bumped to version 6.0.
 * The function FrmAddonsController::is_license_expiring has been deprecated.
