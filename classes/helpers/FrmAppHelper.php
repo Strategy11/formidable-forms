@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.10';
+	public static $plug_version = '6.11';
 
 	/**
 	 * @var bool
@@ -67,7 +67,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function plugin_url() {
-		// Prevously FRM_URL constant.
+		// Previously FRM_URL constant.
 		return plugins_url( '', self::plugin_path() . '/formidable.php' );
 	}
 
@@ -171,7 +171,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param array $args - May include the form id when values need translation.
-	 * @return FrmSettings $frm_setings
+	 * @return FrmSettings $frm_settings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
@@ -1980,7 +1980,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if the user has permision for action.
+	 * Check if the user has permission for action.
 	 * Return permission message and stop the action if no permission
 	 *
 	 * @since 2.0
@@ -2822,7 +2822,7 @@ class FrmAppHelper {
 
 	/**
 	 * Get the translatable time strings. The untranslated version is a failsafe
-	 * in case langauges are changing for the unit set in the shortcode.
+	 * in case languages are changing for the unit set in the shortcode.
 	 *
 	 * @since 2.0.20
 	 * @return array
@@ -3285,7 +3285,6 @@ class FrmAppHelper {
 			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 			'focus_first_error'    => self::should_focus_first_error(),
 			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
-			'include_update_field' => self::should_include_update_field_function(),
 			'include_resend_email' => self::should_include_resend_email_code(),
 		);
 
@@ -3405,21 +3404,6 @@ class FrmAppHelper {
 	 */
 	public static function should_include_alert_role_on_field_errors() {
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
-	}
-
-	/**
-	 * As of 6.10 the frmUpdateField function is now included in Pro.
-	 * This was originally included in Lite but was removed because the feature is only supoprted in Pro.
-	 *
-	 * @since 6.10
-	 *
-	 * @return bool
-	 */
-	private static function should_include_update_field_function() {
-		if ( ! self::pro_is_installed() ) {
-			return false;
-		}
-		return ! self::meets_min_pro_version( '6.9.2' );
 	}
 
 	/**
@@ -3933,7 +3917,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Some back end fields allow privleged users to add scripts.
+	 * Some back end fields allow privileged users to add scripts.
 	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
 	 *
 	 * @since 5.0.13

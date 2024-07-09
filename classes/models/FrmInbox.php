@@ -432,7 +432,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * Get all message with a "banner" mesage key defined.
+	 * Get all message with a "banner" message key defined.
 	 *
 	 * @return array
 	 */

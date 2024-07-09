@@ -152,7 +152,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 .<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 	opacity: 1;
 }
 .<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,

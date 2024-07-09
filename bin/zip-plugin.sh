@@ -94,7 +94,8 @@ zip -r $zipname $destination \
 	-x "*/sonar-project.properties" \
 	-x "*/.sonar_lock" \
 	-x "*/report-task.txt" \
-	-x "*/cypress.config.js"
+	-x "*/cypress.config.js" \
+	-x "*/_typos.toml"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

@@ -26,7 +26,7 @@ class FrmFieldValueSelector {
 	protected $field_key = '';
 
 	/**
-	 * @var null
+	 * @var FrmProFieldSettings|null
 	 *
 	 * @since 2.03.05
 	 */

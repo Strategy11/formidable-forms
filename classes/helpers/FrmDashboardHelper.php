@@ -342,9 +342,9 @@ class FrmDashboardHelper {
 			}
 		);
 
-		$params                  = FrmForm::get_admin_params();
-		$controler_entires_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
-		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
+		$params                   = FrmForm::get_admin_params();
+		$controller_entries_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
+		$wp_list_table            = new $controller_entries_table( array( 'params' => $params ) );
 		$wp_list_table->prepare_items();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/entries-list.php';
