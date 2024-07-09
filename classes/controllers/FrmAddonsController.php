@@ -225,10 +225,7 @@ class FrmAddonsController {
 		$addon['category-slugs'] = array();
 
 		foreach ( $addon['categories'] as $category ) {
-			if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
-				$category = 'Plus';
-			}
-
+			$category      = FrmFormsHelper::convert_legacy_package_names( $category );
 			$category_slug = sanitize_title( $category );
 
 			// Add the slug to the new array.

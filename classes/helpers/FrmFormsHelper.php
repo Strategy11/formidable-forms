@@ -1528,16 +1528,28 @@ BEFORE_HTML;
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
-					// Show the current package name.
-					$category = 'Plus';
-				}
+				$category = self::convert_legacy_package_names( $category );
 
 				return $category;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Converts legacy package names to the current standard package name.
+	 *
+	 * @since x.x
+	 * @param string $package_name
+	 * @return string The updated package name.
+	 */
+	public static function convert_legacy_package_names( $package_name ) {
+		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
+			$package_name = 'Plus';
+		}
+
+		return $package_name;
 	}
 
 	/**
