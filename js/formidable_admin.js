@@ -6682,7 +6682,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
 
 		container.classList.add( 'frmcenter' );
 
