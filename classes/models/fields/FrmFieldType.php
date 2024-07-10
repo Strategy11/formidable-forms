@@ -1214,7 +1214,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since 3.0
+	 * @since x.x
 	 *
 	 * @param array $values
 	 *
@@ -1684,6 +1684,9 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * This function is deprecated since it has a typo in the name.
+	 *
+	 * @since 3.0
 	 * @deprecated x.x
 	 *
 	 * @param array $values
