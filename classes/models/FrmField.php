@@ -234,7 +234,7 @@ class FrmField {
 			$fields['ranking'] = array(
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
+				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
 				'upsell_image' => $images_url . 'ranking-field.svg',
 				'addon'        => 'surveys',
 				'is_new'       => self::field_is_new( 'ranking' ),
