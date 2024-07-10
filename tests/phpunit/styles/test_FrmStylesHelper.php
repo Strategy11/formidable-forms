@@ -53,7 +53,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$style        = $frm_style->get_one();
 		$settings     = FrmStylesHelper::get_settings_for_output( $style );
 		$css_contains = substr_count( $compiled_css, '}.frm_forms.' . $settings['style_class'] . '{' );
-		$this->assertEquals( 1, $css_contains, 'Multiple or no occurances of style found' );
+		$this->assertEquals( 1, $css_contains, 'Multiple or no occurrences of style found' );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		foreach ( $colors as $color ) {
 			$result = FrmStylesHelper::adjust_brightness( $color['start'], $color['steps'] );
-			$this->assertEquals( $color['end'], $result, $color['start'] . ' was not adusted as expected by ' . $color['steps'] . ' steps' );
+			$this->assertEquals( $color['end'], $result, $color['start'] . ' was not adjusted as expected by ' . $color['steps'] . ' steps' );
 		}
 	}
 

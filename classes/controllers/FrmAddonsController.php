@@ -314,19 +314,6 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
-	 *
-	 * @return bool|int false or the number of days until expiration.
-	 */
-	public static function is_license_expiring() {
-		if ( is_callable( 'FrmProAddonsController::is_license_expiring' ) ) {
-			return FrmProAddonsController::is_license_expiring();
-		}
-
-		return false;
-	}
-
-	/**
-	 * @since 4.08
 	 * @since 6.7 This is public.
 	 *
 	 * @return array|false
@@ -1561,5 +1548,21 @@ class FrmAddonsController {
 	 */
 	public static function connect_pro() {
 		_deprecated_function( __METHOD__, '6.8.3' );
+	}
+
+	/**
+	 * @since 4.08
+	 * @deprecated 6.11.1
+	 *
+	 * @return bool|int false or the number of days until expiration.
+	 */
+	public static function is_license_expiring() {
+		_deprecated_function( __METHOD__, '6.11.1', 'FrmProAddonsController::is_license_expiring' );
+
+		if ( is_callable( 'FrmProAddonsController::is_license_expiring' ) ) {
+			return FrmProAddonsController::is_license_expiring();
+		}
+
+		return false;
 	}
 }

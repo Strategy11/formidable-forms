@@ -214,7 +214,7 @@ class FrmEntriesHelper {
 			return '';
 		}
 
-		// This is an embeded form.
+		// This is an embedded form.
 		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
 			// This is a repeating section.
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
@@ -583,7 +583,7 @@ class FrmEntriesHelper {
 			'Firefox'  => 'Mozilla Firefox',
 		);
 
-		// Next get the name of the useragent yes seperately and for good reason
+		// Next get the name of the useragent yes separately and for good reason.
 		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
 			$bname = 'Internet Explorer';
 			$ub    = 'MSIE';

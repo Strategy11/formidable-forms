@@ -569,24 +569,44 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {string}      messageType
+	 * @return {string} The error message to display.
+	 */
 	function getFieldValidationMessage( field, messageType ) {
-		let msg, errorHtml;
-
-		msg = field.getAttribute( messageType );
+		let msg = field.getAttribute( messageType );
 		if ( null === msg ) {
 			msg = '';
 		}
 
 		if ( '' !== msg && shouldWrapErrorHtmlAroundMessageType( messageType ) ) {
-			errorHtml = field.getAttribute( 'data-error-html' );
-			if ( null !== errorHtml ) {
-				errorHtml = errorHtml.replace( /\+/g, '%20' );
-				msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
-				msg = msg.replace( '[key]', getFieldId( field, false ) );
-			}
+			msg = wrapErrorHtml( msg, field );
 		}
 
 		return msg;
+	}
+
+	/**
+	 * @param {string}      msg
+	 * @param {HTMLElement} field
+	 * @return {string} The error HTML to use.
+	 */
+	function wrapErrorHtml( msg, field ) {
+		let errorHtml = field.getAttribute( 'data-error-html' );
+		if ( null === errorHtml ) {
+			return msg;
+		}
+
+		errorHtml          = errorHtml.replace( /\+/g, '%20' );
+		msg                = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+		const fieldId      = getFieldId( field, false );
+		const split        = fieldId.split( '-' );
+		const fieldIdParts = field.id.split( '_' );
+		fieldIdParts.shift(); // Drop the "field" value from the front.
+		split[0]       = fieldIdParts.join( '_' );
+		const errorKey = split.join( '-' );
+		return msg.replace( '[key]', errorKey );
 	}
 
 	function shouldWrapErrorHtmlAroundMessageType( type ) {
@@ -1804,29 +1824,4 @@ function getSelectedCaptcha( captchaSelector ) {
 
 function frmAfterRecaptcha( token ) {
 	frmFrontForm.afterSingleRecaptcha( token );
-}
-
-if ( frm_js.include_update_field ) { // eslint-disable-line camelcase
-	window.frmUpdateField = function( entryId, fieldId, value, message, num ) {
-		console.warn( 'DEPRECATED: function frmUpdateField please update to Formidable Pro v6.9.2' );
-		jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
-		jQuery.ajax({
-			type: 'POST',
-			url: frm_js.ajax_url, // eslint-disable-line camelcase
-			data: {
-				action: 'frm_entries_update_field_ajax',
-				entry_id: entryId,
-				field_id: fieldId,
-				value: value,
-				nonce: frm_js.nonce // eslint-disable-line camelcase
-			},
-			success: function() {
-				if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
-					jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
-				} else {
-					jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
-				}
-			}
-		});
-	};
 }

@@ -7,7 +7,7 @@ class FrmFormsController {
 
 	/**
 	 * Track the form that opened the redirect URL in a new tab. This is used to check if we should show the default
-	 * message in the currect tab.
+	 * message in the current tab.
 	 *
 	 * @since 6.2
 	 *
@@ -19,7 +19,7 @@ class FrmFormsController {
 	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
 	 * is stored here and re-used as an optimization.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @var string|null
 	 */
@@ -526,7 +526,7 @@ class FrmFormsController {
 
 	/**
 	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
-	 * and renders required html fragements calling required functions.
+	 * and renders required html fragments calling required functions.
 	 *
 	 * @since 6.7.1
 	 * @param string $template
@@ -1731,6 +1731,14 @@ class FrmFormsController {
 			$form = $form->id;
 		}
 
+		/*
+		 * Repeater actions adds `parent_entry` to `$entry` store the parent entry data. If `parent_entry` is not empty,
+		 * use the parent form ID instead of repeater form ID to fix the parent form field shortcodes doesn't work.
+		 */
+		if ( ! empty( $entry->parent_entry ) ) {
+			$form = $entry->parent_entry->form_id;
+		}
+
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
 		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
@@ -1886,9 +1894,11 @@ class FrmFormsController {
 			case 'update_settings':
 				return self::$action( $vars );
 			case 'lite-reports':
-				return self::no_reports( $vars );
+				self::no_reports( $vars );
+				return;
 			case 'views':
-				return self::no_views( $vars );
+				self::no_views( $vars );
+				return;
 			default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1972,6 +1982,8 @@ class FrmFormsController {
 	 * Add education about views.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
 		FrmAppHelper::include_svg();
@@ -1985,6 +1997,8 @@ class FrmFormsController {
 	 * Add education about reports.
 	 *
 	 * @since 4.07
+	 *
+	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
 		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
@@ -2440,7 +2454,7 @@ class FrmFormsController {
 			return array();
 		}
 
-		// If a redirect action has already opened the URL in a new tab, we show the default message in the currect tab.
+		// If a redirect action has already opened the URL in a new tab, we show the default message in the current tab.
 		if ( ! empty( self::$redirected_in_new_tab[ $args['form']->id ] ) ) {
 			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
 		}
@@ -2761,7 +2775,7 @@ class FrmFormsController {
 			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
 			ob_start();
-			self::show_lone_success_messsage( $args );
+			self::show_lone_success_message( $args );
 			$response_data['content'] = ob_get_clean();
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
@@ -2787,7 +2801,7 @@ class FrmFormsController {
 		 *
 		 * @since 6.0
 		 *
-		 * @param int $delay_time Delay time in miliseconds.
+		 * @param int $delay_time Delay time in milliseconds.
 		 */
 		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
@@ -2877,7 +2891,7 @@ class FrmFormsController {
 				self::show_form_after_submit( $atts );
 			}
 		} else {
-			self::show_lone_success_messsage( $atts );
+			self::show_lone_success_message( $atts );
 		}
 	}
 
@@ -2970,7 +2984,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.05
 	 */
-	private static function show_lone_success_messsage( $atts ) {
+	private static function show_lone_success_message( $atts ) {
 		global $frm_vars;
 		$values = FrmEntriesHelper::setup_new_vars( $atts['fields'], $atts['form'], true );
 		self::maybe_load_css( $atts['form'], $values['custom_style'], $frm_vars['load_css'] );

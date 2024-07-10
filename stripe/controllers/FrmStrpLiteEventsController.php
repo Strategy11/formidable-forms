@@ -249,7 +249,7 @@ class FrmStrpLiteEventsController {
 	 * Check if a subscription has reached its payment limit.
 	 * If it has, the subscription will be cancelled by period end.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param object $sub
 	 * @return void
@@ -299,7 +299,7 @@ class FrmStrpLiteEventsController {
 	/**
 	 * Get the count of completed payments.
 	 *
-	 * @since x.x
+	 * @since 6.11
 	 *
 	 * @param string $sub_id Stripe subscriptino id prefixed with 'sub_'.
 	 * @return int

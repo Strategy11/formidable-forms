@@ -339,6 +339,8 @@ namespace {
 	}
 	class FrmProEddController extends FrmAddon {
 	}
+	class FrmProFieldSettings {
+	}
 	function load_formidable_pro() {
 	}
 	/**
@@ -371,6 +373,12 @@ namespace Elementor {
 		 */
 		public static function instance() {
 		}
+	}
+
+	class Controls_Manager {
+		const TAB_CONTENT = 'content';
+		const SELECT2     = 'select2';
+		const SWITCHER    = 'switcher';
 	}
 }
 
