@@ -6,7 +6,7 @@ import { getElements, addElements, PREFIX as SKELETON_PREFIX } from 'core/page-s
 /**
  * Internal dependencies
  */
-import { PLANS, VIEWS } from '../constants';
+import { PLANS, PREFIX, VIEWS } from '../constants';
 
 const { bodyContent, sidebar } = getElements();
 
@@ -48,6 +48,7 @@ bodyContent.querySelectorAll( '.frm-card-item:not(.plugin-card-formidable-pro)' 
 });
 
 const cards = {
+	addonsList: document.getElementById(`${PREFIX}-list`),
 	addons: bodyContent.querySelectorAll( '.frm-card-item' ),
 	availableAddons: bodyContent.querySelectorAll('.frm-card-item:not(.frm-locked-item)'),
 	addonsToggle: bodyContent.querySelectorAll( '.frm_toggle_block' )

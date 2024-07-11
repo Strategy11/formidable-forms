@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
  * External dependencies
  */
 import { CURRENT_CLASS } from 'core/constants';
-import { frmAnimate, showElements, hideElements, hide, isVisible } from 'core/utils';
+import { frmAnimate, hideElements, hide, show, isVisible } from 'core/utils';
 
 /**
  * Internal dependencies
@@ -23,8 +23,7 @@ import { showEmptyState } from '.';
  * @return {void}
  */
 export function showSearchState( notEmptySearchText ) {
-	const { bodyContent, bodyContentChildren } = getElements();
-	const bodyContentAnimate = new frmAnimate( bodyContent );
+	const { bodyContent, bodyContentChildren, addonsList } = getElements();
 
 	// Remove highlighting from the currently selected category if the search text is not empty
 	if ( notEmptySearchText ) {
@@ -34,8 +33,10 @@ export function showSearchState( notEmptySearchText ) {
 	// Hide non-relevant elements in the body content
 	hideElements( bodyContentChildren );
 
+	show(addonsList);
+
 	// Smoothly display the updated UI elements
-	bodyContentAnimate.fadeIn();
+	new frmAnimate( bodyContent ).fadeIn();
 }
 
 /**

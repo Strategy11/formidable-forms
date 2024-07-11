@@ -1,10 +1,4 @@
 /**
- * External dependencies
- */
-import { onClickPreventDefault } from 'core/utils';
-import { resetSearchInput } from 'core/page-skeleton';
-
-/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
