@@ -228,7 +228,7 @@ class FrmStylesPreviewHelper {
 	 * @return string
 	 */
 	private function get_disabled_features_note() {
-		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end', 'formidable' );
+		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end.', 'formidable' );
 	}
 
 	/**
