@@ -64,9 +64,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<p class="frm-hide-empty">
+		<p class="frm-hide-empty frm-inline-flex frm-gap-sm frm-flex-wrap">
 			<?php if ( $display['required'] ) { ?>
-				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label">
+				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>">
 					<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
 					<?php esc_html_e( 'Required', 'formidable' ); ?>
 				</label>
@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			if ( $display['unique'] ) {
 				?>
-				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
 					<?php esc_html_e( 'Unique', 'formidable' ); ?>
 				</label>
 				<?php
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			if ( $display['read_only'] ) {
 				?>
-				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
+				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
 					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
 					<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 				</label>
