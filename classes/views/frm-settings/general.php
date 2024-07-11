@@ -33,11 +33,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Defaults', 'formidable' ); ?></h3>
 
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
-		<?php esc_html_e( 'Default Email Address', 'formidable' ); ?>
+		<?php esc_html_e( 'Email Address', 'formidable' ); ?>
 		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The default email address to receive notifications for new form submissions.', 'formidable' ); ?>"></span>
 	</label>
 	<input class="frm_with_left_label frm8" type="text" name="frm_default_email" id="frm_default_email" value="<?php echo esc_attr( $frm_settings->default_email ); ?>" />
@@ -61,6 +61,8 @@ unset( $more_html );
 ?>
 
 <div class="clear"></div>
+
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 
 <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 	<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ); ?>"/>
