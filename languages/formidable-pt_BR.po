@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-09T14:07:24+00:00\n"
-"PO-Revision-Date: 2024-07-09 21:16\n"
+"POT-Creation-Date: 2024-07-10T14:03:52+00:00\n"
+"PO-Revision-Date: 2024-07-11 00:41\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -281,7 +281,7 @@ msgstr ""
 #: classes/helpers/FrmAppHelper.php:3342
 #: classes/helpers/FrmFormMigratorsHelper.php:154
 #: classes/views/shared/upgrade_overlay.php:34
-#: js/formidable_admin.js:6798
+#: js/formidable_admin.js:6811
 #: js/formidable_blocks.js:863
 msgid "Install"
 msgstr "Instalar"
@@ -290,7 +290,7 @@ msgstr "Instalar"
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:317
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:6795
+#: js/formidable_admin.js:6808
 #: js/formidable_blocks.js:863
 msgid "Activate"
 msgstr "Ativar"
@@ -5006,6 +5006,10 @@ msgstr "Pagamento"
 msgid "File Upload"
 msgstr "Envio de arquivo"
 
+#: classes/models/FrmField.php:100
+msgid "Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more."
+msgstr ""
+
 #: classes/models/FrmField.php:104
 msgid "Rich Text"
 msgstr "Rich text"
@@ -5034,6 +5038,10 @@ msgstr "Alternador"
 msgid "Dynamic"
 msgstr "Dinâmico"
 
+#: classes/models/FrmField.php:135
+msgid "Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more."
+msgstr ""
+
 #: classes/models/FrmField.php:138
 msgid "Lookup"
 msgstr "Pesquisa"
@@ -5054,6 +5062,10 @@ msgstr "Seção"
 #: classes/models/FrmField.php:156
 msgid "Page Break"
 msgstr "Quebra de página"
+
+#: classes/models/FrmField.php:158
+msgid "Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?"
+msgstr ""
 
 #: classes/models/FrmField.php:165
 msgid "Likert Scale"
@@ -5079,6 +5091,10 @@ msgstr "Endereço"
 msgid "Summary"
 msgstr "Sumário"
 
+#: classes/models/FrmField.php:195
+msgid "Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more."
+msgstr ""
+
 #: classes/models/FrmField.php:198
 msgid "Signature"
 msgstr "Assinatura"
@@ -5086,6 +5102,10 @@ msgstr "Assinatura"
 #: classes/models/FrmField.php:203
 msgid "AI"
 msgstr "IA"
+
+#: classes/models/FrmField.php:206
+msgid "Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields."
+msgstr ""
 
 #: classes/models/FrmField.php:209
 msgid "Appointment"
@@ -5102,6 +5122,10 @@ msgstr "Quantidade"
 #: classes/models/FrmField.php:235
 msgid "Ranking"
 msgstr "Classificação"
+
+#: classes/models/FrmField.php:237
+msgid "Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options."
+msgstr ""
 
 #: classes/models/FrmFieldValue.php:193
 msgid "The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value()."
@@ -5479,7 +5503,7 @@ msgstr "Criar formulário em branco"
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:71
-#: js/formidable_admin.js:9015
+#: js/formidable_admin.js:9028
 msgid "Close"
 msgstr "fechado"
 
@@ -8349,23 +8373,28 @@ msgstr "Mesclar em uma linha"
 msgid "Duplicate option value \"%s\" detected"
 msgstr "Valor de opção duplicada \"%s\" detectado"
 
-#: js/formidable_admin.js:6794
+#. translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling).
+#: js/formidable_admin.js:6685
+msgid "%s are not installed"
+msgstr ""
+
+#: js/formidable_admin.js:6807
 msgid "This plugin is not activated. Would you like to activate it now?"
 msgstr ""
 
-#: js/formidable_admin.js:6797
+#: js/formidable_admin.js:6810
 msgid "That add-on is not installed. Would you like to install it now?"
 msgstr "Esse complemento não está instalado. Gostaria de instalar agora?"
 
-#: js/formidable_admin.js:9000
+#: js/formidable_admin.js:9013
 msgid "Save and Reload"
 msgstr "Salvar e recarregar"
 
-#: js/formidable_admin.js:9169
+#: js/formidable_admin.js:9182
 msgid "Unable to install template"
 msgstr "Não foi possível instalar o modelo"
 
-#: js/formidable_admin.js:9821
+#: js/formidable_admin.js:9834
 msgid "Thank you for signing up!"
 msgstr "Obrigado por inscrever-se!"
 
