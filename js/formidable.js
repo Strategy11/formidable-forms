@@ -153,7 +153,8 @@ function frmFrontFormJS() {
 	 * @param {Object} $form
 	 */
 	function enableSaveDraft( $form ) {
-		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', '' );
+		$form.find( '.frm_save_draft' ).css( 'pointer-events', '' );
+		$form.find( '.frm_save_draft' ).prop( 'disabled', false );
 	}
 
 	function validateForm( object ) {
