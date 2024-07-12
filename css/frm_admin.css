@@ -1697,6 +1697,11 @@ input.frm_insert_in_template {
 	margin-right: var(--gap-sm) !important;
 }
 
+#wpbody-content .frm-my-sm {
+	margin-top: var(--gap-sm) !important;
+	margin-bottom: var(--gap-sm) !important;
+}
+
 .frm-p-0 {
 	padding: 0 !important;
 }
