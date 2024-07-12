@@ -18,18 +18,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-tabs-slide-track frm-flex-box">
 			<div class="frm-active">
 				<div class="frm_grid_container">
-					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background', 'formidable' ); ?></label></div>
+					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background Image', 'formidable' ); ?></label></div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmBackgroundImageStyleComponent(
+						<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_bg_img' ) ); ?>" id="frm_submit_bg_img" value="<?php echo esc_attr( $style->post_content['submit_bg_img'] ); ?>"  />
+					</div>
+
+					<div class="frm5 frm_form_field">
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Background Color', 'formidable' ); ?></label>
+					</div>
+					<div class="frm7 frm_form_field">
+						<?php new FrmColorpickerStyleComponent(
 							$frm_style->get_field_name( 'submit_bg_color' ),
 							$style->post_content['submit_bg_color'],
 							array(
 								'id'          => 'frm_submit_bg_color',
-								'frm_style'   => $frm_style,
-								'style'       => $style,
-								'action_slug' => 'submit_bg_color'
+								'action_slug' => 'submit_bg_color',
 							)
-						);
+						); 
 						?>
 					</div>
 
@@ -52,8 +57,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_font_size' ),
-							(int) $style->post_content['submit_font_size'],
-							array( 'id' => 'frm_submit_font_size' )
+							$style->post_content['submit_font_size'],
+							array(
+								'id'        => 'frm_submit_font_size',
+								'max_value' => 100
+							)
 						); ?>
 					</div>
 
@@ -75,8 +83,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_width' ),
-							(int) $style->post_content['submit_width'],
-							array( 'id' => 'frm_submit_width' )
+							$style->post_content['submit_width'],
+							array(
+								'id'        => 'frm_submit_width',
+								'max_value' => 300,
+							)
 						); ?>
 					</div>
 
@@ -84,8 +95,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_height' ),
-							(int) $style->post_content['submit_height'],
-							array( 'id' => 'frm_submit_height' )
+							$style->post_content['submit_height'],
+							array(
+								'id'        => 'frm_submit_height',
+								'max_value' => 300,
+							)
 						); ?>
 					</div>
 
@@ -108,8 +122,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_border_width' ),
-							(int) $style->post_content['submit_border_width'],
-							array( 'id' => 'frm_submit_border_width' )
+							$style->post_content['submit_border_width'],
+							array(
+								'id'        => 'frm_submit_border_width',
+								'max_value' => 25,
+							)
 						); ?>
 					</div>
 
@@ -132,8 +149,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_border_radius' ),
-							(int) $style->post_content['submit_border_radius'],
-							array( 'id' => 'frm_submit_border_radius' )
+							$style->post_content['submit_border_radius'],
+							array(
+								'id'        => 'frm_submit_border_radius',
+								'max_value' => 50,
+							)
 						); ?>
 					</div>
 
@@ -141,8 +161,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_margin' ),
-							(int) $style->post_content['submit_margin'],
-							array( 'id' => 'frm_submit_margin' )
+							$style->post_content['submit_margin'],
+							array(
+								'id'        => 'frm_submit_margin',
+								'type'		=> 'vertical-margin',
+								'max_value' => 100
+							)
 						); ?>
 					</div>
 
@@ -150,8 +174,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_padding' ),
-							(int) $style->post_content['submit_padding'],
-							array( 'id' => 'frm_submit_padding' )
+							$style->post_content['submit_padding'],
+							array(
+								'id'        => 'frm_submit_padding',
+								'type'		=> 'vertical-margin',
+								'max_value' => 100
+							)
 						); ?>
 					</div>
 

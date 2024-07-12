@@ -2,9 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-class FrmAlignStyleComponent extends FrmStyleComponent {
+class FrmPrimaryColorStyleComponent extends FrmStyleComponent {
 
-	public $view_name = 'align';
+	public $view_name = 'primary-color';
 
 	public function __construct( $field_name, $field_value, $data ) {
 
@@ -16,4 +16,5 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 		
 		$this->load_view( $this->data );
 	}
+
 }

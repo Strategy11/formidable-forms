@@ -12,8 +12,8 @@ class FrmDropdownStyleComponent extends FrmStyleComponent {
 		$this->field_name  = $field_name;
 		$this->field_value = $field_value;
 
-		parent::get_instance( $field_name, $field_value, $data );
+		parent::get_instance();
 		
-		$this->load_view();
+		$this->load_view( $this->data );
 	}
 }

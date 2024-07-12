@@ -70,8 +70,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'field_border_width' ),
-							(int) $style->post_content['field_border_width'],
-							array( 'id' => 'frm_field_border_width' )
+							$style->post_content['field_border_width'],
+							array(
+								'id'        => 'frm_field_border_width',
+								'max_value' => 25
+							)
 						); ?>
 					</div>
 
@@ -95,7 +98,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php _e( 'Box Shadow', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -145,7 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php _e( 'Box Shadow', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -262,8 +265,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'border_width_error' ),
-							(int) $style->post_content['border_width_error'],
-							array( 'id' => 'frm_border_width_error' )
+							$style->post_content['border_width_error'],
+							array(
+								'id'        => 'frm_border_width_error',
+								'max_value' => 25
+							)
 						); ?>
 					</div>
 

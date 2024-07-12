@@ -53,7 +53,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'fieldset' ),
 		$style->post_content['fieldset'],
-		array( 'id' => 'frm_fieldset' )
+		array(
+			'id'        => 'frm_fieldset',
+			'max_value' => 25,
+		)
 	); ?>
 </div>
 
@@ -62,7 +65,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'fieldset_padding' ),
 		$style->post_content['fieldset_padding'],
-		array( 'id' => 'frm_fieldset_padding' )
+		array(
+			'id'        => 'frm_fieldset_padding',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 
@@ -71,7 +78,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'form_width' ),
 		$style->post_content['form_width'],
-		array( 'id' => 'frm_form_width' )
+		array(
+			'id'        => 'frm_form_width',
+			'max_value' => 2000,
+		)
 	); ?>
 </div>
 

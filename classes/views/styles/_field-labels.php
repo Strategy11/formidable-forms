@@ -38,8 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'font_size' ),
-							(int) $style->post_content['font_size'],
-							array( 'id' => 'frm_font_size' )
+							$style->post_content['font_size'],
+							array(
+								'id'        => 'frm_font_size',
+								'max_value' => 100
+							)
 						); ?>
 					</div>
 
@@ -92,7 +95,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'width' ),
 							$style->post_content['width'],
-							array( 'id' => 'frm_width' )
+							array(
+								'id' => 'frm_width',
+								'max_value' => 300,
+							)
 						); ?>
 					</div>
 
@@ -103,7 +109,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'label_padding' ),
 							$style->post_content['label_padding'],
-							array( 'id' => 'frm_label_padding' )
+							array(
+								'id'        => 'frm_label_padding',
+								'type'		=> 'vertical-margin',
+								'max_value' => 100,
+							)
 						); ?>
 					</div>
 				</div>

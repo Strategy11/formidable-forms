@@ -134,7 +134,7 @@
 }
 
 .frm-style-component .frm-radio-container {
-	max-width: 190px;
+	max-width: 216px;
 	height: 36px;
 	background: rgba( 242, 244, 247, 1 );
 	gap: var(--small-gap);
@@ -194,8 +194,10 @@
 	align-items: center;
 	color: rgba(29, 41, 57, 1);
 }
-.frm-style-component .frm-slider-container svg {
+.frm-style-component .frm-slider-container svg.frmsvg {
 	color: currentColor;
+	margin-right: 2px;
+	margin-left: -5px;
 }
 .frm-style-component .frm-slider-container .frm-slider-active-track {
 	display: block;
@@ -268,6 +270,9 @@
 	height: 4px;
 	background: rgba(234, 236, 240, 1);
 	border-radius: 200px;
+}
+.frm-style-component .frm-slider-component.frm-has-multiple-values {
+	margin-bottom: 5px;
 }
 
 .frm-tabs-wrapper {
@@ -383,7 +388,7 @@
 	overflow: auto;
 	position: relative;
 	width:100%;
-	padding: 0 var(--gap-sm);
+	padding: 0px;
 	box-sizing: border-box;
 }
 

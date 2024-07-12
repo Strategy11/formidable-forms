@@ -1,6 +1,6 @@
 <div class="frm-style-component frm-background-image">
 	<div class="frm-flex-justify">
-		<input type="text" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $component['id'] ) ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
+		<input type="text" <?php echo esc_attr( $field_name ); ?> id="<?php echo esc_attr( $component['id'] ) ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
 		<?php
 			do_action( 'frm_style_settings_general_section_after_background', array( 'frm_style' => $component['frm_style'], 'style' => $component['style'] ) );
 			if ( ! FrmAppHelper::pro_is_installed() ) {

@@ -628,6 +628,19 @@ class FrmStylesHelper {
 		return admin_url( 'admin.php?page=formidable-styles&form=' . absint( $form_id ) );
 	}
 
+	public static function get_style_options_back_button_args( $style, $form_id ) {
+		if ( ! self::is_quick_settings() ) {
+			return array(
+				'url'   => self::get_edit_url( $style, $form_id, 'quick-settings' ),
+				'title' => esc_html__( 'Quick Settings', 'formidable' ), 
+			);
+		}
+		return array(
+			'url'   => self::get_list_url( $form_id ),
+			'title' => esc_html( $style->post_title ), 
+		);
+	}
+
 	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
@@ -635,11 +648,12 @@ class FrmStylesHelper {
 	 * @param int|string       $form_id Used for the back button and preview form target.
 	 * @return string
 	 */
-	public static function get_edit_url( $style, $form_id = 0 ) {
+	public static function get_edit_url( $style, $form_id = 0, $section = '' ) {
 		$query_args = array(
 			'page'       => 'formidable-styles',
 			'frm_action' => 'edit',
 			'id'         => $style->ID,
+			'section'    => $section,
 		);
 
 		if ( $form_id ) {
@@ -720,6 +734,10 @@ class FrmStylesHelper {
 		}
 
 		return FrmDb::get_count( 'frm_forms', $where );
+	}
+
+	public static function is_quick_settings() {
+		return FrmAppHelper::get_param( 'section' ) === 'quick-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
 	}
 
 	/**

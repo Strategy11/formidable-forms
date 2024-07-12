@@ -24,8 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'description_font_size' ),
-		(int) $style->post_content['description_font_size'],
-		array( 'id' => 'frm_description_align' )
+		$style->post_content['description_font_size'],
+		array(
+			'id'        => 'frm_description_align',
+			'max_value' => 300
+		)
 	); ?>
 </div>
 
@@ -81,7 +84,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'description_margin' ),
 		$style->post_content['description_margin'],
-		array( 'id' => 'frm_description_margin' )
+		array(
+			'id'        => 'frm_description_margin',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100
+		)
 	); ?>
 </div>
 

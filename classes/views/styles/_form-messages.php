@@ -66,8 +66,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'success_font_size' ),
-							(int) $style->post_content['success_font_size'],
-							array( 'id' => 'frm_success_font_size' )
+							$style->post_content['success_font_size'],
+							array(
+								'id'        => 'frm_success_font_size',
+								'max_value' => 100,
+							)
 						); ?>
 					</div>
 				</div>
@@ -124,8 +127,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field">
 						<?php new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'error_font_size' ),
-							(int) $style->post_content['error_font_size'],
-							array( 'id' => 'frm_error_font_size' )
+							$style->post_content['error_font_size'],
+							array(
+								'id'        => 'frm_error_font_size',
+								'max_value' => 100,
+							)
 						); ?>
 					</div>
 				</div>

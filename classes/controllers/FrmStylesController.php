@@ -678,6 +678,10 @@ class FrmStylesController {
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}
 
+	public static function get_quick_settings_template( $frm_style, $style, $form_id ) {
+		include_once self::get_views_path() . '_quick-settings.php';
+	}
+
 	/**
 	 * Show the edit view after saving.
 	 * The save event is triggered earlier, on admin init where self::save_style is called.

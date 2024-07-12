@@ -9,8 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'field_font_size' ),
-		(int) $style->post_content['field_font_size'],
-		array( 'id' => 'frm_field_font_size' )
+		$style->post_content['field_font_size'],
+		array(
+			'id'        => 'frm_field_font_size',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 
@@ -34,8 +37,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'field_height' ),
-		(int) $style->post_content['field_height'],
-		array( 'id' => 'frm_field_height' )
+		$style->post_content['field_height'],
+		array(
+			'id'        => 'frm_field_height',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 <div class="frm5 frm_form_field">
@@ -44,8 +50,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'field_width' ),
-		(int) $style->post_content['field_width'],
-		array( 'id' => 'frm_field_width' )
+		$style->post_content['field_width'],
+		array(
+			'id'        => 'frm_field_width',
+			'max_value' => 300,
+		)
 	); ?>
 </div>
 <div class="frm5 frm_form_field">
@@ -54,8 +63,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'field_pad' ),
-		(int) $style->post_content['field_pad'],
-		array( 'id' => 'frm_field_pad' )
+		$style->post_content['field_pad'],
+		array(
+			'id'        => 'frm_field_pad',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 <div class="frm5 frm_form_field">
@@ -64,8 +77,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'field_margin' ),
-		(int) $style->post_content['field_margin'],
-		array( 'id' => 'frm_field_margin' )
+		$style->post_content['field_margin'],
+		array(
+			'id'        => 'frm_field_margin',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 <div class="frm5 frm_form_field">
@@ -74,13 +91,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'border_radius' ),
-		(int) $style->post_content['border_radius'],
-		array( 'id' => 'frm_border_radius' )
+		$style->post_content['border_radius'],
+		array(
+			'id' => 'frm_border_radius',
+			'max_value' => 50,
+		)
 	); ?>
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php _e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
+	<label class="frm-style-item-heading"><?php esc_html_e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

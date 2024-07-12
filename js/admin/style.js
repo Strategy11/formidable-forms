@@ -1108,7 +1108,7 @@
 	function initEditPage() {
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-
+		const debouncedColorChange	 = debounce( ( event, value ) => wp.hooks.doAction( 'frm_style_options_color_change', { event, value } ), 200 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
 		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
@@ -1117,14 +1117,15 @@
 
 		jQuery( 'input.hex' ).wpColorPicker({
 			change: function( event ) {
+				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+					debouncedColorChange( event, hexcolor );
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
 				jQuery( event.target ).val( hexcolor ).trigger( 'change' );
 			}
 		});

@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 */?>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php _e( 'Color', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php new FrmColorPickerStyleComponent(
 		$frm_style->get_field_name( 'form_desc_color' ),
@@ -40,20 +40,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php _e( 'Margin', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'form_desc_margin_top' ),
-		(int) $style->post_content['form_desc_margin_top'],
-		array( 'id' => 'frm_form_desc_margin_top' )
+		$style->post_content['form_desc_margin_top'],
+		array(
+			'id'        => 'frm_form_desc_margin_top',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100,
+		)
 	); ?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php _e( 'Padding', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'form_desc_padding' ),
-		(int) $style->post_content['form_desc_padding'],
-		array( 'id' => 'frm_form_desc_padding' )
+		$style->post_content['form_desc_padding'],
+		array(
+			'id'        => 'frm_form_desc_padding',
+			'type'		=> 'vertical-margin',
+			'max_value' => 100,
+		)
 	); ?>
 </div>

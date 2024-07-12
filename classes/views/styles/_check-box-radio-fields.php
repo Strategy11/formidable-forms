@@ -24,8 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'check_font_size' ),
-		(int) $style->post_content['check_font_size'],
-		array( 'id' => 'frm_check_font_size' )
+		$style->post_content['check_font_size'],
+		array(
+			'id'        => 'frm_check_font_size',
+			'max_value' => 100
+		)
 	); ?>
 </div>
 
