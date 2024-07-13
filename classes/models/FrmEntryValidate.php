@@ -238,6 +238,7 @@ class FrmEntryValidate {
 			$pattern = FrmField::get_option( $field, 'format' );
 		}
 
+		$pattern = html_entity_decode($pattern);
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
 		// Create a regexp if format is not already a regexp
