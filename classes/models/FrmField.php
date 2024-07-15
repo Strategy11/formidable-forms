@@ -214,7 +214,7 @@ class FrmField {
 					__( 'Appointment fields are an integration with %1$s Simply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms. %3$s', 'formidable' ),
 					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>',
-					'<img src="' . $images_url . 'appointments.png" alt="Scheduling" />'
+					'<img src="' . $images_url . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />'
 				),
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
