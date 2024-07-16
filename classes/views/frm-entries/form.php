@@ -22,7 +22,7 @@ if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { 
 	return;
 }
 
-global $frm_vars;
+global $frm_vars, $post;
 FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 
 // Get conditionally hidden fields
@@ -42,6 +42,9 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <?php do_action( 'frm_after_title', compact( 'form' ) ); ?>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr( $form_action ); ?>" />
 <input type="hidden" name="form_id" value="<?php echo esc_attr( $form->id ); ?>" />
+<?php if ( $post ) { ?>
+<input type="hidden" name="frm_post_id" value="<?php echo esc_attr( $post->ID ); ?>" />
+<?php } ?>
 <input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" value="<?php echo esc_attr( $frm_hide_fields ); ?>" />
 <input type="hidden" name="form_key" value="<?php echo esc_attr( $form->form_key ); ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
