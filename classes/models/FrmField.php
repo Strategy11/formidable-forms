@@ -429,7 +429,50 @@ class FrmField {
 	 * @return array
 	 */
 	private static function maybe_filter_options( $options ) {
-		return FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+		$options = FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+
+		if ( ! empty( $options['custom_html'] ) ) {
+			$options['custom_html'] = self::maybe_filter_custom_html_input_attributes( $options['custom_html'] );
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Prevent users who do not have permission to insert JavaScript attributes in input elements.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	private static function maybe_filter_custom_html_input_attributes( $html ) {
+		if ( FrmAppHelper::allow_unfiltered_html() ) {
+			return $html;
+		}
+
+		$pattern = get_shortcode_regex( array( 'input' ) );
+		return preg_replace_callback(
+			"/$pattern/",
+			function ( $match ) {
+				$attr = shortcode_parse_atts( $match[3] );
+
+				foreach ( $attr as $attr_key => $att ) {
+					$split = explode( '=', $att, 2 );
+					$key   = trim( $split[0] );
+					if ( ! FrmAppHelper::input_key_is_safe( $key ) ) {
+						unset( $attr[ $attr_key ] );
+					}
+				}
+
+				if ( ! $attr ) {
+					return '[input]';
+				}
+
+				return '[input ' . FrmAppHelper::array_to_html_params( $attr ) . ']';
+			},
+			$html
+		);
 	}
 
 	/**

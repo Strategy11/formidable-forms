@@ -3934,6 +3934,53 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function input_key_is_safe( $key ) {
+		if ( 0 === strpos( $key, 'data-'  ) ) {
+			// Allow all data attributes.
+			$safe = true;
+		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
+			// Allow all aria attributes.
+			$safe = true;
+		} else {
+			$safe_keys = array(
+				'class',
+				'required',
+				'title',
+				'placeholder',
+				'value',
+				'readonly',
+				'disabled',
+				'size',
+				'maxlength',
+				'min',
+				'max',
+				'pattern',
+				'step',
+				'autofocus',
+				'width',
+				'height',
+				'autocomplete',
+				'tabindex',
+				'role',
+			);
+			$safe = in_array( $key, $safe_keys, true );
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $safe
+		 * @param string $key
+		 */
+		return (bool) apply_filters( 'frm_input_key_is_safe', $safe, $key );
+	}
+
+	/**
 	 * @since 5.0.16
 	 *
 	 * @return bool

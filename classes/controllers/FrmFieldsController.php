@@ -946,52 +946,14 @@ class FrmFieldsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $option The option key.
+	 * @param string $key The option key.
 	 * @return bool
 	 */
-	private static function should_allow_input_attribute( $option ) {
+	private static function should_allow_input_attribute( $key ) {
 		if ( ! FrmAppHelper::should_never_allow_unfiltered_html() ) {
 			return true;
 		}
-
-		if ( 0 === strpos( $option, 'data-'  ) ) {
-			// Allow all data attributes.
-			$allowed = true;
-		} elseif ( 0 === strpos( $option, 'aria-' ) ) {
-			// Allow all aria attributes.
-			$allowed = true;
-		} else {
-			$safe_options = array(
-				'class',
-				'required',
-				'title',
-				'placeholder',
-				'value',
-				'readonly',
-				'disabled',
-				'size',
-				'maxlength',
-				'min',
-				'max',
-				'pattern',
-				'step',
-				'autofocus',
-				'width',
-				'height',
-				'autocomplete',
-				'tabindex',
-				'role',
-			);
-			$allowed = in_array( $option, $safe_options, true );
-		}
-
-		/**
-		 * @since x.x
-		 *
-		 * @param bool   $allowed
-		 * @param string $option
-		 */
-		return (bool) apply_filters( 'frm_should_allow_input_attribute', $allowed, $option );
+		return FrmAppHelper::input_key_is_safe( $key );
 	}
 
 	/**
