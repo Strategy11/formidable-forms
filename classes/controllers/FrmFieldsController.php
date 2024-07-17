@@ -942,7 +942,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Disallow JavaScript attributees when unasfe HTML is not allowed.
+	 * Disallow possibly unsafe attributees (that trigger JavaScript) when unasfe HTML is not allowed.
 	 *
 	 * @since x.x
 	 *
@@ -966,6 +966,7 @@ class FrmFieldsController {
 				'required',
 				'title',
 				'placeholder',
+				'value',
 			);
 			$allowed = in_array( $option, $allowed_options, true );
 		}
