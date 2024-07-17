@@ -455,8 +455,7 @@ class FrmField {
 		return preg_replace_callback(
 			"/$pattern/",
 			function ( $match ) {
-				$attr = shortcode_parse_atts( $match[3] );
-
+				$attr      = shortcode_parse_atts( $match[3] );
 				$safe_atts = array();
 				foreach ( $attr as $attr_key => $att ) {
 					$split = explode( '=', $att, 2 );
