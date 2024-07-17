@@ -961,14 +961,26 @@ class FrmFieldsController {
 			// Allow all aria attributes.
 			$allowed = true;
 		} else {
-			$allowed_options = array(
+			$safe_options = array(
 				'class',
 				'required',
 				'title',
 				'placeholder',
 				'value',
+				'readonly',
+				'disabled',
+				'size',
+				'maxlength',
+				'min',
+				'max',
+				'pattern',
+				'step',
+				'autofocus',
+				'width',
+				'height',
+				'autocomplete',
 			);
-			$allowed = in_array( $option, $allowed_options, true );
+			$allowed = in_array( $option, $safe_options, true );
 		}
 
 		/**
