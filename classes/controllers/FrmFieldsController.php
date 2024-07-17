@@ -979,6 +979,8 @@ class FrmFieldsController {
 				'width',
 				'height',
 				'autocomplete',
+				'tabindex',
+				'role',
 			);
 			$allowed = in_array( $option, $safe_options, true );
 		}
