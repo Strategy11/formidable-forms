@@ -454,6 +454,10 @@ class FrmField {
 		$pattern = get_shortcode_regex( array( 'input' ) );
 		return preg_replace_callback(
 			"/$pattern/",
+			/**
+			 * @param array $match Shortcode data.
+			 * @return string
+			 */
 			function ( $match ) {
 				$attr      = shortcode_parse_atts( $match[3] );
 				$safe_atts = array();
