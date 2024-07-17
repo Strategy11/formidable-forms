@@ -457,19 +457,24 @@ class FrmField {
 			function ( $match ) {
 				$attr = shortcode_parse_atts( $match[3] );
 
+				$safe_atts = array();
 				foreach ( $attr as $attr_key => $att ) {
 					$split = explode( '=', $att, 2 );
-					$key   = trim( $split[0] );
-					if ( ! FrmAppHelper::input_key_is_safe( $key ) ) {
-						unset( $attr[ $attr_key ] );
+					if ( 2 !== count( $split ) ) {
+						continue;
+					}
+
+					$key = trim( $split[0] );
+					if ( FrmAppHelper::input_key_is_safe( $key ) ) {
+						$safe_atts[ $key ] = trim( $split[1], '"' );
 					}
 				}
 
-				if ( ! $attr ) {
+				if ( ! $safe_atts ) {
 					return '[input]';
 				}
 
-				return '[input ' . FrmAppHelper::array_to_html_params( $attr ) . ']';
+				return '[input ' . FrmAppHelper::array_to_html_params( $safe_atts ) . ']';
 			},
 			$html
 		);
