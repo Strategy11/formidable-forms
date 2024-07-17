@@ -925,7 +925,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( 'opt' === $k ) {
+			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
 
@@ -939,6 +939,44 @@ class FrmFieldsController {
 
 			unset( $k, $v );
 		}
+	}
+
+	/**
+	 * Disallow JavaScript attributees when unasfe HTML is not allowed.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $option The option key.
+	 * @return bool
+	 */
+	private static function should_allow_input_attribute( $option ) {
+		if ( ! FrmAppHelper::should_never_allow_unfiltered_html() ) {
+			return true;
+		}
+
+		if ( 0 === strpos( $option, 'data-'  ) ) {
+			// Allow all data attributes.
+			$allowed = true;
+		} elseif ( 0 === strpos( $option, 'aria-' ) ) {
+			// Allow all aria attributes.
+			$allowed = true;
+		} else {
+			$allowed_options = array(
+				'class',
+				'required',
+				'title',
+				'placeholder',
+			);
+			$allowed = in_array( $option, $allowed_options, true );
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $allowed
+		 * @param string $option
+		 */
+		return (bool) apply_filters( 'frm_should_allow_input_attribute', $allowed, $option );
 	}
 
 	/**
