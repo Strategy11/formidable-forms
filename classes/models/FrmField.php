@@ -423,6 +423,10 @@ class FrmField {
 	}
 
 	/**
+	 * Maybe filter HTML in field options data.
+	 * HTML is only filtered when unsafe HTML is disallowed.
+	 * See FrmAppHelper::allow_unfiltered_html.
+	 *
 	 * @since 5.0.08
 	 *
 	 * @param array $options
@@ -440,6 +444,7 @@ class FrmField {
 
 	/**
 	 * Prevent users who do not have permission to insert JavaScript attributes in input elements.
+	 * This is trigged when a field is updated.
 	 *
 	 * @since x.x
 	 *
@@ -468,7 +473,7 @@ class FrmField {
 					}
 
 					$key = trim( $split[0] );
-					if ( FrmAppHelper::input_key_is_safe( $key ) ) {
+					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
 						$safe_atts[ $key ] = trim( $split[1], '"' );
 					}
 				}

@@ -3934,13 +3934,18 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Check if an option attribute used in an [input] shortcode is safe.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $key
+	 * @param string $context Either 'display' or 'update'. On update, we want to allow a few keys that are never displayed.
 	 * @return bool
 	 */
-	public static function input_key_is_safe( $key ) {
-		if ( 0 === strpos( $key, 'data-'  ) ) {
+	public static function input_key_is_safe( $key, $context = 'display' ) {
+		if ( 'update' === $context && in_array( $key, array( 'opt', 'label' ), true ) ) {
+			$safe = true;
+		} elseif ( 0 === strpos( $key, 'data-'  ) ) {
 			// Allow all data attributes.
 			$safe = true;
 		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
@@ -3972,12 +3977,15 @@ class FrmAppHelper {
 		}
 
 		/**
+		 * Filter the $safe value so additional keys can be allowed or disallowed.
+		 *
 		 * @since x.x
 		 *
-		 * @param bool   $safe
+		 * @param bool   $safe True if the key is considered safe.
 		 * @param string $key
+		 * @param string $context Either 'display' or 'update'.
 		 */
-		return (bool) apply_filters( 'frm_input_key_is_safe', $safe, $key );
+		return (bool) apply_filters( 'frm_input_key_is_safe', $safe, $key, $context );
 	}
 
 	/**
