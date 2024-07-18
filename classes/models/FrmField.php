@@ -467,14 +467,22 @@ class FrmField {
 				$attr      = shortcode_parse_atts( $match[3] );
 				$safe_atts = array();
 				foreach ( $attr as $attr_key => $att ) {
-					$split = explode( '=', $att, 2 );
-					if ( 2 !== count( $split ) ) {
-						continue;
+					if ( ! is_numeric( $attr_key ) ) {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
+					} else {
+						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
+						$split = explode( '=', $att, 2 );
+						if ( 2 !== count( $split ) ) {
+							continue;
+						}
+						$key   = trim( $split[0] );
+						$value = trim( $split[1], '"' );
 					}
 
-					$key = trim( $split[0] );
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
-						$safe_atts[ $key ] = trim( $split[1], '"' );
+						$safe_atts[ $key ] = $value;
 					}
 				}
 
