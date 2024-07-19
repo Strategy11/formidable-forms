@@ -947,7 +947,11 @@ class FrmAppController {
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
-		return strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $is_views_post_type ) || ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application' );
+		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $is_views_post_type ) ) {
+			return true;
+		}
+
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application';
 	}
 
 	/**
