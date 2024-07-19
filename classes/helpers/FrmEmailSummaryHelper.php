@@ -298,6 +298,7 @@ class FrmEmailSummaryHelper {
 				'created_at >' => $from_date,
 				'created_at <' => $to_date . ' 23:59:59',
 				'is_draft'     => 0,
+				'parent_item_id' => 0,
 			)
 		);
 	}
@@ -317,7 +318,7 @@ class FrmEmailSummaryHelper {
 			$wpdb->prepare(
 				"SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
 						FROM {$wpdb->prefix}frm_items AS it INNER JOIN {$wpdb->prefix}frm_forms AS fr ON it.form_id = fr.id
-						WHERE it.created_at BETWEEN %s AND %s AND it.is_draft = 0
+						WHERE it.created_at BETWEEN %s AND %s AND it.is_draft = 0 AND parent_form_id = 0
 						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
 				$from_date,
 				$to_date . ' 23:59:59',
