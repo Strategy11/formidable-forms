@@ -933,20 +933,18 @@ class FrmAppController {
 	private static function should_register_popper() {
 		global $pagenow;
 
-		$post_id   = FrmAppHelper::simple_get( 'post', 'absint' );
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
-
+		$post_id = FrmAppHelper::simple_get( 'post', 'absint' );
 		if ( 'post.php' === $pagenow && $post_id && 'frm_display' === get_post_type( $post_id ) ) {
 			return true;
 		}
-		$is_views_post_type = 'frm_display' === $post_type;
 
+		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$is_views_post_type = 'frm_display' === $post_type;
 		if ( 'post-new.php' === $pagenow && $is_views_post_type ) {
 			return true;
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $is_views_post_type ) ) {
 			return true;
 		}
