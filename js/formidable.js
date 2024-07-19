@@ -158,7 +158,7 @@ function frmFrontFormJS() {
 			return;
 		}
 		saveDraftButton.disabled            = false;
-		saveDraftButton.style.pointerEvents = ''
+		saveDraftButton.style.pointerEvents = '';
 	}
 
 	function validateForm( object ) {
