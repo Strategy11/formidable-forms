@@ -211,11 +211,10 @@ class FrmField {
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing, %3$s: Image HTML */
-					__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms. %3$s', 'formidable' ),
+					__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
 					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>',
-					'<img src="' . $images_url . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />'
-				),
+				) . '<img src="' . $images_url . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
