@@ -210,7 +210,7 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
-					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing, %3$s: Image HTML */
+					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
 					__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
 					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>',
