@@ -4847,7 +4847,6 @@ function frmAdminBuildJS() {
 					// prevent "More Options" tooltips from staying around after their target field is deleted.
 					deleteTooltips();
 				});
-				wp.hooks.doAction( 'frm_after_delete_field', $thisField[0] );
 			}
 		});
 	}
