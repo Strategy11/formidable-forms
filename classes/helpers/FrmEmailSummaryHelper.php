@@ -298,7 +298,8 @@ class FrmEmailSummaryHelper {
 				'created_at >'   => $from_date,
 				'created_at <'   => $to_date . ' 23:59:59',
 				'is_draft'       => 0,
-				'parent_item_id' => 0, // Do not count repeater entries.
+				// Do not count repeater entries.
+				'parent_item_id' => 0,
 			)
 		);
 	}
