@@ -940,12 +940,12 @@ class FrmAppController {
 
 		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 		$is_views_post_type = 'frm_display' === $post_type;
-		if ( 'post-new.php' === $pagenow && $is_views_post_type ) {
+		if ( in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) && $is_views_post_type ) {
 			return true;
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $is_views_post_type ) ) {
+		if ( strpos( $page, 'formidable' ) === 0 ) {
 			return true;
 		}
 
