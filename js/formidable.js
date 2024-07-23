@@ -153,12 +153,10 @@ function frmFrontFormJS() {
 	 * @param {Object} $form
 	 */
 	function enableSaveDraft( $form ) {
-		const saveDraftButton = $form[0].querySelector( '.frm_save_draft' );
-		if ( ! saveDraftButton ) {
-			return;
-		}
-		saveDraftButton.disabled            = false;
-		saveDraftButton.style.pointerEvents = '';
+		$form[0].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
+			saveDraftButton.disabled            = false;
+			saveDraftButton.style.pointerEvents = '';
+		});
 	}
 
 	function validateForm( object ) {
