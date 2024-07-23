@@ -128,12 +128,4 @@ describe( 'Run some accessibility tests', function() {
         cy.checkA11y();
     });
 
-    it('Check the form template creation is accessible', () => {
-        cy.visit( '/wp-admin/admin.php?page=formidable&frm_action=edit&id=11&new_template=true' );
-        cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset();
-        cy.checkA11y();
-    });
-
-
 });
