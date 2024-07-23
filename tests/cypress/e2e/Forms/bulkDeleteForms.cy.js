@@ -2,6 +2,8 @@ describe("Bulk delete forms from the form list page", () => {
     beforeEach(() => {
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable');
+        cy.viewport(1280, 720);
+
     });
 
     it("should create multiple forms and bulk delete them", () => {
@@ -11,7 +13,7 @@ describe("Bulk delete forms from the form list page", () => {
         }
 
         cy.log("Bulk delete all 5 new forms");
-        cy.get('tr').filter((index, element) => {
+        cy.get('tr').filter((element) => {
             return Cypress.$(element).text().includes('Test Form');
         }).each(($row) => {
             cy.wrap($row).find('.check-column input[type="checkbox"]').check();
