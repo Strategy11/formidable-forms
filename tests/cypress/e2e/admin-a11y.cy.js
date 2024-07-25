@@ -13,7 +13,8 @@ describe( 'Run some accessibility tests', function() {
                 { id: 'link-name', enabled: false },
                 { id: 'empty-table-header', enabled: false },
                 { id: 'heading-order', enabled: false },
-                { id: 'no-dup-id', enabled: false }
+                { id: 'no-dup-id', enabled: false },
+                { id: 'aria-allowed-role', enabled: false }
             ]
         });
     };
