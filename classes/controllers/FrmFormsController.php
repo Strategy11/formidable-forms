@@ -7,7 +7,7 @@ class FrmFormsController {
 
 	/**
 	 * Track the form that opened the redirect URL in a new tab. This is used to check if we should show the default
-	 * message in the currect tab.
+	 * message in the current tab.
 	 *
 	 * @since 6.2
 	 *
@@ -526,7 +526,7 @@ class FrmFormsController {
 
 	/**
 	 * Calls core function to get a template part if it doesn't cause deprecation warnings. Otherwise skips the deprecation function call
-	 * and renders required html fragements calling required functions.
+	 * and renders required html fragments calling required functions.
 	 *
 	 * @since 6.7.1
 	 * @param string $template
@@ -2454,7 +2454,7 @@ class FrmFormsController {
 			return array();
 		}
 
-		// If a redirect action has already opened the URL in a new tab, we show the default message in the currect tab.
+		// If a redirect action has already opened the URL in a new tab, we show the default message in the current tab.
 		if ( ! empty( self::$redirected_in_new_tab[ $args['form']->id ] ) ) {
 			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
 		}
@@ -2775,7 +2775,7 @@ class FrmFormsController {
 			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
 			ob_start();
-			self::show_lone_success_messsage( $args );
+			self::show_lone_success_message( $args );
 			$response_data['content'] = ob_get_clean();
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
@@ -2801,7 +2801,7 @@ class FrmFormsController {
 		 *
 		 * @since 6.0
 		 *
-		 * @param int $delay_time Delay time in miliseconds.
+		 * @param int $delay_time Delay time in milliseconds.
 		 */
 		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
@@ -2891,7 +2891,7 @@ class FrmFormsController {
 				self::show_form_after_submit( $atts );
 			}
 		} else {
-			self::show_lone_success_messsage( $atts );
+			self::show_lone_success_message( $atts );
 		}
 	}
 
@@ -2984,7 +2984,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.05
 	 */
-	private static function show_lone_success_messsage( $atts ) {
+	private static function show_lone_success_message( $atts ) {
 		global $frm_vars;
 		$values = FrmEntriesHelper::setup_new_vars( $atts['fields'], $atts['form'], true );
 		self::maybe_load_css( $atts['form'], $values['custom_style'], $frm_vars['load_css'] );

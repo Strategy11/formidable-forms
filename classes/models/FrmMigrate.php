@@ -391,7 +391,7 @@ class FrmMigrate {
 	}
 
 	/**
-	 * Delete uneeded default templates
+	 * Delete unneeded default templates
 	 *
 	 * @since 3.06
 	 */

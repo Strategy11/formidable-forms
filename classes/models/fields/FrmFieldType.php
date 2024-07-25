@@ -1086,7 +1086,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Add paramters to an input value as an alterntative to
+	 * Add parameters to an input value as an alterntative to
 	 * using the frm_field_input_html hook
 	 *
 	 * @since 3.01.03
@@ -1207,16 +1207,20 @@ DEFAULT_HTML;
 	protected function select_tag( $values ) {
 		$field       = isset( $values['field'] ) ? $values['field'] : $this->field;
 		$input_html  = $this->get_field_input_html_hook( $field );
-		$select_atts = $this->get_select_atributes( $values );
+		$select_atts = $this->get_select_attributes( $values );
 		$select      = FrmAppHelper::array_to_html_params( $select_atts ) . ' ';
 
 		return '<select' . $select . $input_html . '>';
 	}
 
 	/**
-	 * @since 3.0
+	 * @since x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return array
 	 */
-	protected function get_select_atributes( $values ) {
+	protected function get_select_attributes( $values ) {
 		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
 		$select_atts = array();
 		if ( ! $readonly ) {
@@ -1677,5 +1681,20 @@ DEFAULT_HTML;
 	protected function default_invalid_msg() {
 		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_invalid_msg' );
 		return FrmFieldsHelper::default_invalid_msg();
+	}
+
+	/**
+	 * This function is deprecated since it has a typo in the name.
+	 *
+	 * @since 3.0
+	 * @deprecated x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return array
+	 */
+	protected function get_select_atributes( $values ) {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldType::get_select_attributes' );
+		return $this->get_select_attributes( $values );
 	}
 }

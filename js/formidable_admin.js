@@ -35,7 +35,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 			$( document.getElementById( 'frm_deauthorize_link' ) ).on( 'click', app.deauthorize );
 			$( '.frm_authorize_link' ).on( 'click', app.authorize );
 			// Handles FF dashboard Authorize & Reauthorize events.
-			// Atach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
+			// Attach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
 			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_deauthorize_link', app.deauthorize );
 			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_reconnect_link', app.reauthorize );
 
@@ -4610,13 +4610,13 @@ function frmAdminBuildJS() {
 		popup = document.getElementById( 'frm_field_multiselect_popup' );
 
 		if ( null !== popup ) {
-			popup.classList.toggle( 'frm-unmergable', ! selectedFieldsAreMergable() );
+			popup.classList.toggle( 'frm-unmergable', ! selectedFieldsAreMergeable() );
 			return popup;
 		}
 
 		popup = div();
 		popup.id = 'frm_field_multiselect_popup';
-		if ( ! selectedFieldsAreMergable() ) {
+		if ( ! selectedFieldsAreMergeable() ) {
 			popup.classList.add( 'frm-unmergable' );
 		}
 
@@ -4648,7 +4648,7 @@ function frmAdminBuildJS() {
 		return popup;
 	}
 
-	function selectedFieldsAreMergable() {
+	function selectedFieldsAreMergeable() {
 		let selectedFieldGroups, totalFieldCount, length, index, fieldGroup;
 		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
 		length = selectedFieldGroups.length;
@@ -6411,7 +6411,7 @@ function frmAdminBuildJS() {
 	 */
 	function showNameYourFormModal() {
 		// Exit early if the 'new_template' URL parameter is not set to 'true'
-		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+		if ( ! shouldShowNameYourFormNameModal() ) {
 			return false;
 		}
 
@@ -6425,6 +6425,19 @@ function frmAdminBuildJS() {
 		modalWidget.dialog( 'open' );
 
 		return true;
+	}
+
+	/**
+	 * Returns true if 'Name Your Form' modal should be displayed.
+	 *
+	 * @returns {Boolean}
+	 */
+	function shouldShowNameYourFormNameModal() {
+		const formNameInput = document.getElementById( 'frm_form_name' );
+		if ( formNameInput && formNameInput.value.trim() !== '' ) {
+			return false;
+		}
+		return 'true' === urlParams.get( 'new_template' );
 	}
 
 	/**
@@ -6669,7 +6682,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
 
 		container.classList.add( 'frmcenter' );
 
@@ -9737,14 +9750,14 @@ function frmAdminBuildJS() {
 		);
 
 		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
-		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+		const leaveEmailInput = document.getElementById( 'frm_leave_email' );
 
-		if ( emptyInbox && leaveEmailIput ) {
+		if ( emptyInbox && leaveEmailInput ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
-			leaveEmailIput.addEventListener(
+			leaveEmailInput.addEventListener(
 				'keyup',
 				event => {
 					if ( 'Enter' === event.key ) {

@@ -916,7 +916,40 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function register_popper1() {
+		if ( ! self::should_register_popper() ) {
+			return;
+		}
 		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+	}
+
+	/**
+	 * Only register popper on Formidable pages.
+	 * This helps to avoid popper conflicts on other plugin pages, including the WP Bakery page editor.
+	 *
+	 * @since 6.11.1
+	 *
+	 * @return bool
+	 */
+	private static function should_register_popper() {
+		global $pagenow;
+
+		$post_id = FrmAppHelper::simple_get( 'post', 'absint' );
+		if ( 'post.php' === $pagenow && $post_id && 'frm_display' === get_post_type( $post_id ) ) {
+			return true;
+		}
+
+		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$is_views_post_type = 'frm_display' === $post_type;
+		if ( in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) && $is_views_post_type ) {
+			return true;
+		}
+
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable' ) === 0 ) {
+			return true;
+		}
+
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application';
 	}
 
 	/**
