@@ -3972,6 +3972,7 @@ class FrmAppHelper {
 				'autocomplete',
 				'tabindex',
 				'role',
+				'style',
 			);
 			$safe = in_array( $key, $safe_keys, true );
 		}
