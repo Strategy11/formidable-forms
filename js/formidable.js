@@ -153,6 +153,9 @@ function frmFrontFormJS() {
 	 * @param {Object} $form
 	 */
 	function enableSaveDraft( $form ) {
+		if ( ! $form.length ) {
+			return;
+		}
 		$form[0].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
 			saveDraftButton.disabled            = false;
 			saveDraftButton.style.pointerEvents = '';
