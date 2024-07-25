@@ -401,7 +401,7 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
 		if ( is_array( $where ) ) {
