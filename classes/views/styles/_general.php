@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label class="frm-style-item-heading"><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
 </p>
 <p class="frm7 frm_form_field">
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Leave blank to inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
 </p>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background', 'formidable' ); ?></label></div>
@@ -16,10 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'fieldset_bg_color' ),
 		$style->post_content['fieldset_bg_color'],
 		array(
-			'id'          => 'frm_fieldset_bg_color',
-			'frm_style'   => $frm_style,
-			'style'       => $style,
-			'action_slug' => 'fieldset_bg_color'
+			'id'                  => 'frm_fieldset_bg_color',
+			'frm_style'           => $frm_style,
+			'style'               => $style,
+			'action_slug'         => 'fieldset_bg_color',
+			'image_id_input_name' => 'bg_image_id'
 		)
 	);
 	?>
@@ -37,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmColorPickerStyleComponent(
+	<?php new FrmColorpickerStyleComponent(
 		$frm_style->get_field_name( 'fieldset_color' ),
-		$style->post_content['fieldset'],
+		$style->post_content['fieldset_color'],
 		array(
-			'id'         => 'frm_fieldset_color',
+			'id'          => 'frm_fieldset_color',
 			'action_slug' => 'fieldset_color',
 		)
 	); 
@@ -95,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Override Theme', 'formidable' ); ?></label></div>
-<div class="frm7 frm_form_field">
+<div class="frm7 frm_form_field frm-style-component">
 	<?php
 		FrmHtmlHelper::toggle(
 			'frm_important_style',
@@ -109,7 +110,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Center Form', 'formidable' ); ?></label></div>
-<div class="frm7 frm_form_field">
+<div class="frm7 frm_form_field frm-style-component">
 	<?php
 		FrmHtmlHelper::toggle(
 			'frm_center_form',
@@ -122,8 +123,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	); ?>
 </div>
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label></div>
-<div class="frm7 frm_form_field">
-	<span>.frm_style_<?php echo esc_html( $style->post_name ); ?></span>
+<div class="frm7 frm_form_field frm-style-component">
+	<label class="frm-copy-text">.frm_style_<?php echo esc_html( $style->post_name ); FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' ) ?></label>
 </div>
 
 <?php /*

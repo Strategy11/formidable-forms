@@ -149,4 +149,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <hr class="frm12"/>
 
-<a class="frm-white-button frm-margin-top-md" href="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form_id ) ); ?>"><?php echo esc_html_e( 'Show advanced settings', 'formidable' )?></a>
+<a id="frm-style-advanced-settings-button" class="frm-white-button frm-margin-top-md" href="#"><?php echo esc_html_e( 'Show advanced settings', 'formidable' )?></a>

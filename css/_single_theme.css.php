@@ -10,6 +10,7 @@ $important = empty( $important_style ) ? '' : ' !important';
 
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
+$submit_bg_img = FrmStylesHelper:: get_submit_image_bg_url( $settings );
 
 ?>
 .<?php echo esc_html( $style_class ); ?>{

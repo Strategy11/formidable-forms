@@ -740,6 +740,17 @@ class FrmStylesHelper {
 		return FrmAppHelper::get_param( 'section' ) === 'quick-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
 	}
 
+	public static function get_submit_image_bg_url( $settings ) {
+		if ( empty( $settings['submit_bg_img'] ) ) {
+			return false;
+		}
+		if ( is_numeric( $settings['submit_bg_img'] ) ) {
+			return wp_get_attachment_url( (int) $settings['submit_bg_img'] );
+		}
+
+		return $settings['submit_bg_img'];
+	}
+
 	/**
 	 * @since 5.5.1
 	 * @deprecated x.x

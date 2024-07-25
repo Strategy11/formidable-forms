@@ -242,7 +242,7 @@
 			return;
 		}
 
-		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
+		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id ) {
 			handleUpdateClick();
 			return;
 		}
@@ -1109,11 +1109,12 @@
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
 		const debouncedColorChange	 = debounce( ( event, value ) => wp.hooks.doAction( 'frm_style_options_color_change', { event, value } ), 200 );
+		const debouncedTextSquishCheck = debounce( textSquishCheck, 700 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
+		document.getElementById( 'frm_field_height' ).addEventListener( 'change', debouncedTextSquishCheck );
+		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', debouncedTextSquishCheck );
+		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', debouncedTextSquishCheck );
 
 		jQuery( 'input.hex' ).wpColorPicker({
 			change: function( event ) {
@@ -1130,6 +1131,10 @@
 			}
 		});
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
+			const container = jQuery( this ).closest( '.wp-picker-container' );
+			if ( 'undefined' !== typeof container && container[0].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+				return container[0].querySelector( '.wp-color-picker' ).value;
+			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		});
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
@@ -1205,7 +1210,7 @@
 
 			// Get the top and bottom padding from entered values
 			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
-			const paddingBottom = paddingTop;
+			let   paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
 				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
 			}

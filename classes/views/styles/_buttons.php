@@ -20,21 +20,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="frm_grid_container">
 					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background Image', 'formidable' ); ?></label></div>
 					<div class="frm7 frm_form_field">
-						<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_bg_img' ) ); ?>" id="frm_submit_bg_img" value="<?php echo esc_attr( $style->post_content['submit_bg_img'] ); ?>"  />
-					</div>
-
-					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Background Color', 'formidable' ); ?></label>
-					</div>
-					<div class="frm7 frm_form_field">
-						<?php new FrmColorpickerStyleComponent(
+						<?php new FrmBackgroundImageStyleComponent(
 							$frm_style->get_field_name( 'submit_bg_color' ),
 							$style->post_content['submit_bg_color'],
 							array(
-								'id'          => 'frm_submit_bg_color',
-								'action_slug' => 'submit_bg_color',
+								'id'                  => 'frm_submit_bg_color',
+								'frm_style'           => $frm_style,
+								'style'               => $style,
+								'action_slug'         => 'submit_bg_color',
+								'image_id_input_name' => 'submit_bg_img'
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -165,7 +161,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							array(
 								'id'        => 'frm_submit_margin',
 								'type'		=> 'vertical-margin',
-								'max_value' => 100
+								'max_value' => 100,
 							)
 						); ?>
 					</div>

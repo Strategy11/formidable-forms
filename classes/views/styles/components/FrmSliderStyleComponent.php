@@ -4,15 +4,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 class FrmSliderStyleComponent extends FrmStyleComponent {
 
+	/**
+	 * The view file name.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
 	public $view_name = 'slider';
+
+	/**
+	 * The FrmStyleComponent data.
+	 *
+	 * @since x.x
+	 *
+	 * @var array
+	 */
 	protected $data;
+
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->data        = $data;
 		$this->field_name  = $field_name;
 		$this->field_value = $field_value;
 
-		$this->data['unit_measurement'] = $this->detect_unit_measurement();
+		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 
 		$this->init_icon();
@@ -22,26 +38,75 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->load_view( $this->data );
 	}
 
+	/**
+	 * Init the slider multiple values data. It works with sliders which has multiple values only: top&bottom and left&right.
+	 * This is used for cases when there are 4 sliders in the same field.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	private function init_multiple_values() {
 		if ( ! $this->data['has-multiple-values'] ) {
 			return;
 		}
 
 		$values = $this->get_values();
+		$top    = $values[0];
+		$bottom = empty( $values[2] ) ? $values[0] : $values[2];
+		$left   = empty( $values[3] ) ? $values[1] : $values[3];
+		$right  = $values[1];
+
 		$this->data['vertical'] = array(
-			'value' => $values[0],
-			'unit'  => $this->detect_unit_measurement( $values[0] )
+			'value' => $top,
+			'unit'  => $this->detect_unit_measurement( $top )
 		);
 		$this->data['horizontal'] = array(
-			'value' => $values[1],
-			'unit'  => $this->detect_unit_measurement( $values[1] )
+			'value' => $right,
+			'unit'  => $this->detect_unit_measurement( $right )
+		);
+
+		$this->data['top'] = array(
+			'value' => $top,
+			'unit'  => $this->detect_unit_measurement( $top )
+		);
+
+		$this->data['bottom'] = array(
+			'value' => $bottom,
+			'unit'  => $this->detect_unit_measurement( $bottom )
+		);
+
+		$this->data['left'] = array(
+			'value' => $left,
+			'unit'  => $this->detect_unit_measurement( $left )
+		);
+
+		$this->data['right'] = array(
+			'value' => $right,
+			'unit'  => $this->detect_unit_measurement( $right )
 		);
 	}
 
+	/**
+	 * Split the field value by space from string to an array.
+	 * For instance: '10px 20px 30px 40px' will be converted to array( '10px', '20px', '30px', '40px' ).
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	private function get_values() {
 		return explode( ' ', $this->field_value );
 	}
 
+	/**
+	 * Detect the unit measurement from the value.
+	 * Possible values are: px, %, em.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	private function detect_unit_measurement( $value = null ) {
 		if ( null === $value ) {
 			$value = $this->field_value;
@@ -58,6 +123,13 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		}
 	}
 
+	/**
+	 * Init the field icon
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	private function init_icon() {
 
 		if ( ! empty( $this->data['icon'] ) ) {

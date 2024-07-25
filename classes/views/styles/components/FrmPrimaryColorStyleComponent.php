@@ -4,8 +4,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 class FrmPrimaryColorStyleComponent extends FrmStyleComponent {
 
+	/**
+	 * The view file name.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
 	public $view_name = 'primary-color';
 
+	/**
+	 * Construct FrmPrimaryColorStyleComponent.
+	 *
+	 * @since x.x
+	 *
+	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->data        = $data;

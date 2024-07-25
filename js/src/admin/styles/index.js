@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { frmTabsNavigator } from '../../components/class-tabs-navigator';
 
 export class frmRadioStyleComponent {
@@ -55,6 +56,10 @@ export class frmSliderStyleComponent {
 
 		this.eventsChange = [];
 		this.elements = document.querySelectorAll( '.frm-slider-component' );
+
+		const { debounce }        = frmDom.util;
+		this.valueChangeDebouncer = debounce( ( index ) => this.triggerValueChange( index ), 25 );
+
 		this.initOptions();
 		this.init();
 	}
@@ -88,6 +93,31 @@ export class frmSliderStyleComponent {
 				'cancelable': true
 			} );
 			const draggableBullet = element.querySelector( '.frm-slider-bullet' );
+			const valueInput      = element.querySelector( '.frm-slider-value input[type="text"]' );
+
+			if ( 'undefined' !== typeof element.dataset.displaySliders ) {
+				const sliderGroupItems = this.getSliderGroupItems( element );
+
+				if ( null !== element.querySelector( '.frmsvg' ) ) {
+					element.querySelector( '.frmsvg' ).addEventListener( 'click', ( ) => {
+						sliderGroupItems.forEach( ( item ) => {
+							item.classList.toggle( 'frm_hidden' );
+						});
+					});
+				}
+			}
+
+			valueInput.addEventListener( 'change', ( event ) => {
+				const unit = element.querySelector( 'select' ).value;
+
+				if ( this.getMaxValue( unit, index ) < parseInt( event.target.value, 10 ) ) {
+					return;
+				}
+
+				this.initSliderWidth( element );
+				this.updateValue( element, valueInput.value + unit );
+				this.triggerValueChange( index );
+			});
 
 			draggableBullet.addEventListener( 'mousedown', (event) => {
 				this.enableDragging( event, index );
@@ -97,14 +127,26 @@ export class frmSliderStyleComponent {
 				this.moveTracker( event, index );
 			});
 
-			draggableBullet.addEventListener( 'mouseup', () => {
-				this.disableDragging( index );
+			draggableBullet.addEventListener( 'mouseup', ( event) => {
+				this.disableDragging( index, event );
 			});
 
-			draggableBullet.addEventListener( 'mouseleave', () => {
-				this.disableDragging( index );
+			draggableBullet.addEventListener( 'mouseleave', ( event ) => {
+				this.disableDragging( index, event );
 			});
 		});
+	}
+
+	getSliderGroupItems( element ) {
+		if ( 'undefined' === typeof element.dataset.displaySliders ) {
+			return [];
+		}
+		const slidersGroup = element.dataset.displaySliders.split( ',' );
+		const query        = slidersGroup.map( ( item ) => {
+			return `.frm-slider-component[data-type="${item}"]`;
+		}).join( ', ' );
+
+		return element.closest( '.frm-style-component' ).querySelectorAll( query )
 	}
 
 	initSlidersPosition() {
@@ -145,6 +187,19 @@ export class frmSliderStyleComponent {
 		this.options[ index ].value = value + unit;
 	}
 
+	initChildSlidersWidth( slider, width, index, value ) {
+		if ( ! slider.classList.contains( 'frm-has-independent-fields' ) && ! slider.classList.contains( 'frm-has-multiple-values' ) ) {
+			return;
+		}
+		const childSliders = slider.classList.contains( 'frm-has-independent-fields' ) ? slider.querySelectorAll( '.frm-independent-slider-field' ) : this.getSliderGroupItems( slider );
+
+		childSliders.forEach( ( item, childIndex ) => {
+			item.querySelector( '.frm-slider-active-track' ).style.width = `${width}px`;
+			this.options[ index + childIndex + 1 ].translateX = width;
+			this.options[ index + childIndex + 1 ].value = value;
+		});
+	}
+
 	getSliderIndex( slider ) {
 		return this.options.filter( ( option ) => {
 			return option.element === slider;
@@ -162,32 +217,51 @@ export class frmSliderStyleComponent {
 		if ( deltaX + 12 >= sliderWidth ) {
 			return;
 		}
-		const unit     = element.querySelector( 'select' ).value;
-		const maxValue = '%' === unit ? 100 : this.options[ index ].maxValue;
-		const value    = this.calculateValue( sliderWidth, deltaX, maxValue );
+		const unit  = element.querySelector( 'select' ).value;
+		const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
 
 		element.querySelector( '.frm-slider-value input[type="text"]' ).value = value;
+		element.querySelector( '.frm-slider-bullet .frm-slider-value-label' ).innerText = value;
 		element.querySelector( '.frm-slider-active-track' ).style.width = `${deltaX}px`;
+		this.initChildSlidersWidth( element, deltaX, index, value + unit );
+
 		this.options[ index ].translateX = deltaX;
 		this.options[ index ].value = value + unit;
 		this.options[ index ].fullValue = this.updateValue( element, this.options[ index ].value );
+		this.valueChangeDebouncer( index );
+	}
+
+	getMaxValue( unit, index ) {
+		return '%' === unit ? 100 : this.options[ index ].maxValue;
 	}
 
 	enableDragging( event, index ) {
+		event.target.classList.add( 'frm-dragging' );
 		this.options[ index ].dragging = true;
 		this.options[ index ].startX = event.clientX - this.options[ index ].translateX;
 	}
 
-	disableDragging( index ) {
+	disableDragging( index, event ) {
 		if ( false === this.options[ index ].dragging ) { return; }
-
-		if ( null === this.options[ index ].dependendUpdater ) {
-			const input = this.elements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.elements[ index ].closest('.frm-style-component').querySelector( 'input[type="hidden"]' ) : this.elements[ index ].querySelector( '.frm-slider-value input[type="hidden"]' );
-			input.dispatchEvent( this.eventsChange[ index ] );
-		} else {
-			this.options[ index ].dependendUpdater.updateAllDependendElements( this.options[ index ].fullValue );
-		}
+		event.target.classList.remove( 'frm-dragging' );
 		this.options[ index ].dragging = false;
+		this.triggerValueChange( index );
+	}
+
+	triggerValueChange( index ) {
+		if ( null !== this.options[ index ].dependendUpdater ) {
+			this.options[ index ].dependendUpdater.updateAllDependendElements( this.options[ index ].fullValue );
+			return;
+		}
+
+		const input = this.elements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.elements[ index ].closest('.frm-style-component').querySelector( 'input[type="hidden"]' ) : this.elements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+		if ( input instanceof NodeList ) {
+			input.forEach( ( item ) => {
+				item.dispatchEvent( this.eventsChange[ index ] );
+			});
+			return;
+		}
+		input.dispatchEvent( this.eventsChange[ index ] );
 	}
 
 	calculateValue( width, deltaX, maxValue ) {
@@ -200,25 +274,71 @@ export class frmSliderStyleComponent {
 
 	updateValue( element, value ) {
 		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
-			const input = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
-			const inputValue   = input.value.split( ' ' );
+			const input      = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
+			const inputValue = input.value.split( ' ' );
 			const type       = element.dataset.type;
 
-			if ( 'vertical' === type ) {
-				inputValue[0] = value;
-			} else {
-				inputValue[1] = value;
+			if ( ! inputValue[2] ) {
+				inputValue[2] = '0px';
 			}
+
+			if ( ! inputValue[3] ) {
+				inputValue[3] = '0px';
+			}
+
+			switch ( type ) {
+				case 'vertical':
+					inputValue[0] = value;
+					inputValue[2] = value;
+					break;
+
+				case 'horizontal':
+					inputValue[1] = value;
+					inputValue[3] = value;
+					break;
+
+				case 'top':
+					inputValue[0] = value;
+					break;
+
+				case 'bottom':
+					inputValue[2] = value;
+					break;
+
+				case 'left':
+					inputValue[3] = value;
+					break;
+
+				case 'right':
+					inputValue[1] = value;
+					break;
+			}
+
 			const newValue = inputValue.join( ' ' );
 			input.value = newValue;
+
+			const childSlidersGroup = this.getSliderGroupItems( element );
+			childSlidersGroup.forEach( ( slider ) => {
+				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseInt( value, 10 );
+			});
+
 			return newValue;
+		}
+
+		if ( element.classList.contains( 'frm-has-independent-fields' ) ) {
+			const inputValues   = element.querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+			const visibleValues = element.querySelectorAll( '.frm-slider-value input[type="text"]' );
+			inputValues.forEach( ( input, index ) => {
+				input.value = value;
+				visibleValues[ index + 1 ].value = parseInt( value, 10 );
+			});
+
+			return value;
 		}
 
 		element.querySelector( '.frm-slider-value input[type="hidden"]' ).value = value;
 		return value;
-
 	}
-
 }
 
 export class frmTabsStyleComponent {
@@ -280,6 +400,7 @@ export class frmStyleDependendUpdaterComponent {
 export class frmStyleOptions {
 
 	constructor() {
+		this.success = frmDom.success;
 		this.init();
 		this.initHover();
 	}
@@ -290,6 +411,7 @@ export class frmStyleOptions {
 		new frmTabsStyleComponent();
 
 		this.initColorPickerDependendUpdaterComponents();
+		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
 	}
 
 	initColorPickerDependendUpdaterComponents() {
@@ -309,7 +431,11 @@ export class frmStyleOptions {
 		});
 
 		wp.hooks.addAction( 'frm_style_options_color_change', 'formidable', ( { event, value } ) => {
-			const id = event.target.getAttribute( 'id' );
+			const container = event.target.closest( '.wp-picker-container' );
+			const id        = event.target.getAttribute( 'id' );
+
+			container.querySelector( '.wp-color-result-text' ).innerText = value;
+
 			elements.forEach( ( element ) => {
 				if ( element.id === id ) {
 					element.dependendUpdaterClass.updateAllDependendElements( value );
@@ -346,6 +472,17 @@ export class frmStyleOptions {
 			});
 		});
 	}
+
+	initStyleClassCopyToClipboard( successMessage ) {
+		const copyLabel = document.querySelector( '.frm-copy-text' );
+		copyLabel.addEventListener( 'click', ( event ) => {
+			const className = event.target.innerText;
+			navigator.clipboard.writeText( className ).then( () => {
+				this.success( successMessage );
+			});
+		})
+	}
+
 }
 
 new frmStyleOptions();

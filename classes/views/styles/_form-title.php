@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmColorPickerStyleComponent(
+	<?php new FrmColorpickerStyleComponent(
 		$frm_style->get_field_name( 'title_color' ),
 		$style->post_content['title_color'],
 		array(
@@ -51,12 +51,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php new FrmSliderStyleComponent(
-		$frm_style->get_field_name( 'title_margin_top' ),
+		null,
 		$style->post_content['title_margin_top'],
 		array(
-			'id'        => 'frm_title_margin_top',
-			'type'		=> 'vertical-margin',
-			'max_value' => 100,
+			'id'                 => 'frm_title_margins',
+			'type'		         => 'vertical-margin',
+			'max_value'          => 100,
+			'independent_fields' => array(
+				array(
+					'name'  => $frm_style->get_field_name( 'title_margin_top' ),
+					'value' => $style->post_content['title_margin_top'],
+					'id'    => 'frm_title_margin_top',
+					'type'  => 'top',
+				),
+				array(
+					'name'  => $frm_style->get_field_name( 'title_margin_bottom' ),
+					'value' => $style->post_content['title_margin_bottom'],
+					'id'    => 'frm_title_margin_bottom',
+					'type'  => 'bottom',
+				),
+			)
 		)
 	); ?>
 </div>

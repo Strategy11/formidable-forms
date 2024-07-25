@@ -4,8 +4,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 class FrmAlignStyleComponent extends FrmStyleComponent {
 
+	/**
+	 * The view file name.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
 	public $view_name = 'align';
 
+	/**
+	 * Construct the FrmAlignStyleComponent.
+	 *
+	 * @since x.x
+	 *
+	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->data        = $data;
@@ -15,5 +28,23 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 		parent::get_instance();
 		
 		$this->load_view( $this->data );
+	}
+
+	/**
+	 * Get the wrapper classname.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function get_wrapper_class_name() {
+		$class  = $this->get_default_wrapper_class_name();
+		$class .= ' frm-align-component frm-radio-component';
+
+		if ( empty( $this->data['options'] ) || 3 === count( $this->data['options'] ) ) {
+			return $class;
+		}
+
+		return $class . ' frm-2-options';
 	}
 }

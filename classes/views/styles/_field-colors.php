@@ -100,7 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
 					</div>
-					<div class="frm7 frm_form_field">
+					<div class="frm7 frm_form_field frm-style-component">
 						<?php
 							FrmHtmlHelper::toggle(
 								'remove_box_shadow',
@@ -150,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
 					</div>
-					<div class="frm7 frm_form_field">
+					<div class="frm7 frm_form_field frm-style-component">
 						<?php
 							FrmHtmlHelper::toggle(
 								'remove_box_shadow_active',
