@@ -419,25 +419,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
 * Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
 
-= 6.9.1 =
-* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
-* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
-* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
-* Fix: Submit button fields were appearing by mistake in WooCommerce products.
-* The parser for serialized string data has been optimized to be approximately 30% faster than before.
-* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
-* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
-
-= 6.9 =
-* New: A new onboarding wizard has been added to help improve the initial set up process.
-* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
-* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
-* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
-* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
-* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
-* Fix: A confirmation field wouldn't validate with JS when left empty.
-* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
