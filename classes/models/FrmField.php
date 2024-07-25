@@ -115,7 +115,7 @@ class FrmField {
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => __( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . __( 'Scale Field', 'formidable' ) . '" />',
+				'message' => esc_html__( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . esc_attr__( 'Scale Field', 'formidable' ) . '" />',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -137,12 +137,12 @@ class FrmField {
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => __( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . __( 'cascading lookup fields', 'formidable' ) . '" />',
+				'message' => esc_html__( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . esc_attr__( 'cascading lookup fields', 'formidable' ) . '" />',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
-				'message' => __( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . __( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
+				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -211,10 +211,10 @@ class FrmField {
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
-					__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
+					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
 					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>'
-				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />',
+				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . esc_attr__( 'Scheduling', 'formidable' ) . '" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
