@@ -373,7 +373,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 == Changelog ==
 = 6.11.2 =
 * New: Some small accessibility improvements were made on the Import/Export admin page.
-* Fix: A width limit has been removed from admin page h1 tags to help avoid issues translated page titles that overflow their expected space.
+* Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
 * Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
 * Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
 * Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
