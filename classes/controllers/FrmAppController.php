@@ -933,10 +933,23 @@ class FrmAppController {
 	private static function should_register_popper() {
 		global $pagenow;
 
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$post_id = FrmAppHelper::simple_get( 'post', 'absint' );
+		if ( 'post.php' === $pagenow && $post_id && 'frm_display' === get_post_type( $post_id ) ) {
+			return true;
+		}
 
-		return strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) || ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application' );
+		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$is_views_post_type = 'frm_display' === $post_type;
+		if ( in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) && $is_views_post_type ) {
+			return true;
+		}
+
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable' ) === 0 ) {
+			return true;
+		}
+
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application';
 	}
 
 	/**
