@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5.5
+Tested up to: 6.6.1
 Requires PHP: 7.0
-Stable tag: 6.11.1
+Stable tag: 6.11.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,21 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.11.2 =
+* New: Some small accessibility improvements were made on the Import/Export admin page.
+* Fix: A width limit has been removed from admin page h1 tags to help avoid issues translated page titles that overflow their expected space.
+* Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
+* Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
+* Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
+* Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
+* Fix: HTML entities are now decoded when used for phone format validation to prevent issues were & is converted to &amp; for the regex check.
+* Fix: Email summaries would include repeater forms in the top 10 list.
+* Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
+* Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
+* Fix: Several incorrect text domains and untranslatable strings have been corrected.
+* The function FrmFieldType::get_select_atributes has been deprecated because of a typo in its name.
+* Several old deprecated view files have been removed.
+
 = 6.11.1 =
 * New: Screen reader text has been updated on some admin pages to improve accessibility.
 * New: Hover styling has been updated for modal close icons to improve user experience.
