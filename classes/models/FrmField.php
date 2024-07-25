@@ -92,7 +92,7 @@ class FrmField {
 	}
 
 	public static function pro_field_selection() {
-		$images_url = esc_url( FrmAppHelper::plugin_url() . '/images/' );
+		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
@@ -115,7 +115,7 @@ class FrmField {
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => __( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . $images_url . 'scale_field.png" alt="' . __( 'Scale Field', 'formidable' ) . '" />',
+				'message' => __( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . __( 'Scale Field', 'formidable' ) . '" />',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -137,12 +137,12 @@ class FrmField {
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => __( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . $images_url . 'look-up_year-make-model.gif" alt="' . __( 'cascading lookup fields', 'formidable' ) . '" />',
+				'message' => __( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . __( 'cascading lookup fields', 'formidable' ) . '" />',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
-				'message' => __( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . $images_url . 'repeatable-section_frontend.gif" alt="' . __( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
+				'message' => __( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . __( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -214,7 +214,7 @@ class FrmField {
 					__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
 					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>'
-				) . '<img src="' . $images_url . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />',
+				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . __( 'Scheduling', 'formidable' ) . '" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
@@ -239,7 +239,7 @@ class FrmField {
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
-				'upsell_image' => $images_url . 'ranking-field.svg',
+				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
 				'addon'        => 'surveys',
 				'is_new'       => self::field_is_new( 'ranking' ),
 			);
