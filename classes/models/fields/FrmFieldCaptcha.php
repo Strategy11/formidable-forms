@@ -151,8 +151,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$allow_mutiple = $frm_settings->re_multi;
-		if ( $allow_mutiple ) {
+		$allow_multiple = $frm_settings->re_multi;
+		if ( $allow_multiple ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 

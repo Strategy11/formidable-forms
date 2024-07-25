@@ -1,4 +1,5 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require( "cypress" );
+const htmlvalidate = require( "cypress-html-validate/plugin" );
 
 module.exports = defineConfig({
   fixturesFolder: "tests/cypress/fixtures",
@@ -10,6 +11,9 @@ module.exports = defineConfig({
     video: false,
     retries: {
       runMode: 1,
-    }
+    },
+    setupNodeEvents(on) {
+      htmlvalidate.install( on );
+    },
   },
 });

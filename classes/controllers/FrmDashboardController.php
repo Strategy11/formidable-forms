@@ -120,7 +120,7 @@ class FrmDashboardController {
 	/**
 	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
-	 * @param false|object $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param false|object $latest_available_form If a form is available, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
 	 * @param array        $counters_value The counter values for "Total Forms" & "Total Entries".
 	 *
 	 * @return array
@@ -319,7 +319,7 @@ class FrmDashboardController {
 				break;
 
 			case 'save-subscribed-email':
-				$email = FrmAppHelper::get_post_param( 'email' );
+				$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 				self::save_subscribed_email( $email );
 				wp_send_json_success();
 				break;

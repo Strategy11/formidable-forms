@@ -569,7 +569,7 @@ class FrmOnboardingWizardController {
 			$acf_addon          = FrmAddonsController::get_addon( 'acf' );
 			$signature_addon    = FrmAddonsController::get_addon( 'signature' );
 
-			if ( ! is_plugin_active( 'formidable-views/formidable-views.php' ) ) {
+			if ( ! is_plugin_active( 'formidable-views/formidable-views.php' ) && isset( $views_addon['url'] ) ) {
 				self::$available_addons['formidable-views'] = array(
 					'title'      => esc_html__( 'Views', 'formidable' ),
 					'rel'        => $views_addon['url'],
@@ -577,7 +577,7 @@ class FrmOnboardingWizardController {
 					'help-text'  => $views_addon['excerpt'],
 				);
 			}
-			if ( ! is_plugin_active( 'formidable-mailchimp/formidable-mailchimp.php' ) ) {
+			if ( ! is_plugin_active( 'formidable-mailchimp/formidable-mailchimp.php' ) && isset( $mailchimp_addon['url'] ) ) {
 				self::$available_addons['formidable-mailchimp'] = array(
 					'title'      => esc_html__( 'Mailchimp', 'formidable' ),
 					'rel'        => $mailchimp_addon['url'],
@@ -585,7 +585,7 @@ class FrmOnboardingWizardController {
 					'help-text'  => $mailchimp_addon['excerpt'],
 				);
 			}
-			if ( ! is_plugin_active( 'formidable-registration/formidable-registration.php' ) ) {
+			if ( ! is_plugin_active( 'formidable-registration/formidable-registration.php' ) && isset( $registration_addon['url'] ) ) {
 				self::$available_addons['formidable-registration'] = array(
 					'title'      => esc_html__( 'User Registration', 'formidable' ),
 					'rel'        => $registration_addon['url'],
@@ -593,7 +593,7 @@ class FrmOnboardingWizardController {
 					'help-text'  => $registration_addon['excerpt'],
 				);
 			}
-			if ( ! is_plugin_active( 'formidable-api/formidable-api.php' ) ) {
+			if ( ! is_plugin_active( 'formidable-api/formidable-api.php' ) && isset( $api_addon['url'] ) ) {
 				self::$available_addons['formidable-api'] = array(
 					'title'      => esc_html__( 'Form Rest API', 'formidable' ),
 					'rel'        => $api_addon['url'],
@@ -601,7 +601,7 @@ class FrmOnboardingWizardController {
 					'help-text'  => $api_addon['excerpt'],
 				);
 			}
-			if ( class_exists( 'ACF' ) && ! is_plugin_active( 'formidable-acf/formidable-acf.php' ) ) {
+			if ( class_exists( 'ACF' ) && ! is_plugin_active( 'formidable-acf/formidable-acf.php' ) && isset( $acf_addon['url'] ) ) {
 				self::$available_addons['formidable-acf'] = array(
 					'title'      => esc_html__( 'ACF Forms', 'formidable' ),
 					'rel'        => $acf_addon['url'],
@@ -609,7 +609,7 @@ class FrmOnboardingWizardController {
 					'help-text'  => $acf_addon['excerpt'],
 				);
 			}
-			if ( ! is_plugin_active( 'formidable-signature/signature.php' ) ) {
+			if ( ! is_plugin_active( 'formidable-signature/signature.php' ) && isset( $signature_addon['url'] ) ) {
 				self::$available_addons['formidable-signature'] = array(
 					'title'      => esc_html__( 'Signature Forms', 'formidable' ),
 					'rel'        => $signature_addon['url'],

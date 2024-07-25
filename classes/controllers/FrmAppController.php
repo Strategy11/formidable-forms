@@ -354,7 +354,7 @@ class FrmAppController {
 	 */
 	public static function pro_get_started_headline() {
 		self::review_request();
-		FrmAppHelper::min_pro_version_notice( '4.0' );
+		FrmAppHelper::min_pro_version_notice( '6.0' );
 	}
 
 	/**
@@ -759,7 +759,7 @@ class FrmAppController {
 			wp_enqueue_style( 'formidable-admin' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
-				wp_enqueue_style( 'formidable-dropzone' );
+				self::maybe_enqueue_dropzone_css( $page );
 			} else {
 				wp_enqueue_style( 'formidable-grids' );
 			}
@@ -797,6 +797,25 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+	}
+
+	/**
+	 * Avoid loading dropzone CSS on the form list page. It isn't required there.
+	 *
+	 * @since 6.11
+	 *
+	 * @param string $page
+	 * @return void
+	 */
+	private static function maybe_enqueue_dropzone_css( $page ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+
+		$should_avoid_loading_dropzone = 'formidable' === $page && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( ! $should_avoid_loading_dropzone ) {
+			wp_enqueue_style( 'formidable-dropzone' );
 		}
 	}
 
@@ -897,7 +916,40 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function register_popper1() {
+		if ( ! self::should_register_popper() ) {
+			return;
+		}
 		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+	}
+
+	/**
+	 * Only register popper on Formidable pages.
+	 * This helps to avoid popper conflicts on other plugin pages, including the WP Bakery page editor.
+	 *
+	 * @since 6.11.1
+	 *
+	 * @return bool
+	 */
+	private static function should_register_popper() {
+		global $pagenow;
+
+		$post_id = FrmAppHelper::simple_get( 'post', 'absint' );
+		if ( 'post.php' === $pagenow && $post_id && 'frm_display' === get_post_type( $post_id ) ) {
+			return true;
+		}
+
+		$post_type          = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$is_views_post_type = 'frm_display' === $post_type;
+		if ( in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) && $is_views_post_type ) {
+			return true;
+		}
+
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( strpos( $page, 'formidable' ) === 0 ) {
+			return true;
+		}
+
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && FrmAppHelper::simple_get( 'taxonomy' ) === 'frm_application';
 	}
 
 	/**

@@ -390,8 +390,7 @@ class FrmEmail {
 			$this->message = html_entity_decode( $this->message );
 		}
 
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
-
+		$this->message  = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 		$prev_mail_body = $this->message;
 
 		// Make a copy to prevent changes by reference.
@@ -421,6 +420,7 @@ class FrmEmail {
 
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
+			$this->message = str_replace( '&nbsp;', '', $this->message );
 		} else {
 			$this->add_autop();
 		}

@@ -20,19 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
 
-<p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>" >
+<p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>>
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
-		<a href="javascript:void(0)" class="frm_icon_font frm_remove_field frm_cancel1_icon" data-emailrow="cc"></a>
+		<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_cancel1_icon frm_svg14' ); ?></a>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'cc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['cc'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'cc', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" />
 </p>
 
-<p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>" >
+<p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>>
 		<?php esc_html_e( 'BCC', 'formidable' ); ?>
-		<a href="javascript:void(0)" class="frm_icon_font frm_remove_field frm_cancel1_icon" data-emailrow="bcc"></a>
+		<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_cancel1_icon frm_svg14' ); ?></a>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'bcc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['bcc'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'bcc', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" />
@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo empty( $form_action->post_content['reply_to'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'reply_to' ); ?>>
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
-		<a href="javascript:void(0)" class="frm_icon_font frm_remove_field frm_cancel1_icon" data-emailrow="reply_to"></a>
+		<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="reply_to"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_cancel1_icon frm_svg14' ); ?></a>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'reply_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['reply_to'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'reply_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>" />

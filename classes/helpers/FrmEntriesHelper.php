@@ -214,7 +214,7 @@ class FrmEntriesHelper {
 			return '';
 		}
 
-		// This is an embeded form.
+		// This is an embedded form.
 		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
 			// This is a repeating section.
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
@@ -334,7 +334,7 @@ class FrmEntriesHelper {
 
 	public static function set_posted_value( $field, $value, $args ) {
 		// If validating a field with "other" opt, set back to prev value now.
-		if ( isset( $args['other'] ) && $args['other'] ) {
+		if ( ! empty( $args['other'] ) ) {
 			$value = $args['temp_value'];
 		}
 		if ( empty( $args['parent_field_id'] ) ) {
@@ -561,7 +561,7 @@ class FrmEntriesHelper {
 	 */
 	public static function get_browser( $u_agent ) {
 		$bname    = __( 'Unknown', 'formidable' );
-		$platform = __( 'Unknown', 'formidable' );
+		$platform = $bname;
 		$ub       = '';
 
 		// Get the operating system
@@ -583,7 +583,7 @@ class FrmEntriesHelper {
 			'Firefox'  => 'Mozilla Firefox',
 		);
 
-		// Next get the name of the useragent yes seperately and for good reason
+		// Next get the name of the useragent yes separately and for good reason.
 		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
 			$bname = 'Internet Explorer';
 			$ub    = 'MSIE';
@@ -668,7 +668,7 @@ class FrmEntriesHelper {
 		$page    = FrmAppHelper::get_param( 'frm_action' );
 		$actions = array();
 
-		if ( $page != 'show' ) {
+		if ( $page !== 'show' ) {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),

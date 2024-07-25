@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p>
-	<label for="frm_tracking">
+	<label>
 		<input type="checkbox" name="frm_tracking" id="frm_tracking" value="1" <?php checked( $frm_settings->tracking, 1 ); ?> />
 		<?php esc_html_e( 'Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings.', 'formidable' ); ?>
 	</label>
 </p>
 
 <p>
-	<label for="frm_summary_emails">
+	<label>
 		<input
 			type="checkbox"
 			name="frm_summary_emails"
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php } ?>
 
 <p class="frm_uninstall">
-	<label for="frm-uninstall-box">
+	<label>
 		<input type="checkbox" id="frm-uninstall-box" value="1" onchange="frm_show_div('frm_uninstall_now',this.checked,true,'#')" />
 		<?php esc_html_e( 'Uninstall Formidable Forms and permanently delete all data.', 'formidable' ); ?>
 	</label>

@@ -136,7 +136,7 @@ class FrmDb {
 			 */
 			$start = '%';
 			$end   = '%';
-			if ( $lowercase_key == 'like%' ) {
+			if ( $lowercase_key === 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
 			} elseif ( $lowercase_key == '%like' ) {
@@ -152,7 +152,7 @@ class FrmDb {
 			$where .= ' IS NULL';
 		} else {
 			// allow a - to prevent = from being added
-			if ( substr( $key, - 1 ) == '-' ) {
+			if ( substr( $key, - 1 ) === '-' ) {
 				$where = rtrim( $where, '-' );
 			} else {
 				$where .= '=';
@@ -319,7 +319,7 @@ class FrmDb {
 		}
 
 		// > and < need a little more work since we don't want them switched to >= and <=
-		if ( $where_is == '>' || $where_is == '<' ) {
+		if ( $where_is === '>' || $where_is === '<' ) {
 			// The - indicates that the = should not be added later.
 			return ' ' . $where_is . '-';
 		}
@@ -444,7 +444,7 @@ class FrmDb {
 			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			/**
-			 * Allow the $where to be prepared before we recieve it here.
+			 * Allow the $where to be prepared before we receive it here.
 			 * This is a fallback for reverse compatibility, but is not recommended
 			 */
 			_deprecated_argument( 'where', '2.0', esc_html__( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
@@ -459,9 +459,9 @@ class FrmDb {
 	 */
 	private static function esc_query_args( &$args ) {
 		foreach ( $args as $param => $value ) {
-			if ( $param == 'order_by' ) {
+			if ( $param === 'order_by' ) {
 				$args[ $param ] = self::esc_order( $value );
-			} elseif ( $param == 'limit' ) {
+			} elseif ( $param === 'limit' ) {
 				$args[ $param ] = self::esc_limit( $value );
 			}
 
@@ -472,7 +472,7 @@ class FrmDb {
 	}
 
 	/**
-	 * Added for < WP 4.0 compatability
+	 * Added for < WP 4.0 compatibility
 	 *
 	 * @since 2.05.06
 	 *
@@ -496,7 +496,7 @@ class FrmDb {
 			return '';
 		}
 
-		// remove ORDER BY before santizing
+		// Remove ORDER BY before sanitizing.
 		$order_query = strtolower( $order_query );
 		if ( strpos( $order_query, 'order by' ) !== false ) {
 			$order_query = str_replace( 'order by', '', $order_query );

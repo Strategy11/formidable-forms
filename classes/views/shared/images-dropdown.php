@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$image_details = FrmAppHelper::get_images_dropdown_atts( $option, $args );
 		?>
 		<div class="frm_radio frm_image_option frm<?php echo esc_attr( $args['col_class'] ); ?>">
-			<label class="<?php echo esc_attr( $image_details['classes'] ); ?>" data-value="<?php echo esc_attr( $option['key'] ); ?>"<?php echo $image_details['custom_attrs']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<label class="<?php echo esc_attr( $image_details['classes'] ); ?>" data-value="<?php echo esc_attr( $option['key'] ); ?>" <?php echo $image_details['custom_attrs']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<input value="<?php echo esc_attr( $option['key'] ); ?>" <?php checked( $option['key'], $args['selected'] ); ?> <?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 				<div class="frm_image_option_container frm_grid_container">
 					<span class="frm_images_dropdown__image frm4">

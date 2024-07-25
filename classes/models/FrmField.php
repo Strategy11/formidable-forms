@@ -97,7 +97,7 @@ class FrmField {
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_upload_icon',
-				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
+				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
 			'ranking'         => array(),
 			'rte'             => array(
@@ -115,7 +115,7 @@ class FrmField {
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_url( $images_url ) . 'scale_field.png" alt="Scale Field" />',
+				'message' => esc_html__( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . esc_attr__( 'Scale Field', 'formidable' ) . '" />',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -132,17 +132,17 @@ class FrmField {
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_sitemap_icon',
-				'message' => 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.',
+				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
 			),
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
+				'message' => esc_html__( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . esc_attr__( 'cascading lookup fields', 'formidable' ) . '" />',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_repeater_icon',
-				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
+				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -155,7 +155,7 @@ class FrmField {
 			'break'           => array(
 				'name'    => __( 'Page Break', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_page_break_icon',
-				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
+				'message' => __( 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?', 'formidable' ),
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
@@ -192,7 +192,7 @@ class FrmField {
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_file_text_icon',
-				'message' => 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.',
+				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
 			),
 			'signature'       => array(
 				'name'  => __( 'Signature', 'formidable' ),
@@ -203,14 +203,18 @@ class FrmField {
 				'name'    => __( 'AI', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
 				'addon'   => 'ai',
-				'message' => 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.',
+				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
-				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
-					<img src="' . esc_url( $images_url ) . 'appointments.png" alt="Scheduling" />',
+				'message' => sprintf(
+					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
+					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
+					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
+					'</a>'
+				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . esc_attr__( 'Scheduling', 'formidable' ) . '" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product'         => array(
@@ -234,8 +238,8 @@ class FrmField {
 			$fields['ranking'] = array(
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'message'      => 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.',
-				'upsell_image' => $images_url . 'ranking-field.svg',
+				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
+				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
 				'addon'        => 'surveys',
 				'is_new'       => self::field_is_new( 'ranking' ),
 			);
@@ -927,7 +931,7 @@ class FrmField {
 		$limit = FrmDb::esc_limit( $limit );
 
 		$query      = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = $limit == ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
+		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
 
 		if ( is_array( $where ) ) {
 			$args    = array(
@@ -993,7 +997,7 @@ class FrmField {
 	}
 
 	/**
-	 * If a form has too many fields, thay won't all save into a single transient.
+	 * If a form has too many fields, they won't all save into a single transient.
 	 * We'll break them into groups of 200
 	 *
 	 * @since 2.0.1

@@ -72,7 +72,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		);
 		$this->save_options( $options );
 
-		// Test against the actual renewal date when running Github workflow.
+		// Test against the actual renewal date when running GitHub workflow.
 		$renewal_date = $this->run_private_method(
 			array( 'FrmEmailSummaryHelper', 'get_renewal_date' )
 		);

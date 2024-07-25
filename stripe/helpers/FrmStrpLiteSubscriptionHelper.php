@@ -55,6 +55,17 @@ class FrmStrpLiteSubscriptionHelper {
 			'test'           => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
+		if ( ! empty( $atts['action']->post_content['payment_limit'] ) ) {
+			$end_count = self::prepare_payment_limit(
+				$atts['action']->post_content['payment_limit'],
+				(int) $atts['entry']->form_id,
+				(int) $atts['entry']->id
+			);
+			if ( is_int( $end_count ) ) {
+				$new_values['end_count'] = $end_count;
+			}
+		}
+
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub_id  = $frm_sub->create( $new_values );
 		return $sub_id;
@@ -187,5 +198,52 @@ class FrmStrpLiteSubscriptionHelper {
 		 * @param bool $cancel_at_period_end
 		 */
 		return (bool) apply_filters( 'frm_stripe_cancel_subscription_at_period_end', true );
+	}
+
+	/**
+	 * Get an end_count value to use for our subscription.
+	 *
+	 * @since 6.11
+	 *
+	 * @param string $payment_limit The raw payment value string. It is not empty.
+	 * @param int    $form_id       Required for processing shortcodes.
+	 * @param int    $entry_id      Required for processing shortcodes.
+	 * @return int|WP_Error
+	 */
+	public static function prepare_payment_limit( $payment_limit, $form_id, $entry_id ) {
+		if ( is_numeric( $payment_limit ) ) {
+			return (int) $payment_limit;
+		}
+
+		if ( false === strpos( $payment_limit, '[' ) ) {
+			return self::get_invalid_payment_limit_error( $payment_limit );
+		}
+
+		$payment_limit = FrmTransLiteAppHelper::process_shortcodes(
+			array(
+				'value' => $payment_limit,
+				'form'  => $form_id,
+				'entry' => $entry_id,
+			)
+		);
+		if ( ! is_numeric( $payment_limit ) ) {
+			return self::get_invalid_payment_limit_error( $payment_limit );
+		}
+
+		return (int) $payment_limit;
+	}
+
+	/**
+	 * @since 6.11
+	 *
+	 * @param string $payment_limit
+	 * @return WP_Error
+	 */
+	private static function get_invalid_payment_limit_error( $payment_limit ) {
+		return new WP_Error(
+			'invalid_payment_limit',
+			/* translators: %s: Invalid payment limit value title */
+			sprintf( __( 'Invalid payment limit value %s', 'formidable' ), $payment_limit )
+		);
 	}
 }

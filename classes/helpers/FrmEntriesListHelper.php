@@ -15,6 +15,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	public function __construct( $args ) {
+		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Entries list', 'formidable' ),
+			)
+		);
+	}
+
 	/**
 	 * @return void
 	 */
@@ -347,7 +356,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @param object $item
 	 */
 	private function column_value( $item ) {
-		$col_name = $this->column_name;
+		$col_name = $this->maybe_fix_column_name( $this->column_name );
 
 		switch ( $col_name ) {
 			case 'ip':
@@ -408,6 +417,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}//end switch
 
 		return $val;
+	}
+
+	/**
+	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $column_name
+	 * @return string
+	 */
+	private function maybe_fix_column_name( $column_name ) {
+		if ( 0 === strpos( $column_name, '0_' ) ) {
+			$column_name = substr( $column_name, 2 );
+		}
+		return $column_name;
 	}
 
 	/**

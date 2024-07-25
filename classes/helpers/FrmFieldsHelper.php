@@ -481,9 +481,9 @@ class FrmFieldsHelper {
 		}
 
 		$position = FrmStylesController::get_style_val( 'position', $form );
-		if ( $position == 'none' ) {
+		if ( $position === 'none' ) {
 			$position = 'top';
-		} elseif ( $position == 'no_label' ) {
+		} elseif ( $position === 'no_label' ) {
 			$position = 'none';
 		} elseif ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 			$position = 'top';
@@ -676,8 +676,8 @@ class FrmFieldsHelper {
 	}
 
 	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
-		$hide_opt       = self::get_value_for_comparision( $hide_opt );
-		$observed_value = self::get_value_for_comparision( $observed_value );
+		$hide_opt       = self::get_value_for_comparison( $hide_opt );
+		$observed_value = self::get_value_for_comparison( $observed_value );
 
 		if ( is_array( $observed_value ) ) {
 			return self::array_value_condition( $observed_value, $cond, $hide_opt );
@@ -723,7 +723,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.05
 	 */
-	private static function get_value_for_comparision( $value ) {
+	private static function get_value_for_comparison( $value ) {
 		// Remove white space from hide_opt
 		if ( ! is_array( $value ) ) {
 			$value = trim( $value );
@@ -1203,9 +1203,18 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_single_input_fields', $fields );
 	}
 
+	/**
+	 * @param string[] $inputs
+	 * @param array    $fields
+	 * @param array    $field_types
+	 * @return void
+	 */
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {
 		foreach ( $inputs as $input ) {
-			$field_types[ $input ] = $fields[ $input ];
+			// This may not be set if a field type was removed using the frm_available_fields or frm_pro_available_fields filters.
+			if ( array_key_exists( $input, $fields ) ) {
+				$field_types[ $input ] = $fields[ $input ];
+			}
 			unset( $input );
 		}
 	}

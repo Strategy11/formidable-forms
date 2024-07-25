@@ -89,7 +89,7 @@
 }
 
 /* Create a blank form */
-#frm-form-templates-create-form {
+.frm-form-templates-create-button {
 	gap: 10px;
 	color: var(--grey-900);
 	background-color: transparent;
@@ -101,11 +101,11 @@
 	box-shadow: var(--box-shadow-xs);
 }
 
-#frm-form-templates-create-form:hover {
+.frm-form-templates-create-button:hover {
 	background-color: var(--grey-50);
 }
 
-#frm-form-templates-create-form:focus-within {
+.frm-form-templates-create-button:focus-within {
 	outline: 1px solid var(--primary-700);
 	border-color: var(--primary-700);
 }

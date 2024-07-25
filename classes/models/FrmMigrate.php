@@ -391,7 +391,7 @@ class FrmMigrate {
 	}
 
 	/**
-	 * Delete uneeded default templates
+	 * Delete unneeded default templates
 	 *
 	 * @since 3.06
 	 */
@@ -517,7 +517,7 @@ class FrmMigrate {
 		}
 
 		foreach ( $styles as $style ) {
-			if ( $style->post_content['field_width'] == '400px' ) {
+			if ( $style->post_content['field_width'] === '400px' ) {
 				$style->post_content['field_width'] = '100%';
 				$frm_style->save( (array) $style );
 

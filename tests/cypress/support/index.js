@@ -14,10 +14,14 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 import '@10up/cypress-wp-utils';
 import 'cypress-axe'
+
+import "cypress-html-validate/commands";
+
+require('cypress-xpath');

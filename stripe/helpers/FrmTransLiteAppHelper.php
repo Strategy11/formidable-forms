@@ -490,4 +490,24 @@ class FrmTransLiteAppHelper {
 		}
 		return $payment->test ? __( 'Test', 'formidable' ) : __( 'Live', 'formidable' );
 	}
+
+	/**
+	 * Returns the count of completed payments.
+	 *
+	 * @since 6.11
+	 *
+	 * @param array $payments
+	 *
+	 * @return int
+	 */
+	public static function count_completed_payments( $payments ) {
+		$count = 0;
+		foreach ( $payments as $payment ) {
+			if ( $payment->status === 'complete' ) {
+				$count++;
+			}
+		}
+
+		return $count;
+	}
 }

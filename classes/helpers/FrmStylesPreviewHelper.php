@@ -225,27 +225,10 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @return false|string
+	 * @return string
 	 */
 	private function get_disabled_features_note() {
-		$disabled_features = array();
-
-		if ( $this->form_includes_captcha ) {
-			$disabled_features[] = __( 'Captcha fields are hidden.', 'formidable' );
-		}
-
-		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {
-			$disabled_pro_features = FrmProStylesController::get_disabled_javascript_features();
-			if ( is_string( $disabled_pro_features ) ) {
-				$disabled_features[] = $disabled_pro_features;
-			}
-		}
-
-		if ( $disabled_features ) {
-			return __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) . ' ' . implode( ' ', $disabled_features );
-		}
-
-		return false;
+		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end.', 'formidable' );
 	}
 
 	/**

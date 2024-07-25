@@ -35,7 +35,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 			$( document.getElementById( 'frm_deauthorize_link' ) ).on( 'click', app.deauthorize );
 			$( '.frm_authorize_link' ).on( 'click', app.authorize );
 			// Handles FF dashboard Authorize & Reauthorize events.
-			// Atach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
+			// Attach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
 			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_deauthorize_link', app.deauthorize );
 			$( '.frm-dashboard-license-options' ).on( 'click', '#frm_reconnect_link', app.reauthorize );
 
@@ -4610,13 +4610,13 @@ function frmAdminBuildJS() {
 		popup = document.getElementById( 'frm_field_multiselect_popup' );
 
 		if ( null !== popup ) {
-			popup.classList.toggle( 'frm-unmergable', ! selectedFieldsAreMergable() );
+			popup.classList.toggle( 'frm-unmergable', ! selectedFieldsAreMergeable() );
 			return popup;
 		}
 
 		popup = div();
 		popup.id = 'frm_field_multiselect_popup';
-		if ( ! selectedFieldsAreMergable() ) {
+		if ( ! selectedFieldsAreMergeable() ) {
 			popup.classList.add( 'frm-unmergable' );
 		}
 
@@ -4648,7 +4648,7 @@ function frmAdminBuildJS() {
 		return popup;
 	}
 
-	function selectedFieldsAreMergable() {
+	function selectedFieldsAreMergeable() {
 		let selectedFieldGroups, totalFieldCount, length, index, fieldGroup;
 		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
 		length = selectedFieldGroups.length;
@@ -6411,7 +6411,7 @@ function frmAdminBuildJS() {
 	 */
 	function showNameYourFormModal() {
 		// Exit early if the 'new_template' URL parameter is not set to 'true'
-		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+		if ( ! shouldShowNameYourFormNameModal() ) {
 			return false;
 		}
 
@@ -6425,6 +6425,19 @@ function frmAdminBuildJS() {
 		modalWidget.dialog( 'open' );
 
 		return true;
+	}
+
+	/**
+	 * Returns true if 'Name Your Form' modal should be displayed.
+	 *
+	 * @returns {Boolean}
+	 */
+	function shouldShowNameYourFormNameModal() {
+		const formNameInput = document.getElementById( 'frm_form_name' );
+		if ( formNameInput && formNameInput.value.trim() !== '' ) {
+			return false;
+		}
+		return 'true' === urlParams.get( 'new_template' );
 	}
 
 	/**
@@ -6476,7 +6489,7 @@ function frmAdminBuildJS() {
 			}
 
 			// Trigger the 'Save' button click using jQuery
-			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).click();
+			jQuery( '#frm-publishing' ).find( '.frm_button_submit' ).trigger( 'click' );
 		});
 	};
 
@@ -6669,7 +6682,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
 
 		container.classList.add( 'frmcenter' );
 
@@ -7634,14 +7647,6 @@ function frmAdminBuildJS() {
 		return ! isNaN( parseFloat( value ) ) && isFinite( value );
 	}
 
-	function getMetaValue( id, metaName ) {
-		let newMeta = metaName;
-		if ( jQuery( document.getElementById( id + metaName ) ).length > 0 ) {
-			newMeta = getMetaValue( id, metaName + 1 );
-		}
-		return newMeta;
-	}
-
 	function changePosttaxRow() {
 		/*jshint validthis:true */
 		if ( ! jQuery( this ).closest( '.frm_posttax_row' ).find( '.frm_posttax_opt_list' ).length ) {
@@ -8012,11 +8017,71 @@ function frmAdminBuildJS() {
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+
 			const s = e + variable.length;
+
+			maybeRemoveLayoutClasses( obj, variable );
+
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
 		triggerChange( contentBox );
+	}
+
+	/**
+	 * When a layout class is added, remove any previous layout classes to avoid conflicts.
+	 * We only expect one layout class to exist for a given field.
+	 * For example, if a field has frm_half and we set it to frm_third, frm_half will be removed.
+	 *
+	 * @since 6.11
+	 *
+	 * @param {HTMLElement} obj
+	 * @param {string}      variable
+	 * @return {void}
+	 */
+	function maybeRemoveLayoutClasses( obj, variable ) {
+		if ( ! obj.classList.contains( 'frm_classes' ) || ! isALayoutClass( variable ) ) {
+			return;
+		}
+
+		const removeClasses = obj.value.split( ' ' ).filter( isALayoutClass );
+		if ( removeClasses.length ) {
+			obj.value = maybeRemoveClasses( obj.value, removeClasses, variable.trim() );
+		}
+	}
+
+	/**
+	 * Check if a given class is a layout class.
+	 *
+	 * @since 6.11
+	 *
+	 * @param {string} className
+	 * @return {boolean}
+	 */
+	function isALayoutClass( className ) {
+		let layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12' ];
+		return layoutClasses.includes( className.trim() );
+	}
+
+	/**
+	 * @since 6.11
+	 *
+	 * @param {string} beforeValue
+	 * @param {Array}  removeClasses
+	 * @param {string} variable
+	 * @return {string}
+	 */
+	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
+		const currentClasses = beforeValue.split( ' ' ).filter(
+			currentClass => {
+				currentClass = currentClass.trim();
+				return currentClass.length && ! removeClasses.includes( currentClass );
+			}
+		);
+		if ( ! currentClasses.includes( variable ) ) {
+			currentClasses.push( variable );
+		}
+		return currentClasses.join( ' ' );
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
@@ -9685,14 +9750,14 @@ function frmAdminBuildJS() {
 		);
 
 		const emptyInbox     = document.getElementById( 'frm_empty_inbox' );
-		const leaveEmailIput = document.getElementById( 'frm_leave_email' );
+		const leaveEmailInput = document.getElementById( 'frm_leave_email' );
 
-		if ( emptyInbox && leaveEmailIput ) {
+		if ( emptyInbox && leaveEmailInput ) {
 			const leaveEmailModal = document.getElementById( 'frm-leave-email-modal' );
 			leaveEmailModal.classList.remove( 'frm_hidden' );
 			leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 
-			leaveEmailIput.addEventListener(
+			leaveEmailInput.addEventListener(
 				'keyup',
 				event => {
 					if ( 'Enter' === event.key ) {
