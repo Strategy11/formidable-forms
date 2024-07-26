@@ -17,7 +17,6 @@ class FrmBackgroundImageStyleComponent extends FrmStyleComponent {
 	 * Construct FrmBackgroundImageStyleComponent.
 	 *
 	 * @since x.x
-	 *
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 

@@ -17,7 +17,6 @@ class FrmColorpickerStyleComponent extends FrmStyleComponent {
 	 * Construct FrmColorpickerStyleComponent.
 	 *
 	 * @since x.x
-	 *
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 

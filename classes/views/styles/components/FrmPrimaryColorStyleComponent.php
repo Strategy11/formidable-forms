@@ -17,7 +17,6 @@ class FrmPrimaryColorStyleComponent extends FrmStyleComponent {
 	 * Construct FrmPrimaryColorStyleComponent.
 	 *
 	 * @since x.x
-	 *
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
@@ -29,5 +28,4 @@ class FrmPrimaryColorStyleComponent extends FrmStyleComponent {
 		
 		$this->load_view( $this->data );
 	}
-
 }

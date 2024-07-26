@@ -17,7 +17,6 @@ class FrmDirectionStyleComponent extends FrmStyleComponent {
 	 * Construct FrmDirectionStyleComponent.
 	 *
 	 * @since x.x
-	 *
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 

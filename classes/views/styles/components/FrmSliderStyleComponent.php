@@ -59,31 +59,32 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$this->data['vertical'] = array(
 			'value' => $top,
-			'unit'  => $this->detect_unit_measurement( $top )
+			'unit'  => $this->detect_unit_measurement( $top ),
 		);
+
 		$this->data['horizontal'] = array(
 			'value' => $right,
-			'unit'  => $this->detect_unit_measurement( $right )
+			'unit'  => $this->detect_unit_measurement( $right ),
 		);
 
 		$this->data['top'] = array(
 			'value' => $top,
-			'unit'  => $this->detect_unit_measurement( $top )
+			'unit'  => $this->detect_unit_measurement( $top ),
 		);
 
 		$this->data['bottom'] = array(
 			'value' => $bottom,
-			'unit'  => $this->detect_unit_measurement( $bottom )
+			'unit'  => $this->detect_unit_measurement( $bottom ),
 		);
 
 		$this->data['left'] = array(
 			'value' => $left,
-			'unit'  => $this->detect_unit_measurement( $left )
+			'unit'  => $this->detect_unit_measurement( $left ),
 		);
 
 		$this->data['right'] = array(
 			'value' => $right,
-			'unit'  => $this->detect_unit_measurement( $right )
+			'unit'  => $this->detect_unit_measurement( $right ),
 		);
 	}
 
@@ -136,7 +137,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			return;
 		}
 
-		if ( empty ( $this->data['type'] ) ) {
+		if ( empty( $this->data['type'] ) ) {
 			$this->data['icon'] = '';
 			return;
 		}

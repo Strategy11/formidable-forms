@@ -17,7 +17,6 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 	 * Construct the FrmAlignStyleComponent.
 	 *
 	 * @since x.x
-	 *
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
