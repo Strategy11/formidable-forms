@@ -1,21 +1,13 @@
 parameters:
-	level: max
-	reportUnmatchedIgnoredErrors: false
-	bootstrapFiles:
-		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
-		- stubs.php
+	paths:
+		- formidable.php
+		- classes/
+		- stripe/
 	scanFiles:
 		- deprecated/FrmDeprecated.php
-	excludePaths:
-		- */node_modules/*
-		- */tests/*
-		- */bin/*
-		- */images/*
-		- */languages/*
-		- */js/*
-		- */vendor/*
-		- */fonts/*
-		- */deprecated/*
+	bootstrapFiles:
+		- stubs.php
+	level: max
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
@@ -24,8 +16,12 @@ parameters:
 		strictCalls: false
 		noVariableVariables: false
 	ignoreErrors:
+		-
+			message: '#^Action callback returns int but should not return anything\.$#'
+			count: 1
+			path: classes/controllers/FrmHooksController.php
 		- '#Access to an undefined property#'
-		- '#Call to an undefined method object::#'
+#		- '#Call to an undefined method object::#'
 		- '#Call to (function is_callable|protected method)+#'
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
@@ -61,7 +57,6 @@ parameters:
 		- '#has an unused use#'
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
-		- '#callback of function spl_autoload_register expects#'
 		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
 		-
 			message: '#should be contravariant with#'
