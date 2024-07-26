@@ -38,20 +38,7 @@ describe('Run some accessibility tests', function() {
         configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'empty-table-header', enabled: false },
-            { id: 'label', enabled: false },
-            { id: 'select-name', enabled: false }
-        ]);
-        cy.checkA11y();
-    });
-
-    it('Check the views page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-entries');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
-            ...baselineRules,
-            { id: 'empty-table-header', enabled: false },
-            { id: 'label', enabled: false },
-            { id: 'select-name', enabled: false }
+            { id: 'label', enabled: false }
         ]);
         cy.checkA11y();
     });

@@ -247,6 +247,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
+			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
