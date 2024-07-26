@@ -1,7 +1,7 @@
 describe('Run some accessibility tests', function() {
     beforeEach(cy.login);
 
-    const configureAxeWithBaselineIgnoredRuleset = (rules) => {
+    const configureAxeWithIgnoredRuleset = (rules) => {
         cy.configureAxe({ rules });
     };
 
@@ -15,7 +15,7 @@ describe('Run some accessibility tests', function() {
     it('Check the dashboard page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-dashboard');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'heading-order', enabled: false }
         ]);
@@ -25,7 +25,7 @@ describe('Run some accessibility tests', function() {
     it('Check the form list is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'empty-table-header', enabled: false }
         ]);
@@ -35,7 +35,7 @@ describe('Run some accessibility tests', function() {
     it('Check the entries page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-entries');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'empty-table-header', enabled: false },
             { id: 'label', enabled: false },
@@ -47,7 +47,7 @@ describe('Run some accessibility tests', function() {
     it('Check the views page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-entries');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'empty-table-header', enabled: false },
             { id: 'label', enabled: false },
@@ -59,7 +59,7 @@ describe('Run some accessibility tests', function() {
     it('Check the styles page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-styles');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             { id: 'aria-allowed-role', enabled: false },
             { id: 'link-name', enabled: false },
             { id: 'label', enabled: false },
@@ -71,7 +71,7 @@ describe('Run some accessibility tests', function() {
     it('Check the applications page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'image-alt', enabled: false }
         ]);
@@ -81,7 +81,7 @@ describe('Run some accessibility tests', function() {
     it('Check the form templates page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-form-templates');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             { id: 'color-contrast', enabled: false },
             { id: 'aria-allowed-role', enabled: false }
         ]);
@@ -91,7 +91,7 @@ describe('Run some accessibility tests', function() {
     it('Check the payments page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-settings&t=stripe_settings');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
         cy.checkA11y();
@@ -100,7 +100,7 @@ describe('Run some accessibility tests', function() {
     it('Check the import/export page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-import');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'heading-order', enabled: false }
         ]);
@@ -110,7 +110,7 @@ describe('Run some accessibility tests', function() {
     it('Check the global settings page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-settings');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
         cy.checkA11y();
@@ -119,7 +119,7 @@ describe('Run some accessibility tests', function() {
     it('Check the Add-Ons page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-addons');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
         cy.checkA11y();
@@ -128,7 +128,7 @@ describe('Run some accessibility tests', function() {
     it('Check the upgrade page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-pro-upgrade');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'empty-table-header', enabled: false },
             { id: 'heading-order', enabled: false }
@@ -140,7 +140,7 @@ describe('Run some accessibility tests', function() {
     it('Check the SMTP page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-smtp');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules,
             { id: 'landmark-unique', enabled: false }
         ]);
@@ -150,7 +150,7 @@ describe('Run some accessibility tests', function() {
     it('Check the form creation is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-form-templates&return_page=forms');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             { id: 'color-contrast', enabled: false },
             { id: 'aria-allowed-role', enabled: false }
         ]);
@@ -160,7 +160,7 @@ describe('Run some accessibility tests', function() {
     it('Check the list of deleted forms is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable&form_type=trash');
         cy.injectAxe();
-        configureAxeWithBaselineIgnoredRuleset([
+        configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
         cy.checkA11y();
