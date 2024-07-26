@@ -3286,6 +3286,7 @@ class FrmAppHelper {
 			'focus_first_error'    => self::should_focus_first_error(),
 			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
 			'include_resend_email' => self::should_include_resend_email_code(),
+			'submit_speak_msg'     => FrmFormsHelper::get_submit_speak_message(),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );

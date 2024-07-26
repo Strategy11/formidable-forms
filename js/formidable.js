@@ -1560,8 +1560,24 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
+		speak: function( message ) {
+			var element = document.createElement( 'div' );
+			element.setAttribute( 'aria-live', 'assertive' );
+			element.className = 'frm_screen_reader frm_hidden';
+			element.textContent = message;
+			document.body.appendChild( element );
+
+			setTimeout(
+				function() {
+					document.body.removeChild( element );
+				},
+				0
+			);
+		},
+
 		submitForm: function( e ) {
-			frmFrontForm.submitFormManual( e, this );
+			frmFrontForm.submitFormManual( e, e.target );
+			frmFrontForm.speak( frm_js.submit_speak_msg ); // eslint-disable-line camelcase
 		},
 
 		submitFormManual: function( e, object ) {
