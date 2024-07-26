@@ -6,22 +6,6 @@ describe("Fields in the form builder", () => {
         cy.viewport(1280, 720);
     });
 
-        const openForm = () => {
-            cy.log("Click on the created form");
-            cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
-                cy.wrap($row).within(() => {
-                    cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
-                        console.log('Element is:', $elem);
-                        cy.wrap($elem).click({ force: true });
-                    });
-                });
-            });
-
-            cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
-            cy.get('.current_page').should("contain", "Build");
-            cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
-        };
-
     it("should create, duplicate a field from each type and delete them", () => {
 
         const createAndDuplicateField = (fieldId, fieldType) => {
@@ -98,7 +82,7 @@ describe("Fields in the form builder", () => {
             cy.get(`div[id^="frm-single-settings-"] input[value="${fieldValue}"]`, { timeout: 10000 }).should('be.visible').clear({ force: true }).type(`${fieldType} Updated`, { force: true });
         };
 
-        openForm();
+        cy.openForm();
 
         const fieldsToProcess = [
             { fieldId: "text", fieldType: "Text", fieldValue: "Text" },
@@ -140,7 +124,7 @@ describe("Fields in the form builder", () => {
             cy.get('.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 }).check({ force: true });
         };
 
-        openForm();
+        cy.openForm();
 
         const fieldsToSetAsRequired = [
             { fieldId: "text", fieldType: "Text" },
@@ -196,8 +180,7 @@ describe("Fields in the form builder", () => {
         
     it("should validate forms with javascript setting", () => {
 
-        openForm();
-    
+        cy.openForm();    
             cy.log(`Create a text field and set it as required`);
             cy.get(`li[id="text"] a[title="Text"]`).click({ force: true });
             cy.get(`li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 }).click({ force: true });
