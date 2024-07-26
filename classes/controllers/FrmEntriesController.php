@@ -469,9 +469,9 @@ class FrmEntriesController {
 		if ( ! $entry ) {
 			FrmAppController::show_error_modal(
 				array(
-					'title'        => __( 'You can\'t view the entry', 'formidable' ),
-					'body'         => __( 'You are trying to view an entry that does not exist', 'formidable' ),
-					'cancel_url'   => admin_url( 'admin.php?page=formidable' ),
+					'title'      => __( 'You can\'t view the entry', 'formidable' ),
+					'body'       => __( 'You are trying to view an entry that does not exist', 'formidable' ),
+					'cancel_url' => admin_url( 'admin.php?page=formidable' ),
 				)
 			);
 			return;
