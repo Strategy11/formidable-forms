@@ -274,7 +274,7 @@ class FrmAntiSpam extends FrmValidate {
 		}
 
 		// If the user is an admin, return text with a link to support.
-		// We add a space here to seperate the sentences, but outside of the localized
+		// We add a space here to separate the sentences, but outside of the localized
 		// text to avoid it being removed.
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.

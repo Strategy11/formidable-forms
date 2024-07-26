@@ -64,6 +64,7 @@ class FrmFormActionsController {
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
 			'aweber'            => 'FrmDefAweberAction',
+			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
@@ -475,7 +476,14 @@ class FrmFormActionsController {
 		$filter_args['entry_id'] = $entry_id;
 		$filter_args['form_id']  = $form_id;
 
-		$event = apply_filters( 'frm_trigger_create_action', 'create', $args );
+		/**
+		 * @since 2.0.23
+		 * @since x.x $filter_args is now passed instead of $args. It includes additional ID data.
+		 *
+		 * @param string $event 'create' by default. Pro may filter this value to 'draft' instead.
+		 * @param array  $filter_args
+		 */
+		$event = apply_filters( 'frm_trigger_create_action', 'create', $filter_args );
 
 		self::trigger_actions( $event, $form_id, $entry_id, 'all', $args );
 	}

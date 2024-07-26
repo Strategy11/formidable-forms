@@ -36,7 +36,7 @@ class FrmHooksController {
 		}
 		unset( $trigger_hooks );
 
-		// Instansiate Controllers.
+		// Instantiate Controllers.
 		foreach ( $controllers as $c ) {
 			foreach ( $hooks as $hook ) {
 				if ( is_callable( array( $c, $hook ) ) ) {

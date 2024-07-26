@@ -20,7 +20,7 @@ class FrmOverlayController {
 	private $recurring_execution = false;
 
 	/**
-	 * The controller configs passed through construct. If empty the overlay will run normaly, it will open every time when open_overlay is called.
+	 * The controller configs passed through construct. If empty the overlay will run normally, it will open every time when open_overlay is called.
 	 *
 	 * @var array Config {
 	 *

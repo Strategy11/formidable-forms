@@ -444,7 +444,7 @@ class FrmDb {
 			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			/**
-			 * Allow the $where to be prepared before we recieve it here.
+			 * Allow the $where to be prepared before we receive it here.
 			 * This is a fallback for reverse compatibility, but is not recommended
 			 */
 			_deprecated_argument( 'where', '2.0', esc_html__( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
@@ -472,7 +472,7 @@ class FrmDb {
 	}
 
 	/**
-	 * Added for < WP 4.0 compatability
+	 * Added for < WP 4.0 compatibility
 	 *
 	 * @since 2.05.06
 	 *
@@ -496,7 +496,7 @@ class FrmDb {
 			return '';
 		}
 
-		// remove ORDER BY before santizing
+		// Remove ORDER BY before sanitizing.
 		$order_query = strtolower( $order_query );
 		if ( strpos( $order_query, 'order by' ) !== false ) {
 			$order_query = str_replace( 'order by', '', $order_query );

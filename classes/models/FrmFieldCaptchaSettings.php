@@ -218,7 +218,7 @@ class FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * Deternine if the Captcha Size setting should be shown in field settings.
+	 * Determine if the Captcha Size setting should be shown in field settings.
 	 * This has options for "Normal" and "Compact".
 	 * This is supported by all CAPTCHA types except for invisible reCAPTCHAs.
 	 *

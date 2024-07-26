@@ -5,7 +5,7 @@ describe("Entries submitted from a form", () => {
         cy.viewport(1280, 720);
     });
 
-    it("should not be stored", () => {
+    it("should not be stored in the entry list", () => {
 
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
