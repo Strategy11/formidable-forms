@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-10T14:03:52+00:00\n"
-"PO-Revision-Date: 2024-07-11 00:41\n"
+"POT-Creation-Date: 2024-07-25T13:58:13+00:00\n"
+"PO-Revision-Date: 2024-07-26 00:52\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -3988,7 +3988,7 @@ msgid "This will permanently delete the form and all its entries. This is irreve
 msgstr "Vous allez supprimer le formulaire et toutes ses entrées de manière définitive. Cette action est irréversible. Voulez-vous vraiment continuer ?"
 
 #: classes/helpers/FrmFormsHelper.php:1255
-#: classes/models/FrmField.php:227
+#: classes/models/FrmField.php:231
 msgid "Total"
 msgstr "Total"
 
@@ -4355,19 +4355,15 @@ msgstr "Les styles Formidable sont désactivés. Ils doivent être activés dans
 msgid "You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features."
 msgstr "Vous utilisez une version obsolète de Formidable Pro. Veuillez passer à la version 6.0 pour accéder à toutes les fonctionnalités de l’éditeur de style."
 
-#: classes/helpers/FrmStylesPreviewHelper.php:234
-msgid "Captcha fields are hidden."
-msgstr "Les champs Captcha sont masqués."
+#: classes/helpers/FrmStylesPreviewHelper.php:231
+msgid "Not all JavaScript is loaded in this preview. Some features will appear differently on the front end."
+msgstr ""
 
-#: classes/helpers/FrmStylesPreviewHelper.php:245
-msgid "Not all JavaScript is loaded in this preview."
-msgstr "Tous les JavaScript ne sont pas chargés dans cet aperçu."
-
-#: classes/helpers/FrmStylesPreviewHelper.php:258
+#: classes/helpers/FrmStylesPreviewHelper.php:241
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
 msgstr "Ce formulaire est en aperçu car aucun formulaire n’a été sélectionné. Utilisez le menu déroulant du formulaire pour sélectionner une nouvelle cible de prévisualisation."
 
-#: classes/helpers/FrmStylesPreviewHelper.php:277
+#: classes/helpers/FrmStylesPreviewHelper.php:260
 msgid "Changes that you will make to this style will apply to every form using this style."
 msgstr "Les modifications que vous apporterez à ce style s’appliqueront à chaque formulaire utilisant ce style."
 
@@ -5022,6 +5018,14 @@ msgstr "Heure"
 msgid "Scale"
 msgstr "Échelle"
 
+#: classes/models/FrmField.php:118
+msgid "Add a set of radio buttons with whatever range you choose."
+msgstr ""
+
+#: classes/models/FrmField.php:118
+msgid "Scale Field"
+msgstr ""
+
 #: classes/models/FrmField.php:121
 msgid "Star Rating"
 msgstr "Évaluation en étoiles"
@@ -5046,9 +5050,25 @@ msgstr ""
 msgid "Lookup"
 msgstr "Champ de recherche"
 
+#: classes/models/FrmField.php:140
+msgid "Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more."
+msgstr ""
+
+#: classes/models/FrmField.php:140
+msgid "cascading lookup fields"
+msgstr ""
+
 #: classes/models/FrmField.php:143
 msgid "Repeater"
 msgstr "Répétiteur"
+
+#: classes/models/FrmField.php:145
+msgid "Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources."
+msgstr ""
+
+#: classes/models/FrmField.php:145
+msgid "Dynamically Add Form Fields with repeatable sections"
+msgstr ""
 
 #: classes/models/FrmField.php:148
 #: classes/models/FrmFormMigrator.php:302
@@ -5111,19 +5131,28 @@ msgstr ""
 msgid "Appointment"
 msgstr "Rendez-vous"
 
+#. translators: %1$s: Link opening HTML, %2$s: Link tag closing
+#: classes/models/FrmField.php:214
+msgid "Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms."
+msgstr ""
+
 #: classes/models/FrmField.php:217
+msgid "Scheduling"
+msgstr ""
+
+#: classes/models/FrmField.php:221
 msgid "Product"
 msgstr "Produit"
 
-#: classes/models/FrmField.php:222
+#: classes/models/FrmField.php:226
 msgid "Quantity"
 msgstr "Quantité"
 
-#: classes/models/FrmField.php:235
+#: classes/models/FrmField.php:239
 msgid "Ranking"
 msgstr "Classement"
 
-#: classes/models/FrmField.php:237
+#: classes/models/FrmField.php:241
 msgid "Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options."
 msgstr ""
 
