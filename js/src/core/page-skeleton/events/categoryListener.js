@@ -23,7 +23,7 @@ export function addCategoryEvents() {
 	categoryItems.forEach( ( category ) => {
 		onClickPreventDefault( category, onCategoryClick );
 		category.addEventListener( 'keydown', onCategoryKeydown );
-	});
+	} );
 }
 
 /**
@@ -35,7 +35,8 @@ export function addCategoryEvents() {
 const onCategoryClick = ( event ) => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
-	let { selectedCategory, selectedCategoryEl, notEmptySearchText } = getState();
+	let { selectedCategory, selectedCategoryEl, notEmptySearchText } =
+		getState();
 
 	// If the selected category hasn't changed, return early
 	if ( selectedCategory === newSelectedCategory ) {
@@ -56,7 +57,7 @@ const onCategoryClick = ( event ) => {
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );
 	selectedCategoryEl = clickedCategory;
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
-	setState({ selectedCategory, selectedCategoryEl });
+	setState( { selectedCategory, selectedCategoryEl } );
 
 	// Reset the search input if it contains text
 	if ( notEmptySearchText ) {
