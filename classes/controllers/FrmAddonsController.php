@@ -1720,12 +1720,12 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
-	 * @deprecated x.x
+	 * @deprecated 6.11.1
 	 *
 	 * @return bool|int false or the number of days until expiration.
 	 */
 	public static function is_license_expiring() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmProAddonsController::is_license_expiring' );
+		_deprecated_function( __METHOD__, '6.11.1', 'FrmProAddonsController::is_license_expiring' );
 
 		if ( is_callable( 'FrmProAddonsController::is_license_expiring' ) ) {
 			return FrmProAddonsController::is_license_expiring();

@@ -638,7 +638,7 @@ ul.frm_form_nav > li {
 	gap: var(--gap-sm);
 	align-items: center;
 	text-align: left;
-	width: 200px;
+	min-width: 200px;
 }
 
 #frm_top_bar h1 span {

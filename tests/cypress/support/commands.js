@@ -49,5 +49,22 @@ Cypress.Commands.add("deleteForm", () => {
     })
 })
 
+Cypress.Commands.add("openForm", () => {
+    cy.log("Click on the created form");
+    cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
+        cy.wrap($row).within(() => {
+            cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
+                console.log('Element is:', $elem);
+                cy.wrap($elem).click({ force: true });
+            });
+        });
+    });
+
+    cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
+    cy.get('.current_page').should("contain", "Build");
+    cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
+});
+
+
 
 

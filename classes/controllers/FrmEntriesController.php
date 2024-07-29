@@ -467,10 +467,13 @@ class FrmEntriesController {
 
 		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
-			echo '<div id="form_show_entry_page" class="wrap">' .
-				esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
-				'</div>';
-
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => __( 'You can\'t view the entry', 'formidable' ),
+					'body'       => __( 'You are trying to view an entry that does not exist', 'formidable' ),
+					'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+				)
+			);
 			return;
 		}
 

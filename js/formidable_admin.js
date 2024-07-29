@@ -6411,7 +6411,7 @@ function frmAdminBuildJS() {
 	 */
 	function showNameYourFormModal() {
 		// Exit early if the 'new_template' URL parameter is not set to 'true'
-		if ( 'true' !== urlParams.get( 'new_template' ) ) {
+		if ( ! shouldShowNameYourFormNameModal() ) {
 			return false;
 		}
 
@@ -6425,6 +6425,19 @@ function frmAdminBuildJS() {
 		modalWidget.dialog( 'open' );
 
 		return true;
+	}
+
+	/**
+	 * Returns true if 'Name Your Form' modal should be displayed.
+	 *
+	 * @returns {Boolean}
+	 */
+	function shouldShowNameYourFormNameModal() {
+		const formNameInput = document.getElementById( 'frm_form_name' );
+		if ( formNameInput && formNameInput.value.trim() !== '' ) {
+			return false;
+		}
+		return 'true' === urlParams.get( 'new_template' );
 	}
 
 	/**
@@ -6669,7 +6682,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
 
 		container.classList.add( 'frmcenter' );
 
