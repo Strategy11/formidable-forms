@@ -3,7 +3,7 @@ export const PREFIX = 'frm-addons';
 
 export const VIEWS = {
 	AVAILABLE: 'available-addons',
-	ACTIVE: 'active-addons'
+	ACTIVE: 'active-addons',
 };
 
 export const PLANS = {

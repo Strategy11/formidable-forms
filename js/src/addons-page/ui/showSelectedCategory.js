@@ -7,7 +7,7 @@ import { VIEWS as SKELETON_VIEWS } from 'core/page-skeleton';
 /**
  * Internal dependencies
  */
-import { getElements } from "../elements";
+import { getElements } from '../elements';
 import { categorizedAddons } from '../addons';
 import { showEmptyState } from '.';
 
@@ -21,7 +21,7 @@ export function showSelectedCategory( selectedCategory ) {
 	const { bodyContent, addons, emptyState, upgradeBanner } = getElements();
 
 	hide( emptyState );
-	show( upgradeBanner )
+	show( upgradeBanner );
 
 	bodyContent.dataset.category = selectedCategory;
 

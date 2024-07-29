@@ -27,13 +27,15 @@ export function showSearchState( notEmptySearchText ) {
 
 	// Remove highlighting from the currently selected category if the search text is not empty
 	if ( notEmptySearchText ) {
-		getSingleState( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
+		getSingleState( 'selectedCategoryEl' ).classList.remove(
+			CURRENT_CLASS
+		);
 	}
 
 	// Hide non-relevant elements in the body content
 	hideElements( bodyContentChildren );
 
-	show(addonsList);
+	show( addonsList );
 
 	// Smoothly display the updated UI elements
 	new frmAnimate( bodyContent ).fadeIn();

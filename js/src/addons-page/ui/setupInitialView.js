@@ -44,18 +44,27 @@ export function setupInitialView() {
  * @return {void}
  */
 export function setupActiveCategory() {
-	const { activeCategory, availableCategory, categoriesTopDivider } = getElements();
-	const activeAddons = document.querySelectorAll('.frm-addon-active:not(.frm-locked-item)');
+	const { activeCategory, availableCategory, categoriesTopDivider } =
+		getElements();
+	const activeAddons = document.querySelectorAll(
+		'.frm-addon-active:not(.frm-locked-item)'
+	);
 
 	if ( activeAddons.length === 0 ) {
-		hideElements( [ activeCategory, availableCategory, categoriesTopDivider ] );
+		hideElements( [
+			activeCategory,
+			availableCategory,
+			categoriesTopDivider,
+		] );
 		return;
 	}
 
 	categorizedAddons[ VIEWS.ACTIVE ] = activeAddons;
 
 	// Set "Active" category count
-	activeCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = activeAddons.length;
+	activeCategory.querySelector(
+		`.${ SKELETON_PREFIX }-cat-count`
+	).textContent = activeAddons.length;
 }
 
 /**
@@ -76,7 +85,9 @@ function setupAvailableCategory() {
 			`.${ SKELETON_PREFIX }-cat-count`
 		).textContent = availableAddons.length;
 
-		const upgradeBannerAvailableCount = bodyContent.querySelector(`.${PREFIX}-available-count`);
+		const upgradeBannerAvailableCount = bodyContent.querySelector(
+			`.${ PREFIX }-available-count`
+		);
 		if ( upgradeBannerAvailableCount ) {
 			upgradeBannerAvailableCount.textContent = availableAddons.length;
 		}
@@ -111,10 +122,15 @@ function setupPlansCategory() {
 		basicPlanCategory,
 		plusPlanCategory,
 		businessPlanCategory,
-		elitePlanCategory
+		elitePlanCategory,
 	} = getElements();
 
-	const getCount = category => parseInt( category.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent, 10 ) || 0;
+	const getCount = ( category ) =>
+		parseInt(
+			category.querySelector( `.${ SKELETON_PREFIX }-cat-count` )
+				.textContent,
+			10
+		) || 0;
 
 	// The "Formidable Pro" add-on is included in all plans, so we just consider that in the basicCount
 	const basicCount = getCount( basicPlanCategory );
@@ -123,7 +139,13 @@ function setupPlansCategory() {
 	const eliteCount = getCount( elitePlanCategory ) - 1;
 
 	// Update the text content for each category
-	plusPlanCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = basicCount + plusCount;
-	businessPlanCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = basicCount + plusCount + businessCount;
-	elitePlanCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = basicCount + plusCount + businessCount + eliteCount;
+	plusPlanCategory.querySelector(
+		`.${ SKELETON_PREFIX }-cat-count`
+	).textContent = basicCount + plusCount;
+	businessPlanCategory.querySelector(
+		`.${ SKELETON_PREFIX }-cat-count`
+	).textContent = basicCount + plusCount + businessCount;
+	elitePlanCategory.querySelector(
+		`.${ SKELETON_PREFIX }-cat-count`
+	).textContent = basicCount + plusCount + businessCount + eliteCount;
 }

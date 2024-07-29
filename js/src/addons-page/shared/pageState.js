@@ -1,7 +1,12 @@
 /**
  * External dependencies
  */
-import { getState, getSingleState, setState, setSingleState } from 'core/page-skeleton';
+import {
+	getState,
+	getSingleState,
+	setState,
+	setSingleState,
+} from 'core/page-skeleton';
 
 // NOTE:
 // Use setState() here to add new states on the Add-Ons page.

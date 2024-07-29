@@ -6,8 +6,8 @@ import { addCategoryEvents } from 'core/page-skeleton';
 /**
  * Internal dependencies
  */
-import addAddonToggle from './addonToggleListener';
 import { showSelectedCategory } from '../ui';
+import addAddonToggle from './addonToggleListener';
 import addSearchEvents from './searchListener';
 
 /**
@@ -17,9 +17,13 @@ import addSearchEvents from './searchListener';
  */
 export function addEventListeners() {
 	addCategoryEvents();
-	wp.hooks.addAction( 'frmPage.onCategoryClick', 'frmAddonsPage', selectedCategory => {
-		showSelectedCategory( selectedCategory );
-	});
+	wp.hooks.addAction(
+		'frmPage.onCategoryClick',
+		'frmAddonsPage',
+		( selectedCategory ) => {
+			showSelectedCategory( selectedCategory );
+		}
+	);
 
 	addAddonToggle();
 	addSearchEvents();

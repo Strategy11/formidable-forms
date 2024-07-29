@@ -14,13 +14,17 @@ let targetButton;
 function addAddonToggleEvents() {
 	const { addonsToggle } = getElements();
 
-	addonsToggle.forEach( addonToggle =>
+	addonsToggle.forEach( ( addonToggle ) =>
 		addonToggle.addEventListener( 'click', onAddonToggleClick )
 	);
 
-	wp.hooks.addAction( 'frmAdmin.updateAddonState', 'frmAddonPage', response => {
-		setupActiveCategory();
-	});
+	wp.hooks.addAction(
+		'frmAdmin.updateAddonState',
+		'frmAddonPage',
+		( response ) => {
+			setupActiveCategory();
+		}
+	);
 }
 
 /**
@@ -31,18 +35,21 @@ function addAddonToggleEvents() {
  * @return {void}
  */
 const onAddonToggleClick = ( event ) => {
-	if ( targetButton && targetButton.classList.contains( 'frm_loading_button' ) ) {
+	if (
+		targetButton &&
+		targetButton.classList.contains( 'frm_loading_button' )
+	) {
 		return;
 	}
 
 	const addonToggle = event.currentTarget;
 	const addon = addonToggle.closest( '.frm-card-item' );
 
-	const actionMap = new Map([
+	const actionMap = new Map( [
 		[ 'frm-addon-not-installed', '.frm-install-addon' ],
 		[ 'frm-addon-installed', '.frm-activate-addon' ],
-		[ 'frm-addon-active', '.frm-deactivate-addon' ]
-	]);
+		[ 'frm-addon-active', '.frm-deactivate-addon' ],
+	] );
 
 	for ( const [ className, selector ] of actionMap.entries() ) {
 		if ( addon.classList.contains( className ) ) {
