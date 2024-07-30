@@ -925,7 +925,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( 'opt' === $k ) {
+			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
 
@@ -939,6 +939,21 @@ class FrmFieldsController {
 
 			unset( $k, $v );
 		}
+	}
+
+	/**
+	 * Disallow possibly unsafe attributees (that trigger JavaScript) when unasfe HTML is not allowed.
+	 *
+	 * @since 6.11.2
+	 *
+	 * @param string $key The option key.
+	 * @return bool
+	 */
+	private static function should_allow_input_attribute( $key ) {
+		if ( ! FrmAppHelper::should_never_allow_unfiltered_html() ) {
+			return true;
+		}
+		return FrmAppHelper::input_key_is_safe( $key );
 	}
 
 	/**

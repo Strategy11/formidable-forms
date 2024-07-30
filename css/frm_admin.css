@@ -9868,3 +9868,9 @@ Responsive Design
 	border-top: 1px solid var(--grey-200);
 	margin: 0;
 }
+
+/* Always hide submit field button */
+.field_type_list .frm_tsubmit {
+	display: none !important;
+}
+/* End always hide submit field button */
