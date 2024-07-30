@@ -2236,7 +2236,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * Maybe adjust a field value based on type.
-	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 * Some types require unserializing an array.
+	 * These types are defined by a array_allowed property on their field model class.
 	 *
 	 * @since 6.2
 	 *

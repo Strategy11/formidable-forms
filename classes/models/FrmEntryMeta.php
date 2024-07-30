@@ -243,7 +243,10 @@ class FrmEntryMeta {
 		}
 
 		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
-		FrmAppHelper::unserialize_or_decode( $result );
+
+		$field_type = FrmField::get_type( $field_id );
+		FrmFieldsHelper::prepare_field_value( $result, $field_type );
+
 		$result = wp_unslash( $result );
 
 		return $result;
