@@ -170,8 +170,13 @@ class FrmAddonsController {
 		unset( self::$categories['strategy11'] );
 		ksort( self::$categories );
 
-		$plans             = array( 'basic', 'plus', 'business', 'elite' );
 		$bottom_categories = array();
+		$plans             = FrmFormsHelper::get_license_types(
+			array(
+				'include_all' => false,
+				'case_lower'  => true,
+			)
+		);
 
 		// Extract the elements to move
 		foreach ( $plans as $plan ) {
