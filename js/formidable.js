@@ -153,7 +153,13 @@ function frmFrontFormJS() {
 	 * @param {Object} $form
 	 */
 	function enableSaveDraft( $form ) {
-		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', '' );
+		if ( ! $form.length ) {
+			return;
+		}
+		$form[0].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
+			saveDraftButton.disabled            = false;
+			saveDraftButton.style.pointerEvents = '';
+		});
 	}
 
 	function validateForm( object ) {
@@ -470,13 +476,13 @@ function frmFrontFormJS() {
 		if ( format !== '' && text !== '' ) {
 			fieldID = getFieldId( field, true );
 			if ( ! ( fieldID in errors ) ) {
-				format = new RegExp( '^' + format + '$', 'i' );
-				if ( format.test( text ) === false ) {
-					if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
-						if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
-							errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
-						}
-					} else {
+				if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
+					if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
+						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					}
+				} else {
+					format = new RegExp( '^' + format + '$', 'i' );
+					if ( format.test( text ) === false ) {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
 				}

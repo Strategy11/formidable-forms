@@ -247,6 +247,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
+			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
@@ -356,7 +358,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @param object $item
 	 */
 	private function column_value( $item ) {
-		$col_name = $this->column_name;
+		$col_name = $this->maybe_fix_column_name( $this->column_name );
 
 		switch ( $col_name ) {
 			case 'ip':
@@ -417,6 +419,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}//end switch
 
 		return $val;
+	}
+
+	/**
+	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $column_name
+	 * @return string
+	 */
+	private function maybe_fix_column_name( $column_name ) {
+		if ( 0 === strpos( $column_name, '0_' ) ) {
+			$column_name = substr( $column_name, 2 );
+		}
+		return $column_name;
 	}
 
 	/**

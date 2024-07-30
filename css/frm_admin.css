@@ -637,7 +637,7 @@ ul.frm_form_nav > li {
 	gap: var(--gap-sm);
 	align-items: center;
 	text-align: left;
-	width: 200px;
+	min-width: 200px;
 }
 
 #frm_top_bar h1 span {
@@ -9759,3 +9759,9 @@ Responsive Design
 	transform: rotate(45deg);
 }
 /* End External Link Styles */
+
+/* Always hide submit field button */
+.field_type_list .frm_tsubmit {
+	display: none !important;
+}
+/* End always hide submit field button */
