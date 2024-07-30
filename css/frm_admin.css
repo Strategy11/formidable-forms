@@ -9759,3 +9759,9 @@ Responsive Design
 	transform: rotate(45deg);
 }
 /* End External Link Styles */
+
+/* Always hide submit field button */
+.field_type_list .frm_tsubmit {
+	display: none !important;
+}
+/* End always hide submit field button */
