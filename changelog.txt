@@ -7,7 +7,7 @@
 * Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
 * Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
 * Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
-* Fix: HTML entities are now decoded when used for phone format validation to prevent issues were & is converted to &amp; for the regex check.
+* Fix: HTML entities are now decoded when used for phone format validation to prevent issues where & is converted to &amp; for the regex check.
 * Fix: Email summaries would include repeater forms in the top 10 list.
 * Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
 * Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
