@@ -231,7 +231,7 @@ class FrmAddonsHelper {
 	 * @return bool
 	 */
 	public static function is_locked() {
-		return ! FrmAppHelper::pro_is_installed() || self::$plan_required;
+		return self::$plan_required || ! FrmAppHelper::pro_is_installed();
 	}
 
 	/**
