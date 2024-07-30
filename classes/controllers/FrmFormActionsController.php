@@ -478,7 +478,7 @@ class FrmFormActionsController {
 
 		/**
 		 * @since 2.0.23
-		 * @since x.x $filter_args is now passed instead of $args. It includes additional ID data.
+		 * @since 6.11.2 $filter_args is now passed instead of $args. It includes additional ID data.
 		 *
 		 * @param string $event 'create' by default. Pro may filter this value to 'draft' instead.
 		 * @param array  $filter_args

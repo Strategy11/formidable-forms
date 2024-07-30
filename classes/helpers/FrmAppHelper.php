@@ -3936,7 +3936,7 @@ class FrmAppHelper {
 	/**
 	 * Check if an option attribute used in an [input] shortcode is safe.
 	 *
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param string $key
 	 * @param string $context Either 'display' or 'update'. On update, we want to allow a few keys that are never displayed.
@@ -3980,7 +3980,7 @@ class FrmAppHelper {
 		/**
 		 * Filter the $safe value so additional keys can be allowed or disallowed.
 		 *
-		 * @since x.x
+		 * @since 6.11.2
 		 *
 		 * @param bool   $safe True if the key is considered safe.
 		 * @param string $key

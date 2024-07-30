@@ -424,7 +424,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
 	 *
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param string $column_name
 	 * @return string
