@@ -2938,12 +2938,6 @@ body.frm-body-with-open-modal {
 	float: left;
 }
 
-.frm-meta-tag,
-.frm-meta-tag:hover {
-	padding: var(--gap-2xs) var(--gap-xs);
-	border-radius: var(--small-radius);
-}
-
 .frm-meta-tag.frm-grey-tag,
 .frm-meta-tag.frm-grey-tag:hover {
 	background-color: var(--sidebar-hover);
@@ -2976,7 +2970,6 @@ body.frm-body-with-open-modal {
 }
 
 .frm-meta-tag.frm-new-pill {
-	background-color: var(--success-500);
 	vertical-align: text-bottom;
 }
 
