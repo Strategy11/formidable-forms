@@ -199,6 +199,7 @@
 				<file name="classes/models/FrmMigrate.php" />
 				<file name="classes/models/fields/FrmFieldType.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
+				<file name="classes/models/FrmField.php" />
 			</errorLevel>
 		</PossiblyInvalidIterator>
 		<ArgumentTypeCoercion>

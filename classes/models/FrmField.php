@@ -427,13 +427,77 @@ class FrmField {
 	}
 
 	/**
+	 * Maybe filter HTML in field options data.
+	 * HTML is only filtered when unsafe HTML is disallowed.
+	 * See FrmAppHelper::allow_unfiltered_html.
+	 *
 	 * @since 5.0.08
 	 *
 	 * @param array $options
 	 * @return array
 	 */
 	private static function maybe_filter_options( $options ) {
-		return FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+		$options = FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+
+		if ( ! empty( $options['custom_html'] ) ) {
+			$options['custom_html'] = self::maybe_filter_custom_html_input_attributes( $options['custom_html'] );
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Prevent users who do not have permission to insert JavaScript attributes in input elements.
+	 * This is triggered when a field is updated.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	private static function maybe_filter_custom_html_input_attributes( $html ) {
+		if ( FrmAppHelper::allow_unfiltered_html() ) {
+			return $html;
+		}
+
+		$pattern = get_shortcode_regex( array( 'input' ) );
+		return preg_replace_callback(
+			"/$pattern/",
+			/**
+			 * @param array $match Shortcode data.
+			 * @return string
+			 */
+			function ( $match ) {
+				$attr      = shortcode_parse_atts( $match[3] );
+				$safe_atts = array();
+				foreach ( $attr as $attr_key => $att ) {
+					if ( ! is_numeric( $attr_key ) ) {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
+					} else {
+						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
+						$split = explode( '=', $att, 2 );
+						if ( 2 !== count( $split ) ) {
+							continue;
+						}
+						$key   = trim( $split[0] );
+						$value = trim( $split[1], '"' );
+					}
+
+					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
+						$safe_atts[ $key ] = $value;
+					}
+				}
+
+				if ( ! $safe_atts ) {
+					return '[input]';
+				}
+
+				return '[input ' . FrmAppHelper::array_to_html_params( $safe_atts ) . ']';
+			},
+			$html
+		);
 	}
 
 	/**

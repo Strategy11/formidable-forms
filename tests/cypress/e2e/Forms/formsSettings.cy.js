@@ -1,14 +1,9 @@
 describe("Updating form settings", () => {
     beforeEach(() => { 
-        cy.on('uncaught:exception', (err, runnable) => {
-            if (err.message.includes('.draggable is not a function')) {
-                return false;
-            }
-            throw err;
-        });
-       
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable');
+        cy.viewport(1280, 720);
+
     });
 
         it("should 'Show the form title' and 'Show the form description' on the preview form", () => {
