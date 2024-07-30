@@ -448,7 +448,7 @@ class FrmField {
 
 	/**
 	 * Prevent users who do not have permission to insert JavaScript attributes in input elements.
-	 * This is trigged when a field is updated.
+	 * This is triggered when a field is updated.
 	 *
 	 * @since x.x
 	 *
