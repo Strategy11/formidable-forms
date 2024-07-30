@@ -48,7 +48,7 @@ if ( $globally_disabled ) {
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div class="frm-mb-sm frm-flex-justify">
+	<div class="frm-mb-sm frm-flex-justify frm-style-component">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',

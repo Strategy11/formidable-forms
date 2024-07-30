@@ -242,7 +242,7 @@
 			return;
 		}
 
-		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
+		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id ) {
 			handleUpdateClick();
 			return;
 		}
@@ -1108,27 +1108,33 @@
 	function initEditPage() {
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-
+		const debouncedColorChange	 = debounce( ( event, value ) => wp.hooks.doAction( 'frm_style_options_color_change', { event, value } ), 200 );
+		const debouncedTextSquishCheck = debounce( textSquishCheck, 700 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
+		document.getElementById( 'frm_field_height' ).addEventListener( 'change', debouncedTextSquishCheck );
+		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', debouncedTextSquishCheck );
+		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', debouncedTextSquishCheck );
 
 		jQuery( 'input.hex' ).wpColorPicker({
 			change: function( event ) {
+				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+					debouncedColorChange( event, hexcolor );
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
 				jQuery( event.target ).val( hexcolor ).trigger( 'change' );
 			}
 		});
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
+			const container = jQuery( this ).closest( '.wp-picker-container' );
+			if ( 'undefined' !== typeof container && container[0].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+				return container[0].querySelector( '.wp-color-picker' ).value;
+			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		});
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
@@ -1192,10 +1198,15 @@
 		 * @returns {void}
 		 */
 		function textSquishCheck() {
+			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
+				return;
+			}
 			const size           = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
 			const paddingCount   = paddingEntered.length;
+
+			frmDom.util.setCookie( 'frm-style-text-squish-check', 1, 30 );
 
 			// If too many or too few padding entries, leave now
 			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
@@ -1204,7 +1215,7 @@
 
 			// Get the top and bottom padding from entered values
 			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
-			const paddingBottom = paddingTop;
+			let   paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
 				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
 			}

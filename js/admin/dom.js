@@ -461,6 +461,34 @@
 					}
 				}
 			}, options );
+		},
+
+		/**
+		 * Retrieves the value of a cookie by its name.
+		 *
+		 * @param {string} name - The name of the cookie.
+		 * @return {string|null} The value of the cookie, or undefined if the cookie does not exist.
+		 */
+		getCookie: ( name ) => {
+			const cookie = document.cookie.split('; ').find( cookie => cookie.startsWith( `${name}=` ) );
+
+			if ( cookie ) {
+				return cookie.split( '=' )[1];
+			}
+			return null;
+		},
+
+		/**
+		 * Sets a cookie with the specified name, value, and expiration time.
+		 *
+		 * @param {string} name    - The name of the cookie.
+		 * @param {string} value   - The value of the cookie.
+		 * @param {number} minutes - The number of minutes until the cookie expires.
+		 */
+		setCookie: ( name, value, minutes ) => {
+			const expires = new Date();
+			expires.setTime( expires.getTime() + ( minutes * 60 * 1000 ) );
+			document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
 		}
 	};
 

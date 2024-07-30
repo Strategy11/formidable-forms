@@ -120,6 +120,7 @@ class FrmStylesController {
 			return;
 		}
 
+		FrmStyleComponent::register_assets();
 		self::load_pro_hooks();
 
 		$version = FrmAppHelper::plugin_version();
@@ -675,6 +676,10 @@ class FrmStylesController {
 		}
 
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
+	}
+
+	public static function get_quick_settings_template( $frm_style, $style, $form_id ) {
+		include_once self::get_views_path() . '_quick-settings.php';
 	}
 
 	/**

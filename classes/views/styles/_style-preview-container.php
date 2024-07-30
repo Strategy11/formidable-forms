@@ -45,7 +45,7 @@ if ( $sample_form_is_on ) {
 			?>
 		</div>
 		<?php if ( 'edit' !== $view ) { ?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button button frm-button-secondary frm-with-icon" tabindex="0" role="button">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&section=quick-settings&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button button frm-button-secondary frm-with-icon" tabindex="0" role="button">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
 			</a>
 		<?php } ?>
