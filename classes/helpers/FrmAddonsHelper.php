@@ -244,6 +244,7 @@ class FrmAddonsHelper {
 	 * @since x.x
 	 *
 	 * @param array $addon The addon array that will be modified by reference.
+	 * @return void
 	 */
 	private static function set_plan_required( $addon ) {
 		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
