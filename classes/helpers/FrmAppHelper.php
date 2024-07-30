@@ -3945,7 +3945,7 @@ class FrmAppHelper {
 	public static function input_key_is_safe( $key, $context = 'display' ) {
 		if ( 'update' === $context && in_array( $key, array( 'opt', 'label' ), true ) ) {
 			$safe = true;
-		} elseif ( 0 === strpos( $key, 'data-'  ) ) {
+		} elseif ( 0 === strpos( $key, 'data-' ) ) {
 			// Allow all data attributes.
 			$safe = true;
 		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
@@ -3974,8 +3974,8 @@ class FrmAppHelper {
 				'role',
 				'style',
 			);
-			$safe = in_array( $key, $safe_keys, true );
-		}
+			$safe      = in_array( $key, $safe_keys, true );
+		}//end if
 
 		/**
 		 * Filter the $safe value so additional keys can be allowed or disallowed.
