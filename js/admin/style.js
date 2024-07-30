@@ -1198,10 +1198,15 @@
 		 * @returns {void}
 		 */
 		function textSquishCheck() {
+			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
+				return;
+			}
 			const size           = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
 			const paddingCount   = paddingEntered.length;
+
+			frmDom.util.setCookie( 'frm-style-text-squish-check', 1, 30 );
 
 			// If too many or too few padding entries, leave now
 			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {

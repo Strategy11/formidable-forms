@@ -436,6 +436,9 @@
 	margin-top: var(--gap-md);
 	height: 100%;
 }
+.frm-style-tabs-wrapper .frm-tabs-container .frm-tabs-slide-track {
+	transition: 0.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 .frm-style-tabs-wrapper .frm-tabs-slide-track > div {
 	flex: 0 0 100%;
 	opacity: 0.0;

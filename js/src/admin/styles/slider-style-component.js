@@ -1,61 +1,20 @@
-import { __ } from '@wordpress/i18n';
-import { frmTabsNavigator } from '../../components/class-tabs-navigator';
-
-export class frmRadioStyleComponent {
-
-	constructor() {
-		if ( 0 === document.querySelectorAll( '.frm-style-component.frm-radio-component' ).length ) {
-			return;
-		}
-
-		this.elements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
-		this.init();
-	}
-
-	init() {
-		this.elements.forEach( ( element ) => {
-			this.initOnRadioChange( element );
-		});
-	}
-
-	initOnRadioChange( wrapper ) {
-		wrapper.querySelectorAll( 'input[type="radio"]' ).forEach( ( radio ) => {
-			radio.addEventListener( 'change', ( event ) => {
-				this.onRadioChange( event.target.closest( '.frm-style-component.frm-radio-component' ) );
-			});
-		});
-	}
-
-	onRadioChange( wrapper ) {
-		const activeItem = wrapper.querySelector( 'input[type="radio"]:checked + label' );
-		this.moveTracker( activeItem, wrapper );
-	}
-
-	getRadioIndex( radio ) {
-		const radioButtons = Array.from( wrapper.querySelectorAll( 'input[type="radio"]' ) );
-		return radioButtons.indexOf( radio );
-	}
-
-	moveTracker( activeItem, wrapper ) {
-		const offset  = activeItem.offsetLeft;
-		const width   = activeItem.offsetWidth;
-		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
-
-		tracker.style.left = 0;
-		tracker.style.width = width;
-		tracker.style.transform = `translateX(${ offset }px)`;
-	}
-}
-
-export class frmSliderStyleComponent {
+import frmStyleDependentUpdaterComponent from './dependent-updater-component';
+/**
+ * Represents a slider style component.
+ * @class frmSliderStyleComponent
+ */
+export default class frmSliderStyleComponent {
 
 	constructor() {
-		if ( 0 === document.querySelectorAll( '.frm-slider-component' ).length ) {
-			return;
-		}
-
-		this.eventsChange = [];
 		this.elements = document.querySelectorAll( '.frm-slider-component' );
+		if ( 0 === this.elements.length ) {
+			return;
+		}
+
+		// The slider bullet point width in pixels. Used in value calculation on drag event.
+		this.sliderBulletWidth = 16;
+		this.sliderMarginRight = 5;
+		this.eventsChange = [];
 
 		const { debounce }        = frmDom.util;
 		this.valueChangeDebouncer = debounce( ( index ) => this.triggerValueChange( index ), 25 );
@@ -64,6 +23,9 @@ export class frmSliderStyleComponent {
 		this.init();
 	}
 
+	/**
+	 * Initializes the options for the slider style component.
+	 */
 	initOptions() {
 		this.options = [];
 		this.elements.forEach( ( element, index ) => {
@@ -76,16 +38,22 @@ export class frmSliderStyleComponent {
 				element: element,
 				index: index,
 				value: 0,
-				dependendUpdater: parentWrapper.classList.contains( 'frm-style-dependend-updater-component' ) ? new frmStyleDependendUpdaterComponent( parentWrapper ) : null
+				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmStyleDependentUpdaterComponent( parentWrapper ) : null
 			});
 		});
 	}
 
+	/**
+	 * Initializes the slider style component.
+	 */
 	init() {
 		this.initSlidersPosition();
 		this.initDraggable();
 	}
 
+	/**
+	 * Initializes the draggable functionality for the slider style component.
+	 */
 	initDraggable() {
 		this.elements.forEach( ( element, index ) => {
 			this.eventsChange[ index ] = new Event( 'change', { 
@@ -120,6 +88,7 @@ export class frmSliderStyleComponent {
 			});
 
 			draggableBullet.addEventListener( 'mousedown', (event) => {
+				event.preventDefault();
 				this.enableDragging( event, index );
 			});
 
@@ -137,6 +106,12 @@ export class frmSliderStyleComponent {
 		});
 	}
 
+	/**
+	 * Retrieves an array of slider group items based on the provided element.
+	 *
+	 * @param {HTMLElement} element - The element to retrieve slider group items from.
+	 * @return {NodeList} - An array-like object containing the slider group items.
+	 */
 	getSliderGroupItems( element ) {
 		if ( 'undefined' === typeof element.dataset.displaySliders ) {
 			return [];
@@ -149,6 +124,9 @@ export class frmSliderStyleComponent {
 		return element.closest( '.frm-style-component' ).querySelectorAll( query )
 	}
 
+	/**
+	 * Initializes the position of sliders.
+	 */
 	initSlidersPosition() {
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
 
@@ -166,6 +144,12 @@ export class frmSliderStyleComponent {
 		});
 	}
 
+	/**
+	 * Initializes the width of sliders within a given section.
+	 *
+	 * @param {HTMLElement} section - The section containing the sliders.
+	 * @return {void}
+	 */
 	initSlidersWidth( section ) {
 		const sliders = section.querySelectorAll( '.frm-slider-component' );
 		sliders.forEach( ( slider ) => {
@@ -175,9 +159,15 @@ export class frmSliderStyleComponent {
 		});
 	}
 
+	/**
+	 * Initializes the width of a slider.
+	 *
+	 * @param {HTMLElement} slider - The slider element.
+	 * @return {void}
+	 */
 	initSliderWidth( slider ) {
 		const index       = this.getSliderIndex( slider );
-		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - 14;
+		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 		const value       = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
 		const unit        = slider.querySelector( 'select' ).value;
 		const deltaX      = '%' === unit ? Math.round( sliderWidth * value / 100 ) : Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
@@ -187,6 +177,14 @@ export class frmSliderStyleComponent {
 		this.options[ index ].value = value + unit;
 	}
 
+	/**
+	 * Initializes the width of child sliders.
+	 *
+	 * @param {HTMLElement} slider - The parent slider element.
+	 * @param {number}      width  - The width to set for the child sliders.
+	 * @param {number}      index  - The starting index for the child sliders.
+	 * @param {number}      value  - The value to set for the child sliders.
+	 */
 	initChildSlidersWidth( slider, width, index, value ) {
 		if ( ! slider.classList.contains( 'frm-has-independent-fields' ) && ! slider.classList.contains( 'frm-has-multiple-values' ) ) {
 			return;
@@ -200,21 +198,37 @@ export class frmSliderStyleComponent {
 		});
 	}
 
+	/**
+	 * Returns the index of the specified slider element.
+	 *
+	 * @param {HTMLElement} slider - The slider element.
+	 * @return {number} The index of the slider element.
+	 */
 	getSliderIndex( slider ) {
 		return this.options.filter( ( option ) => {
 			return option.element === slider;
 		})[0].index;
 	};
 
+	/**
+	 * Handles the movement of the slider tracker.
+	 *
+	 * @param {Event}  event - The event object representing the mouse movement.
+	 * @param {number} index - The index of the slider element.
+	 * @return {void}
+	 */
 	moveTracker( event, index ) {
 		if ( ! this.options[ index ].dragging ) {
 			return;
 		}
+		let deltaX        = event.clientX - this.options[ index ].startX;
 		const element     = this.elements[ index ];
-		const deltaX      = event.clientX - this.options[ index ].startX;
 		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth;
 
-		if ( deltaX + 12 >= sliderWidth ) {
+		// Ensure deltaX does not go below 0
+		deltaX = Math.max( deltaX, 0 );
+
+		if ( deltaX + this.sliderBulletWidth / 2 + this.sliderMarginRight  >= sliderWidth ) {
 			return;
 		}
 		const unit  = element.querySelector( 'select' ).value;
@@ -231,16 +245,35 @@ export class frmSliderStyleComponent {
 		this.valueChangeDebouncer( index );
 	}
 
+	/**
+	 * Get the maximum value based on the unit and index.
+	 *
+	 * @param {string} unit  - The unit of measurement.
+	 * @param {number} index - The index of the option.
+	 * @return {number} The maximum value.
+	 */
 	getMaxValue( unit, index ) {
 		return '%' === unit ? 100 : this.options[ index ].maxValue;
 	}
 
+	/**
+	 * Enables dragging for the slider style component.
+	 *
+	 * @param {Event}  event - The event object.
+	 * @param {number} index - The index of the option being dragged.
+	 */
 	enableDragging( event, index ) {
 		event.target.classList.add( 'frm-dragging' );
 		this.options[ index ].dragging = true;
 		this.options[ index ].startX = event.clientX - this.options[ index ].translateX;
 	}
 
+	/**
+	 * Disables dragging for a specific index.
+	 *
+	 * @param {number} index - The index of the option to disable dragging for.
+	 * @param {Event}  event - The event object triggered by the dragging action.
+	 */
 	disableDragging( index, event ) {
 		if ( false === this.options[ index ].dragging ) { return; }
 		event.target.classList.remove( 'frm-dragging' );
@@ -248,9 +281,14 @@ export class frmSliderStyleComponent {
 		this.triggerValueChange( index );
 	}
 
+	/**
+	 * Triggers a value change for the specified index.
+	 *
+	 * @param {number} index - The index of the value to be changed.
+	 */
 	triggerValueChange( index ) {
-		if ( null !== this.options[ index ].dependendUpdater ) {
-			this.options[ index ].dependendUpdater.updateAllDependendElements( this.options[ index ].fullValue );
+		if ( null !== this.options[ index ].dependentUpdater ) {
+			this.options[ index ].dependentUpdater.updateAllDependentElements( this.options[ index ].fullValue );
 			return;
 		}
 
@@ -264,14 +302,32 @@ export class frmSliderStyleComponent {
 		input.dispatchEvent( this.eventsChange[ index ] );
 	}
 
+	/**
+	 * Calculates the value based on the width, deltaX, and maxValue.
+	 *
+	 * @param {number} width    - The width of the slider.
+	 * @param {number} deltaX   - The change in x-coordinate.
+	 * @param {number} maxValue - The maximum value.
+	 * @return {number} - The calculated value.
+	 */
 	calculateValue( width, deltaX, maxValue ) {
-		const value = Math.ceil( ( ( deltaX + 14 ) / width ) * maxValue );
-		if ( value < 0 ) {
-			return 0;
-		}
-		return value > maxValue ? maxValue : value;
+
+		// Indicates the additional value generated by the slider's drag progress (up to 100%) and the width of the slider bullet.
+		// Generates a more accurate value for the slider's start (0) and end (maximum value) positions, taking into account the slider's position and bullet width.
+		const delta = Math.ceil( this.sliderBulletWidth * ( deltaX / width ) );
+
+		const value = Math.ceil( ( ( deltaX + delta ) / width ) * maxValue );
+
+		return Math.min( value, maxValue )
 	}
 
+	/**
+	 * Updates the value of a slider component.
+	 *
+	 * @param {HTMLElement} element - The slider component element.
+	 * @param {string}      value   - The new value to be set.
+	 * @return {string} - The updated value.
+	 */
 	updateValue( element, value ) {
 		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
 			const input      = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
@@ -340,149 +396,3 @@ export class frmSliderStyleComponent {
 		return value;
 	}
 }
-
-export class frmTabsStyleComponent {
-
-	constructor() {
-		if ( 0 === document.querySelectorAll( '.frm-style-tabs-wrapper' ).length ) {
-			return;
-		}
-
-		this.elements = document.querySelectorAll( '.frm-style-tabs-wrapper' );
-		this.init();
-	}
-
-	init() {
-		this.elements.forEach( ( element ) => {
-			new frmTabsNavigator( element );
-		});
-	}
-
-	initOnTabClick( wrapper ) {
-		this.initActiveBackgroundWidth( wrapper );
-		wrapper.querySelectorAll( '.frm-tab-item' ).forEach( ( tab ) => {
-			tab.addEventListener( 'click', ( event ) => {
-				this.onTabClick( event.target.closest( '.frm-tabs-wrapper' ) );
-			});
-		});
-	}
-}
-
-export class frmStyleDependendUpdaterComponent {
-
-	constructor( component ) {
-		this.component = component;
-		this.data = {
-			propagateInputs: this.initPropagationList( JSON.parse( this.component.dataset.willChange ) ),
-			changeEvent: new Event( 'change', { bubbles: true } )
-		};
-	}
-
-	initPropagationList( inputNames ) {
-		const list = [];
-		inputNames.forEach( ( name ) => {
-			const input = document.querySelector( `input[name="${name}"]` );
-			if ( null !== input ) {
-				list.push( input );
-			}
-		});
-		return list;
-	}
-
-	updateAllDependendElements( value ) {
-		this.data.propagateInputs.forEach( ( input ) => {
-			input.value = value;
-		});
-		this.data.propagateInputs[0].dispatchEvent( this.data.changeEvent );
-	}
-}
-
-export class frmStyleOptions {
-
-	constructor() {
-		this.success = frmDom.success;
-		this.init();
-		this.initHover();
-	}
-
-	init() {
-		new frmRadioStyleComponent();
-		new frmSliderStyleComponent();
-		new frmTabsStyleComponent();
-
-		this.initColorPickerDependendUpdaterComponents();
-		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
-	}
-
-	initColorPickerDependendUpdaterComponents() {
-		const components = document.querySelectorAll( '.frm-style-dependend-updater-component.frm-colorpicker' );
-		const elements   = [];
-
-		components.forEach( ( component ) => {
-			const element = component.querySelector( 'input.hex' );
-			const id      = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
-
-			if ( null !== id ) {
-				elements.push({
-					id: id,
-					dependendUpdaterClass: new frmStyleDependendUpdaterComponent( component, 'colorpicker' )
-				});
-			}
-		});
-
-		wp.hooks.addAction( 'frm_style_options_color_change', 'formidable', ( { event, value } ) => {
-			const container = event.target.closest( '.wp-picker-container' );
-			const id        = event.target.getAttribute( 'id' );
-
-			container.querySelector( '.wp-color-result-text' ).innerText = value;
-
-			elements.forEach( ( element ) => {
-				if ( element.id === id ) {
-					element.dependendUpdaterClass.updateAllDependendElements( value );
-				}
-			});
-		});
-	}
-
-	initHover() {
-		const settingsWrapper = document.querySelector( '.frm-right-panel .styling_settings .accordion-container' );
-		if ( null === settingsWrapper ) {
-			return;
-		}
-		const hoverElement = document.createElement( 'div' );
-		hoverElement.classList.add( 'frm_hidden' );
-		hoverElement.classList.add( 'frm-style-settings-hover' );
-		settingsWrapper.appendChild( hoverElement );
-
-		const styleOptionsMenu = settingsWrapper.querySelector( ':scope > ul' );
-
-		styleOptionsMenu.querySelectorAll( ':scope > li' ).forEach( ( item ) => {
-			item.querySelector('h3').addEventListener( 'mouseover', ( event ) => {
-				hoverElement.style.transform = `translateY(${event.target.closest('li').offsetTop}px)`;
-				hoverElement.classList.add( 'frm-animating' );
-				hoverElement.classList.remove( 'frm_hidden' );
-				setTimeout( () => { hoverElement.classList.remove( 'frm-animating' ); }, 250 );
-			});
-		});
-
-		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
-		accordionitems.forEach( ( item ) => {
-			item.addEventListener( 'click', () => {
-				hoverElement.classList.add( 'frm_hidden' );
-			});
-		});
-	}
-
-	initStyleClassCopyToClipboard( successMessage ) {
-		const copyLabel = document.querySelector( '.frm-copy-text' );
-		copyLabel.addEventListener( 'click', ( event ) => {
-			const className = event.target.innerText;
-			navigator.clipboard.writeText( className ).then( () => {
-				this.success( successMessage );
-			});
-		})
-	}
-
-}
-
-new frmStyleOptions();

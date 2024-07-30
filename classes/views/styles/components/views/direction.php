@@ -1,3 +1,7 @@
+<?php if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <span class="<?php echo esc_attr( $component_class ); ?> frm-direction-component frm-radio-component">
 	<div class="frm-radio-container frm-flex-box frm-flex-justify">
 		<input id="frm-direction-left-<?php echo esc_attr( $field_name ); ?>" <?php checked( $field_value, 'left' ); ?>  type="radio" <?php echo esc_attr( $field_name ); ?> value="ltr" />

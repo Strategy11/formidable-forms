@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="frm-tabs-navs">
 		<ul class="frm-flex-box">
-			<li class="frm-active"><?php esc_html_e( 'General', 'formidable' );?></li>
+			<li class="frm-active"><?php esc_html_e( 'General', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Required Indicator', 'formidable' ); ?></li>
 		</ul>
 	</div>
@@ -21,11 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmColorpickerStyleComponent(
+						<?php
+						new FrmColorpickerStyleComponent(
 							$frm_style->get_field_name( 'label_color' ),
 							$style->post_content['label_color'],
 							array(
-								'id'         => 'frm_label_color',
+								'id'          => 'frm_label_color',
 								'action_slug' => 'label_color',
 							)
 						); 
@@ -36,53 +37,60 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmSliderStyleComponent(
+						<?php
+						new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'font_size' ),
 							$style->post_content['font_size'],
 							array(
 								'id'        => 'frm_font_size',
-								'max_value' => 100
+								'max_value' => 100,
 							)
-						); ?>
+						);
+						?>
 					</div>
 
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmDropdownStyleComponent(
+						<?php
+						new FrmDropdownStyleComponent(
 							$frm_style->get_field_name( 'weight' ),
 							$style->post_content['weight'],
 							array(
 								'id'      => 'frm_required_weight',
 								'options' => FrmStyle::get_bold_options(),
 							)
-						); ?>
+						);
+						?>
 					</div>
 
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Position', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmDropdownStyleComponent(
+						<?php
+						new FrmDropdownStyleComponent(
 							$frm_style->get_field_name( 'position' ),
 							$style->post_content['position'],
 							array(
-								'id' 	  => 'frm_position',
+								'id'      => 'frm_position',
 								'options' => FrmStylesHelper::get_css_label_positions(),
 							)
-						); ?>
+						);
+						?>
 					</div>
 
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmAlignStyleComponent(
+						<?php
+						new FrmAlignStyleComponent(
 							$frm_style->get_field_name( 'align' ),
 							$style->post_content['align'],
 							array(
-								'options' => array( 'left', 'right' )
+								'options' => array( 'left', 'right' ),
 							),
 						);
 						?>
@@ -92,29 +100,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmSliderStyleComponent(
+						<?php
+						new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'width' ),
 							$style->post_content['width'],
 							array(
-								'id' => 'frm_width',
+								'id'        => 'frm_width',
 								'max_value' => 300,
 							)
-						); ?>
+						);
+						?>
 					</div>
 
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmSliderStyleComponent(
+						<?php
+						new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'label_padding' ),
 							$style->post_content['label_padding'],
 							array(
 								'id'        => 'frm_label_padding',
-								'type'		=> 'vertical-margin',
+								'type'      => 'vertical-margin',
 								'max_value' => 100,
 							)
-						); ?>
+						);
+						?>
 					</div>
 				</div>
 			</div>
@@ -125,7 +137,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmColorpickerStyleComponent(
+						<?php
+						new FrmColorpickerStyleComponent(
 							$frm_style->get_field_name( 'required_color' ),
 							$style->post_content['required_color'],
 							array(
@@ -140,14 +153,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php new FrmDropdownStyleComponent(
+						<?php
+						new FrmDropdownStyleComponent(
 							$frm_style->get_field_name( 'required_weight' ),
 							$style->post_content['required_weight'],
 							array(
 								'id'      => 'frm_required_weight',
 								'options' => FrmStyle::get_bold_options(),
 							)
-						); ?>
+						);
+						?>
 					</div>
 				</div>
 			</div>

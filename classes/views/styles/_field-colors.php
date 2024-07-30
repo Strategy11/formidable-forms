@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -195,7 +195,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Font', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -247,7 +247,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Font', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php 

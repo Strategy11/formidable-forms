@@ -113,7 +113,7 @@ class FrmStyleComponent {
 	protected function get_default_wrapper_class_name() {
 		$class = 'frm-style-component';
 		if ( ! empty( $this->data['will_change'] ) ) {
-			return $class . ' frm-style-dependend-updater-component';
+			return $class . ' frm-style-dependent-updater-component';
 		}
 		return $class;
 	}

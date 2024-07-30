@@ -12,7 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmBackgroundImageStyleComponent(
+	<?php
+	new FrmBackgroundImageStyleComponent(
 		$frm_style->get_field_name( 'fieldset_bg_color' ),
 		$style->post_content['fieldset_bg_color'],
 		array(
@@ -20,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'frm_style'           => $frm_style,
 			'style'               => $style,
 			'action_slug'         => 'fieldset_bg_color',
-			'image_id_input_name' => 'bg_image_id'
+			'image_id_input_name' => 'bg_image_id',
 		)
 	);
 	?>
@@ -28,7 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmAlignStyleComponent(
+	<?php
+	new FrmAlignStyleComponent(
 		$frm_style->get_field_name( 'form_align' ),
 		$style->post_content['form_align'],
 		array(),
@@ -38,7 +40,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmColorpickerStyleComponent(
+	<?php
+	new FrmColorpickerStyleComponent(
 		$frm_style->get_field_name( 'fieldset_color' ),
 		$style->post_content['fieldset_color'],
 		array(
@@ -51,48 +54,56 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmSliderStyleComponent(
+	<?php
+	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'fieldset' ),
 		$style->post_content['fieldset'],
 		array(
 			'id'        => 'frm_fieldset',
 			'max_value' => 25,
 		)
-	); ?>
+	);
+	?>
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmSliderStyleComponent(
+	<?php
+	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'fieldset_padding' ),
 		$style->post_content['fieldset_padding'],
 		array(
 			'id'        => 'frm_fieldset_padding',
-			'type'		=> 'vertical-margin',
+			'type'      => 'vertical-margin',
 			'max_value' => 100,
 		)
-	); ?>
+	);
+	?>
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Form Width', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmSliderStyleComponent(
+	<?php
+	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'form_width' ),
 		$style->post_content['form_width'],
 		array(
 			'id'        => 'frm_form_width',
 			'max_value' => 2000,
 		)
-	); ?>
+	);
+	?>
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Direction', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
-	<?php new FrmDirectionStyleComponent(
+	<?php
+	new FrmDirectionStyleComponent(
 		$frm_style->get_field_name( 'direction' ),
 		$style->post_content['direction'],
 		array()
-	) ?>
+	);
+	?>
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Override Theme', 'formidable' ); ?></label></div>
@@ -106,7 +117,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'checked'   => ! empty( $style->post_content['important_style'] ),
 				'echo'      => true,
 			)
-	); ?>
+		);
+		?>
 </div>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Center Form', 'formidable' ); ?></label></div>
@@ -120,9 +132,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'checked'   => ! empty( $style->post_content['important_style'] ),
 				'echo'      => true,
 			)
-	); ?>
+		);
+		?>
 </div>
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field frm-style-component">
-	<label class="frm-copy-text">.frm_style_<?php echo esc_html( $style->post_name ); FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' ) ?></label>
+	<label class="frm-copy-text">.frm_style_<?php
+		echo esc_html( $style->post_name );
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' );
+	?>
+	</label>
 </div>
