@@ -87,10 +87,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<p class="frm_hidden csv_opts export-filters frm4 frm_form_field">
-				<label for="csv_format" class="frm_help" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ); ?>">
+				<label for="frm_csv_format" class="frm_help" title="<?php esc_attr_e( 'If your CSV special characters are not working correctly, try a different formatting option.', 'formidable' ); ?>">
 					<?php esc_html_e( 'CSV Encoding Format', 'formidable' ); ?>
 				</label>
-				<select name="csv_format">
+				<select id="frm_csv_format" name="csv_format">
 					<?php foreach ( FrmCSVExportHelper::csv_format_options() as $format ) { ?>
 						<option value="<?php echo esc_attr( $format ); ?>">
 							<?php echo esc_html( $format ); ?>
@@ -100,7 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<p class="frm_hidden csv_opts export-filters frm4 frm_form_field">
-				<label for="csv_col_sep">
+				<label for="frm_csv_col_sep">
 					<?php esc_html_e( 'Column Separation', 'formidable' ); ?>
 				</label>
 				<input id="frm_csv_col_sep" name="csv_col_sep" value="," type="text" />

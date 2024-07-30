@@ -1214,7 +1214,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param array $values
 	 *
@@ -1687,14 +1687,14 @@ DEFAULT_HTML;
 	 * This function is deprecated since it has a typo in the name.
 	 *
 	 * @since 3.0
-	 * @deprecated x.x
+	 * @deprecated 6.11.2
 	 *
 	 * @param array $values
 	 *
 	 * @return array
 	 */
 	protected function get_select_atributes( $values ) {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldType::get_select_attributes' );
+		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
 		return $this->get_select_attributes( $values );
 	}
 }
