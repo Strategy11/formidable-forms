@@ -1,4 +1,20 @@
 == Changelog ==
+= 6.11.2 =
+* Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
+* New: Some small accessibility improvements were made on the Import/Export admin page.
+* Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
+* Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
+* Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
+* Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
+* Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
+* Fix: HTML entities are now decoded when used for phone format validation to prevent issues were & is converted to &amp; for the regex check.
+* Fix: Email summaries would include repeater forms in the top 10 list.
+* Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
+* Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
+* Fix: Several incorrect text domains and untranslatable strings have been corrected.
+* The function FrmFieldType::get_select_atributes has been deprecated because of a typo in its name.
+* Several old deprecated view files have been removed.
+
 = 6.11.1 =
 * New: Screen reader text has been updated on some admin pages to improve accessibility.
 * New: Hover styling has been updated for modal close icons to improve user experience.

@@ -944,7 +944,7 @@ class FrmFieldsController {
 	/**
 	 * Disallow possibly unsafe attributees (that trigger JavaScript) when unasfe HTML is not allowed.
 	 *
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param string $key The option key.
 	 * @return bool
