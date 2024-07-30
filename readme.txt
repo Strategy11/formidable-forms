@@ -372,6 +372,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.11.2 =
+* Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
 * New: Some small accessibility improvements were made on the Import/Export admin page.
 * Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
 * Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
