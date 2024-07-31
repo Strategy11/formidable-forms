@@ -1176,7 +1176,7 @@ class FrmFormsController {
 
 		$frm_field_selection = FrmField::field_selection();
 
-		$fields = FrmField::get_all_for_form( $form->id );
+		$fields = self::get_fields_for_form( $form->id );
 
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
@@ -1184,7 +1184,7 @@ class FrmFormsController {
 		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
 
 		if ( $reset_fields ) {
-			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
+			$fields = self::get_fields_for_form( $form->id );
 		}
 
 		unset( $reset_fields );
@@ -1217,6 +1217,31 @@ class FrmFormsController {
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return array
+	 */
+	private static function get_fields_for_form( $form_id ) {
+		global $wpdb;
+
+		$fields = FrmDb::get_results(
+			"{$wpdb->prefix}frm_forms AS fr LEFT OUTER JOIN {$wpdb->prefix}frm_fields AS fi ON fi.form_id = fr.id",
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			)
+		);
+
+		foreach ( $fields as $field ) {
+			FrmAppHelper::unserialize_or_decode( $field->field_options );
+			FrmAppHelper::unserialize_or_decode( $field->options );
+		}
+		return wp_unslash( $fields );
 	}
 
 	/**
