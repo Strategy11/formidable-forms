@@ -253,6 +253,16 @@ namespace {
 		 */
 		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
 		}
+
+		/**
+		 * @param object $entry
+		 * @param object $field
+		 * @param array  $atts
+		 *
+		 * @return string
+		 */
+		public static function prepare_child_display_value( $entry, $field, $atts ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**
