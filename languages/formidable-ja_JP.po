@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-26T14:12:47+00:00\n"
-"PO-Revision-Date: 2024-07-27 01:30\n"
+"POT-Creation-Date: 2024-07-30T13:52:12+00:00\n"
+"PO-Revision-Date: 2024-07-31 01:40\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -632,18 +632,22 @@ msgstr "インポートが完了しました"
 msgid "This form is in the trash and is scheduled to be deleted permanently in %s along with any entries."
 msgstr "このフォームはゴミ箱に入っています。%s後に他のエントリーと一緒に完全に削除される予定です。"
 
-#: classes/controllers/FrmEntriesController.php:471
-msgid "You are trying to view an entry that does not exist."
-msgstr "存在しないエントリーを表示しようとしています。"
+#: classes/controllers/FrmEntriesController.php:472
+msgid "You can't view the entry"
+msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:498
+#: classes/controllers/FrmEntriesController.php:473
+msgid "You are trying to view an entry that does not exist"
+msgstr ""
+
+#: classes/controllers/FrmEntriesController.php:501
 #: classes/controllers/FrmFormActionsController.php:418
 #: classes/controllers/FrmFormsController.php:212
 #: classes/controllers/FrmSettingsController.php:273
 msgid "Verification failed"
 msgstr "検証に失敗しました"
 
-#: classes/controllers/FrmEntriesController.php:514
+#: classes/controllers/FrmEntriesController.php:517
 msgid "Entry was successfully deleted"
 msgstr "エントリーは正常に削除されました"
 
@@ -2258,26 +2262,26 @@ msgstr "ウェールズ語"
 msgid "Zulu"
 msgstr "ズールー語"
 
-#: classes/helpers/FrmAppHelper.php:3953
+#: classes/helpers/FrmAppHelper.php:4009
 msgid "Form Landing Pages"
 msgstr "フォームランディングページ"
 
-#: classes/helpers/FrmAppHelper.php:3954
+#: classes/helpers/FrmAppHelper.php:4010
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr "フォームのランディングページを簡単に管理できます。アップグレードして、フォームのランディングページを利用しましょう。"
 
-#: classes/helpers/FrmAppHelper.php:4036
+#: classes/helpers/FrmAppHelper.php:4092
 #: classes/views/styles/_style-card.php:37
 #: js/admin/applications.js:304
 msgid "NEW"
 msgstr "新規"
 
-#: classes/helpers/FrmAppHelper.php:4195
+#: classes/helpers/FrmAppHelper.php:4251
 msgctxt "warning message: close icon label"
 msgid "Dismiss"
 msgstr "非表示"
 
-#: classes/helpers/FrmAppHelper.php:4236
+#: classes/helpers/FrmAppHelper.php:4292
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
 msgstr "Formidable Forms Lite をご利用中です - ライセンスは必要ありません。ご活用ください !"
 
