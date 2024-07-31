@@ -1366,8 +1366,14 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
-			<span>You're using Formidable Forms Lite. To unlock more features consider</span>
-			<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+				<?php
+				printf(
+					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+					'<a href="' . esc_url( self::admin_upgrade_link( 'settings-license' ) ) . '">',
+					'</a>'
+				);
+				?>
 		</div>
 		<?php
 	}
