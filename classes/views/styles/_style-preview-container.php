@@ -19,7 +19,7 @@ if ( $sample_form_is_on ) {
 	<div class="frm-m-12 frm-mt-0">
 		<?php
 		// If a $message, $warnings, or $notes variable are not empty, it will be rendered here.
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 		?>
 		<?php
 		// If Pro is not active, this will show an upsell.
@@ -40,7 +40,7 @@ if ( $sample_form_is_on ) {
 		<div id="frm_sample_form">
 			<?php
 			$frm_settings = FrmAppHelper::get_settings();
-			include $style_views_path . '_sample_form.php';
+			require $style_views_path . '_sample_form.php';
 			unset( $frm_settings );
 			?>
 		</div>

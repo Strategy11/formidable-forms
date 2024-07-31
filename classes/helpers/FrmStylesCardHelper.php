@@ -48,7 +48,7 @@ class FrmStylesCardHelper {
 	/**
 	 * @param stdClass|WP_Post $active_style
 	 * @param WP_Post          $default_style
-	 * @param string|int       $form_id
+	 * @param int|string       $form_id
 	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
@@ -132,7 +132,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @param WP_Post|stdClass $style
+	 * @param stdClass|WP_Post $style
 	 * @return bool
 	 */
 	private static function has_dark_background( $style ) {
@@ -196,12 +196,12 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $args {
-			 *     @type WP_Post|stdClass $style
+			 *     @type stdClass|WP_Post $style
 			 * }
 			 * @param stdClass $style_object
 			 * @param array    $style
 			 */
-			$param_filter = function( $params, $args ) use ( $style_object, $style ) {
+			$param_filter = function ( $params, $args ) use ( $style_object, $style ) {
 				if ( $args['style'] !== $style_object ) {
 					return $params;
 				}
@@ -225,7 +225,7 @@ class FrmStylesCardHelper {
 			 * @param array $style
 			 * @return array
 			 */
-			$param_filter = function( $params ) use ( $style ) {
+			$param_filter = function ( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
@@ -246,7 +246,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style (including duplicated styles) is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style (including duplicated styles) is not a WP_Post object.
 	 *                                Template cards also use an stdClss instead of a WP_Post object.
 	 * @return string
 	 */
@@ -396,7 +396,7 @@ class FrmStylesCardHelper {
 			 * @param int          $count Used for pagination.
 			 * @return void
 			 */
-			function( $style, $key ) use ( &$count ) {
+			function ( $style, $key ) {
 				if ( ! is_numeric( $key ) ) {
 					// Skip active_sub/expires keys.
 					return;
@@ -417,14 +417,14 @@ class FrmStylesCardHelper {
 		array_walk(
 			$styles,
 			/**
-			* Echo a style card for a single style in the $styles array.
-			*
-			* @param WP_Post $style
-			* @param int     $count Used for pagination.
-			* @return void
-			*/
-			function( $style ) use ( &$count ) {
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
+			 * Echo a style card for a single style in the $styles array.
+			 *
+			 * @param WP_Post $style
+			 * @param int     $count Used for pagination.
+			 * @return void
+			 */
+			function ( $style ) use ( &$count ) {
+				$hidden = $count > self::PAGE_SIZE - 1;
 				$this->echo_style_card( $style, $hidden );
 				++$count;
 			}
@@ -484,7 +484,7 @@ class FrmStylesCardHelper {
 			 * @param WP_Post $style
 			 * @return bool
 			 */
-			function( $style ) {
+			function ( $style ) {
 				return $this->default_style->ID !== $style->ID;
 			}
 		);

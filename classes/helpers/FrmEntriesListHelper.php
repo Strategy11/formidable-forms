@@ -4,15 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmEntriesListHelper extends FrmListHelper {
+
 	protected $column_name;
 	protected $item;
 	protected $field;
 
 	/**
 	 * @since 4.07
-	 * @var int
+	 * @var bool|int
 	 */
 	public $total_items = 0;
+
+	public function __construct( $args ) {
+		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Entries list', 'formidable' ),
+			)
+		);
+	}
 
 	/**
 	 * @return void
@@ -89,7 +99,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( strpos( $orderby, 'meta' ) !== false ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby          .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
+			$orderby         .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
 		}
 
 		$order = self::get_param(
@@ -237,6 +247,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
+			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
@@ -257,7 +269,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			if ( 'cb' != $column_key && ! in_array( $column_key, $hidden ) ) {
+			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden ) ) {
 				$primary_column = $column_key;
 				break;
 			}
@@ -319,8 +331,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
-					$r         .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
-					$r         .= $action_links;
+					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
+					$r        .= $action_links;
 				} else {
 					$r .= $val;
 				}
@@ -346,7 +358,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @param object $item
 	 */
 	private function column_value( $item ) {
-		$col_name = $this->column_name;
+		$col_name = $this->maybe_fix_column_name( $this->column_name );
 
 		switch ( $col_name ) {
 			case 'ip':
@@ -364,7 +376,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
-				$val = sprintf(
+				$val          = sprintf(
 					'<span class="frm-meta-tag frm-entry-status frm-entry-status-%s">%s</span>',
 					sanitize_html_class( $item->is_draft ),
 					esc_html( $entry_status )
@@ -407,6 +419,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}//end switch
 
 		return $val;
+	}
+
+	/**
+	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $column_name
+	 * @return string
+	 */
+	private function maybe_fix_column_name( $column_name ) {
+		if ( 0 === strpos( $column_name, '0_' ) ) {
+			$column_name = substr( $column_name, 2 );
+		}
+		return $column_name;
 	}
 
 	/**

@@ -278,7 +278,7 @@ Avoid a conflict with the .frm_form_field > label:first-child rule in frm_admin.
 The label in the preview should use the label color setting.
 */
 #frm_style_preview .frm_form_field > label:first-child {
-    color: var(--label-color);
+	 color: var(--label-color);
 	font-size: var(--font-size);
 }
 
@@ -424,6 +424,22 @@ body.rtl .frm-style-card-separator {
 .frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
 	pointer-events: none;
 	opacity: 0.5;
+}
+
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:before,
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:after {
+	content: '' !important;
+}
+.formidable_page_formidable-styles .frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
+	transform: rotate(180deg);
+}
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title > .frmsvg:last-child {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	color: var(--grey);
 }
 
 @media only screen and (max-width: 782px) {

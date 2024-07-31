@@ -29,14 +29,52 @@ class FrmSettings {
 	public $custom_style;
 
 	public $active_captcha;
-	public $hcaptcha_pubkey;
-	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for reCAPTCHA.
+	 */
+
+	/**
+	 * @var string|null
+	 */
 	public $pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $privkey;
 	public $re_lang;
 	public $re_type;
 	public $re_msg;
 	public $re_multi;
+
+	/**
+	 * Settings for hCaptcha.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $hcaptcha_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for Turnstile.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $turnstile_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $turnstile_privkey;
 
 	public $no_ips;
 	public $custom_header_ip;
@@ -45,12 +83,13 @@ class FrmSettings {
 	public $summary_emails;
 	public $summary_emails_recipients;
 
+	public $default_email;
 	public $currency;
 
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var false|string|null
 	 */
 	public $custom_css;
 
@@ -94,41 +133,41 @@ class FrmSettings {
 	 */
 	public function default_options() {
 		return array(
-			'menu'         => apply_filters( 'frm_default_menu', 'Formidable' ),
-			'mu_menu'      => 0,
-			'use_html'     => true,
-			'jquery_css'   => false,
-			'accordion_js' => false,
-			'fade_form'    => false,
-			'old_css'      => false,
-			'admin_bar'    => false,
+			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
+			'mu_menu'                   => 0,
+			'use_html'                  => true,
+			'jquery_css'                => false,
+			'accordion_js'              => false,
+			'fade_form'                 => false,
+			'old_css'                   => false,
+			'admin_bar'                 => false,
 
-			're_multi' => 1,
+			're_multi'                  => 1,
 
-			'success_msg'      => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			'success_msg'               => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
 			// translators: %s: [field_name] shortcode.
-			'blank_msg'        => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
+			'blank_msg'                 => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
 			// translators: %s: [field_name] shortcode.
-			'unique_msg'       => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
-			'invalid_msg'      => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
-			'failed_msg'       => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
-			'submit_value'     => __( 'Submit', 'formidable' ),
-			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
-			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
-			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
+			'unique_msg'                => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
+			'invalid_msg'               => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
+			'failed_msg'                => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
+			'submit_value'              => __( 'Submit', 'formidable' ),
+			'login_msg'                 => __( 'You do not have permission to view this form.', 'formidable' ),
+			'admin_permission'          => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
 
-			'email_to'         => '[admin_email]',
-			'no_ips'           => 0,
+			'email_to'                  => '[admin_email]',
+			'no_ips'                    => 0,
 			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip' => false,
-			'tracking'         => FrmAppHelper::pro_is_installed(),
+			'custom_header_ip'          => false,
+			'tracking'                  => FrmAppHelper::pro_is_installed(),
 			// Only enable this by default for the main site.
-			'summary_emails'   => get_current_blog_id() === get_main_site_id(),
+			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
 			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
-			'custom_css' => false,
+			'custom_css'                => false,
 		);
 	}
 
@@ -161,6 +200,10 @@ class FrmSettings {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
 			}
+		}
+
+		if ( ! isset( $this->default_email ) ) {
+			$this->default_email = get_option( 'admin_email' );
 		}
 
 		if ( ! isset( $this->currency ) ) {
@@ -235,22 +278,26 @@ class FrmSettings {
 			$this->active_captcha = 'recaptcha';
 		}
 
-		$privkey          = '';
-		$re_lang          = '';
+		$privkey = '';
+		$re_lang = '';
 
 		if ( ! isset( $this->hcaptcha_privkey ) ) {
 			$this->hcaptcha_privkey = '';
 		}
 
+		if ( ! isset( $this->turnstile_privkey ) ) {
+			$this->turnstile_privkey = '';
+		}
+
 		if ( ! isset( $this->pubkey ) ) {
-			// get the options from the database
+			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
 			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
 			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
 			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
+		if ( empty( $this->re_msg ) ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
@@ -339,20 +386,24 @@ class FrmSettings {
 	}
 
 	/**
+	 * @param array $params
 	 * @return void
 	 */
 	private function update_settings( $params ) {
-		$this->active_captcha   = $params['frm_active_captcha'];
-		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
-		$this->pubkey           = trim( $params['frm_pubkey'] );
-		$this->privkey          = trim( $params['frm_privkey'] );
-		$this->re_type          = $params['frm_re_type'];
-		$this->re_lang          = $params['frm_re_lang'];
-		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
-		$this->load_style       = $params['frm_load_style'];
-		$this->custom_css       = $params['frm_custom_css'];
-		$this->currency         = $params['frm_currency'];
+		$this->active_captcha    = $params['frm_active_captcha'];
+		$this->pubkey            = trim( $params['frm_pubkey'] );
+		$this->privkey           = trim( $params['frm_privkey'] );
+		$this->re_type           = $params['frm_re_type'];
+		$this->re_lang           = $params['frm_re_lang'];
+		$this->re_threshold      = floatval( $params['frm_re_threshold'] );
+		$this->hcaptcha_pubkey   = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
+		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );
+		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
+		$this->load_style        = $params['frm_load_style'];
+		$this->custom_css        = $params['frm_custom_css'];
+		$this->default_email     = $params['frm_default_email'];
+		$this->currency          = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
@@ -372,7 +423,7 @@ class FrmSettings {
 			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
 
 			// Make sure administrators always have permissions
-			if ( ! in_array( 'administrator', $this->$frm_role ) ) {
+			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {
 				array_push( $this->$frm_role, 'administrator' );
 			}
 
@@ -384,6 +435,29 @@ class FrmSettings {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Updates a single setting with specified sanitization.
+	 *
+	 * @since 6.9
+	 *
+	 * @param string $key The setting key to update.
+	 * @param mixed  $value The new value for the setting.
+	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_setting( $key, $value, $sanitize ) {
+		if ( ! property_exists( $this, $key ) || ! is_callable( $sanitize ) ) {
+			// Setting does not exist or sanitization function name is not callable.
+			return false;
+		}
+
+		// Update the property value.
+		FrmAppHelper::sanitize_value( $sanitize, $value );
+		$this->{$key} = $value;
+
+		return true;
 	}
 
 	/**

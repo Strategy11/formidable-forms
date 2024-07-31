@@ -64,7 +64,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 		<?php
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			// only load settings if they are just added or are open
-			include( dirname( __FILE__ ) . '/_action_inside.php' );
+			include __DIR__ . '/_action_inside.php';
 		} else {
 			// include hidden settings so action won't get lost on update
 			?>

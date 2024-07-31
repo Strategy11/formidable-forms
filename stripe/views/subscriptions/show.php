@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 									<td>
 
-									<?php foreach ( $subscription->meta_value as $k => $metas ) { ?>
+									<?php foreach ( $subscription->meta_value as $metas ) { ?>
 										<table class="widefat" style="border:none;">
 										<?php
 

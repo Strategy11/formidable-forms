@@ -1,4 +1,69 @@
 == Changelog ==
+= 6.11.1 =
+* New: Screen reader text has been updated on some admin pages to improve accessibility.
+* New: Hover styling has been updated for modal close icons to improve user experience.
+* Fix: The way Popper scripts are registered have been updated to help avoid a new conflict introduced in a recent WP Bakery update.
+* Fix: The reCaptcha settings name was missing in a global settings string.
+* The minimum supported version of Formidable Pro has been bumped to version 6.0.
+* The function FrmAddonsController::is_license_expiring has been deprecated.
+
+= 6.11 =
+* New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
+* New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
+* New: An optimization has been added to help reduce form builder load times for forms with many HTML or Rich Text fields.
+* New: A styling update has been made to make field placeholder font sizes more consistent.
+* New: Stripe actions included in this plugin now support a Recurring Payment Limit setting. When this setting is defined, and the number of payments has been reached, the subscription will be cancelled automatically.
+* Fix: References to JavaScript map files have been removed from bootstrap and popper scripts to prevent 404 error messages that appear when using Safari.
+* Fix: An Undefined array key PHP Warning would get logged when trying to remove fields using the frm_available_fields or frm_pro_available_fields filters.
+* Fix: Form previews would include two conflicting title tags in the source HTML.
+* Fix: A small update has been made to properly support sending data for repeated API actions.
+* Some old CSS styles have been removed, helping to reduce file size.
+* An old TTF file used for icon fonts has been removed as it was only required for supporting Internet Explorer and is no longer required, helping to reduce overall file size.
+
+= 6.10 =
+* New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
+* New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
+* Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
+* Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
+* Fix: In some cases, a Stripe redirect would happen after failing to create an entry, resulting in an unexpected redirect to stripe.com.
+* The minimum supported PHP version has been updated to 7.0, ending official support for PHP 5.6.
+* The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
+* Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
+* Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
+* Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
+
+= 6.9.1 =
+* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
+* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
+* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
+* Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* The parser for serialized string data has been optimized to be approximately 30% faster than before.
+* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
+* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
+
+= 6.9 =
+* New: A new onboarding wizard has been added to help improve the initial set up process.
+* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
+* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
+* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
+* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
+* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
+* Fix: A confirmation field wouldn't validate with JS when left empty.
+* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
+
+= 6.8.4 =
+* New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
+* New: A new filter has been added to enable support for bulk editing options for a Ranking field.
+* New: The trigger to save draft entries has been updated to a button in new forms.
+* New: A new frm_after_generate_csv action has been added. This can be used to track which entries have already been exported as CSV to avoid exporting an entry more than once.
+* Fix: hCaptcha was not properly resetting after clicking the previous button and returning to the page with the hCaptcha field.
+* Fix: A trim(): Passing null to parameter #1 PHP Deprecated message has been fixed.
+* Fix: Checks have been added to avoid fatal errors when trying to extend the time limit when the function is disabled.
+* Fix: A Creation of dynamic property FrmProEddController::$save_status is deprecated PHP Deprecated message has been fixed.
+* Fix: Icons were missing for collapsible sections in the visual views builder.
+* Monthly summary emails will not longer get sent when there are no new entries to report on.
+* The global JS function frm_add_logic_row used on admin pages has been removed.
+
 = 6.8.3 =
 * New: HTML field descriptions now support the shortcode pop up used in email actions.
 * New: Exported posts from entries will now include <term_parent> tags when applicable.
@@ -9,7 +74,7 @@
 * Fix: A Uncaught TypeError: Cannot access offset of type string on string error has been fixed when checking for add-on data.
 * Fix: License expired emails would get incorrectly sent for rate limited API requests.
 * Fix: Some color style settings would output invalid RGB values when using a RGB color as the style setting value.
-* API requests sent for retreiving add-on and template data will now happen less frequently.
+* API requests sent for retrieving add-on and template data will now happen less frequently.
 * A few old deprecated global JavaScript functions have been removed including frm_resend_email, frmOnSubmit, and frmDeleteEntry.
 * Some old CSS rules using -webkit- and -moz- prefixes have been removed, helping to reduce CSS file size.
 
@@ -82,7 +147,7 @@
 * New: [frm-entry-links] shortcodes now support a new drafts=all option, and drafts=2 and drafts=3 options for filtering for in-progress and abandoned entries. It also now supports comma separated values like drafts="2,3" to include both in-progress and abandoned entries.
 * New: Checkbox groups will no longer use an aria-required attribute on the group element. This was causing accessibility errors in axe DevTools and Google PageSpeed.
 * New: The more options icon in the form builder now has screen reader text for improved accessibility.
-* New: A new test flag colum has been added for payments for more accurate payment tracking.
+* New: A new test flag column has been added for payments for more accurate payment tracking.
 * Fix: A fix has been added to help avoid warnings and error messages when form data is sent in an unexpected format.
 * Fix: Name fields would not properly reset to their default values when using a start over button or when the field was conditionally shown.
 * Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
@@ -158,7 +223,7 @@
 * New: A floating button has been added to some admin pages with links for documentation and support.
 * New: When importing, if a matching trashed form is found based on a key match, it will be deleted before the import begins. This prevents conflicts that cause field shortcodes and conditional logic not to update as expected when imported.
 * New: The field search has been improved. Inactive fields will no longer appear when there is no match, and categories will no longer appear when no children fields are visible.
-* New: Captcha key settings will now be trimmed on save to avoid unecessary whitespace characters reported to cause issues in some cases.
+* New: Captcha key settings will now be trimmed on save to avoid unnecessary whitespace characters reported to cause issues in some cases.
 * New: Form previews inside of Gutenberg blocks are no longer interactive and can no longer be submitted when clicking the submit button in the preview.
 * Fix: Rapidly clicking the preview button before the page has loaded would cause a JavaScript error preventing the preview button from working.
 
@@ -366,7 +431,7 @@
 * Removed a restriction that was preventing a second summary field from being added after adding the first.
 
 = 5.4.4 =
-* New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This signficantly improves form builder performance for fields with many options.
+* New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This significantly improves form builder performance for fields with many options.
 * New: Added a new frm_before_duplicate_entry_values filter for customizing the data of a duplicated entry before it is saved.
 * New: Maximum character length is now validated server side on form submit.
 * Fix: The duplicate option pop up was triggering incorrectly when dragging new options in Chrome.
@@ -737,7 +802,7 @@
 = 4.06 =
 * New: Better accessibility for honeypot field and message after submit.
 * New: Add a Dismiss all button in the inbox.
-* New: Add 'frm_user_id_display' hook for showing something other than the dispay name by default in user ID fields.
+* New: Add 'frm_user_id_display' hook for showing something other than the display name by default in user ID fields.
 * Set the default styling to use grids since most browsers support it now.
 * Fix: On some sites, permissions were preventing a form from being created from a template.
 * Fix: The button colors were overriding eachother with some settings.
@@ -797,7 +862,7 @@
 * Fix: In some cases, a PHP warning was shown when redirecting after submit.
 
 = 4.04 =
-* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
+* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintended results.
 * New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
 * New: Show the new pricing fields in the builder for product education.
 
@@ -998,7 +1063,7 @@
 = 3.06 =
 * New: Add one-click form creation from a form template and adjust the way a new form is created
 * New: Add a new process for creating a custom form template
-* Tweak: Create smaller XML fiels when exporting forms
+* Tweak: Create smaller XML fields when exporting forms
 * Tweak: Use the name of the form for XML exports when a single form is exported
 * Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
 * Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
@@ -1147,7 +1212,7 @@
 * **Pro Version Forms**
 * New: Show a generated screenshot of the embedded form in the form builder rather than the first few fields
 * Fix: Auto updates with the nested version going from 3.0 were failing and updating to lite
-* Fix: Some default values were overiding non defaults when the form was displayed. This included user ID fields and other ifelds with separate values.
+* Fix: Some default values were overriding non defaults when the form was displayed. This included user ID fields and other ifelds with separate values.
 * Fix: Recompile the combined javascript file any time the pro version number changes
 * Fix: Embedded forms were being changed when the parent form was saved
 * Fix: Dynamic fields showing the entry key were blank with [25 show=key].
@@ -1296,7 +1361,7 @@
 = 2.05.04 =
 * Tweak: Remove recaptcha and website fields from sample Contact us form template since most people don't need them
 * Fix: Updates for WP 4.9 compatibility. This includes preventing double filtering on contact form widgets and using the WordPress Codemirror scripts for the form CSS page.
-* Fix: Prevent "are you sure" message that has started occuring from WordPress when saving a WordPress form
+* Fix: Prevent "are you sure" message that has started occurring from WordPress when saving a WordPress form
 * Fix: Correctly validate form fields with an Inside field label when HTML5 forms are not enabled
 * Fix: Set the background color on loading form submit button. Depending on the hover button covers, the loading spinner may have been the same color as the button
 * Fix: Additional security checks when getting POST or GET values in some places
@@ -1332,7 +1397,7 @@
 * Fix: Prevent endless loops in conditional logic when fields are dependent on each other
 * Fix: Searching number field values with LIKE was causing issues
 * Fix: Use secure cookies on SSL sites
-* Fix: Convert dates in certain formats more realibly before save
+* Fix: Convert dates in certain formats more reliably before save
 * Fix: Correctly duplicate fields inside a repeating section
 
 = 2.05.01 =
@@ -2303,7 +2368,7 @@
 * **Pro Forms Features:**
 * Views can now be filtered by fields in the repeating sections.
 * Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
-* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
+* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexibility.
 * Added order parameter to frm-entry-links
 * Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
 * Remove the option to lock field and form keys. This is more of a hassle than a feature.
@@ -2377,7 +2442,7 @@
 = 2.0.09 =
 * Add frm_time_to_check duplicate entries filter
 * Allow custom JavaScript validation
-* Add frm_do_html_shortcodes fiter
+* Add frm_do_html_shortcodes filter
 * Fix the duplicate entry check
 * Include get_columns function in list tables for 4.3
 * Use relative URLs in the stylesheet
@@ -2424,7 +2489,7 @@
 * Fix timezones for searching by entry creation and updated dates in a view
 
 = 2.0.08 =
-* Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
+* Fix security vulnerability allowing shortcodes to be executed inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
 * Added frm_filter_final_form hook. This will need to be used to cover shortcodes that span multiple blocks of field HTML since we can't do a general shortcode replacement on the rendered form
 * Revert change that prevented scripts from firing in the form success message
 * Fix timestamp timezone on view/edit entry page
@@ -2499,7 +2564,7 @@
 * Styling enhancements for left and right label settings
 * Deactivate plugin after uninstall to prevent tables from being added back
 * Add frm_text_block class to Layout tab
-* Fix migration of email settigns that haven't been updated in over two years
+* Fix migration of email settings that haven't been updated in over two years
 * Fix emailing from only a multiple word name with no email
 * Send emails for WordPress default if trying to send from Yahoo
 * Pro: Trigger calculation update each time a row is added or removed from repeating section
@@ -2521,7 +2586,7 @@
 * Pro: If a comma separated list of dates is sent for formatting, explode it before formatting
 * Pro: Increase the backtrack limit when needed when replacing shortcodes in the view content if server has the limit below default
 * Pro: Fix issue causing csv export error
-* Pro: Fix the issue cuasing new posts to not be linked to a view if a field is selected for the post content
+* Pro: Fix the issue causing new posts to not be linked to a view if a field is selected for the post content
 * Pro: Fix issue some users are having with blank date fields
 * Pro: Fix ending collapsible sections at the end of a section instead of waiting for the next section
 * Pro: Fix firing calculations on page load when there are multiple calculations
@@ -2534,7 +2599,7 @@
 * Add a fallback if dbDelta is missing
 * Remove inline js from the draft button in the default HTML to prevent 404/403 errors on some servers. This change only applies to new forms
 * Move the legend tag into the customizable HTML, but without a migration so it won't be added to existing forms
-* Move the "before fields" HTML into the fieldset to it will be parallell with the "After fields" HTML
+* Move the "before fields" HTML into the fieldset to it will be parallel with the "After fields" HTML
 * Make sure partial form transients aren't saved for long forms. Make sure it's all or nothing.
 * Make sure the parent_form_id column was added, and try to add it again if it's not there
 * Pro: Allow [25 show=count]. This shortcode will return a count of items instead of the items themselves. Intended for use with a repeating section field, but would work with anything.
@@ -2652,7 +2717,7 @@
 * Added a few ajax nonce checks but don't require valid nonce for logged-out users for caching reasons
 * Allow data-something="value" inside the [input] short code
 * Pro: Allow [default-message] to have short code parameters to set rtl (direction=rtl), font size (font_size="14px"), and styling (text_color="000" border_width="1px" border_color="000" bg_color="fff" alt_bg_color="eee").
-* Pro: Added frm_html_scoll_box class for scrolling content in an HTML field
+* Pro: Added frm_html_scroll_box class for scrolling content in an HTML field
 * Pro: Allow recurring entries using values like "Third Wednesday of [frmcal-date]"
 * Pro: Allow comma separated view filters for entry key and id
 * Pro: Allow drafts=both in view short code and form results short code
@@ -2739,7 +2804,7 @@
 * PRO: Added drafts parameter to view shortcode to show draft entries. [display-frm-data id=40 drafts=1]
 * PRO: Switched star ratings to icon font
 * PRO: Added multiple="multiple" into multiple file upload fields
-* PRO: Allow field keys in the exlude_fields shortcode option
+* PRO: Allow field keys in the exclude_fields shortcode option
 * PRO: Allow updated-at, created-at, updated-by to by used in conditional statements
 * PRO: Added update message and button to global default messages
 * PRO: Added progress bar to csv import
@@ -2836,7 +2901,7 @@
 * PRO: Updated file uploading progress bar with frm_uploading_files hook added to text
 * PRO: Only show "create entry in form" box if user has permission to create entries
 * PRO: Removed icons from error message
-* PRO: Fixed collapsable entry list bullets
+* PRO: Fixed collapsible entry list bullets
 * PRO: Fixed dependent multi-select data from entries fields on edit
 * PRO: Added frm_back_button_class hook
 * PRO: Fixed quotation marks in conditional logic

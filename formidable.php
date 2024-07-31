@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.8.3
+ * Version: 6.11.1
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -42,9 +42,9 @@ function load_formidable_forms() {
 	);
 
 	// For reverse compatibility. Load Pro if it's still nested.
-	$frm_path = dirname( __FILE__ );
+	$frm_path = __DIR__;
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
-		include( $frm_path . '/pro/formidable-pro.php' );
+		include $frm_path . '/pro/formidable-pro.php';
 	}
 
 	FrmHooksController::trigger_load_hook();
@@ -67,7 +67,7 @@ function frm_forms_autoloader( $class_name ) {
 		return;
 	}
 
-	frm_class_autoloader( $class_name, dirname( __FILE__ ) );
+	frm_class_autoloader( $class_name, __DIR__ );
 }
 
 /**
@@ -78,7 +78,7 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater', 'FrmWelcomeController' );
+	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater' );
 	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
 
@@ -135,8 +135,12 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  * @return void
  */
 function frm_maybe_install() {
-	if ( get_transient( FrmDashboardController::REDIRECT_META_NAME ) !== 'no' ) {
-		set_transient( FrmDashboardController::REDIRECT_META_NAME, FrmDashboardController::PAGE_SLUG, 60 );
+	if ( get_transient( FrmOnboardingWizardController::TRANSIENT_NAME ) !== 'no' ) {
+		set_transient(
+			FrmOnboardingWizardController::TRANSIENT_NAME,
+			FrmOnboardingWizardController::TRANSIENT_VALUE,
+			60
+		);
 	}
 
 	FrmAppController::handle_activation();
@@ -144,7 +148,7 @@ function frm_maybe_install() {
 
 register_deactivation_hook(
 	__FILE__,
-	function() {
+	function () {
 		if ( ! class_exists( 'FrmCronController', false ) ) {
 			require_once __DIR__ . '/classes/controllers/FrmCronController.php';
 		}

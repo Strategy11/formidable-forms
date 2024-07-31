@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p>
-	<label for="frm_tracking">
+	<label>
 		<input type="checkbox" name="frm_tracking" id="frm_tracking" value="1" <?php checked( $frm_settings->tracking, 1 ); ?> />
 		<?php esc_html_e( 'Allow Formidable Forms to track plugin usage to help us ensure compatibility and simplify our settings.', 'formidable' ); ?>
 	</label>
 </p>
 
 <p>
-	<label for="frm_summary_emails">
+	<label>
 		<input
 			type="checkbox"
 			name="frm_summary_emails"
@@ -42,21 +42,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <!-- Deprecated settings can only be switched away from the default -->
-<input type="hidden" id="frm_use_html" name="frm_use_html" value="1" />
-
 <?php if ( empty( $frm_settings->use_html ) ) { ?>
 <p>
 	<label for="frm_use_html">
 		<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked( $frm_settings->use_html, 1 ); ?> />
 		<?php esc_html_e( 'Use HTML5 in forms', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ); ?>"></span>
 	</label>
-	<span class="frm_help frm_icon_font frm_tooltip_icon"
-	title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ); ?>"></span>
 </p>
+<?php } else { ?>
+	<input type="hidden" name="frm_use_html" value="1" />
 <?php } ?>
 
 <p class="frm_uninstall">
-	<label for="frm-uninstall-box">
+	<label>
 		<input type="checkbox" id="frm-uninstall-box" value="1" onchange="frm_show_div('frm_uninstall_now',this.checked,true,'#')" />
 		<?php esc_html_e( 'Uninstall Formidable Forms and permanently delete all data.', 'formidable' ); ?>
 	</label>

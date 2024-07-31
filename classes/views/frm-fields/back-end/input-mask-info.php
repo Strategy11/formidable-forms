@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		echo esc_url(
 			FrmAppHelper::admin_upgrade_link(
 				array(
-					'medium' => 'builder',
+					'medium'  => 'builder',
 					'content' => 'inputmask',
 				),
 				'knowledgebase/format/'

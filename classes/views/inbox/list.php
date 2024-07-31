@@ -6,8 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm-inbox-wrapper">
 	<div class="frm-tabs-navs">
 		<ul class="frm-flex-box">
-			<li class="frm-active"><?php echo esc_html__( 'Inbox', 'formidable' ); ?></li>
-			<li><?php echo esc_html__( 'Dismissed', 'formidable' ); ?></li>
+			<li class="frm-active">
+				<?php
+				esc_html_e( 'Inbox', 'formidable' );
+				echo wp_kses_post( FrmInboxController::get_notice_count( false ) );
+				?>
+			</li>
+			<li><?php esc_html_e( 'Dismissed', 'formidable' ); ?></li>
 		</ul>
 	</div>
 	<div class="frm-tabs-delimiter">

@@ -183,11 +183,11 @@
 }
 
 #frm_application_category_filter {
-    display: inline-block;
+	display: inline-block;
 }
 
 #frm_application_category_filter > a {
-    padding: 0 8px;
+	padding: 0 8px;
 }
 
 #frm_application_category_filter > a:first-child {

@@ -1,0 +1,105 @@
+/**
+ * Onboardin Wizard Page Styles
+ *
+ * This file includes all CSS rules specifically for the Onboarding Wizard page.
+ */
+
+/**
+ * Page General Styles
+ *
+ * Defines the basic typography and layout styles for the Onboarding Wizard page.
+ */
+html.wp-toolbar {
+	padding: 0;
+}
+
+#frm-onboarding-wizard-page {
+	position: relative;
+	overflow: hidden;
+}
+
+#frm-onboarding-wizard-page * {
+	box-sizing: border-box;
+}
+
+#frm-onboarding-bg {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	z-index: 1;
+}
+
+#frm-onboarding-bg img {
+	min-height: 80%;
+	max-height: 1200px;
+}
+
+#frm-onboarding-container {
+	position: relative;
+	min-height: 100vh;
+	opacity: 0;
+	z-index: 2;
+}
+
+#frm-onboarding-return-dashboard {
+	color: var(--grey-400);
+	font-weight: 500;
+	margin-top: var(--gap-xl);
+}
+
+#frm-onboarding-return-dashboard:hover {
+	color: var(--grey-500);
+}
+
+#frm-onboarding-wizard-page[data-current-step="success"] #frm-onboarding-return-dashboard {
+	display: none;
+}
+
+/* NOTE: The changes below were implemented to align with the distinct tooltip style observed in the "Install Formidable Add-ons" step */
+.tooltip-inner {
+	max-width: 295px;
+	background-color: #545F6E;
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: var(--small-radius);
+}
+
+.bs-tooltip-top .arrow::before {
+	border-top-color: #545F6E;
+}
+
+/**
+ * Welcome Step Styles
+ *
+ * Provides styles for when the Onboarding Wizard page is displayed Welcome step.
+ */
+#frm-onboarding-welcome-step {
+	max-width: 445px;
+}
+
+.frm-onboarding-logo {
+	max-width: 185px;
+}
+
+/**
+ * Install Formidable Add-ons Step Styles
+ *
+ * Provides styles for when the Onboarding Wizard page is displayed Install Formidable Add-ons step.
+ */
+.frm-cta-green .frm-banner-title {
+	color: var(--success-900);
+}
+
+.frm-cta-green .frm-banner-text,
+.frm-cta-green .frm-banner-text a {
+	color: var(--success-800);
+}
+
+.frm-cta-green .frm-banner-text a {
+	text-decoration: underline;
+}

@@ -28,7 +28,7 @@ class FrmFieldGridHelper {
 	private $active_field_size;
 
 	/**
-	 * @var bool $is_frm_first flagged while calling get_field_layout_class, true if classes contain frm_first class.
+	 * @var bool flagged while calling get_field_layout_class, true if classes contain frm_first class.
 	 */
 	private $is_frm_first;
 
@@ -38,17 +38,17 @@ class FrmFieldGridHelper {
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper $section_helper
+	 * @var FrmFieldGridHelper
 	 */
 	private $section_helper;
 
 	/**
-	 * @var bool $nested
+	 * @var bool
 	 */
 	private $nested;
 
 	/**
-	 * @var int $section_size
+	 * @var int
 	 */
 	private $section_size;
 
@@ -81,7 +81,7 @@ class FrmFieldGridHelper {
 			$this->maybe_close_section_helper();
 		} else {
 			$this->field_layout_class = $this->get_field_layout_class();
-			$this->active_field_size  = $this->get_size_of_class( $this->field_layout_class );
+			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
 		if ( 'divider' === $field->type && empty( $this->nested ) ) {
@@ -217,7 +217,7 @@ class FrmFieldGridHelper {
 		}
 
 		if ( false !== $this->parent_li ) {
-			$this->current_field_count ++;
+			++$this->current_field_count;
 			$this->current_list_size += $this->active_field_size;
 			if ( 12 === $this->current_list_size ) {
 				$this->close_field_wrapper();
@@ -263,7 +263,7 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function can_support_an_additional_layout( $class ) {
-		$size = $this->get_size_of_class( $class );
+		$size = self::get_size_of_class( $class );
 		return $this->current_list_size + $size <= 12;
 	}
 
