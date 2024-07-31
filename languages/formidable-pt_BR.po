@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-26T14:12:47+00:00\n"
-"PO-Revision-Date: 2024-07-27 01:30\n"
+"POT-Creation-Date: 2024-07-30T13:52:12+00:00\n"
+"PO-Revision-Date: 2024-07-31 01:40\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -632,18 +632,22 @@ msgstr "Sua importação foi concluída"
 msgid "This form is in the trash and is scheduled to be deleted permanently in %s along with any entries."
 msgstr "Esse formulário está na lixeira e está programado para ser excluído permanentemente em %s junto com todas as entradas."
 
-#: classes/controllers/FrmEntriesController.php:471
-msgid "You are trying to view an entry that does not exist."
-msgstr "Você está tentando visualizar uma entrada que não existe."
+#: classes/controllers/FrmEntriesController.php:472
+msgid "You can't view the entry"
+msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:498
+#: classes/controllers/FrmEntriesController.php:473
+msgid "You are trying to view an entry that does not exist"
+msgstr ""
+
+#: classes/controllers/FrmEntriesController.php:501
 #: classes/controllers/FrmFormActionsController.php:418
 #: classes/controllers/FrmFormsController.php:212
 #: classes/controllers/FrmSettingsController.php:273
 msgid "Verification failed"
 msgstr "Falha na verificação"
 
-#: classes/controllers/FrmEntriesController.php:514
+#: classes/controllers/FrmEntriesController.php:517
 msgid "Entry was successfully deleted"
 msgstr "Entrada foi excluída"
 
@@ -2266,26 +2270,26 @@ msgstr "Galês"
 msgid "Zulu"
 msgstr "Zulu"
 
-#: classes/helpers/FrmAppHelper.php:3953
+#: classes/helpers/FrmAppHelper.php:4009
 msgid "Form Landing Pages"
 msgstr "Formulário para páginas de destino"
 
-#: classes/helpers/FrmAppHelper.php:3954
+#: classes/helpers/FrmAppHelper.php:4010
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr "Gerencie facilmente uma páginas de destino para seu formulário. Atualize para obter formulários para páginas de destino."
 
-#: classes/helpers/FrmAppHelper.php:4036
+#: classes/helpers/FrmAppHelper.php:4092
 #: classes/views/styles/_style-card.php:37
 #: js/admin/applications.js:304
 msgid "NEW"
 msgstr "NOVO"
 
-#: classes/helpers/FrmAppHelper.php:4195
+#: classes/helpers/FrmAppHelper.php:4251
 msgctxt "warning message: close icon label"
 msgid "Dismiss"
 msgstr "Dispensar"
 
-#: classes/helpers/FrmAppHelper.php:4236
+#: classes/helpers/FrmAppHelper.php:4292
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
 msgstr "Você está usando o Formidable Forms Lite, que não precisa de licença. Aproveite!"
 
