@@ -19,14 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php echo esc_html( FrmAppHelper::copy_for_lite_license() ); ?>
 		</p>
 		<p>
-				<?php
-				printf(
-					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-					esc_html__( 'To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
-					'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ) . '">',
-					'</a>'
-				);
-				?>
+			<?php
+			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+				esc_html__( 'To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+				'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ) . '">',
+				'</a>'
+			);
+			?>
 		</p>
 	</div>
 </div>
