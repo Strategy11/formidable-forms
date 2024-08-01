@@ -788,7 +788,12 @@ function frmAdminBuildJS() {
 		document.querySelectorAll( sortableSelector ).forEach(
 			list => {
 				makeDroppable( list );
-				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
+				Array.from( list.children ).forEach( child => {
+					if ( child.dataset.ftype === 'user_id' ) {
+						return;
+					}
+					makeDraggable( child, '.frm-move' )
+				});
 
 				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
 				if ( $sectionTitle.length ) {
