@@ -5892,7 +5892,6 @@ function frmAdminBuildJS() {
 			{
 				className: 'frm_image_option_container' + imageLabelClass,
 				children: [
-					tag( 'div', { className: 'frm_selected_checkmark', child: svg({ href: '#frm_checkmark_' + shape + '_icon' }) }),
 					labelImage,
 					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel })
 				]
