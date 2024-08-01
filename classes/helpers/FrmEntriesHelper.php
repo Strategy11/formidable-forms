@@ -210,10 +210,51 @@ class FrmEntriesHelper {
 			return self::display_value( $field_value, $field, $atts );
 		}
 
-		if ( ! is_callable( 'FrmProEntriesHelper::prepare_child_display_value' ) ) {
+		if ( is_callable( 'FrmProEntriesHelper::prepare_child_display_value' ) ) {
+			return FrmProEntriesHelper::prepare_child_display_value( $entry, $field, $atts );
+		}
+
+		// This is an embedded form.
+		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+			// This is a repeating section.
+			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
+		} else {
+			// Get all values for this field.
+			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+
+			if ( $child_values ) {
+				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
+			}
+		}
+
+		$field_value = array();
+
+		if ( empty( $child_entries ) ) {
 			return '';
 		}
-		return FrmProEntriesHelper::prepare_child_display_value( $entry, $field, $atts );
+
+		foreach ( $child_entries as $child_entry ) {
+			$atts['item_id'] = $child_entry->id;
+			$atts['post_id'] = $child_entry->post_id;
+
+			// Fet the value for this field -- check for post values as well.
+			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
+
+			if ( $entry_val || '0' === $entry_val ) {
+				// foreach entry get display_value.
+				$field_value[] = self::display_value( $entry_val, $field, $atts );
+			}
+
+			unset( $child_entry );
+		}
+
+		$sep = ', ';
+		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
+			$sep = '<br/>';
+		}
+		$val = implode( $sep, $field_value );
+
+		return FrmAppHelper::kses( $val, 'all' );
 	}
 
 	/**
