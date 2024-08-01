@@ -789,9 +789,6 @@ function frmAdminBuildJS() {
 			list => {
 				makeDroppable( list );
 				Array.from( list.children ).forEach( child => {
-					if ( child.dataset.ftype === 'user_id' ) {
-						return;
-					}
 					makeDraggable( child, '.frm-move' )
 				});
 
@@ -1836,6 +1833,7 @@ function frmAdminBuildJS() {
 		const newHiddenField    = classes.contains( 'frm_thidden' );
 		const newSectionField   = classes.contains( 'frm_tdivider' );
 		const newEmbedField     = classes.contains( 'frm_tform' );
+		const newUserIdField    = classes.contains( 'frm_tuser_id' );
 
 		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
 		if ( newFieldWillBeAddedToAGroup ) {
@@ -1844,7 +1842,7 @@ function frmAdminBuildJS() {
 				return false;
 			}
 
-			return ! newHiddenField && ! newPageBreakField;
+			return ! newHiddenField && ! newPageBreakField && ! newUserIdField;
 		}
 
 		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
@@ -1925,6 +1923,9 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
+		if ( draggable.classList.contains( 'edit_field_type_user_id' ) ) {
+			return false;
+		}
 		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
 		const draggableIsEmbedField     = draggable.classList.contains( 'edit_field_type_form' );
 		const groupIsInASection         = null !== group.closest( '.start_divider' );
