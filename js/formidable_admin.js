@@ -5631,7 +5631,8 @@ function frmAdminBuildJS() {
 				const fieldChoices     = document.querySelectorAll( '#frm_field_' + fieldId + '_opts input[data-value-on-focus]' );
 				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
 				if ( expectedChoiceEl ) {
-					const hasMatch = valueSelect.querySelector( 'option[value="' + expectedChoiceEl.getAttribute( 'data-value-on-focus' ) + '"]' );
+					const oldValue = expectedChoiceEl.getAttribute( 'data-value-on-focus' );
+					const hasMatch = oldValue && valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
 					if ( hasMatch ) {
 						continue;
 					}
