@@ -1910,7 +1910,7 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
-		if ( groupIncludesBreakOrHidden( group ) ) {
+		if ( groupIncludesBreakOrHiddenOrUserId( group ) ) {
 			// Never allow any field beside a page break or a hidden field.
 			return false;
 		}
@@ -1924,6 +1924,7 @@ function frmAdminBuildJS() {
 		if ( draggable.classList.contains( 'edit_field_type_user_id' ) ) {
 			return false;
 		}
+
 		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
 		const draggableIsEmbedField     = draggable.classList.contains( 'edit_field_type_form' );
 		const groupIsInASection         = null !== group.closest( '.start_divider' );
@@ -1935,8 +1936,8 @@ function frmAdminBuildJS() {
 		return true;
 	}
 
-	function groupIncludesBreakOrHidden( group ) {
-		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
+	function groupIncludesBreakOrHiddenOrUserId( group ) {
+		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden, .edit_field_type_user_id' );
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
