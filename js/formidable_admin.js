@@ -1873,8 +1873,10 @@ function frmAdminBuildJS() {
 		}
 
 		const isHiddenField = draggable.classList.contains( 'edit_field_type_hidden' );
-		if ( isHiddenField ) {
-			// Hidden fields should not be added to field groups since they're not shown and don't make sense with the grid distribution.
+		const isUserIdField = draggable.classList.contains( 'edit_field_type_user_id' );
+		if ( isHiddenField || isUserIdField ) {
+			// Hidden fields and user id fields should not be added to field groups since they're not shown
+			// and don't make sense with the grid distribution.
 			return false;
 		}
 
@@ -1918,10 +1920,6 @@ function frmAdminBuildJS() {
 		const isFieldGroup = jQuery( draggable ).children( 'ul.frm_sorting' ).not( '.start_divider' ).length > 0;
 		if ( isFieldGroup ) {
 			// Do not allow a field group directly inside of a field group unless it's in a section.
-			return false;
-		}
-
-		if ( draggable.classList.contains( 'edit_field_type_user_id' ) ) {
 			return false;
 		}
 
