@@ -1056,34 +1056,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function clearDefault() {
-		/*jshint validthis:true */
-		toggleDefault( jQuery( this ), 'clear' );
-	}
-
-	function replaceDefault() {
-		/*jshint validthis:true */
-		toggleDefault( jQuery( this ), 'replace' );
-	}
-
-	function toggleDefault( $thisField, e ) {
-		// TODO: Fix this for a default value that is a number or array
-		let thisVal,
-			v = $thisField.data( 'frmval' ).replace( /(\n|\r\n)/g, '\r' );
-		if ( v === '' || typeof v === 'undefined' ) {
-			return false;
-		}
-		thisVal = $thisField.val().replace( /(\n|\r\n)/g, '\r' );
-
-		if ( 'replace' === e ) {
-			if ( thisVal === '' ) {
-				$thisField.addClass( 'frm_default' ).val( v );
-			}
-		} else if ( thisVal == v ) {
-			$thisField.removeClass( 'frm_default' ).val( '' );
-		}
-	}
-
 	function resendEmail() {
 		console.warn( 'DEPRECATED: function resendEmail in v6.10 please update to Formidable Pro v6.10' );
 
@@ -1475,10 +1447,6 @@ function frmFrontFormJS() {
 					jQuery( this ).trigger( 'blur' );
 				}
 			});
-
-			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
-			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
-			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
 			if ( frm_js.include_resend_email ) { // eslint-disable-line camelcase
 				jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
