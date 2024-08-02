@@ -1565,7 +1565,9 @@ select.frm_loading_lookup{
 	margin-bottom: 0 !important;
 }
 
-
+.with_frm_style .cf-turnstile>div:nth-child(n+2) {
+	display:none;
+}
 <?php
 /**
  * Call action so other plugins can add additional CSS.
