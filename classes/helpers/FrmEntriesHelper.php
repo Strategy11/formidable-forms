@@ -210,6 +210,9 @@ class FrmEntriesHelper {
 			return self::display_value( $field_value, $field, $atts );
 		}
 
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return '';
+		}
 		if ( is_callable( 'FrmProEntriesHelper::prepare_child_display_value' ) ) {
 			return FrmProEntriesHelper::prepare_child_display_value( $entry, $field, $atts );
 		}
