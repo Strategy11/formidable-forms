@@ -5632,12 +5632,13 @@ function frmAdminBuildJS() {
 				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
 				if ( expectedChoiceEl ) {
 					const hasMatch = valueSelect.querySelector( 'option[value="' + expectedChoiceEl.getAttribute( 'data-value-on-focus' ) + '"]' );
-					if ( ! hasMatch ) {
-						prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
+					if ( hasMatch ) {
+						continue;
 					}
-				} else {
 					prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
+					continue;
 				}
+				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
