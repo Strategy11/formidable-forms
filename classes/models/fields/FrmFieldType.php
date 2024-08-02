@@ -1062,9 +1062,7 @@ DEFAULT_HTML;
 	}
 
 	protected function html5_input_type() {
-		$frm_settings = FrmAppHelper::get_settings();
-
-		return $frm_settings->use_html ? $this->type : 'text';
+		return $this->type;
 	}
 
 	/**
@@ -1101,11 +1099,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( ! $frm_settings->use_html ) {
-			return;
-		}
-
 		$min = FrmField::get_option( $this->field, 'minnum' );
 		if ( ! is_numeric( $min ) ) {
 			$min = 0;

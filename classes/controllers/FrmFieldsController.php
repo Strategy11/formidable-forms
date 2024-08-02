@@ -638,19 +638,7 @@ class FrmFieldsController {
 			return;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-
-		if ( $frm_settings->use_html ) {
-			self::add_placeholder_to_input( $field, $add_html );
-		} else {
-			self::add_frmval_to_input( $field, $add_html );
-
-			$class[] = 'frm_toggle_default';
-
-			if ( $field['value'] == $field['placeholder'] ) {
-				$class[] = 'frm_default';
-			}
-		}
+		self::add_placeholder_to_input( $field, $add_html );
 	}
 
 	/**
@@ -970,14 +958,10 @@ class FrmFieldsController {
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
 		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
-			$frm_settings = FrmAppHelper::get_settings();
+			$format = FrmEntryValidate::phone_format( $field );
+			$format = substr( $format, 2, - 1 );
 
-			if ( $frm_settings->use_html ) {
-				$format = FrmEntryValidate::phone_format( $field );
-				$format = substr( $format, 2, - 1 );
-
-				$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
-			}
+			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
 		}
 	}
 
