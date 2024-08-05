@@ -46,6 +46,7 @@
 		"camelcase": ["error", { "properties": "never" }],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
+		"no-unused-expressions": "off",
 		"react/jsx-curly-spacing": [
 			"error",
 			{
