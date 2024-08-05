@@ -15,7 +15,7 @@ describe("Forms page", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
         cy.get('.frm-upgrade-bar > a')
-            .should('have.text', 'upgrading to Pro')
+            .should('have.text', 'upgrading to PRO')
             .and('have.attr', 'href', formidableFormsUrl)
             .then(link => {
                 cy.wrap(link).invoke('removeAttr', 'target').click();
