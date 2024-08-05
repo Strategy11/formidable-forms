@@ -5631,7 +5631,7 @@ function frmAdminBuildJS() {
 				const fieldChoices     = document.querySelectorAll( '#frm_field_' + fieldId + '_opts input[data-value-on-focus]' );
 				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
 				if ( expectedChoiceEl ) {
-					const oldValue = expectedChoiceEl.getAttribute( 'data-value-on-focus' );
+					const oldValue = expectedChoiceEl.dataset.valueOnFocus;
 					const hasMatch = oldValue && valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
 					if ( hasMatch ) {
 						continue;
@@ -5651,9 +5651,11 @@ function frmAdminBuildJS() {
 
 	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption ) {
 		if ( optionMatch === null ) {
-			optionMatch = document.createElement( 'option' );
-			optionMatch.setAttribute( 'value', expectedOption );
-			optionMatch.textContent = expectedOption;
+			optionMatch = frmDom.tag( 'option', {
+				text: expectedOption,
+				value: expectedOption
+			});
+			optionMatch.value = expectedOption;
 		}
 
 		valueSelect.prepend( optionMatch );
