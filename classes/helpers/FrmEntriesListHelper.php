@@ -293,7 +293,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
 		$checkbox = "<input type='checkbox' name='item-action[]' id='cb-item-action-{$item->id}' value='{$item->id}' />";
 		/* translators: %s: Form name */
-		$checkbox .= "<label for='cb-item-action-{$item->id}'/><span class='screen-reader-text'>" . sprintf( __( 'Select %s', 'formidable' ), FrmFormsHelper::edit_form_link_label( $item->form_id ) ) . '</span></label>';
+		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . sprintf( __( 'Select %s', 'formidable' ), FrmFormsHelper::edit_form_link_label( $item->form_id ) ) . '</span></label>';
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
