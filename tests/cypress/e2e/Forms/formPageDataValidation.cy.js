@@ -1,5 +1,5 @@
 describe("Forms page", () => {
-    const formidableFormsUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=top-bar&utm_campaign=liteplugin';
+    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin';
     const origin = Cypress.config('baseUrl');
     const formTitle = "Test Form";
 
@@ -15,12 +15,12 @@ describe("Forms page", () => {
         cy.log("Validate the upgrade link");
         cy.get('.frm-upgrade-bar > a')
             .should('have.text', 'upgrading to PRO')
-            .and('have.attr', 'href', formidableFormsUrl)
+            .and('have.attr', 'href', formidableFormsUpgradeUrl)
             .then(link => {
                 cy.wrap(link).invoke('removeAttr', 'target').click();
 
-                cy.origin('https://formidableforms.com', { args: { formidableFormsUrl } }, ({ formidableFormsUrl }) => {
-                    cy.location('href').should('eq', formidableFormsUrl);
+                cy.origin('https://formidableforms.com', { args: { formidableFormsUpgradeUrl } }, ({ formidableFormsUpgradeUrl }) => {
+                    cy.location('href').should('eq', formidableFormsUpgradeUrl);
                 });
 
                 cy.log("Navigate back to the original page");
