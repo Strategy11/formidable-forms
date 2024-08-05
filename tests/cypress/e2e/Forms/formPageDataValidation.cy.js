@@ -11,11 +11,10 @@ describe("Forms page", () => {
     });
 
     it("should validate all data in list view", () => {
-
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
-        cy.get('.frm-upgrade-bar > a',{timeout:5000})
-            .should('contain', 'upgrading to PRO')
+        cy.get('.frm-upgrade-bar > a')
+            .should('have.text', 'upgrading to PRO')
             .and('have.attr', 'href', formidableFormsUrl)
             .then(link => {
                 cy.wrap(link).invoke('removeAttr', 'target').click();
@@ -91,7 +90,6 @@ describe("Forms page", () => {
     });
 
     it("should validate all data in excerpt view", () => {
-
         cy.log("Verify that table view in forms page is in excerpt mode");
         cy.get('#view-switch-excerpt').should("exist").click();
 
