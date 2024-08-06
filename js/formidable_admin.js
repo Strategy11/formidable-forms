@@ -5636,8 +5636,6 @@ function frmAdminBuildJS() {
 					if ( hasMatch ) {
 						continue;
 					}
-					prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
-					continue;
 				}
 				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
 			}
@@ -5651,10 +5649,7 @@ function frmAdminBuildJS() {
 
 	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption ) {
 		if ( optionMatch === null ) {
-			optionMatch = frmDom.tag( 'option', {
-				text: expectedOption,
-				value: expectedOption
-			});
+			optionMatch = frmDom.tag( 'option', { text: expectedOption });
 			optionMatch.value = expectedOption;
 		}
 
