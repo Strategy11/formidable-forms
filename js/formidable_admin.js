@@ -5628,13 +5628,16 @@ function frmAdminBuildJS() {
 				expectedOption = fieldOptions[ optionIndex ];
 				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
 
-				if ( optionMatch === null ) {
-					optionMatch = document.createElement( 'option' );
-					optionMatch.setAttribute( 'value', expectedOption );
-					optionMatch.textContent = expectedOption;
+				const fieldChoices     = document.querySelectorAll( '#frm_field_' + fieldId + '_opts input[data-value-on-focus]' );
+				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
+				if ( expectedChoiceEl ) {
+					const oldValue = expectedChoiceEl.dataset.valueOnFocus;
+					const hasMatch = oldValue && valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
+					if ( hasMatch ) {
+						continue;
+					}
 				}
-
-				valueSelect.prepend( optionMatch );
+				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
@@ -5642,6 +5645,15 @@ function frmAdminBuildJS() {
 				valueSelect.prepend( optionMatch );
 			}
 		}
+	}
+
+	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption ) {
+		if ( optionMatch === null ) {
+			optionMatch = frmDom.tag( 'option', { text: expectedOption });
+			optionMatch.value = expectedOption;
+		}
+
+		valueSelect.prepend( optionMatch );
 	}
 
 	function getFieldOptions( fieldId ) {
