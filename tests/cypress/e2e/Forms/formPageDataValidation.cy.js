@@ -128,7 +128,7 @@ describe("Forms page", () => {
                         .then((dateTime) => {
                             const datePart = dateTime.split(' ')[0];
                             expect(datePart).to.equal(formattedDate);
-                        });
+                    
 
                     cy.log("Check that time exists in the <br> element");
                     cy.get('.created_at > abbr')
@@ -137,6 +137,7 @@ describe("Forms page", () => {
                             expect(html.split('<br>')[1].trim()).to.not.be.empty;
 
                         });
+                    });
                 });
             });
     });
