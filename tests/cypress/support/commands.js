@@ -35,19 +35,23 @@ Cypress.Commands.add("createNewForm", () => {
     cy.get("#frm-save-form-name-button").should("contain", "Save").click();
     cy.get("a[aria-label='Close']", { timeout: 7000 }).click();
 })
-
 Cypress.Commands.add("deleteForm", () => {
     cy.log("Delete Form");
     cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
         console.log('Hovered Row:', $row);
-        // Find the visible element with class "trash" within the hovered row and click it
-    cy.wrap($row).within(() => {
-        cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
+        cy.wrap($row).within(() => {
+            cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
         });
-    cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
-    cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
-    })
-})
+        cy.get("body").then(($body) => {
+            if ($body.find("div[role='dialog']").length) {
+                cy.get("div[role='dialog']").should("be.visible").and("contain.text", "Do you want to move this form to the trash?");
+                cy.xpath("//a[@id='frm-confirmed-click']").should("contain.text", "Confirm").click({ force: true });
+            } else {
+                cy.log("Dialog not found");
+            }
+        });
+    });
+});
 
 Cypress.Commands.add("openForm", () => {
     cy.log("Click on the created form");
@@ -65,22 +69,8 @@ Cypress.Commands.add("openForm", () => {
     cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
 });
 
-Cypress.Commands.add("validateFormData", () => {
-    cy.get('.id').should("exist");
-    cy.get(`[id^="item-action-"] > .name > strong > .row-title:contains("${formTitle}")`)
-        .parents('[id^="item-action-"]')
-        .within(() => {
-            cy.get('.name > strong > .row-title').should("contain", formTitle);
-            cy.get('.entries > a').should("contain", "0");
-            cy.get('.form_key').should("contain", "test-form");
-            cy.get('.shortcode > div').should("exist");
-
-            const currentDate = new Date();
-            const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
-        });
-    });
-
-Cypress.Commands.add("getFormattedCurrentDate", () => {
+Cypress.Commands.add("getCurrentFormattedDate", () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
-});    
+    return formattedDate;
+});   

@@ -74,17 +74,19 @@ describe("Forms page", () => {
                 cy.get('.name > strong > .row-title').should("contain", formTitle);
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");
-                
-                cy.getFormattedCurrentDate();
 
-                cy.log("Find the element that displays the date and get its text content");
-                cy.get('.created_at > abbr')
-                    .invoke('text')
-                    .then((dateText) => {
-                        const dateMatch = dateText.match(/\d{4}\/\d{2}\/\d{2}/);
-                        const displayedDate = dateMatch ? dateMatch[0] : '';
-                        expect(displayedDate).to.equal(formattedDate);
-                    });
+                cy.getCurrentFormattedDate().then((formattedDate) => {
+                    cy.log('Formatted Date: ', formattedDate);
+
+                    cy.log("Find the element that displays the date and get its text content");
+                    cy.get('.created_at > abbr')
+                        .invoke('text')
+                        .then((dateText) => {
+                            const dateMatch = dateText.match(/\d{4}\/\d{2}\/\d{2}/);
+                            const displayedDate = dateMatch ? dateMatch[0] : '';
+                            expect(displayedDate).to.equal(formattedDate);
+                        });
+                });
             });
     });
 
@@ -117,23 +119,25 @@ describe("Forms page", () => {
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");
 
-                cy.getFormattedCurrentDate();
+                cy.getCurrentFormattedDate().then((formattedDate) => {
+                    cy.log('Formatted Date: ', formattedDate);
 
-                cy.log("Find the element that displays the date and get its title content");
-                cy.get('.created_at > abbr')
-                    .invoke('attr', 'title')
-                    .then((dateTime) => {
-                        const datePart = dateTime.split(' ')[0];
-                        expect(datePart).to.equal(formattedDate);
-                    });
+                    cy.log("Find the element that displays the date and get its title content");
+                    cy.get('.created_at > abbr')
+                        .invoke('attr', 'title')
+                        .then((dateTime) => {
+                            const datePart = dateTime.split(' ')[0];
+                            expect(datePart).to.equal(formattedDate);
+                        });
 
-                cy.log("Check that time exists in the <br> element");
-                cy.get('.created_at > abbr')
-                    .invoke('html')
-                    .then((html) => {
-                        expect(html.split('<br>')[1].trim()).to.not.be.empty;
+                    cy.log("Check that time exists in the <br> element");
+                    cy.get('.created_at > abbr')
+                        .invoke('html')
+                        .then((html) => {
+                            expect(html.split('<br>')[1].trim()).to.not.be.empty;
 
-                    });
+                        });
+                });
             });
     });
 
