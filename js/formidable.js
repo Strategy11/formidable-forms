@@ -856,6 +856,7 @@ function frmFrontFormJS() {
 	function afterFormSubmittedBeforeReplace( object, response ) {
 		const formCompleted = jQuery( response.content ).find( '.frm_message' );
 		if ( formCompleted.length ) {
+			console.log( 'asfsdfds' );
 			triggerCustomEvent( document, 'frmFormCompleteBeforeReplace', { object, response });
 		}
 	}
