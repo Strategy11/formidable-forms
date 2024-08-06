@@ -1831,6 +1831,7 @@ function frmAdminBuildJS() {
 		const newHiddenField    = classes.contains( 'frm_thidden' );
 		const newSectionField   = classes.contains( 'frm_tdivider' );
 		const newEmbedField     = classes.contains( 'frm_tform' );
+		const newUserIdField    = classes.contains( 'frm_tuser_id' );
 
 		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
 		if ( newFieldWillBeAddedToAGroup ) {
@@ -1839,7 +1840,7 @@ function frmAdminBuildJS() {
 				return false;
 			}
 
-			return ! newHiddenField && ! newPageBreakField;
+			return ! newHiddenField && ! newPageBreakField && ! newUserIdField;
 		}
 
 		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
@@ -1872,8 +1873,10 @@ function frmAdminBuildJS() {
 		}
 
 		const isHiddenField = draggable.classList.contains( 'edit_field_type_hidden' );
-		if ( isHiddenField ) {
-			// Hidden fields should not be added to field groups since they're not shown and don't make sense with the grid distribution.
+		const isUserIdField = draggable.classList.contains( 'edit_field_type_user_id' );
+		if ( isHiddenField || isUserIdField ) {
+			// Hidden fields and user id fields should not be added to field groups since they're not shown
+			// and don't make sense with the grid distribution.
 			return false;
 		}
 
@@ -1909,7 +1912,7 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
-		if ( groupIncludesBreakOrHidden( group ) ) {
+		if ( groupIncludesBreakOrHiddenOrUserId( group ) ) {
 			// Never allow any field beside a page break or a hidden field.
 			return false;
 		}
@@ -1931,8 +1934,8 @@ function frmAdminBuildJS() {
 		return true;
 	}
 
-	function groupIncludesBreakOrHidden( group ) {
-		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
+	function groupIncludesBreakOrHiddenOrUserId( group ) {
+		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden, .edit_field_type_user_id' );
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
