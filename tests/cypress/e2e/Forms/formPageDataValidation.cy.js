@@ -74,9 +74,8 @@ describe("Forms page", () => {
                 cy.get('.name > strong > .row-title').should("contain", formTitle);
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");
-
-                const currentDate = new Date();
-                const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+                
+                cy.getFormattedCurrentDate();
 
                 cy.log("Find the element that displays the date and get its text content");
                 cy.get('.created_at > abbr')
@@ -118,8 +117,7 @@ describe("Forms page", () => {
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");
 
-                const currentDate = new Date();
-                const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+                cy.getFormattedCurrentDate();
 
                 cy.log("Find the element that displays the date and get its title content");
                 cy.get('.created_at > abbr')

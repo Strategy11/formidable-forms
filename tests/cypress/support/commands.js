@@ -65,6 +65,22 @@ Cypress.Commands.add("openForm", () => {
     cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
 });
 
+Cypress.Commands.add("validateFormData", () => {
+    cy.get('.id').should("exist");
+    cy.get(`[id^="item-action-"] > .name > strong > .row-title:contains("${formTitle}")`)
+        .parents('[id^="item-action-"]')
+        .within(() => {
+            cy.get('.name > strong > .row-title').should("contain", formTitle);
+            cy.get('.entries > a').should("contain", "0");
+            cy.get('.form_key').should("contain", "test-form");
+            cy.get('.shortcode > div').should("exist");
 
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+        });
+    });
 
-
+Cypress.Commands.add("getFormattedCurrentDate", () => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+});    
