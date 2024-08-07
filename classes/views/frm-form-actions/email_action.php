@@ -7,12 +7,12 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'   => 'frm_icon_font frm_email_solid_icon',
-			'active'    => true,
-			'event'     => array( 'create' ),
-			'limit'     => 99,
-			'priority'  => 10,
-			'color'     => 'rgb(49, 119, 199)',
+			'classes'  => 'frm_icon_font frm_email_solid_icon',
+			'active'   => true,
+			'event'    => array( 'create' ),
+			'limit'    => 99,
+			'priority' => 10,
+			'color'    => 'rgb(49, 119, 199)',
 		);
 		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
 

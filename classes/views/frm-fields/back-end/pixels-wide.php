@@ -16,6 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 if ( $display_max ) {
-	include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/max.php' );
+	include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/max.php';
 }
 ?>

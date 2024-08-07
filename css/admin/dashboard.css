@@ -1,4 +1,3 @@
-
 .frm-white-body #wpbody-content {
 	/* clear float - fix the full auto height with frm-dashboard-container */
 	float: none;
@@ -281,7 +280,7 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-    justify-content: center;
+	justify-content: center;
 }
 
 .frm-widget-placeholder[data-background="chart-placeholder"] {
@@ -318,7 +317,7 @@
 	position: absolute;
 	top: 0; left: 0;
 	border-top-right-radius: var(--small-radius);
-    border-top-left-radius: var(--small-radius);
+	border-top-left-radius: var(--small-radius);
 }
 
 .frm_wrap .frm-dashboard-container .frm-pro-features-list h2 {

@@ -16,11 +16,11 @@
 }
 
 .frm_clear_none{
-    clear:none;
+	clear:none;
 }
 
 .frm_clear{
-    clear:both;
+	clear:both;
 }
 
 .frm_form_field.frm_alignright{
@@ -28,7 +28,7 @@
 }
 
 .with_frm_style .frm_form_field{
-    clear:both;
+	clear:both;
 }
 
 .frm_combo_inputs_container,
@@ -56,7 +56,7 @@
 .frm_submit.frm_inline,
 .frm_form_field.frm_right_inline,
 .frm_form_field.frm_last_inline{
-    width:auto;
+	width:auto;
 	grid-column: span 2 / span 2;
 }
 
@@ -71,7 +71,7 @@
 .frm_form_field.frm_last_half,
 .frm_form_field.frm_half,
 .frm_submit.frm_half{
-    grid-column:span 6 / span 6;
+	grid-column:span 6 / span 6;
 }
 
 .frm4,
@@ -85,7 +85,7 @@
 .frm_form_field.frm_right_third,
 .frm_form_field.frm_first_third,
 .frm_form_field.frm_last_third{
-    grid-column:span 4 / span 4;
+	grid-column:span 4 / span 4;
 }
 
 .frm8,
@@ -97,7 +97,7 @@
 .frm_form_field.frm_first_two_thirds,
 .frm_form_field.frm_last_two_thirds,
 .frm_form_field.frm_two_thirds{
-    grid-column: span 8/span 8;
+	grid-column: span 8/span 8;
 }
 
 .frm3,
@@ -110,7 +110,7 @@
 .frm_form_field.frm_right_fourth,
 .frm_form_field.frm_first_fourth,
 .frm_form_field.frm_last_fourth{
-    grid-column: span 3/span 3;
+	grid-column: span 3/span 3;
 }
 
 .frm9,
@@ -129,7 +129,7 @@
 .frm_form_field.frm_right_fifth,
 .frm_form_field.frm_first_fifth,
 .frm_form_field.frm_last_fifth{
-    grid-column: span 2/span 2;
+	grid-column: span 2/span 2;
 }
 
 .frm2,
@@ -140,7 +140,7 @@
 .frm_submit.frm_sixth,
 .frm_form_field.frm_first_sixth,
 .frm_form_field.frm_last_sixth{
-    grid-column: span 2/span 2;
+	grid-column: span 2/span 2;
 }
 
 .frm10,
@@ -161,7 +161,7 @@
 .frm_submit.frm_eighth,
 .frm_form_field.frm_first_eighth,
 .frm_form_field.frm_last_eighth{
-    grid-column: span 1/span 1;
+	grid-column: span 1/span 1;
 }
 
 .frm5,
@@ -188,13 +188,13 @@
 .frm_full > input:not([type='checkbox']):not([type='radio']):not([type='button']),
 .frm_full select,
 .frm_full textarea{
-    width:100% !important;
+	width:100% !important;
 	grid-column: span 12/span 12;
 	box-sizing: border-box;
 }
 
 .frm_full .wp-editor-wrap input{
-    width:auto !important;
+	width:auto !important;
 }
 
 .frm_first,
@@ -227,7 +227,7 @@
 /* RTL Grids */
 
 .with_frm_style.frm_rtl .frm_form_fields .star-rating{
-    float:right;
+	float:right;
 }
 
 .with_frm_style.frm_rtl .frm_grid .frm_primary_label,
@@ -239,8 +239,8 @@
 .with_frm_style.frm_rtl .frm_grid .frm_checkbox,
 .with_frm_style.frm_rtl .frm_grid_first .frm_checkbox,
 .with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox{
-    float:right !important;
-    margin-right:0 !important;
+	float:right !important;
+	margin-right:0 !important;
 }
 
 .with_frm_style.frm_rtl .frm_grid_first .frm_radio label input,
@@ -249,7 +249,7 @@
 .with_frm_style.frm_rtl .frm_grid_first .frm_checkbox label input,
 .with_frm_style.frm_rtl .frm_grid .frm_checkbox label input,
 .with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox label input{
-    float:left;
+	float:left;
 }
 
 .with_frm_style.frm_rtl .frm_catlevel_2,
@@ -268,18 +268,18 @@
 .frm_form_field.frm_inline_container,
 .frm_form_field.frm_right_container,
 .frm_form_field.frm_left_container{
-    display: grid;
-    grid-template-columns: 25% auto;
+	display: grid;
+	grid-template-columns: 25% auto;
 	width:100%;
 	grid-auto-rows: min-content;
 }
 
 .frm_form_field.frm_right_container{
-    grid-template-columns: auto 25%;
+	grid-template-columns: auto 25%;
 }
 
 .frm_form_field.frm_inline_container{
-    grid-template-columns: repeat(2, minmax(auto, max-content) );
+	grid-template-columns: repeat(2, minmax(auto, max-content) );
 }
 
 .frm_form_field.frm_inline_container .frm_primary_label,
@@ -328,8 +328,8 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {

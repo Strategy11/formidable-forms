@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDashboardController {
 
 	/**
-	 * Option name used to store the time when auto redirected for welcome.
-	 */
-	const REDIRECT_META_NAME = 'frm_activation_redirect';
-
-	/**
 	 * Handle name used for registering controller scripts and style.
 	 */
 	const PAGE_SLUG = 'formidable-dashboard';
@@ -23,12 +18,9 @@ class FrmDashboardController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_init', __CLASS__ . '::redirect' );
 		add_action( 'admin_menu', __CLASS__ . '::menu', 9 );
 	}
 
@@ -39,58 +31,6 @@ class FrmDashboardController {
 	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . wp_kses_post( FrmInboxController::get_notice_count() ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
-	}
-
-	/**
-	 * Performs a safe (local) redirect to the welcome screen
-	 * when the plugin is activated
-	 *
-	 * @return void
-	 */
-	public static function redirect() {
-		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		if ( $current_page === self::PAGE_SLUG ) {
-			// Prevent endless loop.
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification
-		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) {
-			// Only do this for single site installs.
-			return;
-		}
-
-		// Check if we should consider redirection.
-		if ( ! self::is_dashboard_page() ) {
-			return;
-		}
-
-		set_transient( self::REDIRECT_META_NAME, 'no', 60 );
-
-		// Prevent redirect with every activation.
-		if ( self::already_redirected() ) {
-			return;
-		}
-
-		// Initial install.
-		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) ) );
-		exit;
-	}
-
-	/**
-	 * Don't redirect every time the plugin is activated.
-	 *
-	 * @return bool
-	 */
-	private static function already_redirected() {
-		$redirect_option = 'frm_welcome_redirect';
-		$last_redirect   = get_option( $redirect_option );
-		if ( $last_redirect ) {
-			return true;
-		}
-
-		update_option( $redirect_option, FrmAppHelper::plugin_version(), 'no' );
-		return false;
 	}
 
 	/**
@@ -171,13 +111,16 @@ class FrmDashboardController {
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
+
+		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
+
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
 	}
 
 	/**
 	 * Init top counters widgets view args used to construct FrmDashboardHelper.
 	 *
-	 * @param object|false $latest_available_form If a form is availble, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
+	 * @param false|object $latest_available_form If a form is available, we utilize its ID to direct the 'Create New Entry' link of the entries counter CTA when no entries exist.
 	 * @param array        $counters_value The counter values for "Total Forms" & "Total Entries".
 	 *
 	 * @return array
@@ -221,7 +164,6 @@ class FrmDashboardController {
 		}
 
 		return array_merge( $lite_counters, $pro_counters_placeholder );
-
 	}
 
 	/**
@@ -251,9 +193,9 @@ class FrmDashboardController {
 	/**
 	 * Build view args for cta.
 	 *
-	 * @param string  $title
-	 * @param string  $link
-	 * @param boolean $display
+	 * @param string $title
+	 * @param string $link
+	 * @param bool   $display
 	 *
 	 * @return array
 	 */
@@ -309,7 +251,7 @@ class FrmDashboardController {
 				'copy'       => $copy,
 				'button'     => array(
 					'label' => esc_html__( 'Add New Form', 'formidable' ),
-					'link'  => admin_url( 'admin.php?page=formidable-form-templates' ),
+					'link'  => admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG ),
 				),
 			);
 		}
@@ -333,7 +275,7 @@ class FrmDashboardController {
 	 *
 	 * @param string       $counter_type
 	 * @param int          $counter_value
-	 * @param object|false $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
 	 * @return array
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
@@ -377,7 +319,7 @@ class FrmDashboardController {
 				break;
 
 			case 'save-subscribed-email':
-				$email = FrmAppHelper::get_post_param( 'email' );
+				$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 				self::save_subscribed_email( $email );
 				wp_send_json_success();
 				break;
@@ -402,13 +344,13 @@ class FrmDashboardController {
 	/**
 	 * Check if user has closed the welcome banner. The status of banner is saved in db options.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
 
-		if ( ! empty( $banner_closed_by_users ) && false !== array_search( $user_id, $banner_closed_by_users, true ) ) {
+		if ( ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true ) ) {
 			return true;
 		}
 		return false;
@@ -417,7 +359,7 @@ class FrmDashboardController {
 	/**
 	 * Check if is dashboard page.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_dashboard_page() {
 		return FrmAppHelper::is_admin_page( 'formidable-dashboard' );
@@ -427,11 +369,11 @@ class FrmDashboardController {
 	 * Detect if the logged user's email is subscribed. Used for inbox email subscribe.
 	 *
 	 * @param string $email The logged user's email.
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function email_is_subscribed( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		return false !== in_array( $email, $subscribed_emails, true );
+		return in_array( $email, $subscribed_emails, true );
 	}
 
 	/**
@@ -525,7 +467,7 @@ class FrmDashboardController {
 	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
-		if ( false === array_search( $email, $subscribed_emails, true ) ) {
+		if ( ! in_array( $email, $subscribed_emails, true ) ) {
 			$subscribed_emails[] = $email;
 			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
 		}
@@ -588,7 +530,7 @@ class FrmDashboardController {
 	private static function add_welcome_closed_banner_user_id() {
 		$users_list = self::get_closed_welcome_banner_user_ids();
 		$user_id    = get_current_user_id();
-		if ( false === array_search( $user_id, $users_list, true ) ) {
+		if ( ! in_array( $user_id, $users_list, true ) ) {
 			$users_list[] = $user_id;
 			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
 		}

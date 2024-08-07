@@ -64,6 +64,7 @@ class FrmFormActionsController {
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
 			'aweber'            => 'FrmDefAweberAction',
+			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
@@ -254,6 +255,9 @@ class FrmFormActionsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
+	/**
+	 * @param string $action
+	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 		if ( empty( $temp_actions ) ) {
@@ -266,7 +270,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' != $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base == $action ) {
 				return $a;
 			}
 
@@ -375,7 +379,7 @@ class FrmFormActionsController {
 	 */
 	private static function should_show_log_message( $action_type ) {
 		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
-		return in_array( $action_type, $logging ) && ! function_exists( 'frm_log_autoloader' );
+		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
 	private static function fields_to_values( $form_id, array &$values ) {
@@ -410,10 +414,10 @@ class FrmFormActionsController {
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
-			$error_args = array(
-				'title'       => __( 'Verification failed', 'formidable' ),
-				'body'        => $frm_settings->admin_permission,
-				'cancel_url'  => add_query_arg(
+			$error_args   = array(
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $frm_settings->admin_permission,
+				'cancel_url' => add_query_arg(
 					array(
 						'page'       => 'formidable',
 						'frm_action' => 'settings',
@@ -472,7 +476,14 @@ class FrmFormActionsController {
 		$filter_args['entry_id'] = $entry_id;
 		$filter_args['form_id']  = $form_id;
 
-		$event = apply_filters( 'frm_trigger_create_action', 'create', $args );
+		/**
+		 * @since 2.0.23
+		 * @since 6.11.2 $filter_args is now passed instead of $args. It includes additional ID data.
+		 *
+		 * @param string $event 'create' by default. Pro may filter this value to 'draft' instead.
+		 * @param array  $filter_args
+		 */
+		$event = apply_filters( 'frm_trigger_create_action', 'create', $filter_args );
 
 		self::trigger_actions( $event, $form_id, $entry_id, 'all', $args );
 	}
@@ -553,15 +564,29 @@ class FrmFormActionsController {
 
 			foreach ( $action_priority as $action_id => $priority ) {
 				$action = $stored_actions[ $action_id ];
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
-				do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+
+				/**
+				 * Allows custom form action trigger.
+				 *
+				 * @since 6.10
+				 *
+				 * @param bool   $skip   Skip default trigger.
+				 * @param object $action Action object.
+				 * @param object $entry  Entry object.
+				 * @param object $form   Form object.
+				 * @param string $event  Event ('create' or 'update').
+				 */
+				if ( false === apply_filters( 'frm_custom_trigger_action', false, $action, $entry, $form, $event ) ) {
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_action', $action, $entry, $form, $event );
+					do_action( 'frm_trigger_' . $action->post_excerpt . '_' . $event . '_action', $action, $entry, $form );
+				}
 
 				// If post is created, get updated $entry object.
 				if ( $action->post_excerpt === 'wppost' && $event === 'create' ) {
 					$entry = FrmEntry::getOne( $entry->id, true );
 				}
-			}
-		}
+			}//end foreach
+		}//end if
 	}
 
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {

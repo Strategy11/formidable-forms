@@ -89,7 +89,7 @@
 }
 
 /* Create a blank form */
-#frm-form-templates-create-form {
+.frm-form-templates-create-button {
 	gap: 10px;
 	color: var(--grey-900);
 	background-color: transparent;
@@ -101,11 +101,11 @@
 	box-shadow: var(--box-shadow-xs);
 }
 
-#frm-form-templates-create-form:hover {
+.frm-form-templates-create-button:hover {
 	background-color: var(--grey-50);
 }
 
-#frm-form-templates-create-form:focus-within {
+.frm-form-templates-create-button:focus-within {
 	outline: 1px solid var(--primary-700);
 	border-color: var(--primary-700);
 }
@@ -279,41 +279,18 @@ p.frm-form-templates-item-description {
  *
  * Customizes the look of modals on the Form Templates page.
  */
-/* Modal Errors */
-#frm-form-templates-modal .frm-form-templates-modal-error:not(.frm_hidden),
-#frm_code_from_email_options:not(.frm_hidden) {
-	display: flex;
-}
-
-#frm-form-templates-modal .frm-form-templates-modal-error,
-#frm_code_from_email_options {
-	gap: calc(var(--gap-xs) + var(--gap-2xs));
-}
-
-#frm-form-templates-modal .frm-form-templates-modal-error {
-	color: var(--error-500);
-}
-
-#frm_code_from_email_error span,
-#frm_leave_email_error span {
-	display: none;
-}
-
-#frm_code_from_email_error[frm-error="wrong-code"] span[frm-error="wrong-code"],
-#frm_code_from_email_error[frm-error="empty"] span[frm-error="empty"],
-#frm_code_from_email_error[frm-error="custom"] span[frm-error="custom"],
-#frm_leave_email_error[frm-error="invalid"] span[frm-error="invalid"],
-#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"] {
-	display: inline-block;
-}
-
 /* Upgrade Modal */
 #frm-form-upgrade-modal .frm-upgrade-modal-plan-icon {
 	color: var(--error-500);
 }
 
 /* Code from email modal */
+#frm_code_from_email_options:not(.frm_hidden) {
+	display: flex;
+}
+
 #frm_code_from_email_options {
+	gap: calc(var(--gap-xs) + var(--gap-2xs));
 	color: var(--primary-500);
 }
 

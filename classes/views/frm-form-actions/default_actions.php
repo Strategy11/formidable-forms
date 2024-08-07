@@ -197,3 +197,11 @@ class FrmDefHrsAction extends FrmFormAction {
 		parent::__construct( 'payment', __( 'eCommerce', 'formidable' ), $action_ops );
 	}
 }
+
+class FrmDefConvertKitAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops          = FrmFormAction::default_action_opts( 'frm_convertkit_icon frm-inverse frm_show_upgrade' );
+		$action_ops['color'] = '#fb686f';
+		parent::__construct( 'convertkit', 'ConvertKit', $action_ops );
+	}
+}

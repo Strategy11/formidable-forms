@@ -90,7 +90,7 @@ class FrmFieldTextarea extends FrmFieldType {
 	public function front_field_input( $args, $shortcode_atts ) {
 		$input_html = $this->get_field_input_html_hook( $this->field );
 		$this->add_aria_description( $args, $input_html );
-		$rows = ( $this->field['max'] ) ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
+		$rows = $this->field['max'] ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
 
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .

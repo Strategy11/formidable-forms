@@ -46,7 +46,8 @@ class FrmFieldDefault extends FrmFieldType {
 	}
 
 	/**
-	 * @return false|string
+	 * @param array $args
+	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$pass_args = array(
@@ -59,6 +60,6 @@ class FrmFieldDefault extends FrmFieldType {
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
-		return $input_html;
+		return is_string( $input_html ) ? $input_html : '';
 	}
 }

@@ -25,7 +25,7 @@ class FrmDashboardHelper {
 	 *        @type array  $counters['counters'][]['cta']
 	 *            @type string  $counters['counters'][]['cta']['title']
 	 *            @type string  $counters['counters'][]['cta']['link']
-	 *            @type boolean $counters['counters'][]['cta']['display'] If true a CTA will be displayed instead of the counter.
+	 *            @type bool $counters['counters'][]['cta']['display'] If true a CTA will be displayed instead of the counter.
 	 *    @type array $license Array of license args
 	 *        @type string $license['heading']
 	 *        @type string $license['copy']
@@ -64,11 +64,11 @@ class FrmDashboardHelper {
 	 *            @type string     $entries['placeholder']['background']
 	 *            @type string     $entries['placeholder']['heading']
 	 *            @type string     $entries['placeholder']['copy']
-	 *            @type null|array $entries['placeholder']['button']
+	 *            @type array|null $entries['placeholder']['button']
 	 *                @type string $entries['placeholder']['button']['label']
 	 *                @type string $entries['placeholder']['button']['link']
 	 *    @type array $payments Array of payments args
-	 *        @type boolean $payments['show-placeholder']
+	 *        @type bool $payments['show-placeholder']
 	 *        @type array   $payments['placeholder']
 	 *            @type string $payments['placeholder']['copy']
 	 *            @type array  $payments['placeholder']['cta']
@@ -337,14 +337,14 @@ class FrmDashboardHelper {
 	private static function load_entries_list_template( $template ) {
 		add_filter(
 			'formidable_page_formidable_entries_per_page',
-			function() {
+			function () {
 				return 7;
 			}
 		);
 
-		$params                  = FrmForm::get_admin_params();
-		$controler_entires_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
-		$wp_list_table           = new $controler_entires_table( array( 'params' => $params ) );
+		$params                   = FrmForm::get_admin_params();
+		$controller_entries_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
+		$wp_list_table            = new $controller_entries_table( array( 'params' => $params ) );
 		$wp_list_table->prepare_items();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/entries-list.php';

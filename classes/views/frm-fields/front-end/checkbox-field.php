@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
-if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
+if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
@@ -22,7 +22,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
-		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
 		/**
 		 * Allows changing the HTML of option label in choice field (radio, checkbox,...).
@@ -45,14 +45,22 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		// Check if other opt, and get values for other field if needed
-		$other_opt = false;
+		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key', 'field_val' ), $other_opt, $checked );
 
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
+			$label_attributes = array(
+				'for' => $html_id . '-' . $opt_key,
+			);
+			if ( $read_only ) {
+				$label_attributes['class'] = 'frm-label-disabled';
+			}
+			?>
+			<label <?php FrmAppHelper::array_to_html_params( $label_attributes, true ); ?>>
+			<?php
 		}
 
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
@@ -61,13 +69,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		do_action( 'frm_field_input_html', $field );
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
-			echo ' aria-required="true" ';
+	echo ' aria-required="true" ';
 		}
 
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$other_args = array(

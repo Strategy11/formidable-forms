@@ -18,7 +18,7 @@ class FrmElementorController {
 		if ( is_admin() ) {
 			add_action(
 				'elementor/editor/after_enqueue_styles',
-				function() {
+				function () {
 					wp_enqueue_style( 'font_icons', FrmAppHelper::plugin_url() . '/css/font_icons.css', array(), FrmAppHelper::plugin_version() );
 				}
 			);

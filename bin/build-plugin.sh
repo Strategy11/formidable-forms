@@ -87,5 +87,5 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ]; then
 	npm run git-release -- $version
 else
-	echo "Changes not commited."
+	echo "Changes not committed."
 fi
