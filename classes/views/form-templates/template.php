@@ -43,7 +43,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 					</span>
 				<?php } ?>
 
-				<span class="frm-form-template-name">
+				<span class="frm-form-template-name frm-truncate">
 					<?php echo esc_html( $template['name'] ); ?>
 				</span>
 			</span>
@@ -78,7 +78,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 				</a>
 			</div>
 
-			<p class="frm-form-templates-item-description">
+			<p class="frm-form-templates-item-description frm-line-clamp-2">
 				<?php
 				if ( $template['description'] ) {
 					echo FrmAppHelper::kses( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

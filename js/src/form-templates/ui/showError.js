@@ -1,7 +1,7 @@
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { showFormError } from '../utils';
+import { showFormError } from 'core/utils';
 
 /**
  * Displays errors related to the email address field.
@@ -16,7 +16,7 @@ export const showEmailAddressError = type => {
 /**
  * Displays errors related to the confirm email address field.
  *
- * @param {string} type The categorization of the error (e.g., "invalid", "empty").
+ * @param {string} type      The categorization of the error (e.g., "invalid", "empty").
  * @param {string} [message] Optional. The specific error message to display.
  * @return {void}
  */

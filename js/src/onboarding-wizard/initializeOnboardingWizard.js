@@ -1,10 +1,8 @@
 /**
  * Internal dependencies
  */
-import { initializeElements } from './elements';
-import { initializeAppState } from './shared';
-import { addEventListeners } from './events';
 import { setupInitialView } from './ui';
+import { addEventListeners } from './events';
 
 /**
  * Initializes Onboarding Wizard.
@@ -12,8 +10,6 @@ import { setupInitialView } from './ui';
  * @return {void}
  */
 function initializeOnboardingWizard() {
-	initializeElements();
-	initializeAppState();
 	setupInitialView();
 	addEventListeners();
 }

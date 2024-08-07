@@ -439,6 +439,7 @@ class FrmTipsHelper {
 			'link_url'    => '#',
 			'class'       => '',
 			'id'          => '',
+			'target'      => '_blank',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

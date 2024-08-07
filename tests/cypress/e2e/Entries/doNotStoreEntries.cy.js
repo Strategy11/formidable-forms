@@ -9,7 +9,7 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-        cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+        cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
         cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
         cy.get("#frm_new_form_name_input").type("Test Form");
         cy.get("#frm-save-form-name-button").should("contain", "Save").click();
@@ -24,7 +24,7 @@ describe("Entries submitted from a form", () => {
         cy.get("#frm-previewDrop",{timeout:5000}).should("contain", "Preview").click();
         cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
         cy.get('[id^="field_"]').filter('input, textarea').type("Entry is stored");
-        cy.get("button[type='submit']").should("contain", "Submit").click();   
+        cy.get("button[type='submit']").should("contain", "Submit").click();
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain","Entries").click();
         cy.get('.wrap > h2').should("contain","Form Entries");
@@ -41,7 +41,7 @@ describe("Entries submitted from a form", () => {
         cy.get("#frm-previewDrop",{timeout:5000}).should("contain", "Preview").click();
         cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
         cy.get('[id^="field_"]').filter('input, textarea').type("Entry is not stored");
-        cy.get("button[type='submit']").should("contain", "Submit").click();   
+        cy.get("button[type='submit']").should("contain", "Submit").click();
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain","Entries").click();
         cy.get('.wrap > h2').should("contain","Form Entries");
@@ -50,8 +50,8 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Teardown - Close and delete form");
         cy.get('.frm_form_nav > :nth-child(1) > a').should("contain","Build").click();
-        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
-        cy.deleteForm(); 
+        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });
+        cy.deleteForm();
     });
 
 });

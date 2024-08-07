@@ -494,7 +494,7 @@ class FrmFormTemplatesController {
 
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
-		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::ignore_template_categories() );
+		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::get_license_types() );
 		foreach ( $redundant_cats as $redundant_cat ) {
 			$category_slug = sanitize_title( $redundant_cat );
 			unset( self::$categories[ $category_slug ] );
@@ -522,7 +522,7 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
-		$special_categories['all-templates']  = array(
+		$special_categories['all-items']      = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);

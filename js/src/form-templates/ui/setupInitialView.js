@@ -1,9 +1,15 @@
 /**
+ * External dependencies
+ */
+import { HIDE_JS_CLASS } from 'core/constants';
+import { frmAnimate, hasQueryParam, hideElements, show, hide } from 'core/utils';
+import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS, getAppState } from '../shared';
-import { show, hide, hideElements, frmAnimate, hasQueryParam } from '../utils';
+import { getState } from '../shared';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -24,7 +30,6 @@ function setupInitialView() {
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
 
-	// Clear the value in the search input
 	searchInput.value = '';
 
 	// Hide the twin featured template items
@@ -32,20 +37,20 @@ function setupInitialView() {
 
 	// Set the 'Available Templates' count if it is present
 	if ( availableTemplatesCategory ) {
-		const { availableTemplatesCount } = getAppState();
-		availableTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = availableTemplatesCount;
+		const { availableTemplatesCount } = getState();
+		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
 	}
 
 	// Update the 'Free Templates' count and hide the category if count is zero
-	const { freeTemplatesCount } = getAppState();
-	freeTemplatesCategory.querySelector( '.frm-form-templates-cat-count' ).textContent = freeTemplatesCount;
+	const { freeTemplatesCount } = getState();
+	freeTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = freeTemplatesCount;
 	if ( 0 === freeTemplatesCount ) {
 		hide( freeTemplatesCategory );
 	}
 
 	// Update extra templates count
 	const { extraTemplateCountElements } = getElements();
-	const { extraTemplatesCount } = getAppState();
+	const { extraTemplatesCount } = getState();
 	extraTemplateCountElements.forEach( element => element.textContent = extraTemplatesCount );
 
 	// Smoothly display the updated UI elements

@@ -1,10 +1,15 @@
 /**
+ * External dependencies
+ */
+import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core/utils';
+import { addProgressToCardBoxes } from 'core/ui';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { STEPS, WELCOME_STEP_ID, proIsIncluded } from '../shared';
-import { frmAnimate, getQueryParam, hasQueryParam, navigateToStep, removeQueryParam } from '../utils';
-import { addProgressToCardBoxes } from '../../common/components';
+import { navigateToStep } from '../utils';
 
 /**
  * Initializes the onboarding wizard's UI, sets up the initial step based on certain conditions,
@@ -45,8 +50,7 @@ function determineInitialStep() {
 	const { hiddenLicenseKeyInput, installFormidableProStep, licenseManagementStep } = getElements();
 
 	if ( hiddenLicenseKeyInput ) {
-		const step = handleLicenseKeyInput( hiddenLicenseKeyInput, installFormidableProStep, licenseManagementStep );
-		return step; // Steps are conditionally removed inside handleLicenseKeyInput based on proIsIncluded
+		return handleLicenseKeyInput( hiddenLicenseKeyInput, installFormidableProStep, licenseManagementStep ); // Steps are conditionally removed inside handleLicenseKeyInput based on proIsIncluded
 	}
 
 	if ( hasQueryParam( 'success' ) ) {
@@ -78,9 +82,9 @@ function determineInitialStep() {
  * Removes unnecessary steps based on the determined next step.
  *
  * @private
- * @param {HTMLElement} hiddenLicenseKeyInput The hidden input element containing the license key.
+ * @param {HTMLElement} hiddenLicenseKeyInput    The hidden input element containing the license key.
  * @param {HTMLElement} installFormidableProStep The step element for installing Formidable Pro.
- * @param {HTMLElement} licenseManagementStep The step element for license management.
+ * @param {HTMLElement} licenseManagementStep    The step element for license management.
  * @return {string} The name of the next step to navigate to.
  */
 function handleLicenseKeyInput( hiddenLicenseKeyInput, installFormidableProStep, licenseManagementStep ) {

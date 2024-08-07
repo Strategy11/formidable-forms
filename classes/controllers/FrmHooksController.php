@@ -127,10 +127,6 @@ class FrmHooksController {
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 
-		// Addons Controller.
-		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
-		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
-
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
@@ -203,6 +199,7 @@ class FrmHooksController {
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
+		FrmAddonsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 

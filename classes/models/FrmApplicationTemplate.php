@@ -99,7 +99,7 @@ class FrmApplicationTemplate {
 		if ( false !== strpos( $category, '+Views' ) ) {
 			return true;
 		}
-		return in_array( $category, FrmFormsHelper::ignore_template_categories(), true );
+		return in_array( $category, FrmFormsHelper::get_license_types(), true );
 	}
 
 	/**
