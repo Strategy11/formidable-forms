@@ -1833,16 +1833,6 @@ function frmAdminBuildJS() {
 		const newEmbedField     = classes.contains( 'frm_tform' );
 		const newUserIdField    = classes.contains( 'frm_tuser_id' );
 
-		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
-		if ( newFieldWillBeAddedToAGroup ) {
-			if ( groupIncludesBreakOrHidden( droppable ) ) {
-				// Never allow any field beside a page break or a hidden field.
-				return false;
-			}
-
-			return ! newHiddenField && ! newPageBreakField && ! newUserIdField;
-		}
-
 		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
 		if ( fieldTypeIsAlwaysAllowed ) {
 			return true;
@@ -1854,6 +1844,16 @@ function frmAdminBuildJS() {
 			return ! newEmbedField && ! newSectionField;
 		}
 
+		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
+		if ( newFieldWillBeAddedToAGroup ) {
+			if ( groupIncludesBreakOrHidden( droppable ) ) {
+				// Never allow any field beside a page break or a hidden field.
+				return false;
+			}
+
+			return ! newHiddenField && ! newPageBreakField && ! newUserIdField;
+		}
+	
 		return true;
 	}
 
