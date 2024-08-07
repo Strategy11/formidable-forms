@@ -1510,22 +1510,20 @@ class FrmFieldsHelper {
 		}//end foreach
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
-				if ( $k === 'custom_html' ) {
-					$replace_copy      = $replace;
-					$replace_with_copy = $replace_with;
-					$if_description    = array_search( '[if description]', $replace, true );
-					if ( false !== $if_description ) {
-						unset( $replace_copy[ $if_description ] );
-						unset( $replace_with_copy[ $if_description ] );
-					}
-					$if_description_end = array_search( '[/if description]', $replace, true );
-					if ( false !== $if_description_end ) {
-						unset( $replace_copy[ $if_description_end ] );
-						unset( $replace_with_copy[ $if_description_end ] );
-					}
-				}
 				if ( is_string( $v ) ) {
 					if ( 'custom_html' === $k ) {
+						$replace_copy      = $replace;
+						$replace_with_copy = $replace_with;
+						$if_description    = array_search( '[if description]', $replace, true );
+						if ( false !== $if_description ) {
+							unset( $replace_copy[ $if_description ] );
+							unset( $replace_with_copy[ $if_description ] );
+						}
+						$if_description_end = array_search( '[/if description]', $replace, true );
+						if ( false !== $if_description_end ) {
+							unset( $replace_copy[ $if_description_end ] );
+							unset( $replace_with_copy[ $if_description_end ] );
+						}
 						$val[ $k ] = str_replace( $replace_copy, $replace_with_copy, $v );
 						unset( $k, $v );
 						continue;
