@@ -4975,7 +4975,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns an object that has the old and new values and labels, when a field choice is changed.
 	 *
-	 * @param {HTMLElement} choiceElement
+	 * @param {HTMLElement} input
 	 * @returns {Object}
 	 */
 	function getChoiceOldAndNewValues( input ) {
@@ -5756,7 +5756,7 @@ function frmAdminBuildJS() {
 						continue;
 					}
 				}
-				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption, newValue, newLabel );
+				prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
