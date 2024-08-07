@@ -134,7 +134,8 @@ describe("Forms page", () => {
                     cy.get('.created_at > abbr')
                         .invoke('html')
                         .then((html) => {
-                            expect(html).to.not.be.empty;
+                            expect(html.split('<br>')[1]).to.exist.and.not.be.empty;
+
                         });
                     });
                 });
