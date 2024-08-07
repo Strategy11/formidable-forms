@@ -1835,7 +1835,7 @@ function frmAdminBuildJS() {
 
 		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
 		if ( newFieldWillBeAddedToAGroup ) {
-			if ( groupIncludesBreakOrHidden( droppable ) ) {
+			if ( groupIncludesBreakOrHiddenOrUserId( droppable ) ) {
 				// Never allow any field beside a page break or a hidden field.
 				return false;
 			}
