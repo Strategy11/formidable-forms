@@ -5738,7 +5738,6 @@ function frmAdminBuildJS() {
 
 			for ( optionIndex = optionLength - 1; optionIndex >= 0; optionIndex-- ) {
 				expectedOption = fieldOptions[ optionIndex ];
-<<<<<<< HEAD
 				let expectedOptionValue = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelector( '.frm_option_key input[type="text"]' )?.value;
 				if ( ! expectedOptionValue ) {
 					expectedOptionValue = expectedOption;
@@ -5747,18 +5746,6 @@ function frmAdminBuildJS() {
 				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOptionValue + '"]' );
 
 				const { newValue, newLabel } = getNewConditionalLogicOption( fieldId, expectedOption );
-
-				if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' ) ) {
-					optionMatch = document.createElement( 'option' );
-					optionMatch.setAttribute( 'value', newValue );
-					optionMatch.textContent = newLabel;
-				}
-
-				if ( optionMatch ) {
-					valueSelect.append( optionMatch );
-				}
-=======
-				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
 
 				const fieldChoices     = document.querySelectorAll( '#frm_field_' + fieldId + '_opts input[data-value-on-focus]' );
 				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
@@ -5769,8 +5756,7 @@ function frmAdminBuildJS() {
 						continue;
 					}
 				}
-				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
->>>>>>> master
+				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption, newValue, newLabel );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
@@ -5780,10 +5766,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption ) {
-		if ( optionMatch === null ) {
-			optionMatch = frmDom.tag( 'option', { text: expectedOption });
-			optionMatch.value = expectedOption;
+	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel ) {
+		if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' )) {
+			optionMatch = frmDom.tag( 'option', { text: newLabel });
+			optionMatch.value = newValue;
 		}
 
 		valueSelect.prepend( optionMatch );
