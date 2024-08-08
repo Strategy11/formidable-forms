@@ -382,13 +382,13 @@ function frmAdminBuildJS() {
 
 	function toggleItem( e ) {
 		/*jshint validthis:true */
-		const toggle = this.getAttribute( 'data-frmtoggle' ),
-			text = this.getAttribute( 'data-toggletext' ),
-			items = jQuery( toggle );
+		const toggle = this.getAttribute( 'data-frmtoggle' );
+		const text   = this.getAttribute( 'data-toggletext' );
+		const $items = jQuery( toggle );
 
 		e.preventDefault();
 
-		items.toggle();
+		$items.toggle();
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );

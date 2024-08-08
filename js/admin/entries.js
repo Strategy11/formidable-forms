@@ -48,5 +48,4 @@ wp.domReady( () => {
 			}, newShowState === 'true' ? 0 : 200 );
 		});
 	}
-
 });
