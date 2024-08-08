@@ -37,8 +37,7 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             ...baselineRules,
-            { id: 'empty-table-header', enabled: false },
-            { id: 'label', enabled: false }
+            { id: 'empty-table-header', enabled: false }
         ]);
         cy.checkA11y();
     });
