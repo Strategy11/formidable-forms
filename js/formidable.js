@@ -270,7 +270,7 @@ function frmFrontFormJS() {
 		}
 
 		removeFieldError( $fieldCont );
-		if (  Object.keys( errors ).length > 0 ) {
+		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
 				addFieldError( $fieldCont, key, errors );
 			}
@@ -619,8 +619,14 @@ function frmFrontFormJS() {
 		return 'pattern' !== type;
 	}
 
+	/**
+	 * Check if JS validation should happen.
+	 *
+	 * @param {HTMLElement} object Form object.
+	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
+	 */
 	function shouldJSValidate( object ) {
-		let validate = jQuery( object ).hasClass( 'frm_js_validate' );
+		let validate = hasClass( object, 'frm_js_validate' );
 		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
 			validate = false;
 		}
