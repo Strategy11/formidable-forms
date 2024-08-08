@@ -1066,41 +1066,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function resendEmail() {
-		console.warn( 'DEPRECATED: function resendEmail in v6.10 please update to Formidable Pro v6.10' );
-
-		/*jshint validthis:true */
-		let $link = jQuery( this ),
-			entryId = this.getAttribute( 'data-eid' ),
-			formId = this.getAttribute( 'data-fid' ),
-			label = $link.find( '.frm_link_label' );
-		if ( label.length < 1 ) {
-			label = $link;
-		}
-		label.append( '<span class="frm-wait"></span>' );
-
-		jQuery.ajax({
-			type: 'POST',
-			url: frm_js.ajax_url, // eslint-disable-line camelcase
-			data: {
-				action: 'frm_entries_send_email',
-				entry_id: entryId,
-				form_id: formId,
-				nonce: frm_js.nonce // eslint-disable-line camelcase
-			},
-			success: function( msg ) {
-				const admin = document.getElementById( 'wpbody' );
-				if ( admin === null ) {
-					label.html( msg );
-				} else {
-					label.html( '' );
-					$link.after( msg );
-				}
-			}
-		});
-		return false;
-	}
-
 	/**********************************************
 	 * General Helpers
 	 *********************************************/
@@ -1171,7 +1136,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			label.addEventListener( 'click', function( e ) {
+			label.addEventListener( 'click', function() {
 				inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' ).focus();
 			});
 		});
@@ -1447,10 +1412,6 @@ function frmFrontFormJS() {
 				}
 			});
 
-			if ( frm_js.include_resend_email ) { // eslint-disable-line camelcase
-				jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
-			}
-
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
@@ -1521,7 +1482,7 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterRecaptcha: function( token, formID ) {
+		afterRecaptcha: function( _, formID ) {
 			const object = jQuery( '#frm_form_' + formID + '_container form' )[0];
 			frmFrontForm.submitFormNow( object );
 		},
