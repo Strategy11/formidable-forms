@@ -791,7 +791,7 @@ function frmFrontFormJS() {
 				if ( contSubmit ) {
 					object.submit();
 				} else {
-					jQuery( object ).prepend( response.error_message );
+					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
 			} else {
