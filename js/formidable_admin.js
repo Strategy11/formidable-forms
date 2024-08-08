@@ -388,11 +388,7 @@ function frmAdminBuildJS() {
 
 		e.preventDefault();
 
-		if ( items.is( ':visible' ) ) {
-			items.show();
-		} else {
-			items.hide();
-		}
+		items.toggle();
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );

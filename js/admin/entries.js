@@ -26,9 +26,6 @@ wp.domReady( () => {
 	 */
 	manageShowEmptyFieldsButton();
 
-	// This is used for the "Show empty fields" toggle.
-	jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
-
 	function manageShowEmptyFieldsButton() {
 		const showEmptyFieldsButton = document.getElementById( 'frm-entry-show-empty-fields' );
 
@@ -50,22 +47,6 @@ wp.domReady( () => {
 				applyZebraStriping( '.frm-alt-table', newShowState === 'true' ? '' : 'frm-empty-row' );
 			}, newShowState === 'true' ? 0 : 200 );
 		});
-	}
-
-	/**
-	 * Toggle a target element open or closed.
-	 *
-	 * @return {false}
-	 */
-	function toggleDiv() {
-		/*jshint validthis:true */
-		const div = jQuery( this ).data( 'frmtoggle' );
-		if ( jQuery( div ).is( ':visible' ) ) {
-			jQuery( div ).slideUp( 'fast' );
-		} else {
-			jQuery( div ).slideDown( 'fast' );
-		}
-		return false;
 	}
 
 });
