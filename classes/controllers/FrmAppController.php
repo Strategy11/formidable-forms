@@ -295,7 +295,7 @@ class FrmAppController {
 			),
 		);
 
-		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
