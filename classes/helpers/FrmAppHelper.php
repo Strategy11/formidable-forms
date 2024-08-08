@@ -3278,20 +3278,19 @@ class FrmAppHelper {
 		global $wp_scripts;
 
 		$script_strings = array(
-			'ajax_url'             => esc_url_raw( self::get_ajax_url() ),
-			'images_url'           => self::plugin_url() . '/images',
-			'loading'              => __( 'Loading&hellip;', 'formidable' ),
-			'remove'               => __( 'Remove', 'formidable' ),
-			'offset'               => apply_filters( 'frm_scroll_offset', 4 ),
-			'nonce'                => wp_create_nonce( 'frm_ajax' ),
-			'id'                   => __( 'ID', 'formidable' ),
-			'no_results'           => __( 'No results match', 'formidable' ),
-			'file_spam'            => __( 'That file looks like Spam.', 'formidable' ),
-			'calc_error'           => __( 'There is an error in the calculation in the field with key', 'formidable' ),
-			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
-			'focus_first_error'    => self::should_focus_first_error(),
-			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
-			'include_resend_email' => self::should_include_resend_email_code(),
+			'ajax_url'           => esc_url_raw( self::get_ajax_url() ),
+			'images_url'         => self::plugin_url() . '/images',
+			'loading'            => __( 'Loading&hellip;', 'formidable' ),
+			'remove'             => __( 'Remove', 'formidable' ),
+			'offset'             => apply_filters( 'frm_scroll_offset', 4 ),
+			'nonce'              => wp_create_nonce( 'frm_ajax' ),
+			'id'                 => __( 'ID', 'formidable' ),
+			'no_results'         => __( 'No results match', 'formidable' ),
+			'file_spam'          => __( 'That file looks like Spam.', 'formidable' ),
+			'calc_error'         => __( 'There is an error in the calculation in the field with key', 'formidable' ),
+			'empty_fields'       => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
+			'focus_first_error'  => self::should_focus_first_error(),
+			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3410,24 +3409,6 @@ class FrmAppHelper {
 	 */
 	public static function should_include_alert_role_on_field_errors() {
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
-	}
-
-	/**
-	 * @since 6.10
-	 *
-	 * @return bool
-	 */
-	private static function should_include_resend_email_code() {
-		if ( ! self::pro_is_installed() ) {
-			return false;
-		}
-
-		/**
-		 * @since 6.10
-		 *
-		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro v6.10.
-		 */
-		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}
 
 	/**
