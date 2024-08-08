@@ -55,7 +55,9 @@ wp.domReady( () => {
 	}
 
 	/**
-	 * @returns Toggle a target element open or closed.
+	 * Toggle a target element open or closed.
+	 *
+	 * @return {false}
 	 */
 	function toggleDiv() {
 		/*jshint validthis:true */
