@@ -1105,17 +1105,6 @@ function frmFrontFormJS() {
 		return confirm( message );
 	}
 
-	function toggleDiv() {
-		/*jshint validthis:true */
-		const div = jQuery( this ).data( 'frmtoggle' );
-		if ( jQuery( div ).is( ':visible' ) ) {
-			jQuery( div ).slideUp( 'fast' );
-		} else {
-			jQuery( div ).slideDown( 'fast' );
-		}
-		return false;
-	}
-
 	/**
 	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
 	 * If this is a match, the User is autofilling the input on a Webkit browser.
@@ -1462,7 +1451,6 @@ function frmFrontFormJS() {
 			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
-			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
 
 			checkForErrorsAndMaybeSetFocus();
 
