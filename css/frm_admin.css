@@ -6800,11 +6800,7 @@ li.selected .divider_section_only:before {
 	transform: rotate(-90deg);
 }
 
-.open .widget-top .frm_arrow_right_icon:before {
-	content: '\e62a';
-}
-
-.open .widget-top .widget-title-action button svg {
+.open .widget-top .widget-title-action button .frmsvg {
 	transform: rotate(90deg);
 }
 
