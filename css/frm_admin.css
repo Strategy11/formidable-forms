@@ -6808,7 +6808,7 @@ li.selected .divider_section_only:before {
 	transform: rotate(90deg);
 }
 
-.widget-top .widget-title-action button svg use {
+.widget-top .widget-title-action button .frmsvg use {
 	color: var(--grey);
 }
 
