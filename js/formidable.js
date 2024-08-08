@@ -994,10 +994,14 @@ function frmFrontFormJS() {
 		jQuery( '.frm_error_style' ).remove();
 	}
 
+	/**
+	 * @param {HTMLElement} object Form object.
+	 * @return {void}
+	 */
 	function scrollToFirstField( object ) {
-		const field = jQuery( object ).find( '.frm_blank_field' ).first();
-		if ( field.length ) {
-			frmFrontForm.scrollMsg( field, object, true );
+		const field = object.querySelector( '.frm_blank_field' );
+		if ( field ) {
+			frmFrontForm.scrollMsg( jQuery( field ), object, true );
 		}
 	}
 
