@@ -26,9 +26,7 @@ wp.domReady( () => {
 	 */
 	manageShowEmptyFieldsButton();
 
-	/**
-	 * This is used for the "Show empty fields" toggle.
-	 */
+	// This is used for the "Show empty fields" toggle.
 	jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
 
 	function manageShowEmptyFieldsButton() {
