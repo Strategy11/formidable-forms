@@ -983,7 +983,8 @@ function frmFrontFormJS() {
 			input = $fieldCont.find( 'input, select, textarea' ),
 			describedBy = input.attr( 'aria-describedby' );
 
-		$fieldCont.removeClass( 'frm_blank_field has-error' );
+		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
 		input.removeAttr( 'aria-describedby' );
