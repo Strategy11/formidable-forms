@@ -977,13 +977,21 @@ function frmFrontFormJS() {
 		return 'frm_error_' + input.id;
 	}
 
+	/**
+	 * Removes errors before validating with JS.
+	 * This prevents issues with stale errors that has since been fixed.
+	 *
+	 * @param {Object} $fieldCont jQuery object.
+	 * @return {void}
+	 */
 	function removeFieldError( $fieldCont ) {
-		let errorMessage = $fieldCont.find( '.frm_error' ),
-			errorId = errorMessage.attr( 'id' ),
-			input = $fieldCont.find( 'input, select, textarea' ),
-			describedBy = input.attr( 'aria-describedby' );
+		const errorMessage = $fieldCont.find( '.frm_error' );
+		const errorId      = errorMessage.attr( 'id' );
+		const input        = $fieldCont.find( 'input, select, textarea' );
+		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.removeClass( 'frm_blank_field has-error' );
+		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
 		input.removeAttr( 'aria-describedby' );
