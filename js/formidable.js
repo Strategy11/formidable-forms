@@ -981,7 +981,7 @@ function frmFrontFormJS() {
 	 * Removes errors before validating with JS.
 	 * This prevents issues with stale errors that has since been fixed.
 	 *
-	 * @param {object} $fieldCont jQuery object.
+	 * @param {Object} $fieldCont jQuery object.
 	 * @return {void}
 	 */
 	function removeFieldError( $fieldCont ) {
