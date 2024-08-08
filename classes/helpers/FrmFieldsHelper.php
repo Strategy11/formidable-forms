@@ -1512,19 +1512,7 @@ class FrmFieldsHelper {
 			foreach ( $val as $k => $v ) {
 				if ( is_string( $v ) ) {
 					if ( 'custom_html' === $k ) {
-						$replace_copy      = $replace;
-						$replace_with_copy = $replace_with;
-						$if_description    = array_search( '[if description]', $replace, true );
-						if ( false !== $if_description ) {
-							unset( $replace_copy[ $if_description ] );
-							unset( $replace_with_copy[ $if_description ] );
-						}
-						$if_description_end = array_search( '[/if description]', $replace, true );
-						if ( false !== $if_description_end ) {
-							unset( $replace_copy[ $if_description_end ] );
-							unset( $replace_with_copy[ $if_description_end ] );
-						}
-						$val[ $k ] = str_replace( $replace_copy, $replace_with_copy, $v );
+						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[/if description]' ), $v );
 						unset( $k, $v );
 						continue;
 					}
@@ -1537,6 +1525,31 @@ class FrmFieldsHelper {
 		}
 
 		return $val;
+	}
+
+	/**
+	 * Removes exception strings from replacement arrays and replaces the rest in the provided value string.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $replace      Values to be replaced.
+	 * @param array  $replace_with Replacement values.
+	 * @param array  $exceptions   Array of strings to skip.
+	 * @param string $value        Value to be updated.
+	 *
+	 * @return string
+	 */
+	private static function switch_ids_except_strings( $replace, $replace_with, $exceptions, $value ) {
+		foreach ( $exceptions as $exception ) {
+			$index = array_search( $exception, $replace, true );
+			if ( false === $index ) {
+				continue;
+			}
+			unset( $replace[ $index ] );
+			unset( $replace_with[ $index ] );
+		}
+		$value = str_replace( $replace, $replace_with, $value );
+		return $value;
 	}
 
 	/**
