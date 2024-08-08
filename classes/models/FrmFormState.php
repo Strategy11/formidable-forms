@@ -146,7 +146,7 @@ class FrmFormState {
 	 */
 	public function render_state_field() {
 		if ( ! self::open_ssl_is_installed() ) {
-			return '';
+			return;
 		}
 		if ( ! $this->state && ! self::get_state_from_request() ) {
 			return;
@@ -173,6 +173,7 @@ class FrmFormState {
 	 * Returns true if open SSL is installed.
 	 *
 	 * @since x.x
+	 * @return bool
 	 */
 	private static function open_ssl_is_installed() {
 		return function_exists( 'openssl_encrypt' );
