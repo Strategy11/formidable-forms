@@ -1734,13 +1734,6 @@ function frmFrontFormJS() {
 			}
 		},
 
-		savingDraft: function( object ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.savingDraft in v3.0 use frmProForm.savingDraft' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				return frmProForm.savingDraft( object );
-			}
-		},
-
 		escapeHtml: function( text ) {
 			return text
 				.replace( /&/g, '&amp;' )
