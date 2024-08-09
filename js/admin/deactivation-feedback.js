@@ -22,13 +22,13 @@
 
 	frmDom.util.documentOn( 'click', selectors, onClickDeactivate );
 
-	document.addEventListener( 'frmFormCompleteBeforeReplace', function( a, b ) {
+	/*document.addEventListener( 'frmFormCompleteBeforeReplace', function( a, b ) {
+		console.log( a );
+		console.log( b );
+	});*/
+
+	jQuery.on( document, 'frmFormComplete', function( a, b ) {
 		console.log( a );
 		console.log( b );
 	});
-
-	// jQuery.on( document, 'frmFormComplete', function( a, b ) {
-	// 	console.log( a );
-	// 	console.log( b );
-	// });
 }() );
