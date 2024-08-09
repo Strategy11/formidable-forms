@@ -5521,6 +5521,10 @@ h2.frm-h2,
 	outline: 0;
 }
 
+#frm_notification_settings .widget-top .widget-action{
+	padding-top: 13.5px;
+}
+
 #frm_email_addon_menu {
 	border: 1px solid var(--grey-300);
 	padding: var(--gap-sm);
@@ -6796,8 +6800,12 @@ li.selected .divider_section_only:before {
 	transform: rotate(-90deg);
 }
 
-.open .widget-top .frm_arrow_right_icon:before {
-	content: '\e62a';
+.open .widget-top .widget-title-action button .frmsvg {
+	transform: rotate(90deg);
+}
+
+.widget-top .widget-title-action button .frmsvg use {
+	color: var(--grey);
 }
 
 .frm-collapsed + .frm-collapse-me {
