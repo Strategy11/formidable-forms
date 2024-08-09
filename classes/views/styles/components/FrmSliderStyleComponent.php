@@ -30,12 +30,29 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
+		$this->data['units']               = $this->get_units_list( $data );
 
 		$this->init_icon();
 		$this->init_multiple_values();
 
 		parent::get_instance();
 		$this->load_view( $this->data );
+	}
+
+	/**
+	 * Retrieves the list of units for the slider style component.
+	 *
+	 * If the units array is empty in the provided data, it returns an array containing the default units: 'px', 'em', and '%'.
+	 * Otherwise, it merges the units array from the provided data with the default units array and returns the result.
+	 *
+	 * @param array $data The data containing the units array.
+	 * @return array The list of units for the slider style component.
+	 */
+	private function get_units_list( $data ) {
+		if ( empty( $data['units'] ) ) {
+			return array( 'px', 'em', '%' );
+		}
+		return $data['units'];
 	}
 
 	/**

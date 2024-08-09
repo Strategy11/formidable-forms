@@ -90,6 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							array(
 								'id'        => 'frm_submit_width',
 								'max_value' => 300,
+								'units'     => array( 'auto', 'px', 'em', '%' ),
 							)
 						);
 						?>
@@ -169,7 +170,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 					</div>
 
-					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label></div>
+					<div class="frm5 frm_form_field">
+						<label class="frm-style-item-heading">
+							<?php esc_html_e( 'Margin', 'formidable' ); ?>
+							<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
+						</label>
+					</div>
 					<div class="frm7 frm_form_field">
 						<?php
 						new FrmSliderStyleComponent(

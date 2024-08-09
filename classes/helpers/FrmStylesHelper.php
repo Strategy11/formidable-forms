@@ -445,9 +445,44 @@ class FrmStylesHelper {
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
-				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	private static function css_var_prepare_value( $settings, $key ) {
+		$value = $settings[ $key ];
+
+		switch ( $key ) {
+			case 'font':
+				return FrmAppHelper::kses( $value );
+		
+			case 'field_border_width':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return esc_html( '0px 0px ' . $value . ' 0px' );
+				}
+				break;
+		
+			case 'box_shadow':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return 'none';
+				}
+				break;
+		
+			case 'border_radius':
+				if ( ! empty( $settings['field_shape_type'] ) ) {
+					if ( 'underline' === $settings['field_shape_type'] ) {
+						return '0px';
+					} elseif ( 'circle' === $settings['field_shape_type'] ) {
+						return '30px';
+					} elseif ( 'regular' === $settings['field_shape_type'] ) {
+						return '0px';
+					}
+				}
+				break;
+		}//end switch
+
+		return esc_html( $settings[ $key ] );
 	}
 
 	/**
@@ -648,13 +683,13 @@ class FrmStylesHelper {
 	public static function get_style_options_back_button_args( $style, $form_id ) {
 		if ( ! self::is_quick_settings() ) {
 			return array(
-				'url'   => self::get_edit_url( $style, $form_id, 'quick-settings' ),
-				'title' => esc_html__( 'Quick Settings', 'formidable' ), 
+				'title' => esc_html__( 'Quick Settings', 'formidable' ),
+				'id'    => 'frm_style_back_to_quick_settings',
 			);
 		}
 		return array(
 			'url'   => self::get_list_url( $form_id ),
-			'title' => esc_html( $style->post_title ), 
+			'title' => esc_html( $style->post_title ),
 		);
 	}
 

@@ -73,7 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field">
 	<label class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 </div>
-<div class="frm7 frm_form_field">
+<div class="frm7 frm_form_field frm-sm-z-index">
 	<?php
 	new FrmAlignStyleComponent(
 		$frm_style->get_field_name( 'description_align' ),
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field">
 	<label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
-<div class="frm7 frm_form_field">
+<div class="frm7 frm_form_field frm-md-z-index">
 	<?php
 	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'description_margin' ),

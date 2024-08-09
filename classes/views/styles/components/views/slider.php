@@ -18,9 +18,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['vertical']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['vertical']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['vertical']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['vertical']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['vertical']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -40,9 +40,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['top']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['top']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['top']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['top']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['top']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -62,9 +62,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['bottom']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['bottom']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['bottom']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['bottom']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['bottom']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -84,9 +84,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['horizontal']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['horizontal']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['horizontal']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['horizontal']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['horizontal']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -106,9 +106,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['left']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['left']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['left']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['left']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['left']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -128,9 +128,9 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-value">
 					<input type="text" value="<?php echo (int) $component['right']['value']; ?>" />
 					<select>
-						<option <?php selected( $component['right']['unit'], 'px' ); ?> value="px">px</option>
-						<option <?php selected( $component['right']['unit'], 'em' ); ?> value="em">em</option>
-						<option <?php selected( $component['right']['unit'], '%' ); ?> value="%">%</option>
+						<?php foreach ( $component['units'] as $unit ) : ?>
+							<option <?php selected( $component['right']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -158,9 +158,9 @@ if ( $component['has-multiple-values'] ) : ?>
 						<input type="text" value="<?php echo (int) $field_value; ?>" />
 						<input type="hidden" <?php echo esc_attr( $field_name ); ?> value="<?php echo esc_attr( $field_value ); ?>" id="<?php echo esc_attr( $component['id'] ); ?>" />
 						<select>
-							<option <?php selected( $component['unit_measurement'], 'px' ); ?> value="px">px</option>
-							<option <?php selected( $component['unit_measurement'], 'em' ); ?> value="em">em</option>
-							<option <?php selected( $component['unit_measurement'], '%' ); ?> value="%">%</option>
+							<?php foreach ( $component['units'] as $unit ) : ?>
+								<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 				</div>
@@ -182,9 +182,9 @@ if ( $component['has-multiple-values'] ) : ?>
 						<div class="frm-slider-value">
 							<input type="text" value="<?php echo (int) $field_value; ?>" />
 							<select>
-								<option <?php selected( $component['unit_measurement'], 'px' ); ?> value="px">px</option>
-								<option <?php selected( $component['unit_measurement'], 'em' ); ?> value="em">em</option>
-								<option <?php selected( $component['unit_measurement'], '%' ); ?> value="%">%</option>
+								<?php foreach ( $component['units'] as $unit ) : ?>
+									<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+								<?php endforeach; ?>
 							</select>
 						</div>
 					</div>
@@ -210,9 +210,9 @@ if ( $component['has-multiple-values'] ) : ?>
 									<input type="text" value="<?php echo (int) $field['value']; ?>" />
 									<input type="hidden" <?php echo esc_attr( $field['name'] ); ?> value="<?php echo esc_attr( $field['value'] ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" />
 									<select>
-										<option <?php selected( $component['unit_measurement'], 'px' ); ?> value="px">px</option>
-										<option <?php selected( $component['unit_measurement'], 'em' ); ?> value="em">em</option>
-										<option <?php selected( $component['unit_measurement'], '%' ); ?> value="%">%</option>
+										<?php foreach ( $component['units'] as $unit ) : ?>
+											<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+										<?php endforeach; ?>
 									</select>
 								</div>
 							</div>

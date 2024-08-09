@@ -112,6 +112,12 @@
 .frm-margin-top-xl {
 	margin-top: var(--gap-xl);
 }
+.frm-sm-z-index {
+	z-index: 1;
+}
+.frm-md-z-index {
+	z-index: 5;
+}
 .frm-white-body,
 .frm-white-body p,
 .frm_wrap,
@@ -1901,6 +1907,9 @@ input.frm_insert_in_template {
 
 .frm-text-right {
 	text-align: right;
+}
+.frm-text-center {
+	text-align: center;
 }
 
 .frm-border-b {

@@ -63,18 +63,6 @@ export default class frmSliderStyleComponent {
 			const draggableBullet = element.querySelector( '.frm-slider-bullet' );
 			const valueInput      = element.querySelector( '.frm-slider-value input[type="text"]' );
 
-			if ( 'undefined' !== typeof element.dataset.displaySliders ) {
-				const sliderGroupItems = this.getSliderGroupItems( element );
-
-				if ( null !== element.querySelector( '.frmsvg' ) ) {
-					element.querySelector( '.frmsvg' ).addEventListener( 'click', ( ) => {
-						sliderGroupItems.forEach( ( item ) => {
-							item.classList.toggle( 'frm_hidden' );
-						});
-					});
-				}
-			}
-
 			valueInput.addEventListener( 'change', ( event ) => {
 				const unit = element.querySelector( 'select' ).value;
 
@@ -87,22 +75,110 @@ export default class frmSliderStyleComponent {
 				this.triggerValueChange( index );
 			});
 
-			draggableBullet.addEventListener( 'mousedown', (event) => {
+			this.expandSliderGroup( element );
+			this.updateOnUnitChange( element, valueInput, index );
+			this.changeSliderPositionOnClick( element, valueInput, index );
+
+			draggableBullet.addEventListener( 'mousedown', ( event ) => {
 				event.preventDefault();
+				event.stopPropagation();
+				if ( element.classList.contains( 'frm-disabled' ) ) {
+					return;
+				}
 				this.enableDragging( event, index );
 			});
 
 			draggableBullet.addEventListener( 'mousemove', ( event ) => {
+				if ( element.classList.contains( 'frm-disabled' ) ) {
+					return;
+				}
 				this.moveTracker( event, index );
 			});
 
 			draggableBullet.addEventListener( 'mouseup', ( event) => {
+				if ( element.classList.contains( 'frm-disabled' ) ) {
+					return;
+				}
 				this.disableDragging( index, event );
 			});
 
 			draggableBullet.addEventListener( 'mouseleave', ( event ) => {
+				if ( element.classList.contains( 'frm-disabled' ) ) {
+					return;
+				}
 				this.disableDragging( index, event );
 			});
+		});
+	}
+
+	expandSliderGroup( element ) {
+		const svgIcon = element.querySelector( '.frmsvg' );
+
+		if ( 'undefined' === typeof element.dataset.displaySliders || null === svgIcon ) {
+			return;
+		}
+
+		const sliderGroupItems = this.getSliderGroupItems( element );
+		svgIcon.addEventListener( 'click', ( ) => {
+			sliderGroupItems.forEach( ( item ) => {
+				item.classList.toggle( 'frm_hidden' );
+			});
+		});
+	}
+
+	updateOnUnitChange( element, valueInput, index ) {
+		element.querySelector( 'select' ).addEventListener( 'change', ( event ) => {
+			const unit = event.target.value.toLowerCase();
+
+			if ( 'auto' === unit ) {
+				element.classList.add( 'frm-disabled' );
+				this.updateValue( element, 'auto' );
+				this.triggerValueChange( index );
+				return;
+			}
+
+			element.classList.remove( 'frm-disabled' );
+			this.options[ index ].fullValue = valueInput.value + unit;
+			this.updateValue( element, this.options[ index ].fullValue );
+			this.triggerValueChange( index );
+		});
+	}
+
+	changeSliderPositionOnClick( element, valueInput, index ) {
+		const frmSlider   = element.querySelector( '.frm-slider' );
+		const customEvent = new Event( 'change', {
+			'bubbles': true,
+			'cancelable': true
+		});
+
+		frmSlider.addEventListener( 'click', ( event ) => {
+			if ( element.classList.contains( 'frm-disabled' ) ) {
+				return;
+			}
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			if ( ! event.target.classList.contains( 'frm-slider' ) && ! event.target.classList.contains( 'frm-slider-active-track' ) ) {
+				return;
+			}
+
+			const sliderWidth = frmSlider.offsetWidth - this.sliderBulletWidth;
+			const sliderRect  = frmSlider.getBoundingClientRect();
+			const deltaX      = event.clientX - sliderRect.left - this.sliderBulletWidth;
+			const unit        = element.querySelector( 'select' ).value;
+			const value       = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
+
+			if ( value < 0 ) {
+				return;
+			}
+
+			this.options[ index ].fullValue = this.updateValue( element, value + unit );
+			this.initChildSlidersWidth( element, deltaX, index, value + unit );
+
+			valueInput.value = value;
+			valueInput.dispatchEvent( customEvent );
+
 		});
 	}
 
@@ -125,22 +201,45 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the position of sliders.
+	 * Initializes the position of sliders when a style accordion section is opened.
 	 */
 	initSlidersPosition() {
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
+		const quickSettings  = document.querySelector( '.frm-quick-settings' );
 
-		if ( null !== document.querySelector( '.frm-quick-settings' ) ) {
-			this.initSlidersWidth( document.querySelector( '.frm-quick-settings' ) );
+		if ( null !== quickSettings ) {
+			this.initSlidersWidth( quickSettings );
 		}
 
-		accordionitems.forEach( ( item, index ) => {
-			if ( 0 === index ) {
-				this.initSlidersWidth( item.closest( '.accordion-section' ) );
-			}
+		accordionitems.forEach( ( item ) => {
 			item.addEventListener( 'click', ( event ) => {
 				this.initSlidersWidth( event.target.closest( '.accordion-section' ) );
 			});
+		});
+
+		this.initSliderPositionOnFieldShapeChange();
+	}
+
+	/**
+	 * Initializes the width of "Corner Radius" slider that is dynamically is displayed on "Field Shape" option change from "Quick Settings".
+	 *
+	 * @return {void}
+	 */
+	initSliderPositionOnFieldShapeChange() {
+		const fieldShapeType = document.querySelector( '.frm-style-component.frm-field-shape' );
+
+		if ( null === fieldShapeType ) {
+			return;
+		}
+
+		const radioButtons = fieldShapeType.querySelectorAll( 'input[type="radio"]' );
+		radioButtons.forEach( ( radio ) => {
+			radio.addEventListener( 'change', ( event ) => {
+				if ( event.target.checked && 'rounded-corner' === event.target.value ) {
+					const slider = document.querySelector( 'div[data-frm-element="field-shape-corner-radius"] .frm-slider-component' );
+					this.initSliderWidth( slider );
+				}
+			})
 		});
 	}
 
@@ -375,7 +474,9 @@ export default class frmSliderStyleComponent {
 
 			const childSlidersGroup = this.getSliderGroupItems( element );
 			childSlidersGroup.forEach( ( slider ) => {
+				const unitMeasure = this.getUnitMeasureFromValue( value );
 				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseInt( value, 10 );
+				slider.querySelector( 'select' ).value = unitMeasure;
 			});
 
 			return newValue;
@@ -394,5 +495,15 @@ export default class frmSliderStyleComponent {
 
 		element.querySelector( '.frm-slider-value input[type="hidden"]' ).value = value;
 		return value;
+	}
+
+	/**
+	 * Returns the unit of measurement used in the given value.
+	 *
+	 * @param {string} value - The value to check for the unit of measurement.
+	 * @return {string} The unit of measurement ('%', 'px', 'em') found in the value, or an empty string if none is found.
+	 */
+	getUnitMeasureFromValue( value ) {
+		return [ '%', 'px', 'em' ].find( unit => value.includes( unit ) ) || '';
 	}
 }

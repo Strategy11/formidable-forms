@@ -20,6 +20,22 @@ export default class frmRadioStyleComponent {
 		this.elements.forEach( ( element ) => {
 			this.initOnRadioChange( element );
 		});
+		this.initTrackerOnAccordionClick();
+	}
+
+	initTrackerOnAccordionClick() {
+		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
+
+		accordionitems.forEach( ( accordionitem ) => {
+			accordionitem.addEventListener( 'click', ( event ) => {
+				const wrapper      = event.target.closest( '.accordion-section' );
+				const radioButtons = wrapper.querySelectorAll( '.frm-style-component.frm-radio-component input[type="radio"]:checked' );
+
+				radioButtons.forEach( ( radio ) => {
+					setTimeout( () => this.onRadioChange( radio ), 200 );
+				});
+			});
+		});
 	}
 
 	/**
@@ -28,29 +44,64 @@ export default class frmRadioStyleComponent {
 	 */
 	initOnRadioChange( wrapper ) {
 		wrapper.querySelectorAll( 'input[type="radio"]' ).forEach( ( radio ) => {
+			if ( radio.checked ) {
+				this.onRadioChange( radio );
+			}
 			radio.addEventListener( 'change', ( event ) => {
-				this.onRadioChange( event.target.closest( '.frm-style-component.frm-radio-component' ) );
+				this.onRadioChange( event.target );
 			});
 		});
 	}
 
 	/**
 	 * Handles the onRadioChange event for the given wrapper.
-	 * @param {HTMLElement} wrapper - The wrapper element.
+	 * @param {HTMLElement} target - The active radio button.
 	 */
-	onRadioChange( wrapper ) {
+	onRadioChange( target ) {
+		const wrapper    = target.closest( '.frm-style-component.frm-radio-component' );
 		const activeItem = wrapper.querySelector( 'input[type="radio"]:checked + label' );
+
+		if ( null === activeItem ) { return; }
+
 		this.moveTracker( activeItem, wrapper );
+		this.hideExtraElements( target );
+		this.maybeShowExtraElements( target );
 	}
 
 	/**
-	 * Gets the index of the radio button.
+	 * Display additional elements related to the selected radio option.
 	 * @param {HTMLElement} radio - The radio button element.
-	 * @return {number} The index of the radio button.
 	 */
-	getRadioIndex( radio ) {
-		const radioButtons = Array.from( wrapper.querySelectorAll( 'input[type="radio"]' ) );
-		return radioButtons.indexOf( radio );
+	maybeShowExtraElements( radio ) {
+		const elementAttr = radio.getAttribute( 'data-frm-show-element' );
+		if ( null === elementAttr ) {
+			return;
+		}
+
+		const elements = document.querySelectorAll( `div[data-frm-element="${elementAttr}"]` );
+
+		if ( 0 === elements.length ) {
+			return;
+		}
+
+		elements.forEach( ( element ) => {
+			element.classList.remove( 'frm_hidden' );
+			element.classList.add( 'frm-element-is-visible' );
+		});
+	}
+
+	/**
+	 * Hide the possible opepend extra elements.
+	 */
+	hideExtraElements() {
+		const elements = document.querySelectorAll( '.frm-element-is-visible' );
+		if ( 0 === elements.length ) {
+			return;
+		}
+		elements.forEach( ( element ) => {
+			element.classList.remove( 'frm-element-is-visible' );
+			element.classList.add( 'frm_hidden' );
+		});
 	}
 
 	/**
@@ -64,7 +115,7 @@ export default class frmRadioStyleComponent {
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
 		tracker.style.left = 0;
-		tracker.style.width = width;
+		tracker.style.width = width + 'px';
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }

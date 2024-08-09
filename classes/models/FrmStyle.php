@@ -733,6 +733,8 @@ class FrmStyle {
 			'progress_border_size'       => '2px',
 			'progress_size'              => '24px',
 			'custom_css'                 => '',
+
+			'field_shape_type'           => 'regular',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );
@@ -754,15 +756,15 @@ class FrmStyle {
 	 */
 	public static function get_bold_options() {
 		return array(
-			100      => 100,
-			200      => 200,
-			300      => 300,
-			'normal' => __( 'normal', 'formidable' ),
-			500      => 500,
-			600      => 600,
-			'bold'   => __( 'bold', 'formidable' ),
-			800      => 800,
-			900      => 900,
+			100      => __( 'Thin', 'formidable' ),
+			200      => __( 'Extra Light', 'formidable' ),
+			300      => __( 'Light', 'formidable' ),
+			'normal' => __( 'Regular', 'formidable' ),
+			500      => __( 'Medium', 'formidable' ),
+			600      => __( 'Semi Bold', 'formidable' ),
+			'bold'   => __( 'Bold', 'formidable' ),
+			800      => __( 'Extra Bold', 'formidable' ),
+			900      => __( 'Black', 'formidable' ),
 		);
 	}
 

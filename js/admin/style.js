@@ -242,7 +242,10 @@
 			return;
 		}
 
-		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id ) {
+		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id || target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
+			if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
+				switchQuickSettingsFormAction();
+			}
 			handleUpdateClick();
 			return;
 		}
@@ -251,6 +254,19 @@
 			modifyStylerUrl( target );
 			return;
 		}
+	}
+
+	/**
+	 * This function is used to update the form action when switching between the advanced settings and quick-settings.
+	 * @param {string} actionType
+	 * @returns {void}
+	 */
+	function switchQuickSettingsFormAction() {
+		const form = document.querySelector( '#frm_styling_form' );
+		if ( null === form ) {
+			return;
+		}
+		form.setAttribute( 'action', form.getAttribute( 'action' ) + '&section=quick-settings' );
 	}
 
 	/**
@@ -1109,7 +1125,7 @@
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
 		const debouncedColorChange	 = debounce( ( event, value ) => wp.hooks.doAction( 'frm_style_options_color_change', { event, value } ), 200 );
-		const debouncedTextSquishCheck = debounce( textSquishCheck, 700 );
+		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
 		document.getElementById( 'frm_field_height' ).addEventListener( 'change', debouncedTextSquishCheck );
@@ -1137,7 +1153,7 @@
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		});
-		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape' ).on( 'change', debouncedPreviewUpdate );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();

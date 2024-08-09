@@ -24,7 +24,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$frm_style->get_field_name( 'slider_bar_color' ),
 				$frm_style->get_field_name( 'slider_color' ),
 				$frm_style->get_field_name( 'border_color_active' ),
-				$frm_style->get_field_name( 'check_label_color' ),
 				$frm_style->get_field_name( 'submit_border_color' ),
 			),
 		)
@@ -46,6 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'will_change' => array(
 				$frm_style->get_field_name( 'text_color' ),
 				$frm_style->get_field_name( 'section_color' ),
+				$frm_style->get_field_name( 'check_label_color' ),
 			),
 		)
 	);
@@ -143,10 +143,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
+<hr class="frm12"/>
+
 <div class="frm5 frm_form_field">
+	<label class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
+</div>
+<div class="frm7 frm_form_field frm-sm-z-index">
+	<?php
+	new FrmFieldShapeStyleComponent(
+		$frm_style->get_field_name( 'field_shape_type' ),
+		$style->post_content['field_shape_type'],
+		array(
+			'id' => 'frm_field_shape',
+		)
+	);
+	?>
+</div>
+
+<div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
 	<label class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
-<div class="frm7 frm_form_field">
+<div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
 	<?php
 	new FrmSliderStyleComponent(
 		null,
@@ -161,9 +178,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 </div>
+
 <hr class="frm12"/>
 
-<a id="frm-style-advanced-settings-button" class="frm-white-button frm-margin-top-md" href="#"><?php
-	echo esc_html_e( 'Show advanced settings', 'formidable' );
-?>
-</a>
+<a id="frm-style-advanced-settings-button" class="frm-button-secondary frm-margin-top-md frm-text-center" href="#"><?php esc_html_e( 'Show advanced settings', 'formidable' ); ?></a>
