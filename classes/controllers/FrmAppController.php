@@ -1315,29 +1315,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * Include icons on page for Embed Form modal.
-	 *
-	 * @since 5.2
-	 *
-	 * @return void
-	 */
-	public static function include_embed_form_icons() {
-		_deprecated_function( __METHOD__, '5.3' );
-	}
-
-	/**
-	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $atts
-	 * @return string
-	 */
-	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
-		return FrmFormsController::get_form_shortcode( $atts );
-	}
-
-	/**
 	 * @deprecated 3.0 This is still referenced in https://formidableforms.com/knowledgebase/php-examples/ as of May 8, 2024.
 	 * @codeCoverageIgnore
 	 */
