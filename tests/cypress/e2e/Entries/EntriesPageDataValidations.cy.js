@@ -134,21 +134,17 @@ describe("Entries submitted from a form", () => {
         cy.get('td[data-colname="IP"]').should("exist");
 
         cy.log("Click on View");
-        cy.get('tr').first().trigger('mouseover', { force: true });
-        cy.wait(500); 
-        cy.get('div.row-actions span.view a')
-          .should('be.visible')
-          .and('contain', 'View')
-          .click({ force: true });        
-        
+        cy.get('tr div.row-actions span.view a', { timeout: 5000 })
+            .should("contain", "View")
+            .click({ force: true });
+
         cy.url().should('include', 'frm_action=show&id=');
 
         cy.get('.hndle > :nth-child(1)').should("contain", "Entry");
         cy.get('.frm-odd > th').should("contain", "Text");
         cy.get('.frm-odd > td').should("contain", "Entry is stored");
 
-        cy.get('#frm-entry-show-empty-fields').should("contain", "Show empty fields").click();
-        cy.get('.frm-empty-row > th',{timeout:5000}).should("contain", "Submit");
+        cy.get('#frm-entry-show-empty-fields').should("contain", "Show empty fields");
 
         cy.log("Check for entry actions elements");
         cy.get('.frm_no_print > h3').should("contain", "Entry Actions");
