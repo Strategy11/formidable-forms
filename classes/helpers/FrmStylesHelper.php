@@ -680,24 +680,37 @@ class FrmStylesHelper {
 		return admin_url( 'admin.php?page=formidable-styles&form=' . absint( $form_id ) );
 	}
 
+	/**
+	 * Get the back button args from Style settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass|WP_Post $style
+	 * @param int              $form_id
+	 * @return array
+	 */
 	public static function get_style_options_back_button_args( $style, $form_id ) {
 		if ( ! self::is_quick_settings() ) {
 			return array(
-				'title' => esc_html__( 'Quick Settings', 'formidable' ),
+				'title' => __( 'Quick Settings', 'formidable' ),
 				'id'    => 'frm_style_back_to_quick_settings',
 			);
 		}
 		return array(
 			'url'   => self::get_list_url( $form_id ),
-			'title' => esc_html( $style->post_title ),
+			'title' => $style->post_title,
 		);
 	}
 
 	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
+	 * @since x.x
+	 *
 	 * @param stdClass|WP_Post $style
 	 * @param int|string       $form_id Used for the back button and preview form target.
+	 * @param string           $section The url param section.
+	 *
 	 * @return string
 	 */
 	public static function get_edit_url( $style, $form_id = 0, $section = '' ) {
@@ -788,19 +801,32 @@ class FrmStylesHelper {
 		return FrmDb::get_count( 'frm_forms', $where );
 	}
 
+	/**
+	 * Check if the current page is the quick settings page. 
+	 *
+	 * @return bool True if quick settings, false otherwise.
+	 */
 	public static function is_quick_settings() {
 		return FrmAppHelper::get_param( 'section' ) === 'quick-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
 	}
 
+	/**
+	 * Retrieve the background image URL of the submit button, which may be either a full URL string (used in versions prior to x.x) or a numeric attachment ID (introduced in version x.x).
+	 *
+	 * @since x.x
+	 * @param array $settings
+	 * @return string|false Return image url or false.
+	 */
 	public static function get_submit_image_bg_url( $settings ) {
 		if ( empty( $settings['submit_bg_img'] ) ) {
 			return false;
 		}
-		if ( is_numeric( $settings['submit_bg_img'] ) ) {
-			return wp_get_attachment_url( (int) $settings['submit_bg_img'] );
+		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to x.x, the submit_bg_img will be a full URL string.
+		if ( ! is_numeric( $settings['submit_bg_img'] ) ) {
+			return $settings['submit_bg_img'];
 		}
 
-		return $settings['submit_bg_img'];
+		return wp_get_attachment_url( (int) $settings['submit_bg_img'] );
 	}
 
 	/**

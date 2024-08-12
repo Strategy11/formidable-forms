@@ -129,16 +129,14 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		if ( null === $value ) {
 			$value = $this->field_value;
 		}
-		switch ( true ) {
-			case preg_match( '/px$/', $value ):
-				return 'px';
-			case preg_match( '/%$/', $value ):
-				return '%';
-			case preg_match( '/em$/', $value ):
-				return 'em';
-			default:
-				return 'px';
+
+		if ( preg_match( '/%$/', $value ) ) {
+			return '%';
+		} elseif ( preg_match( '/em$/', $value ) ) {
+			return 'em';
 		}
+
+		return 'px';
 	}
 
 	/**

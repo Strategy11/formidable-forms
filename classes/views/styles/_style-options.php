@@ -16,7 +16,6 @@ $back_button_args = FrmStylesHelper::get_style_options_back_button_args( $style,
 	<span id="frm_style_name"><?php echo esc_html( $back_button_args['title'] ); ?></span>
 </h2>
 
-
 <div class="styling_settings <?php echo FrmStylesHelper::is_quick_settings() ? 'frm_hidden' : ''; ?>">
 	<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
 </div>

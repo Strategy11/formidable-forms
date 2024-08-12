@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <hr class="frm12"/>
-<h2 class="frm12"><?php esc_html_e( 'Quick Settings', 'formidable' ); ?></h2>
+<h2 class="frm12 frm-mb-0"><?php esc_html_e( 'Quick Settings', 'formidable' ); ?></h2>
 
 <p class="frm12"><?php esc_html_e( 'Essential presets for a quick start. Explore advanced settings for more options', 'formidable' ); ?>.</p>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Primary', 'formidable' ); ?></label></div>
-<div class="frm7 frm_form_field">
+<div class="frm5 frm_form_field frm-mt-md"><label class="frm-style-item-heading"><?php esc_html_e( 'Primary', 'formidable' ); ?></label></div>
+<div class="frm7 frm_form_field frm-mt-md">
 	<?php
 	new FrmPrimaryColorStyleComponent(
 		null,

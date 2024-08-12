@@ -37,13 +37,13 @@ class FrmFieldShapeStyleComponent extends FrmStyleComponent {
 	 * @return string
 	 */
 	protected function get_wrapper_class_name() {
-		$class  = $this->get_default_wrapper_class_name();
-		$class .= ' frm-align-component frm-radio-component';
 
-		if ( empty( $this->data['options'] ) || 3 === count( $this->data['options'] ) ) {
-			return $class;
+		$classes = array( $this->get_default_wrapper_class_names(), 'frm-align-component', 'frm-radio-component' );
+
+		if ( ! empty( $this->data['options'] ) && 2 === count( $this->data['options'] ) ) {
+			$classes[] = 'frm-2-options';
 		}
-
-		return $class . ' frm-2-options';
+	
+		return implode( ' ', $classes );
 	}
 }

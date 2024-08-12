@@ -12,10 +12,15 @@ export default class frmStyleDependentUpdaterComponent {
 	 */
 	constructor( component ) {
 		this.component = component;
-		this.data = {
-			propagateInputs: this.initPropagationList( JSON.parse( this.component.dataset.willChange ) ),
-			changeEvent: new Event( 'change', { bubbles: true } )
-		};
+		try {
+			const willChangeData = JSON.parse( this.component.dataset.willChange );
+			this.data = {
+				propagateInputs: this.initPropagationList( willChangeData ),
+				changeEvent: new Event( 'change', { bubbles: true } )
+			};
+		} catch ( error ) {
+			console.error( 'Error parsing JSON data from "will-change" attribute.', error );
+		}
 	}
 
 	/**

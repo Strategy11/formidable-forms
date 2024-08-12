@@ -110,7 +110,7 @@ class FrmStyleComponent {
 	 *
 	 * @return string
 	 */
-	protected function get_default_wrapper_class_name() {
+	protected function get_default_wrapper_class_names() {
 		$class = 'frm-style-component';
 		if ( ! empty( $this->data['will_change'] ) ) {
 			return $class . ' frm-style-dependent-updater-component';
@@ -126,7 +126,7 @@ class FrmStyleComponent {
 	 * @return string
 	 */
 	protected function get_wrapper_class_name() {
-		return $this->get_default_wrapper_class_name();
+		return $this->get_default_wrapper_class_names();
 	}
 
 	/**
@@ -138,7 +138,7 @@ class FrmStyleComponent {
 	 */
 	private function get_component_attributes() {
 		$attributes = '';
-		if ( isset( $this->data['will_change'] ) ) {
+		if ( ! empty( $this->data['will_change'] ) ) {
 			$attributes .= 'data-will-change=' . wp_json_encode( $this->data['will_change'] );
 		}
 		return $attributes;
@@ -153,10 +153,7 @@ class FrmStyleComponent {
 	 * @return string
 	 */
 	private function get_field_name() {
-		if ( empty( $this->field_name ) ) {
-			return '';
-		}
-		return 'name=' . $this->field_name;
+		return ! empty( $this->field_name ) ? 'name=' . $this->field_name : '';
 	}
 
 	/**
@@ -166,7 +163,7 @@ class FrmStyleComponent {
 	 *
 	 * @return void
 	 */
-	private function init_view_path() {
+	private function set_view_path() {
 		$this->view_folder = FrmAppHelper::plugin_path() . '/classes/views/styles/components/views/';
 	}
 
@@ -182,7 +179,7 @@ class FrmStyleComponent {
 			return;
 		}
 
-		$this->init_view_path();
+		$this->set_view_path();
 		$component_attr  = $this->get_component_attributes();
 		$component_class = $this->get_wrapper_class_name();
 		$component       = $data;

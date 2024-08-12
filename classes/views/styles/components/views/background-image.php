@@ -2,7 +2,7 @@
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-style-component frm-background-image">
+<div class="frm-style-component frm-background-image-component">
 	<div class="frm-flex-justify">
 		<input type="text" <?php echo esc_attr( $field_name ); ?> id="<?php echo esc_attr( $component['id'] ); ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
 		<?php
