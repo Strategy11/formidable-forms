@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
-Tested up to: 6.5.5
+Tested up to: 6.6.1
 Requires PHP: 7.0
-Stable tag: 6.11.1
+Stable tag: 6.11.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,22 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.11.2 =
+* Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
+* New: Some small accessibility improvements were made on the Import/Export admin page.
+* Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
+* Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
+* Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
+* Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
+* Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
+* Fix: HTML entities are now decoded when used for phone format validation to prevent issues where & is converted to &amp; for the regex check.
+* Fix: Email summaries would include repeater forms in the top 10 list.
+* Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
+* Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
+* Fix: Several incorrect text domains and untranslatable strings have been corrected.
+* The function FrmFieldType::get_select_atributes has been deprecated because of a typo in its name.
+* Several old deprecated view files have been removed.
+
 = 6.11.1 =
 * New: Screen reader text has been updated on some admin pages to improve accessibility.
 * New: Hover styling has been updated for modal close icons to improve user experience.
@@ -403,25 +419,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
 * Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
 * Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
-
-= 6.9.1 =
-* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
-* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
-* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
-* Fix: Submit button fields were appearing by mistake in WooCommerce products.
-* The parser for serialized string data has been optimized to be approximately 30% faster than before.
-* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
-* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
-
-= 6.9 =
-* New: A new onboarding wizard has been added to help improve the initial set up process.
-* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
-* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
-* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
-* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
-* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
-* Fix: A confirmation field wouldn't validate with JS when left empty.
-* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

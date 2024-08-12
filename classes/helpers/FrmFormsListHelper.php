@@ -246,7 +246,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			! empty( $item->name ) ? $item->name : __( '(no title)', 'formidable' )
 		);
 
-		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . $checkbox_label_text . '</span></label>';
+		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
 
 		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 

@@ -238,6 +238,9 @@ class FrmEntryValidate {
 			$pattern = FrmField::get_option( $field, 'format' );
 		}
 
+		// Ampersands are saved as &amp;.
+		// Reverse it here so we are checking for the correct character.
+		$pattern = html_entity_decode( $pattern );
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
 		// Create a regexp if format is not already a regexp

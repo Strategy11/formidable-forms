@@ -270,7 +270,7 @@ function frmFrontFormJS() {
 		}
 
 		removeFieldError( $fieldCont );
-		if (  Object.keys( errors ).length > 0 ) {
+		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
 				addFieldError( $fieldCont, key, errors );
 			}
@@ -476,13 +476,13 @@ function frmFrontFormJS() {
 		if ( format !== '' && text !== '' ) {
 			fieldID = getFieldId( field, true );
 			if ( ! ( fieldID in errors ) ) {
-				format = new RegExp( '^' + format + '$', 'i' );
-				if ( format.test( text ) === false ) {
-					if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
-						if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
-							errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
-						}
-					} else {
+				if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.isIntlPhoneInput && window.frmProForm.isIntlPhoneInput( field ) ) {
+					if ( ! window.frmProForm.validateIntlPhoneInput( field ) ) {
+						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+					}
+				} else {
+					format = new RegExp( '^' + format + '$', 'i' );
+					if ( format.test( text ) === false ) {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
 				}
@@ -619,8 +619,14 @@ function frmFrontFormJS() {
 		return 'pattern' !== type;
 	}
 
+	/**
+	 * Check if JS validation should happen.
+	 *
+	 * @param {HTMLElement} object Form object.
+	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
+	 */
 	function shouldJSValidate( object ) {
-		let validate = jQuery( object ).hasClass( 'frm_js_validate' );
+		let validate = hasClass( object, 'frm_js_validate' );
 		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
 			validate = false;
 		}
@@ -791,7 +797,7 @@ function frmFrontFormJS() {
 				if ( contSubmit ) {
 					object.submit();
 				} else {
-					jQuery( object ).prepend( response.error_message );
+					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
 			} else {
@@ -971,13 +977,21 @@ function frmFrontFormJS() {
 		return 'frm_error_' + input.id;
 	}
 
+	/**
+	 * Removes errors before validating with JS.
+	 * This prevents issues with stale errors that has since been fixed.
+	 *
+	 * @param {Object} $fieldCont jQuery object.
+	 * @return {void}
+	 */
 	function removeFieldError( $fieldCont ) {
-		let errorMessage = $fieldCont.find( '.frm_error' ),
-			errorId = errorMessage.attr( 'id' ),
-			input = $fieldCont.find( 'input, select, textarea' ),
-			describedBy = input.attr( 'aria-describedby' );
+		const errorMessage = $fieldCont.find( '.frm_error' );
+		const errorId      = errorMessage.attr( 'id' );
+		const input        = $fieldCont.find( 'input, select, textarea' );
+		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.removeClass( 'frm_blank_field has-error' );
+		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
 		input.removeAttr( 'aria-describedby' );
@@ -994,10 +1008,14 @@ function frmFrontFormJS() {
 		jQuery( '.frm_error_style' ).remove();
 	}
 
+	/**
+	 * @param {HTMLElement} object Form object.
+	 * @return {void}
+	 */
 	function scrollToFirstField( object ) {
-		const field = jQuery( object ).find( '.frm_blank_field' ).first();
-		if ( field.length ) {
-			frmFrontForm.scrollMsg( field, object, true );
+		const field = object.querySelector( '.frm_blank_field' );
+		if ( field ) {
+			frmFrontForm.scrollMsg( jQuery( field ), object, true );
 		}
 	}
 
@@ -1056,69 +1074,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function clearDefault() {
-		/*jshint validthis:true */
-		toggleDefault( jQuery( this ), 'clear' );
-	}
-
-	function replaceDefault() {
-		/*jshint validthis:true */
-		toggleDefault( jQuery( this ), 'replace' );
-	}
-
-	function toggleDefault( $thisField, e ) {
-		// TODO: Fix this for a default value that is a number or array
-		let thisVal,
-			v = $thisField.data( 'frmval' ).replace( /(\n|\r\n)/g, '\r' );
-		if ( v === '' || typeof v === 'undefined' ) {
-			return false;
-		}
-		thisVal = $thisField.val().replace( /(\n|\r\n)/g, '\r' );
-
-		if ( 'replace' === e ) {
-			if ( thisVal === '' ) {
-				$thisField.addClass( 'frm_default' ).val( v );
-			}
-		} else if ( thisVal == v ) {
-			$thisField.removeClass( 'frm_default' ).val( '' );
-		}
-	}
-
-	function resendEmail() {
-		console.warn( 'DEPRECATED: function resendEmail in v6.10 please update to Formidable Pro v6.10' );
-
-		/*jshint validthis:true */
-		let $link = jQuery( this ),
-			entryId = this.getAttribute( 'data-eid' ),
-			formId = this.getAttribute( 'data-fid' ),
-			label = $link.find( '.frm_link_label' );
-		if ( label.length < 1 ) {
-			label = $link;
-		}
-		label.append( '<span class="frm-wait"></span>' );
-
-		jQuery.ajax({
-			type: 'POST',
-			url: frm_js.ajax_url, // eslint-disable-line camelcase
-			data: {
-				action: 'frm_entries_send_email',
-				entry_id: entryId,
-				form_id: formId,
-				nonce: frm_js.nonce // eslint-disable-line camelcase
-			},
-			success: function( msg ) {
-				const admin = document.getElementById( 'wpbody' );
-				if ( admin === null ) {
-					label.html( msg );
-				} else {
-					label.html( '' );
-					$link.after( msg );
-				}
-			}
-		});
-		return false;
-	}
-
 	/**********************************************
 	 * General Helpers
 	 *********************************************/
@@ -1127,17 +1082,6 @@ function frmFrontFormJS() {
 		/*jshint validthis:true */
 		const message = jQuery( this ).data( 'frmconfirm' );
 		return confirm( message );
-	}
-
-	function toggleDiv() {
-		/*jshint validthis:true */
-		const div = jQuery( this ).data( 'frmtoggle' );
-		if ( jQuery( div ).is( ':visible' ) ) {
-			jQuery( div ).slideUp( 'fast' );
-		} else {
-			jQuery( div ).slideDown( 'fast' );
-		}
-		return false;
 	}
 
 	/**
@@ -1200,7 +1144,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			label.addEventListener( 'click', function( e ) {
+			label.addEventListener( 'click', function() {
 				inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' ).focus();
 			});
 		});
@@ -1476,21 +1420,12 @@ function frmFrontFormJS() {
 				}
 			});
 
-			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
-			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
-			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
-
-			if ( frm_js.include_resend_email ) { // eslint-disable-line camelcase
-				jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
-			}
-
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
 			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
-			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
 
 			checkForErrorsAndMaybeSetFocus();
 
@@ -1555,7 +1490,7 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterRecaptcha: function( token, formID ) {
+		afterRecaptcha: function( _, formID ) {
 			const object = jQuery( '#frm_form_' + formID + '_container form' )[0];
 			frmFrontForm.submitFormNow( object );
 		},
@@ -1763,13 +1698,6 @@ function frmFrontFormJS() {
 
 			if ( e.selfTriggered !== true ) {
 				maybeValidateChange( this );
-			}
-		},
-
-		savingDraft: function( object ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.savingDraft in v3.0 use frmProForm.savingDraft' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				return frmProForm.savingDraft( object );
 			}
 		},
 
