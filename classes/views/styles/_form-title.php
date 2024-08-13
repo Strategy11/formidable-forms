@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'type'  => 'bottom',
 				),
 			),
-		),
+		)
 	);
 	?>
 </div>

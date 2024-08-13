@@ -63,9 +63,9 @@ class FrmStyleComponent {
 	 *
 	 * @since x.x
 	 *
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	public function __construct() {
 		$this->load_css();

@@ -481,7 +481,7 @@ class FrmStylesHelper {
 		
 			case 'border_radius':
 				if ( ! empty( $settings['field_shape_type'] ) ) {
-					if ( 'underline' === $settings['field_shape_type'] || 'regular' === $settings['field_shape_type']) {
+					if ( 'underline' === $settings['field_shape_type'] || 'regular' === $settings['field_shape_type'] ) {
 						return '0px';
 					}
 					if ( 'circle' === $settings['field_shape_type'] ) {
@@ -694,8 +694,8 @@ class FrmStylesHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
-	 * @param int     $form_id
+	 * @param stdClass|WP_Post $style
+	 * @param int              $form_id
 	 * @return array
 	 */
 	public static function get_style_options_back_button_args( $style, $form_id ) {
@@ -714,11 +714,9 @@ class FrmStylesHelper {
 	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post    $style
-	 * @param int|string $form_id Used for the back button and preview form target.
-	 * @param string     $section The url param section.
+	 * @param stdClass|WP_Post $style
+	 * @param int|string       $form_id Used for the back button and preview form target.
+	 * @param string           $section The url param section.
 	 *
 	 * @return string
 	 */
