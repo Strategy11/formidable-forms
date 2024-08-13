@@ -450,6 +450,16 @@ class FrmStylesHelper {
 		}
 	}
 
+	/**
+	 * Prepare the value for a CSS variable.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $settings An array of css style.
+	 * @param string $key
+	 *
+	 * @return string
+	 */
 	private static function css_var_prepare_value( $settings, $key ) {
 		$value = $settings[ $key ];
 
@@ -471,12 +481,11 @@ class FrmStylesHelper {
 		
 			case 'border_radius':
 				if ( ! empty( $settings['field_shape_type'] ) ) {
-					if ( 'underline' === $settings['field_shape_type'] ) {
+					if ( 'underline' === $settings['field_shape_type'] || 'regular' === $settings['field_shape_type']) {
 						return '0px';
-					} elseif ( 'circle' === $settings['field_shape_type'] ) {
+					}
+					if ( 'circle' === $settings['field_shape_type'] ) {
 						return '30px';
-					} elseif ( 'regular' === $settings['field_shape_type'] ) {
-						return '0px';
 					}
 				}
 				break;
@@ -685,8 +694,8 @@ class FrmStylesHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param stdClass|WP_Post $style
-	 * @param int              $form_id
+	 * @param WP_Post $style
+	 * @param int     $form_id
 	 * @return array
 	 */
 	public static function get_style_options_back_button_args( $style, $form_id ) {
@@ -707,9 +716,9 @@ class FrmStylesHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param stdClass|WP_Post $style
-	 * @param int|string       $form_id Used for the back button and preview form target.
-	 * @param string           $section The url param section.
+	 * @param WP_Post    $style
+	 * @param int|string $form_id Used for the back button and preview form target.
+	 * @param string     $section The url param section.
 	 *
 	 * @return string
 	 */
@@ -814,8 +823,9 @@ class FrmStylesHelper {
 	 * Retrieve the background image URL of the submit button, which may be either a full URL string (used in versions prior to x.x) or a numeric attachment ID (introduced in version x.x).
 	 *
 	 * @since x.x
+	 *
 	 * @param array $settings
-	 * @return string|false Return image url or false.
+	 * @return false|string Return image url or false.
 	 */
 	public static function get_submit_image_bg_url( $settings ) {
 		if ( empty( $settings['submit_bg_img'] ) ) {

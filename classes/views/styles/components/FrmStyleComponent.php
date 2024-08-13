@@ -92,7 +92,7 @@ class FrmStyleComponent {
 	 *
 	 * @since x.x
 	 *
-	 * @return void|stdClass
+	 * @return stdClass|void
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {

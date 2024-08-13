@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	new FrmAlignStyleComponent(
 		$frm_style->get_field_name( 'form_align' ),
 		$style->post_content['form_align'],
-		array(),
+		array()
 	);
 	?>
 </div>

@@ -91,7 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$style->post_content['align'],
 							array(
 								'options' => array( 'left', 'right' ),
-							),
+							)
 						);
 						?>
 					</div>
