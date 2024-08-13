@@ -28,22 +28,4 @@ class FrmFieldShapeStyleComponent extends FrmStyleComponent {
 		
 		$this->load_view( $this->data );
 	}
-
-	/**
-	 * Get the wrapper classname.
-	 *
-	 * @since x.x
-	 *
-	 * @return string
-	 */
-	protected function get_wrapper_class_name() {
-
-		$classes = array( $this->get_default_wrapper_class_names(), 'frm-align-component', 'frm-radio-component' );
-
-		if ( ! empty( $this->data['options'] ) && 2 === count( $this->data['options'] ) ) {
-			$classes[] = 'frm-2-options';
-		}
-	
-		return implode( ' ', $classes );
-	}
 }

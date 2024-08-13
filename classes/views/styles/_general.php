@@ -118,9 +118,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'frm_important_style',
 			$frm_style->get_field_name( 'important_style' ),
 			array(
-				'div_class' => 'with_frm_style frm_toggle',
-				'checked'   => ! empty( $style->post_content['important_style'] ),
-				'echo'      => true,
+				'div_class'       => 'with_frm_style frm_toggle',
+				'checked'         => ! empty( $style->post_content['important_style'] ),
+				'echo'            => true,
+				'aria-label-attr' => __( 'Override Theme', 'formidable' ),
 			)
 		);
 		?>
@@ -133,9 +134,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'frm_center_form',
 			$frm_style->get_field_name( 'center_form' ),
 			array(
-				'div_class' => 'with_frm_style frm_toggle',
-				'checked'   => ! empty( $style->post_content['important_style'] ),
-				'echo'      => true,
+				'div_class'       => 'with_frm_style frm_toggle',
+				'checked'         => ! empty( $style->post_content['important_style'] ),
+				'echo'            => true,
+				'aria-label-attr' => __( 'Center Form', 'formidable' ),
 			)
 		);
 		?>

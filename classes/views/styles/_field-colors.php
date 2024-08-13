@@ -166,9 +166,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'remove_box_shadow_active',
 								$frm_style->get_field_name( 'remove_box_shadow_active' ),
 								array(
-									'div_class' => 'with_frm_style frm_toggle',
-									'checked'   => ! $style->post_content['remove_box_shadow_active'],
-									'echo'      => true,
+									'div_class'       => 'with_frm_style frm_toggle',
+									'checked'         => ! $style->post_content['remove_box_shadow_active'],
+									'echo'            => true,
+									'aria-label-attr' => __( 'Toggle box shadow', 'formidable' ),
 								)
 							);
 							?>
