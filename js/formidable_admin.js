@@ -1833,7 +1833,7 @@ function frmAdminBuildJS() {
 		const newEmbedField     = classes.contains( 'frm_tform' );
 		const newUserIdField    = classes.contains( 'frm_tuser_id' );
 
-		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
+		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newUserIdField && ! newSectionField && ! newEmbedField;
 		if ( fieldTypeIsAlwaysAllowed ) {
 			return true;
 		}
