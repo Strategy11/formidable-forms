@@ -1834,7 +1834,7 @@ function frmAdminBuildJS() {
 			return true;
 		}
 
-		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
+		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || droppable.classList.contains( '.start_divider' );
 		if ( newFieldWillBeAddedToASection ) {
 			// Don't allow a section or an embedded form in a section.
 			return ! newEmbedField && ! newSectionField;
@@ -1849,7 +1849,7 @@ function frmAdminBuildJS() {
 
 			return ! newHiddenField && ! newPageBreakField && ! newUserIdField;
 		}
-	
+
 		return true;
 	}
 
