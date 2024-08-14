@@ -5199,17 +5199,9 @@ label.frm-example-icon {
 	display: none;
 }
 
-.edd_frm_status_icon.frm_icon_font {
+.edd_frm_status_icon.frmsvg {
 	color: #D54E21;
 	margin: 0 5px;
-}
-
-.edd_frm_status_icon.frmsvg {
-	margin: 0;
-}
-
-.edd_frm_status_icon.frmsvg {
-	fill: #D54E21;
 }
 
 .edd_frm_status_icon.frmsvg.frm_inactive_icon {
