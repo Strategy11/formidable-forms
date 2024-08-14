@@ -382,17 +382,13 @@ function frmAdminBuildJS() {
 
 	function toggleItem( e ) {
 		/*jshint validthis:true */
-		const toggle = this.getAttribute( 'data-frmtoggle' ),
-			text = this.getAttribute( 'data-toggletext' ),
-			items = jQuery( toggle );
+		const toggle = this.getAttribute( 'data-frmtoggle' );
+		const text   = this.getAttribute( 'data-toggletext' );
+		const $items = jQuery( toggle );
 
 		e.preventDefault();
 
-		if ( items.is( ':visible' ) ) {
-			items.show();
-		} else {
-			items.hide();
-		}
+		$items.toggle();
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );
@@ -3590,6 +3586,7 @@ function frmAdminBuildJS() {
 			fieldId = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
+			wp.hooks.doAction( 'frm_before_delete_field_option', this );
 			jQuery( parentLi ).remove();
 
 			const hasOther = jQuery( parentUl ).find( '.frm_other_option' );
@@ -4971,10 +4968,69 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns an object that has the old and new values and labels, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Object}
+	 */
+	function getChoiceOldAndNewValues( input ) {
+		const { oldValue, oldLabel } = getChoiceOldValueAndLabel( input );
+		const { newValue, newLabel } = getChoiceNewValueAndLabel( input );
+
+		return { oldValue, oldLabel, newValue, newLabel };
+	}
+
+	/**
+	 * Returns an object that has the new value and label, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
+	function getChoiceNewValueAndLabel( choiceElement ) {
+		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
+
+		let newValue, newLabel;
+
+		if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+			newValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).value;
+			newLabel = choiceElement.value;
+			return { newValue, newLabel };
+		}
+
+		// saved value changed
+		newLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).value;
+		newValue = choiceElement.value;
+		return { newValue, newLabel };
+	}
+
+	/**
+	 * Returns an object that has the old value and label, when a field choice is changed.
+	 *
+	 * @param {HTMLElement} choiceElement
+	 * @returns {Object}
+	 */
+	function getChoiceOldValueAndLabel( choiceElement ) {
+		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
+
+		let oldValue, oldLabel;
+
+		if ( usingSeparateValues  ) {
+			if ( choiceElement.parentElement.classList.contains( 'frm_single_option' ) ) { // label changed
+				oldValue = singleOptionContainer.querySelector( '.frm_option_key input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+				oldLabel = choiceElement.getAttribute( 'data-value-on-focus' );
+				return { oldValue, oldLabel };
+			}
+		}
+		oldValue = choiceElement.getAttribute( 'data-value-on-focus' );
+		oldLabel = singleOptionContainer.querySelector( 'input[type="text"]' ).getAttribute( 'data-value-on-focus' );
+
+		return { oldValue, oldLabel };
+	}
+
 	function onOptionTextBlur() {
 		let originalValue,
-			oldValue = this.getAttribute( 'data-value-on-focus' ),
-			newValue = this.value,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -4989,11 +5045,15 @@ function frmAdminBuildJS() {
 			optionMatches,
 			option;
 
-		if ( oldValue === newValue ) {
+		const { oldValue, oldLabel, newValue, newLabel } = getChoiceOldAndNewValues( this );
+
+		if ( oldValue === newValue && oldLabel === newLabel ) {
 			return;
 		}
 
-		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+		const singleSettingsContainer = this.closest( '.frm-single-settings' );
+
+		fieldId       = singleSettingsContainer.getAttribute( 'data-fid' );
 		originalValue = this.getAttribute( 'data-value-on-load' );
 
 		// check if the newValue is already mapped to another option
@@ -5037,8 +5097,14 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					option = document.createElement( 'option' );
-					valueSelect.appendChild( option );
+					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' ).checked ) {
+						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
+					}
+
+					if ( ! option ) {
+						option = document.createElement( 'option' );
+						valueSelect.appendChild( option );
+					}
 				}
 			}
 
@@ -5047,7 +5113,7 @@ function frmAdminBuildJS() {
 			}
 
 			option.setAttribute( 'value', newValue );
-			option.textContent = newValue;
+			option.textContent = newLabel;
 
 			if ( fieldIds.indexOf( logicId ) === -1 ) {
 				fieldIds.push( logicId );
@@ -5059,6 +5125,26 @@ function frmAdminBuildJS() {
 			setting = document.getElementById( 'frm-single-settings-' + settingId );
 			moveFieldSettings( setting );
 		}
+	}
+
+	/**
+	 * Returns an option element that matches a string with its text content.
+	 *
+	 * @param {HTMLElement} selectElement
+	 * @param {string}      searchText
+	 * @returns {HTMLElement|null}
+	 */
+	function searchSelectByText( selectElement, searchText ) {
+		const options = selectElement.options;
+
+		for ( let i = 0; i < options.length; i++ ) {
+			const option = options[i];
+			if ( searchText === option.textContent ) {
+				return option;
+			}
+		}
+
+		return null;
 	}
 
 	function updateGetValueFieldSelection() {
@@ -5608,6 +5694,25 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
+	/**
+	 * Returns an object that has a value and label for new conditional logic option, for a given option value.
+	 *
+	 * @param {Number} fieldId
+	 * @param {string} expectedOption
+	 * @returns {Object}
+	 */
+	function getNewConditionalLogicOption( fieldId, expectedOption ) {
+		const optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+
+		const expectedOptionInput = optionsContainer.querySelector( 'input[value="' + expectedOption + '"]' );
+
+		if ( expectedOptionInput ) {
+			return getChoiceNewValueAndLabel( expectedOptionInput );
+		}
+
+		return { newValue: expectedOption, newLabel: expectedOption };
+	}
+
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
 		let row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
 			rows = builderPage.querySelectorAll( '.frm_logic_row' ),
@@ -5629,7 +5734,14 @@ function frmAdminBuildJS() {
 
 			for ( optionIndex = optionLength - 1; optionIndex >= 0; optionIndex-- ) {
 				expectedOption = fieldOptions[ optionIndex ];
-				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
+				let expectedOptionValue = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelector( '.frm_option_key input[type="text"]' )?.value;
+				if ( ! expectedOptionValue ) {
+					expectedOptionValue = expectedOption;
+				}
+
+				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOptionValue + '"]' );
+
+				const { newValue, newLabel } = getNewConditionalLogicOption( fieldId, expectedOption );
 
 				const fieldChoices     = document.querySelectorAll( '#frm_field_' + fieldId + '_opts input[data-value-on-focus]' );
 				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
@@ -5640,7 +5752,7 @@ function frmAdminBuildJS() {
 						continue;
 					}
 				}
-				prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption );
+				prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
@@ -5650,10 +5762,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, expectedOption ) {
-		if ( optionMatch === null ) {
-			optionMatch = frmDom.tag( 'option', { text: expectedOption });
-			optionMatch.value = expectedOption;
+	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel ) {
+		if ( optionMatch === null && ! valueSelect.querySelector( 'option[value="' + newValue + '"]' )) {
+			optionMatch = frmDom.tag( 'option', { text: newLabel });
+			optionMatch.value = newValue;
 		}
 
 		valueSelect.prepend( optionMatch );

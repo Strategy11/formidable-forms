@@ -295,7 +295,7 @@ class FrmAppController {
 			),
 		);
 
-		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
@@ -1312,29 +1312,6 @@ class FrmAppController {
 		 * @since 6.8.4
 		 */
 		do_action( 'frm_enqueue_floating_links' );
-	}
-
-	/**
-	 * Include icons on page for Embed Form modal.
-	 *
-	 * @since 5.2
-	 *
-	 * @return void
-	 */
-	public static function include_embed_form_icons() {
-		_deprecated_function( __METHOD__, '5.3' );
-	}
-
-	/**
-	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $atts
-	 * @return string
-	 */
-	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
-		return FrmFormsController::get_form_shortcode( $atts );
 	}
 
 	/**
