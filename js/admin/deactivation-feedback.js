@@ -94,7 +94,7 @@
 				const wrapper = document.getElementById( 'frm-deactivation-form-wrapper' );
 				const form    = response.renderedHtml.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 
-				wrapper.innerHTML = form;
+				jQuery( wrapper ).html( form );
 				addSkipBtn( wrapper );
 				deactivationModal.dialog( 'open' );
 			})
