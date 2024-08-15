@@ -1,7 +1,7 @@
 ( function() {
 	'use strict';
 
-	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
+	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a';
 
 	let deactivationModal, deactivationUrl;
 
@@ -81,9 +81,9 @@
 
 		deactivationUrl = event.target.href;
 
-		const pluginName = event.target.closest( '.plugin-title' ).querySelector( 'strong' ).innerText;
+		const pluginSlug = event.target.closest( 'tr' ).dataset.slug;
 
-		const url = 'http://frmdev.test/wp-json/frm/v2/forms/deactivation-feedback?plugin_name=' + pluginName + '&return=html&exclude_script=jquery&exclude_style=formidable-css';
+		const url = 'http://frmdev.test/wp-json/frm/v2/forms/deactivation-feedback?plugin_slug=' + pluginSlug + '&return=html&exclude_script=jquery&exclude_style=formidable-css';
 
 		const response = fetch( url, {
 			method: 'GET'
@@ -96,6 +96,7 @@
 				const form    = response.renderedHtml.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 
 				jQuery( wrapper ).html( form );
+				wrapper.setAttribute( 'data-slug', pluginSlug );
 				addSkipBtn( wrapper );
 				deactivationModal.dialog( 'open' );
 			})

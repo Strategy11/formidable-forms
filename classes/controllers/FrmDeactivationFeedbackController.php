@@ -38,6 +38,10 @@ class FrmDeactivationFeedbackController {
 		<div id="frm-deactivation-modal" class="">
 			<div class="metabox-holder">
 				<div class="postbox">
+					<a class="frm-modal-close dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+						<svg class="frmsvg" id="frm_close_icon" viewBox="0 0 20 20" width="18px" height="18px" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>"><path d="M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z"/></svg>
+					</a>
+
 					<div class="inside">
 						<?php self::modal_icon(); ?>
 						<div id="frm-deactivation-form-wrapper" class="frmapi-form">
@@ -71,6 +75,13 @@ class FrmDeactivationFeedbackController {
 				left: var(--padding);
 			}
 
+			#frm-deactivation-modal .frm-modal-close {
+				position: absolute;
+				top: 20px;
+				right: var(--padding);
+				z-index: 1000;
+			}
+
 			#frm-deactivation-modal .frm_form_title {
 				padding: 20px var(--padding) 20px calc(2 * var(--padding));
 				margin-top: 0;
@@ -89,7 +100,8 @@ class FrmDeactivationFeedbackController {
 			}
 
 			#frm-deactivation-modal input[name="item_key"] + div,
-			#frm-deactivation-modal .frm_primary_label {
+			#frm-deactivation-modal .frm_primary_label,
+			#frm-deactivation-form-wrapper[data-slug="formidable"] #frm_radio_1601-5 { /* Hide too expensive option */
 				display: none;
 			}
 
