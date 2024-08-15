@@ -8710,7 +8710,7 @@ function frmAdminBuildJS() {
 							thisRow.find( '.edd_frm_unauthorized' ).removeClass( 'frm_hidden' )
 							thisRow.find( '.edd_frm_authorized' ).addClass( 'frm_hidden' )
 						}
-					}, 10000 );
+					}, 5000 );
 				}
 			}
 		});
