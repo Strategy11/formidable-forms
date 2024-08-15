@@ -1,7 +1,7 @@
 ( function() {
 	'use strict';
 
-	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a,';
+	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
 
 	let deactivationModal, deactivationUrl;
 
