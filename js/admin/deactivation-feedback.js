@@ -62,7 +62,8 @@
 	const addSkipBtn = formEl => {
 		const btn = frmDom.a( {
 			text: FrmDeactivationFeedbackI18n.skip_text,
-			href: deactivationUrl
+			href: deactivationUrl,
+			className: 'button button-primary frm-button-secondary'
 		});
 
 		formEl.querySelector( '.frm_submit' ).prepend( btn );

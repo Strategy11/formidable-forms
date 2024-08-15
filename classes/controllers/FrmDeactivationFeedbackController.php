@@ -88,7 +88,8 @@ class FrmDeactivationFeedbackController {
 				padding-right: 0;
 			}
 
-			#frm-deactivation-modal input[name="item_key"] + div {
+			#frm-deactivation-modal input[name="item_key"] + div,
+			#frm-deactivation-modal .frm_primary_label {
 				display: none;
 			}
 
