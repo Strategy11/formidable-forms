@@ -5200,12 +5200,15 @@ label.frm-example-icon {
 }
 
 .edd_frm_status_icon.frmsvg {
-	color: #D54E21;
 	margin: 0 5px;
 }
 
-.edd_frm_status_icon.frmsvg.frm_check1_icon {
+.edd_frm_status_icon.frm_check1_icon {
 	fill: green;
+}
+
+.edd_frm_status_icon.frm_cancel1_icon {
+	fill: #D54E21;
 }
 
 /* Hide the install steps for solutions */
