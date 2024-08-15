@@ -8686,13 +8686,10 @@ function frmAdminBuildJS() {
 					document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value = '';
 				}
 				thisRow.find( '.edd_frm_license' ).html( license );
-				if ( msg.success === true ) {
-					thisRow.find( '.frm_icon_font.frm_action_success' ).removeClass( 'frm_hidden' );
-					thisRow.find( '.frm_icon_font.frm_action_error' ).addClass( 'frm_hidden' );
-				} else {
-					thisRow.find( '.frm_icon_font.frm_action_success' ).addClass( 'frm_hidden' );
-					thisRow.find( '.frm_icon_font.frm_action_error' ).removeClass( 'frm_hidden' );
-				}
+				const eddWrapper = button.get(0).closest( '.frm_form_field' );
+				const actionIsSuccess = msg.success === true;
+				eddWrapper.querySelector( `.frm_icon_font.frm_action_success` ).classList.toggle( 'frm_hidden', ! actionIsSuccess );
+				eddWrapper.querySelector( `.frm_icon_font.frm_action_error` ).classList.toggle( 'frm_hidden', actionIsSuccess);
 
 				const messageBox = thisRow.find( '.frm_license_msg' );
 				messageBox.html( msg.message );
@@ -8700,15 +8697,10 @@ function frmAdminBuildJS() {
 					setTimeout( function() {
 						messageBox.html( '' );
 						thisRow.find( '.frm_icon_font' ).addClass( 'frm_hidden' );
-						if ( msg.success === false ) {
-							return;
-						}
-						if ( action === 'activate' ) {
-							thisRow.find( '.edd_frm_unauthorized' ).addClass( 'frm_hidden' )
-							thisRow.find( '.edd_frm_authorized' ).removeClass( 'frm_hidden' )
-						} else {
-							thisRow.find( '.edd_frm_unauthorized' ).removeClass( 'frm_hidden' )
-							thisRow.find( '.edd_frm_authorized' ).addClass( 'frm_hidden' )
+						if ( actionIsSuccess ) {
+							const actionIsActivate = action === 'activate';
+							thisRow.get(0).querySelector( '.edd_frm_unauthorized' ).classList.toggle( 'frm_hidden', actionIsActivate )
+							thisRow.get(0).querySelector( '.edd_frm_authorized' ).classList.toggle( 'frm_hidden', ! actionIsActivate )
 						}
 					}, 5000 );
 				}
