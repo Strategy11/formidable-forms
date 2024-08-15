@@ -1182,7 +1182,7 @@ class FrmFormsController {
 		$reset_fields = false;
 		FrmFormsHelper::auto_add_end_section_fields( $form, $fields, $reset_fields );
 		FrmSubmitHelper::maybe_create_submit_field( $form, $fields, $reset_fields );
-error_log( $reset_fields );
+
 		if ( $reset_fields ) {
 			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
 		}
@@ -1191,7 +1191,7 @@ error_log( $reset_fields );
 
 		$args   = array( 'parent_form_id' => $form->id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
-//error_log( print_r( $fields, true ) );
+
 		/**
 		 * Allows modifying the list of fields in the form builder.
 		 *
