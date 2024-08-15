@@ -8676,10 +8676,12 @@ function frmAdminBuildJS() {
 		const pluginSlug = this.getAttribute( 'data-plugin' );
 		const action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		let license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
+		button.get(0).disabled = true;
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl, dataType: 'json',
 			data: {action: 'frm_addon_' + action, license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
 			success: function( msg ) {
+				button.get(0).disabled = false;
 				const thisRow = button.closest( '.edd_frm_license_row' );
 				if ( action === 'deactivate' ) {
 					license = '';
@@ -8688,7 +8690,7 @@ function frmAdminBuildJS() {
 				thisRow.find( '.edd_frm_license' ).html( license );
 				const eddWrapper = button.get(0).closest( '.frm_form_field' );
 				const actionIsSuccess = msg.success === true;
-				eddWrapper.querySelector( `.frm_icon_font.frm_action_success` ).classList.toggle( 'frm_hidden', ! actionIsSuccess );
+				eddWrapper.querySelector( `.frm_icon_font.frm_action_success` ).classList.toggle( 'frm_hidden', ! actionIsSuccess || action === 'deactivate' );
 				eddWrapper.querySelector( `.frm_icon_font.frm_action_error` ).classList.toggle( 'frm_hidden', actionIsSuccess);
 
 				const messageBox = thisRow.find( '.frm_license_msg' );
