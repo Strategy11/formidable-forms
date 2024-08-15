@@ -8700,7 +8700,17 @@ function frmAdminBuildJS() {
 					setTimeout( function() {
 						messageBox.html( '' );
 						thisRow.find( '.frm_icon_font' ).addClass( 'frm_hidden' );
-					}, 15000 );
+						if ( msg.success === false ) {
+							return;
+						}
+						if ( action === 'activate' ) {
+							thisRow.find( '.edd_frm_unauthorized' ).addClass( 'frm_hidden' )
+							thisRow.find( '.edd_frm_authorized' ).removeClass( 'frm_hidden' )
+						} else {
+							thisRow.find( '.edd_frm_unauthorized' ).removeClass( 'frm_hidden' )
+							thisRow.find( '.edd_frm_authorized' ).addClass( 'frm_hidden' )
+						}
+					}, 10000 );
 				}
 			}
 		});
