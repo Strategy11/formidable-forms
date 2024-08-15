@@ -8687,8 +8687,11 @@ function frmAdminBuildJS() {
 				}
 				thisRow.find( '.edd_frm_license' ).html( license );
 				if ( msg.success === true ) {
-					thisRow.find( '.frm_icon_font' ).removeClass( 'frm_hidden' );
-					thisRow.find( 'div.alignleft' ).toggleClass( 'frm_hidden', 1000 );
+					thisRow.find( '.frm_icon_font.frm_action_success' ).removeClass( 'frm_hidden' );
+					thisRow.find( '.frm_icon_font.frm_action_error' ).addClass( 'frm_hidden' );
+				} else {
+					thisRow.find( '.frm_icon_font.frm_action_success' ).addClass( 'frm_hidden' );
+					thisRow.find( '.frm_icon_font.frm_action_error' ).removeClass( 'frm_hidden' );
 				}
 
 				const messageBox = thisRow.find( '.frm_license_msg' );
@@ -8696,6 +8699,7 @@ function frmAdminBuildJS() {
 				if ( msg.message !== '' ) {
 					setTimeout( function() {
 						messageBox.html( '' );
+						thisRow.find( '.frm_icon_font' ).addClass( 'frm_hidden' );
 					}, 15000 );
 				}
 			}
