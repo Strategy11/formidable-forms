@@ -195,7 +195,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function turnstile_api_url() {
-		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile';
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile&render=explicit';
 
 		/**
 		 * Allows updating hcaptcha js api url.
@@ -205,6 +205,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * @param string $api_js_url
 		 */
 		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
+
+		// Prevent render=explicit from happening twice in case someone patched
+		// the double rendering issue using the frm_turnstile_js_url hook.
+		$api_js_url = str_replace(
+			'&render=explicit&render=explicit',
+			'&render=explicit',
+			$api_js_url
+		);
 
 		return $api_js_url;
 	}
