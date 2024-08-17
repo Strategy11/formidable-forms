@@ -2605,6 +2605,7 @@ h2.frm-h2 + .howto {
 .frm-white-body .updated,
 .frm-white-body .notice,
 .frm-white-body .cky-admin-notice,
+.frm-white-body #codepeople-review-banner,
 .frm_wrap > .wrap > .notice,
 .frm_wrap > .wrap > .cky-admin-notice,
 .frm-white-body .error:not(.frm_previous_install)
