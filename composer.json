@@ -16,6 +16,7 @@
 	],
 	"type": "wordpress-plugin",
 	"require": {
+		"ext-mbstring": "*",
 		"composer/installers": "~1.0",
 		"phpmailer/phpmailer": ">=5.2.25"
 	},

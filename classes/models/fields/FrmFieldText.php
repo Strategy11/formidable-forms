@@ -41,7 +41,7 @@ class FrmFieldText extends FrmFieldType {
 		$errors     = parent::validate( $args );
 		$max_length = intval( FrmField::get_option( $this->field, 'max' ) );
 
-		if ( $max_length && strlen( $args['value'] ) > $max_length ) {
+		if ( $max_length && mb_strlen( $args['value'] ) > $max_length ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
