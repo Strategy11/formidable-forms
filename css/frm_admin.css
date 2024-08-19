@@ -5204,7 +5204,7 @@ label.frm-example-icon {
 }
 
 .edd_frm_license_row .frm_action_success .frmsvg {
-	fill: green;
+	color: green;
 }
 
 .edd_frm_license_row .frm_action_error .frmsvg {
