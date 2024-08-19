@@ -5314,7 +5314,8 @@ label.frm-example-icon {
 	position: relative;
 }
 
-#frm_where_options span.frm_where_val .frm_tooltip_icon {
+#frm_where_options span.frm_where_val .frm_tooltip_icon,
+#frm_where_options span.frm_where_val .frm_help {
 	left: -4px;
 	position: absolute;
 }
@@ -6073,6 +6074,12 @@ a.frm_add_logic_link.frm_hidden {
 
 .frm_tooltip_icon:before {
 	font-size: 13px;
+	vertical-align: top;
+}
+
+.frm_help svg {
+	height: 13px;
+	width: 13px;
 	vertical-align: top;
 }
 

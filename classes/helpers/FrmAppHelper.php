@@ -4301,4 +4301,27 @@ class FrmAppHelper {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
+
+	/**
+	 * Shows tooltip icon.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $tooltip_text Tooltip text.
+	 * @param array  $atts         Tooltip wrapper HTML attributes.
+	 *
+	 * @return void
+	 */
+	public static function tooltip_icon( $tooltip_text, $atts = array() ) {
+		$atts['title'] = $tooltip_text;
+		if ( isset( $atts['class'] ) ) {
+			$atts['class'] .= ' frm_help';
+		} else {
+			$atts['class'] = 'frm_help';
+		}
+
+		echo '<span ' . self::array_to_html_params( $atts ) . '>';
+		FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon' );
+		echo '</span>';
+	}
 }
