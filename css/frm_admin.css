@@ -5208,7 +5208,7 @@ label.frm-example-icon {
 }
 
 .edd_frm_license_row .frm_action_error .frmsvg {
-	fill: #D54E21;
+	color: #D54E21;
 }
 
 /* Hide the install steps for solutions */
