@@ -1,7 +1,7 @@
 == Changelog ==
 = 6.12 =
 * New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
-* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibilty.
+* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
 * Fix: Turnstile captcha widgets were rendering twice.
 * Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
 * Fix: The submit button would appear as an entry table row on the entry view admin page.
