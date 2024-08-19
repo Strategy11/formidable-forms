@@ -64,7 +64,7 @@ if ( ! $values['is_template'] ) {
 
 <h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 	<?php esc_html_e( 'On Submit', 'formidable' ); ?>
-	<?php FrmAppHelper::tooltip_icon( __( 'Choose what will happen after the user submits this form.', 'formidable' ) ) ?>
+	<?php FrmAppHelper::tooltip_icon( __( 'Choose what will happen after the user submits this form.', 'formidable' ) ); ?>
 </h3>
 
 <input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
