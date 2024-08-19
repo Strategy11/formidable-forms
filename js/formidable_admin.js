@@ -3589,6 +3589,10 @@ function frmAdminBuildJS() {
 			wp.hooks.doAction( 'frm_before_delete_field_option', this );
 			jQuery( parentLi ).remove();
 
+			setTimeout( () => {
+				resetDisplayedOpts( fieldId );
+			}, 1000 );
+
 			const hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
 				otherInput = document.getElementById( 'other_input_' + fieldId );
