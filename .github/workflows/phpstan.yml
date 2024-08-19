@@ -9,18 +9,18 @@ jobs:
 
     steps:
       - name: "📥 Fetching Repository Contents"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.1.1
 
       - name: "💽  Installing PHP, Composer, CS2PR"
-        uses: shivammathur/setup-php@2.10.0
+        uses: shivammathur/setup-php@2.30.2
         with:
-          php-version: '7.4'
+          php-version: 8.0
           coverage: none
           ini-values: display_errors = on, error_reporting = E_ALL
-          tools: phpstan, composer
+          tools: composer
 
       - name: "💽  Installing Composer Packages"
         run: composer install
 
       - name: "🧪 Test"
-        run: phpstan analyze ./
+        run: vendor/bin/phpstan analyze ./ --memory-limit=2G

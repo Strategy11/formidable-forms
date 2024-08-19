@@ -45,10 +45,10 @@ class FrmEntryShortcodeFormatter {
 	protected $format = 'text';
 
 	/**
-	 * @var FrmTableHTMLGenerator
+	 * @var FrmTableHTMLGenerator|null
 	 * @since 2.04
 	 */
-	protected $table_generator = null;
+	protected $table_generator;
 
 	/**
 	 * @var array
@@ -60,7 +60,7 @@ class FrmEntryShortcodeFormatter {
 	 * FrmEntryShortcodeFormatter constructor
 	 *
 	 * @param int|string $form_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $form_id, $atts ) {
 		if ( ! $form_id ) {
@@ -87,7 +87,6 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param $form_id
 	 * @param int|string $form_id
 	 *
 	 * @return void
@@ -160,7 +159,7 @@ class FrmEntryShortcodeFormatter {
 			return '';
 		}
 
-		if ( $this->format == 'array' ) {
+		if ( $this->format === 'array' ) {
 			$content = $this->get_array();
 		} elseif ( $this->is_plain_text_format() ) {
 			$content = $this->get_plain_text();
@@ -205,7 +204,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function get_table() {
-		$content = $this->table_generator->generate_table_header();
+		$content  = $this->table_generator->generate_table_header();
 		$content .= $this->generate_content_for_all_fields();
 		$content .= $this->table_generator->generate_table_footer();
 
@@ -254,7 +253,7 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param mixed $value
+	 * @param mixed    $value
 	 *
 	 * @return string
 	 */
@@ -305,7 +304,7 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param string $value
+	 * @param string   $value
 	 *
 	 * @return void
 	 */

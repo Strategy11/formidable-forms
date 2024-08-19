@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since 3.0
  */
-
 class FrmFieldFormHtml {
 
 	private $html;
@@ -42,7 +41,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param string $param
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	private function _set( $param, $atts ) {
 		if ( isset( $atts[ $param ] ) ) {
@@ -145,16 +144,16 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_field_values() {
-		//replace [id]
+		// Replace [id].
 		$this->html = str_replace( '[id]', $this->field_id, $this->html );
 
 		// set the label for
 		$this->html = str_replace( 'field_[key]', $this->html_id, $this->html );
 
-		//replace [key]
+		// Replace [key].
 		$this->html = str_replace( '[key]', $this->field_obj->get_field_column( 'field_key' ), $this->html );
 
-		//replace [field_name]
+		// Replace [field_name].
 		$this->html = str_replace( '[field_name]', FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'name' ) ), $this->html );
 	}
 
@@ -220,7 +219,7 @@ class FrmFieldFormHtml {
 		if ( is_string( $inner_html[2] ) ) {
 			$has_id = strpos( $inner_html[2], ' id=' );
 			if ( ! $has_id ) {
-				$id = 'frm_' . $id . '_' . $this->html_id;
+				$id         = 'frm_' . $id . '_' . $this->html_id;
 				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 			}
 		}
@@ -248,7 +247,7 @@ class FrmFieldFormHtml {
 	 * Pull the HTML between [if error] and [/if error] shortcodes.
 	 *
 	 * @param string $html
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_error_body( $html ) {
 		$start = strpos( $html, '[if error]' );
@@ -296,10 +295,10 @@ class FrmFieldFormHtml {
 		if ( ! empty( $this->form ) ) {
 			$form = (array) $this->form;
 
-			//replace [form_key]
+			// Replace [form_key].
 			$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
 
-			//replace [form_name]
+			// Replace [form_name].
 			$this->html = str_replace( '[form_name]', $form['name'], $this->html );
 		}
 	}
@@ -322,7 +321,7 @@ class FrmFieldFormHtml {
 	private function filter_for_more_shortcodes() {
 		$atts = $this->pass_args;
 
-		//If field is not in repeating section
+		// If field is not in repeating section.
 		if ( empty( $atts['section_id'] ) ) {
 			$atts = array(
 				'errors' => $this->pass_args['errors'],
@@ -357,9 +356,9 @@ class FrmFieldFormHtml {
 
 			$replace_with = '';
 
-			if ( $tag == 'deletelink' && FrmAppHelper::pro_is_installed() ) {
+			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
-			} elseif ( $tag == 'input' ) {
+			} elseif ( $tag === 'input' ) {
 				$replace_with = $this->replace_input_shortcode( $shortcode_atts );
 			}
 
@@ -385,7 +384,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt'] --;
+			--$shortcode_atts['opt'];
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
@@ -431,7 +430,7 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column( 'type' ) == 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $this->html );
 		}
@@ -453,7 +452,7 @@ class FrmFieldFormHtml {
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
-			$classes .= ' frm_' . $label_position . '_container';
+			$classes       .= ' frm_' . $label_position . '_container';
 
 			// Add class if field has value, to be used for floating label styling.
 			if ( 'inside' === $label_position && $this->field_obj->get_field_column( 'value' ) ) {
@@ -501,30 +500,22 @@ class FrmFieldFormHtml {
 			return;
 		}
 
-		$field                       = (array) $this->field_obj->get_field();
-		$attributes                  = array();
-		$is_radio                    = 'radio' === $field_type || 'scale' === $field_type;
-		$type_requires_aria_required = true;
+		$field      = (array) $this->field_obj->get_field();
+		$attributes = array();
 
 		// Check if the field type is 'data' or 'product'.
 		if ( in_array( $field_type, array( 'data', 'product' ), true ) ) {
 			$data_type = FrmField::get_option( $field, 'data_type' );
-			// Check if the data type isn't 'radio' or 'checkbox'.
-			if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
-				// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
-				$type_requires_aria_required = false;
-			}
-			// Check if data type is 'radio'
-			if ( 'radio' === $data_type ) {
-				$is_radio = true;
-			}
+			$is_radio  = 'radio' === $data_type;
+		} else {
+			$is_radio = 'radio' === $field_type || 'scale' === $field_type;
 		}
 
 		// Add 'role' attribute to the field.
 		$attributes['role'] = $is_radio ? 'radiogroup' : 'group';
 
 		// Add 'aria-required' attribute to the field if required.
-		if ( $type_requires_aria_required && '1' === $field['required'] ) {
+		if ( $is_radio && '1' === $field['required'] ) {
 			$attributes['aria-required'] = 'true';
 		}
 

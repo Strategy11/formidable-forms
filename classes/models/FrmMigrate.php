@@ -36,14 +36,14 @@ class FrmMigrate {
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$old_db_version = get_option( 'frm_db_version' );
 
 			$this->create_tables();
 			$this->migrate_data( $old_db_version );
 
-			/***** SAVE DB VERSION *****/
+			// SAVE DB VERSION.
 			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 
 			if ( ! $old_db_version ) {
@@ -158,6 +158,57 @@ class FrmMigrate {
 			}
 			unset( $q );
 		}
+
+		$this->add_composite_indexes_for_entries();
+	}
+
+	/**
+	 * These indexes help optimize database queries for entries.
+	 *
+	 * @since 6.6
+	 *
+	 * @return void
+	 */
+	private function add_composite_indexes_for_entries() {
+		global $wpdb;
+
+		$table_name = "{$wpdb->prefix}frm_items";
+		$index_name = 'idx_is_draft_created_at';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_is_draft_created_at ON `{$wpdb->prefix}frm_items` (is_draft, created_at)" );
+		}
+
+		$table_name = "{$wpdb->prefix}frm_item_metas";
+		$index_name = 'idx_field_id_item_id';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_field_id_item_id ON `{$wpdb->prefix}frm_item_metas` (field_id, item_id)" );
+		}
+	}
+
+	/**
+	 * Check that an index exists in a database table before trying to add it (which results in an error).
+	 *
+	 * @since 6.6
+	 *
+	 * @param string $table_name
+	 * @param string $index_name
+	 * @return bool
+	 */
+	private static function index_exists( $table_name, $index_name ) {
+		global $wpdb;
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT 1 FROM information_schema.statistics
+					WHERE table_schema = database()
+						AND table_name = %s
+						AND index_name = %s
+					LIMIT 1',
+				array( $table_name, $index_name )
+			)
+		);
+		return (bool) $row;
 	}
 
 	private function maybe_create_contact_form() {
@@ -205,7 +256,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -234,7 +285,8 @@ class FrmMigrate {
 		delete_option( 'frm-usage-uuid' );
 		delete_option( 'frm_inbox' );
 		delete_option( 'frmpro_css' );
-		delete_option( 'frm_welcome_redirect' );
+		delete_option( FrmOnboardingWizardController::REDIRECT_STATUS_OPTION );
+		delete_option( FrmEmailSummaryHelper::$option_name );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();
@@ -265,13 +317,33 @@ class FrmMigrate {
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
-		delete_transient( 'frm_activation_redirect' );
+		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Disables summary email for multisite (not the main site) if recipient setting isn't changed.
+	 *
+	 * @since 6.8
+	 */
+	private function migrate_to_101() {
+		if ( ! is_multisite() || get_main_site_id() === get_current_blog_id() ) {
+			return;
+		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->summary_emails ) || '[admin_email]' !== $frm_settings->summary_emails_recipients ) {
+			// User changed it.
+			return;
+		}
+
+		$frm_settings->summary_emails = 0;
+		$frm_settings->store();
 	}
 
 	/**
@@ -319,7 +391,7 @@ class FrmMigrate {
 	}
 
 	/**
-	 * Delete uneeded default templates
+	 * Delete unneeded default templates
 	 *
 	 * @since 3.06
 	 */
@@ -341,7 +413,7 @@ class FrmMigrate {
 
 		foreach ( (array) $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
-			$size             = $f->field_options['size'];
+			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
 
 			if ( $size === $f->field_options['size'] ) {
@@ -445,7 +517,7 @@ class FrmMigrate {
 		}
 
 		foreach ( $styles as $style ) {
-			if ( $style->post_content['field_width'] == '400px' ) {
+			if ( $style->post_content['field_width'] === '400px' ) {
 				$style->post_content['field_width'] = '100%';
 				$frm_style->save( (array) $style );
 
@@ -511,7 +583,7 @@ class FrmMigrate {
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
 
-		$size = round( $pixel_conversion * (int) $size );
+		$size  = round( $pixel_conversion * (int) $size );
 		$size .= 'px';
 	}
 
@@ -585,7 +657,7 @@ DEFAULT_HTML;
 		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
-			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
+			if ( empty( $form->options['submit_html'] ) ) {
 				continue;
 			}
 

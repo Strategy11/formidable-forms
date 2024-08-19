@@ -295,7 +295,7 @@ class FrmOnSubmitHelper {
 			return;
 		}
 
-		$form->id = $form_id;
+		$form->id    = $form_id;
 		$action_type = FrmOnSubmitAction::$slug;
 
 		// Check if form already has form actions to avoid creating duplicates.
@@ -395,8 +395,13 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Limited form object.
+	 * @return void
 	 */
 	private static function save_migrated_success_actions( $form ) {
+		// Options may be an empty string.
+		if ( ! is_array( $form->options ) ) {
+			$form->options = array();
+		}
 		$form->options['on_submit_migrated'] = 1;
 		FrmForm::update( $form->id, array( 'options' => $form->options ) );
 	}
@@ -406,7 +411,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.1.1
 	 *
-	 * @param string|array $event Uses 'create' or 'update'.
+	 * @param array|string $event Uses 'create' or 'update'.
 	 *
 	 * @return object
 	 */
@@ -427,7 +432,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.3.1
 	 *
-	 * @param string|array $event Uses 'create' or 'update'.
+	 * @param array|string $event Uses 'create' or 'update'.
 	 * @return object
 	 */
 	public static function get_fallback_action_after_open_in_new_tab( $event ) {

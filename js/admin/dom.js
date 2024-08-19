@@ -147,6 +147,8 @@
 			let labelledBy = id ? jQuery( '#for_' + id ) : false;
 			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 
+			// Set empty title attributes so that none of the dropdown options include title attributes.
+			$select.find( 'option' ).attr( 'title', ' ' );
 			$select.multiselect({
 				templates: {
 					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
@@ -154,7 +156,14 @@
 					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-				nonSelectedText: '',
+				nonSelectedText: __( '— Select —', 'formidable' ),
+				// Prevent the dropdown from showing "All Selected" when every option is checked.
+				allSelectedText: '',
+				// This is 3 by default. We want to show more options before it starts showing a count.
+				numberDisplayed: 8,
+				onInitialized: function( _, $container ) {
+					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
+				},
 				onDropdownShown: function( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
@@ -373,7 +382,7 @@
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );
 
-			function handleSearch() {
+			function handleSearch( event ) {
 				const searchText = input.value.toLowerCase();
 				const notEmptySearchText = searchText !== '';
 				const items = Array.from( document.getElementsByClassName( targetClassName ) );
@@ -381,7 +390,7 @@
 				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
 				if ( 'function' === typeof handleSearchResult ) {
-					handleSearchResult({ foundSomething, notEmptySearchText });
+					handleSearchResult({ foundSomething, notEmptySearchText }, event );
 				}
 
 				function toggleSearchClassesForItem( item ) {
@@ -423,7 +432,7 @@
 				event.preventDefault();
 				callback( event );
 			};
-			element.addEventListener( 'click', listener );
+			element?.addEventListener( 'click', listener );
 		},
 
 		/**
@@ -540,7 +549,7 @@
 					'click', '#' + editor.id + '-html',
 					function() {
 						editor.style.visibility = 'visible';
-						initQuickTagsButtons( editor );
+						initQuickTagsButtons();
 					}
 				);
 			}
@@ -765,7 +774,7 @@
 	function success( content ) {
 		const container           = document.getElementById( 'wpbody' );
 		const notice              = div({
-			className: 'notice notice-info frm-review-notice frm_updated_message frm-floating-success-message',
+			className: 'frm_updated_message frm-floating-success-message',
 			child: div({
 				className: 'frm-satisfied',
 				child: 'string' === typeof content ? document.createTextNode( content ) : content
@@ -798,7 +807,8 @@
 		span: [ 'class' ],
 		strong: [],
 		svg: [ 'class' ],
-		use: []
+		use: [],
+		a: [ 'href', 'class' ]
 	};
 
 	function cleanNode( node ) {
@@ -812,10 +822,17 @@
 		const tagType = node.tagName.toLowerCase();
 
 		if ( 'svg' === tagType ) {
-			return svg({
-				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+			const svgArgs = {
 				classList: Array.from( node.classList )
-			});
+			};
+			const use = node.querySelector( 'use' );
+			if ( use ) {
+				svgArgs.href = use.getAttribute( 'xlink:href' );
+				if ( ! svgArgs.href ) {
+					svgArgs.href = use.getAttribute( 'href' );
+				}
+			}
+			return svg( svgArgs );
 		}
 
 		const newNode = document.createElement( tagType );

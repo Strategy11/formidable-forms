@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			&nbsp; &nbsp;
 		<?php } else { ?>
 			<strong>
-				<span class="frm-nope" style="color:#B94A48">&#10008;</span>
+				<span class="frm-nope" style="color:#F04438">&#10008;</span>
 				<?php esc_html_e( 'Not connected!', 'formidable' ); ?>
 			</strong>
 			<br/><br/>
@@ -31,5 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php FrmStrpLiteConnectHelper::stripe_icon(); ?> &nbsp;
 			<?php esc_html_e( 'Connect to Stripe', 'formidable' ); ?>
 		</a>
-	<?php } ?>
+		<?php
+	}//end if
+	?>
 </div>

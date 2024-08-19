@@ -4,6 +4,7 @@
  * This page is shown when a Formidable plugin is activated.
  *
  * @since 4.06.02
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,6 +21,7 @@ class FrmSolution {
 	 * Hidden welcome page slug.
 	 *
 	 * @since 4.06.02
+	 * @var string
 	 */
 	protected $page = '';
 
@@ -162,7 +164,7 @@ class FrmSolution {
 			return;
 		}
 
-		delete_transient( 'frm_activation_redirect' );
+		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
 		// Initial install.
 		wp_safe_redirect( $this->settings_link() );
@@ -176,7 +178,7 @@ class FrmSolution {
 		return admin_url( 'index.php?page=' . $this->page );
 	}
 
-	/*
+	/**
 	 * Add page to global settings.
 	 */
 	public function add_settings( $sections ) {
@@ -216,7 +218,7 @@ class FrmSolution {
 			// Always show this step in settings.
 			$step['current'] = true;
 
-			$new_class = $all_imported ? ' button frm_hidden' : '';
+			$new_class            = $all_imported ? ' button frm_hidden' : '';
 			$step['button_class'] = str_replace( 'frm_grey disabled', $new_class, $step['button_class'] );
 		}
 		if ( $all_imported ) {
@@ -225,8 +227,8 @@ class FrmSolution {
 		$this->show_app_install( $step );
 
 		if ( ! $all_imported ) {
-			$step            = $steps['complete'];
-			$step['current'] = false;
+			$step                  = $steps['complete'];
+			$step['current']       = false;
 			$step['button_class'] .= ' frm_grey disabled';
 			$this->show_page_links( $step );
 		}
@@ -308,35 +310,35 @@ class FrmSolution {
 		$pro_installed = FrmAppHelper::pro_is_connected();
 
 		$steps = array(
-			'license' => array(
-				'label'         => __( 'Connect to FormidableForms.com', 'formidable' ),
-				'description'   => __( 'Create a connection to get plugin downloads.', 'formidable' ),
-				'button_label'  => __( 'Connect an Account', 'formidable' ),
-				'current'       => empty( $pro_installed ),
-				'complete'      => $pro_installed,
-				'num'           => 1,
+			'license'  => array(
+				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
+				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
+				'button_label' => __( 'Connect an Account', 'formidable' ),
+				'current'      => empty( $pro_installed ),
+				'complete'     => $pro_installed,
+				'num'          => 1,
 			),
-			'plugin' => array(
-				'label'         => __( 'Install and Activate Add-Ons', 'formidable' ),
-				'description'   => __( 'Install any required add-ons from FormidableForms.com.', 'formidable' ),
-				'button_label'  => __( 'Install & Activate', 'formidable' ),
-				'current'       => false,
-				'complete'      => false,
-				'num'           => 2,
+			'plugin'   => array(
+				'label'        => __( 'Install and Activate Add-Ons', 'formidable' ),
+				'description'  => __( 'Install any required add-ons from FormidableForms.com.', 'formidable' ),
+				'button_label' => __( 'Install & Activate', 'formidable' ),
+				'current'      => false,
+				'complete'     => false,
+				'num'          => 2,
 			),
-			'import' => array(
-				'label'         => __( 'Setup Forms, Views, and Pages', 'formidable' ),
-				'description'   => __( 'Build the forms, views, and pages automatically.', 'formidable' ),
-				'button_label'  => __( 'Create Now', 'formidable' ),
-				'complete'      => $this->is_complete(),
-				'num'           => 3,
+			'import'   => array(
+				'label'        => __( 'Setup Forms, Views, and Pages', 'formidable' ),
+				'description'  => __( 'Build the forms, views, and pages automatically.', 'formidable' ),
+				'button_label' => __( 'Create Now', 'formidable' ),
+				'complete'     => $this->is_complete(),
+				'num'          => 3,
 			),
 			'complete' => array(
-				'label'         => __( 'Customize Your New Pages', 'formidable' ),
-				'description'   => __( 'Make any required changes and publish the page.', 'formidable' ),
-				'button_label'  => __( 'View Page', 'formidable' ),
-				'complete'      => false,
-				'num'           => 4,
+				'label'        => __( 'Customize Your New Pages', 'formidable' ),
+				'description'  => __( 'Make any required changes and publish the page.', 'formidable' ),
+				'button_label' => __( 'View Page', 'formidable' ),
+				'complete'     => false,
+				'num'          => 4,
 			),
 		);
 
@@ -350,20 +352,20 @@ class FrmSolution {
 					$steps[ $k ]['current'] = false;
 				} else {
 					$steps[ $k ]['current'] = ! $has_current;
-					$has_current = true;
+					$has_current            = true;
 				}
 			} elseif ( $step['current'] ) {
 				$has_current = true;
 			}
 
 			// Set disabled buttons.
-			$class = isset( $step['button_class'] ) ? $step['button_class'] : '';
+			$class  = isset( $step['button_class'] ) ? $step['button_class'] : '';
 			$class .= ' button-primary frm-button-primary';
 			if ( ! $steps[ $k ]['current'] ) {
 				$class .= ' frm_grey disabled';
 			}
 			$steps[ $k ]['button_class'] = $class;
-		}
+		}//end foreach
 
 		return $steps;
 	}
@@ -389,7 +391,6 @@ class FrmSolution {
 			if ( $plugin['status'] === 'active' ) {
 				continue;
 			}
-			$links[ $plugin_key ] = $plugin;
 			if ( isset( $plugin['url'] ) ) {
 				$rel[] = $plugin['url'];
 			} else {
@@ -406,7 +407,7 @@ class FrmSolution {
 				implode( ', ', $missing )
 			);
 		} else {
-			$steps['plugin']['links'] = $rel;
+			$steps['plugin']['links']        = $rel;
 			$steps['plugin']['button_class'] = 'frm-solution-multiple ';
 		}
 
@@ -419,7 +420,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = ( ! isset( $step['current'] ) || ! $step['current'] ) ? 'frm_grey' : '';
+		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
 
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
@@ -517,7 +518,7 @@ class FrmSolution {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
-		$id = $this->download_id();
+		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
 		if ( ! $step['current'] ) {
@@ -575,7 +576,7 @@ class FrmSolution {
 			} else {
 				echo '</form>';
 			}
-		}
+		}//end if
 
 		$this->step_bottom( $step );
 	}
@@ -595,7 +596,9 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array  $options
 	 * @param string $importing
+	 * @param string $xml
 	 *
 	 * @psalm-param 'form'|'view' $importing
 	 *
@@ -611,7 +614,7 @@ class FrmSolution {
 		foreach ( $options as $info ) {
 			// Count the number of options displayed for css.
 			if ( $count > 1 && ! isset( $info['img'] ) ) {
-				$count --;
+				--$count;
 			}
 		}
 		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
@@ -619,7 +622,7 @@ class FrmSolution {
 
 		$selected = false;
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php';
 	}
 
 	/**
@@ -669,7 +672,7 @@ class FrmSolution {
 	 * @return bool
 	 */
 	protected function is_current_plugin() {
-		$to_redirect = get_transient( 'frm_activation_redirect' );
+		$to_redirect = get_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 		return $to_redirect === $this->plugin_slug && empty( $this->is_complete() );
 	}
 
@@ -782,8 +785,6 @@ class FrmSolution {
 		?>
 <style>
 #frm-welcome *, #frm-welcome *::before, #frm-welcome  *::after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 #frm-welcome{
@@ -844,8 +845,6 @@ class FrmSolution {
 }
 #frm-welcome .step,
 #frm-welcome .screenshot .cont {
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 }
 #frm-welcome .step {
@@ -890,5 +889,4 @@ class FrmSolution {
 </style>
 		<?php
 	}
-
 }

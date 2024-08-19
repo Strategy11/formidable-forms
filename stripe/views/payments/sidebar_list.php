@@ -11,11 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		foreach ( $payments as $payment ) {
 			if ( empty( $payment->status ) && ! empty( $payment->completed ) ) {
-				$payment->status = 'complete'; // PayPal fallback
+				// PayPal fallback.
+				$payment->status = 'complete';
 			}
 
 			if ( $payment->status === 'complete' ) {
-				$entry_total += $payment->amount;
+				$entry_total  += $payment->amount;
 				$total_payment = $payment;
 			}
 			?>
@@ -51,7 +52,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<b><?php echo esc_html( FrmTransLiteAppHelper::show_status( $payment->status ) ); ?></b>
 				</span>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 
 		<?php foreach ( $subscriptions as $sub ) { ?>
 			<div class="misc-pub-section">
@@ -77,7 +80,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</div>
 			<?php } ?>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 
 		<?php
 		if ( $entry_total ) {

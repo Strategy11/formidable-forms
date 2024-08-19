@@ -57,14 +57,19 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 		</span>
 	</p>
 
-	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+		<label>
+			<?php esc_html_e( 'Recurring Payment Limit', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'payment_limit' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_limit'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'payment_limit' ) ); ?>" class="frm_not_email_subject" />
+	</p>
+
+	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Trial Period', 'formidable' ); ?>
 		</label>
-		<span class="frm_grid_container">
-			<input class="frm6" type="text" name="<?php echo esc_attr( $this->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject auto_width" />
-			<?php esc_html_e( 'day(s)', 'formidable' ); ?>
-		</span>
+		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject" />
+		<?php esc_html_e( 'day(s)', 'formidable' ); ?>
 	</p>
 
 	<p class="frm6">

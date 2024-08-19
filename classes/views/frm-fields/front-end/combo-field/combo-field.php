@@ -63,6 +63,9 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
 							value="<?php echo esc_attr( isset( $field_value[ $name ] ) ? $field_value[ $name ] : '' ); ?>"
 							<?php
+							if ( ! empty( $field_value[ $name ] ) ) {
+								echo 'data-frmval="' . esc_attr( $field_value[ $name ] ) . '" ';
+							}
 							if ( empty( $args['remove_names'] ) ) {
 								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
 							}
@@ -83,6 +86,8 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					<div class="frm_error" role="alert"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </fieldset>

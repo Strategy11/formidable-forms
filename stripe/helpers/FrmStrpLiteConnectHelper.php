@@ -99,7 +99,7 @@ class FrmStrpLiteConnectHelper {
 		$mode = self::get_mode_value_from_post();
 
 		if ( self::get_account_id( $mode ) ) {
-			// do not allow for initialize if there is already a configured account id
+			// Do not allow for initialize if there is already a configured account id.
 			return 'Cannot initialize another account';
 		}
 
@@ -138,8 +138,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return array|string
-	 *
 	 * @param string $action
 	 * @param array  $additional_body
 	 * @return object|string
@@ -157,7 +155,9 @@ class FrmStrpLiteConnectHelper {
 			return 'Unable to build headers for post. Is your pro license configured properly?';
 		}
 
-		$timeout = 45; // (seconds) default timeout is 5. we want a bit more time to work with.
+		// (Seconds) default timeout is 5. we want a bit more time to work with.
+		$timeout = 45;
+
 		self::try_to_extend_server_timeout( $timeout );
 
 		$args     = compact( 'body', 'headers', 'timeout' );
@@ -186,7 +186,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function try_to_extend_server_timeout( $timeout ) {
-		if ( ! ini_get( 'safe_mode' ) ) {
+		if ( function_exists( 'set_time_limit' ) ) {
 			set_time_limit( $timeout + 10 );
 		}
 	}
@@ -291,8 +291,6 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function maybe_unschedule_crons() {
-		$mode = self::get_mode_value_from_post();
-
 		if ( self::at_least_one_mode_is_setup() ) {
 			// Don't unschedule if a mode is still on.
 			return;
@@ -324,7 +322,7 @@ class FrmStrpLiteConnectHelper {
 		$data            = self::post_with_authenticated_body( 'reauth', $additional_body );
 
 		if ( false === $data ) {
-			// check account status
+			// Check account status.
 			if ( self::check_server_for_connected_account_status() ) {
 				wp_send_json_success();
 			}
@@ -371,7 +369,7 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( self::get_account_id( $mode ) ) {
-			// do not allow for initialize if there is already a configured account id
+			// Do not allow for initialize if there is already a configured account id.
 			return false;
 		}
 
@@ -417,13 +415,13 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_oauth_redirect_url() {
 		$mode = self::get_mode_value_from_post();
 
 		if ( self::get_account_id( $mode ) ) {
-			// do not allow for initialize if there is already a configured account id
+			// Do not allow for initialize if there is already a configured account id.
 			return false;
 		}
 
@@ -433,7 +431,8 @@ class FrmStrpLiteConnectHelper {
 			'frm_strp_connect_mode' => $mode,
 		);
 
-		delete_option( 'frm_stripe_lite_last_verify_attempt' ); // Clear the transient so it doesn't fail.
+		// Clear the transient so it doesn't fail.
+		delete_option( 'frm_stripe_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -503,8 +502,10 @@ class FrmStrpLiteConnectHelper {
 
 		$site_url = home_url();
 		$site_url = self::maybe_fix_wpml_url( $site_url );
-		$site_url = preg_replace( '#^https?://#', '', $site_url ); // remove protocol from url (our url cannot include the colon).
-		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );    // remove port from url (mostly helpful in development)
+		// Remove protocol from url (our url cannot include the colon).
+		$site_url = preg_replace( '#^https?://#', '', $site_url );
+		// Remove port from url (mostly helpful in development).
+		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );
 		$site_url = self::strip_lang_from_url( $site_url );
 
 		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
@@ -543,7 +544,7 @@ class FrmStrpLiteConnectHelper {
 	 * Get a Pro license when Pro is active.
 	 * Otherwise we'll use a uuid to support Lite.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
@@ -642,14 +643,13 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$version = FrmAppHelper::plugin_version();
 		wp_register_script( 'formidable_stripe_settings', FrmStrpLiteAppHelper::plugin_url() . '/js/connect_settings.js', array( 'formidable_dom' ), FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_stripe_settings' );
 	}
 
 	/**
 	 * @param string $mode
-	 * @return string|bool
+	 * @return bool|string
 	 */
 	public static function get_account_id( $mode = 'auto' ) {
 		return get_option( self::get_account_id_option_name( $mode ) );
@@ -657,7 +657,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $options
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_customer_id( $options ) {
 		$data    = self::post_with_authenticated_body( 'get_customer', compact( 'options' ) );
@@ -684,7 +684,7 @@ class FrmStrpLiteConnectHelper {
 	 * @param string $action
 	 * @param array  $additional_body
 	 *
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
 		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
@@ -748,12 +748,13 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string       $sub_id
-	 * @param string|false $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
-		$data     = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id' ) );
-		$canceled = false !== $data;
+		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
+		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
+		$canceled             = false !== $data;
 		return $canceled;
 	}
 
@@ -766,7 +767,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @return object|false
+	 * @return false|object
 	 */
 	public static function get_customer_subscriptions() {
 		$user_id     = get_current_user_id();
@@ -783,7 +784,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
-	 * @return object|false
+	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
 		$event = wp_cache_get( $event_id, 'frm_strp' );
@@ -810,7 +811,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $plan
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function maybe_create_plan( $plan ) {
 		$data = self::post_with_authenticated_body( 'maybe_create_plan', compact( 'plan' ) );
@@ -858,7 +859,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string      $customer_id
 	 * @param array|false $payment_method_types
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
 		$charge_data = array( 'customer' => $customer_id );
@@ -880,7 +881,7 @@ class FrmStrpLiteConnectHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {
 		return self::post_with_authenticated_body( 'get_setup_intent', compact( 'setup_id' ) );

@@ -9,92 +9,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEmail {
 
 	/**
-	 * @var string $email_key
+	 * @var string
 	 */
 	private $email_key = '';
 
 	/**
-	 * @var array $to
+	 * @var array
 	 */
 	private $to = array();
 
 	/**
-	 * @var array $cc
+	 * @var array
 	 */
 	private $cc = array();
 
 	/**
-	 * @var array $bcc
+	 * @var array
 	 */
 	private $bcc = array();
 
 	/**
-	 * @var string $from
+	 * @var string
 	 */
 	private $from = '';
 
 	/**
-	 * @var string $reply_to
+	 * @var string
 	 */
 	private $reply_to = '';
 
 	/**
-	 * @var string $subject
+	 * @var string
 	 */
 	private $subject = '';
 
 	/**
-	 * @var string $message
+	 * @var string
 	 */
 	private $message = '';
 
 	/**
-	 * @var array $attachments
+	 * @var array
 	 */
 	private $attachments = array();
 
 	/**
-	 * @var bool $is_plain_text
+	 * @var bool
 	 */
 	private $is_plain_text = false;
 
 	/**
-	 * @var bool $is_single_recipient
+	 * @var bool
 	 */
 	private $is_single_recipient = false;
 
 	/**
-	 * @var bool $include_user_info
+	 * @var bool
 	 */
 	private $include_user_info = false;
 
 	/**
-	 * @var string $charset
+	 * @var string
 	 */
 	private $charset = '';
 
 	/**
-	 * @var string $content_type
+	 * @var string
 	 */
 	private $content_type = 'text/html';
 
 	/**
-	 * @var array $settings
+	 * @var array
 	 */
 	private $settings = array();
 
 	/**
-	 * @var stdClass $entry
+	 * @var stdClass
 	 */
 	private $entry;
 
 	/**
-	 * @var stdClass $form
+	 * @var stdClass
 	 */
 	private $form;
 
 	/**
-	 * @var int $action_id
+	 * @var int
 	 */
 	private $action_id = 0;
 
@@ -217,7 +217,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $recipients
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return array
 	 */
@@ -305,7 +305,6 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param $action
 	 * @param object $action
 	 *
 	 * @return void
@@ -387,14 +386,16 @@ class FrmEmail {
 		$this->message = $this->settings['email_message'];
 
 		if ( ! $this->is_plain_text ) {
-			$this->message = html_entity_decode( $this->message ); // The decode is to support [default-html] shortcodes.
+			// The decode is to support [default-html] shortcodes.
+			$this->message = html_entity_decode( $this->message );
 		}
 
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
-
+		$this->message  = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 		$prev_mail_body = $this->message;
-		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
-		$mail_body      = FrmEntriesHelper::replace_default_message(
+
+		// Make a copy to prevent changes by reference.
+		$pass_entry = clone $this->entry;
+		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
 				'id'         => $this->entry->id,
@@ -406,7 +407,7 @@ class FrmEmail {
 
 		// Add the user info if it isn't already included
 		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
-			$data      = $this->entry->description;
+			$data       = $this->entry->description;
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
@@ -419,6 +420,7 @@ class FrmEmail {
 
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
+			$this->message = str_replace( '&nbsp;', '', $this->message );
 		} else {
 			$this->add_autop();
 		}
@@ -512,9 +514,8 @@ class FrmEmail {
 	private function has_recipients() {
 		if ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) ) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	/**
@@ -608,7 +609,7 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param $form_id
+	 * @param int $form_id
 	 *
 	 * @return array
 	 */
@@ -632,7 +633,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $value
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return string
 	 */
@@ -691,22 +692,22 @@ class FrmEmail {
 			if ( is_email( $val ) ) {
 				// If a plain email is used, no formatting is needed
 				continue;
-			} else {
-				$parts = explode( ' ', $val );
-				$email = end( $parts );
+			}
 
-				if ( is_email( $email ) ) {
-					// If user enters a name and email
-					$name = trim( str_replace( $email, '', $val ) );
-				} else {
-					// If user enters a name without an email
-					unset( $recipients[ $key ] );
-					continue;
-				}
+			$parts = explode( ' ', $val );
+			$email = end( $parts );
+
+			if ( is_email( $email ) ) {
+				// If user enters a name and email
+				$name = trim( str_replace( $email, '', $val ) );
+			} else {
+				// If user enters a name without an email
+				unset( $recipients[ $key ] );
+				continue;
 			}
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );
-		}
+		}//end foreach
 
 		return $recipients;
 	}
@@ -758,7 +759,7 @@ class FrmEmail {
 
 		if ( ! is_email( $reply_to ) ) {
 			list( $name, $email ) = $this->get_name_and_email_for_sender( $reply_to );
-			$reply_to = $this->format_from_email( $name, $email );
+			$reply_to             = $this->format_from_email( $name, $email );
 		}
 
 		return $reply_to;
@@ -856,8 +857,8 @@ class FrmEmail {
 
 				// Remove phone number from to addresses
 				unset( $this->to[ $key ] );
-			}
-		}
+			}//end if
+		}//end foreach
 	}
 
 	/**

@@ -22,10 +22,10 @@ class FrmUsageController {
 		}
 
 		$tracking = array(
-			'day'      => rand( 0, 6 ) * DAY_IN_SECONDS,
-			'hour'     => rand( 0, 23 ) * HOUR_IN_SECONDS,
-			'minute'   => rand( 0, 59 ) * MINUTE_IN_SECONDS,
-			'second'   => rand( 0, 59 ),
+			'day'    => rand( 0, 6 ) * DAY_IN_SECONDS,
+			'hour'   => rand( 0, 23 ) * HOUR_IN_SECONDS,
+			'minute' => rand( 0, 59 ) * MINUTE_IN_SECONDS,
+			'second' => rand( 0, 59 ),
 		);
 
 		$offset    = array_sum( $tracking );

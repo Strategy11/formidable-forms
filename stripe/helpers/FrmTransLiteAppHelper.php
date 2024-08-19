@@ -6,6 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppHelper {
 
 	/**
+	 * @var bool|null
+	 */
+	private static $should_fallback_to_paypal;
+
+	/**
 	 * @return string
 	 */
 	public static function plugin_path() {
@@ -127,7 +132,8 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @param string $note
+	 * @param array|string $meta_value
+	 * @param string       $note
 	 *
 	 * @return array
 	 */
@@ -142,7 +148,7 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param string $option
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
@@ -174,8 +180,8 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Allow entry values, default values, and other shortcodes
 	 *
-	 * @param array $atts - Includes value (required), form, entry
-	 * @return string|int
+	 * @param array $atts Includes value (required), form, entry.
+	 * @return int|string
 	 */
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
@@ -244,7 +250,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param string $value
-	 * @param int $number
+	 * @param int    $number
 	 * @return string
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
@@ -274,6 +280,31 @@ class FrmTransLiteAppHelper {
 		self::format_amount_for_currency( $currency, $amount );
 
 		return $amount;
+	}
+
+	/**
+	 * Gets amount and currency from payment object or amount.
+	 *
+	 * @since 6.7
+	 *
+	 * @param array|float|object|string $payment Payment object, payment array or amount.
+	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 */
+	public static function get_amount_and_currency_from_payment( $payment ) {
+		$currency = '';
+		$amount   = $payment;
+
+		if ( is_object( $payment ) || is_array( $payment ) ) {
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
+			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
+		}
+
+		return array( $amount, $currency );
 	}
 
 	/**
@@ -399,7 +430,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @param string|int $amount
+	 * @param int|string $amount
 	 * @param WP_Post    $action
 	 *
 	 * @return string
@@ -411,9 +442,72 @@ class FrmTransLiteAppHelper {
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
 		if ( ! empty( $currency['decimals'] ) ) {
-			$amount = number_format( ( $amount / 100 ), 2, '.', '' );
+			$amount = number_format( $amount / 100, 2, '.', '' );
 		}
 
 		return $amount;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public static function should_fallback_to_paypal() {
+		if ( isset( self::$should_fallback_to_paypal ) ) {
+			return self::$should_fallback_to_paypal;
+		}
+
+		if ( ! class_exists( 'FrmPaymentsController' ) || ! isset( FrmPaymentsController::$db_opt_name ) ) {
+			self::$should_fallback_to_paypal = false;
+			return false;
+		}
+
+		$db     = new FrmTransLiteDb();
+		$option = get_option( $db->db_opt_name );
+		if ( false !== $option ) {
+			// Don't fallback to PayPal if Stripe migrations have run.
+			self::$should_fallback_to_paypal = false;
+			return false;
+		}
+
+		$option                          = get_option( FrmPaymentsController::$db_opt_name );
+		self::$should_fallback_to_paypal = false !== $option;
+
+		return self::$should_fallback_to_paypal;
+	}
+
+	/**
+	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
+	 * Old payments will just output an empty string.
+	 *
+	 * @since 6.6
+	 *
+	 * @param stdClass $payment
+	 * @return string
+	 */
+	public static function get_test_mode_display_string( $payment ) {
+		if ( ! isset( $payment->test ) ) {
+			return '';
+		}
+		return $payment->test ? __( 'Test', 'formidable' ) : __( 'Live', 'formidable' );
+	}
+
+	/**
+	 * Returns the count of completed payments.
+	 *
+	 * @since 6.11
+	 *
+	 * @param array $payments
+	 *
+	 * @return int
+	 */
+	public static function count_completed_payments( $payments ) {
+		$count = 0;
+		foreach ( $payments as $payment ) {
+			if ( $payment->status === 'complete' ) {
+				$count++;
+			}
+		}
+
+		return $count;
 	}
 }

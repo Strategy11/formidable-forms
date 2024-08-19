@@ -46,6 +46,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$title = __( 'You have not created any forms yet', 'formidable' );
 	$info  = __( 'Start collecting leads and data today.', 'formidable' );
 	include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
-}
+}//end if
 ?>
 </div>

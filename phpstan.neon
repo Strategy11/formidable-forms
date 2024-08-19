@@ -4,6 +4,8 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
+	scanFiles:
+		- deprecated/FrmDeprecated.php
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -14,6 +16,13 @@ parameters:
 		- */vendor/*
 		- */fonts/*
 		- */deprecated/*
+	strictRules:
+		disallowedLooseComparison: false
+		booleansInConditions: false
+		uselessCast: false
+		requireParentConstructorCall: false
+		strictCalls: false
+		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
 		- '#Call to an undefined method object::#'
@@ -21,10 +30,9 @@ parameters:
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
-		- '#Function (remove_filter|remove_action|apply_filters)+ invoked with#'
+		- '#Function (apply_filters)+ invoked with#'
 		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
 		- '#Possibly invalid array key type#'
-		- '#always exists and is not nullable.#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
@@ -33,34 +41,43 @@ parameters:
 		- '#might not be defined.#'
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
-		- '#Call to an undefined static method#'
-		- '#on an unknown class (Elementor|FrmDeprecated)#'
 		- '#get_mailer\(\) expects#'
 		- '#only iterables are supported#'
-		- '#outside of class scope.#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#PHPDoc tag @param (references unknown parameter:|has invalid valu)+#'
 		- '#has no return type specified#'
 		- '#with no type specified#'
-		- '#is not nullable.#'
 		- '#in isset\(\) does not exist.#'
 		- '#has no type specified.#'
-		- '#has invalid return type#'
+		-
+			message: '#has invalid return type#'
+			path: classes/controllers/FrmSMTPController.php
 		- '#is unused.#'
 		- '#is never read, only written#'
 		- '#in empty\(\) is not falsy.#'
-		- '#always exists and is always null.#'
 		- '#Cannot access an offset on mixed.#'
 		- '#always exists and is not falsy.#'
-		- '#should always throw an exception or terminate script execution but#'
-		- '#always exists and is always falsy#'
 		- '#has an unused use#'
-		- '#AllowDynamicProperties does not exist#'
-		- '#Variable \$customer_id_error_message in empty\(\) is never defined#'
-		- "#Offset '(stripe_link|change_field)' on string in#"
-		- '#Result of static method FrmTransLiteCRUDController::show#'
 		- '#Cannot use array destructuring on#'
 		- '#of method FrmFieldName::\_\_construct#'
 		- '#callback of function spl_autoload_register expects#'
+		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
+		-
+			message: '#should be contravariant with#'
+			paths:
+				- classes/helpers/FrmFormsListHelper.php
+				- classes/models/FrmInstallerSkin.php
+				- stripe/controllers/FrmStrpLiteActionsController.php
+		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
+		-
+			message: '#Foreach overwrites \$ip with its value variable.#'
+			path: classes/helpers/FrmAppHelper.php
+		-
+			message: '#Foreach overwrites \$opt_key with its key variable.#'
+			path: classes/helpers/FrmFieldsHelper.php
+		-
+			message: '#Only numeric types are allowed#'
+			paths:
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/models/FrmStyle.php

@@ -80,7 +80,7 @@ class FrmStrpLiteEventsController {
 			if ( ! $is_partial_refund ) {
 				$run_triggers = true;
 			}
-		}
+		}//end if
 
 		if ( $run_triggers && $payment && $payment->action_id ) {
 			FrmTransLiteActionsController::trigger_payment_status_change(
@@ -232,14 +232,84 @@ class FrmStrpLiteEventsController {
 			$frm_payment->update( $payment->id, $payment_values );
 			$payment_id = $payment->id;
 		} else {
+			$payment_values['test'] = $this->event->livemode ? 0 : 1;
+
 			// If this isn't the first, create a new payment.
 			$payment_id = $frm_payment->create( $payment_values );
 		}
 
+		$this->maybe_cancel_subscription( $sub );
 		$this->update_next_bill_date( $sub, $payment_values );
 
 		$payment = $frm_payment->get_one( $payment_id );
 		return $payment;
+	}
+
+	/**
+	 * Check if a subscription has reached its payment limit.
+	 * If it has, the subscription will be cancelled by period end.
+	 *
+	 * @since 6.11
+	 *
+	 * @param object $sub
+	 * @return void
+	 */
+	private function maybe_cancel_subscription( $sub ) {
+		$action = FrmFormAction::get_single_action_type( $sub->action_id, 'payment' );
+		// @phpstan-ignore-next-line
+		if ( ! is_object( $action ) || empty( $action->post_content['payment_limit'] ) ) {
+			return;
+		}
+
+		$payment_limit = FrmStrpLiteSubscriptionHelper::prepare_payment_limit(
+			$action->post_content['payment_limit'],
+			// Form ID.
+			(int) $action->menu_order,
+			(int) $sub->item_id
+		);
+		if ( is_wp_error( $payment_limit ) ) {
+			FrmTransLiteLog::log_message( 'Invalid payment limit value', $payment_limit->get_error_message() );
+			return;
+		}
+
+		if ( $this->get_payments_count( $sub->id ) < $payment_limit ) {
+			return;
+		}
+
+		// Flag to cancel subscription at period end.
+		// In this case, we do not want to cancel immediately.
+		$hook   = 'frm_stripe_cancel_subscription_at_period_end';
+		$filter = function () {
+			return true;
+		};
+
+		add_filter( $hook, $filter, 99 );
+		$cancelled = FrmStrpLiteApiHelper::cancel_subscription( $sub->sub_id );
+		if ( $cancelled ) {
+			FrmTransLiteSubscriptionsController::change_subscription_status(
+				array(
+					'status' => 'future_cancel',
+					'sub'    => $sub,
+				)
+			);
+		}
+		remove_filter( $hook, $filter, 99 );
+	}
+
+	/**
+	 * Get the count of completed payments.
+	 *
+	 * @since 6.11
+	 *
+	 * @param string $sub_id Stripe subscriptino id prefixed with 'sub_'.
+	 * @return int
+	 */
+	private function get_payments_count( $sub_id ) {
+		$frm_payment  = new FrmTransLitePayment();
+		$all_payments = $frm_payment->get_all_by( $sub_id, 'sub_id' );
+		$count        = FrmTransLiteAppHelper::count_completed_payments( $all_payments );
+
+		return $count;
 	}
 
 	/**
@@ -256,7 +326,7 @@ class FrmStrpLiteEventsController {
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
 		if ( ! $sub ) {
-			// If this isn't an existing subscription, it must be a charge for another site/plugin
+			// If this isn't an existing subscription, it must be a charge for another site/plugin.
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
 			echo json_encode(
 				array(
@@ -283,15 +353,15 @@ class FrmStrpLiteEventsController {
 		$payment_values['expire_date'] = '0000-00-00';
 
 		foreach ( $this->invoice->lines->data as $line ) {
-			$payment_values['amount']      = number_format( ( $line->amount / 100 ), 2, '.', '' );
+			$payment_values['amount']      = number_format( $line->amount / 100, 2, '.', '' );
 			$payment_values['begin_date']  = gmdate( 'Y-m-d', $line->period->start );
 			$payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 		}
 
-		$payment_values['receipt_id']  = $this->charge ? $this->charge : __( 'None', 'formidable' );
-		$payment_values['status']      = $this->status;
-		$payment_values['meta_value']  = array();
-		$payment_values['created_at']  = current_time( 'mysql', 1 );
+		$payment_values['receipt_id'] = $this->charge ? $this->charge : __( 'None', 'formidable' );
+		$payment_values['status']     = $this->status;
+		$payment_values['meta_value'] = array();
+		$payment_values['created_at'] = current_time( 'mysql', 1 );
 
 		FrmTransLiteAppHelper::add_note_to_payment( $payment_values );
 	}
@@ -395,7 +465,7 @@ class FrmStrpLiteEventsController {
 	 */
 	private function last_attempt_to_process_event_is_too_recent( $event_id ) {
 		$last_process_attempt = get_transient( 'frm_last_process_' . $event_id );
-		return is_numeric( $last_process_attempt ) && $last_process_attempt > ( time() - 60 );
+		return is_numeric( $last_process_attempt ) && $last_process_attempt > time() - 60;
 	}
 
 	/**

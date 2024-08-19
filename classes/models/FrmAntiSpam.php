@@ -107,8 +107,10 @@ class FrmAntiSpam extends FrmValidate {
 		$valid_token_times_before = apply_filters(
 			'frm_form_token_check_before_today',
 			array(
-				( 2 * DAY_IN_SECONDS ), // Two days ago.
-				( 1 * DAY_IN_SECONDS ), // One day ago.
+				// Two days ago.
+				2 * DAY_IN_SECONDS,
+				// One day ago.
+				1 * DAY_IN_SECONDS,
 			)
 		);
 
@@ -117,7 +119,8 @@ class FrmAntiSpam extends FrmValidate {
 		$valid_token_times_after = apply_filters(
 			'frm_form_token_check_after_today',
 			array(
-				( 45 * MINUTE_IN_SECONDS ), // Add in 45 minutes past today to catch some midnight edge cases.
+				// Add in 45 minutes past today to catch some midnight edge cases.
+				45 * MINUTE_IN_SECONDS,
 			)
 		);
 
@@ -223,22 +226,6 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * @return bool True if saving a draft.
-	 */
-	private function is_saving_a_draft() {
-		global $frm_vars;
-		if ( empty( $frm_vars['form_params'] ) ) {
-			return false;
-		}
-		$form_params = $frm_vars['form_params'];
-		if ( ! isset( $form_params[ $this->form_id ] ) ) {
-			return false;
-		}
-		$this_form_params = $form_params[ $this->form_id ];
-		return ! empty( $this_form_params['action'] ) && 'update' === $this_form_params['action'];
-	}
-
-	/**
 	 * Helper to run our filter on all the responses for the antispam checks.
 	 *
 	 * @since 4.11
@@ -287,7 +274,7 @@ class FrmAntiSpam extends FrmValidate {
 		}
 
 		// If the user is an admin, return text with a link to support.
-		// We add a space here to seperate the sentences, but outside of the localized
+		// We add a space here to separate the sentences, but outside of the localized
 		// text to avoid it being removed.
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.

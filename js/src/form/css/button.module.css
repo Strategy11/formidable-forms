@@ -1,0 +1,31 @@
+button.frm-loading {
+	cursor: progress;
+	opacity: 0.7;
+	position: relative;
+	text-indent: -999px;
+	min-width: 70px;
+	overflow: hidden;
+}
+button.frm-loading:before {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	background: transparent;
+	border: 1px solid #fff;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	border-radius: 50%;
+
+	box-sizing: border-box;
+	top: 50%;
+	left: 50%;
+	margin-top: -10px;
+	margin-left: -10px;
+	width: 20px;
+	height: 20px;
+
+	-webkit-animation: spin 2s linear infinite;
+	-moz-animation: spin 2s linear infinite;
+	-o-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}

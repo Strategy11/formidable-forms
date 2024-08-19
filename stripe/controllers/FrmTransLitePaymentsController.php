@@ -9,12 +9,47 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function menu() {
+		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
+			return;
+		}
+
 		$frm_settings = FrmAppHelper::get_settings();
 
 		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).
 		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 );
 
-		add_submenu_page( 'formidable', $frm_settings->menu . ' | Payments', 'Payments', 'frm_view_entries', 'formidable-payments', 'FrmTransLitePaymentsController::route' );
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
+			// Use the PayPal addon for add new and edit routing if it is active.
+			// This is required to support the "edit" link when using the Stripe Lite table view.
+			// It is also required for the "Add New" button to work on the payments table page.
+			$menu_route = 'FrmPaymentsController::route';
+		} else {
+			$menu_route = 'FrmTransLitePaymentsController::route';
+		}
+
+		$payments_string = __( 'Payments', 'formidable' );
+		add_submenu_page(
+			'formidable',
+			$frm_settings->menu . ' | ' . $payments_string,
+			self::payments_menu_title( $payments_string ),
+			'frm_view_entries',
+			'formidable-payments',
+			$menu_route
+		);
+	}
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @param string $payments_string
+	 *
+	 * @return string
+	 */
+	private static function payments_menu_title( $payments_string ) {
+		ob_start();
+		echo esc_html( $payments_string );
+		FrmAppHelper::show_pill_text();
+		return ob_get_clean();
 	}
 
 	/**

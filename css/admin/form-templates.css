@@ -1,0 +1,311 @@
+/**
+ * Form Templates Page Styles
+ *
+ * This file includes all CSS rules specifically for the Form Templates page.
+ */
+
+/**
+ * Page General Styles
+ *
+ * This section defines the basic typography and layout styles for the Form Templates page.
+ */
+#frm-form-templates-page ul,
+#frm-form-templates-page li {
+	margin: 0;
+}
+
+#frm-form-templates-page .frm-upgrade-bar {
+	display: none;
+}
+
+/**
+ * Sidebar Styles
+ *
+ * Defines the layout and styling for the sidebar, including scroll behavior.
+ */
+#frm-form-templates-page .frm-right-panel {
+	padding: 2px;
+	overflow-y: initial;
+}
+
+#frm-form-templates-page .frm-scrollbar-wrapper {
+	padding: var(--gap-md) var(--gap-sm);
+}
+
+/* Search Box */
+#frm-form-templates-page .frm-search {
+	float: none;
+	padding: 0 var(--gap-2xs);
+}
+
+#template-search-input {
+	width: 100%;
+}
+
+/* Categories List */
+.frm-form-templates-cat-item {
+	cursor: pointer;
+	padding: var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: transparent;
+	transition: background-color 250ms ease-out;
+}
+
+.frm-form-templates-cat-item:hover {
+	background-color: var(--grey-100);
+}
+
+.frm-form-templates-cat-item > * {
+	z-index: 2;
+}
+
+.frm-form-templates-cat-text {
+	color: var(--grey-900);
+}
+
+.frm-form-templates-cat-count {
+	color: var(--grey-400);
+}
+
+.frm-current .frm-form-templates-cat-text,
+.frm-current .frm-form-templates-cat-count {
+	color: var(--primary-500);
+}
+
+/**
+ * Page Content Styles
+ *
+ * Focuses on the main content area, laying out the various elements and components.
+ */
+.frm-form-templates-grid-layout {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(308px, 1fr));
+	grid-auto-rows: max-content;
+	gap: var(--gap-sm);
+}
+
+.frm-form-templates-grid-layout > * {
+	grid-column: span 1;
+}
+
+/* Create a blank form */
+.frm-form-templates-create-button {
+	gap: 10px;
+	color: var(--grey-900);
+	background-color: transparent;
+	border: 1px dashed var(--grey-400);
+	border-radius: var(--small-radius);
+	padding: calc(var(--gap-sm) - 2px) var(--gap-sm);
+	transition: background-color 200ms ease-out;
+	cursor: pointer;
+	box-shadow: var(--box-shadow-xs);
+}
+
+.frm-form-templates-create-button:hover {
+	background-color: var(--grey-50);
+}
+
+.frm-form-templates-create-button:focus-within {
+	outline: 1px solid var(--primary-700);
+	border-color: var(--primary-700);
+}
+
+#frm-form-templates-create-form .frmsvg {
+	width: 20px;
+	height: 20px;
+	color: var(--grey-500);
+	background: var(--grey-100);
+	border-radius: var(--small-radius);
+	padding: calc(var(--gap-2xs) + 2px);
+}
+
+/* Templates item */
+.frm-form-templates-item-icon {
+	flex-shrink: 0;
+}
+
+#frm-form-templates-list .frm-form-templates-item-icon {
+	display: none;
+}
+
+.frm-form-templates-item-body {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--gap-xs) - 2px);
+	min-width: 0; /* Fix for truncated text within a flexbox layout */
+	flex-grow: 1;
+}
+
+.frm-form-templates-item-title,
+.frm-form-templates-item-title-text {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	margin: 0;
+}
+
+.frm-form-templates-item-title-text {
+	width: calc(100% - 24px);
+	font-size: var(--text-sm);
+}
+
+.frm-form-templates-item-lock-icon .frmsvg {
+	display: flex;
+	width: 11px;
+	height: 13px;
+	flex-shrink: 0;
+}
+
+.frm-form-templates-item-title-text > span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+a.frm-form-templates-item-favorite-button {
+	display: none;
+	transition: color 200ms ease-out;
+	color: var(--grey-900);
+}
+
+.frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
+	display: flex;
+}
+
+a.frm-form-templates-item-favorite-button:hover,
+.frm-form-templates-favorite-item .frm-form-templates-item-favorite-button {
+	color: var(--error-500);
+}
+
+.frm-form-templates-favorite-item a.frm-form-templates-item-favorite-button:hover {
+	color: var(--error-700);
+}
+
+.frm-form-templates-custom-item-trash-button {
+	display: none;
+}
+
+.frm-form-templates-custom-item-trash-button .frmsvg {
+	width: 18px;
+	height: 18px;
+	color: var(--grey-900);
+	transition: color 200ms ease-out;
+	z-index: 2;
+}
+
+.frm-form-templates-custom-item-trash-button:hover .frmsvg {
+	color: var(--primary-500);
+}
+
+.frm-form-templates-custom-item-trash-button + .frm-vertical-line {
+	display: none;
+}
+
+.frm-form-templates-item-content {
+	position: relative;
+}
+
+.frm-form-templates-item-buttons {
+	display: none;
+	position: absolute;
+	gap: 12px;
+	margin-top: calc(var(--gap-2xs) + 2px);
+	z-index: 2;
+}
+
+p.frm-form-templates-item-description {
+	font-size: var(--text-xs);
+	margin: 0;
+	min-height: var(--h-md);
+
+	display: -webkit-box;         /* Required for line-clamp to work */
+	-webkit-box-orient: vertical; /* Required for line-clamp to work */
+	-webkit-line-clamp: 2;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.frm-card-item:hover .frm-form-templates-item-description,
+.frm-card-item:focus-within .frm-form-templates-item-description {
+	visibility: hidden;
+	opacity: 0;
+}
+
+.frm-card-item:hover .frm-form-templates-item-buttons,
+.frm-card-item:focus-within .frm-form-templates-item-buttons {
+	display: flex;
+}
+
+.frm-card-item:not(.frm-form-templates-favorite-item):hover .frm-form-templates-item-favorite-button,
+.frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button,
+.frm-form-templates-custom-item:hover .frm-form-templates-custom-item-trash-button + .frm-vertical-line {
+	display: flex;
+}
+
+/* Application templates */
+#frm-form-templates-applications img {
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	box-sizing: border-box;
+}
+
+#frm-form-templates-applications .frm-meta-tag {
+	max-width: max-content;
+}
+
+.frm-form-templates-application-item {
+	cursor: pointer;
+}
+
+/**
+ * Empty State Styles
+ *
+ * Provides styles for when the Form Templates page is empty.
+ */
+#frm-form-templates-empty-state {
+	height: 100%;
+	margin-top: calc(-1 * var(--gap-md));
+}
+
+#frm-form-templates-empty-state .frm-form-templates-text {
+	max-width: 420px;
+}
+
+/**
+ * Modal Styles
+ *
+ * Customizes the look of modals on the Form Templates page.
+ */
+/* Upgrade Modal */
+#frm-form-upgrade-modal .frm-upgrade-modal-plan-icon {
+	color: var(--error-500);
+}
+
+/* Code from email modal */
+#frm_code_from_email_options:not(.frm_hidden) {
+	display: flex;
+}
+
+#frm_code_from_email_options {
+	gap: calc(var(--gap-xs) + var(--gap-2xs));
+	color: var(--primary-500);
+}
+
+/**
+ * Helper Classes
+ *
+ * Provides helper classes for common layout patterns and animations in the
+ * Form Templates page.
+ */
+
+.frm_hidden {
+	display: none; /* Load this last for overrides */
+}
+
+.frm-form-templates-divider {
+	border-top: 1px solid var(--grey-200);
+	margin: 0;
+}

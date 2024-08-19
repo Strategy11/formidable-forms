@@ -8,7 +8,7 @@ class FrmTransLiteDb {
 	/**
 	 * @var int
 	 */
-	public $db_version = 5;
+	public $db_version = 6;
 
 	/**
 	 * @var string
@@ -60,6 +60,7 @@ class FrmTransLiteDb {
 				expire_date date default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
@@ -83,13 +84,14 @@ class FrmTransLiteDb {
 				status varchar(100) default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
 
 		dbDelta( $sql );
 
-		/***** SAVE DB VERSION *****/
+		// SAVE DB VERSION.
 		update_option( $this->db_opt_name, $this->db_version );
 
 		$this->migrate_data( $old_db_version );
@@ -103,7 +105,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 
 		$values['action'] = 'create';
-		$new_values = array();
+		$new_values       = array();
 		$this->fill_values( $values, $new_values );
 
 		$wpdb->insert( $wpdb->prefix . $this->table_name, $new_values );
@@ -112,9 +114,9 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param array      $values
-	 * @return int|false
+	 * @return false|int
 	 */
 	public function update( $id, $values ) {
 		global $wpdb;
@@ -127,8 +129,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return int|bool
+	 * @param int|string $id
+	 * @return bool|int
 	 */
 	public function &destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
@@ -154,8 +156,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return array|object|null|void
+	 * @param int|string $id
+	 * @return array|object|void|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
@@ -170,13 +172,13 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param string     $field
 	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', '6.5' );
 			return null;
 		}
 
@@ -203,7 +205,7 @@ class FrmTransLiteDb {
 		$field = sanitize_text_field( $field );
 
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', '6.5' );
 			return array();
 		}
 
@@ -292,6 +294,8 @@ class FrmTransLiteDb {
 	}
 
 	/**
+	 * This migration checks for PayPal payments and sets a status value based on the completed status.
+	 *
 	 * @return void
 	 */
 	private function migrate_to_4() {

@@ -69,13 +69,17 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 				'sanitize' => 'maybe_serialize',
 				'default'  => '',
 			),
+			'test'           => array(
+				'sanitize' => 'sanitize_text_field',
+				'default'  => null,
+			),
 		);
 
 		return $values;
 	}
 
 	/**
-	 * @return array|object|null
+	 * @return array
 	 */
 	public function get_overdue_subscriptions() {
 		global $wpdb;

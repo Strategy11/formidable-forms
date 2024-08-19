@@ -4,11 +4,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
-	public $number = false; // Unique ID number of the current instance.
-	public $id = 0; // the id of the post
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @var int
+	 */
+	public $number = false;
 
 	/**
-	 * @param int|string $id The id of the stylsheet or 'default'
+	 * The id of the post.
+	 *
+	 * @var int|string
+	 */
+	public $id = 0;
+
+	/**
+	 * @param int|string $id The id of the stylsheet or 'default'.
 	 */
 	public function __construct( $id = 0 ) {
 		$this->id = $id;
@@ -21,7 +32,8 @@ class FrmStyle {
 		$this->id = 0;
 
 		$max_slug_value = 2147483647;
-		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+		// We want to have at least 2 characters in the slug.
+		$min_slug_value = 37;
 		$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 
 		$style = array(
@@ -68,7 +80,7 @@ class FrmStyle {
 
 		$action_ids = array();
 
-		foreach ( $all_instances as $number => $new_instance ) {
+		foreach ( $all_instances as $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 
@@ -92,8 +104,8 @@ class FrmStyle {
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
-			$new_instance['post_type']    = FrmStylesController::$post_type;
-			$new_instance['post_status']  = 'publish';
+			$new_instance['post_type']   = FrmStylesController::$post_type;
+			$new_instance['post_status'] = 'publish';
 
 			if ( ! $id ) {
 				$new_instance['post_name'] = $new_instance['post_title'];
@@ -121,7 +133,7 @@ class FrmStyle {
 			}
 
 			$action_ids[] = $this->save( $new_instance );
-		}
+		}//end foreach
 
 		$this->save_settings();
 
@@ -133,7 +145,7 @@ class FrmStyle {
 	 *
 	 * @since 5.3.2
 	 *
-	 * @param string $color_val, The color value, by reference.
+	 * @param string $color_val The color value, by reference.
 	 * @return void
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) {
@@ -142,7 +154,8 @@ class FrmStyle {
 		}
 
 		$color_val = trim( $color_val );
-		$color_val = ltrim( $color_val, '(' ); // Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
+		// Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
+		$color_val = ltrim( $color_val, '(' );
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
@@ -154,8 +167,9 @@ class FrmStyle {
 		$color_val  = rtrim( $color_val, ')' );
 		$color_val .= ')';
 
-		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
-		$color_rgba            = trim( $color_rgba, '()' ); // Remove any excessive braces from the rgba like rgba((.
+		$color_rgba = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		// Remove any excessive braces from the rgba like rgba((.
+		$color_rgba            = trim( $color_rgba, '()' );
 		$length_of_color_codes = strpos( $color_val, '(' );
 		$new_color_values      = array();
 
@@ -184,10 +198,10 @@ class FrmStyle {
 				} else {
 					$new_value = floatval( $value );
 				}
-			}
+			}//end if
 
 			$new_color_values[] = null === $new_value ? $value : $new_value;
-		}
+		}//end foreach
 
 		// add more 0s and 1 (if alpha position) if needed.
 		$missing_values = $length_of_color_codes - count( $new_color_values );
@@ -204,25 +218,11 @@ class FrmStyle {
 
 		$new_color = implode( ',', $new_color_values );
 		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
-		$prefix    = rtrim( $prefix, '(' ) . '('; // Limit the number of opening braces after rgb/rgba. There should only be one.
+		// Limit the number of opening braces after rgb/rgba. There should only be one.
+		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
-	}
-
-	/**
-	 * Unslash everything in post_content but custom_css
-	 *
-	 * @since 5.0.13
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private function unslash_post_content( $settings ) {
-		$custom_css             = isset( $settings['custom_css'] ) ? $settings['custom_css'] : '';
-		$settings               = wp_unslash( $settings );
-		$settings['custom_css'] = $custom_css;
-		return $settings;
 	}
 
 	/**
@@ -301,10 +301,8 @@ class FrmStyle {
 	private function trim_braces( $input ) {
 		$output = $input;
 		// Remove any ( from the start of the string as no CSS values expect at the first character.
-		if ( $output ) {
-			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
-				$output = ltrim( $output, '()' );
-			}
+		if ( $output && in_array( $output[0], array( '(', ')' ), true ) ) {
+			$output = ltrim( $output, '()' );
 		}
 		// Remove extra braces from the end.
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
@@ -434,7 +432,7 @@ class FrmStyle {
 	 * Delete a style by its post ID.
 	 *
 	 * @param int $id
-	 * @return WP_Post|false|null
+	 * @return false|WP_Post|null
 	 */
 	public function destroy( $id ) {
 		if ( $id === $this->get_default_style()->ID ) {
@@ -444,7 +442,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @return WP_Post|stdClass
+	 * @return stdClass|WP_Post
 	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {
@@ -571,7 +569,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ( ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] == 'auto' ) ? 'normal' : $settings['field_height'];
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height'];
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];
@@ -602,140 +600,139 @@ class FrmStyle {
 	 */
 	public function get_defaults() {
 		$defaults = array(
-			'theme_css'  => 'ui-lightness',
-			'theme_name' => 'UI Lightness',
+			'theme_css'                  => 'ui-lightness',
+			'theme_name'                 => 'UI Lightness',
 
-			'center_form'       => '',
-			'form_width'        => '100%',
-			'form_align'        => 'left',
-			'direction'         => is_rtl() ? 'rtl' : 'ltr',
-			'fieldset'          => '0px',
-			'fieldset_color'    => '000000',
-			'fieldset_padding'  => '0 0 15px 0',
-			'fieldset_bg_color' => '',
+			'center_form'                => '',
+			'form_width'                 => '100%',
+			'form_align'                 => 'left',
+			'direction'                  => is_rtl() ? 'rtl' : 'ltr',
+			'fieldset'                   => '0px',
+			'fieldset_color'             => '000000',
+			'fieldset_padding'           => '0 0 15px 0',
+			'fieldset_bg_color'          => '',
 
-			'title_size'              => '40px',
-			'title_color'             => '444444',
-			'title_margin_top'        => '10px',
-			'title_margin_bottom'     => '60px',
-			'form_desc_size'          => '14px',
-			'form_desc_color'         => '666666',
-			'form_desc_margin_top'    => '10px',
-			'form_desc_margin_bottom' => '25px',
-			'form_desc_padding'       => '0',
+			'title_size'                 => '40px',
+			'title_color'                => '444444',
+			'title_margin_top'           => '10px',
+			'title_margin_bottom'        => '60px',
+			'form_desc_size'             => '14px',
+			'form_desc_color'            => '98A2B3',
+			'form_desc_margin_top'       => '10px',
+			'form_desc_margin_bottom'    => '25px',
+			'form_desc_padding'          => '0',
 
-			'font'            => '',
-			'font_size'       => '15px',
-			'label_color'     => '3f4b5b',
-			'weight'          => 'normal',
-			'position'        => 'none',
-			'align'           => 'left',
-			'width'           => '150px',
-			'required_color'  => 'B94A48',
-			'required_weight' => 'bold',
-			'label_padding'   => '0 0 3px 0',
+			'font'                       => '',
+			'font_size'                  => '15px',
+			'label_color'                => '344054',
+			'weight'                     => 'normal',
+			'position'                   => 'none',
+			'align'                      => 'left',
+			'width'                      => '150px',
+			'required_color'             => 'F04438',
+			'required_weight'            => 'bold',
+			'label_padding'              => '0 0 5px 0',
 
-			'description_font_size' => '12px',
-			'description_color'     => '666666',
-			'description_weight'    => 'normal',
-			'description_style'     => 'normal',
-			'description_align'     => 'left',
-			'description_margin'    => '0',
+			'description_font_size'      => '12px',
+			'description_color'          => '667085',
+			'description_weight'         => 'normal',
+			'description_style'          => 'normal',
+			'description_align'          => 'left',
+			'description_margin'         => '0',
 
-			'field_font_size'    => '14px',
-			'field_height'       => '32px',
-			'line_height'        => 'normal',
-			'field_width'        => '100%',
-			'auto_width'         => false,
-			'field_pad'          => '6px 10px',
-			'field_margin'       => '20px',
-			'field_weight'       => 'normal',
-			'text_color'         => '555555',
-			//'border_color_hv'   => 'cccccc',
-			'border_color'       => 'BFC3C8',
-			'field_border_width' => '1px',
-			'field_border_style' => 'solid',
+			'field_font_size'            => '14px',
+			'field_height'               => '36px',
+			'line_height'                => 'normal',
+			'field_width'                => '100%',
+			'auto_width'                 => false,
+			'field_pad'                  => '8px 12px',
+			'field_margin'               => '20px',
+			'field_weight'               => 'normal',
+			'text_color'                 => '1D2939',
+			// 'border_color_hv'   => 'cccccc',
+			'border_color'               => 'D0D5DD',
+			'field_border_width'         => '1px',
+			'field_border_style'         => 'solid',
 
-			'bg_color'                 => 'ffffff',
-			//'bg_color_hv'       => 'ffffff',
-			'remove_box_shadow'        => '',
-			'bg_color_active'          => 'ffffff',
-			'border_color_active'      => '66afe9',
-			'remove_box_shadow_active' => '',
-			'text_color_error'         => '444444',
-			'bg_color_error'           => 'ffffff',
-			'border_color_error'       => 'B94A48',
-			'border_width_error'       => '1px',
-			'border_style_error'       => 'solid',
-			'bg_color_disabled'        => 'ffffff',
-			'border_color_disabled'    => 'E5E5E5',
-			'text_color_disabled'      => 'A1A1A1',
+			'bg_color'                   => 'ffffff',
+			// 'bg_color_hv'       => 'ffffff',
+			'remove_box_shadow'          => '',
+			'bg_color_active'            => 'ffffff',
+			'border_color_active'        => '4199FD',
+			'remove_box_shadow_active'   => '',
+			'text_color_error'           => '444444',
+			'bg_color_error'             => 'ffffff',
+			'border_color_error'         => 'F04438',
+			'border_width_error'         => '1px',
+			'border_style_error'         => 'solid',
+			'bg_color_disabled'          => 'F9FAFB',
+			'border_color_disabled'      => 'D0D5DD',
+			'text_color_disabled'        => '667085',
 
-			'radio_align'       => 'block',
-			'check_align'       => 'block',
-			'check_font_size'   => '13px',
-			'check_label_color' => '444444',
-			'check_weight'      => 'normal',
+			'radio_align'                => 'block',
+			'check_align'                => 'block',
+			'check_font_size'            => '14px',
+			'check_label_color'          => '1D2939',
+			'check_weight'               => 'normal',
 
-			'section_font_size'    => '18px',
-			'section_color'        => '444444',
-			'section_weight'       => 'bold',
-			'section_pad'          => '15px 0 3px 0',
-			'section_mar_top'      => '15px',
-			'section_mar_bottom'   => '30px',
-			'section_bg_color'     => '',
-			'section_border_color' => 'e8e8e8',
-			'section_border_width' => '2px',
-			'section_border_style' => 'solid',
-			'section_border_loc'   => '-top',
-			'collapse_icon'        => '6',
-			'collapse_pos'         => 'after',
-			'repeat_icon'          => '1',
-			'repeat_icon_color'    => 'ffffff',
+			'section_font_size'          => '18px',
+			'section_color'              => '344054',
+			'section_weight'             => 'bold',
+			'section_pad'                => '32px 0 3px 0',
+			'section_mar_top'            => '30px',
+			'section_mar_bottom'         => '30px',
+			'section_bg_color'           => '',
+			'section_border_color'       => 'EAECF0',
+			'section_border_width'       => '1px',
+			'section_border_style'       => 'solid',
+			'section_border_loc'         => '-top',
+			'collapse_icon'              => '6',
+			'collapse_pos'               => 'after',
+			'repeat_icon'                => '1',
+			'repeat_icon_color'          => 'ffffff',
 
 			'submit_style'               => false,
-			'submit_font_size'           => '15px',
+			'submit_font_size'           => '14px',
 			'submit_width'               => 'auto',
 			'submit_height'              => 'auto',
-			'submit_bg_color'            => '579AF6',
-			'submit_border_color'        => '579AF6',
+			'submit_bg_color'            => '4199FD',
+			'submit_border_color'        => '4199FD',
 			'submit_border_width'        => '1px',
 			'submit_text_color'          => 'ffffff',
 			'submit_weight'              => 'normal',
-			'submit_border_radius'       => '4px',
+			'submit_border_radius'       => '8px',
 			'submit_bg_img'              => '',
 			'submit_margin'              => '10px',
-			'submit_padding'             => '10px 20px',
+			'submit_padding'             => '8px 16px',
 			'submit_shadow_color'        => 'eeeeee',
-			'submit_hover_bg_color'      => 'efefef',
-			'submit_hover_color'         => '444444',
-			'submit_hover_border_color'  => 'cccccc',
-			'submit_active_bg_color'     => 'efefef',
-			'submit_active_color'        => '444444',
-			'submit_active_border_color' => 'cccccc',
+			'submit_hover_bg_color'      => '3680D3',
+			'submit_hover_color'         => 'ffffff',
+			'submit_hover_border_color'  => '3680D3',
+			'submit_active_bg_color'     => '3680D3',
+			'submit_active_color'        => 'ffffff',
+			'submit_active_border_color' => '3680D3',
 
-			'border_radius'   => '4px',
-			'error_bg'        => 'F2DEDE',
-			'error_border'    => 'EBCCD1',
-			'error_text'      => 'B94A48',
-			'error_font_size' => '14px',
+			'border_radius'              => '8px',
+			'error_bg'                   => 'FEE4E2',
+			'error_border'               => 'F5B8AA',
+			'error_text'                 => 'F04438',
+			'error_font_size'            => '14px',
 
-			'success_bg_color'     => 'DFF0D8',
-			'success_border_color' => 'D6E9C6',
-			'success_text_color'   => '468847',
-			'success_font_size'    => '14px',
+			'success_bg_color'           => 'DFF0D8',
+			'success_border_color'       => 'D6E9C6',
+			'success_text_color'         => '468847',
+			'success_font_size'          => '14px',
 
-			'important_style' => false,
+			'important_style'            => false,
 
-			'progress_bg_color'        => 'eaeaea',
-			'progress_active_color'    => 'ffffff',
-			'progress_active_bg_color' => '579AF6',
-			'progress_color'           => '3f4b5b',
-			'progress_border_color'    => 'E5E5E5',
-			'progress_border_size'     => '2px',
-			'progress_size'            => '24px',
-
-			'custom_css' => '',
+			'progress_bg_color'          => 'EAECF0',
+			'progress_color'             => '1D2939',
+			'progress_active_bg_color'   => '4199FD',
+			'progress_active_color'      => 'ffffff',
+			'progress_border_color'      => 'EAECF0',
+			'progress_border_size'       => '1px',
+			'progress_size'              => '30px',
+			'custom_css'                 => '',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );

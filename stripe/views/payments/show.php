@@ -75,6 +75,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<td><?php echo esc_html( FrmTransLiteAppHelper::formatted_amount( $payment ) ); ?></td>
 							</tr>
 
+							<?php if ( isset( $payment->test ) ) { ?>
+							<tr valign="top">
+								<th scope="row"><?php esc_html_e( 'Mode', 'formidable' ); ?>:</th>
+								<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $payment ) ); ?></td>
+							</tr>
+							<?php } ?>
+
 							<?php if ( $payment->expire_date && $payment->expire_date !== '0000-00-00' ) { ?>
 							<tr>
 								<th scope="row"><?php esc_html_e( 'Payment Dates', 'formidable' ); ?>:</th>
@@ -121,12 +128,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 										?>
 									</table>
 									<br/>
-								<?php } ?>
+									<?php
+								}//end foreach
+								?>
 
 								</td>
 							</tr>
 								<?php
-							}
+							}//end if
 							?>
 						</tbody>
 						</table>

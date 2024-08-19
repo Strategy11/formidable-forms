@@ -43,10 +43,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 	</p>
 
-<?php if ( ! $values['is_template'] ) { ?>
-	<?php $first_h3 = ''; ?>
+<?php
+if ( ! $values['is_template'] ) {
+	$first_h3 = '';
 
-	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
+	if ( has_action( 'frm_settings_buttons' ) ) {
+		?>
 		<h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 			<?php esc_html_e( 'Form Settings', 'formidable' ); ?>
 		</h3>
@@ -54,9 +56,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'frm_settings_buttons', $values ); ?>
 			<div class="clear"></div>
 		</div>
-		<?php $first_h3 = ''; ?>
-	<?php } ?>
-<?php } ?>
+		<?php
+		$first_h3 = '';
+	}
+}
+?>
 
 <h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 	<?php esc_html_e( 'On Submit', 'formidable' ); ?>
@@ -73,7 +77,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <?php
-is_callable( 'FrmFormsController::render_spam_settings' ) && FrmFormsController::render_spam_settings( $values );
+if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
+	FrmFormsController::render_spam_settings( $values );
+}
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 
@@ -86,7 +92,7 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 	<tr>
 		<td>
 			<label for="ajax_load" class="frm_inline_block">
-				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ( $values['ajax_load'] ) ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
+				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo $values['ajax_load'] ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Recommended for long forms.', 'formidable' ); ?>"></span>
 			</label>
 		</td>
@@ -115,9 +121,9 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 </table>
 
 <!--Permissions Section-->
-<?php do_action( 'frm_add_form_perm_options', $values ); ?>
-
 <?php
+do_action( 'frm_add_form_perm_options', $values );
+
 /*
  * We keep this section to make the frm_add_form_msg_options hook still work after we moved the Success message option
  * to the On Submit action, and moved the Draft message option to the below of its checkbox.

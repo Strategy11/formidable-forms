@@ -76,7 +76,9 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		setTimeout( addHamburgerMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+		// Add a timeout so Pro has a chance to add a filter first.
+		// 0 does not always work in Google Chrome, so use 1.
+		setTimeout( addHamburgerMenusToCards, 1 );
 		initDatepickerSample();
 
 		const enableToggle              = document.getElementById( 'frm_enable_styling' );
@@ -702,7 +704,7 @@
 	 * @returns {HTMLElement}
 	 */
 	function getRenameOption( styleId ) {
-		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
+		const renameOption = a( __( 'Rename', 'formidable' ) );
 		addIconToOption( renameOption, 'frm_signature_icon' );
 
 		let titleTarget;
@@ -721,7 +723,7 @@
 				stylerModal(
 					'frm_rename_style_modal',
 					{
-						title: __( 'Rename style', 'formidable-pro' ),
+						title: __( 'Rename style', 'formidable' ),
 						content: getStyleInputNameModalContent( 'rename', styleName ),
 						footer: getRenameStyleModalFooter( styleId )
 					}
@@ -759,7 +761,7 @@
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable-pro' ), 'style_name' )
+				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
@@ -809,10 +811,10 @@
 	 * @returns {HTMLELement}
 	 */
 	 function getRenameStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable-pro' ), buttonType: 'cancel' });
+		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' });
 		cancelButton.classList.add( 'dismiss' );
 
-		const renameButton = footerButton({ text: __( 'Rename style', 'formidable-pro' ), buttonType: 'primary' });
+		const renameButton = footerButton({ text: __( 'Rename style', 'formidable' ), buttonType: 'primary' });
 		onClickPreventDefault( renameButton, () => renameStyle( styleId ) );
 
 		return div({
@@ -1241,6 +1243,36 @@
 
 			radio.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
+
+		document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
+			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
+			el.setAttribute( 'role', 'button' );
+			el.addEventListener( 'click', event => {
+				maybeCollapseSettings( event );
+			});
+			el.addEventListener( 'keydown', event => {
+				if ( event.key === ' ' ) {
+					event.preventDefault();
+					maybeCollapseSettings( event );
+				}
+			});
+		});
+	}
+
+	/**
+	 * @param {Event} event
+	 */
+	function maybeCollapseSettings( event ) {
+		let expanded;
+		const sectionParent = event.target.parentElement;
+		if ( event.type === 'keydown' ) {
+			expanded = sectionParent.classList.toggle( 'open' );
+			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
+		} else {
+			expanded = sectionParent.classList.contains( 'open' );
+		}
+
+		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**

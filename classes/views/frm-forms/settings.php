@@ -10,18 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Settings', 'formidable' ),
-			'form'        => $form,
-			'hide_title'  => true,
-			'close'       => '?page=formidable',
-			'publish'     => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
+			'label'      => __( 'Settings', 'formidable' ),
+			'form'       => $form,
+			'hide_title' => true,
+			'close'      => '?page=formidable',
+			'publish'    => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);
 	?>
 
 	<div class="columns-2">
 		<div class="frm-right-panel">
-			<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' ); ?>
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php'; ?>
 		</div>
 
 		<div id="post-body-content" class="frm-fields">
@@ -34,11 +34,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="inside frm-inner-content">
 					<?php
 					// Add form messages.
-					require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+					require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 					?>
 
 					<?php foreach ( $sections as $section ) { ?>
-						<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo ( $current === $section['anchor'] ) ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
+						<div id="<?php echo esc_attr( $section['id'] ); ?>" class="tabs-panel <?php echo $current === $section['anchor'] ? ' frm_block' : ' frm_hidden'; ?> <?php echo esc_attr( $section['anchor'] . ' frm_' . $section['anchor'] ); ?>">
 							<h2>
 								<?php echo esc_html( $section['title'] ); ?>
 							</h2>
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php do_action( 'frm_add_form_option_section', $values ); ?>
 					<div class="clear"></div>
-					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
+					<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php'; ?>
 					<?php do_action( 'frm_page_footer', array( 'table' => 'form-settings' ) ); ?>
 				</div>
 			</div>

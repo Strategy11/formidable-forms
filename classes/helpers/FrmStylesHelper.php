@@ -38,8 +38,15 @@ class FrmStylesHelper {
 		);
 	}
 
-	public static function get_single_label_positions() {
-		return array(
+	/**
+	 * @since 6.11 Added $field param.
+	 *
+	 * @param array|object $field
+	 *
+	 * @return array
+	 */
+	public static function get_single_label_positions( $field = array() ) {
+		$label_positions = array(
 			'top'    => __( 'Top', 'formidable' ),
 			'left'   => __( 'Left', 'formidable' ),
 			'right'  => __( 'Right', 'formidable' ),
@@ -48,6 +55,16 @@ class FrmStylesHelper {
 			'hidden' => __( 'Hidden (but leave the space)', 'formidable' ),
 			'inside' => __( 'Placeholder inside the field', 'formidable' ),
 		);
+
+		/**
+		 * Allows updating label positions in field settings.
+		 *
+		 * @since 6.11
+		 *
+		 * @param array        $label_positions
+		 * @param array|object $field
+		 */
+		return apply_filters( 'frm_single_label_positions', $label_positions, $field );
 	}
 
 	public static function minus_icons() {
@@ -121,14 +138,14 @@ class FrmStylesHelper {
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
 		if ( 'arrow' === $type && is_numeric( $key ) ) {
-			//frm_arrowup6_icon
+			// frm_arrowup6_icon.
 			$arrow = array(
 				'-' => 'down',
 				'+' => 'up',
 			);
 			$class = 'frm_arrow' . $arrow[ $icon ];
 		} else {
-			//frm_minus1_icon
+			// frm_minus1_icon.
 			$key   = str_replace( 'p', '', $key );
 			$plus  = array(
 				'-' => 'minus',
@@ -166,7 +183,7 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
@@ -185,14 +202,53 @@ class FrmStylesHelper {
 		<?php
 	}
 
-	public static function hex2rgb( $hex ) {
-		$hex = str_replace( '#', '', $hex );
-
-		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
-
-		$rgb = array( $r, $g, $b );
-
+	/**
+	 * Convert a color setting to a RGB CSV (without the rgb()/rgba() wrapper).
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $color Color setting value. This could be hex or rgb.
+	 * @return string RGB value without the rgb() wrapper.
+	 */
+	public static function hex2rgb( $color ) {
+		if ( 0 === strpos( $color, 'rgb' ) ) {
+			$rgb = self::get_rgb_array_from_rgb( $color );
+		} else {
+			$rgb = self::get_rgb_array_from_hex( $color );
+		}
 		return implode( ',', $rgb );
+	}
+
+	/**
+	 * Remove the rgb()/rgba() wrapper from a RGB color and return its R, G and B values as an array.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param string $rgb    RGB value including the rgb() or rgba() wrapper.
+	 * @return array<string> including three numeric values for R, G, and B.
+	 */
+	private static function get_rgb_array_from_rgb( $rgb ) {
+		$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $rgb );
+		$rgb = explode( ',', $rgb );
+		if ( 4 === count( $rgb ) ) {
+			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
+			array_pop( $rgb );
+		}
+		return $rgb;
+	}
+
+	/**
+	 * Get the R, G, and B array values from a Hex color code.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param string $hex    A hex color string.
+	 * @return array<string> Including three numeric values for R, G, and B.
+	 */
+	private static function get_rgb_array_from_hex( $hex ) {
+		$hex               = str_replace( '#', '', $hex );
+		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
+		return array( $r, $g, $b );
 	}
 
 	/**
@@ -207,11 +263,12 @@ class FrmStylesHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string $rgba
-	 * @return string
+	 * @param string $rgba Color setting value. This could be hex or rgb.
+	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
 		if ( strpos( $rgba, '#' ) === 0 ) {
+			// Color is already hex.
 			return $rgba;
 		}
 		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
@@ -219,10 +276,71 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @param $hex string - The original color in hex format #ffffff
-	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
+	 * @since 6.8
 	 *
+	 * @param string $hsl
+	 * @return string|null Null if it fails to parse the HSL string.
+	 */
+	private static function hsl_to_hex( $hsl ) {
+		// Convert hsla to hsl.
+		$hsl = preg_replace( '/hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*([\d.]+)\)/', 'hsl($1, $2%, $3%)', $hsl );
+
+		// Extract HSL components from the color string.
+		preg_match( '/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/', $hsl, $matches );
+
+		if ( count( $matches ) !== 4 ) {
+			// Invalid HSL string format.
+			return null;
+		}
+
+		// Extract HSL values.
+		$h = (int) $matches[1];
+		$s = (int) $matches[2] / 100;
+		$l = (int) $matches[3] / 100;
+
+		// Calculate RGB values.
+		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
+		$x = $c * ( 1 - abs( ( (int) ( $h / 60 ) % 2 ) - 1 ) );
+		$m = $l - $c / 2;
+		$r = 0;
+		$g = 0;
+		$b = 0;
+
+		if ( $h >= 0 && $h < 60 ) {
+			$r = $c;
+			$g = $x;
+		} elseif ( $h >= 60 && $h < 120 ) {
+			$r = $x;
+			$g = $c;
+		} elseif ( $h >= 120 && $h < 180 ) {
+			$g = $c;
+			$b = $x;
+		} elseif ( $h >= 180 && $h < 240 ) {
+			$g = $x;
+			$b = $c;
+		} elseif ( $h >= 240 && $h < 300 ) {
+			$r = $x;
+			$b = $c;
+		} elseif ( $h >= 300 && $h < 360 ) {
+			$r = $c;
+			$b = $x;
+		}//end if
+
+		// Convert RGB to 8-bit values
+		$r = round( ( $r + $m ) * 255 );
+		$g = round( ( $g + $m ) * 255 );
+		$b = round( ( $b + $m ) * 255 );
+
+		// Convert RGB to hex
+		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
+
+		return $hex;
+	}
+
+	/**
 	 * @since 2.3
+	 * @param string $hex   string  The original color in hex format #ffffff.
+	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
@@ -245,9 +363,13 @@ class FrmStylesHelper {
 		$return      = '#';
 
 		foreach ( $color_parts as $color ) {
-			$color  = hexdec( $color ); // Convert to decimal
-			$color  = max( 0, min( 255, $color + $steps ) ); // Adjust color
-			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
+			// Convert to decimal.
+			$color = hexdec( $color );
+			// Adjust color.
+			$color = max( 0, min( 255, $color + $steps ) );
+
+			// Make two char hex code.
+			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT );
 		}
 
 		return $return;
@@ -262,6 +384,15 @@ class FrmStylesHelper {
 	public static function get_color_brightness( $color ) {
 		if ( 0 === strpos( $color, 'rgb' ) ) {
 			$color = self::rgb_to_hex( $color );
+		}
+
+		if ( 0 === strpos( $color, 'hsl' ) ) {
+			$hsl_to_hex = self::hsl_to_hex( $color );
+			if ( is_null( $hsl_to_hex ) ) {
+				// Fallback if we cannot convert the HSL value.
+				return 0;
+			}
+			$color = $hsl_to_hex;
 		}
 
 		self::fill_hex( $color );
@@ -279,7 +410,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private static function fill_hex( &$color ) {
 		if ( 3 === strlen( $color ) ) {
@@ -355,7 +486,7 @@ class FrmStylesHelper {
 		} else {
 			$settings                = $style->post_content;
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
-		}
+		}//end if
 
 		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
@@ -373,7 +504,7 @@ class FrmStylesHelper {
 		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
 		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
-		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 2px 0 rgba(18, 18, 23, 0.05)';
 
 		if ( ! isset( $settings['repeat_icon'] ) ) {
 			$settings['repeat_icon'] = 1;
@@ -440,9 +571,35 @@ class FrmStylesHelper {
 		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
+		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
+	}
+
+	/**
+	 * If a color looks like a hex code without the #, prepend the #.
+	 * A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+	 *
+	 * @since 6.8
+	 *
+	 * @param string $color
+	 * @return bool
+	 */
+	private static function is_hex( $color ) {
+		$non_hex_substrings = array(
+			'rgba(',
+			'hsl(',
+			'hsla(',
+			'hwb(',
+		);
+
+		foreach ( $non_hex_substrings as $substring ) {
+			if ( false !== strpos( $color, $substring ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -477,43 +634,11 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since 5.5.1
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		$signature_add_on_is_active = class_exists( 'FrmSigAppHelper', false );
-
-		if ( ! FrmAppHelper::pro_is_installed() && ! $signature_add_on_is_active ) {
-			// If Pro and Signatures are both not active, there is no need to include the font icon CSS in lite.
-			return;
-		}
-
-		$pro_version_will_handle_loading = false;
-
-		if ( class_exists( 'FrmProDb', false ) ) {
-			$pro_version_that_includes_font_icons_css = '5.5.1';
-
-			// Include font icons in Lite for backward compatibility with older version of Pro.
-			$pro_version_will_handle_loading = version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '>=' );
-		}
-
-		$load_it_here = false;
-		if ( ! $pro_version_will_handle_loading ) {
-			// If Pro is not handling it, we still need to include it for the Signature add on.
-			$load_it_here = $signature_add_on_is_active;
-		}
-
-		if ( $load_it_here ) {
-			readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
-		}
-	}
-
-	/**
 	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return string
 	 */
 	public static function get_list_url( $form_id ) {
@@ -523,8 +648,8 @@ class FrmStylesHelper {
 	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
-	 * @param WP_Post|stdClass $style
-	 * @param string|int       $form_id Used for the back button and preview form target.
+	 * @param stdClass|WP_Post $style
+	 * @param int|string       $form_id Used for the back button and preview form target.
 	 * @return string
 	 */
 	public static function get_edit_url( $style, $form_id = 0 ) {
@@ -548,13 +673,14 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param bool       $is_default
 	 * @return int
 	 */
 	public static function get_form_count_for_style( $style_id, $is_default ) {
-		$serialized      = serialize( array( 'custom_style' => (string) $style_id ) );
-		$substring       = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
+		// Chop off the "a:1:{" from the front and the "}" from the back.
+		$substring       = substr( $serialized, 5, -1 );
 		$number_of_forms = FrmDb::get_count(
 			'frm_forms',
 			array(
@@ -579,19 +705,19 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param mixed      $conversational_style_id
 	 * @return int
 	 */
 	private static function get_default_style_count( $style_id, $conversational_style_id ) {
 		$substrings = array_map(
-			function( $value ) {
+			function ( $value ) {
 				$substring = serialize( array( 'custom_style' => $value ) );
 				return substr( $substring, 5, -1 );
 			},
 			array( '1', 1 )
 		);
-		$where = array(
+		$where      = array(
 			'status' => 'published',
 			0        => array(
 				'options NOT LIKE' => 'custom_style',
@@ -603,7 +729,7 @@ class FrmStylesHelper {
 		if ( $conversational_style_id ) {
 			// When a conversational style is set, check for it in the query by wrapping the where and adding a conversational option check.
 			$is_conversational_style = (int) $style_id === (int) $conversational_style_id;
-			$where[0] = array(
+			$where[0]                = array(
 				// The chat option doesn't exist if it isn't on.
 				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
 				$where[0],
@@ -614,88 +740,11 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @deprecated 3.01
-	 * @codeCoverageIgnore
-	 */
-	public static function get_sigle_label_postitions() {
-		return FrmDeprecated::get_sigle_label_postitions();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_themes() {
-		return FrmDeprecated::jquery_themes();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_css_url( $theme_css ) {
-		return FrmDeprecated::jquery_css_url( $theme_css );
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function enqueue_jquery_css() {
-		FrmDeprecated::enqueue_jquery_css();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_for_page() {
-		return FrmDeprecated::get_form_for_page();
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
-	 * @return string
-	 */
-	public static function get_style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
-		return '';
-	}
-
-	/**
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
+	 * @since 5.5.1
+	 * @deprecated 6.10
 	 * @return void
 	 */
-	public static function style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
-	}
-
-	/**
-	 * Either get the heading or the style switcher.
-	 *
-	 * @since 4.0
-	 * @deprecated 6.0 The style switcher was replaced with a form switcher and is no longer used.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_switcher( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_save_button( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
+	public static function maybe_include_font_icon_css() {
+		_deprecated_function( __METHOD__, '6.10' );
 	}
 }

@@ -17,7 +17,9 @@ class FrmHtmlHelper {
 	 * @param string $id
 	 * @param string $name
 	 * @param array  $args {
-	 *     @param bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
+	 *     Any extra arguments.
+	 *
+	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
 	 * @return string|void
@@ -26,7 +28,7 @@ class FrmHtmlHelper {
 		wp_enqueue_script( 'formidable_settings' );
 		return FrmAppHelper::clip(
 			// @phpstan-ignore-next-line
-			function() use ( $id, $name, $args ) {
+			function () use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},
 			isset( $args['echo'] ) ? $args['echo'] : false

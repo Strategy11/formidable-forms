@@ -33,17 +33,31 @@ class FrmSimpleBlocksController {
 			$block_name = 'Formidable Forms';
 		}
 
-		$modal_addon = self::get_modal_addon_info();
+		$modal_addon      = self::get_addon_info( 185013 );
+		$charts_addon     = self::get_addon_info( 28248560 );
+		$views_addon      = FrmAddonsController::get_addon( 'views' );
+		$views_addon_info = self::get_addon_info( 28027505 );
 
 		$script_vars = array(
-			'forms' => self::get_forms_options(),
-			'icon'  => $icon,
-			'name'  => $block_name,
-			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
-			'url'   => FrmAppHelper::plugin_url(),
-			'modalAddon' => array(
+			'forms'       => self::get_forms_options(),
+			'icon'        => $icon,
+			'name'        => $block_name,
+			'link'        => FrmAppHelper::admin_upgrade_link( 'block' ),
+			'url'         => FrmAppHelper::plugin_url(),
+			'modalAddon'  => array(
 				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $modal_addon['link'] ),
 				'hasAccess' => ! empty( $modal_addon['url'] ),
+			),
+			'viewsAddon'  => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $views_addon_info['link'] ),
+				'hasAccess' => ! empty( $views_addon_info['url'] ),
+				'url'       => ! empty( $views_addon_info['url'] ) ? $views_addon_info['url'] : '',
+				'installed' => 'installed' === $views_addon['status']['type'],
+			),
+			'chartsAddon' => array(
+				'link'      => FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ),
+				'hasAccess' => ! empty( $charts_addon['url'] ),
+				'installed' => class_exists( 'FrmChartsAppController' ),
 			),
 		);
 
@@ -61,16 +75,16 @@ class FrmSimpleBlocksController {
 	}
 
 	/**
-	 * Gets the modal addon info.
+	 * Gets addon info.
 	 *
-	 * @since 6.3.2
+	 * @since 6.8
 	 *
+	 * @param int $addon_id Addon ID.
 	 * @return array|false
 	 */
-	private static function get_modal_addon_info() {
-		$api      = new FrmFormApi();
-		$addons   = $api->get_api_info();
-		$addon_id = 185013;
+	private static function get_addon_info( $addon_id ) {
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
 
 		if ( ! is_array( $addons ) || ! array_key_exists( $addon_id, $addons ) ) {
 			return false;
@@ -104,7 +118,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Returns an array for a form with name as label and id as value
 	 *
-	 * @param $form
+	 * @param object $form
 	 *
 	 * @return array
 	 */
