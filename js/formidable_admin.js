@@ -513,7 +513,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
 
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
+			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
 			jQuery( this ).tooltip( 'show' );
 		});
 
@@ -3024,7 +3024,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
-		} 
+		}
 		return '';
 	}
 
@@ -4385,7 +4385,7 @@ function frmAdminBuildJS() {
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
 				}
- 
+
 				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
@@ -8852,7 +8852,7 @@ function frmAdminBuildJS() {
 		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
 		if ( exportFormatSelect ) {
 			return exportFormatSelect.value;
-		} 
+		}
 		return '';
 	}
 
@@ -9619,7 +9619,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
-		} 
+		}
 		return 'product' === field.getAttribute( 'data-type' );
 	}
 

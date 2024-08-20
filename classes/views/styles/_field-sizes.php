@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p class="frm4 frm_form_field">
-	<label><?php esc_html_e( 'Corners', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Formidable uses CSS3 border-radius for corner rounding, which is not currently supported by Internet Explorer.', 'formidable' ); ?>" ></span></label>
+	<label><?php esc_html_e( 'Corners', 'formidable' ); ?> <?php FrmAppHelper::tooltip_icon( __( 'Formidable uses CSS3 border-radius for corner rounding, which is not currently supported by Internet Explorer.', 'formidable' ) ); ?></label>
 	<input type="text" value="<?php echo esc_attr( $style->post_content['border_radius'] ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_radius' ) ); ?>" id="frm_border_radius" />
 </p>
 
