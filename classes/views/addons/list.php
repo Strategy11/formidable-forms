@@ -3,8 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
-
 FrmAddonsHelper::show_upgrade_renew_cta();
 FrmAddonsHelper::get_reconnect_link();
 ?>
