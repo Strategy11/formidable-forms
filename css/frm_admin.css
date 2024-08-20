@@ -2155,7 +2155,7 @@ form .form-field.frm_field_loading {
 }
 
 .frm_error {
-	color: #B94A48;
+	color: #F04438;
 }
 
 form .frm_blank_field input,
@@ -2163,15 +2163,15 @@ form .frm_blank_field textarea,
 form .frm_blank_field select,
 form .frm_blank_field .frm-g-recaptcha iframe,
 form .frm_blank_field .g-recaptcha iframe {
-	border-color: #B94A48;
+	border-color: #F04438;
 }
 
 form .frm_blank_field label {
-	color: #B94A48;
+	color: #F04438;
 }
 
 .frm_required {
-	color: #B94A48;
+	color: #F04438;
 }
 
 .with_frm_style .wp-editor-container textarea,
@@ -2598,9 +2598,15 @@ h2.frm-h2 + .howto {
 #wpbody-content > .update-nag,
 #wpbody-content > .notice,
 #wpbody-content > .error:not(.frm_previous_install),
+#wpbody-content > [class*="admin-notice"],
 .frm-white-body .updated,
 .frm-white-body .notice,
+.frm-white-body [class*="admin-notice"],
+.frm-white-body [class*="review-banner"],
+.frm-white-body [id$="-review-banner"],
+.frm-white-body #codepeople-review-banner,
 .frm_wrap > .wrap > .notice,
+.frm_wrap > .wrap > [class*="admin-notice"],
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
@@ -3830,6 +3836,14 @@ input[type="checkbox"] {
 .horizontal_radio .frm_checkbox {
 	margin-right: 5px;
 	display: inline-block;
+}
+
+.frm_form_builder .frm_opt_container .frm_radio.frm_image_option label,
+.frm_form_builder .frm_opt_container .frm_checkbox.frm_image_option label {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	white-space: normal;
 }
 
 .frm_form_field.frm_two_col .frm_opt_container,
@@ -5511,6 +5525,10 @@ h2.frm-h2,
 	outline: 0;
 }
 
+#frm_notification_settings .widget-top .widget-action{
+	padding-top: 13.5px;
+}
+
 #frm_email_addon_menu {
 	border: 1px solid var(--grey-300);
 	padding: var(--gap-sm);
@@ -6786,8 +6804,12 @@ li.selected .divider_section_only:before {
 	transform: rotate(-90deg);
 }
 
-.open .widget-top .frm_arrow_right_icon:before {
-	content: '\e62a';
+.open .widget-top .widget-title-action button .frmsvg {
+	transform: rotate(90deg);
+}
+
+.widget-top .widget-title-action button .frmsvg use {
+	color: var(--grey);
 }
 
 .frm-collapsed + .frm-collapse-me {

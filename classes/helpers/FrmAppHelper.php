@@ -1366,8 +1366,14 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
-			<span>You're using Formidable Forms Lite. To unlock more features consider</span>
-			<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+				<?php
+				printf(
+					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+					'<a href="' . esc_url( self::admin_upgrade_link( 'settings-license' ) ) . '">',
+					'</a>'
+				);
+				?>
 		</div>
 		<?php
 	}
@@ -3285,7 +3291,8 @@ class FrmAppHelper {
 			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 			'focus_first_error'    => self::should_focus_first_error(),
 			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
-			'include_resend_email' => self::should_include_resend_email_code(),
+			// We need to keep this setting for a few versions because Pro checks for this.
+			'include_resend_email' => false,
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3404,24 +3411,6 @@ class FrmAppHelper {
 	 */
 	public static function should_include_alert_role_on_field_errors() {
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
-	}
-
-	/**
-	 * @since 6.10
-	 *
-	 * @return bool
-	 */
-	private static function should_include_resend_email_code() {
-		if ( ! self::pro_is_installed() ) {
-			return false;
-		}
-
-		/**
-		 * @since 6.10
-		 *
-		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro v6.10.
-		 */
-		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
 	}
 
 	/**
