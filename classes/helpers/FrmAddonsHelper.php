@@ -187,7 +187,7 @@ class FrmAddonsHelper {
 
 		$attributes = array(
 			'tabindex'        => '0',
-			'frm-search-text' => strtolower( $addon['title'] ),
+			'frm-search-text' => strtolower( $addon['title'] . ' ' . esc_html( $addon['excerpt'] ) ),
 		);
 
 		// Set 'data-slug' attribute.
