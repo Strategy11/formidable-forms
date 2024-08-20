@@ -41,18 +41,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } ?>
 </p>
 
-<!-- Deprecated settings can only be switched away from the default -->
-<?php if ( empty( $frm_settings->use_html ) ) { ?>
-<p>
-	<label for="frm_use_html">
-		<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked( $frm_settings->use_html, 1 ); ?> />
-		<?php esc_html_e( 'Use HTML5 in forms', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ); ?>"></span>
-	</label>
-</p>
-<?php } else { ?>
-	<input type="hidden" name="frm_use_html" value="1" />
-<?php } ?>
+<?php
+/*
+Deprecated setting. This is always on now.
+Leave this for now for backward compatibility.
+This is to prevent this from being disabled.
+Pro could possibly check for `use_html` and think it is still false.
+*/
+?>
+<input type="hidden" name="frm_use_html" value="1" />
 
 <p class="frm_uninstall">
 	<label>

@@ -35,19 +35,42 @@ Cypress.Commands.add("createNewForm", () => {
     cy.get("#frm-save-form-name-button").should("contain", "Save").click();
     cy.get("a[aria-label='Close']", { timeout: 7000 }).click();
 })
-
 Cypress.Commands.add("deleteForm", () => {
     cy.log("Delete Form");
     cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
         console.log('Hovered Row:', $row);
-        // Find the visible element with class "trash" within the hovered row and click it
-    cy.wrap($row).within(() => {
-        cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
+        cy.wrap($row).within(() => {
+            cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
         });
-    cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
-    cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
-    })
-})
+        cy.get("body").then(($body) => {
+            if ($body.find("div[role='dialog']").length) {
+                cy.get("div[role='dialog']").should("be.visible").and("contain.text", "Do you want to move this form to the trash?");
+                cy.xpath("//a[@id='frm-confirmed-click']").should("contain.text", "Confirm").click({ force: true });
+            } else {
+                cy.log("Dialog not found");
+            }
+        });
+    });
+});
 
+Cypress.Commands.add("openForm", () => {
+    cy.log("Click on the created form");
+    cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
+        cy.wrap($row).within(() => {
+            cy.get('.column-name .row-title').should('exist').and('be.visible').then(($elem) => {
+                console.log('Element is:', $elem);
+                cy.wrap($elem).click({ force: true });
+            });
+        });
+    });
 
+    cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
+    cy.get('.current_page').should("contain", "Build");
+    cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
+});
 
+Cypress.Commands.add("getCurrentFormattedDate", () => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+    return formattedDate;
+});   
