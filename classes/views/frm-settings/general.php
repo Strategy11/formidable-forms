@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
 		<?php esc_html_e( 'Default Email Address', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'The default email address to receive notifications for new form submissions.', 'formidable' ); ?>"></span>
+		<?php FrmAppHelper::tooltip_icon( __( 'The default email address to receive notifications for new form submissions.', 'formidable' ) ); ?>
 	</label>
 	<input class="frm_with_left_label frm8" type="text" name="frm_default_email" id="frm_default_email" value="<?php echo esc_attr( $frm_settings->default_email ); ?>" />
 </p>
@@ -84,7 +84,7 @@ if ( $frm_settings->no_ips ) {
 	<label>
 		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
 		<?php esc_html_e( 'Use custom headers when retrieving IPs with form submissions.', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ); ?>"></span>
+		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
 
