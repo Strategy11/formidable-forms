@@ -5,6 +5,7 @@
 * Fix: Turnstile captcha widgets were rendering twice.
 * Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
 * Fix: The submit button would appear as an entry table row on the entry view admin page.
+* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
 * Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
 * Some updates have been made to improve the syncing of field option updates and conditional logic settings.
 * The setting to use HTML5 has been removed. This is now always true for all sites.
