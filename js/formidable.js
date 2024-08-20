@@ -622,10 +622,14 @@ function frmFrontFormJS() {
 	/**
 	 * Check if JS validation should happen.
 	 *
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
 	 */
 	function shouldJSValidate( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		let validate = hasClass( object, 'frm_js_validate' );
 		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
 			validate = false;
@@ -1564,6 +1568,11 @@ function frmFrontFormJS() {
 			}
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 *
+		 * @return {Array} List of errors.
+		 */
 		validateFormSubmit: function( object ) {
 			if ( typeof tinyMCE !== 'undefined' && jQuery( object ).find( '.wp-editor-wrap' ).length ) {
 				tinyMCE.triggerSave();
