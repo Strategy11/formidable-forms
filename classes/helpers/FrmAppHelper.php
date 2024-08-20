@@ -4320,7 +4320,7 @@ class FrmAppHelper {
 			$atts['class'] = 'frm_help';
 		}
 		?>
-		<span <?php self::array_to_html_params( $atts, true ) ?>>
+		<span <?php self::array_to_html_params( $atts, true ); ?>>
 			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
 		</span>
 		<?php
