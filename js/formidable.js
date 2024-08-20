@@ -1571,7 +1571,7 @@ function frmFrontFormJS() {
 		/**
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 *
-		 * @return {Array}
+		 * @return {Array} List of errors.
 		 */
 		validateFormSubmit: function( object ) {
 			if ( typeof tinyMCE !== 'undefined' && jQuery( object ).find( '.wp-editor-wrap' ).length ) {
