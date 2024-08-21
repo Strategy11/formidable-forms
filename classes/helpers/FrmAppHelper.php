@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.11.2';
+	public static $plug_version = '6.12';
 
 	/**
 	 * @var bool
@@ -4305,7 +4305,7 @@ class FrmAppHelper {
 	/**
 	 * Shows tooltip icon.
 	 *
-	 * @since x.x
+	 * @since 6.12
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 * @param array  $atts         Tooltip wrapper HTML attributes.

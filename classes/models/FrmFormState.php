@@ -172,7 +172,7 @@ class FrmFormState {
 	/**
 	 * Returns true if open SSL is installed.
 	 *
-	 * @since x.x
+	 * @since 6.12
 	 * @return bool
 	 */
 	private static function open_ssl_is_installed() {
