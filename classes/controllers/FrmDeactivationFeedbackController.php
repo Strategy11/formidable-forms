@@ -11,10 +11,20 @@
  */
 class FrmDeactivationFeedbackController {
 
+	/**
+	 * Checks if is plugins page.
+	 *
+	 * @return bool
+	 */
 	private static function is_plugins_page() {
 		return 'plugins' === get_current_screen()->id;
 	}
 
+	/**
+	 * Enqueues assets.
+	 *
+	 * @return void
+	 */
 	public static function enqueue_assets() {
 		if ( ! self::is_plugins_page() ) {
 			return;
@@ -39,6 +49,11 @@ class FrmDeactivationFeedbackController {
 		);
 	}
 
+	/**
+	 * Prints footer HTML.
+	 *
+	 * @return void
+	 */
 	public static function footer_html() {
 		if ( ! self::is_plugins_page() ) {
 			return;
@@ -62,6 +77,18 @@ class FrmDeactivationFeedbackController {
 				</div>
 			</div>
 		</div><!-- End #frm-deactivation-popup -->
+		<?php
+
+		self::modal_style();
+	}
+
+	/**
+	 * Prints modal styling.
+	 *
+	 * @return void
+	 */
+	private static function modal_style() {
+		?>
 		<style>
 			#frm-deactivation-modal {
 				--padding: 24px;
@@ -187,22 +214,6 @@ class FrmDeactivationFeedbackController {
 				padding: 0 13px;
 			}
 		</style>
-		<?php
-	}
-
-	private static function modal_icon() {
-		?>
-		<svg
-			class="frmsvg frm_deactivation_modal_icon"
-			xmlns="http://www.w3.org/2000/svg"
-			xmlns:xlink="http://www.w3.org/1999/xlink"
-			viewBox="0 0 20 20"
-			xml:space="preserve"
-		>
-			<path d="M9.6 12.8h4.8v2.5H9.6v-2.5zm3.8-8H6.7a1 1 0 0 0-1 1v1.5h8.7V4.8h-1z"/>
-			<path d="M13.3 8.8H5.6v6.5h2.5v-4h5.2a1 1 0 0 0 1-.7V8.8h-1z"/>
-			<path d="M10 20A10 10 0 0 1 0 10 10 10 0 0 1 10 0a10 10 0 0 1 10 10 10 10 0 0 1-10 10zm0-18.7A8.7 8.7 0 0 0 1.3 10a8.7 8.7 0 0 0 8.7 8.7 8.7 8.7 0 0 0 8.7-8.7A8.7 8.7 0 0 0 10 1.3z"/>
-		</svg>
 		<?php
 	}
 }
