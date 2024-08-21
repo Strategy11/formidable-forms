@@ -2,11 +2,12 @@ describe("Deleting forms", () => {
     beforeEach(() => {
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable');
-        cy.emptyTrash();
         cy.viewport(1280, 720);
     });
 
-    it("should create multiple forms and bulk delete them", () => {     
+    it("should create multiple forms and bulk delete them", () => {  
+        
+        cy.emptyTrash();
 
         cy.log("Create 5 new forms");
         for (let i = 0; i < 5; i++) {
