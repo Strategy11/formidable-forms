@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-30T13:52:12+00:00\n"
-"PO-Revision-Date: 2024-07-31 01:40\n"
+"POT-Creation-Date: 2024-08-21T11:55:16+00:00\n"
+"PO-Revision-Date: 2024-08-21 23:47\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -278,10 +278,10 @@ msgstr ""
 
 #: js/src/form/views.js:32
 #: classes/controllers/FrmSMTPController.php:321
-#: classes/helpers/FrmAppHelper.php:3342
+#: classes/helpers/FrmAppHelper.php:3349
 #: classes/helpers/FrmFormMigratorsHelper.php:154
 #: classes/views/shared/upgrade_overlay.php:34
-#: js/formidable_admin.js:6811
+#: js/formidable_admin.js:6938
 #: js/formidable_blocks.js:863
 msgid "Install"
 msgstr "Instalar"
@@ -290,7 +290,7 @@ msgstr "Instalar"
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:317
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:6808
+#: js/formidable_admin.js:6935
 #: js/formidable_blocks.js:863
 msgid "Activate"
 msgstr "Activar"
@@ -351,18 +351,18 @@ msgid "There are no plugins on your site that require a license"
 msgstr "No hay plugins en tu sitio que requieran una licencia"
 
 #: classes/controllers/FrmAddonsController.php:680
-#: classes/helpers/FrmAppHelper.php:3344
+#: classes/helpers/FrmAppHelper.php:3351
 msgid "Installed"
 msgstr "Instalado"
 
 #: classes/controllers/FrmAddonsController.php:685
-#: classes/helpers/FrmAppHelper.php:3343
+#: classes/helpers/FrmAppHelper.php:3350
 #: stripe/helpers/FrmTransLiteAppHelper.php:107
 msgid "Active"
 msgstr "Activado"
 
 #: classes/controllers/FrmAddonsController.php:690
-#: classes/helpers/FrmAppHelper.php:3345
+#: classes/helpers/FrmAppHelper.php:3352
 msgid "Not Installed"
 msgstr "No instalado"
 
@@ -459,20 +459,20 @@ msgid "Build a Form"
 msgstr "Construir un formulario"
 
 #. Translators: 1: Global Settings Link
-#: classes/controllers/FrmAppController.php:639
+#: classes/controllers/FrmAppController.php:638
 msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
 msgstr "Es posible que las direcciones IP de los formularios ya no sean exactas. Si tienes problemas, te recomendamos que vayas a %1$s y actives la opción «Usar cabeceras personalizadas al recuperar IPs con envíos de formularios»."
 
-#: classes/controllers/FrmAppController.php:640
+#: classes/controllers/FrmAppController.php:639
 #: classes/controllers/FrmSettingsController.php:12
 msgid "Global Settings"
 msgstr "Ajustes globales"
 
-#: classes/controllers/FrmAppController.php:1266
+#: classes/controllers/FrmAppController.php:1265
 #: classes/controllers/FrmFormsController.php:214
 #: classes/controllers/FrmFormTemplatesController.php:612
 #: classes/controllers/FrmSettingsController.php:275
-#: classes/helpers/FrmAppHelper.php:3302
+#: classes/helpers/FrmAppHelper.php:3309
 #: classes/views/form-templates/modals/create-template-modal.php:62
 #: classes/views/form-templates/modals/name-your-form-modal.php:32
 #: classes/views/shared/admin-header.php:32
@@ -484,7 +484,7 @@ msgstr "Ajustes globales"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: classes/controllers/FrmAppController.php:1270
+#: classes/controllers/FrmAppController.php:1269
 #: classes/views/onboarding-wizard/steps/install-formidable-pro-step.php:70
 msgid "Continue"
 msgstr "Continuar"
@@ -797,7 +797,7 @@ msgid "Minimize form HTML"
 msgstr "Minimizar HTML del formulario"
 
 #: classes/controllers/FrmFormsController.php:1066
-#: classes/controllers/FrmStylesController.php:948
+#: classes/controllers/FrmStylesController.php:946
 #: classes/views/frm-forms/settings-advanced.php:13
 #: classes/views/styles/manage.php:17
 #: classes/views/styles/_sample_form.php:12
@@ -850,7 +850,7 @@ msgid "Form was Successfully Copied"
 msgstr "El formulario fue copiado con éxito"
 
 #: classes/controllers/FrmFormsController.php:1329
-#: classes/controllers/FrmStylesController.php:947
+#: classes/controllers/FrmStylesController.php:945
 msgid "General"
 msgstr "General"
 
@@ -880,7 +880,7 @@ msgid "Form scheduling settings"
 msgstr "Ajustes de la programación de formularios"
 
 #: classes/controllers/FrmFormsController.php:1362
-#: classes/controllers/FrmStylesController.php:955
+#: classes/controllers/FrmStylesController.php:953
 #: classes/helpers/FrmFieldsHelper.php:2126
 #: classes/views/frm-forms/settings-buttons.php:12
 msgid "Buttons"
@@ -1064,7 +1064,7 @@ msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr "%1$sHaz clic aquí%2$s si no eres redirigido automáticamente."
 
 #: classes/controllers/FrmFormsController.php:3246
-#: classes/helpers/FrmAppHelper.php:1691
+#: classes/helpers/FrmAppHelper.php:1697
 #: classes/helpers/FrmOnSubmitHelper.php:146
 msgid "Select a Page"
 msgstr "Selecciona una página"
@@ -1215,7 +1215,7 @@ msgid "Manage Styles"
 msgstr "Gestionar estilos"
 
 #: classes/controllers/FrmSettingsController.php:81
-#: classes/models/fields/FrmFieldCaptcha.php:389
+#: classes/models/fields/FrmFieldCaptcha.php:397
 msgid "Captcha"
 msgstr "Captcha"
 
@@ -1416,74 +1416,74 @@ msgstr "Crear un nuevo estilo"
 msgid "Edit Style"
 msgstr "Editar estilo"
 
-#: classes/controllers/FrmStylesController.php:329
-#: classes/controllers/FrmStylesController.php:339
-#: classes/controllers/FrmStylesController.php:1297
+#: classes/controllers/FrmStylesController.php:327
+#: classes/controllers/FrmStylesController.php:337
+#: classes/controllers/FrmStylesController.php:1295
 msgid "Invalid route"
 msgstr "Ruta no válida"
 
-#: classes/controllers/FrmStylesController.php:460
+#: classes/controllers/FrmStylesController.php:458
 msgid "Invalid target style"
 msgstr "Estilo de destino no válido"
 
-#: classes/controllers/FrmStylesController.php:475
+#: classes/controllers/FrmStylesController.php:473
 msgid "Invalid style value"
 msgstr "Valor del estilo no válido"
 
-#: classes/controllers/FrmStylesController.php:481
+#: classes/controllers/FrmStylesController.php:479
 msgid "No form specified"
 msgstr "Ningún formulario especificado"
 
-#: classes/controllers/FrmStylesController.php:487
+#: classes/controllers/FrmStylesController.php:485
 msgid "Form does not exist"
 msgstr "El formulario no existe"
 
-#: classes/controllers/FrmStylesController.php:507
+#: classes/controllers/FrmStylesController.php:505
 msgid "Successfully updated style."
 msgstr "Estilo actualizado con éxito."
 
-#: classes/controllers/FrmStylesController.php:677
+#: classes/controllers/FrmStylesController.php:675
 msgid "Your styling settings have been saved."
 msgstr "Tus estilos se han guardado."
 
-#: classes/controllers/FrmStylesController.php:949
+#: classes/controllers/FrmStylesController.php:947
 #: classes/helpers/FrmFormsHelper.php:555
 #: classes/views/frm-forms/settings-advanced.php:27
 msgid "Form Description"
 msgstr "Descripción de formulario"
 
-#: classes/controllers/FrmStylesController.php:950
+#: classes/controllers/FrmStylesController.php:948
 msgid "Field Labels"
 msgstr "Etiquetas de campo"
 
-#: classes/controllers/FrmStylesController.php:951
+#: classes/controllers/FrmStylesController.php:949
 #: classes/helpers/FrmFormsHelper.php:515
 #: classes/views/frm-fields/back-end/field-description.php:8
 msgid "Field Description"
 msgstr "Descripción del campo"
 
-#: classes/controllers/FrmStylesController.php:952
+#: classes/controllers/FrmStylesController.php:950
 msgid "Field Colors"
 msgstr "Colores de campo"
 
-#: classes/controllers/FrmStylesController.php:953
-#: js/formidable_admin.js:2390
+#: classes/controllers/FrmStylesController.php:951
+#: js/formidable_admin.js:2389
 msgid "Field Settings"
 msgstr "Ajustes de campo"
 
-#: classes/controllers/FrmStylesController.php:954
+#: classes/controllers/FrmStylesController.php:952
 msgid "Check Box & Radio Fields"
 msgstr "Campos de casilla y radio"
 
-#: classes/controllers/FrmStylesController.php:956
+#: classes/controllers/FrmStylesController.php:954
 msgid "Form Messages"
 msgstr "Mensajes del formulario"
 
-#: classes/controllers/FrmStylesController.php:1286
+#: classes/controllers/FrmStylesController.php:1284
 msgid "Unable to rename style"
 msgstr "No se ha podido renombrar el estilo"
 
-#: classes/controllers/FrmStylesController.php:1306
+#: classes/controllers/FrmStylesController.php:1304
 msgid "The style you are renaming either does not exist or it is not a style"
 msgstr "El estilo que estás renombrado no existe o no es un estilo"
 
@@ -1541,11 +1541,16 @@ msgstr "No hay registros para ese formulario."
 msgid "Import"
 msgstr "Importar"
 
-#: classes/helpers/FrmAppHelper.php:1416
+#. translators: %1$s: Start link HTML, %2$s: End link HTML
+#: classes/helpers/FrmAppHelper.php:1372
+msgid "You're using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1422
 msgid "Add New"
 msgstr "Añadir nuevo"
 
-#: classes/helpers/FrmAppHelper.php:1428
+#: classes/helpers/FrmAppHelper.php:1434
 #: classes/views/frm-entries/list.php:43
 #: classes/views/frm-forms/list.php:36
 #: classes/views/shared/mb_adv_info.php:41
@@ -1553,743 +1558,743 @@ msgstr "Añadir nuevo"
 msgid "Search"
 msgstr "Buscar"
 
-#: classes/helpers/FrmAppHelper.php:1834
+#: classes/helpers/FrmAppHelper.php:1840
 msgid "Add Entries from Admin Area"
 msgstr "Añadir registros desde el escritorio"
 
-#: classes/helpers/FrmAppHelper.php:1835
+#: classes/helpers/FrmAppHelper.php:1841
 msgid "Edit Entries from Admin Area"
 msgstr "Editar registros desde el escritorio"
 
-#: classes/helpers/FrmAppHelper.php:1836
+#: classes/helpers/FrmAppHelper.php:1842
 msgid "View Reports"
 msgstr "Ver informes"
 
-#: classes/helpers/FrmAppHelper.php:1848
+#: classes/helpers/FrmAppHelper.php:1854
 msgid "Add/Edit Views"
 msgstr "Añadir / modificar Vistas"
 
-#: classes/helpers/FrmAppHelper.php:1867
+#: classes/helpers/FrmAppHelper.php:1873
 msgid "View Forms List"
 msgstr "Ver lista de formularios"
 
-#: classes/helpers/FrmAppHelper.php:1868
+#: classes/helpers/FrmAppHelper.php:1874
 msgid "Add and Edit Forms"
 msgstr "Añadir y editar formularios"
 
-#: classes/helpers/FrmAppHelper.php:1869
+#: classes/helpers/FrmAppHelper.php:1875
 msgid "Delete Forms"
 msgstr "Eliminar formularios"
 
-#: classes/helpers/FrmAppHelper.php:1870
+#: classes/helpers/FrmAppHelper.php:1876
 msgid "Access this Settings Page"
 msgstr "Acceder a esta página de ajustes"
 
-#: classes/helpers/FrmAppHelper.php:1871
+#: classes/helpers/FrmAppHelper.php:1877
 msgid "View Entries from Admin Area"
 msgstr "Ver registros desde el escritorio"
 
-#: classes/helpers/FrmAppHelper.php:1872
+#: classes/helpers/FrmAppHelper.php:1878
 msgid "Delete Entries from Admin Area"
 msgstr "Eliminar registros desde el escritorio"
 
-#: classes/helpers/FrmAppHelper.php:2689
+#: classes/helpers/FrmAppHelper.php:2695
 msgid "at"
 msgstr "en"
 
-#: classes/helpers/FrmAppHelper.php:2833
+#: classes/helpers/FrmAppHelper.php:2839
 #: stripe/helpers/FrmTransLiteAppHelper.php:245
 msgid "year"
 msgid_plural "years"
 msgstr[0] "año"
 msgstr[1] "años"
 
-#: classes/helpers/FrmAppHelper.php:2834
+#: classes/helpers/FrmAppHelper.php:2840
 msgid "years"
 msgstr "años"
 
-#: classes/helpers/FrmAppHelper.php:2838
+#: classes/helpers/FrmAppHelper.php:2844
 #: stripe/helpers/FrmTransLiteAppHelper.php:244
 msgid "month"
 msgid_plural "months"
 msgstr[0] "mes"
 msgstr[1] "meses"
 
-#: classes/helpers/FrmAppHelper.php:2839
+#: classes/helpers/FrmAppHelper.php:2845
 msgid "months"
 msgstr "meses"
 
-#: classes/helpers/FrmAppHelper.php:2843
+#: classes/helpers/FrmAppHelper.php:2849
 #: stripe/helpers/FrmTransLiteAppHelper.php:243
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "semana"
 msgstr[1] "semanas"
 
-#: classes/helpers/FrmAppHelper.php:2844
+#: classes/helpers/FrmAppHelper.php:2850
 msgid "weeks"
 msgstr "semanas"
 
-#: classes/helpers/FrmAppHelper.php:2848
+#: classes/helpers/FrmAppHelper.php:2854
 #: stripe/helpers/FrmTransLiteAppHelper.php:242
 msgid "day"
 msgid_plural "days"
 msgstr[0] "día"
 msgstr[1] "días"
 
-#: classes/helpers/FrmAppHelper.php:2849
+#: classes/helpers/FrmAppHelper.php:2855
 msgid "days"
 msgstr "días"
 
-#: classes/helpers/FrmAppHelper.php:2853
+#: classes/helpers/FrmAppHelper.php:2859
 msgid "hour"
 msgstr "hora"
 
-#: classes/helpers/FrmAppHelper.php:2854
+#: classes/helpers/FrmAppHelper.php:2860
 msgid "hours"
 msgstr "horas"
 
-#: classes/helpers/FrmAppHelper.php:2858
+#: classes/helpers/FrmAppHelper.php:2864
 msgid "minute"
 msgstr "minuto"
 
-#: classes/helpers/FrmAppHelper.php:2859
+#: classes/helpers/FrmAppHelper.php:2865
 msgid "minutes"
 msgstr "minutos"
 
-#: classes/helpers/FrmAppHelper.php:2863
+#: classes/helpers/FrmAppHelper.php:2869
 msgid "second"
 msgstr "segundo"
 
-#: classes/helpers/FrmAppHelper.php:2864
+#: classes/helpers/FrmAppHelper.php:2870
 msgid "seconds"
 msgstr "segundos"
 
-#: classes/helpers/FrmAppHelper.php:2963
+#: classes/helpers/FrmAppHelper.php:2969
 msgid "Give this action a label for easy reference."
 msgstr "Etiqueta esta acción para poder facilitar el uso."
 
-#: classes/helpers/FrmAppHelper.php:2964
+#: classes/helpers/FrmAppHelper.php:2970
 msgid "Add one or more recipient addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings."
 msgstr "Añade una o más direcciones de destinatario separadas por una \",\". FORMATO: Nombre <name@email.com> o name@email.com.  [admin_email] es la dirección configurada en los ajustes generales de WP."
 
-#: classes/helpers/FrmAppHelper.php:2965
+#: classes/helpers/FrmAppHelper.php:2971
 msgid "Add CC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "Añade direcciones CC separadas por una \",\". FORMATO: Nombre <name@email.com> o name@email.com."
 
-#: classes/helpers/FrmAppHelper.php:2966
+#: classes/helpers/FrmAppHelper.php:2972
 msgid "Add BCC addresses separated by a \",\".  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "Añade direcciones CCO separadas por una \",\". FORMATO: Nombre <name@email.com> o name@email.com."
 
-#: classes/helpers/FrmAppHelper.php:2967
+#: classes/helpers/FrmAppHelper.php:2973
 msgid "If you would like a different reply to address than the \"from\" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com."
 msgstr "Si quieres una dirección de respuesta distinta de la dirección del \"from\", añade aquí una única dirección. FORMATO: Nombre <name@email.com> o name@email.com."
 
-#: classes/helpers/FrmAppHelper.php:2968
+#: classes/helpers/FrmAppHelper.php:2974
 msgid "Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com."
 msgstr "Introduce el nombre y/o correo electrónico del remitente. Formato: John Bates <john@example.com> o john@example.com."
 
 #. translators: %1$s: Form name, %2$s: Date
-#: classes/helpers/FrmAppHelper.php:2970
+#: classes/helpers/FrmAppHelper.php:2976
 msgid "If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s"
 msgstr "Si deja el asunto en blanco, el valor predeterminado se utilizará: Formulario %1$s enviado en %2$s"
 
-#: classes/helpers/FrmAppHelper.php:2971
+#: classes/helpers/FrmAppHelper.php:2977
 msgid "This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed."
 msgstr "Esta opción abrirá el enlace en una nueva pestaña de navegador. Por favor, ten en cuenta que alguno bloqueadores de ventanas emergentes pueden impedir que esto ocurra, en cuyo caso será mostrado el enlace."
 
-#: classes/helpers/FrmAppHelper.php:3241
-#: classes/helpers/FrmAppHelper.php:3322
+#: classes/helpers/FrmAppHelper.php:3247
+#: classes/helpers/FrmAppHelper.php:3329
 msgid "Please wait while your site updates."
 msgstr "Por favor, espera mientras se actualiza tu sitio."
 
-#: classes/helpers/FrmAppHelper.php:3242
+#: classes/helpers/FrmAppHelper.php:3248
 msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
 msgstr "¿Estás seguro de que quieres desautorizar Formidable Forms en este sitio?"
 
-#: classes/helpers/FrmAppHelper.php:3247
-#: classes/helpers/FrmAppHelper.php:3277
+#: classes/helpers/FrmAppHelper.php:3253
+#: classes/helpers/FrmAppHelper.php:3283
 msgid "Loading&hellip;"
 msgstr "Cargando&hellip;"
 
-#: classes/helpers/FrmAppHelper.php:3278
+#: classes/helpers/FrmAppHelper.php:3284
 msgid "Remove"
 msgstr "Eliminar"
 
-#: classes/helpers/FrmAppHelper.php:3281
+#: classes/helpers/FrmAppHelper.php:3287
 #: classes/helpers/FrmCSVExportHelper.php:374
 msgid "ID"
 msgstr "ID"
 
-#: classes/helpers/FrmAppHelper.php:3282
+#: classes/helpers/FrmAppHelper.php:3288
 msgid "No results match"
 msgstr "No se encontraron resultados"
 
-#: classes/helpers/FrmAppHelper.php:3283
+#: classes/helpers/FrmAppHelper.php:3289
 msgid "That file looks like Spam."
 msgstr "Ese archivo parece ser Spam."
 
-#: classes/helpers/FrmAppHelper.php:3284
+#: classes/helpers/FrmAppHelper.php:3290
 msgid "There is an error in the calculation in the field with key"
 msgstr "Hay un error en el cálculo en el campo con clave"
 
-#: classes/helpers/FrmAppHelper.php:3285
+#: classes/helpers/FrmAppHelper.php:3291
 msgid "Please complete the preceding required fields before uploading a file."
 msgstr "Por favor, rellena los campos obligatorios antes de subir un archivo."
 
-#: classes/helpers/FrmAppHelper.php:3298
+#: classes/helpers/FrmAppHelper.php:3305
 msgid "(Click to add description)"
 msgstr "(haz clic para añadir descripción)"
 
-#: classes/helpers/FrmAppHelper.php:3299
+#: classes/helpers/FrmAppHelper.php:3306
 msgid "(Blank)"
 msgstr "(En blanco)"
 
-#: classes/helpers/FrmAppHelper.php:3300
+#: classes/helpers/FrmAppHelper.php:3307
 msgid "(no label)"
 msgstr "(sin etiqueta)"
 
-#: classes/helpers/FrmAppHelper.php:3301
+#: classes/helpers/FrmAppHelper.php:3308
 msgid "OK"
 msgstr "Aceptar"
 
-#: classes/helpers/FrmAppHelper.php:3303
+#: classes/helpers/FrmAppHelper.php:3310
 #: classes/views/frm-fields/back-end/settings.php:281
 msgid "Default"
 msgstr "Por defecto"
 
-#: classes/helpers/FrmAppHelper.php:3304
+#: classes/helpers/FrmAppHelper.php:3311
 msgid "Clear default value when typing"
 msgstr "Borrar valor por defecto al escribir"
 
-#: classes/helpers/FrmAppHelper.php:3305
+#: classes/helpers/FrmAppHelper.php:3312
 msgid "Do not clear default value when typing"
 msgstr "No borrar valor por defecto al escribir"
 
-#: classes/helpers/FrmAppHelper.php:3306
+#: classes/helpers/FrmAppHelper.php:3313
 msgid "Default value will pass form validation"
 msgstr "Valor por defecto pasará validación de formulario"
 
-#: classes/helpers/FrmAppHelper.php:3307
+#: classes/helpers/FrmAppHelper.php:3314
 msgid "Default value will NOT pass form validation"
 msgstr "El valor por defecto NO pasará validación  de formulario"
 
-#: classes/helpers/FrmAppHelper.php:3308
+#: classes/helpers/FrmAppHelper.php:3315
 #: classes/views/shared/confirm-overlay.php:15
 #: classes/views/shared/info-overlay.php:15
 msgid "Are you sure?"
 msgstr "¿Estás seguro?"
 
-#: classes/helpers/FrmAppHelper.php:3309
+#: classes/helpers/FrmAppHelper.php:3316
 msgid "Are you sure you want to delete this field and all data associated with it?"
 msgstr "¿Estás seguro de que quieres borrar este campo y todos los datos asociados?"
 
-#: classes/helpers/FrmAppHelper.php:3310
+#: classes/helpers/FrmAppHelper.php:3317
 msgid "All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?"
 msgstr "Todos los campos de esta sección serán borrados junto con sus datos. ¿Seguro que quieres borrar este grupo de campos?"
 
-#: classes/helpers/FrmAppHelper.php:3311
+#: classes/helpers/FrmAppHelper.php:3318
 msgid "Warning: If you have entries with multiple rows, all but the first row will be lost."
 msgstr "Advertencia: si tienes registros con múltiples filas, se perderán todas excepto la primera fila."
 
-#: classes/helpers/FrmAppHelper.php:3313
+#: classes/helpers/FrmAppHelper.php:3320
 #: classes/helpers/FrmFieldsHelper.php:330
 msgid "The entered values do not match"
 msgstr "Los valores introducidos no coinciden"
 
-#: classes/helpers/FrmAppHelper.php:3314
+#: classes/helpers/FrmAppHelper.php:3321
 msgid "Enter Email"
 msgstr "Introduce tu email"
 
-#: classes/helpers/FrmAppHelper.php:3315
+#: classes/helpers/FrmAppHelper.php:3322
 msgid "Confirm Email"
 msgstr "Confirmar el correo electrónico"
 
-#: classes/helpers/FrmAppHelper.php:3316
+#: classes/helpers/FrmAppHelper.php:3323
 #: classes/views/shared/mb_adv_info.php:179
 msgid "Conditional content here"
 msgstr "Aquí el contenido condicional"
 
-#: classes/helpers/FrmAppHelper.php:3317
+#: classes/helpers/FrmAppHelper.php:3324
 #: classes/helpers/FrmFieldsHelper.php:565
 #: classes/helpers/FrmFieldsHelper.php:566
 msgid "New Option"
 msgstr "Nueva opción"
 
-#: classes/helpers/FrmAppHelper.php:3318
+#: classes/helpers/FrmAppHelper.php:3325
 msgid "In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding."
 msgstr "En algunos navegadores (por ejemplo, Firefox), el texto no se mostrará correctamente si la altura del campo es demasiado pequeña en relación con el relleno del campo y el tamaño del texto. Por favor, aumenta la altura del campo o disminuya el relleno del campo."
 
-#: classes/helpers/FrmAppHelper.php:3319
+#: classes/helpers/FrmAppHelper.php:3326
 msgid "Enter Password"
 msgstr "Introduce tu clave"
 
-#: classes/helpers/FrmAppHelper.php:3320
+#: classes/helpers/FrmAppHelper.php:3327
 msgid "Confirm Password"
 msgstr "Confirma tu clave"
 
-#: classes/helpers/FrmAppHelper.php:3321
+#: classes/helpers/FrmAppHelper.php:3328
 msgid "Import Complete"
 msgstr "Importación Completa"
 
-#: classes/helpers/FrmAppHelper.php:3323
+#: classes/helpers/FrmAppHelper.php:3330
 msgid "Warning: There is no way to retrieve unsaved entries."
 msgstr "Advertencia: No hay manera de recuperar los registros que no haya guardado."
 
-#: classes/helpers/FrmAppHelper.php:3324
+#: classes/helpers/FrmAppHelper.php:3331
 msgid "Private"
 msgstr "Privado"
 
-#: classes/helpers/FrmAppHelper.php:3327
+#: classes/helpers/FrmAppHelper.php:3334
 msgid "No new licenses were found"
 msgstr "No se han encontrado nuevas licencias"
 
-#: classes/helpers/FrmAppHelper.php:3328
+#: classes/helpers/FrmAppHelper.php:3335
 msgid "This calculation has at least one unmatched ( ) { } [ ]."
 msgstr "Este cálculo tiene al menos un ( ) { } [ ] desparejado."
 
-#: classes/helpers/FrmAppHelper.php:3329
+#: classes/helpers/FrmAppHelper.php:3336
 msgid "This calculation may have shortcodes that work in Views but not forms."
 msgstr "Este cálculo puede tener shortcodes que funcionan en Vistas pero no en formularios."
 
-#: classes/helpers/FrmAppHelper.php:3330
+#: classes/helpers/FrmAppHelper.php:3337
 msgid "This calculation may have shortcodes that work in text calculations but not numeric calculations."
 msgstr "Este cálculo puede tener shortcodes que funcionan en los cálculos de texto pero no en los cálculos numéricos."
 
 #. translators: %d is the number of allowed actions per form
-#: classes/helpers/FrmAppHelper.php:3332
+#: classes/helpers/FrmAppHelper.php:3339
 msgid "This form action is limited to %d per form."
 msgstr "Esta acción de formulario está limitada a %d por formulario."
 
-#: classes/helpers/FrmAppHelper.php:3333
+#: classes/helpers/FrmAppHelper.php:3340
 msgid "Please edit the existing form action."
 msgstr "Por favor, edita la acción del formulario existente."
 
 #. Translators: %s is the name of a Detail Page Slug that is a reserved word.
-#: classes/helpers/FrmAppHelper.php:3336
+#: classes/helpers/FrmAppHelper.php:3343
 msgid "The Detail Page Slug \"%s\" is reserved by WordPress. This may cause problems. Is this intentional?"
 msgstr "El slug «%s» de la página de detalle está reservado por WordPress. Esto puede causar problemas, ¿es intencional?"
 
 #. Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common.
-#: classes/helpers/FrmAppHelper.php:3338
+#: classes/helpers/FrmAppHelper.php:3345
 msgid "The parameter \"%s\" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? "
 msgstr "El parámetro(s) «%s» está(n) reservado(s) por WordPress. Esto puede causar problemas cuando se incluye en la URL, ¿esto es intencional? "
 
-#: classes/helpers/FrmAppHelper.php:3339
+#: classes/helpers/FrmAppHelper.php:3346
 #: classes/helpers/FrmFormsHelper.php:1624
 msgid "See the list of reserved words in WordPress."
 msgstr "Mira la lista de palabras reservadas en WordPress."
 
-#: classes/helpers/FrmAppHelper.php:3340
+#: classes/helpers/FrmAppHelper.php:3347
 msgid "Please enter a Repeat Limit that is greater than 1."
 msgstr "Introduce un Límite de Repetición mayor que 1."
 
-#: classes/helpers/FrmAppHelper.php:3341
+#: classes/helpers/FrmAppHelper.php:3348
 msgid "Please select a limit between 0 and 200."
 msgstr "Por favor, selecciona un límite entre 0 y 200."
 
-#: classes/helpers/FrmAppHelper.php:3346
+#: classes/helpers/FrmAppHelper.php:3353
 #: classes/views/shared/mb_adv_info.php:119
 #: classes/views/shared/mb_adv_info.php:135
 msgid "Select a Field"
 msgstr "Selecciona un campo"
 
-#: classes/helpers/FrmAppHelper.php:3347
+#: classes/helpers/FrmAppHelper.php:3354
 #: classes/helpers/FrmListHelper.php:248
 msgid "No items found."
 msgstr "No se han encontrado elementos."
 
-#: classes/helpers/FrmAppHelper.php:3348
+#: classes/helpers/FrmAppHelper.php:3355
 msgid "Oops. You have already used that field."
 msgstr "Vaya. Ya has utilizado ese campo."
 
 #. translators: %1$s: HTML open tag, %2$s: HTML end tag.
-#: classes/helpers/FrmAppHelper.php:3357
+#: classes/helpers/FrmAppHelper.php:3364
 msgid "You can hold %1$sShift%2$s on your keyboard to select multiple fields"
 msgstr "Puedes mantener pulsado %1$sShift%2$s en tu teclado para seleccionar varios campos"
 
-#: classes/helpers/FrmAppHelper.php:3445
+#: classes/helpers/FrmAppHelper.php:3434
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
 msgstr "Estás ejecutando una versión antigua de Formidable. Este plugin puede no funcionar bien si no actualizas Formidable."
 
-#: classes/helpers/FrmAppHelper.php:3473
+#: classes/helpers/FrmAppHelper.php:3462
 msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
 msgstr "Estás ejecutando una versión de Formidable Forms que puede que no sea compatible con tu versión de Formidable Forms Pro."
 
-#: classes/helpers/FrmAppHelper.php:3505
+#: classes/helpers/FrmAppHelper.php:3494
 msgid "The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+."
 msgstr "La versión de PHP de tu servidor es demasiado baja. Si no se corrige esto pued que veas problemas con Formidable Forms. Por favor, contacta con tu alojamiento web y pide que te actualicen a PHP 7.0+."
 
-#: classes/helpers/FrmAppHelper.php:3511
+#: classes/helpers/FrmAppHelper.php:3500
 msgid "You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome)."
 msgstr "Estás usando un navegador obsoleto que no es compatible con Formidable Forms. Por favor, actualiza a un navegador más actual (recomendamos Chrome)."
 
-#: classes/helpers/FrmAppHelper.php:3529
+#: classes/helpers/FrmAppHelper.php:3518
 msgid "English"
 msgstr "Inglés"
 
-#: classes/helpers/FrmAppHelper.php:3530
+#: classes/helpers/FrmAppHelper.php:3519
 msgid "Afrikaans"
 msgstr "Africanos"
 
-#: classes/helpers/FrmAppHelper.php:3531
+#: classes/helpers/FrmAppHelper.php:3520
 msgid "Albanian"
 msgstr "Albanés"
 
-#: classes/helpers/FrmAppHelper.php:3532
+#: classes/helpers/FrmAppHelper.php:3521
 msgid "Algerian Arabic"
 msgstr "Árabe argelino"
 
-#: classes/helpers/FrmAppHelper.php:3533
+#: classes/helpers/FrmAppHelper.php:3522
 msgid "Amharic"
 msgstr "Amárico"
 
-#: classes/helpers/FrmAppHelper.php:3534
+#: classes/helpers/FrmAppHelper.php:3523
 msgid "Arabic"
 msgstr "Árabe"
 
-#: classes/helpers/FrmAppHelper.php:3535
+#: classes/helpers/FrmAppHelper.php:3524
 msgid "Armenian"
 msgstr "Armenio"
 
-#: classes/helpers/FrmAppHelper.php:3536
+#: classes/helpers/FrmAppHelper.php:3525
 msgid "Azerbaijani"
 msgstr "Azerbaiyano"
 
-#: classes/helpers/FrmAppHelper.php:3537
+#: classes/helpers/FrmAppHelper.php:3526
 msgid "Basque"
 msgstr "Vasco"
 
-#: classes/helpers/FrmAppHelper.php:3538
+#: classes/helpers/FrmAppHelper.php:3527
 msgid "Belarusian"
 msgstr "Bielorruso"
 
-#: classes/helpers/FrmAppHelper.php:3539
+#: classes/helpers/FrmAppHelper.php:3528
 msgid "Bengali"
 msgstr "Bengalí"
 
-#: classes/helpers/FrmAppHelper.php:3540
+#: classes/helpers/FrmAppHelper.php:3529
 msgid "Bosnian"
 msgstr "Bosnio"
 
-#: classes/helpers/FrmAppHelper.php:3541
+#: classes/helpers/FrmAppHelper.php:3530
 msgid "Bulgarian"
 msgstr "Búlgaro"
 
-#: classes/helpers/FrmAppHelper.php:3542
+#: classes/helpers/FrmAppHelper.php:3531
 msgid "Catalan"
 msgstr "Catalán"
 
-#: classes/helpers/FrmAppHelper.php:3543
+#: classes/helpers/FrmAppHelper.php:3532
 msgid "Chinese Hong Kong"
 msgstr "Chino Hong Kong"
 
-#: classes/helpers/FrmAppHelper.php:3544
+#: classes/helpers/FrmAppHelper.php:3533
 msgid "Chinese Simplified"
 msgstr "Chino Simplificado"
 
-#: classes/helpers/FrmAppHelper.php:3545
+#: classes/helpers/FrmAppHelper.php:3534
 msgid "Chinese Traditional"
 msgstr "ChinoTradicional"
 
-#: classes/helpers/FrmAppHelper.php:3546
+#: classes/helpers/FrmAppHelper.php:3535
 msgid "Croatian"
 msgstr "Croata"
 
-#: classes/helpers/FrmAppHelper.php:3547
+#: classes/helpers/FrmAppHelper.php:3536
 msgid "Czech"
 msgstr "Checo"
 
-#: classes/helpers/FrmAppHelper.php:3548
+#: classes/helpers/FrmAppHelper.php:3537
 msgid "Danish"
 msgstr "Danés"
 
-#: classes/helpers/FrmAppHelper.php:3549
+#: classes/helpers/FrmAppHelper.php:3538
 msgid "Dutch"
 msgstr "Neerlandés"
 
-#: classes/helpers/FrmAppHelper.php:3550
+#: classes/helpers/FrmAppHelper.php:3539
 msgid "English/UK"
 msgstr "Inglés/RU"
 
-#: classes/helpers/FrmAppHelper.php:3551
+#: classes/helpers/FrmAppHelper.php:3540
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: classes/helpers/FrmAppHelper.php:3552
+#: classes/helpers/FrmAppHelper.php:3541
 msgid "Estonian"
 msgstr "Estonio"
 
-#: classes/helpers/FrmAppHelper.php:3553
+#: classes/helpers/FrmAppHelper.php:3542
 msgid "Faroese"
 msgstr "Feroés"
 
-#: classes/helpers/FrmAppHelper.php:3554
+#: classes/helpers/FrmAppHelper.php:3543
 msgid "Farsi/Persian"
 msgstr "Farsi/Persa"
 
-#: classes/helpers/FrmAppHelper.php:3555
+#: classes/helpers/FrmAppHelper.php:3544
 msgid "Filipino"
 msgstr "Filipino"
 
-#: classes/helpers/FrmAppHelper.php:3556
+#: classes/helpers/FrmAppHelper.php:3545
 msgid "Finnish"
 msgstr "Finlandés"
 
-#: classes/helpers/FrmAppHelper.php:3557
+#: classes/helpers/FrmAppHelper.php:3546
 msgid "French"
 msgstr "Francés"
 
-#: classes/helpers/FrmAppHelper.php:3558
+#: classes/helpers/FrmAppHelper.php:3547
 msgid "French/Canadian"
 msgstr "Francés/Canadá"
 
-#: classes/helpers/FrmAppHelper.php:3559
+#: classes/helpers/FrmAppHelper.php:3548
 msgid "French/Swiss"
 msgstr "Francés/Suizo"
 
-#: classes/helpers/FrmAppHelper.php:3560
+#: classes/helpers/FrmAppHelper.php:3549
 msgid "Galician"
 msgstr "Gallego"
 
-#: classes/helpers/FrmAppHelper.php:3561
+#: classes/helpers/FrmAppHelper.php:3550
 msgid "Georgian"
 msgstr "Georgiano"
 
-#: classes/helpers/FrmAppHelper.php:3562
+#: classes/helpers/FrmAppHelper.php:3551
 msgid "German"
 msgstr "Alemán"
 
-#: classes/helpers/FrmAppHelper.php:3563
+#: classes/helpers/FrmAppHelper.php:3552
 msgid "German/Austria"
 msgstr "Alemán/Austria"
 
-#: classes/helpers/FrmAppHelper.php:3564
+#: classes/helpers/FrmAppHelper.php:3553
 msgid "German/Switzerland"
 msgstr "Alemán/Suiza"
 
-#: classes/helpers/FrmAppHelper.php:3565
+#: classes/helpers/FrmAppHelper.php:3554
 msgid "Greek"
 msgstr "Griego"
 
-#: classes/helpers/FrmAppHelper.php:3566
+#: classes/helpers/FrmAppHelper.php:3555
 msgid "Gujarati"
 msgstr "Guyaratí"
 
-#: classes/helpers/FrmAppHelper.php:3567
-#: classes/helpers/FrmAppHelper.php:3568
+#: classes/helpers/FrmAppHelper.php:3556
+#: classes/helpers/FrmAppHelper.php:3557
 msgid "Hebrew"
 msgstr "Hebreo"
 
-#: classes/helpers/FrmAppHelper.php:3569
+#: classes/helpers/FrmAppHelper.php:3558
 msgid "Hindi"
 msgstr "Hindi"
 
-#: classes/helpers/FrmAppHelper.php:3570
+#: classes/helpers/FrmAppHelper.php:3559
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: classes/helpers/FrmAppHelper.php:3571
+#: classes/helpers/FrmAppHelper.php:3560
 msgid "Icelandic"
 msgstr "Islándico"
 
-#: classes/helpers/FrmAppHelper.php:3572
+#: classes/helpers/FrmAppHelper.php:3561
 msgid "Indonesian"
 msgstr "Indonesio"
 
-#: classes/helpers/FrmAppHelper.php:3573
+#: classes/helpers/FrmAppHelper.php:3562
 msgid "Italian"
 msgstr "Italiano"
 
-#: classes/helpers/FrmAppHelper.php:3574
+#: classes/helpers/FrmAppHelper.php:3563
 msgid "Japanese"
 msgstr "Japonés"
 
-#: classes/helpers/FrmAppHelper.php:3575
+#: classes/helpers/FrmAppHelper.php:3564
 msgid "Kannada"
 msgstr "Canarés"
 
-#: classes/helpers/FrmAppHelper.php:3576
+#: classes/helpers/FrmAppHelper.php:3565
 msgid "Kazakh"
 msgstr "Kazajo"
 
-#: classes/helpers/FrmAppHelper.php:3577
+#: classes/helpers/FrmAppHelper.php:3566
 msgid "Khmer"
 msgstr "Jémer"
 
-#: classes/helpers/FrmAppHelper.php:3578
+#: classes/helpers/FrmAppHelper.php:3567
 msgid "Korean"
 msgstr "Coreano"
 
-#: classes/helpers/FrmAppHelper.php:3579
+#: classes/helpers/FrmAppHelper.php:3568
 msgid "Kyrgyz"
 msgstr "Kirguistán"
 
-#: classes/helpers/FrmAppHelper.php:3580
+#: classes/helpers/FrmAppHelper.php:3569
 msgid "Laothian"
 msgstr "Laosiano"
 
-#: classes/helpers/FrmAppHelper.php:3581
+#: classes/helpers/FrmAppHelper.php:3570
 msgid "Latvian"
 msgstr "Latvio"
 
-#: classes/helpers/FrmAppHelper.php:3582
+#: classes/helpers/FrmAppHelper.php:3571
 msgid "Lithuanian"
 msgstr "Lituano"
 
-#: classes/helpers/FrmAppHelper.php:3583
+#: classes/helpers/FrmAppHelper.php:3572
 msgid "Luxembourgish"
 msgstr "Luxemburgués"
 
-#: classes/helpers/FrmAppHelper.php:3584
+#: classes/helpers/FrmAppHelper.php:3573
 msgid "Macedonian"
 msgstr "Macedonio"
 
-#: classes/helpers/FrmAppHelper.php:3585
+#: classes/helpers/FrmAppHelper.php:3574
 msgid "Malayalam"
 msgstr "Malayo"
 
-#: classes/helpers/FrmAppHelper.php:3586
+#: classes/helpers/FrmAppHelper.php:3575
 msgid "Malaysian"
 msgstr "Malayo"
 
-#: classes/helpers/FrmAppHelper.php:3587
+#: classes/helpers/FrmAppHelper.php:3576
 msgid "Marathi"
 msgstr "Maratí"
 
-#: classes/helpers/FrmAppHelper.php:3588
+#: classes/helpers/FrmAppHelper.php:3577
 msgid "Norwegian"
 msgstr "Noruego"
 
-#: classes/helpers/FrmAppHelper.php:3589
+#: classes/helpers/FrmAppHelper.php:3578
 msgid "Norwegian Bokmål"
 msgstr "Bokmål Noruego"
 
-#: classes/helpers/FrmAppHelper.php:3590
+#: classes/helpers/FrmAppHelper.php:3579
 msgid "Norwegian Nynorsk"
 msgstr "Nuevo Noruego"
 
-#: classes/helpers/FrmAppHelper.php:3591
+#: classes/helpers/FrmAppHelper.php:3580
 msgid "Polish"
 msgstr "Polaco"
 
-#: classes/helpers/FrmAppHelper.php:3592
+#: classes/helpers/FrmAppHelper.php:3581
 msgid "Portuguese"
 msgstr "Portugués"
 
-#: classes/helpers/FrmAppHelper.php:3593
+#: classes/helpers/FrmAppHelper.php:3582
 msgid "Portuguese/Brazilian"
 msgstr "Portugués/Brasileño"
 
-#: classes/helpers/FrmAppHelper.php:3594
+#: classes/helpers/FrmAppHelper.php:3583
 msgid "Portuguese/Portugal"
 msgstr "Portugués/Portugal"
 
-#: classes/helpers/FrmAppHelper.php:3595
+#: classes/helpers/FrmAppHelper.php:3584
 msgid "Romansh"
 msgstr "Romanche"
 
-#: classes/helpers/FrmAppHelper.php:3596
+#: classes/helpers/FrmAppHelper.php:3585
 msgid "Romanian"
 msgstr "Rumano"
 
-#: classes/helpers/FrmAppHelper.php:3597
+#: classes/helpers/FrmAppHelper.php:3586
 msgid "Russian"
 msgstr "Ruso"
 
-#: classes/helpers/FrmAppHelper.php:3598
-#: classes/helpers/FrmAppHelper.php:3599
+#: classes/helpers/FrmAppHelper.php:3587
+#: classes/helpers/FrmAppHelper.php:3588
 msgid "Serbian"
 msgstr "Serbio"
 
-#: classes/helpers/FrmAppHelper.php:3600
+#: classes/helpers/FrmAppHelper.php:3589
 msgid "Sinhalese"
 msgstr "Cingalés"
 
-#: classes/helpers/FrmAppHelper.php:3601
+#: classes/helpers/FrmAppHelper.php:3590
 msgid "Slovak"
 msgstr "Eslovaco"
 
-#: classes/helpers/FrmAppHelper.php:3602
+#: classes/helpers/FrmAppHelper.php:3591
 msgid "Slovenian"
 msgstr "Eslovenio"
 
-#: classes/helpers/FrmAppHelper.php:3603
+#: classes/helpers/FrmAppHelper.php:3592
 msgid "Spanish"
 msgstr "Español"
 
-#: classes/helpers/FrmAppHelper.php:3604
+#: classes/helpers/FrmAppHelper.php:3593
 msgid "Spanish/Latin America"
 msgstr "Español/Latinoamérica"
 
-#: classes/helpers/FrmAppHelper.php:3605
+#: classes/helpers/FrmAppHelper.php:3594
 msgid "Swahili"
 msgstr "Suajili"
 
-#: classes/helpers/FrmAppHelper.php:3606
+#: classes/helpers/FrmAppHelper.php:3595
 msgid "Swedish"
 msgstr "Sueco"
 
-#: classes/helpers/FrmAppHelper.php:3607
+#: classes/helpers/FrmAppHelper.php:3596
 msgid "Tamil"
 msgstr "Tamil"
 
-#: classes/helpers/FrmAppHelper.php:3608
+#: classes/helpers/FrmAppHelper.php:3597
 msgid "Telugu"
 msgstr "Telugu"
 
-#: classes/helpers/FrmAppHelper.php:3609
+#: classes/helpers/FrmAppHelper.php:3598
 msgid "Thai"
 msgstr "Tailandés"
 
-#: classes/helpers/FrmAppHelper.php:3610
+#: classes/helpers/FrmAppHelper.php:3599
 msgid "Tajiki"
 msgstr "Tajiki"
 
-#: classes/helpers/FrmAppHelper.php:3611
+#: classes/helpers/FrmAppHelper.php:3600
 msgid "Turkish"
 msgstr "Turco"
 
-#: classes/helpers/FrmAppHelper.php:3612
+#: classes/helpers/FrmAppHelper.php:3601
 msgid "Ukrainian"
 msgstr "Ucraniano"
 
-#: classes/helpers/FrmAppHelper.php:3613
+#: classes/helpers/FrmAppHelper.php:3602
 msgid "Urdu"
 msgstr "Urdu"
 
-#: classes/helpers/FrmAppHelper.php:3614
+#: classes/helpers/FrmAppHelper.php:3603
 msgid "Vietnamese"
 msgstr "Vietnamita"
 
-#: classes/helpers/FrmAppHelper.php:3615
+#: classes/helpers/FrmAppHelper.php:3604
 msgid "Welsh"
 msgstr "Galés"
 
-#: classes/helpers/FrmAppHelper.php:3616
+#: classes/helpers/FrmAppHelper.php:3605
 msgid "Zulu"
 msgstr "Zulú"
 
-#: classes/helpers/FrmAppHelper.php:4009
+#: classes/helpers/FrmAppHelper.php:3998
 msgid "Form Landing Pages"
 msgstr "Páginas de destino para formularios"
 
-#: classes/helpers/FrmAppHelper.php:4010
+#: classes/helpers/FrmAppHelper.php:3999
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr "Gestiona fácilmente una página de destino para tu formulario. Actualiza para obtener páginas de destino para formularios."
 
-#: classes/helpers/FrmAppHelper.php:4092
+#: classes/helpers/FrmAppHelper.php:4081
 #: classes/views/styles/_style-card.php:37
 #: js/admin/applications.js:304
 msgid "NEW"
 msgstr "NUEVO"
 
-#: classes/helpers/FrmAppHelper.php:4251
+#: classes/helpers/FrmAppHelper.php:4240
 msgctxt "warning message: close icon label"
 msgid "Dismiss"
 msgstr "Descartar"
 
-#: classes/helpers/FrmAppHelper.php:4292
+#: classes/helpers/FrmAppHelper.php:4281
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
 msgstr "Estás usando Formidable Forms Lite - no necesitas licencia. ¡Disfrútalo!"
 
@@ -2504,63 +2509,63 @@ msgstr "Mostrar datos de formulario con vistas"
 msgid "And much more..."
 msgstr "Y mucho más..."
 
-#: classes/helpers/FrmEntriesHelper.php:563
+#: classes/helpers/FrmEntriesHelper.php:566
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: classes/helpers/FrmEntriesHelper.php:674
+#: classes/helpers/FrmEntriesHelper.php:677
 #: classes/views/frm-entries/show.php:11
 msgid "View Entry"
 msgstr "Ver registro"
 
-#: classes/helpers/FrmEntriesHelper.php:682
+#: classes/helpers/FrmEntriesHelper.php:685
 msgid "Delete Entry"
 msgstr "Borrar registro"
 
-#: classes/helpers/FrmEntriesHelper.php:685
+#: classes/helpers/FrmEntriesHelper.php:688
 msgid "Delete this form entry?"
 msgstr "¿Borrar este registro de formulario?"
 
-#: classes/helpers/FrmEntriesHelper.php:693
+#: classes/helpers/FrmEntriesHelper.php:696
 msgid "Print Entry"
 msgstr "Imprimir el registro"
 
-#: classes/helpers/FrmEntriesHelper.php:703
 #: classes/helpers/FrmEntriesHelper.php:706
+#: classes/helpers/FrmEntriesHelper.php:709
 msgid "Resend Emails"
 msgstr "Reenviar correos electrónicos"
 
-#: classes/helpers/FrmEntriesHelper.php:716
+#: classes/helpers/FrmEntriesHelper.php:719
 msgid "Download as PDF"
 msgstr "Descargar como PDF"
 
-#: classes/helpers/FrmEntriesHelper.php:725
+#: classes/helpers/FrmEntriesHelper.php:728
 msgid "Edit Entry"
 msgstr "Editar registro"
 
-#: classes/helpers/FrmEntriesHelper.php:728
+#: classes/helpers/FrmEntriesHelper.php:731
 msgid "Entry edits"
 msgstr "Modificaciones de registro"
 
-#: classes/helpers/FrmEntriesHelper.php:748
+#: classes/helpers/FrmEntriesHelper.php:751
 msgid "Forms to PDF"
 msgstr "Forms to PDF"
 
-#: classes/helpers/FrmEntriesHelper.php:778
+#: classes/helpers/FrmEntriesHelper.php:781
 msgid "reCAPTCHA Score"
 msgstr "Puntuación de reCAPTCHA"
 
-#: classes/helpers/FrmEntriesHelper.php:837
+#: classes/helpers/FrmEntriesHelper.php:840
 msgid "Submitted"
 msgstr "Enviado"
 
-#: classes/helpers/FrmEntriesHelper.php:838
+#: classes/helpers/FrmEntriesHelper.php:841
 #: classes/helpers/FrmFormsHelper.php:1318
 #: classes/helpers/FrmFormsListHelper.php:441
 msgid "Draft"
 msgstr "Borrador"
 
-#: classes/helpers/FrmEntriesHelper.php:854
+#: classes/helpers/FrmEntriesHelper.php:857
 msgid "Entry status must be return in array format."
 msgstr "El estado del registro debe devolverse en formato array."
 
@@ -2593,7 +2598,19 @@ msgstr "Ver todos los formularios"
 msgid "Filter"
 msgstr "Filtro"
 
-#: classes/helpers/FrmEntriesListHelper.php:447
+#. translators: %d: Entry id
+#: classes/helpers/FrmEntriesListHelper.php:292
+msgid "Entry %d"
+msgstr ""
+
+#. translators: %s: Form name
+#. translators: Form title
+#: classes/helpers/FrmEntriesListHelper.php:310
+#: classes/helpers/FrmFormsListHelper.php:245
+msgid "Select %s"
+msgstr "Selecionar %s"
+
+#: classes/helpers/FrmEntriesListHelper.php:463
 #: classes/views/frm-entries/sidebar-shared.php:43
 #: stripe/helpers/FrmTransLiteListHelper.php:361
 #: stripe/helpers/FrmTransLiteListHelper.php:382
@@ -2601,23 +2618,23 @@ msgstr "Filtro"
 msgid "View"
 msgstr "Vista"
 
-#: classes/helpers/FrmEntriesListHelper.php:451
+#: classes/helpers/FrmEntriesListHelper.php:467
 msgid "Permanently delete this entry?"
 msgstr "¿Borrar este registro permanentemente?"
 
-#: classes/helpers/FrmEntriesListHelper.php:451
+#: classes/helpers/FrmEntriesListHelper.php:467
 #: classes/helpers/FrmFormsHelper.php:1237
 #: classes/helpers/FrmFormsListHelper.php:144
 #: classes/views/frm-form-actions/form_action.php:36
 #: stripe/helpers/FrmTransLiteListHelper.php:389
 #: stripe/views/payments/show.php:156
 #: stripe/views/subscriptions/show.php:129
-#: js/formidable_admin.js:2418
+#: js/formidable_admin.js:2417
 msgid "Delete"
 msgstr "Borrar"
 
 #. translators: %1$s: HTML break line, %2$s: HTML bold text
-#: classes/helpers/FrmEntriesListHelper.php:508
+#: classes/helpers/FrmEntriesListHelper.php:524
 msgid "ALL entries in this form will be permanently deleted.%1$sWant to proceed? Type %2$s below."
 msgstr "TODOS los registros de este formulario se borrarán permanentemente.%1$s¿Quieres continuar? Escribe %2$s a continuación."
 
@@ -4133,11 +4150,6 @@ msgstr "Borradores"
 msgid "%1$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s <span class=\"count\">(%2$s)</span>"
 
-#. translators: Form title
-#: classes/helpers/FrmFormsListHelper.php:245
-msgid "Select %s"
-msgstr "Selecionar %s"
-
 #: classes/helpers/FrmFormsListHelper.php:297
 msgid "Saving entries is disabled for this form"
 msgstr "El guardado de registros está desactivado en este formulario"
@@ -4679,24 +4691,24 @@ msgstr "Crear Mensajes"
 msgid "Email Notification"
 msgstr "Notificación de correo electrónico"
 
-#: classes/models/fields/FrmFieldCaptcha.php:258
+#: classes/models/fields/FrmFieldCaptcha.php:266
 msgid "There was a problem verifying your captcha"
 msgstr "Ha habido un problema verificando tu captcha"
 
-#: classes/models/fields/FrmFieldCaptcha.php:283
+#: classes/models/fields/FrmFieldCaptcha.php:291
 msgid "The reCAPTCHA was not entered correctly"
 msgstr "El reCAPTCHA no se ha introducido correctamente"
 
-#: classes/models/fields/FrmFieldCaptcha.php:318
+#: classes/models/fields/FrmFieldCaptcha.php:326
 msgid "The captcha is missing from this form"
 msgstr "Falta el captcha de este formulario"
 
-#: classes/models/fields/FrmFieldCaptcha.php:388
+#: classes/models/fields/FrmFieldCaptcha.php:396
 #: classes/views/frm-settings/captcha/captcha.php:13
 msgid "reCAPTCHA"
 msgstr "reCAPTCHA"
 
-#: classes/models/fields/FrmFieldCaptcha.php:388
+#: classes/models/fields/FrmFieldCaptcha.php:396
 #: classes/views/frm-settings/captcha/captcha.php:18
 msgid "hCaptcha"
 msgstr "hCaptcha"
@@ -4742,16 +4754,16 @@ msgstr "Medio"
 msgid "Last"
 msgstr "Apellidos"
 
-#: classes/models/fields/FrmFieldNumber.php:80
+#: classes/models/fields/FrmFieldNumber.php:76
 msgid "Please select a higher number"
 msgstr "Por favor, seleccione un número mayor"
 
-#: classes/models/fields/FrmFieldNumber.php:82
+#: classes/models/fields/FrmFieldNumber.php:78
 msgid "Please select a lower number"
 msgstr "Por favor, seleccione un número más bajo"
 
 #. Translators: %1$s: the first nearest value; %2$s: the second nearest value.
-#: classes/models/fields/FrmFieldNumber.php:120
+#: classes/models/fields/FrmFieldNumber.php:116
 msgid "Please enter a valid value. Two nearest valid values are %1$s and %2$s"
 msgstr "Por favor, introduce un valor válido. Los dos valores válidos más cercanos son %1$s y %2$s"
 
@@ -5540,7 +5552,7 @@ msgstr "Crear un formulario en blanco"
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:71
-#: js/formidable_admin.js:9028
+#: js/formidable_admin.js:9155
 msgid "Close"
 msgstr "Cerrado"
 
@@ -6132,7 +6144,7 @@ msgstr "Correos electrónicos condicionales"
 
 #: classes/views/frm-form-actions/form_action.php:32
 #: js/admin/style.js:678
-#: js/formidable_admin.js:2424
+#: js/formidable_admin.js:2423
 msgid "Duplicate"
 msgstr "Duplicar"
 
@@ -6277,14 +6289,14 @@ msgid "Move Field"
 msgstr "Mover Campo"
 
 #: classes/views/frm-forms/add_field.php:36
-#: js/formidable_admin.js:1425
-#: js/formidable_admin.js:1430
-#: js/formidable_admin.js:2349
+#: js/formidable_admin.js:1421
+#: js/formidable_admin.js:1426
+#: js/formidable_admin.js:2348
 msgid "More Options"
 msgstr "Más opciones"
 
 #: classes/views/frm-forms/add_field.php:38
-#: js/formidable_admin.js:1417
+#: js/formidable_admin.js:1413
 msgid "Toggle More Options Dropdown"
 msgstr "Conmutador desplegable de más opciones"
 
@@ -6654,63 +6666,63 @@ msgstr "Estos mensajes se utilizarán por defecto para los nuevos formularios. M
 msgid "Failed/Duplicate Entry"
 msgstr "Registro fallido/duplicado"
 
-#: classes/views/frm-settings/messages.php:13
+#: classes/views/frm-settings/messages.php:12
 msgid "The message seen when a form is submitted and passes validation, but something goes wrong."
 msgstr "El mensaje que se ve cuando se envía un formulario y pasa la validación, pero algo sale mal."
 
-#: classes/views/frm-settings/messages.php:21
+#: classes/views/frm-settings/messages.php:20
 msgid "Blank Field"
 msgstr "Campo en blanco"
 
-#: classes/views/frm-settings/messages.php:23
+#: classes/views/frm-settings/messages.php:21
 msgid "The message seen when a required field is left blank."
 msgstr "El mensaje que se ve cuando un campo requerido se deja en blanco."
 
-#: classes/views/frm-settings/messages.php:31
+#: classes/views/frm-settings/messages.php:29
 msgid "Incorrect Field"
 msgstr "Campo incorrecto"
 
-#: classes/views/frm-settings/messages.php:33
+#: classes/views/frm-settings/messages.php:30
 msgid "The message seen when a field response is either incorrect or missing."
 msgstr "El mensaje se observa cuando una respuesta de campo es incorrecta o faltante."
 
-#: classes/views/frm-settings/messages.php:41
+#: classes/views/frm-settings/messages.php:38
 msgid "Requires Privileged Access"
 msgstr "Necesita acceso privilegiado"
 
-#: classes/views/frm-settings/messages.php:43
+#: classes/views/frm-settings/messages.php:39
 msgid "The message shown to users who do not have access to a resource."
 msgstr "El mensaje mostrado a los usuarios que no tienen acceso a un recurso."
 
-#: classes/views/frm-settings/messages.php:52
+#: classes/views/frm-settings/messages.php:48
 msgid "Unique Value"
 msgstr "Valor único"
 
-#: classes/views/frm-settings/messages.php:54
+#: classes/views/frm-settings/messages.php:49
 msgid "The message seen when a user selects a value in a unique field that has already been used."
 msgstr "El mensaje se ve cuando un usuario selecciona un valor en un campo único que ya ha sido utilizado."
 
-#: classes/views/frm-settings/messages.php:69
+#: classes/views/frm-settings/messages.php:64
 msgid "Success Message"
 msgstr "Mensaje de éxito"
 
-#: classes/views/frm-settings/messages.php:71
+#: classes/views/frm-settings/messages.php:65
 msgid "The default message seen after a form is submitted."
 msgstr "El mensaje predeterminado visto después de un formulario es enviado."
 
-#: classes/views/frm-settings/messages.php:79
+#: classes/views/frm-settings/messages.php:73
 msgid "Open In New Tab Message"
 msgstr "Mensaje de abrir en una nueva pestaña"
 
-#: classes/views/frm-settings/messages.php:81
+#: classes/views/frm-settings/messages.php:74
 msgid "The default message seen after opening the redirect URL in new tab when a form is submitted."
 msgstr "El mensaje por defecto que se ve después de abrir la URL de redirección en una nueva pestaña cuando se envía un formulario."
 
-#: classes/views/frm-settings/messages.php:89
+#: classes/views/frm-settings/messages.php:82
 msgid "Submit Button Text"
 msgstr "Texto del botón de envío"
 
-#: classes/views/frm-settings/messages.php:91
+#: classes/views/frm-settings/messages.php:83
 msgid "The default label for the submit button."
 msgstr "La etiqueta por defecto del botón de envío."
 
@@ -6731,23 +6743,15 @@ msgstr "Destinatarios de los correos de resumen"
 msgid "Summary emails can be disabled across multiple sites from %1$sFormidableForms.com%2$s."
 msgstr "Los correos electrónicos de resumen pueden desactivarse en varios sitios desde %1$sFormidableForms.com%2$s."
 
-#: classes/views/frm-settings/misc.php:49
-msgid "Use HTML5 in forms"
-msgstr "Utilice HTML5 en formularios"
-
-#: classes/views/frm-settings/misc.php:50
-msgid "We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete."
-msgstr "Recomendamos usar HTML 5 para tus formularios. Añade algunas opciones ingeniosas como marcadores de posición, patrones y autocompletar."
-
-#: classes/views/frm-settings/misc.php:60
+#: classes/views/frm-settings/misc.php:57
 msgid "Uninstall Formidable Forms and permanently delete all data."
 msgstr "Desinstala Formidable Forms y elimina permanentemente todos los datos."
 
-#: classes/views/frm-settings/misc.php:62
+#: classes/views/frm-settings/misc.php:59
 msgid "Are you sure you want to delete all forms, form data, and all other Formidable data. There is no Undo."
 msgstr "¿Estás seguro que deseas borrar todos los formularios, información del formulario y todos los demás datos del formulario? No se puede deshacer."
 
-#: classes/views/frm-settings/misc.php:63
+#: classes/views/frm-settings/misc.php:60
 msgid "Uninstall Now"
 msgstr "Desinstalar"
 
@@ -7956,7 +7960,7 @@ msgstr "ilimitado"
 msgid "%1$s of %2$s"
 msgstr "%1$s de %2$s"
 
-#: stripe/helpers/FrmTransLiteListHelper.php:497
+#: stripe/helpers/FrmTransLiteListHelper.php:495
 msgid "This payment method may take between 4-5 business days to process."
 msgstr "Este método de pago puede tardar entre 4 y 5 días laborables en procesarse."
 
@@ -8361,19 +8365,19 @@ msgstr "¿Restablecer este estilo a los valores por defecto?"
 msgid "Style has been reset successfully"
 msgstr "El estilo ha sido restablecido correctamente"
 
-#: js/formidable_admin.js:1376
+#: js/formidable_admin.js:1372
 msgid "Set Row Layout"
 msgstr "Establecer el diseño de la fila"
 
-#: js/formidable_admin.js:1383
+#: js/formidable_admin.js:1379
 msgid "Move Field Group"
 msgstr "Mover el grupo de campos"
 
-#: js/formidable_admin.js:2418
+#: js/formidable_admin.js:2417
 msgid "Delete Group"
 msgstr "Borrar el grupo"
 
-#: js/formidable_admin.js:2424
+#: js/formidable_admin.js:2423
 msgid "Duplicate Group"
 msgstr "Duplicar el grupo"
 
@@ -8406,32 +8410,32 @@ msgstr "Los diseños están basados en un diseño en cuadrícula de 12 columnas"
 msgid "Merge into row"
 msgstr "Combinar en la fila"
 
-#: js/formidable_admin.js:5987
+#: js/formidable_admin.js:6114
 msgid "Duplicate option value \"%s\" detected"
 msgstr "Detectado el valor de opción duplicado «%s»"
 
 #. translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling).
-#: js/formidable_admin.js:6685
+#: js/formidable_admin.js:6812
 msgid "%s are not installed"
 msgstr "%s no están instalados"
 
-#: js/formidable_admin.js:6807
+#: js/formidable_admin.js:6934
 msgid "This plugin is not activated. Would you like to activate it now?"
 msgstr ""
 
-#: js/formidable_admin.js:6810
+#: js/formidable_admin.js:6937
 msgid "That add-on is not installed. Would you like to install it now?"
 msgstr "Esa extensión no está instalada. ¿Quieres instalarla ahora?"
 
-#: js/formidable_admin.js:9013
+#: js/formidable_admin.js:9140
 msgid "Save and Reload"
 msgstr "Guardar y recargar"
 
-#: js/formidable_admin.js:9182
+#: js/formidable_admin.js:9309
 msgid "Unable to install template"
 msgstr "No ha sido posible instalar la plantilla"
 
-#: js/formidable_admin.js:9834
+#: js/formidable_admin.js:9961
 msgid "Thank you for signing up!"
 msgstr "¡Gracias por registrate!"
 
