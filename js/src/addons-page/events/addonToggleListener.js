@@ -35,10 +35,7 @@ function addAddonToggleEvents() {
  * @return {void}
  */
 const onAddonToggleClick = ( event ) => {
-	if (
-		targetButton &&
-		targetButton.classList.contains( 'frm_loading_button' )
-	) {
+	if (targetButton?.classList.contains( 'frm_loading_button' )) {
 		return;
 	}
 
