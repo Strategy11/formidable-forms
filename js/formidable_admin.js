@@ -8704,7 +8704,7 @@ function frmAdminBuildJS() {
 							thisRow.get(0).querySelector( '.edd_frm_unauthorized' ).classList.toggle( 'frm_hidden', actionIsActivate )
 							thisRow.get(0).querySelector( '.edd_frm_authorized' ).classList.toggle( 'frm_hidden', ! actionIsActivate )
 						}
-					}, 5000 );
+					}, 2000 );
 				}
 			}
 		});
