@@ -54,7 +54,7 @@ class FrmDeactivationFeedbackController {
 					</a>
 
 					<div class="inside">
-						<?php self::modal_icon(); ?>
+						<img class="frmsvg" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/logo.svg' ); ?>" alt="" />
 						<div id="frm-deactivation-form-wrapper" class="frmapi-form">
 							<span class="frm-wait frm_visible_spinner"></span>
 						</div>
@@ -80,7 +80,7 @@ class FrmDeactivationFeedbackController {
 				word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
 			}
 
-			.frm_deactivation_modal_icon {
+			#frm-deactivation-modal .inside .frmsvg {
 				position: absolute;
 				top: calc(var(--padding) - 1px);
 				left: var(--padding);
