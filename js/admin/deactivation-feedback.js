@@ -1,7 +1,7 @@
 ( function() {
 	'use strict';
 
-	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a';
+	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
 
 	let deactivationModal, deactivationUrl;
 
@@ -63,7 +63,7 @@
 		const btn = frmDom.a( {
 			text: FrmDeactivationFeedbackI18n.skip_text,
 			href: deactivationUrl,
-			className: 'button button-primary frm-button-secondary'
+			className: 'frm-skip-link'
 		});
 
 		formEl.querySelector( '.frm_submit' ).prepend( btn );
