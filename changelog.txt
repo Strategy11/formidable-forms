@@ -8,7 +8,7 @@
 * Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
 * Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
 * Some updates have been made to improve the syncing of field option updates and conditional logic settings.
-* The setting to use HTML5 has been removed. This is now always true for all sites.
+* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
 * Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
 * The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
 
