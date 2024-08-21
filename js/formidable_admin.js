@@ -513,7 +513,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
 
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
+			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
 			jQuery( this ).tooltip( 'show' );
 		});
 

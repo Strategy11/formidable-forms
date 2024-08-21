@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="frm_submit_style">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_style' ) ); ?>" id="frm_submit_style" <?php checked( $style->post_content['submit_style'], 1 ); ?> value="1" />
 		<?php esc_html_e( 'Disable submit button styling', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click "Update Options".', 'formidable' ); ?>"></span>
+		<?php FrmAppHelper::tooltip_icon( __( 'Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click "Update Options".', 'formidable' ) ); ?>
 	</label>
 </p>
 
