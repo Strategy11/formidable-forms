@@ -1,4 +1,17 @@
 == Changelog ==
+= 6.12 =
+* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
+* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
+* Fix: Turnstile captcha widgets were rendering twice.
+* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
+* Fix: The submit button would appear as an entry table row on the entry view admin page.
+* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
+* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
+* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
+* The setting to use HTML5 has been removed. This is now always true for all sites.
+* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
+* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
+
 = 6.11.2 =
 * Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
 * New: Some small accessibility improvements were made on the Import/Export admin page.
