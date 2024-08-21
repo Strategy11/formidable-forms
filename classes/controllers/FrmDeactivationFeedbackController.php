@@ -6,6 +6,9 @@
  * @since x.x
  */
 
+/**
+ * Class FrmDeactivationFeedbackController
+ */
 class FrmDeactivationFeedbackController {
 
 	private static function is_plugins_page() {
@@ -16,8 +19,14 @@ class FrmDeactivationFeedbackController {
 		if ( ! self::is_plugins_page() ) {
 			return;
 		}
-		wp_enqueue_script( 'frm-deactivation-feedback', FrmAppHelper::plugin_url() . '/js/admin/deactivation-feedback.js', array( 'formidable', 'formidable_dom', 'jquery' ), FrmAppHelper::plugin_version(), true );
-        wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_script(
+			'frm-deactivation-feedback',
+			FrmAppHelper::plugin_url() . '/js/admin/deactivation-feedback.js',
+			array( 'formidable', 'formidable_dom', 'jquery' ),
+			FrmAppHelper::plugin_version(),
+			true
+		);
+		wp_enqueue_style( 'formidable-admin' );
 
 		FrmAppHelper::localize_script( 'front' );
 
@@ -39,7 +48,9 @@ class FrmDeactivationFeedbackController {
 			<div class="metabox-holder">
 				<div class="postbox">
 					<a class="frm-modal-close dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-						<svg class="frmsvg" id="frm_close_icon" viewBox="0 0 20 20" width="18px" height="18px" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>"><path d="M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z"/></svg>
+						<svg class="frmsvg" id="frm_close_icon" viewBox="0 0 20 20" width="18px" height="18px" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+							<path d="M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z"/>
+						</svg>
 					</a>
 
 					<div class="inside">
@@ -114,8 +125,16 @@ class FrmDeactivationFeedbackController {
 
 	private static function modal_icon() {
 		?>
-		<svg class="frmsvg frm_deactivation_modal_icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20" xml:space="preserve" fill="#000000">
-			<path d="M9.6 12.8h4.8v2.5H9.6v-2.5zm3.8-8H6.7a1 1 0 0 0-1 1v1.5h8.7V4.8h-1z"/><path d="M13.3 8.8H5.6v6.5h2.5v-4h5.2a1 1 0 0 0 1-.7V8.8h-1z"/><path d="M10 20A10 10 0 0 1 0 10 10 10 0 0 1 10 0a10 10 0 0 1 10 10 10 10 0 0 1-10 10zm0-18.7A8.7 8.7 0 0 0 1.3 10a8.7 8.7 0 0 0 8.7 8.7 8.7 8.7 0 0 0 8.7-8.7A8.7 8.7 0 0 0 10 1.3z"/>
+		<svg
+			class="frmsvg frm_deactivation_modal_icon"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlns:xlink="http://www.w3.org/1999/xlink"
+			viewBox="0 0 20 20"
+			xml:space="preserve"
+		>
+			<path d="M9.6 12.8h4.8v2.5H9.6v-2.5zm3.8-8H6.7a1 1 0 0 0-1 1v1.5h8.7V4.8h-1z"/>
+			<path d="M13.3 8.8H5.6v6.5h2.5v-4h5.2a1 1 0 0 0 1-.7V8.8h-1z"/>
+			<path d="M10 20A10 10 0 0 1 0 10 10 10 0 0 1 10 0a10 10 0 0 1 10 10 10 10 0 0 1-10 10zm0-18.7A8.7 8.7 0 0 0 1.3 10a8.7 8.7 0 0 0 8.7 8.7 8.7 8.7 0 0 0 8.7-8.7A8.7 8.7 0 0 0 10 1.3z"/>
 		</svg>
 		<?php
 	}
