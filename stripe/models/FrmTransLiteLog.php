@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteLog {
 
 	/**
-	 * @since x.x The $is_error parameter was added.
+	 * @since 6.12 The $is_error parameter was added.
 	 *
 	 * @param string $title
 	 * @param string $text

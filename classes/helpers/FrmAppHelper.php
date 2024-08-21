@@ -4305,7 +4305,7 @@ class FrmAppHelper {
 	/**
 	 * Shows tooltip icon.
 	 *
-	 * @since x.x
+	 * @since 6.12
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 * @param array  $atts         Tooltip wrapper HTML attributes.
