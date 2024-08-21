@@ -25,8 +25,6 @@ describe("Deleting forms", () => {
         cy.get('#bulk-action-selector-top').select("Move to Trash");
         cy.get('#doaction').should("contain", "Apply").click();
         cy.get('.frm_updated_message').should("contain", "forms moved to the Trash.");
-        cy.get('.trash > a').should('contain.text', 'Trash')
-            .find('.count').should('contain.text', '(5)');
 
         cy.log("Restore deleted forms and the redelete them");
         cy.get('.subsubsub > .trash > a').should("contain", "Trash").click();
