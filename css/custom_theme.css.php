@@ -25,7 +25,7 @@ $pro_is_installed = FrmAppHelper::pro_is_installed();
 
 $use_chosen_js =
 	$pro_is_installed
-	&& ( method_exists( 'FrmProAppHelper', 'use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true );
+	&& is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 
 ?>
 .with_frm_style{
