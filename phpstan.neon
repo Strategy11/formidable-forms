@@ -88,3 +88,6 @@ parameters:
 			paths:
 				- classes/controllers/FrmEntriesController.php
 				- classes/controllers/FrmFormsController.php
+		-
+			message: '#Call to an undefined method object::prepare_items#'
+			path: classes/helpers/FrmDashboardHelper.php
