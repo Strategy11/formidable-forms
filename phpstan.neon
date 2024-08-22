@@ -84,3 +84,11 @@ parameters:
 			paths:
 				- classes/helpers/FrmCSVExportHelper.php
 				- classes/models/FrmStyle.php
+		-
+			message: '#Call to an undefined method FrmFieldType::get_export_headings#'
+			path: classes/helpers/FrmCSVExportHelper.php
+		-
+			message: '#Call to an undefined method object::(get\_pagenum|prepare\_items|get_pagination\_arg)#'
+			paths:
+				- classes/controllers/FrmEntriesController.php
+				- classes/controllers/FrmFormsController.php
