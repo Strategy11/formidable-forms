@@ -22,7 +22,7 @@ $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
 $important        = empty( $defaults['important_style'] ) ? '' : ' !important';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
-$use_chosen_js    = $pro_is_installed && FrmProAppHelper::use_chosen_js();
+$use_chosen_js    = FrmStylesHelper::use_chosen_js();
 
 ?>
 .with_frm_style{
