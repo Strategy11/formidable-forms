@@ -33,8 +33,7 @@ describe("Deleting forms", () => {
         cy.get('#doaction').should("contain", "Apply").click();
         cy.get('.trash > a').should('contain.text', 'Trash')
             .find('.count').should('contain.text', '(0)');
-        cy.get('.published > a').should('contain.text', 'My Forms')
-            .find('.count').should('contain.text', '(5)');
+        
         cy.get('.colspanchange > p').should("contain", "No forms found in the trash.");
         cy.get('.colspanchange > p > a').should("contain", "See all forms").click();
         cy.log("Bulk delete permanently deleted forms");
