@@ -1600,6 +1600,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {Array}
+		 */
 		getAjaxFormErrors: function( object ) {
 			let customErrors, key;
 
