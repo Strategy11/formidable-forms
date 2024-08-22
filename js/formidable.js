@@ -1607,7 +1607,7 @@ function frmFrontFormJS() {
 
 		/**
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
-		 * @return {Array}
+		 * @return {Array} List of errors.
 		 */
 		getAjaxFormErrors: function( object ) {
 			let customErrors, key;
