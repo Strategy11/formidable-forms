@@ -1013,10 +1013,14 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {void}
 	 */
 	function scrollToFirstField( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		const field = object.querySelector( '.frm_blank_field' );
 		if ( field ) {
 			frmFrontForm.scrollMsg( jQuery( field ), object, true );
