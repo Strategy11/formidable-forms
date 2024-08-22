@@ -1,5 +1,5 @@
 == Changelog ==
-= 6.12.1 =
+= 6.13 =
 * Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
 * Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
 

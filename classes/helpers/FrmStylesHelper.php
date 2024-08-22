@@ -742,7 +742,7 @@ class FrmStylesHelper {
 	/**
 	 * Determines if the chosen JavaScript library should be used.
 	 *
-	 * @since 6.12.1
+	 * @since 6.13
 	 *
 	 * @return bool
 	 */
