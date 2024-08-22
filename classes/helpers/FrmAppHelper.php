@@ -4325,4 +4325,19 @@ class FrmAppHelper {
 		</span>
 		<?php
 	}
+
+	/**
+	 * Determines if the chosen JavaScript library should be used.
+	 *
+	 * @return bool
+	 */
+	public static function use_chosen_js() {
+		if ( ! self::pro_is_installed() ) {
+			return false;
+		}
+
+		return is_callable( 'FrmProAppHelper::use_chosen_js' )
+			? FrmProAppHelper::use_chosen_js()
+			: true;
+	}
 }
