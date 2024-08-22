@@ -10,7 +10,7 @@ $important = empty( $important_style ) ? '' : ' !important';
 
 $minus_icons   = FrmStylesHelper::minus_icons();
 $arrow_icons   = FrmStylesHelper::arrow_icons();
-$use_chosen_js = FrmAppHelper::use_chosen_js();
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .<?php echo esc_html( $style_class ); ?>{
