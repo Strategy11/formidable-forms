@@ -1512,6 +1512,11 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
+		/**
+		 * @param {Event}       e
+		 * @param {HTMLElement} object The form object that is being submitted.
+		 * @return {void}
+		 */
 		submitFormManual: function( e, object ) {
 			let isPro, errors,
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
