@@ -638,6 +638,11 @@ function frmFrontFormJS() {
 		return validate;
 	}
 
+	/**
+	 * @param {HTMLElement}      object
+	 * @param {string|undefined} action
+	 * @return {void}
+	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
 
