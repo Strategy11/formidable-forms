@@ -1617,6 +1617,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {void}
+		 */
 		addAjaxFormErrors: function( object ) {
 			let key, $fieldCont;
 			removeAllErrors();
