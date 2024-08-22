@@ -1,4 +1,8 @@
 parameters:
+	paths:
+		- formidable.php
+		- classes/
+		- stripe/
 	level: max
 	reportUnmatchedIgnoredErrors: false
 	bootstrapFiles:

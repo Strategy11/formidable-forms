@@ -447,8 +447,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array       $settings
-	 * @param object|null $field_info
+	 * @param array             $settings
+	 * @param FrmFieldType|null $field_info
 	 *
 	 * @return array
 	 */
