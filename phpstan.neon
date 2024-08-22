@@ -25,7 +25,6 @@ parameters:
 		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
-		- '#Call to an undefined method object::#'
 		- '#Call to (function is_callable|protected method)+#'
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'

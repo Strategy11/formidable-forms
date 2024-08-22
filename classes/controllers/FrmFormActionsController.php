@@ -5,6 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormActionsController {
 	public static $action_post_type = 'frm_form_actions';
+
+	/**
+	 * @param array|null
+	 */
 	public static $registered_actions;
 
 	/**
@@ -257,6 +261,7 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
+	 * @return array
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;

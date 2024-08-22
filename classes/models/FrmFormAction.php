@@ -463,9 +463,10 @@ class FrmFormAction {
 			 *
 			 * @since 2.0
 			 *
-			 * @param array $instance The current widget instance's settings.
-			 * @param array $new_instance Array of new widget settings.
-			 * @param array $old_instance Array of old widget settings.
+			 * @param array         $instance The current widget instance's settings.
+			 * @param array         $new_instance Array of new widget settings.
+			 * @param array         $old_instance Array of old widget settings.
+			 * @param FrmFormAction $form_action FrmFormAction instance.
 			 */
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
