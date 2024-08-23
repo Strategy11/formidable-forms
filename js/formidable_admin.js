@@ -3587,9 +3587,7 @@ function frmAdminBuildJS() {
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			wp.hooks.doAction( 'frm_before_delete_field_option', this );
-			jQuery( parentLi ).remove( () => {
-				resetDisplayedOpts( fieldId );
-			});
+			resetDisplayedOpts( fieldId );
 
 			const hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
@@ -10891,6 +10889,7 @@ function frmAdminBuildJS() {
 				},
 				success: function( html ) {
 					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					wp.hooks.doAction( 'frm_after_update_field_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
