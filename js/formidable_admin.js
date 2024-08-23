@@ -8701,8 +8701,8 @@ function frmAdminBuildJS() {
 						thisRow.find( '.frm_icon_font' ).addClass( 'frm_hidden' );
 						if ( actionIsSuccess ) {
 							const actionIsActivate = action === 'activate';
-							thisRow.get(0).querySelector( '.edd_frm_unauthorized' ).classList.toggle( 'frm_hidden', actionIsActivate )
-							thisRow.get(0).querySelector( '.edd_frm_authorized' ).classList.toggle( 'frm_hidden', ! actionIsActivate )
+							thisRow.get(0).querySelector( '.edd_frm_unauthorized' ).classList.toggle( 'frm_hidden', actionIsActivate );
+							thisRow.get(0).querySelector( '.edd_frm_authorized' ).classList.toggle( 'frm_hidden', ! actionIsActivate );
 						}
 					}, 2000 );
 				}
