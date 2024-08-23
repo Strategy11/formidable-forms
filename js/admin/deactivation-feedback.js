@@ -79,7 +79,7 @@
 			);
 		}
 
-		deactivationUrl = event.target.href;
+		deactivationUrl = event.target.href + '&frm_feedback_submitted=1';
 
 		const pluginSlug = event.target.closest( 'tr' ).dataset.slug;
 

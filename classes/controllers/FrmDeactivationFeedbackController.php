@@ -21,12 +21,48 @@ class FrmDeactivationFeedbackController {
 	}
 
 	/**
+	 * Checks if feedback is expired.
+	 *
+	 * @return bool
+	 */
+	private static function feedback_is_expired() {
+		$feedback_expired = get_option( 'frm_feedback_expired' );
+		if ( ! $feedback_expired ) {
+			return true;
+		}
+
+		$expired_date = strtotime( $feedback_expired );
+		if ( ! $expired_date ) {
+			return true;
+		}
+
+		return $expired_date < time();
+	}
+
+	/**
+	 * Sets feedback expired date.
+	 *
+	 * @param string $plugin Path to the plugin file relative to the plugins directory.
+	 *
+	 * @return void
+	 */
+	public static function set_feedback_expired_date( $plugin ) {
+		if ( empty( $_GET['frm_feedback_submitted'] ) ) {
+			return;
+		}
+		if ( ! strpos( $plugin, 'formidable.php' ) && ! strpos( $plugin, 'formidable-pro.php' ) ) {
+			return;
+		}
+		update_option( 'frm_feedback_expired', date( 'Y-m-d', strtotime( '+ 6 months' ) ) );
+	}
+
+	/**
 	 * Enqueues assets.
 	 *
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-		if ( ! self::is_plugins_page() ) {
+		if ( ! self::is_plugins_page() || ! self::feedback_is_expired() ) {
 			return;
 		}
 		wp_enqueue_script(
@@ -55,7 +91,7 @@ class FrmDeactivationFeedbackController {
 	 * @return void
 	 */
 	public static function footer_html() {
-		if ( ! self::is_plugins_page() ) {
+		if ( ! self::is_plugins_page() || ! self::feedback_is_expired() ) {
 			return;
 		}
 		?>
@@ -192,8 +228,7 @@ class FrmDeactivationFeedbackController {
 			}
 
 			#frm-deactivation-modal input[name="item_key"] + div,
-			#frm-deactivation-modal .frm_primary_label,
-			#frm-deactivation-form-wrapper[data-slug="formidable"] .frm_radio:nth-of-type(5) { /* Hide too expensive option */
+			#frm-deactivation-modal .frm_primary_label {
 				display: none;
 			}
 
