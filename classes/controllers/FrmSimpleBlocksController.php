@@ -50,13 +50,13 @@ class FrmSimpleBlocksController {
 			),
 			'viewsAddon'  => array(
 				'link'      => is_array( $views_addon_info ) && isset( $views_addon_info['link'] ) ? FrmAppHelper::admin_upgrade_link( 'block', $views_addon_info['link'] ) : '',
-				'hasAccess' => ! empty( $views_addon_info['url'] ),
+				'hasAccess' => is_array( $views_addon_info ) && ! empty( $views_addon_info['url'] ),
 				'url'       => ! empty( $views_addon_info['url'] ) ? $views_addon_info['url'] : '',
 				'installed' => 'installed' === $views_addon['status']['type'],
 			),
 			'chartsAddon' => array(
 				'link'      => is_array( $charts_addon ) && isset( $charts_addon['link'] ) ? FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ) : '',
-				'hasAccess' => ! empty( $charts_addon['url'] ),
+				'hasAccess' => is_array( $charts_addon ) && ! empty( $charts_addon['url'] ),
 				'installed' => class_exists( 'FrmChartsAppController' ),
 			),
 		);
