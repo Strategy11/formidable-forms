@@ -108,6 +108,7 @@
 	frmDom.util.documentOn( 'click', selectors, onClickDeactivate );
 
 	document.addEventListener( 'frmFormCompleteBeforeReplace', function( event ) {
+		document.getElementById( 'frm-deactivation-modal-icon' ).remove();
 		window.location.href = deactivationUrl;
 	});
 }() );
