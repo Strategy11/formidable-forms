@@ -53,7 +53,7 @@ class FrmDeactivationFeedbackController {
 		if ( ! strpos( $plugin, 'formidable.php' ) && ! strpos( $plugin, 'formidable-pro.php' ) ) {
 			return;
 		}
-		update_option( 'frm_feedback_expired', date( 'Y-m-d', strtotime( '+ 15 minutes' ) ) );
+		update_option( 'frm_feedback_expired', date( 'Y-m-d', strtotime( '+ 1 day' ) ) );
 	}
 
 	/**
