@@ -6234,7 +6234,7 @@ function frmAdminBuildJS() {
 		renumberPageBreaks();
 
 		return ( function() {
-			var fieldId, field, currentOrder, newOrder,
+			let fieldId, field, currentOrder, newOrder,
 				moveFieldsClass = new moveFieldSettings(),
 				fields = jQuery( 'li.frm_field_box', jQuery( '#frm-show-fields' ) );
 
