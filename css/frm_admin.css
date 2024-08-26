@@ -2986,6 +2986,7 @@ body.frm-body-with-open-modal {
 }
 
 .frm-meta-tag.frm-new-pill {
+	background-color: var(--success-500);
 	vertical-align: text-bottom;
 }
 
