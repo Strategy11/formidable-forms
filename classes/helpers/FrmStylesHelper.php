@@ -740,6 +740,23 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Determines if the chosen JavaScript library should be used.
+	 *
+	 * @since 6.13
+	 *
+	 * @return bool
+	 */
+	public static function use_chosen_js() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+
+		return is_callable( 'FrmProAppHelper::use_chosen_js' )
+			? FrmProAppHelper::use_chosen_js()
+			: true;
+	}
+
+	/**
 	 * @since 5.5.1
 	 * @deprecated 6.10
 	 * @return void

@@ -2601,9 +2601,15 @@ h2.frm-h2 + .howto {
 #wpbody-content > .update-nag,
 #wpbody-content > .notice,
 #wpbody-content > .error:not(.frm_previous_install),
+#wpbody-content > [class*="admin-notice"],
 .frm-white-body .updated,
 .frm-white-body .notice,
+.frm-white-body [class*="admin-notice"],
+.frm-white-body [class*="review-banner"],
+.frm-white-body [id$="-review-banner"],
+.frm-white-body #codepeople-review-banner,
 .frm_wrap > .wrap > .notice,
+.frm_wrap > .wrap > [class*="admin-notice"],
 .frm-white-body .error:not(.frm_previous_install)
 {
 	display: none;
@@ -5199,13 +5205,16 @@ label.frm-example-icon {
 	display: none;
 }
 
-.edd_frm_status_icon.frm_icon_font {
-	color: #D54E21;
+.edd_frm_status_icon.frmsvg {
 	margin: 0 5px;
 }
 
-.edd_frm_status_icon.frm_icon_font.frm_inactive_icon {
+.edd_frm_license_row .frm_action_success .frmsvg {
 	color: green;
+}
+
+.edd_frm_license_row .frm_action_error .frmsvg {
+	color: #D54E21;
 }
 
 /* Hide the install steps for solutions */
@@ -5314,7 +5323,8 @@ label.frm-example-icon {
 	position: relative;
 }
 
-#frm_where_options span.frm_where_val .frm_tooltip_icon {
+#frm_where_options span.frm_where_val .frm_tooltip_icon,
+#frm_where_options span.frm_where_val .frm_help {
 	left: -4px;
 	position: absolute;
 }
@@ -6074,6 +6084,14 @@ a.frm_add_logic_link.frm_hidden {
 .frm_tooltip_icon:before {
 	font-size: 13px;
 	vertical-align: top;
+}
+
+.frm_help svg {
+	height: 13px;
+	width: 13px;
+	vertical-align: top;
+	color: #A0A0A0;
+	color: var(--grey);
 }
 
 .form-field input[type=text].frm_other_input {
@@ -9318,6 +9336,7 @@ Responsive Design
 	font-size: 13px;
 	right: 30px;
 	bottom: 10px;
+	z-index: 2;
 }
 
 #frm_field_multiselect_popup > div {

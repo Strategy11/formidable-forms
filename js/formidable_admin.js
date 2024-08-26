@@ -513,7 +513,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
 
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
+			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
 			jQuery( this ).tooltip( 'show' );
 		});
 
@@ -3024,7 +3024,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( id );
 		if ( field !== null ) {
 			return field.value;
-		} 
+		}
 		return '';
 	}
 
@@ -4385,7 +4385,7 @@ function frmAdminBuildJS() {
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
 				}
- 
+
 				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
@@ -8676,27 +8676,35 @@ function frmAdminBuildJS() {
 		const pluginSlug = this.getAttribute( 'data-plugin' );
 		const action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		let license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
+		button.get(0).disabled = true;
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl, dataType: 'json',
 			data: {action: 'frm_addon_' + action, license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
 			success: function( msg ) {
+				button.get(0).disabled = false;
 				const thisRow = button.closest( '.edd_frm_license_row' );
 				if ( action === 'deactivate' ) {
 					license = '';
 					document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value = '';
 				}
 				thisRow.find( '.edd_frm_license' ).html( license );
-				if ( msg.success === true ) {
-					thisRow.find( '.frm_icon_font' ).removeClass( 'frm_hidden' );
-					thisRow.find( 'div.alignleft' ).toggleClass( 'frm_hidden', 1000 );
-				}
+				const eddWrapper = button.get(0).closest( '.frm_form_field' );
+				const actionIsSuccess = msg.success === true;
+				eddWrapper.querySelector( `.frm_icon_font.frm_action_success` ).classList.toggle( 'frm_hidden', ! actionIsSuccess || action === 'deactivate' );
+				eddWrapper.querySelector( `.frm_icon_font.frm_action_error` ).classList.toggle( 'frm_hidden', actionIsSuccess);
 
 				const messageBox = thisRow.find( '.frm_license_msg' );
 				messageBox.html( msg.message );
 				if ( msg.message !== '' ) {
 					setTimeout( function() {
 						messageBox.html( '' );
-					}, 15000 );
+						thisRow.find( '.frm_icon_font' ).addClass( 'frm_hidden' );
+						if ( actionIsSuccess ) {
+							const actionIsActivate = action === 'activate';
+							thisRow.get(0).querySelector( '.edd_frm_unauthorized' ).classList.toggle( 'frm_hidden', actionIsActivate );
+							thisRow.get(0).querySelector( '.edd_frm_authorized' ).classList.toggle( 'frm_hidden', ! actionIsActivate );
+						}
+					}, 2000 );
 				}
 			}
 		});
@@ -8852,7 +8860,7 @@ function frmAdminBuildJS() {
 		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
 		if ( exportFormatSelect ) {
 			return exportFormatSelect.value;
-		} 
+		}
 		return '';
 	}
 
@@ -9619,7 +9627,7 @@ function frmAdminBuildJS() {
 		const field = document.getElementById( 'frm_field_id_' + fieldId );
 		if ( field === null ) {
 			return false;
-		} 
+		}
 		return 'product' === field.getAttribute( 'data-type' );
 	}
 

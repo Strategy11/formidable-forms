@@ -236,7 +236,7 @@ function frmFrontFormJS() {
 	 * @return {boolean} True if the element has the target class.
 	 */
 	function hasClass( element, targetClass ) {
-		return element.classList.contains( targetClass );
+		return element.classList && element.classList.contains( targetClass );
 	}
 
 	function maybeValidateChange( field ) {
@@ -350,6 +350,12 @@ function frmFrontFormJS() {
 				}
 			} else {
 				fieldID = getFieldId( field, true );
+			}
+
+			// Make sure fieldID is a string.
+			// fieldID may be a number which doesn't include a .replace function.
+			if ( 'function' !== typeof fieldID.replace ) {
+				fieldID = fieldID.toString();
 			}
 
 			if ( hasClass( field, 'frm_time_select' ) ) {
@@ -622,10 +628,14 @@ function frmFrontFormJS() {
 	/**
 	 * Check if JS validation should happen.
 	 *
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
 	 */
 	function shouldJSValidate( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		let validate = hasClass( object, 'frm_js_validate' );
 		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
 			validate = false;
@@ -634,6 +644,11 @@ function frmFrontFormJS() {
 		return validate;
 	}
 
+	/**
+	 * @param {HTMLElement}      object
+	 * @param {string|undefined} action
+	 * @return {void}
+	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
 
@@ -1009,10 +1024,14 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {void}
 	 */
 	function scrollToFirstField( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		const field = object.querySelector( '.frm_blank_field' );
 		if ( field ) {
 			frmFrontForm.scrollMsg( jQuery( field ), object, true );
@@ -1499,6 +1518,11 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
+		/**
+		 * @param {Event}       e
+		 * @param {HTMLElement} object The form object that is being submitted.
+		 * @return {void}
+		 */
 		submitFormManual: function( e, object ) {
 			let isPro, errors,
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
@@ -1564,6 +1588,11 @@ function frmFrontFormJS() {
 			}
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 *
+		 * @return {Array} List of errors.
+		 */
 		validateFormSubmit: function( object ) {
 			if ( typeof tinyMCE !== 'undefined' && jQuery( object ).find( '.wp-editor-wrap' ).length ) {
 				tinyMCE.triggerSave();
@@ -1582,6 +1611,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {Array} List of errors.
+		 */
 		getAjaxFormErrors: function( object ) {
 			let customErrors, key;
 
@@ -1599,6 +1632,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {void}
+		 */
 		addAjaxFormErrors: function( object ) {
 			let key, $fieldCont;
 			removeAllErrors();
