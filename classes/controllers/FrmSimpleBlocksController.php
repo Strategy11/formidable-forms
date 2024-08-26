@@ -198,7 +198,7 @@ class FrmSimpleBlocksController {
 		 * @param string $form
 		 * @param array $params
 		 */
-		$form = apply_filters( 'frm_before_simple_form_render_filter', '', $params );
+		$form = apply_filters( 'frm_before_simple_form_render', '', $params );
 
 		$form .= FrmFormsController::get_form_shortcode( $params );
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
