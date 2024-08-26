@@ -481,8 +481,8 @@ BEFORE_HTML;
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
 		if ( ! empty( $classes ) ) {
 			$classes      = implode( ' ', $classes );
-			$button_class = ' class="frm_button_submit';
-			if ( strpos( $button_parts[0], $button_class ) !== false ) {
+			$button_class = 'frm_button_submit';
+			if ( preg_match( '/\bclass="[^"]*?\b' . preg_quote( $button_class, '/' ) . '\b[^"]*?"/', $button_parts[0] ) ) {
 				$button_parts[0] = str_replace( $button_class, $button_class . ' ' . esc_attr( $classes ), $button_parts[0] );
 			} else {
 				$button_parts[0] .= ' class="' . esc_attr( $classes ) . '"';

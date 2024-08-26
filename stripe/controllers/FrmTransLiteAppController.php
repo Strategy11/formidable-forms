@@ -59,7 +59,7 @@ class FrmTransLiteAppController {
 		$frm_payment = new FrmTransLitePayment();
 
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
-		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.' );
+		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );

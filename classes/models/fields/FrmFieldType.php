@@ -1062,9 +1062,7 @@ DEFAULT_HTML;
 	}
 
 	protected function html5_input_type() {
-		$frm_settings = FrmAppHelper::get_settings();
-
-		return $frm_settings->use_html ? $this->type : 'text';
+		return $this->type;
 	}
 
 	/**
@@ -1101,11 +1099,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( ! $frm_settings->use_html ) {
-			return;
-		}
-
 		$min = FrmField::get_option( $this->field, 'minnum' );
 		if ( ! is_numeric( $min ) ) {
 			$min = 0;
@@ -1214,7 +1207,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param array $values
 	 *
@@ -1687,14 +1680,14 @@ DEFAULT_HTML;
 	 * This function is deprecated since it has a typo in the name.
 	 *
 	 * @since 3.0
-	 * @deprecated x.x
+	 * @deprecated 6.11.2
 	 *
 	 * @param array $values
 	 *
 	 * @return array
 	 */
 	protected function get_select_atributes( $values ) {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmFieldType::get_select_attributes' );
+		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
 		return $this->get_select_attributes( $values );
 	}
 }

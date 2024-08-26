@@ -504,7 +504,7 @@ class FrmStylesHelper {
 		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
 		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
-		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 2px 0 rgba(18, 18, 23, 0.05)';
 
 		if ( ! isset( $settings['repeat_icon'] ) ) {
 			$settings['repeat_icon'] = 1;
@@ -737,6 +737,23 @@ class FrmStylesHelper {
 		}
 
 		return FrmDb::get_count( 'frm_forms', $where );
+	}
+
+	/**
+	 * Determines if the chosen JavaScript library should be used.
+	 *
+	 * @since 6.13
+	 *
+	 * @return bool
+	 */
+	public static function use_chosen_js() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+
+		return is_callable( 'FrmProAppHelper::use_chosen_js' )
+			? FrmProAppHelper::use_chosen_js()
+			: true;
 	}
 
 	/**
