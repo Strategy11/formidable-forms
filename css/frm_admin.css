@@ -2944,14 +2944,14 @@ body.frm-body-with-open-modal {
 	float: left;
 }
 
-.frm-meta-tag,	
-.frm-meta-tag:hover {	
-	padding: var(--gap-2xs) var(--gap-xs);	
-	border-radius: var(--small-radius);	
-	font-weight: 600;	
-	display: inline-flex;	
-	background-color: #D9EBFF;	
-	gap: 2px;	
+.frm-meta-tag,
+.frm-meta-tag:hover {
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	font-weight: 600;
+	display: inline-flex;
+	background-color: #D9EBFF;
+	gap: 2px;
 }
 
 .frm-meta-tag.frm-grey-tag,
