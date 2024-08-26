@@ -6196,25 +6196,68 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldOrder() {
-		let fields, fieldId, field, currentOrder, newOrder;
+		let self = this;
+
+		this.initOnceInAllInstances = function() {
+			if ( 'undefined' !== typeof updateFieldOrder.prototype.orderFieldsObject ) {
+				return;
+			}
+
+			// It will store the order input fields ( input[name="field_options[field_order_{fieldId}]"] ).
+			// It will help to reduce the DOM searches based on fieldId.
+			// The same object data is used across all "updateFieldOrder" instances.
+			updateFieldOrder.prototype.orderFieldsObject = {};
+
+			// Get the Form group that will handle the fields settings.
+			// Perform a single DOM search and use it across all "updateFieldOrder" instances.
+			updateFieldOrder.prototype.fieldSettingsForm = document.getElementById( 'frm-end-form-marker' ).closest( 'form' );
+		};
+
+		this.getFieldOrderInputById = function( fieldId, parent ) {
+			let field;
+			const orderFieldsObject = updateFieldOrder.prototype.orderFieldsObject;
+			const fieldSettingsForm = updateFieldOrder.prototype.fieldSettingsForm;
+
+			if ( 'undefined' === typeof orderFieldsObject[ fieldId ]) {
+				field = fieldSettingsForm.querySelector( 'input[name="field_options[field_order_' + fieldId + ']"]' );
+				if ( null === field ) {
+					field = parent.querySelector( 'input[name="field_options[field_order_' + fieldId + ']"]' );
+				}
+				orderFieldsObject[ fieldId ] = field;
+				return field;
+			}
+
+			return orderFieldsObject[ fieldId ];
+		};
+
+		this.initOnceInAllInstances();
 		renumberPageBreaks();
-		jQuery( '#frm-show-fields' ).each( function( i ) {
-			fields = jQuery( 'li.frm_field_box', this );
+
+		return ( function() {
+			let fieldId, field, currentOrder, newOrder,
+				moveFieldsClass = new moveFieldSettings(),
+				fields = jQuery( 'li.frm_field_box', jQuery( '#frm-show-fields' ) );
+
 			for ( i = 0; i < fields.length; i++ ) {
 				fieldId = fields[ i ].getAttribute( 'data-fid' );
-				field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' );
-				currentOrder = field.val();
+				field = self.getFieldOrderInputById( fieldId, fields[ i ]);
+
+				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
+				currentOrder = null !== field ? Object.assign({}, field.value )[0] : null;
 				newOrder = i + 1;
 
-				if ( currentOrder != newOrder ) {
-					field.val( newOrder );
-					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
+				if ( currentOrder != newOrder && null !== currentOrder ) {
+					field.value = newOrder;
+					singleField = fields[ i ].querySelector( '#frm-single-settings-' + fieldId );
 
-					moveFieldSettings( singleField );
+					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
+					moveFieldsClass.append( singleField );
 					fieldUpdated();
 				}
 			}
-		});
+			// move all appended fields
+			moveFieldsClass.moveFields();
+		}() );
 	}
 
 	function toggleSectionHolder() {
@@ -7346,16 +7389,51 @@ function frmAdminBuildJS() {
 	 * Keep the end marker at the end of the form.
 	 */
 	function moveFieldSettings( singleField ) {
+		let self = this;
+
 		if ( singleField === null ) {
 			// The field may have not been loaded yet via ajax.
 			return;
 		}
 
-		const classes = singleField.parentElement.classList;
-		if ( classes.contains( 'frm_field_box' ) || classes.contains( 'divider_section_only' ) ) {
-			const endMarker = document.getElementById( 'frm-end-form-marker' );
-			builderForm.insertBefore( singleField, endMarker );
+		this.fragment = document.createDocumentFragment();
+
+		this.initOnceInAllInstances = function() {
+			if ( 'undefined' !== typeof moveFieldSettings.prototype.endMarker ) {
+				return;
+			}
+			// perform a single search in the DOM and use it across all moveFieldSettings instances
+			moveFieldSettings.prototype.endMarker = document.getElementById( 'frm-end-form-marker' );
+		};
+
+		this.append = function( field ) {
+			const classname = null !== field ? field.parentElement.classList : '';
+			if ( null === field || ( ! classname.contains( 'frm_field_box' ) && ! classname.contains( 'divider_section_only' ) ) ) {
+				return;
+			}
+			self.fragment.appendChild( field );
+		};
+
+		this.moveFields = function() {
+			builderForm.insertBefore( self.fragment, moveFieldSettings.prototype.endMarker );
+		};
+
+		this.initOnceInAllInstances();
+
+		// Move the field if function is called as function with a singleField passed as arg.
+		// In this particular case only 1 field is needed to be moved so the field will get instantly moved.
+		// "singleField" may be undefined when it's called as a constructor instead of a function. Use the constructor to add multiple fields which are passed through "append" and move these all at once via "moveFields".
+		if ( 'undefined' !== typeof singleField ) {
+			this.append( singleField );
+			this.moveFields();
+			return;
 		}
+
+		return {
+			append: this.append,
+			moveFields: this.moveFields
+		};
+
 	}
 
 	function showEmailRow() {
