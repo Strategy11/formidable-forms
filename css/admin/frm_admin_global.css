@@ -7,3 +7,13 @@
 	font-size: 9px;
 	vertical-align: middle;
 }
+
+.wp-submenu.wp-submenu-wrap .frm-meta-tag.frm-new-pill {
+	color: #F47449;
+	background: inherit;
+	margin-left: 0;
+	font-size: unset;
+	font-weight: unset;
+	vertical-align: unset;
+}
+
