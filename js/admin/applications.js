@@ -91,7 +91,7 @@
 				tag(
 					'h2',
 					{
-						child: span( __( 'My Applications', 'formidable-pro' ) ),
+						child: span( __( 'My Applications', 'formidable' ) ),
 						className: 'frm-h2'
 					}
 				)

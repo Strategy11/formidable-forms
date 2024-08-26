@@ -329,9 +329,9 @@ class FrmSMTPController {
 		$step['plugin'] = $this->output_data['pro_plugin_installed'] ? $this->config['pro_plugin'] : $this->config['lite_plugin'];
 
 		if ( $this->output_data['plugin_activated'] ) {
-			$step['icon']          = 'frm_step_complete_icon';
-			$step['button_text']   = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
-			$step['button_class']  = 'grey disabled';
+			$step['icon']         = 'frm_step_complete_icon';
+			$step['button_text']  = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
+			$step['button_class'] = 'grey disabled';
 		} else {
 			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
 			$step['button_class']  = 'frm-activate-addon';
@@ -405,7 +405,7 @@ class FrmSMTPController {
 	 *
 	 * @since 4.04.04
 	 *
-	 * @return \WPMailSMTP\Providers\MailCatcherInterface|PHPMailer Instance of PHPMailer.
+	 * @return PHPMailer|\WPMailSMTP\Providers\MailCatcherInterface Instance of PHPMailer.
 	 */
 	protected function get_phpmailer() {
 		global $phpmailer;
@@ -452,8 +452,6 @@ class FrmSMTPController {
 		?>
 <style>
 #frm-admin-smtp *, #frm-admin-smtp *::before, #frm-admin-smtpp *::after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 #frm-admin-smtp{
@@ -514,8 +512,6 @@ class FrmSMTPController {
 }
 #frm-admin-smtp .step,
 #frm-admin-smtp .screenshot .cont {
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 }
 #frm-admin-smtp .step {

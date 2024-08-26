@@ -3,12 +3,12 @@
 **/*.js.map
 **/formidable_blocks.js
 **/formidable_overlay.js
+**/formidable_dashboard.js
 **/formidable-templates.js
 
 **/node_modules/**
 **/vendor/**
 build
 coverage
-cypress
 node_modules
 vendor

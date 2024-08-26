@@ -1,3 +1,3 @@
-import { FrmOverlay } from './components/class-overlay';
+import { frmOverlay } from './components/class-overlay';
 
-window.frmOverlay = new FrmOverlay();
+window.frmOverlay = new frmOverlay();

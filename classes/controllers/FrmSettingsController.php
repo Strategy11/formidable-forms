@@ -21,7 +21,7 @@ class FrmSettingsController {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php';
 	}
 
 	public static function display_form( $errors = array(), $message = '' ) {
@@ -35,7 +35,7 @@ class FrmSettingsController {
 		$sections = self::get_settings_tabs();
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php';
 	}
 
 	/**
@@ -45,25 +45,25 @@ class FrmSettingsController {
 	 */
 	private static function get_settings_tabs() {
 		$sections = array(
-			'general' => array(
+			'general'       => array(
 				'class'    => __CLASS__,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
-			'messages' => array(
+			'messages'      => array(
 				'class'    => __CLASS__,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
-			'permissions' => array(
+			'permissions'   => array(
 				'class'    => __CLASS__,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
-			'custom_css' => array(
+			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
 				'name'     => __( 'Custom CSS', 'formidable' ),
@@ -75,13 +75,13 @@ class FrmSettingsController {
 				'name'     => __( 'Manage Styles', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
-			'captcha' => array(
+			'captcha'       => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
-			'white_label' => array(
+			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_ghost_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -91,7 +91,7 @@ class FrmSettingsController {
 					'screenshot' => 'white-label.png',
 				),
 			),
-			'inbox' => array(
+			'inbox'         => array(
 				'name'       => __( 'Inbox', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_email_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
@@ -223,7 +223,7 @@ class FrmSettingsController {
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
 	/**
@@ -233,7 +233,7 @@ class FrmSettingsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php';
 	}
 
 	/**
@@ -243,7 +243,7 @@ class FrmSettingsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
 	}
 
 	/**
@@ -252,13 +252,13 @@ class FrmSettingsController {
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
 	/**
 	 * Save form data submitted from the Global settings page.
 	 *
-	 * @param string|bool $stop_load
+	 * @param bool|string $stop_load
 	 *
 	 * @return void
 	 */
@@ -270,8 +270,8 @@ class FrmSettingsController {
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$error_args = array(
-				'title' => __( 'Verification failed', 'formidable' ),
-				'body'  => $frm_settings->admin_permission,
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $frm_settings->admin_permission,
 				'cancel_text' => __( 'Cancel', 'formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
@@ -317,7 +317,7 @@ class FrmSettingsController {
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
-		if ( $action == 'process-form' ) {
+		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
 		} elseif ( $stop_load != 'stop_load' ) {
 			self::display_form();
@@ -353,7 +353,7 @@ class FrmSettingsController {
 			__( 'Analyze form data with graphs & stats', 'formidable' ),
 		);
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php';
 	}
 
 	/**
@@ -362,6 +362,7 @@ class FrmSettingsController {
 	 * @since 3.04.02
 	 */
 	public static function settings_cta_dismiss() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
 		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
@@ -380,7 +381,7 @@ class FrmSettingsController {
 
 		global $wpdb;
 
-		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$term      = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
 		$where = array(
@@ -405,13 +406,5 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
-	}
-
-	/**
-	 * @deprecated 6.0 use FrmSettingsController::captcha_settings().
-	 */
-	public static function recaptcha_settings() {
-		_deprecated_function( __FUNCTION__, '6.0', 'FrmSettingsController::captcha_settings()' );
-		self::captcha_settings();
 	}
 }

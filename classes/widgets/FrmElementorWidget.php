@@ -91,10 +91,10 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo FrmFormsController::get_form_shortcode(
 				array(
-					'id'          => $form_id,
-					'title'       => $title,
-					'description' => $description,
-					'minimize'    => $minimize,
+					'id'          => $form_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'title'       => $title, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'description' => $description, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'minimize'    => $minimize, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				)
 			);
 		}

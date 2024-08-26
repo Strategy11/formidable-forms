@@ -58,77 +58,77 @@ class FrmFormTemplatesController {
 	/**
 	 * Instance of the Form Template API handler.
 	 *
-	 * @var FrmFormTemplateApi $form_template_api Form Template API handler.
+	 * @var FrmFormTemplateApi Form Template API handler.
 	 */
 	private static $form_template_api;
 
 	/**
 	 * Templates fetched from the API.
 	 *
-	 * @var array $templates Templates information from API.
+	 * @var array Templates information from API.
 	 */
 	private static $templates = array();
 
 	/**
 	 * Featured templates.
 	 *
-	 * @var array $featured_templates Associative array with the featured templates' information.
+	 * @var array Associative array with the featured templates' information.
 	 */
 	private static $featured_templates = array();
 
 	/**
 	 * List of user favorite templates.
 	 *
-	 * @var array $favorite_templates List of templates that the user has marked as favorites.
+	 * @var array List of templates that the user has marked as favorites.
 	 */
 	private static $favorite_templates = array();
 
 	/**
 	 * Templates fetched from the published form by user.
 	 *
-	 * @var array $custom_templates Templates information from published form.
+	 * @var array Templates information from published form.
 	 */
 	private static $custom_templates = array();
 
 	/**
 	 * Categories for organizing templates.
 	 *
-	 * @var array $categories Categories for organizing templates.
+	 * @var array Categories for organizing templates.
 	 */
 	private static $categories = array();
 
 	/**
 	 * Status of API request, true if expired.
 	 *
-	 * @var bool $is_expired Whether the API request is expired or not.
+	 * @var bool Whether the API request is expired or not.
 	 */
 	private static $is_expired = false;
 
 	/**
 	 * The type of license received from the API.
 	 *
-	 * @var string $license_type License type received from the API.
+	 * @var string License type received from the API.
 	 */
 	private static $license_type = '';
 
 	/**
 	 * Path to views.
 	 *
-	 * @var string $view_path Path to form templates views.
+	 * @var string Path to form templates views.
 	 */
 	private static $view_path = '';
 
 	/**
 	 * Upgrade URL.
 	 *
-	 * @var string $upgrade_link URL for upgrading accounts.
+	 * @var string URL for upgrading accounts.
 	 */
 	private static $upgrade_link = '';
 
 	/**
 	 * Renew URL.
 	 *
-	 * @var string $renew_link URL for renewing accounts.
+	 * @var string URL for renewing accounts.
 	 */
 	private static $renew_link = '';
 
@@ -200,7 +200,6 @@ class FrmFormTemplatesController {
 		$custom_templates   = self::get_custom_templates();
 		$categories         = self::get_categories();
 
-		// Render the view.
 		include $view_path . 'index.php';
 	}
 
@@ -253,7 +252,6 @@ class FrmFormTemplatesController {
 			}
 		}
 
-		// Render the view.
 		include $view_path . 'modal.php';
 	}
 
@@ -484,7 +482,7 @@ class FrmFormTemplatesController {
 					);
 				}
 
-				self::$categories[ $category_slug ]['count']++;
+				++self::$categories[ $category_slug ]['count'];
 			}
 
 			// Mark the template as favorite if it's in the favorite templates list.
@@ -526,7 +524,7 @@ class FrmFormTemplatesController {
 		}
 		$special_categories['all-templates']  = array(
 			'name'  => __( 'All Templates', 'formidable' ),
-			'count' => count( self::$templates ),
+			'count' => self::get_template_count(),
 		);
 		$special_categories['free-templates'] = array(
 			'name'  => __( 'Free Templates', 'formidable' ),
@@ -656,6 +654,7 @@ class FrmFormTemplatesController {
 
 		// Enqueue styles that needed.
 		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_style( 'formidable-animations' );
 		wp_enqueue_style( 'formidable-grids' );
 
 		// Register and enqueue "Form Templates" style.
@@ -674,7 +673,7 @@ class FrmFormTemplatesController {
 		 */
 		do_action( 'frm_form_templates_enqueue_assets' );
 
-		self::dequeue_scripts();
+		FrmAppHelper::dequeue_extra_global_scripts();
 	}
 
 	/**
@@ -687,7 +686,7 @@ class FrmFormTemplatesController {
 	private static function get_js_variables() {
 		$js_variables = array(
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
-			'templatesCount'          => count( self::$templates ),
+			'templatesCount'          => self::get_template_count(),
 			'favoritesCount'          => array(
 				'total'   => self::get_favorite_templates_count(),
 				'default' => count( self::$favorite_templates['default'] ),
@@ -705,20 +704,6 @@ class FrmFormTemplatesController {
 		 * @param array $js_variables Array of js_variables passed to "Form Templates".
 		 */
 		return apply_filters( 'frm_form_templates_js_variables', $js_variables );
-	}
-
-	/**
-	 * Dequeue scripts and styles on "Form Templates".
-	 *
-	 * Avoid extra scripts loading on "Form Templates" page that aren't needed.
-	 *
-	 * @since 6.7
-	 *
-	 * @return void
-	 */
-	private static function dequeue_scripts() {
-		wp_dequeue_script( 'frm-surveys-admin' );
-		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
 
 	/**
@@ -741,6 +726,21 @@ class FrmFormTemplatesController {
 	 */
 	public static function get_templates() {
 		return self::$templates;
+	}
+
+	/**
+	 * Get the total number of templates.
+	 *
+	 * @since 6.8
+	 *
+	 * @return int
+	 */
+	public static function get_template_count() {
+		if ( empty( self::$templates ) ) {
+			self::$form_template_api = new FrmFormTemplateApi();
+			self::retrieve_and_set_templates();
+		}
+		return count( self::$templates );
 	}
 
 	/**

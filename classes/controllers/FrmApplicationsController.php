@@ -154,11 +154,22 @@ class FrmApplicationsController {
 	private static function sort_templates( $applications ) {
 		usort(
 			$applications,
-			function( $a, $b ) {
+			function ( $a, $b ) {
 				return strcmp( $a['name'], $b['name'] );
 			}
 		);
 		return $applications;
+	}
+
+	/**
+	 * @usedby FrmAppController::admin_init().
+	 *
+	 * @since 6.8
+	 *
+	 * @return void
+	 */
+	public static function load_page() {
+		self::load_assets();
 	}
 
 	/**
@@ -186,6 +197,7 @@ class FrmApplicationsController {
 		wp_localize_script( 'formidable_applications', 'frmApplicationsVars', $js_vars );
 
 		wp_enqueue_script( 'formidable_applications' );
+		wp_set_script_translations( 'formidable_applications', 'formidable' );
 		wp_enqueue_style( 'formidable_applications' );
 
 		do_action( 'frm_applications_assets' );
@@ -196,9 +208,7 @@ class FrmApplicationsController {
 	 */
 	public static function dequeue_scripts() {
 		if ( 'formidable-applications' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
-			// Avoid extra scripts loading on applications index that aren't needed.
-			wp_dequeue_script( 'frm-surveys-admin' );
-			wp_dequeue_script( 'frm-quizzes-form-action' );
+			FrmAppHelper::dequeue_extra_global_scripts();
 		}
 	}
 

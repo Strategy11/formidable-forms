@@ -24,7 +24,7 @@ class FrmStrpLitePaymentsController {
 
 		$url .= $receipt;
 
-		$link  = '<a href="' . esc_attr( $url ) . '" target="_blank">';
+		$link  = '<a href="' . esc_url( $url ) . '" target="_blank">';
 		$link .= esc_html( $receipt );
 		$link .= '</a>';
 		return $link;

@@ -36,7 +36,7 @@ class FrmMigrate {
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			$old_db_version = get_option( 'frm_db_version' );
 
@@ -256,7 +256,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -285,7 +285,7 @@ class FrmMigrate {
 		delete_option( 'frm-usage-uuid' );
 		delete_option( 'frm_inbox' );
 		delete_option( 'frmpro_css' );
-		delete_option( 'frm_welcome_redirect' );
+		delete_option( FrmOnboardingWizardController::REDIRECT_STATUS_OPTION );
 		delete_option( FrmEmailSummaryHelper::$option_name );
 
 		// Delete roles.
@@ -317,13 +317,33 @@ class FrmMigrate {
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
-		delete_transient( 'frm_activation_redirect' );
+		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Disables summary email for multisite (not the main site) if recipient setting isn't changed.
+	 *
+	 * @since 6.8
+	 */
+	private function migrate_to_101() {
+		if ( ! is_multisite() || get_main_site_id() === get_current_blog_id() ) {
+			return;
+		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->summary_emails ) || '[admin_email]' !== $frm_settings->summary_emails_recipients ) {
+			// User changed it.
+			return;
+		}
+
+		$frm_settings->summary_emails = 0;
+		$frm_settings->store();
 	}
 
 	/**
@@ -371,7 +391,7 @@ class FrmMigrate {
 	}
 
 	/**
-	 * Delete uneeded default templates
+	 * Delete unneeded default templates
 	 *
 	 * @since 3.06
 	 */
@@ -393,7 +413,7 @@ class FrmMigrate {
 
 		foreach ( (array) $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
-			$size             = $f->field_options['size'];
+			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
 
 			if ( $size === $f->field_options['size'] ) {
@@ -497,7 +517,7 @@ class FrmMigrate {
 		}
 
 		foreach ( $styles as $style ) {
-			if ( $style->post_content['field_width'] == '400px' ) {
+			if ( $style->post_content['field_width'] === '400px' ) {
 				$style->post_content['field_width'] = '100%';
 				$frm_style->save( (array) $style );
 
@@ -563,7 +583,7 @@ class FrmMigrate {
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
 
-		$size = round( $pixel_conversion * (int) $size );
+		$size  = round( $pixel_conversion * (int) $size );
 		$size .= 'px';
 	}
 
@@ -637,7 +657,7 @@ DEFAULT_HTML;
 		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
-			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
+			if ( empty( $form->options['submit_html'] ) ) {
 				continue;
 			}
 

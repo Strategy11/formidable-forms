@@ -2,8 +2,8 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { HIDE_JS_CLASS, getAppState, hasQueryParam } from '../shared';
-import { show, hide, hideElements, fadeIn } from '../utils';
+import { HIDE_JS_CLASS, getAppState } from '../shared';
+import { show, hide, hideElements, frmAnimate, hasQueryParam } from '../utils';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -21,6 +21,8 @@ function setupInitialView() {
 		availableTemplatesCategory,
 		freeTemplatesCategory
 	} = getElements();
+
+	const bodyContentAnimate = new frmAnimate( bodyContent );
 
 	// Clear the value in the search input
 	searchInput.value = '';
@@ -49,7 +51,7 @@ function setupInitialView() {
 	// Smoothly display the updated UI elements
 	bodyContent.classList.remove( HIDE_JS_CLASS );
 	sidebar.classList.remove( HIDE_JS_CLASS );
-	fadeIn( bodyContent );
+	bodyContentAnimate.fadeIn();
 	show( sidebar );
 
 	// Show the "Cancel" button in the header if the 'return_page' query param is present

@@ -1,0 +1,33 @@
+[type.po]
+extend-glob = ["*.po"]
+check-file = false
+
+[type.map]
+extend-glob = ["*.map"]
+check-file = false
+
+[type.js]
+extend-glob = ["*/bootstrap-multiselect.js","*.min.js"]
+check-file = false
+
+[type.xml]
+extend-glob = ["*.xml"]
+check-file = false
+
+[default]
+extend-ignore-re = [
+    "/mis'",
+    "5ths deprecated",
+    "7ths and 8ths",
+    "'ND' => 'North Dakota'",
+]
+
+[default.extend-words]
+datas = "datas"
+# This typo fix requires deprecating a method (get_select_atributes). There is an open issue to fix this.
+atributes = "atributes"
+# fo is used for the Faroese locale. It is not a typo.
+# fo is also used for a table alias in SQL queries.
+fo = "fo"
+[default.extend-identifiers]
+66afe9 = "66afe9"

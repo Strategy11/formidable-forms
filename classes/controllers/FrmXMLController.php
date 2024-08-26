@@ -101,8 +101,8 @@ class FrmXMLController {
 				$pages = self::create_pages_for_import( $form );
 			}
 
-			if ( isset( $pages ) && ! empty( $pages ) ) {
-				$post_id = end( $pages );
+			if ( ! empty( $pages ) ) {
+				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
@@ -163,7 +163,7 @@ class FrmXMLController {
 			return;
 		}
 
-		$selected_xml  = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
+		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
 			return;
 		}
@@ -178,7 +178,7 @@ class FrmXMLController {
 	 * @param string $value
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -189,15 +189,14 @@ class FrmXMLController {
 	 * @since 4.06.02
 	 *
 	 * @param array $form The posted form values.
-	 *
-	 * @return array The array of created pages.
+	 * @return array|null The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
-		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
-			return;
+		if ( empty( $form['pages'] ) ) {
+			return null;
 		}
 
-		$form_key = self::get_selected_in_form( $form, 'form' );
+		$form_key  = self::get_selected_in_form( $form, 'form' );
 		$view_keys = self::get_selected_in_form( $form, 'view' );
 
 		$page_ids = array();
@@ -211,7 +210,7 @@ class FrmXMLController {
 				$item_key  = is_array( $view_keys ) ? $view_keys[ $form_key ] : $view_keys;
 				$shortcode = '[display-frm-data id=%1$s filter=limited]';
 			} elseif ( $for === 'form' ) {
-				$item_key = $form_key;
+				$item_key  = $form_key;
 				$shortcode = '[formidable id=%1$s]';
 			} else {
 				$item_key  = self::get_selected_in_form( $form, 'form' );
@@ -302,7 +301,7 @@ class FrmXMLController {
 	 */
 	public static function form( $errors = array(), $message = '' ) {
 		$where = array(
-			'status'         => array( null, '', 'published' ),
+			'status' => array( null, '', 'published' ),
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 
@@ -344,6 +343,7 @@ class FrmXMLController {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
 		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
@@ -352,7 +352,7 @@ class FrmXMLController {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? sanitize_option( 'upload_path', $_FILES['frm_import_file']['tmp_name'] ) : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
@@ -372,7 +372,7 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		$file_type = sanitize_option( 'upload_path', $_FILES['frm_import_file']['name'] );
 		$file_type = strtolower( pathinfo( $file_type, PATHINFO_EXTENSION ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {
@@ -542,7 +542,7 @@ class FrmXMLController {
 			unset( $tb_type );
 		}//end foreach
 
-		$filename = self::get_file_name( $args, $type, $records );
+		$filename = self::get_file_name( $args, $records );
 
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
@@ -553,16 +553,37 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Returns an array that has parent term slugs for the terms provided.
+	 *
+	 * @since 6.8.3
+	 * @param array $terms
+	 * @return array
+	 */
+	public static function get_parent_terms_slugs( $terms ) {
+		$parent_term_ids = array_filter( array_unique( wp_list_pluck( $terms, 'parent' ) ) );
+		$parent_slugs    = array();
+
+		if ( ! $parent_term_ids ) {
+			return $parent_slugs;
+		}
+
+		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
+		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
+
+		return $parent_slugs;
+	}
+
+	/**
 	 * @return void
 	 */
 	private static function prepare_types_array( &$type ) {
 		$type = (array) $type;
-		if ( ! in_array( 'forms', $type ) && ( in_array( 'items', $type ) || in_array( 'posts', $type ) ) ) {
+		if ( ! in_array( 'forms', $type, true ) && ( in_array( 'items', $type, true ) || in_array( 'posts', $type, true ) ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type ) ) {
+		if ( in_array( 'forms', $type, true ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
@@ -575,13 +596,11 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param array $args
-	 * @param array $type
 	 * @param array $records
-	 *
 	 * @return string
 	 */
-	private static function get_file_name( $args, $type, $records ) {
-		$has_one_form = isset( $records['forms'] ) && ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
+	private static function get_file_name( $args, $records ) {
+		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );
@@ -643,7 +662,9 @@ class FrmXMLController {
 		}
 
 		// Remove time limit to execute this function.
-		set_time_limit( 0 );
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();

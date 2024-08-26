@@ -67,6 +67,8 @@ class FrmStrpLiteConnectApiAdapter {
 		$user_id   = ! empty( $options['user_id'] ) ? $options['user_id'] : get_current_user_id();
 		$meta_name = FrmStrpLiteAppHelper::get_customer_id_meta_name();
 
+		$customer_id_error_message = '';
+
 		if ( $user_id ) {
 			$customer_id = get_user_meta( $user_id, $meta_name, true );
 			if ( ! isset( $options['email'] ) ) {
@@ -162,7 +164,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $new_charge
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_subscription( $new_charge ) {
 		return FrmStrpLiteConnectHelper::create_subscription( $new_charge );
@@ -193,7 +195,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 *
 	 * @param string      $customer_id Customer ID beginning with cus_.
 	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
 		return FrmStrpLiteConnectHelper::create_setup_intent( $customer_id, $payment_method_types );
@@ -205,7 +207,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
-	 * @return object|string|false
+	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {
 		return FrmStrpLiteConnectHelper::get_setup_intent( $setup_id );

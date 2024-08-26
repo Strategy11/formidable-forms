@@ -21,14 +21,6 @@
 	position: relative;
 }
 
-.frm-admin-page-applications #frm_top_bar {
-	background: #fff;
-}
-
-.frm-admin-page-applications #wpbody {
-	background: var(--sidebar-color);
-}
-
 .frm-admin-page-applications #wpcontent {
 	padding-left: 0;
 }
@@ -191,11 +183,11 @@
 }
 
 #frm_application_category_filter {
-    display: inline-block;
+	display: inline-block;
 }
 
 #frm_application_category_filter > a {
-    padding: 0 8px;
+	padding: 0 8px;
 }
 
 #frm_application_category_filter > a:first-child {

@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			$disabled = isset( $imported[ $info['form'] ] ) ? ' disabled' : '';
-			$url   = isset( $info['url'] ) ? $info['url'] : '';
-			$value = $importing === 'form' ? $info['form'] : $info['key'];
+			$url      = isset( $info['url'] ) ? $info['url'] : '';
+			$value    = $importing === 'form' ? $info['form'] : $info['key'];
 			if ( ! isset( $info['img'] ) ) {
 				?>
 				<input type="hidden" name="<?php echo esc_attr( $importing ); ?>[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $value ); ?>" <?php echo esc_attr( $disabled ); ?>/>

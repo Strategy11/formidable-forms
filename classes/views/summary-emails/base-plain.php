@@ -16,10 +16,20 @@ $frm_settings = FrmAppHelper::get_settings();
 
 echo '%%INNER_CONTENT%%';
 
-// translators: contact support URL.
-printf( esc_html__( 'Need help? Get in touch with our team at %s', 'formidable' ), esc_url_raw( $args['support_url'] ) );
+FrmEmailSummaryHelper::plain_text_echo(
+	sprintf(
+		// translators: Contact support URL.
+		__( 'Need help? Get in touch with our team at %s', 'formidable' ),
+		esc_url_raw( $args['support_url'] )
+	)
+);
 
 echo "\r\n\r\n";
 
-// translators: Unsubscribe URL.
-printf( esc_html__( 'Unsubscribe: %s', 'formidable' ), esc_url_raw( $args['unsubscribe_url'] ) );
+FrmEmailSummaryHelper::plain_text_echo(
+	sprintf(
+		// translators: Unsubscribe URL.
+		__( 'Unsubscribe: %s', 'formidable' ),
+		esc_url_raw( $args['unsubscribe_url'] )
+	)
+);

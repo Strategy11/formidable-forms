@@ -8,11 +8,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	if ( $has_fields ) {
 		// Add form messages.
-		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 	}
 	?>
 
 	<div id="frm-fake-page" class="frm_hidden">
+		<?php
+		/**
+		 * Fires before the fake page in form builder.
+		 *
+		 * @since 6.9
+		 *
+		 * @param array $form_array Processed form array.
+		 */
+		do_action( 'frm_before_builder_fake_page', $values );
+		?>
+
 		<div class="frm-page-break">
 			<div class="frm-collapse-page button frm-button-secondary frm-button-sm">
 				<?php
@@ -22,6 +33,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</div>
 		</div>
+
+		<?php
+		/**
+		 * Fires after the fake page in form builder.
+		 *
+		 * @since 6.9
+		 *
+		 * @param array $form_array Processed form array.
+		 */
+		do_action( 'frm_after_builder_fake_page', $values );
+		?>
 	</div>
 
 	<ul id="frm-show-fields" class="frm_sorting inside">
@@ -30,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
 			foreach ( $values['fields'] as $field ) {
-				$values['count']++;
+				++$values['count'];
 				$grid_helper->set_field( $field );
 				$grid_helper->maybe_begin_field_wrapper();
 				FrmFieldsController::load_single_field( $field, $values );
@@ -43,11 +65,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<p id="frm-form-button">
-		<button class="frm_button_submit" disabled="disabled">
-			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
-		</button>
-	</p>
+	<?php if ( ! FrmAppHelper::is_admin_page() ) : ?>
+		<p id="frm-form-button">
+			<button class="frm_button_submit" disabled="disabled">
+				<?php echo esc_html( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+			</button>
+		</p>
+	<?php endif; ?>
 
 	<div class="frm_no_fields">
 

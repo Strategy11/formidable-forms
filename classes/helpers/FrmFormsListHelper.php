@@ -12,6 +12,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
 		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Forms list', 'formidable' ),
+			)
+		);
 	}
 
 	/**
@@ -78,7 +83,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( $s != '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
-			foreach ( (array) $search_terms as $term ) {
+			foreach ( $search_terms as $term ) {
 				$s_query[] = array(
 					'or'               => true,
 					'name LIKE'        => $term,
@@ -91,8 +96,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 		}
 
-		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
-		$total_items = FrmDb::get_count( 'frm_forms', $s_query );
+		$this->items       = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
+		$total_items       = FrmDb::get_count( 'frm_forms', $s_query );
 		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
@@ -125,7 +130,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function get_bulk_actions() {
 		$actions = array();
 
-		if ( 'trash' == $this->status ) {
+		if ( 'trash' === $this->status ) {
 			if ( current_user_can( 'frm_edit_forms' ) ) {
 				$actions['bulk_untrash'] = __( 'Restore', 'formidable' );
 			}
@@ -146,11 +151,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
-		if ( 'top' != $which ) {
+		if ( 'top' !== $which ) {
 			return;
 		}
 
-		if ( 'trash' == $this->status && current_user_can( 'frm_delete_forms' ) ) {
+		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
 			?>
 			<div class="alignleft actions frm_visible_overflow">
 				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
@@ -159,8 +164,10 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_views() {
-
 		$statuses = array(
 			'published' => __( 'My Forms', 'formidable' ),
 			'draft'     => __( 'Drafts', 'formidable' ),
@@ -202,6 +209,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
 	 * @return void
 	 */
 	public function pagination( $which ) {
@@ -231,22 +239,29 @@ class FrmFormsListHelper extends FrmListHelper {
 		$action_links = $this->row_actions( $actions );
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox_label_text = sprintf(
+			// translators: Form title
+			__( 'Select %s', 'formidable' ),
+			! empty( $item->name ) ? $item->name : __( '(no title)', 'formidable' )
+		);
+
+		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
 
 		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
 		$format = 'Y/m/d';
-		if ( 'list' != $mode ) {
+		if ( 'list' !== $mode ) {
 			$format .= ' \<\b\r \/\> g:i:s a';
 		}
 
 		foreach ( $columns as $column_name => $column_display_name ) {
-			$class = $column_name . ' column-' . $column_name . ( 'name' == $column_name ? ' post-title page-title column-title' : '' );
+			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
 
 			$style = '';
-			if ( in_array( $column_name, $hidden ) ) {
+			if ( in_array( $column_name, $hidden, true ) ) {
 				$class .= ' frm_hidden';
 			}
 
@@ -267,7 +282,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
+					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
 					$val .= $action_links;
 					break;
 				case 'created_at':
@@ -318,7 +333,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
-		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
@@ -368,9 +383,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			$new_actions[ $link ] = FrmFormsHelper::format_link_html( $action, 'short' );
 		}
 
-		if ( 'trash' == $this->status ) {
+		if ( 'trash' === $this->status ) {
 			$actions = $new_actions;
-
 			return;
 		}
 
@@ -402,7 +416,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$val = '<strong>';
-		if ( 'trash' == $this->status ) {
+		if ( 'trash' === $this->status ) {
 			$val .= $form_name;
 		} else {
 			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> ';
@@ -423,8 +437,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
-		if ( 'draft' == $item->status && 'draft' != $this->status ) {
-			$val .= ' - <span class="post-state">' . __( 'Draft', 'formidable' ) . '</span>';
+		if ( 'draft' === $item->status && 'draft' != $this->status ) {
+			$val .= ' - <span class="post-state">' . esc_html__( 'Draft', 'formidable' ) . '</span>';
 		}
 	}
 
@@ -436,7 +450,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function add_form_description( $item, &$val ) {
 		global $mode;
-		if ( 'excerpt' == $mode ) {
+		if ( 'excerpt' === $mode ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}
 	}

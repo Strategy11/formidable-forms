@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesPreviewHelper {
 
 	/**
-	 * @var int $form_id
+	 * @var int
 	 */
 	private $form_id;
 
@@ -32,11 +32,11 @@ class FrmStylesPreviewHelper {
 	private $default_label_position_field_ids;
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
-		$this->form_id = (int) $form_id;
+		$this->form_id                          = (int) $form_id;
 		$this->default_label_position_field_ids = array();
 	}
 
@@ -71,10 +71,10 @@ class FrmStylesPreviewHelper {
 			'frm_html_label_position',
 			/**
 			 * @param string $position
-			 * @param object|array $field
+			 * @param array|object $field
 			 * @return string
 			 */
-			function( $position, $field ) {
+			function ( $position, $field ) {
 				if ( is_array( $field ) ) {
 					$this->default_label_position_field_ids[] = (int) $field['id'];
 				}
@@ -88,10 +88,10 @@ class FrmStylesPreviewHelper {
 			'frm_field_div_classes',
 			/**
 			 * @param string       $classes
-			 * @param object|array $field
+			 * @param array|object $field
 			 * @return string
 			 */
-			function( $classes, $field ) {
+			function ( $classes, $field ) {
 				if ( is_array( $field ) && in_array( (int) $field['id'], $this->default_label_position_field_ids, true ) ) {
 					$classes .= ' frm-default-label-position';
 				}
@@ -118,7 +118,7 @@ class FrmStylesPreviewHelper {
 			 * @param string $target_field_type
 			 * @return bool
 			 */
-			function( $show, $field_type ) {
+			function ( $show, $field_type ) {
 				if ( 'captcha' === $field_type ) {
 					$show = false;
 				}
@@ -141,8 +141,15 @@ class FrmStylesPreviewHelper {
 	private function disable_javascript_validation() {
 		add_filter(
 			'frm_form_object',
-			function( $form ) {
-				$form->options['js_validate'] = false;
+			/**
+			 * @param stdClass|null $form
+			 * @param int           $form_id
+			 * @return stdClass|null
+			 */
+			function ( $form ) {
+				if ( is_object( $form ) && is_array( $form->options ) ) {
+					$form->options['js_validate'] = false;
+				}
 				return $form;
 			}
 		);
@@ -189,7 +196,7 @@ class FrmStylesPreviewHelper {
 
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( 'none' === $frm_settings->load_style ) {
-			$notes[] = function() {
+			$notes[] = function () {
 				printf(
 					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),
@@ -218,33 +225,16 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return string
 	 */
 	private function get_disabled_features_note() {
-		$disabled_features = array();
-
-		if ( $this->form_includes_captcha ) {
-			$disabled_features[] = __( 'Captcha fields are hidden.', 'formidable' );
-		}
-
-		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {
-			$disabled_pro_features = FrmProStylesController::get_disabled_javascript_features();
-			if ( is_string( $disabled_pro_features ) ) {
-				$disabled_features[] = $disabled_pro_features;
-			}
-		}
-
-		if ( $disabled_features ) {
-			return __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) . ' ' . implode( ' ', $disabled_features );
-		}
-
-		return false;
+		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end.', 'formidable' );
 	}
 
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private function get_fallback_form_note() {
 		if ( ! FrmAppHelper::simple_get( 'form', 'absint' ) ) {
@@ -258,7 +248,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
 	 * @param string           $view Either 'list' or 'edit'.
 	 * @return array<string>

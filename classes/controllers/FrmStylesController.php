@@ -6,17 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesController {
 
 	/**
-	 * @var string $post_type
+	 * @var string
 	 */
 	public static $post_type = 'frm_styles';
 
 	/**
-	 * @var string $screen
+	 * @var string
 	 */
 	public static $screen = 'formidable_page_formidable-styles';
 
 	/**
-	 * @var string|null $message
+	 * @var string|null
 	 */
 	private static $message;
 
@@ -153,7 +153,7 @@ class FrmStylesController {
 			/**
 			 * Update the form data on the "Manage Styles" tab after global settings are saved.
 			 */
-			function() {
+			function () {
 				self::manage_styles();
 			}
 		);
@@ -192,7 +192,7 @@ class FrmStylesController {
 				}
 
 				$load_on_all = ! FrmAppHelper::is_admin() && 'all' === $frm_settings->load_style;
-				if ( $load_on_all || $register != 'register' ) {
+				if ( $load_on_all || $register !== 'register' ) {
 					wp_enqueue_style( $css_key );
 				}
 				unset( $css_key, $file );
@@ -265,12 +265,15 @@ class FrmStylesController {
 		return $this_version;
 	}
 
+	/**
+	 * @param string $tag
+	 * @param string $handle
+	 * @return string
+	 */
 	public static function add_tags_to_css( $tag, $handle ) {
-		if ( ( 'formidable' == $handle || 'jquery-theme' == $handle ) && strpos( $tag, ' property=' ) === false ) {
+		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
 			$frm_settings = FrmAppHelper::get_settings();
-			if ( $frm_settings->use_html ) {
-				$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
-			}
+			$tag          = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -400,7 +403,7 @@ class FrmStylesController {
 		if ( ! $form_id ) {
 			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
-			$where = array(
+			$where   = array(
 				'status'         => 'published',
 				// Make sure it's not a repeater.
 				'parent_form_id' => array( null, 0 ),
@@ -419,7 +422,7 @@ class FrmStylesController {
 	private static function disable_admin_page_styling_on_submit_buttons() {
 		add_filter(
 			'frm_submit_button_class',
-			function( $classes ) {
+			function ( $classes ) {
 				$classes[] = 'frm_no_style_button';
 				return $classes;
 			}
@@ -465,13 +468,13 @@ class FrmStylesController {
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
 
-		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
+		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' ) ) {
 			// "0" is a special value used for the enable/disable toggle.
 			wp_die( esc_html__( 'Invalid style value', 'formidable' ), esc_html__( 'Invalid style value', 'formidable' ), 400 );
 			return;
 		}
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
 			wp_die( esc_html__( 'No form specified', 'formidable' ), esc_html__( 'No form specified', 'formidable' ), 400 );
 			return;
@@ -536,6 +539,7 @@ class FrmStylesController {
 
 		wp_print_styles( 'formidable' );
 		wp_enqueue_script( 'formidable_style' );
+		wp_set_script_translations( 'formidable_style', 'formidable' );
 	}
 
 	/**
@@ -621,19 +625,19 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
 		add_filter(
 			'frm_add_form_style_class',
-			function( $class ) use ( $style ) {
-				$split = array_filter(
+			function ( $class ) use ( $style ) {
+				$split   = array_filter(
 					explode( ' ', $class ),
 					/**
 					 * @param string $class
 					 */
-					function( $class ) {
+					function ( $class ) {
 						return $class && 0 !== strpos( $class, 'frm_style_' );
 					}
 				);
@@ -652,7 +656,6 @@ class FrmStylesController {
 	 */
 	public static function save_style() {
 		$frm_style   = new FrmStyle();
-		$message     = '';
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
 
@@ -711,7 +714,7 @@ class FrmStylesController {
 		}
 
 		parse_str( $query, $parsed_query );
-		$form_id      = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
+		$form_id = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
 
 		$style     = new stdClass();
 		$style->ID = end( $ids );
@@ -749,8 +752,8 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			$new_style      = ( isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$previous_style = ( isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$new_style      = isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$previous_style = isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( $new_style == $previous_style ) {
 				continue;
 			}
@@ -1033,7 +1036,7 @@ class FrmStylesController {
 
 	/**
 	 * Add an extra style rule to hide a broken style warning.
-	 * To avoid cluttering the front end with any unecessary styles this is only added when the referer URL matches the styler.
+	 * To avoid cluttering the front end with any unnecessary styles this is only added when the referer URL matches the styler.
 	 *
 	 * @since 6.2.3
 	 *
@@ -1086,7 +1089,7 @@ class FrmStylesController {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->load_style != 'none' ) {
+		if ( $frm_settings->load_style !== 'none' ) {
 			wp_enqueue_style( 'formidable' );
 			$frm_vars['css_loaded'] = true;
 		}
@@ -1107,7 +1110,7 @@ class FrmStylesController {
 	/**
 	 * Get the style post object for a target form.
 	 *
-	 * @param object|string|boolean $form
+	 * @param bool|object|string $form
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {
@@ -1142,10 +1145,9 @@ class FrmStylesController {
 	}
 
 	/**
+	 * @since 3.0
 	 * @param object $style
 	 * @param string $class
-	 *
-	 * @since 3.0
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
@@ -1192,8 +1194,80 @@ class FrmStylesController {
 		return $important;
 	}
 
-	public static function do_accordion_sections( $screen, $context, $object ) {
-		return do_accordion_sections( $screen, $context, $object );
+	/**
+	 * Duplicate of WordPress do_accordion_section function, it adds an additional svg icon support.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return int
+	 */
+	public static function do_accordion_sections( $screen, $context, $data_object ) {
+		global $wp_meta_boxes;
+
+		// the symbol id from icons.svg
+		$icon_ids = array(
+			'ranking-fields-style' => 'frm_chart_bar_icon',
+			'section-fields-style' => 'frm-form-title-style',
+		);
+
+		wp_enqueue_script( 'accordion' );
+
+		if ( empty( $screen ) ) {
+			$screen = get_current_screen();
+		} elseif ( is_string( $screen ) ) {
+			$screen = convert_to_screen( $screen );
+		}
+
+		$page = $screen->id;
+
+		?>
+		<div id="side-sortables" class="accordion-container">
+			<ul class="outer-border">
+		<?php
+		$i          = 0;
+		$first_open = false;
+
+		if ( isset( $wp_meta_boxes[ $page ][ $context ] ) ) {
+			foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
+				if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
+					foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
+						if ( false === $box || ! $box['title'] ) {
+							continue;
+						}
+
+						++$i;
+						$icon_id = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
+
+						$open_class = '';
+						if ( ! $first_open ) {
+							$first_open = true;
+							$open_class = 'open';
+						}
+						?>
+						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
+							<h3 class="accordion-section-title hndle" tabindex="0">
+								<?php
+								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
+								echo esc_html( $box['title'] );
+								FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
+								?>
+							</h3>
+							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
+								<div class="inside">
+									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
+								</div><!-- .inside -->
+							</div><!-- .accordion-section-content -->
+						</li><!-- .accordion-section -->
+						<?php
+					}//end foreach
+				}//end if
+			}//end foreach
+		}//end if
+		?>
+			</ul><!-- .outer-border -->
+		</div><!-- .accordion-container -->
+		<?php
+		return $i;
 	}
 
 	/**

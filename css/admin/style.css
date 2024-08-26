@@ -163,10 +163,11 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	font-weight: 400;
 
 	/*
-	When a background image is set the children in the fieldset have a z-index of 1.\
-	Set to 2 so the floating buttons get priority when clicking if they overlap a form element.
+	When a background image is set the children in the fieldset have a z-index of 1.
+	The Ranking Field contains elements with a higher z-index of 2.
+	Set to 3 so the floating buttons get priority when clicking if they overlap a form element.
 	*/
-	z-index: 2;
+	z-index: 3;
 }
 
 #frm_style_preview .frm_floating_style_button.frm_hidden {
@@ -247,7 +248,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	appearance: none; /* Hide the default icon */
 }
 
-#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year) {
+#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year):not(.frm-ranking-position) {
 	/*
 	The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
 	Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
@@ -277,7 +278,7 @@ Avoid a conflict with the .frm_form_field > label:first-child rule in frm_admin.
 The label in the preview should use the label color setting.
 */
 #frm_style_preview .frm_form_field > label:first-child {
-    color: var(--label-color);
+	 color: var(--label-color);
 	font-size: var(--font-size);
 }
 
@@ -423,6 +424,22 @@ body.rtl .frm-style-card-separator {
 .frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
 	pointer-events: none;
 	opacity: 0.5;
+}
+
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:before,
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title:after {
+	content: '' !important;
+}
+.formidable_page_formidable-styles .frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
+	transform: rotate(180deg);
+}
+.formidable_page_formidable-styles .frm-right-panel .accordion-section-title > .frmsvg:last-child {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	color: var(--grey);
 }
 
 @media only screen and (max-width: 782px) {

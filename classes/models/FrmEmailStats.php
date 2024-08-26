@@ -80,7 +80,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	/**
-	 * @return mixed
+	 * @return false|string
 	 */
 	protected function get_inner_content() {
 		$args = $this->get_content_args();
@@ -94,6 +94,13 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args = parent::get_content_args();
 
 		$entries_count = FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date );
+		$entries_stat  = array(
+			'entries' => array(
+				'label'   => __( 'Entries created', 'formidable' ),
+				'count'   => $entries_count,
+				'compare' => 0,
+			),
+		);
 
 		$args['inbox_msg']       = $this->has_inbox_msg ? FrmEmailSummaryHelper::get_latest_inbox_message() : false;
 		$args['from_date']       = $this->from_date;
@@ -101,13 +108,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		$args['top_forms']       = FrmEmailSummaryHelper::get_top_forms( $this->from_date, $this->to_date );
 		$args['top_forms_label'] = $this->get_top_forms_label();
 		$args['dashboard_url']   = site_url() . '/wp-admin/admin.php?page=formidable';
-		$args['stats']           = array(
-			'entries' => array(
-				'label'   => __( 'Entries created', 'formidable' ),
-				'count'   => $entries_count,
-				'compare' => 0,
-			),
-		);
+		$args['stats']           = isset( $args['stats'] ) ? array_merge( $entries_stat, $args['stats'] ) : $entries_stat;
 
 		if ( $this->has_out_of_date_plugins ) {
 			$args['out_of_date_plugins'] = FrmEmailSummaryHelper::get_out_of_date_plugins();
@@ -130,7 +131,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 			return;
 		}
 
-		$prev_entries_count = FrmEmailSummaryHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
+		$prev_entries_count          = FrmEmailSummaryHelper::get_entries_count( $this->prev_from_date, $this->prev_to_date );
 		$stats['entries']['compare'] = $this->get_compare_diff( $stats['entries']['count'], $prev_entries_count );
 	}
 
@@ -140,7 +141,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @param array $stats Statistics section data.
 	 */
 	protected function add_payments_data( &$stats ) {
-		$payment_data  = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
+		$payment_data            = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
 		$stats['payments_count'] = array(
 			'label'   => __( 'Payments collected', 'formidable' ),
 			'count'   => $payment_data['count'],
@@ -159,7 +160,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 		}
 
 		if ( $this->has_comparison ) {
-			$prev_payment_data  = FrmEmailSummaryHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
+			$prev_payment_data = FrmEmailSummaryHelper::get_payments_data( $this->prev_from_date, $this->prev_to_date );
 
 			if ( ! $payment_data['count'] && ! $prev_payment_data['count'] ) {
 				// Maybe this site doesn't collect payment, hide these sections.
@@ -197,7 +198,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Gets formatted price.
 	 *
 	 * @param float        $amount Amount.
-	 * @param string|array $currency Currency string value or array.
+	 * @param array|string $currency Currency string value or array.
 	 * @return string
 	 */
 	protected function get_formatted_price( $amount, $currency ) {
@@ -235,4 +236,49 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * @return string
 	 */
 	abstract protected function get_top_forms_label();
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @return int
+	 */
+	public function get_date_range() {
+		return $this->date_range;
+	}
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @return string
+	 */
+	public function get_from_date() {
+		return $this->from_date;
+	}
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @return string
+	 */
+	public function get_to_date() {
+		return $this->to_date;
+	}
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @return string
+	 */
+	public function get_prev_from_date() {
+		return $this->prev_from_date;
+	}
+
+	/**
+	 * @since 6.11.1
+	 *
+	 * @return string
+	 */
+	public function get_prev_to_date() {
+		return $this->prev_to_date;
+	}
 }

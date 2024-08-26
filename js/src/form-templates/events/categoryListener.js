@@ -4,7 +4,7 @@
 import { getElements } from '../elements';
 import { PREFIX, CURRENT_CLASS, getAppState, setAppState } from '../shared';
 import { showSelectedCategory } from '../ui';
-import { fadeIn, onClickPreventDefault } from '../utils';
+import { onClickPreventDefault, frmAnimate } from '../utils';
 import { resetSearchInput } from './';
 
 /**
@@ -64,7 +64,8 @@ const onCategoryClick = ( event ) => {
 
 	// Smoothly display the updated UI elements
 	const { bodyContent } = getElements();
-	fadeIn( bodyContent );
+	const bodyContentAnimate = new frmAnimate( bodyContent );
+	bodyContentAnimate.fadeIn();
 };
 
 /**

@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Easily change which style your forms are using by making changes below.', 'formidable' ); ?>
 	</p>
 
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 	<table class="widefat fixed striped">
 		<thead>
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @param string         $row_view_file_path
 					 * @return void
 					 */
-					function( $form ) use ( $styles, $default_style, $row_view_file_path ) {
+					function ( $form ) use ( $styles, $default_style, $row_view_file_path ) {
 						$active_style_id = isset( $form->options['custom_style'] ) ? (int) $form->options['custom_style'] : 1;
 						if ( 1 === $active_style_id ) {
 							// use the default style

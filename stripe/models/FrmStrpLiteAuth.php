@@ -39,7 +39,7 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
-		$atts    = array(
+		$atts = array(
 			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
 			'entry'  => $details['entry'],
 		);
@@ -57,7 +57,7 @@ class FrmStrpLiteAuth {
 		$intent_is_processing = 'processing' === $intent->status;
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
-			$filter = function( $message ) {
+			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
 				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
 				return $message;
@@ -79,7 +79,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array|false
 	 */
 	private static function check_request_params( $form_id ) {
@@ -105,7 +105,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5
 	 *
 	 * @param string $html
-	 * @return int|false Matching form id or false if there is no match.
+	 * @return false|int Matching form id or false if there is no match.
 	 */
 	private static function check_html_for_form_id_match( $html ) {
 		foreach ( self::$form_ids as $form_id ) {
@@ -171,7 +171,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';
-		$pos = strpos( $form, $add_after );
+		$pos       = strpos( $form, $add_after );
 		if ( $pos !== false ) {
 			$form = substr_replace( $form, $add_after . $message, $pos, strlen( $add_after ) );
 		}
@@ -327,7 +327,7 @@ class FrmStrpLiteAuth {
 				continue;
 			}
 
-			$saved     = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
 			foreach ( $actions as $action ) {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
@@ -419,7 +419,7 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function maybe_create_intents( $form_id ) {
@@ -518,7 +518,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $payment_method_types
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function create_setup_intent( $payment_method_types ) {
 		$payment_info = array(
@@ -537,7 +537,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param array      $actions
 	 * @return void
 	 */
@@ -548,7 +548,7 @@ class FrmStrpLiteAuth {
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {
-			$amount = self::get_amount_before_submit( compact( 'action', 'form' ) );
+			$amount                                = self::get_amount_before_submit( compact( 'action', 'form' ) );
 			$actions[ $k ]->post_content['amount'] = $amount;
 		}
 	}
@@ -622,7 +622,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * If the form should should a message, apend it to the success url.
+	 * If the form should should a message, append it to the success url.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
@@ -639,9 +639,9 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @param bool       $delete_meta
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_referer_url( $entry_id, $delete_meta = true ) {
 		$row = FrmDb::get_row(
@@ -694,7 +694,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check if a payment failed.
 	 *
-	 * @since x.x
+	 * @since 6.8
 	 *
 	 * @param object $payment
 	 * @param object $intent
