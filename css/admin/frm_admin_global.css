@@ -9,16 +9,10 @@
 }
 
 .wp-submenu.wp-submenu-wrap .frm-meta-tag.frm-new-pill {
-	background-color: #12b76a;
-	vertical-align: middle;
-}
-
-.frm-meta-tag,
-.frm-meta-tag:hover {
-	padding: 4px 8px;
-	border-radius: 8px;
-	font-weight: 600;
-	display: inline-flex;
-	background-color: #D9EBFF;
-	gap: 2px;
+	color: #F47449;
+	background: inherit;
+	margin-left: 0;
+	font-size: unset;
+	font-weight: unset;
+	vertical-align: unset;
 }
