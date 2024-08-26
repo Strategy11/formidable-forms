@@ -192,6 +192,10 @@ class FrmSimpleBlocksController {
 
 		$form = ob_get_clean();
 
+		if ( false === $form ) {
+			$form = '';
+		}
+
 		$params       = array_filter( $attributes );
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
