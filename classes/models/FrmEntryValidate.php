@@ -630,9 +630,7 @@ class FrmEntryValidate {
 							return true;
 						}
 					}
-				}
-
-				if ( $name_field_ids ) {
+				} else {
 					// If there is name field in the form, we should always use it as author name.
 					return in_array( $field_id, $name_field_ids, true );
 				}
