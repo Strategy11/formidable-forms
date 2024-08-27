@@ -618,7 +618,10 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				if ( ! $name_field_ids ) {
+				if ( $name_field_ids ) {
+					// If there is name field in the form, we should always use it as author name.
+					return in_array( $field_id, $name_field_ids, true );
+				} else {
 					$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 					$fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
 					foreach ( $fields as $index => $field ) {
@@ -630,9 +633,6 @@ class FrmEntryValidate {
 							return true;
 						}
 					}
-				} else {
-					// If there is name field in the form, we should always use it as author name.
-					return in_array( $field_id, $name_field_ids, true );
 				}
 		}
 
