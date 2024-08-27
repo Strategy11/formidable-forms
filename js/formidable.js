@@ -1629,6 +1629,11 @@ function frmFrontFormJS() {
 				}
 			}
 
+			triggerCustomEvent( document, 'frm_get_ajax_form_errors', {
+				formEl: object,
+				errors: jsErrors
+			});
+
 			return jsErrors;
 		},
 
