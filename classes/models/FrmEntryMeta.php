@@ -127,7 +127,7 @@ class FrmEntryMeta {
 
 		$values_indexed_by_field_id = array();
 		foreach ( $values as $field_id_or_key => $meta_value ) {
-			$field_id = false;
+			$field_id = $field_id_or_key;
 			$field    = null;
 
 			if ( $field_id_or_key ) {
@@ -136,10 +136,6 @@ class FrmEntryMeta {
 				if ( is_object( $field ) ) {
 					$field_id = $field->id;
 				}
-			}
-
-			if ( false === $field_id ) {
-				$field_id = $field_id_or_key;
 			}
 
 			$values_indexed_by_field_id[ $field_id ] = $meta_value;
