@@ -633,7 +633,7 @@ class FrmEntryValidate {
 						return true;
 					}
 				}
-		}
+		}//end switch
 
 		return false;
 	}
