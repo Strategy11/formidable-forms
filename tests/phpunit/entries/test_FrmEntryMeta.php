@@ -7,6 +7,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntryMeta::update_entry_metas
+	 * @group mike
 	 */
 	public function test_update_entry_metas() {
 		$form       = $this->factory->form->create_and_get();
@@ -42,8 +43,10 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$this->assertEquals( 'Updated value by field key', $meta );
 
-		// Test with no values. It should be null.
-		$values = array();
+		// Test with an empty value. It should be null because the row should be deleted from the db.
+		$values = array(
+			$field_key => '',
+		);
 		FrmEntryMeta::update_entry_metas( $entry_id, $values );
 
 		$meta = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id );
