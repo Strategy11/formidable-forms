@@ -7,7 +7,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntryMeta::update_entry_metas
-	 * @group mike
 	 */
 	public function test_update_entry_metas() {
 		$form       = $this->factory->form->create_and_get();
@@ -22,7 +21,8 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$entry_id = $this->factory->entry->create( $entry_data );
 
-		$values   = array(
+		// Test field ID.
+		$values = array(
 			$field_id => 'Updated value by field ID',
 		);
 		FrmEntryMeta::update_entry_metas( $entry_id, $values );
@@ -31,8 +31,9 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$this->assertEquals( 'Updated value by field ID', $meta );
 
+		// Test field key.
 		$field_key = FrmField::get_key_by_id( $field_id );
-		$values   = array(
+		$values    = array(
 			$field_key => 'Updated value by field key',
 		);
 		FrmEntryMeta::update_entry_metas( $entry_id, $values );
@@ -40,5 +41,13 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$meta = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id );
 
 		$this->assertEquals( 'Updated value by field key', $meta );
+
+		// Test with no values. It should be null.
+		$values = array();
+		FrmEntryMeta::update_entry_metas( $entry_id, $values );
+
+		$meta = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id );
+
+		$this->assertNull( $meta );
 	}
 }
