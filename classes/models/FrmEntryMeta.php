@@ -120,10 +120,20 @@ class FrmEntryMeta {
 			'field_id'
 		);
 
-		foreach ( $values as $field_id => $meta_value ) {
-			$field = false;
-			if ( ! empty( $field_id ) ) {
-				$field = FrmField::getOne( $field_id );
+		foreach ( $values as $field_id_or_key => $meta_value ) {
+			$field_id = false;
+			$field    = false;
+
+			if ( $field_id_or_key ) {
+				$field = FrmField::getOne( $field_id_or_key );
+
+				if ( is_object( $field ) ) {
+					$field_id = $field->id;
+				}
+			}
+
+			if ( false === $field_id ) {
+				$field_id = $field_id_or_key;
 			}
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
@@ -132,7 +142,7 @@ class FrmEntryMeta {
 
 				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
 					// remove blank fields
-					unset( $values[ $field_id ] );
+					unset( $values[ $field_id_or_key ] );
 				} else {
 					// if value exists, then update it
 					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
