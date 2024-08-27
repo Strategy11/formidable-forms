@@ -601,6 +601,8 @@ class FrmEntryValidate {
 	 * @param string $value          Value to check.
 	 * @param int    $field_id       Field ID.
 	 * @param array  $name_field_ids Name field IDs.
+	 * @param array  $values         Array of posted values.
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_guest_info_value( $key, &$value, $field_id, $name_field_ids, $values ) {
@@ -620,10 +622,10 @@ class FrmEntryValidate {
 					$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 					$fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
 					foreach ( $fields as $index => $field ) {
-						if ( false === stripos( $field->name, 'name' ) ) {
+						if ( __( 'Name', 'formidable' ) !== $field->name ) {
 							continue;
 						}
-						if ( isset( $fields[ $index + 1 ] ) && false !== stripos( $fields[ $index + 1 ]->name, 'last' ) ) {
+						if ( isset( $fields[ $index + 1 ] ) && __( 'Last', 'formidable' ) === $fields[ $index + 1 ]->name ) {
 							$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 							return true;
 						}
