@@ -7,7 +7,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntryMeta::update_entry_metas
-	 * @group mike
 	 */
 	public function test_update_entry_metas() {
 		$form       = $this->factory->form->create_and_get();
