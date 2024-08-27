@@ -618,7 +618,7 @@ class FrmEntryValidate {
 			case 'comment_author':
 				if ( ! $name_field_ids ) {
 					$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-					$fields = FrmField::get_all_for_form( $form_id );
+					$fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
 					foreach ( $fields as $index => $field ) {
 						if ( false === stripos( $field->name, 'name' ) ) {
 							continue;
