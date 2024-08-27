@@ -481,8 +481,8 @@ BEFORE_HTML;
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
 		if ( ! empty( $classes ) ) {
 			$classes      = implode( ' ', $classes );
-			$button_class = ' class="frm_button_submit';
-			if ( strpos( $button_parts[0], $button_class ) !== false ) {
+			$button_class = 'frm_button_submit';
+			if ( preg_match( '/\bclass="[^"]*?\b' . preg_quote( $button_class, '/' ) . '\b[^"]*?"/', $button_parts[0] ) ) {
 				$button_parts[0] = str_replace( $button_class, $button_class . ' ' . esc_attr( $classes ), $button_parts[0] );
 			} else {
 				$button_parts[0] .= ' class="' . esc_attr( $classes ) . '"';
@@ -1108,6 +1108,10 @@ BEFORE_HTML;
 		return $actions;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link( $data ) {
 		$form_id = self::get_form_id_from_data( $data );
 
@@ -1120,6 +1124,10 @@ BEFORE_HTML;
 		return $link;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
@@ -1129,8 +1137,8 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed $data
-	 * @return int
+	 * @param int|object|string $data
+	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
 		if ( is_object( $data ) ) {

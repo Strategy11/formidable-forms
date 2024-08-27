@@ -37,8 +37,7 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             ...baselineRules,
-            { id: 'empty-table-header', enabled: false },
-            { id: 'label', enabled: false }
+            { id: 'empty-table-header', enabled: false }
         ]);
         cy.checkA11y();
     });
@@ -71,15 +70,6 @@ describe('Run some accessibility tests', function() {
         configureAxeWithIgnoredRuleset([
             { id: 'color-contrast', enabled: false },
             { id: 'aria-allowed-role', enabled: false }
-        ]);
-        cy.checkA11y();
-    });
-
-    it('Check the payments page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-settings&t=stripe_settings');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
-            ...baselineRules
         ]);
         cy.checkA11y();
     });

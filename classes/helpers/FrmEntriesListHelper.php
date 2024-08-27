@@ -279,6 +279,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @since 6.12
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	private static function get_entry_label( $item ) {
+		if ( $item->name ) {
+			return $item->name;
+		}
+		/* translators: %d: Entry id */
+		return sprintf( __( 'Entry %d', 'formidable' ), $item->id );
+	}
+
+	/**
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -292,6 +306,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
 		$checkbox = "<input type='checkbox' name='item-action[]' id='cb-item-action-{$item->id}' value='{$item->id}' />";
+		/* translators: %s: Form name */
+		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . esc_html( sprintf( __( 'Select %s', 'formidable' ), self::get_entry_label( $item ) ) ) . '</span></label>';
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
