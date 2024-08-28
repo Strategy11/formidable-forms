@@ -59,18 +59,18 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		// $this->assertEquals( $test_url, $check['comment_author_url'] );
 
 		// Test with repeater/embedded field.
-		$values['item_meta'][ $made_up_name_field_id ]  = array(
-			'John Doe',
-			'Some Guy',
-		);
-		$values['item_meta'][ $made_up_email_field_id ] = array(
-			'johndoe@gmail.com',
-			'someguy@gmail.com',
-		);
-		$values['item_meta'][ $made_up_url_field_id ]   = array(
-			'https://johndoe.com',
-			'https://someguy.com',
-		);
+		// $values['item_meta'][ $made_up_name_field_id ]  = array(
+		// 	'John Doe',
+		// 	'Some Guy',
+		// );
+		// $values['item_meta'][ $made_up_email_field_id ] = array(
+		// 	'johndoe@gmail.com',
+		// 	'someguy@gmail.com',
+		// );
+		// $values['item_meta'][ $made_up_url_field_id ]   = array(
+		// 	'https://johndoe.com',
+		// 	'https://someguy.com',
+		// );
 
 		// $check = $this->get_spam_check_user_info( $values );
 		// $this->assertEquals( 'John Doe', $check['comment_author'] );
