@@ -800,7 +800,6 @@ class FrmEntryValidate {
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) {
-				var_dump('Existing');
 				// Maybe `other`.
 				continue;
 			}
