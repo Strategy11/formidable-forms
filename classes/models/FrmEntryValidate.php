@@ -514,6 +514,7 @@ class FrmEntryValidate {
 	 */
 	private static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
+			var_dump('Guest');
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
 
@@ -802,7 +803,7 @@ class FrmEntryValidate {
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
-			var_dump( $value );
+			var_dump('VALUE:');var_dump( $value );
 			if ( ! is_numeric( $field_id ) ) {
 				var_dump('Existing');
 				// Maybe `other`.
