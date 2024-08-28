@@ -621,7 +621,6 @@ class FrmEntryValidate {
 					return in_array( $field_id, $name_field_ids, true );
 				}
 				// debug
-				return strlen( $value ) < 200;
 		}
 
 		return false;
