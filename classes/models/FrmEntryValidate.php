@@ -513,7 +513,6 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_spam_check_user_info( $values ) {
-		$a = $b;
 		if ( ! is_user_logged_in() ) {
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
