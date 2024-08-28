@@ -622,21 +622,22 @@ class FrmEntryValidate {
 				var_dump( $name_field_ids );
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 				var_dump( $form_id );
-				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
-					// If there is name field in the form, we should always use it as author name.
-					return true;
-				}
-				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-				$fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
-				foreach ( $fields as $index => $field ) {
-					if ( __( 'Name', 'formidable' ) !== $field->name ) {
-						continue;
-					}
-					if ( isset( $fields[ $index + 1 ] ) && __( 'Last', 'formidable' ) === $fields[ $index + 1 ]->name ) {
-						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
-						return true;
-					}
-				}
+				return in_array( $field_id, $name_field_ids, true );
+				// if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
+				// 	// If there is name field in the form, we should always use it as author name.
+				// 	return true;
+				// }
+				// $form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+				// $fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
+				// foreach ( $fields as $index => $field ) {
+				// 	if ( __( 'Name', 'formidable' ) !== $field->name ) {
+				// 		continue;
+				// 	}
+				// 	if ( isset( $fields[ $index + 1 ] ) && __( 'Last', 'formidable' ) === $fields[ $index + 1 ]->name ) {
+				// 		$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
+				// 		return true;
+				// 	}
+				// }
 		}//end switch
 
 		return false;
