@@ -796,7 +796,7 @@ class FrmEntryValidate {
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
-		var_dump( $values );
+		var_dump('VALUES: '); var_dump( $values );
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
