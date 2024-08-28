@@ -492,13 +492,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_processing_tooltip() {
 		return FrmAppHelper::clip(
 			function () {
-				$params = array(
-					'class' => 'frm_help frm_icon_font frm_tooltip_icon',
-					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable' ),
-				);
-				?>
-				<span <?php FrmAppHelper::array_to_html_params( $params, true ); ?>></span>
-				<?php
+				FrmAppHelper::tooltip_icon( __( 'This payment method may take between 4-5 business days to process.', 'formidable' ) );
 			}
 		);
 	}

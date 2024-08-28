@@ -247,6 +247,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
+			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
@@ -277,6 +279,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @since 6.12
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	private static function get_entry_label( $item ) {
+		if ( $item->name ) {
+			return $item->name;
+		}
+		/* translators: %d: Entry id */
+		return sprintf( __( 'Entry %d', 'formidable' ), $item->id );
+	}
+
+	/**
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -290,6 +306,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
 		$checkbox = "<input type='checkbox' name='item-action[]' id='cb-item-action-{$item->id}' value='{$item->id}' />";
+		/* translators: %s: Form name */
+		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . esc_html( sprintf( __( 'Select %s', 'formidable' ), self::get_entry_label( $item ) ) ) . '</span></label>';
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
@@ -422,7 +440,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
 	 *
-	 * @since x.x
+	 * @since 6.11.2
 	 *
 	 * @param string $column_name
 	 * @return string

@@ -2,8 +2,18 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$field_size_container_atts = array();
+if ( $display_max ) {
+	$max_characters_label         = __( 'Max Characters', 'formidable' );
+	$can_fit_label_in_two_columns = FrmAppHelper::mb_function( array( 'mb_strlen', 'strlen' ), array( $max_characters_label ) ) < 20;
+
+	if ( $can_fit_label_in_two_columns ) {
+		$field_size_container_atts['class'] = 'frm6 frm_form_field';
+	}
+}
 ?>
-<p class="<?php echo esc_attr( $display_max ? 'frm6 frm_form_field' : '' ); ?>">
+<p <?php FrmAppHelper::array_to_html_params( $field_size_container_atts, true ); ?>>
 	<label for="field_options_size_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php esc_html_e( 'Field Size', 'formidable' ); ?>
 		<span class="frm-sub-label">

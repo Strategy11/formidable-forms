@@ -10,7 +10,7 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 		if ( ! $views_installed ) {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
 		}
@@ -467,10 +467,13 @@ class FrmEntriesController {
 
 		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
-			echo '<div id="form_show_entry_page" class="wrap">' .
-				esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
-				'</div>';
-
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => __( 'You can\'t view the entry', 'formidable' ),
+					'body'       => __( 'You are trying to view an entry that does not exist', 'formidable' ),
+					'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+				)
+			);
 			return;
 		}
 

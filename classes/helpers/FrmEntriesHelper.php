@@ -213,6 +213,9 @@ class FrmEntriesHelper {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			return '';
 		}
+		if ( is_callable( 'FrmProEntriesHelper::prepare_child_display_value' ) ) {
+			return FrmProEntriesHelper::prepare_child_display_value( $entry, $field, $atts );
+		}
 
 		// This is an embedded form.
 		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
@@ -289,6 +292,10 @@ class FrmEntriesHelper {
 		}
 
 		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
+
+		if ( is_string( $field->field_options ) ) {
+			$field->field_options = array();
+		}
 
 		if ( ! isset( $field->field_options['post_field'] ) ) {
 			$field->field_options['post_field'] = '';

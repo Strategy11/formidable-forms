@@ -295,7 +295,7 @@ class FrmAppController {
 			),
 		);
 
-		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
@@ -583,7 +583,6 @@ class FrmAppController {
 		}
 
 		self::maybe_add_ip_warning();
-		self::maybe_add_deprecated_message();
 	}
 
 	/**
@@ -1313,81 +1312,6 @@ class FrmAppController {
 		 * @since 6.8.4
 		 */
 		do_action( 'frm_enqueue_floating_links' );
-	}
-
-	/**
-	 * @return void
-	 */
-	private static function maybe_add_deprecated_message() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( ! empty( $settings->use_html ) ) {
-			// Dont' show a message if Use HTML 5 is already enabled.
-			return;
-		}
-
-		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
-			add_action(
-				'frm_update_settings',
-				function ( $params ) {
-					if ( ! empty( $params['frm_use_html'] ) ) {
-						$inbox = new FrmInbox();
-						$inbox->dismiss( 'deprecated_use_html' );
-					}
-				}
-			);
-			// Don't show the message on global settings.
-			return;
-		}
-
-		$url = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
-
-		add_filter(
-			'frm_message_list',
-			/**
-			 * @param array $messages
-			 * @return array
-			 */
-			function ( $messages ) use ( $url ) {
-				$messages[] = '<p>The option to use HTML5 in forms is currently disabled. In a future release, this setting will be removed and using HTML5 will be a requirement. <a href="' . esc_url( $url ) . '">Click here to enable it in Global Settings now</a>.</p>';
-				return $messages;
-			}
-		);
-
-		$inbox = new FrmInbox();
-		$inbox->add_message(
-			array(
-				'key'     => 'deprecated_use_html',
-				'force'   => true,
-				'subject' => 'The option to use HTML5 in forms will soon be removed',
-				'message' => 'The option to use HTML5 in forms is currently disabled. In a future release, this setting will be removed and using HTML5 will be a requirement.',
-				'icon'    => 'frm_report_problem_icon',
-				'cta'     => '<a class="button-secondary frm-button-secondary" href="' . esc_url( $url ) . '">Enable in Global Settings</a>',
-			)
-		);
-	}
-
-	/**
-	 * Include icons on page for Embed Form modal.
-	 *
-	 * @since 5.2
-	 *
-	 * @return void
-	 */
-	public static function include_embed_form_icons() {
-		_deprecated_function( __METHOD__, '5.3' );
-	}
-
-	/**
-	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
-	 * @codeCoverageIgnore
-	 *
-	 * @param array $atts
-	 * @return string
-	 */
-	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
-		return FrmFormsController::get_form_shortcode( $atts );
 	}
 
 	/**
