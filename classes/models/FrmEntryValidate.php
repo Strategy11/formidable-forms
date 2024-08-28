@@ -514,7 +514,6 @@ class FrmEntryValidate {
 	 */
 	private static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
-			var_dump('Guest');
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
 
@@ -619,8 +618,6 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				var_dump( $field_id );
-				var_dump( $name_field_ids );
 				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
@@ -797,13 +794,11 @@ class FrmEntryValidate {
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
-		var_dump('VALUES: '); var_dump( $values );
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
-			var_dump('VALUE:');var_dump( $value );
 			if ( ! is_numeric( $field_id ) ) {
 				var_dump('Existing');
 				// Maybe `other`.
@@ -812,7 +807,6 @@ class FrmEntryValidate {
 
 			// Convert name array to string.
 			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
-				var_dump('Name field');
 				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
 				$values['name_field_ids'][]       = $field_id;
 				continue;
