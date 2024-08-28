@@ -796,18 +796,22 @@ class FrmEntryValidate {
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+		var_dump( $values );
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
+			var_dump( $value );
 			if ( ! is_numeric( $field_id ) ) {
+				var_dump('Existing');
 				// Maybe `other`.
 				continue;
 			}
 
 			// Convert name array to string.
 			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
+				var_dump('Name field');
 				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
 				$values['name_field_ids'][]       = $field_id;
 				continue;
