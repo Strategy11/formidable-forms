@@ -618,7 +618,7 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
+				if ( $name_field_ids && in_array( $field_id, $name_field_ids ) ) {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
 				}
