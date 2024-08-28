@@ -89,6 +89,9 @@ if ( $globally_disabled ) {
 		<div class="frm_form_settings">
 			<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
 		</div>
-		<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_templates ); ?>
+		<?php
+		$style_templates = $card_helper->add_classic_style( $style_templates );
+		$card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_templates );
+		?>
 	<?php } ?>
 </div>

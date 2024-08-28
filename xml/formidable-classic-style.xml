@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- generator="WordPress/6.6.1" created="2024-08-28 17:21" -->
+
+<channel>
+	<view>
+		<title>Formidable Classic Style</title>
+		<link></link>
+		<post_author><![CDATA[admin]]></post_author>
+		<description></description>
+		<content><![CDATA[{"theme_css":"ui-lightness","theme_name":"UI Lightness","center_form":"","form_width":"100%","form_align":"left","direction":"ltr","fieldset":"0px","fieldset_color":"000000","fieldset_padding":"0 0 15px 0","fieldset_bg_color":"","title_size":"40px","title_color":"444444","title_margin_top":"10px","title_margin_bottom":"60px","form_desc_size":"14px","form_desc_color":"666666","form_desc_margin_top":"10px","form_desc_margin_bottom":"25px","form_desc_padding":"0","font":"","font_size":"15px","label_color":"3f4b5b","weight":"normal","position":"none","align":"left","width":"150px","required_color":"B94A48","required_weight":"bold","label_padding":"0 0 3px 0","description_font_size":"12px","description_color":"666666","description_weight":"normal","description_style":"normal","description_align":"left","description_margin":"0","field_font_size":"14px","field_height":"32px","line_height":"normal","field_width":"100%","auto_width":"","field_pad":"6px 10px","field_margin":"20px","field_weight":"normal","text_color":"555555","border_color":"BFC3C8","field_border_width":"1px","field_border_style":"solid","bg_color":"ffffff","remove_box_shadow":"","bg_color_active":"ffffff","border_color_active":"66afe9","remove_box_shadow_active":"","text_color_error":"444444","bg_color_error":"ffffff","border_color_error":"B94A48","border_width_error":"1px","border_style_error":"solid","bg_color_disabled":"ffffff","border_color_disabled":"E5E5E5","text_color_disabled":"A1A1A1","radio_align":"block","check_align":"block","check_font_size":"13px","check_label_color":"444444","check_weight":"normal","section_font_size":"18px","section_color":"444444","section_weight":"bold","section_pad":"15px 0 3px 0","section_mar_top":"15px","section_mar_bottom":"30px","section_bg_color":"","section_border_color":"e8e8e8","section_border_width":"2px","section_border_style":"solid","section_border_loc":"-top","collapse_icon":"6","collapse_pos":"after","repeat_icon":"1","repeat_icon_color":"ffffff","submit_style":"","submit_font_size":"15px","submit_width":"auto","submit_height":"auto","submit_bg_color":"579AF6","submit_border_color":"579AF6","submit_border_width":"1px","submit_text_color":"ffffff","submit_weight":"normal","submit_border_radius":"4px","submit_bg_img":"","submit_margin":"10px","submit_padding":"10px 20px","submit_shadow_color":"eeeeee","submit_hover_bg_color":"efefef","submit_hover_color":"444444","submit_hover_border_color":"cccccc","submit_active_bg_color":"efefef","submit_active_color":"444444","submit_active_border_color":"cccccc","border_radius":"4px","error_bg":"F2DEDE","error_border":"EBCCD1","error_text":"B94A48","error_font_size":"14px","success_bg_color":"DFF0D8","success_border_color":"D6E9C6","success_text_color":"468847","success_font_size":"14px","important_style":"","progress_bg_color":"eaeaea","progress_active_color":"ffffff","progress_active_bg_color":"579AF6","progress_color":"3f4b5b","progress_border_color":"E5E5E5","progress_border_size":"2px","progress_size":"24px","custom_css":"","toggle_font_size":"15px","toggle_on_color":"579AF6","toggle_off_color":"eaeaea","slider_font_size":"24px","slider_track_size":"5px","slider_circle_size":"24px","slider_color":"579AF6","slider_bar_color":"579AF6","date_head_bg_color":"579AF6","date_head_color":"ffffff","date_band_color":"#2568c4","bg_image_id":"","bg_image_opacity":"100%"}]]></content>
+		<excerpt><![CDATA[]]></excerpt>
+		<post_id>5</post_id>
+		<post_date>2024-03-15 12:42:46</post_date>
+		<post_date_gmt>2024-03-15 12:42:46</post_date_gmt>
+		<comment_status>closed</comment_status>
+		<ping_status>closed</ping_status>
+		<post_name>formidable-classic-style</post_name>
+		<status>publish</status>
+		<post_parent>0</post_parent>
+		<menu_order>1</menu_order>
+		<post_type>frm_styles</post_type>
+		<post_password><![CDATA[]]></post_password>
+		<is_sticky>0</is_sticky>
+	</view>
+</channel>

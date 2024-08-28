@@ -497,4 +497,36 @@ class FrmStylesCardHelper {
 		$style_api = new FrmStyleApi();
 		return $style_api->get_api_info();
 	}
+
+	/**
+	 * @param array $templates
+	 * @return array
+	 */
+	public function add_classic_style( $templates ) {
+		$classic_template = array(
+			'name'     => 'Formidable Classic',
+			'settings' => array(
+				'fieldset_bg_color'    => '',
+				'field_border_width'   => '1px',
+				'label_color'          => '3f4b5b',
+				'border_radius'        => '4px',
+				'field_border_style'   => 'solid',
+				'border_color'         => 'BFC3C8',
+				'text_color'           => '555555',
+				'bg_color'             => 'ffffff',
+				'submit_border_radius' => '4px',
+				'submit_text_color'    => 'fff',
+				'submit_weight'        => 'normal',
+				'submit_width'         => 'auto',
+				'submit_bg_color'      => '579AF6',
+				'submit_border_color'  => '579AF6',
+				'submit_border_width'  => '1px',
+			),
+			'url'      => 'true', // Prevent the lock icon.
+			'slug'     => 'formidable-classic-style',
+			'is_new'   => false,
+		);
+		array_unshift( $templates, $classic_template );
+		return $templates;
+	}
 }
