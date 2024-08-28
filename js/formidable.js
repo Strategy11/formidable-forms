@@ -1779,11 +1779,18 @@ function frmTurnstile() {
 	frmCaptcha( '.cf-turnstile' );
 }
 
+function frmElementIsVisible(element) {
+	return element.offsetParent !== null;
+}
+
 function frmCaptcha( captchaSelector ) {
 	let c;
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
+		if ( ! frmElementIsVisible( captchas[c] ) ) {
+			continue;
+		}
 		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
 }
