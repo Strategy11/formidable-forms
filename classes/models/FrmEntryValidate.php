@@ -618,7 +618,11 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				if ( $name_field_ids && in_array( $field_id, $name_field_ids ) ) {
+				var_dump( $field_id );
+				var_dump( $name_field_ids );
+				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+				var_dump( $form_id );
+				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
 				}
