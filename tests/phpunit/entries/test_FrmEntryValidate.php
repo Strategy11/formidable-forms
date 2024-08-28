@@ -37,7 +37,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$made_up_name_field_id  = 4;
 		$made_up_email_field_id = 12;
 		$made_up_url_field_id   = 16;
-		$test_name              = 'Some Guy';
+		$test_name              = array( 'first' => 'Some', 'last' => 'Guy' );
 		$test_email             = 'amadeupemail@email.com';
 		$test_url               = 'http://madeupwebsite.com';
 		$values                 = array(
@@ -54,7 +54,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$check = $this->get_spam_check_user_info( $values );
 		$this->assertTrue( empty( $check['user_ID'] ) );
 		$this->assertTrue( empty( $check['user_id'] ) );
-		$this->assertEquals( $test_name, $check['comment_author'] );
+		$this->assertEquals( 'Some Guy', $check['comment_author'] );
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
