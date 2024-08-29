@@ -569,7 +569,7 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function update_base_font_size( $settings, $defaults ) {
-		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || true !== (bool) $settings['use_base_font_size'] ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || ! (bool) $settings['use_base_font_size'] ) {
 			return $settings;
 		}
 

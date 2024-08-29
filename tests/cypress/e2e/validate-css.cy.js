@@ -22,6 +22,7 @@ describe( 'Run some CSS validation', () => {
                     'Content-Type': 'multipart/form-data',
                 },
             }).then( validationResponse => {
+				console.log( validationResponse );
                 expect( validationResponse.status ).to.eq( 200 );
 
                const jsonObject = arrayBufferToJsonObject( validationResponse.body );
