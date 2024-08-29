@@ -37,7 +37,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$made_up_name_field_id  = 4;
 		$made_up_email_field_id = 12;
 		$made_up_url_field_id   = 16;
-		$test_name              = array( 'first' => 'Some', 'last' => 'Guy' );
+		$test_name              = array(
+			'first' => 'Some',
+			'last'  => 'Guy',
+		);
 		$test_email             = 'amadeupemail@email.com';
 		$test_url               = 'http://madeupwebsite.com';
 		$values                 = array(
@@ -76,8 +79,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			)
 		);
 
-		$values = array(
-			'item_meta' => array(
+		$values           = array(
+			'item_meta'      => array(
 				0                       => '',
 				$first_name_id          => 'John',
 				$last_name_id           => 'Doe',
@@ -88,7 +91,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 		$_POST['form_id'] = $form_id;
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
-		$check = $this->get_spam_check_user_info( $values );;
+		$check = $this->get_spam_check_user_info( $values );
 		$this->assertEquals( 'John Doe', $check['comment_author'] );
 
 		// Test with repeater/embedded field.
