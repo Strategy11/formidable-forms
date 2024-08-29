@@ -59,6 +59,38 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
+		$form_id       = $this->factory->form->create();
+		$first_name_id = $this->factory->field->create(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'name'    => 'Name',
+			)
+		);
+		$last_name_id  = $this->factory->field->create(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'name'    => 'Last',
+			)
+		);
+
+		$values = array(
+			'item_meta' => array(
+				0                       => '',
+				$first_name_id          => 'John',
+				$last_name_id           => 'Doe',
+				$made_up_email_field_id => $test_email,
+				$made_up_url_field_id   => $test_url,
+			),
+			'name_field_ids' => array(),
+		);
+		$_POST['form_id'] = $form_id;
+		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
+
+		$check = $this->get_spam_check_user_info( $values );;
+		$this->assertEquals( 'John Doe', $check['comment_author'] );
+
 		// Test with repeater/embedded field.
 		$values['item_meta'][ $made_up_name_field_id ]  = array(
 			'John Doe',
@@ -89,10 +121,11 @@ class test_FrmEntryValidate extends FrmUnitTest {
 	}
 
 	private function get_spam_check_user_info( $values ) {
-		return $this->run_private_method(
-			array( 'FrmEntryValidate', 'get_spam_check_user_info' ),
-			array( $values )
-		);
+		return FrmEntryValidate::get_spam_check_user_info( $values );
+		// return $this->run_private_method(
+		// 	array( 'FrmEntryValidate', 'get_spam_check_user_info' ),
+		// 	array( $values )
+		// );
 	}
 
 	public function test_get_all_form_ids_and_flatten_meta() {
