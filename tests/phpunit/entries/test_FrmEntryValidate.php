@@ -121,11 +121,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 	}
 
 	private function get_spam_check_user_info( $values ) {
-		return FrmEntryValidate::get_spam_check_user_info( $values );
-		// return $this->run_private_method(
-		// 	array( 'FrmEntryValidate', 'get_spam_check_user_info' ),
-		// 	array( $values )
-		// );
+		return $this->run_private_method(
+			array( 'FrmEntryValidate', 'get_spam_check_user_info' ),
+			array( $values )
+		);
 	}
 
 	public function test_get_all_form_ids_and_flatten_meta() {
