@@ -205,6 +205,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 					</div>
 
+					<div class="frm5 frm_form_field">
+						<label class="frm-style-item-heading">
+							<?php esc_html_e( 'Disable submit button styling', 'formidable' ); ?>
+							<?php FrmAppHelper::tooltip_icon( __( 'Note: If disabled, you may not see the change take effect until you make 2 more styling changes or click "Update Options".', 'formidable' ) ); ?>
+						</label>
+					</div>
+					<div class="frm7 frm_form_field frm-style-component">
+						<?php
+							FrmHtmlHelper::toggle(
+								'frm_submit_style',
+								$frm_style->get_field_name( 'submit_style' ),
+								array(
+									'div_class'       => 'with_frm_style frm_toggle',
+									'checked'         => ! empty( $frm_style->get_field_name( 'submit_style' ) ),
+									'echo'            => true,
+									'aria-label-attr' => __( 'Disable submit button styling', 'formidable' ),
+								)
+							);
+							?>
+					</div>
+
 				</div>
 			</div>
 			<div class="frm-active">

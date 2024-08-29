@@ -279,7 +279,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.12
 	 *
 	 * @param object $item
 	 * @return string

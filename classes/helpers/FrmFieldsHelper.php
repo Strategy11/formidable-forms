@@ -1511,6 +1511,11 @@ class FrmFieldsHelper {
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
 				if ( is_string( $v ) ) {
+					if ( 'custom_html' === $k ) {
+						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+						unset( $k, $v );
+						continue;
+					}
 					$val[ $k ] = str_replace( $replace, $replace_with, $v );
 					unset( $k, $v );
 				}
@@ -1520,6 +1525,31 @@ class FrmFieldsHelper {
 		}
 
 		return $val;
+	}
+
+	/**
+	 * Removes exception strings from replacement arrays and replaces the rest in the provided value string.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $replace      Values to be replaced.
+	 * @param array  $replace_with Replacement values.
+	 * @param array  $exceptions   Array of strings to skip.
+	 * @param string $value        Value to be updated.
+	 *
+	 * @return string
+	 */
+	private static function switch_ids_except_strings( $replace, $replace_with, $exceptions, $value ) {
+		foreach ( $exceptions as $exception ) {
+			$index = array_search( $exception, $replace, true );
+			if ( false === $index ) {
+				continue;
+			}
+			unset( $replace[ $index ] );
+			unset( $replace_with[ $index ] );
+		}
+		$value = str_replace( $replace, $replace_with, $value );
+		return $value;
 	}
 
 	/**
@@ -2236,7 +2266,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * Maybe adjust a field value based on type.
-	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 * Some types require unserializing an array.
+	 * These types are defined by a array_allowed property on their field model class.
 	 *
 	 * @since 6.2
 	 *

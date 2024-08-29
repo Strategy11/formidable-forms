@@ -14,7 +14,9 @@
 .formidable_page_formidable-styles .frm-right-panel .open h3.accordion-section-title > svg:last-child {
 	color: var( --grey-900 );
 }
-
+.formidable_page_formidable-styles .frm-right-panel  .frm-style-component {
+	align-self: center;
+}
 .formidable_page_formidable-styles .frm-right-panel  .frm-style-component .wp-picker-container button {
 	position: relative;
 	height: 36px !important;

@@ -109,7 +109,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field">
 	<label class="frm-style-item-heading">
 		<?php esc_html_e( 'Override Theme', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used', 'formidable' ); ?>"></span>
+		<?php FrmAppHelper::tooltip_icon( __( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used', 'formidable' ) ); ?>
 	</label>
 </div>
 <div class="frm7 frm_form_field frm-style-component">

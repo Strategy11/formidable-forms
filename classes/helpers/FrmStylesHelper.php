@@ -896,6 +896,22 @@ class FrmStylesHelper {
 
 		return wp_get_attachment_url( (int) $settings['submit_bg_img'] );
 	}
+	/**
+	 * Determines if the chosen JavaScript library should be used.
+	 *
+	 * @since 6.13
+	 *
+	 * @return bool
+	 */
+	public static function use_chosen_js() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+
+		return is_callable( 'FrmProAppHelper::use_chosen_js' )
+			? FrmProAppHelper::use_chosen_js()
+			: true;
+	}
 
 	/**
 	 * @since 5.5.1

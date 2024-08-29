@@ -91,6 +91,17 @@ describe("Forms page", () => {
     });
 
     it("should validate all data in excerpt view", () => {
+
+        cy.log("Edit form to add description");
+        cy.contains('#the-list tr', 'Test Form').trigger('mouseover').within(() => {
+            cy.get('.row-actions .frm_edit a').should('be.visible').click({ force: true });
+        });
+
+        cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
+        cy.get('#frm_form_description').should("be.visible").type("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+        cy.get('#frm_submit_side_top').should("contain", "Update").click();
+        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
+
         cy.log("Verify that table view in forms page is in excerpt mode");
         cy.get('#view-switch-excerpt').should("exist").click();
 
@@ -115,6 +126,7 @@ describe("Forms page", () => {
             .parents('[id^="item-action-"]')
             .within(() => {
                 cy.get('.name > strong > .row-title').should("contain", formTitle);
+                cy.get('.name').should("contain", "Lorem Ipsum is simply dummy text of the printing...");
                 cy.get('.entries > a').should("contain", "0");
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");
