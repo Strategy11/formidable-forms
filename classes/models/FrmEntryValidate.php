@@ -625,10 +625,10 @@ class FrmEntryValidate {
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 				$fields  = FrmDb::get_results( 'frm_fields', array( 'form_id' => $form_id ), 'id,name', array( 'order_by' => 'field_order ASC' ) );
 				foreach ( $fields as $index => $field ) {
-					if ( __( 'Name', 'formidable' ) !== $field->name ) {
+					if ( 'Name' !== $field->name ) {
 						continue;
 					}
-					if ( isset( $fields[ $index + 1 ] ) && __( 'Last', 'formidable' ) === $fields[ $index + 1 ]->name ) {
+					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
 						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 						return true;
 					}
