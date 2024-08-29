@@ -869,9 +869,9 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Check if the current page is the quick settings page. 
+	 * Check if the current page is the advanced settings page. 
 	 *
-	 * @return bool True if quick settings, false otherwise.
+	 * @return bool True if is advanced settings, false otherwise.
 	 */
 	public static function is_advanced_settings() {
 		return FrmAppHelper::get_param( 'section' ) === 'advanced-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
