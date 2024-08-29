@@ -59,6 +59,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
+		// Test "Name" + "Last" field name pattern to build the comment_author
 		$form_id       = $this->factory->form->create();
 		$first_name_id = $this->factory->field->create(
 			array(
@@ -87,7 +88,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 		$_POST['form_id'] = $form_id;
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
-
 		$check = $this->get_spam_check_user_info( $values );;
 		$this->assertEquals( 'John Doe', $check['comment_author'] );
 
