@@ -56,6 +56,18 @@
 		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
 		document.body.classList.remove( 'wp-core-ui' );
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+
+		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+	}
+
+
+	function initSliderPreview( event ) {
+		const wrapper = event.target.closest( '.frm_range_container' );
+		if ( null === wrapper ) {
+			return;
+		}
+		wrapper.querySelector( '.frm_range_value' ).innerHTML = parseInt( this.value, 10 );
 	}
 
 	/**
@@ -243,9 +255,7 @@
 		}
 
 		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id || target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
-			if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
-				switchQuickSettingsFormAction();
-			}
+			switchAdvancedSettingsFormAction( target );
 			handleUpdateClick();
 			return;
 		}
@@ -257,16 +267,16 @@
 	}
 
 	/**
-	 * This function is used to update the form action when switching between the advanced settings and quick-settings.
-	 * @param {string} actionType
+	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
+	 * @param {object} target The submit button event target
 	 * @returns {void}
 	 */
-	function switchQuickSettingsFormAction() {
+	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( 'frm-style-advanced-settings-button' !== target.id || null === form ) {
 			return;
 		}
-		form.setAttribute( 'action', form.getAttribute( 'action' ) + '&section=quick-settings' );
+		form.setAttribute( 'action', form.getAttribute( 'action' ) + '&section=advanced-settings' );
 	}
 
 	/**
@@ -1153,7 +1163,7 @@
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		});
-		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape' ).on( 'change', debouncedPreviewUpdate );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();

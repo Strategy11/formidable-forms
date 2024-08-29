@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$style->post_content['field_width'],
 		array(
 			'id'        => 'frm_field_width',
-			'max_value' => 300,
+			'max_value' => 1400,
 		)
 	);
 	?>

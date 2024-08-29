@@ -28,6 +28,10 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->field_name  = $field_name;
 		$this->field_value = $field_value;
 
+		if ( true === $this->hide_component() ) {
+			return;
+		}
+
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );

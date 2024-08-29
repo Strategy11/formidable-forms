@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
+FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
+
 $important = empty( $important_style ) ? '' : ' !important';
 
 $minus_icons   = FrmStylesHelper::minus_icons();

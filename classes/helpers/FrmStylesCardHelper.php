@@ -103,7 +103,7 @@ class FrmStylesCardHelper {
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
-			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id, 'quick-settings' ) ),
+			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $label_position,
 		);
 

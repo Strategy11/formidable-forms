@@ -189,6 +189,18 @@ class FrmStyleComponent {
 		include $this->view_folder . $this->view_name . '.php';
 	}
 
+	protected function hide_component() {
+		if ( empty( $this->data['not_show_in'] ) ) {
+			return false;
+		}
+
+		if ( FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'] ) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Load component CSS file.
 	 *

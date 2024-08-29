@@ -132,6 +132,8 @@ class FrmStyle {
 				}
 			}
 
+			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
+
 			$action_ids[] = $this->save( $new_instance );
 		}//end foreach
 
@@ -733,7 +735,8 @@ class FrmStyle {
 			'progress_border_size'       => '1px',
 			'progress_size'              => '30px',
 			'custom_css'                 => '',
-
+			'use_base_font_size'         => false,
+			'base_font_size'             => '15px',
 			'field_shape_type'           => 'regular',
 		);
 

@@ -521,6 +521,8 @@ class FrmStylesHelper {
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
+			$settings = self::update_base_font_size( $settings, $frm_style->get_defaults() );
+
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
 			$settings['style_class'] = '';
@@ -555,6 +557,64 @@ class FrmStylesHelper {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Update the "Base Font Size" value from "Quick Settings across multiple settings values".
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings An array of css style.
+	 *
+	 * @return array
+	 */
+	public static function update_base_font_size( $settings, $defaults ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || true !== (bool) $settings['use_base_font_size'] ) {
+			return $settings;
+		}
+
+		$base_font_size       = (int) $settings['base_font_size'];
+		$font_size            = $settings['font_size'];
+		$font_sizes_to_update = array(
+			'font_size',
+			'field_font_size',
+			'check_font_size',
+			'title_size',
+			'form_desc_size',
+			'description_font_size',
+			'section_font_size',
+			'submit_font_size',
+			'success_font_size',
+			'error_font_size',
+			'progress_size',
+		);
+
+		$css_vars_to_update = array_combine(
+			$font_sizes_to_update,
+			array_map(
+				function ( $key ) use ( $defaults, $font_size ) {
+					return self::get_base_font_size_scale( $key, $font_size, $defaults );
+				},
+				$font_sizes_to_update
+			)
+		);
+
+		foreach ( $css_vars_to_update as $key => $value ) {
+			if ( isset( $settings[ $key ] ) ) {
+				$size             = ceil( $value * $base_font_size ) . 'px';
+				$settings[ $key ] = $size;
+			}
+		}
+
+		return $settings;
+	}
+
+	private static function get_base_font_size_scale( $key, $value, $defaults ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
+			return 1;
+		}
+
+		return round( (int) $defaults[ $key ] / (int) $value, 2 );
 	}
 
 	/**
@@ -699,7 +759,7 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function get_style_options_back_button_args( $style, $form_id ) {
-		if ( ! self::is_quick_settings() ) {
+		if ( self::is_advanced_settings() ) {
 			return array(
 				'title' => __( 'Quick Settings', 'formidable' ),
 				'id'    => 'frm_style_back_to_quick_settings',
@@ -813,8 +873,8 @@ class FrmStylesHelper {
 	 *
 	 * @return bool True if quick settings, false otherwise.
 	 */
-	public static function is_quick_settings() {
-		return FrmAppHelper::get_param( 'section' ) === 'quick-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
+	public static function is_advanced_settings() {
+		return FrmAppHelper::get_param( 'section' ) === 'advanced-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
 	}
 
 	/**

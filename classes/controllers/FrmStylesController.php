@@ -929,7 +929,8 @@ class FrmStylesController {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$frm_style = new FrmStyle();
+		$is_loaded_via_ajax = true;
+		$frm_style          = new FrmStyle();
 
 		// Intentionally avoid defaults here so nothing gets removed from our style.
 		$defaults = array();

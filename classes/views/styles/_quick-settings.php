@@ -25,6 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$frm_style->get_field_name( 'slider_color' ),
 				$frm_style->get_field_name( 'border_color_active' ),
 				$frm_style->get_field_name( 'submit_border_color' ),
+				$frm_style->get_field_name( 'progress_active_bg_color' ),
+				$frm_style->get_field_name( 'date_band_color' ),
+				$frm_style->get_field_name( 'date_head_bg_color' ),
 			),
 		)
 	);
@@ -128,16 +131,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
+	<?php if ( ! FrmStylesHelper::is_advanced_settings() ) { ?>
+		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="true" />
+	<?php } ?>
 	<?php
 	new FrmSliderStyleComponent(
-		null,
-		$style->post_content['field_font_size'],
+		$frm_style->get_field_name( 'base_font_size' ),
+		$style->post_content['base_font_size'],
 		array(
-			'id'          => 'field_font_size',
+			'id'          => 'base_font_size',
 			'max_value'   => 100,
-			'will_change' => array(
-				$frm_style->get_field_name( 'field_font_size' ),
-			),
+			'not_show_in' => 'advanced-settings', 
 		)
 	);
 	?>
