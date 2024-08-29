@@ -17,14 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-card-box-content frm-fields">
-		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Default Email Address', 'formidable' ); ?></h2>
+		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Email Setup', 'formidable' ); ?></h2>
 		<p class="frm-card-box-text frmcenter">
-			<?php esc_html_e( 'Set the default email address to receive notifications for new form submissions. You can change this at any time.', 'formidable' ); ?>
+			<?php esc_html_e( 'Setup the sender address shown to recipients (from) and the default email for admin notifications (to).', 'formidable' ); ?>
 		</p>
 
 		<div class="frm_form_field frm-mt-lg">
 			<p>
-				<label for="frm-onboarding-default-email-field"><?php esc_html_e( 'Default email address', 'formidable' ); ?></label>
+				<label for="frm-onboarding-default-email-field"><?php esc_html_e( 'To address', 'formidable' ); ?></label>
 				<input type="email" name="frm-onboarding-default-email-field" id="frm-onboarding-default-email-field" class="frm-input-field frm-gap-xs" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_settings()->default_email ); ?>" />
 				<!-- Email Error -->
 				<span id="frm-onboarding-email-step-error" class="frm-validation-error frm-mt-xs frm_hidden">
