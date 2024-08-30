@@ -11,7 +11,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @var string
 	 */
-	public $view_name = 'slider';
+	protected $view_name = 'slider';
 
 	/**
 	 * The FrmStyleComponent data.
@@ -24,9 +24,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 	public function __construct( $field_name, $field_value, $data ) {
 
-		$this->data        = $data;
-		$this->field_name  = $field_name;
-		$this->field_value = $field_value;
+		$this->init_field_data( $data, $field_name, $field_value );
 
 		if ( true === $this->hide_component() ) {
 			return;
@@ -40,7 +38,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->init_multiple_values();
 
 		parent::get_instance();
-		$this->load_view( $this->data );
+		$this->load_view();
 	}
 
 	/**

@@ -11,7 +11,7 @@ class FrmDropdownStyleComponent extends FrmStyleComponent {
 	 *
 	 * @var string
 	 */
-	public $view_name = 'dropdown';
+	protected $view_name = 'dropdown';
 
 	/**
 	 * Construct FrmDropdownStyleComponent.
@@ -19,13 +19,6 @@ class FrmDropdownStyleComponent extends FrmStyleComponent {
 	 * @since x.x
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
-
-		$this->data        = $data;
-		$this->field_name  = $field_name;
-		$this->field_value = $field_value;
-
-		parent::get_instance();
-		
-		$this->load_view( $this->data );
+		$this->init( $data, $field_name, $field_value );
 	}
 }

@@ -67,7 +67,7 @@ class FrmStyleComponent {
 	 */
 	private static $instance;
 
-	public function __construct() {
+	private function __construct() {
 		$this->load_css();
 		$this->load_js();
 	}
@@ -101,6 +101,27 @@ class FrmStyleComponent {
 
 		self::$instance = new FrmStyleComponent();
 		return self::$instance;
+	}
+
+	protected function init( $data, $field_name, $field_value ) {
+		$this->init_field_data( $data, $field_name, $field_value );
+		self::get_instance();
+		$this->load_view();
+	}
+
+	/**
+	 * Init the field component data, field name and field value.
+	 *
+	 * @since x.x
+	 * @param array  $data The field extra options.
+	 * @param string $field_name The field input's name.
+	 * @param mixed  $field_value The field value.
+	 * @return void
+	 */
+	protected function init_field_data( $data, $field_name, $field_value ) {
+		$this->data        = $data;
+		$this->field_name  = $field_name;
+		$this->field_value = $field_value;
 	}
 
 	/**
@@ -174,7 +195,7 @@ class FrmStyleComponent {
 	 *
 	 * @return void
 	 */
-	protected function load_view( $data ) {
+	protected function load_view() {
 		if ( empty( $this->view_name ) ) {
 			return;
 		}
@@ -182,7 +203,7 @@ class FrmStyleComponent {
 		$this->set_view_path();
 		$component_attr  = $this->get_component_attributes();
 		$component_class = $this->get_wrapper_class_name();
-		$component       = $data;
+		$component       = $this->data;
 		$field_name      = $this->get_field_name();
 		$field_value     = $this->field_value;
 
