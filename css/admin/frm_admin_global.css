@@ -8,11 +8,11 @@
 	vertical-align: middle;
 }
 
-.wp-submenu.wp-submenu-wrap .frm-meta-tag.frm-new-pill {
+#adminmenu .frm-new-pill {
 	color: #F47449;
-	background: inherit;
+	background: none;
 	margin-left: 0;
-	font-size: unset;
-	font-weight: unset;
+	font-size: 85%;
+	font-weight: inherit;
 	vertical-align: unset;
 }
