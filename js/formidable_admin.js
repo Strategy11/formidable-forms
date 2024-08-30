@@ -10975,6 +10975,7 @@ function frmAdminBuildJS() {
 				},
 				success: function( html ) {
 					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
