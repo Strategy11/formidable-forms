@@ -330,6 +330,7 @@ class FrmStylesController {
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
@@ -338,6 +339,7 @@ class FrmStylesController {
 		}
 
 		$form = FrmForm::getOne( $form_id );
+		
 		if ( ! is_object( $form ) ) {
 			$error_args   = array(
 				'title'      => __( 'No forms', 'formidable' ),
@@ -345,6 +347,7 @@ class FrmStylesController {
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
 			);
 			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$frm_style     = new FrmStyle( $style_id );
