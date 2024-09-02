@@ -7,7 +7,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top-bottom' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
 								<span class="frm-slider-value-label"><?php echo (int) $component['vertical']['value']; ?></span>
@@ -29,7 +29,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
 								<span class="frm-slider-value-label"><?php echo (int) $component['top']['value']; ?></span>
@@ -51,7 +51,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-bottom' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
 								<span class="frm-slider-value-label"><?php echo (int) $component['bottom']['value']; ?></span>
@@ -73,7 +73,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-left-right' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
 								<span class="frm-slider-value-label"><?php echo (int) $component['horizontal']['value']; ?></span>
@@ -95,7 +95,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-left' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
 								<span class="frm-slider-value-label"><?php echo (int) $component['left']['value']; ?></span>
@@ -117,10 +117,10 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-right' ); ?>
-					<span class="frm-slider">
+					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"></span>
+								<span class="frm-slider-value-label"><?php echo (int) $component['right']['value']; ?></span>
 							</span>
 						</span>
 					</span>
@@ -146,7 +146,7 @@ if ( $component['has-multiple-values'] ) : ?>
 						<?php if ( ! empty( $component['icon'] ) ) : ?>
 							<?php FrmAppHelper::icon_by_class( $component['icon'] ); ?>
 						<?php endif; ?>
-						<span class="frm-slider">
+						<span class="frm-slider" tabindex="0">
 							<span class="frm-slider-active-track">
 								<span class="frm-slider-bullet">
 									<span class="frm-slider-value-label"><?php echo (int) $field_value; ?></span>
@@ -171,7 +171,7 @@ if ( $component['has-multiple-values'] ) : ?>
 					<div class="frm-flex-justify">
 						<div class="frm-slider-container">
 							<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top-bottom' ); ?>
-							<span class="frm-slider">
+							<span class="frm-slider" tabindex="0">
 								<span class="frm-slider-active-track">
 									<span class="frm-slider-bullet">
 										<span class="frm-slider-value-label"><?php echo (int) $field_value; ?></span>
@@ -198,7 +198,7 @@ if ( $component['has-multiple-values'] ) : ?>
 									<?php if ( ! empty( $component['icon'] ) ) : ?>
 										<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-' . $field['type'] ); ?>
 									<?php endif; ?>
-									<span class="frm-slider">
+									<span class="frm-slider" tabindex="0">
 										<span class="frm-slider-active-track">
 											<span class="frm-slider-bullet">
 												<span class="frm-slider-value-label"><?php echo (int) $field['value']; ?></span>
