@@ -23,14 +23,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 
 		<div class="frm_form_field frm-mt-lg">
+            <p>
+                <label for="frm-onboarding-from-email"><?php esc_html_e( 'From Address', 'formidable' ); ?></label>
+                <input type="email" name="frm-onboarding-from-email" id="frm-onboarding-from-email" class="frm-input-field frm-gap-xs" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_settings()->email_to ); ?>" />
+				<?php
+				FrmOnboardingWizardHelper::print_setting_error(
+					array(
+						'id'     => 'frm-onboarding-from-email-error',
+						'errors' => array(
+							'invalid' => __( 'Email is invalid', 'formidable' ),
+							'empty'   => __( 'Email is empty', 'formidable' ),
+						),
+					)
+				);
+				?>
+            </p>
 			<p>
-				<label for="frm-onboarding-default-email-field"><?php esc_html_e( 'To address', 'formidable' ); ?></label>
+				<label for="frm-onboarding-default-email-field"><?php esc_html_e( 'To Address', 'formidable' ); ?></label>
 				<input type="email" name="frm-onboarding-default-email-field" id="frm-onboarding-default-email-field" class="frm-input-field frm-gap-xs" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_settings()->default_email ); ?>" />
 				<!-- Email Error -->
-				<span id="frm-onboarding-email-step-error" class="frm-validation-error frm-mt-xs frm_hidden">
-					<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
-					<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
-				</span>
+                <?php
+                FrmOnboardingWizardHelper::print_setting_error(
+					array(
+						'id'     => 'frm-onboarding-email-step-error',
+						'errors' => array(
+							'invalid' => __( 'Email is invalid', 'formidable' ),
+							'empty'   => __( 'Email is empty', 'formidable' ),
+						),
+					)
+                );
+                ?>
 			</p>
 
 			<?php if ( ! $pro_is_installed ) { ?>
