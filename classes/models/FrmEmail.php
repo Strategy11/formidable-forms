@@ -391,6 +391,13 @@ class FrmEmail {
 		}
 
 		$this->message  = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
+		if ( ! empty( $this->form->parent_form_id ) && ! empty( $this->entry->parent_entry_id ) ) {
+			// We want to make sure field ids and shortcodes of the parent form are also processed.
+			$parent_form   = FrmForm::getOne( $this->form->parent_form_id );
+			$parent_entry  = FrmEntry::getOne( $this->entry->parent_item_id, true );
+			$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $parent_form, $parent_entry );
+		}
+
 		$prev_mail_body = $this->message;
 
 		// Make a copy to prevent changes by reference.
