@@ -340,7 +340,7 @@ class FrmStylesController {
 
 		$form = FrmForm::getOne( $form_id );
 		
-		if ( ! is_object( $form ) ) {
+		if ( true ) {
 			$error_args   = array(
 				'title'      => __( 'No forms', 'formidable' ),
 				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
