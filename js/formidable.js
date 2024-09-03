@@ -1784,6 +1784,10 @@ function frmCaptcha( captchaSelector ) {
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
+		const isVisible = captchas[c].offsetParent !== null;
+		if ( ! isVisible ) {
+			continue;
+		}
 		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
 }
