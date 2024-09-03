@@ -1545,13 +1545,13 @@ function frmFrontFormJS() {
 				return;
 			}
 
+			errors = frmFrontForm.validateFormSubmit( object );
 			if ( invisibleRecaptcha.length ) {
-				showLoadingIndicator( jQuery( object ) );
-				executeInvisibleRecaptcha( invisibleRecaptcha );
+				if ( Object.keys( errors ).length === 0 ) {
+					showLoadingIndicator( jQuery( object ) );
+					executeInvisibleRecaptcha( invisibleRecaptcha );
+				}
 			} else {
-
-				errors = frmFrontForm.validateFormSubmit( object );
-
 				if ( Object.keys( errors ).length === 0 ) {
 					showSubmitLoading( jQuery( object ) );
 
