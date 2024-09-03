@@ -12,8 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php do_action( 'frm_before_settings' ); ?>
 </div>
 
-<h3><?php esc_html_e( 'Styling & Scripts', 'formidable' ); ?></h3>
-
 <h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 
 <p class="frm_grid_container">
