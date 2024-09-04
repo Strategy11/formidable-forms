@@ -343,6 +343,9 @@ class FrmFormActionsController {
 		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
