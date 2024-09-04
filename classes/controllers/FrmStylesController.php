@@ -339,7 +339,7 @@ class FrmStylesController {
 		}
 
 		$form = FrmForm::getOne( $form_id );
-		
+
 		if ( ! is_object( $form ) ) {
 			$error_args   = array(
 				'title'      => __( 'No forms', 'formidable' ),
