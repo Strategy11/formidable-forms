@@ -443,6 +443,7 @@
 				<file name="stripe/models/FrmTransLiteAction.php" />
 				<file name="classes/models/FrmFormAction.php" />
 				<file name="classes/controllers/FrmFormsController.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</PossiblyInvalidMethodCall>
 		<UndefinedMethod>
@@ -451,5 +452,10 @@
 				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</UndefinedMethod>
+		<InvalidMethodCall>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</InvalidMethodCall>
 	</issueHandlers>
 </psalm>

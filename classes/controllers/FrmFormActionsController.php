@@ -305,6 +305,9 @@ class FrmFormActionsController {
 		);
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'all', $filters );
 
+		/**
+		 * @var array
+		 */
 		$action_controls = self::get_form_actions();
 
 		$action_map = array();
@@ -600,6 +603,9 @@ class FrmFormActionsController {
 			return;
 		}
 
+		/**
+		 * @var array
+		 */
 		$action_controls = self::get_form_actions();
 
 		foreach ( $action_controls as $action_control ) {
