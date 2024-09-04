@@ -539,7 +539,7 @@ class FrmFormAction {
 			return array();
 		}
 
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
@@ -608,6 +608,10 @@ class FrmFormAction {
 		if ( ! $type ) {
 			return false;
 		}
+
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = FrmFormActionsController::get_form_actions( $type );
 
 		return $action_control->get_single_action( $action_id );

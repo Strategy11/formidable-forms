@@ -205,6 +205,9 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	public static function get_single_action_type( $action_id, $type = '' ) {
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = FrmFormActionsController::get_form_actions( 'payment' );
 		return $action_control->get_single_action( $action_id );
 	}
