@@ -1546,18 +1546,16 @@ function frmFrontFormJS() {
 			}
 
 			errors = frmFrontForm.validateFormSubmit( object );
-			if ( invisibleRecaptcha.length ) {
-				if ( Object.keys( errors ).length === 0 ) {
-					showLoadingIndicator( jQuery( object ) );
-					executeInvisibleRecaptcha( invisibleRecaptcha );
-				}
-			} else {
-				if ( Object.keys( errors ).length === 0 ) {
-					showSubmitLoading( jQuery( object ) );
-
-					frmFrontForm.submitFormNow( object, classList );
-				}
+			if ( Object.keys( errors ).length !== 0 ) {
+				return;
 			}
+			if ( invisibleRecaptcha.length ) {
+				showLoadingIndicator( jQuery( object ) );
+				executeInvisibleRecaptcha( invisibleRecaptcha );
+			} else {
+				showSubmitLoading( jQuery( object ) );
+				frmFrontForm.submitFormNow( object, classList );
+			}	
 		},
 
 		submitFormNow: function( object ) {
