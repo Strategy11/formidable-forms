@@ -702,7 +702,9 @@ class FrmEntriesController {
 			 * Add or remove information in the entry sidebar.
 			 *
 			 * @since 5.5.2
+			 *
 			 * @param array $data
+			 * @param array{entry:\stdClass} $entry
 			 */
 			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}

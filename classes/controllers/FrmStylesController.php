@@ -359,9 +359,7 @@ class FrmStylesController {
 		/**
 		 * @since 6.0
 		 *
-		 * @param array {
-		 *     @type stdClass $form
-		 * }
+		 * @param array{form:\stdClass} $data
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
