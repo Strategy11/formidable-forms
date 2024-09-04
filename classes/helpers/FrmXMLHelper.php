@@ -216,7 +216,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @param SimpleXMLElement $views
+	 * @param SimpleXMLElement $forms
 	 * @param array            $imported
 	 * @return array
 	 */
