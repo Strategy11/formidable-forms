@@ -453,10 +453,33 @@ class FrmStylesController {
 			wp_die( 'Unable to save form', '', 403 );
 		}
 
-		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
-		if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
-			wp_die( esc_html__( 'Invalid target style', 'formidable' ), esc_html__( 'Invalid target style', 'formidable' ), 400 );
-			return;
+		$installing_classic_style = 'formidable-classic-style' === FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' );
+		if ( $installing_classic_style ) {
+			$classic_style_path = FrmAppHelper::plugin_path() . '/xml/formidable-classic-style.xml';
+			$xml_string         = file_get_contents( $classic_style_path );
+			$xml                = simplexml_load_string( $xml_string );
+
+			if ( false === $xml || empty( $xml->view ) || FrmStylesController::$post_type !== (string) $xml->view->post_type ) {
+				return false;
+			}
+
+			self::maybe_set_style_key( $xml );
+
+			$result  = FrmXMLHelper::import_xml_now( $xml, true );
+			$invalid = empty( $result['imported']['styles'] ) || empty( $result['posts'] ) || ! is_array( $result['posts'] );
+
+			if ( $invalid ) {
+				wp_die( esc_html__( 'Failed to import style', 'formidable' ), esc_html__( 'Failed to import style', 'formidable' ), 400 );
+				return;
+			}
+
+			$style_id = reset( $result['posts'] );
+		} else {
+			$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+			if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
+				wp_die( esc_html__( 'Invalid target style', 'formidable' ), esc_html__( 'Invalid target style', 'formidable' ), 400 );
+				return;
+			}
 		}
 
 		/**
@@ -467,12 +490,6 @@ class FrmStylesController {
 		 * @param int $style_id
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
-
-		$installing_classic_style = 'formidable-classic-style' === FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' );
-		if ( $installing_classic_style ) {
-			
-			return;
-		}
 
 		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', '', 'sanitize_text_field' ) ) {
 			// "0" is a special value used for the enable/disable toggle.
@@ -509,6 +526,22 @@ class FrmStylesController {
 		FrmForm::clear_form_cache();
 
 		self::$message = __( 'Successfully updated style.', 'formidable' );
+	}
+
+	/**
+	 * Make sure the style post name is unique when we import a style template so we never update an existing one.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement $xml
+	 * @return void
+	 */
+	private static function maybe_set_style_key( $xml ) {
+		if ( ! isset( $xml->view ) || empty( $xml->view->post_name ) ) {
+			return;
+		}
+
+		$xml->view->post_name = FrmAppHelper::get_unique_key( (string) $xml->view->post_name, 'posts', 'post_name' );
 	}
 
 	/**
