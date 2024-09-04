@@ -454,7 +454,9 @@ class FrmFieldsController {
 	 */
 	public static function display_field_options( $settings, $field_info = null ) {
 		if ( $field_info ) {
-			$settings               = $field_info->display_field_settings();
+			$settings = $field_info->display_field_settings();
+
+			// Field appears to be protected but there is a __get function in FrmFieldType that makes this public.
 			$settings['field_data'] = $field_info->field;
 		}
 
