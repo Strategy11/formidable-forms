@@ -515,7 +515,7 @@ class FrmFormActionsController {
 		FrmForm::maybe_get_form( $form );
 
 		$link_settings = self::get_form_actions( $type );
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$link_settings = array( $type => $link_settings );
 		}
 

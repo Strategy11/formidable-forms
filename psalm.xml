@@ -448,6 +448,7 @@
 				<file name="classes/helpers/FrmXMLHelper.php" />
 				<file name="classes/models/FrmFormAction.php" />
 				<file name="classes/models/FrmFormTemplateApi.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</UndefinedMethod>
 		<InvalidMethodCall>
