@@ -91,3 +91,6 @@ parameters:
 		-
 			message: '#Call to an undefined method object::prepare_items#'
 			path: classes/helpers/FrmDashboardHelper.php
+		-
+			message: 'Access to protected property FrmFieldType::\$field.'
+			path: classes/controllers/FrmFieldsController.php
