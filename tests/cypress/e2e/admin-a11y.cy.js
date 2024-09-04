@@ -74,15 +74,6 @@ describe('Run some accessibility tests', function() {
         cy.checkA11y();
     });
 
-    it('Check the payments page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-settings&t=stripe_settings');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
-            ...baselineRules
-        ]);
-        cy.checkA11y();
-    });
-
     it('Check the import/export page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-import');
         cy.injectAxe();

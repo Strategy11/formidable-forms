@@ -352,6 +352,12 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			}
 
+			// Make sure fieldID is a string.
+			// fieldID may be a number which doesn't include a .replace function.
+			if ( 'function' !== typeof fieldID.replace ) {
+				fieldID = fieldID.toString();
+			}
+
 			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
@@ -638,6 +644,11 @@ function frmFrontFormJS() {
 		return validate;
 	}
 
+	/**
+	 * @param {HTMLElement}      object
+	 * @param {string|undefined} action
+	 * @return {void}
+	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
 
@@ -1013,10 +1024,14 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {void}
 	 */
 	function scrollToFirstField( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		const field = object.querySelector( '.frm_blank_field' );
 		if ( field ) {
 			frmFrontForm.scrollMsg( jQuery( field ), object, true );
@@ -1503,6 +1518,11 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
+		/**
+		 * @param {Event}       e
+		 * @param {HTMLElement} object The form object that is being submitted.
+		 * @return {void}
+		 */
 		submitFormManual: function( e, object ) {
 			let isPro, errors,
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
@@ -1591,6 +1611,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {Array} List of errors.
+		 */
 		getAjaxFormErrors: function( object ) {
 			let customErrors, key;
 
@@ -1605,9 +1629,18 @@ function frmFrontFormJS() {
 				}
 			}
 
+			triggerCustomEvent( document, 'frm_get_ajax_form_errors', {
+				formEl: object,
+				errors: jsErrors
+			});
+
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {void}
+		 */
 		addAjaxFormErrors: function( object ) {
 			let key, $fieldCont;
 			removeAllErrors();
@@ -1751,6 +1784,10 @@ function frmCaptcha( captchaSelector ) {
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
+		const isVisible = captchas[c].offsetParent !== null;
+		if ( ! isVisible ) {
+			continue;
+		}
 		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
 	}
 }

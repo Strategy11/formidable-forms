@@ -444,7 +444,7 @@ class FrmOnSubmitHelper {
 	}
 
 	/**
-	 * Check if the current event has been paased. If not, use create actions.
+	 * Check if the current event has been passed. If not, use create actions.
 	 *
 	 * @since 6.1.1
 	 *

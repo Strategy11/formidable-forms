@@ -5205,13 +5205,16 @@ label.frm-example-icon {
 	display: none;
 }
 
-.edd_frm_status_icon.frm_icon_font {
-	color: #D54E21;
+.edd_frm_status_icon.frmsvg {
 	margin: 0 5px;
 }
 
-.edd_frm_status_icon.frm_icon_font.frm_inactive_icon {
+.edd_frm_license_row .frm_action_success .frmsvg {
 	color: green;
+}
+
+.edd_frm_license_row .frm_action_error .frmsvg {
+	color: #D54E21;
 }
 
 /* Hide the install steps for solutions */
@@ -9333,6 +9336,7 @@ Responsive Design
 	font-size: 13px;
 	right: 30px;
 	bottom: 10px;
+	z-index: 2;
 }
 
 #frm_field_multiselect_popup > div {
