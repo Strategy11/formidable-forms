@@ -324,7 +324,13 @@ class FrmStylesController {
 
 		$style_id = self::get_style_id_for_styler();
 		if ( ! $style_id ) {
-			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+			$error_args   = array(
+				'title'      => __( 'No styles', 'formidable' ),
+				'body'       => __( 'You must have a style to use the Visual Styler.', 'formidable' ),
+				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
@@ -333,8 +339,15 @@ class FrmStylesController {
 		}
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! is_object( $form ) ) {
-			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+			$error_args   = array(
+				'title'      => __( 'No forms', 'formidable' ),
+				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
+				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$frm_style     = new FrmStyle( $style_id );
