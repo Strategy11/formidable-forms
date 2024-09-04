@@ -261,7 +261,7 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
-	 * @return array
+	 * @return array|FrmFormAction A single form action is returned when a specific $action value is requested.
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
