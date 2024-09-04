@@ -180,7 +180,7 @@ class FrmStylesCardHelper {
 
 		// Use a better name than my sample form.
 		$style_object               = new stdClass();
-		$style_object->ID           = 0;
+		$style_object->ID           = 'formidable-classic-style' === $style['slug'] ? 'formidable-classic-style' : 0;
 		$style_object->post_title   = $style['name'];
 		$style_object->post_content = $style['settings'];
 
@@ -227,6 +227,11 @@ class FrmStylesCardHelper {
 			 */
 			$param_filter = function ( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
+
+				if ( 'formidable-classic-style' === $style['slug'] ) {
+					$params['data-pro-installed'] = FrmAppHelper::pro_is_installed() ? 1 : 0;
+				}
+
 				return $params;
 			};
 		}//end if

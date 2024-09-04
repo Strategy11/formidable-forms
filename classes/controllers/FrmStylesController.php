@@ -460,13 +460,21 @@ class FrmStylesController {
 			$xml                = simplexml_load_string( $xml_string );
 
 			if ( false === $xml || empty( $xml->view ) || FrmStylesController::$post_type !== (string) $xml->view->post_type ) {
-				return false;
+				wp_die( esc_html__( 'Template XML is invalid', 'formidable' ), esc_html__( 'Template XML is invalid', 'formidable' ), 400 );
+				return;
 			}
 
 			self::maybe_set_style_key( $xml );
 
 			$result  = FrmXMLHelper::import_xml_now( $xml, true );
-			$invalid = empty( $result['imported']['styles'] ) || empty( $result['posts'] ) || ! is_array( $result['posts'] );
+
+			if ( FrmAppHelper::pro_is_installed() ) {
+				// Expect a new style when Pro is active.
+				$invalid = empty( $result['imported']['styles'] ) || empty( $result['posts'] ) || ! is_array( $result['posts'] );
+			} else {
+				// Expect the default style is updated when Pro is inactive.
+				$invalid = empty( $result['updated']['styles'] ) || empty( $result['posts'] ) || ! is_array( $result['posts'] );
+			}
 
 			if ( $invalid ) {
 				wp_die( esc_html__( 'Failed to import style', 'formidable' ), esc_html__( 'Failed to import style', 'formidable' ), 400 );
@@ -474,6 +482,7 @@ class FrmStylesController {
 			}
 
 			$style_id = reset( $result['posts'] );
+
 		} else {
 			$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
 			if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
@@ -529,7 +538,8 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Make sure the style post name is unique when we import a style template so we never update an existing one.
+	 * When Pro is active, make sure the style post name is unique when we import a style template so we never update an existing one.
+	 * When Pro is inactive, make sure to use the style post name of the default style so we remain with only one style.
 	 *
 	 * @since x.x
 	 *
@@ -541,7 +551,16 @@ class FrmStylesController {
 			return;
 		}
 
-		$xml->view->post_name = FrmAppHelper::get_unique_key( (string) $xml->view->post_name, 'posts', 'post_name' );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			// Make sure the style post name is unique when we import a style template so we never update an existing one.
+			$xml->view->post_name = FrmAppHelper::get_unique_key( (string) $xml->view->post_name, 'posts', 'post_name' );
+			return;
+		}
+
+		// Make sure to use the style post name of the default style so we remain with only one style.
+		$frm_style            = new FrmStyle( 'default' );
+		$default_style        = $frm_style->get_one();
+		$xml->view->post_name = $default_style->post_name;
 	}
 
 	/**

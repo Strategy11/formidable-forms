@@ -601,9 +601,15 @@
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
-			const applyOption = a({
-				text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
-			});
+			let applyLabel;
+
+			if ( 'formidable-classic-style' === data.templateKey && ! parseInt( data.proInstalled ) ) {
+				applyLabel = __( 'Set as default', 'formidable' );
+			} else {
+				applyLabel = isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' );
+			}
+
+			const applyOption = a({ text: applyLabel });
 			addIconToOption( applyOption, 'frm_save_icon' );
 			dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
 			onClickPreventDefault( applyOption, handleApplyOptionClick );
