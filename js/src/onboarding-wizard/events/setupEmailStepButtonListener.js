@@ -26,12 +26,20 @@ function addSetupEmailStepButtonEvents() {
  * @return {void}
  */
 const onSetupEmailStepButtonClick = async() => {
-	const { defaultEmailField } = getElements();
+	const { defaultEmailField, defaultFromEmailField } = getElements();
 	const email = defaultEmailField.value.trim();
+	let hasError = false;
 
-	// Check if the email is valid
-	if ( ! isValidEmail( email ) ) {
-		showEmailAddressError( 'invalid' );
+	// Check if the emails are valid
+	[ defaultFromEmailField, defaultEmailField ].forEach( input => {
+		const emailAddress = input.value.trim();
+		if ( ! isValidEmail( emailAddress ) ) {
+			showEmailAddressError( 'invalid', input );
+			hasError = true;
+		}
+	});
+
+	if ( hasError ) {
 		return;
 	}
 
@@ -63,6 +71,7 @@ const onSetupEmailStepButtonClick = async() => {
 	// Prepare FormData for the POST request
 	const formData = new FormData();
 	formData.append( 'default_email', email );
+	formData.append( 'from_email', defaultFromEmailField.value.trim() );
 	formData.append( 'allows_tracking', allowTrackingCheckbox.checked );
 	formData.append( 'summary_emails', summaryEmailsCheckbox.checked );
 

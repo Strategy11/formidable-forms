@@ -49,7 +49,7 @@ class FrmEmailHelper {
 	 * @return string
 	 */
 	public static function get_default_from_email() {
-		$settings = new FrmSettings();
+		$settings = FrmAppHelper::get_settings();
 		if ( $settings->from_email && is_email( $settings->from_email ) ) {
 			return $settings->from_email;
 		}

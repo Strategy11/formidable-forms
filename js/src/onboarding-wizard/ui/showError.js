@@ -10,6 +10,6 @@ import { showFormError } from '../utils';
  * @param {string} type The categorization of the error (e.g., "invalid", "empty").
  * @return {void}
  */
-export const showEmailAddressError = type => {
-	showFormError( `#${PREFIX}-default-email-field`, `#${PREFIX}-email-step-error`, type );
+export const showEmailAddressError = ( type, input ) => {
+	showFormError( '#' + input.id, '#' + input.nextElementSibling.id, type );
 };

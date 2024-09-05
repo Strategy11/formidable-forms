@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm_form_field frm-mt-lg">
             <p>
                 <label for="frm-onboarding-from-email"><?php esc_html_e( 'From Address', 'formidable' ); ?></label>
-                <input type="email" name="frm-onboarding-from-email" id="frm-onboarding-from-email" class="frm-input-field frm-gap-xs" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_settings()->email_to ); ?>" />
+                <input type="email" name="frm-onboarding-from-email" id="frm-onboarding-from-email" class="frm-input-field frm-gap-xs" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( FrmAppHelper::get_settings()->from_email ); ?>" />
 				<?php
 				FrmOnboardingWizardHelper::print_setting_error(
 					array(
