@@ -6132,7 +6132,7 @@ function frmAdminBuildJS() {
 			let input = false;
 			let showSelect = ( valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
 			const showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
-			// const isSubstringComparison = document.querySelector( `#frm_logic_${fieldID}_${metaKey} [name]="field_options[hide_field_cond_${fieldID}][]"` ).value === 'contains';
+			const comparison = document.querySelector( `#frm_logic_${fieldID}_${metaKey} [name="field_options[hide_field_cond_${fieldID}][]"]` ).value;
 
 			if ( showSelect ) {
 				isTaxonomy = document.getElementById( 'frm_has_hidden_options_' + val );
@@ -6144,7 +6144,7 @@ function frmAdminBuildJS() {
 
 			if ( showSelect || showText ) {
 				fill.innerHTML = '';
-				if ( showSelect ) {
+				if ( showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison ) ) {
 					input = document.createElement( 'select' );
 				} else {
 					input = document.createElement( 'input' );
