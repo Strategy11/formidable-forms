@@ -374,6 +374,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.13.1 =
 * New: The code for moving fields in the builder has been optimized for large forms.
 * New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
+* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
 * Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
 * Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
 * Fix: A JavaScript error would occur when trying to validate a read only time field.
