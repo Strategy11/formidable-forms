@@ -380,6 +380,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
 * Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
 * Fix: Turnstile elements are now only rendered when the field is visible.
+* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
 
 = 6.13 =
 * Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
