@@ -7,10 +7,9 @@ export default class frmTabsStyleComponent {
 
 	constructor() {
 		this.elements = document.querySelectorAll( '.frm-style-tabs-wrapper' );
-		if ( 0 === this.elements.length ) {
-			return;
+		if ( 0 < this.elements.length ) {
+			this.init();
 		}
-		this.init();
 	}
 
 	/**
