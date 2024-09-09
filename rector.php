@@ -21,7 +21,6 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
-use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
@@ -82,7 +81,6 @@ return RectorConfig::configure()
 			LocallyCalledStaticMethodToNonStaticRector::class,
 			JoinStringConcatRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
-			CallableThisArrayToAnonymousFunctionRector::class,
 			RemoveUselessParamTagRector::class,
 			RemoveDeadStmtRector::class,
 			RemoveDeadReturnRector::class,

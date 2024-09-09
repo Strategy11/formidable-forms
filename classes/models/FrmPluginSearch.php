@@ -57,6 +57,11 @@ class FrmPluginSearch {
 			return $result;
 		}
 
+		if ( is_wp_error( $result ) ) {
+			// This may happen if the request failed due to an internet connection issue.
+			return $result;
+		}
+
 		$addon_list = $this->get_addons();
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.

@@ -1108,6 +1108,10 @@ BEFORE_HTML;
 		return $actions;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link( $data ) {
 		$form_id = self::get_form_id_from_data( $data );
 
@@ -1120,6 +1124,10 @@ BEFORE_HTML;
 		return $link;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
@@ -1129,8 +1137,8 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed $data
-	 * @return int
+	 * @param int|object|string $data
+	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
 		if ( is_object( $data ) ) {

@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.6.1
 Requires PHP: 7.0
-Stable tag: 6.12
+Stable tag: 6.13
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,10 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.13 =
+* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
+* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
+
 = 6.12 =
 * New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
 * New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
