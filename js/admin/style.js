@@ -61,7 +61,12 @@
 
 	}
 
-
+	/**
+	 * Initialize the slider functionality in the style preview.
+	 *
+	 * @param {HTMLElement} event
+	 * @returns {void}
+	 */
 	function initSliderPreview( event ) {
 		const wrapper = event.target.closest( '.frm_range_container' );
 		if ( null === wrapper ) {
@@ -1134,13 +1139,22 @@
 	function initEditPage() {
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-		const debouncedColorChange	 = debounce( ( event, value ) => wp.hooks.doAction( 'frm_style_options_color_change', { event, value } ), 200 );
+		const debouncedColorChange	 = debounce(( event, value ) => {
+			/**
+			 * Fires on style colorpicker change.
+			 *
+			 * @param {Event}  data.event The color change event.
+			 * @param {string} data.value New color value.
+			 */
+			wp.hooks.doAction( 'frm_style_options_color_change', { event, value } );
+		}, 200 );
+
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		document.getElementById( 'frm_field_height' ).addEventListener( 'change', debouncedTextSquishCheck );
-		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', debouncedTextSquishCheck );
-		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', debouncedTextSquishCheck );
+		['frm_field_height', 'frm_field_font_size', 'frm_field_pad'].forEach( selector => {
+			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
+		});
 
 		jQuery( 'input.hex' ).wpColorPicker({
 			change: function( event ) {
@@ -1227,7 +1241,6 @@
 			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
 				return;
 			}
-			const size           = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
 			const paddingCount   = paddingEntered.length;
@@ -1239,6 +1252,7 @@
 				return;
 			}
 
+			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			// Get the top and bottom padding from entered values
 			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
 			let   paddingBottom = paddingTop;

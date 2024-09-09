@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'id'          => 'frm_fieldset_color',
 			'action_slug' => 'title_color',
 		)
-	); 
+	);
 	?>
 </div>
 

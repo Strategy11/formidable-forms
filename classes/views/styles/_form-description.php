@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'id'          => 'frm_form_desc_color',
 			'action_slug' => 'form_desc_color',
 		)
-	); 
+	);
 	?>
 </div>
 

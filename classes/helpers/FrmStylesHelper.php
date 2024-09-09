@@ -465,27 +465,28 @@ class FrmStylesHelper {
 
 		switch ( $key ) {
 			case 'font':
-				return FrmAppHelper::kses( $value );
-		
+				return safecss_filter_attr( $value );
+
 			case 'field_border_width':
 				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
-					return esc_html( '0px 0px ' . $value . ' 0px' );
+					return safecss_filter_attr( '0px 0px ' . $value . ' 0px' );
 				}
 				break;
-		
+
 			case 'box_shadow':
 				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
-					return 'none';
+					return safecss_filter_attr( 'none' );
 				}
 				break;
-		
+
 			case 'border_radius':
 				if ( ! empty( $settings['field_shape_type'] ) ) {
-					if ( 'underline' === $settings['field_shape_type'] || 'regular' === $settings['field_shape_type'] ) {
-						return '0px';
-					}
-					if ( 'circle' === $settings['field_shape_type'] ) {
-						return '30px';
+					switch ( $settings['field_shape_type'] ) {
+						case 'underline':
+						case 'regular':
+							return safecss_filter_attr( '0px' );
+						case 'circle':
+							return safecss_filter_attr( '30px' );
 					}
 				}
 				break;
@@ -569,10 +570,9 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function update_base_font_size( $settings, $defaults ) {
-		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || ! (bool) $settings['use_base_font_size'] ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) ) {
 			return $settings;
 		}
-
 		$base_font_size       = (int) $settings['base_font_size'];
 		$font_size            = $settings['font_size'];
 		$font_sizes_to_update = array(
@@ -589,26 +589,25 @@ class FrmStylesHelper {
 			'progress_size',
 		);
 
-		$css_vars_to_update = array_combine(
-			$font_sizes_to_update,
-			array_map(
-				function ( $key ) use ( $defaults, $font_size ) {
-					return self::get_base_font_size_scale( $key, $font_size, $defaults );
-				},
-				$font_sizes_to_update
-			)
+		array_map(
+			function ( $key ) use ( $defaults, $font_size, $base_font_size, &$settings ) {
+				if ( isset( $settings[ $key ] ) ) {
+					$settings[ $key ] = round( self::get_base_font_size_scale( $key, $font_size, $defaults ) * $base_font_size ) . 'px';
+				}
+			},
+			$font_sizes_to_update
 		);
-
-		foreach ( $css_vars_to_update as $key => $value ) {
-			if ( isset( $settings[ $key ] ) ) {
-				$size             = ceil( $value * $base_font_size ) . 'px';
-				$settings[ $key ] = $size;
-			}
-		}
 
 		return $settings;
 	}
 
+	/**
+	 * Get style font size scale value.
+	 *
+	 * @since x.x
+	 *
+	 * @return float
+	 */
 	private static function get_base_font_size_scale( $key, $value, $defaults ) {
 		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
 			return 1;
@@ -766,7 +765,7 @@ class FrmStylesHelper {
 			);
 		}
 		return array(
-			'url'   => self::get_list_url( $form_id ),
+			'href'  => self::get_list_url( $form_id ),
 			'title' => $style->post_title,
 		);
 	}
@@ -869,7 +868,9 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Check if the current page is the advanced settings page. 
+	 * Check if the current page is the advanced settings page.
+	 *
+	 * @since x.x
 	 *
 	 * @return bool True if is advanced settings, false otherwise.
 	 */
@@ -878,7 +879,8 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Retrieve the background image URL of the submit button, which may be either a full URL string (used in versions prior to x.x) or a numeric attachment ID (introduced in version x.x).
+	 * Retrieve the background image URL of the submit button.
+	 * It may be either a full URL string (used in versions prior to x.x) or a numeric attachment ID (introduced in version x.x).
 	 *
 	 * @since x.x
 	 *
@@ -886,15 +888,16 @@ class FrmStylesHelper {
 	 * @return false|string Return image url or false.
 	 */
 	public static function get_submit_image_bg_url( $settings ) {
-		if ( empty( $settings['submit_bg_img'] ) ) {
+		$background_image = $settings['submit_bg_img'];
+		if ( empty( $background_image ) ) {
 			return false;
 		}
 		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to x.x, the submit_bg_img will be a full URL string.
-		if ( ! is_numeric( $settings['submit_bg_img'] ) ) {
-			return $settings['submit_bg_img'];
+		if ( ! is_numeric( $background_image ) ) {
+			return $background_image;
 		}
 
-		return wp_get_attachment_url( (int) $settings['submit_bg_img'] );
+		return wp_get_attachment_url( (int) $background_image );
 	}
 	/**
 	 * Determines if the chosen JavaScript library should be used.

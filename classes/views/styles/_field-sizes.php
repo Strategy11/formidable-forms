@@ -118,14 +118,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <div class="frm7 frm_form_field frm-style-component">
 	<?php
-		FrmHtmlHelper::toggle(
-			'auto_width',
-			$frm_style->get_field_name( 'auto_width' ),
-			array(
-				'div_class' => 'with_frm_style frm_toggle',
-				'checked'   => $style->post_content['auto_width'],
-				'echo'      => true,
-			)
-		);
-		?>
+	FrmHtmlHelper::toggle(
+		'auto_width',
+		$frm_style->get_field_name( 'auto_width' ),
+		array(
+			'div_class' => 'with_frm_style frm_toggle',
+			'checked'   => $style->post_content['auto_width'],
+			'echo'      => true,
+		)
+	);
+	?>
 </div>

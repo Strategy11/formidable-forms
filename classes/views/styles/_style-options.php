@@ -3,10 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 $back_button_args = FrmStylesHelper::get_style_options_back_button_args( $style, $form->id );
+$back_button_attr = array_intersect_key( array_filter( $back_button_args ), array_flip( array( 'id', 'href' ) ) );
 ?>
 <h2>
-	<a	<?php echo ! empty( $back_button_args['id'] ) ? esc_attr( 'id=' . $back_button_args['id'] ) : ''; ?>
-		<?php echo ! empty( $back_button_args['url'] ) ? esc_attr( 'href=' . $back_button_args['url'] ) : ''; ?>
+	<a <?php FrmAppHelper::array_to_html_params( $back_button_attr, true ); ?>
 		tabindex="0" role="button"
 		title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 			<svg class="frmsvg">
@@ -21,5 +21,5 @@ $back_button_args = FrmStylesHelper::get_style_options_back_button_args( $style,
 </div>
 
 <div class="frm-quick-settings frm_grid_container <?php echo FrmStylesHelper::is_advanced_settings() ? 'frm_hidden' : ''; ?>">
-	<?php FrmStylesController::get_quick_settings_template( $frm_style, $style, $form->id ); ?>
+	<?php require_once FrmAppHelper::plugin_path() . '/classes/views/styles/_quick-settings.php'; ?>
 </div>

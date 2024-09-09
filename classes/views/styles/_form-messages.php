@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_success_bg_color',
 								'action_slug' => 'success_bg_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_success_border_color',
 								'action_slug' => 'success_border_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_success_text_color',
 								'action_slug' => 'success_text_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -95,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_error_bg',
 								'action_slug' => 'error_bg',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_error_border',
 								'action_slug' => 'error_border',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -127,7 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_error_text',
 								'action_slug' => 'error_text',
 							)
-						); 
+						);
 						?>
 					</div>
 

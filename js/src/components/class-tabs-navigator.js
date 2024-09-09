@@ -5,7 +5,7 @@ export class frmTabsNavigator {
 			return;
 		}
 
-		this.wrapper = wrapper instanceof Element ? wrapper : document.querySelector( wrapper ) ;
+		this.wrapper = wrapper instanceof Element ? wrapper : document.querySelector( wrapper );
 
 		if ( null === this.wrapper ) {
 			return;

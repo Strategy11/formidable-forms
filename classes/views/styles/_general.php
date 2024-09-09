@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'id'          => 'frm_fieldset_color',
 			'action_slug' => 'fieldset_color',
 		)
-	); 
+	);
 	?>
 </div>
 

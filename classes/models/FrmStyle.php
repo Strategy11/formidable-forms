@@ -4,6 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
+
+	/**
+	 * The meta name of default template style.
+	 *
+	 * @since x.x
+	 * @var string
+	 */
+	private $default_template_style_meta_name = 'frm_style_default';
+
 	/**
 	 * Unique ID number of the current instance.
 	 *
@@ -737,7 +746,7 @@ class FrmStyle {
 			'custom_css'                 => '',
 			'use_base_font_size'         => false,
 			'base_font_size'             => '15px',
-			'field_shape_type'           => 'regular',
+			'field_shape_type'           => 'rounded-corner',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );
@@ -794,5 +803,21 @@ class FrmStyle {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Get the default template style
+	 *
+	 * @since x.x
+	 * @param int $style_id The post type "frm_styles" ID.
+	 *
+	 * @return string The json encoded template data
+	 */
+	public function get_default_template_style( $style_id ) {
+		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
+		if ( empty( $default_template ) ) {
+			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
+		}
+		return $default_template;
 	}
 }

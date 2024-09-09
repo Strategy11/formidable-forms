@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_label_color',
 								'action_slug' => 'label_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -145,7 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_required_color',
 								'action_slug' => 'required_color',
 							)
-						); 
+						);
 						?>
 					</div>
 

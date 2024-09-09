@@ -185,7 +185,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	private function set_view_path() {
-		$this->view_folder = FrmAppHelper::plugin_path() . '/classes/views/styles/components/views/';
+		$this->view_folder = FrmAppHelper::plugin_path() . '/classes/views/styles/components/templates/';
 	}
 
 	/**

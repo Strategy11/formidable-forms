@@ -47,13 +47,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_text_color',
 								'action_slug' => 'submit_text_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
 					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label></div>
 					<div class="frm7 frm_form_field">
-						<?php 
+						<?php
 						new FrmSliderStyleComponent(
 							$frm_style->get_field_name( 'submit_font_size' ),
 							$style->post_content['submit_font_size'],
@@ -122,7 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_border_color',
 								'action_slug' => 'submit_border_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -152,7 +152,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_shadow_color',
 								'action_slug' => 'submit_shadow_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -218,7 +218,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$frm_style->get_field_name( 'submit_style' ),
 								array(
 									'div_class'       => 'with_frm_style frm_toggle',
-									'checked'         => ! empty( $frm_style->get_field_name( 'submit_style' ) ),
+									'checked'         => empty( $frm_style->get_field_name( 'submit_style' ) ),
 									'echo'            => true,
 									'aria-label-attr' => __( 'Disable submit button styling', 'formidable' ),
 								)
@@ -242,7 +242,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_hover_bg_color',
 								'action_slug' => 'submit_hover_bg_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -258,7 +258,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_hover_color',
 								'action_slug' => 'submit_hover_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -274,7 +274,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_hover_border_color',
 								'action_slug' => 'submit_hover_border_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -294,7 +294,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_active_bg_color',
 								'action_slug' => 'submit_active_bg_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -310,7 +310,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_active_color',
 								'action_slug' => 'submit_active_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -326,7 +326,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_submit_active_border_color',
 								'action_slug' => 'submit_active_border_color',
 							)
-						); 
+						);
 						?>
 					</div>
 				</div>

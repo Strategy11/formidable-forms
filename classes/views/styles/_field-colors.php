@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_bg_color',
 								'action_slug' => 'bg_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_text_color',
 								'action_slug' => 'text_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_border_color',
 								'action_slug' => 'border_color',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -109,16 +109,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm7 frm_form_field frm-style-component">
 						<?php
-							FrmHtmlHelper::toggle(
-								'remove_box_shadow',
-								$frm_style->get_field_name( 'remove_box_shadow' ),
-								array(
-									'div_class' => 'with_frm_style frm_toggle',
-									'checked'   => ! $style->post_content['remove_box_shadow'],
-									'echo'      => true,
-								)
-							);
-							?>
+						FrmHtmlHelper::toggle(
+							'remove_box_shadow',
+							$frm_style->get_field_name( 'remove_box_shadow' ),
+							array(
+								'div_class' => 'with_frm_style frm_toggle',
+								'checked'   => ! $style->post_content['remove_box_shadow'],
+								'echo'      => true,
+							)
+						);
+						?>
 					</div>
 				</div>
 			</div>
@@ -137,7 +137,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_bg_color_active',
 								'action_slug' => 'bg_color_active',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -153,7 +153,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_border_color_active',
 								'action_slug' => 'border_color_active',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -191,7 +191,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_bg_color_disabled',
 								'action_slug' => 'bg_color_disabled',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -207,7 +207,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_text_color_disabled',
 								'action_slug' => 'text_color_disabled',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -223,7 +223,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_border_color_disabled',
 								'action_slug' => 'border_color_disabled',
 							)
-						); 
+						);
 						?>
 					</div>
 				</div>
@@ -243,7 +243,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_bg_color_error',
 								'action_slug' => 'bg_color_error',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -251,7 +251,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
-						<?php 
+						<?php
 						new FrmColorpickerStyleComponent(
 							$frm_style->get_field_name( 'text_color_error' ),
 							$style->post_content['text_color_error'],
@@ -259,7 +259,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_text_color_error',
 								'action_slug' => 'text_color_error',
 							)
-						); 
+						);
 						?>
 					</div>
 
@@ -275,7 +275,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								'id'          => 'frm_border_color_error',
 								'action_slug' => 'border_color_error',
 							)
-						); 
+						);
 						?>
 					</div>
 

@@ -1,3 +1,4 @@
+import { show, hide } from '../../common/utilities';
 /**
  * Represents a radio style component.
  * @class
@@ -5,8 +6,8 @@
 export default class frmRadioStyleComponent {
 
 	constructor() {
-		this.elements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
-		if ( 0 === this.elements.length ) {
+		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		if ( 0 === this.radioElements.length ) {
 			return;
 		}
 
@@ -17,7 +18,7 @@ export default class frmRadioStyleComponent {
 	 * Initializes the radio style component.
 	 */
 	init() {
-		this.elements.forEach( ( element ) => {
+		this.radioElements.forEach( ( element ) => {
 			this.initOnRadioChange( element );
 		});
 		this.initTrackerOnAccordionClick();
@@ -40,10 +41,10 @@ export default class frmRadioStyleComponent {
 
 	/**
 	 * Initializes the onRadioChange event for the given wrapper.
-	 * @param {HTMLElement} wrapper - The wrapper element.
+	 * @param {HTMLElement} radioElement - The radio element.
 	 */
-	initOnRadioChange( wrapper ) {
-		wrapper.querySelectorAll( 'input[type="radio"]' ).forEach( ( radio ) => {
+	initOnRadioChange( radioElement ) {
+		radioElement.querySelectorAll( 'input[type="radio"]' ).forEach( ( radio ) => {
 			if ( radio.checked ) {
 				this.onRadioChange( radio );
 			}
@@ -61,7 +62,9 @@ export default class frmRadioStyleComponent {
 		const wrapper    = target.closest( '.frm-style-component.frm-radio-component' );
 		const activeItem = wrapper.querySelector( 'input[type="radio"]:checked + label' );
 
-		if ( null === activeItem ) { return; }
+		if ( null === activeItem ) {
+			return;
+		}
 
 		this.moveTracker( activeItem, wrapper );
 		this.hideExtraElements( target );
@@ -85,7 +88,7 @@ export default class frmRadioStyleComponent {
 		}
 
 		elements.forEach( ( element ) => {
-			element.classList.remove( 'frm_hidden' );
+			show( element );
 			element.classList.add( 'frm-element-is-visible' );
 		});
 	}
@@ -101,6 +104,7 @@ export default class frmRadioStyleComponent {
 		elements.forEach( ( element ) => {
 			element.classList.remove( 'frm-element-is-visible' );
 			element.classList.add( 'frm_hidden' );
+			hide( element );
 		});
 	}
 
@@ -115,7 +119,7 @@ export default class frmRadioStyleComponent {
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
 		tracker.style.left = 0;
-		tracker.style.width = width + 'px';
+		tracker.style.width = `${width}px`;
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }

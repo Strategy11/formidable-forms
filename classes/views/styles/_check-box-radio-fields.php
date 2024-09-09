@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'id'          => 'frm_check_label_color',
 			'action_slug' => 'check_label_color',
 		)
-	); 
+	);
 	?>
 </div>
 

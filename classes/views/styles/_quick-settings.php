@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		array(
 			'id'          => 'base_font_size',
 			'max_value'   => 100,
-			'not_show_in' => 'advanced-settings', 
+			'not_show_in' => 'advanced-settings',
 		)
 	);
 	?>
@@ -185,4 +185,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <hr class="frm12"/>
 
-<a id="frm-style-advanced-settings-button" class="frm-button-secondary frm-margin-top-md frm-text-center" href="#"><?php esc_html_e( 'Show advanced settings', 'formidable' ); ?></a>
+<a id="frm-style-advanced-settings-button" class="frm-button-secondary frm-mt-md frmcenter" href="#"><?php esc_html_e( 'Show advanced settings', 'formidable' ); ?></a>

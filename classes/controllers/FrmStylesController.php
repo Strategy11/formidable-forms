@@ -676,10 +676,6 @@ class FrmStylesController {
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}
 
-	public static function get_quick_settings_template( $frm_style, $style, $form_id ) {
-		include_once self::get_views_path() . '_quick-settings.php';
-	}
-
 	/**
 	 * Show the edit view after saving.
 	 * The save event is triggered earlier, on admin init where self::save_style is called.
@@ -898,21 +894,24 @@ class FrmStylesController {
 			wp_die();
 		}
 
-		$frm_style            = new FrmStyle();
-		$defaults             = $frm_style->get_defaults();
-		$default_post_content = FrmAppHelper::prepare_and_encode( $defaults );
-		$where                = array(
+		$frm_style              = new FrmStyle();
+		$default_template_style = $frm_style->get_default_template_style( $style_id );
+		$where                  = array(
 			'ID'        => $style_id,
 			'post_type' => self::$post_type,
 		);
+
+		$style_object               = $frm_style->get_new();
+		$style_object->post_content = json_decode( $default_template_style, true );
+
 		global $wpdb;
-		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_post_content ), $where );
+		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_template_style ), $where );
 
 		// Save the settings after resetting to default or the old style will still appear.
 		$frm_style->save_settings();
 
 		$data = array(
-			'style' => FrmStylesCardHelper::get_style_param_for_card( $frm_style->get_new() ),
+			'style' => FrmStylesCardHelper::get_style_param_for_card( $style_object ),
 		);
 		wp_send_json_success( $data );
 		wp_die();

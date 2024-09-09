@@ -6,8 +6,8 @@ import frmStyleDependentUpdaterComponent from './dependent-updater-component';
 export default class frmSliderStyleComponent {
 
 	constructor() {
-		this.elements = document.querySelectorAll( '.frm-slider-component' );
-		if ( 0 === this.elements.length ) {
+		this.sliderElements = document.querySelectorAll( '.frm-slider-component' );
+		if ( 0 === this.sliderElements.length ) {
 			return;
 		}
 
@@ -28,7 +28,7 @@ export default class frmSliderStyleComponent {
 	 */
 	initOptions() {
 		this.options = [];
-		this.elements.forEach( ( element, index ) => {
+		this.sliderElements.forEach( ( element, index ) => {
 			const parentWrapper = element.classList.contains( 'frm-has-multiple-values' ) ? element.closest( '.frm-style-component' ) : element;
 			this.options.push({
 				dragging: false,
@@ -55,11 +55,11 @@ export default class frmSliderStyleComponent {
 	 * Initializes the draggable functionality for the slider style component.
 	 */
 	initDraggable() {
-		this.elements.forEach( ( element, index ) => {
+		this.sliderElements.forEach( ( element, index ) => {
 			this.eventsChange[ index ] = new Event( 'change', { 
-				'bubbles': true,
-				'cancelable': true
-			} );
+				bubbles: true,
+				cancelable: true
+			});
 			const draggableBullet = element.querySelector( '.frm-slider-bullet' );
 			const valueInput      = element.querySelector( '.frm-slider-value input[type="text"]' );
 
@@ -321,7 +321,7 @@ export default class frmSliderStyleComponent {
 			return;
 		}
 		let deltaX        = event.clientX - this.options[ index ].startX;
-		const element     = this.elements[ index ];
+		const element     = this.sliderElements[ index ];
 		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth;
 
 		// Ensure deltaX does not go below 0
@@ -374,7 +374,9 @@ export default class frmSliderStyleComponent {
 	 * @param {Event}  event - The event object triggered by the dragging action.
 	 */
 	disableDragging( index, event ) {
-		if ( false === this.options[ index ].dragging ) { return; }
+		if ( false === this.options[ index ].dragging ) {
+			return;
+		}
 		event.target.classList.remove( 'frm-dragging' );
 		this.options[ index ].dragging = false;
 		this.triggerValueChange( index );
@@ -391,7 +393,7 @@ export default class frmSliderStyleComponent {
 			return;
 		}
 
-		const input = this.elements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.elements[ index ].closest('.frm-style-component').querySelector( 'input[type="hidden"]' ) : this.elements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+		const input = this.sliderElements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.sliderElements[ index ].closest('.frm-style-component').querySelector( 'input[type="hidden"]' ) : this.sliderElements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
 		if ( input instanceof NodeList ) {
 			input.forEach( ( item ) => {
 				item.dispatchEvent( this.eventsChange[ index ] );

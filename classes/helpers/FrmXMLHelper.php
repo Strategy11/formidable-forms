@@ -918,6 +918,8 @@ class FrmXMLHelper {
 				// Properly encode post content before inserting the post
 				$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
 				$post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
+				// Store template data additionally to a postmeta that can be used to revert the style to default template style.
+				$post['postmeta']['frm_style_default'] = $post['post_content'];
 
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
