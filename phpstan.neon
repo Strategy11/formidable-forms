@@ -16,6 +16,7 @@ parameters:
 		- */vendor/*
 		- */fonts/*
 		- */deprecated/*
+		- */rector.php
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
