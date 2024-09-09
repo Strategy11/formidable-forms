@@ -10,7 +10,6 @@
 * Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
 * Fix: Turnstile elements are now only rendered when the field is visible.
 * Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
-* Fix: JavaScript validation would get skipped for forms using invisible or v3 reCaptcha fields.
 
 = 6.13 =
 * Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
