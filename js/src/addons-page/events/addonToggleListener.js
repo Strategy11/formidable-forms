@@ -18,13 +18,9 @@ function addAddonToggleEvents() {
 		addonToggle.addEventListener( 'click', onAddonToggleClick )
 	);
 
-	wp.hooks.addAction(
-		'frmAdmin.updateAddonState',
-		'frmAddonPage',
-		( response ) => {
-			setupActiveCategory();
-		}
-	);
+	wp.hooks.addAction('frm_update_addon_state', 'frmAddonPage', () => {
+		setupActiveCategory();
+	});
 }
 
 /**

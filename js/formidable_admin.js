@@ -9109,7 +9109,7 @@ function frmAdminBuildJS() {
 				 *
 				 * @param {Object} response
 				 */
-				wp.hooks.doAction( 'frmAdmin.updateAddonState', response );
+				wp.hooks.doAction( 'frm_update_addon_state', response );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
