@@ -32,7 +32,7 @@ export function createEmptyStateElement() {
 		children: [
 			img( {
 				src: `${ PLUGIN_URL }/images/page-skeleton/empty-state.svg`,
-				alt: __( 'Empty State', 'sherv-challenge' ),
+				alt: __( 'Empty State', 'formidable' ),
 			} ),
 			div( {
 				className: 'frmcenter',
