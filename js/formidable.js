@@ -1545,19 +1545,17 @@ function frmFrontFormJS() {
 				return;
 			}
 
+			errors = frmFrontForm.validateFormSubmit( object );
+			if ( Object.keys( errors ).length !== 0 ) {
+				return;
+			}
 			if ( invisibleRecaptcha.length ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
-
-				errors = frmFrontForm.validateFormSubmit( object );
-
-				if ( Object.keys( errors ).length === 0 ) {
-					showSubmitLoading( jQuery( object ) );
-
-					frmFrontForm.submitFormNow( object, classList );
-				}
-			}
+				showSubmitLoading( jQuery( object ) );
+				frmFrontForm.submitFormNow( object, classList );
+			}	
 		},
 
 		submitFormNow: function( object ) {
