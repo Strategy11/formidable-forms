@@ -477,6 +477,7 @@ class FrmEntryValidate {
 		self::add_server_values_to_akismet( $datas );
 
 		self::prepare_values_for_spam_check( $values );
+		self::skip_adding_values_to_akismet( $values );
 
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_comment_content_to_akismet( $datas, $values );
@@ -657,8 +658,6 @@ class FrmEntryValidate {
 			}
 			unset( $datas['frm_duplicated'] );
 		}
-
-		self::skip_adding_values_to_akismet( $values );
 
 		$datas['comment_content'] = FrmEntriesHelper::entry_array_to_string( $values );
 	}

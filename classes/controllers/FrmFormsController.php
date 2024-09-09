@@ -114,6 +114,9 @@ class FrmFormsController {
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 		if ( $create_email ) {
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( 'email' );
 			$action_control->create( $form->id );
 		}
@@ -140,6 +143,9 @@ class FrmFormsController {
 		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
 
 		if ( $create ) {
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
 			$action_control->create( $form->id );
 		}

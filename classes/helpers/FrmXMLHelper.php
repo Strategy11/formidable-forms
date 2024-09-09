@@ -27,6 +27,10 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param string $file
+	 * @return array|WP_Error The items imported
+	 */
 	public static function import_xml( $file ) {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			define( 'WP_IMPORTING', true );
@@ -157,6 +161,11 @@ class FrmXMLHelper {
 		);
 	}
 
+	/**
+	 * @param SimpleXMLElement $terms
+	 * @param array            $imported
+	 * @return array
+	 */
 	public static function import_xml_terms( $terms, $imported ) {
 		foreach ( $terms as $t ) {
 			if ( term_exists( (string) $t->term_slug, (string) $t->term_taxonomy ) ) {
@@ -188,6 +197,9 @@ class FrmXMLHelper {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param object $t
+	 * @return int|string
 	 */
 	private static function get_term_parent_id( $t ) {
 		$parent = (string) $t->term_parent;
@@ -203,6 +215,11 @@ class FrmXMLHelper {
 		return $parent;
 	}
 
+	/**
+	 * @param SimpleXMLElement $forms
+	 * @param array            $imported
+	 * @return array
+	 */
 	public static function import_xml_forms( $forms, $imported ) {
 		$child_forms = array();
 
@@ -863,6 +880,13 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * Handle import for all posts. This includes views, styles, pages, and form actions.
+	 *
+	 * @param SimpleXMLElement $views
+	 * @param array            $imported
+	 * @return array
+	 */
 	public static function import_xml_views( $views, $imported ) {
 		$imported['posts'] = array();
 		$form_action_type  = FrmFormActionsController::$action_post_type;
@@ -1262,7 +1286,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * Edit post if the key and created time match
+	 * Edit post if the key and created time match.
 	 */
 	private static function maybe_editing_post( &$post ) {
 		$match_by = array(
@@ -1272,7 +1296,7 @@ class FrmXMLHelper {
 			'posts_per_page' => 1,
 		);
 
-		if ( in_array( $post['post_status'], array( 'trash', 'draft' ) ) ) {
+		if ( in_array( $post['post_status'], array( 'trash', 'draft' ), true ) ) {
 			$match_by['include'] = $post['post_id'];
 			unset( $match_by['name'] );
 		}

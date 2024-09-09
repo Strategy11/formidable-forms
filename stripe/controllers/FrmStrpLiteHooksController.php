@@ -50,7 +50,7 @@ class FrmStrpLiteHooksController {
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
-		add_filter( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
+		add_action( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class FrmStrpLiteHooksController {
 
 		// Actions.
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
-		add_action( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
+		add_filter( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
 		add_action( 'admin_init', 'FrmStrpLiteAppController::maybe_redirect_to_stripe_settings' );
 		add_action( 'frm_update_settings', 'FrmStrpLiteSettingsController::process_form' );
 
