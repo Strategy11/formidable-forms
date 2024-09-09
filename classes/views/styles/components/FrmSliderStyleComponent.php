@@ -34,6 +34,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
 
+		$this->init_defaults();
 		$this->init_icon();
 		$this->init_multiple_values();
 
@@ -55,6 +56,17 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			return array( 'px', 'em', '%' );
 		}
 		return $data['units'];
+	}
+
+	/**
+	 * Init components default values
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function init_defaults() {
+		$this->data['max_value'] = empty( $this->data['max_value'] ) ? 100 : $this->data['max_value'];
 	}
 
 	/**

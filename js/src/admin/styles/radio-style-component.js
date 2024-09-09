@@ -7,11 +7,9 @@ export default class frmRadioStyleComponent {
 
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
-		if ( 0 === this.radioElements.length ) {
-			return;
+		if ( 0 < this.radioElements.length ) {
+			this.init();
 		}
-
-		this.init();
 	}
 
 	/**
