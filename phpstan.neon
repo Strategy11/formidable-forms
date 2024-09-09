@@ -26,12 +26,11 @@ parameters:
 		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
-		- '#Call to (function is_callable|protected method)+#'
+		- '#Call to protected method+#'
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
 		- '#Function (apply_filters)+ invoked with#'
-		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
 		- '#Possibly invalid array key type#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
