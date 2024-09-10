@@ -4,6 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
+
+	/**
+	 * The meta name of default template style.
+	 *
+	 * @since 6.14
+	 * @var string
+	 */
+	private $default_template_style_meta_name = 'frm_style_default';
+
 	/**
 	 * Unique ID number of the current instance.
 	 *
@@ -131,6 +140,8 @@ class FrmStyle {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
+
+			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
 
 			$action_ids[] = $this->save( $new_instance );
 		}//end foreach
@@ -733,6 +744,9 @@ class FrmStyle {
 			'progress_border_size'       => '1px',
 			'progress_size'              => '30px',
 			'custom_css'                 => '',
+			'use_base_font_size'         => false,
+			'base_font_size'             => '15px',
+			'field_shape_type'           => 'rounded-corner',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );
@@ -754,15 +768,15 @@ class FrmStyle {
 	 */
 	public static function get_bold_options() {
 		return array(
-			100      => 100,
-			200      => 200,
-			300      => 300,
-			'normal' => __( 'normal', 'formidable' ),
-			500      => 500,
-			600      => 600,
-			'bold'   => __( 'bold', 'formidable' ),
-			800      => 800,
-			900      => 900,
+			100      => __( 'Thin', 'formidable' ),
+			200      => __( 'Extra Light', 'formidable' ),
+			300      => __( 'Light', 'formidable' ),
+			'normal' => __( 'Regular', 'formidable' ),
+			500      => __( 'Medium', 'formidable' ),
+			600      => __( 'Semi Bold', 'formidable' ),
+			'bold'   => __( 'Bold', 'formidable' ),
+			800      => __( 'Extra Bold', 'formidable' ),
+			900      => __( 'Black', 'formidable' ),
 		);
 	}
 
@@ -789,5 +803,21 @@ class FrmStyle {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Get the default template style
+	 *
+	 * @since 6.14
+	 * @param int $style_id The post type "frm_styles" ID.
+	 *
+	 * @return string The json encoded template data
+	 */
+	public function get_default_template_style( $style_id ) {
+		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
+		if ( empty( $default_template ) ) {
+			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
+		}
+		return $default_template;
 	}
 }

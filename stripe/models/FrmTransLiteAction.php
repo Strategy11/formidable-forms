@@ -169,7 +169,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		$has_field = false;
 		?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
-			<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
+			<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 			<?php
 			foreach ( $form_atts['form_fields'] as $field ) {
 				$type_is_allowed = empty( $field_atts['allowed_fields'] ) || in_array( $field->type, (array) $field_atts['allowed_fields'], true );
@@ -205,6 +205,9 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	public static function get_single_action_type( $action_id, $type = '' ) {
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = FrmFormActionsController::get_form_actions( 'payment' );
 		return $action_control->get_single_action( $action_id );
 	}

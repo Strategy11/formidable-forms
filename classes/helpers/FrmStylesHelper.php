@@ -445,9 +445,54 @@ class FrmStylesHelper {
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
-				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * Prepare the value for a CSS variable.
+	 *
+	 * @since 6.14
+	 *
+	 * @param array  $settings An array of css style.
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	private static function css_var_prepare_value( $settings, $key ) {
+		$value = $settings[ $key ];
+
+		switch ( $key ) {
+			case 'font':
+				return safecss_filter_attr( $value );
+
+			case 'field_border_width':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return safecss_filter_attr( '0px 0px ' . $value . ' 0px' );
+				}
+				break;
+
+			case 'box_shadow':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return safecss_filter_attr( 'none' );
+				}
+				break;
+
+			case 'border_radius':
+				if ( ! empty( $settings['field_shape_type'] ) ) {
+					switch ( $settings['field_shape_type'] ) {
+						case 'underline':
+						case 'regular':
+							return safecss_filter_attr( '0px' );
+						case 'circle':
+							return safecss_filter_attr( '30px' );
+					}
+				}
+				break;
+		}//end switch
+
+		return esc_html( $settings[ $key ] );
 	}
 
 	/**
@@ -476,6 +521,8 @@ class FrmStylesHelper {
 				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
+
+			$settings = self::update_base_font_size( $settings, $frm_style->get_defaults() );
 
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
@@ -511,6 +558,62 @@ class FrmStylesHelper {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Update the "Base Font Size" value from "Quick Settings across multiple settings values".
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings An array of css style.
+	 *
+	 * @return array
+	 */
+	public static function update_base_font_size( $settings, $defaults ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) ) {
+			return $settings;
+		}
+		$base_font_size       = (int) $settings['base_font_size'];
+		$font_size            = $settings['font_size'];
+		$font_sizes_to_update = array(
+			'font_size',
+			'field_font_size',
+			'check_font_size',
+			'title_size',
+			'form_desc_size',
+			'description_font_size',
+			'section_font_size',
+			'submit_font_size',
+			'success_font_size',
+			'error_font_size',
+			'progress_size',
+		);
+
+		array_map(
+			function ( $key ) use ( $defaults, $font_size, $base_font_size, &$settings ) {
+				if ( isset( $settings[ $key ] ) ) {
+					$settings[ $key ] = round( self::get_base_font_size_scale( $key, $font_size, $defaults ) * $base_font_size ) . 'px';
+				}
+			},
+			$font_sizes_to_update
+		);
+
+		return $settings;
+	}
+
+	/**
+	 * Get style font size scale value.
+	 *
+	 * @since 6.14
+	 *
+	 * @return float
+	 */
+	private static function get_base_font_size_scale( $key, $value, $defaults ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
+			return 1;
+		}
+
+		return round( (int) $defaults[ $key ] / (int) $value, 2 );
 	}
 
 	/**
@@ -646,17 +749,42 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the back button args from Style settings.
+	 *
+	 * @since 6.14
+	 *
+	 * @param stdClass|WP_Post $style
+	 * @param int              $form_id
+	 * @return array
+	 */
+	public static function get_style_options_back_button_args( $style, $form_id ) {
+		if ( self::is_advanced_settings() ) {
+			return array(
+				'title' => __( 'Quick Settings', 'formidable' ),
+				'id'    => 'frm_style_back_to_quick_settings',
+			);
+		}
+		return array(
+			'href'  => self::get_list_url( $form_id ),
+			'title' => $style->post_title,
+		);
+	}
+
+	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param int|string       $form_id Used for the back button and preview form target.
+	 * @param string           $section The url param section.
+	 *
 	 * @return string
 	 */
-	public static function get_edit_url( $style, $form_id = 0 ) {
+	public static function get_edit_url( $style, $form_id = 0, $section = '' ) {
 		$query_args = array(
 			'page'       => 'formidable-styles',
 			'frm_action' => 'edit',
 			'id'         => $style->ID,
+			'section'    => $section,
 		);
 
 		if ( $form_id ) {
@@ -739,6 +867,38 @@ class FrmStylesHelper {
 		return FrmDb::get_count( 'frm_forms', $where );
 	}
 
+	/**
+	 * Check if the current page is the advanced settings page.
+	 *
+	 * @since 6.14
+	 *
+	 * @return bool True if is advanced settings, false otherwise.
+	 */
+	public static function is_advanced_settings() {
+		return FrmAppHelper::get_param( 'section' ) === 'advanced-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
+	}
+
+	/**
+	 * Retrieve the background image URL of the submit button.
+	 * It may be either a full URL string (used in versions prior to 6.14) or a numeric attachment ID (introduced in version 6.14).
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings
+	 * @return false|string Return image url or false.
+	 */
+	public static function get_submit_image_bg_url( $settings ) {
+		$background_image = $settings['submit_bg_img'];
+		if ( empty( $background_image ) ) {
+			return false;
+		}
+		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to 6.14, the submit_bg_img will be a full URL string.
+		if ( ! is_numeric( $background_image ) ) {
+			return $background_image;
+		}
+
+		return wp_get_attachment_url( (int) $background_image );
+	}
 	/**
 	 * Determines if the chosen JavaScript library should be used.
 	 *

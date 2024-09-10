@@ -1530,7 +1530,7 @@ class FrmFieldsHelper {
 	/**
 	 * Removes exception strings from replacement arrays and replaces the rest in the provided value string.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array  $replace      Values to be replaced.
 	 * @param array  $replace_with Replacement values.
