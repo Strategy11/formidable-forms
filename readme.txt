@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.6.1
 Requires PHP: 7.0
-Stable tag: 6.13
+Stable tag: 6.14
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,19 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.14 =
+* New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
+* New: The code for moving fields in the builder has been optimized for large forms.
+* New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
+* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
+* Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
+* Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
+* Fix: A JavaScript error would occur when trying to validate a read only time field.
+* Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
+* Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
+* Fix: Turnstile elements are now only rendered when the field is visible.
+* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
+
 = 6.13 =
 * Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
 * Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
