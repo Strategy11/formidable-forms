@@ -7,7 +7,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * The view file name.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -16,7 +16,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * The FrmStyleComponent data.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var array
 	 */
@@ -61,7 +61,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Init components default values
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */
@@ -73,7 +73,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Init the slider multiple values data. It works with sliders which has multiple values only: top&bottom and left&right.
 	 * This is used for cases when there are 4 sliders in the same field.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return array
 	 */
@@ -123,7 +123,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Split the field value by space from string to an array.
 	 * For instance: '10px 20px 30px 40px' will be converted to array( '10px', '20px', '30px', '40px' ).
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return array
 	 */
@@ -135,7 +135,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Detect the unit measurement from the value.
 	 * Possible values are: px, %, em.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */
@@ -157,7 +157,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Init the field icon
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return array
 	 */

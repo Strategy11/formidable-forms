@@ -7,7 +7,7 @@ class FrmStyleComponent {
 	/**
 	 * The CSS and JS scripts slug.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -16,7 +16,7 @@ class FrmStyleComponent {
 	/**
 	 * The folder name where views files are located.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -25,7 +25,7 @@ class FrmStyleComponent {
 	/**
 	 * The view file name.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -34,7 +34,7 @@ class FrmStyleComponent {
 	/**
 	 * The FrmStyleComponent data.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var array
 	 */
@@ -43,7 +43,7 @@ class FrmStyleComponent {
 	/**
 	 * The name of the input field that will handle the form value
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -52,7 +52,7 @@ class FrmStyleComponent {
 	/**
 	 * The field value
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -61,7 +61,7 @@ class FrmStyleComponent {
 	/**
 	 * The FrmStyleComponent instance.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var stdClass|null
 	 */
@@ -75,7 +75,7 @@ class FrmStyleComponent {
 	/**
 	 * Register CSS & JS style components assets.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */
@@ -90,7 +90,7 @@ class FrmStyleComponent {
 	/**
 	 * Get the singleton instance.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return stdClass|void
 	 */
@@ -112,7 +112,7 @@ class FrmStyleComponent {
 	/**
 	 * Init the field component data, field name and field value.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 * @param array  $data The field extra options.
 	 * @param string $field_name The field input's name.
 	 * @param mixed  $field_value The field value.
@@ -127,7 +127,7 @@ class FrmStyleComponent {
 	/**
 	 * Get the default wrapper classnames.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */
@@ -142,7 +142,7 @@ class FrmStyleComponent {
 	/**
 	 * Get the wrapper classnames.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */
@@ -153,7 +153,7 @@ class FrmStyleComponent {
 	/**
 	 * Get the wrapper's attributes.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */
@@ -169,7 +169,7 @@ class FrmStyleComponent {
 	 * Get the input's name that will handle the form value.
 	 * It can have no name attribute for cases when the component is a dependency updater. It will update multiple fields from the same form. It will require "will-change" attribute to be set
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */
@@ -180,7 +180,7 @@ class FrmStyleComponent {
 	/**
 	 * Init the full view path.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */
@@ -191,7 +191,7 @@ class FrmStyleComponent {
 	/**
 	 * Load the view file.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */
@@ -225,7 +225,7 @@ class FrmStyleComponent {
 	/**
 	 * Load component CSS file.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */
@@ -236,7 +236,7 @@ class FrmStyleComponent {
 	/**
 	 * Load component JS file.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return void
 	 */

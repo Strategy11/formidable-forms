@@ -7,7 +7,7 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 	/**
 	 * The view file name.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -16,7 +16,7 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 	/**
 	 * Construct the FrmAlignStyleComponent.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 		$this->init( $data, $field_name, $field_value );
@@ -25,7 +25,7 @@ class FrmAlignStyleComponent extends FrmStyleComponent {
 	/**
 	 * Get the wrapper classname.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return string
 	 */

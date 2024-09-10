@@ -7,7 +7,7 @@ class FrmBackgroundImageStyleComponent extends FrmStyleComponent {
 	/**
 	 * The view file name.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @var string
 	 */
@@ -16,7 +16,7 @@ class FrmBackgroundImageStyleComponent extends FrmStyleComponent {
 	/**
 	 * Construct FrmBackgroundImageStyleComponent.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 		$this->init( $data, $field_name, $field_value );

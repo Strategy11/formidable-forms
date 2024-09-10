@@ -8,7 +8,7 @@ class FrmStyle {
 	/**
 	 * The meta name of default template style.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 * @var string
 	 */
 	private $default_template_style_meta_name = 'frm_style_default';
@@ -808,7 +808,7 @@ class FrmStyle {
 	/**
 	 * Get the default template style
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 * @param int $style_id The post type "frm_styles" ID.
 	 *
 	 * @return string The json encoded template data
