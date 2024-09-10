@@ -18,23 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-tabs-slide-track frm-flex-box">
 			<div class="frm-active">
 				<div class="frm_grid_container">
-					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background Image', 'formidable' ); ?></label></div>
-					<div class="frm7 frm_form_field">
-						<?php
-						new FrmBackgroundImageStyleComponent(
-							$frm_style->get_field_name( 'submit_bg_color' ),
-							$style->post_content['submit_bg_color'],
-							array(
-								'id'                  => 'frm_submit_bg_color',
-								'frm_style'           => $frm_style,
-								'style'               => $style,
-								'action_slug'         => 'submit_bg_color',
-								'image_id_input_name' => 'submit_bg_img',
-							)
-						);
-						?>
-					</div>
-
+					<?php
+					new FrmBackgroundImageStyleComponent(
+						$frm_style->get_field_name( 'submit_bg_color' ),
+						$style->post_content['submit_bg_color'],
+						array(
+							'title'                       => __( 'Background Image', 'formidable' ),
+							'id'                          => 'frm_submit_bg_color',
+							'frm_style'                   => $frm_style,
+							'style'                       => $style,
+							'action_slug'                 => 'submit_bg_color',
+							'image_id_input_name'         => 'submit_bg_img',
+							'include_additional_settings' => false,
+						)
+					);
+					?>
 					<div class="frm5 frm_form_field">
 						<label class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
 					</div>

@@ -2,12 +2,20 @@
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-style-component frm-background-image-component">
-	<span class="frm-flex-justify" tabindex="0">
-		<input type="text" <?php echo esc_attr( $field_name ); ?> id="<?php echo esc_attr( $component['id'] ); ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
-		<?php
+<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php echo esc_html( $component['title'] ); ?></label></div>
+<div class="frm7 frm_form_field">
+	<div class="frm-style-component frm-background-image-component">
+		<span class="frm-flex-justify" tabindex="0">
+			<input type="text" <?php echo esc_attr( $field_name ); ?> id="<?php echo esc_attr( $component['id'] ); ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
+			<?php
+			/**
+			 * Prompt Pro to load the upload button along with its functionalities.
+			 * Before it was loaded via frm_style_settings_general_section_after_background action hook.
+			 *
+			 * @since x.x
+			 */
 			do_action(
-				'frm_style_settings_general_section_after_background',
+				'frm_style_settings_bg_image_component_upload_button',
 				array(
 					'frm_style'           => $component['frm_style'],
 					'style'               => $component['style'],
@@ -25,5 +33,19 @@
 				<?php
 			}
 			?>
-	</span>
+		</span>
+	</div>
 </div>
+<?php
+if ( ! empty( $component['include_additional_settings'] ) ) {
+	/**
+	 * Prompt Pro to load the additional background image options like "Image Opacity".
+	 */
+	do_action(
+		'frm_style_settings_general_section_after_background',
+		array(
+			'frm_style' => $component['frm_style'],
+			'style'     => $component['style'],
+		)
+	);
+}

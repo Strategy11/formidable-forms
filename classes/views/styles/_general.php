@@ -10,22 +10,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
 </p>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Background', 'formidable' ); ?></label></div>
-<div class="frm7 frm_form_field">
-	<?php
-	new FrmBackgroundImageStyleComponent(
-		$frm_style->get_field_name( 'fieldset_bg_color' ),
-		$style->post_content['fieldset_bg_color'],
-		array(
-			'id'                  => 'frm_fieldset_bg_color',
-			'frm_style'           => $frm_style,
-			'style'               => $style,
-			'action_slug'         => 'fieldset_bg_color',
-			'image_id_input_name' => 'bg_image_id',
-		)
-	);
-	?>
-</div>
+<?php
+new FrmBackgroundImageStyleComponent(
+	$frm_style->get_field_name( 'fieldset_bg_color' ),
+	$style->post_content['fieldset_bg_color'],
+	array(
+		'title'                       => __( 'Background', 'formidable' ),
+		'id'                          => 'frm_fieldset_bg_color',
+		'frm_style'                   => $frm_style,
+		'style'                       => $style,
+		'action_slug'                 => 'fieldset_bg_color',
+		'image_id_input_name'         => 'bg_image_id',
+		'include_additional_settings' => true,
+	)
+);
+?>
 
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
