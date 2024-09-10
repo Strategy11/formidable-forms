@@ -1170,8 +1170,9 @@
 					// If there's transparency, use RGBA
 					color = ui.color.toCSS( 'rgba' );
 				}
+				debouncedColorChange( event, color );
+
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
-					debouncedColorChange( event, color );
 					debouncedPreviewUpdate();
 					return;
 				}
