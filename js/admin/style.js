@@ -273,15 +273,21 @@
 
 	/**
 	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
-	 * @param {object} target The submit button event target
-	 * @returns {void}
+	 * @param {Object} target The submit button event target
+	 * @return {void}
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( 'frm-style-advanced-settings-button' !== target.id || null === form ) {
+		if ( null === form ) {
 			return;
 		}
-		form.setAttribute( 'action', form.getAttribute( 'action' ) + '&section=advanced-settings' );
+		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
+			form.action = form.action.replace( '&section=advanced-settings', '' );
+			return;
+		}
+		if ( 'frm-style-advanced-settings-button' === target.id ) {
+			form.action += '&section=advanced-settings';
+		}
 	}
 
 	/**
@@ -1157,17 +1163,20 @@
 		});
 
 		jQuery( 'input.hex' ).wpColorPicker({
-			change: function( event ) {
-				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+			change: function( event, ui ) {
+				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
-
+				if ( ui.color._alpha < 1 ) {
+					// If there's transparency, use RGBA
+					color = ui.color.toCSS( 'rgba' );
+				}
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
-					debouncedColorChange( event, hexcolor );
+					debouncedColorChange( event, color );
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+				jQuery( event.target ).val( color ).trigger( 'change' );
 			}
 		});
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {

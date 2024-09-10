@@ -204,13 +204,27 @@ export default class frmSliderStyleComponent {
 	 * Initializes the position of sliders when a style accordion section is opened.
 	 */
 	initSlidersPosition() {
-		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
-		const quickSettings  = document.querySelector( '.frm-quick-settings' );
+		const accordionitems  = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
+		const quickSettings   = document.querySelector( '.frm-quick-settings' );
+		const openedAccordion = document.querySelector( '.accordion-section.open' );
 
+		// Detect if upload background image upload has triggered and initialize the "Image Opacity" slider width.
+		wp.hooks.addAction( 'frm_pro_on_bg_image_upload', 'formidable', ( event ) => {
+			const imageBackgroundOpacitySlider = event.closest( '.accordion-section-content' ).querySelector( '#frm-bg-image-opacity-slider' );
+			this.initSlidersWidth( imageBackgroundOpacitySlider );
+		});
+
+		// init the sliders width from "Quick Settings" page.
 		if ( null !== quickSettings ) {
 			this.initSlidersWidth( quickSettings );
 		}
 
+		// Init the sliders width in opened accordion section from "Advanced Settings" page.
+		if ( null !== openedAccordion ) {
+			this.initSlidersWidth( openedAccordion );
+		}
+
+		// init the sliders width everytime when an accordion section is opened from "Advanced Settings" page.
 		accordionitems.forEach( ( item ) => {
 			item.addEventListener( 'click', ( event ) => {
 				this.initSlidersWidth( event.target.closest( '.accordion-section' ) );
