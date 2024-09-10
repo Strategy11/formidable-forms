@@ -453,7 +453,7 @@ class FrmStylesHelper {
 	/**
 	 * Prepare the value for a CSS variable.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array  $settings An array of css style.
 	 * @param string $key
@@ -563,7 +563,7 @@ class FrmStylesHelper {
 	/**
 	 * Update the "Base Font Size" value from "Quick Settings across multiple settings values".
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array $settings An array of css style.
 	 *
@@ -604,7 +604,7 @@ class FrmStylesHelper {
 	/**
 	 * Get style font size scale value.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return float
 	 */
@@ -751,7 +751,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the back button args from Style settings.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param int              $form_id
@@ -870,7 +870,7 @@ class FrmStylesHelper {
 	/**
 	 * Check if the current page is the advanced settings page.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @return bool True if is advanced settings, false otherwise.
 	 */
@@ -880,9 +880,9 @@ class FrmStylesHelper {
 
 	/**
 	 * Retrieve the background image URL of the submit button.
-	 * It may be either a full URL string (used in versions prior to x.x) or a numeric attachment ID (introduced in version x.x).
+	 * It may be either a full URL string (used in versions prior to 6.14) or a numeric attachment ID (introduced in version 6.14).
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array $settings
 	 * @return false|string Return image url or false.
@@ -892,7 +892,7 @@ class FrmStylesHelper {
 		if ( empty( $background_image ) ) {
 			return false;
 		}
-		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to x.x, the submit_bg_img will be a full URL string.
+		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to 6.14, the submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
 		}

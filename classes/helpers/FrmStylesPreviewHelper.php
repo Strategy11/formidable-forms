@@ -328,7 +328,7 @@ class FrmStylesPreviewHelper {
 	 * Fix the "Width" from Fields Settings to get reflected on each style preview ajax update.
 	 * Fix the Radio & Checkbox "Single Row" or "Multiple Row" to get reflected in style preview ajax update.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array $settings The style options.
 	 * @param bool  $is_preview

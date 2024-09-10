@@ -12,7 +12,7 @@
 			 * Prompt Pro to load the upload button along with its functionalities.
 			 * Before it was loaded via frm_style_settings_general_section_after_background action hook.
 			 *
-			 * @since x.x
+			 * @since 6.14
 			 */
 			do_action(
 				'frm_style_settings_bg_image_component_upload_button',
