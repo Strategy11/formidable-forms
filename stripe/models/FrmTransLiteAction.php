@@ -204,7 +204,7 @@ class FrmTransLiteAction extends FrmFormAction {
 				</option>
 				<?php
 				unset( $field );
-			}
+			}//end foreach
 
 			if ( ! $has_field && ! empty( $field_atts['allowed_fields'] ) ) {
 				$readable_fields = str_replace( '_', ' ', implode( ', ', (array) $field_atts['allowed_fields'] ) );
