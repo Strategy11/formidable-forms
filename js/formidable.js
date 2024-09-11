@@ -1,4 +1,4 @@
-/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
+/* exported frmRecaptcha, frmAfterRecaptcha */
 /* eslint-disable prefer-const */
 
 function frmFrontFormJS() {
