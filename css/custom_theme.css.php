@@ -816,11 +816,15 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_checkbox label,
-.with_frm_style .frm_radio label{
-	display: flex;
-	align-items: center;
-	gap: 9px;
-	white-space: normal;
+.with_frm_style .frm_radio label {
+	display: inline-block;
+	vertical-align: middle;
+	white-space:normal;
+}
+
+.with_frm_style .frm_checkbox label input[type=checkbox],
+.with_frm_style .frm_radio label input[type=radio] {
+	margin-right: 4px;
 }
 
 .with_frm_style .frm_checkbox label:not(.frm-label-disabled),
@@ -830,6 +834,7 @@ a.frm_save_draft{
 
 .with_frm_style .vertical_radio .frm_checkbox label,
 .with_frm_style .vertical_radio .frm_radio label{
+	display: block;
 	width: 100%;
 }
 
