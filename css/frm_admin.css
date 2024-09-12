@@ -3821,22 +3821,30 @@ input[type="checkbox"] {
 }
 
 .frm-white-body input[type="checkbox"]:checked,
-.frm_wrap input[type="checkbox"]:checked {
+.frm_wrap input[type="checkbox"]:checked,
+body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked {
 	background-color: var(--primary-500);
 	border-color: var(--primary-500) !important;
 }
 
 .frm-white-body input[type="checkbox"]:checked:focus,
-.frm_wrap input[type="checkbox"]:checked:focus {
+.frm_wrap input[type="checkbox"]:checked:focus,
+body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked:focus {
 	border-color: var(--primary-500);
 }
 
 .frm-white-body input[type="checkbox"]:checked::before,
-.frm_wrap input[type="checkbox"]:checked::before {
-	content: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2010%2010%27%3E%3Cpath%20d%3D%27M9.2%202c.2.3.2.7%200%201l-5%205c-.3.2-.6.2-.9%200L.8 5.3a.6.6%200%200%201%20.9-.8l2%202%204.6-4.5c.3-.3.6-.3.9%200Z%27%20fill%3D%27%23fff%27%2F%3E%3C%2Fsvg%3E");
-	height: 12px;
-	width: 12px;
-	margin: 1px;
+.frm_wrap input[type="checkbox"]:checked::before,
+body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked::before {
+	content: '';
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	background-image: url("data:image/svg+xml,%3Csvg width='12' height='9' viewBox='0 0 12 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.6667 1.5L4.25001 7.91667L1.33334 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") !important;
+	background-size: 9px !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	margin: 0;
 }
 
 .frm_radio input[type="radio"],
