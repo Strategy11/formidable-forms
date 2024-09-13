@@ -103,6 +103,11 @@ class FrmFieldsHelper {
 	 * Prepare field while creating a new entry
 	 *
 	 * @since 3.0
+	 *
+	 * @param array    $field_array
+	 * @param stdClass $field
+	 * @param array    $args
+	 * @return void
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
 		self::fill_default_field_opts( $field, $field_array );
@@ -114,8 +119,19 @@ class FrmFieldsHelper {
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
 		if ( $args['action'] === 'edit' ) {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param int|string $entry_id
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 		}
 	}
