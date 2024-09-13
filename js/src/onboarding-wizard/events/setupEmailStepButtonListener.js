@@ -18,6 +18,17 @@ function addSetupEmailStepButtonEvents() {
 	onClickPreventDefault( setupEmailStepButton, onSetupEmailStepButtonClick );
 }
 
+const validateEmails = emailInputs => {
+	return emailInputs.every( input => {
+		const emailAddress = input.value.trim();
+		if ( ! isValidEmail( emailAddress ) ) {
+			showEmailAddressError( 'invalid', input );
+			return false;
+		}
+		return true;
+	});
+};
+
 /**
  * Handles the click event on the "Next Step" button in the "Default Email Address" step.
  *
@@ -27,18 +38,9 @@ function addSetupEmailStepButtonEvents() {
  */
 const onSetupEmailStepButtonClick = async() => {
 	const { defaultEmailField, defaultFromEmailField } = getElements();
-	let hasError = false;
 
 	// Check if the emails are valid
-	[ defaultFromEmailField, defaultEmailField ].forEach( input => {
-		const emailAddress = input.value.trim();
-		if ( ! isValidEmail( emailAddress ) ) {
-			showEmailAddressError( 'invalid', input );
-			hasError = true;
-		}
-	});
-
-	if ( hasError ) {
+	if ( ! validateEmails( [ defaultFromEmailField, defaultEmailField ] ) ) {
 		return;
 	}
 
