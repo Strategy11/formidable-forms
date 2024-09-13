@@ -63,6 +63,7 @@ const onSetupEmailStepButtonClick = async() => {
 	// Capture usage data
 	const { emailStepData } = getAppState();
 	emailStepData.default_email = email;
+	emailStepData.from_email = defaultFromEmailField.value.trim();
 	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
 	emailStepData.summary_emails = summaryEmailsCheckbox.checked;
 	if ( subscribeCheckbox ) {
