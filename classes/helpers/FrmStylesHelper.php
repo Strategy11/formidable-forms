@@ -467,6 +467,7 @@ class FrmStylesHelper {
 			case 'font':
 				return safecss_filter_attr( $value );
 
+			case 'border_width_error':
 			case 'field_border_width':
 				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
 					return safecss_filter_attr( '0px 0px ' . $value . ' 0px' );
