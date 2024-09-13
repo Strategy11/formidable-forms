@@ -22,12 +22,11 @@ function addSetupEmailStepButtonEvents() {
  * Handles the click event on the "Next Step" button in the "Default Email Address" step.
  *
  * @private
- * @param {Event} event The click event object.
+ *
  * @return {void}
  */
 const onSetupEmailStepButtonClick = async() => {
 	const { defaultEmailField, defaultFromEmailField } = getElements();
-	const email = defaultEmailField.value.trim();
 	let hasError = false;
 
 	// Check if the emails are valid
@@ -44,6 +43,7 @@ const onSetupEmailStepButtonClick = async() => {
 	}
 
 	const { subscribeCheckbox, summaryEmailsCheckbox, allowTrackingCheckbox } = getElements();
+	const email = defaultEmailField.value.trim();
 
 	// Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
 	if ( subscribeCheckbox?.checked ) {
