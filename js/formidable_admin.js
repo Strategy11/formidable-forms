@@ -3061,7 +3061,6 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			changes.innerHTML = purifyHtml( newValue );
-
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
 				jQuery( changes ).trigger( 'change' );
@@ -10975,6 +10974,7 @@ function frmAdminBuildJS() {
 				},
 				success: function( html ) {
 					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
