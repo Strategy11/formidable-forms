@@ -19,14 +19,15 @@ function addSetupEmailStepButtonEvents() {
 }
 
 const validateEmails = emailInputs => {
-	return emailInputs.every( input => {
+	let isValid = true;
+	emailInputs.forEach( input => {
 		const emailAddress = input.value.trim();
 		if ( ! isValidEmail( emailAddress ) ) {
 			showEmailAddressError( 'invalid', input );
-			return false;
+			isValid = false;
 		}
-		return true;
 	});
+	return isValid;
 };
 
 /**
