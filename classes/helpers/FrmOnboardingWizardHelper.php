@@ -134,21 +134,4 @@ class FrmOnboardingWizardHelper {
 
 		require FrmOnboardingWizardController::get_view_path() . 'footer.php';
 	}
-
-	public static function print_setting_error( $args ) {
-		$args = wp_parse_args(
-			$args,
-			array(
-				'id'     => '',
-				'errors' => array(),
-			)
-		);
-		?>
-		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="frm-validation-error frm-mt-xs frm_hidden">
-			<?php foreach ( $args['errors'] as $key => $msg ) : ?>
-				<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
-			<?php endforeach; ?>
-		</span>
-		<?php
-	}
 }

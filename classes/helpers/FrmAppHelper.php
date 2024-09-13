@@ -4325,4 +4325,41 @@ class FrmAppHelper {
 		</span>
 		<?php
 	}
+
+	/**
+	 * Prints errors for settings in onboarding wizard or template settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Args.
+	 *
+	 * @return void
+	 */
+	public static function print_setting_error( $args ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'     => '',
+				'errors' => array(),
+				'class'  => '',
+			)
+		);
+
+		$args['class'] .= ' frm-validation-error frm-mt-xs frm_hidden';
+		?>
+		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
+			<?php
+			if ( is_array( $args['errors'] ) ) {
+				foreach ( $args['errors'] as $key => $msg ) {
+					?>
+					<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
+					<?php
+				}
+			} else {
+				echo '<span>' . esc_html( $args['errors'] ) . '</span>';
+			}
+			?>
+		</span>
+		<?php
+	}
 }
