@@ -13,5 +13,5 @@ import { showFormError } from '../utils';
  * @return {void}
  */
 export const showEmailAddressError = ( type, input ) => {
-	showFormError( '#' + input.id, '#' + input.nextElementSibling.id, type );
+	showFormError( `#${input.id}`, `#${input.nextElementSibling.id}`, type );
 };
