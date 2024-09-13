@@ -274,8 +274,8 @@ class FrmOnboardingWizardController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data.
-		$from_email      = FrmAppHelper::get_post_param( 'from_email', '', 'sanitize_text_field' );
-		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
+		$from_email      = FrmAppHelper::get_post_param( 'from_email', '', 'sanitize_email' );
+		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_email' );
 		$allows_tracking = FrmAppHelper::get_post_param( 'allows_tracking', '', 'rest_sanitize_boolean' );
 		$summary_emails  = FrmAppHelper::get_post_param( 'summary_emails', '', 'rest_sanitize_boolean' );
 
