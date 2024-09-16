@@ -1322,6 +1322,9 @@ class FrmAppController {
 		return FrmDeprecated::page_route( $content );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function filter_admin_notices() {
 		if ( ! FrmAppHelper::is_formidable_admin() ) {
 			return;
@@ -1337,35 +1340,42 @@ class FrmAppController {
 		global $wp_filter;
 
 		foreach ( $actions as $action ) {
-			if ( empty( $wp_filter[ $action ] ) || empty( $wp_filter[ $action ]->callbacks ) ) {
+			if ( empty( $wp_filter[ $action ]->callbacks ) ) {
 				continue;
 			}
 			foreach ( $wp_filter[ $action ]->callbacks as $priority => $callbacks ) {
 				foreach ( $callbacks as $callback_name => $callback ) {
-					if (
-						self::is_our_callback_string( $callback_name ) ||
-						self::is_our_callback_array( $callback )
-					) {
+					if ( self::is_our_callback_string( $callback_name ) || self::is_our_callback_array( $callback ) ) {
 						continue;
 					}
-
 					unset( $wp_filter[ $action ]->callbacks[ $priority ][ $callback_name ] );
 				}
 			}
 		}
 	}
 
+	/**
+	 * Validate that the callback name is ours not from third-party.
+	 *
+	 * @param string $callback_name WordPress callback name.
+	 *
+	 * @return bool
+	 */
 	private static function is_our_callback_string( $callback_name ) {
 		return 0 === stripos( $callback_name, 'frm' );
 	}
 
+	/**
+	 * Validate that the callback array is ours not from third-party.
+	 *
+	 * @param array $callback WordPress callback array.
+	 *
+	 * @return bool
+	 */
 	private static function is_our_callback_array( $callback ) {
 		return ! empty( $callback['function'] ) &&
-		(
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
-			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] )
-		);
+			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
 	}
-
 }
