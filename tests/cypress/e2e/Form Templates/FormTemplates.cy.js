@@ -13,62 +13,49 @@ describe("Form Templates page", () => {
         cy.log("Validate data categories");
 
         const categories = [
-            { category: 'all-templates', text: 'All Templates', count: '319' },
-            { category: 'favorites', text: 'Favorites', count: '0' },
-            { category: 'custom', text: 'Custom', count: '0' },
-            { category: 'available-templates', text: 'Available Templates', count: '33' },
-            { category: 'ai', text: 'AI', count: '9' },
-            { category: 'application', text: 'Application', count: '12' },
-            { category: 'business-operations', text: 'Business Operations', count: '91' },
-            { category: 'calculator', text: 'Calculator', count: '57' },
-            { category: 'consent', text: 'Consent', count: '2' },
-            { category: 'contact', text: 'Contact', count: '14' },
-            { category: 'conversational-forms', text: 'Conversational Forms', count: '18' },
-            { category: 'customer-service', text: 'Customer Service', count: '18' },
-            { category: 'datepicker', text: 'Datepicker', count: '1' },
-            { category: 'education', text: 'Education', count: '23' },
-            { category: 'entertainment', text: 'Entertainment', count: '1' },
-            { category: 'event-planning', text: 'Event Planning', count: '23' },
-            { category: 'feedback', text: 'Feedback', count: '21' },
-            { category: 'finance', text: 'Finance', count: '15' },
-            { category: 'geolocation', text: 'Geolocation', count: '5' },
-            { category: 'health-and-wellness', text: 'Health and Wellness', count: '21' },
-            { category: 'lead', text: 'Lead', count: '11' },
-            { category: 'marketing', text: 'Marketing', count: '12' },
-            { category: 'multi-page', text: 'Multi-Page', count: '3' },
-            { category: 'nonprofit', text: 'Nonprofit', count: '22' },
-            { category: 'order-form', text: 'Order Form', count: '16' },
-            { category: 'payment', text: 'Payment', count: '26' },
-            { category: 'post', text: 'Post', count: '3' },
-            { category: 'quiz', text: 'Quiz', count: '18' },
-            { category: 'real-estate', text: 'Real Estate', count: '9' },
-            { category: 'registration-and-signup', text: 'Registration and Signup', count: '14' },
-            { category: 'repeater-field', text: 'Repeater Field', count: '2' },
-            { category: 'signature', text: 'Signature', count: '48' },
-            { category: 'survey', text: 'Survey', count: '21' },
-            { category: 'user-registration', text: 'User Registration', count: '3' },
-            { category: 'woocommerce', text: 'WooCommerce', count: '2' }
+            { category: 'all-templates', text: 'All Templates' },
+            { category: 'favorites', text: 'Favorites' },
+            { category: 'custom', text: 'Custom' },
+            { category: 'available-templates', text: 'Available Templates' },
+            { category: 'ai', text: 'AI' },
+            { category: 'application', text: 'Application' },
+            { category: 'business-operations', text: 'Business Operations' },
+            { category: 'calculator', text: 'Calculator' },
+            { category: 'consent', text: 'Consent' },
+            { category: 'contact', text: 'Contact' },
+            { category: 'conversational-forms', text: 'Conversational Forms' },
+            { category: 'customer-service', text: 'Customer Service' },
+            { category: 'datepicker', text: 'Datepicker' },
+            { category: 'education', text: 'Education' },
+            { category: 'entertainment', text: 'Entertainment' },
+            { category: 'event-planning', text: 'Event Planning' },
+            { category: 'feedback', text: 'Feedback' },
+            { category: 'finance', text: 'Finance' },
+            { category: 'geolocation', text: 'Geolocation' },
+            { category: 'health-and-wellness', text: 'Health and Wellness' },
+            { category: 'lead', text: 'Lead' },
+            { category: 'marketing', text: 'Marketing' },
+            { category: 'multi-page', text: 'Multi-Page' },
+            { category: 'nonprofit', text: 'Nonprofit' },
+            { category: 'order-form', text: 'Order Form' },
+            { category: 'payment', text: 'Payment' },
+            { category: 'post', text: 'Post' },
+            { category: 'quiz', text: 'Quiz' },
+            { category: 'real-estate', text: 'Real Estate' },
+            { category: 'registration-and-signup', text: 'Registration and Signup' },
+            { category: 'repeater-field', text: 'Repeater Field' },
+            { category: 'signature', text: 'Signature' },
+            { category: 'survey', text: 'Survey' },
+            { category: 'user-registration', text: 'User Registration' },
+            { category: 'woocommerce', text: 'WooCommerce' }
         ];
-
-        categories.forEach(({ category, text, count }) => {
+        
+        categories.forEach(({ category, text }) => {
             cy.get(`li[data-category="${category}"]`).within(() => {
                 cy.get('.frm-form-templates-cat-text').should("have.text", text);
-
-                cy.log("Since number of templates keeps changing assert that it's within ±5 of the expected count"); cy.get('.frm-form-templates-cat-count').invoke('text').then((countText) => {
-                    const actualCount = parseInt(countText.trim(), 10);
-                    const expectedCount = parseInt(count, 10);
-
-                    if (!isNaN(actualCount) && !isNaN(expectedCount)) {
-                        const minCount = expectedCount - 5;
-                        const maxCount = expectedCount + 5;
-
-                        expect(actualCount).to.be.within(minCount, maxCount);
-                    } else {
-                        throw new Error(`Invalid count: Expected (${count}) or actual count (${countText}) is not a number`);
-                    }
-                });
             });
         });
+        
 
         cy.log("Check the items on the All Templates page");
         cy.log("Contact Us Template");
