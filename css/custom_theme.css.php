@@ -884,9 +884,9 @@ a.frm_save_draft{
 	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block !important;
-	width: 16px;
-	min-width: 16px;
-	height: 16px;
+	width: 16px !important;
+	min-width: 16px !important;
+	height: 16px !important;
 	color: var(--border-color);
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
