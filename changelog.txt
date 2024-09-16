@@ -7,7 +7,6 @@
 * Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
 * Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
 * Fix: Base font size calculations were occuring too frequently, causing text to become smaller than intended.
-* Fix: Errors would not appear as expected when using the Mad Lib style template.
 * Fix: Box shadow styling would not reset as expected.
 
 = 6.14 =
