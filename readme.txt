@@ -374,9 +374,13 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.14.1 =
 * New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
 * New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactiving the Formidable Views add-on.
+* New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending addiitonal unit to the value introduces CSS errors.
 * Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
 * Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
 * Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
+* Fix: Base font size calculations were occuring too frequently, causing text to become smaller than intended.
+* Fix: Errors would not appear as expected when using the Mad Lib style template.
+* Fix: Box shadow styling would not reset as expected.
 
 = 6.14 =
 * New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
