@@ -432,9 +432,10 @@ class FrmFieldFormHtml {
 
 		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
-			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . $classes, $this->html );
+			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . esc_attr( $classes ), $this->html );
 		}
-		$this->html = str_replace( '[error_class]', $classes, $this->html );
+
+		$this->html = str_replace( '[error_class]', esc_attr( $classes ), $this->html );
 	}
 
 	/**
@@ -472,7 +473,12 @@ class FrmFieldFormHtml {
 		$classes .= $this->field_obj->get_container_class();
 
 		// Get additional classes
-		return apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
+		$classes = apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
+
+		// Remove unexpected characters from class.
+		$classes = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $classes ) ) );
+
+		return $classes;
 	}
 
 	/**
