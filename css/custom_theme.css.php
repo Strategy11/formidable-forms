@@ -347,12 +347,12 @@ legend.frm_hidden{
 	background-position-y: calc(50% + 3px);
 }
 
-.with_frm_style input[disabled],
-.with_frm_style select[disabled],
-.with_frm_style textarea[disabled],
-.with_frm_style input[readonly],
-.with_frm_style select[readonly],
-.with_frm_style textarea[readonly] {
+.frm_forms.with_frm_style input[disabled],
+.frm_forms.with_frm_style select[disabled],
+.frm_forms.with_frm_style textarea[disabled],
+.frm_forms.with_frm_style input[readonly],
+.frm_forms.with_frm_style select[readonly],
+.frm_forms.with_frm_style textarea[readonly] {
 	background-color: var(--bg-color-disabled)<?php echo esc_html( $important ); ?>;
 	color: var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
 	border-color: var(--border-color-disabled)<?php echo esc_html( $important ); ?>;
@@ -866,8 +866,8 @@ a.frm_save_draft{
 	border-radius:50%;
 }
 
-.with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius: calc(var(--border-radius) / 2);
+.with_frm_style .frm_checkbox input[type=checkbox] {
+	border-radius: calc(var(--border-radius) / 2) !important;
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -895,11 +895,13 @@ a.frm_save_draft{
 <?php if ( $pro_is_installed ) : ?>
 .frm_forms.with_frm_style .frm_fields_container .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
+.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	border-color: var(--border-color-active) !important;
 }
 
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
+.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	background-color: var(--border-color-active) !important;
 }
 

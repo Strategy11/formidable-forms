@@ -1406,7 +1406,7 @@ body.frm-hidden-overflow {
 .post-type-frm_display.wp-core-ui .button-primary,
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
-.frm_single_entry_page .button-primary {
+.frm_single_entry_page .button-primary:not(.frm-fields-item) {
 	background-color: var(--primary-500) !important;
 	color: #fff !important;
 }
@@ -1468,7 +1468,7 @@ body.frm-hidden-overflow {
 .frm-white-body .button:not(.frm-button-primary):active,
 .frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .frm-button-secondary:hover,
-.wp-core-ui.frm-white-body .button-secondary:hover,
+.wp-core-ui.frm-white-body .button-secondary:not(.frm-fields-item):hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
 .frm_wrap .preview > .button:hover {
@@ -3821,21 +3821,18 @@ input[type="checkbox"] {
 }
 
 .frm-white-body input[type="checkbox"]:checked,
-.frm_wrap input[type="checkbox"]:checked,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked {
+.frm_wrap input[type="checkbox"]:checked {
 	background-color: var(--primary-500);
 	border-color: var(--primary-500) !important;
 }
 
 .frm-white-body input[type="checkbox"]:checked:focus,
-.frm_wrap input[type="checkbox"]:checked:focus,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked:focus {
+.frm_wrap input[type="checkbox"]:checked:focus {
 	border-color: var(--primary-500);
 }
 
 .frm-white-body input[type="checkbox"]:checked::before,
-.frm_wrap input[type="checkbox"]:checked::before,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked::before {
+.frm_wrap input[type="checkbox"]:checked::before {
 	content: '';
 	display: block;
 	width: 100% !important;
@@ -3850,19 +3847,6 @@ body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked::before 
 .frm_radio input[type="radio"],
 .frm_checkbox input[type="checkbox"] {
 	margin-right: 5px;
-}
-
-.frm_single_entry_page .with_frm_style .frm_radio input[type=radio] {
-	margin: 5px 0;
-	width: 18px;
-	position: relative; /* override Bootstrap */
-}
-
-.frm_single_entry_page .with_frm_style .frm_radio input[type=radio]:before {
-	position: relative !important;
-	left: calc(50% - 6px);
-	top: calc(50% - 6px);
-	margin: 0 !important;
 }
 
 .frm_inner_field_container {
@@ -4505,7 +4489,7 @@ li.frm_field_box > ul.frm_grid_container {
 
 /* Image options for Radio and Checkbox */
 
-.frm_image_options .frm_image_option_container {
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_image_options .frm_image_option_container {
 	--field-border-width: 1px;
 	--border-color: var(--grey-300);
 	--border-color-active: var(--primary-500);
@@ -8258,17 +8242,28 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
-.frm-white-body textarea:focus,
-.frm-white-body input:focus,
-.frm-white-body select:focus,
-.frm_wrap input:focus,
-.frm_wrap select:focus,
-.wp-core-ui .frm_wrap select:focus,
+
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) textarea:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) input:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) select:focus,
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap input:focus,
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap select:focus,
+.wp-core-ui:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap select:focus,
 #frm-form-templates-modal select:focus,
 .frm-btn-group .multiselect.dropdown-toggle:focus,
-.frm_wrap textarea:focus {
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap textarea:focus {
 	border-color: var(--primary-500) !important;
 	box-shadow: none !important;
+}
+
+.frm-admin-page-styles textarea:focus,
+.frm-admin-page-styles input:focus,
+.frm-admin-page-styles select:focus,
+.frm-admin-page-entries textarea:focus,
+.frm-admin-page-entries input:focus,
+.frm-admin-page-entries select:focus {
+	border-color: var(--primary-500);
+	box-shadow: none;
 }
 
 #postbox-container-2 textarea,
