@@ -4,6 +4,7 @@
 * New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactiving the Formidable Views add-on.
 * Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
 * Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
+* Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
 
 = 6.14 =
 * New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
