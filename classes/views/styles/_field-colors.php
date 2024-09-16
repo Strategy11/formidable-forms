@@ -114,7 +114,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'remove_box_shadow' ),
 							array(
 								'div_class' => 'with_frm_style frm_toggle',
-								'checked'   => ! $style->post_content['remove_box_shadow'],
+								'checked'   => ! empty( $style->post_content['remove_box_shadow'] ),
 								'echo'      => true,
 							)
 						);
@@ -167,7 +167,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$frm_style->get_field_name( 'remove_box_shadow_active' ),
 								array(
 									'div_class'       => 'with_frm_style frm_toggle',
-									'checked'         => ! $style->post_content['remove_box_shadow_active'],
+									'checked'         => ! empty( $style->post_content['remove_box_shadow_active'] ),
 									'echo'            => true,
 									'aria-label-attr' => __( 'Toggle box shadow', 'formidable' ),
 								)
