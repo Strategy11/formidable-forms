@@ -105,7 +105,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Remove Box Shadow', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-style-component">
 						<?php
@@ -158,7 +158,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Box Shadow', 'formidable' ); ?></label>
+						<label class="frm-style-item-heading"><?php esc_html_e( 'Remove Box Shadow', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-style-component">
 						<?php
