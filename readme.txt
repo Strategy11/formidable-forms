@@ -372,6 +372,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.14.1 =
+* Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
 * New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
 * New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactivating the Formidable Views add-on.
 * New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending additional unit to the value introduces CSS errors.
