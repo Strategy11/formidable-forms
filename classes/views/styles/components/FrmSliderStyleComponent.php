@@ -56,7 +56,8 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		if ( empty( $data['units'] ) ) {
 			return array( '', 'px', 'em', '%' );
 		}
-		return array_unshift( $data['units'], '' );
+		array_unshift( $data['units'], '' );
+		return $data['units'];
 	}
 
 	/**
