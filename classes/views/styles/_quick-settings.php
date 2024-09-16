@@ -132,7 +132,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php if ( ! FrmStylesHelper::is_advanced_settings() ) { ?>
-		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="true" />
+		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="false" />
 	<?php } ?>
 	<?php
 	new FrmSliderStyleComponent(
@@ -142,6 +142,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'id'          => 'base_font_size',
 			'max_value'   => 100,
 			'not_show_in' => 'advanced-settings',
+			'classname'   => 'frm-base-font-size',
 		)
 	);
 	?>
