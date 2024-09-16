@@ -932,6 +932,7 @@ a.frm_save_draft{
 	background-size: 9px !important;
 	background-repeat: no-repeat !important;
 	background-position: center !important;
+	margin: 0;
 }
 
 <?php if ( $pro_is_installed ) { ?>
