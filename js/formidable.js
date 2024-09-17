@@ -284,7 +284,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
-	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function validateFieldValue( field, errors, onSubmit ) {
 		if ( field.type === 'hidden' ) {
@@ -442,7 +442,7 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} field    Field input.
-	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -465,7 +465,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
-	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function checkEmailField( field, errors, onSubmit ) {
 		const fieldID = getFieldId( field, true ),
@@ -488,7 +488,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
-	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function checkPasswordField( field, errors, onSubmit ) {
 		if ( shouldCheckConfirmField( field, onSubmit ) ) {
