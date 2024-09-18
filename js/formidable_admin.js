@@ -5760,6 +5760,7 @@ function frmAdminBuildJS() {
 			}
 			if ( valueSelect.dataset.selectedValue ) {
 				valueSelect.value = valueSelect.dataset.selectedValue;
+				valueSelect.removeAttribute( 'data-selected-value' );
 			}
 		}
 	}
