@@ -5,13 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $button_upgrade_link      = FrmAppHelper::admin_upgrade_link(
 	array(
-		'medium' => 'settings-license',
+		'medium'  => 'settings-license',
 		'content' => 'global-settings-license-box-get-formidable-button',
 	)
 );
 $unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link(
 	array(
-		'medium' => 'settings-license',
+		'medium'  => 'settings-license',
 		'content' => 'global-settings-license-box-unlock-more',
 	)
 );
