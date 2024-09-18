@@ -5758,6 +5758,9 @@ function frmAdminBuildJS() {
 			if ( optionMatch !== null ) {
 				valueSelect.prepend( optionMatch );
 			}
+			if ( valueSelect.dataset.selectedValue ) {
+				valueSelect.value = valueSelect.dataset.selectedValue;
+			}
 		}
 	}
 
