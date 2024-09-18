@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</li>
 			<?php endforeach; ?>
 		</ul>
-		<a target="_blank" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'dashboard-discount' ) ); ?>" title="Upgrade" class="frm-button-primary">
+		<a target="_blank" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( array( 'medium' => 'dashboard-discount', 'content' => 'dashboard-defy-limits-cta' ) ) ); ?>" title="Upgrade" class="frm-button-primary">
 			<?php esc_html_e( 'Upgrade to Pro & Get 50% Off', 'formidable' ); ?>
 		</a>
 	</div>
