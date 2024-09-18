@@ -200,7 +200,7 @@ class FrmDashboardHelper {
 			array(
 				'medium'  => 'settings-license',
 				'content' => 'dashboard-license-box',
-		 	)
+			)
 		);
 
 		return array(
