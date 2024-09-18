@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 		</a>
 		<?php esc_html_e( 'or', 'formidable' ); ?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" target="_blank" class="button-secondary frm-button-secondary frm-button-sm">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( array( 'medium' => 'settings-license', 'content' => 'global-settings-license-box-get-formidable-button' ) ) ); ?>" target="_blank" class="button-secondary frm-button-secondary frm-button-sm">
 			<?php esc_html_e( 'Get Formidable Now', 'formidable' ); ?>
 		</a>
 	</p>
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			printf(
 				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 				esc_html__( 'To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
-				'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ) . '">',
+				'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( array( 'medium' => 'settings-license', 'content' => 'global-settings-license-box-unlock-more' ) ) ) . '">',
 				'</a>'
 			);
 			?>
