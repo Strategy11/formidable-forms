@@ -443,6 +443,10 @@ class FrmField {
 			$options['custom_html'] = self::maybe_filter_custom_html_input_attributes( $options['custom_html'] );
 		}
 
+		if ( ! empty( $options['classes'] ) ) {
+			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+		}
+
 		return $options;
 	}
 

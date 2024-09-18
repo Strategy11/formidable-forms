@@ -56,6 +56,23 @@
 		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
 		document.body.classList.remove( 'wp-core-ui' );
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+
+		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+	}
+
+	/**
+	 * Initialize the slider functionality in the style preview.
+	 *
+	 * @param {HTMLElement} event
+	 * @returns {void}
+	 */
+	function initSliderPreview( event ) {
+		const wrapper = event.target.closest( '.frm_range_container' );
+		if ( null === wrapper ) {
+			return;
+		}
+		wrapper.querySelector( '.frm_range_value' ).innerHTML = parseInt( this.value, 10 );
 	}
 
 	/**
@@ -242,7 +259,8 @@
 			return;
 		}
 
-		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
+		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) || 'frm-style-advanced-settings-button' === target.id || target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
+			switchAdvancedSettingsFormAction( target );
 			handleUpdateClick();
 			return;
 		}
@@ -250,6 +268,25 @@
 		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
 			modifyStylerUrl( target );
 			return;
+		}
+	}
+
+	/**
+	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
+	 * @param {Object} target The submit button event target
+	 * @return {void}
+	 */
+	function switchAdvancedSettingsFormAction( target ) {
+		const form = document.querySelector( '#frm_styling_form' );
+		if ( null === form ) {
+			return;
+		}
+		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
+			form.action = form.action.replace( '&section=advanced-settings', '' );
+			return;
+		}
+		if ( 'frm-style-advanced-settings-button' === target.id ) {
+			form.action += '&section=advanced-settings';
 		}
 	}
 
@@ -1108,30 +1145,49 @@
 	function initEditPage() {
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
+		const debouncedColorChange	 = debounce(( event, value ) => {
+			/**
+			 * Fires on style colorpicker change.
+			 *
+			 * @param {Event}  data.event The color change event.
+			 * @param {string} data.value New color value.
+			 */
+			wp.hooks.doAction( 'frm_style_options_color_change', { event, value } );
+		}, 200 );
 
+		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
-		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
+		['frm_field_height', 'frm_field_font_size', 'frm_field_pad'].forEach( selector => {
+			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
+		});
 
 		jQuery( 'input.hex' ).wpColorPicker({
-			change: function( event ) {
+			change: function( event, ui ) {
+				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
+				if ( ui.color._alpha < 1 ) {
+					// If there's transparency, use RGBA
+					color = ui.color.toCSS( 'rgba' );
+				}
+				debouncedColorChange( event, color );
 
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
-				jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+				jQuery( event.target ).val( color ).trigger( 'change' );
 			}
 		});
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
+			const container = jQuery( this ).closest( '.wp-picker-container' );
+			if ( 'undefined' !== typeof container && container[0].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+				return container[0].querySelector( '.wp-color-picker' ).value;
+			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		});
-		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
@@ -1192,19 +1248,24 @@
 		 * @returns {void}
 		 */
 		function textSquishCheck() {
-			const size           = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
+			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
+				return;
+			}
 			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
 			const paddingCount   = paddingEntered.length;
+
+			frmDom.util.setCookie( 'frm-style-text-squish-check', 1, 30 );
 
 			// If too many or too few padding entries, leave now
 			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
 				return;
 			}
 
+			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			// Get the top and bottom padding from entered values
 			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
-			const paddingBottom = paddingTop;
+			let   paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
 				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
 			}

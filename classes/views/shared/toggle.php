@@ -23,6 +23,7 @@ $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || fals
 $disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
 $input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
+$aria_label   = empty( $args['aria-label-attr'] ) ? '' : 'aria-label="' . $args['aria-label-attr'] . '"';
 
 $use_container = false;
 
@@ -69,7 +70,7 @@ if ( $use_container ) {
 			?>
 		/>
 
-		<span class="frm_toggle" tabindex="0" role="switch" aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">
+		<span class="frm_toggle" tabindex="0" role="switch" <?php echo esc_attr( $aria_label ); ?> aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">
 			<span class="frm_toggle_slider"></span>
 		</span>
 

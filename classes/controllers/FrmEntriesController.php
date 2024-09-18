@@ -13,11 +13,79 @@ class FrmEntriesController {
 		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 		if ( ! $views_installed ) {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
+			self::maybe_redirect_to_views_upsell();
+		} else {
+			self::maybe_redirect_to_views_index();
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			self::load_manage_entries_hooks();
 		}
+	}
+
+	/**
+	 * This function is called when views is installed.
+	 * The Views add-on uses a different URL for the Views tab than the upsell page.
+	 * If the user is on the upsell page, instead of showing a permission error on reload,
+	 * redirect to the views index page.
+	 *
+	 * @since 6.14.1
+	 *
+	 * @return void
+	 */
+	private static function maybe_redirect_to_views_index() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-views' ) ) {
+			return;
+		}
+
+		$query_args = array(
+			'post_type' => 'frm_display',
+		);
+		$query_args = self::add_url_params_to_views_redirect_query_args( $query_args );
+
+		wp_safe_redirect( add_query_arg( $query_args, admin_url( 'edit.php' ) ) );
+		die();
+	}
+
+	/**
+	 * This function is called when views is inactive.
+	 * A user may deactivate views but then try to reload the views index.
+	 * Instead of showing a permission error, redirect to the views upsell page.
+	 *
+	 * @since 6.14.1
+	 *
+	 * @return void
+	 */
+	private static function maybe_redirect_to_views_upsell() {
+		global $pagenow;
+		if ( 'edit.php' !== $pagenow || 'frm_display' !== FrmAppHelper::simple_get( 'post_type' ) ) {
+			return;
+		}
+
+		$query_args = array(
+			'page' => 'formidable-views',
+		);
+		$query_args = self::add_url_params_to_views_redirect_query_args( $query_args );
+
+		wp_safe_redirect( add_query_arg( $query_args, admin_url( 'admin.php' ) ) );
+		die();
+	}
+
+	/**
+	 * @since 6.14.1
+	 *
+	 * @param array $query_args
+	 * @return array
+	 */
+	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
+		$query_args['show_nav'] = FrmAppHelper::simple_get( 'show_nav', 'absint', 0 );
+
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( $form_id ) {
+			$query_args['form'] = $form_id;
+		}
+
+		return $query_args;
 	}
 
 	/**
