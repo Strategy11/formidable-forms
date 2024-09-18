@@ -1,4 +1,5 @@
-import { show, hide } from '../../common/utilities';
+import { show, hide } from 'core/utils';
+
 /**
  * Represents a radio style component.
  * @class
