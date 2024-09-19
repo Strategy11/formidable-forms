@@ -2244,8 +2244,8 @@ function frmAdminBuildJS() {
 	function copyUnsavedOptions( args ) {
 		const { originalFieldId, newFieldId } = args;
 
-		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
-		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` ).querySelector( '.frm_opt_container' );
+		const originalFieldOpts = document.getElementById( `field_${originalFieldId}_inner_container` )?.querySelector( '.frm_opt_container' );
+		const newFieldOpts      = document.getElementById( `field_${newFieldId}_inner_container` )?.querySelector( '.frm_opt_container' );
 
 		if ( ! originalFieldOpts || ! newFieldOpts ) {
 			return;
