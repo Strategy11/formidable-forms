@@ -1066,7 +1066,7 @@ class FrmField {
 	 * @return void
 	 */
 	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
-		if ( ! is_array( $result->field_options ) || ! isset( $result->field_options ) || empty( $result->field_options['format'] ) ) {
+		if ( ! isset( $result->field_options ) || ! is_array( $result->field_options ) || empty( $result->field_options['format'] ) ) {
 			return;
 		}
 
