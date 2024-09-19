@@ -629,6 +629,9 @@ class FrmEntryValidate {
 						continue;
 					}
 					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
+						if ( empty( $values[ $fields[ $index + 1 ]->id ] ) ) {
+							continue;
+						}
 						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 						return true;
 					}
