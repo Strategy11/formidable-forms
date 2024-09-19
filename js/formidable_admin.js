@@ -2203,7 +2203,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {HTMLElement} origOptsContainer
 	 * @param {HTMLElement} newOptsContainer
-	 * @param {object} args
+	 * @param {object}      args
 	 * @returns {void}
 	 */
 	function copyUnsavedDeleteOptions( origOptsContainer, newOptsContainer, args ) {
