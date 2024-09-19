@@ -1070,7 +1070,7 @@ class FrmField {
 			return;
 		}
 
-		$result->field_options['format'] = addslashes( $result->field_options['format']  );
+		$result->field_options['format'] = addslashes( $result->field_options['format'] );
 	}
 
 	/**
