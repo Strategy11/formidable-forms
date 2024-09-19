@@ -2261,10 +2261,12 @@ function frmAdminBuildJS() {
 	function replaceElementAttribute( element, args ) {
 		const { originalFieldId, originalFieldKey, newFieldId, newFieldKey } = args;
 
-		let regex         = new RegExp( originalFieldId, 'g' );
-		let elementString = element.outerHTML.replace( regex, newFieldId );
-		regex             = new RegExp( originalFieldKey, 'g' );
-		elementString     = elementString.replace( regex, newFieldKey );
+		let regex         = new RegExp( `_${originalFieldId}`, 'g' );
+		let elementString = element.outerHTML.replace( regex, `_${newFieldId}` );
+		regex             = new RegExp( `"${originalFieldId}"`, 'g' );
+		elementString     = elementString.replace( regex, `"${newFieldId}"` );
+		regex             = new RegExp( `_${originalFieldKey}`, 'g' );
+		elementString     = elementString.replace( regex, `_${newFieldKey}` );
 		const tempDiv     = div();
 		tempDiv.innerHTML = elementString;
 
