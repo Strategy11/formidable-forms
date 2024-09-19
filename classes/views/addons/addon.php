@@ -43,10 +43,11 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				'frm-' . $addon['slug'],
 				'frm-' . $addon['slug'],
 				array(
-					'div_class' => 'with_frm_style frm_toggle frm-ml-auto',
-					'checked'   => $addon['status']['type'] === 'active',
-					'disabled'  => $addon['slug'] === 'formidable-pro',
-					'echo'      => true,
+					'div_class'       => 'with_frm_style frm_toggle frm-ml-auto',
+					'checked'         => $addon['status']['type'] === 'active',
+					'disabled'        => $addon['slug'] === 'formidable-pro',
+					'echo'            => true,
+					'aria-label-attr' => $addon['title'],
 				)
 			);
 		} else {
