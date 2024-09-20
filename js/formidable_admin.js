@@ -2868,6 +2868,9 @@ function frmAdminBuildJS() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
+			if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
+				addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
+			}
 
 			if ( 'name' === fields[i].fieldType ) {
 				Object.entries({
@@ -2886,22 +2889,21 @@ function frmAdminBuildJS() {
 					}
 				);
 			}
-			const span = document.createElement( 'span' );
-			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
-
-			const a = document.createElement( 'a' );
-			a.setAttribute( 'href', '#' );
-			a.setAttribute( 'data-code', fields[i].fieldId );
-			a.classList.add( 'frm_insert_code' );
-			a.appendChild( span );
-			a.appendChild( document.createTextNode( fields[i].fieldName ) );
-
-			const li = document.createElement( 'li' );
-			li.classList.add( 'frm-field-list-' + fieldId );
-			li.classList.add( 'frm-field-list-' + fields[i].fieldType );
-			li.appendChild( a );
-			list.appendChild( li );
 		}
+	}
+
+	/**
+	 * Returns true if [fieldId show=label] type shortcodes should be available in calculation fields popup.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @param {Number} fieldId
+	 *
+	 * @returns {Boolean}
+	 */
+	function shouldShowFieldLabelShortcode( fieldType, fieldId ) {
+		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && document.getElementById( `separate_value_${fieldId}` )?.checked;
 	}
 
 	/**
