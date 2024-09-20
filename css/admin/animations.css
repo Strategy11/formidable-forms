@@ -1,0 +1,95 @@
+/* fadeIn */
+.frm-fadein {
+	animation: fadeIn 400ms ease-in-out forwards;
+}
+
+.frm-fadein-up {
+	animation: fadeInUp 230ms ease-in-out forwards;
+}
+
+.frm-fadein-up-back {
+	animation: fadeInUpBack 500ms cubic-bezier( 0.34, 1.56, 0.64, 1 ) forwards;
+}
+
+.frm-fadein-down-short {
+	animation: fadeInDownShort 300ms ease-out forwards;
+}
+/* END fadeIn */
+
+/* cascadeFadeIn */
+.frm-init-cascade-animation {
+	transform: translateY( 0px );
+	opacity: 1.0 !important;
+	transition: 0.35s transform, 0.35s opacity linear;
+	will-change: transform;
+}
+.frm-init-cascade-animation > * {
+	transition: 0.3s opacity linear;
+	transition-delay: 0.1s;
+}
+.frm-init-cascade-animation.frm-animate {
+	transform: translateY( 7px );
+	opacity: 0.0 !important;
+}
+.frm-init-cascade-animation.frm-animate > * {
+	opacity: 0.0;
+}
+/* End cascadeFadeIn */
+
+/* FadeIn 3d */
+.frm-init-fadein-3d.frm-animate {
+	opacity:0.0!important;
+	transform: matrix3d( 1,0,0,0,0,1,0,-0.00095,0,0,1,0,0,0,0,1 ) translateY( 15px ) scale3d( 0.92, 0.92, 1 );
+}
+.frm-init-fadein-3d {
+	opacity:1!important;
+	transform: matrix3d( 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 ) translateY( 0px ) scale3d( 1, 1, 1 );
+	transition: 0.35s transform, 0.5s opacity linear;
+}
+/* END FadeIn 3d */
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeInUp {
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInUpBack {
+	0% {
+		opacity: 0;
+		transform: translateY(32px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInDownShort {
+	0% {
+		opacity: 0.4;
+		transform: translateY(-2px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

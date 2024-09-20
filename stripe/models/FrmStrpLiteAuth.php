@@ -39,7 +39,7 @@ class FrmStrpLiteAuth {
 			return $html;
 		}
 
-		$atts    = array(
+		$atts = array(
 			'fields' => FrmFieldsHelper::get_form_fields( $form_id ),
 			'entry'  => $details['entry'],
 		);
@@ -57,7 +57,7 @@ class FrmStrpLiteAuth {
 		$intent_is_processing = 'processing' === $intent->status;
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
-			$filter = function( $message ) {
+			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
 				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
 				return $message;
@@ -71,7 +71,7 @@ class FrmStrpLiteAuth {
 		ob_end_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
-		if ( $intent_is_processing && isset( $filter ) ) {
+		if ( $intent_is_processing ) {
 			remove_filter( 'frm_content', $filter );
 		}
 
@@ -79,7 +79,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array|false
 	 */
 	private static function check_request_params( $form_id ) {
@@ -105,7 +105,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5
 	 *
 	 * @param string $html
-	 * @return int|false Matching form id or false if there is no match.
+	 * @return false|int Matching form id or false if there is no match.
 	 */
 	private static function check_html_for_form_id_match( $html ) {
 		foreach ( self::$form_ids as $form_id ) {
@@ -171,7 +171,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';
-		$pos = strpos( $form, $add_after );
+		$pos       = strpos( $form, $add_after );
 		if ( $pos !== false ) {
 			$form = substr_replace( $form, $add_after . $message, $pos, strlen( $add_after ) );
 		}
@@ -327,7 +327,7 @@ class FrmStrpLiteAuth {
 				continue;
 			}
 
-			$saved     = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
 			foreach ( $actions as $action ) {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
@@ -351,8 +351,8 @@ class FrmStrpLiteAuth {
 				}
 
 				FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'amount' => $amount ) );
-			}
-		}
+			}//end foreach
+		}//end foreach
 	}
 
 	/**
@@ -419,17 +419,23 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return array
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
-		if ( is_array( $details ) && ! self::intent_has_failed_status( $details['intent'] ) ) {
+		if ( is_array( $details ) ) {
+			$payment        = $details['payment'];
+			$intent         = $details['intent'];
+			$payment_failed = self::payment_failed( $payment, $intent );
+
 			// Exit early if the request params are set.
 			// This way an extra payment intent isn't created for Stripe Link.
-			return $intents;
+			if ( ! $payment_failed ) {
+				return $intents;
+			}
 		}
 
 		if ( ! FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' ) ) {
@@ -465,7 +471,7 @@ class FrmStrpLiteAuth {
 				'id'     => $intent->client_secret,
 				'action' => $action->ID,
 			);
-		}
+		}//end foreach
 
 		return $intents;
 	}
@@ -481,7 +487,8 @@ class FrmStrpLiteAuth {
 	private static function create_intent( $action ) {
 		$amount = $action->post_content['amount'];
 		if ( $amount == '000' ) {
-			$amount = 100; // Create the intent when the form loads.
+			// Create the intent when the form loads.
+			$amount = 100;
 		}
 
 		if ( 'recurring' === $action->post_content['type'] ) {
@@ -511,7 +518,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $payment_method_types
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function create_setup_intent( $payment_method_types ) {
 		$payment_info = array(
@@ -530,7 +537,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @param array      $actions
 	 * @return void
 	 */
@@ -541,7 +548,7 @@ class FrmStrpLiteAuth {
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {
-			$amount = self::get_amount_before_submit( compact( 'action', 'form' ) );
+			$amount                                = self::get_amount_before_submit( compact( 'action', 'form' ) );
 			$actions[ $k ]->post_content['amount'] = $amount;
 		}
 	}
@@ -588,6 +595,8 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The form and entry details.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 * }
@@ -613,7 +622,7 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
-	 * If the form should should a message, apend it to the success url.
+	 * If the form should should a message, append it to the success url.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
@@ -630,9 +639,9 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @param bool       $delete_meta
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_referer_url( $entry_id, $delete_meta = true ) {
 		$row = FrmDb::get_row(
@@ -680,5 +689,27 @@ class FrmStrpLiteAuth {
 	 */
 	private static function intent_has_failed_status( $intent ) {
 		return in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true );
+	}
+
+	/**
+	 * Check if a payment failed.
+	 *
+	 * @since 6.8
+	 *
+	 * @param object $payment
+	 * @param object $intent
+	 * @return bool
+	 */
+	public static function payment_failed( $payment, $intent ) {
+		if ( self::intent_has_failed_status( $intent ) ) {
+			return true;
+		}
+
+		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
+		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
+			return true;
+		}
+
+		return false;
 	}
 }

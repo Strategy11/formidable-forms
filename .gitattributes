@@ -10,15 +10,20 @@
 .gitignore export-ignore
 .jshintrc export-ignore
 .jshintignore export-ignore
-.travis.yml export-ignore
 .wordpress-org export-ignore
 .phpunit.result.cache export-ignore
+.php-cs-fixer.php export-ignore
+.php-cs-fixer.cache export-ignore
+.wp-env.json export-ignore
+cypress.config.js export-ignore
 /bin/ export-ignore
 changelog.txt export-ignore
 codesniffer.xml export-ignore
 composer.lock export-ignore
 composer.json export-ignore
+crowdin.yml export-ignore
 /js/src/ export-ignore
+/js/*.js.map export-ignore
 /js/jquery/jquery.editinplace.js export-ignore
 node_modules export-ignore
 package-lock.json export-ignore
@@ -32,3 +37,5 @@ readme.md export-ignore
 tests export-ignore
 webpack.config.js export-ignore
 /stripe/js/frmstrp.js export-ignore
+rector.php export-ignore
+_typos.toml export-ignore

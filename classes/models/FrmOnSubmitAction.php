@@ -16,13 +16,13 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'   => 'frm_icon_font frm_checkmark_icon',
-			'active'    => true,
-			'event'     => array( 'create' ),
-			'limit'     => 99,
-			'priority'  => 9,
-			'color'     => 'rgb(66, 193, 178)',
-			'keywords'  => __( 'redirect, success, confirmation, submit', 'formidable' ),
+			'classes'  => 'frm_icon_font frm_checkmark_icon',
+			'active'   => true,
+			'event'    => array( 'create' ),
+			'limit'    => 99,
+			'priority' => 9,
+			'color'    => 'rgb(66, 193, 178)',
+			'keywords' => __( 'redirect, success, confirmation, submit', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
@@ -61,8 +61,8 @@ class FrmOnSubmitAction extends FrmFormAction {
 	 * The newly calculated value of $instance should be returned.
 	 * If "false" is returned, the instance won't be saved/updated.
 	 *
-	 * @param array $new_instance New settings for this instance as input by the user via form()
-	 * @param array $old_instance Old settings for this instance
+	 * @param array $new_instance New settings for this instance as input by the user via form().
+	 * @param array $old_instance Old settings for this instance.
 	 *
 	 * @return array Settings to save or bool false to cancel saving
 	 */

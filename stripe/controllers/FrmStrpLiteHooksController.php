@@ -27,7 +27,7 @@ class FrmStrpLiteHooksController {
 		// This filter flags the Pro credit card field that Stripe is enabled.
 		add_filter(
 			'frm_pro_show_card_callback',
-			function() {
+			function () {
 				return 'FrmStrpLiteActionsController::show_card';
 			}
 		);
@@ -35,10 +35,10 @@ class FrmStrpLiteHooksController {
 		// This filter hides gateway fields from the entries list.
 		add_filter(
 			'frm_fields_in_entries_list_table',
-			function( $form_cols ) {
+			function ( $form_cols ) {
 				return array_filter(
 					$form_cols,
-					function( $form_col ) {
+					function ( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}
 				);
@@ -46,10 +46,11 @@ class FrmStrpLiteHooksController {
 		);
 
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
+		add_filter( 'frm_validate_credit_card_field_entry', 'FrmStrpLiteActionsController::remove_cc_validation', 20, 3 );
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
-		add_filter( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
+		add_action( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
 	}
 
 	/**
@@ -63,7 +64,7 @@ class FrmStrpLiteHooksController {
 
 		// Actions.
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
-		add_action( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
+		add_filter( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
 		add_action( 'admin_init', 'FrmStrpLiteAppController::maybe_redirect_to_stripe_settings' );
 		add_action( 'frm_update_settings', 'FrmStrpLiteSettingsController::process_form' );
 
@@ -92,7 +93,7 @@ class FrmStrpLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 		add_action( 'wp_ajax_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 
-		// Stripe Lite
+		// Stripe Lite.
 		add_action( 'wp_ajax_nopriv_frm_strp_lite_verify', 'FrmStrpLiteConnectHelper::verify' );
 	}
 }

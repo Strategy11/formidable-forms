@@ -8,17 +8,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $frm_settings      = FrmAppHelper::get_settings();
 $globally_disabled = 'none' === $frm_settings->load_style;
-$enabled           = '0' !== $form->options['custom_style'] && ! $globally_disabled;
+$enabled           = ( ! is_array( $form->options ) || 0 !== (int) $form->options['custom_style'] ) && ! $globally_disabled;
 $card_helper       = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
 $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
 $sidebar_params    = array(
 	'id'    => 'frm_style_sidebar',
-	'class' => 'frm-right-panel frm-p-6 frm_wrap', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	// Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	'class' => 'frm-right-panel frm-p-6 frm_wrap',
 );
 $toggle_input_html = array();
 if ( $globally_disabled ) {
-	$sidebar_params['class'] .= ' frm-styles-globally-disabled';
+	$sidebar_params['class']      .= ' frm-styles-globally-disabled';
 	$toggle_input_html['disabled'] = 'disabled';
 }
 ?>
@@ -26,7 +27,7 @@ if ( $globally_disabled ) {
 	<?php
 	$can_create_styles = class_exists( 'FrmProStylesPreviewHelper' );
 	$trigger_params    = array(
-		'id' => 'frm_new_style_trigger',
+		'id'   => 'frm_new_style_trigger',
 		'href' => '#',
 	);
 	if ( $can_create_styles ) {
@@ -38,14 +39,16 @@ if ( $globally_disabled ) {
 		$trigger_params['data-image']   = 'styles-upsell.svg';
 	}
 	?>
-	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
+	<?php
+	// This form isn't visible. It's just used for assigning the selected style id to the target form.
+	?>
 	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $enabled ? $active_style->ID : 0 ); ?>" />
 		<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div class="frm-mb-sm frm-flex-justify">
+	<div class="frm-mb-sm frm-flex-justify frm-style-component">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',
@@ -55,7 +58,7 @@ if ( $globally_disabled ) {
 				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
 				'show_labels' => true,
 				'echo'        => true,
-				'input_html' => $toggle_input_html,
+				'input_html'  => $toggle_input_html,
 			)
 		);
 		?>
@@ -81,8 +84,11 @@ if ( $globally_disabled ) {
 		<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
 	<?php } ?>
 
-	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
-	</div>
-	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $card_helper->get_template_info() ); ?>
+	<?php $style_templates = array_filter( $card_helper->get_template_info(), 'is_array' ); ?>
+	<?php if ( $style_templates ) { ?>
+		<div class="frm_form_settings">
+			<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
+		</div>
+		<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_templates ); ?>
+	<?php } ?>
 </div>

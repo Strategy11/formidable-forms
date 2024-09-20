@@ -15,11 +15,6 @@ class FrmFieldNumber extends FrmFieldType {
 	protected $type = 'number';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
 	 */
 	protected $array_allowed = false;
@@ -35,10 +30,7 @@ class FrmFieldNumber extends FrmFieldType {
 			'range'          => true,
 		);
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->use_html ) {
-			$settings['max'] = false;
-		}
+		$settings['max'] = false;
 
 		return $settings;
 	}
@@ -68,18 +60,17 @@ class FrmFieldNumber extends FrmFieldType {
 
 		$this->remove_commas_from_number( $args );
 
-		//validate the number format
+		// Validate the number format.
 		if ( ! is_numeric( $args['value'] ) && '' !== $args['value'] ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
 		// validate number settings
 		if ( $args['value'] != '' ) {
-			$frm_settings = FrmAppHelper::get_settings();
 			// only check if options are available in settings
 			$minnum = FrmField::get_option( $this->field, 'minnum' );
 			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $frm_settings->use_html && $maxnum !== '' && $minnum !== '' ) {
+			if ( $maxnum !== '' && $minnum !== '' ) {
 				$value = (float) $args['value'];
 				if ( $value < $minnum ) {
 					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
@@ -106,7 +97,8 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	private function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
-			return; // Don't need to check if value is invalid before.
+			// Don't need to check if value is invalid before.
+			return;
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );
@@ -134,7 +126,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param numeric $value The value.
 	 * @param numeric $step  The step.
-	 * @return int|array     Return `0` if valid. Otherwise, return an array contains two nearest values.
+	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
 	private function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.

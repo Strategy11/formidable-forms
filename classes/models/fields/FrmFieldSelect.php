@@ -63,7 +63,7 @@ class FrmFieldSelect extends FrmFieldType {
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 *
 	 * @return void
 	 */

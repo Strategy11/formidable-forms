@@ -91,7 +91,7 @@
 				tag(
 					'h2',
 					{
-						child: span( __( 'My Applications', 'formidable-pro' ) ),
+						child: span( __( 'My Applications', 'formidable' ) ),
 						className: 'frm-h2'
 					}
 				)
@@ -260,7 +260,7 @@
 	function createApplicationCard( data ) {
 		const isTemplate = ! data.termId;
 		const card = div({
-			className: 'frm-application-card',
+			className: 'frm-application-card frm-card-item',
 			children: [
 				getCardHeader(),
 				div({ className: 'frm-flex' })
@@ -285,11 +285,11 @@
 
 		function getCardHeader() {
 			const titleWrapper = tag(
-				'h4',
+				'h3',
 				{
 					children: [
 						svg({ href: '#frm_lock_icon' }),
-						document.createTextNode( data.name )
+						span({ className: 'frm-inner-text', text: data.name })
 					]
 				}
 			);
@@ -301,7 +301,7 @@
 			});
 
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();

@@ -56,6 +56,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</tr>
 								<?php } ?>
 
+								<?php if ( isset( $subscription->test ) ) { ?>
+								<tr valign="top">
+									<th scope="row"><?php esc_html_e( 'Mode', 'formidable' ); ?>:</th>
+									<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $subscription ) ); ?></td>
+								</tr>
+								<?php } ?>
+
 								<tr>
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
 									<td><?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $subscription ) ); ?></td>
@@ -78,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 									<td>
 
-									<?php foreach ( $subscription->meta_value as $k => $metas ) { ?>
+									<?php foreach ( $subscription->meta_value as $metas ) { ?>
 										<table class="widefat" style="border:none;">
 										<?php
 
@@ -98,7 +105,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</td>
 								</tr>
 									<?php
-								}
+								}//end if
 								?>
 							</tbody>
 						</table>

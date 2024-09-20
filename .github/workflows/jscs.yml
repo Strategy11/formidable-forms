@@ -21,3 +21,4 @@ jobs:
           npm install eslint
           wget https://develop.svn.wordpress.org/trunk/.jshintrc
           ./node_modules/.bin/eslint ./js/formidable*
+          ./node_modules/.bin/eslint ./tests/cypress/e2e/*

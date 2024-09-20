@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesPreviewHelper {
 
 	/**
-	 * @param int $form_id
+	 * @var int
 	 */
 	private $form_id;
 
@@ -32,11 +32,11 @@ class FrmStylesPreviewHelper {
 	private $default_label_position_field_ids;
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
-		$this->form_id = (int) $form_id;
+		$this->form_id                          = (int) $form_id;
 		$this->default_label_position_field_ids = array();
 	}
 
@@ -48,8 +48,11 @@ class FrmStylesPreviewHelper {
 	 * @return void
 	 */
 	public function adjust_form_for_preview() {
-		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
-		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
+		// Don't bother including the antispam token in the preview as the form isn't submitted.
+		add_filter( 'frm_run_antispam', '__return_false', 99 );
+
+		// We don't need the honeypot in the preview so leave it out.
+		add_filter( 'frm_run_honeypot', '__return_false' );
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 		$this->add_a_div_class_for_default_label_positions();
@@ -68,10 +71,10 @@ class FrmStylesPreviewHelper {
 			'frm_html_label_position',
 			/**
 			 * @param string $position
-			 * @param object|array $field
+			 * @param array|object $field
 			 * @return string
 			 */
-			function( $position, $field ) {
+			function ( $position, $field ) {
 				if ( is_array( $field ) ) {
 					$this->default_label_position_field_ids[] = (int) $field['id'];
 				}
@@ -85,10 +88,10 @@ class FrmStylesPreviewHelper {
 			'frm_field_div_classes',
 			/**
 			 * @param string       $classes
-			 * @param object|array $field
+			 * @param array|object $field
 			 * @return string
 			 */
-			function( $classes, $field ) {
+			function ( $classes, $field ) {
 				if ( is_array( $field ) && in_array( (int) $field['id'], $this->default_label_position_field_ids, true ) ) {
 					$classes .= ' frm-default-label-position';
 				}
@@ -115,7 +118,7 @@ class FrmStylesPreviewHelper {
 			 * @param string $target_field_type
 			 * @return bool
 			 */
-			function( $show, $field_type ) {
+			function ( $show, $field_type ) {
 				if ( 'captcha' === $field_type ) {
 					$show = false;
 				}
@@ -138,8 +141,15 @@ class FrmStylesPreviewHelper {
 	private function disable_javascript_validation() {
 		add_filter(
 			'frm_form_object',
-			function( $form ) {
-				$form->options['js_validate'] = false;
+			/**
+			 * @param stdClass|null $form
+			 * @param int           $form_id
+			 * @return stdClass|null
+			 */
+			function ( $form ) {
+				if ( is_object( $form ) && is_array( $form->options ) ) {
+					$form->options['js_validate'] = false;
+				}
 				return $form;
 			}
 		);
@@ -148,7 +158,6 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
 	 * @return string
 	 */
 	public function get_html_for_form_preview() {
@@ -187,7 +196,7 @@ class FrmStylesPreviewHelper {
 
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( 'none' === $frm_settings->load_style ) {
-			$notes[] = function() {
+			$notes[] = function () {
 				printf(
 					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),
@@ -216,33 +225,16 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return string
 	 */
 	private function get_disabled_features_note() {
-		$disabled_features = array();
-
-		if ( $this->form_includes_captcha ) {
-			$disabled_features[] = __( 'Captcha fields are hidden.', 'formidable' );
-		}
-
-		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {
-			$disabled_pro_features = FrmProStylesController::get_disabled_javascript_features();
-			if ( is_string( $disabled_pro_features ) ) {
-				$disabled_features[] = $disabled_pro_features;
-			}
-		}
-
-		if ( $disabled_features ) {
-			return __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) . ' ' . implode( ' ', $disabled_features );
-		}
-
-		return false;
+		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end.', 'formidable' );
 	}
 
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private function get_fallback_form_note() {
 		if ( ! FrmAppHelper::simple_get( 'form', 'absint' ) ) {
@@ -256,7 +248,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
 	 * @param string           $view Either 'list' or 'edit'.
 	 * @return array<string>
@@ -329,6 +321,52 @@ class FrmStylesPreviewHelper {
 
 		// Remove the edit dependency from wp-admin so it still loads, just without edit.css.
 		self::remove_wp_admin_dependency( $styles, 'edit' );
+	}
+
+	/**
+	 * Provides few fixes for style preview.
+	 * Fix the "Width" from Fields Settings to get reflected on each style preview ajax update.
+	 * Fix the Radio & Checkbox "Single Row" or "Multiple Row" to get reflected in style preview ajax update.
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings The style options.
+	 * @param bool  $is_preview
+	 *
+	 * @return void
+	 */
+	public static function get_additional_preview_style( $settings, $is_preview = false ) {
+		if ( ! $is_preview ) {
+			return;
+		}
+		$radio_display_type = 'inline' === $settings['radio_align'] ? 'inline-block' : 'block';
+		$check_display_type = 'inline' === $settings['check_align'] ? 'inline-block' : 'block';
+
+		$style = '#frm_style_preview .with_frm_style input[type=text],
+				#frm_style_preview .with_frm_style input[type=password],
+				#frm_style_preview .with_frm_style input[type=email],
+				#frm_style_preview .with_frm_style input[type=number],
+				#frm_style_preview .with_frm_style input[type=url],
+				#frm_style_preview .with_frm_style input[type=tel],
+				#frm_style_preview .with_frm_style input[type=phone],
+				#frm_style_preview .with_frm_style input[type=search],
+				#frm_style_preview .with_frm_style textarea,
+				#frm_style_preview .frm_form_fields_style,
+				#frm_style_preview .with_frm_style .frm_scroll_box .frm_opt_container,
+				#frm_style_preview .frm_form_fields_active_style,
+				#frm_style_preview .frm_form_fields_error_style,
+				#frm_style_preview .with_frm_style .frm-card-element.StripeElement,
+				#frm_style_preview .with_frm_style .frm_slimselect.ss-main {
+					width: var(--field-width);
+				}
+				#frm_style_preview .with_frm_style .frm_radio {
+					display:' . $radio_display_type . ';
+				}
+				#frm_style_preview .with_frm_style .frm_checkbox {
+					display:' . $check_display_type . ';
+				}';
+
+		echo esc_html( $style );
 	}
 
 	/**

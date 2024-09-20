@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="divider_section_only">
 <?php } ?>
 
-	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
+<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
 
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
 	<div class="frm-field-action-icons frm-show-hover">
@@ -35,21 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="dropdown">
 			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" aria-expanded="false">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
+				<span class="screen-reader-text"><?php esc_html_e( 'Toggle More Options Dropdown', 'formidable' ); ?></span>
 			</a>
 			<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu"></ul>
 		</div>
 
 	</div>
 
-	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
-			<?php echo esc_html( $field['required_indicator'] ); ?>
-		</span>
-		<span class="frm-sub-label frm-collapsed-label">
-			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
-		</span>
-	</label>
+	<?php $field_obj->show_label_on_form_builder(); ?>
 
 	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>
@@ -93,7 +86,7 @@ if ( $display['conf_field'] ) {
 	</div>
 	<div class="clear"></div>
 	<?php
-}
+}//end if
 
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
 

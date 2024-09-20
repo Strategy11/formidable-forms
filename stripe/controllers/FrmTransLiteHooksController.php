@@ -16,7 +16,7 @@ class FrmTransLiteHooksController {
 
 		// Actions.
 		add_action( 'frm_payment_cron', 'FrmTransLiteAppController::run_payment_cron' );
-		add_action( 'frm_registered_form_actions', 'FrmTransLiteActionsController::register_actions' );
+		add_filter( 'frm_registered_form_actions', 'FrmTransLiteActionsController::register_actions' );
 		add_action( 'frm_add_form_option_section', 'FrmTransLiteActionsController::actions_js' );
 		add_action( 'frm_trigger_payment_action', 'FrmTransLiteActionsController::trigger_action', 10, 3 );
 
@@ -43,8 +43,9 @@ class FrmTransLiteHooksController {
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
+		add_action( 'frm_after_install', 'FrmTransLiteAppController::on_after_install' );
 
-		// Filters
+		// Filters.
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
 
 		if ( defined( 'DOING_AJAX' ) ) {

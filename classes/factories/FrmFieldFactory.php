@@ -13,7 +13,7 @@ class FrmFieldFactory {
 	 *
 	 * @since 2.03.05
 	 *
-	 * @param int $field_id
+	 * @param int   $field_id
 	 * @param array $args
 	 *
 	 * @return FrmFieldValueSelector
@@ -35,7 +35,8 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
+	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
 		if ( is_object( $field ) ) {
@@ -50,9 +51,9 @@ class FrmFieldFactory {
 	}
 
 	/**
-	 * @param int|string|object $field
+	 * @param int|object|string $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
@@ -65,10 +66,10 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param string $field_type
-	 * @param int|array|object $field
+	 * @param string           $field_type
+	 * @param array|int|object $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
@@ -90,22 +91,24 @@ class FrmFieldFactory {
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
-			'text'        => 'FrmFieldText',
-			'textarea'    => 'FrmFieldTextarea',
-			'select'      => 'FrmFieldSelect',
-			'radio'       => 'FrmFieldRadio',
-			'checkbox'    => 'FrmFieldCheckbox',
-			'number'      => 'FrmFieldNumber',
-			'phone'       => 'FrmFieldPhone',
-			'url'         => 'FrmFieldUrl',
-			'website'     => 'FrmFieldUrl',
-			'email'       => 'FrmFieldEmail',
-			'user_id'     => 'FrmFieldUserID',
-			'html'        => 'FrmFieldHTML',
-			'hidden'      => 'FrmFieldHidden',
-			'captcha'     => 'FrmFieldCaptcha',
-			'name'        => 'FrmFieldName',
-			'credit_card' => 'FrmFieldCreditCard',
+			'text'                      => 'FrmFieldText',
+			'textarea'                  => 'FrmFieldTextarea',
+			'select'                    => 'FrmFieldSelect',
+			'radio'                     => 'FrmFieldRadio',
+			'checkbox'                  => 'FrmFieldCheckbox',
+			'number'                    => 'FrmFieldNumber',
+			'phone'                     => 'FrmFieldPhone',
+			'url'                       => 'FrmFieldUrl',
+			'website'                   => 'FrmFieldUrl',
+			'email'                     => 'FrmFieldEmail',
+			'user_id'                   => 'FrmFieldUserID',
+			'html'                      => 'FrmFieldHTML',
+			'hidden'                    => 'FrmFieldHidden',
+			'captcha'                   => 'FrmFieldCaptcha',
+			'name'                      => 'FrmFieldName',
+			'credit_card'               => 'FrmFieldCreditCard',
+			// Submit button field.
+			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
@@ -126,6 +129,7 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $type
 	 * @param string $property
 	 */
 	public static function field_has_property( $type, $property ) {

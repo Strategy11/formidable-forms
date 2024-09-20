@@ -6,10 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
+$is_loaded_via_ajax = isset( $is_loaded_via_ajax ) ? $is_loaded_via_ajax : false;
+FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
+
 $important = empty( $important_style ) ? '' : ' !important';
 
-$minus_icons = FrmStylesHelper::minus_icons();
-$arrow_icons = FrmStylesHelper::arrow_icons();
+$minus_icons   = FrmStylesHelper::minus_icons();
+$arrow_icons   = FrmStylesHelper::arrow_icons();
+$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .<?php echo esc_html( $style_class ); ?>{
@@ -33,42 +38,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 }
 <?php } ?>
 
-<?php if ( ! empty( $label_color ) ) { ?>
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font{
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-}
-<?php } ?>
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['-'] : $minus_icons[1]['-'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['+'] : $minus_icons[1]['+'] ); ?>";
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before,
-.<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	<?php if ( ! empty( $submit_text_color ) ) { ?>
-		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
-	<?php } ?>
-	vertical-align:middle;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['-'] : $arrow_icons[1]['-'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_trigger .frm_icon_font.frm_arrow_icon:before{
-	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['+'] : $arrow_icons[1]['+'] ); ?>";
-	<?php if ( ! empty( $section_color ) ) { ?>
-		color:<?php echo esc_html( $section_color . $important ); ?>;
-	<?php } ?>
-}
-
 <?php if ( ! empty( $field_margin ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field{
 	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
@@ -87,6 +56,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> .frm_pro_max_limit_desc{
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
+	<?php } else { ?>
+		margin-top: 6px;
 	<?php } ?>
 	padding:0;
 	<?php if ( ! empty( $font ) ) { ?>
@@ -188,15 +159,10 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 .<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 	opacity: 1;
 }
 .<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
 <?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
-.<?php echo esc_html( $style_class ); ?> input:-moz-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea:-moz-placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
@@ -204,13 +170,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
 .<?php echo esc_html( $style_class ); ?> textarea.frm_default,
 .<?php echo esc_html( $style_class ); ?> select.frm_default,
-.<?php echo esc_html( $style_class ); ?> .placeholder,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-multi .chosen-choices li.search-field .default,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .placeholder {
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):focus,
+.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
 .<?php echo esc_html( $style_class ); ?> textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
@@ -221,9 +189,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=tel],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
-.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-single.chosen-container-active .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement {
 	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
 	color: var(--text-color);
@@ -231,7 +201,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
-	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
+	box-shadow:0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
 }
 
@@ -259,23 +229,19 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	echo esc_html( $important );
 	?>
 	;
+	<?php if ( '' !== $submit_border_width ) : ?>
 	border-width:<?php echo esc_html( $submit_border_width ); ?>;
+	<?php endif; ?>
 	border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
 	border-style:solid;
 	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
 	cursor:pointer;
 	font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	border-radius:<?php echo esc_html( $submit_border_radius . $important ); ?>;
 	text-shadow:none;
 	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
-	-moz-box-sizing:border-box;
 	box-sizing:border-box;
-	-ms-box-sizing:border-box;
 	<?php if ( ! empty( $submit_shadow_color ) ) { ?>
-	-moz-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
-	-webkit-box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	box-shadow:0 1px 1px <?php echo esc_html( $submit_shadow_color ); ?>;
 	<?php } ?>
 	margin:<?php echo esc_html( $submit_margin ); ?>;
@@ -330,6 +296,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ); ?>;
 	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
+	border-color: <?php echo esc_html( $submit_bg_color . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
@@ -344,8 +311,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 		<?php } ?>
 }
 		<?php
-	}
-}
+	}//end if
+}//end if
 ?>
 
 .<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,
@@ -394,13 +361,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-multi .chosen-choices,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-single .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid{
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid {
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
-	border-width:<?php echo esc_html( $border_width_error . $important ); ?>;
+	border-width:var(--border-width-error) <?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $border_style_error . $important ); ?>;
 }
 
@@ -413,10 +382,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_blank_field label,
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
-	color:<?php echo esc_html( $border_color_error . $important ); ?>;
+	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{

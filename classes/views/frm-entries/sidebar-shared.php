@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Entry Details', 'formidable' ); ?>
 	</h3>
 	<div class="inside">
-		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
+		<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php'; ?>
 
 		<?php if ( $entry->post_id ) { ?>
 			<div class="misc-pub-section frm_no_print">
@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="misc-pub-section">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_keyalt_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_key_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
@@ -129,7 +129,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer' ) ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ) ) ) {
 				continue;
 			}
 			?>

@@ -9,23 +9,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmInboxController {
 
 	/**
-	 * @since 4.05
+	 * Get the HTML for the inbox notice.
 	 *
-	 * @return void
-	 */
-	public static function menu() {
-		$unread = self::get_notice_count();
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Inbox', 'formidable' ), __( 'Inbox', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-inbox', 'FrmInboxController::inbox' );
-	}
-
-	/**
 	 * @since 4.05
+	 * @since 6.8.4 The $filtered parameter was added.
+	 *
+	 * @param bool $filtered Set this to false to avoid the frm_inbox_badge filter.
+	 * @return string
 	 */
-	private static function get_notice_count() {
+	public static function get_notice_count( $filtered = true ) {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
 		$inbox = new FrmInbox();
-		return $inbox->unread_html();
+		return $inbox->unread_html( $filtered );
 	}
 
 	/**
@@ -44,21 +40,26 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since 4.05
+	 * @since 6.8
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public static function inbox() {
-		FrmAppHelper::include_svg();
+	public static function get_inbox_messages() {
 		self::add_tracking_request();
 		self::add_free_template_message();
 
-		$inbox    = new FrmInbox();
-		$messages = $inbox->get_messages( 'filter' );
-		$messages = array_reverse( $messages );
-		$user     = wp_get_current_user();
+		$inbox              = new FrmInbox();
+		$unread_messages    = $inbox->get_messages();
+		$dismissed_messages = $unread_messages;
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/inbox/list.php' );
+		$inbox->filter_messages( $unread_messages, 'filter' );
+		$inbox->filter_messages( $dismissed_messages, 'dismissed' );
+
+		return array(
+			'unread'    => array_reverse( $unread_messages ),
+			'dismissed' => array_reverse( $dismissed_messages ),
+			'user'      => wp_get_current_user(),
+		);
 	}
 
 	/**
@@ -125,17 +126,37 @@ class FrmInboxController {
 			return;
 		}
 
-		$link = admin_url( 'admin.php?page=formidable&triggerNewFormModal=1&free-templates=1' );
+		$link = admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&free-templates=1' );
 
 		$message = new FrmInbox();
 		$message->add_message(
 			array(
 				'key'     => 'free_templates',
-				'message' => 'Add your email address to get a code for 10+ free form templates.',
-				'subject' => 'Get 10+ Free Form Templates',
+				'message' => 'Add your email address to get a code for 20+ free form templates.',
+				'subject' => 'Get 20+ Free Form Templates',
 				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'type'    => 'feedback',
 			)
 		);
+	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function menu() {
+		_deprecated_function( __METHOD__, '6.8' );
+	}
+
+	/**
+	 * @since 4.05
+	 * @deprecated 6.8
+	 *
+	 * @return void
+	 */
+	public static function inbox() {
+		_deprecated_function( __METHOD__, '6.8' );
 	}
 }

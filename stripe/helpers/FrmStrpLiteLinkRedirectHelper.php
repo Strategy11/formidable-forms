@@ -37,7 +37,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Set the entry ID to pull referer data from.
 	 * This is separate from the constructor as the entry ID isn't known for some error cases.
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
 	 * @return void
 	 */
 	public function set_entry_id( $entry_id ) {
@@ -46,9 +46,10 @@ class FrmStrpLiteLinkRedirectHelper {
 
 	/**
 	 * @param string $error_code
+	 * @param string $charge_id
 	 * @return void
 	 */
-	public function handle_error( $error_code ) {
+	public function handle_error( $error_code, $charge_id = '' ) {
 		if ( ! empty( $this->entry_id ) ) {
 			$referer = FrmStrpLiteAuth::get_referer_url( $this->entry_id );
 		}
@@ -57,8 +58,16 @@ class FrmStrpLiteLinkRedirectHelper {
 			$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
 
+		$args = array(
+			'frm_link_error' => $error_code,
+		);
+
+		if ( $charge_id ) {
+			$args['charge'] = $charge_id;
+		}
+
 		$this->add_intent_info_and_redirect(
-			add_query_arg( array( 'frm_link_error' => $error_code ), $referer )
+			add_query_arg( $args, $referer )
 		);
 	}
 
@@ -109,8 +118,8 @@ class FrmStrpLiteLinkRedirectHelper {
 			return false;
 		}
 
-		$home_url      = home_url();
-		$parsed        = parse_url( $home_url );
+		$home_url = home_url();
+		$parsed   = parse_url( $home_url );
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
@@ -121,8 +130,8 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Try to get the referer URL from the entry meta.
 	 * If it is found, it will also be deleted as it is only required once.
 	 *
-	 * @param string|int $entry_id
-	 * @return string|false
+	 * @param int|string $entry_id
+	 * @return false|string
 	 */
 	private function get_referer_url( $entry_id ) {
 		$row = FrmDb::get_row(

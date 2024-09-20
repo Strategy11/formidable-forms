@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-	errorLevel="7"
+	errorLevel="2"
+	findUnusedCode="false"
+	findUnusedBaselineEntry="true"
 	resolveFromConfigFile="true"
+	findUnusedIssueHandlerSuppression="false"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="https://getpsalm.org/schema/config"
 	xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -33,7 +36,7 @@
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
-				<directory name="classes" />
+				<file name="classes/controllers/FrmSMTPController.php" />
 			</errorLevel>
 		</UndefinedDocblockClass>
 		<UndefinedFunction>
@@ -44,21 +47,6 @@
 				<referencedFunction name="__autoload" />
 			</errorLevel>
 		</UndefinedFunction>
-		<MissingFile>
-			<errorLevel type="suppress">
-				<file name="formidable.php" />
-			</errorLevel>
-		</MissingFile>
-		<InvalidParamDefault>
-			<errorLevel type="suppress">
-				<directory name="deprecated" />
-			</errorLevel>
-		</InvalidParamDefault>
-		<MethodSignatureMustProvideReturnType>
-			<errorLevel type="suppress">
-				<file name="classes/widgets/FrmShowForm.php" />
-			</errorLevel>
-		</MethodSignatureMustProvideReturnType>
 		<!-- Add exceptions for classes/views files. -->
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
@@ -66,30 +54,15 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</UndefinedGlobalVariable>
-		<UndefinedAttributeClass>
-			<errorLevel type="suppress">
-				<referencedClass name="AllowDynamicProperties"/>
-			</errorLevel>
-		</UndefinedAttributeClass>
 		<UndefinedVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
 			</errorLevel>
 		</UndefinedVariable>
-		<NonStaticSelfCall>
-			<errorLevel type="suppress">
-				<directory name="classes/views" />
-			</errorLevel>
-		</NonStaticSelfCall>
-		<NullReference>
-			<errorLevel type="suppress">
-				<directory name="classes/views" />
-			</errorLevel>
-		</NullReference>
 		<InvalidScope>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
-				<directory name="stripe" />
+				<directory name="stripe/views" />
 			</errorLevel>
 		</InvalidScope>
 		<InaccessibleMethod>
@@ -105,12 +78,383 @@
 		<ParamNameMismatch>
 			<errorLevel type="suppress">
 				<file name="classes/views/frm-form-actions/email_action.php" />
+				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</ParamNameMismatch>
-		<UndefinedAttributeClass>
+		<MissingParamType>
 			<errorLevel type="suppress">
-				<referencedClass name="AllowDynamicProperties" />
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
 			</errorLevel>
-		</UndefinedAttributeClass>
+		</MissingParamType>
+		<PropertyNotSetInConstructor>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PropertyNotSetInConstructor>
+		<RiskyTruthyFalsyComparison>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RiskyTruthyFalsyComparison>
+		<MissingReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</MissingReturnType>
+		<InvalidArgument>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidArgument>
+		<PossiblyUndefinedVariable>
+			<errorLevel type="suppress">
+				<file name="stripe/views/action-settings/payments-options.php" />
+				<file name="classes/controllers/FrmApplicationsController.php" />
+				<file name="classes/controllers/FrmFieldsController.php" />
+				<file name="classes/controllers/FrmStylesController.php" />
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
+			</errorLevel>
+		</PossiblyUndefinedVariable>
+		<MissingClosureParamType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MissingClosureParamType>
+		<NullableReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</NullableReturnStatement>
+		<TypeDoesNotContainType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</TypeDoesNotContainType>
+		<InvalidReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidReturnStatement>
+		<InvalidArrayOffset>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidArrayOffset>
+		<PossiblyNullPropertyAssignment>
+			<errorLevel type="suppress">
+				<file name="stripe/models/FrmStrpLiteSettings.php" />
+			</errorLevel>
+		</PossiblyNullPropertyAssignment>
+		<MissingPropertyType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</MissingPropertyType>
+		<TooManyArguments>
+			<errorLevel type="suppress">
+				<referencedFunction name="apply_filters" />
+			</errorLevel>
+		</TooManyArguments>
+		<PossiblyNullPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyNullPropertyFetch>
+		<InvalidScalarArgument>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/controllers/FrmAddonsController.php" />
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmField.php" />
+				<file name="classes/models/FrmMigrate.php" />
+				<file name="classes/models/FrmStyle.php" />
+				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
+			</errorLevel>
+		</InvalidScalarArgument>
+		<PossiblyInvalidIterator>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFieldsController.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="classes/models/FrmMigrate.php" />
+				<file name="classes/models/fields/FrmFieldType.php" />
+				<file name="stripe/models/FrmStrpLiteAuth.php" />
+				<file name="classes/models/FrmField.php" />
+			</errorLevel>
+		</PossiblyInvalidIterator>
+		<ArgumentTypeCoercion>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</ArgumentTypeCoercion>
+		<PossiblyUndefinedArrayOffset>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyUndefinedArrayOffset>
+		<InvalidOperand>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidOperand>
+		<PossiblyInvalidPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidPropertyFetch>
+		<FalsableReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</FalsableReturnStatement>
+		<DocblockTypeContradiction>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</DocblockTypeContradiction>
+		<RedundantConditionGivenDocblockType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RedundantConditionGivenDocblockType>
+		<InvalidReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidReturnType>
+		<LessSpecificReturnStatement>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</LessSpecificReturnStatement>
+		<PossiblyInvalidPropertyAssignmentValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidPropertyAssignmentValue>
+		<ReferenceConstraintViolation>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</ReferenceConstraintViolation>
+		<InvalidPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</InvalidPropertyFetch>
+		<InvalidStringClass>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidStringClass>
+		<RedundantCondition>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</RedundantCondition>
+		<MoreSpecificImplementedParamType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MoreSpecificImplementedParamType>
+		<MissingClosureReturnType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MissingClosureReturnType>
+		<PossiblyInvalidArrayAssignment>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmEmailStats.php" />
+				<file name="classes/models/fields/FrmFieldType.php" />
+				<file name="classes/controllers/FrmFormsController.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
+			</errorLevel>
+		</PossiblyInvalidArrayAssignment>
+		<PossiblyInvalidArrayAccess>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</PossiblyInvalidArrayAccess>
+		<UndefinedPropertyFetch>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UndefinedPropertyFetch>
+		<RiskyCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</RiskyCast>
+		<PossiblyInvalidPropertyAssignment>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmFormAction.php" />
+			</errorLevel>
+		</PossiblyInvalidPropertyAssignment>
+		<PossiblyInvalidArgument>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+			</errorLevel>
+		</PossiblyInvalidArgument>
+		<InvalidPropertyAssignmentValue>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidPropertyAssignmentValue>
+		<RedundantCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</RedundantCast>
+		<InvalidCast>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</InvalidCast>
+		<PropertyTypeCoercion>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmEmail.php" />
+				<file name="classes/models/FrmEntryFormatter.php" />
+				<file name="classes/models/FrmEntryValues.php" />
+				<file name="classes/models/FrmInstallerSkin.php" />
+			</errorLevel>
+		</PropertyTypeCoercion>
+		<DirectConstructorCall>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmFormAction.php" />
+			</errorLevel>
+		</DirectConstructorCall>
+		<NoValue>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmEntryValidate.php" />
+			</errorLevel>
+		</NoValue>
+		<UnsafeInstantiation>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmAddon.php" />
+			</errorLevel>
+		</UnsafeInstantiation>
+		<InvalidArrayAccess>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmStylesHelper.php" />
+				<file name="classes/helpers/FrmStylesHelper.php" />
+			</errorLevel>
+		</InvalidArrayAccess>
+		<PossiblyFalseReference>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/models/FrmAddon.php" />
+			</errorLevel>
+		</PossiblyFalseReference>
+		<PossiblyNullReference>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmEntryFormatter.php" />
+				<file name="classes/controllers/FrmSMTPController.php" />
+				<file name="classes/models/FrmEntryShortcodeFormatter.php" />
+				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</PossiblyNullReference>
+		<DeprecatedMethod>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmAppController.php" />
+			</errorLevel>
+		</DeprecatedMethod>
+		<DeprecatedFunction>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+				<file name="classes/models/FrmEntryValidate.php" />
+			</errorLevel>
+		</DeprecatedFunction>
+		<UndefinedThisPropertyAssignment>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</UndefinedThisPropertyAssignment>
+		<UnresolvableInclude>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<file name="formidable.php" />
+			</errorLevel>
+		</UnresolvableInclude>
+		<PossiblyFalseIterator>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+			</errorLevel>
+		</PossiblyFalseIterator>
+		<UndefinedMethod>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmFormTemplateApi.php" />
+			</errorLevel>
+		</UndefinedMethod>
+		<PossiblyInvalidMethodCall>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmFormAction.php" />
+			</errorLevel>
+		</PossiblyInvalidMethodCall>
+		<UndefinedMethod>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/models/FrmFormTemplateApi.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</UndefinedMethod>
+		<InvalidMethodCall>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</InvalidMethodCall>
 	</issueHandlers>
 </psalm>

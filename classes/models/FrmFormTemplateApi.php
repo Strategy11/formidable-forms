@@ -5,16 +5,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
-	protected static $code_option_name  = 'frm_free_license_code';
+	protected static $code_option_name = 'frm_free_license_code';
 
 	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
 
 	protected static $free_license;
 
 	/**
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 30;
+
+	/**
+	 * @var string
+	 */
+	protected $cache_timeout = '+12 hours';
 
 	/**
 	 * @since 3.06
@@ -57,7 +62,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	protected function skip_categories() {
 		return array();
@@ -93,7 +98,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the code from the email sent for the API
+	 * @param string $code the code from the email sent for the API.
 	 *
 	 * @return void
 	 */
@@ -137,7 +142,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the base64 encoded code
+	 * @param string $code The base64 encoded code.
 	 *
 	 * @return void
 	 */
@@ -173,7 +178,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 			}
 
 			$data['url'] = $data['urlByKey'][ $key ];
-		}
+		}//end if
 
 		wp_send_json_success( $data );
 	}

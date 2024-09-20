@@ -10,14 +10,82 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 		if ( ! $views_installed ) {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
+			self::maybe_redirect_to_views_upsell();
+		} else {
+			self::maybe_redirect_to_views_index();
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			self::load_manage_entries_hooks();
 		}
+	}
+
+	/**
+	 * This function is called when views is installed.
+	 * The Views add-on uses a different URL for the Views tab than the upsell page.
+	 * If the user is on the upsell page, instead of showing a permission error on reload,
+	 * redirect to the views index page.
+	 *
+	 * @since 6.14.1
+	 *
+	 * @return void
+	 */
+	private static function maybe_redirect_to_views_index() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-views' ) ) {
+			return;
+		}
+
+		$query_args = array(
+			'post_type' => 'frm_display',
+		);
+		$query_args = self::add_url_params_to_views_redirect_query_args( $query_args );
+
+		wp_safe_redirect( add_query_arg( $query_args, admin_url( 'edit.php' ) ) );
+		die();
+	}
+
+	/**
+	 * This function is called when views is inactive.
+	 * A user may deactivate views but then try to reload the views index.
+	 * Instead of showing a permission error, redirect to the views upsell page.
+	 *
+	 * @since 6.14.1
+	 *
+	 * @return void
+	 */
+	private static function maybe_redirect_to_views_upsell() {
+		global $pagenow;
+		if ( 'edit.php' !== $pagenow || 'frm_display' !== FrmAppHelper::simple_get( 'post_type' ) ) {
+			return;
+		}
+
+		$query_args = array(
+			'page' => 'formidable-views',
+		);
+		$query_args = self::add_url_params_to_views_redirect_query_args( $query_args );
+
+		wp_safe_redirect( add_query_arg( $query_args, admin_url( 'admin.php' ) ) );
+		die();
+	}
+
+	/**
+	 * @since 6.14.1
+	 *
+	 * @param array $query_args
+	 * @return array
+	 */
+	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
+		$query_args['show_nav'] = FrmAppHelper::simple_get( 'show_nav', 'absint', 0 );
+
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( $form_id ) {
+			$query_args['form'] = $form_id;
+		}
+
+		return $query_args;
 	}
 
 	/**
@@ -36,7 +104,9 @@ class FrmEntriesController {
 		}
 	}
 
-	/* Display in Back End */
+	/**
+	 * Display in Back End.
+	 */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
@@ -126,7 +196,7 @@ class FrmEntriesController {
 				continue;
 			}
 
-			$has_child_fields = $form_col->type == 'form' && isset( $form_col->field_options['form_select'] ) && ! empty( $form_col->field_options['form_select'] );
+			$has_child_fields = $form_col->type === 'form' && ! empty( $form_col->field_options['form_select'] );
 			if ( $has_child_fields ) {
 				self::add_subform_cols( $form_col, $form_id, $columns );
 			} else {
@@ -164,7 +234,7 @@ class FrmEntriesController {
 		}
 
 		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
-		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] == 'post_status';
+		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
 		if ( $has_separate_value && ! $is_post_status ) {
 			$columns[ $form_id . '_frmsep_' . $col_id ] = FrmAppHelper::truncate( $field->name, 35 );
 		}
@@ -189,8 +259,8 @@ class FrmEntriesController {
 		}
 
 		global $frm_vars;
-		//add a check so we don't create a loop
-		$frm_vars['prev_hidden_cols'] = ( isset( $frm_vars['prev_hidden_cols'] ) && $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
+		// Add a check so we don't create a loop.
+		$frm_vars['prev_hidden_cols'] = ! empty( $frm_vars['prev_hidden_cols'] ) ? false : $prev_value;
 
 		return $check;
 	}
@@ -206,7 +276,8 @@ class FrmEntriesController {
 
 		global $frm_vars;
 		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
-			return; // Don't continue if there's no previous value.
+			// Don't continue if there's no previous value.
+			return;
 		}
 
 		foreach ( $meta_value as $mk => $mv ) {
@@ -266,7 +337,7 @@ class FrmEntriesController {
 	}
 
 	public static function save_per_page( $save, $option, $value ) {
-		if ( $option == 'formidable_page_formidable_entries_per_page' ) {
+		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
 		}
 
@@ -285,6 +356,12 @@ class FrmEntriesController {
 			$form_id . '_item_key'   => 'item_key',
 			$form_id . '_is_draft'   => 'is_draft',
 		);
+
+		if ( ! $form_id ) {
+			$columns[ $form_id . '_user_id' ] = 'user_id';
+			$columns[ $form_id . '_name' ]    = 'name';
+			$columns[ $form_id . '_form_id' ] = 'form_id';
+		}
 
 		foreach ( $fields as $field ) {
 			if ( self::field_supports_sorting( $field ) ) {
@@ -352,7 +429,7 @@ class FrmEntriesController {
 			if ( ! empty( $r ) ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
-				if ( (int) $form_prefix == (int) $form_id ) {
+				if ( (int) $form_prefix === (int) $form_id ) {
 					$hidden[] = $r;
 				}
 
@@ -386,7 +463,7 @@ class FrmEntriesController {
 
 			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
-				$i--;
+				--$i;
 			}
 
 			unset( $col_key, $col );
@@ -433,16 +510,18 @@ class FrmEntriesController {
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? ( $form->options['trash_time'] ) : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
 
 			/* translators: %1$s: Time string */
-			$errors['trash']  = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 		}
 	}
 
-	/* Back End CRUD */
+	/**
+	 * Back End CRUD.
+	 */
 	public static function show( $id = 0 ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
 
@@ -456,10 +535,13 @@ class FrmEntriesController {
 
 		$entry = FrmEntry::getOne( $id, true );
 		if ( ! $entry ) {
-			echo '<div id="form_show_entry_page" class="wrap">' .
-				esc_html__( 'You are trying to view an entry that does not exist.', 'formidable' ) .
-				'</div>';
-
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => __( 'You can\'t view the entry', 'formidable' ),
+					'body'       => __( 'You are trying to view an entry that does not exist', 'formidable' ),
+					'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+				)
+			);
 			return;
 		}
 
@@ -471,7 +553,7 @@ class FrmEntriesController {
 		$fields = FrmField::get_all_for_form( $entry->form_id, '', 'include' );
 		$form   = FrmForm::getOne( $entry->form_id );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php';
 	}
 
 	/**
@@ -483,7 +565,13 @@ class FrmEntriesController {
 	public static function destroy() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
 		if ( false !== $permission_error ) {
-			wp_die( esc_html( $permission_error ) );
+			$error_args = array(
+				'title'      => __( 'Verification failed', 'formidable' ),
+				'body'       => $permission_error,
+				'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$params = FrmForm::get_admin_params();
@@ -498,16 +586,6 @@ class FrmEntriesController {
 		}
 
 		self::display_list( $message );
-	}
-
-	/**
-	 * @deprecated 4.02.04 - Moved to Pro since it was unused in Lite.
-	 */
-	public static function destroy_all() {
-		_deprecated_function( __METHOD__, '4.02.04', 'FrmProEntriesController::destroy_all' );
-		if ( is_callable( 'FrmProEntriesController::destroy_all' ) ) {
-			FrmProEntriesController::destroy_all();
-		}
 	}
 
 	public static function process_entry( $errors = '', $ajax = false ) {
@@ -618,7 +696,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return array|string
 	 */
@@ -647,7 +725,8 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
-			'child_array'     => false, // return embedded fields as nested array
+			// Return embedded fields as nested array.
+			'child_array'     => false,
 			'line_breaks'     => true,
 			'array_separator' => ', ',
 		);
@@ -691,19 +770,13 @@ class FrmEntriesController {
 			 * Add or remove information in the entry sidebar.
 			 *
 			 * @since 5.5.2
+			 *
 			 * @param array $data
+			 * @param array{entry:\stdClass} $entry
 			 */
 			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
-	}
-
-	/**
-	 * @deprecated 4.0
-	 */
-	public static function contextual_help( $help, $screen_id, $screen ) {
-		_deprecated_function( __METHOD__, '4.0' );
-		return $help;
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
 	}
 }

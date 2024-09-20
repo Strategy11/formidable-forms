@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValues {
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var int
@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
@@ -115,22 +115,18 @@ class FrmEntryValues {
 	 */
 	protected function init_include_fields( $atts ) {
 
-		// For reverse compatibility with the fields parameter
-		if ( ! isset( $atts['include_fields'] ) || empty( $atts['include_fields'] ) ) {
+		// For reverse compatibility with the fields parameter.
+		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
+			if ( ! is_array( $atts['fields'] ) ) {
+				$atts['include_fields'] = $atts['fields'];
+			} else {
+				$atts['include_fields'] = '';
 
-			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
-
-				if ( ! is_array( $atts['fields'] ) ) {
-					$atts['include_fields'] = $atts['fields'];
-				} else {
-					$atts['include_fields'] = '';
-
-					foreach ( $atts['fields'] as $included_field ) {
-						$atts['include_fields'] .= $included_field->id . ',';
-					}
-
-					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				foreach ( $atts['fields'] as $included_field ) {
+					$atts['include_fields'] .= $included_field->id . ',';
 				}
+
+				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
 			}
 		}
 
@@ -176,12 +172,12 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param string $index
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return array
 	 */
 	private function prepare_array_property( $index, $atts ) {
-		if ( isset( $atts[ $index ] ) && ! empty( $atts[ $index ] ) ) {
+		if ( ! empty( $atts[ $index ] ) ) {
 
 			if ( is_array( $atts[ $index ] ) ) {
 				$property = $atts[ $index ];
@@ -266,11 +262,11 @@ class FrmEntryValues {
 			);
 		}
 
-		$ip      = array(
+		$ip       = array(
 			'label' => __( 'IP Address', 'formidable' ),
 			'value' => $this->entry->ip,
 		);
-		$browser = array(
+		$browser  = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
 			'value' => isset( $entry_description['browser'] ) ? FrmEntriesHelper::get_browser( $entry_description['browser'] ) : '',
 		);
@@ -284,8 +280,9 @@ class FrmEntryValues {
 		 *
 		 * @since 5.5.1
 		 *
-		 * @param array $referrer
-		 * @param array @entry_description
+		 * @param array  $referrer
+		 * @param array  $entry_description
+		 * @param object $entry
 		 */
 		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
@@ -338,7 +335,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param array $array
+	 * @param array    $array
 	 *
 	 * @return bool
 	 */

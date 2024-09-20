@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormState {
 
 	/**
-	 * @var FrmFormState $instance
+	 * @var FrmFormState
 	 */
 	private static $instance;
 
@@ -46,7 +46,7 @@ class FrmFormState {
 	 * @return bool true if just initialized.
 	 */
 	private static function maybe_initialize() {
-		if ( ! isset( self::$instance ) ) {
+		if ( empty( self::$instance ) ) {
 			self::$instance = new self();
 			return true;
 		}
@@ -145,6 +145,9 @@ class FrmFormState {
 	 * @return void
 	 */
 	public function render_state_field() {
+		if ( ! self::open_ssl_is_installed() ) {
+			return;
+		}
 		if ( ! $this->state && ! self::get_state_from_request() ) {
 			return;
 		}
@@ -156,11 +159,24 @@ class FrmFormState {
 	 * @return string
 	 */
 	private function get_state_string() {
+		if ( ! self::open_ssl_is_installed() ) {
+			return '';
+		}
 		$secret           = self::get_encryption_secret();
 		$compressed_state = $this->compressed_state();
 		$json_encoded     = json_encode( $compressed_state );
 		$encrypted        = openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
 		return $encrypted;
+	}
+
+	/**
+	 * Returns true if open SSL is installed.
+	 *
+	 * @since 6.12
+	 * @return bool
+	 */
+	private static function open_ssl_is_installed() {
+		return function_exists( 'openssl_encrypt' );
 	}
 
 	/**
@@ -219,7 +235,7 @@ class FrmFormState {
 
 		// We don't have a secret, so let's generate one.
 		$secret_key = is_callable( 'sodium_crypto_secretbox_keygen' ) ? sodium_crypto_secretbox_keygen() : wp_generate_password( 32, true, true );
-		add_option( 'frm_form_state_key', base64_encode( $secret_key ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		update_option( 'frm_form_state_key', base64_encode( $secret_key ), 'no' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 
 		return $secret_key;
 	}

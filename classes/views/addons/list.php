@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="wrap">
 
 	<?php
-	include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 
 	FrmAppHelper::show_search_box(
 		array(
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="plugin-card-top">
 					<h2>
 						<?php
-						echo esc_html( $addon['title'] );
+						echo esc_html( ! empty( $addon['display_name'] ) ? $addon['display_name'] : $addon['title'] );
 
 						if ( ! empty( $addon['is_new'] ) ) {
 							FrmAppHelper::show_pill_text();
@@ -56,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php
 						echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-						$show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'];
+						$show_docs = ! empty( $addon['docs'] ) && $addon['installed'];
 						?>
 						<?php if ( $show_docs ) { ?>
 							<br/><a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
@@ -92,7 +92,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</div>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </div>
 </div>

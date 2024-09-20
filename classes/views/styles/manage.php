@@ -4,11 +4,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div>
+	<p class="frm_grid_container">
+		<label class="frm4 frm_form_field" for="frm_load_style">
+			<?php esc_html_e( 'Load form styling', 'formidable' ); ?>
+		</label>
+		<select id="frm_load_style" name="frm_load_style" class="frm8 frm_form_field">
+			<option value="all" <?php selected( $frm_settings->load_style, 'all' ); ?>>
+				<?php esc_html_e( 'on every page of my site', 'formidable' ); ?>
+			</option>
+			<option value="dynamic" <?php selected( $frm_settings->load_style, 'dynamic' ); ?>>
+				<?php esc_html_e( 'only on applicable pages', 'formidable' ); ?>
+			</option>
+			<option value="none" <?php selected( $frm_settings->load_style, 'none' ); ?>>
+				<?php esc_html_e( 'Don\'t use form styling on any page', 'formidable' ); ?>
+			</option>
+		</select>
+	</p>
+
+	<?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
+
 	<p class="howto">
 		<?php esc_html_e( 'Easily change which style your forms are using by making changes below.', 'formidable' ); ?>
 	</p>
 
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 	<table class="widefat fixed striped">
 		<thead>
@@ -34,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @param string         $row_view_file_path
 					 * @return void
 					 */
-					function( $form ) use ( $styles, $default_style, $row_view_file_path ) {
+					function ( $form ) use ( $styles, $default_style, $row_view_file_path ) {
 						$active_style_id = isset( $form->options['custom_style'] ) ? (int) $form->options['custom_style'] : 1;
 						if ( 1 === $active_style_id ) {
 							// use the default style
@@ -50,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
 				<?php
-			}
+			}//end if
 			?>
 		</tbody>
 	</table>

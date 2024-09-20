@@ -135,7 +135,7 @@ class FrmStrpLiteLinkController {
 	 * Try to add the description to a Stripe link payment after it was confirmed.
 	 *
 	 * @param object           $intent
-	 * @param WP_Post|stdClass $action
+	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
 	 * @return void
 	 */
@@ -149,7 +149,7 @@ class FrmStrpLiteLinkController {
 			'form'  => $entry->form_id,
 			'value' => $action->post_content['description'],
 		);
-		$new_values = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
+		$new_values     = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
 		FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent->id, $new_values );
 	}
 
@@ -215,13 +215,13 @@ class FrmStrpLiteLinkController {
 		$new_charge = array(
 			'customer'               => $customer_id,
 			'default_payment_method' => $payment_method_id,
-			'plan' => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
+			'plan'                   => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
 					'action' => $action,
 					'amount' => $amount,
 				)
 			),
-			'expand'           => array( 'latest_invoice.charge' ),
+			'expand'                 => array( 'latest_invoice.charge' ),
 		);
 
 		if ( ! FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
@@ -249,6 +249,7 @@ class FrmStrpLiteLinkController {
 		}
 
 		if ( 'succeeded' !== $setup_intent->status ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'payment_failed' );
 			die();
 		}
@@ -260,7 +261,17 @@ class FrmStrpLiteLinkController {
 		if ( $customer_has_been_charged ) {
 			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
-			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+
+			if ( 'failed' === $charge->status ) {
+				FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
+
+				$new_payment_values['receipt_id'] = $charge->id;
+				$frm_payment->update( $payment->id, $new_payment_values );
+
+				$redirect_helper->handle_error( 'payment_failed', $charge->id );
+			}
+
+			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
@@ -270,7 +281,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
 			$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $trial_end );
-		}
+		}//end if
 
 		$new_payment_values['sub_id'] = FrmStrpLiteSubscriptionHelper::create_new_subscription( $atts );
 
@@ -306,7 +317,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
 		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
@@ -333,6 +344,8 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The details needs to create a payment.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 *     @type WP_Post  $action
@@ -383,6 +396,7 @@ class FrmStrpLiteLinkController {
 				'action_id'  => $action->ID,
 				'receipt_id' => $intent_id,
 				'sub_id'     => '',
+				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
 	}
@@ -392,8 +406,8 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param string|int $form_id
-	 * @return string|false String intent id on success, False if intent is missing or cannot be verified.
+	 * @param int|string $form_id
+	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
 	private static function verify_intent( $form_id ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );

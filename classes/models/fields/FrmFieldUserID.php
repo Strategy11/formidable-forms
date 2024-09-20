@@ -60,8 +60,8 @@ class FrmFieldUserID extends FrmFieldType {
 		$user_ID      = ( $user_ID ? $user_ID : '' );
 		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
-		$updating     = $action == 'update';
-		return ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
+		$updating     = $action === 'update';
+		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
 
 	public function validate( $args ) {
@@ -69,23 +69,23 @@ class FrmFieldUserID extends FrmFieldType {
 			return array();
 		}
 
-		// make sure we have a user ID
+		// Make sure we have a user ID.
 		if ( ! is_numeric( $args['value'] ) ) {
 			$args['value'] = FrmAppHelper::get_user_id_param( $args['value'] );
 			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 		}
 
-		//add user id to post variables to be saved with entry
+		// Add user id to post variables to be saved with entry.
 		$_POST['frm_user_id'] = $args['value'];
 
 		return array();
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts array
+	 * @param array|string $value
+	 * @param array        $atts
 	 *
-	 * @return false|mixed|string
+	 * @return array|string A string is returned, but the return signature should match FrmFieldType.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
@@ -100,7 +100,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
@@ -119,8 +119,8 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return int
 	 */

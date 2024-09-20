@@ -4,14 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmEntriesListHelper extends FrmListHelper {
+
 	protected $column_name;
 	protected $item;
 	protected $field;
 
 	/**
 	 * @since 4.07
+	 * @var bool|int
 	 */
 	public $total_items = 0;
+
+	public function __construct( $args ) {
+		parent::__construct( $args );
+		$this->screen->set_screen_reader_content(
+			array(
+				'heading_list' => esc_html__( 'Entries list', 'formidable' ),
+			)
+		);
+	}
 
 	/**
 	 * @return void
@@ -34,7 +45,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * Prepares pagination.
 	 *
-	 * @since x.x
+	 * @since 6.5.4
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -50,7 +61,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * Sets the global $per_page variable
 	 *
-	 * @since x.x
+	 * @since 6.5.4
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -58,10 +69,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
-	 * @param array      $s_query
-	 * @param bool       $join_form_in_query
+	 * @param array $s_query
+	 * @param bool  $join_form_in_query
 	 *
 	 * @return array
 	 */
@@ -75,7 +86,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -88,7 +99,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( strpos( $orderby, 'meta' ) !== false ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby          .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
+			$orderby         .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
 		}
 
 		$order = self::get_param(
@@ -102,7 +113,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param int $per_page
 	 * @return string
@@ -120,7 +131,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
 	 * @return array
@@ -157,7 +168,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
 	 * @return array<int>
@@ -236,6 +247,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
+			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
@@ -256,13 +269,27 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			if ( 'cb' != $column_key && ! in_array( $column_key, $hidden ) ) {
+			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden ) ) {
 				$primary_column = $column_key;
 				break;
 			}
 		}
 
 		return $primary_column;
+	}
+
+	/**
+	 * @since 6.12
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	private static function get_entry_label( $item ) {
+		if ( $item->name ) {
+			return $item->name;
+		}
+		/* translators: %d: Entry id */
+		return sprintf( __( 'Entry %d', 'formidable' ), $item->id );
 	}
 
 	/**
@@ -279,6 +306,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
 		$checkbox = "<input type='checkbox' name='item-action[]' id='cb-item-action-{$item->id}' value='{$item->id}' />";
+		/* translators: %s: Form name */
+		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . esc_html( sprintf( __( 'Select %s', 'formidable' ), self::get_entry_label( $item ) ) ) . '</span></label>';
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
@@ -318,15 +347,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
-					$r         .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
-					$r         .= $action_links;
+					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
+					$r        .= $action_links;
 				} else {
 					$r .= $val;
 				}
 				$r .= '</td>';
 			}
 			unset( $val );
-		}
+		}//end foreach
 		$r .= '</tr>';
 
 		return $r;
@@ -345,7 +374,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @param object $item
 	 */
 	private function column_value( $item ) {
-		$col_name = $this->column_name;
+		$col_name = $this->maybe_fix_column_name( $this->column_name );
 
 		switch ( $col_name ) {
 			case 'ip':
@@ -363,8 +392,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
-				$val = sprintf(
-					'<span class="frm-entry-status frm-entry-status-%s">%s</span>',
+				$val          = sprintf(
+					'<span class="frm-meta-tag frm-entry-status frm-entry-status-%s">%s</span>',
 					sanitize_html_class( $item->is_draft ),
 					esc_html( $entry_status )
 				);
@@ -403,15 +432,30 @@ class FrmEntriesListHelper extends FrmListHelper {
 				 * @param array $args Contains `item` and `col_name`.
 				 */
 				$val = apply_filters( 'frm_entries_column_value', $val, compact( 'item', 'col_name' ) );
-		}
+		}//end switch
 
 		return $val;
 	}
 
 	/**
-	 * @param string $view_link
-	 * @param array $actions
+	 * When a form has entries with the 0 item meta value, the values do not appear properly in the entries list.
+	 *
+	 * @since 6.11.2
+	 *
+	 * @param string $column_name
+	 * @return string
+	 */
+	private function maybe_fix_column_name( $column_name ) {
+		if ( 0 === strpos( $column_name, '0_' ) ) {
+			$column_name = substr( $column_name, 2 );
+		}
+		return $column_name;
+	}
+
+	/**
+	 * @param array  $actions
 	 * @param object $item
+	 * @param string $view_link
 	 *
 	 * @return void
 	 */
@@ -427,7 +471,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param false $val
+	 * @param object $item
+	 * @param false  $val
 	 *
 	 * @return void
 	 */

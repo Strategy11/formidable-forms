@@ -26,9 +26,8 @@ class FrmPluginSearch {
 	/**
 	 * Add actions and filters only if this is the plugin installation screen and it's the first page.
 	 *
-	 * @param object $screen WP Screen object.
-	 *
 	 * @since 4.12
+	 * @param object $screen WP Screen object.
 	 *
 	 * @return void
 	 */
@@ -58,6 +57,11 @@ class FrmPluginSearch {
 			return $result;
 		}
 
+		if ( is_wp_error( $result ) ) {
+			// This may happen if the request failed due to an internet connection issue.
+			return $result;
+		}
+
 		$addon_list = $this->get_addons();
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
@@ -75,16 +79,17 @@ class FrmPluginSearch {
 
 		$inject    = (array) $this->get_plugin_data();
 		$overrides = array(
-			'plugin-search'       => true, // Helps to determine if that an injected card.
-			'name'                => sprintf(
+			// Helps to determine if that an injected card.
+			'plugin-search'     => true,
+			'name'              => sprintf(
 				/* translators: Formidable addon name */
 				esc_html_x( 'Formidable %s', 'Formidable Addon Name', 'formidable' ),
 				$addon_list[ $matching_addon ]['name']
 			),
-			'addon'               => $addon_list[ $matching_addon ]['slug'],
-			'short_description'   => $addon_list[ $matching_addon ]['excerpt'],
-			'slug'                => self::$slug,
-			'version'             => $addon_list[ $matching_addon ]['version'],
+			'addon'             => $addon_list[ $matching_addon ]['slug'],
+			'short_description' => $addon_list[ $matching_addon ]['excerpt'],
+			'slug'              => self::$slug,
+			'version'           => $addon_list[ $matching_addon ]['version'],
 		);
 
 		if ( ! empty( $addon_list[ $matching_addon ]['external'] ) ) {
@@ -182,9 +187,8 @@ class FrmPluginSearch {
 	/**
 	 * Modify URL used to fetch to plugin information so it pulls Formidable plugin page.
 	 *
-	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
-	 *
 	 * @since 4.12
+	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
 	 *
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
 	 */
@@ -300,16 +304,16 @@ class FrmPluginSearch {
 		// By the time this filter is applied, self_admin_url was already applied and we don't need it anymore.
 		remove_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
 
-		$links = array();
+		$links        = array();
 		$is_installed = $this->is_installed( $plugin['plugin'] );
 		$is_active    = is_plugin_active( $plugin['plugin'] );
 
 		// Plugin installed, active, feature not enabled; prompt to enable.
 		if ( ! $is_active && $is_installed ) {
 			if ( current_user_can( 'activate_plugins' ) ) {
-				$activate_url = add_query_arg(
+				$activate_url             = add_query_arg(
 					array(
-						'action' => 'activate',
+						'action'   => 'activate',
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin['plugin'] ),
 						'plugin'   => $plugin['plugin'],
 					),
@@ -332,7 +336,7 @@ class FrmPluginSearch {
 				target="_blank"
 				data-addon="' . esc_attr( $plugin['addon'] ) . '"
 				>' . esc_html__( 'Learn more', 'formidable' ) . '</a>';
-		}
+		}//end if
 
 		// Dismiss link.
 		$dismiss = add_query_arg( array( 'frm-dismiss' => $plugin['id'] ) );

@@ -24,7 +24,7 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_honeypot_spam() {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
@@ -35,8 +35,8 @@ class FrmHoneypot extends FrmValidate {
 			$is_honeypot_spam = '' !== $honeypot_value;
 		}
 
-		$form             = $this->get_form();
-		$atts             = compact( 'form' );
+		$form = $this->get_form();
+		$atts = compact( 'form' );
 		return apply_filters( 'frm_process_honeypot', $is_honeypot_spam, $atts );
 	}
 
@@ -102,10 +102,10 @@ class FrmHoneypot extends FrmValidate {
 		);
 
 		if ( 'strict' !== $honeypot ) {
-			$input_attrs['autocomplete'] = 'false';
+			$input_attrs['autocomplete'] = 'off';
 		}
 		?>
-			<div class="<?php echo esc_attr( $class_name ); ?>" <?php echo in_array( $honeypot, array( true, 'strict' ), true ) ? '' : 'aria-hidden="true"'; ?>>
+			<div class="<?php echo esc_attr( $class_name ); ?>">
 				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
 					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
 				</label>

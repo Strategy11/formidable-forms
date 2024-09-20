@@ -9,14 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldOption {
 
 	/**
-	 * @var string|int
+	 * @var int|string
 	 *
 	 * @since 2.03.05
 	 */
 	protected $option_key;
 
 	/**
-	 * @var string|array
+	 * @var array|string
 	 *
 	 * @since 2.03.05
 	 */
@@ -73,7 +73,7 @@ class FrmFieldOption {
 	 * @since 2.03.05
 	 *
 	 * @param string $selected_value
-	 * @param int $truncate
+	 * @param int    $truncate
 	 *
 	 * @return void
 	 */

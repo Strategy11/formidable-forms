@@ -3,6 +3,8 @@
  * Generate the XML for export for posts and form actions.
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+ *
+ * @package Formidable
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,7 +16,8 @@ if ( ! $item_ids ) {
 }
 
 global $wp_query;
-$wp_query->in_the_loop = true; // Fake being in the loop.
+// Fake being in the loop.
+$wp_query->in_the_loop = true;
 
 // fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
@@ -46,7 +49,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
-<?php
+		<?php
 		endif;
 
 		$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
@@ -75,20 +78,22 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 		if ( 'frm_display' === $post->post_type && is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
 			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
-			foreach ( $layouts as $layout ) {
-				?>
+			if ( is_array( $layouts ) ) {
+				foreach ( $layouts as $layout ) {
+					?>
 		<layout>
 			<type><?php echo esc_html( $layout->type ); ?></type>
 			<data><?php echo FrmXMLHelper::cdata( $layout->data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></data>
 		</layout>
 <?php
+				}
 			}
 		}
 		?>
 	</view>
 <?php
-	}
-}
+	}//end foreach
+}//end while
 
 if ( empty( $taxonomies ) ) {
 	return;
@@ -99,15 +104,20 @@ if ( empty( $frm_inc_tax ) ) {
 	$frm_inc_tax = array();
 }
 
+$parent_slugs = FrmXMLController::get_parent_terms_slugs( $terms );
+
 foreach ( (array) $terms as $term ) {
 	if ( in_array( $term->term_id, $frm_inc_tax, true ) ) {
-		return;
+		continue;
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
+	$label         = 'category' === $term->taxonomy || 'tag' === $term->taxonomy ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
+	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {
+		echo '<term_parent>' . esc_html( $parent_slugs[ $term->parent ] ) . '</term_parent>';
+	}
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -116,4 +126,4 @@ foreach ( (array) $terms as $term ) {
 	}
 	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
 	echo '</term>';
-}
+}//end foreach

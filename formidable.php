@@ -1,13 +1,15 @@
 <?php
-/*
-Plugin Name: Formidable Forms
-Description: Quickly and easily create drag-and-drop forms
-Version: 6.5.4
-Plugin URI: https://formidableforms.com/
-Author URI: https://formidableforms.com/
-Author: Strategy11 Form Builder Team
-Text Domain: formidable
-*/
+/**
+ * Plugin Name: Formidable Forms
+ * Description: Quickly and easily create drag-and-drop forms
+ * Version: 6.14.1
+ * Plugin URI: https://formidableforms.com/
+ * Author URI: https://formidableforms.com/
+ * Author: Strategy11 Form Builder Team
+ * Text Domain: formidable
+ *
+ * @package Formidable
+ */
 
 /*
 	Copyright 2010  Formidable Forms
@@ -40,32 +42,32 @@ function load_formidable_forms() {
 	);
 
 	// For reverse compatibility. Load Pro if it's still nested.
-	$frm_path = dirname( __FILE__ );
+	$frm_path = __DIR__;
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
-		include( $frm_path . '/pro/formidable-pro.php' );
+		include $frm_path . '/pro/formidable-pro.php';
 	}
 
 	FrmHooksController::trigger_load_hook();
 }
 
-// if __autoload is active, put it on the spl_autoload stack
+// If __autoload is active, put it on the spl_autoload stack.
 if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoload_functions(), true ) ) {
 	spl_autoload_register( '__autoload' );
 }
 
-// Add the autoloader
+// Add the autoloader.
 spl_autoload_register( 'frm_forms_autoloader' );
 
 /**
  * @return void
  */
 function frm_forms_autoloader( $class_name ) {
-	// Only load Frm classes here
+	// Only load Frm classes here.
 	if ( ! preg_match( '/^Frm.+$/', $class_name ) || preg_match( '/^FrmPro.+$/', $class_name ) ) {
 		return;
 	}
 
-	frm_class_autoloader( $class_name, dirname( __FILE__ ) );
+	frm_class_autoloader( $class_name, __DIR__ );
 }
 
 /**
@@ -76,7 +78,7 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
+	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater' );
 	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
 
@@ -90,6 +92,8 @@ function frm_class_autoloader( $class_name, $filepath ) {
 			$filepath .= 'controllers/';
 		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
 			$filepath .= 'factories/';
+		} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
+			$filepath .= 'views/styles/components/';
 		} else {
 			$filepath .= 'models/';
 			if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
@@ -133,8 +137,12 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  * @return void
  */
 function frm_maybe_install() {
-	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
-		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
+	if ( get_transient( FrmOnboardingWizardController::TRANSIENT_NAME ) !== 'no' ) {
+		set_transient(
+			FrmOnboardingWizardController::TRANSIENT_NAME,
+			FrmOnboardingWizardController::TRANSIENT_VALUE,
+			60
+		);
 	}
 
 	FrmAppController::handle_activation();
@@ -142,7 +150,7 @@ function frm_maybe_install() {
 
 register_deactivation_hook(
 	__FILE__,
-	function() {
+	function () {
 		if ( ! class_exists( 'FrmCronController', false ) ) {
 			require_once __DIR__ . '/classes/controllers/FrmCronController.php';
 		}

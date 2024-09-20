@@ -38,7 +38,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	</div>
 	<ul class="frm_form_nav"></ul>
 		<?php
-	}
+	}//end if
 
 	if ( isset( $atts['nav'] ) ) {
 		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -68,7 +68,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	if ( FrmAppHelper::is_full_screen() ) {
 		?>
 		<div class="frm-full-close">
-			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+			<a href="<?php echo esc_url( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 		</div>
