@@ -1323,10 +1323,22 @@ class FrmAppController {
 	}
 
 	/**
+	 * Check if we are in our admin pages.
+	 *
+	 * @return bool
+	 */
+	private static function in_our_pages() {
+		global $current_screen;
+		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+	}
+
+	/**
+	 * Hide all third-parties admin notices only in our admin pages.
+	 *
 	 * @return void
 	 */
 	public static function filter_admin_notices() {
-		if ( ! FrmAppHelper::is_formidable_admin() ) {
+		if ( ! self::in_our_pages() ) {
 			return;
 		}
 
