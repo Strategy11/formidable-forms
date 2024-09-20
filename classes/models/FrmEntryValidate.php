@@ -56,7 +56,7 @@ class FrmEntryValidate {
 		if ( is_array( $filtered_errors ) ) {
 			$errors = $filtered_errors;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_validate_entry filter.', '6.3' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_validate_entry filter.', '6.3' );
 		}
 
 		return $errors;
