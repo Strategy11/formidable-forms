@@ -10,13 +10,33 @@ describe("Form Templates page", () => {
         cy.get('h1').should("contain", "Form Templates");
         cy.get('#template-search-input').should("exist");
 
-        cy.log("Validate data categories");
+        cy.log("Validate template categories");
+        cy.get('li[data-category="favorites"]').within(() => {
+            cy.get('.frm-form-templates-cat-text').should("have.text", "Favorites");
+            cy.get('.frm-form-templates-cat-count').should("have.text", "0");
+        });
+
+        cy.get('li[data-category="custom"]').within(() => {
+            cy.get('.frm-form-templates-cat-text').should("have.text", "Custom");
+            cy.get('.frm-form-templates-cat-count').should("have.text", "0");
+        });
+
+        cy.get('li[data-category="available-templates"]').within(() => {
+            cy.get('.frm-form-templates-cat-text').should("have.text", "Available Templates");
+            cy.get('.frm-form-templates-cat-count').should("have.text", "0");
+        });
+
+        cy.get('li[data-category="all-templates"]').within(() => {
+            cy.get('.frm-form-templates-cat-text').should("have.text", "All Templates");
+            cy.get('.frm-form-templates-cat-count').should("have.text", "319");
+        });
+
+        cy.get('li[data-category="free-templates"]').within(() => {
+            cy.get('.frm-form-templates-cat-text').should("have.text", "Free Templates");
+            cy.get('.frm-form-templates-cat-count').should("have.text", "34");
+        });
 
         const categories = [
-            { category: 'all-templates', text: 'All Templates' },
-            { category: 'favorites', text: 'Favorites' },
-            { category: 'custom', text: 'Custom' },
-            { category: 'available-templates', text: 'Available Templates' },
             { category: 'ai', text: 'AI' },
             { category: 'application', text: 'Application' },
             { category: 'business-operations', text: 'Business Operations' },
@@ -49,13 +69,13 @@ describe("Form Templates page", () => {
             { category: 'user-registration', text: 'User Registration' },
             { category: 'woocommerce', text: 'WooCommerce' }
         ];
-        
+
         categories.forEach(({ category, text }) => {
             cy.get(`li[data-category="${category}"]`).within(() => {
                 cy.get('.frm-form-templates-cat-text').should("have.text", text);
             });
         });
-        
+
 
         cy.log("Check the items on the All Templates page");
         cy.log("Contact Us Template");
@@ -63,36 +83,48 @@ describe("Form Templates page", () => {
             .should('contain', 'Contact Us');
         cy.get('[frm-search-text="contact us"] .frm-form-templates-item-description')
             .should('contain.text', 'A basic contact form that for any WordPress website.');
+        cy.get('[frm-search-text="contact us"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_align_right_icon');
 
         cy.log("Stripe Payment Template");
         cy.get('[frm-search-text="stripe payment"] .frm-form-templates-item-title-text')
             .should('contain', 'Stripe Payment');
         cy.get('[frm-search-text="stripe payment"] .frm-form-templates-item-description')
             .should('contain.text', 'Effortlessly gather payment information from customers using our secure Stripe payment form. Simplify the payment process and ensure a seamless transaction experience.');
+        cy.get('[frm-search-text="stripe payment"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_credit_card_icon');
 
         cy.log("User Registration Template");
         cy.get('[frm-search-text="user registration"] .frm-form-templates-item-title-text')
             .should('contain', 'User Registration');
         cy.get('[frm-search-text="user registration"] .frm-form-templates-item-description')
             .should('contain.text', 'Let users register on the front-end of your site and set their username, email, password, name, and avatar.');
+        cy.get('[frm-search-text="user registration"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_register_icon');
 
         cy.log("Create WordPress Post Template");
         cy.get('[frm-search-text="create wordpress post"] .frm-form-templates-item-title-text')
             .should('contain', 'Create WordPress Post');
         cy.get('[frm-search-text="create wordpress post"] .frm-form-templates-item-description')
             .should('contain.text', 'Allow users to create WordPress posts from the front-end of your site with the Create WordPress Post form template.');
+        cy.get('[frm-search-text="create wordpress post"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_wordpress_icon');
 
         cy.log("Survey Template");
         cy.get('[frm-search-text="survey"] .frm-form-templates-item-title-text')
             .should('contain', 'Survey');
         cy.get('[frm-search-text="survey"] .frm-form-templates-item-description')
             .should('contain.text', 'Collect feedback from your customers, employees, or other members of your community using an online survey form.');
+        cy.get('[frm-search-text="survey"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_chat_forms_icon');
 
         cy.log("Quiz Template");
         cy.get('[frm-search-text="quiz"] .frm-form-templates-item-title-text')
             .should('contain', 'Quiz');
         cy.get('[frm-search-text="quiz"] .frm-form-templates-item-description')
             .should('contain.text', 'This multiple-choice quiz template is a great example of basic quiz scoring.');
+        cy.get('[frm-search-text="quiz"] span.frm-category-icon svg use')
+            .should('have.attr', 'xlink:href', '#frm_percent_icon');
 
         cy.log("Car payment calculator Template");
         cy.get('[frm-search-text="car payment calculator"] .frm-form-templates-item-title-text')
@@ -199,6 +231,88 @@ describe("Form Templates page", () => {
         cy.get('#frm-form-templates-empty-state > .button').should("contain", "Start from Scratch").click();
         cy.get('#frm-form-templates-page-title-text').should("contain", "All Templates");
 
+        cy.log("Search for application templates");
+        cy.get('#template-search-input').clear().type("Business");
+        cy.get('[frm-search-text="small business loan application"]').should('exist')
+            .within(() => {
+                cy.get('span.frm-form-template-name')
+                    .should('contain.text', 'Small Business Loan Application');
+                cy.get('p.frm-form-templates-item-description')
+                    .should('contain.text', 'A complete loan application for small businesses and startups. Allow business owners to easily apply for loans on your site.');
+            });
+
+        cy.get('[frm-search-text="business inquiry"]').should('exist')
+            .within(() => {
+                cy.get('span.frm-form-template-name')
+                    .should('contain.text', 'Business Inquiry');
+                cy.get('p.frm-form-templates-item-description')
+                    .should('contain.text', 'Obtain contact information from potential clients interested in your business.');
+            });
+
+        cy.get('#frm-form-templates-applications > .frm-mb-sm').should("contain", "Application Templates");
+        cy.get('li[data-frm-search-text="business directory"]').should('exist')
+            .within(() => {
+                cy.get('div.frm-form-templates-item-icon img')
+                    .should('have.attr', 'src')
+                    .and('include', 'placeholder.svg');
+
+                cy.get('span.frm-meta-tag.frm-orange-tag')
+                    .should('have.text', 'Ready Made Solution');
+
+                cy.get('h3.frm-text-sm.frm-font-medium')
+                    .should('have.text', 'Business Directory');
+
+                cy.get('a.frm-text-xs.frm-font-semibold')
+                    .should('have.text', 'See all applications')
+                    .and('have.attr', 'href')
+                    .and('include', '/wp-admin/admin.php?page=formidable-applications');
+            });
+
+        cy.get('li[data-frm-search-text="business directory"]').within(() => {
+            cy.get('a.frm-text-xs.frm-font-semibold')
+                .should('have.text', 'See all applications')
+                .click();
+        });
+
+        cy.url().should('include', 'page=formidable-applications');
+        cy.go('back');
+
+        cy.get('#template-search-input').clear().type("Business");
+        cy.get('[frm-search-text="business inquiry"]').should('exist')
+            .within(() => {
+                cy.get('span.frm-form-template-name')
+                    .should('contain.text', 'Business Inquiry');
+                cy.get('p.frm-form-templates-item-description')
+                    .should('contain.text', 'Obtain contact information from potential clients interested in your business.');
+            });
+
+        cy.get('#frm-form-templates-applications > .frm-mb-sm').should("contain", "Application Templates");
+        cy.get('li[data-frm-search-text="business hours"]').should('exist')
+            .within(() => {
+                cy.get('div.frm-form-templates-item-icon img')
+                    .should('have.attr', 'src')
+                    .and('include', 'business-hours.png');
+
+                cy.get('span.frm-meta-tag.frm-orange-tag')
+                    .should('have.text', 'Ready Made Solution');
+
+                cy.get('h3.frm-text-sm.frm-font-medium')
+                    .should('have.text', 'Business Hours');
+
+                cy.get('a.frm-text-xs.frm-font-semibold')
+                    .should('have.text', 'See all applications')
+                    .and('have.attr', 'href')
+                    .and('include', '/wp-admin/admin.php?page=formidable-applications');
+            });
+
+        cy.get('li[data-frm-search-text="business hours"]').within(() => {
+            cy.get('a.frm-text-xs.frm-font-semibold')
+                .should('have.text', 'See all applications')
+                .click();
+        });
+
+        cy.url().should('include', 'page=formidable-applications');
+
     });
 
     it("add templates as favorites, view demo and use templates", () => {
@@ -239,12 +353,75 @@ describe("Form Templates page", () => {
             .find('.frm-form-templates-use-template-button')
             .should("contain", "Use Template");
 
-        cy.log("Try to use template of a template which requires upgrade")
-        cy.get('li[frm-search-text="user registration"]').first()
+        cy.log("Try to use free templates");
+        cy.get('[data-category="free-templates"]').should("contain", "Free Templates").click();
+        cy.get('#frm-form-templates-page-title-text').should("contain", "Free Templates");
+        cy.get('li[frm-search-text="contact us"]').first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
-            .should("contain", "Use Template")
+            .should('contain', 'Use Template')
             .click({ force: true });
+
+        cy.get('#frm-leave-email-modal').should('be.visible');
+        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 20+ Free Form Templates');
+        cy.get('#frm-leave-email-modal p')
+            .should('contain.text', "Just add your email address and we'll send you a code for free form templates!");
+
+        cy.get('a#frm-get-code-button').should('contain.text', 'Get Code');
+        cy.get('a.frm-modal-close').should('contain.text', 'Close');
+
+        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
+
+        cy.get('li[frm-search-text="contact us"]').first()
+            .trigger('mouseover', { force: true })
+            .find('.frm-form-templates-use-template-button')
+            .should('contain', 'Use Template')
+            .click({ force: true });
+        cy.get('a#frm-get-code-button').click();
+        cy.get('#frm-code-from-email-modal .frm-modal-title h2')
+            .should('contain.text', 'Check Your Inbox');
+
+        cy.get('#frm-code-from-email-modal p')
+            .should('contain.text', 'Enter the code that we sent to your email address.');
+
+        cy.get('a#frm-code-modal-back-button')
+            .should('contain.text', 'Back')
+            .and('have.attr', 'role', 'button').click();
+
+        cy.get('a#frm-get-code-button').click();
+
+        cy.get('a#frm-confirm-email-address')
+            .should('contain.text', 'Save Code')
+            .and('have.attr', 'role', 'button')
+            .and('have.class', 'button-primary')
+            .click({force:true});
+        cy.get('#frm_code_from_email_error > [frm-error="empty"]').should("contain", "Verification code is empty");
+
+        cy.get('input#frm_code_from_email')
+            .should('have.attr', 'type', 'text')
+            .should('have.attr', 'placeholder', 'Code from email')
+            .type("Invalid code");
+        cy.get('a#frm-confirm-email-address')
+            .should('contain.text', 'Save Code').click();
+        cy.get('#frm_code_from_email_error > [frm-error="custom"]').should('contain.text', "Sorry, that's not the right code.");
+        cy.get('#frm-change-email-address').should('contain.text', "Change email address").click();
+        cy.get('a#frm-get-code-button').click();
+        cy.get('#frm-resend-code').should('contain.text', "Resend code");
+
+        cy.get('a#frm-code-modal-back-button')
+            .should('contain.text', 'Back')
+            .and('have.attr', 'role', 'button').click();
+        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();  
+      
+        cy.get('[data-category="all-templates"]').click();
+
+        cy.log("Try to use templates which require upgrade");
+        cy.get('[frm-search-text="user registration"]')
+            .first()
+            .trigger('mouseover')
+            .find('.frm-form-templates-use-template-button')
+            .should("contain", "Use Template")
+            .click({force: true});
 
         cy.get('#frm-form-upgrade-modal > .frm_modal_top > .frm-modal-title > h2').should("contain", "User Registration is a PRO Template");
         cy.get('#frm-form-upgrade-modal > .inside > :nth-child(1)').should("contain", "The User Registration is not available on your plan. Please upgrade to unlock this and more awesome templates.");
@@ -260,6 +437,23 @@ describe("Form Templates page", () => {
 
         cy.get('#frm-form-templates-create-form').should("contain", "Create a blank form").click();
         cy.get('#frm_submit_side_top').should("contain", "Save").click();
+
+        cy.log("Ensure the modal for for saving form is visible");
+        cy.get('#frm-form-templates-modal').should('be.visible');
+        cy.get('a.frm-modal-close.dismiss')
+            .should('have.attr', 'title', 'Close')
+            .should('be.visible');
+        cy.get('.frm-modal-title > h2')
+            .should('contain', 'Name your form');
+        cy.get('#frm-name-your-form-modal p')
+            .should('contain', 'Before we save this form, do you want to name it first?');
+        cy.get('label[for="frm_new_form_name_input"]')
+            .should('contain', 'Form Name (Optional)');
+        cy.get('input#frm_new_form_name_input')
+            .should('have.attr', 'placeholder', 'Enter your form name');
+        cy.get('a#frm-cancel-rename-form-button')
+            .should('contain.text', 'Cancel');
+
         cy.get('#frm_new_form_name_input').type("Form Template Test");
         cy.get('#frm-save-form-name-button').should("contain", "Save").click();
         cy.get('a[aria-label="Close"] svg').click();
