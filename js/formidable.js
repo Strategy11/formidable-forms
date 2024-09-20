@@ -194,6 +194,7 @@ function frmFrontFormJS() {
 					const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
 					if ( ! isConfirmationField ) {
 						// Allow a blank confirmation field to still call validateFieldValue.
+						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
 						continue;
 					}
 				}
