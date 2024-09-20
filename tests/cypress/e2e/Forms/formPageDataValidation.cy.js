@@ -1,5 +1,5 @@
 describe("Forms page", () => {
-    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin';
+    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin&utm_content=lite-banner';
     const origin = Cypress.config('baseUrl');
     const formTitle = "Test Form";
 

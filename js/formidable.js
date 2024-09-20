@@ -1784,8 +1784,9 @@ function frmCaptcha( captchaSelector ) {
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
-		const isVisible = captchas[c].offsetParent !== null;
-		if ( ! isVisible ) {
+		const closestForm   = captchas[c].closest( 'form' );
+		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		if ( ! formIsVisible ) {
 			continue;
 		}
 		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );

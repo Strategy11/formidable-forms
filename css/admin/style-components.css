@@ -374,6 +374,12 @@
 .frm-slider-component.frm-disabled .frm-slider-value select {
 	width: 56px;
 }
+.frm-slider-component.frm-disabled.frm-empty .frm-slider-value input[type="text"] {
+	width: 56px;
+}
+.frm-slider-component.frm-disabled.frm-empty .frm-slider-value select {
+	width: 28px;
+}
 
 .frm-tabs-wrapper {
 	position: relative;

@@ -467,6 +467,7 @@ class FrmStylesHelper {
 			case 'font':
 				return safecss_filter_attr( $value );
 
+			case 'border_width_error':
 			case 'field_border_width':
 				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
 					return safecss_filter_attr( '0px 0px ' . $value . ' 0px' );
@@ -570,7 +571,7 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function update_base_font_size( $settings, $defaults ) {
-		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || 'false' === $settings['use_base_font_size'] ) {
 			return $settings;
 		}
 		$base_font_size       = (int) $settings['base_font_size'];

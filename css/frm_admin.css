@@ -2630,7 +2630,7 @@ h2.frm-h2 + .howto {
 	padding: 10px 20px;
 }
 
-.frm-modal .postbox {
+.frm-modal:not(#frm-dismissable-cta) .postbox {
 	max-height: 600px;
 	overflow: hidden;
 	margin-bottom: 0;

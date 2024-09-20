@@ -745,6 +745,7 @@ class FrmStylesController {
 		$frm_style     = new FrmStyle();
 		$styles        = $frm_style->get_all();
 		$default_style = $frm_style->get_default_style( $styles );
+		$frm_settings  = FrmAppHelper::get_settings();
 
 		if ( ! $forms ) {
 			$forms = FrmForm::get_published_forms();
