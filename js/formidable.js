@@ -190,7 +190,12 @@ function frmFrontFormJS() {
 						// A number field will return an empty string when it is invalid.
 						checkValidity( field, errors );
 					}
-					continue;
+
+					const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
+					if ( ! isConfirmationField ) {
+						// Allow a blank confirmation field to still call validateFieldValue.
+						continue;
+					}
 				}
 
 				validateFieldValue( field, errors );
