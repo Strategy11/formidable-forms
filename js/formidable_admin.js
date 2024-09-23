@@ -2908,10 +2908,11 @@ function frmAdminBuildJS() {
 
 	/**
 	 * @param {HTMLElement} list
-	 * @param {string} fieldId
-	 * @param {string} code
-	 * @param {string} label
-	 * @param {string} fieldType
+	 * @param {string}      fieldId
+	 * @param {string}      code
+	 * @param {string}      label
+	 * @param {string}      fieldType
+	 *
 	 * @returns {void}
 	 */
 	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
