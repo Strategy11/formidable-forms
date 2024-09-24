@@ -8,531 +8,622 @@ describe("Add-Ons page", () => {
     it("should validate all add-on cards", () => {
 
         cy.get('#frm_top_bar').should("contain", "Formidable Add-Ons");
-        cy.get('#frm-connect-btns > .button-primary').should("contain", "Connect an Account");
-        cy.get('#frm-connect-btns > .button-secondary').should("contain", "Get Formidable Now");
-        cy.get('#frm-publishing > .button').should("contain","Upgrade");
+        cy.get('#frm-publishing > .button').should("contain", "Upgrade");
+        cy.log("Target the upgrade banner and perform all checks within it");
+        cy.get('#frm-upgrade-banner').within(() => {
+            cy.get('h4').should('contain.text', 'Unlock Add-on library');
+            cy.get('p.frm-m-0').should('contain.text', 'Upgrade to Pro and access our library of add-ons to supercharge your forms.');
+            cy.get('a.frm-cta-link')
+                .should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=upgrade-cta')
+                .and('contain.text', 'Upgrade to PRO');
+        });
         cy.get('#addon-search-input').should("exist");
 
+        cy.log("Validate add-ons categories");
+        cy.get('li[data-category="all-items"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "All Add-Ons");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "43");
+        });
+
+        cy.get('li[data-category="automation"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Automation");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+        });
+
+        cy.get('li[data-category="crm"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "CRM");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "3");
+        });
+
+        cy.get('li[data-category="data-collection"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Data Collection");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "6");
+        });
+
+        cy.get('li[data-category="data-management"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Data Management");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "6");
+        });
+
+        cy.get('li[data-category="ecommerce"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Ecommerce");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+        });
+
+        cy.get('li[data-category="email-sms-marketing"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Email & SMS Marketing");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "9");
+        });
+
+        cy.get('li[data-category="form-design-display"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Form Design & Display");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+        });
+
+        cy.get('li[data-category="form-functionality"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Form Functionality");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "5");
+        });
+
+        cy.get('li[data-category="marketing"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Marketing");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "1");
+        });
+
+        cy.get('li[data-category="multilingual"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Multilingual");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "2");
+        });
+
+        cy.get('li[data-category="utilities"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Utilities");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "3");
+        });
+
+        cy.log("Validate add-ons category plans");
+        cy.get('li[data-category="basic"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "basic");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "2");
+        });
+
+        cy.get('li[data-category="plus"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "plus");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "14");
+        });
+
+        cy.get('li[data-category="business"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "business");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "37");
+        });
+
+        cy.get('li[data-category="elite"]').within(() => {
+            cy.get('.frm-page-skeleton-cat-text').should("have.text", "elite");
+            cy.get('.frm-page-skeleton-cat-count').should("have.text", "43");
+        });
+
         cy.log("Formidable Forms Pro card");
-        cy.get('.plugin-card-pro > .plugin-card-top').should("exist");
-        cy.get('.plugin-card-pro > .plugin-card-top > h2').should("contain", "Formidable Forms Pro");
-        cy.get('.plugin-card-pro > .plugin-card-top > p').should("contain", "Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.")
-        cy.get('.plugin-card-pro > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-pro > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+        cy.get('li[data-slug="formidable-pro"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Formidable Forms Pro');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.');
+            cy.get('a[aria-label="View Docs"]').should('have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin')
+                .and('have.attr', 'target', '_blank')
+                .invoke('removeAttr', 'target').click();
+        });
+
+        cy.origin('https://formidableforms.com', () => {
+            cy.get('h1').should('have.text', 'Formidable Forms Docs & Support');
+        });
+
+        cy.visit('/wp-admin/admin.php?page=formidable-addons');
 
         cy.log("Digital Signatures card");
-        cy.contains('.frm-card', 'Digital Signatures')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="signature"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Digital Signatures');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20signature')
+                    .and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-163248 > .plugin-card-top > :nth-child(2)').should("contain", "Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.")
-        cy.get('.plugin-card-163248 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-163248 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href')
+                .and('include', 'https://formidableforms.com/lite-upgrade/')
+        });
 
         cy.log("PayPal Standard card");
-        cy.contains('.frm-card', 'PayPal Standard')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="paypal-standard"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'PayPal Standard');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_paypal_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20paypal-standard').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-163257 > .plugin-card-top > :nth-child(2)').should("contain", "Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.")
-        cy.get('.plugin-card-163257 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-163257 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Formidable API card");
-        cy.contains('.frm-card', 'Formidable API')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="formidable-api"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Formidable API');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Add a full forms API for forms, form fields, views, and entries. Then send submissions to other sites with REST APIs.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20formidable-api').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-168072 > .plugin-card-top > :nth-child(2)').should("contain", "Add a full forms API for forms, form fields, views, and entries. Then send submissions to other sites with REST APIs.")
-        cy.get('.plugin-card-168072 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-168072 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Twilio WordPress SMS card");
-        cy.contains('.frm-card', 'Twilio WordPress SMS')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="twilio"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Twilio WordPress SMS');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_twilio_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20twilio').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-168460 > .plugin-card-top > :nth-child(2)').should("contain", "Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.")
-        cy.get('.plugin-card-168460 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-168460 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Bootstrap card");
-        cy.contains('.frm-card', 'Bootstrap')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="bootstrap"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Bootstrap');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_bootstrap_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Instantly add Bootstrap styling to all your Formidable forms.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20bootstrap').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-168463 > .plugin-card-top > :nth-child(2)').should("contain", "Instantly add Bootstrap styling to all your Formidable forms.")
-        cy.get('.plugin-card-168463 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-168463 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("AWeber card");
-        cy.contains('.frm-card', 'AWeber')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="aweber"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'AWeber');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_aweber_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'AWeber is a powerful email marketing service. Subscribe contacts to an AWeber mailing list when they submit your WordPress contact forms.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20aweber').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-168468 > .plugin-card-top > :nth-child(2)').should("contain", "AWeber is a powerful email marketing service. Subscribe contacts to an AWeber mailing list when they submit your WordPress contact forms.")
-        cy.get('.plugin-card-168468 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-168468 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("WP Multilingual card");
-        cy.contains('.frm-card', 'WP Multilingual')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="wp-multilingual"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'WP Multilingual');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Translate your forms into multiple languages using the Formidable-integrated WPML plugin.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20wp-multilingual').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-169998 > .plugin-card-top > :nth-child(2)').should("contain", "Translate your forms into multiple languages using the Formidable-integrated WPML plugin.")
-        cy.get('.plugin-card-169998 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-169998 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Locations card");
-        cy.contains('.frm-card', 'Locations')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="locations"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Locations');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20locations').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-170641 > .plugin-card-top > :nth-child(2)').should("contain", "Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.")
-        cy.get('.plugin-card-170641 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-170641 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Zapier card");
-        cy.contains('.frm-card', 'Zapier')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="zapier"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Zapier');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_zapier_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Connect with hundreds of applications through Zapier. Automatically insert a Google spreadsheet row, tweet, or upload to Dropbox.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20zapier').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-170645 > .plugin-card-top > :nth-child(2)').should("contain", "Connect with hundreds of applications through Zapier. Automatically insert a Google spreadsheet row, tweet, or upload to Dropbox.")
-        cy.get('.plugin-card-170645 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-170645 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("User Flow card");
-        cy.contains('.frm-card', 'User Flow')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="user-tracking"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'User Flow');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Track the pages a user visits and the time spent on each page prior to submitting a form.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20user-tracking').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-170649 > .plugin-card-top > :nth-child(2)').should("contain", "Track the pages a user visits and the time spent on each page prior to submitting a form.")
-        cy.get('.plugin-card-170649 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-170649 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Mailchimp card");
-        cy.contains('.frm-card', 'Mailchimp')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="mailchimp"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Mailchimp');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_mailchimp_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Get on the path to more leads in minutes. Add and update leads in a Mailchimp mailing list when a form is submitted.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20mailchimp').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-170655 > .plugin-card-top > :nth-child(2)').should("contain", "Get on the path to more leads in minutes. Add and update leads in a Mailchimp mailing list when a form is submitted.")
-        cy.get('.plugin-card-170655 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-170655 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("User Registration card");
-        cy.contains('.frm-card', 'User Registration')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="user-registration"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'User Registration');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Give new users access to your site quickly and painlessly. Plus edit profiles and login from the front end.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20user-registration').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-173984 > .plugin-card-top > :nth-child(2)').should("contain", "Give new users access to your site quickly and painlessly. Plus edit profiles and login from the front end.")
-        cy.get('.plugin-card-173984 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-173984 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("WooCommerce card");
-        cy.contains('.frm-card', 'WooCommerce')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Elite')
+        cy.get('li[data-slug="woocommerce"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'WooCommerce');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_woocommerce_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Are your WooCommerce product forms too basic? Add custom fields to a product form and collect more data when it is added to the cart.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20woocommerce').and('contain.text', 'Elite');
             });
-        cy.get('.plugin-card-174006 > .plugin-card-top > :nth-child(2)').should("contain", "Are your WooCommerce product forms too basic? Add custom fields to a product form and collect more data when it is added to the cart.")
-        cy.get('.plugin-card-174006 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-174006 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Highrise card");
-        cy.contains('.frm-card', 'Highrise')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="highrise"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Highrise');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_highrise_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Capture leads in your WordPress contact forms, and save them in your Highrise CRM account too.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20highrise').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-180495 > .plugin-card-top > :nth-child(2)').should("contain", "Capture leads in your WordPress contact forms, and save them in your Highrise CRM account too.")
-        cy.get('.plugin-card-180495 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-180495 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Bootstrap Modal card");
-        cy.contains('.frm-card', 'Bootstrap Modal')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="bootstrap-modal"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Bootstrap Modal');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_bootstrap_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Open forms, views, other shortcodes, or sections of content in a Bootstrap popup.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20bootstrap-modal').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-185013 > .plugin-card-top > :nth-child(2)').should("contain", "Open forms, views, other shortcodes, or sections of content in a Bootstrap popup.")
-        cy.get('.plugin-card-185013 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-185013 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Polylang card");
-        cy.contains('.frm-card', 'Polylang')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="polylang"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Polylang');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_polylang_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Create bilingual or multilingual forms with help from Polylang.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20polylang').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-209561 > .plugin-card-top > :nth-child(2)').should("contain", "Create bilingual or multilingual forms with help from Polylang.")
-        cy.get('.plugin-card-209561 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-209561 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
-
-        cy.log("Stripe card");
-        cy.contains('.frm-card', 'Stripe')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
-            });
-        cy.get('.plugin-card-310430 > .plugin-card-top > :nth-child(2)').should("contain", "Any Formidable forms on your site can accept credit card payments without users ever leaving your site.")
-        cy.get('.plugin-card-310430 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-310430 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Form Action Automation card");
-        cy.contains('.frm-card', 'Form Action Automation')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Elite')
+        cy.get('li[data-slug="autoresponder"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Form Action Automation');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Schedule email notifications, SMS messages, and API actions.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20autoresponder').and('contain.text', 'Elite');
             });
-        cy.get('.plugin-card-326042 > .plugin-card-top > :nth-child(2)').should("contain", "Schedule email notifications, SMS messages, and API actions.")
-        cy.get('.plugin-card-326042 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-326042 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
-
-        cy.log("Authorize.net AIM card");
-        cy.contains('.frm-card', 'Authorize.net AIM')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Elite')
-            });
-        cy.get('.plugin-card-337527 > .plugin-card-top > :nth-child(2)').should("contain", "Accept one-time payments directly on your site, using Authorize.net AIM.")
-        cy.get('.plugin-card-337527 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-337527 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Logs card");
-        cy.contains('.frm-card', 'Logs')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Basic')
+        cy.get('li[data-slug="logs"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Logs');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').invoke('text').then((text) => {
+                const normalizedText = text.replace(/\s+/g, ' ').trim();
+                expect(normalizedText).to.contain('See your API requests along with their responses from add-ons including Zapier, Formidable API Webhooks, Salesforce and more.');
             });
-        cy.get('.plugin-card-11927748 > .plugin-card-top > :nth-child(2)').should("contain", "See your API requests along with their responses from add-ons including Zapier, Formidable API Webhooks, Salesforce and more.")
-        cy.get('.plugin-card-11927748 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-11927748 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20logs').and('contain.text', 'Basic');
+            });
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Datepicker Options card");
-        cy.contains('.frm-card', 'Datepicker Options')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="datepicker-options"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Datepicker Options');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').invoke('text').then((text) => {
+                const normalizedText = text.replace(/\s+/g, ' ').trim();
+                expect(normalizedText).to.contain('Add more options to date fields in your forms for so only the dates you choose can be chosen.');
             });
-        cy.get('.plugin-card-20247260 > .plugin-card-top > :nth-child(2)').should("contain", "Add more options to date fields in your forms for so only the dates you choose can be chosen.")
-        cy.get('.plugin-card-20247260 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20247260 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20datepicker-options').and('contain.text', 'Business');
+            });
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Salesforce card");
-        cy.get('.frm-card.plugin-card-20266559')
-            .within(() => {
-                cy.get('.plugin-card-top h2')
-                    .should('contain', 'Salesforce');
-                cy.get('.frm_plan_required')
-                    .should('contain.text', 'License plan required')
-                    .and('contain.text', 'Elite');
-                cy.get('.plugin-card-bottom .addon-status')
-                    .should('contain.text', 'Status: Not Installed');
-                cy.get('.plugin-card-bottom .install-now')
-                    .should('contain.text', 'Upgrade Now');
-                cy.get('.plugin-card-top > :nth-child(2)')
-                    .should("contain", "Add new contacts and leads into your Salesforce CRM directly from the WordPress forms on your site.")
+        cy.get('li[data-slug="salesforce"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Salesforce');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_salesforcealt_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Add new contacts and leads into your Salesforce CRM directly from the WordPress forms on your site.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20salesforce').and('contain.text', 'Elite');
             });
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("MailPoet Newsletters card");
-        cy.contains('.frm-card', 'MailPoet Newsletters')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="mailpoet-newsletters"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'MailPoet Newsletters');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_mailpoet_icon');
+            cy.get('p.frm-line-clamp-2').invoke('text').then((text) => {
+                const normalizedText = text.replace(/\s+/g, ' ').trim();
+                expect(normalizedText).to.contain('Send WordPress newsletters from your own site with MailPoet. And use Formidable to for your newsletter signup forms.');
             });
-        cy.get('.plugin-card-20781560 > .plugin-card-top > :nth-child(2)').should("contain", "Send WordPress newsletters from your own site with MailPoet. And use Formidable to for your newsletter signup forms.")
-        cy.get('.plugin-card-20781560 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20781560 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20mailpoet-newsletters').and('contain.text', 'Plus');
+            });
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("ActiveCampaign card");
-        cy.contains('.frm-card', 'ActiveCampaign')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Elite')
+        cy.get('li[data-slug="activecampaign-wordpress-plugin"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'ActiveCampaign');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_activecampaign_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Add contacts to any ActiveCampaign list from your WordPress forms.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20activecampaign-wordpress-plugin').and('contain.text', 'Elite');
             });
-        cy.get('.plugin-card-20790298 > .plugin-card-top > :nth-child(2)').should("contain", "Add contacts to any ActiveCampaign list from your WordPress forms.")
-        cy.get('.plugin-card-20790298 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20790298 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
-
-        cy.log("HubSpot card");
-        cy.contains('.frm-card', 'HubSpot')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Elite')
-            });
-        cy.get('.plugin-card-20811871 > .plugin-card-top > :nth-child(2)').should("contain", "HubSpot is a complete CRM platform with tools for increased leads, accelerated sales, or streamlined customer service.")
-        cy.get('.plugin-card-20811871 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20811871 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("GetResponse card");
-        cy.contains('.frm-card', 'GetResponse')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="getresponse-wordpress-plugin"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'GetResponse');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_getresponse_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Collect leads in WordPress forms and automatically add them in GetResponse. Then trigger automatic emails and other GetResponse marketing automations.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20getresponse-wordpress-plugin').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-20813244 > .plugin-card-top > :nth-child(2)').should("contain", "Collect leads in WordPress forms and automatically add them in GetResponse. Then trigger automatic emails and other GetResponse marketing automations.")
-        cy.get('.plugin-card-20813244 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20813244 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Quiz Maker card");
-        cy.contains('.frm-card', 'Quiz Maker')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="quiz-maker"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Quiz Maker');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Turn your forms into automated quizzes. Add questions and submit the quiz key. Then all the grading is done for you.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20quiz-maker').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-20815759 > .plugin-card-top > :nth-child(2)').should("contain", "Turn your forms into automated quizzes. Add questions and submit the quiz key. Then all the grading is done for you.")
-        cy.get('.plugin-card-20815759 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20815759 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Constant Contact card");
-        cy.contains('.frm-card', 'Constant Contact')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="constant-contact"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Constant Contact');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_constant_contact_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Setup WordPress forms to create leads automatically in Constant Contact. Just select a list and match up form fields.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20constant-contact').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-20826884 > .plugin-card-top > :nth-child(2)').should("contain", "Setup WordPress forms to create leads automatically in Constant Contact. Just select a list and match up form fields.")
-        cy.get('.plugin-card-20826884 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20826884 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Campaign Monitor card");
-        cy.contains('.frm-card', 'Campaign Monitor')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="campaign-monitor"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Campaign Monitor');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_campaignmonitor_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Save time by automatically sending leads from WordPress forms to Campaign Monitor.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20campaign-monitor').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-20891694 > .plugin-card-top > :nth-child(2)').should("contain", "Save time by automatically sending leads from WordPress forms to Campaign Monitor.")
-        cy.get('.plugin-card-20891694 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20891694 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Export View to CSV card");
-        cy.contains('.frm-card', 'Export View to CSV')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="export-view"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Export View to CSV');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Easily create custom CSV files and allow users to export their data from the front-end of your site.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20export-view').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-20897348 > .plugin-card-top > :nth-child(2)').should("contain", "Easily create custom CSV files and allow users to export their data from the front-end of your site.")
-        cy.get('.plugin-card-20897348 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-20897348 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
-
-        cy.log("Legacy Views card");
-        cy.contains('.frm-card', 'Legacy Views');
-        cy.get('.plugin-card-28027505 > .plugin-card-top > :nth-child(2)').should("contain", "Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.")
-        cy.get('.plugin-card-28027505 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28027505 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Visual Views card");
-        cy.contains('.frm-card', 'Visual Views')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="visual-views"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Visual Views');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Create WordPress web apps to display your form submissions in grids, tables, calendars, and more.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20visual-views').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-28058856 > .plugin-card-top > :nth-child(2)').should("contain", "Create WordPress web apps to display your form submissions in grids, tables, calendars, and more.")
-        cy.get('.plugin-card-28058856 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28058856 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Surveys and Polls card");
-        cy.contains('.frm-card', 'Surveys and Polls')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="surveys"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Surveys and Polls');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Transform your WordPress site into a data collection machine with our user-friendly survey form builder.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20surveys').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28067256 > .plugin-card-top > :nth-child(2)').should("contain", "Transform your WordPress site into a data collection machine with our user-friendly survey form builder.")
-        cy.get('.plugin-card-28067256 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28067256 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Landing Pages card");
-        cy.contains('.frm-card', 'Landing Pages')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="landing-pages"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Landing Pages');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Create beautiful landing pages fast and rake in new leads.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20landing-pages').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-28074303 > .plugin-card-top > :nth-child(2)').should("contain", "Create beautiful landing pages fast and rake in new leads.")
-        cy.get('.plugin-card-28074303 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28074303 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Conversational Forms card");
-        cy.contains('.frm-card', 'Conversational Forms')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="conversational-forms"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Conversational Forms');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Ask one question at a time to humanize forms and boost their conversion rates.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20conversational-forms').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28100793 > .plugin-card-top > :nth-child(2)').should("contain", "Ask one question at a time to humanize forms and boost their conversion rates.")
-        cy.get('.plugin-card-28100793 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28100793 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Geolocation card");
-        cy.contains('.frm-card', 'Geolocation')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="geolocation"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Geolocation');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Get more accurate data and make forms faster to complete with address autocomplete.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20geolocation').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28118399 > .plugin-card-top > :nth-child(2)').should("contain", "Get more accurate data and make forms faster to complete with address autocomplete.")
-        cy.get('.plugin-card-28118399 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28118399 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("PDFs card");
-        cy.contains('.frm-card', 'PDFs')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="pdfs"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'PDFs');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Create PDFs from form entries automatically. Email them or let visitors download PDFs from your site.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20pdfs').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28136428 > .plugin-card-top > :nth-child(2)').should("contain", "Create PDFs from form entries automatically. Email them or let visitors download PDFs from your site.")
-        cy.get('.plugin-card-28136428 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28136428 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Google Sheets card");
-        cy.contains('.frm-card', 'Google Sheets')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="google-sheets"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Google Sheets');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_googlesheets_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Send form entries to a Google spreadsheet as a backup or for extra processing.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20google-sheets').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28149579 > .plugin-card-top > :nth-child(2)').should("contain", "Send form entries to a Google spreadsheet as a backup or for extra processing.")
-        cy.get('.plugin-card-28149579 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28149579 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("ACF Forms card");
-        cy.contains('.frm-card', 'ACF Forms')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="acf-forms"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'ACF Forms');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_acfforms_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Sync custom fields between Formidable and Advanced Custom Fields or ACF Pro.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20acf-forms').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28158728 > .plugin-card-top > :nth-child(2)').should("contain", "Sync custom fields between Formidable and Advanced Custom Fields or ACF Pro.")
-        cy.get('.plugin-card-28158728 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28158728 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("AI Forms card");
-        cy.contains('.frm-card', 'AI Forms')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="ai"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'AI Forms');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm-ai-form-icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Get back your time by autogenerating a response from ChatGPT and inserting it into a field.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20ai').and('contain.text', 'Business');
             });
-        cy.get('.plugin-card-28189169 > .plugin-card-top > :nth-child(2)').should("contain", "Get back your time by autogenerating a response from ChatGPT and inserting it into a field.")
-        cy.get('.plugin-card-28189169 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28189169 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Form Abandonment card");
-        cy.contains('.frm-card', 'Form Abandonment')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Business')
+        cy.get('li[data-slug="abandonment"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Form Abandonment');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').invoke('text').then((text) => {
+                const normalizedText = text.replace(/\s+/g, ' ').trim();
+                expect(normalizedText).to.contain("Capture form data before it's submitted to save more leads and optimize forms. Plus, auto save drafts and allow logged out editing.");
             });
-        cy.get('.plugin-card-28217763 > .plugin-card-top > :nth-child(2)').should("contain", "Capture form data before it's submitted to save more leads and optimize forms. Plus, auto save drafts and allow logged out editing.")
-        cy.get('.plugin-card-28217763 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28217763 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20abandonment').and('contain.text', 'Business');
+            });
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("Charts card");
-        cy.contains('.frm-card', 'Charts')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="charts"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'Charts');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Transform form data into insightful graphs with ease.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20charts').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-28248560 > .plugin-card-top > :nth-child(2)').should("contain", "Transform form data into insightful graphs with ease.")
-        cy.get('.plugin-card-28248560 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28248560 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
 
         cy.log("ConvertKit card");
-        cy.contains('.frm-card', 'ConvertKitNEW')
-            .find('.frm_plan_required')
-            .invoke('text')
-            .then((text) => {
-                const trimmedText = text.replace(/\s+/g, ' ').trim();
-                expect(trimmedText).to.include('License plan required: Plus')
+        cy.get('li[data-slug="convertkit"]').within(() => {
+            cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'ConvertKit');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('p.frm-line-clamp-2').should('contain.text', 'Bring automation into your email marketing plan for the power to say "welcome" to your subscribers the moment they opt-in to your list.');
+            cy.contains('Plan required:').within(() => {
+                cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20convertkit').and('contain.text', 'Plus');
             });
-        cy.get('.plugin-card-28286367 > .plugin-card-top > :nth-child(2)').should("contain", 'Bring automation into your email marketing plan for the power to say "welcome" to your subscribers the moment they opt-in to your list.')
-        cy.get('.plugin-card-28286367 > .plugin-card-bottom > .addon-status').should("contain", "Status: Not Installed");
-        cy.get('.plugin-card-28286367 > .plugin-card-bottom > .install-now').should("contain", "Upgrade Now");
+            cy.get('a[aria-label="Upgrade Now"]').should('have.attr', 'target', '_blank')
+                .and('have.attr', 'href').and('include', 'https://formidableforms.com/lite-upgrade/');
+        });
+
+        cy.get('div.frm-addons-request-addon').should('exist').within(() => {
+            cy.get('span').should('have.text', 'Not finding what you need?');
+            cy.get('a.frm-font-semibold').should('have.text', 'Request Add-On')
+                .and('have.attr', 'href', 'https://connect.formidableforms.com/add-on-request/')
+                .and('have.attr', 'target', '_blank');
+        });
+    });
+
+    it("should search for add-ons", () => {
+
+        cy.log("Search for valid add-ons by name");
+        cy.get('#addon-search-input').type("PayPal Standard");
+        cy.get('.plugin-card-paypal-standard').should("contain", "PayPal Standard");
+
+        cy.log("Search for valid add-ons by description");
+        cy.get('#addon-search-input').clear().type("Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.");
+        cy.get('.plugin-card-paypal-signature').should("contain", "PayPal Standard");
+
+        cy.log("Search for non valid add-ons");
+        cy.get('#addon-search-input').clear().type("Non valid add-on");
+        cy.get('#frm-page-skeleton-empty-state > img').should("exist");
+        cy.get('.frm-page-skeleton-title').should("contain", "No add-ons found");
+        cy.get('.frm-page-skeleton-text').should("contain", "Sorry, we didn't find any add-ons that match your criteria.");
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Request Add-On").click();
 
     });
 });
