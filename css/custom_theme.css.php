@@ -347,12 +347,12 @@ legend.frm_hidden{
 	background-position-y: calc(50% + 3px);
 }
 
-.frm_forms.with_frm_style input[disabled],
-.frm_forms.with_frm_style select[disabled],
-.frm_forms.with_frm_style textarea[disabled],
-.frm_forms.with_frm_style input[readonly],
-.frm_forms.with_frm_style select[readonly],
-.frm_forms.with_frm_style textarea[readonly] {
+.with_frm_style input[disabled],
+.with_frm_style select[disabled],
+.with_frm_style textarea[disabled],
+.with_frm_style input[readonly],
+.with_frm_style select[readonly],
+.with_frm_style textarea[readonly] {
 	background-color: var(--bg-color-disabled)<?php echo esc_html( $important ); ?>;
 	color: var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
 	border-color: var(--border-color-disabled)<?php echo esc_html( $important ); ?>;
@@ -816,15 +816,11 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_checkbox label,
-.with_frm_style .frm_radio label {
-	display: inline-block;
-	vertical-align: middle;
-	white-space:normal;
-}
-
-.with_frm_style .frm_checkbox label input[type=checkbox],
-.with_frm_style .frm_radio label input[type=radio] {
-	margin-right: 4px;
+.with_frm_style .frm_radio label{
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	white-space: normal;
 }
 
 .with_frm_style .frm_checkbox label:not(.frm-label-disabled),
@@ -834,7 +830,6 @@ a.frm_save_draft{
 
 .with_frm_style .vertical_radio .frm_checkbox label,
 .with_frm_style .vertical_radio .frm_radio label{
-	display: block;
 	width: 100%;
 }
 
@@ -884,9 +879,9 @@ a.frm_save_draft{
 	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block !important;
-	width: 16px !important;
-	min-width: 16px !important;
-	height: 16px !important;
+	width: 16px;
+	min-width: 16px;
+	height: 16px;
 	color: var(--border-color);
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
