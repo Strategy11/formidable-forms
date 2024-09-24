@@ -5848,19 +5848,6 @@ p.frm-inline-select,
 	align-items: center;
 }
 
-.frm-single-settings .frm_logic_row > select {
-	max-width: 32.5% !important;
-}
-
-.frm-single-settings .frm_logic_row select:nth-child(2) {
-	max-width: 20% !important;
-}
-
-.frm-single-settings .frm_logic_row span input,
-.frm-single-settings .frm_logic_row span select {
-	max-width: 36% !important;
-}
-
 .frm-single-settings .frm_logic_row input {
 	max-width: 118px !important;
 }
