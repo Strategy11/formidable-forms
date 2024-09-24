@@ -620,7 +620,7 @@ class FrmStyle {
 			'direction'                  => is_rtl() ? 'rtl' : 'ltr',
 			'fieldset'                   => '0px',
 			'fieldset_color'             => '000000',
-			'fieldset_padding'           => '0 0 15px 0',
+			'fieldset_padding'           => '0px 0px 15px 0px',
 			'fieldset_bg_color'          => '',
 
 			'title_size'                 => '40px',
@@ -631,7 +631,7 @@ class FrmStyle {
 			'form_desc_color'            => '98A2B3',
 			'form_desc_margin_top'       => '10px',
 			'form_desc_margin_bottom'    => '25px',
-			'form_desc_padding'          => '0',
+			'form_desc_padding'          => '0px',
 
 			'font'                       => '',
 			'font_size'                  => '15px',
@@ -642,14 +642,14 @@ class FrmStyle {
 			'width'                      => '150px',
 			'required_color'             => 'F04438',
 			'required_weight'            => 'bold',
-			'label_padding'              => '0 0 5px 0',
+			'label_padding'              => '0px 0px 5px 0px',
 
 			'description_font_size'      => '12px',
 			'description_color'          => '667085',
 			'description_weight'         => 'normal',
 			'description_style'          => 'normal',
 			'description_align'          => 'left',
-			'description_margin'         => '0',
+			'description_margin'         => '0px',
 
 			'field_font_size'            => '14px',
 			'field_height'               => '36px',
@@ -689,7 +689,7 @@ class FrmStyle {
 			'section_font_size'          => '18px',
 			'section_color'              => '344054',
 			'section_weight'             => 'bold',
-			'section_pad'                => '32px 0 3px 0',
+			'section_pad'                => '32px 0px 3px 0px',
 			'section_mar_top'            => '30px',
 			'section_mar_bottom'         => '30px',
 			'section_bg_color'           => '',

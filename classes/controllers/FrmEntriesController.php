@@ -29,7 +29,7 @@ class FrmEntriesController {
 	 * If the user is on the upsell page, instead of showing a permission error on reload,
 	 * redirect to the views index page.
 	 *
-	 * @since x.x
+	 * @since 6.14.1
 	 *
 	 * @return void
 	 */
@@ -52,7 +52,7 @@ class FrmEntriesController {
 	 * A user may deactivate views but then try to reload the views index.
 	 * Instead of showing a permission error, redirect to the views upsell page.
 	 *
-	 * @since x.x
+	 * @since 6.14.1
 	 *
 	 * @return void
 	 */
@@ -72,7 +72,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.14.1
 	 *
 	 * @param array $query_args
 	 * @return array

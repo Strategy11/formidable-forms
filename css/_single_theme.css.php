@@ -369,7 +369,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
-	border-width:<?php echo esc_html( $border_width_error . $important ); ?>;
+	border-width:var(--border-width-error) <?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $border_style_error . $important ); ?>;
 }
 
@@ -384,7 +384,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
-	color:<?php echo esc_html( $border_color_error . $important ); ?>;
+	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{

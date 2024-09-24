@@ -1321,4 +1321,73 @@ class FrmAppController {
 	public static function page_route( $content ) {
 		return FrmDeprecated::page_route( $content );
 	}
+
+	/**
+	 * Check if we are in our admin pages.
+	 *
+	 * @return bool
+	 */
+	private static function in_our_pages() {
+		global $current_screen;
+		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+	}
+
+	/**
+	 * Hide all third-parties admin notices only in our admin pages.
+	 *
+	 * @return void
+	 */
+	public static function filter_admin_notices() {
+		if ( ! self::in_our_pages() ) {
+			return;
+		}
+
+		$actions = array(
+			'admin_notices',
+			'network_admin_notices',
+			'user_admin_notices',
+			'all_admin_notices',
+		);
+
+		global $wp_filter;
+
+		foreach ( $actions as $action ) {
+			if ( empty( $wp_filter[ $action ]->callbacks ) ) {
+				continue;
+			}
+			foreach ( $wp_filter[ $action ]->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback_name => $callback ) {
+					if ( self::is_our_callback_string( $callback_name ) || self::is_our_callback_array( $callback ) ) {
+						continue;
+					}
+					unset( $wp_filter[ $action ]->callbacks[ $priority ][ $callback_name ] );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Validate that the callback name is ours not from third-party.
+	 *
+	 * @param string $callback_name WordPress callback name.
+	 *
+	 * @return bool
+	 */
+	private static function is_our_callback_string( $callback_name ) {
+		return 0 === stripos( $callback_name, 'frm' );
+	}
+
+	/**
+	 * Validate that the callback array is ours not from third-party.
+	 *
+	 * @param array $callback WordPress callback array.
+	 *
+	 * @return bool
+	 */
+	private static function is_our_callback_array( $callback ) {
+		return ! empty( $callback['function'] ) &&
+			is_array( $callback['function'] ) &&
+			! empty( $callback['function'][0] ) &&
+			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+	}
 }
