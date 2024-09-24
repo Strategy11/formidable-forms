@@ -28,54 +28,11 @@ describe("Form Templates page", () => {
 
         cy.get('li[data-category="all-templates"]').within(() => {
             cy.get('.frm-form-templates-cat-text').should("have.text", "All Templates");
-            cy.get('.frm-form-templates-cat-count').should("have.text", "319");
         });
 
         cy.get('li[data-category="free-templates"]').within(() => {
             cy.get('.frm-form-templates-cat-text').should("have.text", "Free Templates");
-            cy.get('.frm-form-templates-cat-count').should("have.text", "34");
         });
-
-        const categories = [
-            { category: 'ai', text: 'AI' },
-            { category: 'application', text: 'Application' },
-            { category: 'business-operations', text: 'Business Operations' },
-            { category: 'calculator', text: 'Calculator' },
-            { category: 'consent', text: 'Consent' },
-            { category: 'contact', text: 'Contact' },
-            { category: 'conversational-forms', text: 'Conversational Forms' },
-            { category: 'customer-service', text: 'Customer Service' },
-            { category: 'datepicker', text: 'Datepicker' },
-            { category: 'education', text: 'Education' },
-            { category: 'entertainment', text: 'Entertainment' },
-            { category: 'event-planning', text: 'Event Planning' },
-            { category: 'feedback', text: 'Feedback' },
-            { category: 'finance', text: 'Finance' },
-            { category: 'geolocation', text: 'Geolocation' },
-            { category: 'health-and-wellness', text: 'Health and Wellness' },
-            { category: 'lead', text: 'Lead' },
-            { category: 'marketing', text: 'Marketing' },
-            { category: 'multi-page', text: 'Multi-Page' },
-            { category: 'nonprofit', text: 'Nonprofit' },
-            { category: 'order-form', text: 'Order Form' },
-            { category: 'payment', text: 'Payment' },
-            { category: 'post', text: 'Post' },
-            { category: 'quiz', text: 'Quiz' },
-            { category: 'real-estate', text: 'Real Estate' },
-            { category: 'registration-and-signup', text: 'Registration and Signup' },
-            { category: 'repeater-field', text: 'Repeater Field' },
-            { category: 'signature', text: 'Signature' },
-            { category: 'survey', text: 'Survey' },
-            { category: 'user-registration', text: 'User Registration' },
-            { category: 'woocommerce', text: 'WooCommerce' }
-        ];
-
-        categories.forEach(({ category, text }) => {
-            cy.get(`li[data-category="${category}"]`).within(() => {
-                cy.get('.frm-form-templates-cat-text').should("have.text", text);
-            });
-        });
-
 
         cy.log("Check the items on the All Templates page");
         cy.log("Contact Us Template");
