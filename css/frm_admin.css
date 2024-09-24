@@ -1406,7 +1406,7 @@ body.frm-hidden-overflow {
 .post-type-frm_display.wp-core-ui .button-primary,
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
-.frm_single_entry_page .button-primary:not(.frm-fields-item) {
+.frm_single_entry_page .button-primary:not(.frm-button-entry-nav) {
 	background-color: var(--primary-500) !important;
 	color: #fff !important;
 }
@@ -1468,7 +1468,7 @@ body.frm-hidden-overflow {
 .frm-white-body .button:not(.frm-button-primary):active,
 .frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .frm-button-secondary:hover,
-.wp-core-ui.frm-white-body .button-secondary:not(.frm-fields-item):hover,
+.wp-core-ui.frm-white-body .button-secondary:not(.frm-button-entry-nav):hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
 .frm_wrap .preview > .button:hover {
