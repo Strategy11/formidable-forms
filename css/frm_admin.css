@@ -5848,10 +5848,6 @@ p.frm-inline-select,
 	align-items: center;
 }
 
-.frm-single-settings .frm_logic_row input {
-	max-width: 118px !important;
-}
-
 .frm-single-settings ul.frm_sortable_field_opts {
 	margin-bottom: 5px;
 }
@@ -5976,10 +5972,6 @@ a.frm_add_logic_link.frm_hidden {
 
 .frm_remove_tag:before {
 	content: '\e600';
-}
-
-.frm_logic_row .frm_remove_tag {
-	padding-left: 7px;
 }
 
 .frm_logic_row .frm1 > .frm_remove_tag {
