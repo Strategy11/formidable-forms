@@ -8250,12 +8250,9 @@ body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap textarea
 	box-shadow: none !important;
 }
 
-.frm-admin-page-styles textarea:focus,
-.frm-admin-page-styles input:focus,
-.frm-admin-page-styles select:focus,
-.frm-admin-page-entries textarea:focus,
-.frm-admin-page-entries input:focus,
-.frm-admin-page-entries select:focus {
+.wp-admin .frm_fields_container textarea:focus,
+.wp-admin .frm_fields_container input:focus,
+.wp-admin .frm_fields_container select:focus {
 	border-color: var(--primary-500);
 	box-shadow: none;
 }
