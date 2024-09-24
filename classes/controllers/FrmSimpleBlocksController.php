@@ -182,17 +182,25 @@ class FrmSimpleBlocksController {
 			return '';
 		}
 
+		ob_start();
+
 		/**
 		 * @since 5.5.2
 		 * @param array $attributes
 		 */
 		do_action( 'frm_before_simple_form_render', $attributes );
 
+		$form = ob_get_clean();
+
+		if ( false === $form ) {
+			$form = '';
+		}
+
 		$params       = array_filter( $attributes );
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
 
-		$form = FrmFormsController::get_form_shortcode( $params );
+		$form .= FrmFormsController::get_form_shortcode( $params );
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
 	}
 

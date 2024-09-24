@@ -326,7 +326,7 @@ class FrmCurrencyHelper {
 		if ( is_array( $filtered_currencies ) ) {
 			$currencies = $filtered_currencies;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_currencies filter.', '6.5' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_currencies filter.', '6.5' );
 		}
 
 		return $currencies;

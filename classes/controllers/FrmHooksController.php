@@ -126,6 +126,7 @@ class FrmHooksController {
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
+		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
 
 		// Addons Controller.
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
@@ -301,7 +302,7 @@ class FrmHooksController {
 		add_filter( 'frm_field_label_seen', 'FrmFieldsController::check_label' );
 
 		// Forms Controller.
-		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
+		add_action( 'frm_form_classes', 'FrmFormsController::form_classes' );
 		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_button_classes' );
 		add_filter( 'frm_back_button_class', 'FrmFormsController::update_button_classes' );
 

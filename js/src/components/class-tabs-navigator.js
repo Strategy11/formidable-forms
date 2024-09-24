@@ -5,7 +5,7 @@ export class frmTabsNavigator {
 			return;
 		}
 
-		this.wrapper = document.querySelector( wrapper );
+		this.wrapper = wrapper instanceof Element ? wrapper : document.querySelector( wrapper );
 
 		if ( null === this.wrapper ) {
 			return;
@@ -24,6 +24,8 @@ export class frmTabsNavigator {
 		if ( null === this.wrapper || ! this.navs.length || null === this.trackLine || null === this.slideTrack || ! this.slides.length ) {
 			return;
 		}
+
+		this.initDefaultSlideTrackerWidth();
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 		});
@@ -32,19 +34,34 @@ export class frmTabsNavigator {
 	onNavClick( event, index ) {
 		this.removeActiveClassnameFromNavs();
 		event.target.classList.add( 'frm-active' );
-		this.initSlideTrackUnterline( event.target );
+		this.initSlideTrackUnderline( event.target, index );
 		this.changeSlide( index );
 	}
 
-	initSlideTrackUnterline( nav ) {
+	initDefaultSlideTrackerWidth() {
+		if ( ! this.slideTrackLine.dataset.initialWidth ) {
+			return;
+		}
+		this.slideTrackLine.style.width = `${this.slideTrackLine.dataset.initialWidth}px`;
+	}
+	initSlideTrackUnderline( nav, index ) {
+		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) ) ;
 		this.slideTrackLine.style.transform = `translateX(${activeNav.offsetLeft}px)`;
-		this.slideTrackLine.style.width = activeNav.offsetWidth + 'px';
+		this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+
+		if ( this.navs.length === index + 1 ) { 
+			this.slideTrackLine.classList.add( 'frm-last' );
+			return;
+		}
+		if ( 0 === index ) {
+			this.slideTrackLine.classList.add( 'frm-first' );
+		}
 	}
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
-		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${this.flexboxSlidesGap} ) * -1 )`;
+		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * -1 )`;
 		this.slideTrack.style.transform = `translateX(${translate})`;
 		if ( index in this.slides ) {
 			this.slides[ index ].classList.add( 'frm-active' );

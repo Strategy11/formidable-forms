@@ -108,11 +108,16 @@ class FrmEntryMeta {
 		$value = apply_filters( 'frm_prepare_data_before_db', $value, $atts['field_id'], $atts['entry_id'], array( 'field' => $atts['field'] ) );
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param array      $values Either indexed by field ID or field key.
+	 * @return void
+	 */
 	public static function update_entry_metas( $entry_id, $values ) {
 		global $wpdb;
 
-		$prev_values = FrmDb::get_col(
-			$wpdb->prefix . 'frm_item_metas',
+		$previous_field_ids = FrmDb::get_col(
+			'frm_item_metas',
 			array(
 				'item_id'    => $entry_id,
 				'field_id !' => 0,
@@ -120,19 +125,28 @@ class FrmEntryMeta {
 			'field_id'
 		);
 
-		foreach ( $values as $field_id => $meta_value ) {
-			$field = false;
-			if ( ! empty( $field_id ) ) {
-				$field = FrmField::getOne( $field_id );
+		$values_indexed_by_field_id = array();
+		foreach ( $values as $field_id_or_key => $meta_value ) {
+			$field_id = $field_id_or_key;
+			$field    = null;
+
+			if ( $field_id_or_key ) {
+				$field = FrmField::getOne( $field_id_or_key );
+
+				if ( is_object( $field ) ) {
+					$field_id = $field->id;
+				}
 			}
+
+			$values_indexed_by_field_id[ $field_id ] = $meta_value;
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
-			if ( $prev_values && in_array( $field_id, $prev_values ) ) {
+			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
 				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
-					// remove blank fields
-					unset( $values[ $field_id ] );
+					// Remove blank fields.
+					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
 					// if value exists, then update it
 					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
@@ -143,20 +157,20 @@ class FrmEntryMeta {
 			}
 		}//end foreach
 
-		if ( empty( $prev_values ) ) {
+		if ( empty( $previous_field_ids ) ) {
 			return;
 		}
 
-		$prev_values = array_diff( $prev_values, array_keys( $values ) );
+		$field_ids_to_remove = array_diff( $previous_field_ids, array_keys( $values_indexed_by_field_id ) );
 
-		if ( empty( $prev_values ) ) {
+		if ( ! $field_ids_to_remove ) {
 			return;
 		}
 
 		// prepare the query
 		$where = array(
 			'item_id'  => $entry_id,
-			'field_id' => $prev_values,
+			'field_id' => $field_ids_to_remove,
 		);
 		FrmDb::get_where_clause_and_values( $where );
 
