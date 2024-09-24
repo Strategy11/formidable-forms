@@ -624,13 +624,16 @@ class FrmEntryValidate {
 					return true;
 				}
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-				$fields  = FrmDb::get_results( 'frm_fields', array(
+				$fields  = FrmDb::get_results(
+					'frm_fields',
+					array(
 						'form_id' => $form_id,
 						'type'    => 'text',
 					),
 					'id,name',
 					array( 'order_by' => 'field_order ASC' )
 				);
+
 				foreach ( $fields as $index => $field ) {
 					if ( 'Name' !== $field->name ) {
 						continue;
