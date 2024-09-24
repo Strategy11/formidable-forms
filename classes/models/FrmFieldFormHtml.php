@@ -436,6 +436,9 @@ class FrmFieldFormHtml {
 		}
 
 		$this->html = str_replace( '[error_class]', esc_attr( $classes ), $this->html );
+		if ( $this->field_obj->get_field_column( 'type' ) === 'summary' ) {
+			$this->html = str_replace( ' form-field', esc_attr( ' form-field' . $classes ), $this->html );
+		}
 	}
 
 	/**
