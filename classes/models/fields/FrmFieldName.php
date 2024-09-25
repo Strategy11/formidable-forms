@@ -128,6 +128,11 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return string      Most of cases, this will return string.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
+		if ( ! empty( $atts['return_array'] ) ) {
+			// When this setting is passed we want to keep $value as an array.
+			return $value;
+		}
+
 		if ( ! is_array( $value ) ) {
 			return $value;
 		}
