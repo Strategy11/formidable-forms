@@ -135,6 +135,9 @@ class FrmOnSubmitHelper {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
 		?>
 		<div class="frm_form_field">
+			<div class="frm_note_style">
+				<?php esc_html_e( 'The contents of the selected page will be printed, but it does not trigger a full page load. This means that standard URL tracking mechanisms, such as Google Analytics or other tools that rely on page load events, will not work out of the box. If you require tracking consider using the Redirect to Url setting instead.', 'formidable' ); ?>
+			</div>
 			<label for="<?php echo esc_attr( $name_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Select a page', 'formidable' ); ?>
 			</label>
