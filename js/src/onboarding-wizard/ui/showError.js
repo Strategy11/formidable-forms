@@ -4,16 +4,14 @@
 import { showFormError } from 'core/utils';
 
 /**
- * Internal dependencies
- */
-import { PREFIX } from '../shared';
-
-/**
  * Displays errors related to the email address field.
  *
- * @param {string} type The categorization of the error (e.g., "invalid", "empty").
+ * @since x.x Added the `input` param.
+ *
+ * @param {string}           type  The categorization of the error (e.g., "invalid", "empty").
+ * @param {HTMLInputElement} input The input element to which the error is related.
  * @return {void}
  */
-export const showEmailAddressError = type => {
-	showFormError( `#${PREFIX}-default-email-field`, `#${PREFIX}-email-step-error`, type );
+export const showEmailAddressError = ( type, input ) => {
+	showFormError( `#${input.id}`, `#${input.nextElementSibling.id}`, type );
 };

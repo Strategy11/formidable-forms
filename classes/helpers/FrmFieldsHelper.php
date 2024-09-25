@@ -429,7 +429,7 @@ class FrmFieldsHelper {
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings = $filtered_substrings;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
 		}
 
 		return $substrings;

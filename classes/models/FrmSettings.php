@@ -84,6 +84,7 @@ class FrmSettings {
 	public $summary_emails_recipients;
 
 	public $default_email;
+	public $from_email;
 	public $currency;
 
 	/**
@@ -403,6 +404,7 @@ class FrmSettings {
 		$this->load_style        = $params['frm_load_style'];
 		$this->custom_css        = $params['frm_custom_css'];
 		$this->default_email     = $params['frm_default_email'];
+		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
