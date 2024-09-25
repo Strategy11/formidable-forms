@@ -241,7 +241,7 @@ class FrmEmail {
 	 */
 	private function set_from( $user_id_args ) {
 		if ( empty( $this->settings['from'] ) ) {
-			$from = get_option( 'admin_email' );
+			$from = FrmEmailHelper::get_default_from_email();
 		} else {
 			$from = $this->prepare_email_setting( $this->settings['from'], $user_id_args );
 		}
