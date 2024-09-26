@@ -1,16 +1,21 @@
 /**
+ * External dependencies
+ */
+import { CURRENT_CLASS } from 'core/constants';
+import { frmAnimate, setQueryParam, hide, show } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { setupUsageData } from '../dataUtils';
 import { getElements } from '../elements';
-import { CURRENT_CLASS, getAppState, PREFIX, setAppStateProperty } from '../shared';
-import { hide, frmAnimate, show, setQueryParam } from '../utils';
+import { getState, PREFIX, setSingleState } from '../shared';
 
 /**
  * Navigates to the given step in the onboarding sequence.
  * Optionally updates the browser's history state to include the current step.
  *
- * @param {string} stepName The name of the step to navigate to.
+ * @param {string} stepName                   The name of the step to navigate to.
  * @param {string} [updateMethod='pushState'] Specifies the method to update the browser's history and URL. Accepts 'pushState' or 'replaceState'. If omitted, defaults to 'pushState'.
  * @return {void}
  */
@@ -60,10 +65,10 @@ export const navigateToNextStep = () => {
 	const nextStepName = nextStep.dataset.stepName;
 
 	// Save processed steps
-	const { processedSteps } = getAppState();
+	const { processedSteps } = getState();
 	if ( ! processedSteps.includes( processedStep ) ) {
 		processedSteps.push( processedStep );
-		setAppStateProperty( 'processedSteps', processedSteps );
+		setSingleState( 'processedSteps', processedSteps );
 	}
 
 	setupUsageData( processedStep, nextStepName );

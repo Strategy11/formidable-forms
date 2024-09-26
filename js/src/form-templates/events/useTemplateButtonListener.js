@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, setAppStateProperty } from '../shared';
+import { PREFIX, setSingleState } from '../shared';
 import { showLockedTemplateModal } from '../ui/';
 import { isCustomTemplate, isLockedTemplate } from '../utils';
 
@@ -43,7 +43,7 @@ const onUseTemplateButtonClick = ( event ) => {
 	event.preventDefault();
 
 	// Update app state with selected template
-	setAppStateProperty( 'selectedTemplate', template );
+	setSingleState( 'selectedTemplate', template );
 
 	// Handle locked templates
 	if ( isLocked ) {

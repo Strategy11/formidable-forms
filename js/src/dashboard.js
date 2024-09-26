@@ -1,7 +1,10 @@
+/**
+ * External dependencies
+ */
+import { frmAnimate } from 'core/utils';
+
 import { frmTabsNavigator } from './components/class-tabs-navigator';
 import { frmCounter } from './components/class-counter';
-import { frmAnimate } from './common/utilities/animation';
-
 class frmDashboard {
 
 	constructor() {

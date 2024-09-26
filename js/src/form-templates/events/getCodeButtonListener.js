@@ -1,9 +1,13 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault, isValidEmail } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { showCodeFromEmailModal, showEmailAddressError } from '../ui';
-import { isValidEmail, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Get Code" button.

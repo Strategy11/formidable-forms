@@ -126,10 +126,7 @@ class FrmHooksController {
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
-
-		// Addons Controller.
-		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
-		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
+		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
@@ -203,6 +200,7 @@ class FrmHooksController {
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
+		FrmAddonsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
@@ -301,7 +299,7 @@ class FrmHooksController {
 		add_filter( 'frm_field_label_seen', 'FrmFieldsController::check_label' );
 
 		// Forms Controller.
-		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
+		add_action( 'frm_form_classes', 'FrmFormsController::form_classes' );
 		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_button_classes' );
 		add_filter( 'frm_back_button_class', 'FrmFormsController::update_button_classes' );
 

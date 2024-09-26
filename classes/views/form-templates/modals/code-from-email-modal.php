@@ -22,11 +22,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-form-templates-modal-fieldset frm_form_field">
 			<input id="frm_code_from_email" type="text" placeholder="<?php esc_attr_e( 'Code from email', 'formidable' ); ?>" />
 
-			<span id="frm_code_from_email_error" class="frm-validation-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
-				<span frm-error="custom"></span>
-				<span frm-error="invalid"><?php esc_html_e( 'Verification code is wrong', 'formidable' ); ?></span>
-				<span frm-error="empty"><?php esc_html_e( 'Verification code is empty', 'formidable' ); ?></span>
-			</span>
+			<?php
+			FrmAppHelper::print_setting_error(
+				array(
+					'id'     => 'frm_code_from_email_error',
+					'errors' => array(
+						'custom'  => '',
+						'invalid' => __( 'Verification code is wrong', 'formidable' ),
+						'empty'   => __( 'Verification code is empty', 'formidable' ),
+					),
+					'class'  => 'frm-justify-center frm-items-center',
+				)
+			);
+			?>
 		</div>
 
 		<div id="frm_code_from_email_options" class="frm-justify-center frm-items-center frm_hidden">

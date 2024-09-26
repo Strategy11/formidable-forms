@@ -3,7 +3,7 @@
  */
 import { getElements } from '../elements';
 
-export let categorizedTemplates = {};
+export const categorizedTemplates = {};
 
 /**
  * Builds a categorized list of templates.

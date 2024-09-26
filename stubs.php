@@ -363,6 +363,36 @@ namespace {
 	 */
 	function akismet_test_mode() {
 	}
+
+	/** WP Optimize plugin */
+	class WP_Optimize {
+		/**
+		 * @return WPO_Page_Cache
+		 */
+		public function get_page_cache() {
+		}
+	}
+	class WPO_Page_Cache {
+		/**
+		 * @return bool
+		 */
+		public function purge() {
+		}
+	}
+	/**
+	 * @return WP_Optimize
+	 */
+	function WP_Optimize() {
+	}
+
+	/**
+	 * Function from W3 Total cache.
+	 *
+	 * @param array|null $extras Extras.
+	 * @return void
+	 */
+	function w3tc_flush_all( $extras = null ) {
+	}
 }
 
 namespace Elementor {
