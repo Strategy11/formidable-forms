@@ -2872,7 +2872,7 @@ function frmAdminBuildJS() {
 				if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
 					addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
 				}
-				addNamePartShortcodes( fields[i], fieldId, list );	
+				maybeAddNamePartShortcodes( fields[i], fieldId, list );	
 			}
 		}
 	}
@@ -2888,7 +2888,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @returns {Void}
 	 */
-	function addNamePartShortcodes( field, fieldId, list ) {
+	function maybeAddNamePartShortcodes( field, fieldId, list ) {
 		if ( 'name' !== field.fieldType ) {
 			return;
 		}
