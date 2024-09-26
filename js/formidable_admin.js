@@ -2868,10 +2868,12 @@ function frmAdminBuildJS() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
-			if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
-				addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
+			if ( document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes ) {
+				if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
+					addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
+				}
+				addNamePartShortcodes( fields[i], fieldId, list );	
 			}
-			addNamePartShortcodes( fields[i], fieldId, list );
 		}
 	}
 
