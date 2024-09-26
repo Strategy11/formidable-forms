@@ -38,7 +38,9 @@ abstract class FrmEmailSummary {
 	 *
 	 * @return false|string
 	 */
-	abstract protected function get_inner_content();
+	protected function get_inner_content() {
+		return '';
+	}
 
 	/**
 	 * Constructor.
