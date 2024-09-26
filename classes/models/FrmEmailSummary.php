@@ -15,7 +15,7 @@ abstract class FrmEmailSummary {
 	/**
 	 * Name of the file with the HTML content, without the file extension.
 	 *
-	 * @var bool
+	 * @var string
 	 */
 	protected $template = 'base';
 
