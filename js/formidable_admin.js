@@ -2887,23 +2887,24 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function addNamePartShortcodes( field, fieldId, list ) {
-		if ( 'name' === field.fieldType ) {
-			Object.entries({
-				first: __( 'First', 'formidable' ),
-				middle: __( 'Middle', 'formidable' ),
-				last: __( 'Last', 'formidable' ),
-			}).forEach(
-				([ code, label ]) => {
-					addCalcFieldLiToList(
-						list,
-						fieldId,
-						field.fieldId + ' show=' + code,
-						field.fieldName + ' (' + label + ')',
-						field.fieldType
-					);
-				}
-			);
+		if ( 'name' !== field.fieldType ) {
+			return;
 		}
+		Object.entries({
+			first: __( 'First', 'formidable' ),
+			middle: __( 'Middle', 'formidable' ),
+			last: __( 'Last', 'formidable' ),
+		}).forEach(
+			([ code, label ]) => {
+				addCalcFieldLiToList(
+					list,
+					fieldId,
+					field.fieldId + ' show=' + code,
+					field.fieldName + ' (' + label + ')',
+					field.fieldType
+				);
+			}
+		);
 	}
 
 	/**
