@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class FrmEmailSummary {
 
 	/**
+	 * Name of the file with the HTML content, without the file extension.
+	 *
+	 * @var bool
+	 */
+	protected $template = 'base';
+
+	/**
 	 * Is HTML email?
 	 *
 	 * @var bool
@@ -85,7 +92,7 @@ abstract class FrmEmailSummary {
 		}
 
 		ob_start();
-		include $this->get_include_file( 'base' );
+		include $this->get_include_file( $this->template );
 		$content = ob_get_clean();
 
 		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
