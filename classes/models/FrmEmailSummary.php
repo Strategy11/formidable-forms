@@ -148,11 +148,24 @@ abstract class FrmEmailSummary {
 	}
 
 	/**
+	 * Check if the email should be sent.
+	 *
+	 * @return bool
+	 */
+	protected function should_send() {
+		return true;
+	}
+
+	/**
 	 * Sends email.
 	 *
 	 * @return bool
 	 */
 	public function send() {
+		if ( ! $this->should_send() ) {
+			return false;
+		}
+
 		$recipients = $this->get_recipients();
 		if ( ! $recipients ) {
 			// Return true to not try to send this email on the next day.
