@@ -2868,7 +2868,7 @@ function frmAdminBuildJS() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
-			if ( document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes ) {
+			if ( document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes ) { // If the required Pro updates are there to support "show" shortcodes.
 				if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
 					addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
 				}
