@@ -108,7 +108,16 @@ abstract class FrmEmailSummary {
 	 */
 	protected function get_include_file( $file_name ) {
 		$suffix = $this->is_html ? '' : '-plain';
-		return FrmAppHelper::plugin_path() . '/classes/views/summary-emails/' . $file_name . $suffix . '.php';
+		return $this->get_include_folder() . $file_name . $suffix . '.php';
+	}
+
+	/**
+	 * Gets the full path to the folder containing the email templates.
+	 *
+	 * @return string
+	 */
+	protected function get_include_folder() {
+		return FrmAppHelper::plugin_path() . '/classes/views/summary-emails/';
 	}
 
 	/**
