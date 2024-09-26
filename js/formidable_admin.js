@@ -2871,24 +2871,36 @@ function frmAdminBuildJS() {
 			if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
 				addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
 			}
+			addNamePartShortcodes( fields[i], fieldId, list );
+		}
+	}
 
-			if ( 'name' === fields[i].fieldType ) {
-				Object.entries({
-					first: __( 'First', 'formidable' ),
-					middle: __( 'Middle', 'formidable' ),
-					last: __( 'Last', 'formidable' ),
-				}).forEach(
-					([ code, label ]) => {
-						addCalcFieldLiToList(
-							list,
-							fieldId,
-							fields[i].fieldId + ' show=' + code,
-							fields[i].fieldName + ' (' + label + ')',
-							fields[i].fieldType
-						);
-					}
-				);
-			}
+	/**
+	 * Adds shortcodes like [nameFieldId show=last] to the calculation popup.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      field
+	 * @param {Number}      fieldId
+	 * @param {HTMLElement} list The 'ul' element that contains field shortcodes available for calculation. 
+	 */
+	function addNamePartShortcodes( field, fieldId, list ) {
+		if ( 'name' === field.fieldType ) {
+			Object.entries({
+				first: __( 'First', 'formidable' ),
+				middle: __( 'Middle', 'formidable' ),
+				last: __( 'Last', 'formidable' ),
+			}).forEach(
+				([ code, label ]) => {
+					addCalcFieldLiToList(
+						list,
+						fieldId,
+						field.fieldId + ' show=' + code,
+						field.fieldName + ' (' + label + ')',
+						field.fieldType
+					);
+				}
+			);
 		}
 	}
 
