@@ -2872,7 +2872,23 @@ function frmAdminBuildJS() {
 				addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
 			}
 
-			wp.hooks.doAction( 'frm_calculation_add_field_shortcode', fields[i], fieldId, list );
+			if ( 'name' === fields[i].fieldType ) {
+				Object.entries({
+					first: __( 'First', 'formidable' ),
+					middle: __( 'Middle', 'formidable' ),
+					last: __( 'Last', 'formidable' ),
+				}).forEach(
+					([ code, label ]) => {
+						addCalcFieldLiToList(
+							list,
+							fieldId,
+							fields[i].fieldId + ' show=' + code,
+							fields[i].fieldName + ' (' + label + ')',
+							fields[i].fieldType
+						);
+					}
+				);
+			}
 		}
 	}
 
@@ -11063,8 +11079,7 @@ function frmAdminBuildJS() {
 		toggleAddonState,
 		purifyHtml,
 		loadApiEmailForm,
-		addMyEmailAddress,
-		addCalcFieldLiToList
+		addMyEmailAddress
 	};
 }
 
