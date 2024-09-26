@@ -73,7 +73,7 @@ describe("Form Templates page", () => {
         cy.get('[frm-search-text="survey"] .frm-form-templates-item-description')
             .should('contain.text', 'Collect feedback from your customers, employees, or other members of your community using an online survey form.');
         cy.get('[frm-search-text="survey"] span.frm-category-icon svg use')
-            .should('have.attr', 'xlink:href', '#frm_chat_forms_icon');
+            .should('have.attr', 'xlink:href', '#frm_smile_icon');
 
         cy.log("Quiz Template");
         cy.get('[frm-search-text="quiz"] .frm-form-templates-item-title-text')
