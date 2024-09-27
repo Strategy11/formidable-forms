@@ -10,6 +10,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmUsageController {
 
 	/**
+	 * Option name of flows data.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private static $flows_option_name = 'frm_usage_tracking_flows';
+
+	/**
 	 * Randomize the first send to prevent our servers from crashing.
 	 *
 	 * @since 3.06.04
@@ -55,5 +64,39 @@ class FrmUsageController {
 	public static function send_snapshot() {
 		$usage = new FrmUsage();
 		$usage->send_snapshot();
+	}
+
+	/**
+	 * Loads scripts.
+	 */
+	public static function load_scripts() {
+		// TODO: check page.
+		wp_enqueue_script( 'frm-usage-tracking', FrmAppHelper::plugin_url() . '/js/admin/usage-tracking.js', array( 'formidable_dom' ), FrmAppHelper::$plug_version, true );
+	}
+
+	/**
+	 * AJAX handler to track flows.
+	 *
+	 * @since x.x
+	 */
+	public static function ajax_track_flows() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$flows_data = get_option( self::$flows_option_name, array() );
+		$key   = FrmAppHelper::get_post_param( 'key', '', 'sanitize_text_field' );
+		$value = FrmAppHelper::get_post_param( 'value', '', 'sanitize_text_field' );
+
+		if ( ! isset( $flows_data[ $key ] ) ) {
+			$flows_data[ $key ] = array();
+		}
+
+		if ( ! isset( $flows_data[ $key ][ $value ] ) ) {
+			$flows_data[ $key ][ $value ] = 0;
+		}
+
+		$flows_data[ $key ][ $value ]++;
+		update_option( self::$flows_option_name, $flows_data );
+
+		wp_send_json_success();
 	}
 }
