@@ -33,11 +33,13 @@ class FrmEmailAction extends FrmFormAction {
 	 */
 	public function get_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
+		$to_email     = ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : '[admin_email]';
+		$from_email   = ! empty( $frm_settings->from_email ) && is_email( $frm_settings->from_email ) ? $frm_settings->from_email : '[admin_email]';
 		return array(
-			'email_to'      => ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : '[admin_email]',
+			'email_to'      => $to_email,
 			'cc'            => '',
 			'bcc'           => '',
-			'from'          => '[sitename] <[admin_email]>',
+			'from'          => '[sitename] <' . $from_email . '>',
 			'reply_to'      => '',
 			'email_subject' => '',
 			'email_message' => '[default-message]',
