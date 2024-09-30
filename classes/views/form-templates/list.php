@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm-form-templates-page-title" class="frm-flex-box frm-justify-between frm-items-center">
-	<h2 id="frm-form-templates-page-title-text" class="frm-form-templates-title frm-text-sm frm-m-0"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
+	<h2 id="frm-form-templates-page-title-text" class="frm-form-skeleton-title frm-text-sm frm-m-0"><?php esc_html_e( 'All Templates', 'formidable' ); ?></h2>
 	<a id="frm-show-create-template-modal" href="#" class="button button-primary frm-button-primary frm_hidden" role="button"><?php esc_html_e( 'Create Template', 'formidable' ); ?></a>
 </div>
 <span id="frm-form-templates-page-title-divider" class="frm-page-skeleton-divider frm-mb-xs frm_hidden"></span>
