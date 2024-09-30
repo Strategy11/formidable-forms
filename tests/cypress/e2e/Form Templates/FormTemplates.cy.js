@@ -185,7 +185,7 @@ describe("Form Templates page", () => {
         cy.get('#template-search-input').clear().type("Non Valid Template");
         cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "No templates found");
         cy.get('.frm-page-skeleton-text').should("contain", "Sorry, we didn't find any templates that match your criteria.");
-        cy.get('#frm-form-templates-empty-state > .button').should("contain", "Start from Scratch").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Start from Scratch").click();
         cy.get('#frm-form-templates-page-title-text').should("contain", "All Templates");
 
         cy.log("Search for application templates");
@@ -280,7 +280,7 @@ describe("Form Templates page", () => {
             .find('.frm-form-templates-item-favorite-button')
             .click({ force: true });
 
-        cy.get('[data-category="favorites"] > .frm-form-templates-cat-count').should("contain.text", '1');
+        cy.get('[data-category="favorites"] > .frm-page-skeleton-cat-count').should("contain.text", '1');
         cy.get('[data-category="favorites"]').click();
         cy.get('#frm-form-templates-list > .frm-form-templates-favorite-item').should("contain", "Contact Us");
 
@@ -421,11 +421,11 @@ describe("Form Templates page", () => {
         cy.log("Validate that there are no custom templates yet");
         cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "You currently have no templates.");
         cy.get('.frm-page-skeleton-text').should("contain", "You haven't created any form templates. Begin now to simplify your workflow and save time.");
-        cy.get('#frm-form-templates-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
         cy.get('#frm-create-template-modal > .frm_modal_footer > .button-secondary').should("contain", "Cancel").click();
 
         cy.log("Create a new template");
-        cy.get('#frm-form-templates-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
         cy.get('#frm-create-template-modal > .frm_modal_top > .frm-modal-title > h2').should("contain", "Create New Template");
         cy.get('.inside > :nth-child(1) > label').should("contain", "Select form for a new template");
         cy.get('#frm-create-template-modal-forms-select').select("Form Template Test");
