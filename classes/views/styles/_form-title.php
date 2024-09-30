@@ -3,7 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_fieldset_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmColorpickerStyleComponent(
@@ -17,7 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_title_size"
+		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
@@ -31,7 +39,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_title_margins"
+		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(

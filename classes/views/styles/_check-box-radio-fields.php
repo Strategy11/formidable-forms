@@ -4,7 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
+	<label 
+		for="frm_check_label_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -20,7 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+	<label 
+		for="frm_check_font_size"
+		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -36,7 +40,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
+	<label 
+		for="frm_check_weight"
+		class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -52,7 +58,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Check Box', 'formidable' ); ?></label>
+	<label 
+		for="frm_check_align"
+		class="frm-style-item-heading"><?php esc_html_e( 'Check Box', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -71,7 +79,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Radio', 'formidable' ); ?></label>
+	<label 
+		for="frm_radio_align"
+		class="frm-style-item-heading"><?php esc_html_e( 'Radio', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
