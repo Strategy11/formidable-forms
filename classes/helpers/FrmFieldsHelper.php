@@ -846,6 +846,8 @@ class FrmFieldsHelper {
 			'siteurl',
 			'sitename',
 			'admin_email',
+			'default-email',
+			'default-from-email',
 			'post[-|_]id',
 			'created[-|_]at',
 			'updated[-|_]at',
@@ -968,7 +970,7 @@ class FrmFieldsHelper {
 			'ip'  => $atts['entry']->ip,
 		);
 
-		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get' );
+		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get', 'default-email', 'default-from-email' );
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
@@ -1055,6 +1057,14 @@ class FrmFieldsHelper {
 		switch ( $tag ) {
 			case 'admin_email':
 				$new_value = get_option( 'admin_email' );
+				break;
+			case 'default-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : get_option( 'admin_email' );
+				break;
+			case 'default-from-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->from_email ) && is_email( $frm_settings->from_email ) ? $frm_settings->from_email : get_option( 'admin_email' );
 				break;
 			case 'siteurl':
 				$new_value = FrmAppHelper::site_url();
