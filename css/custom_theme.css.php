@@ -816,11 +816,15 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_checkbox label,
-.with_frm_style .frm_radio label{
-	display: flex;
-	align-items: center;
-	gap: 9px;
-	white-space: normal;
+.with_frm_style .frm_radio label {
+	display: inline-block;
+	vertical-align: middle;
+	white-space:normal;
+}
+
+.with_frm_style .frm_checkbox label input[type=checkbox],
+.with_frm_style .frm_radio label input[type=radio] {
+	margin-right: 4px;
 }
 
 .with_frm_style .frm_checkbox label:not(.frm-label-disabled),
@@ -830,6 +834,7 @@ a.frm_save_draft{
 
 .with_frm_style .vertical_radio .frm_checkbox label,
 .with_frm_style .vertical_radio .frm_radio label{
+	display: block;
 	width: 100%;
 }
 
@@ -879,9 +884,9 @@ a.frm_save_draft{
 	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block !important;
-	width: 16px;
-	min-width: 16px;
-	height: 16px;
+	width: 16px !important;
+	min-width: 16px !important;
+	height: 16px !important;
 	color: var(--border-color);
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
@@ -932,6 +937,7 @@ a.frm_save_draft{
 	background-size: 9px !important;
 	background-repeat: no-repeat !important;
 	background-position: center !important;
+	margin: 0;
 }
 
 <?php if ( $pro_is_installed ) { ?>

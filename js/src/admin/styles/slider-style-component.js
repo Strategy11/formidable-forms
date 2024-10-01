@@ -130,14 +130,20 @@ export default class frmSliderStyleComponent {
 		element.querySelector( 'select' ).addEventListener( 'change', ( event ) => {
 			const unit = event.target.value.toLowerCase();
 
+			if ( '' === unit ) {
+				element.classList.add( 'frm-disabled', 'frm-empty' );
+				return;
+			}
+
 			if ( 'auto' === unit ) {
 				element.classList.add( 'frm-disabled' );
 				this.updateValue( element, 'auto' );
 				this.triggerValueChange( index );
+
 				return;
 			}
 
-			element.classList.remove( 'frm-disabled' );
+			element.classList.remove( 'frm-disabled', 'frm-empty' );
 			this.options[ index ].fullValue = valueInput.value + unit;
 			this.updateValue( element, this.options[ index ].fullValue );
 			this.triggerValueChange( index );
@@ -279,6 +285,9 @@ export default class frmSliderStyleComponent {
 	 * @return {void}
 	 */
 	initSliderWidth( slider ) {
+		if ( slider.classList.contains( 'frm-disabled' ) ) {
+			return;
+		}
 		const index       = this.getSliderIndex( slider );
 		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 		const value       = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
@@ -444,6 +453,14 @@ export default class frmSliderStyleComponent {
 	 * @return {string} - The updated value.
 	 */
 	updateValue( element, value ) {
+		// When the slider component is used for "Base Font Size", we need to update a hidden input field when change happens to indicate that the "Base Font Size" has been adjusted.
+		// Used to avoid conflicts with other possible font sizes adjustemnts in "Advanced Settings" when moving from "Quick Settings" when "Base Font Size" is not changed.
+		if ( element.classList.contains( 'frm-base-font-size' ) ) {
+			const userBaseFontSizeInput = document.querySelector( 'input[name="frm_style_setting[post_content][use_base_font_size]"]' );
+			if ( null !== userBaseFontSizeInput ) {
+				userBaseFontSizeInput.value = 'true';
+			}
+		}
 		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
 			const input      = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
 			const inputValue = input.value.split( ' ' );

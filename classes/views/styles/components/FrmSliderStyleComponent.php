@@ -33,6 +33,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
+		$this->data['value_label']         = empty( $this->detect_unit_measurement() ) ? $field_value : (int) $field_value; 
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -53,8 +54,9 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 */
 	private function get_units_list( $data ) {
 		if ( empty( $data['units'] ) ) {
-			return array( 'px', 'em', '%' );
+			return array( '', 'px', 'em', '%' );
 		}
+		array_unshift( $data['units'], '' );
 		return $data['units'];
 	}
 
@@ -89,33 +91,33 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$right  = $values[1];
 
 		$this->data['vertical'] = array(
-			'value' => $top,
 			'unit'  => $this->detect_unit_measurement( $top ),
+			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (int) $top,
 		);
 
 		$this->data['horizontal'] = array(
-			'value' => $right,
 			'unit'  => $this->detect_unit_measurement( $right ),
+			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (int) $right,
 		);
 
 		$this->data['top'] = array(
-			'value' => $top,
 			'unit'  => $this->detect_unit_measurement( $top ),
+			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (int) $top,
 		);
 
 		$this->data['bottom'] = array(
-			'value' => $bottom,
 			'unit'  => $this->detect_unit_measurement( $bottom ),
+			'value' => empty( $this->detect_unit_measurement( $bottom ) ) ? $bottom : (int) $bottom,
 		);
 
 		$this->data['left'] = array(
-			'value' => $left,
 			'unit'  => $this->detect_unit_measurement( $left ),
+			'value' => empty( $this->detect_unit_measurement( $left ) ) ? $left : (int) $left,
 		);
 
 		$this->data['right'] = array(
-			'value' => $right,
 			'unit'  => $this->detect_unit_measurement( $right ),
+			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (int) $right,
 		);
 	}
 
@@ -133,7 +135,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 	/**
 	 * Detect the unit measurement from the value.
-	 * Possible values are: px, %, em.
+	 * Possible values are: "px", "%", "em" or empty ""
 	 *
 	 * @since 6.14
 	 *
@@ -150,8 +152,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		if ( preg_match( '/em$/', $value ) ) {
 			return 'em';
 		}
+		if ( preg_match( '/px$/', $value ) ) {
+			return 'px';
+		}
 
-		return 'px';
+		return '';
 	}
 
 	/**

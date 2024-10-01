@@ -67,7 +67,7 @@ abstract class FrmEmailSummary {
 	protected function get_headers() {
 		return array(
 			'Content-Type: ' . ( $this->is_html ? 'text/html; charset=UTF-8' : 'text/plain' ),
-			'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>',
+			'From: ' . get_bloginfo( 'name' ) . ' <' . FrmEmailHelper::get_default_from_email() . '>',
 		);
 	}
 
