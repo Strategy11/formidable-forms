@@ -128,12 +128,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
+	<label 
+		for="frm_auto_dropdowns_width"
+		class="frm-style-item-heading"><?php esc_html_e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
 	<?php
 	FrmHtmlHelper::toggle(
-		'auto_width',
+		'frm_auto_dropdowns_width',
 		$frm_style->get_field_name( 'auto_width' ),
 		array(
 			'div_class' => 'with_frm_style frm_toggle',

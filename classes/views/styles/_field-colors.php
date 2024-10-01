@@ -122,7 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm7 frm_form_field frm-style-component">
 						<?php
 						FrmHtmlHelper::toggle(
-							'remove_box_shadow',
+							'frm_box_shadow',
 							$frm_style->get_field_name( 'remove_box_shadow' ),
 							array(
 								'div_class' => 'with_frm_style frm_toggle',
