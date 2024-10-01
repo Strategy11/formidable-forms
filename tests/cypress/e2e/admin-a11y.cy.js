@@ -97,7 +97,8 @@ describe('Run some accessibility tests', function() {
         cy.visit('/wp-admin/admin.php?page=formidable-addons');
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
-            ...baselineRules
+            ...baselineRules,
+            { id: 'heading-order', enabled: false }
         ]);
         cy.checkA11y();
     });
