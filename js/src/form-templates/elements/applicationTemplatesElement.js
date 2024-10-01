@@ -4,9 +4,15 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { PLUGIN_URL, HIDDEN_CLASS } from 'core/constants';
+import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
-import { PLUGIN_URL, PREFIX, HIDDEN_CLASS, applicationsUrl } from '../shared';
+import { PREFIX, applicationsUrl } from '../shared';
 import { addElements, getElements } from './elements';
 
 const { tag, div, span, a, img } = window.frmDom;
@@ -39,7 +45,7 @@ export function createApplicationTemplates( applications ) {
 				className: 'frm-text-sm frm-mb-sm'
 			}),
 			tag( 'ul', {
-				className: `${PREFIX}-list ${PREFIX}-grid-layout`,
+				className: `${PREFIX}-list frm-list-grid-layout`,
 				children: templateItems
 			})
 		]

@@ -1,10 +1,15 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault, isValidEmail } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState, setAppStateProperty } from '../shared';
+import { getState, setSingleState } from '../shared';
 import { showEmailAddressError } from '../ui';
-import { isValidEmail, navigateToNextStep, onClickPreventDefault } from '../utils';
+import { navigateToNextStep } from '../utils';
 
 /**
  * Manages event handling for the "Next Step" button in the "Default Email Address" step.
@@ -62,7 +67,7 @@ const onSetupEmailStepButtonClick = async() => {
 	}
 
 	// Capture usage data
-	const { emailStepData } = getAppState();
+	const { emailStepData } = getState();
 	emailStepData.default_email = email;
 	emailStepData.from_email = defaultFromEmailField.value.trim();
 	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
@@ -70,7 +75,7 @@ const onSetupEmailStepButtonClick = async() => {
 	if ( subscribeCheckbox ) {
 		emailStepData.is_subscribed = subscribeCheckbox.checked;
 	}
-	setAppStateProperty( 'emailStepData', emailStepData );
+	setSingleState( 'emailStepData', emailStepData );
 
 	// Prepare FormData for the POST request
 	const formData = new FormData();

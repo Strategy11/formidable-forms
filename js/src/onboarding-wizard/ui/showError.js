@@ -1,7 +1,7 @@
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { showFormError } from '../utils';
+import { showFormError } from 'core/utils';
 
 /**
  * Displays errors related to the email address field.

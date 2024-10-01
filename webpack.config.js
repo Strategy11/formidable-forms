@@ -13,7 +13,10 @@ const config = {
 		modules: [
 			`${ __dirname }/js`,
 			'node_modules'
-		]
+		],
+		alias: {
+			core: path.resolve( __dirname, 'js/src/core' )
+		}
 	},
 	entry: {
 		formidable_blocks: './js/src/blocks.js',
@@ -21,6 +24,7 @@ const config = {
 		'form-templates': './js/src/form-templates/index.js',
 		formidable_dashboard: './js/src/dashboard.js',
 		'onboarding-wizard': './js/src/onboarding-wizard/index.js',
+		'addons-page': './js/src/addons-page/index.js',
 		formidable_styles: './js/src/admin/styles.js',
 	},
 	output: {
