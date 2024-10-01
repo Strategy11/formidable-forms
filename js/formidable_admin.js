@@ -2884,7 +2884,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {Object}      field
 	 * @param {Number}      fieldId
-	 * @param {HTMLElement} list The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
 	 *
 	 * @returns {Void}
 	 */
