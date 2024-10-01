@@ -32,13 +32,11 @@ class FrmEmailAction extends FrmFormAction {
 	 * @return array
 	 */
 	public function get_defaults() {
-		$to_email   = '[default-email]';
-		$from_email = '[default-from-email]';
 		return array(
-			'email_to'      => $to_email,
+			'email_to'      => '[default-email]',
 			'cc'            => '',
 			'bcc'           => '',
-			'from'          => '[sitename] <' . $from_email . '>',
+			'from'          => '[sitename] <[default-from-email]>',
 			'reply_to'      => '',
 			'email_subject' => '',
 			'email_message' => '[default-message]',
