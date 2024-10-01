@@ -15,12 +15,16 @@ abstract class FrmEmailSummary {
 	/**
 	 * Name of the file with the HTML content, without the file extension.
 	 *
+	 * @since 6.15
+	 *
 	 * @var string
 	 */
 	protected $template = 'base';
 
 	/**
 	 * Is HTML email?
+	 *
+	 * @since 6.15
 	 *
 	 * @var bool
 	 */
@@ -115,6 +119,8 @@ abstract class FrmEmailSummary {
 
 	/**
 	 * Gets the full path to the folder containing the email templates.
+	 *
+	 * @since 6.15
 	 *
 	 * @return string
 	 */
