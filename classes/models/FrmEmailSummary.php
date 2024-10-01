@@ -156,15 +156,6 @@ abstract class FrmEmailSummary {
 	}
 
 	/**
-	 * Set data to include in the email and to be used when generating the
-	 * email's pieces (recipient, subject, etc.).
-	 *
-	 * @param array $data Data to include in the email.
-	 * @return void
-	 */
-	public function set_data( $data ) {}
-
-	/**
 	 * Check if the email should be sent.
 	 *
 	 * @return bool
