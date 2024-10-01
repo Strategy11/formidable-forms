@@ -37,9 +37,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<!-- Error Handling -->
-		<span id="frm-onboarding-check-pro-installation-error" class="frm-validation-error frm-mt-xs frm_hidden">
-			<span><?php esc_html_e( 'Formidable Pro is currently inactive!', 'formidable' ); ?></span>
-		</span>
+		<?php
+		FrmAppHelper::print_setting_error(
+			array(
+				'id'     => 'frm-onboarding-check-pro-installation-error',
+				'errors' => __( 'Formidable Pro is currently inactive!', 'formidable' ),
+			)
+		);
+		?>
 
 		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
 			<span class="frm-banner-title frm-font-semibold frm-flex">
