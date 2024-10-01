@@ -122,7 +122,17 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'landmark-unique', enabled: false }
         ]);
-        cy.checkA11y();
+        cy.checkA11y(
+            null,
+            null,
+            (violations) => {
+                violations.forEach((violation) => {
+                  const nodes = violation.nodes.map(node => node.html).join(', ');
+                  cy.log(`${violation.id} (${violation.impact}): ${violation.description}`);
+                  cy.log(`Affected nodes: ${nodes}`);
+                });
+            }
+        );
     });
 
     it('Check the form creation is accessible', () => {
