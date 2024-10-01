@@ -183,7 +183,7 @@ describe("Form Templates page", () => {
 
         cy.log("Search for non-valid templates");
         cy.get('#template-search-input').clear().type("Non Valid Template");
-        cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "No templates found");
+        cy.get('.frmcenter > .frm-form-skeleton-title').should("contain", "No templates found");
         cy.get('.frm-page-skeleton-text').should("contain", "Sorry, we didn't find any templates that match your criteria.");
         cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Start from Scratch").click();
         cy.get('#frm-form-templates-page-title-text').should("contain", "All Templates");
@@ -286,7 +286,7 @@ describe("Form Templates page", () => {
 
         cy.log("Remove contact us template from favorites");
         cy.get('#frm-form-templates-list > .frm-form-templates-favorite-item > .frm-form-templates-item-body > .frm-form-templates-item-title > .frm-flex-box > .frm-form-templates-item-favorite-button > .frmsvg > use').click();
-        cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "No favorites");
+        cy.get('.frmcenter > .frm-form-skeleton-title').should("contain", "No favorites");
 
         cy.get('[data-category="all-templates"]').should("contain", "All Templates").click();
 
@@ -368,8 +368,8 @@ describe("Form Templates page", () => {
         cy.get('a#frm-code-modal-back-button')
             .should('contain.text', 'Back')
             .and('have.attr', 'role', 'button').click();
-        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();  
-      
+        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
+
         cy.get('[data-category="all-templates"]').click();
 
         cy.log("Try to use templates which require upgrade");
@@ -419,7 +419,7 @@ describe("Form Templates page", () => {
         cy.get('[data-category="custom"]').click();
 
         cy.log("Validate that there are no custom templates yet");
-        cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "You currently have no templates.");
+        cy.get('.frmcenter > .frm-form-skeleton-title').should("contain", "You currently have no templates.");
         cy.get('.frm-page-skeleton-text').should("contain", "You haven't created any form templates. Begin now to simplify your workflow and save time.");
         cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
         cy.get('#frm-create-template-modal > .frm_modal_footer > .button-secondary').should("contain", "Cancel").click();
