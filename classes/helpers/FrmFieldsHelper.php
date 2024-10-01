@@ -1077,7 +1077,7 @@ class FrmFieldsHelper {
 				break;
 			case 'get':
 				$new_value = self::process_get_shortcode( $atts, $return_array );
-		}
+		}//end switch
 
 		return $new_value;
 	}
