@@ -38,6 +38,8 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets inner content.
 	 *
+	 * @since 6.15 Method isn't abstract anymore, returning an empty string by default.
+	 *
 	 * @return false|string
 	 */
 	protected function get_inner_content() {
@@ -155,6 +157,8 @@ abstract class FrmEmailSummary {
 
 	/**
 	 * Check if the email should be sent.
+	 *
+	 * @since 6.15
 	 *
 	 * @return bool
 	 */
