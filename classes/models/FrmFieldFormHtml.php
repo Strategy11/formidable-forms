@@ -430,9 +430,10 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( in_array( $this->field_obj->get_field_column( 'type' ), array( 'html', 'summary' ), true ) && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . esc_attr( $classes ), $this->html );
+			return;
 		}
 
 		$this->html = str_replace( '[error_class]', esc_attr( $classes ), $this->html );
