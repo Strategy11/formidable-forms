@@ -24,8 +24,6 @@ abstract class FrmEmailSummary {
 	/**
 	 * Is HTML email?
 	 *
-	 * @since 6.15
-	 *
 	 * @var bool
 	 */
 	protected $is_html = true;
