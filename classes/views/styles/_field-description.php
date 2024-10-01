@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_description_align"
+		for="frm_description_font_size"
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'description_font_size' ),
 		$style->post_content['description_font_size'],
 		array(
-			'id'        => 'frm_description_align',
+			'id'        => 'frm_description_font_size',
 			'max_value' => 300,
 		)
 	);
