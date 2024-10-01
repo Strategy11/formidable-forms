@@ -616,7 +616,7 @@ describe("Add-Ons page", () => {
 
         cy.log("Search for valid add-ons by description");
         cy.get('#addon-search-input').clear().type("Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.");
-        cy.get('.plugin-card-paypal-signature').should("contain", "PayPal Standard");
+        cy.get('.plugin-card-signature').should("contain", "Digital Signatures");
 
         cy.log("Search for non valid add-ons");
         cy.get('#addon-search-input').clear().type("Non valid add-on");
