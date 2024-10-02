@@ -8406,9 +8406,7 @@ function frmAdminBuildJS() {
 			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
 			return;
 		}
-		showSaveAndReloadModal( __(`You are changing the field type. Not all field settings will 
-			appear as expected until you reload the page. Would you like to reload the page now?`, 'formidable' )
-		);
+		showSaveAndReloadModal( __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' ) );
 	}
 
 	/**
@@ -8420,16 +8418,20 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showSaveAndReloadModal( message ) {
-		const modalContent = div( message );
-		modalContent.style.padding = 'var(--gap-md)';
 		frmDom.modal.maybeCreateModal(
 			'frmSaveAndReloadModal',
 			{
 				title: __( 'Save and Reload?', 'formidable' ),
-				content: modalContent,
+				content: getModalContent(),
 				footer: getModalFooter()
 			}
 		);
+
+		function getModalContent() {
+			const modalContent = div( message );
+			modalContent.style.padding = 'var(--gap-md)';
+			return modalContent;
+		}
 
 		function getModalFooter() {
 			const continueButton = frmDom.modal.footerButton({
