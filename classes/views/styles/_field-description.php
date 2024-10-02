@@ -4,7 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -20,7 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_font_size"
+		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -28,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'description_font_size' ),
 		$style->post_content['description_font_size'],
 		array(
-			'id'        => 'frm_description_align',
+			'id'        => 'frm_description_font_size',
 			'max_value' => 300,
 		)
 	);
@@ -36,7 +40,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_weight"
+		class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -52,7 +58,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Style', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_style"
+		class="frm-style-item-heading"><?php esc_html_e( 'Style', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -60,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'description_style' ),
 		$style->post_content['description_style'],
 		array(
-			'id'      => 'frm_description_weight',
+			'id'      => 'frm_description_style',
 			'options' => array(
 				'normal' => esc_html__( 'normal', 'formidable' ),
 				'italic' => esc_html__( 'italic', 'formidable' ),
@@ -71,7 +79,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_align"
+		class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
 	<?php
@@ -79,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'description_align' ),
 		$style->post_content['description_align'],
 		array(
+			'id'      => 'frm_description_align',
 			'options' => array( 'left', 'right' ),
 		)
 	);
@@ -86,7 +97,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
+	<label 
+		for="frm_description_margin"
+		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-md-z-index">
 	<?php
