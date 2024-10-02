@@ -16,6 +16,8 @@ class FrmAppController {
 
 		$menu_name = FrmAppHelper::get_menu_name();
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
+
+		self::maybe_add_black_friday_submenu_item();
 	}
 
 	/**
@@ -38,6 +40,65 @@ class FrmAppController {
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 
 		return apply_filters( 'frm_icon', $icon );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_add_black_friday_submenu_item() {
+		$is_black_friday = self::is_black_friday();
+		$is_cyber_monday = self::is_cyber_monday();
+
+		if ( ! $is_black_friday && ! $is_cyber_monday ) {
+			return;
+		}
+
+		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
+
+		add_action(
+			'admin_menu',
+			function () use ( $black_friday_menu_label ) {
+				add_submenu_page( 'formidable', 'Formidable', $black_friday_menu_label, 'frm_change_settings', 'formidable-black-friday', 'FrmAppController::redirect_blackfriday' );
+			},
+			1000
+		);
+	}
+
+	/**
+	 * Black Friday sale is from November 25 to 29.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_black_friday() {
+		return self::within_sale_date_range( '2024-11-25', '2024-11-29' );
+	}
+
+	/**
+	 * Cyber Monday sale rules from November 30 to December 4.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_cyber_monday() {
+		return self::within_sale_date_range( '2024-11-30', '2024-12-04' );
+	}
+
+	/**
+	 * Check if the current time is within a sale date range.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function within_sale_date_range( $from, $to ) {
+		// TODO This should not be in GMT but in a specific timezone. Is it EST, MST?
+		$today = gmdate( 'Y-m-d' );
+		return $today >= $from && $today <= $to;
 	}
 
 	/**
@@ -1389,5 +1450,9 @@ class FrmAppController {
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+	}
+
+	public static function redirect_blackfriday() {
+		wp_redirect( 'https://formidableforms.com/black-friday' );
 	}
 }
