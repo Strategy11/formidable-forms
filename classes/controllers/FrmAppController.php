@@ -1454,14 +1454,12 @@ class FrmAppController {
 
 	public static function redirect_blackfriday() {
 		wp_redirect(
-			add_query_arg(
+			FrmAppHelper::admin_upgrade_link(
 				array(
-					'utm_source'   => 'WordPress',
-					'utm_medium'   => 'black-friday',
-					'utm_campaign' => 'liteplugin',
-					'utm_content'  => 'black-friday-submenu',
+					'medium'  => 'black-friday',
+					'content' => 'black-friday-submenu',
 				),
-				'https://formidableforms.com/black-friday'
+				'black-friday'
 			)
 		);
 	}
