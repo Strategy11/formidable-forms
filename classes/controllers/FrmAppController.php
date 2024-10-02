@@ -1453,6 +1453,16 @@ class FrmAppController {
 	}
 
 	public static function redirect_blackfriday() {
-		wp_redirect( 'https://formidableforms.com/black-friday' );
+		wp_redirect(
+			add_query_arg(
+				array(
+					'utm_source'   => 'WordPress',
+					'utm_medium'   => 'black-friday',
+					'utm_campaign' => 'liteplugin',
+					'utm_content'  => 'black-friday-submenu',
+				),
+				'https://formidableforms.com/black-friday'
+			)
+		);
 	}
 }
