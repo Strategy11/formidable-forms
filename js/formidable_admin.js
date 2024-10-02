@@ -8375,17 +8375,34 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	/**
+	 * Handles 'change' event on the document.
+	 *
+	 * @since x.x
+	 * 
+	 * @param {Event} event
+	 *
+	 * @returns {Void}
+	 */
 	function handleChangeEventonDocument( event ) {
 		const target = event.target;
 		if ( target.id.startsWith( 'field_options_type_' ) ) {
-			showSaveAndReloadModal();
+			showSaveAndReloadModal( __(`You are changing the field type. Not all field settings will 
+				appear as expected until you reload the page. Would you like to reload the page now?`, 'formidable' )
+			);
 		}
 	}
 
-	function showSaveAndReloadModal() {
-		const modalContent = div(
-			__( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' )
-		);
+	/**
+	 * Shows 'Save and Reload' modal with the given message.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} message
+	 * @returns {Void}
+	 */
+	function showSaveAndReloadModal( message ) {
+		const modalContent = div( message );
 		modalContent.style.padding = 'var(--gap-md)';
 		frmDom.modal.maybeCreateModal(
 			'frmSaveAndReloadModal',
@@ -8402,7 +8419,7 @@ function frmAdminBuildJS() {
 				buttonType: 'primary'
 			});
 
-			frmDom.util.onClickPreventDefault( continueButton, () => {
+			onClickPreventDefault( continueButton, () => {
 				saveAndReloadFormBuilder();
 			} );
 	
