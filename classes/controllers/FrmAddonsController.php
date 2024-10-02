@@ -26,7 +26,7 @@ class FrmAddonsController {
 	protected static $plugin;
 
 	/**
-	 * @since x.x
+	 * @since 6.15
 	 */
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', __CLASS__ . '::menu', 100 );
@@ -43,7 +43,7 @@ class FrmAddonsController {
 	/**
 	 * Enqueues the Add-Ons page scripts and styles.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @return void
 	 */
@@ -76,7 +76,7 @@ class FrmAddonsController {
 	/**
 	 * Get the Add-Ons page JS variables as an array.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @return array
 	 */
@@ -162,7 +162,7 @@ class FrmAddonsController {
 	/**
 	 * Organize and set categories.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @return void
 	 */
@@ -217,7 +217,7 @@ class FrmAddonsController {
 	/**
 	 * Organize and set categories.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $addon The addon array that will be modified by reference.
 	 * @return void

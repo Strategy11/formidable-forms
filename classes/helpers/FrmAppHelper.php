@@ -4335,7 +4335,7 @@ class FrmAppHelper {
 	/**
 	 * Prints errors for settings in onboarding wizard or template settings.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $args Args.
 	 *

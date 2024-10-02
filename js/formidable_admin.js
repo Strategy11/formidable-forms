@@ -9479,7 +9479,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow a search for "signatures" to still match "signature" for example when searching fields.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param {string} text       The text in the element we are checking for a match.
 	 * @param {string} searchText The text value that is being searched.
