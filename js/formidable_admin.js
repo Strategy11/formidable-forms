@@ -8385,8 +8385,15 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function handleChangeEventonDocument( event ) {
-		const target = event.target;
+		const target  = event.target;
+
 		if ( target.id.startsWith( 'field_options_type_' ) || target.classList.contains( 'frmjs_prod_data_type_opt' ) ) {
+			const idParts = target.id.split( '_' );
+			const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+	
+			if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+				return;
+			}
 			showSaveAndReloadModal( __(`You are changing the field type. Not all field settings will 
 				appear as expected until you reload the page. Would you like to reload the page now?`, 'formidable' )
 			);
