@@ -8375,6 +8375,49 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	function handleChangeEventonDocument( event ) {
+		const target = event.target;
+		if ( target.id.startsWith( 'field_options_type_' ) ) {
+			showSaveAndReloadModal();
+		}
+	}
+
+	function showSaveAndReloadModal() {
+		const modalContent = div(
+			__( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' )
+		);
+		modalContent.style.padding = 'var(--gap-md)';
+		frmDom.modal.maybeCreateModal(
+			'frmSaveAndReloadModal',
+			{
+				title: __( 'Save and Reload?', 'formidable' ),
+				content: modalContent,
+				footer: getModalFooter()
+			}
+		);
+
+		function getModalFooter() {
+			const continueButton = frmDom.modal.footerButton({
+				text: __( 'Save and Reload', 'formidable' ),
+				buttonType: 'primary'
+			});
+
+			frmDom.util.onClickPreventDefault( continueButton, () => {
+				saveAndReloadFormBuilder();
+			} );
+	
+			const cancelButton = frmDom.modal.footerButton({
+				text: __( 'Cancel', 'formidable' ),
+				buttonType: 'cancel'
+			});
+			cancelButton.classList.add( 'dismiss' );
+
+			return frmDom.div({
+				children: [ cancelButton, continueButton ]
+			});
+		}
+	}
+
 	function updateShortcodesPopupPosition( target ) {
 		let moreIcon;
 		if ( target instanceof Event ) {
@@ -10521,6 +10564,7 @@ function frmAdminBuildJS() {
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
+			document.addEventListener( 'change', handleChangeEventonDocument );
 		},
 
 		settingsInit: function() {
