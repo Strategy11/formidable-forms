@@ -28,12 +28,15 @@ class FrmEmailAction extends FrmFormAction {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_email_settings.php';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		return array(
-			'email_to'      => '[admin_email]',
+			'email_to'      => '[default-email]',
 			'cc'            => '',
 			'bcc'           => '',
-			'from'          => '[sitename] <[admin_email]>',
+			'from'          => '[sitename] <[default-from-email]>',
 			'reply_to'      => '',
 			'email_subject' => '',
 			'email_message' => '[default-message]',
