@@ -8381,23 +8381,34 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 * 
 	 * @param {Event} event
-	 *
 	 * @returns {Void}
 	 */
 	function handleChangeEventonDocument( event ) {
-		const target  = event.target;
+		maybeShowSaveAndReloadModal( event.target );
+	}
 
-		if ( target.id.startsWith( 'field_options_type_' ) || target.classList.contains( 'frmjs_prod_data_type_opt' ) ) {
-			const idParts = target.id.split( '_' );
-			const fieldId = idParts.length && idParts[ idParts.length - 1 ];
-	
-			if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
-				return;
-			}
-			showSaveAndReloadModal( __(`You are changing the field type. Not all field settings will 
-				appear as expected until you reload the page. Would you like to reload the page now?`, 'formidable' )
-			);
+	/**
+	 * Shows 'Save and Reload' modal if the target field's type is changed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} target
+	 * @returns {Void}
+	 */
+	function maybeShowSaveAndReloadModal( target ) {
+		if ( ! target.id.startsWith( 'field_options_type_' ) && ! target.classList.contains( 'frmjs_prod_data_type_opt' ) ) {
+			return;
 		}
+		const idParts = target.id.split( '_' );
+		const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+
+		if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
+			return;
+		}
+		showSaveAndReloadModal( __(`You are changing the field type. Not all field settings will 
+			appear as expected until you reload the page. Would you like to reload the page now?`, 'formidable' )
+		);
 	}
 
 	/**
