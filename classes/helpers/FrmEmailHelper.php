@@ -44,7 +44,7 @@ class FrmEmailHelper {
 	/**
 	 * Gets default from email address in header for emails.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @return string
 	 */

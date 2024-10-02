@@ -1537,7 +1537,7 @@ BEFORE_HTML;
 	/**
 	 * Converts legacy package names to the current standard package name.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @param string $package_name
 	 * @return string The updated package name.
 	 */
@@ -1552,7 +1552,7 @@ BEFORE_HTML;
 	/**
 	 * Get the license types.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $args
 	 * @return array
@@ -1846,12 +1846,12 @@ BEFORE_HTML;
 	 * Retrieves the list of template categories to ignore.
 	 *
 	 * @since 4.03.01
-	 * @deprecated x.x
+	 * @deprecated 6.15
 	 *
 	 * @return string[] Array of categories to ignore.
 	 */
 	public static function ignore_template_categories() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.15' );
 
 		return self::get_license_types();
 	}
