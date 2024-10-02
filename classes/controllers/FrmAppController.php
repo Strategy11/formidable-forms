@@ -1452,6 +1452,13 @@ class FrmAppController {
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
 	}
 
+	/**
+	 * Redirect to Black Friday sales page when the menu item is clicked.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	public static function redirect_blackfriday() {
 		wp_redirect(
 			FrmAppHelper::admin_upgrade_link(
