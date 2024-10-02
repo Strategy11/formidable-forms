@@ -10,10 +10,11 @@ class FrmFormsController {
 	 * message in the current tab.
 	 *
 	 * @since 6.2
+     * @since x.x This is public.
 	 *
 	 * @var array Keys are form IDs and values are 1.
 	 */
-	private static $redirected_in_new_tab = array();
+	public static $redirected_in_new_tab = array();
 
 	/**
 	 * The HTML for the Formdiable TinyMCE button (That triggers a popup to insert shortcodes)
@@ -2738,11 +2739,12 @@ class FrmFormsController {
 	 * Prints open in new tab js with fallback handler.
 	 *
 	 * @since 6.3.1
+     * @since x.x This is public.
 	 *
 	 * @param string $success_url Success URL.
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
 	 */
-	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
+	public static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
 		echo '<script>var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");';
 		echo 'if ( ! newTab ) {';
 
