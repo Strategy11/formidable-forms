@@ -56,6 +56,7 @@ class FrmAppController {
 		}
 
 		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
+		$black_friday_menu_label = '<span class="frm-orange-text">' . esc_html( $black_friday_menu_label ) . '</span>';
 
 		add_action(
 			'admin_menu',
@@ -1466,8 +1467,8 @@ class FrmAppController {
 		wp_redirect(
 			FrmAppHelper::admin_upgrade_link(
 				array(
-					'medium'  => 'black-friday',
-					'content' => 'black-friday-submenu',
+					'medium'  => 'black-friday-submenu',
+					'content' => self::is_cyber_monday() ? 'cyber-monday' : 'black-friday',
 				),
 				'black-friday'
 			)
