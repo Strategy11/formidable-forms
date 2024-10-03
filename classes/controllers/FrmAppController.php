@@ -90,14 +90,16 @@ class FrmAppController {
 
 	/**
 	 * Check if the current time is within a sale date range.
+	 * Our sales are based on Eastern Time, so we use New York's timezone.
 	 *
 	 * @since x.x
 	 *
 	 * @return bool
 	 */
 	private static function within_sale_date_range( $from, $to ) {
-		// TODO This should not be in GMT but in a specific timezone. Is it EST, MST?
-		$today = gmdate( 'Y-m-d' );
+		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
+		$today = $date->format( 'Y-m-d' );
+
 		return $today >= $from && $today <= $to;
 	}
 
