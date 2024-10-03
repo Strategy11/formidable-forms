@@ -94,12 +94,13 @@ class FrmAppController {
 	 *
 	 * @since x.x
 	 *
+	 * @param string $from The beginning of the date range. Y-m-d format is expected.
+	 * @param string $to   The end of the date range. Y-m-d format is expected.
 	 * @return bool
 	 */
 	private static function within_sale_date_range( $from, $to ) {
 		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
 		$today = $date->format( 'Y-m-d' );
-
 		return $today >= $from && $today <= $to;
 	}
 
