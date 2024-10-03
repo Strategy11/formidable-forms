@@ -272,6 +272,7 @@ class FrmUsage {
 			'submit_conditions',
 		);
 
+		$style = new FrmStyle();
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
 				'form_id'           => $form->id,
@@ -287,8 +288,11 @@ class FrmUsage {
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
 					if ( 'custom_style' === $setting ) {
-						// TODO: get style slug.
-						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+						$style->id = $form->options[ $setting ];
+						$style_post = $style->get_one();
+						$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+
+						$new_form[ $setting ] = $style_name;
 					} else {
 						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
 					}
