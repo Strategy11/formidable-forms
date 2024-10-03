@@ -1473,6 +1473,6 @@ class FrmAppController {
 				'black-friday'
 			)
 		);
-		exit;
+		die();
 	}
 }
