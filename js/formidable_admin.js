@@ -2854,12 +2854,14 @@ function frmAdminBuildJS() {
 			box = document.getElementById( 'frm-calc-box-' + fieldId );
 		}
 
-		exclude = getExcludeArray( box, isSummary );
+		exclude            = getExcludeArray( box, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
 
-		fields = getFieldList();
-		list = document.getElementById( 'frm-calc-list-' + fieldId );
+		fields         = getFieldList();
+		list           = document.getElementById( 'frm-calc-list-' + fieldId );
 		list.innerHTML = '';
+
+		const supportsShowShortcodes = document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes;
 
 		for ( i = 0; i < fields.length; i++ ) {
 			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
@@ -2868,7 +2870,7 @@ function frmAdminBuildJS() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
-			if ( document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes ) { // If the required Pro updates are there to support "show" shortcodes.
+			if ( supportsShowShortcodes ) { // If the required Pro updates are there to support "show" shortcodes.
 				if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
 					addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
 				}
@@ -2940,9 +2942,11 @@ function frmAdminBuildJS() {
 					text: '[' + code + ']'
 				}),
 				document.createTextNode( label )
-			]
+			],
+			data: {
+				code
+			}
 		});
-		anchor.setAttribute( 'data-code', code );
 
 		list.appendChild(
 			tag(
