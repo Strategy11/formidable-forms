@@ -89,9 +89,26 @@ class FrmUsage {
 			'actions'           => $this->actions(),
 
 			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'flows'             => FrmUsageController::get_flows_data(),
+			'payments'          => $this->payments(),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
+	}
+
+	private function payments() {
+		global $wpdb;
+		$rows     = $wpdb->get_results( "SELECT amount, status, paysys FROM {$wpdb->prefix}frm_payments" );
+		$payments = array();
+		foreach ( $rows as $row ) {
+			$payments[] = array(
+				'amount'  => (float) $row->amount,
+				'status'  => $row->status,
+				'gateway' => $row->paysys,
+			);
+		}
+
+		return $payments;
 	}
 
 	/**
@@ -269,7 +286,12 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					if ( 'custom_style' === $setting ) {
+						// TODO: get style slug.
+						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					} else {
+						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					}
 				}
 			}
 
