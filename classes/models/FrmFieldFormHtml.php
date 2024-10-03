@@ -476,7 +476,7 @@ class FrmFieldFormHtml {
 		$classes = apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 
 		// Remove unexpected characters from class.
-		$classes = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $classes ) ) );
+		$classes = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
 
 		return $classes;
 	}
