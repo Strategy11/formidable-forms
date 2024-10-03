@@ -48,6 +48,10 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function maybe_add_black_friday_submenu_item() {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			return;
+		}
+
 		$is_black_friday = self::is_black_friday();
 		$is_cyber_monday = self::is_cyber_monday();
 
@@ -1468,7 +1472,7 @@ class FrmAppController {
 			FrmAppHelper::admin_upgrade_link(
 				array(
 					'medium'  => 'black-friday-submenu',
-					'content' => self::is_cyber_monday() ? 'cyber-monday' : 'black-friday',
+					'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
 				),
 				'black-friday'
 			)
