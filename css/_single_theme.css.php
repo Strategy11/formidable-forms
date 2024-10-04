@@ -148,7 +148,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	}
 	<?php
 	if ( ! empty( $field_border_width ) && false !== strpos( $field_border_width, ' ' ) ) {
-		$border_width = explode( ' ', str_replace( 'px', '', $field_border_width ) );
+		$border_width = explode( ' ', str_replace( 'px', '', esc_html( $field_border_width ) ) );
 		$border_width = max( $border_width ) . 'px';
 		?>
 		.<?php echo esc_html( $style_class ); ?> .frm_image_options .frm_image_option_container {
