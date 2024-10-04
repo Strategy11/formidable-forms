@@ -444,7 +444,7 @@ class FrmField {
 		}
 
 		if ( ! empty( $options['classes'] ) ) {
-			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
 		}
 
 		return $options;
