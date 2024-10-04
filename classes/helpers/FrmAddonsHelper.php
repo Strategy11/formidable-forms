@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for managing add-ons in the admin area.
  *
- * @since x.x
+ * @since 6.15
  */
 class FrmAddonsHelper {
 	/**
@@ -25,7 +25,7 @@ class FrmAddonsHelper {
 	/**
 	 * Show the CTA to upgrade or renew.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta() {
@@ -47,7 +47,7 @@ class FrmAddonsHelper {
 	/**
 	 * Show 'Renew' banner for expired users.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @return void
 	 */
 	private static function show_expired_cta() {
@@ -65,7 +65,7 @@ class FrmAddonsHelper {
 	/**
 	 * Show 'Upgrade to Pro' banner for users not connected to Pro.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @return void
 	 */
 	private static function show_lite_cta() {
@@ -88,7 +88,7 @@ class FrmAddonsHelper {
 	/**
 	 * Show 'Upgrade' banner for non-elite users.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @return void
 	 */
 	private static function show_elite_cta() {
@@ -116,7 +116,7 @@ class FrmAddonsHelper {
 	/**
 	 * Displays a reconnect link for checking add-ons status.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @return void
 	 */
 	public static function get_reconnect_link() {
@@ -136,7 +136,7 @@ class FrmAddonsHelper {
 	/**
 	 * Get the icon for a specific addon.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 * @param string $slug The slug of the addon.
 	 * @return void
 	 */
@@ -177,7 +177,7 @@ class FrmAddonsHelper {
 	/**
 	 * Echo attributes for a given addon.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $addon
 	 * @return void
@@ -208,7 +208,7 @@ class FrmAddonsHelper {
 	/**
 	 * Add classes for a given addon.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $addon
 	 * @return string
@@ -241,7 +241,7 @@ class FrmAddonsHelper {
 	 * Because the `FrmFormsHelper::get_plan_required` changes $addon by reference,
 	 * we save the result inside a static field called `$plan_required`.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $addon The addon array that will be modified by reference.
 	 * @return void
@@ -253,7 +253,7 @@ class FrmAddonsHelper {
 	/**
 	 * Get the required plan.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @return false|string
 	 */

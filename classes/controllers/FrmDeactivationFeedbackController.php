@@ -3,7 +3,7 @@
  * Deactivation feedback controller
  *
  * @package Formidable
- * @since x.x
+ * @since 6.15
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

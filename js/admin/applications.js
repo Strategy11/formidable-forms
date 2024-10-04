@@ -320,7 +320,7 @@
 
 		function getCardContent() {
 			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
-			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
+			const filenameToUse = data.hasLiteThumbnail ? data.key +  ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div({
 				className: 'frm-application-card-image-wrapper',
 				child: img({ src: thumbnailFolderUrl + filenameToUse })

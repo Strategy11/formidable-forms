@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.14.1';
+	public static $plug_version = '6.15';
 
 	/**
 	 * @var bool
@@ -4335,7 +4335,7 @@ class FrmAppHelper {
 	/**
 	 * Prints errors for settings in onboarding wizard or template settings.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $args Args.
 	 *
