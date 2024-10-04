@@ -4,11 +4,16 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { CURRENT_CLASS } from 'core/constants';
+import { frmAnimate, showElements, hideElements, show, hide, isVisible } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { CURRENT_CLASS, getAppStateProperty } from '../shared';
-import { showElements, show, hideElements, hide, isVisible, frmAnimate } from '../utils';
+import { getSingleState } from '../shared';
 import { showSearchEmptyState, updatePageTitle } from '.';
 
 /**
@@ -23,7 +28,7 @@ export function showSearchState( notEmptySearchText ) {
 
 	// Remove highlighting from the currently selected category if the search text is not empty
 	if ( notEmptySearchText ) {
-		getAppStateProperty( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
+		getSingleState( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
 	}
 
 	// Hide non-relevant elements in the body content

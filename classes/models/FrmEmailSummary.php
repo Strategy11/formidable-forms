@@ -13,6 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class FrmEmailSummary {
 
 	/**
+	 * Name of the file with the HTML content, without the file extension.
+	 *
+	 * @since 6.15
+	 *
+	 * @var string
+	 */
+	protected $template = 'base';
+
+	/**
 	 * Is HTML email?
 	 *
 	 * @var bool
@@ -29,9 +38,13 @@ abstract class FrmEmailSummary {
 	/**
 	 * Gets inner content.
 	 *
+	 * @since 6.15 Method isn't abstract anymore, returning an empty string by default.
+	 *
 	 * @return false|string
 	 */
-	abstract protected function get_inner_content();
+	protected function get_inner_content() {
+		return '';
+	}
 
 	/**
 	 * Constructor.
@@ -67,7 +80,7 @@ abstract class FrmEmailSummary {
 	protected function get_headers() {
 		return array(
 			'Content-Type: ' . ( $this->is_html ? 'text/html; charset=UTF-8' : 'text/plain' ),
-			'From: ' . get_bloginfo( 'name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>',
+			'From: ' . get_bloginfo( 'name' ) . ' <' . FrmEmailHelper::get_default_from_email() . '>',
 		);
 	}
 
@@ -85,7 +98,7 @@ abstract class FrmEmailSummary {
 		}
 
 		ob_start();
-		include $this->get_include_file( 'base' );
+		include $this->get_include_file( $this->template );
 		$content = ob_get_clean();
 
 		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
@@ -101,7 +114,18 @@ abstract class FrmEmailSummary {
 	 */
 	protected function get_include_file( $file_name ) {
 		$suffix = $this->is_html ? '' : '-plain';
-		return FrmAppHelper::plugin_path() . '/classes/views/summary-emails/' . $file_name . $suffix . '.php';
+		return $this->get_include_folder() . $file_name . $suffix . '.php';
+	}
+
+	/**
+	 * Gets the full path to the folder containing the email templates.
+	 *
+	 * @since 6.15
+	 *
+	 * @return string
+	 */
+	protected function get_include_folder() {
+		return FrmAppHelper::plugin_path() . '/classes/views/summary-emails/';
 	}
 
 	/**
@@ -132,11 +156,26 @@ abstract class FrmEmailSummary {
 	}
 
 	/**
+	 * Check if the email should be sent.
+	 *
+	 * @since 6.15
+	 *
+	 * @return bool
+	 */
+	protected function should_send() {
+		return true;
+	}
+
+	/**
 	 * Sends email.
 	 *
 	 * @return bool
 	 */
 	public function send() {
+		if ( ! $this->should_send() ) {
+			return false;
+		}
+
 		$recipients = $this->get_recipients();
 		if ( ! $recipients ) {
 			// Return true to not try to send this email on the next day.

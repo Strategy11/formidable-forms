@@ -5,6 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormActionsController {
 	public static $action_post_type = 'frm_form_actions';
+
+	/**
+	 * @var array|null
+	 */
 	public static $registered_actions;
 
 	/**
@@ -257,6 +261,7 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
+	 * @return array|FrmFormAction A single form action is returned when a specific $action value is requested.
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
@@ -300,6 +305,9 @@ class FrmFormActionsController {
 		);
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'all', $filters );
 
+		/**
+		 * @var array
+		 */
 		$action_controls = self::get_form_actions();
 
 		$action_map = array();
@@ -335,6 +343,9 @@ class FrmFormActionsController {
 		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
@@ -504,7 +515,7 @@ class FrmFormActionsController {
 		FrmForm::maybe_get_form( $form );
 
 		$link_settings = self::get_form_actions( $type );
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$link_settings = array( $type => $link_settings );
 		}
 
@@ -595,6 +606,9 @@ class FrmFormActionsController {
 			return;
 		}
 
+		/**
+		 * @var array
+		 */
 		$action_controls = self::get_form_actions();
 
 		foreach ( $action_controls as $action_control ) {

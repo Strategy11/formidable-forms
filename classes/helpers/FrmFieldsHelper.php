@@ -103,6 +103,11 @@ class FrmFieldsHelper {
 	 * Prepare field while creating a new entry
 	 *
 	 * @since 3.0
+	 *
+	 * @param array    $field_array
+	 * @param stdClass $field
+	 * @param array    $args
+	 * @return void
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
 		self::fill_default_field_opts( $field, $field_array );
@@ -114,8 +119,19 @@ class FrmFieldsHelper {
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
 		if ( $args['action'] === 'edit' ) {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param int|string $entry_id
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 		}
 	}
@@ -413,7 +429,7 @@ class FrmFieldsHelper {
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings = $filtered_substrings;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
 		}
 
 		return $substrings;
@@ -830,6 +846,8 @@ class FrmFieldsHelper {
 			'siteurl',
 			'sitename',
 			'admin_email',
+			'default-email',
+			'default-from-email',
 			'post[-|_]id',
 			'created[-|_]at',
 			'updated[-|_]at',
@@ -952,7 +970,7 @@ class FrmFieldsHelper {
 			'ip'  => $atts['entry']->ip,
 		);
 
-		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get' );
+		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get', 'default-email', 'default-from-email' );
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
@@ -1040,6 +1058,14 @@ class FrmFieldsHelper {
 			case 'admin_email':
 				$new_value = get_option( 'admin_email' );
 				break;
+			case 'default-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : get_option( 'admin_email' );
+				break;
+			case 'default-from-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->from_email ) && is_email( $frm_settings->from_email ) ? $frm_settings->from_email : get_option( 'admin_email' );
+				break;
 			case 'siteurl':
 				$new_value = FrmAppHelper::site_url();
 				break;
@@ -1051,7 +1077,7 @@ class FrmFieldsHelper {
 				break;
 			case 'get':
 				$new_value = self::process_get_shortcode( $atts, $return_array );
-		}
+		}//end switch
 
 		return $new_value;
 	}
@@ -1530,7 +1556,7 @@ class FrmFieldsHelper {
 	/**
 	 * Removes exception strings from replacement arrays and replaces the rest in the provided value string.
 	 *
-	 * @since x.x
+	 * @since 6.14
 	 *
 	 * @param array  $replace      Values to be replaced.
 	 * @param array  $replace_with Replacement values.

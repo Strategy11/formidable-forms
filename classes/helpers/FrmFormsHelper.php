@@ -1357,7 +1357,7 @@ BEFORE_HTML;
 		$atts     = array_merge( $defaults, $atts );
 
 		// Filter out ignored categories.
-		$ignore     = self::ignore_template_categories();
+		$ignore     = self::get_license_types();
 		$categories = array_diff( $categories, $ignore );
 
 		// Define icons mapping.
@@ -1414,17 +1414,6 @@ BEFORE_HTML;
 		echo '>';
 			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
-	}
-
-	/**
-	 * Retrieves the list of template categories to ignore.
-	 *
-	 * @since 4.03.01
-	 *
-	 * @return string[] Array of categories to ignore.
-	 */
-	public static function ignore_template_categories() {
-		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
@@ -1511,7 +1500,7 @@ BEFORE_HTML;
 
 		?>
 		<p class="frm_plan_required">
-			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
 			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
 				<?php echo esc_html( $requires ); ?>
 			</a>
@@ -1530,22 +1519,62 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$plans = array( 'free', 'Basic', 'Personal', 'Plus', 'Creator', 'Business', 'Elite' );
+		$plans = self::get_license_types();
 
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
-					// Show the current package name.
-					$category = 'Plus';
-				}
+				$category = self::convert_legacy_package_names( $category );
 
 				return $category;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Converts legacy package names to the current standard package name.
+	 *
+	 * @since 6.15
+	 * @param string $package_name
+	 * @return string The updated package name.
+	 */
+	public static function convert_legacy_package_names( $package_name ) {
+		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
+			$package_name = 'Plus';
+		}
+
+		return $package_name;
+	}
+
+	/**
+	 * Get the license types.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public static function get_license_types( $args = array() ) {
+		$defaults = array(
+			'include_all' => true,
+			'case_lower'  => false,
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		$license_types = array( 'Basic', 'Plus', 'Business', 'Elite' );
+
+		if ( $args['include_all'] ) {
+			$license_types = array_merge( array( 'free', 'Personal', 'Creator' ), $license_types );
+		}
+
+		if ( $args['case_lower'] ) {
+			$license_types = array_map( 'strtolower', $license_types );
+		}
+
+		return $license_types;
 	}
 
 	/**
@@ -1811,5 +1840,19 @@ BEFORE_HTML;
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
+	}
+
+	/**
+	 * Retrieves the list of template categories to ignore.
+	 *
+	 * @since 4.03.01
+	 * @deprecated 6.15
+	 *
+	 * @return string[] Array of categories to ignore.
+	 */
+	public static function ignore_template_categories() {
+		_deprecated_function( __METHOD__, '6.15' );
+
+		return self::get_license_types();
 	}
 }

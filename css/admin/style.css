@@ -13,11 +13,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	padding-bottom: 0;
 }
 
-#frm_style_sidebar .control-section:hover .accordion-section-title {
-	/* Normally an accordion has a white background but this doesn't look great with the padding on the accordion. */
-	background-color: transparent !important;
-}
-
 #frm_style_sidebar .accordion-section-title::after {
 	right: 0;
 	color: var(--grey-400);
@@ -309,7 +304,6 @@ The label in the preview should use the label color setting.
 	position: relative;
 	bottom: 2px;
 }
-
 .frm-style-card-separator {
 	background-color: var(--grey-300);
 	width: 2px;
@@ -441,7 +435,100 @@ body.rtl .frm-style-card-separator {
 	margin: auto;
 	color: var(--grey);
 }
+.control-section:hover .accordion-section-title {
+	background: transparent !important;
+	border-bottom-color: transparent;
+}
+.frm-style-settings-hover {
+	width: 100%;
+	position: absolute;
+	top:0;
+	left: 0;
+	height: 58px;
+	background: white;
+	border-radius: var(--small-radius);
+	box-shadow: var(--button-shadow);
+	z-index: 0;
+	transition: 0.25s opacity ease, 0.3s transform cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.frm-style-settings-hover.frm-animating {
+	opacity: 0.45;
+}
+.frm-right-panel .accordion-section-content {
+	background: transparent;
+	padding: 0;
+	overflow: initial;
+}
 
+.frm-right-panel .accordion-section-content > .inside {
+	padding: 15px;
+}
+.frm-quick-settings .frm_form_field .frm-style-item-heading,
+.frm-right-panel .accordion-section-content > .inside .frm-style-item-heading {
+	line-height: 36px;
+}
+.frm-right-panel .accordion-section-content > .inside .frm-style-item-heading .frm_help {
+	display: inline-block;
+	line-height: 13px;
+}
+
+.frm-right-panel .accordion-section-content .inside a {
+	font-size: inherit;
+}
+.frm-right-panel .control-section.open h3 {
+	border-bottom: none;
+}
+
+.js .frm-right-panel .control-section .accordion-section-title:focus,
+.js .frm-right-panel .control-section .accordion-section-title:hover {
+	color: var(--grey-900);
+}
+.js .frm-right-panel .control-section.open h3.accordion-section-title {
+	box-shadow: var(--button-shadow);
+	background: white !important;
+	border-radius: var(--small-radius);
+}
+
+.js .frm-right-panel .control-section .accordion-section-title:hover:before {
+	color: var(--grey-700);
+}
+.frm-right-panel .accordion-section {
+	border: none;
+	position: relative;
+	padding-bottom: 2px;
+}
+.frm-right-panel .accordion-section-title > .frmsvg:first-child {
+	margin: 0 10px 0 0;
+	color: var(--grey);
+}
+.frm-right-panel .accordion-section-title:hover > .frmsvg:first-child {
+	color: var(--grey-900);
+}
+.frm-right-panel .accordion-section-title > .frmsvg:last-child {
+	margin-right: 15px !important;
+}
+.frm-right-panel .open .accordion-section-title > .frmsvg:last-child {
+	transform: rotate(180deg);
+}
+.frm-right-panel .open.accordion-section {
+	border-bottom: 1px solid var(--grey-300);
+}
+#frm_view_editor_left.frm-right-panel .accordion-section-title,
+.frm-right-panel h3.accordion-section-title {
+	padding: 17px 15px;
+	background: transparent;
+	line-height: var(--leading);
+	color: var(--grey-500);
+	font-size: var(--text-md);
+	font-weight: 400;
+}
+.styling_settings .accordion-container {
+	position: relative;
+}
+.styling_settings .accordion-container .outer-border {
+	position: relative;
+	z-index: 1;
+}
 @media only screen and (max-width: 782px) {
 	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
 	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {

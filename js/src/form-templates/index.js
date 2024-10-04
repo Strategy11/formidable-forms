@@ -6,38 +6,38 @@ import domReady from '@wordpress/dom-ready';
 /**
  * Internal dependencies
  */
-import { getAppState, setAppState } from './shared';
+import { getState, setState } from './shared';
 import initializeFormTemplates from './initializeFormTemplates';
 
 domReady( () => {
 	/**
-	 * Entry point for pre-initialization adjustments to the application state.
+	 * Entry point for pre-initialization adjustments to the page state.
 	 *
-	 * @param {Object} appState Current state of the application.
+	 * @param {Object} state Current state of the page.
 	 */
 	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', {
-		getAppState,
-		setAppState
+		getState,
+		setState
 	});
 
 	// Initialize the form templates
 	initializeFormTemplates();
 
 	/**
-	 * Entry point for post-initialization custom logic or adjustments to the application state.
+	 * Entry point for post-initialization custom logic or adjustments to the page state.
 	 *
-	 * @param {Object} appState Current state of the application.
+	 * @param {Object} state Current state of the page.
 	 */
 	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', {
-		getAppState,
-		setAppState
+		getState,
+		setState
 	});
 
 	/**
 	 * Trigger a specific action to interact with the hidden form '#frm-new-template',
 	 * which is used for creating or using a form template.
 	 *
-	 * @param {jQuery} jQuery('#frm-new-template') The jQuery object containing the hidden form element.
+	 * @param {jQuery} $form The jQuery object containing the hidden form element.
 	 */
 	wp.hooks.doAction( 'frm_new_form_modal_form', jQuery( '#frm-new-template' ) );
 });

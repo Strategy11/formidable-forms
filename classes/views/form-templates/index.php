@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-form-templates-page" class="frm_wrap">
+<div id="frm-form-templates-page" class="frm_wrap frm-page-skeleton">
 	<div class="frm_page_container">
 		<?php
 		FrmAppHelper::get_admin_header(
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<div class="columns-2">
-			<div id="frm-form-templates-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
+			<div id="frm-page-skeleton-sidebar" class="frm-right-panel frm-flex-col frm-hide-js">
 				<div class="frm-scrollbar-wrapper frm-flex-col frm-gap-sm">
 					<?php
 					// Search box.
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 			<div id="post-body-content" class="frm-flex-col frm-gap-sm frm-p-md frm-hide-js">
-				<div class="frm-form-templates-grid-layout">
+				<div class="frm-list-grid-layout">
 					<button id="frm-form-templates-create-form" class="frm-flex-box frm-items-center frm-form-templates-create-button">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => _x( 'Create', 'form templates: create a blank form', 'formidable' ) ) ); ?>
 						<span><?php esc_html_e( 'Create a blank form', 'formidable' ); ?></span>
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					do_action( 'frm_after_create_blank_form_button' );
 					?>
 				</div>
-				<span id="frm-form-templates-create-form-divider" class="frm-form-templates-divider frm-mt-xs frm-mb-xs"></span>
+				<span id="frm-form-templates-create-form-divider" class="frm-page-skeleton-divider frm-mt-xs frm-mb-xs"></span>
 
 				<?php
 				// Templates list.

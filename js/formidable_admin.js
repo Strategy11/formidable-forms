@@ -3061,7 +3061,6 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			changes.innerHTML = purifyHtml( newValue );
-
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
 				jQuery( changes ).trigger( 'change' );
@@ -9103,6 +9102,13 @@ function frmAdminBuildJS() {
 				}
 
 				afterAddonInstall( response, button, message, el, saveAndReload, action );
+
+				/**
+				 * Trigger an action after successfully toggling the addon state.
+				 *
+				 * @param {Object} response
+				 */
+				wp.hooks.doAction( 'frm_update_addon_state', response );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -9453,7 +9459,7 @@ function frmAdminBuildJS() {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
-			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 ) {
+			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
 				if ( itemCanBeShown ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
@@ -9468,6 +9474,29 @@ function frmAdminBuildJS() {
 		updateCatHeadingVisibility();
 
 		jQuery( this ).trigger( 'frmAfterSearch' );
+	}
+
+	/**
+	 * Allow a search for "signatures" to still match "signature" for example when searching fields.
+	 *
+	 * @since 6.15
+	 *
+	 * @param {string} text       The text in the element we are checking for a match.
+	 * @param {string} searchText The text value that is being searched.
+	 * @return {boolean}
+	 */
+	function textMatchesPlural( text, searchText ) {
+		if ( searchText === 's' ) {
+			// Don't match everything when just "s" is searched.
+			return false;
+		}
+
+		if ( text[ text.length - 1 ] === 's' ) {
+			// Do not match something with double s if the text already ends in s.
+			return false;
+		}
+
+		return ( text + 's' ).indexOf( searchText ) >= 0;
 	}
 
 	/**
@@ -10975,6 +11004,7 @@ function frmAdminBuildJS() {
 				},
 				success: function( html ) {
 					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {

@@ -926,7 +926,7 @@
 	/**
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {@array|NodeList} items
+	 * @param {Array|NodeList} items
 	 * @param {function} callback
 	 */
 	function each( items, callback ) {
