@@ -60,9 +60,9 @@ export function createApplicationTemplates( applications ) {
  * @return {HTMLElement} Element representing a single application template.
  */
 function createTemplateItem( template ) {
-	const { name, key, hasLiteThumbnail } = template;
+	const { name, key, hasLiteThumbnail, isWebp } = template;
 	const thumbnailURL = hasLiteThumbnail ?
-		`${thumbnailBaseURL}/${key}.png` :
+		( isWebp ? `${thumbnailBaseURL}/${key}.webp` : `${thumbnailBaseURL}/${key}.png` ) :
 		`${thumbnailBaseURL}/placeholder.svg`;
 
 	return tag( 'li', {
