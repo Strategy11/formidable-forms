@@ -132,20 +132,29 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 <?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-.<?php echo esc_html( $style_class ); ?> .frm_scale label{
-	<?php if ( ! empty( $check_weight ) ) { ?>
-		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
+	.<?php echo esc_html( $style_class ); ?> .frm_scale label{
+		<?php if ( ! empty( $check_weight ) ) { ?>
+			font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
+		<?php } ?>
+		<?php if ( ! empty( $font ) ) { ?>
+			font-family:<?php echo FrmAppHelper::kses( $font . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
+		<?php } ?>
+		<?php if ( ! empty( $check_font_size ) ) { ?>
+			font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
+		<?php } ?>
+		<?php if ( ! empty( $check_label_color ) ) { ?>
+			color:<?php echo esc_html( $check_label_color . $important ); ?>;
+		<?php } ?>
+	}
+	<?php
+	if ( ! empty( $field_border_width ) && false !== strpos( $field_border_width, ' ' ) ) {
+		$border_width = explode( ' ', str_replace( 'px', '', $field_border_width ) );
+		$border_width = max( $border_width ) . 'px';
+		?>
+		.<?php echo esc_html( $style_class ); ?> .frm_image_options .frm_image_option_container {
+			border-width:<?php echo esc_html( $border_width . $important ); ?>;
+		}
 	<?php } ?>
-	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
-	<?php } ?>
-	<?php if ( ! empty( $check_font_size ) ) { ?>
-		font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $check_label_color ) ) { ?>
-		color:<?php echo esc_html( $check_label_color . $important ); ?>;
-	<?php } ?>
-}
 <?php endif; ?>
 
 /* These do not work if they are combined */
