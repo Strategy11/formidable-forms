@@ -13,7 +13,7 @@ describe("Applications page", () => {
         cy.get('#frm_custom_applications_placeholder > :nth-child(1) > img').should('exist');
         cy.get(':nth-child(2) > h3').should('contain', 'Improve your workflow with applications');
         cy.get('#frm_custom_applications_placeholder > :nth-child(2) > div').should('contain', 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.');
-        cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
+        cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr').click();
 
         cy.origin('https://formidableforms.com', () => {
             cy.get('h1').should('have.text', 'Upgrade Today to Unlock the Full Power of Formidable Forms');
@@ -25,13 +25,15 @@ describe("Applications page", () => {
         cy.get(':nth-child(3) > .frm-h2').should('contain', "Application Templates");
         cy.get('#frm_application_category_filter > .current').should('contain', "All Items");
 
-        cy.get('#frm_application_templates_grid > :nth-child(1)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Business Directory')
+        .within(() => {
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Business Directory Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-directory.png');
             cy.get('h3 .frm-inner-text').should('contain.text', 'Business Directory').click();
         });
 
@@ -54,7 +56,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/business-directory-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr', 'trigger')
+                    .invoke('removeAttr')
                     .click();
             });
         cy.origin('https://formidableforms.com', () => {
@@ -67,7 +69,9 @@ describe("Applications page", () => {
 
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
 
-        cy.get('#frm_application_templates_grid > :nth-child(2)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Business Hours')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Business Hours');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -77,37 +81,45 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-hours.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(3)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Certificate')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Certificate');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Certificate Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/certificate.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(4)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Charity Tracker')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Charity Tracker');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Charity Tracker Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/charity-tracker.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(5)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Contract Agreement')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Contract Agreement');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Contract Agreement Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/contract-agreement.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(6)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'FAQ')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'FAQ');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -117,33 +129,39 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/faq-template-wordpress.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(7)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Freelance Invoice Generator')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Freelance Invoice Generator');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Freelance Invoice Generator Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/freelance-invoice-generator.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(8)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Invoice PDF')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Invoice PDF');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Invoice PDF Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/invoice-pdf.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(9)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Letter of Recommendation')
+        .within(() => {
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Letter of Recommendation Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/letter-of-recommendation.webp');
             cy.get('h3 .frm-inner-text').should('contain.text', 'Letter of Recommendation').click();
         });
 
@@ -166,7 +184,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/letter-of-recommendation-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr', 'trigger')
+                    .invoke('removeAttr')
                     .click();
             });
         cy.origin('https://formidableforms.com', () => {
@@ -179,27 +197,33 @@ describe("Applications page", () => {
 
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
 
-        cy.get('#frm_application_templates_grid > :nth-child(10)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Link in Bio Instagram Page')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Link in Bio Instagram Page');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Link in Bio Instagram Page Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/link-in-bio-instagram.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(11)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Member Directory')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Member Directory');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
                 .and('have.attr', 'aria-description', 'Member Directory Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
+                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/member-directory.webp');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(12)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Product Review and Purchase')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Product Review and Purchase');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -209,7 +233,9 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/product-review.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(13)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Real Estate Listing')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Real Estate Listing');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -219,7 +245,9 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/real-estate-listings.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(14)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Restaurant Menu')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Restaurant Menu');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -229,7 +257,9 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/restaurant-menu.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(15)').within(() => {
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Team Directory')
+        .within(() => {
             cy.get('h3 .frm-inner-text').should('contain.text', 'Team Directory');
             cy.get('.button.frm-button-secondary.frm-button-sm')
                 .should('contain.text', 'Learn More')
@@ -239,15 +269,18 @@ describe("Applications page", () => {
                 .and('include', '/plugins/formidable-forms/images/applications/thumbnails/team-directory.png');
         });
 
-        cy.get('#frm_application_templates_grid > :nth-child(16)').within(() => {
-            cy.get('.button.frm-button-secondary.frm-button-sm')
-                .should('contain.text', 'Learn More')
-                .and('have.attr', 'aria-description', 'Testimonials Template');
-            cy.get('.frm-application-card-image-wrapper img')
-                .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/placeholder.svg');
-            cy.get('h3 .frm-inner-text').should('contain.text', 'Testimonials').click();
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card', 'Testimonials')
+        .within(() => {
+          cy.get('.button.frm-button-secondary.frm-button-sm')
+            .should('contain.text', 'Learn More')
+            .and('have.attr', 'aria-description', 'Testimonials Template');
+          cy.get('.frm-application-card-image-wrapper img')
+            .should('have.attr', 'src')
+            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/testimonials.webp');
+          cy.get('h3 .frm-inner-text').should('contain.text', 'Testimonials').click();
         });
+      
 
         cy.get('#frm_view_application_modal')
             .should('be.visible')
@@ -268,7 +301,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/testimonials-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr', 'trigger')
+                    .invoke('removeAttr')
                     .click();
             });
 
@@ -285,16 +318,35 @@ describe("Applications page", () => {
 
         cy.log("Search for valid application templates");
         cy.get('#frm-application-search').type("Business Hours");
-        cy.get('.frm-search-result > :nth-child(1) > h3').should('contain', "Business Hours");
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card.frm-search-result', 'Business Hours').should('exist');
         cy.get('#frm-application-search').clear().type("menu");
-        cy.get('.frm-search-result > :nth-child(1) > h3').should('contain', "Restaurant Menu");
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card.frm-search-result', 'Restaurant Menu').should('exist');
         cy.get('#frm-application-search').clear().type("business");
-        cy.get(':nth-child(1) > :nth-child(1) > h3').should('contain', "Business Directory");
-        cy.get(':nth-child(2) > :nth-child(1) > h3').should('contain', "Business Hours");
-
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card.frm-search-result', 'Business Directory')
+        .within(() => {
+          cy.get('.button.frm-button-secondary.frm-button-sm')
+            .should('contain.text', 'Learn More')
+            .and('have.attr', 'aria-description', 'Business Directory Template');
+          cy.get('.frm-application-card-image-wrapper img')
+            .should('have.attr', 'src')
+            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-directory.png');
+        });
+        cy.get('#frm_application_templates_grid')
+        .contains('.frm-application-template-card.frm-search-result', 'Business Hours')
+        .within(() => {
+          cy.get('.button.frm-button-secondary.frm-button-sm')
+            .should('contain.text', 'Learn More')
+            .and('have.attr', 'aria-description', 'Business Hours Template');
+          cy.get('.frm-application-card-image-wrapper img')
+            .should('have.attr', 'src')
+            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-hours.png');
+        });
         cy.log("Search for non-valid application templates");
         cy.get('#frm-application-search').clear().type("Application does not exist");
-        cy.get('#frm_application_templates_grid > :nth-child(17)').should('contain', 'No application templates match your search query.');
+        cy.get('#frm_application_templates_grid').should('contain', 'No application templates match your search query.');
 
     });
 });
