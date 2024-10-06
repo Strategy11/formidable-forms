@@ -13,7 +13,7 @@ describe("Applications page", () => {
         cy.get('#frm_custom_applications_placeholder > :nth-child(1) > img').should('exist');
         cy.get(':nth-child(2) > h3').should('contain', 'Improve your workflow with applications');
         cy.get('#frm_custom_applications_placeholder > :nth-child(2) > div').should('contain', 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.');
-        cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr').click();
+        cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
 
         cy.origin('https://formidableforms.com', () => {
             cy.get('h1').should('have.text', 'Upgrade Today to Unlock the Full Power of Formidable Forms');
@@ -56,7 +56,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/business-directory-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr')
+                    .invoke('removeAttr', 'target')
                     .click();
             });
         cy.origin('https://formidableforms.com', () => {
@@ -184,7 +184,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/letter-of-recommendation-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr')
+                    .invoke('removeAttr', 'target')
                     .click();
             });
         cy.origin('https://formidableforms.com', () => {
@@ -301,7 +301,7 @@ describe("Applications page", () => {
                     .and('include', 'https://formidableforms.com/view-templates/testimonials-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade');
                 cy.get('.frm_modal_footer a.button-primary')
                     .should('contain.text', 'Upgrade Now')
-                    .invoke('removeAttr')
+                    .invoke('removeAttr', 'target')
                     .click();
             });
 
