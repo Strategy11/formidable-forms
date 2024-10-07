@@ -259,7 +259,7 @@ class FrmApplicationTemplate {
 				'content' => 'upgrade',
 				'medium'  => 'applications',
 			),
-			'/view-templates/' . $this->api_data['slug']
+			'view-templates/' . $this->api_data['slug']
 		);
 	}
 }
