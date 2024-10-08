@@ -204,7 +204,6 @@ class FrmAppController {
 			'formidable-entries',
 			'formidable-views',
 			'formidable-views-editor',
-			'formidable-pro-upgrade',
 			'formidable-addons',
 			'formidable-import',
 			'formidable-settings',
