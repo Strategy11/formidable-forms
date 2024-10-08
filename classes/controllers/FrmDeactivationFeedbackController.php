@@ -108,7 +108,7 @@ class FrmDeactivationFeedbackController {
 			return;
 		}
 		?>
-		<div id="frm-deactivation-modal" class="">
+		<div id="frm-deactivation-modal" style="display: none;">
 			<div class="metabox-holder">
 				<div class="postbox">
 					<a class="frm-modal-close dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
