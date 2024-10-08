@@ -819,7 +819,9 @@ class FrmAppController {
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
 			wp_enqueue_script( 'formidable_admin' );
+			wp_set_script_translations( 'formidable_admin', 'formidable' );
 			wp_enqueue_script( 'formidable_embed' );
+			wp_set_script_translations( 'formidable_embed', 'formidable' );
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-animations' );
