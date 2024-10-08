@@ -1232,6 +1232,17 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function maybeSetFocusOnNameFieldElement( element ) {
+		if ( ! element.querySelector( '.frm_combo_inputs_container[data-name-layout]' ) ) {
+			return;
+		}
+		const nameField = element.querySelector( '[aria-invalid="true"]' );
+		if ( ! nameField ) {
+			return;
+		}
+		nameField.focus();
+	}
+
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
@@ -1247,9 +1258,14 @@ function frmFrontFormJS() {
 		element = errors[0];
 		do {
 			element = element.previousSibling;
+
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
 				element.focus();
 				break;
+			}
+
+			if ( 'FIELDSET' === element.nodeName ) {
+				maybeSetFocusOnNameFieldElement( element );
 			}
 
 			if ( 'undefined' !== typeof element.classList ) {

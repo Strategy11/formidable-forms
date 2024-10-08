@@ -381,6 +381,9 @@ class FrmFieldCombo extends FrmFieldType {
 		// Fake it to avoid printing frm-val attribute.
 		$field['default_value'] = '';
 
+		if ( ! empty( $sub_field['name'] ) ) {
+			$field['subfield_name'] = $sub_field['name'];
+		}
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.

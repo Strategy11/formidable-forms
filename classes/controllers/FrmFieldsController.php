@@ -915,6 +915,15 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
+			if ( $field['type'] === 'name' ) {
+				if ( false !== strpos( $k, 'aria-invalid' ) && ! empty( $field['subfield_name'] ) && $field['shortcodes'][ 'aria-invalid-' . $field['subfield_name'] ]) {
+					$k = 'aria-invalid';
+					$v = $field['shortcodes'][ 'aria-invalid-' . $field['subfield_name'] ];
+					unset( $field['shortcodes'][ 'aria-invalid-' . $field['subfield_name'] ] );
+				} else {
+					continue;
+				}
+			}
 			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
