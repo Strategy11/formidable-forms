@@ -3640,7 +3640,7 @@ function frmAdminBuildJS() {
 
 	function confirmFieldsDeleteMessage( numberOfFields ) {
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
-		return __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', numberOfFields );
+		return sprintf( __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ), numberOfFields );
 	}
 
 	function clickDeleteField() {
@@ -6110,7 +6110,8 @@ function frmAdminBuildJS() {
 		);
 
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyHtml( targetInput.value ) ) );
+			/* translators: %s: The detected option value. */
+			infoModal( sprintf( __( 'Duplicate option value "%s" detected', 'formidable' ), purifyHtml( targetInput.value ) ) );
 		}
 	}
 
@@ -6851,7 +6852,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
+		h2.textContent = sprintf( __( '%s are not installed', 'formidable' ), title );
 
 		container.classList.add( 'frmcenter' );
 
