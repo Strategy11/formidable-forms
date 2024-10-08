@@ -866,7 +866,7 @@ function frmAdminBuildJS() {
 		if ( isFieldGroup( draggable ) ) {
 			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
 			newTextFieldClone.querySelector( 'use' ).setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_field_group_layout_icon' );
-			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
+			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group', 'formidable' );
 			newTextFieldClone.classList.add( 'frm_field_box' );
 			newTextFieldClone.classList.add( 'ui-sortable-helper' );
 			return newTextFieldClone;
