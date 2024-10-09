@@ -384,7 +384,7 @@ class FrmInbox extends FrmFormApi {
 			// because the user was active before this option was introduced.
 			return false;
 		}
-		if ( FrmAppHelper::pro_is_installed() ) {
+		if ( FrmAppHelper::pro_is_included() ) {
 			// Not free.
 			return false;
 		}
