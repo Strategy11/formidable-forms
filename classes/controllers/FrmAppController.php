@@ -1243,7 +1243,6 @@ class FrmAppController {
 	 */
 	public static function handle_activation() {
 		self::maybe_activate_payment_cron();
-		self::maybe_set_first_activation_timestamp();
 	}
 
 	/**
@@ -1260,30 +1259,6 @@ class FrmAppController {
 		}
 
 		FrmTransLiteAppController::maybe_schedule_cron();
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function maybe_set_first_activation_timestamp() {
-		$activation_timestamp = get_option( 'frm_first_activation' );
-		if ( false !== $activation_timestamp ) {
-			// Activation timestamp is already set, so exit.
-			return;
-		}
-		$entry_count = FrmEntry::getRecordCount();
-		if ( $entry_count ) {
-			// There are already entries, so this is not a first activation.
-			return;
-		}
-		$form_count = FrmDb::get_count( 'frm_forms' );
-		if ( $form_count > 1 ) {
-			// The user has added new forms, so this is not a first activation.
-			return;
-		}
-		update_option( 'frm_first_activation', time(), false );
 	}
 
 	public static function set_footer_text( $text ) {
