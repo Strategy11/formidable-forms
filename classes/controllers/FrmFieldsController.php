@@ -939,7 +939,7 @@ class FrmFieldsController {
 
 			unset( $k, $v );
 		}
-	}
+	} //end foreach
 
 	/**
 	 * Disallow possibly unsafe attributees (that trigger JavaScript) when unasfe HTML is not allowed.

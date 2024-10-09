@@ -1238,7 +1238,7 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
-	 * @returns {Void}
+	 * @return {Void}
 	 */
 	function maybeSetFocusOnNameFieldElement( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
