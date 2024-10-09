@@ -8375,6 +8375,86 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	/**
+	 * Handles 'change' event on the document.
+	 *
+	 * @since x.x
+	 * 
+	 * @param {Event} event
+	 * @returns {Void}
+	 */
+	function handleChangeEventonDocument( event ) {
+		maybeShowSaveAndReloadModal( event.target );
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal if the target field's type is changed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} target
+	 * @returns {Void}
+	 */
+	function maybeShowSaveAndReloadModal( target ) {
+		if ( ! target.id.startsWith( 'field_options_type_' ) && ! target.classList.contains( 'frmjs_prod_data_type_opt' ) ) {
+			return;
+		}
+		const idParts = target.id.split( '_' );
+		const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+
+		if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
+			return;
+		}
+		showSaveAndReloadModal( __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' ) );
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal with the given message.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} message
+	 * @returns {Void}
+	 */
+	function showSaveAndReloadModal( message ) {
+		frmDom.modal.maybeCreateModal(
+			'frmSaveAndReloadModal',
+			{
+				title: __( 'Save and Reload?', 'formidable' ),
+				content: getModalContent(),
+				footer: getModalFooter()
+			}
+		);
+
+		function getModalContent() {
+			const modalContent = div( message );
+			modalContent.style.padding = 'var(--gap-md)';
+			return modalContent;
+		}
+
+		function getModalFooter() {
+			const continueButton = frmDom.modal.footerButton({
+				text: __( 'Save and Reload', 'formidable' ),
+				buttonType: 'primary'
+			});
+
+			onClickPreventDefault( continueButton, () => {
+				saveAndReloadFormBuilder();
+			} );
+	
+			const cancelButton = frmDom.modal.footerButton({
+				text: __( 'Cancel', 'formidable' ),
+				buttonType: 'cancel'
+			});
+			cancelButton.classList.add( 'dismiss' );
+
+			return frmDom.div({
+				children: [ cancelButton, continueButton ]
+			});
+		}
+	}
+
 	function updateShortcodesPopupPosition( target ) {
 		let moreIcon;
 		if ( target instanceof Event ) {
@@ -10521,6 +10601,7 @@ function frmAdminBuildJS() {
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
+			document.addEventListener( 'change', handleChangeEventonDocument );
 		},
 
 		settingsInit: function() {
