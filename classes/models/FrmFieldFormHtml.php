@@ -414,7 +414,7 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	private function set_aria_invalid_error_for_name_part( &$shortcode_atts ) {
-		foreach ( array( 'first', 'last' ) as $name_part ) {
+		foreach ( array( 'first', 'middle', 'last' ) as $name_part ) {
 			$shortcode_atts[ 'aria-invalid-' . $name_part ] = isset( $this->pass_args['errors'][ 'field' . $this->field_id . '-' . $name_part ] ) ? 'true' : 'false';
 		}
 	}

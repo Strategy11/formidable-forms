@@ -916,7 +916,7 @@ class FrmFieldsController {
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
 			if ( $field['type'] === 'name' && 0 === strpos( $k, 'aria-invalid' ) && isset( $field['subfield_name'] ) ) {
-				$subfield_name = $field['subfield_name']; // first or last.
+				$subfield_name = $field['subfield_name']; // first, middle or last.
 				if ( isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
 					$k = 'aria-invalid';
 					$v = $field['shortcodes'][ 'aria-invalid-' . $subfield_name ];
