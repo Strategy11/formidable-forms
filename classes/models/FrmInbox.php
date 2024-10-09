@@ -208,7 +208,7 @@ class FrmInbox extends FrmFormApi {
 		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
 			return true;
 		}
-		$who = array( 'free_first_30' );//(array) $message['who'];
+		$who = (array) $message['who'];
 		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
 			return true;
 		}
@@ -490,7 +490,6 @@ class FrmInbox extends FrmFormApi {
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
 			function ( $message ) use ( $key ) {
-				return true;
 				return ! empty( $message[ $key ] );
 			}
 		);
