@@ -208,11 +208,14 @@ class FrmInbox extends FrmFormApi {
 		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
 			return true;
 		}
-		$who = (array) $message['who'];
+		$who = array( 'free_first_30' );//(array) $message['who'];
 		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
 			return true;
 		}
 		if ( in_array( $this->get_user_type(), $who, true ) ) {
+			return true;
+		}
+		if ( in_array( 'free_first_30', $who, true ) && $this->is_free_first_30() ) {
 			return true;
 		}
 		/**
@@ -367,6 +370,29 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * Check if user is still using the Lite version only, and within
+	 * the first 30 days of activation.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function is_free_first_30() {
+		$activation_timestamp = get_option( 'frm_first_activation' );
+		if ( false === $activation_timestamp ) {
+			// If the option does not exist, assume that it is
+			// because the user was active before this option was introduced.
+			return false;
+		}
+		if ( FrmAppHelper::pro_is_installed() ) {
+			// Not free.
+			return false;
+		}
+		$cutoff = strtotime( '-30 days' );
+		return $activation_timestamp > $cutoff;
+	}
+
+	/**
 	 * Show a banner message if one is available.
 	 *
 	 * @return bool True if a banner is available and shown.
@@ -464,6 +490,7 @@ class FrmInbox extends FrmFormApi {
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
 			function ( $message ) use ( $key ) {
+				return true;
 				return ! empty( $message[ $key ] );
 			}
 		);
