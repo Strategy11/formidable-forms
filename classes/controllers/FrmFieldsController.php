@@ -938,7 +938,7 @@ class FrmFieldsController {
 			}
 
 			unset( $k, $v );
-		} //end foreach
+		}//end foreach
 	}
 
 	/**
