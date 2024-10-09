@@ -397,9 +397,13 @@ class FrmFieldFormHtml {
 		if ( $this->field_obj->get_field_column( 'type' ) === 'name' ) {
 			if ( isset( $this->pass_args['errors'][ 'field' . $this->field_id . '-first' ] ) ) {
 				$shortcode_atts['aria-invalid-first'] = 'true';
+			} else {
+				$shortcode_atts['aria-invalid-first'] = 'false';
 			}
 			if ( isset( $this->pass_args['errors'][ 'field' . $this->field_id . '-last' ] ) ) {
 				$shortcode_atts['aria-invalid-last'] = 'true';
+			} else {
+				$shortcode_atts['aria-invalid-last'] = 'false';
 			}
 		} else {
 			$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
