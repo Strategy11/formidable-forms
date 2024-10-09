@@ -1232,6 +1232,14 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Sets focus on a name field part (first or last name) if it has an error.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @returns {Void}
+	 */
 	function maybeSetFocusOnNameFieldElement( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
 			return;
@@ -1261,7 +1269,6 @@ function frmFrontFormJS() {
 		element = errors[0];
 		do {
 			element = element.previousSibling;
-
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
 				element.focus();
 				break;
