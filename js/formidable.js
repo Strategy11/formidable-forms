@@ -1233,6 +1233,9 @@ function frmFrontFormJS() {
 	}
 
 	function maybeSetFocusOnNameFieldElement( element ) {
+		if ( 'FIELDSET' !== element.nodeName ) {
+			return;
+		}
 		if ( ! element.querySelector( '.frm_combo_inputs_container[data-name-layout]' ) ) {
 			return;
 		}
@@ -1264,9 +1267,7 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			if ( 'FIELDSET' === element.nodeName ) {
-				maybeSetFocusOnNameFieldElement( element );
-			}
+			maybeSetFocusOnNameFieldElement( element );
 
 			if ( 'undefined' !== typeof element.classList ) {
 				if ( element.classList.contains( 'html-active' ) ) {
