@@ -394,11 +394,29 @@ class FrmFieldFormHtml {
 			unset( $shortcode_atts['class'] );
 		}
 
-		$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+		if ( $this->field_obj->get_field_column( 'type' ) === 'name' ) {
+			$this->set_aria_invalid_error_for_name_part( $shortcode_atts );
+		} else {
+			$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+		}
 
 		$this->field_obj->set_field_column( 'shortcodes', $shortcode_atts );
 
 		return $shortcode_atts;
+	}
+
+	/**
+	 * Set the aria-invalid attribute for the first and last name fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $shortcode_atts
+	 * @return void
+	 */
+	private function set_aria_invalid_error_for_name_part( &$shortcode_atts ) {
+		foreach ( array( 'first', 'middle', 'last' ) as $name_part ) {
+			$shortcode_atts[ 'aria-invalid-' . $name_part ] = isset( $this->pass_args['errors'][ 'field' . $this->field_id . '-' . $name_part ] ) ? 'true' : 'false';
+		}
 	}
 
 	/**
