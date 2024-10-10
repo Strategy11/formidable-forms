@@ -53,7 +53,7 @@ class FrmMigrate {
 					update_option( 'frm_first_activation', time(), false );
 				}
 			}
-		}
+		}//end if
 
 		do_action( 'frm_after_install' );
 
