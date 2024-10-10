@@ -128,8 +128,7 @@ function enhanceStepsWithProgress() {
  * @return {void}
  */
 function fadeInPageElements() {
-	const { pageBackground, container } = getElements();
-	new frmAnimate( pageBackground ).fadeIn();
+	const { container } = getElements();
 	new frmAnimate( container ).fadeIn();
 }
 

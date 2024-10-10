@@ -106,7 +106,7 @@ class FrmOnboardingWizardHelper {
 		$primary_button_attributes          = array(
 			'href' => $args['primary-button-href'],
 		);
-		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary ' . $args['primary-button-class'] );
+		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary frm-sharp frm_large ' . $args['primary-button-class'] );
 		if ( ! empty( $args['primary-button-id'] ) ) {
 			$primary_button_attributes['id'] = $args['primary-button-id'];
 		}
@@ -121,7 +121,7 @@ class FrmOnboardingWizardHelper {
 		$secondary_button_attributes          = array(
 			'href' => $args['secondary-button-href'],
 		);
-		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary ' . $args['secondary-button-class'] );
+		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary frm-sharp frm_large ' . $args['secondary-button-class'] );
 		if ( $args['secondary-button-skip-step'] ) {
 			$secondary_button_attributes['class'] .= ' frm-onboarding-skip-step';
 		}

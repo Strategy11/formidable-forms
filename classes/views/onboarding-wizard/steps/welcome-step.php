@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<section id="frm-onboarding-welcome-step" class="frm-onboarding-step frm-card-box frmcenter frm-current" data-step-name="<?php echo esc_attr( $step ); ?>">
+<section id="frm-onboarding-welcome-step" class="frm-onboarding-step frm-card-box frmcenter frm-current frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
 		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard Logo', 'formidable' ); ?>" />
 	</div>

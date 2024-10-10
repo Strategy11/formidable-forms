@@ -70,7 +70,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @var string
 	 */
-	const INITIAL_STEP = 'welcome';
+	const INITIAL_STEP = 'consent-tracking';
 
 	/**
 	 * Option name to store usage data.
@@ -250,6 +250,7 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in order.
 		$step_parts = array(
+			'consent-tracking'       => 'steps/consent-tracking-step.php',
 			'welcome'                => 'steps/welcome-step.php',
 			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
 			'license-management'     => 'steps/license-management-step.php',

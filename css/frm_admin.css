@@ -1316,6 +1316,11 @@ body.frm-hidden-overflow {
 	display: inline-block;
 }
 
+.frm-button-primary.frm-sharp,
+.frm-button-secondary.frm-sharp {
+	border-radius: 12px !important;
+}
+
 .no-js.wp-core-ui .frm-search .button.hide-if-no-js,
 .js.wp-core-ui .frm-search .button.hide-if-js {
 	display: none;
@@ -1411,10 +1416,10 @@ body.frm-hidden-overflow {
 	color: #fff !important;
 }
 
-.frm-button-primary.frm_large{
-	font-size: var(--text-md) !important;
+.frm-button-primary.frm_large,
+.frm-button-secondary.frm_large {
 	height: auto !important;
-	padding: 9px 18px !important;
+	padding: 12px 16px !important;
 }
 
 .frm-button-secondary.frm-small,
@@ -2428,11 +2433,12 @@ h2.frm-h2 + .howto {
 }
 
 .frm-card-box {
-	max-width: 500px;
+	max-width: 524px;
 	background-color: #fff;
-	border-radius: var(--small-radius);
-	padding: var(--gap-lg);
-	box-shadow: var(--box-shadow-sm);
+	border-radius: var(--medium-radius);
+	padding: var(--gap-xl);
+	border: 1px solid var(--grey-200);
+	box-shadow: var(--box-shadow-md);
 }
 
 .frm-card-box.frm-has-progress-bar {

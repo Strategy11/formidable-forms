@@ -11,7 +11,6 @@ import { PREFIX, WELCOME_STEP_ID } from '../shared';
 export const { getElements, addElements } = createPageElements({
 	// Body Elements
 	onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
-	pageBackground: document.getElementById( `${PREFIX}-bg` ),
 	container: document.getElementById( `${PREFIX}-container` ),
 	steps: document.querySelectorAll( `.${PREFIX}-step` ),
 	skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),

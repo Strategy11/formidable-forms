@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-card-box-footer<?php echo $args['footer-class'] ? ' ' . esc_attr( $args['footer-class'] ) : ''; ?>">
 	<?php if ( $args['display-back-button'] ) { ?>
-		<a href="#" class="frm-onboarding-back-button frm-button-tertiary frm-mr-auto" role="button">
+		<a href="#" class="frm-onboarding-back-button frm-button-tertiary frm-mr-auto frm_large" role="button">
 			<?php esc_html_e( 'Back', 'formidable' ); ?>
 		</a>
 	<?php } ?>
