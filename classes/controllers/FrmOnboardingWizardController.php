@@ -144,7 +144,7 @@ class FrmOnboardingWizardController {
 		}
 
 		// Check if we should consider redirection.
-		if ( ! self::is_onboarding_wizard_displayed() || self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
+		if ( isset( $_GET['activate-multi'] ) || ! self::is_onboarding_wizard_displayed() || self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
 			return;
 		}
 
