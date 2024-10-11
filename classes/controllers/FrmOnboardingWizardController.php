@@ -162,6 +162,16 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
+		$is_multi_activate = isset( $_GET['activate-multi'] );
+		if ( $is_multi_activate ) {
+			set_transient(
+				FrmOnboardingWizardController::TRANSIENT_NAME,
+				FrmOnboardingWizardController::TRANSIENT_MULTI_VALUE,
+				60
+			);
+			return;
+		}
+
 		if ( self::TRANSIENT_MULTI_VALUE === $transient_value && ! FrmAppHelper::is_formidable_admin() ) {
 			// For multi-activations we want to only redirect when a user loads a Formidable page.
 			return;
