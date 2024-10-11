@@ -93,6 +93,7 @@ class FrmOnboardingWizardHelper {
 			'primary-button-class'       => '',
 			'primary-button-href'        => '#',
 			'primary-button-role'        => 'button',
+			'primary-button-with-icon'   => false,
 			// Secondary Button Args.
 			'secondary-button-text'      => esc_html__( 'Skip', 'formidable' ),
 			'secondary-button-class'     => '',

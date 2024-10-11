@@ -1687,6 +1687,10 @@ input.frm_insert_in_template {
 	margin-bottom: var(--gap-lg) !important;
 }
 
+.frm-ml-xs {
+	margin-left: var(--gap-xs) !important;
+}
+
 .frm-ml-auto {
 	margin-left: auto;
 }
@@ -1944,6 +1948,10 @@ input.frm_insert_in_template {
 
 .frm-on-bottom {
 	z-index: -1;
+}
+
+.frm-rotate-90 {
+	transform: rotate(90deg);
 }
 
 /* End Generic Classes, Start Forced Generic Classes */

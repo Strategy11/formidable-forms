@@ -20,6 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php echo esc_html( $args['secondary-button-text'] ); ?>
 	</a>
 	<a <?php FrmAppHelper::array_to_html_params( $primary_button_attributes, true ); ?>>
-		<?php echo esc_html( $args['primary-button-text'] ); ?>
+		<?php
+		echo esc_html( $args['primary-button-text'] );
+
+		if ( $args['primary-button-with-icon'] === true ) {
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowup6_icon frm_svg13 frm_inline_block frm-rotate-90 frm-ml-xs' );
+		}
+		?>
 	</a>
 </div>
