@@ -140,7 +140,7 @@ function frm_maybe_install() {
 	if ( get_transient( FrmOnboardingWizardController::TRANSIENT_NAME ) !== 'no' ) {
 		set_transient(
 			FrmOnboardingWizardController::TRANSIENT_NAME,
-			isset( $_GET['activate-multi'] ) ? FrmOnboardingWizardController::TRANSIENT_MULTI_VALUE : FrmOnboardingWizardController::TRANSIENT_VALUE,
+			FrmOnboardingWizardController::TRANSIENT_VALUE,
 			60
 		);
 	}
