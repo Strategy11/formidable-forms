@@ -5,7 +5,7 @@
 		return;
 	}
 
-	const __ = wp.i18n.__;
+	const { __, sprintf } = wp.i18n;
 	const { div, tag, svg } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 
@@ -74,7 +74,7 @@
 
 	function openEmbedModal() {
 		/* translators: %s type: ie form, view. */
-		const title = __( 'Embed %s', 'formidable' ).replace( '%s', getTypeDescription() );
+		const title = sprintf( __( 'Embed %s', 'formidable' ), getTypeDescription() );
 
 		modal = maybeCreateModal(
 			'frm_embed_modal',
@@ -129,13 +129,13 @@
 		const typeDescription = getTypeDescription();
 
 		/* translators: %s type: ie form, view. */
-		const existingPageDescription = __( 'Embed your %s into an existing page.', 'formidable' ).replace( '%s', typeDescription );
+		const existingPageDescription = sprintf( __( 'Embed your %s into an existing page.', 'formidable' ), typeDescription );
 
 		/* translators: %s type: ie form, view. */
-		const newPageDescription = __( 'Put your %s on a newly created page.', 'formidable' ).replace( '%s', typeDescription );
+		const newPageDescription = sprintf( __( 'Put your %s on a newly created page.', 'formidable' ), typeDescription );
 
 		/* translators: %s type: ie form, view. */
-		const insertManuallyDescription = __( 'Use shortcodes or PHP code to put the %s anywhere.', 'formidable' ).replace( '%s', typeDescription );
+		const insertManuallyDescription = sprintf( __( 'Use shortcodes or PHP code to put the %s anywhere.', 'formidable' ), typeDescription );
 
 		const options = [
 			{
@@ -178,7 +178,7 @@
 						const typeDescription = getTypeDescription();
 
 						/* translators: %s: type (ie. view, form). */
-						const titleText = __( 'Select the page you want to embed your %s into.', 'formidable' ).replace( '%s', typeDescription );
+						const titleText = sprintf( __( 'Select the page you want to embed your %s into.', 'formidable' ), typeDescription );
 
 						const title = getLabel( titleText );
 						title.setAttribute( 'for', 'frm_page_dropdown' );
@@ -189,7 +189,7 @@
 						doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 						doneButton.classList.remove( 'dismiss' );
 						/* translators: %s: type (ie. view, form). */
-						doneButton.textContent = __( 'Insert %s', 'formidable' ).replace( '%s', typeDescription );
+						doneButton.textContent = sprintf( __( 'Insert %s', 'formidable' ), typeDescription );
 						doneButton.addEventListener( 'click', redirectToExistingPageWithInjectedShortcode );
 
 						const dropdownWrapper = div();
@@ -448,7 +448,7 @@
 		icon.setAttribute( 'tabindex', 0 );
 		icon.setAttribute( 'role', 'button' );
 		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
-		icon.setAttribute( 'aria-label', __( 'Copy %s', 'formidable' ).replace( '%s', label ) );
+		icon.setAttribute( 'aria-label', sprintf( __( 'Copy %s', 'formidable' ), label ) );
 		icon.addEventListener(
 			'click',
 			() => copyExampleToClipboard( icon.parentNode.querySelector( '.frm_embed_example' ) )
