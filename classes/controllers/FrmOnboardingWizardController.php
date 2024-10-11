@@ -135,6 +135,8 @@ class FrmOnboardingWizardController {
 
 	/**
 	 * Performs a safe redirect to the welcome screen when the plugin is activated.
+	 * On single activation, we will redirect immediately.
+	 * When activating multiple plugins, the redirect is delayed until a Formidable page is loaded.
 	 *
 	 * @return void
 	 */
@@ -162,8 +164,11 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		$is_multi_activate = isset( $_GET['activate-multi'] );
-		if ( $is_multi_activate ) {
+		if ( isset( $_GET['activate-multi'] ) ) {
+			/**
+			 * $_GET['activate-multi'] is set after activating multiple plugins.
+			 * In this case, change the transient value so we know for future checks.
+			 */
 			set_transient(
 				FrmOnboardingWizardController::TRANSIENT_NAME,
 				FrmOnboardingWizardController::TRANSIENT_MULTI_VALUE,
