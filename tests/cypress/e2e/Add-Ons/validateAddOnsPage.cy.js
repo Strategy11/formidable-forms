@@ -640,7 +640,7 @@ describe("Add-Ons page", () => {
         cy.log("ConvertKit card");
         cy.get('li[data-slug="convertkit"]').within(() => {
             cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'ConvertKit');
-            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_convertkit_icon');
             cy.get('p.frm-line-clamp-2').should('contain.text', 'Bring automation into your email marketing plan for the power to say "welcome" to your subscribers the moment they opt-in to your list.');
             cy.contains('Plan required:').within(() => {
                 cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20convertkit').and('contain.text', 'Plus');
