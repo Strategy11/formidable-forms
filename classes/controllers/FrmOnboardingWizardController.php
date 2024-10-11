@@ -169,11 +169,7 @@ class FrmOnboardingWizardController {
 			 * $_GET['activate-multi'] is set after activating multiple plugins.
 			 * In this case, change the transient value so we know for future checks.
 			 */
-			set_transient(
-				self::TRANSIENT_NAME,
-				self::TRANSIENT_MULTI_VALUE,
-				60
-			);
+			set_transient( self::TRANSIENT_NAME, self::TRANSIENT_MULTI_VALUE, 60 );
 			return;
 		}
 
