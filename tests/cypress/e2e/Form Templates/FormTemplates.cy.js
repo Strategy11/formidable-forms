@@ -211,7 +211,7 @@ describe("Form Templates page", () => {
             .within(() => {
                 cy.get('div.frm-form-templates-item-icon img')
                     .should('have.attr', 'src')
-                    // .and('include', 'business-directory.png');
+                    .and('include', 'business-directory.png');
 
                 cy.get('span.frm-meta-tag.frm-orange-tag')
                     .should('have.text', 'Ready Made Solution');
