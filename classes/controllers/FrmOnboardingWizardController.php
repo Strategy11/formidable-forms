@@ -114,7 +114,7 @@ class FrmOnboardingWizardController {
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
-		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects', 9999 );
+		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );//, 9999 );
 
 		if ( self::has_onboarding_been_skipped() ) {
 			add_filter( 'option_frm_inbox', __CLASS__ . '::add_wizard_to_floating_links' );
