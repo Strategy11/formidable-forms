@@ -138,9 +138,10 @@ add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'fr
  */
 function frm_maybe_install() {
 	if ( get_transient( FrmOnboardingWizardController::TRANSIENT_NAME ) !== 'no' ) {
+		$transient_value = isset( $_GET['activate-multi'] ) ? FrmOnboardingWizardController::TRANSIENT_MULTI_VALUE : FrmOnboardingWizardController::TRANSIENT_VALUE;
 		set_transient(
 			FrmOnboardingWizardController::TRANSIENT_NAME,
-			FrmOnboardingWizardController::TRANSIENT_VALUE,
+			$transient_value,
 			60
 		);
 	}

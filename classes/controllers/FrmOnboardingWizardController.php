@@ -46,10 +46,19 @@ class FrmOnboardingWizardController {
 
 	/**
 	 * Transient value associated with the redirection to the Onboarding Wizard page.
+	 * Used when activating a single plugin.
 	 *
 	 * @var string
 	 */
 	const TRANSIENT_VALUE = 'formidable-welcome';
+
+	/**
+	 * Transient value associated with the redirection to the Onboarding Wizard page.
+	 * Used when activating multiple plugins at once.
+	 *
+	 * @var string
+	 */
+	const TRANSIENT_MULTI_VALUE = 'formidable-welcome-multi';
 
 	/**
 	 * Option name for storing the redirect status for the Onboarding Wizard page.
@@ -143,9 +152,24 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		// Check if we should consider redirection.
-		if ( ! FrmAppHelper::is_formidable_admin() || ! self::is_onboarding_wizard_displayed() || self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
+		if ( self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
 			return;
+		}
+
+		switch ( get_transient( self::TRANSIENT_NAME ) ) {
+			case self::TRANSIENT_VALUE:
+				// For single activations we want to always redirect.
+				break;
+			case self::TRANSIENT_MULTI_VALUE:
+				// For multi-activations we want to only redirect when a user loads a Formidable page.
+				if ( ! FrmAppHelper::is_formidable_admin() ) {
+					return;
+				}
+				break;
+			default:
+				// If the transient is any other value, we do not want to redirect.
+				// The value is likely false, or 'no'.
+				return;
 		}
 
 		set_transient( self::TRANSIENT_NAME, 'no', 60 );
@@ -463,17 +487,6 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Validates if the Onboarding Wizard page is being displayed.
-	 *
-	 * @since 6.9
-	 *
-	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
-	 */
-	public static function is_onboarding_wizard_displayed() {
-		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
-	}
-
-	/**
 	 * Checks if the plugin has already performed a redirect to avoid repeated redirections.
 	 *
 	 * @return bool Returns true if already redirected, otherwise false.
@@ -662,5 +675,18 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_usage_data() {
 		return get_option( self::USAGE_DATA_OPTION, array() );
+	}
+
+	/**
+	 * Validates if the Onboarding Wizard page is being displayed.
+	 *
+	 * @since 6.9
+	 * @deprecated x.x
+	 *
+	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
+	 */
+	public static function is_onboarding_wizard_displayed() {
+		// TODO deprecate this.
+		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 }
