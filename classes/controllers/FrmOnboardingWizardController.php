@@ -156,20 +156,15 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		switch ( get_transient( self::TRANSIENT_NAME ) ) {
-			case self::TRANSIENT_VALUE:
-				// For single activations we want to always redirect.
-				break;
-			case self::TRANSIENT_MULTI_VALUE:
-				// For multi-activations we want to only redirect when a user loads a Formidable page.
-				if ( ! FrmAppHelper::is_formidable_admin() ) {
-					return;
-				}
-				break;
-			default:
-				// If the transient is any other value, we do not want to redirect.
-				// The value is likely false, or 'no'.
-				return;
+		$transient_value = get_transient( self::TRANSIENT_NAME );
+		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
+			self::mark_onboarding_as_skipped();
+			return;
+		}
+
+		if ( self::TRANSIENT_MULTI_VALUE === $transient_value && ! FrmAppHelper::is_formidable_admin() ) {
+			// For multi-activations we want to only redirect when a user loads a Formidable page.
+			return;
 		}
 
 		set_transient( self::TRANSIENT_NAME, 'no', 60 );
@@ -686,7 +681,7 @@ class FrmOnboardingWizardController {
 	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
 	 */
 	public static function is_onboarding_wizard_displayed() {
-		// TODO deprecate this.
+		_deprecated_function( __METHOD__, 'x.x' );
 		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 }
