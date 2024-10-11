@@ -16,7 +16,13 @@ describe("Applications page", () => {
         cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
 
         cy.origin('https://formidableforms.com', () => {
-            cy.get('h1').should('have.text', 'Upgrade Today to Unlock the Full Power of Formidable Forms');
+            cy.get('h1').should(($h1) => {
+                const text = $h1.text();
+                expect(text).to.satisfy((t) =>
+                    t.includes('The Only WordPress Form Maker & Application Builder Plugin') ||
+                    t.includes('Upgrade Today to Unlock the Full Power of Formidable Forms')
+                );
+            });
         });
 
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
