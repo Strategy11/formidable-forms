@@ -6001,7 +6001,8 @@ a.frm_add_logic_link.frm_hidden {
 	vertical-align: top;
 }
 
-.frm_help svg {
+.frm_help svg,
+.frm_help .frmsvg {
 	height: 13px;
 	width: 13px;
 	vertical-align: top;
