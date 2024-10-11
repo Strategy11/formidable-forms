@@ -19,7 +19,7 @@ class FrmUsage {
 		}
 
 		$ep = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
-		 $ep = base64_encode( 'http://localhost:8080/snapshot' ); // Uncomment for testing
+		$ep = base64_encode( 'http://localhost:8080/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
 		// Setup variable for wp_remote_request.
@@ -91,12 +91,13 @@ class FrmUsage {
 			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
 			'flows'             => FrmUsageController::get_flows_data(),
 			'payments'          => $this->payments(),
+			'subscription'      => $this->payments( 'frm_subscriptions' ),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
-	private function payments() {
+	private function payments( $table = 'frm_payments' ) {
 		global $wpdb;
 		$rows     = $wpdb->get_results( "SELECT amount, status, paysys FROM {$wpdb->prefix}frm_payments" );
 		$payments = array();
