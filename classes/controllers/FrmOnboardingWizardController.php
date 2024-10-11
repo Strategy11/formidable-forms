@@ -170,8 +170,8 @@ class FrmOnboardingWizardController {
 			 * In this case, change the transient value so we know for future checks.
 			 */
 			set_transient(
-				FrmOnboardingWizardController::TRANSIENT_NAME,
-				FrmOnboardingWizardController::TRANSIENT_MULTI_VALUE,
+				self::TRANSIENT_NAME,
+				self::TRANSIENT_MULTI_VALUE,
 				60
 			);
 			return;
