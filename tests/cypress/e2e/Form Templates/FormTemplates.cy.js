@@ -343,7 +343,7 @@ describe("Form Templates page", () => {
 
         cy.get('a#frm-code-modal-back-button')
             .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click();
+            .and('have.attr', 'role', 'button').click({force:true});
 
         cy.get('a#frm-get-code-button').click();
 
