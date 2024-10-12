@@ -91,7 +91,7 @@ class FrmUsage {
 			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
 			'flows'             => FrmUsageController::get_flows_data(),
 			'payments'          => $this->payments(),
-			'subscription'      => $this->payments( 'frm_subscriptions' ),
+			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
@@ -99,7 +99,7 @@ class FrmUsage {
 
 	private function payments( $table = 'frm_payments' ) {
 		global $wpdb;
-		$rows     = $wpdb->get_results( "SELECT amount, status, paysys FROM {$wpdb->prefix}frm_payments" );
+		$rows     = $wpdb->get_results( "SELECT amount, status, paysys FROM {$wpdb->prefix}{$table}" );
 		$payments = array();
 		foreach ( $rows as $row ) {
 			$payments[] = array(
