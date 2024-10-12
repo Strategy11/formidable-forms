@@ -31,6 +31,7 @@ class FrmUsage {
 				'Content-Length' => strlen( $body ),
 			),
 			'body'    => $body,
+			'timeout' => 45, // Without this, Debug Log catches the `http_request_failed` error.
 		);
 
 		wp_remote_request( base64_decode( $ep ), $post );
