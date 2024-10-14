@@ -1612,6 +1612,10 @@ input.frm_insert_in_template {
 }
 
 /* Generic Classes */
+.frm-text-grey-500 {
+	color: var(--grey-500);
+}
+
 .frm-text-grey-700 {
 	color: var(--grey-700);
 }
@@ -1685,6 +1689,10 @@ input.frm_insert_in_template {
 
 .frm-mb-lg {
 	margin-bottom: var(--gap-lg) !important;
+}
+
+.frm-ml-2xs {
+	margin-left: var(--gap-2xs) !important;
 }
 
 .frm-ml-xs {
@@ -1885,6 +1893,10 @@ input.frm_insert_in_template {
 	gap: 0 !important;
 }
 
+.frm-gap-2xs {
+	gap: var(--gap-2xs);
+}
+
 .frm-gap-xs {
 	gap: var(--gap-xs);
 }
@@ -1952,6 +1964,10 @@ input.frm_insert_in_template {
 
 .frm-rotate-90 {
 	transform: rotate(90deg);
+}
+
+.frm-cursor-pointer {
+	cursor: pointer;
 }
 
 /* End Generic Classes, Start Forced Generic Classes */

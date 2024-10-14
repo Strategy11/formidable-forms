@@ -33,4 +33,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 		)
 	);
 	?>
+
+	<div class="dropdown frm-mt-lg">
+		<div id="frm-onboarding-consent-tracking-list" class="frm-dropdown-toggle frm-cursor-pointer" data-toggle="dropdown">
+			<span class="frm_bstooltip" data-placement="right">
+				<?php esc_html_e( 'Allow Formidable Forms to', 'formidable' ); ?>
+			</span>
+
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
+		</div>
+
+		<div class="frm-dropdown-menu frm-mt-sm" aria-labelledby="frm-onboarding-consent-tracking-list">
+			<div class="frm-flex frm-gap-xs frm-items-center">
+				<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+
+				<div class="frm-flex-col frm-gap-2xs frm-ml-2xs">
+					<h4 class="frm-text-sm frm-font-medium frm-text-grey-700 frm-m-0"><?php esc_html_e( 'View Basic Profile Info', 'formidable' ); ?></h4>
+					<span class="frm-text-xs frm-text-grey-500 frm-m-0">Your WordPress user’s: first & last name and email address</span>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>

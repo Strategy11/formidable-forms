@@ -40,14 +40,26 @@ html.wp-toolbar {
 	color: var(--grey-500);
 }
 
-#frm-onboarding-wizard-page[data-current-step="success"]
-	#frm-onboarding-return-dashboard {
+#frm-onboarding-wizard-page[data-current-step="success"] #frm-onboarding-return-dashboard {
 	display: none;
 }
 
-.frm-onboarding-logo {
+#frm-onboarding-wizard-page .frm-onboarding-logo {
 	width: 60px;
 	height: auto;
+}
+
+#frm-onboarding-wizard-page .frm-dropdown-menu {
+	position: static !important;
+	transform: none !important;
+	border: 0;
+	box-shadow: none;
+	width: 100%;
+	padding: var(--gap-sm) 0;
+}
+
+.dropdown.show .frm-dropdown-toggle .frmsvg {
+	transform: rotate(180deg);
 }
 
 /* NOTE: The changes below were implemented to align with the distinct tooltip style observed in the "Install Formidable Add-ons" step */
