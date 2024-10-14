@@ -55,7 +55,7 @@ html.wp-toolbar {
 	border: 0;
 	box-shadow: none;
 	width: 100%;
-	padding: var(--gap-sm) 0;
+	max-height: unset;
 }
 
 .dropdown.show .frm-dropdown-toggle .frmsvg {
@@ -72,6 +72,10 @@ html.wp-toolbar {
 
 .bs-tooltip-top .arrow::before {
 	border-top-color: #545f6e;
+}
+
+.bs-tooltip-bottom .arrow::before {
+	border-bottom-color: #545f6e;
 }
 
 /**
