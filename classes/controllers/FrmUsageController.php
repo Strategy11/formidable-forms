@@ -95,7 +95,7 @@ class FrmUsageController {
 		}
 
 		$flows_data[ $key ][ $value ]++;
-		update_option( self::$flows_option_name, $flows_data );
+		update_option( self::FLOWS_ACTION_NAME, $flows_data );
 
 		wp_send_json_success();
 	}
