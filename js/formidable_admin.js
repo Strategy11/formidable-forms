@@ -2278,11 +2278,11 @@ function frmAdminBuildJS() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {string} elementString
+	 * @param {string}        elementString
 	 * @param {Number|string} originalFieldId
 	 * @param {Number|string} newFieldId
-	 * @param {string} endChar
-	 * @param {string} startChar
+	 * @param {string}        endChar
+	 * @param {string}        startChar
 	 *
 	 * @return {string}
 	 */
