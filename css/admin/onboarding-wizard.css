@@ -78,6 +78,48 @@ html.wp-toolbar {
 	border-bottom-color: #545f6e;
 }
 
+/* Rootline */
+.frm-rootline {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: calc(3 * var(--gap-xl));
+	padding: 0;
+	margin: 0 0  var(--gap-lg);
+}
+
+.frm-rootline::before {
+	content: '';
+	position: absolute;
+	width: calc(100% - 32px);
+	border: 1px solid var(--grey-300);
+	z-index: 1;
+}
+
+.frm-rootline-item {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 16px;
+	height: 16px;
+	background-color: var(--grey-50);
+	border: 2px solid var(--grey-300);
+	outline: 4px solid var(--grey-50);
+	border-radius: 100%;
+	padding: 0;
+	margin: 0;
+	z-index: 2;
+}
+
+#frm-onboarding-wizard-page[data-current-step="consent-tracking"] .frm-rootline-item[data-step="consent-tracking"],
+#frm-onboarding-wizard-page[data-current-step="install-addons"] .frm-rootline-item[data-step="install-addons"],
+#frm-onboarding-wizard-page[data-current-step="success"] .frm-rootline-item[data-step="success"] {
+	background-color: #fff;
+	border-color: var(--primary-500);
+}
+
 /**
  * Install Formidable Add-ons Step Styles
  *
@@ -95,3 +137,4 @@ html.wp-toolbar {
 .frm-cta-green .frm-banner-text a {
 	text-decoration: underline;
 }
+
