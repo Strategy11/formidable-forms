@@ -2260,17 +2260,35 @@ function frmAdminBuildJS() {
 
 	function replaceElementAttribute( element, args ) {
 		const { originalFieldId, originalFieldKey, newFieldId, newFieldKey } = args;
+		let elementString = element.outerHTML;
+		for ( const endChar of [ '-', '"', ']', '_' ] ) {
+			elementString = replaceFieldIdPatterns( elementString, originalFieldId, newFieldId, endChar );
+		}
+		elementString = replaceFieldIdPatterns( elementString, originalFieldId, newFieldId, '"', '"' );
+		elementString = replaceFieldIdPatterns( elementString, originalFieldKey, newFieldKey, '-' );
 
-		let regex         = new RegExp( `_${originalFieldId}`, 'g' );
-		let elementString = element.outerHTML.replace( regex, `_${newFieldId}` );
-		regex             = new RegExp( `"${originalFieldId}"`, 'g' );
-		elementString     = elementString.replace( regex, `"${newFieldId}"` );
-		regex             = new RegExp( `_${originalFieldKey}`, 'g' );
-		elementString     = elementString.replace( regex, `_${newFieldKey}` );
 		const tempDiv     = div();
 		tempDiv.innerHTML = elementString;
 
 		return tempDiv.firstChild;
+	}
+
+	/**
+	 * Replaces original field id/key prepended by startChar and followed by endChar with new field id/key.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} elementString
+	 * @param {Number|string} originalFieldId
+	 * @param {Number|string} newFieldId
+	 * @param {string} endChar
+	 * @param {string} startChar
+	 *
+	 * @return {string}
+	 */
+	function replaceFieldIdPatterns( elementString, originalFieldId, newFieldId, endChar, startChar = '_' ) {
+		const regex = new RegExp( `${startChar}${originalFieldId}${endChar}`, 'g' );
+		return elementString.replace( regex, `${startChar}${newFieldId}${endChar}` );
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
