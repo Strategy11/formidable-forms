@@ -629,6 +629,7 @@ class FrmEntryValidate {
 					array(
 						'form_id' => $form_id,
 						'type'    => 'text',
+						'name'    => array( 'Name', 'Last' ),
 					),
 					'id,name',
 					array( 'order_by' => 'field_order ASC' )
