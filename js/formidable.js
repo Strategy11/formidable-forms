@@ -286,7 +286,7 @@ function frmFrontFormJS() {
 	/**
 	 * Validates a field value.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -308,7 +308,7 @@ function frmFrontFormJS() {
 		}
 
 		/**
-		 * @since x.x Added `onSubmit` to the data.
+		 * @since 6.15 Added `onSubmit` to the data.
 		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
 			field: field,
@@ -445,7 +445,7 @@ function frmFrontFormJS() {
 	/**
 	 * Checks if the confirm field should be checked.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
@@ -467,7 +467,7 @@ function frmFrontFormJS() {
 	/**
 	 * Check the email field for errors.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -490,7 +490,7 @@ function frmFrontFormJS() {
 	/**
 	 * Check the password field for errors.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -1068,7 +1068,10 @@ function frmFrontFormJS() {
 		const input        = $fieldCont.find( 'input, select, textarea' );
 		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+		const fieldContainer = $fieldCont.get( 0 );
+		if ( fieldContainer && fieldContainer.classList ) {
+			fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		}
 
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );

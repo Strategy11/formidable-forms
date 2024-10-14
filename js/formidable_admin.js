@@ -9102,6 +9102,13 @@ function frmAdminBuildJS() {
 				}
 
 				afterAddonInstall( response, button, message, el, saveAndReload, action );
+
+				/**
+				 * Trigger an action after successfully toggling the addon state.
+				 *
+				 * @param {Object} response
+				 */
+				wp.hooks.doAction( 'frm_update_addon_state', response );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -9472,7 +9479,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow a search for "signatures" to still match "signature" for example when searching fields.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param {string} text       The text in the element we are checking for a match.
 	 * @param {string} searchText The text value that is being searched.
