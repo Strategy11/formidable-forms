@@ -1235,6 +1235,27 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Sets focus on a name field part (first or last name) if it has an error.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 */
+	function maybeSetFocusOnNameFieldElement( element ) {
+		if ( 'FIELDSET' !== element.nodeName ) {
+			return;
+		}
+		if ( ! element.querySelector( '.frm_combo_inputs_container[data-name-layout]' ) ) {
+			return;
+		}
+		const nameField = element.querySelector( '[aria-invalid="true"]' );
+		if ( ! nameField ) {
+			return;
+		}
+		nameField.focus();
+	}
+
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
@@ -1254,6 +1275,8 @@ function frmFrontFormJS() {
 				element.focus();
 				break;
 			}
+
+			maybeSetFocusOnNameFieldElement( element );
 
 			if ( 'undefined' !== typeof element.classList ) {
 				if ( element.classList.contains( 'html-active' ) ) {
