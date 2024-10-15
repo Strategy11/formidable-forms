@@ -50,17 +50,6 @@ function processDataForStep( processedStep, nextStepName ) {
 		}
 	}
 
-	// Append email step data for the email step
-	if ( STEPS.DEFAULT_EMAIL_ADDRESS === processedStep ) {
-		const { emailStepData } = getState();
-		if ( ! isEmptyObject( emailStepData ) ) {
-			formData = formData ?? new FormData();
-			for ( const [ key, value ] of Object.entries( emailStepData ) ) {
-				formData.append( key, value );
-			}
-		}
-	}
-
 	// Append installed addons for the addon installation step
 	if ( STEPS.INSTALL_ADDONS === processedStep ) {
 		const { installedAddons } = getState();

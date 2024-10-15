@@ -6,7 +6,7 @@ import { createPageElements } from 'core/factory';
 /**
  * Internal dependencies
  */
-import { PREFIX, WELCOME_STEP_ID } from '../shared';
+import { PREFIX } from '../shared';
 
 export const { getElements, addElements } = createPageElements({
 	// Body Elements
@@ -18,7 +18,6 @@ export const { getElements, addElements } = createPageElements({
 	hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' ),
 
 	// Install Formidable Pro Step Elements
-	installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` ),
 	checkProInstallationButton: document.getElementById( `${PREFIX}-check-pro-installation-button` ),
 	skipProInstallationButton: document.getElementById( `${PREFIX}-skip-pro-installation-button` ),
 	checkProInstallationError: document.getElementById( `${PREFIX}-check-pro-installation-error` ),
@@ -27,9 +26,6 @@ export const { getElements, addElements } = createPageElements({
 	licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` ),
 	licenseKeyInput: document.getElementById( 'edd_formidable_pro_license_key' ),
 	saveLicenseButton: document.getElementById( `${PREFIX}-save-license-button` ),
-
-	// Welcome Step Elements
-	welcomeStep: document.getElementById( WELCOME_STEP_ID ),
 
 	// Default Email Address Step Elements
 	setupEmailStepButton: document.getElementById( `${PREFIX}-setup-email-step-button` ),

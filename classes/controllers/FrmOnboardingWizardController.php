@@ -250,13 +250,10 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in order.
 		$step_parts = array(
-			'consent-tracking'       => 'steps/consent-tracking-step.php',
-			'welcome'                => 'steps/welcome-step.php',
-			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
-			'license-management'     => 'steps/license-management-step.php',
-			'default-email-address'  => 'steps/default-email-address-step.php',
-			'install-addons'         => 'steps/install-addons-step.php',
-			'success'                => 'steps/success-step.php',
+			'consent-tracking'   => 'steps/consent-tracking-step.php',
+			'license-management' => 'steps/license-management-step.php',
+			'install-addons'     => 'steps/install-addons-step.php',
+			'success'            => 'steps/success-step.php',
 		);
 
 		include $view_path . 'index.php';
