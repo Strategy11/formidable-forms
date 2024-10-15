@@ -4,7 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
+	<label 
+		for="frm_font"
+		class="frm-style-item-heading"><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
 </p>
 <p class="frm7 frm_form_field">
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
@@ -26,18 +28,28 @@ new FrmBackgroundImageStyleComponent(
 );
 ?>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_form_align"
+		class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmAlignStyleComponent(
 		$frm_style->get_field_name( 'form_align' ),
 		$style->post_content['form_align'],
-		array()
+		array(
+			'id' => 'frm_form_align',
+		)
 	);
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_fieldset_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmColorpickerStyleComponent(
@@ -51,7 +63,11 @@ new FrmBackgroundImageStyleComponent(
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_fieldset"
+		class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
@@ -65,7 +81,11 @@ new FrmBackgroundImageStyleComponent(
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_fieldset_padding"
+		class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
@@ -80,7 +100,11 @@ new FrmBackgroundImageStyleComponent(
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Form Width', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_form_width"
+		class="frm-style-item-heading"><?php esc_html_e( 'Form Width', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
@@ -94,19 +118,27 @@ new FrmBackgroundImageStyleComponent(
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Direction', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_direction"
+		class="frm-style-item-heading"><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmDirectionStyleComponent(
 		$frm_style->get_field_name( 'direction' ),
 		$style->post_content['direction'],
-		array()
+		array(
+			'id' => 'frm_direction',
+		)
 	);
 	?>
 </div>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading">
+	<label 
+		for="frm_important_style"
+		class="frm-style-item-heading">
 		<?php esc_html_e( 'Override Theme', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used', 'formidable' ) ); ?>
 	</label>
@@ -126,7 +158,11 @@ new FrmBackgroundImageStyleComponent(
 		?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Center Form', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_center_form"
+		class="frm-style-item-heading"><?php esc_html_e( 'Center Form', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field frm-style-component">
 	<?php
 		FrmHtmlHelper::toggle(
@@ -141,7 +177,11 @@ new FrmBackgroundImageStyleComponent(
 		);
 		?>
 </div>
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_style_class"
+		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field frm-style-component">
 	<label class="frm-copy-text">.frm_style_<?php
 		echo esc_html( $style->post_name );
