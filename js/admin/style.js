@@ -6,6 +6,10 @@
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
+	if ( ! document.getElementById( 'frm_active_style_form' ) ) {
+		return;
+	}
+
 	const { __ }                                                 = wp.i18n;
 	const state                                                  = {
 		showingSampleForm: document.getElementById( 'frm_active_style_form' ).classList.contains( 'frm_hidden' ), // boolean

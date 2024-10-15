@@ -204,7 +204,11 @@ function frmFrontFormJS() {
 			}
 		}
 
-		errors = validateRecaptcha( object, errors );
+		// Invisible captchas are processed after validation.
+		// We only want to validate a visible captcha on submit.
+		if ( ! hasInvisibleRecaptcha( object ) ) {
+			errors = validateRecaptcha( object, errors );
+		}
 
 		return errors;
 	}
@@ -286,7 +290,7 @@ function frmFrontFormJS() {
 	/**
 	 * Validates a field value.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -308,7 +312,7 @@ function frmFrontFormJS() {
 		}
 
 		/**
-		 * @since x.x Added `onSubmit` to the data.
+		 * @since 6.15 Added `onSubmit` to the data.
 		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
 			field: field,
@@ -445,7 +449,7 @@ function frmFrontFormJS() {
 	/**
 	 * Checks if the confirm field should be checked.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
@@ -467,7 +471,7 @@ function frmFrontFormJS() {
 	/**
 	 * Check the email field for errors.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -490,7 +494,7 @@ function frmFrontFormJS() {
 	/**
 	 * Check the password field for errors.
 	 *
-	 * @since x.x Added `onSubmit` parameter.
+	 * @since 6.15 Added `onSubmit` parameter.
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {Object}      errors   Errors data.
@@ -621,26 +625,30 @@ function frmFrontFormJS() {
 	}
 
 	function validateRecaptcha( form, errors ) {
-		let recaptchaID, response, fieldContainer, fieldID,
-			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
-		if ( $recaptcha.length ) {
-			recaptchaID = $recaptcha.data( 'rid' );
+		let response;
 
-			try {
-				response = grecaptcha.getResponse( recaptchaID );
-			} catch ( e ) {
-				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
-					return errors;
-				}
-				response = '';
-			}
-
-			if ( response.length === 0 ) {
-				fieldContainer = $recaptcha.closest( '.frm_form_field' );
-				fieldID = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
-				errors[ fieldID ] = '';
-			}
+		const $recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
+		if ( ! $recaptcha.length ) {
+			return errors;
 		}
+
+		const recaptchaID = $recaptcha.data( 'rid' );
+
+		try {
+			response = grecaptcha.getResponse( recaptchaID );
+		} catch ( e ) {
+			if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
+				return errors;
+			}
+			response = '';
+		}
+
+		if ( response.length === 0 ) {
+			const fieldContainer = $recaptcha.closest( '.frm_form_field' );
+			const fieldID        = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
+			errors[ fieldID ] = '';
+		}
+
 		return errors;
 	}
 
@@ -1068,7 +1076,10 @@ function frmFrontFormJS() {
 		const input        = $fieldCont.find( 'input, select, textarea' );
 		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+		const fieldContainer = $fieldCont.get( 0 );
+		if ( fieldContainer && fieldContainer.classList ) {
+			fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		}
 
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
@@ -1608,18 +1619,19 @@ function frmFrontFormJS() {
 				return;
 			}
 
+			errors = frmFrontForm.validateFormSubmit( object );
+			if ( Object.keys( errors ).length !== 0 ) {
+				return;
+			}
+
 			if ( invisibleRecaptcha.length ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
 
-				errors = frmFrontForm.validateFormSubmit( object );
+				showSubmitLoading( jQuery( object ) );
 
-				if ( Object.keys( errors ).length === 0 ) {
-					showSubmitLoading( jQuery( object ) );
-
-					frmFrontForm.submitFormNow( object, classList );
-				}
+				frmFrontForm.submitFormNow( object, classList );
 			}
 		},
 

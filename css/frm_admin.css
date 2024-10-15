@@ -34,6 +34,7 @@
 	--error-500: #F04438;
 	--error-300: #FECDCA;
 	--error-100: #FEE4E2;
+	--error-25: #FFF5F4;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -229,7 +230,6 @@ body.frm-white-body:not(.frm-full-screen) .mce-fullscreen {
 	border: none;
 }
 
-body.formidable_page_formidable-pro-upgrade,
 body.post-type-frm_display.edit-php,
 body.frm-white-body {
 	background: #fff;
@@ -899,7 +899,7 @@ p.frm_has_shortcodes {
 
 #form_global_settings .columns-2 .frm-right-panel,
 #form_settings_page .columns-2 .frm-right-panel,
-#frm-form-templates-page .frm-right-panel {
+#wpbody-content .frm-page-skeleton .frm-right-panel {
 	flex: 0 0 var(--small-sidebar);
 	width: var(--small-sidebar);
 	min-width: var(--small-sidebar);
@@ -1607,6 +1607,10 @@ input.frm_insert_in_template {
 }
 
 /* Generic Classes */
+.frm-text-grey-700 {
+	color: var(--grey-700);
+}
+
 .frm-text-grey-900 {
 	color: var(--grey-900);
 }
@@ -1723,6 +1727,10 @@ input.frm_insert_in_template {
 	padding: var(--gap-md) !important;
 }
 
+.frm-p-xl {
+	padding: var(--gap-xl) !important;
+}
+
 .frm-px-0 {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
@@ -1731,6 +1739,11 @@ input.frm_insert_in_template {
 .frm-py-0 {
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
+}
+
+.frm-py-2xs {
+	padding-top: var(--gap-2xs) !important;
+	padding-bottom: var(--gap-2xs) !important;
 }
 
 .frm-pt-sm {
@@ -1782,6 +1795,22 @@ input.frm_insert_in_template {
 
 .frm-font-semibold {
 	font-weight: 600 !important;
+}
+
+.frm-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+[class*="frm-line-clamp-"] {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+
+.frm-line-clamp-2 {
+	-webkit-line-clamp: 2;
 }
 
 .frm-rounded-sm {
@@ -2389,35 +2418,6 @@ h2.frm-h2 + .howto {
 	margin: 5px 0 20px;
 }
 
-.frm-admin-page-addons #frm-using-lite {
-	display: none;
-}
-
-.frm-admin-page-addons .frm-search {
-	margin-top: 0;
-}
-
-.frm-addons {
-	margin-top: var(--gap-lg);
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-gap: var(--gap-md);
-}
-
-.frm-addons,
-.frm-addons h2,
-.frm-addons h3 {
-	color: var(--grey-700);
-}
-
-.frm-addons h2 {
-	font-size: 17px;
-}
-
-.frm-addons h3 {
-	margin-top: 0;
-}
-
 /* Card Components */
 .frm-card {
 	width: 100%;
@@ -2556,10 +2556,6 @@ h2.frm-h2 + .howto {
 .plugin-card-pro.frm-addon-active .button,
 .plugin-card-pro.frm-addon-active .frm-button-tertiary {
 	display: none !important;
-}
-
-#frm-addons-page .frm-addon-button {
-	opacity: 1 !important;
 }
 
 .frm-save-and-reload-options {
@@ -4937,7 +4933,8 @@ input:checked + .frm_toggle .frm_toggle_slider:before {
 	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
 }
 
-input[disabled] + .frm_toggle_slider {
+input[disabled] + .frm_toggle_slider,
+input[disabled] + .frm_toggle .frm_toggle_slider {
 	pointer-events: none;
 	cursor: text;
 	opacity: .5;
@@ -6004,7 +6001,8 @@ a.frm_add_logic_link.frm_hidden {
 	vertical-align: top;
 }
 
-.frm_help svg {
+.frm_help svg,
+.frm_help .frmsvg {
 	height: 13px;
 	width: 13px;
 	vertical-align: top;
@@ -7989,6 +7987,16 @@ body[class*=formidable-payments] .ui-widget-overlay {
 	color: var(--success-500);
 }
 
+.frm-border-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
 .frm-upgrade-message img {
 	max-width: 100%;
 }
@@ -9433,7 +9441,8 @@ Responsive Design
 
 .frm-cta h4 {
 	font-weight: 600;
-	margin: 0;
+	margin-top: 0;
+	margin-bottom: var(--gap-2xs);
 }
 
 .frm-cta-green {
@@ -9447,6 +9456,14 @@ Responsive Design
 
 .frm-cta-green.frm-cta-border {
 	border-color: var(--success-100)
+}
+
+.frm-cta-red {
+	background-color: var(--error-25);
+}
+
+.frm-cta-red.frm-cta-border {
+	border-color: var(--error-100);
 }
 
 .frm-right-panel .inside .frm_pro_tip,
@@ -9711,6 +9728,98 @@ Responsive Design
 	transform: rotate(45deg);
 }
 /* End External Link Styles */
+
+/**
+ * Page Skeleton CSS
+ *
+ * Manages the layout and appearance of the page's content area.
+ */
+
+/* Core Styles for the Page */
+#wpbody-content .frm-page-skeleton ul,
+#wpbody-content .frm-page-skeleton li {
+	margin: 0;
+}
+
+/* Sidebar Styles */
+#wpbody-content .frm-page-skeleton .frm-right-panel {
+	padding: 2px;
+	overflow-y: initial;
+}
+
+/* Scrollbar */
+#wpbody-content .frm-page-skeleton .frm-scrollbar-wrapper {
+	padding: var(--gap-md) var(--gap-sm);
+}
+
+/* Search */
+#wpbody-content .frm-page-skeleton .frm-search {
+	float: none;
+	padding: 0 var(--gap-2xs);
+}
+
+#wpbody-content .frm-page-skeleton .frm-search > input {
+	width: 100%;
+}
+
+/* Categories */
+.frm-page-skeleton-cat {
+	cursor: pointer;
+	padding: var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: transparent;
+	transition: background-color 250ms ease-out;
+}
+
+.frm-page-skeleton-cat:hover {
+	background-color: var(--grey-100);
+}
+
+.frm-page-skeleton-cat > * {
+	z-index: 2;
+}
+
+.frm-page-skeleton-cat-text {
+	color: var(--grey-900);
+	text-transform: capitalize;
+}
+
+.frm-page-skeleton-cat-count {
+	color: var(--grey-400);
+}
+
+.frm-current .frm-page-skeleton-cat-text,
+.frm-current .frm-page-skeleton-cat-count {
+	color: var(--primary-500);
+}
+
+/* Page Content Styles */
+.frm-list-grid-layout {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(303px, 1fr));
+	grid-auto-rows: max-content;
+	gap: var(--gap-sm);
+}
+
+.frm-list-grid-layout > * {
+	grid-column: span 1;
+}
+
+/* Empty State Styles */
+#frm-page-skeleton-empty-state {
+	height: 100%;
+	margin-top: calc(-1 * var(--gap-md));
+}
+
+#frm-page-skeleton-empty-state .frm-page-skeleton-text {
+	max-width: 420px;
+}
+
+/* Helper Classes */
+.frm-page-skeleton-divider {
+	border-top: 1px solid var(--grey-200);
+	margin: 0;
+}
 
 /* Always hide submit field button */
 .field_type_list .frm_tsubmit {

@@ -1,34 +1,48 @@
 /**
+ * External dependencies
+ */
+import { createPageElements } from 'core/factory';
+
+/**
  * Internal dependencies
  */
-import getDOMElements from './getDOMElements';
+import { PREFIX, WELCOME_STEP_ID } from '../shared';
 
-let elements = null;
+export const { getElements, addElements } = createPageElements({
+	// Body Elements
+	onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
+	pageBackground: document.getElementById( `${PREFIX}-bg` ),
+	container: document.getElementById( `${PREFIX}-container` ),
+	steps: document.querySelectorAll( `.${PREFIX}-step` ),
+	skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+	backButtons: document.querySelectorAll( `.${PREFIX}-back-button` ),
+	hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' ),
 
-/**
- * Initialize the elements.
- *
- * @return {void}
- */
-export function initializeElements() {
-	elements = getDOMElements();
-}
+	// Install Formidable Pro Step Elements
+	installFormidableProStep: document.getElementById( `${PREFIX}-install-formidable-pro-step` ),
+	checkProInstallationButton: document.getElementById( `${PREFIX}-check-pro-installation-button` ),
+	skipProInstallationButton: document.getElementById( `${PREFIX}-skip-pro-installation-button` ),
+	checkProInstallationError: document.getElementById( `${PREFIX}-check-pro-installation-error` ),
 
-/**
- * Retrieve the initialized essential DOM elements.
- *
- * @return {Object|null} The initialized elements object or null.
- */
-export function getElements() {
-	return elements;
-}
+	// License Management Step Elements
+	licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` ),
+	licenseKeyInput: document.getElementById( 'edd_formidable_pro_license_key' ),
+	saveLicenseButton: document.getElementById( `${PREFIX}-save-license-button` ),
 
-/**
- * Add new elements to the elements object.
- *
- * @param {Object} newElements An object containing new elements to be added.
- * @return {void} Updates the global `elements` object by merging the new elements into it.
- */
-export function addElements( newElements ) {
-	elements = { ...elements, ...newElements };
-}
+	// Welcome Step Elements
+	welcomeStep: document.getElementById( WELCOME_STEP_ID ),
+
+	// Default Email Address Step Elements
+	setupEmailStepButton: document.getElementById( `${PREFIX}-setup-email-step-button` ),
+	defaultEmailField: document.getElementById( `${PREFIX}-default-email-field` ),
+	defaultFromEmailField: document.getElementById( `${PREFIX}-from-email` ),
+	subscribeCheckbox: document.getElementById( `${PREFIX}-subscribe` ),
+	summaryEmailsCheckbox: document.getElementById( `${PREFIX}-summary-emails` ),
+	allowTrackingCheckbox: document.getElementById( `${PREFIX}-allow-tracking` ),
+
+	// Install Formidable Add-ons Step Elements
+	installAddonsButton: document.getElementById( `${PREFIX}-install-addons-button` ),
+
+	// Success Step Elements
+	successStep: document.getElementById( `${PREFIX}-success-step` )
+});
