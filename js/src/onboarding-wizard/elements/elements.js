@@ -23,7 +23,6 @@ export const { getElements, addElements } = createPageElements({
 	checkProInstallationError: document.getElementById( `${PREFIX}-check-pro-installation-error` ),
 
 	// License Management Step Elements
-	licenseManagementStep: document.getElementById( `${PREFIX}-license-management-step` ),
 	licenseKeyInput: document.getElementById( 'edd_formidable_pro_license_key' ),
 	saveLicenseButton: document.getElementById( `${PREFIX}-save-license-button` ),
 

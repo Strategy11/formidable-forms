@@ -7,7 +7,7 @@ import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { STEPS, proIsIncluded } from '../shared';
+import { STEPS } from '../shared';
 import { navigateToStep } from '../utils';
 
 /**
@@ -30,6 +30,7 @@ export default function setupInitialView() {
  */
 function navigateToInitialStep() {
 	const initialStepName = determineInitialStep();
+
 	clearOnboardingQueryParams();
 	navigateToStep( initialStepName, 'replaceState' );
 }
@@ -42,45 +43,13 @@ function navigateToInitialStep() {
  * @return {string} The name of the initial step to navigate to.
  */
 function determineInitialStep() {
-	const { hiddenLicenseKeyInput, licenseManagementStep } = getElements();
+	const { hiddenLicenseKeyInput } = getElements();
 
-	if ( hiddenLicenseKeyInput ) {
-		return handleLicenseKeyInput( hiddenLicenseKeyInput, licenseManagementStep ); // Steps are conditionally removed inside handleLicenseKeyInput based on proIsIncluded
+	if ( hiddenLicenseKeyInput || hasQueryParam( 'success' ) ) {
+		return STEPS.SUCCESS;
 	}
 
-	if ( hasQueryParam( 'success' ) ) {
-		// Handle the case where 'success' query parameter is present
-		licenseManagementStep.remove();
-		// return STEPS.DEFAULT_EMAIL_ADDRESS;
-	}
-
-	const stepQueryParam = getQueryParam( 'step' ) || STEPS.INITIAL;
-
-	switch ( stepQueryParam ) {
-		case STEPS.LICENSE_MANAGEMENT:
-			break;
-		default:
-			// Remove both steps as they are not needed
-			licenseManagementStep.remove();
-	}
-
-	return stepQueryParam;
-}
-
-/**
- * Handles the presence of a hidden license key input, determining the next step based on whether Formidable Pro is installed.
- * Removes unnecessary steps based on the determined next step.
- *
- * @private
- * @param {HTMLElement} hiddenLicenseKeyInput The hidden input element containing the license key.
- * @param {HTMLElement} licenseManagementStep The step element for license management.
- * @return {string} The name of the next step to navigate to.
- */
-function handleLicenseKeyInput( hiddenLicenseKeyInput, licenseManagementStep ) {
-	const { licenseKeyInput } = getElements();
-	licenseKeyInput.value = hiddenLicenseKeyInput.value;
-
-	return STEPS.LICENSE_MANAGEMENT;
+	return getQueryParam( 'step' ) || STEPS.INITIAL;
 }
 
 /**
@@ -102,5 +71,6 @@ function clearOnboardingQueryParams() {
  */
 function fadeInPageElements() {
 	const { container } = getElements();
+
 	new frmAnimate( container ).fadeIn();
 }

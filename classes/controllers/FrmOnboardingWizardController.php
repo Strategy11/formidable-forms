@@ -250,10 +250,9 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in order.
 		$step_parts = array(
-			'consent-tracking'   => 'steps/consent-tracking-step.php',
-			'license-management' => 'steps/license-management-step.php',
-			'install-addons'     => 'steps/install-addons-step.php',
-			'success'            => 'steps/success-step.php',
+			'consent-tracking' => 'steps/consent-tracking-step.php',
+			'install-addons'   => 'steps/install-addons-step.php',
+			'success'          => 'steps/success-step.php',
 		);
 
 		include $view_path . 'index.php';
