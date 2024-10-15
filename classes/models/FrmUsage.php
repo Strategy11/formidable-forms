@@ -34,7 +34,16 @@ class FrmUsage {
 			'timeout' => 45, // Without this, Debug Log catches the `http_request_failed` error.
 		);
 
-		wp_remote_request( base64_decode( $ep ), $post );
+		$response = wp_remote_request( base64_decode( $ep ), $post );
+		if ( class_exists( 'FrmLog' ) && ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'Usage Tracking Error ' . gmdate( 'Y-m-d H:i:s' ),
+					'content' => (array) $response,
+				)
+			);
+		}
 	}
 
 	/**
