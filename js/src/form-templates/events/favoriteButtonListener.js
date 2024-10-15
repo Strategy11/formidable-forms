@@ -1,18 +1,15 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault, addToRequestQueue, hide } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getAppState, setAppStateProperty } from '../shared';
+import { PREFIX, getState, setSingleState } from '../shared';
 import { showFavoritesEmptyState } from '../ui';
-import {
-	hide,
-	onClickPreventDefault,
-	isFavoriteTemplate,
-	isCustomTemplate,
-	isFeaturedTemplate,
-	isFavoritesCategory,
-	addToRequestQueue
-} from '../utils';
+import { isFavoriteTemplate, isCustomTemplate, isFeaturedTemplate, isFavoritesCategory } from '../utils';
 
 const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
 const HEART_ICON_SELECTOR = `${FAVORITE_BUTTON_CLASS} use`;
@@ -84,7 +81,7 @@ const onFavoriteButtonClick = ( event ) => {
 	/**
 	 * Update favorite counts and icons based on the new state
 	 */
-	const { selectedCategory, favoritesCount } = getAppState();
+	const { selectedCategory, favoritesCount } = getState();
 	const currentOperation = isFavorited ? OPERATION.REMOVE : OPERATION.ADD;
 	const heartIcon = template.querySelector( HEART_ICON_SELECTOR );
 	const twinTemplateHeartIcon =
@@ -108,7 +105,7 @@ const onFavoriteButtonClick = ( event ) => {
 
 	// Update UI and state to reflect new favorite counts
 	favoritesCategoryCountEl.textContent = favoritesCount.total;
-	setAppStateProperty( 'favoritesCount', favoritesCount );
+	setSingleState( 'favoritesCount', favoritesCount );
 
 	/**
 	 * Hide UI elements if 'Favorites' is active and counts are zero.
@@ -136,9 +133,9 @@ const onFavoriteButtonClick = ( event ) => {
 /**
  * Update server-side data for favorite templates.
  *
- * @param {string} id The template ID.
- * @param {string} operation The operation to perform ('add' or 'remove').
- * @param {boolean} isCustom Flag indicating whether the template is custom.
+ * @param {string}  id        The template ID.
+ * @param {string}  operation The operation to perform ('add' or 'remove').
+ * @param {boolean} isCustom  Flag indicating whether the template is custom.
  * @return {Promise<any>}
  */
 function updateFavoriteTemplate( id, operation, isCustom ) {

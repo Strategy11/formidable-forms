@@ -444,7 +444,7 @@ class FrmField {
 		}
 
 		if ( ! empty( $options['classes'] ) ) {
-			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
 		}
 
 		return $options;
@@ -1035,6 +1035,8 @@ class FrmField {
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
 			foreach ( $results as $r_key => $result ) {
+				self::add_slashes_to_format_before_setting_field_cache( $result );
+
 				FrmDb::set_cache( $result->id, $result, 'frm_field' );
 				FrmDb::set_cache( $result->field_key, $result, 'frm_field' );
 
@@ -1051,6 +1053,24 @@ class FrmField {
 
 			self::prepare_options( $results );
 		}
+	}
+
+	/**
+	 * When $result->field_options is an array and not a serialized string there is only a single backslash.
+	 * Cached results are unslashed in FrmField::getAll, so we need to make sure that the cached object has an extra backslash.
+	 * Otherwise the backslash is stripped away on load.
+	 *
+	 * @since 6.15
+	 *
+	 * @param stdClass $result
+	 * @return void
+	 */
+	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
+		if ( ! isset( $result->field_options ) || ! is_array( $result->field_options ) || empty( $result->field_options['format'] ) ) {
+			return;
+		}
+
+		$result->field_options['format'] = addslashes( $result->field_options['format'] );
 	}
 
 	/**

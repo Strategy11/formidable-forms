@@ -14,18 +14,13 @@ describe("Forms page", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
         cy.get('.frm-upgrade-bar > a')
-            .should('have.text', 'upgrading to PRO')
-            .and('have.attr', 'href', formidableFormsUpgradeUrl)
-            .then(link => {
-                cy.wrap(link).invoke('removeAttr', 'target').click();
+            .should('have.text', 'upgrading to PRO').click();
+        cy.origin('https://formidableforms.com', () => {
+            cy.get('h1').should('have.text', 'The Only WordPress Form Maker & Application Builder Plugin');
+        });
 
-                cy.origin('https://formidableforms.com', { args: { formidableFormsUpgradeUrl } }, ({ formidableFormsUpgradeUrl }) => {
-                    cy.location('href').should('eq', formidableFormsUpgradeUrl);
-                });
-
-                cy.log("Navigate back to the original page");
-                cy.visit('/wp-admin/admin.php?page=formidable');
-            });
+        cy.log("Navigate back to the original page");
+        cy.visit('/wp-admin/admin.php?page=formidable');
 
         cy.log("Validate the header logo link");
         cy.get('a.frm-header-logo')

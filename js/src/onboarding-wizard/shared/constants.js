@@ -1,8 +1,6 @@
-export const { nonce } = window.frmGlobal;
 export const { INITIAL_STEP, proIsIncluded } =  window.frmOnboardingWizardVars;
 
 export const PREFIX = 'frm-onboarding';
-export const CURRENT_CLASS = 'frm-current';
 export const WELCOME_STEP_ID = `${PREFIX}-welcome-step`;
 
 export const STEPS = {

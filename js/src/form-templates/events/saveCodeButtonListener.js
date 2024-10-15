@@ -1,10 +1,15 @@
 /**
+ * External dependencies
+ */
+import { nonce } from 'core/constants';
+import { onClickPreventDefault, removeQueryParam, hasQueryParam, hideElements, show, hide } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, getAppState, nonce  } from '../shared';
+import { PREFIX, getState  } from '../shared';
 import { showConfirmEmailAddressError } from '../ui';
-import { show, hide, hideElements, hasQueryParam, removeQueryParam, onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Save Code" button.
@@ -45,7 +50,7 @@ const onSaveCodeButtonClick = async() => {
 		return;
 	}
 
-	const { selectedTemplate } = getAppState();
+	const { selectedTemplate } = getState();
 
 	// Prepare FormData for the POST request
 	const formData = new FormData();

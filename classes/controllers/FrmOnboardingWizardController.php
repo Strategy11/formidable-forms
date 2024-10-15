@@ -46,10 +46,19 @@ class FrmOnboardingWizardController {
 
 	/**
 	 * Transient value associated with the redirection to the Onboarding Wizard page.
+	 * Used when activating a single plugin.
 	 *
 	 * @var string
 	 */
 	const TRANSIENT_VALUE = 'formidable-welcome';
+
+	/**
+	 * Transient value associated with the redirection to the Onboarding Wizard page.
+	 * Used when activating multiple plugins at once.
+	 *
+	 * @var string
+	 */
+	const TRANSIENT_MULTI_VALUE = 'formidable-welcome-multi';
 
 	/**
 	 * Option name for storing the redirect status for the Onboarding Wizard page.
@@ -126,6 +135,8 @@ class FrmOnboardingWizardController {
 
 	/**
 	 * Performs a safe redirect to the welcome screen when the plugin is activated.
+	 * On single activation, we will redirect immediately.
+	 * When activating multiple plugins, the redirect is delayed until a Formidable page is loaded.
 	 *
 	 * @return void
 	 */
@@ -143,8 +154,27 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
-		// Check if we should consider redirection.
-		if ( ! FrmAppHelper::is_formidable_admin() || ! self::is_onboarding_wizard_displayed() || self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
+		if ( self::has_onboarding_been_skipped() || FrmAppHelper::pro_is_connected() ) {
+			return;
+		}
+
+		$transient_value = get_transient( self::TRANSIENT_NAME );
+		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
+			self::mark_onboarding_as_skipped();
+			return;
+		}
+
+		if ( isset( $_GET['activate-multi'] ) ) {
+			/**
+			 * $_GET['activate-multi'] is set after activating multiple plugins.
+			 * In this case, change the transient value so we know for future checks.
+			 */
+			set_transient( self::TRANSIENT_NAME, self::TRANSIENT_MULTI_VALUE, 60 );
+			return;
+		}
+
+		if ( self::TRANSIENT_MULTI_VALUE === $transient_value && ! FrmAppHelper::is_formidable_admin() ) {
+			// For multi-activations we want to only redirect when a user loads a Formidable page.
 			return;
 		}
 
@@ -274,12 +304,14 @@ class FrmOnboardingWizardController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		// Get posted data.
-		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_text_field' );
+		$from_email      = FrmAppHelper::get_post_param( 'from_email', '', 'sanitize_email' );
+		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_email' );
 		$allows_tracking = FrmAppHelper::get_post_param( 'allows_tracking', '', 'rest_sanitize_boolean' );
 		$summary_emails  = FrmAppHelper::get_post_param( 'summary_emails', '', 'rest_sanitize_boolean' );
 
 		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings->update_setting( 'from_email', $from_email, 'sanitize_text_field' );
 		$frm_settings->update_setting( 'default_email', $default_email, 'sanitize_text_field' );
 		$frm_settings->update_setting( 'tracking', $allows_tracking, 'rest_sanitize_boolean' );
 		$frm_settings->update_setting( 'summary_emails', $summary_emails, 'rest_sanitize_boolean' );
@@ -458,17 +490,6 @@ class FrmOnboardingWizardController {
 	 */
 	public static function is_onboarding_wizard_page() {
 		return FrmAppHelper::is_admin_page( self::PAGE_SLUG );
-	}
-
-	/**
-	 * Validates if the Onboarding Wizard page is being displayed.
-	 *
-	 * @since 6.9
-	 *
-	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
-	 */
-	public static function is_onboarding_wizard_displayed() {
-		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 
 	/**
@@ -660,5 +681,18 @@ class FrmOnboardingWizardController {
 	 */
 	public static function get_usage_data() {
 		return get_option( self::USAGE_DATA_OPTION, array() );
+	}
+
+	/**
+	 * Validates if the Onboarding Wizard page is being displayed.
+	 *
+	 * @since 6.9
+	 * @deprecated x.x
+	 *
+	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
+	 */
+	public static function is_onboarding_wizard_displayed() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 }

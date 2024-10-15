@@ -16,6 +16,8 @@ class FrmAppController {
 
 		$menu_name = FrmAppHelper::get_menu_name();
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
+
+		self::maybe_add_black_friday_submenu_item();
 	}
 
 	/**
@@ -38,6 +40,73 @@ class FrmAppController {
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 
 		return apply_filters( 'frm_icon', $icon );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_add_black_friday_submenu_item() {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			return;
+		}
+
+		$is_black_friday = self::is_black_friday();
+		$is_cyber_monday = self::is_cyber_monday();
+
+		if ( ! $is_black_friday && ! $is_cyber_monday ) {
+			return;
+		}
+
+		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
+		$black_friday_menu_label = '<span class="frm-orange-text">' . esc_html( $black_friday_menu_label ) . '</span>';
+
+		add_action(
+			'admin_menu',
+			function () use ( $black_friday_menu_label ) {
+				add_submenu_page( 'formidable', 'Formidable', $black_friday_menu_label, 'frm_change_settings', 'formidable-black-friday', 'FrmAppController::redirect_blackfriday' );
+			},
+			1000
+		);
+	}
+
+	/**
+	 * Black Friday sale is from November 25 to 29.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_black_friday() {
+		return self::within_sale_date_range( '2024-11-25', '2024-11-29' );
+	}
+
+	/**
+	 * Cyber Monday sale rules from November 30 to December 4.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_cyber_monday() {
+		return self::within_sale_date_range( '2024-11-30', '2024-12-04' );
+	}
+
+	/**
+	 * Check if the current time is within a sale date range.
+	 * Our sales are based on Eastern Time, so we use New York's timezone.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $from The beginning of the date range. Y-m-d format is expected.
+	 * @param string $to   The end of the date range. Y-m-d format is expected.
+	 * @return bool
+	 */
+	private static function within_sale_date_range( $from, $to ) {
+		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
+		$today = $date->format( 'Y-m-d' );
+		return $today >= $from && $today <= $to;
 	}
 
 	/**
@@ -135,7 +204,6 @@ class FrmAppController {
 			'formidable-entries',
 			'formidable-views',
 			'formidable-views-editor',
-			'formidable-pro-upgrade',
 			'formidable-addons',
 			'formidable-import',
 			'formidable-settings',
@@ -1320,5 +1388,94 @@ class FrmAppController {
 	 */
 	public static function page_route( $content ) {
 		return FrmDeprecated::page_route( $content );
+	}
+
+	/**
+	 * Check if we are in our admin pages.
+	 *
+	 * @return bool
+	 */
+	private static function in_our_pages() {
+		global $current_screen;
+		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+	}
+
+	/**
+	 * Hide all third-parties admin notices only in our admin pages.
+	 *
+	 * @return void
+	 */
+	public static function filter_admin_notices() {
+		if ( ! self::in_our_pages() ) {
+			return;
+		}
+
+		$actions = array(
+			'admin_notices',
+			'network_admin_notices',
+			'user_admin_notices',
+			'all_admin_notices',
+		);
+
+		global $wp_filter;
+
+		foreach ( $actions as $action ) {
+			if ( empty( $wp_filter[ $action ]->callbacks ) ) {
+				continue;
+			}
+			foreach ( $wp_filter[ $action ]->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback_name => $callback ) {
+					if ( self::is_our_callback_string( $callback_name ) || self::is_our_callback_array( $callback ) ) {
+						continue;
+					}
+					unset( $wp_filter[ $action ]->callbacks[ $priority ][ $callback_name ] );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Validate that the callback name is ours not from third-party.
+	 *
+	 * @param string $callback_name WordPress callback name.
+	 *
+	 * @return bool
+	 */
+	private static function is_our_callback_string( $callback_name ) {
+		return 0 === stripos( $callback_name, 'frm' );
+	}
+
+	/**
+	 * Validate that the callback array is ours not from third-party.
+	 *
+	 * @param array $callback WordPress callback array.
+	 *
+	 * @return bool
+	 */
+	private static function is_our_callback_array( $callback ) {
+		return ! empty( $callback['function'] ) &&
+			is_array( $callback['function'] ) &&
+			! empty( $callback['function'][0] ) &&
+			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+	}
+
+	/**
+	 * Redirect to Black Friday sales page when the menu item is clicked.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function redirect_blackfriday() {
+		wp_redirect(
+			FrmAppHelper::admin_upgrade_link(
+				array(
+					'medium'  => 'black-friday-submenu',
+					'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
+				),
+				'black-friday'
+			)
+		);
+		die();
 	}
 }
