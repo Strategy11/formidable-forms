@@ -10,6 +10,7 @@ import { frmAnimate, setQueryParam, hide, show } from 'core/utils';
 import { setupUsageData } from '../dataUtils';
 import { getElements } from '../elements';
 import { getState, PREFIX, setSingleState } from '../shared';
+import { updateRootline } from '../ui';
 
 /**
  * Navigates to the given step in the onboarding sequence.
@@ -44,6 +45,8 @@ export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 
 	// Update the URL query parameter, with control over history update method
 	setQueryParam( 'step', stepName, updateMethod );
+
+	updateRootline( stepName );
 };
 
 /**

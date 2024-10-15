@@ -113,11 +113,22 @@ html.wp-toolbar {
 	z-index: 2;
 }
 
-#frm-onboarding-wizard-page[data-current-step="consent-tracking"] .frm-rootline-item[data-step="consent-tracking"],
-#frm-onboarding-wizard-page[data-current-step="install-addons"] .frm-rootline-item[data-step="install-addons"],
-#frm-onboarding-wizard-page[data-current-step="success"] .frm-rootline-item[data-step="success"] {
+.frm-rootline-item.frm-completed-step {
+	background-color: var(--grey-500);
+	border-color: var(--grey-500);
+}
+
+.frm-rootline-item.frm-current {
 	background-color: #fff;
 	border-color: var(--primary-500);
+}
+
+.frm-rootline-item .frmsvg {
+	color: #fff;
+}
+
+.frm-rootline-item:not(.frm-completed-step) .frmsvg {
+	display: none;
 }
 
 /**

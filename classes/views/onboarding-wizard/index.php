@@ -12,9 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm-onboarding-wizard-page" class="frm_wrap" data-current-step="consent-tracking">
 	<div id="frm-onboarding-container" class="frm-flex-col frm-justify-center frm-items-center">
 		<ul id="frm-onboarding-rootline" class="frm-rootline">
-			<li class="frm-rootline-item" data-step="consent-tracking"></li>
-			<li class="frm-rootline-item" data-step="install-addons"></li>
-			<li class="frm-rootline-item" data-step="success"></li>
+			<li class="frm-rootline-item" data-step="consent-tracking">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon frm_svg9', array( 'aria-hidden' => 'true' ) ); ?>
+			</li>
+			<li class="frm-rootline-item" data-step="install-addons">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon frm_svg9', array( 'aria-hidden' => 'true' ) ); ?>
+			</li>
+			<li class="frm-rootline-item" data-step="success">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon frm_svg9', array( 'aria-hidden' => 'true' ) ); ?>
+			</li>
 		</ul>
 
 		<?php

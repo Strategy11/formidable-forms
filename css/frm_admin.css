@@ -7781,6 +7781,11 @@ input[disabled],
 	height: 13px;
 }
 
+.frmsvg.frm_svg9 {
+	width: 9px;
+	height: 9px;
+}
+
 .frmbutton.ui-sortable-helper .frmsvg,
 .field_type_list li.frmbutton .frmsvg,
 .frmbutton.ui-sortable-helper i,

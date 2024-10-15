@@ -11,9 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
-		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_puzzle_icon' ); ?>
-		</div>
+		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.svg" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard Logo', 'formidable' ); ?>" />
 	</div>
 
 	<div class="frm-card-box-content frm-fields">
