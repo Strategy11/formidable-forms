@@ -1861,10 +1861,19 @@ function frmCaptcha( captchaSelector ) {
 	for ( c = 0; c < cl; c++ ) {
 		const closestForm   = captchas[c].closest( 'form' );
 		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		const captcha       = captchas[c];
 		if ( ! formIsVisible ) {
+			setTimeout(
+				function() {
+					if ( closestForm && closestForm.offsetParent !== null ) {
+						frmFrontForm.renderCaptcha( captcha, captchaSelector );
+					}
+				},
+				1000
+			);
 			continue;
 		}
-		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
+		frmFrontForm.renderCaptcha( captcha, captchaSelector );
 	}
 }
 
