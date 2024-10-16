@@ -300,8 +300,12 @@ class FrmUsage {
 				if ( isset( $form->options[ $setting ] ) ) {
 					if ( 'custom_style' === $setting ) {
 						$style->id = $form->options[ $setting ];
-						$style_post = $style->get_one();
-						$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+						if ( 1 === intval( $style->id ) ) {
+							$style_name = 'formidable-style';
+						} else {
+							$style_post = $style->get_one();
+							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+						}
 
 						$new_form[ $setting ] = $style_name;
 					} else {
