@@ -48,8 +48,12 @@ class FrmMigrate {
 
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
+
+				if ( false === get_option( 'frm_first_activation' ) ) {
+					update_option( 'frm_first_activation', time(), false );
+				}
 			}
-		}
+		}//end if
 
 		do_action( 'frm_after_install' );
 

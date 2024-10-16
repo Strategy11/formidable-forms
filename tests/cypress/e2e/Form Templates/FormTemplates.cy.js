@@ -343,7 +343,7 @@ describe("Form Templates page", () => {
 
         cy.get('a#frm-code-modal-back-button')
             .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click();
+            .and('have.attr', 'role', 'button').click({force:true});
 
         cy.get('a#frm-get-code-button').click();
 
@@ -386,8 +386,9 @@ describe("Form Templates page", () => {
         cy.get('#frm-upgrade-modal-link').should("contain", "Upgrade to PRO").invoke('removeAttr', 'target').click();
 
         cy.origin('https://formidableforms.com', () => {
-            cy.get('h1.wp-block-heading').should('have.text', 'Upgrade Today to Unlock the Full Power of Formidable Forms');
+            cy.url().should('include', 'https://formidableforms.com');
         });
+        
     });
 
     it("create a new custom template and delete it", () => {

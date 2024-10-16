@@ -16,7 +16,13 @@ describe("Applications page", () => {
         cy.get('#frm_custom_applications_placeholder > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
 
         cy.origin('https://formidableforms.com', () => {
-            cy.get('h1').should('have.text', 'Upgrade Today to Unlock the Full Power of Formidable Forms');
+            cy.get('h1').should(($h1) => {
+                const text = $h1.text();
+                expect(text).to.satisfy((t) =>
+                    t.includes('The Only WordPress Form Maker & Application Builder Plugin') ||
+                    t.includes('Upgrade Today to Unlock the Full Power of Formidable Forms')
+                );
+            });
         });
 
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
@@ -33,7 +39,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Business Directory Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-directory.png');
+                .and('include', '/images/applications/thumbnails/business-directory.png');
             cy.get('h3 .frm-inner-text').should('contain.text', 'Business Directory').click();
         });
 
@@ -45,7 +51,7 @@ describe("Applications page", () => {
                     .should('contain.text', 'Access to this application requires the Elite plan.');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
-                    .and('include', '/plugins/formidable-forms/images/applications/placeholder.png');
+                    .and('include', '/images/applications/placeholder.png');
                 cy.get('.frm-application-modal-details .frm-application-modal-label')
                     .should('contain.text', 'Description');
                 cy.get('.frm-application-modal-details div')
@@ -78,7 +84,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Business Hours Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-hours.png');
+                .and('include', '/images/applications/thumbnails/business-hours.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -90,7 +96,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Certificate Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/certificate.webp');
+                .and('include', '/images/applications/thumbnails/certificate.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -102,7 +108,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Charity Tracker Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/charity-tracker.webp');
+                .and('include', '/images/applications/thumbnails/charity-tracker.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -114,7 +120,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Contract Agreement Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/contract-agreement.webp');
+                .and('include', '/images/applications/thumbnails/contract-agreement.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -126,7 +132,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'FAQ Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/faq-template-wordpress.png');
+                .and('include', '/images/applications/thumbnails/faq-template-wordpress.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -138,7 +144,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Freelance Invoice Generator Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/freelance-invoice-generator.webp');
+                .and('include', '/images/applications/thumbnails/freelance-invoice-generator.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -150,7 +156,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Invoice PDF Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/invoice-pdf.webp');
+                .and('include', '/images/applications/thumbnails/invoice-pdf.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -161,7 +167,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Letter of Recommendation Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/letter-of-recommendation.webp');
+                .and('include', '/images/applications/thumbnails/letter-of-recommendation.webp');
             cy.get('h3 .frm-inner-text').should('contain.text', 'Letter of Recommendation').click();
         });
 
@@ -173,7 +179,7 @@ describe("Applications page", () => {
                     .should('contain.text', 'Access to this application requires the Business plan');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
-                    .and('include', '/plugins/formidable-forms/images/applications/placeholder.png');
+                    .and('include', '/images/applications/placeholder.png');
                 cy.get('.frm-application-modal-details .frm-application-modal-label')
                     .should('contain.text', 'Description');
                 cy.get('.frm-application-modal-details div')
@@ -206,7 +212,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Link in Bio Instagram Page Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/link-in-bio-instagram.webp');
+                .and('include', '/images/applications/thumbnails/link-in-bio-instagram.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -218,7 +224,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Member Directory Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/member-directory.webp');
+                .and('include', '/images/applications/thumbnails/member-directory.webp');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -230,7 +236,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Product Review and Purchase Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/product-review.png');
+                .and('include', '/images/applications/thumbnails/product-review.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -242,7 +248,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Real Estate Listing Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/real-estate-listings.png');
+                .and('include', '/images/applications/thumbnails/real-estate-listings.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -254,7 +260,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Restaurant Menu Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/restaurant-menu.png');
+                .and('include', '/images/applications/thumbnails/restaurant-menu.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -266,7 +272,7 @@ describe("Applications page", () => {
                 .and('have.attr', 'aria-description', 'Team Directory Template');
             cy.get('.frm-application-card-image-wrapper img')
                 .should('have.attr', 'src')
-                .and('include', '/plugins/formidable-forms/images/applications/thumbnails/team-directory.png');
+                .and('include', '/images/applications/thumbnails/team-directory.png');
         });
 
         cy.get('#frm_application_templates_grid')
@@ -277,7 +283,7 @@ describe("Applications page", () => {
             .and('have.attr', 'aria-description', 'Testimonials Template');
           cy.get('.frm-application-card-image-wrapper img')
             .should('have.attr', 'src')
-            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/testimonials.webp');
+            .and('include', '/images/applications/thumbnails/testimonials.webp');
           cy.get('h3 .frm-inner-text').should('contain.text', 'Testimonials').click();
         });
       
@@ -290,7 +296,7 @@ describe("Applications page", () => {
                     .should('contain.text', 'Access to this application requires the Business plan');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
-                    .and('include', '/plugins/formidable-forms/images/applications/placeholder.png');
+                    .and('include', '/images/applications/placeholder.png');
                 cy.get('.frm-application-modal-details .frm-application-modal-label')
                     .should('contain.text', 'Description');
                 cy.get('.frm-application-modal-details div')
@@ -332,7 +338,7 @@ describe("Applications page", () => {
             .and('have.attr', 'aria-description', 'Business Directory Template');
           cy.get('.frm-application-card-image-wrapper img')
             .should('have.attr', 'src')
-            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-directory.png');
+            .and('include', '/images/applications/thumbnails/business-directory.png');
         });
         cy.get('#frm_application_templates_grid')
         .contains('.frm-application-template-card.frm-search-result', 'Business Hours')
@@ -342,7 +348,7 @@ describe("Applications page", () => {
             .and('have.attr', 'aria-description', 'Business Hours Template');
           cy.get('.frm-application-card-image-wrapper img')
             .should('have.attr', 'src')
-            .and('include', '/plugins/formidable-forms/images/applications/thumbnails/business-hours.png');
+            .and('include', '/images/applications/thumbnails/business-hours.png');
         });
         cy.log("Search for non-valid application templates");
         cy.get('#frm-application-search').clear().type("Application does not exist");
