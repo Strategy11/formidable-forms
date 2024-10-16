@@ -6,5 +6,5 @@ export const STEPS = {
 	INITIAL: INITIAL_STEP,
 	INSTALL_ADDONS: 'install-addons',
 	SUCCESS: 'success',
-	UNSUCCESS: 'unsuccess'
+	UNSUCCESSFUL: 'unsuccessful'
 };
