@@ -91,18 +91,6 @@ $labels    = $this->get_built_in_option_labels();
 				$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field_id );
 				$input_id    = 'field_options_' . $option . '_' . $uniq_str;
 				$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
-
-				if ( in_array( $input_value, array( 'First', 'Middle', 'Last' ), true ) ) {
-					?>
-					<div class="frm_warning_style">
-						<?php
-						FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
-						echo ' ';
-						esc_html_e( 'Subfield descriptions are read by screen readers. We recommend using a more descriptive description when possible to improve accessibility.', 'formidable' );
-						?>
-					</div>
-					<?php
-				}
 				?>
 				<p class="frm6 frm_form_field">
 					<input
