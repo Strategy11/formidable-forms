@@ -8451,17 +8451,22 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
 	function showContextualShortcodesToPopup( input ) {
 		const shortcodes = getContextualShortcodes();
 		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
 			return;
 		}
-		for ( let shortcode in shortcodes ) {
+		for ( let shortcode of shortcodes ) {
 			const anchor = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' );
-			if ( ! anchor ) {
-				return;
+			if ( anchor ) {
+				anchor.closest( 'li' ).classList.remove( 'frm_hidden' );
 			}
-			anchor.closest( 'li' ).classList.remove( 'frm_hidden' );
 		}
 	}
 
@@ -8561,17 +8566,27 @@ function frmAdminBuildJS() {
 		return moreIcon;
 	}
 
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 *
+	 * @returns {Array}
+	 */
 	function getContextualShortcodes() {
-		return {
-			admin_email:          __( 'admin_email', 'formidable' ),
-			'default-from-email': __( 'Default from email', 'formidable' )
-		};
+		return [ 'admin_email', 'default-from-email' ];
 	}
 
+	/**
+	 * Hide shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 * @returns {Void}
+	 */
 	function hideContextualShortcodes() {
 		const shortcodes = getContextualShortcodes();
 		const codeList = document.querySelector( '#frm-adv-info-tab .frm_code_list' );
-		for ( let shortcode in shortcodes ) {
+		for ( let shortcode of shortcodes ) {
 			const shortcodeLi = codeList.querySelector( '[data-code="' + shortcode + '"]' )?.closest( 'li' );
 			if ( shortcodeLi ) {
 				shortcodeLi.classList.add( 'frm_hidden' );
