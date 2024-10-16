@@ -160,7 +160,6 @@ class FrmOnboardingWizardController {
 
 		$transient_value = get_transient( self::TRANSIENT_NAME );
 		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
-			self::mark_onboarding_as_skipped();
 			return;
 		}
 
