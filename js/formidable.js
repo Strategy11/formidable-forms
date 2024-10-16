@@ -1863,13 +1863,13 @@ function frmCaptcha( captchaSelector ) {
 		if ( ! closestForm ) {
 			continue;
 		}
-		let formIsVisible;
+		let shouldRenderCaptcha;
 		if ( closestForm.closest( '[id^=frm-modal-]' ) ) {
-			formIsVisible = true;
+			shouldRenderCaptcha = true;
 		} else {
-			formIsVisible = closestForm.offsetParent !== null;
+			shouldRenderCaptcha = closestForm.offsetParent !== null; // Form is visible if offsetParent is not null.
 		}
-		if ( ! formIsVisible ) {
+		if ( ! shouldRenderCaptcha ) {
 			continue;
 		}
 		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
