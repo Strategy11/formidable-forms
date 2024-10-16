@@ -1864,7 +1864,7 @@ function frmCaptcha( captchaSelector ) {
 			continue;
 		}
 		let shouldRenderCaptcha;
-		if ( closestForm.closest( '[id^=frm-modal-]' ) ) {
+		if ( closestForm.closest( '[id^=frm-modal-]' ) ) { // Form is in a modal.
 			shouldRenderCaptcha = true;
 		} else {
 			shouldRenderCaptcha = closestForm.offsetParent !== null; // Form is visible if offsetParent is not null.
