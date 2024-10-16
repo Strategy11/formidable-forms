@@ -18,8 +18,8 @@ class FrmUsage {
 			return;
 		}
 
-		$ep = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
-		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
+		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
+		// $ep = base64_encode( 'http://localhost:8080/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
 		// Setup variable for wp_remote_request.
@@ -31,9 +31,19 @@ class FrmUsage {
 				'Content-Length' => strlen( $body ),
 			),
 			'body'    => $body,
+			'timeout' => 45, // Without this, Debug Log catches the `http_request_failed` error.
 		);
 
-		wp_remote_request( base64_decode( $ep ), $post );
+		$response = wp_remote_request( base64_decode( $ep ), $post );
+		if ( class_exists( 'FrmLog' ) && ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'Usage Tracking Error ' . gmdate( 'Y-m-d H:i:s' ),
+					'content' => (array) $response,
+				)
+			);
+		}
 	}
 
 	/**
@@ -89,9 +99,28 @@ class FrmUsage {
 			'actions'           => $this->actions(),
 
 			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'flows'             => FrmUsageController::get_flows_data(),
+			'payments'          => $this->payments(),
+			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
+	}
+
+	private function payments( $table = 'frm_payments' ) {
+		global $wpdb;
+		$rows     = $wpdb->get_results( "SELECT amount, status, paysys, created_at FROM {$wpdb->prefix}{$table}" );
+		$payments = array();
+		foreach ( $rows as $row ) {
+			$payments[] = array(
+				'amount'     => (float) $row->amount,
+				'status'     => $row->status,
+				'gateway'    => $row->paysys,
+				'created_at' => $row->created_at,
+			);
+		}
+
+		return $payments;
 	}
 
 	/**
@@ -255,6 +284,7 @@ class FrmUsage {
 			'submit_conditions',
 		);
 
+		$style = new FrmStyle();
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
 				'form_id'           => $form->id,
@@ -269,7 +299,19 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					if ( 'custom_style' === $setting ) {
+						$style->id = $form->options[ $setting ];
+						if ( 1 === intval( $style->id ) ) {
+							$style_name = 'formidable-style';
+						} else {
+							$style_post = $style->get_one();
+							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+						}
+
+						$new_form[ $setting ] = $style_name;
+					} else {
+						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					}
 				}
 			}
 
