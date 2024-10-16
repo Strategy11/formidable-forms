@@ -8447,39 +8447,21 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
-			maybeAddContextualShortcodesToPopup( input );
+			showContextualShortcodesToPopup( input );
 		}
 	}
 
-	function maybeAddContextualShortcodesToPopup( input ) {
+	function showContextualShortcodesToPopup( input ) {
 		const shortcodes = getContextualShortcodes();
 		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
 			return;
 		}
-		let newAdvancedShortcode,
-		codeList = document.querySelector( '#frm-adv-info-tab .frm_code_list' );
 		for ( let shortcode in shortcodes ) {
-			if ( codeList.querySelector( '[data-code="' + shortcode + '"]' ) ) {
+			const anchor = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' );
+			if ( ! anchor ) {
 				return;
 			}
-			const anchor = frmDom.a({
-				className: 'frm_insert_code',
-				href: 'javascript:void(0)',
-				child: frmDom.span({
-					text: `[${shortcode}]`
-				}),
-				data: {
-					code: shortcode
-				}
-			});
-			anchor.prepend( document.createTextNode( shortcodes[ shortcode ] ) );
-			newAdvancedShortcode = tag( 'li', {
-				className: 'frm-advanced-list',
-				children: [
-					anchor
-				]
-			});
-			codeList.prepend( newAdvancedShortcode );
+			anchor.closest( 'li' ).classList.remove( 'frm_hidden' );
 		}
 	}
 
@@ -8586,19 +8568,19 @@ function frmAdminBuildJS() {
 		};
 	}
 
-	function removeContextualShortcodes() {
+	function hideContextualShortcodes() {
 		const shortcodes = getContextualShortcodes();
 		const codeList = document.querySelector( '#frm-adv-info-tab .frm_code_list' );
 		for ( let shortcode in shortcodes ) {
-			const shortcodeLi = codeList.querySelector( '[data-code="' + shortcode + '"]' );
+			const shortcodeLi = codeList.querySelector( '[data-code="' + shortcode + '"]' )?.closest( 'li' );
 			if ( shortcodeLi ) {
-				shortcodeLi.remove();
+				shortcodeLi.classList.add( 'frm_hidden' );
 			}
 		}
 	}
 
 	function hideShortcodes( box ) {
-		removeContextualShortcodes();
+		hideContextualShortcodes();
 		let i, u, closeIcons, closeSvg;
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );
