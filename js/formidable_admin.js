@@ -8463,9 +8463,9 @@ function frmAdminBuildJS() {
 			return;
 		}
 		for ( let shortcode of shortcodes ) {
-			const anchor = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' );
-			if ( anchor ) {
-				anchor.closest( 'li' ).classList.remove( 'frm_hidden' );
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			if ( shortcodeLi ) {
+				shortcodeLi.classList.remove( 'frm_hidden' );
 			}
 		}
 	}
@@ -8585,9 +8585,8 @@ function frmAdminBuildJS() {
 	 */
 	function hideContextualShortcodes() {
 		const shortcodes = getContextualShortcodes();
-		const codeList = document.querySelector( '#frm-adv-info-tab .frm_code_list' );
 		for ( let shortcode of shortcodes ) {
-			const shortcodeLi = codeList.querySelector( '[data-code="' + shortcode + '"]' )?.closest( 'li' );
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li' );
 			if ( shortcodeLi ) {
 				shortcodeLi.classList.add( 'frm_hidden' );
 			}
