@@ -50,6 +50,50 @@
 	color: var(--grey-800);
 }
 
+.plugin-card-activecampaign-wordpress-plugin .frm-border-icon svg {
+	color: #004cff;
+}
+
+.plugin-card-aweber .frm-border-icon svg {
+	color: #246be8;
+}
+
+.plugin-card-campaign-monitor .frm-border-icon svg {
+	color: #7856FF;
+}
+
+.plugin-card-constant-contact .frm-border-icon svg {
+	color: #1856ed;
+}
+
+.plugin-card-getresponse-wordpress-plugin .frm-border-icon svg {
+	color: #00baff;
+}
+
+.plugin-card-google-sheets .frm-border-icon svg {
+	color: #34a853;
+}
+
+.plugin-card-hubspot-wordpress .frm-border-icon svg {
+	color: #ff7a59;
+}
+
+.plugin-card-mailchimp .frm-border-icon svg {
+	color: #000;
+}
+
+.plugin-card-mailpoet-newsletters .frm-border-icon svg {
+	color: #fe5301;
+}
+
+.plugin-card-paypal-standard .frm-border-icon svg {
+	color: #0070e0;
+}
+
+.plugin-card-zapier .frm-border-icon svg {
+	color: #ff4a00;
+}
+
 .plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
 	pointer-events: none;
 }
@@ -75,7 +119,12 @@
 
 .frm_loading_button ~ .frm_toggle .frm_toggle_slider {
 	opacity: 0.7;
-	background: linear-gradient(90deg, var(--grey-200) 25%, var(--grey-300) 50%, var(--grey-200) 75%);
+	background: linear-gradient(
+		90deg,
+		var(--grey-200) 25%,
+		var(--grey-300) 50%,
+		var(--grey-200) 75%
+	);
 	background-size: 400% 100%;
 	animation: skeleton-animation 3s infinite ease-in-out;
 }
