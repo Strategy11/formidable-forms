@@ -1860,7 +1860,15 @@ function frmCaptcha( captchaSelector ) {
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
 		const closestForm   = captchas[c].closest( 'form' );
-		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		if ( ! closestForm ) {
+			continue;
+		}
+		let formIsVisible;
+		if ( closestForm.closest( '[id^=frm-modal-]' ) ) {
+			formIsVisible = true;
+		} else {
+			formIsVisible = closestForm.offsetParent !== null;
+		}
 		if ( ! formIsVisible ) {
 			continue;
 		}
