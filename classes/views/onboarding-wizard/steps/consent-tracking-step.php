@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'primary-button-text'      => esc_html__( 'Allow & Continue', 'formidable' ),
+			'primary-button-text'      => __( 'Allow & Continue', 'formidable' ),
 			'primary-button-id'        => 'frm-onboarding-consent-tracking',
 			'primary-button-with-icon' => true,
-			'secondary-button-text'    => esc_html__( 'Skip', 'formidable' ),
+			'secondary-button-text'    => __( 'Skip', 'formidable' ),
 			'footer-class'             => 'frm-justify-center',
 			'display-back-button'      => false,
 		)

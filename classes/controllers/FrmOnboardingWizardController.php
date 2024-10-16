@@ -253,6 +253,7 @@ class FrmOnboardingWizardController {
 			'consent-tracking' => 'steps/consent-tracking-step.php',
 			'install-addons'   => 'steps/install-addons-step.php',
 			'success'          => 'steps/success-step.php',
+			'unsuccess'        => 'steps/unsuccess-step.php',
 		);
 
 		include $view_path . 'index.php';

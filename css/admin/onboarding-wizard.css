@@ -26,6 +26,7 @@ html.wp-toolbar {
 #frm-onboarding-container {
 	position: relative;
 	min-height: 100vh;
+	padding: var(--gap-xl);
 	opacity: 0;
 	z-index: 2;
 }

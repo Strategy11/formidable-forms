@@ -21,6 +21,10 @@ const COMPLETED_STEP_CLASS = 'frm-completed-step';
  * @return {void}
  */
 export function updateRootline( currentStep ) {
+	if (currentStep === STEPS.UNSUCCESS) {
+		currentStep = STEPS.SUCCESS;
+	}
+
 	const { rootline } = getElements();
 	const currentItem = rootline.querySelector( `.frm-rootline-item[data-step="${currentStep}"]` );
 
