@@ -532,7 +532,7 @@ class FrmAppHelper {
 		 * @param array $header_keys
 		 */
 		return apply_filters(
-			'frm_custom_ip_header_keys',
+			'frm_ip_header_keys',
 			array(
 				'HTTP_CLIENT_IP',
 				'HTTP_CF_CONNECTING_IP',
