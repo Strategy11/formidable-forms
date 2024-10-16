@@ -113,6 +113,7 @@ class S11FloatingLinks {
 			children
 		});
 		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );
+		slideIn.setAttribute( 'role', 'alert' );
 		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
 		this.updateSlideInCtaUtm( slideIn );
