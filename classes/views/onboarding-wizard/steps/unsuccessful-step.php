@@ -24,14 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'footer-class'          => 'frm-justify-center frm-mt-2xl',
-			'display-back-button'   => false,
-			'primary-button-text'   => __( 'Go to Dashboard', 'formidable' ),
-			'primary-button-href'   => admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ),
-			'primary-button-role'   => false,
-			'secondary-button-text' => __( 'Install Manually', 'formidable' ),
-			'secondary-button-href' => admin_url( 'plugin-install.php' ),
-			'secondary-button-role' => false,
+			'footer-class'               => 'frm-justify-center frm-mt-2xl',
+			'display-back-button'        => false,
+			'primary-button-text'        => __( 'Go to Dashboard', 'formidable' ),
+			'primary-button-href'        => admin_url( 'admin.php?page=' . FrmDashboardController::PAGE_SLUG ),
+			'primary-button-role'        => false,
+			'secondary-button-text'      => __( 'Install Manually', 'formidable' ),
+			'secondary-button-href'      => admin_url( 'plugin-install.php' ),
+			'secondary-button-role'      => false,
+			'secondary-button-skip-step' => false,
 		)
 	);
 	?>

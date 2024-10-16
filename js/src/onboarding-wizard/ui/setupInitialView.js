@@ -43,9 +43,15 @@ function navigateToInitialStep() {
  * @return {string} The name of the initial step to navigate to.
  */
 function determineInitialStep() {
+	const isConnectedAccount = getQueryParam( 'success' );
+
+	if ( isConnectedAccount === '0' ) {
+		return STEPS.UNSUCCESSFUL;
+	}
+
 	const { hiddenLicenseKeyInput } = getElements();
 
-	if ( hiddenLicenseKeyInput || hasQueryParam( 'success' ) ) {
+	if ( hiddenLicenseKeyInput || isConnectedAccount ) {
 		return STEPS.SUCCESS;
 	}
 

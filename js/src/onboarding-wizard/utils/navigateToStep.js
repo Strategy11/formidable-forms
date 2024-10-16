@@ -39,8 +39,8 @@ export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 	show( targetStep );
 	new frmAnimate( targetStep ).fadeIn();
 
-	const { onboardingWizardPage } = getElements();
 	// Update the onboarding wizard's current step attribute
+	const { onboardingWizardPage } = getElements();
 	onboardingWizardPage.setAttribute( 'data-current-step', stepName );
 
 	// Update the URL query parameter, with control over history update method
@@ -73,8 +73,8 @@ export const navigateToNextStep = () => {
 		processedSteps.push( processedStep );
 		setSingleState( 'processedSteps', processedSteps );
 	}
-
 	setupUsageData( processedStep, nextStepName );
+
 	navigateToStep( nextStepName );
 };
 

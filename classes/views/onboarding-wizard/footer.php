@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a <?php FrmAppHelper::array_to_html_params( $secondary_button_attributes, true ); ?>>
 		<?php echo esc_html( $args['secondary-button-text'] ); ?>
 	</a>
+
 	<a <?php FrmAppHelper::array_to_html_params( $primary_button_attributes, true ); ?>>
 		<?php
 		echo esc_html( $args['primary-button-text'] );

@@ -336,10 +336,7 @@ class FrmOnboardingWizardController {
 		$usage_data = self::get_usage_data();
 
 		$fields_to_update = array(
-			'default_email'    => 'sanitize_email',
-			'is_subscribed'    => 'rest_sanitize_boolean',
 			'allows_tracking'  => 'rest_sanitize_boolean',
-			'summary_emails'   => 'rest_sanitize_boolean',
 			'installed_addons' => 'sanitize_text_field',
 			'processed_steps'  => 'sanitize_text_field',
 			'completed_steps'  => 'rest_sanitize_boolean',
@@ -404,8 +401,7 @@ class FrmOnboardingWizardController {
 	 */
 	private static function get_js_variables() {
 		return array(
-			'INITIAL_STEP'  => self::INITIAL_STEP,
-			'proIsIncluded' => FrmAppHelper::pro_is_included(),
+			'INITIAL_STEP' => self::INITIAL_STEP,
 		);
 	}
 
