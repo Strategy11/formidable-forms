@@ -17,8 +17,10 @@
 	position: relative;
 	height: 36px !important;
 	background-image: none !important;
-	background-color: white !important;
 	overflow: hidden;
+}
+.formidable_page_formidable-styles .frm-right-panel .frm-style-editor-form.frm-pro .frm-style-component .wp-picker-container button {
+	background-color: white !important;
 }
 .formidable_page_formidable-styles .frm-right-panel .frm-style-component .wp-picker-container:after {
 	content: '';
