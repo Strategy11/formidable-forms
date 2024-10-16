@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
-			<span class="frm-banner-title frm-font-semibold frm-flex">
+			<span class="frm-flex frm-banner-title frm-font-semibold">
 				<?php
 				printf(
 					/* translators: %s: The count of add-ons */
@@ -52,6 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 				?>
 			</span>
+
 			<span class="frm-banner-text frm-text-xs">
 				<?php
 				if ( ! $pro_is_installed ) {
@@ -71,6 +72,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				?>
 			</span>
+
+			<?php if ( ! $pro_is_installed ) { ?>
+				<div class="frm-cta-footer frm-flex frm-gap-xs frm-text-xs">
+					<span><?php esc_html_e( 'Already have Pro?', 'formidable' ); ?></span>
+
+					<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="frm-link-with-external-icon" target="_blank">
+						<span><?php esc_html_e( 'Connect Account', 'formidable' ); ?></span>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
+					</a>
+				</div>
+			<?php } ?>
 		</div>
 	</div>
 

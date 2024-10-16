@@ -9482,6 +9482,18 @@ Responsive Design
 	border: 1px solid var(--primary-200);
 }
 
+.frm-cta.frm-cta-border .frm-cta-footer {
+	background-color: #fff;
+	padding: 12px var(--gap-sm);
+	border-top: 1px solid var(--primary-200);
+	border-bottom-left-radius: var(--small-radius);
+	border-bottom-right-radius: var(--small-radius);
+	margin-top: 12px;
+	margin-bottom: calc(-1 * var(--gap-sm));
+	margin-left: calc(-1 * var(--gap-sm));
+	margin-right: calc(-1 * var(--gap-sm));
+}
+
 .frm-cta h4 {
 	font-weight: 600;
 	margin-top: 0;
@@ -9498,6 +9510,10 @@ Responsive Design
 }
 
 .frm-cta-green.frm-cta-border {
+	border-color: var(--success-100)
+}
+
+.frm-cta-green.frm-cta-border .frm-cta-footer {
 	border-color: var(--success-100)
 }
 
