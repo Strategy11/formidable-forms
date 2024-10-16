@@ -1860,7 +1860,7 @@ function frmCaptcha( captchaSelector ) {
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
 		const closestForm   = captchas[c].closest( 'form' );
-		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		const formIsVisible = closestForm && ( closestForm.offsetParent !== null || closestForm.classList.contains( 'frm_logic_form' ) );
 		if ( ! formIsVisible ) {
 			continue;
 		}
