@@ -1863,6 +1863,8 @@ function frmCaptcha( captchaSelector ) {
 		const formIsVisible = closestForm && closestForm.offsetParent !== null;
 		const captcha       = captchas[c];
 		if ( ! formIsVisible ) {
+			// If the form is not visible, try again in 1 second.
+			// This fixes issues where the form fades visible on page load.
 			setTimeout(
 				function() {
 					if ( closestForm && closestForm.offsetParent !== null ) {
