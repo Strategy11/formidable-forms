@@ -1650,17 +1650,17 @@ class FrmFormsController {
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
 		$entry_shortcodes = array(
-			'admin_email' => __( 'Admin email', 'formidable' ),
+			'admin_email'        => __( 'Admin email', 'formidable' ),
 			'default-from-email' => __( 'Default from email', 'formidable' ),
-			'id'         => __( 'Entry ID', 'formidable' ),
-			'key'        => __( 'Entry Key', 'formidable' ),
-			'post_id'    => __( 'Post ID', 'formidable' ),
-			'ip'         => __( 'User IP', 'formidable' ),
-			'created-at' => __( 'Entry created', 'formidable' ),
-			'updated-at' => __( 'Entry updated', 'formidable' ),
-			''           => '',
-			'siteurl'    => __( 'Site URL', 'formidable' ),
-			'sitename'   => __( 'Site Name', 'formidable' ),
+			'id'                 => __( 'Entry ID', 'formidable' ),
+			'key'                => __( 'Entry Key', 'formidable' ),
+			'post_id'            => __( 'Post ID', 'formidable' ),
+			'ip'                 => __( 'User IP', 'formidable' ),
+			'created-at'         => __( 'Entry created', 'formidable' ),
+			'updated-at'         => __( 'Entry updated', 'formidable' ),
+			''                   => '',
+			'siteurl'            => __( 'Site URL', 'formidable' ),
+			'sitename'           => __( 'Site Name', 'formidable' ),
 		);
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
