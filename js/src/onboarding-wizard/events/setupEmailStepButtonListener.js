@@ -1,10 +1,15 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault, isValidEmail } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getAppState, setAppStateProperty } from '../shared';
+import { getState, setSingleState } from '../shared';
 import { showEmailAddressError } from '../ui';
-import { isValidEmail, navigateToNextStep, onClickPreventDefault } from '../utils';
+import { navigateToNextStep } from '../utils';
 
 /**
  * Manages event handling for the "Next Step" button in the "Default Email Address" step.
@@ -18,24 +23,35 @@ function addSetupEmailStepButtonEvents() {
 	onClickPreventDefault( setupEmailStepButton, onSetupEmailStepButtonClick );
 }
 
+const validateEmails = emailInputs => {
+	let isValid = true;
+	emailInputs.forEach( input => {
+		const emailAddress = input.value.trim();
+		if ( ! isValidEmail( emailAddress ) ) {
+			showEmailAddressError( 'invalid', input );
+			isValid = false;
+		}
+	});
+	return isValid;
+};
+
 /**
  * Handles the click event on the "Next Step" button in the "Default Email Address" step.
  *
  * @private
- * @param {Event} event The click event object.
+ *
  * @return {void}
  */
 const onSetupEmailStepButtonClick = async() => {
-	const { defaultEmailField } = getElements();
-	const email = defaultEmailField.value.trim();
+	const { defaultEmailField, defaultFromEmailField } = getElements();
 
-	// Check if the email is valid
-	if ( ! isValidEmail( email ) ) {
-		showEmailAddressError( 'invalid' );
+	// Check if the emails are valid
+	if ( ! validateEmails( [ defaultFromEmailField, defaultEmailField ] ) ) {
 		return;
 	}
 
 	const { subscribeCheckbox, summaryEmailsCheckbox, allowTrackingCheckbox } = getElements();
+	const email = defaultEmailField.value.trim();
 
 	// Check if the 'subscribe' checkbox is selected. If so, proceed to add the user's email to the active campaign
 	if ( subscribeCheckbox?.checked ) {
@@ -51,18 +67,20 @@ const onSetupEmailStepButtonClick = async() => {
 	}
 
 	// Capture usage data
-	const { emailStepData } = getAppState();
+	const { emailStepData } = getState();
 	emailStepData.default_email = email;
+	emailStepData.from_email = defaultFromEmailField.value.trim();
 	emailStepData.allows_tracking = allowTrackingCheckbox.checked;
 	emailStepData.summary_emails = summaryEmailsCheckbox.checked;
 	if ( subscribeCheckbox ) {
 		emailStepData.is_subscribed = subscribeCheckbox.checked;
 	}
-	setAppStateProperty( 'emailStepData', emailStepData );
+	setSingleState( 'emailStepData', emailStepData );
 
 	// Prepare FormData for the POST request
 	const formData = new FormData();
 	formData.append( 'default_email', email );
+	formData.append( 'from_email', defaultFromEmailField.value.trim() );
 	formData.append( 'allows_tracking', allowTrackingCheckbox.checked );
 	formData.append( 'summary_emails', summaryEmailsCheckbox.checked );
 

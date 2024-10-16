@@ -22,6 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input class="frm_with_left_label frm8" type="text" name="frm_default_email" id="frm_default_email" value="<?php echo esc_attr( $frm_settings->default_email ); ?>" />
 </p>
 
+<p class="frm_grid_container">
+	<label class="frm4 frm_form_field" for="frm_from_email">
+		<?php esc_html_e( 'Default From Address', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'The "From" address for emails sent from this site.', 'formidable' ) ); ?>
+	</label>
+	<input class="frm_with_left_label frm8" type="text" name="frm_from_email" id="frm_from_email" value="<?php echo esc_attr( $frm_settings->from_email ); ?>" />
+</p>
+
 <?php
 ob_start();
 
