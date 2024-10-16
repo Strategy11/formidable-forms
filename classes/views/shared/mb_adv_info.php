@@ -223,7 +223,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 
 			unset( $skey, $sname, $classes );
-		}
+		}//end foreach
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
 			if ( 'user_id' === $helper_type && ! isset( $uid ) ) {
