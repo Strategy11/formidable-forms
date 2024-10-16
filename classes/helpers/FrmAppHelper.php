@@ -526,16 +526,24 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function get_custom_header_keys_for_ip() {
-		return array(
-			'HTTP_CLIENT_IP',
-			'HTTP_CF_CONNECTING_IP',
-			'HTTP_X_FORWARDED_FOR',
-			'HTTP_X_FORWARDED',
-			'HTTP_X_CLUSTER_CLIENT_IP',
-			'HTTP_X_REAL_IP',
-			'HTTP_FORWARDED_FOR',
-			'HTTP_FORWARDED',
-			'REMOTE_ADDR',
+		/**
+		 * @since x.x
+		 *
+		 * @param array $header_keys
+		 */
+		return apply_filters(
+			'frm_custom_ip_header_keys',
+			array(
+				'HTTP_CLIENT_IP',
+				'HTTP_CF_CONNECTING_IP',
+				'HTTP_X_FORWARDED_FOR',
+				'HTTP_X_FORWARDED',
+				'HTTP_X_CLUSTER_CLIENT_IP',
+				'HTTP_X_REAL_IP',
+				'HTTP_FORWARDED_FOR',
+				'HTTP_FORWARDED',
+				'REMOTE_ADDR',
+			)
 		);
 	}
 
