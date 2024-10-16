@@ -109,13 +109,14 @@ class FrmUsage {
 
 	private function payments( $table = 'frm_payments' ) {
 		global $wpdb;
-		$rows     = $wpdb->get_results( "SELECT amount, status, paysys FROM {$wpdb->prefix}{$table}" );
+		$rows     = $wpdb->get_results( "SELECT amount, status, paysys, created_at FROM {$wpdb->prefix}{$table}" );
 		$payments = array();
 		foreach ( $rows as $row ) {
 			$payments[] = array(
-				'amount'  => (float) $row->amount,
-				'status'  => $row->status,
-				'gateway' => $row->paysys,
+				'amount'     => (float) $row->amount,
+				'status'     => $row->status,
+				'gateway'    => $row->paysys,
+				'created_at' => $row->created_at,
 			);
 		}
 
