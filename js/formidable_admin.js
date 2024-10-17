@@ -10926,6 +10926,21 @@ function frmAdminBuildJS() {
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => fieldsUpdated = 0 );
+
+			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
+			if ( manageStyleSettings ) {
+				document.addEventListener(
+					'change',
+					event => {
+						const target = event.originalTarget;
+						if ( 'SELECT' !== target.nodeName || ! target.dataset.name || target.getAttribute( 'name' ) ) {
+							return;
+						}
+
+						target.setAttribute( 'name', target.dataset.name );
+					}
+				);
+			}
 		},
 
 		exportInit: function() {
