@@ -1865,13 +1865,14 @@ function frmCaptcha( captchaSelector ) {
 		if ( ! formIsVisible ) {
 			// If the form is not visible, try again in 1 second.
 			// This fixes issues where the form fades visible on page load.
-			setTimeout(
+			const interval = setInterval(
 				function() {
 					if ( closestForm && closestForm.offsetParent !== null ) {
 						frmFrontForm.renderCaptcha( captcha, captchaSelector );
+						clearInterval( interval );
 					}
 				},
-				1000
+				400
 			);
 			continue;
 		}
