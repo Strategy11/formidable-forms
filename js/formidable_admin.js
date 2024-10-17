@@ -10932,7 +10932,7 @@ function frmAdminBuildJS() {
 				manageStyleSettings.addEventListener(
 					'change',
 					event => {
-						const target = event.originalTarget;
+						const target = event.target;
 						if ( 'SELECT' !== target.nodeName || ! target.dataset.name || target.getAttribute( 'name' ) ) {
 							return;
 						}
