@@ -1537,7 +1537,7 @@ class FrmFormsController {
 		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
 		$linked_forms = array();
 		$col          = 'one';
-		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' );
+		$settings_tab = self::is_form_settings_page();
 
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
 		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
@@ -1545,6 +1545,19 @@ class FrmFormsController {
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
+	}
+
+	/**
+	 * Check if the current page is the form settings page
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_form_settings_page() {
+		$page   = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		return 'formidable' === $page && 'settings' === $action;
 	}
 
 	/**
@@ -1637,15 +1650,17 @@ class FrmFormsController {
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
 		$entry_shortcodes = array(
-			'id'         => __( 'Entry ID', 'formidable' ),
-			'key'        => __( 'Entry Key', 'formidable' ),
-			'post_id'    => __( 'Post ID', 'formidable' ),
-			'ip'         => __( 'User IP', 'formidable' ),
-			'created-at' => __( 'Entry created', 'formidable' ),
-			'updated-at' => __( 'Entry updated', 'formidable' ),
-			''           => '',
-			'siteurl'    => __( 'Site URL', 'formidable' ),
-			'sitename'   => __( 'Site Name', 'formidable' ),
+			'admin_email'        => __( 'Admin email', 'formidable' ),
+			'default-from-email' => __( 'Default from email', 'formidable' ),
+			'id'                 => __( 'Entry ID', 'formidable' ),
+			'key'                => __( 'Entry Key', 'formidable' ),
+			'post_id'            => __( 'Post ID', 'formidable' ),
+			'ip'                 => __( 'User IP', 'formidable' ),
+			'created-at'         => __( 'Entry created', 'formidable' ),
+			'updated-at'         => __( 'Entry updated', 'formidable' ),
+			''                   => '',
+			'siteurl'            => __( 'Site URL', 'formidable' ),
+			'sitename'           => __( 'Site Name', 'formidable' ),
 		);
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {

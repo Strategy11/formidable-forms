@@ -8447,6 +8447,26 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
+			showContextualShortcodesToPopup( input );
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
+	function showContextualShortcodesToPopup( input ) {
+		const shortcodes = getContextualShortcodes();
+		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
+			return;
+		}
+		for ( let shortcode of shortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			if ( shortcodeLi ) {
+				shortcodeLi.classList.remove( 'frm_hidden' );
+			}
 		}
 	}
 
@@ -8546,7 +8566,35 @@ function frmAdminBuildJS() {
 		return moreIcon;
 	}
 
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 *
+	 * @returns {Array}
+	 */
+	function getContextualShortcodes() {
+		return [ 'admin_email', 'default-from-email' ];
+	}
+
+	/**
+	 * Hide shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 * @returns {Void}
+	 */
+	function hideContextualShortcodes() {
+		const shortcodes = getContextualShortcodes();
+		for ( let shortcode of shortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li' );
+			if ( shortcodeLi ) {
+				shortcodeLi.classList.add( 'frm_hidden' );
+			}
+		}
+	}
+
 	function hideShortcodes( box ) {
+		hideContextualShortcodes();
 		let i, u, closeIcons, closeSvg;
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );

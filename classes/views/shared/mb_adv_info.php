@@ -210,6 +210,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
 			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
 
+			if ( in_array( $skey, array( 'admin_email', 'default-from-email' ) ) ) {
+				$classes .= ' frm_hidden';
+			}
+
 			FrmFormsHelper::insert_code_html(
 				array(
 					'code'  => $skey,
@@ -219,7 +223,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 
 			unset( $skey, $sname, $classes );
-		}
+		}//end foreach
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
 			if ( 'user_id' === $helper_type && ! isset( $uid ) ) {
