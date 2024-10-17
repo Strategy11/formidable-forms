@@ -442,13 +442,6 @@ class FrmDb {
 			self::get_where_clause_and_values( $where );
 			global $wpdb;
 			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		} else {
-			/**
-			 * Allow the $where to be prepared before we receive it here.
-			 * This is a fallback for reverse compatibility, but is not recommended
-			 */
-			_deprecated_argument( 'where', '2.0', esc_html__( 'Use the query in an array format so it can be properly prepared.', 'formidable' ) );
-			$query .= $where . ' ' . implode( ' ', $args );
 		}
 
 		return $query;
