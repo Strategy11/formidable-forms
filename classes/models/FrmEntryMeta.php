@@ -229,6 +229,11 @@ class FrmEntryMeta {
 		return self::get_entry_meta_by_field( $entry->id, $field_id );
 	}
 
+	/**
+	 * @param int|object|string $entry_id
+	 * @param int|string        $field_id This function supports field keys as field id.
+	 * @return mixed
+	 */
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
 		global $wpdb;
 
@@ -250,9 +255,11 @@ class FrmEntryMeta {
 		$get_table = $wpdb->prefix . 'frm_item_metas';
 		$query     = array( 'item_id' => $entry_id );
 		if ( is_numeric( $field_id ) ) {
+			// Query by field ID.
 			$query['field_id'] = $field_id;
 		} else {
-			$get_table            .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+			// Query by field key.
+			$get_table            .= ' it JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 			$query['fi.field_key'] = $field_id;
 		}
 
