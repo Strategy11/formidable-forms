@@ -583,7 +583,7 @@ class FrmEntryValidate {
 
 			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
-				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
+				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
 				if ( $found ) {
 					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
@@ -602,9 +602,11 @@ class FrmEntryValidate {
 	 * @param string $value          Value to check.
 	 * @param int    $field_id       Field ID.
 	 * @param array  $name_field_ids Name field IDs.
+	 * @param array  $values         Array of posted values.
+	 *
 	 * @return bool
 	 */
-	private static function is_akismet_guest_info_value( $key, $value, $field_id, $name_field_ids ) {
+	private static function is_akismet_guest_info_value( $key, &$value, $field_id, $name_field_ids, $values ) {
 		if ( ! $value || is_numeric( $value ) ) {
 			return false;
 		}
@@ -617,12 +619,35 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				if ( $name_field_ids ) {
+				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
 					// If there is name field in the form, we should always use it as author name.
-					return in_array( $field_id, $name_field_ids, true );
+					return true;
 				}
-				return strlen( $value ) < 200;
-		}
+				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+				$fields  = FrmDb::get_results(
+					'frm_fields',
+					array(
+						'form_id' => $form_id,
+						'type'    => 'text',
+						'name'    => array( 'Name', 'Last' ),
+					),
+					'id,name',
+					array( 'order_by' => 'field_order ASC' )
+				);
+
+				foreach ( $fields as $index => $field ) {
+					if ( 'Name' !== $field->name ) {
+						continue;
+					}
+					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
+						if ( empty( $values[ absint( $fields[ $index + 1 ]->id ) ] ) ) {
+							continue;
+						}
+						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
+						return true;
+					}
+				}
+		}//end switch
 
 		return false;
 	}
