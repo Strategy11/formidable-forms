@@ -9,6 +9,7 @@ import { getQueryParam } from 'core/utils';
  */
 import addSkipStepButtonEvents from './skipStepButtonListener';
 import addBackButtonEvents from './backButtonListener';
+import addConsentTrackingButtonEvents from './consentTrackingButtonListener';
 import addInstallAddonsButtonEvents from './installAddonsButtonListener';
 import { navigateToStep } from '../utils';
 
@@ -21,6 +22,8 @@ export function addEventListeners() {
 	// Add event handling for the "Skip" and "Back" buttons
 	addSkipStepButtonEvents();
 	addBackButtonEvents();
+
+	addConsentTrackingButtonEvents();
 
 	// Add event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step
 	addInstallAddonsButtonEvents();

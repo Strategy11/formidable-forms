@@ -289,29 +289,21 @@ class FrmOnboardingWizardController {
 	}
 
 	/**
-	 * Handle AJAX request to setup the "Default Email Address" step.
+	 * Handle AJAX request to setup the "Never miss an important update" step.
 	 *
 	 * @since 6.9
 	 *
 	 * @return void
 	 */
-	public static function ajax_setup_email_step() {
+	public static function ajax_consent_tracking() {
 		// Check permission and nonce.
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Get posted data.
-		$from_email      = FrmAppHelper::get_post_param( 'from_email', '', 'sanitize_email' );
-		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_email' );
-		$allows_tracking = FrmAppHelper::get_post_param( 'allows_tracking', '', 'rest_sanitize_boolean' );
-		$summary_emails  = FrmAppHelper::get_post_param( 'summary_emails', '', 'rest_sanitize_boolean' );
-
 		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
-		$frm_settings->update_setting( 'from_email', $from_email, 'sanitize_text_field' );
-		$frm_settings->update_setting( 'default_email', $default_email, 'sanitize_text_field' );
-		$frm_settings->update_setting( 'tracking', $allows_tracking, 'rest_sanitize_boolean' );
-		$frm_settings->update_setting( 'summary_emails', $summary_emails, 'rest_sanitize_boolean' );
+		$frm_settings->update_setting( 'tracking', true, 'rest_sanitize_boolean' );
+
 		// Remove the 'FrmProSettingsController::store' action to avoid PHP errors during AJAX call.
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();

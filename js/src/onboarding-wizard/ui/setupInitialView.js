@@ -52,7 +52,7 @@ function determineInitialStep() {
 	const { hiddenLicenseKeyInput } = getElements();
 
 	if ( hiddenLicenseKeyInput || isConnectedAccount ) {
-		return STEPS.SUCCESS;
+		return STEPS.INSTALL_ADDONS;
 	}
 
 	return getQueryParam( 'step' ) || STEPS.INITIAL;
