@@ -9515,7 +9515,7 @@ Responsive Design
 }
 
 .frm-cta-green.frm-cta-border .frm-cta-footer {
-	border-color: var(--success-100)
+	border-color: var(--success-100);
 }
 
 .frm-cta-red {
