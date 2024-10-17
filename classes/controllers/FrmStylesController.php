@@ -765,7 +765,7 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			if ( ! isset( $_POST['style'] ) || ! isset( $_POST['style'][ $form->id ] ) ) {
+			if ( ! isset( $_POST['style'] ) || ! isset( $_POST['style'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				continue;
 			}
 
