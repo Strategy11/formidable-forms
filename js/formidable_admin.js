@@ -10929,7 +10929,7 @@ function frmAdminBuildJS() {
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
-				document.addEventListener(
+				manageStyleSettings.addEventListener(
 					'change',
 					event => {
 						const target = event.originalTarget;
