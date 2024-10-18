@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import { isEmptyObject } from 'core/utils';
-
-/**
  * Internal Dependencies
  */
 import { getState, STEPS } from '../shared';
@@ -38,32 +33,24 @@ function processDataForStep( processedStep, nextStepName ) {
 	let formData;
 
 	// Append completed steps if moving to the success step
-	if ( STEPS.SUCCESS === nextStepName ) {
+	if ( STEPS.SUCCESS === nextStepName || STEPS.UNSUCCESSFUL === nextStepName ) {
 		const { processedSteps } = getState();
+
 		if ( processedSteps.length > 1 ) {
-			if ( ! processedSteps.includes( STEPS.SUCCESS ) ) {
-				processedSteps.push( STEPS.SUCCESS );
+			if ( ! processedSteps.includes( nextStepName ) ) {
+				processedSteps.push( nextStepName );
 			}
+
 			formData = new FormData();
 			formData.append( 'processed_steps', processedSteps.join( ',' ) );
 			formData.append( 'completed_steps', true );
 		}
 	}
 
-	// Append email step data for the email step
-	if ( STEPS.DEFAULT_EMAIL_ADDRESS === processedStep ) {
-		const { emailStepData } = getState();
-		if ( ! isEmptyObject( emailStepData ) ) {
-			formData = formData ?? new FormData();
-			for ( const [ key, value ] of Object.entries( emailStepData ) ) {
-				formData.append( key, value );
-			}
-		}
-	}
-
 	// Append installed addons for the addon installation step
 	if ( STEPS.INSTALL_ADDONS === processedStep ) {
 		const { installedAddons } = getState();
+
 		if ( installedAddons.length > 0 ) {
 			formData = formData ?? new FormData();
 			formData.append( 'installed_addons', installedAddons.join( ',' ) );

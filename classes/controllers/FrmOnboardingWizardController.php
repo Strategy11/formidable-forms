@@ -79,7 +79,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @var string
 	 */
-	const INITIAL_STEP = 'welcome';
+	const INITIAL_STEP = 'consent-tracking';
 
 	/**
 	 * Option name to store usage data.
@@ -279,47 +279,69 @@ class FrmOnboardingWizardController {
 
 		// Note: Add step parts in order.
 		$step_parts = array(
-			'welcome'                => 'steps/welcome-step.php',
-			'install-formidable-pro' => 'steps/install-formidable-pro-step.php',
-			'license-management'     => 'steps/license-management-step.php',
-			'default-email-address'  => 'steps/default-email-address-step.php',
-			'install-addons'         => 'steps/install-addons-step.php',
-			'success'                => 'steps/success-step.php',
+			'consent-tracking' => 'steps/consent-tracking-step.php',
+			'install-addons'   => 'steps/install-addons-step.php',
+			'success'          => 'steps/success-step.php',
+			'unsuccessful'     => 'steps/unsuccessful-step.php',
 		);
 
 		include $view_path . 'index.php';
 	}
 
 	/**
-	 * Handle AJAX request to setup the "Default Email Address" step.
+	 * Handle AJAX request to setup the "Never miss an important update" step.
 	 *
 	 * @since 6.9
 	 *
 	 * @return void
 	 */
-	public static function ajax_setup_email_step() {
+	public static function ajax_consent_tracking() {
 		// Check permission and nonce.
 		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Get posted data.
-		$from_email      = FrmAppHelper::get_post_param( 'from_email', '', 'sanitize_email' );
-		$default_email   = FrmAppHelper::get_post_param( 'default_email', '', 'sanitize_email' );
-		$allows_tracking = FrmAppHelper::get_post_param( 'allows_tracking', '', 'rest_sanitize_boolean' );
-		$summary_emails  = FrmAppHelper::get_post_param( 'summary_emails', '', 'rest_sanitize_boolean' );
-
 		// Update Settings.
 		$frm_settings = FrmAppHelper::get_settings();
-		$frm_settings->update_setting( 'from_email', $from_email, 'sanitize_text_field' );
-		$frm_settings->update_setting( 'default_email', $default_email, 'sanitize_text_field' );
-		$frm_settings->update_setting( 'tracking', $allows_tracking, 'rest_sanitize_boolean' );
-		$frm_settings->update_setting( 'summary_emails', $summary_emails, 'rest_sanitize_boolean' );
+		$frm_settings->update_setting( 'tracking', true, 'rest_sanitize_boolean' );
+
 		// Remove the 'FrmProSettingsController::store' action to avoid PHP errors during AJAX call.
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
+		self::subscribe_to_active_campaign();
+
 		// Send response.
 		wp_send_json_success();
+	}
+
+	/**
+	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function subscribe_to_active_campaign() {
+		$user = wp_get_current_user();
+		if ( empty( $user->user_email ) ) {
+			return;
+		}
+
+		wp_remote_post(
+			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
+			array(
+				'body' => http_build_query(
+					array(
+						'form_key'      => 'subscribe-onboarding',
+						'frm_action'    => 'create',
+						'form_id'       => 5,
+						'item_key'      => '',
+						'item_meta[0]'  => '',
+						'item_meta[15]' => $user->user_email,
+					)
+				),
+			)
+		);
 	}
 
 	/**
@@ -338,10 +360,7 @@ class FrmOnboardingWizardController {
 		$usage_data = self::get_usage_data();
 
 		$fields_to_update = array(
-			'default_email'    => 'sanitize_email',
-			'is_subscribed'    => 'rest_sanitize_boolean',
 			'allows_tracking'  => 'rest_sanitize_boolean',
-			'summary_emails'   => 'rest_sanitize_boolean',
 			'installed_addons' => 'sanitize_text_field',
 			'processed_steps'  => 'sanitize_text_field',
 			'completed_steps'  => 'rest_sanitize_boolean',
@@ -406,8 +425,7 @@ class FrmOnboardingWizardController {
 	 */
 	private static function get_js_variables() {
 		return array(
-			'INITIAL_STEP'  => self::INITIAL_STEP,
-			'proIsIncluded' => FrmAppHelper::pro_is_included(),
+			'INITIAL_STEP' => self::INITIAL_STEP,
 		);
 	}
 

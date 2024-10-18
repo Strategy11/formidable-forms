@@ -218,7 +218,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 
 		// Onboarding Wizard Controller.
-		add_action( 'wp_ajax_frm_onboarding_setup_email_step', 'FrmOnboardingWizardController::ajax_setup_email_step' );
+		add_action( 'wp_ajax_frm_onboarding_consent_tracking', 'FrmOnboardingWizardController::ajax_consent_tracking' );
 		add_action( 'wp_ajax_frm_onboarding_setup_usage_data', 'FrmOnboardingWizardController::setup_usage_data' );
 
 		// Addons.
