@@ -11,9 +11,7 @@ $dropdown_id = 'frm_style_dropdown_' . absint( $form->id );
 		<label for="<?php echo esc_attr( $dropdown_id ); ?>"><?php echo esc_html( $form_name ); ?></label>
 	</td>
 	<td>
-		<input type="hidden" name="prev_style[<?php echo absint( $form->id ); ?>]" value="<?php echo esc_attr( $active_style_id ); ?>" />
-
-		<select id="<?php echo esc_attr( $dropdown_id ); ?>" name="style[<?php echo absint( $form->id ); ?>]">
+		<select id="<?php echo esc_attr( $dropdown_id ); ?>" data-name="style[<?php echo absint( $form->id ); ?>]">
 			<?php foreach ( $styles as $style ) { ?>
 				<option value="<?php echo esc_attr( $style->ID ); ?>" <?php selected( $style->ID, $active_style_id ); ?>>
 					<?php echo esc_html( $style->post_title . ( empty( $style->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>

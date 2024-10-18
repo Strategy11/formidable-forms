@@ -649,8 +649,6 @@ class FrmAppController {
 
 			FrmInbox::maybe_disable_screen_options();
 		}
-
-		self::maybe_add_ip_warning();
 	}
 
 	/**
@@ -674,65 +672,6 @@ class FrmAppController {
 		if ( class_exists( $class ) && method_exists( $class, 'load_page' ) ) {
 			call_user_func( array( $class, 'load_page' ) );
 		}
-	}
-
-	/**
-	 * Show a warning for the IP address setting if it hasn't been set.
-	 *
-	 * @since 6.1
-	 *
-	 * @return void
-	 */
-	private static function maybe_add_ip_warning() {
-		$settings = FrmAppHelper::get_settings();
-		if ( false !== $settings->custom_header_ip ) {
-			// The setting has been changed from the false default (to either 1 or 0), so stop showing the message.
-			return;
-		}
-
-		if ( ! self::is_behind_proxy() ) {
-			// This message is only applicable when using a reverse proxy.
-			return;
-		}
-
-		if ( FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_text_field' ) ) {
-			// Avoid the message on a POST action. We don't want to show the message if we're saving global settings.
-			return;
-		}
-
-		$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
-		$message              = sprintf(
-			// Translators: 1: Global Settings Link
-			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
-			'<a href="' . esc_url( $global_settings_link ) . '">' . __( 'Global Settings', 'formidable' ) . '</a>'
-		);
-		$option_name = 'frm_dismiss_ip_address_notice';
-		FrmAppHelper::add_dismissable_warning_message( $message, $option_name );
-	}
-
-	/**
-	 * Check if any reverse proxy headers are set.
-	 *
-	 * @since 6.1
-	 *
-	 * @return bool
-	 */
-	private static function is_behind_proxy() {
-		$custom_headers = FrmAppHelper::get_custom_header_keys_for_ip();
-		foreach ( $custom_headers as $header ) {
-			if ( 'REMOTE_ADDR' === $header ) {
-				// We want to check every key but REMOTE_ADDR. REMOTE_ATTR is not unique to reverse proxy servers.
-				continue;
-			}
-
-			$ip = trim( FrmAppHelper::get_server_value( $header ) );
-			// Return true for anything that isn't empty but ignoring values like ::1.
-			if ( $ip && 0 !== strpos( $ip, '::' ) ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**
