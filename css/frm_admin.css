@@ -5150,49 +5150,6 @@ label.frm-example-icon {
 	margin: var(--gap-lg) 0;
 }
 
-/* Inbox */
-
-#frm_inbox_page .frm_page_container {
-	height: auto;
-}
-
-.frm_inbox_card {
-	display: grid;
-	grid-template-columns: 72px 1fr;
-	grid-gap: var(--gap-xs);
-	border-bottom: 1px solid var(--grey-300);
-	padding: var(--gap-md);
-}
-
-.frm_inbox_card_icon {
-	grid-row: span 3 / span 3;
-	padding-top: var(--gap-xs);
-	text-align: center
-}
-
-.frm_inbox_card_icon svg {
-	height: 48px;
-	width: 48px;
-	color: var(--blue-border);
-}
-
-.frm_inbox_card header {
-	display: grid;
-	grid-template-columns: 1fr 150px;
-	align-items: center;
-}
-
-.frm_inbox_card h3 {
-	border: none;
-	text-transform: none;
-	margin: 0;
-	padding: 0;
-}
-
-.frm_inbox_date {
-	text-align: right;
-}
-
 .frm_inbox_count {
 	color: #fff;
 	border-radius: 50%;
