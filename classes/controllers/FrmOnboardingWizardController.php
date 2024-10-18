@@ -308,8 +308,40 @@ class FrmOnboardingWizardController {
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
+		self::subscribe_to_active_campaign();
+
 		// Send response.
 		wp_send_json_success();
+	}
+
+	/**
+	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function subscribe_to_active_campaign() {
+		$user = wp_get_current_user();
+		if ( empty( $user->user_email ) ) {
+			return;
+		}
+
+		wp_remote_post(
+			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
+			array(
+				'body' => http_build_query(
+					array(
+						'form_key'      => 'subscribe-onboarding',
+						'frm_action'    => 'create',
+						'form_id'       => 5,
+						'item_key'      => '',
+						'item_meta[0]'  => '',
+						'item_meta[15]' => $user->user_email,
+					)
+				)
+			)
+		);
 	}
 
 	/**
