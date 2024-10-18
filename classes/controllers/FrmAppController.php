@@ -675,31 +675,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * Check if any reverse proxy headers are set.
-	 *
-	 * @since 6.1
-	 *
-	 * @return bool
-	 */
-	private static function is_behind_proxy() {
-		$custom_headers = FrmAppHelper::get_custom_header_keys_for_ip();
-		foreach ( $custom_headers as $header ) {
-			if ( 'REMOTE_ADDR' === $header ) {
-				// We want to check every key but REMOTE_ADDR. REMOTE_ATTR is not unique to reverse proxy servers.
-				continue;
-			}
-
-			$ip = trim( FrmAppHelper::get_server_value( $header ) );
-			// Return true for anything that isn't empty but ignoring values like ::1.
-			if ( $ip && 0 !== strpos( $ip, '::' ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * @return void
 	 */
 	public static function admin_js() {
