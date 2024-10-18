@@ -339,7 +339,7 @@ class FrmOnboardingWizardController {
 						'item_meta[0]'  => '',
 						'item_meta[15]' => $user->user_email,
 					)
-				)
+				),
 			)
 		);
 	}
