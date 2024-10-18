@@ -10228,8 +10228,8 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
-			} else if ( document.getElementById( 'frm_inbox_page' ) !== null || null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
-				// Inbox page
+			} else if ( null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
+				// Dashboard page inbox.
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
 				// Solution install page
@@ -10794,7 +10794,7 @@ function frmAdminBuildJS() {
 		},
 
 		inboxInit: function() {
-			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
+			jQuery( '.frm_inbox_dismiss' ).on( 'click', function( e ) {
 				const message                  = this.parentNode.parentNode;
 				const key                      = message.getAttribute( 'data-message' );
 				const href                     = this.getAttribute( 'href' );
