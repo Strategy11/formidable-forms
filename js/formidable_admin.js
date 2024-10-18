@@ -7630,16 +7630,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function formatEmailSetting() {
-		/*jshint validthis:true */
-		/*var val = jQuery( this ).val();
-		var email = val.match( /(\s[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi );
-		if(email !== null && email.length) {
-			//has email
-			//TODO: add < > if they aren't there
-		}*/
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
@@ -10562,7 +10552,6 @@ function frmAdminBuildJS() {
 
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
-			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
