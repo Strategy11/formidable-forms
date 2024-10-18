@@ -79,7 +79,7 @@ class S11FloatingLinks {
 		document.body.appendChild( slideIn );
 
 		// Make sure the events are set for dismissing the inbox message.
-		if ( ! document.getElementById( 'frm_inbox_page' ) && ! document.querySelector( '.frm-inbox-wrapper' ) ) {
+		if ( ! document.querySelector( '.frm-inbox-wrapper' ) ) {
 			frmAdminBuild.inboxInit();
 		}
 	}
