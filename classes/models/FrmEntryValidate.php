@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValidate {
 
 	/**
+	 * @since x.x
+	 *
+	 * @var array|null
+	 */
+	private static $name_text_fields;
+
+	/**
 	 * @param array         $values
 	 * @param bool|string[] $exclude
 	 * @return array
@@ -624,16 +631,7 @@ class FrmEntryValidate {
 					return true;
 				}
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-				$fields  = FrmDb::get_results(
-					'frm_fields',
-					array(
-						'form_id' => $form_id,
-						'type'    => 'text',
-						'name'    => array( 'Name', 'Last' ),
-					),
-					'id,name',
-					array( 'order_by' => 'field_order ASC' )
-				);
+				$fields  = self::get_name_text_fields( $form_id );
 
 				foreach ( $fields as $index => $field ) {
 					if ( 'Name' !== $field->name ) {
@@ -650,6 +648,33 @@ class FrmEntryValidate {
 		}//end switch
 
 		return false;
+	}
+
+	/**
+	 * Returns fields that have 'Name' and 'Last' as their name.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return array
+	 */
+	private static function get_name_text_fields( $form_id ) {
+		if ( null !== self::$name_text_fields ) {
+			return self::$name_text_fields;
+		}
+		$fields = FrmDb::get_results(
+			'frm_fields',
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+				'name'    => array( 'Name', 'Last' ),
+			),
+			'id,name',
+			array( 'order_by' => 'field_order ASC' )
+		);
+
+		self::$name_text_fields = $fields;
+		return $fields;
 	}
 
 	private static function add_server_values_to_akismet( &$datas ) {
