@@ -159,8 +159,7 @@ class FrmSettings {
 
 			'email_to'                  => '[admin_email]',
 			'no_ips'                    => 0,
-			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip'          => false,
+			'custom_header_ip'          => 0,
 			'tracking'                  => FrmAppHelper::pro_is_installed(),
 			// Only enable this by default for the main site.
 			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
