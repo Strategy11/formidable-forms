@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		echo esc_html( $args['primary-button-text'] );
 
-		if ( $args['primary-button-with-icon'] === true ) {
+		if ( $args['primary-button-with-icon'] ) {
 			FrmAppHelper::icon_by_class( 'frmfont frm_arrowup6_icon frm_svg13 frm_inline_block frm-rotate-90 frm-ml-xs', array( 'aria-hidden' => 'true' ) );
 		}
 		?>

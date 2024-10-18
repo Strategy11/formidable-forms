@@ -21,7 +21,7 @@ const COMPLETED_STEP_CLASS = 'frm-completed-step';
  * @return {void}
  */
 export function updateRootline( currentStep ) {
-	if (currentStep === STEPS.UNSUCCESSFUL) {
+	if ( currentStep === STEPS.UNSUCCESSFUL ) {
 		currentStep = STEPS.SUCCESS;
 	}
 
