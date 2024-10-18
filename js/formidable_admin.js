@@ -7630,16 +7630,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function formatEmailSetting() {
-		/*jshint validthis:true */
-		/*var val = jQuery( this ).val();
-		var email = val.match( /(\s[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi );
-		if(email !== null && email.length) {
-			//has email
-			//TODO: add < > if they aren't there
-		}*/
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
@@ -10228,8 +10218,8 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
-			} else if ( document.getElementById( 'frm_inbox_page' ) !== null || null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
-				// Inbox page
+			} else if ( null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
+				// Dashboard page inbox.
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
 				// Solution install page
@@ -10562,7 +10552,6 @@ function frmAdminBuildJS() {
 
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
-			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
@@ -10794,7 +10783,7 @@ function frmAdminBuildJS() {
 		},
 
 		inboxInit: function() {
-			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
+			jQuery( '.frm_inbox_dismiss' ).on( 'click', function( e ) {
 				const message                  = this.parentNode.parentNode;
 				const key                      = message.getAttribute( 'data-message' );
 				const href                     = this.getAttribute( 'href' );
@@ -10843,25 +10832,13 @@ function frmAdminBuildJS() {
 								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
 									document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
 									message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+									showActiveCampaignForm();
 								}
 								message.parentNode.removeChild( message );
 							}
 						);
 					}
 				);
-			});
-			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
-				data = {
-					action: 'frm_inbox_dismiss',
-					key: 'all',
-					nonce: frmGlobal.nonce
-				};
-				postAjax( data, function() {
-					fadeOut( document.getElementById( 'frm_message_list' ), function() {
-						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-						showActiveCampaignForm();
-					});
-				});
 			});
 
 			if ( false === document.getElementById( 'frm_empty_inbox' )?.classList.contains( 'frm_hidden' ) ) {
