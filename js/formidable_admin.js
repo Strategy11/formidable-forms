@@ -10843,25 +10843,13 @@ function frmAdminBuildJS() {
 								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
 									document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
 									message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+									showActiveCampaignForm();
 								}
 								message.parentNode.removeChild( message );
 							}
 						);
 					}
 				);
-			});
-			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
-				data = {
-					action: 'frm_inbox_dismiss',
-					key: 'all',
-					nonce: frmGlobal.nonce
-				};
-				postAjax( data, function() {
-					fadeOut( document.getElementById( 'frm_message_list' ), function() {
-						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-						showActiveCampaignForm();
-					});
-				});
 			});
 
 			if ( false === document.getElementById( 'frm_empty_inbox' )?.classList.contains( 'frm_hidden' ) ) {
