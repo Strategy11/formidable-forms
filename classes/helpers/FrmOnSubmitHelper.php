@@ -135,6 +135,9 @@ class FrmOnSubmitHelper {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
 		?>
 		<div class="frm_form_field">
+			<div class="frm_note_style">
+				<?php esc_html_e( 'NOTE: The selected page content will be displayed, but the full page will not be loaded. Traditional URL tracking in Google Analytics and similar tools won\'t register a page load event. If precise tracking is essential, consider using the \'Redirect to URL\' option.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+			</div>
 			<label for="<?php echo esc_attr( $name_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Select a page', 'formidable' ); ?>
 			</label>

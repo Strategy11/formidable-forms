@@ -27,7 +27,7 @@
 Cypress.Commands.add("createNewForm", () => {
     cy.log("Create a blank form");
     cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-    cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+    cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
     cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
     cy.get("#frm-form-templates-modal").should("exist");
     cy.get(".frm-modal-title").should("contain", "Name your form");

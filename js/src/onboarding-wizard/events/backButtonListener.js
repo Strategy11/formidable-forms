@@ -1,8 +1,13 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { navigateToPrevStep, onClickPreventDefault } from '../utils';
+import { navigateToPrevStep } from '../utils';
 
 /**
  * Manages event handling for the "Back" button.

@@ -128,10 +128,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
 
-		// Addons Controller.
-		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
-		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
-
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
@@ -199,11 +195,17 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		// Deactivation feedback.
+		add_action( 'admin_enqueue_scripts', 'FrmDeactivationFeedbackController::enqueue_assets' );
+		add_action( 'admin_footer', 'FrmDeactivationFeedbackController::footer_html' );
+		add_action( 'deactivated_plugin', 'FrmDeactivationFeedbackController::set_feedback_expired_date' );
+
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
+		FrmAddonsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
