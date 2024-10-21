@@ -338,6 +338,7 @@ class FrmOnboardingWizardController {
 						'item_key'      => '',
 						'item_meta[0]'  => '',
 						'item_meta[15]' => $user->user_email,
+						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
 					)
 				),
 			)
