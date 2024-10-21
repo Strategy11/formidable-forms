@@ -8418,6 +8418,9 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showSaveAndReloadModal( message ) {
+		if ( 'undefined' === typeof message ) {
+			message = __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' );
+		}
 		frmDom.modal.maybeCreateModal(
 			'frmSaveAndReloadModal',
 			{
