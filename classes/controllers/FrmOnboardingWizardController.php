@@ -564,7 +564,9 @@ class FrmOnboardingWizardController {
 	 */
 	private static function set_available_addons() {
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
+		$plugins          = get_plugins();
 
+		// Base add-ons always included.
 		self::$available_addons['spam-protection'] = array(
 			'title'       => esc_html__( 'Spam Protection', 'formidable' ),
 			'is-checked'  => true,
@@ -577,6 +579,8 @@ class FrmOnboardingWizardController {
 			'is-disabled' => true,
 			'help-text'   => esc_html__( 'Collect donations and payments with your forms. Offer physical products, digital goods, services, and more.', 'formidable' ),
 		);
+
+		// Add-ons included when Pro is not installed.
 		if ( ! $pro_is_installed ) {
 			self::$available_addons['visual-styler'] = array(
 				'title'       => esc_html__( 'Visual Styler', 'formidable' ),
@@ -591,79 +595,91 @@ class FrmOnboardingWizardController {
 				'help-text'   => esc_html__( 'Save form submissions to your database for future reference and analysis.', 'formidable' ),
 			);
 		}
+
+		// SMTP add-on if wp_mail_smtp is not installed.
 		if ( ! function_exists( 'wp_mail_smtp' ) ) {
+			$wp_mail_smtp_plugin       = 'wp-mail-smtp/wp_mail_smtp.php';
+			$is_installed_wp_mail_smtp = array_key_exists( $wp_mail_smtp_plugin, $plugins );
+
 			self::$available_addons['wp-mail-smtp'] = array(
-				'title'      => esc_html__( 'SMTP', 'formidable' ),
-				'rel'        => 'wp-mail-smtp',
-				'is-checked' => false,
-				'is-vendor'  => true,
-				'help-text'  => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
+				'title'        => esc_html__( 'SMTP', 'formidable' ),
+				'rel'          => $is_installed_wp_mail_smtp ? $wp_mail_smtp_plugin : 'wp-mail-smtp',
+				'is-checked'   => false,
+				'is-vendor'    => true,
+				'is-installed' => $is_installed_wp_mail_smtp,
+				'help-text'    => esc_html__( 'Improve email deliverability by routing WordPress emails through SMTP.', 'formidable' ),
 			);
 		}
-		if ( $pro_is_installed ) {
-			$views_addon        = FrmAddonsController::get_addon( 'views' );
-			$mailchimp_addon    = FrmAddonsController::get_addon( 'mailchimp' );
-			$registration_addon = FrmAddonsController::get_addon( 'registration' );
-			$api_addon          = FrmAddonsController::get_addon( 'api' );
-			$acf_addon          = FrmAddonsController::get_addon( 'acf' );
-			$signature_addon    = FrmAddonsController::get_addon( 'signature' );
 
-			if ( ! is_plugin_active( 'formidable-views/formidable-views.php' ) && isset( $views_addon['url'] ) ) {
-				self::$available_addons['formidable-views'] = array(
-					'title'      => esc_html__( 'Views', 'formidable' ),
-					'rel'        => $views_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $views_addon['excerpt'],
+		// Add-ons available when Pro is installed.
+		if ( $pro_is_installed ) {
+			$available_pro_addons = array(
+				'formidable-views'        => array(
+					'addon_key'   => 'views',
+					'title'       => __( 'Views', 'formidable' ),
+					'plugin_file' => 'formidable-views/formidable-views.php',
+				),
+				'formidable-mailchimp'    => array(
+					'addon_key'   => 'mailchimp',
+					'title'       => __( 'Mailchimp', 'formidable' ),
+					'plugin_file' => 'formidable-mailchimp/formidable-mailchimp.php',
+				),
+				'formidable-registration' => array(
+					'addon_key'   => 'registration',
+					'title'       => __( 'User Registration', 'formidable' ),
+					'plugin_file' => 'formidable-registration/formidable-registration.php',
+				),
+				'formidable-api'          => array(
+					'addon_key'   => 'api',
+					'title'       => __( 'Form Rest API', 'formidable' ),
+					'plugin_file' => 'formidable-api/formidable-api.php',
+				),
+				'formidable-signature'    => array(
+					'addon_key'   => 'signature',
+					'title'       => __( 'Signature Forms', 'formidable' ),
+					'plugin_file' => 'formidable-signature/signature.php',
+				),
+			);
+
+			// Include ACF Forms add-on if ACF is installed.
+			if ( class_exists( 'ACF' ) ) {
+				$available_pro_addons['formidable-acf'] = array(
+					'addon_key'   => 'acf',
+					'title'       => __( 'ACF Forms', 'formidable' ),
+					'plugin_file' => 'formidable-acf/formidable-acf.php',
 				);
 			}
-			if ( ! is_plugin_active( 'formidable-mailchimp/formidable-mailchimp.php' ) && isset( $mailchimp_addon['url'] ) ) {
-				self::$available_addons['formidable-mailchimp'] = array(
-					'title'      => esc_html__( 'Mailchimp', 'formidable' ),
-					'rel'        => $mailchimp_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $mailchimp_addon['excerpt'],
-				);
-			}
-			if ( ! is_plugin_active( 'formidable-registration/formidable-registration.php' ) && isset( $registration_addon['url'] ) ) {
-				self::$available_addons['formidable-registration'] = array(
-					'title'      => esc_html__( 'User Registration', 'formidable' ),
-					'rel'        => $registration_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $registration_addon['excerpt'],
-				);
-			}
-			if ( ! is_plugin_active( 'formidable-api/formidable-api.php' ) && isset( $api_addon['url'] ) ) {
-				self::$available_addons['formidable-api'] = array(
-					'title'      => esc_html__( 'Form Rest API', 'formidable' ),
-					'rel'        => $api_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $api_addon['excerpt'],
-				);
-			}
-			if ( class_exists( 'ACF' ) && ! is_plugin_active( 'formidable-acf/formidable-acf.php' ) && isset( $acf_addon['url'] ) ) {
-				self::$available_addons['formidable-acf'] = array(
-					'title'      => esc_html__( 'ACF Forms', 'formidable' ),
-					'rel'        => $acf_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $acf_addon['excerpt'],
-				);
-			}
-			if ( ! is_plugin_active( 'formidable-signature/signature.php' ) && isset( $signature_addon['url'] ) ) {
-				self::$available_addons['formidable-signature'] = array(
-					'title'      => esc_html__( 'Signature Forms', 'formidable' ),
-					'rel'        => $signature_addon['url'],
-					'is-checked' => false,
-					'help-text'  => $signature_addon['excerpt'],
-				);
+
+			foreach ( $available_pro_addons as $key => $data ) {
+				$addon       = FrmAddonsController::get_addon( $data['addon_key'] );
+				$plugin_file = $data['plugin_file'];
+
+				if ( ! is_plugin_active( $plugin_file ) && isset( $addon['url'] ) ) {
+					$is_installed = array_key_exists( $plugin_file, $plugins );
+
+					self::$available_addons[ $key ] = array(
+						'title'        => $data['title'],
+						'rel'          => $is_installed ? $plugin_file : $addon['url'],
+						'is-checked'   => false,
+						'is-installed' => $is_installed,
+						'help-text'    => $addon['excerpt'],
+					);
+				}
 			}
 		}//end if
-		if ( class_exists( 'GFForms' ) && ! is_plugin_active( 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php' ) ) {
+
+		// Gravity Forms Migrator add-on.
+		$gravity_forms_plugin = 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php';
+		if ( class_exists( 'GFForms' ) && ! is_plugin_active( $gravity_forms_plugin ) ) {
+			$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
+
 			self::$available_addons['formidable-gravity-forms-importer'] = array(
-				'title'      => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
-				'rel'        => 'formidable-gravity-forms-importer',
-				'is-checked' => false,
-				'is-vendor'  => true,
-				'help-text'  => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
+				'title'        => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
+				'rel'          => $is_installed_gravity_forms ? $gravity_forms_plugin : 'formidable-gravity-forms-importer',
+				'is-checked'   => false,
+				'is-vendor'    => true,
+				'is-installed' => $is_installed_gravity_forms,
+				'help-text'    => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
 			);
 		}
 	}
