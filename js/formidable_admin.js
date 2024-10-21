@@ -8447,7 +8447,7 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
-			showContextualShortcodesToPopup( input );
+			showContextualShortcodes( input );
 		}
 	}
 
@@ -8457,7 +8457,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} input
 	 * @returns {Void}
 	 */
-	function showContextualShortcodesToPopup( input ) {
+	function showContextualShortcodes( input ) {
 		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
 			return;
 		}
