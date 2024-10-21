@@ -1643,6 +1643,12 @@ class FrmFormsController {
 		return apply_filters( 'frm_user_shortcodes', $options );
 	}
 
+	/**
+	 * Returns shortcodes that are shown/hidden based on the context.
+	 *
+	 * @since x.x
+	 * @return array
+	 */
 	public static function get_contextual_shortcodes() {
 		return array(
 			'admin_email'        => __( 'Admin email', 'formidable' ),
