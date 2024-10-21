@@ -11140,7 +11140,8 @@ function frmAdminBuildJS() {
 		toggleAddonState,
 		purifyHtml,
 		loadApiEmailForm,
-		addMyEmailAddress
+		addMyEmailAddress,
+		showSaveAndReloadModal
 	};
 }
 
