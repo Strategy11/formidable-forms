@@ -6144,7 +6144,8 @@ function frmAdminBuildJS() {
 
 			if ( showSelect || showText ) {
 				fill.innerHTML = '';
-				if ( showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison ) ) {
+				const creatingValuesDropdown = showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison );
+				if ( creatingValuesDropdown ) {
 					input = document.createElement( 'select' );
 				} else {
 					input = document.createElement( 'input' );
@@ -6154,7 +6155,7 @@ function frmAdminBuildJS() {
 				input.id = optionID + '_' + metaKey;
 				fill.appendChild( input );
 
-				if ( showSelect ) {
+				if ( creatingValuesDropdown ) {
 					const fillField = document.getElementById( input.id );
 					fillDropdownOpts( fillField, {
 						sourceID: val,
