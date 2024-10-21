@@ -8447,7 +8447,7 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
-			showContextualShortcodes( input );
+			showOrHideContextualShortcodes( input );
 		}
 	}
 
@@ -8457,10 +8457,21 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} input
 	 * @returns {Void}
 	 */
-	function showContextualShortcodes( input ) {
-		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
+	function showOrHideContextualShortcodes( input ) {
+		if ( input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
+			showContextualShortcodes();
 			return;
 		}
+		hideContextualShortcodes();
+	}
+
+	/**
+	 * Show shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 * @returns {Void}
+	 */
+	function showContextualShortcodes() {
 		const shortcodes = getContextualShortcodes();
 		for ( let shortcode of shortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
@@ -8594,7 +8605,6 @@ function frmAdminBuildJS() {
 	}
 
 	function hideShortcodes( box ) {
-		hideContextualShortcodes();
 		let i, u, closeIcons, closeSvg;
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );
