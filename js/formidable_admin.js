@@ -8396,20 +8396,17 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function maybeShowSaveAndReloadModal( target ) {
-		const isProductTypeSelector = target.classList.contains( 'frmjs_prod_data_type_opt' );
-		if ( ! target.id.startsWith( 'field_options_type_' ) && ! isProductTypeSelector ) {
+		if ( ! target.id.startsWith( 'field_options_type_' ) ) {
 			return;
 		}
-		if ( ! isProductTypeSelector ) {
-			const idParts = target.id.split( '_' );
-			const fieldId = idParts.length && idParts[ idParts.length - 1 ];
-	
-			if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
-				// Do not show modal if the field type is reverted back to the original type when builder is loaded.
-				return;
-			}
+		const idParts = target.id.split( '_' );
+		const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+
+		if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
+			return;
 		}
-		showSaveAndReloadModal( __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' ) );
+		showSaveAndReloadModal();
 	}
 
 	/**
