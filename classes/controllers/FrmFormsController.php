@@ -1643,6 +1643,13 @@ class FrmFormsController {
 		return apply_filters( 'frm_user_shortcodes', $options );
 	}
 
+	public static function get_contextual_shortcodes() {
+		return array(
+			'admin_email'        => __( 'Admin email', 'formidable' ),
+			'default-from-email' => __( 'Default from email', 'formidable' ),
+		);
+	}
+
 	/**
 	 * Get an array of the helper shortcodes to display in the customization panel
 	 *
@@ -1650,19 +1657,18 @@ class FrmFormsController {
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
 		$entry_shortcodes = array(
-			'admin_email'        => __( 'Admin email', 'formidable' ),
-			'default-from-email' => __( 'Default from email', 'formidable' ),
-			'id'                 => __( 'Entry ID', 'formidable' ),
-			'key'                => __( 'Entry Key', 'formidable' ),
-			'post_id'            => __( 'Post ID', 'formidable' ),
-			'ip'                 => __( 'User IP', 'formidable' ),
-			'created-at'         => __( 'Entry created', 'formidable' ),
-			'updated-at'         => __( 'Entry updated', 'formidable' ),
-			''                   => '',
-			'siteurl'            => __( 'Site URL', 'formidable' ),
-			'sitename'           => __( 'Site Name', 'formidable' ),
+			'id'         => __( 'Entry ID', 'formidable' ),
+			'key'        => __( 'Entry Key', 'formidable' ),
+			'post_id'    => __( 'Post ID', 'formidable' ),
+			'ip'         => __( 'User IP', 'formidable' ),
+			'created-at' => __( 'Entry created', 'formidable' ),
+			'updated-at' => __( 'Entry updated', 'formidable' ),
+			''           => '',
+			'siteurl'    => __( 'Site URL', 'formidable' ),
+			'sitename'   => __( 'Site Name', 'formidable' ),
 		);
 
+		$entry_shortcodes = array_merge( self::get_contextual_shortcodes(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}

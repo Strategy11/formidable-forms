@@ -8458,10 +8458,10 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showContextualShortcodesToPopup( input ) {
-		const shortcodes = getContextualShortcodes();
 		if ( ! input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' ) ) {
 			return;
 		}
+		const shortcodes = getContextualShortcodes();
 		for ( let shortcode of shortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
 			if ( shortcodeLi ) {
@@ -8574,7 +8574,7 @@ function frmAdminBuildJS() {
 	 * @returns {Array}
 	 */
 	function getContextualShortcodes() {
-		return [ 'admin_email', 'default-from-email' ];
+		return JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
 	}
 
 	/**
