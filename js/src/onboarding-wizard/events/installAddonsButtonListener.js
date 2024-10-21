@@ -61,17 +61,20 @@ const onInstallAddonsButtonClick = async( event ) => {
  * Installs an add-on or plugin based on the provided plugin name and vendor status.
  *
  * @private
- * @param {string}  plugin           The unique identifier or name of the plugin or add-on to be installed.
- * @param {Object}  options          An object containing additional options for the installation.
- * @param {boolean} options.isVendor Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
+ * @param {string}  plugin              The unique identifier or name of the plugin or add-on to be installed.
+ * @param {Object}  options             An object containing additional options for the installation.
+ * @param {boolean} options.isInstalled Indicates whether the plugin is already installed.
+ * @param {boolean} options.isVendor    Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
  * @return {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
  */
-async function installAddon( plugin, {isVendor}) {
+async function installAddon( plugin, {isVendor, isInstalled}) {
 	// Prepare FormData for the POST request
 	const formData = new FormData();
-	formData.append( 'action', isVendor ? 'frm_install_plugin' : 'frm_install_addon' );
 	formData.append( 'nonce', nonce );
 	formData.append( 'plugin', plugin );
+
+	const addonAction = isInstalled ? 'frm_activate_addon' : 'frm_install_addon';
+	formData.append( 'action', isVendor ? 'frm_install_plugin' : addonAction );
 
 	try {
 		// Perform the POST request
