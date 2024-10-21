@@ -45,6 +45,9 @@ class FrmOnboardingWizardHelper {
 		if ( ! empty( $addon['is-vendor'] ) ) {
 			$attributes['data-is-vendor'] = 'true';
 		}
+		if ( ! empty( $addon['is-installed'] ) ) {
+			$attributes['data-is-installed'] = 'true';
+		}
 
 		FrmAppHelper::array_to_html_params( $attributes, true );
 	}
