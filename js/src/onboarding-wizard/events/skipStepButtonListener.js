@@ -27,7 +27,6 @@ function addSkipStepButtonEvents() {
  * Handles the click event on a "Skip" step button.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onSkipStepButtonClick = () => {

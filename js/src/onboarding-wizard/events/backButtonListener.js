@@ -27,7 +27,6 @@ function addBackButtonEvents() {
  * Handles the click event on a "Back" button.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onBackButtonClick = () => {
