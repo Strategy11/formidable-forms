@@ -55,10 +55,4 @@ class FrmFieldHidden extends FrmFieldType {
 	protected function html5_input_type() {
 		return 'hidden';
 	}
-	public function prepare_field_value( $value, $atts ) {
-		if ( is_array( $value ) ) {
-			return FrmAppHelper::maybe_json_encode( $value );
-		}
-		return $value;
-	}
 }
