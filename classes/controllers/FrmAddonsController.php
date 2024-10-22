@@ -870,17 +870,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Handle when the Upgrade submenu item is clicked.
-	 *
-	 * @since x.x This function was changed to no longer render a page, redirecting directly to the upgrade page instead.
-	 *
-	 * @return void
-	 */
-	public static function upgrade_to_pro() {
-		// TODO deprecate this.
-	}
-
-	/**
 	 * @since 5.5.2
 	 *
 	 * @param string $plugin
