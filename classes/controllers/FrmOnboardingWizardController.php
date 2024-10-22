@@ -327,6 +327,10 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
+		if ( ! self::should_send_email_to_active_campaign( $user->user_email ) ) {
+			return;
+		}
+
 		wp_remote_post(
 			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
 			array(
@@ -343,6 +347,30 @@ class FrmOnboardingWizardController {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Try to skip any fake emails.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $email
+	 * @return bool
+	 */
+	private static function should_send_email_to_active_campaign( $email ) {
+		$substrings = array(
+			'@wpengine.local',
+			'@example.com',
+			'@localhost',
+			'@local.dev',
+			'@local.test',
+		);
+		foreach ( $substrings as $substring ) {
+			if ( false !== strpos( $email, $substring ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
