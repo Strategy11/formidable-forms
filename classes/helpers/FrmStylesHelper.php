@@ -880,6 +880,24 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get wrapper classname for style editor sections.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $section_type
+	 *
+	 * @return string The style editor wrapper classname.
+	 */
+	public static function style_editor_get_wrapper_classname( $section_type ) {
+		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$classname         = 'frm-style-editor-form';
+		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
+		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
+
+		return $classname;
+	}
+
+	/**
 	 * Retrieve the background image URL of the submit button.
 	 * It may be either a full URL string (used in versions prior to 6.14) or a numeric attachment ID (introduced in version 6.14).
 	 *

@@ -11,9 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
-		<div class="frm-circled-icon frm-circled-icon-large frm-flex-center">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_puzzle_icon' ); ?>
-		</div>
+		<img class="frm-onboarding-logo" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.svg" alt="<?php esc_attr_e( 'Formidable Onboarding Wizard Logo', 'formidable' ); ?>" />
 	</div>
 
 	<div class="frm-card-box-content frm-fields">
@@ -45,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="frm-cta frm-cta-border frm-cta-green frm-p-sm frm-mt-sm">
-			<span class="frm-banner-title frm-font-semibold frm-flex">
+			<span class="frm-flex frm-banner-title frm-font-semibold">
 				<?php
 				printf(
 					/* translators: %s: The count of add-ons */
@@ -54,6 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 				?>
 			</span>
+
 			<span class="frm-banner-text frm-text-xs">
 				<?php
 				if ( ! $pro_is_installed ) {
@@ -73,13 +72,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				?>
 			</span>
+
+			<?php if ( ! $pro_is_installed ) { ?>
+				<div class="frm-cta-footer frm-flex frm-gap-xs frm-text-xs">
+					<span><?php esc_html_e( 'Already have Pro?', 'formidable' ); ?></span>
+
+					<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="frm-link-with-external-icon" target="_blank">
+						<span><?php esc_html_e( 'Connect Account', 'formidable' ); ?></span>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
+					</a>
+				</div>
+			<?php } ?>
 		</div>
 	</div>
 
 	<?php
 	FrmOnboardingWizardHelper::print_footer(
 		array(
-			'primary-button-text' => esc_html__( 'Install & Finish Setup', 'formidable' ),
+			'primary-button-text' => __( 'Install & Finish Setup', 'formidable' ),
 			'primary-button-id'   => 'frm-onboarding-install-addons-button',
 		)
 	);

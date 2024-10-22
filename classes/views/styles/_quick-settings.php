@@ -25,13 +25,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'action_slug' => 'submit_bg_color',
 			'will_change' => array(
 				$frm_style->get_field_name( 'submit_bg_color' ),
-				$frm_style->get_field_name( 'slider_bar_color' ),
 				$frm_style->get_field_name( 'slider_color' ),
 				$frm_style->get_field_name( 'border_color_active' ),
 				$frm_style->get_field_name( 'submit_border_color' ),
 				$frm_style->get_field_name( 'progress_active_bg_color' ),
 				$frm_style->get_field_name( 'date_band_color' ),
 				$frm_style->get_field_name( 'date_head_bg_color' ),
+				$frm_style->get_field_name( 'toggle_on_color' ),
+				$frm_style->get_field_name( 'submit_active_border_color' ),
+				$frm_style->get_field_name( 'submit_active_bg_color' ),
+				$frm_style->get_field_name( 'submit_hover_bg_color' ),
+				$frm_style->get_field_name( 'submit_hover_border_color' ),
+				$frm_style->get_field_name( 'toggle_on_color' ),
+
 			),
 		)
 	);
