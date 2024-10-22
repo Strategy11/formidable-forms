@@ -610,7 +610,7 @@ class FrmStylesHelper {
 	 * @return float
 	 */
 	private static function get_base_font_size_scale( $key, $value, $defaults ) {
-		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) || 0 === (int) $value ) {
 			return 1;
 		}
 
