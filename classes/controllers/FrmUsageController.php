@@ -68,10 +68,35 @@ class FrmUsageController {
 
 	/**
 	 * Loads scripts.
+	 *
+	 * @since x.x
 	 */
 	public static function load_scripts() {
-		// TODO: check page.
-		wp_enqueue_script( 'frm-usage-tracking', FrmAppHelper::plugin_url() . '/js/admin/usage-tracking.js', array( 'formidable_dom' ), FrmAppHelper::$plug_version, true );
+		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) ) {
+			wp_enqueue_script( 'frm-usage-tracking', FrmAppHelper::plugin_url() . '/js/admin/usage-tracking.js', array( 'formidable_dom' ), FrmAppHelper::$plug_version, true );
+		}
+	}
+
+	/**
+	 * Checks if is forms list page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_forms_list_page() {
+		if ( ! FrmAppHelper::is_admin_page() ) {
+			return false;
+		}
+
+		// Check Trash page.
+		$form_type = FrmAppHelper::simple_get( 'form_type' );
+		if ( $form_type && 'published' !== $form_type ) {
+			return false;
+		}
+
+		// Check edit or settings page.
+		return ! FrmAppHelper::simple_get( 'frm_action' );
 	}
 
 	/**

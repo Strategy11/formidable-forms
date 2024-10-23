@@ -19,7 +19,7 @@ class FrmUsage {
 		}
 
 		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
-		// $ep = base64_encode( 'http://localhost:8080/snapshot' ); // Uncomment for testing
+		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
 		// Setup variable for wp_remote_request.
