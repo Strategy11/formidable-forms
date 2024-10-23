@@ -317,7 +317,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return void
 	 */
@@ -352,7 +352,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Try to skip any fake emails.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $email
 	 * @return bool
@@ -749,12 +749,12 @@ class FrmOnboardingWizardController {
 	 * Validates if the Onboarding Wizard page is being displayed.
 	 *
 	 * @since 6.9
-	 * @deprecated x.x
+	 * @deprecated 6.16
 	 *
 	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
 	 */
 	public static function is_onboarding_wizard_displayed() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16' );
 		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 }
