@@ -120,6 +120,7 @@ class FrmStylesController {
 			return;
 		}
 
+		FrmStyleComponent::register_assets();
 		self::load_pro_hooks();
 
 		$version = FrmAppHelper::plugin_version();
@@ -324,7 +325,13 @@ class FrmStylesController {
 
 		$style_id = self::get_style_id_for_styler();
 		if ( ! $style_id ) {
-			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+			$error_args   = array(
+				'title'      => __( 'No styles', 'formidable' ),
+				'body'       => __( 'You must have a style to use the Visual Styler.', 'formidable' ),
+				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
@@ -333,8 +340,15 @@ class FrmStylesController {
 		}
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! is_object( $form ) ) {
-			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+			$error_args   = array(
+				'title'      => __( 'No forms', 'formidable' ),
+				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
+				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$frm_style     = new FrmStyle( $style_id );
@@ -346,9 +360,7 @@ class FrmStylesController {
 		/**
 		 * @since 6.0
 		 *
-		 * @param array {
-		 *     @type stdClass $form
-		 * }
+		 * @param array{form:\stdClass} $data
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
@@ -733,6 +745,7 @@ class FrmStylesController {
 		$frm_style     = new FrmStyle();
 		$styles        = $frm_style->get_all();
 		$default_style = $frm_style->get_default_style( $styles );
+		$frm_settings  = FrmAppHelper::get_settings();
 
 		if ( ! $forms ) {
 			$forms = FrmForm::get_published_forms();
@@ -752,11 +765,11 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			$new_style      = isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$previous_style = isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( $new_style == $previous_style ) {
+			if ( ! isset( $_POST['style'] ) || ! isset( $_POST['style'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				continue;
 			}
+
+			$new_style = sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			$form->options['custom_style'] = $new_style;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
@@ -893,21 +906,24 @@ class FrmStylesController {
 			wp_die();
 		}
 
-		$frm_style            = new FrmStyle();
-		$defaults             = $frm_style->get_defaults();
-		$default_post_content = FrmAppHelper::prepare_and_encode( $defaults );
-		$where                = array(
+		$frm_style              = new FrmStyle();
+		$default_template_style = $frm_style->get_default_template_style( $style_id );
+		$where                  = array(
 			'ID'        => $style_id,
 			'post_type' => self::$post_type,
 		);
+
+		$style_object               = $frm_style->get_new();
+		$style_object->post_content = json_decode( $default_template_style, true );
+
 		global $wpdb;
-		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_post_content ), $where );
+		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_template_style ), $where );
 
 		// Save the settings after resetting to default or the old style will still appear.
 		$frm_style->save_settings();
 
 		$data = array(
-			'style' => FrmStylesCardHelper::get_style_param_for_card( $frm_style->get_new() ),
+			'style' => FrmStylesCardHelper::get_style_param_for_card( $style_object ),
 		);
 		wp_send_json_success( $data );
 		wp_die();
@@ -924,7 +940,8 @@ class FrmStylesController {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$frm_style = new FrmStyle();
+		$is_loaded_via_ajax = true;
+		$frm_style          = new FrmStyle();
 
 		// Intentionally avoid defaults here so nothing gets removed from our style.
 		$defaults = array();

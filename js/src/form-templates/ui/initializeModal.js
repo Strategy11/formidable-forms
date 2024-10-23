@@ -1,9 +1,14 @@
 /**
+ * External dependencies
+ */
+import { hasQueryParam } from 'core/utils';
+
+
+/**
  * Internal dependencies
  */
 import { addElements, getElements } from '../elements';
 import { MODAL_SIZES } from '../shared';
-import { hasQueryParam } from '../utils';
 import { showLeaveEmailModal } from './';
 
 let modalWidget = null;

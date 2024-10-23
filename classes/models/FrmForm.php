@@ -659,6 +659,9 @@ class FrmForm {
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
 		if ( $query_results ) {
 			// Delete all form actions linked to this form
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( 'email' );
 			$action_control->destroy( $id, 'all' );
 

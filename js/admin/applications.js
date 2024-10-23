@@ -5,7 +5,7 @@
 		return;
 	}
 
-	const __ = wp.i18n.__;
+	const { __, sprintf } = wp.i18n;
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
@@ -210,7 +210,7 @@
 
 	function getAllItemsCategory() {
 		/* translators: %d: Number of application templates. */
-		return __( 'All Items (%d)', 'formidable' ).replace( '%d', state.templates.length );
+		return sprintf( __( 'All Items (%d)', 'formidable' ), state.templates.length );
 	}
 
 	function handleCategorySelect( category ) {
@@ -320,7 +320,7 @@
 
 		function getCardContent() {
 			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
-			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
+			const filenameToUse = data.hasLiteThumbnail ? data.key +  ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div({
 				className: 'frm-application-card-image-wrapper',
 				child: img({ src: thumbnailFolderUrl + filenameToUse })
@@ -374,7 +374,7 @@
 		});
 		control.setAttribute( 'role', 'button' );
 		/* translators: %s: Application Template Name */
-		const ariaDescription = __( '%s Template' ).replace( '%s', data.name );
+		const ariaDescription = sprintf( __( '%s Template', 'formidable' ), data.name );
 		control.setAttribute( 'aria-description', ariaDescription );
 		control.addEventListener(
 			'click',
@@ -419,8 +419,7 @@
 					children: [
 						span(
 							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
-							__( 'Access to this application requires the %s plan.', 'formidable' )
-								.replace( '%s', data.requires )
+							sprintf( __( 'Access to this application requires the %s plan.', 'formidable' ), data.requires )
 						),
 						a({
 							text: getUpgradeNowText(),

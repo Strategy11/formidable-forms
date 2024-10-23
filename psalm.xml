@@ -399,6 +399,7 @@
 				<file name="classes/controllers/FrmSMTPController.php" />
 				<file name="classes/models/FrmEntryShortcodeFormatter.php" />
 				<file name="classes/helpers/FrmAppHelper.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</PossiblyNullReference>
 		<DeprecatedMethod>
@@ -436,5 +437,24 @@
 				<file name="classes/models/FrmFormTemplateApi.php" />
 			</errorLevel>
 		</UndefinedMethod>
+		<PossiblyInvalidMethodCall>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmFormAction.php" />
+			</errorLevel>
+		</PossiblyInvalidMethodCall>
+		<UndefinedMethod>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmCSVExportHelper.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/models/FrmFormTemplateApi.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</UndefinedMethod>
+		<InvalidMethodCall>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFormActionsController.php" />
+			</errorLevel>
+		</InvalidMethodCall>
 	</issueHandlers>
 </psalm>

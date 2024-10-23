@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.13';
+	public static $plug_version = '6.16';
 
 	/**
 	 * @var bool
@@ -1367,10 +1367,16 @@ class FrmAppHelper {
 		?>
 		<div class="frm-upgrade-bar">
 				<?php
+				$upgrade_link = self::admin_upgrade_link(
+					array(
+						'medium'  => 'settings-license',
+						'content' => 'lite-banner',
+					)
+				);
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
-					'<a href="' . esc_url( self::admin_upgrade_link( 'settings-license' ) ) . '">',
+					'<a href="' . esc_url( $upgrade_link ) . '">',
 					'</a>'
 				);
 				?>
@@ -3483,7 +3489,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Show a message if the browser or PHP version is below the recommendations.
+	 * Show a message if the PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
 	 * @return void
@@ -3492,12 +3498,6 @@ class FrmAppHelper {
 		$message = array();
 		if ( version_compare( phpversion(), '7.0', '<' ) ) {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' );
-		}
-
-		$browser = self::get_server_value( 'HTTP_USER_AGENT' );
-		$is_ie   = strpos( $browser, 'MSIE' ) !== false;
-		if ( $is_ie ) {
-			$message[] = __( 'You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome).', 'formidable' );
 		}
 
 		foreach ( $message as $m ) {
@@ -4322,6 +4322,43 @@ class FrmAppHelper {
 		?>
 		<span <?php self::array_to_html_params( $atts, true ); ?>>
 			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Prints errors for settings in onboarding wizard or template settings.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array $args Args.
+	 *
+	 * @return void
+	 */
+	public static function print_setting_error( $args ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'     => '',
+				'errors' => array(),
+				'class'  => '',
+			)
+		);
+
+		$args['class'] .= ' frm-validation-error frm-mt-xs frm_hidden';
+		?>
+		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
+			<?php
+			if ( is_array( $args['errors'] ) ) {
+				foreach ( $args['errors'] as $key => $msg ) {
+					?>
+					<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
+					<?php
+				}
+			} else {
+				echo '<span>' . esc_html( $args['errors'] ) . '</span>';
+			}
+			?>
 		</span>
 		<?php
 	}
