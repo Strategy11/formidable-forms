@@ -8438,7 +8438,36 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
+			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
+	function showOrHideContextualShortcodes( input ) {
+		const shouldShowShortcodes = input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' );
+		const shortcodes = getContextualShortcodes();
+		for ( let shortcode of shortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			if ( shortcodeLi ) {
+				shortcodeLi.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
+			}
+		}
+	}
+
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 *
+	 * @returns {Array}
+	 */
+	function getContextualShortcodes() {
+		return JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
 	}
 
 	function fieldUpdated() {
