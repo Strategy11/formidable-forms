@@ -6608,7 +6608,7 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' ).textContent.trim() === `(${__( 'no title', 'formidable' )})`;
+		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === `(${__( 'no title', 'formidable' )})`;
 	}
 
 	/**
