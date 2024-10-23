@@ -6142,8 +6142,10 @@ function frmAdminBuildJS() {
 			}
 
 			if ( showSelect || showText ) {
+				const comparison = document.querySelector( `#frm_logic_${fieldID}_${metaKey} [name="field_options[hide_field_cond_${fieldID}][]"]` ).value;
 				fill.innerHTML = '';
-				if ( showSelect ) {
+				const creatingValuesDropdown = showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison );
+				if ( creatingValuesDropdown ) {
 					input = document.createElement( 'select' );
 				} else {
 					input = document.createElement( 'input' );
@@ -6153,7 +6155,7 @@ function frmAdminBuildJS() {
 				input.id = optionID + '_' + metaKey;
 				fill.appendChild( input );
 
-				if ( showSelect ) {
+				if ( creatingValuesDropdown ) {
 					const fillField = document.getElementById( input.id );
 					fillDropdownOpts( fillField, {
 						sourceID: val,
@@ -11049,7 +11051,8 @@ function frmAdminBuildJS() {
 		toggleAddonState,
 		purifyHtml,
 		loadApiEmailForm,
-		addMyEmailAddress
+		addMyEmailAddress,
+		fillDropdownOpts,
 	};
 }
 
