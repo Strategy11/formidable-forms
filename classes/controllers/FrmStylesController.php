@@ -96,7 +96,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function disable_form_css() {
-		add_filter( 'get_frm_stylesheet', '__return_false' );
+		add_filter( 'get_frm_stylesheet', '__return_empty_array' );
 	}
 
 	/**
