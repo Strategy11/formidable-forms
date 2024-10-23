@@ -51,7 +51,7 @@ class FrmApplicationTemplate {
 	/**
 	 * Newer templates now use .webp files instead of .png.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return array<string>
 	 */

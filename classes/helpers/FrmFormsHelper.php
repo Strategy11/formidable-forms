@@ -1825,7 +1825,7 @@ BEFORE_HTML;
 	 * Strip characters similar to the WordPress sanitize_html_class function, but allow for [ and ].
 	 * This allows shortcodes inside of the layout classes setting.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $classname
 	 * @return string

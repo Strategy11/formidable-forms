@@ -157,7 +157,7 @@ class FrmInstallPlugin {
 	/**
 	 * Check if a plugin is installed.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $plugin_file
 	 * @return bool

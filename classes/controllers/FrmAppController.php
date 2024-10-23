@@ -43,7 +43,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return void
 	 */
@@ -83,7 +83,7 @@ class FrmAppController {
 	/**
 	 * Black Friday sale is from November 25 to 29.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return bool
 	 */
@@ -94,7 +94,7 @@ class FrmAppController {
 	/**
 	 * Cyber Monday sale rules from November 30 to December 4.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return bool
 	 */
@@ -106,7 +106,7 @@ class FrmAppController {
 	 * Check if the current time is within a sale date range.
 	 * Our sales are based on Eastern Time, so we use New York's timezone.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $from The beginning of the date range. Y-m-d format is expected.
 	 * @param string $to   The end of the date range. Y-m-d format is expected.
