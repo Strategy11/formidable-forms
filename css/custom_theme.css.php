@@ -871,8 +871,8 @@ a.frm_save_draft{
 	border-radius:50%;
 }
 
-.with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius: calc(var(--border-radius) / 2);
+.with_frm_style .frm_checkbox input[type=checkbox] {
+	border-radius: calc(var(--border-radius) / 2) !important;
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -900,11 +900,13 @@ a.frm_save_draft{
 <?php if ( $pro_is_installed ) : ?>
 .frm_forms.with_frm_style .frm_fields_container .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
+.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	border-color: var(--border-color-active) !important;
 }
 
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
+.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	background-color: var(--border-color-active) !important;
 }
 
