@@ -8383,7 +8383,7 @@ function frmAdminBuildJS() {
 	 * @param {Event} event
 	 * @returns {Void}
 	 */
-	function handleChangeEventonDocument( event ) {
+	function handleBuilderChangeEvent( event ) {
 		maybeShowSaveAndReloadModal( event.target );
 	}
 
@@ -10604,7 +10604,7 @@ function frmAdminBuildJS() {
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
-			document.addEventListener( 'change', handleChangeEventonDocument );
+			document.addEventListener( 'change', handleBuilderChangeEvent );
 		},
 
 		settingsInit: function() {
