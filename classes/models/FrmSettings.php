@@ -84,6 +84,7 @@ class FrmSettings {
 	public $summary_emails_recipients;
 
 	public $default_email;
+	public $from_email;
 	public $currency;
 
 	/**
@@ -158,8 +159,7 @@ class FrmSettings {
 
 			'email_to'                  => '[admin_email]',
 			'no_ips'                    => 0,
-			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip'          => false,
+			'custom_header_ip'          => 0,
 			'tracking'                  => FrmAppHelper::pro_is_installed(),
 			// Only enable this by default for the main site.
 			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
@@ -403,6 +403,7 @@ class FrmSettings {
 		$this->load_style        = $params['frm_load_style'];
 		$this->custom_css        = $params['frm_custom_css'];
 		$this->default_email     = $params['frm_default_email'];
+		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );

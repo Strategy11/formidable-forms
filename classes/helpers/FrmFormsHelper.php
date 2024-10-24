@@ -481,8 +481,8 @@ BEFORE_HTML;
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
 		if ( ! empty( $classes ) ) {
 			$classes      = implode( ' ', $classes );
-			$button_class = ' class="frm_button_submit';
-			if ( strpos( $button_parts[0], $button_class ) !== false ) {
+			$button_class = 'frm_button_submit';
+			if ( preg_match( '/\bclass="[^"]*?\b' . preg_quote( $button_class, '/' ) . '\b[^"]*?"/', $button_parts[0] ) ) {
 				$button_parts[0] = str_replace( $button_class, $button_class . ' ' . esc_attr( $classes ), $button_parts[0] );
 			} else {
 				$button_parts[0] .= ' class="' . esc_attr( $classes ) . '"';
@@ -1108,6 +1108,10 @@ BEFORE_HTML;
 		return $actions;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link( $data ) {
 		$form_id = self::get_form_id_from_data( $data );
 
@@ -1120,6 +1124,10 @@ BEFORE_HTML;
 		return $link;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
@@ -1129,8 +1137,8 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed $data
-	 * @return int
+	 * @param int|object|string $data
+	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
 		if ( is_object( $data ) ) {
@@ -1349,7 +1357,7 @@ BEFORE_HTML;
 		$atts     = array_merge( $defaults, $atts );
 
 		// Filter out ignored categories.
-		$ignore     = self::ignore_template_categories();
+		$ignore     = self::get_license_types();
 		$categories = array_diff( $categories, $ignore );
 
 		// Define icons mapping.
@@ -1406,17 +1414,6 @@ BEFORE_HTML;
 		echo '>';
 			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
-	}
-
-	/**
-	 * Retrieves the list of template categories to ignore.
-	 *
-	 * @since 4.03.01
-	 *
-	 * @return string[] Array of categories to ignore.
-	 */
-	public static function ignore_template_categories() {
-		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
@@ -1503,7 +1500,7 @@ BEFORE_HTML;
 
 		?>
 		<p class="frm_plan_required">
-			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
 			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
 				<?php echo esc_html( $requires ); ?>
 			</a>
@@ -1522,22 +1519,62 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$plans = array( 'free', 'Basic', 'Personal', 'Plus', 'Creator', 'Business', 'Elite' );
+		$plans = self::get_license_types();
 
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
-					// Show the current package name.
-					$category = 'Plus';
-				}
+				$category = self::convert_legacy_package_names( $category );
 
 				return $category;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Converts legacy package names to the current standard package name.
+	 *
+	 * @since 6.15
+	 * @param string $package_name
+	 * @return string The updated package name.
+	 */
+	public static function convert_legacy_package_names( $package_name ) {
+		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
+			$package_name = 'Plus';
+		}
+
+		return $package_name;
+	}
+
+	/**
+	 * Get the license types.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public static function get_license_types( $args = array() ) {
+		$defaults = array(
+			'include_all' => true,
+			'case_lower'  => false,
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		$license_types = array( 'Basic', 'Plus', 'Business', 'Elite' );
+
+		if ( $args['include_all'] ) {
+			$license_types = array_merge( array( 'free', 'Personal', 'Creator' ), $license_types );
+		}
+
+		if ( $args['case_lower'] ) {
+			$license_types = array_map( 'strtolower', $license_types );
+		}
+
+		return $license_types;
 	}
 
 	/**
@@ -1785,6 +1822,25 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Strip characters similar to the WordPress sanitize_html_class function, but allow for [ and ].
+	 * This allows shortcodes inside of the layout classes setting.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $classname
+	 * @return string
+	 */
+	public static function sanitize_layout_class( $classname ) {
+		// Strip out any percent-encoded characters.
+		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classname );
+
+		// Limit to A-Z, a-z, 0-9, '_', '-', '[', ']'.
+		$sanitized = preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
+
+		return $sanitized;
+	}
+
+	/**
 	 * @since 3.0
 	 * @deprecated 6.11
 	 *
@@ -1803,5 +1859,19 @@ BEFORE_HTML;
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
+	}
+
+	/**
+	 * Retrieves the list of template categories to ignore.
+	 *
+	 * @since 4.03.01
+	 * @deprecated 6.15
+	 *
+	 * @return string[] Array of categories to ignore.
+	 */
+	public static function ignore_template_categories() {
+		_deprecated_function( __METHOD__, '6.15' );
+
+		return self::get_license_types();
 	}
 }

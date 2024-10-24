@@ -447,14 +447,16 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array       $settings
-	 * @param object|null $field_info
+	 * @param array             $settings
+	 * @param FrmFieldType|null $field_info
 	 *
 	 * @return array
 	 */
 	public static function display_field_options( $settings, $field_info = null ) {
 		if ( $field_info ) {
-			$settings               = $field_info->display_field_settings();
+			$settings = $field_info->display_field_settings();
+
+			// Field appears to be protected but there is a __get function in FrmFieldType that makes this public.
 			$settings['field_data'] = $field_info->field;
 		}
 
@@ -638,19 +640,7 @@ class FrmFieldsController {
 			return;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-
-		if ( $frm_settings->use_html ) {
-			self::add_placeholder_to_input( $field, $add_html );
-		} else {
-			self::add_frmval_to_input( $field, $add_html );
-
-			$class[] = 'frm_toggle_default';
-
-			if ( $field['value'] == $field['placeholder'] ) {
-				$class[] = 'frm_default';
-			}
-		}
+		self::add_placeholder_to_input( $field, $add_html );
 	}
 
 	/**
@@ -925,7 +915,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( 'opt' === $k ) {
+			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
 
@@ -942,6 +932,21 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Disallow possibly unsafe attributees (that trigger JavaScript) when unasfe HTML is not allowed.
+	 *
+	 * @since 6.11.2
+	 *
+	 * @param string $key The option key.
+	 * @return bool
+	 */
+	private static function should_allow_input_attribute( $key ) {
+		if ( ! FrmAppHelper::should_never_allow_unfiltered_html() ) {
+			return true;
+		}
+		return FrmAppHelper::input_key_is_safe( $key );
+	}
+
+	/**
 	 * Add pattern attribute.
 	 *
 	 * @since 3.0
@@ -955,14 +960,10 @@ class FrmFieldsController {
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
 		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
-			$frm_settings = FrmAppHelper::get_settings();
+			$format = FrmEntryValidate::phone_format( $field );
+			$format = substr( $format, 2, - 1 );
 
-			if ( $frm_settings->use_html ) {
-				$format = FrmEntryValidate::phone_format( $field );
-				$format = substr( $format, 2, - 1 );
-
-				$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
-			}
+			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
 		}
 	}
 

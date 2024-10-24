@@ -253,6 +253,16 @@ namespace {
 		 */
 		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
 		}
+
+		/**
+		 * @param object $entry
+		 * @param object $field
+		 * @param array  $atts
+		 *
+		 * @return string
+		 */
+		public static function prepare_child_display_value( $entry, $field, $atts ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**
@@ -352,6 +362,36 @@ namespace {
 	 * @return bool
 	 */
 	function akismet_test_mode() {
+	}
+
+	/** WP Optimize plugin */
+	class WP_Optimize {
+		/**
+		 * @return WPO_Page_Cache
+		 */
+		public function get_page_cache() {
+		}
+	}
+	class WPO_Page_Cache {
+		/**
+		 * @return bool
+		 */
+		public function purge() {
+		}
+	}
+	/**
+	 * @return WP_Optimize
+	 */
+	function WP_Optimize() {
+	}
+
+	/**
+	 * Function from W3 Total cache.
+	 *
+	 * @param array|null $extras Extras.
+	 * @return void
+	 */
+	function w3tc_flush_all( $extras = null ) {
 	}
 }
 

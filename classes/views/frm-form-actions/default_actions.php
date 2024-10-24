@@ -201,7 +201,7 @@ class FrmDefHrsAction extends FrmFormAction {
 class FrmDefConvertKitAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_convertkit_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = '#fb686f';
-		parent::__construct( 'convertkit', 'ConvertKit', $action_ops );
+		$action_ops['color'] = 'rgb(68 177 255)';
+		parent::__construct( 'convertkit', 'Kit', $action_ops );
 	}
 }

@@ -16,7 +16,7 @@ jobs:
         with:
           php-version: 8.0
           coverage: none
-          ini-values: display_errors = on, error_reporting = E_ALL, opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
+          ini-values: display_errors = on, error_reporting = E_ALL
           tools: composer
 
       - name: "💽  Installing Composer Packages"

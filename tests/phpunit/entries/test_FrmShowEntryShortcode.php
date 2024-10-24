@@ -22,7 +22,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected $extra_fields = array( 'html' );
 	protected $tr_style     = ' style="background-color:#ffffff;"';
-	protected $td_style     = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
+	protected $td_style     = ' style="text-align:left;color:#1D2939;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	protected $is_repeater_child = false;
 
@@ -30,7 +30,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		parent::__construct();
 
 		$defaults       = $this->get_defaults();
-		$this->td_style = str_replace( '#555555', $defaults['text_color'], $this->td_style );
+		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
 		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
 	}
 

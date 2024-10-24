@@ -4,6 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStyle {
+
+	/**
+	 * The meta name of default template style.
+	 *
+	 * @since 6.14
+	 * @var string
+	 */
+	private $default_template_style_meta_name = 'frm_style_default';
+
 	/**
 	 * Unique ID number of the current instance.
 	 *
@@ -131,6 +140,8 @@ class FrmStyle {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
+
+			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
 
 			$action_ids[] = $this->save( $new_instance );
 		}//end foreach
@@ -609,7 +620,7 @@ class FrmStyle {
 			'direction'                  => is_rtl() ? 'rtl' : 'ltr',
 			'fieldset'                   => '0px',
 			'fieldset_color'             => '000000',
-			'fieldset_padding'           => '0 0 15px 0',
+			'fieldset_padding'           => '0px 0px 15px 0px',
 			'fieldset_bg_color'          => '',
 
 			'title_size'                 => '40px',
@@ -617,40 +628,40 @@ class FrmStyle {
 			'title_margin_top'           => '10px',
 			'title_margin_bottom'        => '60px',
 			'form_desc_size'             => '14px',
-			'form_desc_color'            => '666666',
+			'form_desc_color'            => '98A2B3',
 			'form_desc_margin_top'       => '10px',
 			'form_desc_margin_bottom'    => '25px',
-			'form_desc_padding'          => '0',
+			'form_desc_padding'          => '0px',
 
 			'font'                       => '',
 			'font_size'                  => '15px',
-			'label_color'                => '3f4b5b',
+			'label_color'                => '344054',
 			'weight'                     => 'normal',
 			'position'                   => 'none',
 			'align'                      => 'left',
 			'width'                      => '150px',
-			'required_color'             => 'B94A48',
+			'required_color'             => 'F04438',
 			'required_weight'            => 'bold',
-			'label_padding'              => '0 0 3px 0',
+			'label_padding'              => '0px 0px 5px 0px',
 
 			'description_font_size'      => '12px',
-			'description_color'          => '666666',
+			'description_color'          => '667085',
 			'description_weight'         => 'normal',
 			'description_style'          => 'normal',
 			'description_align'          => 'left',
-			'description_margin'         => '0',
+			'description_margin'         => '0px',
 
 			'field_font_size'            => '14px',
-			'field_height'               => '32px',
+			'field_height'               => '36px',
 			'line_height'                => 'normal',
 			'field_width'                => '100%',
 			'auto_width'                 => false,
-			'field_pad'                  => '6px 10px',
+			'field_pad'                  => '8px 12px',
 			'field_margin'               => '20px',
 			'field_weight'               => 'normal',
-			'text_color'                 => '555555',
+			'text_color'                 => '1D2939',
 			// 'border_color_hv'   => 'cccccc',
-			'border_color'               => 'BFC3C8',
+			'border_color'               => 'D0D5DD',
 			'field_border_width'         => '1px',
 			'field_border_style'         => 'solid',
 
@@ -658,32 +669,32 @@ class FrmStyle {
 			// 'bg_color_hv'       => 'ffffff',
 			'remove_box_shadow'          => '',
 			'bg_color_active'            => 'ffffff',
-			'border_color_active'        => '66afe9',
+			'border_color_active'        => '4199FD',
 			'remove_box_shadow_active'   => '',
 			'text_color_error'           => '444444',
 			'bg_color_error'             => 'ffffff',
-			'border_color_error'         => 'B94A48',
+			'border_color_error'         => 'F04438',
 			'border_width_error'         => '1px',
 			'border_style_error'         => 'solid',
-			'bg_color_disabled'          => 'ffffff',
-			'border_color_disabled'      => 'E5E5E5',
-			'text_color_disabled'        => 'A1A1A1',
+			'bg_color_disabled'          => 'F9FAFB',
+			'border_color_disabled'      => 'D0D5DD',
+			'text_color_disabled'        => '667085',
 
 			'radio_align'                => 'block',
 			'check_align'                => 'block',
-			'check_font_size'            => '13px',
-			'check_label_color'          => '444444',
+			'check_font_size'            => '14px',
+			'check_label_color'          => '1D2939',
 			'check_weight'               => 'normal',
 
 			'section_font_size'          => '18px',
-			'section_color'              => '444444',
+			'section_color'              => '344054',
 			'section_weight'             => 'bold',
-			'section_pad'                => '15px 0 3px 0',
-			'section_mar_top'            => '15px',
+			'section_pad'                => '32px 0px 3px 0px',
+			'section_mar_top'            => '30px',
 			'section_mar_bottom'         => '30px',
 			'section_bg_color'           => '',
-			'section_border_color'       => 'e8e8e8',
-			'section_border_width'       => '2px',
+			'section_border_color'       => 'EAECF0',
+			'section_border_width'       => '1px',
 			'section_border_style'       => 'solid',
 			'section_border_loc'         => '-top',
 			'collapse_icon'              => '6',
@@ -692,30 +703,30 @@ class FrmStyle {
 			'repeat_icon_color'          => 'ffffff',
 
 			'submit_style'               => false,
-			'submit_font_size'           => '15px',
+			'submit_font_size'           => '14px',
 			'submit_width'               => 'auto',
 			'submit_height'              => 'auto',
-			'submit_bg_color'            => '579AF6',
-			'submit_border_color'        => '579AF6',
+			'submit_bg_color'            => '4199FD',
+			'submit_border_color'        => '4199FD',
 			'submit_border_width'        => '1px',
 			'submit_text_color'          => 'ffffff',
 			'submit_weight'              => 'normal',
-			'submit_border_radius'       => '4px',
+			'submit_border_radius'       => '8px',
 			'submit_bg_img'              => '',
 			'submit_margin'              => '10px',
-			'submit_padding'             => '10px 20px',
+			'submit_padding'             => '8px 16px',
 			'submit_shadow_color'        => 'eeeeee',
-			'submit_hover_bg_color'      => 'efefef',
-			'submit_hover_color'         => '444444',
-			'submit_hover_border_color'  => 'cccccc',
-			'submit_active_bg_color'     => 'efefef',
-			'submit_active_color'        => '444444',
-			'submit_active_border_color' => 'cccccc',
+			'submit_hover_bg_color'      => '3680D3',
+			'submit_hover_color'         => 'ffffff',
+			'submit_hover_border_color'  => '3680D3',
+			'submit_active_bg_color'     => '3680D3',
+			'submit_active_color'        => 'ffffff',
+			'submit_active_border_color' => '3680D3',
 
-			'border_radius'              => '4px',
-			'error_bg'                   => 'F2DEDE',
-			'error_border'               => 'EBCCD1',
-			'error_text'                 => 'B94A48',
+			'border_radius'              => '8px',
+			'error_bg'                   => 'FEE4E2',
+			'error_border'               => 'F5B8AA',
+			'error_text'                 => 'F04438',
 			'error_font_size'            => '14px',
 
 			'success_bg_color'           => 'DFF0D8',
@@ -725,14 +736,17 @@ class FrmStyle {
 
 			'important_style'            => false,
 
-			'progress_bg_color'          => 'eaeaea',
+			'progress_bg_color'          => 'EAECF0',
+			'progress_color'             => '1D2939',
+			'progress_active_bg_color'   => '4199FD',
 			'progress_active_color'      => 'ffffff',
-			'progress_active_bg_color'   => '579AF6',
-			'progress_color'             => '3f4b5b',
-			'progress_border_color'      => 'E5E5E5',
-			'progress_border_size'       => '2px',
-			'progress_size'              => '24px',
+			'progress_border_color'      => 'EAECF0',
+			'progress_border_size'       => '1px',
+			'progress_size'              => '30px',
 			'custom_css'                 => '',
+			'use_base_font_size'         => false,
+			'base_font_size'             => '15px',
+			'field_shape_type'           => 'rounded-corner',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );
@@ -754,15 +768,15 @@ class FrmStyle {
 	 */
 	public static function get_bold_options() {
 		return array(
-			100      => 100,
-			200      => 200,
-			300      => 300,
-			'normal' => __( 'normal', 'formidable' ),
-			500      => 500,
-			600      => 600,
-			'bold'   => __( 'bold', 'formidable' ),
-			800      => 800,
-			900      => 900,
+			100      => __( 'Thin', 'formidable' ),
+			200      => __( 'Extra Light', 'formidable' ),
+			300      => __( 'Light', 'formidable' ),
+			'normal' => __( 'Regular', 'formidable' ),
+			500      => __( 'Medium', 'formidable' ),
+			600      => __( 'Semi Bold', 'formidable' ),
+			'bold'   => __( 'Bold', 'formidable' ),
+			800      => __( 'Extra Bold', 'formidable' ),
+			900      => __( 'Black', 'formidable' ),
 		);
 	}
 
@@ -789,5 +803,21 @@ class FrmStyle {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Get the default template style
+	 *
+	 * @since 6.14
+	 * @param int $style_id The post type "frm_styles" ID.
+	 *
+	 * @return string The json encoded template data
+	 */
+	public function get_default_template_style( $style_id ) {
+		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
+		if ( empty( $default_template ) ) {
+			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
+		}
+		return $default_template;
 	}
 }

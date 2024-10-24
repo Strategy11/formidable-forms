@@ -140,7 +140,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
-					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %3$s: Span close tag.
+					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %4$s: Span close tag.
 					. sprintf( esc_html__( '%1$s %2$s(%3$s)%4$s', 'formidable' ), esc_html( $name ), '<span class="count">', number_format_i18n( $counts[ $status ] ), '</span>' )
 					. '</a>';
 			}
@@ -492,13 +492,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_processing_tooltip() {
 		return FrmAppHelper::clip(
 			function () {
-				$params = array(
-					'class' => 'frm_help frm_icon_font frm_tooltip_icon',
-					'title' => __( 'This payment method may take between 4-5 business days to process.', 'formidable' ),
-				);
-				?>
-				<span <?php FrmAppHelper::array_to_html_params( $params, true ); ?>></span>
-				<?php
+				FrmAppHelper::tooltip_icon( __( 'This payment method may take between 4-5 business days to process.', 'formidable' ) );
 			}
 		);
 	}

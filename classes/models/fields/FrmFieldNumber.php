@@ -30,10 +30,7 @@ class FrmFieldNumber extends FrmFieldType {
 			'range'          => true,
 		);
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->use_html ) {
-			$settings['max'] = false;
-		}
+		$settings['max'] = false;
 
 		return $settings;
 	}
@@ -70,11 +67,10 @@ class FrmFieldNumber extends FrmFieldType {
 
 		// validate number settings
 		if ( $args['value'] != '' ) {
-			$frm_settings = FrmAppHelper::get_settings();
 			// only check if options are available in settings
 			$minnum = FrmField::get_option( $this->field, 'minnum' );
 			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $frm_settings->use_html && $maxnum !== '' && $minnum !== '' ) {
+			if ( $maxnum !== '' && $minnum !== '' ) {
 				$value = (float) $args['value'];
 				if ( $value < $minnum ) {
 					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );

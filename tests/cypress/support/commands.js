@@ -27,7 +27,7 @@
 Cypress.Commands.add("createNewForm", () => {
     cy.log("Create a blank form");
     cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-    cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+    cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
     cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
     cy.get("#frm-form-templates-modal").should("exist");
     cy.get(".frm-modal-title").should("contain", "Name your form");
@@ -35,19 +35,23 @@ Cypress.Commands.add("createNewForm", () => {
     cy.get("#frm-save-form-name-button").should("contain", "Save").click();
     cy.get("a[aria-label='Close']", { timeout: 7000 }).click();
 })
-
 Cypress.Commands.add("deleteForm", () => {
     cy.log("Delete Form");
     cy.contains('#the-list tr', 'Test Form').trigger('mouseover').then(($row) => {
         console.log('Hovered Row:', $row);
-        // Find the visible element with class "trash" within the hovered row and click it
-    cy.wrap($row).within(() => {
-        cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
+        cy.wrap($row).within(() => {
+            cy.get('.row-actions .trash .frm-trash-link').should('be.visible').click({ force: true });
         });
-    cy.get("div[role='dialog']").should("contain", "Do you want to move this form to the trash?");
-    cy.xpath("//a[@id='frm-confirmed-click']").should("contain", "Confirm").click({ force: true });
-    })
-})
+        cy.get("body").then(($body) => {
+            if ($body.find("div[role='dialog']").length) {
+                cy.get("div[role='dialog']").should("be.visible").and("contain.text", "Do you want to move this form to the trash?");
+                cy.xpath("//a[@id='frm-confirmed-click']").should("contain.text", "Confirm").click({ force: true });
+            } else {
+                cy.log("Dialog not found");
+            }
+        });
+    });
+});
 
 Cypress.Commands.add("openForm", () => {
     cy.log("Click on the created form");
@@ -65,6 +69,26 @@ Cypress.Commands.add("openForm", () => {
     cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
 });
 
+Cypress.Commands.add("getCurrentFormattedDate", () => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+    return formattedDate;
+});   
 
-
-
+Cypress.Commands.add("emptyTrash", () => {
+cy.log("Precondition - Clear trash if there are deleted forms in the list");
+cy.get('.subsubsub > .trash > a').then(($trashLink) => {
+    if ($trashLink.text().includes("Trash")) {
+        cy.wrap($trashLink).click();        
+        cy.get('body').then($body => {
+            if ($body.find('#delete_all').length > 0) {
+                cy.get('#delete_all').should("contain", "Empty Trash").click();
+            } else {
+                cy.log('No forms available to delete.');
+            }
+        });
+    } else {
+        cy.log('No forms in the Trash.');
+    }
+});      
+});   

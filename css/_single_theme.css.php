@@ -6,10 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
+$is_loaded_via_ajax = isset( $is_loaded_via_ajax ) ? $is_loaded_via_ajax : false;
+FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
+
 $important = empty( $important_style ) ? '' : ' !important';
 
-$minus_icons = FrmStylesHelper::minus_icons();
-$arrow_icons = FrmStylesHelper::arrow_icons();
+$minus_icons   = FrmStylesHelper::minus_icons();
+$arrow_icons   = FrmStylesHelper::arrow_icons();
+$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .<?php echo esc_html( $style_class ); ?>{
@@ -51,6 +56,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> .frm_pro_max_limit_desc{
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
+	<?php } else { ?>
+		margin-top: 6px;
 	<?php } ?>
 	padding:0;
 	<?php if ( ! empty( $font ) ) { ?>
@@ -163,13 +170,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
 .<?php echo esc_html( $style_class ); ?> textarea.frm_default,
 .<?php echo esc_html( $style_class ); ?> select.frm_default,
-.<?php echo esc_html( $style_class ); ?> .placeholder,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-multi .chosen-choices li.search-field .default,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .placeholder {
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):focus,
+.<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
 .<?php echo esc_html( $style_class ); ?> textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
@@ -180,9 +189,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=tel],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=search],
 .frm_form_fields_active_style,
-.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .chosen-container-single.chosen-container-active .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices{
+.<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement {
 	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
 	color: var(--text-color);
@@ -190,7 +201,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
-	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
+	box-shadow:0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
 }
 
@@ -285,6 +296,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:focus{
 	color: transparent <?php echo esc_html( $important ); ?>;
 	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
+	border-color: <?php echo esc_html( $submit_bg_color . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
@@ -349,13 +361,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-card-element.StripeElement,
+<?php if ( $use_chosen_js ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-multi .chosen-choices,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-single .chosen-single,
-.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid{
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid {
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
-	border-width:<?php echo esc_html( $border_width_error . $important ); ?>;
+	border-width:var(--border-width-error) <?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $border_style_error . $important ); ?>;
 }
 
@@ -368,10 +382,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_blank_field label,
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
-	color:<?php echo esc_html( $border_color_error . $important ); ?>;
+	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{

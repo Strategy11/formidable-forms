@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.11.1';
+	public static $plug_version = '6.15';
 
 	/**
 	 * @var bool
@@ -1366,8 +1366,20 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
-			<span>You're using Formidable Forms Lite. To unlock more features consider</span>
-			<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+				<?php
+				$upgrade_link = self::admin_upgrade_link(
+					array(
+						'medium'  => 'settings-license',
+						'content' => 'lite-banner',
+					)
+				);
+				printf(
+					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+					'<a href="' . esc_url( $upgrade_link ) . '">',
+					'</a>'
+				);
+				?>
 		</div>
 		<?php
 	}
@@ -3285,7 +3297,8 @@ class FrmAppHelper {
 			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 			'focus_first_error'    => self::should_focus_first_error(),
 			'include_alert_role'   => self::should_include_alert_role_on_field_errors(),
-			'include_resend_email' => self::should_include_resend_email_code(),
+			// We need to keep this setting for a few versions because Pro checks for this.
+			'include_resend_email' => false,
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -3407,24 +3420,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 6.10
-	 *
-	 * @return bool
-	 */
-	private static function should_include_resend_email_code() {
-		if ( ! self::pro_is_installed() ) {
-			return false;
-		}
-
-		/**
-		 * @since 6.10
-		 *
-		 * @param bool $should_include_resend_email_code_in_lite True by default. This is disabled in Pro v6.10.
-		 */
-		return (bool) apply_filters( 'frm_should_include_resend_email_code_in_lite', true );
-	}
-
-	/**
 	 * Echo the message on the plugins listing page
 	 *
 	 * @since 1.07.10
@@ -3494,7 +3489,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Show a message if the browser or PHP version is below the recommendations.
+	 * Show a message if the PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
 	 * @return void
@@ -3503,12 +3498,6 @@ class FrmAppHelper {
 		$message = array();
 		if ( version_compare( phpversion(), '7.0', '<' ) ) {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' );
-		}
-
-		$browser = self::get_server_value( 'HTTP_USER_AGENT' );
-		$is_ie   = strpos( $browser, 'MSIE' ) !== false;
-		if ( $is_ie ) {
-			$message[] = __( 'You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome).', 'formidable' );
 		}
 
 		foreach ( $message as $m ) {
@@ -3934,6 +3923,62 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Check if an option attribute used in an [input] shortcode is safe.
+	 *
+	 * @since 6.11.2
+	 *
+	 * @param string $key
+	 * @param string $context Either 'display' or 'update'. On update, we want to allow a few keys that are never displayed.
+	 * @return bool
+	 */
+	public static function input_key_is_safe( $key, $context = 'display' ) {
+		if ( 'update' === $context && in_array( $key, array( 'opt', 'label' ), true ) ) {
+			$safe = true;
+		} elseif ( 0 === strpos( $key, 'data-' ) ) {
+			// Allow all data attributes.
+			$safe = true;
+		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
+			// Allow all aria attributes.
+			$safe = true;
+		} else {
+			$safe_keys = array(
+				'class',
+				'required',
+				'title',
+				'placeholder',
+				'value',
+				'readonly',
+				'disabled',
+				'size',
+				'maxlength',
+				'min',
+				'max',
+				'pattern',
+				'step',
+				'autofocus',
+				'width',
+				'height',
+				'autocomplete',
+				'tabindex',
+				'role',
+				'style',
+			);
+			$safe      = in_array( $key, $safe_keys, true );
+		}//end if
+
+		/**
+		 * Filter the $safe value so additional keys can be allowed or disallowed.
+		 *
+		 * @since 6.11.2
+		 *
+		 * @param bool   $safe True if the key is considered safe.
+		 * @param string $key
+		 * @param string $context Either 'display' or 'update'.
+		 */
+		return (bool) apply_filters( 'frm_input_key_is_safe', $safe, $key, $context );
+	}
+
+	/**
 	 * @since 5.0.16
 	 *
 	 * @return bool
@@ -4255,5 +4300,66 @@ class FrmAppHelper {
 	public static function dequeue_extra_global_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	/**
+	 * Shows tooltip icon.
+	 *
+	 * @since 6.12
+	 *
+	 * @param string $tooltip_text Tooltip text.
+	 * @param array  $atts         Tooltip wrapper HTML attributes.
+	 *
+	 * @return void
+	 */
+	public static function tooltip_icon( $tooltip_text, $atts = array() ) {
+		$atts['title'] = $tooltip_text;
+		if ( isset( $atts['class'] ) ) {
+			$atts['class'] .= ' frm_help';
+		} else {
+			$atts['class'] = 'frm_help';
+		}
+		?>
+		<span <?php self::array_to_html_params( $atts, true ); ?>>
+			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Prints errors for settings in onboarding wizard or template settings.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array $args Args.
+	 *
+	 * @return void
+	 */
+	public static function print_setting_error( $args ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'id'     => '',
+				'errors' => array(),
+				'class'  => '',
+			)
+		);
+
+		$args['class'] .= ' frm-validation-error frm-mt-xs frm_hidden';
+		?>
+		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
+			<?php
+			if ( is_array( $args['errors'] ) ) {
+				foreach ( $args['errors'] as $key => $msg ) {
+					?>
+					<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
+					<?php
+				}
+			} else {
+				echo '<span>' . esc_html( $args['errors'] ) . '</span>';
+			}
+			?>
+		</span>
+		<?php
 	}
 }

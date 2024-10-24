@@ -24,7 +24,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-top">
 		<div class="widget-title-action">
 			<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
-				<i class="frm_icon_font frm_arrow_right_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_arrow_right_icon' ); ?>
 			</button>
 		</div>
 		<span class="frm_email_icons alignright">

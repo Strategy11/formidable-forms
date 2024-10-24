@@ -1,20 +1,15 @@
 describe("Updating form settings", () => {
     beforeEach(() => { 
-        cy.on('uncaught:exception', (err, runnable) => {
-            if (err.message.includes('.draggable is not a function')) {
-                return false;
-            }
-            throw err;
-        });
-       
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable');
+        cy.viewport(1280, 720);
+
     });
 
         it("should 'Show the form title' and 'Show the form description' on the preview form", () => {
             cy.log("Create a blank form");
             cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-            cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+            cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
             cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
             cy.get("#frm_new_form_name_input").type("Test Form");
             cy.get("#frm-save-form-name-button").should("contain", "Save").click();
@@ -87,7 +82,7 @@ describe("Updating form settings", () => {
 
             cy.log("Create a blank form");
             cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-            cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+            cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
             cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
             cy.get("#frm_new_form_name_input").type("Test Form");
             cy.get("#frm-save-form-name-button").should("contain", "Save").click();

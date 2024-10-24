@@ -137,10 +137,8 @@ if ( $display['clear_on_focus'] ) {
  *
  * @since 5.0.04 Added `$display` and `$values`.
  *
- * @param array        $field     Field data.
- * @param FrmFieldType $field_obj Field type object.
- * @param array        $display   Display data.
- * @param array        $values    Field values.
+ * @param array                                                      $field Field data.
+ * @param array{field_obj:FrmFieldType, display:array, values:array} $data
  */
 do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 'values' ) );
 

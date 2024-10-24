@@ -290,7 +290,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 */
 	protected function skip_fields() {
-		return array( 'captcha', 'html' );
+		return array( 'captcha', 'html', FrmSubmitHelper::FIELD_TYPE );
 	}
 
 	/**

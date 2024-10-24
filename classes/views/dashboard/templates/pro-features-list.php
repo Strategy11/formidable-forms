@@ -9,6 +9,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$discount_link = FrmAppHelper::admin_upgrade_link(
+	array(
+		'medium'  => 'dashboard-discount',
+		'content' => 'dashboard-defy-limits-cta',
+	)
+);
 ?>
 <div class="frm-dashboard-widget frm-card-item frm-px-0 frm-p-0">
 	<div class="frm-pro-features-list">
@@ -21,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</li>
 			<?php endforeach; ?>
 		</ul>
-		<a target="_blank" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'dashboard-discount' ) ); ?>" title="Upgrade" class="frm-button-primary">
+		<a target="_blank" href="<?php echo esc_url( $discount_link ); ?>" title="Upgrade" class="frm-button-primary">
 			<?php esc_html_e( 'Upgrade to Pro & Get 50% Off', 'formidable' ); ?>
 		</a>
 	</div>

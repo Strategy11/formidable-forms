@@ -11,6 +11,6 @@ if ( FrmAppHelper::pro_is_installed() ) {
 	<label for="antispam">
 		<input id="antispam" type="checkbox" name="options[antispam]" <?php checked( $values['antispam'], 1 ); ?> value="1" />
 		<?php esc_html_e( 'Check entries for spam using JavaScript', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php echo esc_attr( $tooltip ); ?>" data-container="body"></span>
+		<?php FrmAppHelper::tooltip_icon( $tooltip, array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>

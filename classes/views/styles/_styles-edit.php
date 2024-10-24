@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It is accessed from /wp-admin/admin.php?page=formidable-styles&frm_action=edit&form=782
 ?>
 <div id="frm_style_sidebar" class="frm-right-panel frm-fields frm_wrap frm-p-6">
-	<form id="frm_styling_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form->id ) ); ?>">
+	<form id="frm_styling_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form->id, FrmAppHelper::get_param( 'section' ) ) ); ?>">
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="frm_action" value="save" />
 

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 _deprecated_file( esc_html( basename( __FILE__ ) ), '6.11' );
 ?>
 <div class="frm_actions_dropdown dropdown <?php echo esc_attr( is_rtl() ? 'dropdown-menu-right' : 'dropdown-menu-left' ); ?>">
-	<a href="#" id="frm-actionsDrop" class="frm-dropdown-toggle frm_icon_font frm_option_icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ); ?>"></a>
+	<a href="#" id="frm-actionsDrop" aria-label="<?php echo esc_attr__( 'Dropdown toggle', 'formidable' ); ?>" class="frm-dropdown-toggle frm_icon_font frm_option_icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ); ?>"></a>
 	<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-actionsDrop">
 		<?php foreach ( $links as $link ) { ?>
 		<li>

@@ -77,9 +77,7 @@ class FrmFieldPhone extends FrmFieldType {
 	 * @return string
 	 */
 	protected function html5_input_type() {
-		$frm_settings = FrmAppHelper::get_settings();
-
-		return $frm_settings->use_html ? 'tel' : 'text';
+		return 'tel';
 	}
 
 	/**

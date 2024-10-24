@@ -427,13 +427,87 @@ class FrmField {
 	}
 
 	/**
+	 * Maybe filter HTML in field options data.
+	 * HTML is only filtered when unsafe HTML is disallowed.
+	 * See FrmAppHelper::allow_unfiltered_html.
+	 *
 	 * @since 5.0.08
 	 *
 	 * @param array $options
 	 * @return array
 	 */
 	private static function maybe_filter_options( $options ) {
-		return FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+		$options = FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+
+		if ( ! empty( $options['custom_html'] ) ) {
+			$options['custom_html'] = self::maybe_filter_custom_html_input_attributes( $options['custom_html'] );
+		}
+
+		if ( ! empty( $options['classes'] ) ) {
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Prevent users who do not have permission to insert JavaScript attributes in input elements.
+	 * This is triggered when a field is updated.
+	 *
+	 * @since 6.11.2
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	private static function maybe_filter_custom_html_input_attributes( $html ) {
+		if ( FrmAppHelper::allow_unfiltered_html() ) {
+			return $html;
+		}
+
+		$pattern = get_shortcode_regex( array( 'input' ) );
+		return preg_replace_callback(
+			"/$pattern/",
+			/**
+			 * @param array $match Shortcode data.
+			 * @return string
+			 */
+			function ( $match ) {
+				$attr = shortcode_parse_atts( $match[3] );
+
+				if ( ! is_array( $attr ) ) {
+					// In old versions of WordPress (older than 6.5), this might not be an array.
+					return '[input]';
+				}
+
+				$safe_atts = array();
+				foreach ( $attr as $attr_key => $att ) {
+					if ( ! is_numeric( $attr_key ) ) {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
+					} else {
+						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
+						$split = explode( '=', $att, 2 );
+						if ( 2 !== count( $split ) ) {
+							continue;
+						}
+						$key   = trim( $split[0] );
+						$value = trim( $split[1], '"' );
+					}
+
+					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
+						$safe_atts[ $key ] = $value;
+					}
+				}
+
+				if ( ! $safe_atts ) {
+					return '[input]';
+				}
+
+				return '[input ' . FrmAppHelper::array_to_html_params( $safe_atts ) . ']';
+			},
+			$html
+		);
 	}
 
 	/**
@@ -961,6 +1035,8 @@ class FrmField {
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
 			foreach ( $results as $r_key => $result ) {
+				self::add_slashes_to_format_before_setting_field_cache( $result );
+
 				FrmDb::set_cache( $result->id, $result, 'frm_field' );
 				FrmDb::set_cache( $result->field_key, $result, 'frm_field' );
 
@@ -977,6 +1053,24 @@ class FrmField {
 
 			self::prepare_options( $results );
 		}
+	}
+
+	/**
+	 * When $result->field_options is an array and not a serialized string there is only a single backslash.
+	 * Cached results are unslashed in FrmField::getAll, so we need to make sure that the cached object has an extra backslash.
+	 * Otherwise the backslash is stripped away on load.
+	 *
+	 * @since 6.15
+	 *
+	 * @param stdClass $result
+	 * @return void
+	 */
+	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
+		if ( ! isset( $result->field_options ) || ! is_array( $result->field_options ) || empty( $result->field_options['format'] ) ) {
+			return;
+		}
+
+		$result->field_options['format'] = addslashes( $result->field_options['format'] );
 	}
 
 	/**
