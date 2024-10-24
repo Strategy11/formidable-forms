@@ -52,4 +52,23 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$this->assertNull( $meta );
 	}
+
+	public function test_should_join_fields_table() {
+		$where = 'fi.form_id=123';
+		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
+		$where = 'fi.id=123 AND fi.form_id=456';
+		$this->assertTrue( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
+
+		$where = array(
+			'fi.id'      => 123,
+			'fi.form_id' => 456,
+		);
+		$this->assertTrue( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
+
+		$where = array(
+			'fi.form_id' => 456,
+		);
+		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
+		$this->assertEquals( array( 'e.form_id' => 456 ), $where );
+	}
 }
