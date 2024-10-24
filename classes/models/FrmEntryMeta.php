@@ -376,6 +376,33 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * Returns true if the where clause refers to a field table column that is not form_id. It also updates
+	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
+	 *
+	 * @since x.x
+	 * @param array|string $where
+	 * @return bool
+	 */
+	private static function should_join_fields_table( &$where ) {
+		if ( is_string( $where ) ) {
+			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
+				return true;
+			}
+			$where = str_replace( 'fi.form_id', 'e.form_id', $where );
+			return false;
+		}
+		$where_fields = array_keys( $where );
+		foreach ( $where_fields as $where_field ) {
+			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) { // If referring to a field table column aside from form_id.
+				return true;
+			}
+		}
+		$where['e.form_id'] = $where['fi.form_id'];
+		unset( $where['fi.form_id'] );
+		return false;
+	}
+
+	/**
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
@@ -403,7 +430,7 @@ class FrmEntryMeta {
 
 		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
-		if ( isset( $where['fi.id'] ) ) {
+		if ( self::should_join_fields_table( $where ) ) {
 			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 		}
 
