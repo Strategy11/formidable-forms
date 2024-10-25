@@ -490,7 +490,7 @@ class FrmStrpLiteAuth {
 
 		if ( $amount == '000' ) {
 			// Create the intent when the form loads.
-			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000; // Create the intent when the form loads.
+			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000;
 		}
 
 		if ( 'recurring' === $action->post_content['type'] ) {
