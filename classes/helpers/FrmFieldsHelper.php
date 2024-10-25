@@ -943,10 +943,15 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array  $atts  Includes entry object.
-	 * @param string $value
+	 * @param array       $atts  Includes entry object.
+	 * @param string|null $value
+	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
+		if ( is_null( $value ) ) {
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 		if ( $should_sanitize ) {

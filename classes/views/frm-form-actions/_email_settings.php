@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>>
 		<?php esc_html_e( 'To', 'formidable' ); ?>
 	</label>
-	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_to', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
 
 <p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'From', 'formidable' ); ?>
 	</label>
 
-	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'from', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'from', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
 </p>
 
 <p class="frm_error_style frm_from_to_match_row <?php echo ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">

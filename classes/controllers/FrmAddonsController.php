@@ -69,6 +69,7 @@ class FrmAddonsController {
 		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/addons-page.js', $js_dependencies, $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmAddonsVars', self::get_js_variables() );
 		wp_enqueue_script( self::SCRIPT_HANDLE );
+		wp_set_script_translations( self::SCRIPT_HANDLE, 'formidable' );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
 	}
@@ -110,7 +111,10 @@ class FrmAddonsController {
 				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
-				'FrmAddonsController::upgrade_to_pro'
+				function () {
+					// This function doesn't need to do anything.
+					// The redirect is handled earlier to avoid issues with the headers being sent.
+				}
 			);
 		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
@@ -863,216 +867,6 @@ class FrmAddonsController {
 				'label' => __( 'Not Installed', 'formidable' ),
 			);
 		}
-	}
-
-	/**
-	 * @return void
-	 */
-	public static function upgrade_to_pro() {
-		FrmAppHelper::include_svg();
-
-		$link_parts = array(
-			'medium'  => 'upgrade',
-			'content' => 'button',
-		);
-
-		$features = array(
-			'Display Entries'  => array(
-				array(
-					'label' => 'Display form data with virtually limitless views',
-					'link'  => array(
-						'content' => 'views',
-						'param'   => 'views-display-form-data',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Generate graphs and stats based on your submitted data',
-					'link'  => array(
-						'content' => 'graphs',
-						'param'   => 'statistics-graphs-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-			),
-			'Entry Management' => array(
-				array(
-					'label' => 'Import entries from a CSV',
-					'link'  => array(
-						'content' => 'import-entries',
-						'param'   => 'importing-exporting-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Logged-in users can save drafts and return later',
-					'link'  => array(
-						'content' => 'save-drafts',
-						'param'   => 'save-drafts-wordpress-form',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Flexibly and powerfully view, edit, and delete entries from anywhere on your site',
-					'link'  => array(
-						'content' => 'front-edit',
-						'param'   => 'wordpress-front-end-editing',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'View form submissions from the back-end',
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Export your entries to a CSV',
-					'lite'  => true,
-				),
-			),
-			'Form Building'    => array(
-				array(
-					'label' => 'Save a calculated value into a field',
-					'link'  => array(
-						'content' => 'calculations',
-						'param'   => 'field-calculations-wordpress-form',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Allow multiple file uploads',
-					'link'  => array(
-						'content' => 'file-uploads',
-						'param'   => 'wordpress-multi-file-upload-fields',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Repeat sections of fields',
-					'link'  => array(
-						'content' => 'repeaters',
-						'param'   => 'repeatable-sections-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Hide and show fields conditionally based on other fields or the user\'s role',
-					'link'  => array(
-						'content' => 'conditional-logic',
-						'param'   => 'conditional-logic-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Confirmation fields',
-					'link'  => array(
-						'content' => 'confirmation-fields',
-						'param'   => 'confirmation-fields-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Multi-paged forms',
-					'link'  => array(
-						'content' => 'page-breaks',
-						'param'   => 'wordpress-multi-page-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Include section headings, page breaks, rich text, dates, times, scales, star ratings, sliders, toggles, dynamic fields populated from other forms, passwords, and tags in advanced forms.',
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Include text, email, url, paragraph text, radio, checkbox, dropdown fields, hidden fields, user ID fields, and HTML blocks in your form.',
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Drag & Drop Form building',
-					'link'  => array(
-						'content' => 'drag-drop',
-						'param'   => 'drag-drop-forms',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Create forms from Templates',
-					'link'  => array(
-						'content' => 'form-templates',
-						'param'   => 'wordpress-form-templates',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Import and export forms with XML',
-					'link'  => array(
-						'content' => 'import',
-						'param'   => 'importing-exporting-wordpress-forms',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Use input placeholder text in your fields that clear when typing starts.',
-					'lite'  => true,
-				),
-			),
-			'Form Actions'     => array(
-				array(
-					'label' => 'Conditionally send your email notifications based on values in your form',
-					'link'  => array(
-						'content' => 'conditional-emails',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Create and edit WordPress posts or custom posts from the front-end',
-					'link'  => array(
-						'content' => 'create-posts',
-						'param'   => 'create-posts-pages-wordpress-forms',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Send multiple emails and autoresponders',
-					'link'  => array(
-						'content' => 'multiple-emails',
-						'param'   => 'virtually-unlimited-emails',
-					),
-					'lite'  => true,
-				),
-			),
-			'Form Appearance'  => array(
-				array(
-					'label' => 'Create Multiple styles for different forms',
-					'link'  => array(
-						'content' => 'multiple-styles',
-						'param'   => 'wordpress-visual-form-styler',
-					),
-					'lite'  => false,
-				),
-				array(
-					'label' => 'Customizable layout with CSS classes',
-					'link'  => array(
-						'content' => 'form-layout',
-						'param'   => 'wordpress-mobile-friendly-forms',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Customize the HTML for your forms',
-					'link'  => array(
-						'content' => 'custom-html',
-						'param'   => 'customizable-html-wordpress-form',
-					),
-					'lite'  => true,
-				),
-				array(
-					'label' => 'Style your form with the Visual Form Styler',
-					'lite'  => true,
-				),
-			),
-		);
-
-		include FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php';
 	}
 
 	/**

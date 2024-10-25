@@ -4,6 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_form_desc_size"
+		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?>
+	</label>
+</div>
+<div class="frm7 frm_form_field">
+	<?php
+	new FrmSliderStyleComponent(
+		$frm_style->get_field_name( 'form_desc_size' ),
+		$style->post_content['form_desc_size'],
+		array(
+			'id'        => 'frm_form_desc_size',
+			'max_value' => 100,
+		)
+	);
+	?>
+</div>
+
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php

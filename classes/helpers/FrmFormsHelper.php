@@ -1822,6 +1822,25 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Strip characters similar to the WordPress sanitize_html_class function, but allow for [ and ].
+	 * This allows shortcodes inside of the layout classes setting.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $classname
+	 * @return string
+	 */
+	public static function sanitize_layout_class( $classname ) {
+		// Strip out any percent-encoded characters.
+		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classname );
+
+		// Limit to A-Z, a-z, 0-9, '_', '-', '[', ']'.
+		$sanitized = preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
+
+		return $sanitized;
+	}
+
+	/**
 	 * @since 3.0
 	 * @deprecated 6.11
 	 *
