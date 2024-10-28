@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$form_name   = ! empty( $form->name ) ? $form->name : __( '(no title)', 'formidable' );
+$form_name   = ! empty( $form->name ) ? $form->name : FrmFormsHelper::get_no_title_text();
 $dropdown_id = 'frm_style_dropdown_' . absint( $form->id );
 ?>
 <tr>
