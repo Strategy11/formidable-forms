@@ -364,6 +364,9 @@ class FrmOnboardingWizardController {
 			'@localhost',
 			'@local.dev',
 			'@local.test',
+			'test@gmail.com',
+			'admin@gmail.com',
+			
 		);
 		foreach ( $substrings as $substring ) {
 			if ( false !== strpos( $email, $substring ) ) {
