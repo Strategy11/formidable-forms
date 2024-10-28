@@ -128,10 +128,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
 
-		// Addons Controller.
-		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
-		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
-
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
@@ -209,6 +205,7 @@ class FrmHooksController {
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
+		FrmAddonsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
@@ -221,7 +218,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
 
 		// Onboarding Wizard Controller.
-		add_action( 'wp_ajax_frm_onboarding_setup_email_step', 'FrmOnboardingWizardController::ajax_setup_email_step' );
+		add_action( 'wp_ajax_frm_onboarding_consent_tracking', 'FrmOnboardingWizardController::ajax_consent_tracking' );
 		add_action( 'wp_ajax_frm_onboarding_setup_usage_data', 'FrmOnboardingWizardController::setup_usage_data' );
 
 		// Addons.

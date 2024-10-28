@@ -846,6 +846,8 @@ class FrmFieldsHelper {
 			'siteurl',
 			'sitename',
 			'admin_email',
+			'default-email',
+			'default-from-email',
 			'post[-|_]id',
 			'created[-|_]at',
 			'updated[-|_]at',
@@ -941,10 +943,15 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array  $atts  Includes entry object.
-	 * @param string $value
+	 * @param array       $atts  Includes entry object.
+	 * @param string|null $value
+	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
+		if ( is_null( $value ) ) {
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 		if ( $should_sanitize ) {
@@ -968,7 +975,7 @@ class FrmFieldsHelper {
 			'ip'  => $atts['entry']->ip,
 		);
 
-		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get' );
+		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get', 'default-email', 'default-from-email' );
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
@@ -1056,6 +1063,14 @@ class FrmFieldsHelper {
 			case 'admin_email':
 				$new_value = get_option( 'admin_email' );
 				break;
+			case 'default-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : get_option( 'admin_email' );
+				break;
+			case 'default-from-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->from_email ) && is_email( $frm_settings->from_email ) ? $frm_settings->from_email : get_option( 'admin_email' );
+				break;
 			case 'siteurl':
 				$new_value = FrmAppHelper::site_url();
 				break;
@@ -1067,7 +1082,7 @@ class FrmFieldsHelper {
 				break;
 			case 'get':
 				$new_value = self::process_get_shortcode( $atts, $return_array );
-		}
+		}//end switch
 
 		return $new_value;
 	}

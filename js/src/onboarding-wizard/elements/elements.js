@@ -1,34 +1,24 @@
 /**
+ * External dependencies
+ */
+import { createPageElements } from 'core/factory';
+
+/**
  * Internal dependencies
  */
-import getDOMElements from './getDOMElements';
+import { PREFIX } from '../shared';
 
-let elements = null;
+export const { getElements, addElements } = createPageElements({
+	onboardingWizardPage: document.getElementById( `${PREFIX}-wizard-page` ),
+	container: document.getElementById( `${PREFIX}-container` ),
 
-/**
- * Initialize the elements.
- *
- * @return {void}
- */
-export function initializeElements() {
-	elements = getDOMElements();
-}
+	rootline: document.getElementById( `${PREFIX}-rootline` ),
+	steps: document.querySelectorAll( `.${PREFIX}-step` ),
+	skipStepButtons: document.querySelectorAll( `.${PREFIX}-skip-step` ),
+	backButtons: document.querySelectorAll( `.${PREFIX}-back-button` ),
 
-/**
- * Retrieve the initialized essential DOM elements.
- *
- * @return {Object|null} The initialized elements object or null.
- */
-export function getElements() {
-	return elements;
-}
+	consentTrackingButton: document.getElementById( `${PREFIX}-consent-tracking` ),
+	installAddonsButton: document.getElementById( `${PREFIX}-install-addons-button` ),
 
-/**
- * Add new elements to the elements object.
- *
- * @param {Object} newElements An object containing new elements to be added.
- * @return {void} Updates the global `elements` object by merging the new elements into it.
- */
-export function addElements( newElements ) {
-	elements = { ...elements, ...newElements };
-}
+	hiddenLicenseKeyInput: document.getElementById( 'frm-license-key' ),
+});

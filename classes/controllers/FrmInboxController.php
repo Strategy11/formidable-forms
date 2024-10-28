@@ -25,21 +25,6 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since 4.06
-	 *
-	 * @return void
-	 */
-	public static function dismiss_all_button( $atts ) {
-		if ( empty( $atts['messages'] ) ) {
-			return;
-		}
-
-		echo '<button class="frm-button-secondary" id="frm-dismiss-inbox" type="button">' .
-			esc_html__( 'Dismiss All', 'formidable' ) .
-			'</button>';
-	}
-
-	/**
 	 * @since 6.8
 	 *
 	 * @return array
@@ -141,22 +126,12 @@ class FrmInboxController {
 	}
 
 	/**
-	 * @since 4.05
-	 * @deprecated 6.8
+	 * @since 4.06
+	 * @deprecated 6.16
 	 *
 	 * @return void
 	 */
-	public static function menu() {
-		_deprecated_function( __METHOD__, '6.8' );
-	}
-
-	/**
-	 * @since 4.05
-	 * @deprecated 6.8
-	 *
-	 * @return void
-	 */
-	public static function inbox() {
-		_deprecated_function( __METHOD__, '6.8' );
+	public static function dismiss_all_button( $atts ) {
+		_deprecated_function( __METHOD__, '6.16' );
 	}
 }

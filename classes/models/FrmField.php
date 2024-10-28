@@ -444,7 +444,7 @@ class FrmField {
 		}
 
 		if ( ! empty( $options['classes'] ) ) {
-			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
 		}
 
 		return $options;
@@ -1060,7 +1060,7 @@ class FrmField {
 	 * Cached results are unslashed in FrmField::getAll, so we need to make sure that the cached object has an extra backslash.
 	 * Otherwise the backslash is stripped away on load.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param stdClass $result
 	 * @return void

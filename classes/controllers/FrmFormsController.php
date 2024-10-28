@@ -2091,7 +2091,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
+					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);

@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.14.1';
+	public static $plug_version = '6.16';
 
 	/**
 	 * @var bool
@@ -3368,6 +3368,7 @@ class FrmAppHelper {
 
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				'noTitleText'        => FrmFormsHelper::get_no_title_text(),
 			);
 			/**
 			 * @param array $admin_script_strings
@@ -3489,7 +3490,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Show a message if the browser or PHP version is below the recommendations.
+	 * Show a message if the PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
 	 * @return void
@@ -3498,12 +3499,6 @@ class FrmAppHelper {
 		$message = array();
 		if ( version_compare( phpversion(), '7.0', '<' ) ) {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' );
-		}
-
-		$browser = self::get_server_value( 'HTTP_USER_AGENT' );
-		$is_ie   = strpos( $browser, 'MSIE' ) !== false;
-		if ( $is_ie ) {
-			$message[] = __( 'You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome).', 'formidable' );
 		}
 
 		foreach ( $message as $m ) {
@@ -4335,7 +4330,7 @@ class FrmAppHelper {
 	/**
 	 * Prints errors for settings in onboarding wizard or template settings.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param array $args Args.
 	 *

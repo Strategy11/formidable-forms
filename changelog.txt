@@ -1,4 +1,27 @@
 == Changelog ==
+= 6.16 =
+* New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
+* Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
+* Fix: Nothing would copy when trying to click the icon to copy a style class name.
+* Fix: A white element would appear at the bottom of the plugins page.
+* Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
+* Fix: Captcha fields would fail to validate in forms with conditional logic that fade in on page load in some cases.
+* Fix: Some JavaScript strings were not configured for translations, and a text domain was missing in one case.
+* Fix: The font size setting for form descriptions has been added back.
+* Fix: Missing for attributes have been added to labels in the visual styler to improve accessibility and user experience.
+* Some old browser specific CSS and deprecated CSS has been removed.
+* New name fields will now use more descriptive "First Name" and "Last Name" descriptions by default instead of "First" and "Last". This is to help improve accessibility.
+* The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
+* The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
+
+= 6.15 =
+* New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
+* New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
+* New: New email actions will now use new [default-email] and [default-from-email] shortcodes that use email settings defined during onboarding. When these are unavailable, the admin email is used by default.
+* Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
+* Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
+* Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
+
 = 6.14.1 =
 * Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
 * New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.

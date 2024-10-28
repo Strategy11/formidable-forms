@@ -42,11 +42,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_attr( $field_label ); ?>">
 							<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 							<span><?php echo esc_html( $field_label ); ?></span>
+							<?php
+							if ( 'credit_card' === $field_key && ! FrmTransLiteAppHelper::payments_table_exists() ) {
+								FrmAppHelper::show_pill_text();
+							}
+							?>
 						</a>
 					</li>
 					<?php
 					unset( $field_key, $field_type );
-				}
+				}//end foreach
 				?>
 			</ul>
 			<div class="clear"></div>

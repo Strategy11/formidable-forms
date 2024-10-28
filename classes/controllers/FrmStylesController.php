@@ -96,7 +96,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function disable_form_css() {
-		add_filter( 'get_frm_stylesheet', '__return_false' );
+		add_filter( 'get_frm_stylesheet', '__return_empty_array' );
 	}
 
 	/**
@@ -765,11 +765,11 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			$new_style      = isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$previous_style = isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( $new_style == $previous_style ) {
+			if ( ! isset( $_POST['style'] ) || ! isset( $_POST['style'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				continue;
 			}
+
+			$new_style = sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			$form->options['custom_style'] = $new_style;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );

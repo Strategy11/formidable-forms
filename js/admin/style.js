@@ -6,7 +6,11 @@
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
-	const { __ }                                                 = wp.i18n;
+	if ( ! document.getElementById( 'frm_active_style_form' ) ) {
+		return;
+	}
+
+	const { __, sprintf }                                        = wp.i18n;
 	const state                                                  = {
 		showingSampleForm: document.getElementById( 'frm_active_style_form' ).classList.contains( 'frm_hidden' ), // boolean
 		unsavedChanges: false, // boolean
@@ -148,7 +152,8 @@
 							card => card.classList.add( 'frm_hidden' )
 						);
 						const hiddenCount         = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
-						showAllAnchor.textContent = __( 'Show all (%d)', 'formidable' ).replace( '%d', hiddenCount );
+						/* translators: %d: The number of hidden items to show. */
+						showAllAnchor.textContent = sprintf( __( 'Show all (%d)', 'formidable' ), hiddenCount );
 					}
 				);
 			}
@@ -421,8 +426,7 @@
 				children: [
 					span(
 						/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
-						__( 'Access to this style requires the %s plan.', 'formidable' )
-							.replace( '%s', card.dataset.requires )
+						sprintf( __( 'Access to this style requires the %s plan.', 'formidable' ), card.dataset.requires )
 					),
 					a({
 						text: getUpgradeNowText(),
