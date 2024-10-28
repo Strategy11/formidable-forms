@@ -63,7 +63,7 @@ class FrmFormsHelper {
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
-					<?php echo esc_html( '' === $form->name ? FrmFormsHelper::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
+					<?php echo esc_html( '' === $form->name ? self::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -127,7 +127,7 @@ class FrmFormsHelper {
 		}
 
 		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name           = '' === $name ? FrmFormsHelper::get_no_title_text() : strip_tags( $name );
+		$name           = '' === $name ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		if ( count( $forms ) < 2 ) {
@@ -183,7 +183,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? FrmFormsHelper::get_no_title_text() : $form->name;
+					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -1142,7 +1142,7 @@ BEFORE_HTML;
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
-			return FrmFormsHelper::get_no_title_text();
+			return self::get_no_title_text();
 		}
 		return FrmAppHelper::truncate( $name, 40 );
 	}
