@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</li>
 					<?php
 					unset( $field_key, $field_type );
-				}
+				}//end foreach
 				?>
 			</ul>
 			<div class="clear"></div>
