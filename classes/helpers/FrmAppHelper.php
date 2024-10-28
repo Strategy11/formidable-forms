@@ -3277,6 +3277,17 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Returns a text used when no title is set.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_no_title_text() {
+		return __( '(no title)', 'formidable' );
+	}
+
+	/**
 	 * @param string $location
 	 * @return void
 	 */
@@ -3368,6 +3379,7 @@ class FrmAppHelper {
 
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				'noTitleText'        => self::get_no_title_text(),
 			);
 			/**
 			 * @param array $admin_script_strings
