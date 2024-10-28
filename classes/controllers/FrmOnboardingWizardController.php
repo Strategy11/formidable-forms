@@ -331,6 +331,10 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
+		$user_id    = $user->ID;
+		$first_name = get_user_meta( $user_id, 'first_name', true );
+		$last_name  = get_user_meta( $user_id, 'last_name', true );
+
 		wp_remote_post(
 			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
 			array(
@@ -343,6 +347,8 @@ class FrmOnboardingWizardController {
 						'item_meta[0]'  => '',
 						'item_meta[15]' => $user->user_email,
 						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
+						'item_meta[18]' => is_string( $first_name ) ? $first_name : '',
+						'item_meta[19]' => is_string( $last_name ) ? $last_name : '',
 					)
 				),
 			)
