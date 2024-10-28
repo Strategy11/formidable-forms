@@ -10,7 +10,7 @@ class FrmFormsController {
 	 * message in the current tab.
 	 *
 	 * @since 6.2
-     * @since x.x This is public.
+	 * @since x.x This is public.
 	 *
 	 * @var array Keys are form IDs and values are 1.
 	 */
@@ -2739,7 +2739,7 @@ class FrmFormsController {
 	 * Prints open in new tab js with fallback handler.
 	 *
 	 * @since 6.3.1
-     * @since x.x This is public.
+	 * @since x.x This is public.
 	 *
 	 * @param string $success_url Success URL.
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
