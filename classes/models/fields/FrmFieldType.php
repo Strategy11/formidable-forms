@@ -1440,11 +1440,11 @@ DEFAULT_HTML;
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
-			if ( isset( $atts['show'] ) && $atts['show'] && isset( $value[ $atts['show'] ] ) ) {
+			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
-			} elseif ( ! isset( $atts['return_array'] ) || ! $atts['return_array'] ) {
+			} elseif ( empty( $atts['return_array'] ) ) {
 				$sep   = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$value = implode( $sep, $value );
+				$value = FrmAppHelper::safe_implode( $sep, $value );
 			}
 		}
 
