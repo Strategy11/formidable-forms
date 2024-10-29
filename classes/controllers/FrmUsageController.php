@@ -111,6 +111,10 @@ class FrmUsageController {
 		$key   = FrmAppHelper::get_post_param( 'key', '', 'sanitize_text_field' );
 		$value = FrmAppHelper::get_post_param( 'value', '', 'sanitize_text_field' );
 
+		if ( '' === $key || '' === $value ) {
+			wp_send_json_success(); // We don't want to emit an error.
+		}
+
 		if ( ! isset( $flows_data[ $key ] ) ) {
 			$flows_data[ $key ] = array();
 		}

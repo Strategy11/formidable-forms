@@ -140,6 +140,11 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function payments( $table = 'frm_payments' ) {
+		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
+		if ( ! in_array( $table, $allowed_tables, true ) ) {
+			return array();
+		}
+
 		global $wpdb;
 		$rows     = $wpdb->get_results( "SELECT amount, status, paysys, created_at FROM {$wpdb->prefix}{$table}" );
 		$payments = array();
