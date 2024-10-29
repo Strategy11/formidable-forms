@@ -98,7 +98,7 @@ class FrmUsage {
 			'fields'            => $this->fields(),
 			'actions'           => $this->actions(),
 
-			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'onboarding-wizard' => $this->onboarding_wizard(),
 			'flows'             => FrmUsageController::get_flows_data(),
 			'payments'          => $this->payments(),
 			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
@@ -107,6 +107,38 @@ class FrmUsage {
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
+	/**
+	 * Gets onboarding wizard data.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private function onboarding_wizard() {
+		$data         = FrmOnboardingWizardController::get_usage_data();
+		$skipped_keys = array(
+			'default_email',
+			'is_subscribed',
+			'allows_tracking',
+			'summary_emails',
+			'installed_addons',
+		);
+
+		foreach ( $skipped_keys as $skipped_key ) {
+			unset( $data[ $skipped_key ] );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Gets payments data.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $table Database table name.
+	 * @return array
+	 */
 	private function payments( $table = 'frm_payments' ) {
 		global $wpdb;
 		$rows     = $wpdb->get_results( "SELECT amount, status, paysys, created_at FROM {$wpdb->prefix}{$table}" );
