@@ -417,7 +417,7 @@ class FrmEntryMeta {
 		}
 		$where_fields = array_keys( $where );
 		foreach ( $where_fields as $where_field ) {
-			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) { // If referring to a field table column aside from form_id.
+			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
 				return true;
 			}
 		}
