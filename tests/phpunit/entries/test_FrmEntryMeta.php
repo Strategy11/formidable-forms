@@ -70,7 +70,13 @@ class test_FrmEntryMeta extends FrmUnitTest {
 			'fi.form_id' => 456,
 		);
 		$this->assertTrue( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
-		$this->assertEquals( array( 'fi.id' => 123, 'fi.form_id' => 456 ), $where );
+		$this->assertEquals(
+			array(
+				'fi.id'      => 123,
+				'fi.form_id' => 456,
+			),
+			$where
+		);
 
 		$where = array(
 			'fi.form_id' => 456,
