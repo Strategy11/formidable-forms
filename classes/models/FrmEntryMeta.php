@@ -412,7 +412,7 @@ class FrmEntryMeta {
 			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
 				return true;
 			}
-			$where = str_replace( 'fi.form_id', 'e.form_id', $where );
+			$where = str_ireplace( 'fi.form_id', 'e.form_id', $where );
 			return false;
 		}
 		$where_fields = array_keys( $where );
