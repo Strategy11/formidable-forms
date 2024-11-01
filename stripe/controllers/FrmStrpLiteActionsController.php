@@ -494,7 +494,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		foreach ( $payment_actions as $action ) {
-			if ( ! empty( $action->post_content['stripe_link'] ) ) {
+			if ( in_array( 'stripe', $action->post_content['gateway'], true ) ) {
 				return true;
 			}
 		}
