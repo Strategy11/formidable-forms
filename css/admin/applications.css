@@ -103,7 +103,6 @@
 	min-height: 20px;
 	font-size: var(--text-xs);
 	align-items: center;
-    justify-content: center;
 }
 
 .frm-application-card:hover .frm-new-pill{
