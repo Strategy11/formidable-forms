@@ -295,14 +295,14 @@
 			);
 			const header = div({
 				children: [
-					titleWrapper,
-					getUseThisTemplateControl( data )
+					titleWrapper
 				]
 			});
 
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
 			}
+			titleWrapper.appendChild( getUseThisTemplateControl( data ) );
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
@@ -369,7 +369,7 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary frm-button-sm',
+			className: 'button frm-button-secondary frm-button-sm frm-fadein',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
