@@ -43,7 +43,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return void
 	 */
@@ -65,7 +65,16 @@ class FrmAppController {
 		add_action(
 			'admin_menu',
 			function () use ( $black_friday_menu_label ) {
-				add_submenu_page( 'formidable', 'Formidable', $black_friday_menu_label, 'frm_change_settings', 'formidable-black-friday', 'FrmAppController::redirect_blackfriday' );
+				add_submenu_page(
+					'formidable',
+					'Formidable',
+					$black_friday_menu_label,
+					'frm_change_settings',
+					'formidable-black-friday',
+					function () {
+						// This function should do nothing. The redirect is handled earlier to avoid header conflicts.
+					}
+				);
 			},
 			1000
 		);
@@ -74,7 +83,7 @@ class FrmAppController {
 	/**
 	 * Black Friday sale is from November 25 to 29.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return bool
 	 */
@@ -85,7 +94,7 @@ class FrmAppController {
 	/**
 	 * Cyber Monday sale rules from November 30 to December 4.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return bool
 	 */
@@ -97,7 +106,7 @@ class FrmAppController {
 	 * Check if the current time is within a sale date range.
 	 * Our sales are based on Eastern Time, so we use New York's timezone.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $from The beginning of the date range. Y-m-d format is expected.
 	 * @param string $to   The end of the date range. Y-m-d format is expected.
@@ -618,6 +627,31 @@ class FrmAppController {
 		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
 			FrmStylesController::save_style();
+		}
+
+		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
+			wp_redirect(
+				FrmAppHelper::admin_upgrade_link(
+					array(
+						'medium'  => 'upgrade',
+						'content' => 'submenu-upgrade',
+					)
+				)
+			);
+			die();
+		}
+
+		if ( 'formidable-black-friday' === FrmAppHelper::get_param( 'page' ) && current_user_can( 'frm_change_settings' ) ) {
+			wp_redirect(
+				FrmAppHelper::admin_upgrade_link(
+					array(
+						'medium'  => 'black-friday-submenu',
+						'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
+					),
+					'black-friday'
+				)
+			);
+			die();
 		}
 
 		// Register personal data hooks.
@@ -1398,25 +1432,5 @@ class FrmAppController {
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
-	}
-
-	/**
-	 * Redirect to Black Friday sales page when the menu item is clicked.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function redirect_blackfriday() {
-		wp_redirect(
-			FrmAppHelper::admin_upgrade_link(
-				array(
-					'medium'  => 'black-friday-submenu',
-					'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
-				),
-				'black-friday'
-			)
-		);
-		die();
 	}
 }

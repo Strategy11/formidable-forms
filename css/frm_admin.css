@@ -3019,6 +3019,10 @@ body.frm-body-with-open-modal {
 	vertical-align: text-bottom;
 }
 
+.frm_add_field span + .frm-meta-tag {
+	margin-left: 0;
+}
+
 /* Start entry statuses */
 .frm-entry-status {
 	font-weight: 500;

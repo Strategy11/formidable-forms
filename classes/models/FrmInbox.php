@@ -373,7 +373,7 @@ class FrmInbox extends FrmFormApi {
 	 * Check if user is still using the Lite version only, and within
 	 * the first 30 days of activation.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return bool
 	 */

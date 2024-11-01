@@ -882,7 +882,7 @@ class FrmStylesHelper {
 	/**
 	 * Get wrapper classname for style editor sections.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $section_type
 	 *

@@ -28,7 +28,7 @@ class FrmStyle {
 	public $id = 0;
 
 	/**
-	 * @param int|string $id The id of the stylsheet or 'default'.
+	 * @param int|string $id The id of the stylesheet or 'default'.
 	 */
 	public function __construct( $id = 0 ) {
 		$this->id = $id;

@@ -241,10 +241,10 @@ class FrmFieldName extends FrmFieldCombo {
 
 	/**
 	 * Maybe show a warning if a name field is using a description that is not descriptive enough.
-	 * Prior to version x.x, First and Last were the default values, but this has been updated to
+	 * Prior to version 6.16, First and Last were the default values, but this has been updated to
 	 * improve accessibility.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param array $args
 	 * @return void

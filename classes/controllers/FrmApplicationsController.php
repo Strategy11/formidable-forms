@@ -141,7 +141,12 @@ class FrmApplicationsController {
 	 */
 	private static function reduce_template( $total, $current ) {
 		$template = new FrmApplicationTemplate( $current );
-		$total[]  = $template->as_js_object();
+
+		$js_object = $template->as_js_object();
+		if ( $js_object ) {
+			$total[] = $js_object;
+		}
+
 		return $total;
 	}
 
