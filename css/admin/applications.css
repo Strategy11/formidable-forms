@@ -98,12 +98,14 @@
 	right: 2px;
 	align-self: center;
 }
+
 .frm-application-card .frm-new-pill {
 	min-height: 20px;
 	font-size: var(--text-xs);
 	align-items: center;
     justify-content: center;
 }
+
 .frm-application-card:hover .frm-new-pill{
 	display: none;
 }
