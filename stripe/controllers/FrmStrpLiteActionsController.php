@@ -10,6 +10,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static $customer;
 
+	private static $has_loaded_stripe_script;
+
 	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
@@ -437,6 +439,73 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
+		self::maybe_load_stripe_script();
+
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$style_settings  = self::get_style_settings_for_form( $form_id );
+		$stripe_vars     = array(
+			'publishable_key' => $publishable,
+			'form_id'         => $form_id,
+			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
+			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'        => $action_settings,
+			'locale'          => self::get_locale(),
+			'baseFontSize'    => $style_settings['field_font_size'],
+			'appearanceRules' => self::get_appearance_rules( $style_settings ),
+			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
+		);
+
+		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
+	}
+
+	private static function get_payment_actions( $form_id ) {
+		return array();
+		$actions = self::get_actions_before_submit( FrmAppHelper::get_param( 'form_id' ) );
+		return ! empty( $actions );
+	}
+
+	private static function should_load_stripe_script(){
+		if ( self::$has_loaded_stripe_script ) {
+			return false;
+		}
+		global $frm_vars;
+		$form_ids = $frm_vars['forms_loaded'];
+		if ( ! is_array( $form_ids ) ) {
+			return false;
+		}
+		$form_ids = array_unique( wp_list_pluck( $form_ids, 'id' ) );
+		foreach ( $form_ids as $form_id ) {
+			if ( self::should_load_stripe_script_for_form( $form_id ) ) {
+				self::$has_loaded_stripe_script = true;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function should_load_stripe_script_for_form( $form_id ) {
+		$action_status   = array(
+			'post_status' => 'publish',
+		);
+		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
+		if ( empty( $payment_actions ) ) {
+			return false;
+		}
+
+		foreach ( $payment_actions as $action ) {
+			if ( ! empty( $action->post_content['stripe_link'] ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static function maybe_load_stripe_script() {
+		if ( ! self::should_load_stripe_script() ) {
+			return;
+		}
+
 		$suffix       = FrmAppHelper::js_suffix();
 		$dependencies = array( 'stripe', 'formidable' );
 
@@ -462,22 +531,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			FrmAppHelper::plugin_version(),
 			false
 		);
-
-		$action_settings = self::prepare_settings_for_js( $form_id );
-		$style_settings  = self::get_style_settings_for_form( $form_id );
-		$stripe_vars     = array(
-			'publishable_key' => $publishable,
-			'form_id'         => $form_id,
-			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
-			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings'        => $action_settings,
-			'locale'          => self::get_locale(),
-			'baseFontSize'    => $style_settings['field_font_size'],
-			'appearanceRules' => self::get_appearance_rules( $style_settings ),
-			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
-		);
-
-		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
 	}
 
 	/**
