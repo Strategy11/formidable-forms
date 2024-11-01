@@ -458,12 +458,13 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
 	}
 
-	private static function get_payment_actions( $form_id ) {
-		return array();
-		$actions = self::get_actions_before_submit( FrmAppHelper::get_param( 'form_id' ) );
-		return ! empty( $actions );
-	}
-
+	/**
+	 * Returns true if the Stripe script should be loaded.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
 	private static function should_load_stripe_script(){
 		if ( self::$has_loaded_stripe_script ) {
 			return false;
@@ -484,6 +485,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		return false;
 	}
 
+	/**
+	 * Returns true if the Stripe script should be loaded for a form.
+	 *
+	 * @since x.x
+	 * @param int $form_id
+	 *
+	 * @return bool
+	 */
 	private static function should_load_stripe_script_for_form( $form_id ) {
 		$action_status   = array(
 			'post_status' => 'publish',
@@ -501,6 +510,12 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		return false;
 	}
 
+	/**
+	 * Loads Stripe script if it hasn't been loaded yet and it should be loaded.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
 	private static function maybe_load_stripe_script() {
 		if ( ! self::should_load_stripe_script() ) {
 			return;
