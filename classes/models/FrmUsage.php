@@ -34,6 +34,11 @@ class FrmUsage {
 			'timeout' => 45, // Without this, Debug Log catches the `http_request_failed` error.
 		);
 
+		// Remove time limit to execute this function.
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
+
 		$response = wp_remote_request( base64_decode( $ep ), $post );
 		if ( class_exists( 'FrmLog' ) && ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) ) {
 			$log = new FrmLog();
