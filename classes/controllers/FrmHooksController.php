@@ -96,7 +96,6 @@ class FrmHooksController {
 		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
 		add_action( 'admin_enqueue_scripts', 'FrmUsageController::load_scripts' );
-		add_action( 'wp_ajax_frm_track_flows', 'FrmUsageController::ajax_track_flows' );
 
 		/**
 		 * Make name field work with View.
@@ -293,6 +292,9 @@ class FrmHooksController {
 		// Submit with AJAX.
 		// Trigger before process_entry.
 		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 );
+
+		// Track the flows usage data.
+		add_action( 'wp_ajax_frm_track_flows', 'FrmUsageController::ajax_track_flows' );
 	}
 
 	/**
