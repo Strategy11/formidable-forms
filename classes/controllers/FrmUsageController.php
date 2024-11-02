@@ -105,14 +105,32 @@ class FrmUsageController {
 	 * @since x.x
 	 */
 	public static function ajax_track_flows() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$flows_data = self::get_flows_data();
 		$key   = FrmAppHelper::get_post_param( 'key', '', 'sanitize_text_field' );
 		$value = FrmAppHelper::get_post_param( 'value', '', 'sanitize_text_field' );
 
+		self::update_flows_data( $key, $value );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Updates flows data.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key   Flow key.
+	 * @param string $value Flow value.
+	 *
+	 * @return void
+	 */
+	public static function update_flows_data( $key, $value ) {
+		$flows_data = self::get_flows_data();
+
 		if ( '' === $key || '' === $value ) {
-			wp_send_json_success(); // We don't want to emit an error.
+			return;
 		}
 
 		if ( ! isset( $flows_data[ $key ] ) ) {
@@ -125,8 +143,6 @@ class FrmUsageController {
 
 		$flows_data[ $key ][ $value ]++;
 		update_option( self::FLOWS_ACTION_NAME, $flows_data );
-
-		wp_send_json_success();
 	}
 
 	/**
