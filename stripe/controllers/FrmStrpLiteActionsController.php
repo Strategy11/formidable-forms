@@ -470,7 +470,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return bool
 	 */
-	private static function should_load_stripe_script(){
+	private static function should_load_stripe_script() {
 		if ( self::$has_loaded_stripe_script ) {
 			return false;
 		}
