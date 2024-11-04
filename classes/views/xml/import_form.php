@@ -157,7 +157,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</td>
 								<td>
 									<label for="export_form_<?php echo esc_attr( $form->id ); ?>">
-										<?php echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name ); ?>
+										<?php echo esc_html( '' === $form->name ? FrmFormsHelper::get_no_title_text() : $form->name ); ?>
 									</label>
 								</td>
 								<td>
