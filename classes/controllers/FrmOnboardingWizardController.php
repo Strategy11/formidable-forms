@@ -317,7 +317,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return void
 	 */
@@ -331,6 +331,10 @@ class FrmOnboardingWizardController {
 			return;
 		}
 
+		$user_id    = $user->ID;
+		$first_name = get_user_meta( $user_id, 'first_name', true );
+		$last_name  = get_user_meta( $user_id, 'last_name', true );
+
 		wp_remote_post(
 			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
 			array(
@@ -343,6 +347,8 @@ class FrmOnboardingWizardController {
 						'item_meta[0]'  => '',
 						'item_meta[15]' => $user->user_email,
 						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
+						'item_meta[18]' => is_string( $first_name ) ? $first_name : '',
+						'item_meta[19]' => is_string( $last_name ) ? $last_name : '',
 					)
 				),
 			)
@@ -352,7 +358,7 @@ class FrmOnboardingWizardController {
 	/**
 	 * Try to skip any fake emails.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $email
 	 * @return bool
@@ -364,6 +370,9 @@ class FrmOnboardingWizardController {
 			'@localhost',
 			'@local.dev',
 			'@local.test',
+			'test@gmail.com',
+			'admin@gmail.com',
+			
 		);
 		foreach ( $substrings as $substring ) {
 			if ( false !== strpos( $email, $substring ) ) {
@@ -749,12 +758,12 @@ class FrmOnboardingWizardController {
 	 * Validates if the Onboarding Wizard page is being displayed.
 	 *
 	 * @since 6.9
-	 * @deprecated x.x
+	 * @deprecated 6.16
 	 *
 	 * @return bool True if the Onboarding Wizard page is displayed, false otherwise.
 	 */
 	public static function is_onboarding_wizard_displayed() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16' );
 		return get_transient( self::TRANSIENT_NAME ) === self::TRANSIENT_VALUE;
 	}
 }

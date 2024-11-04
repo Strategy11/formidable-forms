@@ -111,7 +111,10 @@ class FrmAddonsController {
 				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
-				'FrmAddonsController::upgrade_to_pro'
+				function () {
+					// This function doesn't need to do anything.
+					// The redirect is handled earlier to avoid issues with the headers being sent.
+				}
 			);
 		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
@@ -864,25 +867,6 @@ class FrmAddonsController {
 				'label' => __( 'Not Installed', 'formidable' ),
 			);
 		}
-	}
-
-	/**
-	 * Handle when the Upgrade submenu item is clicked.
-	 *
-	 * @since x.x This function was changed to no longer render a page, redirecting directly to the upgrade page instead.
-	 *
-	 * @return void
-	 */
-	public static function upgrade_to_pro() {
-		wp_redirect(
-			FrmAppHelper::admin_upgrade_link(
-				array(
-					'medium'  => 'upgrade',
-					'content' => 'submenu-upgrade',
-				)
-			)
-		);
-		die();
 	}
 
 	/**

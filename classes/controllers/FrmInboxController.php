@@ -127,11 +127,11 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.06
-	 * @deprecated x.x
+	 * @deprecated 6.16
 	 *
 	 * @return void
 	 */
 	public static function dismiss_all_button( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16' );
 	}
 }

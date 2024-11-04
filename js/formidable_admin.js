@@ -6607,7 +6607,8 @@ function frmAdminBuildJS() {
 		if ( formNameInput && formNameInput.value.trim() !== '' ) {
 			return false;
 		}
-		return 'true' === urlParams.get( 'new_template' );
+
+		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText; // eslint-disable-line camelcase
 	}
 
 	/**
