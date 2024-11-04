@@ -10,6 +10,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static $customer;
 
+	/**
+	 * @since x.x
+	 *
+	 * @var bool|null A memoized value for whether the Stripe script has been loaded.
+	 */
 	private static $has_loaded_stripe_script;
 
 	/**
