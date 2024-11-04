@@ -181,12 +181,18 @@ class FrmApplicationTemplate {
 		$application['isWebp']           = in_array( $application['key'], self::get_template_keys_with_local_webp_images(), true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
+			$application['requires'] = FrmFormsHelper::get_plan_required( $application );
+
+			if ( false === $application['requires'] ) {
+				// Application is invalid if the URL is unavailable and there is no plan required.
+				return array();
+			}
+
 			$purchase_url = $this->is_available_for_purchase();
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
-			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
 
