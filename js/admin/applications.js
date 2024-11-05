@@ -299,10 +299,15 @@
 				]
 			});
 
+			const templateControl = getUseThisTemplateControl( data );
+			if ( templateControl.classList.contains('frm-delete-application-trigger' ) ) {
+				header.appendChild( templateControl );
+			} else {
+				titleWrapper.appendChild( getUseThisTemplateControl( data ) );
+			}
 			if ( data.isNew ) {
 				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
 			}
-			titleWrapper.appendChild( getUseThisTemplateControl( data ) );
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
