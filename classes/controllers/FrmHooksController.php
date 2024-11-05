@@ -95,7 +95,6 @@ class FrmHooksController {
 
 		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
-		add_action( 'admin_enqueue_scripts', 'FrmUsageController::load_scripts' );
 
 		/**
 		 * Make name field work with View.
