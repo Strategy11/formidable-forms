@@ -303,7 +303,7 @@
 			if ( templateControl.classList.contains('frm-delete-application-trigger' ) ) {
 				header.appendChild( templateControl );
 			} else {
-				titleWrapper.appendChild( getUseThisTemplateControl( data ) );
+				titleWrapper.appendChild( templateControl );
 			}
 			if ( data.isNew ) {
 				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
