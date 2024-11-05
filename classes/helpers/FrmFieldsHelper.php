@@ -1036,7 +1036,7 @@ class FrmFieldsHelper {
 			$string_value = $replace_with;
 			if ( is_array( $replace_with ) ) {
 				$sep          = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$string_value = implode( $sep, $replace_with );
+				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
 			if ( empty( $string_value ) && $string_value != '0' ) {
