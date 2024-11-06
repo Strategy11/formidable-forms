@@ -915,7 +915,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( isset( $field['subfield_name'] ) && 'name' === $field['type'] && 0 === strpos( $k, 'aria-invalid' ) ) {
+			if ( isset( $field['subfield_name'] ) && 0 === strpos( $k, 'aria-invalid' ) ) {
 				$subfield_name = $field['subfield_name'];
 				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
 					continue;
