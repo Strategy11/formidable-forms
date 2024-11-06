@@ -920,6 +920,7 @@ class FrmFieldsController {
 				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
 					continue;
 				}
+				// Change the key to the correct aria-invalid value so that $add_html is set correctly for the current subfield of a combo field.
 				$k = 'aria-invalid';
 				$v = $field['shortcodes'][ 'aria-invalid-' . $subfield_name ];
 				unset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] );
