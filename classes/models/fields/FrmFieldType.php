@@ -996,6 +996,20 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Set the aria-invalid attribute for field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
