@@ -55,4 +55,20 @@ class FrmFieldHidden extends FrmFieldType {
 	protected function html5_input_type() {
 		return 'hidden';
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function validate( $args ) {
+		$error = FrmFieldsHelper::get_error_msg( $this->field, 'unique_msg' );
+		if ( ! empty( $error ) ) {
+			add_filter( 'frm_invalid_error_message', function( $msg ) use ( $error ) {
+				return $msg . ' ' . $error;
+			} );
+		}
+		return array();
+	}
 }
