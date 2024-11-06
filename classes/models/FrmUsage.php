@@ -343,7 +343,10 @@ class FrmUsage {
 				if ( isset( $form->options[ $setting ] ) ) {
 					if ( 'custom_style' === $setting ) {
 						$style->id = $form->options[ $setting ];
-						if ( 1 === intval( $style->id ) ) {
+
+						if ( ! $style->id ) {
+							$style_name = 0;
+						} elseif ( 1 === intval( $style->id ) ) {
 							$style_name = 'formidable-style';
 						} else {
 							$style_post = $style->get_one();
