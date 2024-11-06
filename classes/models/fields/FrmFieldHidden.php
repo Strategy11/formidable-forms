@@ -63,6 +63,7 @@ class FrmFieldHidden extends FrmFieldType {
 	 * @return array
 	 */
 	public function validate( $args ) {
+		// Exit early if field is not required to be unique or if the value is empty.
 		$error = FrmFieldsHelper::get_error_msg( $this->field, 'unique_msg' );
 		if ( ! empty( $error ) ) {
 			add_filter( 'frm_invalid_error_message', function( $msg ) use ( $error ) {
