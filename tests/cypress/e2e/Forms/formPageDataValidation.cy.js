@@ -15,9 +15,12 @@ describe("Forms page", () => {
         cy.log("Validate the upgrade link");
         cy.get('.frm-upgrade-bar > a')
             .should('have.text', 'upgrading to PRO').click();
-        cy.origin('https://formidableforms.com', () => {
-            cy.get('h1').should('have.text', 'The Only WordPress Form Maker & Application Builder Plugin');
-        });
+        cy.origin('https://formidableforms.com', () => { 
+            cy.get('h1').then(($h1) => {
+                const text = $h1.text();
+                expect(['The Only WordPress Form Maker & Application Builder Plugin', 'Upgrade Today to Unlock the Full Power of Formidable Forms']).to.include(text);
+            });
+        });            
 
         cy.log("Navigate back to the original page");
         cy.visit('/wp-admin/admin.php?page=formidable');

@@ -2118,6 +2118,20 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Flatten an array before imploding it to avoid Array to string conversion warnings.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sep
+	 * @param array  $array
+	 * @return string
+	 */
+	public static function safe_implode( $sep, $array ) {
+		$array = self::array_flatten( $array );
+		return implode( $sep, $array );
+	}
+
+	/**
 	 * @param string $text
 	 * @param bool   $is_rich_text
 	 * @return string
