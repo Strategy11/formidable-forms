@@ -60,9 +60,15 @@ class FrmInboxController {
 		if ( ! empty( $key ) ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
+
 			if ( $key === 'review' ) {
 				$reviews = new FrmReviews();
 				$reviews->dismiss_review();
+			}
+
+			if ( $key === 'onboarding_wizard' ) {
+				// Delete the skipped option or the inbox message will continue to get added.
+				delete_option( FrmOnboardingWizardController::ONBOARDING_SKIPPED_OPTION );
 			}
 		}
 

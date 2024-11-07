@@ -200,6 +200,10 @@ class FrmOnboardingWizardController {
 	 */
 	public static function maybe_load_page() {
 		if ( self::is_onboarding_wizard_page() ) {
+			// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
+			$message = new FrmInbox();
+			$message->dismiss( 'onboarding_wizard' );
+
 			add_action( 'admin_menu', __CLASS__ . '::menu', 99 );
 			add_action( 'admin_init', __CLASS__ . '::assign_properties' );
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
