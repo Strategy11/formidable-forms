@@ -476,7 +476,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 		global $frm_vars;
 		$form_ids = $frm_vars['forms_loaded'];
-		if ( ! is_array( $form_ids ) ) {
+		if ( empty( $form_ids ) || ! is_array( $form_ids ) ) {
 			return false;
 		}
 		$form_ids = array_unique( wp_list_pluck( $form_ids, 'id' ) );
