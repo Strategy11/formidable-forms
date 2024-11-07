@@ -516,11 +516,8 @@ class FrmForm {
 		foreach ( $field_cols as $col => $default ) {
 			$default = $default === '' ? $field->{$col} : $default;
 
-			if ( '9999' === $values['field_options'][ $col . '_' . $field->id ] && $field->type === 'submit' && 'field_order' === $col ) {
-				$new_field[ $col ] = $field->field_order;
-			} else {
-				$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
-			}
+			$new_value = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+			$new_field[ $col ] = ( '9999' === $new_value && $field->type === 'submit' && 'field_order' === $col ) ? $field->field_order : $new_value;
 		}
 
 		// Don't save the template option.
