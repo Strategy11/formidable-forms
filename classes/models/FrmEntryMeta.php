@@ -421,8 +421,10 @@ class FrmEntryMeta {
 				return true;
 			}
 		}
-		$where['e.form_id'] = $where['fi.form_id'];
-		unset( $where['fi.form_id'] );
+		if ( isset( $where['fi.form_id'] ) ) {
+			$where['e.form_id'] = $where['fi.form_id'];
+			unset( $where['fi.form_id'] );
+		}
 		return false;
 	}
 
