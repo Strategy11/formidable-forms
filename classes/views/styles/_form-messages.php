@@ -18,7 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-active">
 				<div class="frm_grid_container">
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'BG Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_success_bg_color"
+							class="frm-style-item-heading"><?php esc_html_e( 'BG Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -34,7 +36,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_success_border_color"
+							class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -50,7 +54,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_success_text_color"
+							class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -65,7 +71,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 					</div>
 
-					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label></div>
+					<div class="frm5 frm_form_field">
+						<label 
+							for="frm_success_font_size"
+							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+					</div>
 					<div class="frm7 frm_form_field">
 						<?php
 						new FrmSliderStyleComponent(
@@ -84,7 +94,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div>
 				<div class="frm_grid_container">
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'BG Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_error_bg"
+							class="frm-style-item-heading"><?php esc_html_e( 'BG Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -100,7 +112,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_error_border"
+							class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -116,7 +130,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
+						<label 
+							for="frm_error_text"
+							class="frm-style-item-heading"><?php esc_html_e( 'Font Color', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -131,7 +147,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 					</div>
 
-					<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label></div>
+					<div class="frm5 frm_form_field">
+						<label 
+							for="frm_error_font_size"
+							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+					</div>
 					<div class="frm7 frm_form_field">
 						<?php
 						new FrmSliderStyleComponent(
