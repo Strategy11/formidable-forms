@@ -516,7 +516,7 @@ class FrmForm {
 		foreach ( $field_cols as $col => $default ) {
 			$default = $default === '' ? $field->{$col} : $default;
 
-			if ( 'field_order' === $col && $field->type === 'submit' && '9999' === $values['field_options'][ $col . '_' . $field->id ] ) {
+			if ( '9999' === $values['field_options'][ $col . '_' . $field->id ] && $field->type === 'submit' && 'field_order' === $col ) {
 				$new_field[ $col ] = $field->field_order;
 			} else {
 				$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
