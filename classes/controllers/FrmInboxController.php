@@ -67,7 +67,7 @@ class FrmInboxController {
 			}
 
 			if ( $key === 'onboarding_wizard' ) {
-				// Delete the skipped optino or the inbox message will continue to get added.
+				// Delete the skipped option or the inbox message will continue to get added.
 				delete_option( FrmOnboardingWizardController::ONBOARDING_SKIPPED_OPTION );
 			}
 		}
