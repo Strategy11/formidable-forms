@@ -267,6 +267,9 @@
 			]
 		});
 
+		card.setAttribute( 'title', data.description );
+		jQuery( card ).tooltip();
+
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
 			card.classList.add( 'frm-locked-application-template' );
