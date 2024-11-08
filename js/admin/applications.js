@@ -267,8 +267,11 @@
 			]
 		});
 
-		card.setAttribute( 'title', data.description );
-		jQuery( card ).tooltip();
+		// Custom applications have no description. Only templates have tooltips.
+		if ( data.description ) {
+			card.setAttribute( 'title', data.description );
+			jQuery( card ).tooltip();
+		}
 
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
