@@ -1359,14 +1359,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 3.0 This is still referenced in https://formidableforms.com/knowledgebase/php-examples/ as of May 8, 2024.
-	 * @codeCoverageIgnore
-	 */
-	public static function page_route( $content ) {
-		return FrmDeprecated::page_route( $content );
-	}
-
-	/**
 	 * Check if we are in our admin pages.
 	 *
 	 * @return bool

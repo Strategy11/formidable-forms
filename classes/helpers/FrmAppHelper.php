@@ -1772,15 +1772,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.0
-	 * @deprecated 5.5.3
-	 */
-	public static function maybe_full_screen_link( $link ) {
-		_deprecated_function( __METHOD__, '5.5.3' );
-		return $link;
-	}
-
-	/**
 	 * @param string       $field_name
 	 * @param array|string $capability
 	 * @param string       $multiple 'single' and 'multiple'.

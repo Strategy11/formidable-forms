@@ -934,13 +934,4 @@ class FrmStylesHelper {
 			? FrmProAppHelper::use_chosen_js()
 			: true;
 	}
-
-	/**
-	 * @since 5.5.1
-	 * @deprecated 6.10
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		_deprecated_function( __METHOD__, '6.10' );
-	}
 }

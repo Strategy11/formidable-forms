@@ -125,7 +125,6 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
-		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
 
 		// Entries Controller.
@@ -162,8 +161,6 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		add_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
-		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
-		add_action( 'wp_ajax_frm_page_search', 'FrmSettingsController::page_search' );
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
@@ -184,7 +181,6 @@ class FrmHooksController {
 		// Use the same priority as styles so Applications appear directly under Styles.
 		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 );
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
-		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		// CAPTCHA
 		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
@@ -266,6 +262,8 @@ class FrmHooksController {
 
 		// Settings.
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
+		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
+		add_action( 'wp_ajax_frm_page_search', 'FrmSettingsController::page_search' );
 
 		// Styles Controller.
 		add_action( 'wp_ajax_frm_settings_reset', 'FrmStylesController::reset_styling' );
@@ -294,6 +292,12 @@ class FrmHooksController {
 
 		// Track the flows usage data.
 		add_action( 'wp_ajax_frm_track_flows', 'FrmUsageController::ajax_track_flows' );
+
+		// Applications.
+		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
+
+		// Reviews.
+		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 	}
 
 	/**

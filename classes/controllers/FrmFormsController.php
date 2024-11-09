@@ -3269,14 +3269,4 @@ class FrmFormsController {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
 	}
-
-	/**
-	 * @deprecated 6.7
-	 *
-	 * @return bool
-	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, '6.7' );
-		return FrmAddonsController::is_license_expired();
-	}
 }
