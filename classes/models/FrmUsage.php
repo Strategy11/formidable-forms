@@ -31,7 +31,8 @@ class FrmUsage {
 				'Content-Length' => strlen( $body ),
 			),
 			'body'    => $body,
-			'timeout' => 45, // Without this, Debug Log catches the `http_request_failed` error.
+			// Without this, Debug Log catches the `http_request_failed` error.
+			'timeout' => 45,
 		);
 
 		// Remove time limit to execute this function.
@@ -151,7 +152,13 @@ class FrmUsage {
 		}
 
 		global $wpdb;
-		$rows     = $wpdb->get_results( "SELECT amount, status, paysys, created_at FROM {$wpdb->prefix}{$table}" );
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT amount, status, paysys, created_at FROM %i",
+				$wpdb->prefix . $table
+			)
+		);
+
 		$payments = array();
 		foreach ( $rows as $row ) {
 			$payments[] = array(
@@ -361,7 +368,7 @@ class FrmUsage {
 			}
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
-		}
+		} //end foreach
 
 		// If the array uses numeric keys, reset them.
 		return $forms;
