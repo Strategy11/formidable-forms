@@ -610,7 +610,7 @@ class FrmStylesHelper {
 	 * @return float
 	 */
 	private static function get_base_font_size_scale( $key, $value, $defaults ) {
-		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) || 0 === (int) $value ) {
 			return 1;
 		}
 
@@ -877,6 +877,24 @@ class FrmStylesHelper {
 	 */
 	public static function is_advanced_settings() {
 		return FrmAppHelper::get_param( 'section' ) === 'advanced-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
+	}
+
+	/**
+	 * Get wrapper classname for style editor sections.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $section_type
+	 *
+	 * @return string The style editor wrapper classname.
+	 */
+	public static function style_editor_get_wrapper_classname( $section_type ) {
+		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$classname         = 'frm-style-editor-form';
+		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
+		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
+
+		return $classname;
 	}
 
 	/**

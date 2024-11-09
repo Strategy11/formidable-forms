@@ -8,7 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm12"><?php esc_html_e( 'Essential presets for a quick start. Explore advanced settings for more options', 'formidable' ); ?>.</p>
 
-<div class="frm5 frm_form_field frm-mt-md"><label class="frm-style-item-heading"><?php esc_html_e( 'Primary', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field frm-mt-md">
+	<label 
+		for="frm_style_qsettings_submit_bg_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Primary', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field frm-mt-md">
 	<?php
 	new FrmPrimaryColorStyleComponent(
@@ -21,20 +25,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'action_slug' => 'submit_bg_color',
 			'will_change' => array(
 				$frm_style->get_field_name( 'submit_bg_color' ),
-				$frm_style->get_field_name( 'slider_bar_color' ),
 				$frm_style->get_field_name( 'slider_color' ),
 				$frm_style->get_field_name( 'border_color_active' ),
 				$frm_style->get_field_name( 'submit_border_color' ),
 				$frm_style->get_field_name( 'progress_active_bg_color' ),
 				$frm_style->get_field_name( 'date_band_color' ),
 				$frm_style->get_field_name( 'date_head_bg_color' ),
+				$frm_style->get_field_name( 'toggle_on_color' ),
+				$frm_style->get_field_name( 'submit_active_border_color' ),
+				$frm_style->get_field_name( 'submit_active_bg_color' ),
+				$frm_style->get_field_name( 'submit_hover_bg_color' ),
+				$frm_style->get_field_name( 'submit_hover_border_color' ),
+				$frm_style->get_field_name( 'toggle_on_color' ),
+
 			),
 		)
 	);
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_style_qsettings_text_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Field Text', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmPrimaryColorStyleComponent(
@@ -55,7 +69,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Field Border', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_style_qsettings_border_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Field Border', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmPrimaryColorStyleComponent(
@@ -74,7 +92,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Button Text', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_style_qsettings_submit_text_color"
+		class="frm-style-item-heading"><?php esc_html_e( 'Button Text', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmPrimaryColorStyleComponent(
@@ -95,14 +117,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <hr class="frm12"/>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_field_margin"
+		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
 		null,
 		$style->post_content['field_margin'],
 		array(
-			'id'          => 'field_margin',
+			'id'          => 'frm_field_margin',
 			'max_value'   => 100,
 			'will_change' => array(
 				$frm_style->get_field_name( 'field_margin' ),
@@ -112,14 +138,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_field_pad"
+		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
 		null,
 		$style->post_content['field_pad'],
 		array(
-			'id'          => 'field_pad',
+			'id'          => 'frm_field_pad',
 			'max_value'   => 100,
 			'will_change' => array(
 				$frm_style->get_field_name( 'field_pad' ),
@@ -129,7 +159,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <hr class="frm12"/>
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_base_font_size"
+		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
+</div>
 <div class="frm7 frm_form_field">
 	<?php
 	if ( ! FrmStylesHelper::is_advanced_settings() ) {
@@ -143,7 +177,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'base_font_size' ),
 		$style->post_content['base_font_size'],
 		array(
-			'id'          => 'base_font_size',
+			'id'          => 'frm_base_font_size',
 			'max_value'   => 100,
 			'not_show_in' => 'advanced-settings',
 			'classname'   => 'frm-base-font-size',
@@ -155,7 +189,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
+	<label 
+		for="frm_field_shape"
+		class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
 	<?php
@@ -170,7 +206,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
-	<label class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
+	<label 
+		for="frm_border_radius"
+		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
 	<?php

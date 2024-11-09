@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.6.2
 Requires PHP: 7.0
-Stable tag: 6.15
+Stable tag: 6.16
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,21 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.16 =
+* New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
+* Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
+* Fix: Nothing would copy when trying to click the icon to copy a style class name.
+* Fix: A white element would appear at the bottom of the plugins page.
+* Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
+* Fix: Captcha fields would fail to validate in forms with conditional logic that fade in on page load in some cases.
+* Fix: Some JavaScript strings were not configured for translations, and a text domain was missing in one case.
+* Fix: The font size setting for form descriptions has been added back.
+* Fix: Missing for attributes have been added to labels in the visual styler to improve accessibility and user experience.
+* Some old browser specific CSS and deprecated CSS has been removed.
+* New name fields will now use more descriptive "First Name" and "Last Name" descriptions by default instead of "First" and "Last". This is to help improve accessibility.
+* The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
+* The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
+
 = 6.15 =
 * New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
 * New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
@@ -402,23 +417,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
 * Fix: Turnstile elements are now only rendered when the field is visible.
 * Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
-
-= 6.13 =
-* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
-* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
-
-= 6.12 =
-* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
-* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
-* Fix: Turnstile captcha widgets were rendering twice.
-* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
-* Fix: The submit button would appear as an entry table row on the entry view admin page.
-* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
-* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
-* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
-* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
-* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
-* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

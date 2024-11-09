@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_filter(
 	'document_title',
 	function ( $title ) use ( $form ) {
-		$form_name = '' === $form->name ? __( '(no title)', 'formidable' ) : $form->name;
+		$form_name = '' === $form->name ? FrmFormsHelper::get_no_title_text() : $form->name;
 		return get_bloginfo( 'name', 'display' ) . ' | ' . wp_strip_all_tags( $form_name );
 	}
 );

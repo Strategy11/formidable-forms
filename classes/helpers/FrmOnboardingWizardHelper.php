@@ -45,6 +45,9 @@ class FrmOnboardingWizardHelper {
 		if ( ! empty( $addon['is-vendor'] ) ) {
 			$attributes['data-is-vendor'] = 'true';
 		}
+		if ( ! empty( $addon['is-installed'] ) ) {
+			$attributes['data-is-installed'] = 'true';
+		}
 
 		FrmAppHelper::array_to_html_params( $attributes, true );
 	}
@@ -87,12 +90,13 @@ class FrmOnboardingWizardHelper {
 	public static function print_footer( $args = array() ) {
 		$defaults = array(
 			'footer-class'               => '',
-			'display-back-button'        => true,
+			'display-back-button'        => false,
 			// Primary Button Args.
 			'primary-button-text'        => esc_html__( 'Next Step', 'formidable' ),
 			'primary-button-class'       => '',
 			'primary-button-href'        => '#',
 			'primary-button-role'        => 'button',
+			'primary-button-with-icon'   => false,
 			// Secondary Button Args.
 			'secondary-button-text'      => esc_html__( 'Skip', 'formidable' ),
 			'secondary-button-class'     => '',
@@ -106,7 +110,7 @@ class FrmOnboardingWizardHelper {
 		$primary_button_attributes          = array(
 			'href' => $args['primary-button-href'],
 		);
-		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary ' . $args['primary-button-class'] );
+		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary frm-sharp frm_large ' . $args['primary-button-class'] );
 		if ( ! empty( $args['primary-button-id'] ) ) {
 			$primary_button_attributes['id'] = $args['primary-button-id'];
 		}
@@ -121,7 +125,7 @@ class FrmOnboardingWizardHelper {
 		$secondary_button_attributes          = array(
 			'href' => $args['secondary-button-href'],
 		);
-		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary ' . $args['secondary-button-class'] );
+		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary frm-sharp frm_large ' . $args['secondary-button-class'] );
 		if ( $args['secondary-button-skip-step'] ) {
 			$secondary_button_attributes['class'] .= ' frm-onboarding-skip-step';
 		}

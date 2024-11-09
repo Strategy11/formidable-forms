@@ -67,6 +67,7 @@
 	margin: 0;
 	font-size: var(--text-sm) !important;
 	font-weight: 500;
+	min-height: 28px;
 }
 
 .frm-application-card h3 .frmsvg {
@@ -98,11 +99,22 @@
 	align-self: center;
 }
 
+.frm-application-card .frm-new-pill {
+	min-height: 20px;
+	font-size: var(--text-xs);
+	align-items: center;
+}
+
+.frm-application-card:hover .frm-new-pill{
+	display: none;
+}
+
 /* Use template anchor */
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
-	position: absolute;
-	right: 10px;
-	bottom: 0;
+	display: none;
+}
+#frm_application_templates_grid .frm-application-card:hover .frm-button-secondary {
+	display: inline-block;
 }
 
 /* Card description */
