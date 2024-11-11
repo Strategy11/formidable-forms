@@ -1670,7 +1670,7 @@ class FrmFormsController {
 		);
 
 		$contextual_shortcodes = self::get_contextual_shortcodes();
-		$entry_shortcodes = array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'], $entry_shortcodes );
+		$entry_shortcodes      = array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'], $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}
