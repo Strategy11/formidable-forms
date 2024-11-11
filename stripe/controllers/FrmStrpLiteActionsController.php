@@ -499,10 +499,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function should_load_stripe_script_for_form( $form_id ) {
-		$action_status   = array(
-			'post_status' => 'publish',
-		);
-		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
+		$payment_actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
 		if ( empty( $payment_actions ) ) {
 			return false;
 		}
