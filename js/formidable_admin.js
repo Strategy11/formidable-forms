@@ -8467,8 +8467,8 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} input
-	 * @param {string} selector
-	 * @param {Array} contextualShortcodes
+	 * @param {string}      selector
+	 * @param {Array}       contextualShortcodes
 	 *
 	 * @returns {Void}
 	 */
