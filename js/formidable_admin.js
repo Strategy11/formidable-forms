@@ -8451,12 +8451,38 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns true if a shortcode could be shown in the search result.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function checkContextualShortcode( item ) {
+		return ! isContextualShortcode( item ) || canShowContextualShortcode( item )
+	}
+
+	/**
+	 * Returns true if a shortcode is contextual to fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
 	function isContextualShortcode( item ) {
 		const contextualShortcodes = getContextualShortcodes();
 		const shortcode            = item.querySelector( 'a' ).dataset.code;
 		return contextualShortcodes.address.includes( shortcode ) || contextualShortcodes.body.includes( shortcode );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
 	function canShowContextualShortcode( item ) {
 		const shortcode = item.querySelector( 'a' ).dataset.code;
 		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
@@ -9515,14 +9541,14 @@ function frmAdminBuildJS() {
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
-					if ( ! isContextualShortcode( items[i] ) || canShowContextualShortcode( items[i] ) ) {
+					if ( checkContextualShortcode( items[i] ) ) {
 						items[i].classList.remove( 'frm_hidden' );
 					}
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
 				if ( itemCanBeShown ) {
-					if ( ! isContextualShortcode( items[i] ) || canShowContextualShortcode( items[i] ) ) {
+					if ( checkContextualShortcode( items[i] )  ) {
 						items[i].classList.remove( 'frm_hidden' );
 					}
 				}
