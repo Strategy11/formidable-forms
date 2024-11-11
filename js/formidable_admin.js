@@ -8458,9 +8458,23 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showOrHideContextualShortcodes( input ) {
-		const shouldShowShortcodes = input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' );
-		const shortcodes = getContextualShortcodes();
-		for ( let shortcode of shortcodes ) {
+		const contextualShortcodes = getContextualShortcodes();
+		toggleContextualShortcodes( input, '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]', contextualShortcodes.address );
+		toggleContextualShortcodes( input, '[id^=email_message_]', contextualShortcodes.body );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @param {string} selector
+	 * @param {Array} contextualShortcodes
+	 *
+	 * @returns {Void}
+	 */
+	function toggleContextualShortcodes( input, selector, contextualShortcodes ) {
+		let shouldShowShortcodes = input.matches( selector );
+		for ( let shortcode of contextualShortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
 			if ( shortcodeLi ) {
 				shortcodeLi.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );

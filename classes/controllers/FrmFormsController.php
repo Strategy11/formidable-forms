@@ -1638,8 +1638,15 @@ class FrmFormsController {
 	 */
 	public static function get_contextual_shortcodes() {
 		return array(
-			'admin_email'        => __( 'Admin email', 'formidable' ),
-			'default-from-email' => __( 'Default from email', 'formidable' ),
+			'address' => array(
+				'admin_email'        => __( 'Admin email', 'formidable' ),
+				'default-from-email' => __( 'Default from email', 'formidable' ),
+				'default-email'      => __( 'Default email', 'formidable' ),
+			),
+			'body' => array(
+				'default-message'    => __( 'Default Msg', 'formidable' ),
+				'default-html'       => __( 'Default HTML', 'formidable' ),
+			)
 		);
 	}
 
@@ -1661,14 +1668,13 @@ class FrmFormsController {
 			'sitename'   => __( 'Site Name', 'formidable' ),
 		);
 
-		$entry_shortcodes = array_merge( self::get_contextual_shortcodes(), $entry_shortcodes );
+		$contextual_shortcodes = self::get_contextual_shortcodes();
+		$entry_shortcodes = array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'], $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}
 
 		if ( $settings_tab ) {
-			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
-			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
 			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
 			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}

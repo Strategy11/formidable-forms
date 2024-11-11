@@ -210,7 +210,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
 			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
 
-			if ( in_array( $skey, array_keys( FrmFormsController::get_contextual_shortcodes() ), true ) ) {
+			$contextual_shortcodes = FrmFormsController::get_contextual_shortcodes();
+
+			if ( in_array( $skey, array_keys( array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'] ) ), true ) ) {
 				$classes .= ' frm_hidden';
 			}
 
