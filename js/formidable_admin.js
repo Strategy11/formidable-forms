@@ -8451,6 +8451,25 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function isContextualShortcode( item ) {
+		const contextualShortcodes = getContextualShortcodes();
+		const shortcode            = item.querySelector( 'a' ).dataset.code;
+		return contextualShortcodes.address.includes( shortcode ) || contextualShortcodes.body.includes( shortcode );
+	}
+
+	function canShowContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
+		const input   = document.getElementById( inputId );
+		if ( getContextualShortcodes().address.includes( shortcode ) ) {
+			return input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' );
+		}
+		if ( getContextualShortcodes().body.includes( shortcode ) ) {
+			return input.matches( '[id^=email_message_]' );
+		}
+		return true;
+	}
+
 	/**
 	 * @since x.x
 	 *
@@ -9499,12 +9518,16 @@ function frmAdminBuildJS() {
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
-					items[i].classList.remove( 'frm_hidden' );
+					if ( ! isContextualShortcode( items[i] ) || canShowContextualShortcode( items[i] ) ) {
+						items[i].classList.remove( 'frm_hidden' );
+					}
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
 				if ( itemCanBeShown ) {
-					items[i].classList.remove( 'frm_hidden' );
+					if ( ! isContextualShortcode( items[i] ) || canShowContextualShortcode( items[i] ) ) {
+						items[i].classList.remove( 'frm_hidden' );
+					}
 				}
 				items[i].classList.add( 'frm-search-result' );
 			} else {

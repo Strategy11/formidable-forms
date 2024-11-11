@@ -1646,6 +1646,7 @@ class FrmFormsController {
 			'body' => array(
 				'default-message'    => __( 'Default Msg', 'formidable' ),
 				'default-html'       => __( 'Default HTML', 'formidable' ),
+				'default-plain'      => __( 'Default Plain', 'formidable' ),
 			)
 		);
 	}
@@ -1675,7 +1676,6 @@ class FrmFormsController {
 		}
 
 		if ( $settings_tab ) {
-			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
 			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
