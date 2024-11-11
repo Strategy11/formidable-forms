@@ -1643,11 +1643,11 @@ class FrmFormsController {
 				'default-from-email' => __( 'Default from email', 'formidable' ),
 				'default-email'      => __( 'Default email', 'formidable' ),
 			),
-			'body' => array(
-				'default-message'    => __( 'Default Msg', 'formidable' ),
-				'default-html'       => __( 'Default HTML', 'formidable' ),
-				'default-plain'      => __( 'Default Plain', 'formidable' ),
-			)
+			'body'    => array(
+				'default-message' => __( 'Default Msg', 'formidable' ),
+				'default-html'    => __( 'Default HTML', 'formidable' ),
+				'default-plain'   => __( 'Default Plain', 'formidable' ),
+			),
 		);
 	}
 
