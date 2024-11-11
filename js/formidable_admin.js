@@ -8464,10 +8464,7 @@ function frmAdminBuildJS() {
 		if ( getContextualShortcodes().address.includes( shortcode ) ) {
 			return input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' );
 		}
-		if ( getContextualShortcodes().body.includes( shortcode ) ) {
-			return input.matches( '[id^=email_message_]' );
-		}
-		return true;
+		return input.matches( '[id^=email_message_]' );
 	}
 
 	/**
