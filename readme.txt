@@ -373,7 +373,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 == Changelog ==
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
-* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely no longer be visible.
+* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
 * Fix: The slider to set field margin for section fields wouldn't properly save.
 * Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
 * Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
