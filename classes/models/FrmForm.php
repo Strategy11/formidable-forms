@@ -516,7 +516,7 @@ class FrmForm {
 		foreach ( $field_cols as $col => $default ) {
 			$default = $default === '' ? $field->{$col} : $default;
 
-			$new_value = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+			$new_value         = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
 			$new_field[ $col ] = FrmSubmitHelper::DEFAULT_ORDER === intval( $new_value ) && $field->type === 'submit' && 'field_order' === $col ? $field->field_order : $new_value;
 		}
 
