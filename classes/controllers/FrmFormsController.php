@@ -170,7 +170,7 @@ class FrmFormsController {
 			array(
 				'type'          => FrmSubmitHelper::FIELD_TYPE,
 				'name'          => __( 'Submit', 'formidable' ),
-				'field_order'   => 9999,
+				'field_order'   => FrmSubmitHelper::DEFAULT_ORDER,
 				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',

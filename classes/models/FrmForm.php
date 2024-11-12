@@ -514,9 +514,12 @@ class FrmForm {
 			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = $default === '' ? $field->{$col} : $default;
-
+			$default           = $default === '' ? $field->{$col} : $default;
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+		}
+
+		if ( $field->type === 'submit' && isset( $new_field['field_order'] ) && (int) $new_field['field_order'] === FrmSubmitHelper::DEFAULT_ORDER ) {
+			$new_field['field_order'] = $field->field_order;
 		}
 
 		// Don't save the template option.

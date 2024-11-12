@@ -15,6 +15,7 @@
 = 6.16 =
 * New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
 * Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
+* Fix: Submit buttons would appear out of place after saving a form.
 * Fix: Nothing would copy when trying to click the icon to copy a style class name.
 * Fix: A white element would appear at the bottom of the plugins page.
 * Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
