@@ -1,4 +1,16 @@
 == Changelog ==
+= 6.16.1 =
+* New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
+* Fix: The slider to set field margin for section fields wouldn't properly save.
+* Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
+* Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
+* Fix: A str_replace(): Passing null to parameter #3 deprecated message has been fixed.
+* Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
+* Fix: An array to string conversion PHP warning has been fixed.
+* Fix: The center form styling toggle would not properly save.
+* Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
+* The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
+
 = 6.16 =
 * New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
 * Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
