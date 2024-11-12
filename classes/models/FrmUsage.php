@@ -154,7 +154,7 @@ class FrmUsage {
 		global $wpdb;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT amount, status, paysys, created_at FROM %i",
+				"SELECT amount, status, paysys, created_at FROM %1\$s",
 				$wpdb->prefix . $table
 			)
 		);
