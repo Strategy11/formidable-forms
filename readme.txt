@@ -1,7 +1,7 @@
 === Formidable Forms - Contact Form Plugin, Survey, Quiz, Payment, Calculator Form & Custom Form Builder ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
+Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
 Requires at least: 5.2
 Tested up to: 6.6.2
 Requires PHP: 7.0
@@ -405,30 +405,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
 * Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
 * Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
-
-= 6.14.1 =
-* Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
-* New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
-* New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactivating the Formidable Views add-on.
-* New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending additional unit to the value introduces CSS errors.
-* Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
-* Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
-* Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
-* Fix: Base font size calculations were occurring too frequently, causing text to become smaller than intended.
-* Fix: The box shadow styling value would flip to the opposite of the intended setting on load.
-
-= 6.14 =
-* New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
-* New: The code for moving fields in the builder has been optimized for large forms.
-* New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
-* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
-* Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
-* Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
-* Fix: A JavaScript error would occur when trying to validate a read only time field.
-* Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
-* Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
-* Fix: Turnstile elements are now only rendered when the field is visible.
-* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
