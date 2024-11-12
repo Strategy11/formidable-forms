@@ -154,7 +154,7 @@ class FrmUsage {
 		global $wpdb;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT amount, status, paysys, created_at FROM %1\$s",
+				'SELECT amount, status, paysys, created_at FROM %1$s',
 				$wpdb->prefix . $table
 			)
 		);
@@ -368,7 +368,7 @@ class FrmUsage {
 			}
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
-		} //end foreach
+		}//end foreach
 
 		// If the array uses numeric keys, reset them.
 		return $forms;
