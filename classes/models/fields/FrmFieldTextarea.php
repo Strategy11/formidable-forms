@@ -94,7 +94,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .
-			FrmAppHelper::esc_textarea( $this->field['value'] ) .
+			FrmAppHelper::esc_textarea( ! empty( $this->field['value'] ) ? $this->field['value'] : $this->field['default_value'] ) .
 			'</textarea>';
 	}
 }
