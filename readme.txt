@@ -403,23 +403,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Turnstile elements are now only rendered when the field is visible.
 * Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
 
-= 6.13 =
-* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
-* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
-
-= 6.12 =
-* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
-* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
-* Fix: Turnstile captcha widgets were rendering twice.
-* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
-* Fix: The submit button would appear as an entry table row on the entry view admin page.
-* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
-* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
-* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
-* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
-* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
-* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
