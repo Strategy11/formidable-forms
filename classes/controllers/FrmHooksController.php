@@ -290,6 +290,9 @@ class FrmHooksController {
 		// Trigger before process_entry.
 		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 );
 
+		// Track the flows usage data.
+		add_action( 'wp_ajax_frm_track_flows', 'FrmUsageController::ajax_track_flows' );
+
 		// Applications.
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
