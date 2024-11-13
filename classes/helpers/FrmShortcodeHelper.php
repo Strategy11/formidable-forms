@@ -51,11 +51,25 @@ class FrmShortcodeHelper {
 		);
 	}
 
+	/**
+	 * Get contextual shortcodes.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	public static function get_contextual_shortcode_values() {
 		$contextual_shortcodes = self::get_contextual_shortcodes();
 		return array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'] );
 	}
 
+	/**
+	 * Get flattened format of contextual shortcodes.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	public static function get_contextual_codes() {
 		$contextual_shortcodes = self::get_contextual_shortcodes();
 		$result = array();
