@@ -8469,9 +8469,8 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function isContextualShortcode( item ) {
-		const contextualShortcodes = getContextualShortcodes();
 		const shortcode            = item.querySelector( 'a' ).dataset.code;
-		return contextualShortcodes.address.includes( shortcode ) || contextualShortcodes.body.includes( shortcode );
+		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
 	}
 
 	/**
@@ -8484,7 +8483,7 @@ function frmAdminBuildJS() {
 		const shortcode = item.querySelector( 'a' ).dataset.code;
 		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
 		const input   = document.getElementById( inputId );
-		const contextualShortcodes = getContextualShortcodes();
+		const contextualShortcodes = frmAdminJs.contextualShortcodes;
 		if ( contextualShortcodes.address.includes( shortcode ) ) {
 			return input.matches( contextualShortcodes.addressSelector );
 		}
