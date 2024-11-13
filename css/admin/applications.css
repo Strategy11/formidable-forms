@@ -185,6 +185,10 @@
 	overflow-y: auto;
 }
 
+#frm_view_application_modal .postbox {
+	max-height: 800px !important;
+}
+
 .frm-application-modal-label {
 	opacity: 0.65;
 	margin-bottom: 5px;
