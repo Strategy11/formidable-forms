@@ -8531,10 +8531,11 @@ function frmAdminBuildJS() {
 	 * @returns {Array}
 	 */
 	function getContextualShortcodes() {
-		if ( ! document.getElementById( 'frm_adv_info' ) ) {
+		let contextualShortcodes = document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes;
+		if ( ! contextualShortcodes) {
 			return [];
 		}
-		const contextualShortcodes = JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
+		contextualShortcodes = JSON.parse( contextualShortcodes );
 		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
 		contextualShortcodes.bodySelector    = '[id^=email_message_]';
 		return contextualShortcodes;
