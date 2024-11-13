@@ -24,7 +24,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @param array   $_api_data    Optional data to send with API calls.
 	 */
 	public function __construct( $_api_url, $_plugin_file, $_api_data = array() ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 	}
 
 	/**
@@ -35,7 +35,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @return void
 	 */
 	public function init() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @return stdClass Modified update array with custom plugin data.
 	 */
 	public function check_update( $_transient_data ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 		if ( ! is_object( $_transient_data ) ) {
 			$_transient_data = new stdClass();
 		}
@@ -61,7 +61,7 @@ class FrmEDD_SL_Plugin_Updater {
 	}
 
 	/**
-	 * Updates information on the "View version x.x details" page with custom data.
+	 * Updates information on the "View version 6.16.1 details" page with custom data.
 	 *
 	 * @uses api_request()
 	 *
@@ -71,7 +71,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 		return $_data;
 	}
 
@@ -84,7 +84,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @return array $array
 	 */
 	public function http_request_args( $args, $url ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 		return $args;
 	}
 
@@ -92,12 +92,12 @@ class FrmEDD_SL_Plugin_Updater {
 	}
 
 	public function get_cached_version_info( $cache_key = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 		return false;
 	}
 
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.1' );
 	}
 
 }

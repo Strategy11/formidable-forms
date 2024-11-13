@@ -1127,7 +1127,7 @@ BEFORE_HTML;
 	/**
 	 * Returns a text used when no title is set.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @return string
 	 */

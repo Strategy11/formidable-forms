@@ -107,7 +107,7 @@ class FrmUsage {
 	/**
 	 * Gets onboarding wizard data.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @return array
 	 */
@@ -131,7 +131,7 @@ class FrmUsage {
 	/**
 	 * Gets payments data.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @param string $table Database table name.
 	 * @return array
