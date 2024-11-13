@@ -245,6 +245,10 @@
 	margin-top: var(--gap-md);
 }
 
+.frm-application-modal-label ~ .frm-application-modal-label {
+	margin-top: var(--gap-md);
+}
+
 ul.frm-application-item-list {
 	margin-top: 0;
 	list-style: disc;
