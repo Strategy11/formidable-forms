@@ -1275,7 +1275,7 @@ class FrmStylesController {
 									?>
 								</button>
 							</h3>
-							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="">
+							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
 								<div class="inside">
 									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
 								</div><!-- .inside -->
