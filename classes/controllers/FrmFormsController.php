@@ -1631,27 +1631,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Returns shortcodes that are shown/hidden based on the context.
-	 *
-	 * @since x.x
-	 * @return array
-	 */
-	public static function get_contextual_shortcodes() {
-		return array(
-			'address' => array(
-				'admin_email'        => __( 'Admin email', 'formidable' ),
-				'default-from-email' => __( 'Default from email', 'formidable' ),
-				'default-email'      => __( 'Default email', 'formidable' ),
-			),
-			'body'    => array(
-				'default-message' => __( 'Default Msg', 'formidable' ),
-				'default-html'    => __( 'Default HTML', 'formidable' ),
-				'default-plain'   => __( 'Default Plain', 'formidable' ),
-			),
-		);
-	}
-
-	/**
 	 * Get an array of the helper shortcodes to display in the customization panel
 	 *
 	 * @since 2.0.6
@@ -1669,8 +1648,7 @@ class FrmFormsController {
 			'sitename'   => __( 'Site Name', 'formidable' ),
 		);
 
-		$contextual_shortcodes = self::get_contextual_shortcodes();
-		$entry_shortcodes      = array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'], $entry_shortcodes );
+		$entry_shortcodes      = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}

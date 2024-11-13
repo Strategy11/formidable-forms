@@ -8487,10 +8487,11 @@ function frmAdminBuildJS() {
 		const shortcode = item.querySelector( 'a' ).dataset.code;
 		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
 		const input   = document.getElementById( inputId );
-		if ( getContextualShortcodes().address.includes( shortcode ) ) {
-			return input.matches( '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]' );
+		const contextualShortcodes = getContextualShortcodes();
+		if ( contextualShortcodes.address.includes( shortcode ) ) {
+			return input.matches( contextualShortcodes.addressSelector );
 		}
-		return input.matches( '[id^=email_message_]' );
+		return input.matches( contextualShortcodes.bodySelector );
 	}
 
 	/**
@@ -8501,8 +8502,8 @@ function frmAdminBuildJS() {
 	 */
 	function showOrHideContextualShortcodes( input ) {
 		const contextualShortcodes = getContextualShortcodes();
-		toggleContextualShortcodes( input, '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]', contextualShortcodes.address );
-		toggleContextualShortcodes( input, '[id^=email_message_]', contextualShortcodes.body );
+		toggleContextualShortcodes( input, contextualShortcodes.addressSelector, contextualShortcodes.address );
+		toggleContextualShortcodes( input, contextualShortcodes.bodySelector, contextualShortcodes.body );
 	}
 
 	/**
@@ -8532,7 +8533,10 @@ function frmAdminBuildJS() {
 	 * @returns {Array}
 	 */
 	function getContextualShortcodes() {
-		return JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
+		const contextualShortcodes = JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
+		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
+		contextualShortcodes.bodySelector    = '[id^=email_message_]';
+		return contextualShortcodes;
 	}
 
 	function fieldUpdated() {
@@ -9540,17 +9544,13 @@ function frmAdminBuildJS() {
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
-				if ( itemCanBeShown ) {
-					if ( checkContextualShortcode( items[i] ) ) {
-						items[i].classList.remove( 'frm_hidden' );
-					}
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
+					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
-				if ( itemCanBeShown ) {
-					if ( checkContextualShortcode( items[i] )  ) {
-						items[i].classList.remove( 'frm_hidden' );
-					}
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
+					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.add( 'frm-search-result' );
 			} else {
