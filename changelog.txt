@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.16.1.2 =
+* The tested to version was updated.
+
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
 * Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
