@@ -8514,13 +8514,6 @@ function frmAdminBuildJS() {
 		let selector, contextualShortcodes;
 		selector             = frmAdminJs.contextualShortcodes[ type + 'Selector' ];
 		contextualShortcodes = frmAdminJs.contextualShortcodes[ type ];
-		if ( type === 'address' ) {
-			selector             = frmAdminJs.contextualShortcodes.addressSelector;
-			contextualShortcodes = frmAdminJs.contextualShortcodes.address;
-		} else {
-			selector             = frmAdminJs.contextualShortcodes.bodySelector;
-			contextualShortcodes = frmAdminJs.contextualShortcodes.body;
-		}
 		let shouldShowShortcodes = input.matches( selector );
 		for ( let shortcode of contextualShortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
@@ -8538,6 +8531,9 @@ function frmAdminBuildJS() {
 	 * @returns {Array}
 	 */
 	function getContextualShortcodes() {
+		if ( ! document.getElementById( 'frm_adv_info' ) ) {
+			return [];
+		}
 		const contextualShortcodes = JSON.parse( document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes );
 		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
 		contextualShortcodes.bodySelector    = '[id^=email_message_]';

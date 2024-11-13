@@ -1653,9 +1653,10 @@ class FrmFormsController {
 			unset( $entry_shortcodes['post_id'] );
 		}
 
-		if ( $settings_tab ) {
-			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
-		}
+		// if ( $settings_tab ) {
+		// 	$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
+		// }
+		$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 
 		/**
 		 * Use this hook to add or remove buttons in the helpers section
