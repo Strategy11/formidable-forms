@@ -1315,12 +1315,6 @@
 			el.addEventListener( 'click', event => {
 				maybeCollapseSettings( event );
 			});
-			el.addEventListener( 'keydown', event => {
-				if ( event.key === ' ' ) {
-					event.preventDefault();
-					maybeCollapseSettings( event );
-				}
-			});
 		});
 	}
 

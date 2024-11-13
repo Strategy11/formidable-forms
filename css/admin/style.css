@@ -529,6 +529,11 @@ body.rtl .frm-style-card-separator {
 	position: relative;
 	z-index: 1;
 }
+.styling_settings .accordion-section-title button {
+	border: none;
+	background: none;
+	float: right;
+}
 @media only screen and (max-width: 782px) {
 	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
 	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {
