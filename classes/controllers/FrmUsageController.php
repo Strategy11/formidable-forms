@@ -12,7 +12,7 @@ class FrmUsageController {
 	/**
 	 * Option name of flows data.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @var string
 	 */
@@ -69,7 +69,7 @@ class FrmUsageController {
 	/**
 	 * Loads scripts.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 */
 	public static function load_scripts() {
 		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) ) {
@@ -80,7 +80,7 @@ class FrmUsageController {
 	/**
 	 * Checks if is forms list page.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @return bool
 	 */
@@ -102,7 +102,7 @@ class FrmUsageController {
 	/**
 	 * AJAX handler to track flows.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 */
 	public static function ajax_track_flows() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
@@ -119,7 +119,7 @@ class FrmUsageController {
 	/**
 	 * Updates flows data.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @param string $key   Flow key.
 	 * @param string $value Flow value.
@@ -148,7 +148,7 @@ class FrmUsageController {
 	/**
 	 * Get flows data.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @return array
 	 */

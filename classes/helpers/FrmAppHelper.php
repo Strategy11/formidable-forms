@@ -2111,7 +2111,7 @@ class FrmAppHelper {
 	/**
 	 * Flatten an array before imploding it to avoid Array to string conversion warnings.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 *
 	 * @param string $sep
 	 * @param array  $array
