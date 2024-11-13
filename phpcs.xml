@@ -231,6 +231,7 @@
 		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
 		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
 		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPressVIPMinimum">
