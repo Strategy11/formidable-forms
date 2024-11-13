@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $shortcode_tags;
 
 // Store the current callbacks for the shortcode
-$original_shortcode_callbacks = isset( $shortcode_tags[ 'input' ] ) ? $shortcode_tags[ 'input' ] : false;
+$original_input_shortcode_callback = isset( $shortcode_tags['input'] ) ? $shortcode_tags['input'] : false;
 
 // Remove the shortcode
 remove_shortcode( 'input' );
@@ -151,6 +151,6 @@ if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_cur
 
 <?php
 // Add the shortcode back with the original callbacks
-if ( $original_shortcode_callbacks ) {
-	add_shortcode( 'input', $original_shortcode_callbacks );
+if ( $original_input_shortcode_callback ) {
+	add_shortcode( 'input', $original_input_shortcode_callback );
 }
