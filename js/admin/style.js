@@ -1310,10 +1310,10 @@
 		});
 
 		document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
-			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
-			el.setAttribute( 'role', 'button' );
 			el.addEventListener( 'click', event => {
-				maybeCollapseSettings( event );
+				if ( ! event.target.closest( 'button' ) ) {
+					el.querySelector( 'button' ).click();
+				}
 			});
 		});
 	}

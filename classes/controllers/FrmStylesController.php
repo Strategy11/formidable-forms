@@ -1264,12 +1264,12 @@ class FrmStylesController {
 						$accordion_content_id = 'frm_style_section_' . $box['id'];
 						?>
 						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
-							<h3 class="accordion-section-title hndle" tabindex="0">
+							<h3 class="accordion-section-title hndle">
 								<?php
 								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
 								echo esc_html( $box['title'] );
 								?>
-								<button type="button" aria-expanded="<?php $first_open ? 'true' : 'false' ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>">
+								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>">
 									<?php
 									FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
 									?>
