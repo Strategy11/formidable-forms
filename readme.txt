@@ -3,7 +3,7 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 7.0
 Stable tag: 6.16.1
 
