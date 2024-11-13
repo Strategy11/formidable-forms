@@ -1440,11 +1440,11 @@ DEFAULT_HTML;
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
-			if ( isset( $atts['show'] ) && $atts['show'] && isset( $value[ $atts['show'] ] ) ) {
+			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
-			} elseif ( ! isset( $atts['return_array'] ) || ! $atts['return_array'] ) {
+			} elseif ( empty( $atts['return_array'] ) ) {
 				$sep   = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$value = implode( $sep, $value );
+				$value = FrmAppHelper::safe_implode( $sep, $value );
 			}
 		}
 
@@ -1652,28 +1652,6 @@ DEFAULT_HTML;
 			FrmAppHelper::unserialize_or_decode( $value );
 		}
 		return $value;
-	}
-
-	/**
-	 * @deprecated 6.8.3
-	 *
-	 * @return string
-	 */
-	protected function default_unique_msg() {
-		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_unique_msg' );
-		$frm_settings = FrmAppHelper::get_settings();
-		$message      = $frm_settings->unique_msg;
-		return $message;
-	}
-
-	/**
-	 * @deprecated 6.8.3
-	 *
-	 * @return string
-	 */
-	protected function default_invalid_msg() {
-		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_invalid_msg' );
-		return FrmFieldsHelper::default_invalid_msg();
 	}
 
 	/**

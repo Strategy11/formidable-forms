@@ -2088,7 +2088,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
+					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
@@ -3266,15 +3266,5 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * @deprecated 6.7
-	 *
-	 * @return bool
-	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, '6.7' );
-		return FrmAddonsController::is_license_expired();
 	}
 }

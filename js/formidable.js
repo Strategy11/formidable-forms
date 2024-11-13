@@ -1861,10 +1861,23 @@ function frmCaptcha( captchaSelector ) {
 	for ( c = 0; c < cl; c++ ) {
 		const closestForm   = captchas[c].closest( 'form' );
 		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		const captcha       = captchas[c];
 		if ( ! formIsVisible ) {
+			// If the form is not visible, try again later in 400ms.
+			// This fixes issues where the form fades visible on page load.
+			// Or whne the form is inside of a modal.
+			const interval = setInterval(
+				function() {
+					if ( closestForm && closestForm.offsetParent !== null ) {
+						frmFrontForm.renderCaptcha( captcha, captchaSelector );
+						clearInterval( interval );
+					}
+				},
+				400
+			);
 			continue;
 		}
-		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
+		frmFrontForm.renderCaptcha( captcha, captchaSelector );
 	}
 }
 

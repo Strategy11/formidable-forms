@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.15';
+	public static $plug_version = '6.16';
 
 	/**
 	 * @var bool
@@ -1772,15 +1772,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.0
-	 * @deprecated 5.5.3
-	 */
-	public static function maybe_full_screen_link( $link ) {
-		_deprecated_function( __METHOD__, '5.5.3' );
-		return $link;
-	}
-
-	/**
 	 * @param string       $field_name
 	 * @param array|string $capability
 	 * @param string       $multiple 'single' and 'multiple'.
@@ -2115,6 +2106,20 @@ class FrmAppHelper {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * Flatten an array before imploding it to avoid Array to string conversion warnings.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sep
+	 * @param array  $array
+	 * @return string
+	 */
+	public static function safe_implode( $sep, $array ) {
+		$array = self::array_flatten( $array );
+		return implode( $sep, $array );
 	}
 
 	/**
@@ -3368,6 +3373,7 @@ class FrmAppHelper {
 
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
+				'noTitleText'        => FrmFormsHelper::get_no_title_text(),
 			);
 			/**
 			 * @param array $admin_script_strings

@@ -485,10 +485,12 @@ class FrmStrpLiteAuth {
 	 * @return mixed
 	 */
 	private static function create_intent( $action ) {
-		$amount = $action->post_content['amount'];
+		$amount   = $action->post_content['amount'];
+		$currency = $action->post_content['currency'];
+
 		if ( $amount == '000' ) {
 			// Create the intent when the form loads.
-			$amount = 100;
+			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000;
 		}
 
 		if ( 'recurring' === $action->post_content['type'] ) {
@@ -498,7 +500,7 @@ class FrmStrpLiteAuth {
 
 		$new_charge = array(
 			'amount'   => $amount,
-			'currency' => $action->post_content['currency'],
+			'currency' => $currency,
 			'metadata' => array( 'action' => $action->ID ),
 		);
 

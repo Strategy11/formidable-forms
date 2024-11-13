@@ -5,7 +5,7 @@
 		return;
 	}
 
-	const __ = wp.i18n.__;
+	const { __, sprintf } = wp.i18n;
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
@@ -210,7 +210,7 @@
 
 	function getAllItemsCategory() {
 		/* translators: %d: Number of application templates. */
-		return __( 'All Items (%d)', 'formidable' ).replace( '%d', state.templates.length );
+		return sprintf( __( 'All Items (%d)', 'formidable' ), state.templates.length );
 	}
 
 	function handleCategorySelect( category ) {
@@ -295,13 +295,18 @@
 			);
 			const header = div({
 				children: [
-					titleWrapper,
-					getUseThisTemplateControl( data )
+					titleWrapper
 				]
 			});
 
+			const templateControl = getUseThisTemplateControl( data );
+			if ( templateControl.classList.contains('frm-delete-application-trigger' ) ) {
+				header.appendChild( templateControl );
+			} else {
+				titleWrapper.appendChild( templateControl );
+			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();
@@ -369,12 +374,12 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary frm-button-sm',
+			className: 'button frm-button-secondary frm-button-sm frm-fadein',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
 		/* translators: %s: Application Template Name */
-		const ariaDescription = __( '%s Template' ).replace( '%s', data.name );
+		const ariaDescription = sprintf( __( '%s Template', 'formidable' ), data.name );
 		control.setAttribute( 'aria-description', ariaDescription );
 		control.addEventListener(
 			'click',
@@ -419,8 +424,7 @@
 					children: [
 						span(
 							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
-							__( 'Access to this application requires the %s plan.', 'formidable' )
-								.replace( '%s', data.requires )
+							sprintf( __( 'Access to this application requires the %s plan.', 'formidable' ), data.requires )
 						),
 						a({
 							text: getUpgradeNowText(),

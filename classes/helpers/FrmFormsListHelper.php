@@ -243,7 +243,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$checkbox_label_text = sprintf(
 			// translators: Form title
 			__( 'Select %s', 'formidable' ),
-			! empty( $item->name ) ? $item->name : __( '(no title)', 'formidable' )
+			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
 		);
 
 		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
@@ -408,7 +408,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
 		if ( trim( $form_name ) == '' ) {
-			$form_name = __( '(no title)', 'formidable' );
+			$form_name = FrmFormsHelper::get_no_title_text();
 		}
 		$form_name = FrmAppHelper::kses( $form_name );
 		if ( 'excerpt' != $mode ) {
