@@ -3286,7 +3286,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function localize_script( $location ) {
-		global $wp_scripts;
+		global $wp_scripts, $wp_version;
 
 		$script_strings = array(
 			'ajax_url'             => esc_url_raw( self::get_ajax_url() ),
@@ -3374,6 +3374,10 @@ class FrmAppHelper {
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
 				'noTitleText'        => FrmFormsHelper::get_no_title_text(),
+
+				// In older versions this event listener causes the section to immediately close again
+				// when the h3 element is clicked. It's only required in WP 6.7+.
+				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' )
 			);
 			/**
 			 * @param array $admin_script_strings
