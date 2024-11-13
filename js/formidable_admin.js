@@ -8498,8 +8498,9 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showOrHideContextualShortcodes( input ) {
-		toggleContextualShortcodes( input, 'address' );
-		toggleContextualShortcodes( input, 'body' );
+		[ 'address', 'body' ].forEach( type => {
+			toggleContextualShortcodes( input, type );
+		});
 	}
 
 	/**
@@ -8512,6 +8513,8 @@ function frmAdminBuildJS() {
 	 */
 	function toggleContextualShortcodes( input, type ) {
 		let selector, contextualShortcodes;
+		selector             = frmAdminJs.contextualShortcodes[ type + 'Selector' ];
+		contextualShortcodes = frmAdminJs.contextualShortcodes[ type ];
 		if ( type === 'address' ) {
 			selector             = frmAdminJs.contextualShortcodes.addressSelector;
 			contextualShortcodes = frmAdminJs.contextualShortcodes.address;
