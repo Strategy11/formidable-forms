@@ -241,6 +241,7 @@ function frmAdminBuildJS() {
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -8497,21 +8498,27 @@ function frmAdminBuildJS() {
 	 * @returns {Void}
 	 */
 	function showOrHideContextualShortcodes( input ) {
-		const contextualShortcodes = getContextualShortcodes();
-		toggleContextualShortcodes( input, contextualShortcodes.addressSelector, contextualShortcodes.address );
-		toggleContextualShortcodes( input, contextualShortcodes.bodySelector, contextualShortcodes.body );
+		toggleContextualShortcodes( input, 'address' );
+		toggleContextualShortcodes( input, 'body' );
 	}
 
 	/**
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} input
-	 * @param {string}      selector
-	 * @param {Array}       contextualShortcodes
+	 * @param {string}      type
 	 *
 	 * @returns {Void}
 	 */
-	function toggleContextualShortcodes( input, selector, contextualShortcodes ) {
+	function toggleContextualShortcodes( input, type ) {
+		let selector, contextualShortcodes;
+		if ( type === 'address' ) {
+			selector             = frmAdminJs.contextualShortcodes.addressSelector;
+			contextualShortcodes = frmAdminJs.contextualShortcodes.address;
+		} else {
+			selector             = frmAdminJs.contextualShortcodes.bodySelector;
+			contextualShortcodes = frmAdminJs.contextualShortcodes.body;
+		}
 		let shouldShowShortcodes = input.matches( selector );
 		for ( let shortcode of contextualShortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
