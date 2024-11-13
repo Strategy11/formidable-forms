@@ -1,6 +1,7 @@
 == Changelog ==
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
+* Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
 * Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
 * Fix: The slider to set field margin for section fields wouldn't properly save.
 * Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
@@ -9,6 +10,7 @@
 * Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
 * Fix: An array to string conversion PHP warning has been fixed.
 * Fix: The center form styling toggle would not properly save.
+* Fix: Form fields would appear broken when the Payment forms by Paystack plugin was active due to a shortcode conflict.
 * Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
 * The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
 
