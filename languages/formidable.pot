@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-11-13T15:06:21+00:00\n"
+"POT-Creation-Date: 2024-11-13T15:13:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -637,7 +637,7 @@ msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:149
 #: classes/controllers/FrmFormsController.php:1641
-#: classes/views/frm-entries/form.php:76
+#: classes/views/frm-entries/form.php:86
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
 msgstr ""
@@ -5791,12 +5791,12 @@ msgstr ""
 msgid "No description"
 msgstr ""
 
-#: classes/views/frm-entries/form.php:10
+#: classes/views/frm-entries/form.php:20
 msgid "Oops!"
 msgstr ""
 
 #. translators: %1$s: HTML open link, %2$s: HTML close link
-#: classes/views/frm-entries/form.php:14
+#: classes/views/frm-entries/form.php:24
 msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
 msgstr ""
 
