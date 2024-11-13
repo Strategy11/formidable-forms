@@ -245,6 +245,12 @@
 	margin-top: var(--gap-md);
 }
 
+ul.frm-application-item-list {
+	margin-top: 0;
+	list-style: disc;
+	list-style-position: inside;
+}
+
 @media only screen and (max-width: 1200px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
