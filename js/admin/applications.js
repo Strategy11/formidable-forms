@@ -442,6 +442,24 @@
 			placeholderImage.addEventListener( 'load', maybeCenterViewApplicationModal );
 		}
 
+		const detailsChildren = [
+			div({
+				className: 'frm-application-modal-label',
+				text: __( 'Description', 'formidable' )
+			}),
+			div( data.description )
+		];
+
+		if ( data.usedAddons && data.usedAddons.length ) {
+			detailsChildren.push(
+				div({
+					className: 'frm-application-modal-label',
+					text: __( 'Required Add-ons', 'formidable-pro' )
+				}),
+				getBasicList( data.usedAddons )
+			);
+		}
+
 		children.push(
 			div({
 				className: 'frm-application-image-wrapper',
@@ -449,13 +467,7 @@
 			}),
 			div({
 				className: 'frm-application-modal-details',
-				children: [
-					div({
-						className: 'frm-application-modal-label',
-						text: __( 'Description', 'formidable' )
-					}),
-					div( data.description )
-				]
+				children: detailsChildren
 			})
 		);
 
@@ -466,6 +478,16 @@
 		wp.hooks.doAction( hookName, output, args );
 
 		return output;
+	}
+
+	function getBasicList( data ) {
+		return tag(
+			'ul',
+			{
+				className: 'frm-application-item-list',
+				children: data.map( text => tag( 'li', text ) )
+			}
+		);
 	}
 
 	function maybeCenterViewApplicationModal() {
