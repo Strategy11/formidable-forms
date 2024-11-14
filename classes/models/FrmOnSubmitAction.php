@@ -53,6 +53,10 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'success_url'     => '',
 			'success_page_id' => '',
 			'open_in_new_tab' => '',
+			'redirect_delay'  => '',
+			// Value in second.
+			'redirect_delay_time' => 8,
+			'redirect_delay_msg'  => FrmOnSubmitHelper::get_default_redirect_msg(),
 		);
 	}
 
