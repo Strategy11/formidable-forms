@@ -468,7 +468,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {string|number} fileID
-	 * @return {string}
+	 * @return {string} File input value.
 	 */
 	function getFileVals( fileID ) {
 		let val = '',
@@ -562,7 +562,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @param {Array}       errors 
+	 * @param {Array}       errors
 	 * @return {void}
 	 */
 	function confirmField( field, errors ) {
