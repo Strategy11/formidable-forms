@@ -34,8 +34,8 @@ function frmFrontFormJS() {
 	 * Get the ID of the field that changed.
 	 *
 	 * @param {HTMLElement|jQuery} field
-	 * @param {Boolean}            fullID
-	 * @returns {String|Number}
+	 * @param {boolean}            fullID
+	 * @return {string|number}
 	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
@@ -443,7 +443,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
@@ -452,7 +452,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
@@ -460,15 +460,15 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
 	/**
-	 * @param {String|Number} fileID
-	 * @return {String}
+	 * @param {string|number} fileID
+	 * @return {string}
 	 */
 	function getFileVals( fileID ) {
 		let val = '',
@@ -505,8 +505,8 @@ function frmFrontFormJS() {
 	 * @since 6.15
 	 *
 	 * @param {HTMLElement} field    Field input.
-	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
-	 * @return {Boolean}
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @return {boolean}
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -671,7 +671,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement|jQuery} object
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	function hasInvisibleRecaptcha( object ) {
 		let recaptcha, recaptchaID, alreadyChecked;
