@@ -163,23 +163,32 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		let errors, r, rl, n, nl, fields, field, requiredFields;
+		let errors, n, nl, fields, field;
 
 		errors = [];
 
-		// Make sure required text field is filled in
-		requiredFields = jQuery( object ).find(
-			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
-		).filter( ':not(.frm_optional)' );
-		if ( requiredFields.length ) {
-			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
-					// skip rich text field buttons.
-					continue;
+		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
+
+		// Required field validation.
+		vanillaJsObject?.querySelectorAll( '.frm_required_field' ).forEach(
+			requiredField => {
+				const isVisible = requiredField.offsetParent !== null;
+				if ( ! isVisible ) {
+					return;
 				}
-				errors = checkRequiredField( requiredFields[r], errors );
+
+				requiredField.querySelectorAll( 'input, select, textarea' ).forEach(
+					requiredInput => {
+						if ( hasClass( requiredInput, 'frm_optional' ) || hasClass( requiredInput, 'ed_button' ) ) {
+							// skip rich text field buttons.
+							return;
+						}
+
+						errors = checkRequiredField( requiredInput, errors );
+					}
+				);
 			}
-		}
+		);
 
 		fields = jQuery( object ).find( 'input,select,textarea' );
 		if ( fields.length ) {
