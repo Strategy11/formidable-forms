@@ -30,7 +30,13 @@ function frmFrontFormJS() {
 		el.dispatchEvent( event );
 	}
 
-	/* Get the ID of the field that changed*/
+	/**
+	 * Get the ID of the field that changed.
+	 *
+	 * @param {HTMLElement|jQuery} field
+	 * @param {Boolean}            fullID
+	 * @returns {String|Number}
+	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
 			isRepeating = false,
@@ -150,7 +156,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {Object} $form
+	 * @param {jQuery} $form
 	 */
 	function enableSaveDraft( $form ) {
 		if ( ! $form.length ) {
@@ -162,6 +168,12 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Validate form with JS.
+	 *
+	 * @param {HTMLElement|jQuery} object
+	 * @return {Array}
+	 */
 	function validateForm( object ) {
 		let errors, n, nl, fields, field;
 
@@ -258,6 +270,9 @@ function frmFrontFormJS() {
 		return element.classList && element.classList.contains( targetClass );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
@@ -267,6 +282,9 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeAddHttpToUrl( field ) {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
@@ -330,6 +348,11 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {Array}
+	 */
 	function checkRequiredField( field, errors ) {
 		let checkGroup, tempVal, i, placeholder,
 			val = '',
@@ -418,19 +441,35 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {Boolean}
+	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
 		return 'string' === typeof name && '[typed]' === name.substr( -7 );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {Boolean}
+	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {Boolean}
+	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
+	/**
+	 * @param {String|Number} fileID
+	 * @return {String}
+	 */
 	function getFileVals( fileID ) {
 		let val = '',
 			fileFields = jQuery( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
@@ -443,6 +482,11 @@ function frmFrontFormJS() {
 		return val;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkUrlField( field, errors ) {
 		let fieldID,
 			url = field.value;
@@ -461,7 +505,8 @@ function frmFrontFormJS() {
 	 * @since 6.15
 	 *
 	 * @param {HTMLElement} field    Field input.
-	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @param {Boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @return {Boolean}
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -515,6 +560,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors 
+	 * @return {void}
+	 */
 	function confirmField( field, errors ) {
 		let value, confirmValue, firstField,
 			fieldID = getFieldId( field, true ),
@@ -538,6 +588,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {Array}
+	 */
 	function checkNumberField( field, errors ) {
 		let fieldID,
 			number = field.value;
@@ -550,6 +605,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {Array}
+	 */
 	function checkPatternField( field, errors ) {
 		let fieldID,
 			text = field.value,
@@ -609,6 +669,10 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * @param {HTMLElement|jQuery} object
+	 * @return {Boolean}
+	 */
 	function hasInvisibleRecaptcha( object ) {
 		let recaptcha, recaptchaID, alreadyChecked;
 
@@ -627,6 +691,9 @@ function frmFrontFormJS() {
 		return false;
 	}
 
+	/**
+	 * @param {jQuery} invisibleRecaptcha
+	 */
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
 		const recaptchaID = invisibleRecaptcha.data( 'rid' );
 		grecaptcha.reset( recaptchaID );
