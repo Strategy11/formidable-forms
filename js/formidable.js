@@ -35,7 +35,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement|jQuery} field
 	 * @param {boolean}            fullID
-	 * @return {string|number}
+	 * @return {string|number} Field ID.
 	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
@@ -172,7 +172,7 @@ function frmFrontFormJS() {
 	 * Validate form with JS.
 	 *
 	 * @param {HTMLElement|jQuery} object
-	 * @return {Array}
+	 * @return {Array} Errors.
 	 */
 	function validateForm( object ) {
 		let errors, n, nl, fields, field;
@@ -351,7 +351,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @return {Array}
+	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
 		let checkGroup, tempVal, i, placeholder,
@@ -443,7 +443,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {boolean}
+	 * @return {boolean} True if the input is a typed signature input.
 	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
@@ -452,7 +452,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {boolean}
+	 * @return {boolean} True if the field is a SSA appointment field.
 	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
@@ -460,7 +460,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @return {boolean}
+	 * @return {boolean} True if the field is inline datepicker field.
 	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
@@ -506,7 +506,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
-	 * @return {boolean}
+	 * @return {boolean} True if we should confirm the field.
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -591,7 +591,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @return {Array}
+	 * @return {void}
 	 */
 	function checkNumberField( field, errors ) {
 		let fieldID,
@@ -608,7 +608,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @return {Array}
+	 * @return {void}
 	 */
 	function checkPatternField( field, errors ) {
 		let fieldID,
@@ -671,7 +671,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement|jQuery} object
-	 * @return {boolean}
+	 * @return {boolean} True if there is an invisible recaptcha.
 	 */
 	function hasInvisibleRecaptcha( object ) {
 		let recaptcha, recaptchaID, alreadyChecked;
