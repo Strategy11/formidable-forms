@@ -200,12 +200,12 @@ class FrmFieldsHelper {
 			return false;
 		}
 
+		// Confirm an allowed action is being used, and that the correct nonce is being used.
 		if ( 'update' === $action ) {
 			$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
 			return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
 		}
 
-		// Confirm an allowed action is being used, and that the correct nonce is being used.
 		$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
 		if ( 'update_settings' === $action ) {
 			$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
