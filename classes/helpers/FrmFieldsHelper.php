@@ -286,7 +286,11 @@ class FrmFieldsHelper {
 
 		if ( strpos( $setting, 'html' ) !== false ) {
 			// Strip slashes from HTML but not regex or script tags.
-			$value = FrmAppHelper::maybe_kses( wp_unslash( $_POST['field_options'][ $setting ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+
+			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
+				$value = FrmAppHelper::kses( $value, 'all' );
+			}
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
