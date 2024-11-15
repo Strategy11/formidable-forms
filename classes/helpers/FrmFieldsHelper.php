@@ -156,9 +156,9 @@ class FrmFieldsHelper {
 	 * @param array  $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$check_post = self::context_is_safe_to_load_field_options_from_request_data();
+		$defaults   = self::get_default_field_options_from_field( $field, $values );
 
-		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
 			$defaults['required_indicator'] = '';
 			$defaults['original_type']      = $field->type;
@@ -170,9 +170,43 @@ class FrmFieldsHelper {
 			if ( $check_post ) {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
 			}
-
-			unset( $opt, $default );
 		}
+	}
+
+	/**
+	 * The fill_default_field_opts method is called when loading a field.
+	 * To prevent this from happening when creating an entry, we need to check the context.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function context_is_safe_to_load_field_options_from_request_data() {
+		if ( ! FrmAppHelper::is_admin_page() ) {
+			return false;
+		}
+
+		if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return false;
+		}
+
+		if ( ! current_user_can( 'frm_edit_forms' ) ) {
+			return false;
+		}
+
+		$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
+		if ( 'update_settings' === $action ) {
+			$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+			return wp_verify_nonce( $nonce, 'process_form_nonce' );
+		}
+
+		$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+		if ( 'update' === $action ) {
+			$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
+			return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
+		}
+
+		return false;
 	}
 
 	/**
@@ -238,6 +272,8 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * When loading settings for a field, check the $_POST data and possibly use that instead of the DB value.
+	 *
 	 * @since 3.0
 	 *
 	 * @param string $setting
@@ -250,7 +286,7 @@ class FrmFieldsHelper {
 
 		if ( strpos( $setting, 'html' ) !== false ) {
 			// Strip slashes from HTML but not regex or script tags.
-			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = FrmAppHelper::maybe_kses( wp_unslash( $_POST['field_options'][ $setting ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
