@@ -194,6 +194,7 @@ class FrmFieldsHelper {
 			return false;
 		}
 
+		// Confirm an allowed action is being used, and that the correct nonce is being used.
 		$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
 		if ( 'update_settings' === $action ) {
 			$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
