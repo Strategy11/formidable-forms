@@ -285,9 +285,9 @@ class FrmFieldsHelper {
 		}
 
 		if ( strpos( $setting, 'html' ) !== false ) {
-			// Strip slashes from HTML but not regex or script tags.
 			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 
+			// Conditionally strip script tags if the user sending $_POST data is not allowed to use unfiltered HTML.
 			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
 				$value = FrmAppHelper::kses( $value, 'all' );
 			}
