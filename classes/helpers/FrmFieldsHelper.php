@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldsHelper {
 
+	/**
+	 * The context is memoized for re-use as the context is checked for each field.
+	 *
+	 * @var bool|null
+	 */
+	private static $context_is_safe_to_load_field_options_from_request_data;
+
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
 		if ( strpos( $type, '|' ) ) {
@@ -175,44 +182,51 @@ class FrmFieldsHelper {
 
 	/**
 	 * The fill_default_field_opts method is called when loading a field.
+	 * This is used to preserve the $_POST data after updating settings for a field.
 	 * To prevent this from happening when creating an entry, we need to check the context.
-	 *
-	 * @since x.x
 	 *
 	 * @return bool
 	 */
 	private static function context_is_safe_to_load_field_options_from_request_data() {
-		if ( ! FrmAppHelper::is_admin_page() ) {
-			return false;
+		if ( isset( self::$context_is_safe_to_load_field_options_from_request_data ) ) {
+			return self::$context_is_safe_to_load_field_options_from_request_data;
 		}
 
-		if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			return false;
-		}
+		$function = function () {
+			if ( ! FrmAppHelper::is_admin_page() ) {
+				return false;
+			}
 
-		if ( ! current_user_can( 'frm_edit_forms' ) ) {
-			return false;
-		}
+			if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				return false;
+			}
 
-		$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
-		if ( 'frm_forms_preview' === $action ) {
-			// Never trigger when previewing.
-			return false;
-		}
+			if ( ! current_user_can( 'frm_edit_forms' ) ) {
+				return false;
+			}
 
-		// Confirm an allowed action is being used, and that the correct nonce is being used.
-		if ( 'update' === $action ) {
-			$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
-			return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
-		}
+			$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+			if ( 'frm_forms_preview' === $action ) {
+				// Never trigger when previewing.
+				return false;
+			}
 
-		$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
-		if ( 'update_settings' === $action ) {
-			$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
-			return wp_verify_nonce( $nonce, 'process_form_nonce' );
-		}
+			// Confirm an allowed action is being used, and that the correct nonce is being used.
+			if ( 'update' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
+			}
 
-		return false;
+			$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
+			if ( 'update_settings' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'process_form_nonce' );
+			}	
+		};
+
+		self::$context_is_safe_to_load_field_options_from_request_data = $function();
+
+		return self::$context_is_safe_to_load_field_options_from_request_data;
 	}
 
 	/**
