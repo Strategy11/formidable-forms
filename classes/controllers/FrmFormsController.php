@@ -2710,6 +2710,9 @@ class FrmFormsController {
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
+		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
+			$args['force_delay_redirect'] = true;
+		}
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
@@ -2797,7 +2800,7 @@ class FrmFormsController {
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
-		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
+		$success_msg  = $args['form']->options['redirect_delay_msg'];
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
 		$success_url  = esc_url_raw( $args['success_url'] );
 
@@ -2808,7 +2811,7 @@ class FrmFormsController {
 		 *
 		 * @param int $delay_time Delay time in milliseconds.
 		 */
-		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
+		$delay_time = apply_filters( 'frm_redirect_delay_time', 1000 * $args['form']->options['redirect_delay_time'] );
 
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$redirect_js = 'window.open("' . $success_url . '", "_blank")';

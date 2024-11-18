@@ -339,6 +339,9 @@ class FrmOnSubmitHelper {
 			case 'redirect':
 				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
 				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
+				$form_options['redirect_delay']  = ! empty( $action->post_content['redirect_delay'] );
+				$form_options['redirect_delay_time'] = $action->post_content['redirect_delay_time'];
+				$form_options['redirect_delay_msg']  = $action->post_content['redirect_delay_msg'];
 				break;
 
 			case 'page':
