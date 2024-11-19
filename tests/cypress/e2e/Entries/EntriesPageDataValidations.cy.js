@@ -158,7 +158,7 @@ describe("Entries submitted from a form", () => {
         cy.get(':nth-child(2) > h3').should("contain", "Entry Details");
         cy.get('#timestamp')
             .invoke('text')
-            .should('match', /Submitted: [A-Za-z]{3} \d{1,2}, \d{4} @ \d{1,2}:\d{2}/);
+            .should('match', /Submitted: [A-Za-z]{3} \d{1,2}, \d{4} at \d{1,2}:\d{2} (am|pm)/);
         cy.get(':nth-child(2) > .inside > :nth-child(2)').should("contain", "Entry ID:");
         cy.log('Extract and trim the value after "Entry Key:')
         cy.get(':nth-child(2) > .inside > :nth-child(3)')
