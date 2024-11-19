@@ -2710,9 +2710,6 @@ class FrmFormsController {
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
-		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
-			$args['force_delay_redirect'] = true;
-		}
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
@@ -2769,22 +2766,30 @@ class FrmFormsController {
 	private static function get_ajax_redirect_response_data( $args ) {
 		$response_data = array( 'redirect' => $args['success_url'] );
 
+		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
+			$response_data['delay']    = $args['form']->options['redirect_delay_time'];
+			$response_data['content'] .= self::get_redirect_message( $args['success_url'], $args['form']->options['redirect_delay_msg'], $args );
+		}
+
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$response_data['openInNewTab'] = 1;
 
-			$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
+			// Only show open in new tab text if there is no delay.
+			if ( empty( $response_data['content'] ) ) {
+				$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
 
-			$args['form']->options['success_msg'] = $args['message'];
-			$args['form']->options['edit_msg']    = $args['message'];
-			if ( ! isset( $args['fields'] ) ) {
-				$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
+				$args['form']->options['success_msg'] = $args['message'];
+				$args['form']->options['edit_msg']    = $args['message'];
+				if ( ! isset( $args['fields'] ) ) {
+					$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
+				}
+
+				$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
+
+				ob_start();
+				self::show_lone_success_message( $args );
+				$response_data['content'] .= ob_get_clean();
 			}
-
-			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
-
-			ob_start();
-			self::show_lone_success_message( $args );
-			$response_data['content'] = ob_get_clean();
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
 		}
