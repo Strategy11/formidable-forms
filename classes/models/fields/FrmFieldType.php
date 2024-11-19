@@ -291,14 +291,9 @@ DEFAULT_HTML;
 		$html_id    = $this->html_id();
 		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
-		$field['html_name'] = $field_name;
-		$field['html_id']   = $html_id;
-
-		$field_object = FrmFieldFactory::get_field_type( $field['type'] );
-
-		if ( $field_object->should_unserialize_value() ) {
-			FrmAppHelper::unserialize_or_decode( $field['default_value'] );
-		}
+		$field['html_name']     = $field_name;
+		$field['html_id']       = $html_id;
+		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
