@@ -1655,6 +1655,17 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Only some field types should unserialize or decode values. This is based on the value of the array_allowed property.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function should_unserialize_value() {
+		return $this->array_allowed;
+	}
+
+	/**
 	 * This function is deprecated since it has a typo in the name.
 	 *
 	 * @since 3.0
