@@ -2717,7 +2717,7 @@ class FrmFormsController {
 			wp_die();
 		}
 
-		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) {
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) && empty( $args['form']->options['redirect_delay'] ) ) {
 			// Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
