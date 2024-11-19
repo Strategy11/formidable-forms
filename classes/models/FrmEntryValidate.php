@@ -659,10 +659,11 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_name_text_fields( $form_id ) {
-		if ( null !== self::$name_text_fields && isset( self::$name_text_fields[ $form_id ] ) ) {
+		$name_text_fields_is_initialized = is_array( self::$name_text_fields );
+		if ( $name_text_fields_is_initialized && isset( self::$name_text_fields[ $form_id ] ) ) {
 			return self::$name_text_fields[ $form_id ];
 		}
-		if ( null === self::$name_text_fields ) {
+		if ( ! $name_text_fields_is_initialized ) {
 			self::$name_text_fields = array();
 		}
 		self::$name_text_fields[ $form_id ] = FrmDb::get_results(
