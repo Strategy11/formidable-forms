@@ -173,22 +173,6 @@ class FrmFieldName extends FrmFieldCombo {
 	}
 
 	/**
-	 * Set the aria-invalid attribute for name subfields.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $shortcode_atts
-	 * @param array $args
-	 *
-	 * @return void
-	 */
-	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
-		foreach ( array( 'first', 'middle', 'last' ) as $name_part ) {
-			$shortcode_atts[ 'aria-invalid-' . $name_part ] = isset( $args['errors'][ 'field' . $this->field_id . '-' . $name_part ] ) ? 'true' : 'false';
-		}
-	}
-
-	/**
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.

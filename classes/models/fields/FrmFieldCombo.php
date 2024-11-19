@@ -78,6 +78,22 @@ class FrmFieldCombo extends FrmFieldType {
 	}
 
 	/**
+	 * Set the aria-invalid attribute for subfields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		foreach ( $this->sub_fields as $sub_field ) {
+			$shortcode_atts[ 'aria-invalid-' . $sub_field['name'] ] = isset( $args['errors'][ 'field' . $this->field_id . '-' . $sub_field['name'] ] ) ? 'true' : 'false';
+		}
+	}
+
+	/**
 	 * Gets default sub field.
 	 *
 	 * @return array
