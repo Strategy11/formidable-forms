@@ -1364,8 +1364,20 @@ class FrmAppController {
 	 * @return bool
 	 */
 	private static function in_our_pages() {
-		global $current_screen;
-		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+		global $current_screen, $pagenow;
+		if ( FrmAppHelper::is_formidable_admin() ) {
+			return true;
+		}
+
+		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
+			return true;
+		}
+
+		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
