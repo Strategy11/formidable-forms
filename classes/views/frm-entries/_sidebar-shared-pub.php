@@ -5,7 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! isset( $entry ) ) {
 	$entry = $record;
-} ?>
+}
+?>
 
 <div class="misc-pub-section">
 	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
@@ -25,8 +26,7 @@ if ( ! isset( $entry ) ) {
 		/* translators: %1$s: Entry status %2$s: The date */
 		esc_html__( '%1$s: %2$s', 'formidable' ),
 		esc_html( FrmEntriesHelper::get_entry_status_label( $entry->is_draft ) ),
-		// Here
-		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) . FrmAppHelper::add_time_to_date( '', $entry->created_at ) ) . '</b>'
+		'<b>' . esc_html( FrmAppHelper::get_formatted_time( $entry->created_at, $date_format ) ) . '</b>'
 	);
 	?>
 	</span>
@@ -40,8 +40,7 @@ if ( ! isset( $entry ) ) {
 	printf(
 		/* translators: %1$s: The date */
 		esc_html__( 'Updated: %1$s', 'formidable' ),
-		// And here.
-		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->updated_at ) . FrmAppHelper::add_time_to_date( '', $entry->updated_at ) ) . '</b>'
+		'<b>' . esc_html( FrmAppHelper::get_formatted_time( $entry->updated_at, $date_format ) ) . '</b>'
 	);
 	?>
 	</span>
