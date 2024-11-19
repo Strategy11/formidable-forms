@@ -659,10 +659,13 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_name_text_fields( $form_id ) {
-		if ( null !== self::$name_text_fields ) {
-			return self::$name_text_fields;
+		if ( null !== self::$name_text_fields && isset( self::$name_text_fields[ $form_id ] ) ) {
+			return self::$name_text_fields[ $form_id ];
 		}
-		self::$name_text_fields = FrmDb::get_results(
+		if ( null === self::$name_text_fields ) {
+			self::$name_text_fields = array();
+		}
+		self::$name_text_fields[ $form_id ] = FrmDb::get_results(
 			'frm_fields',
 			array(
 				'form_id' => $form_id,
@@ -673,7 +676,7 @@ class FrmEntryValidate {
 			array( 'order_by' => 'field_order ASC' )
 		);
 
-		return self::$name_text_fields;
+		return self::$name_text_fields[ $form_id ];
 	}
 
 	private static function add_server_values_to_akismet( &$datas ) {
