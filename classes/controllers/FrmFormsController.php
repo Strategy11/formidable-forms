@@ -766,6 +766,10 @@ class FrmFormsController {
 			}
 		}
 
+		if ( ! $count ) {
+			return '';
+		}
+
 		$current_page = FrmAppHelper::get_simple_request(
 			array(
 				'param' => 'form_type',

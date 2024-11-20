@@ -604,6 +604,10 @@ class FrmForm {
 			return false;
 		}
 
+		if ( $form->status === 'trash' ) {
+			return false;
+		}
+
 		$options               = $form->options;
 		$options['trash_time'] = time();
 
