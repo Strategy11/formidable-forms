@@ -148,6 +148,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 <?php endif; ?>
 
+/* These do not work if they are combined */
 .<?php echo esc_html( $style_class ); ?> input::placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
