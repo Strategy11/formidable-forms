@@ -8531,7 +8531,7 @@ function frmAdminBuildJS() {
 	 * @returns {Array}
 	 */
 	function getContextualShortcodes() {
-		let contextualShortcodes = document.getElementById( 'frm_adv_info' ).dataset.contextualShortcodes;
+		let contextualShortcodes = document.getElementById( 'frm_adv_info' )?.dataset.contextualShortcodes;
 		if ( ! contextualShortcodes) {
 			return [];
 		}
