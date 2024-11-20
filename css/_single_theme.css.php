@@ -153,18 +153,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
-.<?php echo esc_html( $style_class ); ?> input::-webkit-input-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-webkit-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
-.<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	opacity: 1;
-}
-.<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
-<?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
