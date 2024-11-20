@@ -409,5 +409,5 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.8 =
+= 6.16.2 =
 This version fixes a security-related bug. Upgrade immediately.
