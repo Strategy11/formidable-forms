@@ -84,8 +84,6 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 /* Left and right labels */
 <?php
 
-$frm_settings = FrmAppHelper::get_settings();
-
 if ( '' === $field_height || 'auto' === $field_height ) {
 	foreach ( array( 'left', 'right', 'inline' ) as $alignit ) {
 		?>
