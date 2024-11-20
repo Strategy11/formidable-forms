@@ -1233,24 +1233,20 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Sets focus on a name field part (first or last name) if it has an error.
+	 * Sets focus on a the first subfield of a combo field that has an error.
 	 *
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
 	 */
-	function maybeSetFocusOnNameFieldElement( element ) {
+	function maybeFocusOnComboSubField( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
 			return;
 		}
-		if ( ! element.querySelector( '.frm_combo_inputs_container[data-name-layout]' ) ) {
+		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
 			return;
 		}
-		const nameField = element.querySelector( '[aria-invalid="true"]' );
-		if ( ! nameField ) {
-			return;
-		}
-		nameField.focus();
+		element.querySelector( '[aria-invalid="true"]' )?.focus();
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
@@ -1273,7 +1269,7 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			maybeSetFocusOnNameFieldElement( element );
+			maybeFocusOnComboSubField( element );
 
 			if ( 'undefined' !== typeof element.classList ) {
 				if ( element.classList.contains( 'html-active' ) ) {
