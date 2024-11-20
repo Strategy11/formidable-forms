@@ -1335,7 +1335,7 @@ function frmFrontFormJS() {
 		do {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
-				element.focus();
+				focusInput( element );
 				break;
 			}
 
@@ -1359,6 +1359,32 @@ function frmFrontFormJS() {
 				}
 			}
 		} while ( element.previousSibling );
+	}
+
+	/**
+	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function focusInput( element ) {
+		const visible = element.offsetParent !== null;
+		if ( visible ) {
+			element.focus();
+			return;
+		}
+
+		// Possibly delay focus.
+		const form = element.closest( 'form' );
+		if ( ! form ) {
+			const focusHandler = () => {
+				element.focus();
+				form.removeEventListener( 'frmProAfterFormFadeIn', focusHandler );
+			};
+			form.addEventListener( 'frmProAfterFormFadeIn', focusHandler );
+		}
 	}
 
 	/**
