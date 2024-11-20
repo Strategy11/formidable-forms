@@ -221,7 +221,7 @@ class FrmFieldsHelper {
 			if ( 'update_settings' === $action ) {
 				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 				return wp_verify_nonce( $nonce, 'process_form_nonce' );
-			}	
+			}
 		};
 
 		self::$context_is_safe_to_load_field_options_from_request_data = $function();
