@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 6.16.1.2
+Stable tag: 6.16.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,8 +371,8 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.16.1.2 =
-* The tested to version was updated.
+= 6.16.2 =
+* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
