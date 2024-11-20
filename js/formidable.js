@@ -1366,25 +1366,17 @@ function frmFrontFormJS() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {HTMLElement} element
+	 * @param {HTMLElement} input
 	 * @return {void}
 	 */
-	function focusInput( element ) {
-		const visible = element.offsetParent !== null;
+	function focusInput( input ) {
+		const visible = input.offsetParent !== null;
 		if ( visible ) {
-			element.focus();
+			input.focus();
 			return;
 		}
 
-		// Possibly delay focus.
-		const form = element.closest( 'form' );
-		if ( ! form ) {
-			const focusHandler = () => {
-				element.focus();
-				form.removeEventListener( 'frmProAfterFormFadeIn', focusHandler );
-			};
-			form.addEventListener( 'frmProAfterFormFadeIn', focusHandler );
-		}
+		triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
 	}
 
 	/**
