@@ -1657,7 +1657,7 @@ DEFAULT_HTML;
 	/**
 	 * Only some field types should unserialize or decode values. This is based on the value of the array_allowed property.
 	 *
-	 * @since x.x
+	 * @since 6.16.2
 	 *
 	 * @return bool
 	 */
