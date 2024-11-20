@@ -79,7 +79,7 @@ class FrmFieldValueSelector {
 	 *
 	 * @var int|null
 	 *
-	 * @since x.x
+	 * @since 6.16.2
 	 */
 	protected $truncate;
 
@@ -207,7 +207,7 @@ class FrmFieldValueSelector {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.2
 	 *
 	 * @param array $args
 	 *

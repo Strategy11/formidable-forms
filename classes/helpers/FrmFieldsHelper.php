@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldsHelper {
 
+	/**
+	 * The context is memoized for re-use as the context is checked for each field.
+	 *
+	 * @var bool|null
+	 */
+	private static $context_is_safe_to_load_field_options_from_request_data;
+
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
 		if ( strpos( $type, '|' ) ) {
@@ -156,9 +163,9 @@ class FrmFieldsHelper {
 	 * @param array  $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$check_post = self::context_is_safe_to_load_field_options_from_request_data();
+		$defaults   = self::get_default_field_options_from_field( $field, $values );
 
-		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
 			$defaults['required_indicator'] = '';
 			$defaults['original_type']      = $field->type;
@@ -170,9 +177,56 @@ class FrmFieldsHelper {
 			if ( $check_post ) {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
 			}
-
-			unset( $opt, $default );
 		}
+	}
+
+	/**
+	 * The fill_default_field_opts method is called when loading a field.
+	 * This is used to preserve the $_POST data after updating settings for a field.
+	 * To prevent this from happening when creating an entry, we need to check the context.
+	 *
+	 * @return bool
+	 */
+	private static function context_is_safe_to_load_field_options_from_request_data() {
+		if ( isset( self::$context_is_safe_to_load_field_options_from_request_data ) ) {
+			return self::$context_is_safe_to_load_field_options_from_request_data;
+		}
+
+		$function = function () {
+			if ( ! FrmAppHelper::is_admin_page() ) {
+				return false;
+			}
+
+			if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				return false;
+			}
+
+			if ( ! current_user_can( 'frm_edit_forms' ) ) {
+				return false;
+			}
+
+			$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+			if ( 'frm_forms_preview' === $action ) {
+				// Never trigger when previewing.
+				return false;
+			}
+
+			// Confirm an allowed action is being used, and that the correct nonce is being used.
+			if ( 'update' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
+			}
+
+			$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
+			if ( 'update_settings' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'process_form_nonce' );
+			}
+		};
+
+		self::$context_is_safe_to_load_field_options_from_request_data = $function();
+
+		return self::$context_is_safe_to_load_field_options_from_request_data;
 	}
 
 	/**
@@ -238,6 +292,8 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * When loading settings for a field, check the $_POST data and possibly use that instead of the DB value.
+	 *
 	 * @since 3.0
 	 *
 	 * @param string $setting
@@ -249,8 +305,12 @@ class FrmFieldsHelper {
 		}
 
 		if ( strpos( $setting, 'html' ) !== false ) {
-			// Strip slashes from HTML but not regex or script tags.
 			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+
+			// Conditionally strip script tags if the user sending $_POST data is not allowed to use unfiltered HTML.
+			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
+				$value = FrmAppHelper::kses( $value, 'all' );
+			}
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing

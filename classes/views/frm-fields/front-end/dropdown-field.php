@@ -39,7 +39,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 	if ( ! $placeholder ) {
 		/**
-		 * @since x.x
+		 * @since 6.16.2
 		 *
 		 * @param array $field
 		 */

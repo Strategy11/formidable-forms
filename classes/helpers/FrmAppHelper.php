@@ -33,7 +33,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.16.1';
+	public static $plug_version = '6.16.2';
 
 	/**
 	 * @var bool
@@ -307,7 +307,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06
-	 * @since x.x  Added $check_for_settings parameter
+	 * @since 6.16.2 Added $check_for_settings parameter
 	 *
 	 * @param bool $check_for_settings
 	 *
