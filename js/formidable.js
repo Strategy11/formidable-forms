@@ -1370,13 +1370,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function focusInput( input ) {
-		const visible = input.offsetParent !== null;
-		if ( visible ) {
+		if ( input.offsetParent !== null ) {
 			input.focus();
-			return;
+		} else {
+			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
 		}
-
-		triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
 	}
 
 	/**
