@@ -1732,11 +1732,9 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_full_screen() {
-		if ( self::is_admin_page( 'formidable' ) ) {
-			$action = self::simple_get( 'frm_action', 'sanitize_title' );
-			return in_array( $action, array( 'edit', 'duplicate', 'settings' ), true );
-		}
-		return self::is_style_editor_page() || self::is_full_screen_view_builder_page();
+		return self::is_form_builder_page() ||
+			self::is_style_editor_page() ||
+			self::is_full_screen_view_builder_page();
 	}
 
 	/**
