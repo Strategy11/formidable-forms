@@ -1083,7 +1083,7 @@ class FrmFieldsHelper {
 			case 'get':
 				$new_value = self::process_get_shortcode( $atts, $return_array );
 			case 'form_name':
-				$new_value = FrmForm::getName( $atts['form_id'] );
+				$new_value = isset( $atts['form_id'] ) ? FrmForm::getOne( $atts['form_id'] )->name : '';
 				break;
 		}//end switch
 
