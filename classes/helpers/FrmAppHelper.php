@@ -307,12 +307,19 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.06
+	 * @since x.x  Added $check_for_settings parameter
+	 *
+	 * @param bool $check_for_settings
 	 *
 	 * @return bool
 	 */
-	public static function is_form_builder_page() {
+	public static function is_form_builder_page( $check_for_settings = false ) {
 		$action = self::simple_get( 'frm_action', 'sanitize_title' );
-		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'duplicate' );
+		$check_actions = array( 'edit', 'duplicate' );
+		if ( $check_for_settings ) {
+			$check_actions[] = 'settings';
+		}
+		return self::is_admin_page( 'formidable' ) && in_array( $action, $check_actions, true );
 	}
 
 	/**
