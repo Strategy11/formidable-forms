@@ -313,7 +313,7 @@ class FrmAppHelper {
 	 *
 	 * @return bool
 	 */
-	public static function is_form_builder_page( $check_for_settings = false ) {
+	public static function is_form_builder_page( $check_for_settings = true ) {
 		$action = self::simple_get( 'frm_action', 'sanitize_title' );
 		$check_actions = array( 'edit', 'duplicate' );
 		if ( $check_for_settings ) {
