@@ -1,5 +1,6 @@
 == Changelog ==
 = 6.16.2 =
+* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
 * Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 = 6.16.1 =
