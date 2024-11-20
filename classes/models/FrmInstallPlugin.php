@@ -82,38 +82,43 @@ class FrmInstallPlugin {
 		// Get posted data.
 		$plugin_slug = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
 
-		// Include necessary files for plugin installation.
-		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		if ( ! empty( get_plugins()[ $plugin_slug ] ) ) {
+			$activate = activate_plugin( $plugin_slug );
+		} else {
+			// Include necessary files for plugin installation.
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
-		// Get the plugin information.
-		$api = plugins_api(
-			'plugin_information',
-			array(
-				'slug'   => $plugin_slug,
-				'fields' => array(
-					'sections' => false,
-				),
-			)
-		);
-		if ( is_wp_error( $api ) ) {
-			wp_send_json_error( $api->get_error_message() );
-		}
-		if ( ! FrmAddonsController::url_is_allowed( $api->versions['trunk'] ) ) {
-			wp_send_json_error( 'This download is not allowed' );
-		}
+			// Get the plugin information.
+			$api = plugins_api(
+				'plugin_information',
+				array(
+					'slug'   => $plugin_slug,
+					'fields' => array(
+						'sections' => false,
+					),
+				)
+			);
+			if ( is_wp_error( $api ) ) {
+				wp_send_json_error( $api->get_error_message() );
+			}
+			if ( ! FrmAddonsController::url_is_allowed( $api->versions['trunk'] ) ) {
+				wp_send_json_error( 'This download is not allowed' );
+			}
 
-		// Set up the Plugin Upgrader.
-		$upgrader = new Plugin_Upgrader( new WP_Ajax_Upgrader_Skin() );
+			// Set up the Plugin Upgrader.
+			$upgrader = new Plugin_Upgrader( new WP_Ajax_Upgrader_Skin() );
 
-		// Install the plugin.
-		$result = $upgrader->install( $api->versions['trunk'] );
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( $result->get_error_message() );
-		}
+			// Install the plugin.
+			$result = $upgrader->install( $api->versions['trunk'] );
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error( $result->get_error_message() );
+			}
 
-		// Activate the plugin.
-		$activate = activate_plugin( $upgrader->plugin_info() );
+			// Activate the plugin.
+			$activate = activate_plugin( $upgrader->plugin_info() );
+		}//end if
+
 		if ( is_wp_error( $activate ) ) {
 			wp_send_json_error( $activate->get_error_message() );
 		}
@@ -147,5 +152,17 @@ class FrmInstallPlugin {
 		} else {
 			wp_send_json_error();
 		}
+	}
+
+	/**
+	 * Check if a plugin is installed.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $plugin_file
+	 * @return bool
+	 */
+	private static function is_plugin_installed( $plugin_file ) {
+		return isset( get_plugins()[ $plugin_file ] );
 	}
 }

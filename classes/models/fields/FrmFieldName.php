@@ -33,9 +33,9 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$this->register_sub_fields(
 			array(
-				'first'  => __( 'First', 'formidable' ),
-				'middle' => __( 'Middle', 'formidable' ),
-				'last'   => __( 'Last', 'formidable' ),
+				'first'  => __( 'First Name', 'formidable' ),
+				'middle' => __( 'Middle Name', 'formidable' ),
+				'last'   => __( 'Last Name', 'formidable' ),
 			)
 		);
 	}
@@ -237,5 +237,46 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$attrs['data-name-layout'] = $this->get_name_layout();
 		return $attrs;
+	}
+
+	/**
+	 * Maybe show a warning if a name field is using a description that is not descriptive enough.
+	 * Prior to version 6.16, First and Last were the default values, but this has been updated to
+	 * improve accessibility.
+	 *
+	 * @since 6.16
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public function show_after_default( $args ) {
+		parent::show_after_default( $args );
+
+		/**
+		 * @var array $field
+		 */
+		$field = $args['field'];
+
+		$show_warning = false;
+		foreach ( $this->sub_fields as $name => $sub_field ) {
+			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
+			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {
+				$show_warning = true;
+				break;
+			}
+		}
+
+		if ( ! $show_warning ) {
+			return;
+		}
+		?>
+		<div class="frm_warning_style">
+			<?php
+			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
+			echo ' ';
+			esc_html_e( 'Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like "First Name" instead of "First".', 'formidable' );
+			?>
+		</div>
+		<?php
 	}
 }

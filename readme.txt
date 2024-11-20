@@ -1,11 +1,11 @@
 === Formidable Forms - Contact Form Plugin, Survey, Quiz, Payment, Calculator Form & Custom Form Builder ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
+Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 6.15
+Stable tag: 6.16.1.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,40 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.16.1.2 =
+* The tested to version was updated.
+
+= 6.16.1 =
+* New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
+* Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
+* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
+* Fix: The slider to set field margin for section fields wouldn't properly save.
+* Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
+* Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
+* Fix: A str_replace(): Passing null to parameter #3 deprecated message has been fixed.
+* Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
+* Fix: An array to string conversion PHP warning has been fixed.
+* Fix: The center form styling toggle would not properly save.
+* Fix: Form fields would appear broken when the Payment forms by Paystack plugin was active due to a shortcode conflict.
+* Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
+* The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
+
+= 6.16 =
+* New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
+* Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
+* Fix: Submit buttons would appear out of place after saving a form.
+* Fix: Nothing would copy when trying to click the icon to copy a style class name.
+* Fix: A white element would appear at the bottom of the plugins page.
+* Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
+* Fix: Captcha fields would fail to validate in forms with conditional logic that fade in on page load in some cases.
+* Fix: Some JavaScript strings were not configured for translations, and a text domain was missing in one case.
+* Fix: The font size setting for form descriptions has been added back.
+* Fix: Missing for attributes have been added to labels in the visual styler to improve accessibility and user experience.
+* Some old browser specific CSS and deprecated CSS has been removed.
+* New name fields will now use more descriptive "First Name" and "Last Name" descriptions by default instead of "First" and "Last". This is to help improve accessibility.
+* The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
+* The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
+
 = 6.15 =
 * New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
 * New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
@@ -378,47 +412,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
 * Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
 * Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
-
-= 6.14.1 =
-* Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
-* New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
-* New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactivating the Formidable Views add-on.
-* New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending additional unit to the value introduces CSS errors.
-* Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
-* Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
-* Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
-* Fix: Base font size calculations were occurring too frequently, causing text to become smaller than intended.
-* Fix: The box shadow styling value would flip to the opposite of the intended setting on load.
-
-= 6.14 =
-* New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
-* New: The code for moving fields in the builder has been optimized for large forms.
-* New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
-* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
-* Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
-* Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
-* Fix: A JavaScript error would occur when trying to validate a read only time field.
-* Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
-* Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
-* Fix: Turnstile elements are now only rendered when the field is visible.
-* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
-
-= 6.13 =
-* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
-* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
-
-= 6.12 =
-* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
-* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
-* Fix: Turnstile captcha widgets were rendering twice.
-* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
-* Fix: The submit button would appear as an entry table row on the entry view admin page.
-* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
-* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
-* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
-* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
-* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
-* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

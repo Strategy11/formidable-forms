@@ -215,6 +215,9 @@ class FrmInbox extends FrmFormApi {
 		if ( in_array( $this->get_user_type(), $who, true ) ) {
 			return true;
 		}
+		if ( in_array( 'free_first_30', $who, true ) && $this->is_free_first_30() ) {
+			return true;
+		}
 		/**
 		 * Allow for other special inbox cases in other add-ons.
 		 *
@@ -364,6 +367,29 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function update_list() {
 		update_option( $this->option, self::$messages, 'no' );
+	}
+
+	/**
+	 * Check if user is still using the Lite version only, and within
+	 * the first 30 days of activation.
+	 *
+	 * @since 6.16
+	 *
+	 * @return bool
+	 */
+	private function is_free_first_30() {
+		$activation_timestamp = get_option( 'frm_first_activation' );
+		if ( false === $activation_timestamp ) {
+			// If the option does not exist, assume that it is
+			// because the user was active before this option was introduced.
+			return false;
+		}
+		if ( FrmAppHelper::pro_is_included() ) {
+			// Not free.
+			return false;
+		}
+		$cutoff = strtotime( '-30 days' );
+		return $activation_timestamp > $cutoff;
 	}
 
 	/**
