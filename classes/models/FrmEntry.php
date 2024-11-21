@@ -147,12 +147,17 @@ class FrmEntry {
 			return $duplicate_entry_time;
 		}
 
+		$timestamp = strtotime( $created_at );
+		if ( false === $timestamp ) {
+			$timestamp = time();
+		}
+
 		$unique_id_match = FrmDb::get_var(
 			'frm_item_metas',
 			array(
 				'field_id'     => 0,
 				'meta_value'   => serialize( compact( 'unique_id' ) ),
-				'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $created_at ) - MONTH_IN_SECONDS ),
+				'created_at >' => gmdate( 'Y-m-d H:i:s', $timestamp - MONTH_IN_SECONDS ),
 			),
 			'id'
 		);
