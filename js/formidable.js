@@ -1600,8 +1600,8 @@ function frmFrontFormJS() {
 	 * @return {string}
 	 */
 	function getUniqueKey() {
-		return Array.from( window.crypto.getRandomValues( new Uint8Array(8 ) ) )
-			.map( b => b.toString(16).padStart( 2, '0' ) )
+		return Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
+			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
 			.join( '' )
 			.substring( 0, 9 );
 	}
