@@ -8457,7 +8457,10 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function checkContextualShortcode( item ) {
-		return ! isContextualShortcode( item ) || canShowContextualShortcode( item )
+		if ( frmAdminJs.contextualShortcodes.length === 0 ) {
+			return true;
+		}
+		return ! isContextualShortcode( item ) || canShowContextualShortcode( item );
 	}
 
 	/**
