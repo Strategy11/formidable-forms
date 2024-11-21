@@ -1646,17 +1646,13 @@ class FrmFormsController {
 			''           => '',
 			'siteurl'    => __( 'Site URL', 'formidable' ),
 			'sitename'   => __( 'Site Name', 'formidable' ),
+			'form_name'  => __( 'Form Name', 'formidable' ),
 		);
 
-		$entry_shortcodes      = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
+		$entry_shortcodes = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}
-
-		// if ( $settings_tab ) {
-		// 	$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
-		// }
-		$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 
 		/**
 		 * Use this hook to add or remove buttons in the helpers section
