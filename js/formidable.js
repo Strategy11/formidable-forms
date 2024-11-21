@@ -1325,7 +1325,7 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
-	 * @return {boolean}
+	 * @return {boolean} True if the focus was set on a combo field.
 	 */
 	function maybeFocusOnComboSubField( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
