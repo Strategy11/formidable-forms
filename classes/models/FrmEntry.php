@@ -51,7 +51,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$duplicate_entry_time = self::maybe_extend_duplicate_entry_time( $duplicate_entry_time );
+		$duplicate_entry_time = self::maybe_extend_duplicate_entry_time( $duplicate_entry_time, $new_values['created_at'] );
 
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) );
@@ -131,10 +131,11 @@ class FrmEntry {
 	/**
 	 * @since x.x
 	 *
-	 * @param int $duplicate_entry_time
+	 * @param int    $duplicate_entry_time
+	 * @param string $created_at
 	 * @return int
 	 */
-	private static function maybe_extend_duplicate_entry_time( $duplicate_entry_time ) {
+	private static function maybe_extend_duplicate_entry_time( $duplicate_entry_time, $created_at ) {
 		if ( 60 !== $duplicate_entry_time ) {
 			return $duplicate_entry_time;
 		}
@@ -149,7 +150,7 @@ class FrmEntry {
 			array(
 				'field_id'     => 0,
 				'meta_value'   => serialize( compact( 'unique_id' ) ),
-				'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - MONTH_IN_SECONDS ),
+				'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $created_at ) - MONTH_IN_SECONDS ),
 			),
 			'id'
 		);
