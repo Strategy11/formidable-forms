@@ -47,6 +47,13 @@ class FrmEntry {
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
 
+		if ( 60 === $duplicate_entry_time ) {
+			$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
+			if ( $unique_id && FrmDb::get_var( 'frm_item_metas', array( 'field_id' => 0, 'meta_value' => serialize( compact( 'unique_id' ) ) ), 'id' ) ) {
+				$duplicate_entry_time = MONTH_IN_SECONDS;
+			}
+		}
+
 		if ( false === self::is_duplicate_check_needed( $values, $duplicate_entry_time ) ) {
 			return false;
 		}
@@ -80,6 +87,9 @@ class FrmEntry {
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 			foreach ( $metas as $meta ) {
+				if ( 0 === (int) $meta->field_id ) {
+					continue;
+				}
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 

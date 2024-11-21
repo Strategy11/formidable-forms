@@ -125,6 +125,11 @@ class FrmEntryMeta {
 			'field_id'
 		);
 
+		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
+		if ( $unique_id ) {
+			self::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
+		}
+
 		$values_indexed_by_field_id = array();
 		foreach ( $values as $field_id_or_key => $meta_value ) {
 			$field_id = $field_id_or_key;

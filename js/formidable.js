@@ -1740,6 +1740,12 @@ function frmFrontFormJS() {
 				object.appendChild( antispamInput );
 			}
 
+			const uniqueIDInput = document.createElement( 'input' );
+			uniqueIDInput.type  = 'hidden';
+			uniqueIDInput.name  = 'unique_id';
+			uniqueIDInput.value = Math.random().toString( 36 ).substring( 2, 11 );
+			object.appendChild( uniqueIDInput );
+
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;
