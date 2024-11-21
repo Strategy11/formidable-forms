@@ -1594,6 +1594,18 @@ function frmFrontFormJS() {
 		window.hcaptcha = null;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return {string}
+	 */
+	function getUniqueKey() {
+		return Array.from( window.crypto.getRandomValues( new Uint8Array(8 ) ) )
+			.map( b => b.toString(16).padStart( 2, '0' ) )
+			.join( '' )
+			.substring( 0, 9 );
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1740,10 +1752,11 @@ function frmFrontFormJS() {
 				object.appendChild( antispamInput );
 			}
 
+			// Add a unique ID, used for duplicate checks.
 			const uniqueIDInput = document.createElement( 'input' );
 			uniqueIDInput.type  = 'hidden';
 			uniqueIDInput.name  = 'unique_id';
-			uniqueIDInput.value = Math.random().toString( 36 ).substring( 2, 11 );
+			uniqueIDInput.value = getUniqueKey();
 			object.appendChild( uniqueIDInput );
 
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
