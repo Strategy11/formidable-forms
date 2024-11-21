@@ -1597,7 +1597,7 @@ function frmFrontFormJS() {
 	/**
 	 * @since x.x
 	 *
-	 * @return {string}
+	 * @return {string} Unique key, used for duplicate checks.
 	 */
 	function getUniqueKey() {
 		return Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
