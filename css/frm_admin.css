@@ -5829,6 +5829,16 @@ p.frm_reply_to_container {
 	vertical-align: bottom;
 }
 
+.frm_cc_row.frm_email_row .frm-with-right-icon,
+.frm_bcc_row.frm_email_row .frm-with-right-icon {
+	width: calc(100% - 20px);
+	display: inline-block;
+}
+
+.frm_email_row .frm_remove_field .frm_close_icon {
+	fill: var(--grey-500);
+}
+
 .frm_logic_field_opts {
 	max-width: 35%;
 }
