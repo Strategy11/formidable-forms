@@ -16,10 +16,10 @@ $back_button_attr = array_intersect_key( array_filter( $back_button_args ), arra
 	<span id="frm_style_name"><?php echo esc_html( $back_button_args['title'] ); ?></span>
 </h2>
 
-<div class="styling_settings <?php echo ! FrmStylesHelper::is_advanced_settings() ? 'frm_hidden' : ''; ?>">
+<div class="styling_settings <?php echo esc_attr( FrmStylesHelper::style_editor_get_wrapper_classname( 'advanced-settings' ) ); ?>">
 	<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
 </div>
 
-<div class="frm-quick-settings frm_grid_container <?php echo FrmStylesHelper::is_advanced_settings() ? 'frm_hidden' : ''; ?>">
+<div class="frm-quick-settings frm_grid_container <?php echo esc_attr( FrmStylesHelper::style_editor_get_wrapper_classname( 'quick-settings' ) ); ?>">
 	<?php require_once FrmAppHelper::plugin_path() . '/classes/views/styles/_quick-settings.php'; ?>
 </div>

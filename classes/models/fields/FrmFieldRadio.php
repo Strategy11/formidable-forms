@@ -31,7 +31,7 @@ class FrmFieldRadio extends FrmFieldType {
 	/**
 	 * @var bool
 	 */
-	protected $array_allowed = false;
+	protected $array_allowed = true;
 
 	protected function input_html() {
 		return $this->multiple_input_html();

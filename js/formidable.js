@@ -30,7 +30,13 @@ function frmFrontFormJS() {
 		el.dispatchEvent( event );
 	}
 
-	/* Get the ID of the field that changed*/
+	/**
+	 * Get the ID of the field that changed.
+	 *
+	 * @param {HTMLElement|jQuery} field
+	 * @param {boolean}            fullID
+	 * @return {string|number} Field ID.
+	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
 			isRepeating = false,
@@ -150,7 +156,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {Object} $form
+	 * @param {jQuery} $form
 	 */
 	function enableSaveDraft( $form ) {
 		if ( ! $form.length ) {
@@ -162,24 +168,39 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Validate form with JS.
+	 *
+	 * @param {HTMLElement|jQuery} object
+	 * @return {Array} Errors.
+	 */
 	function validateForm( object ) {
-		let errors, r, rl, n, nl, fields, field, requiredFields;
+		let errors, n, nl, fields, field;
 
 		errors = [];
 
-		// Make sure required text field is filled in
-		requiredFields = jQuery( object ).find(
-			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
-		).filter( ':not(.frm_optional)' );
-		if ( requiredFields.length ) {
-			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
-					// skip rich text field buttons.
-					continue;
+		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
+
+		// Required field validation.
+		vanillaJsObject?.querySelectorAll( '.frm_required_field' ).forEach(
+			requiredField => {
+				const isVisible = requiredField.offsetParent !== null;
+				if ( ! isVisible ) {
+					return;
 				}
-				errors = checkRequiredField( requiredFields[r], errors );
+
+				requiredField.querySelectorAll( 'input, select, textarea' ).forEach(
+					requiredInput => {
+						if ( hasClass( requiredInput, 'frm_optional' ) || hasClass( requiredInput, 'ed_button' ) ) {
+							// skip rich text field buttons.
+							return;
+						}
+
+						errors = checkRequiredField( requiredInput, errors );
+					}
+				);
 			}
-		}
+		);
 
 		fields = jQuery( object ).find( 'input,select,textarea' );
 		if ( fields.length ) {
@@ -204,7 +225,11 @@ function frmFrontFormJS() {
 			}
 		}
 
-		errors = validateRecaptcha( object, errors );
+		// Invisible captchas are processed after validation.
+		// We only want to validate a visible captcha on submit.
+		if ( ! hasInvisibleRecaptcha( object ) ) {
+			errors = validateRecaptcha( object, errors );
+		}
 
 		return errors;
 	}
@@ -245,6 +270,9 @@ function frmFrontFormJS() {
 		return element.classList && element.classList.contains( targetClass );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
@@ -254,6 +282,9 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeAddHttpToUrl( field ) {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
@@ -317,6 +348,11 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {Array} Errors
+	 */
 	function checkRequiredField( field, errors ) {
 		let checkGroup, tempVal, i, placeholder,
 			val = '',
@@ -405,19 +441,35 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the input is a typed signature input.
+	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
 		return 'string' === typeof name && '[typed]' === name.substr( -7 );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the field is a SSA appointment field.
+	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the field is inline datepicker field.
+	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
+	/**
+	 * @param {string|number} fileID
+	 * @return {string} File input value.
+	 */
 	function getFileVals( fileID ) {
 		let val = '',
 			fileFields = jQuery( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
@@ -430,6 +482,11 @@ function frmFrontFormJS() {
 		return val;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkUrlField( field, errors ) {
 		let fieldID,
 			url = field.value;
@@ -449,6 +506,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @return {boolean} True if we should confirm the field.
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -502,6 +560,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function confirmField( field, errors ) {
 		let value, confirmValue, firstField,
 			fieldID = getFieldId( field, true ),
@@ -525,6 +588,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkNumberField( field, errors ) {
 		let fieldID,
 			number = field.value;
@@ -537,6 +605,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkPatternField( field, errors ) {
 		let fieldID,
 			text = field.value,
@@ -596,6 +669,10 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * @param {HTMLElement|jQuery} object
+	 * @return {boolean} True if there is an invisible recaptcha.
+	 */
 	function hasInvisibleRecaptcha( object ) {
 		let recaptcha, recaptchaID, alreadyChecked;
 
@@ -614,6 +691,9 @@ function frmFrontFormJS() {
 		return false;
 	}
 
+	/**
+	 * @param {jQuery} invisibleRecaptcha
+	 */
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
 		const recaptchaID = invisibleRecaptcha.data( 'rid' );
 		grecaptcha.reset( recaptchaID );
@@ -621,26 +701,30 @@ function frmFrontFormJS() {
 	}
 
 	function validateRecaptcha( form, errors ) {
-		let recaptchaID, response, fieldContainer, fieldID,
-			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
-		if ( $recaptcha.length ) {
-			recaptchaID = $recaptcha.data( 'rid' );
+		let response;
 
-			try {
-				response = grecaptcha.getResponse( recaptchaID );
-			} catch ( e ) {
-				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
-					return errors;
-				}
-				response = '';
-			}
-
-			if ( response.length === 0 ) {
-				fieldContainer = $recaptcha.closest( '.frm_form_field' );
-				fieldID = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
-				errors[ fieldID ] = '';
-			}
+		const $recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
+		if ( ! $recaptcha.length ) {
+			return errors;
 		}
+
+		const recaptchaID = $recaptcha.data( 'rid' );
+
+		try {
+			response = grecaptcha.getResponse( recaptchaID );
+		} catch ( e ) {
+			if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
+				return errors;
+			}
+			response = '';
+		}
+
+		if ( response.length === 0 ) {
+			const fieldContainer = $recaptcha.closest( '.frm_form_field' );
+			const fieldID        = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
+			errors[ fieldID ] = '';
+		}
+
 		return errors;
 	}
 
@@ -1068,7 +1152,10 @@ function frmFrontFormJS() {
 		const input        = $fieldCont.find( 'input, select, textarea' );
 		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+		const fieldContainer = $fieldCont.get( 0 );
+		if ( fieldContainer && fieldContainer.classList ) {
+			fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		}
 
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
@@ -1248,7 +1335,7 @@ function frmFrontFormJS() {
 		do {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
-				element.focus();
+				focusInput( element );
 				break;
 			}
 
@@ -1272,6 +1359,22 @@ function frmFrontFormJS() {
 				}
 			}
 		} while ( element.previousSibling );
+	}
+
+	/**
+	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @return {void}
+	 */
+	function focusInput( input ) {
+		if ( input.offsetParent !== null ) {
+			input.focus();
+		} else {
+			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
+		}
 	}
 
 	/**
@@ -1608,18 +1711,19 @@ function frmFrontFormJS() {
 				return;
 			}
 
+			errors = frmFrontForm.validateFormSubmit( object );
+			if ( Object.keys( errors ).length !== 0 ) {
+				return;
+			}
+
 			if ( invisibleRecaptcha.length ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
 
-				errors = frmFrontForm.validateFormSubmit( object );
+				showSubmitLoading( jQuery( object ) );
 
-				if ( Object.keys( errors ).length === 0 ) {
-					showSubmitLoading( jQuery( object ) );
-
-					frmFrontForm.submitFormNow( object, classList );
-				}
+				frmFrontForm.submitFormNow( object, classList );
 			}
 		},
 
@@ -1849,10 +1953,23 @@ function frmCaptcha( captchaSelector ) {
 	for ( c = 0; c < cl; c++ ) {
 		const closestForm   = captchas[c].closest( 'form' );
 		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		const captcha       = captchas[c];
 		if ( ! formIsVisible ) {
+			// If the form is not visible, try again later in 400ms.
+			// This fixes issues where the form fades visible on page load.
+			// Or whne the form is inside of a modal.
+			const interval = setInterval(
+				function() {
+					if ( closestForm && closestForm.offsetParent !== null ) {
+						frmFrontForm.renderCaptcha( captcha, captchaSelector );
+						clearInterval( interval );
+					}
+				},
+				400
+			);
 			continue;
 		}
-		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
+		frmFrontForm.renderCaptcha( captcha, captchaSelector );
 	}
 }
 

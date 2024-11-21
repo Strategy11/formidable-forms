@@ -9,6 +9,5 @@ import domReady from '@wordpress/dom-ready';
 import initializeOnboardingWizard from './initializeOnboardingWizard';
 
 domReady( () => {
-	// Initialize the Onboarding Wizard
 	initializeOnboardingWizard();
 });

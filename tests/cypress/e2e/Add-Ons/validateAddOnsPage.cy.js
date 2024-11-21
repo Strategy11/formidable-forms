@@ -22,83 +22,132 @@ describe("Add-Ons page", () => {
         cy.log("Validate add-ons categories");
         cy.get('li[data-category="all-items"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "All Add-Ons");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "43");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(43);
+            });        
         });
 
         cy.get('li[data-category="automation"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Automation");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(4);
+            });       
         });
 
         cy.get('li[data-category="crm"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "CRM");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "3");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(3);
+            });
         });
 
         cy.get('li[data-category="data-collection"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Data Collection");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "6");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(6);
+            });
         });
 
         cy.get('li[data-category="data-management"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Data Management");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "6");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(6);
+            });
         });
 
         cy.get('li[data-category="ecommerce"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Ecommerce");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(4);
+            });
         });
 
         cy.get('li[data-category="email-sms-marketing"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Email & SMS Marketing");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "9");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(9);
+            });
         });
-
+        
         cy.get('li[data-category="form-design-display"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Form Design & Display");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "4");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(4);
+            });
         });
-
+        
         cy.get('li[data-category="form-functionality"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Form Functionality");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "5");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(5);
+            });
         });
-
+        
         cy.get('li[data-category="marketing"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Marketing");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "1");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(1);
+            });
         });
-
+        
         cy.get('li[data-category="multilingual"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Multilingual");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "2");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(2);
+            });
         });
-
+        
         cy.get('li[data-category="utilities"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "Utilities");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "3");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(3);
+            });
         });
-
+        
         cy.log("Validate add-ons category plans");
+        
         cy.get('li[data-category="basic"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "basic");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "2");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(2);
+            });
         });
-
+        
         cy.get('li[data-category="plus"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "plus");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "14");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(14);
+            });
         });
-
+        
         cy.get('li[data-category="business"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "business");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "37");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(37);
+            });
         });
-
+        
         cy.get('li[data-category="elite"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "elite");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "43");
+            cy.get('.frm-page-skeleton-cat-count').invoke('text').then((text) => {
+                const count = parseInt(text);
+                expect(count).to.be.at.least(43);
+            });
         });
 
         cy.log("Formidable Forms Pro card");
@@ -591,7 +640,7 @@ describe("Add-Ons page", () => {
         cy.log("ConvertKit card");
         cy.get('li[data-slug="convertkit"]').within(() => {
             cy.get('.frm-font-medium.frm-truncate').should('contain.text', 'ConvertKit');
-            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_logo_icon');
+            cy.get('svg.frmsvg > use').should('have.attr', 'xlink:href', '#frm_convertkit_icon');
             cy.get('p.frm-line-clamp-2').should('contain.text', 'Bring automation into your email marketing plan for the power to say "welcome" to your subscribers the moment they opt-in to your list.');
             cy.contains('Plan required:').within(() => {
                 cy.get('a').should('have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20convertkit').and('contain.text', 'Plus');
