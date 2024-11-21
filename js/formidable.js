@@ -1238,15 +1238,17 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
+	 * @returns {Boolean}
 	 */
 	function maybeFocusOnComboSubField( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
-			return;
+			return false;
 		}
 		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
-			return;
+			return false;
 		}
 		element.querySelector( '[aria-invalid="true"]' )?.focus();
+		return true;
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
@@ -1269,7 +1271,9 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			maybeFocusOnComboSubField( element );
+			if ( maybeFocusOnComboSubField( element ) ) {
+				break;
+			}
 
 			if ( 'undefined' !== typeof element.classList ) {
 				if ( element.classList.contains( 'html-active' ) ) {
