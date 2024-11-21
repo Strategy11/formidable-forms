@@ -8472,7 +8472,7 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function isContextualShortcode( item ) {
-		const shortcode            = item.querySelector( 'a' ).dataset.code;
+		const shortcode = item.querySelector( 'a' ).dataset.code;
 		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
 	}
 
@@ -8520,9 +8520,7 @@ function frmAdminBuildJS() {
 		let shouldShowShortcodes = input.matches( selector );
 		for ( let shortcode of contextualShortcodes ) {
 			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
-			if ( shortcodeLi ) {
-				shortcodeLi.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
-			}
+			shortcodeLi?.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
 		}
 	}
 
