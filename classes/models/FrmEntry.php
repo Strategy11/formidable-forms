@@ -137,11 +137,13 @@ class FrmEntry {
 	 */
 	private static function maybe_extend_duplicate_entry_time( $duplicate_entry_time, $created_at ) {
 		if ( 60 !== $duplicate_entry_time ) {
+			// Only check if the time has not been filtered.
 			return $duplicate_entry_time;
 		}
 
 		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
 		if ( ! $unique_id ) {
+			// Only continue if a unique ID was generated on form submit.
 			return $duplicate_entry_time;
 		}
 
@@ -154,11 +156,9 @@ class FrmEntry {
 			),
 			'id'
 		);
-		if ( ! $unique_id_match ) {
-			return $duplicate_entry_time;
-		}
 
-		return MONTH_IN_SECONDS;
+		// Extend the check to a month when unique ID is detected.
+		return $unique_id_match ? MONTH_IN_SECONDS : $duplicate_entry_time;
 	}
 
 	/**
