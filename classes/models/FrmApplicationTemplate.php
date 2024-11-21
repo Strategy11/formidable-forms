@@ -39,7 +39,7 @@ class FrmApplicationTemplate {
 		 */
 		self::$keys             = apply_filters(
 			'frm_application_data_keys',
-			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' )
+			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms', 'used_addons' )
 		);
 		self::$keys_with_images = array_merge(
 			self::get_template_keys_with_local_png_images(),
@@ -51,7 +51,7 @@ class FrmApplicationTemplate {
 	/**
 	 * Newer templates now use .webp files instead of .png.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @return array<string>
 	 */
@@ -181,16 +181,29 @@ class FrmApplicationTemplate {
 		$application['isWebp']           = in_array( $application['key'], self::get_template_keys_with_local_webp_images(), true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
+			$application['requires'] = FrmFormsHelper::get_plan_required( $application );
+
+			if ( false === $application['requires'] ) {
+				// Application is invalid if the URL is unavailable and there is no plan required.
+				return array();
+			}
+
 			$purchase_url = $this->is_available_for_purchase();
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
-			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
 
 		$application['isNew'] = $this->is_new();
+
+		$application['usedAddons'] = array();
+		if ( isset( $application['used_addons'] ) ) {
+			// Change key to camel case.
+			$application['usedAddons'] = $application['used_addons'];
+			unset( $application['used_addons'] );
+		}
 
 		return $application;
 	}
@@ -259,7 +272,7 @@ class FrmApplicationTemplate {
 				'content' => 'upgrade',
 				'medium'  => 'applications',
 			),
-			'/view-templates/' . $this->api_data['slug']
+			'view-templates/' . $this->api_data['slug']
 		);
 	}
 }

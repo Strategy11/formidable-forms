@@ -943,10 +943,15 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array  $atts  Includes entry object.
-	 * @param string $value
+	 * @param array       $atts  Includes entry object.
+	 * @param string|null $value
+	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
+		if ( is_null( $value ) ) {
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 		if ( $should_sanitize ) {
@@ -1031,7 +1036,7 @@ class FrmFieldsHelper {
 			$string_value = $replace_with;
 			if ( is_array( $replace_with ) ) {
 				$sep          = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$string_value = implode( $sep, $replace_with );
+				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
 			if ( empty( $string_value ) && $string_value != '0' ) {

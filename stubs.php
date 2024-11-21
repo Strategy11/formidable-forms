@@ -379,6 +379,15 @@ namespace {
 		public function purge() {
 		}
 	}
+	class FrmLog {
+		/**
+		 * @param array<string> $values values.
+		 *
+		 * @return void
+		 */
+		public function add( $values ) {
+		}
+	}
 	/**
 	 * @return WP_Optimize
 	 */

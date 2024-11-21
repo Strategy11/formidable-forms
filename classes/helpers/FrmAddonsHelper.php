@@ -164,6 +164,7 @@ class FrmAddonsHelper {
 			'twilio'                          => 'twilio',
 			'woocommerce'                     => 'woocommerce',
 			'zapier'                          => 'zapier',
+			'convertkit'                      => 'convertkit',
 		);
 
 		$icon = array_key_exists( $slug, $icons_map ) ? 'frm_' . $icons_map[ $slug ] . '_icon' : 'frm_logo_icon';

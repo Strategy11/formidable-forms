@@ -702,11 +702,6 @@ class FrmFieldsController {
 				'data-placeholder' => 'true',
 			);
 
-			if ( $autocomplete && empty( $use_chosen ) ) {
-				// This is required for Slim Select.
-				$placeholder_attributes['data-placeholder'] = 'true';
-			}
-
 			FrmHtmlHelper::echo_dropdown_option( $use_placeholder, false, $placeholder_attributes );
 			return true;
 		}
