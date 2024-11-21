@@ -141,6 +141,18 @@ class FrmEntry {
 			return $duplicate_entry_time;
 		}
 
+		/**
+		 * Allow users to opt out of the DB query, in case it causes performance issues.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_extend
+		 */
+		$should_extend = apply_filters( 'frm_extend_duplicate_entry_time_on_unique_id_match', true );
+		if ( ! $should_extend ) {
+			return $duplicate_entry_time;
+		}
+
 		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
 		if ( ! $unique_id ) {
 			// Only continue if a unique ID was generated on form submit.
