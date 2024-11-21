@@ -51,23 +51,7 @@ class FrmEntry {
 			return false;
 		}
 
-		if ( 60 === $duplicate_entry_time ) {
-			$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
-			if ( $unique_id ) {
-				$unique_id_match = FrmDb::get_var(
-					'frm_item_metas',
-					array(
-						'field_id'     => 0,
-						'meta_value'   => serialize( compact( 'unique_id' ) ),
-						'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - MONTH_IN_SECONDS ),
-					),
-					'id'
-				);
-				if ( $unique_id_match ) {
-					$duplicate_entry_time = MONTH_IN_SECONDS;
-				}
-			}
-		}
+		$duplicate_entry_time = self::maybe_extend_duplicate_entry_time( $duplicate_entry_time );
 
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) );
@@ -142,6 +126,38 @@ class FrmEntry {
 		$frm_vars['checking_duplicates'] = false;
 
 		return $is_duplicate;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $duplicate_entry_time
+	 * @return int
+	 */
+	private static function maybe_extend_duplicate_entry_time( $duplicate_entry_time ) {
+		if ( 60 !== $duplicate_entry_time ) {
+			return $duplicate_entry_time;
+		}
+
+		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
+		if ( ! $unique_id ) {
+			return $duplicate_entry_time;
+		}
+
+		$unique_id_match = FrmDb::get_var(
+			'frm_item_metas',
+			array(
+				'field_id'     => 0,
+				'meta_value'   => serialize( compact( 'unique_id' ) ),
+				'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - MONTH_IN_SECONDS ),
+			),
+			'id'
+		);
+		if ( ! $unique_id_match ) {
+			return $duplicate_entry_time;
+		}
+
+		return MONTH_IN_SECONDS;
 	}
 
 	/**
