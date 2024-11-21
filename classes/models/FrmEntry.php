@@ -47,15 +47,26 @@ class FrmEntry {
 	public static function is_duplicate( $new_values, $values ) {
 		$duplicate_entry_time = apply_filters( 'frm_time_to_check_duplicates', 60, $new_values );
 
-		if ( 60 === $duplicate_entry_time ) {
-			$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
-			if ( $unique_id && FrmDb::get_var( 'frm_item_metas', array( 'field_id' => 0, 'meta_value' => serialize( compact( 'unique_id' ) ) ), 'id' ) ) {
-				$duplicate_entry_time = MONTH_IN_SECONDS;
-			}
-		}
-
 		if ( false === self::is_duplicate_check_needed( $values, $duplicate_entry_time ) ) {
 			return false;
+		}
+
+		if ( 60 === $duplicate_entry_time ) {
+			$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
+			if ( $unique_id ) {
+				$unique_id_match = FrmDb::get_var(
+					'frm_item_metas',
+					array(
+						'field_id'     => 0,
+						'meta_value'   => serialize( compact( 'unique_id' ) ),
+						'created_at >' => gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - MONTH_IN_SECONDS ),
+					),
+					'id'
+				);
+				if ( $unique_id_match ) {
+					$duplicate_entry_time = MONTH_IN_SECONDS;
+				}
+			}
 		}
 
 		$check_val                 = $new_values;
