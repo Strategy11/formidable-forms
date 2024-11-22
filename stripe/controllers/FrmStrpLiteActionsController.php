@@ -11,6 +11,13 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
+	 * @since x.x
+	 *
+	 * @var bool|null A memoized value for whether the Stripe script has been loaded.
+	 */
+	private static $has_loaded_stripe_script;
+
+	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
@@ -437,6 +444,85 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
+		self::maybe_load_stripe_script();
+
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$style_settings  = self::get_style_settings_for_form( $form_id );
+		$stripe_vars     = array(
+			'publishable_key' => $publishable,
+			'form_id'         => $form_id,
+			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
+			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'        => $action_settings,
+			'locale'          => self::get_locale(),
+			'baseFontSize'    => $style_settings['field_font_size'],
+			'appearanceRules' => self::get_appearance_rules( $style_settings ),
+			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
+		);
+
+		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
+	}
+
+	/**
+	 * Returns true if the Stripe script should be loaded.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_load_stripe_script() {
+		if ( self::$has_loaded_stripe_script ) {
+			return false;
+		}
+		global $frm_vars;
+		$form_ids = $frm_vars['forms_loaded'];
+		if ( empty( $form_ids ) || ! is_array( $form_ids ) ) {
+			return false;
+		}
+		$form_ids = array_unique( wp_list_pluck( $form_ids, 'id' ) );
+		foreach ( $form_ids as $form_id ) {
+			if ( self::should_load_stripe_script_for_form( $form_id ) ) {
+				self::$has_loaded_stripe_script = true;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true if the Stripe script should be loaded for a form.
+	 *
+	 * @since x.x
+	 * @param int $form_id
+	 *
+	 * @return bool
+	 */
+	private static function should_load_stripe_script_for_form( $form_id ) {
+		$payment_actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
+		if ( empty( $payment_actions ) ) {
+			return false;
+		}
+
+		foreach ( $payment_actions as $action ) {
+			if ( in_array( 'stripe', $action->post_content['gateway'], true ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Loads Stripe script if it hasn't been loaded yet and it should be loaded.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	private static function maybe_load_stripe_script() {
+		if ( ! self::should_load_stripe_script() ) {
+			return;
+		}
+
 		$suffix       = FrmAppHelper::js_suffix();
 		$dependencies = array( 'stripe', 'formidable' );
 
@@ -462,22 +548,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			FrmAppHelper::plugin_version(),
 			false
 		);
-
-		$action_settings = self::prepare_settings_for_js( $form_id );
-		$style_settings  = self::get_style_settings_for_form( $form_id );
-		$stripe_vars     = array(
-			'publishable_key' => $publishable,
-			'form_id'         => $form_id,
-			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
-			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings'        => $action_settings,
-			'locale'          => self::get_locale(),
-			'baseFontSize'    => $style_settings['field_font_size'],
-			'appearanceRules' => self::get_appearance_rules( $style_settings ),
-			'account_id'      => FrmStrpLiteConnectHelper::get_account_id(),
-		);
-
-		wp_localize_script( 'formidable-stripe', 'frm_stripe_vars', $stripe_vars );
 	}
 
 	/**
