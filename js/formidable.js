@@ -1334,8 +1334,12 @@ function frmFrontFormJS() {
 		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
 			return false;
 		}
-		element.querySelector( '[aria-invalid="true"]' )?.focus();
-		return true;
+		const comboSubfield = element.querySelector( '[aria-invalid="true"]' );
+		if ( comboSubfield ) {
+			comboSubfield.focus();
+			return true;
+		}
+		return false;
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
