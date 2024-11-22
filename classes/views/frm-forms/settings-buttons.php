@@ -11,7 +11,7 @@ $should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmPro
 <table class="form-table">
 	<?php
 	if ( $should_deprecate_hook ) {
-		do_action_deprecated( 'frm_add_form_style_tab_options', compact( 'values' ), '6.16.2' );
+		do_action_deprecated( 'frm_add_form_style_tab_options', array( 'values' ), '6.16.2' );
 	} else {
 		do_action( 'frm_add_form_style_tab_options', $values );
 	}
@@ -30,7 +30,7 @@ $should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmPro
 	</tr>
 	<?php
 	if ( $should_deprecate_hook ) {
-		do_action_deprecated( 'frm_add_form_button_options', compact( 'values' ), '6.16.2' );
+		do_action_deprecated( 'frm_add_form_button_options', array( 'values' ), '6.16.2' );
 	} else {
 		do_action( 'frm_add_form_button_options', $values );
 	}
