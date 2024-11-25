@@ -51,8 +51,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$is_duplicate = self::maybe_check_for_unique_id_match( $new_values['created_at'] );
-		if ( $is_duplicate ) {
+		if ( self::maybe_check_for_unique_id_match( $new_values['created_at'] ) ) {
 			return true;
 		}
 
