@@ -51,7 +51,10 @@ class FrmEntry {
 			return false;
 		}
 
-		$duplicate_entry_time = self::maybe_extend_duplicate_entry_time( $duplicate_entry_time, $new_values['created_at'] );
+		$is_duplicate = self::maybe_check_for_unique_id_match( $new_values['created_at'] );
+		if ( $is_duplicate ) {
+			return true;
+		}
 
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) );
@@ -135,12 +138,7 @@ class FrmEntry {
 	 * @param string $created_at
 	 * @return int
 	 */
-	private static function maybe_extend_duplicate_entry_time( $duplicate_entry_time, $created_at ) {
-		if ( 60 !== $duplicate_entry_time ) {
-			// Only check if the time has not been filtered.
-			return $duplicate_entry_time;
-		}
-
+	private static function maybe_check_for_unique_id_match( $created_at ) {
 		/**
 		 * Allow users to opt out of the DB query, in case it causes performance issues.
 		 *
@@ -148,15 +146,15 @@ class FrmEntry {
 		 *
 		 * @param bool $should_extend
 		 */
-		$should_extend = apply_filters( 'frm_extend_duplicate_entry_time_on_unique_id_match', true );
-		if ( ! $should_extend ) {
-			return $duplicate_entry_time;
+		$should_check = apply_filters( 'frm_check_for_unique_id_match', true );
+		if ( ! $should_check ) {
+			return false;
 		}
 
 		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
 		if ( ! $unique_id ) {
 			// Only continue if a unique ID was generated on form submit.
-			return $duplicate_entry_time;
+			return false;
 		}
 
 		$timestamp = strtotime( $created_at );
@@ -175,7 +173,7 @@ class FrmEntry {
 		);
 
 		// Extend the check to a month when unique ID is detected.
-		return $unique_id_match ? MONTH_IN_SECONDS : $duplicate_entry_time;
+		return (bool) $unique_id_match;
 	}
 
 	/**
