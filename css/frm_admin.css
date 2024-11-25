@@ -1411,7 +1411,7 @@ body.frm-hidden-overflow {
 .post-type-frm_display.wp-core-ui .button-primary,
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
-.frm_single_entry_page .button-primary:not(.frm-button-entry-nav) {
+.frm_single_entry_page #frm-publishing .button-primary {
 	background-color: var(--primary-500) !important;
 	color: #fff !important;
 }
