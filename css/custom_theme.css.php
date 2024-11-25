@@ -900,8 +900,7 @@ a.frm_save_draft{
 <?php if ( $pro_is_installed ) : ?>
 .frm_forms.with_frm_style .frm_fields_container .frm_scale input[type=radio]:not([disabled]):checked,
 <?php endif; ?>
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
-.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	border-color: var(--border-color-active) !important;
 }
 
