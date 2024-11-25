@@ -1473,7 +1473,7 @@ body.frm-hidden-overflow {
 .frm-white-body .button:not(.frm-button-primary):active,
 .frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .frm-button-secondary:hover,
-.wp-core-ui.frm-white-body .button-secondary:not(.frm-button-entry-nav):hover,
+.wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
 .frm_wrap .preview > .button:hover {
