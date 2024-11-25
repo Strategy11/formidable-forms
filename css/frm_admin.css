@@ -5926,21 +5926,6 @@ a.frm_add_logic_link.frm_hidden {
 	margin-right: 5px;
 }
 
-.frm_right_addon {
-	position: relative;
-}
-
-.frm_right_addon .frm_remove_field {
-	position: absolute;
-	padding: 5px 10px;
-	right: 10px;
-	bottom: 0;
-}
-
-.frm_right_addon input {
-	padding-right: var(--gap-lg);
-}
-
 .frm_icon_font {
 	color: #A0A0A0;
 	color: var(--grey);
