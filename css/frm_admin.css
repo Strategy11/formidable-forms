@@ -14,7 +14,6 @@
 	--grey-100: #F2F4F7;
 	--grey-50: #F9FAFB;
 	--grey-25: #FCFCFD;
-	--darkest-grey: var(--grey-900); /* Deprecated */
 	--dark-grey: var(--grey-700); /* Deprecated */
 	--medium-grey: rgba(40, 47, 54, .65);
 	--grey: var(--grey-500); /* Deprecated */
