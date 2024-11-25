@@ -9,8 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-// List of pricing plans.
-$plans = array( 'Basic', 'Plus', 'Business', 'Elite' );
+$plans = FrmFormsHelper::get_license_types( array( 'include_all' => false ) );
 ?>
 <div id="frm-form-upgrade-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top frm-mt-xs">

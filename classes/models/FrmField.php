@@ -444,7 +444,7 @@ class FrmField {
 		}
 
 		if ( ! empty( $options['classes'] ) ) {
-			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
 		}
 
 		return $options;
@@ -1060,7 +1060,7 @@ class FrmField {
 	 * Cached results are unslashed in FrmField::getAll, so we need to make sure that the cached object has an extra backslash.
 	 * Otherwise the backslash is stripped away on load.
 	 *
-	 * @since x.x
+	 * @since 6.15
 	 *
 	 * @param stdClass $result
 	 * @return void
@@ -1084,9 +1084,14 @@ class FrmField {
 
 		// Allow a single box to be checked for the default value.
 		$before = $results->default_value;
-		FrmAppHelper::unserialize_or_decode( $results->default_value );
-		if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
-			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
+
+		$field_object = FrmFieldFactory::get_field_type( $results->type );
+
+		if ( $field_object->should_unserialize_value() ) {
+			FrmAppHelper::unserialize_or_decode( $results->default_value );
+			if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
+				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
+			}
 		}
 	}
 

@@ -487,7 +487,7 @@ class FrmStrpLiteEventsController {
 		if ( $failed_count >= $maximum_retries ) {
 			$this->track_handled_event( $event_id );
 		} else {
-			set_transient( $transient_name, $failed_count );
+			set_transient( $transient_name, $failed_count, 4 * DAY_IN_SECONDS );
 		}
 	}
 

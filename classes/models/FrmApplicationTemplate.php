@@ -39,10 +39,34 @@ class FrmApplicationTemplate {
 		 */
 		self::$keys             = apply_filters(
 			'frm_application_data_keys',
-			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' )
+			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms', 'used_addons' )
 		);
-		self::$keys_with_images = self::get_template_keys_with_local_images();
+		self::$keys_with_images = array_merge(
+			self::get_template_keys_with_local_png_images(),
+			self::get_template_keys_with_local_webp_images()
+		);
 		self::$categories       = array();
+	}
+
+	/**
+	 * Newer templates now use .webp files instead of .png.
+	 *
+	 * @since 6.16
+	 *
+	 * @return array<string>
+	 */
+	private static function get_template_keys_with_local_webp_images() {
+		return array(
+			'member-directory',
+			'link-in-bio-instagram',
+			'letter-of-recommendation',
+			'invoice-pdf',
+			'freelance-invoice-generator',
+			'contract-agreement',
+			'charity-tracker',
+			'certificate',
+			'testimonials',
+		);
 	}
 
 	/**
@@ -50,7 +74,7 @@ class FrmApplicationTemplate {
 	 *
 	 * @return array<string>
 	 */
-	private static function get_template_keys_with_local_images() {
+	private static function get_template_keys_with_local_png_images() {
 		return array(
 			'business-hours',
 			'faq-template-wordpress',
@@ -58,6 +82,7 @@ class FrmApplicationTemplate {
 			'team-directory',
 			'product-review',
 			'real-estate-listings',
+			'business-directory',
 		);
 	}
 
@@ -99,7 +124,7 @@ class FrmApplicationTemplate {
 		if ( false !== strpos( $category, '+Views' ) ) {
 			return true;
 		}
-		return in_array( $category, FrmFormsHelper::ignore_template_categories(), true );
+		return in_array( $category, FrmFormsHelper::get_license_types(), true );
 	}
 
 	/**
@@ -153,18 +178,32 @@ class FrmApplicationTemplate {
 		}//end foreach
 
 		$application['hasLiteThumbnail'] = in_array( $application['key'], self::$keys_with_images, true );
+		$application['isWebp']           = in_array( $application['key'], self::get_template_keys_with_local_webp_images(), true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
+			$application['requires'] = FrmFormsHelper::get_plan_required( $application );
+
+			if ( false === $application['requires'] ) {
+				// Application is invalid if the URL is unavailable and there is no plan required.
+				return array();
+			}
+
 			$purchase_url = $this->is_available_for_purchase();
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
-			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
 
 		$application['isNew'] = $this->is_new();
+
+		$application['usedAddons'] = array();
+		if ( isset( $application['used_addons'] ) ) {
+			// Change key to camel case.
+			$application['usedAddons'] = $application['used_addons'];
+			unset( $application['used_addons'] );
+		}
 
 		return $application;
 	}
@@ -233,7 +272,7 @@ class FrmApplicationTemplate {
 				'content' => 'upgrade',
 				'medium'  => 'applications',
 			),
-			'/view-templates/' . $this->api_data['slug']
+			'view-templates/' . $this->api_data['slug']
 		);
 	}
 }

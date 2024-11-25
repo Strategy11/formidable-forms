@@ -37,6 +37,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$field['options'] = array();
 	}
 
+	if ( ! $placeholder ) {
+		/**
+		 * @since 6.16.2
+		 *
+		 * @param array $field
+		 */
+		do_action( 'frm_dropdown_field_after_no_placeholder_option', $field );
+	}
+
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );

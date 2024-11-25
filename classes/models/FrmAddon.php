@@ -103,7 +103,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * Updates information on the "View version x.x details" page with custom data.
+	 * Updates information on the "View version 6.15 details" page with custom data.
 	 *
 	 * @uses api_request()
 	 *
