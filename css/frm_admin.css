@@ -7256,10 +7256,6 @@ select[name="m"] {
 	border: 1px solid black;
 }
 
-.pro_feature {
-	text-decoration: line-through;
-}
-
 /* View page */
 
 .post-type-frm_display #poststuff #post-body.columns-2 {
