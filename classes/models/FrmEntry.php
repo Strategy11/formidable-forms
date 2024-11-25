@@ -134,7 +134,6 @@ class FrmEntry {
 	/**
 	 * @since x.x
 	 *
-	 * @param int    $duplicate_entry_time
 	 * @param string $created_at
 	 * @return int
 	 */
