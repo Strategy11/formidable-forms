@@ -2702,6 +2702,11 @@ class FrmAppHelper {
 		return $formatted;
 	}
 
+	/**
+	 * @param string $time_format
+	 * @param string $date
+	 * @return string
+	 */
 	private static function add_time_to_date( $time_format, $date ) {
 		if ( empty( $time_format ) ) {
 			$time_format = get_option( 'time_format' );
