@@ -8229,12 +8229,12 @@ button.frm_choose_image_box,
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) textarea:focus,
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) input:focus,
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) select:focus,
-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap input:focus,
-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap select:focus,
-.wp-core-ui:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap select:focus,
+.frm_wrap input:focus,
+.frm_wrap select:focus,
+.wp-core-ui .frm_wrap select:focus,
 #frm-form-templates-modal select:focus,
 .frm-btn-group .multiselect.dropdown-toggle:focus,
-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_wrap textarea:focus {
+.frm_wrap textarea:focus {
 	border-color: var(--primary-500) !important;
 	box-shadow: none !important;
 }

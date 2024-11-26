@@ -904,8 +904,7 @@ a.frm_save_draft{
 	border-color: var(--border-color-active) !important;
 }
 
-.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked,
-.frm_forms .with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
+.frm_forms.with_frm_style .frm_fields_container .frm_checkbox input[type=checkbox]:not([disabled]):checked {
 	background-color: var(--border-color-active) !important;
 }
 
