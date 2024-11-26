@@ -1982,16 +1982,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
-	}
-
-	/**
 	 * Add education about views.
 	 *
 	 * @since 4.07
@@ -3276,5 +3266,17 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
+	}
+
+	/**
+	 * Education for premium features.
+	 *
+	 * @since 4.05
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function add_form_style_tab_options() {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }
