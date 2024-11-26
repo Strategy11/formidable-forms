@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Do not deprecate if the Pro version still use these hooks.
-$should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '6.16.2' ) >= 0;
+$should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '6.16.3' ) >= 0;
 ?>
 <input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
 	<?php
 	if ( $should_deprecate_hook ) {
-		do_action_deprecated( 'frm_add_form_style_tab_options', array( $values ), '6.16.2' );
+		do_action_deprecated( 'frm_add_form_style_tab_options', array( $values ), '6.16.3' );
 	} else {
 		do_action( 'frm_add_form_style_tab_options', $values );
 	}
@@ -30,7 +30,7 @@ $should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmPro
 	</tr>
 	<?php
 	if ( $should_deprecate_hook ) {
-		do_action_deprecated( 'frm_add_form_button_options', array( $values ), '6.16.2' );
+		do_action_deprecated( 'frm_add_form_button_options', array( $values ), '6.16.3' );
 	} else {
 		do_action( 'frm_add_form_button_options', $values );
 	}
