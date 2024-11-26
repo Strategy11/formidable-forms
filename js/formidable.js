@@ -1336,7 +1336,7 @@ function frmFrontFormJS() {
 		}
 		const comboSubfield = element.querySelector( '[aria-invalid="true"]' );
 		if ( comboSubfield ) {
-			comboSubfield.focus();
+			focusInput( comboSubfield );
 			return true;
 		}
 		return false;
