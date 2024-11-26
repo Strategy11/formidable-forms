@@ -479,11 +479,26 @@ td.column-title .frm_actions_dropdown {
 }
 /** End Temporary View CSS */
 
+.frm-gradient,
 .frm-upgrade-bar {
-	background: rgba(188, 224, 253, 0.23);
+	background: linear-gradient(to right, #1961D5, #E8ABEF);
+	color: #fff;
+}
+
+.frm-upgrade-bar {
 	border-bottom: 1px solid var(--sidebar-hover);
-	padding: 3px 0 3px 40px;
-	font-size: 95%;
+	padding: 9px 0;
+	font-size: 12px;
+	text-align: center;
+}
+
+.frm-upgrade-bar a {
+	color: currentColor !important;
+	text-decoration: underline;
+}
+
+.frm-upgrade-bar a:focus {
+	outline: 1px dotted var(--sidebar-hover);
 }
 
 .frm-upgrade-bar span {
