@@ -3277,6 +3277,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function add_form_style_tab_options() {
+		_deprecated_function( __METHOD__, 'x.x' );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }
