@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 6.16.1.2
+Stable tag: 6.16.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,8 +371,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.16.1.2 =
-* The tested to version was updated.
+= 6.16.2 =
+* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
+* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
@@ -405,16 +406,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
 * The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
 
-= 6.15 =
-* New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
-* New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
-* New: New email actions will now use new [default-email] and [default-from-email] shortcodes that use email settings defined during onboarding. When these are unavailable, the admin email is used by default.
-* Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
-* Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
-* Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.8 =
+= 6.16.2 =
 This version fixes a security-related bug. Upgrade immediately.

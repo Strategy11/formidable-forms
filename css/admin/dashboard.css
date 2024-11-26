@@ -259,6 +259,7 @@
 
 .frm-dashboard-widget table.wp-list-table td {
 	font-size: var(--text-sm);
+	word-break: break-word;
 }
 
 .frm-dashboard-widget table.wp-list-table td abbr {
