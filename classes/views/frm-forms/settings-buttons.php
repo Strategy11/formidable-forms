@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Do not deprecate if the Pro version still use these hooks.
 $should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '6.16.3' ) >= 0;
 ?>
-<input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
 	<?php
