@@ -8225,7 +8225,6 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
-
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) textarea:focus,
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) input:focus,
 .frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) select:focus,
@@ -8239,6 +8238,10 @@ button.frm_choose_image_box,
 	box-shadow: none !important;
 }
 
+/*
+Pages like Entries and Styles need the border-color and box-shadow properties without the !important flag.
+To achieve this, we exclude them above and duplicate these rules specifically for those pages without using !important.
+*/
 .wp-admin .frm_fields_container textarea:focus,
 .wp-admin .frm_fields_container input:focus,
 .wp-admin .frm_fields_container select:focus {
