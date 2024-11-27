@@ -138,6 +138,8 @@ class FrmOnSubmitHelper {
 				<span class="frm_input_with_suffix">
 					<input
 						type="number"
+						min="1"
+						step="1"
 						id="<?php echo esc_attr( $id_attr ); ?>"
 						name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_delay_time' ) ); ?>"
 						value="<?php echo intval( $delay_time ); ?>"
