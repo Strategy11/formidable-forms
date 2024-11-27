@@ -170,7 +170,7 @@ class FrmFormsController {
 			array(
 				'type'          => FrmSubmitHelper::FIELD_TYPE,
 				'name'          => __( 'Submit', 'formidable' ),
-				'field_order'   => 9999,
+				'field_order'   => FrmSubmitHelper::DEFAULT_ORDER,
 				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
@@ -764,6 +764,10 @@ class FrmFormsController {
 			if ( FrmForm::trash( $id ) ) {
 				++$count;
 			}
+		}
+
+		if ( ! $count ) {
+			return '';
 		}
 
 		$current_page = FrmAppHelper::get_simple_request(
@@ -1409,6 +1413,10 @@ class FrmFormsController {
 			),
 		);
 
+		if ( ! has_action( 'frm_add_form_style_tab_options' ) && ! has_action( 'frm_add_form_button_options' ) ) {
+			unset( $sections['buttons'] );
+		}
+
 		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
 			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
 				unset( $sections[ $feature ] );
@@ -1966,16 +1974,6 @@ class FrmFormsController {
 		$errors['json'] = __( 'Abnormal HTML characters prevented your form from saving correctly', 'formidable' );
 
 		return $errors;
-	}
-
-	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 
 	/**
@@ -3263,5 +3261,18 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
+	}
+
+	/**
+	 * Education for premium features.
+	 *
+	 * @since 4.05
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function add_form_style_tab_options() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

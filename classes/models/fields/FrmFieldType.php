@@ -291,9 +291,9 @@ DEFAULT_HTML;
 		$html_id    = $this->html_id();
 		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
-		$field['html_name'] = $field_name;
-		$field['html_id']   = $html_id;
-		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
+		$field['html_name']     = $field_name;
+		$field['html_id']       = $html_id;
+		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
@@ -996,6 +996,20 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Set the aria-invalid attribute for field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
@@ -1652,6 +1666,17 @@ DEFAULT_HTML;
 			FrmAppHelper::unserialize_or_decode( $value );
 		}
 		return $value;
+	}
+
+	/**
+	 * Only some field types should unserialize or decode values. This is based on the value of the array_allowed property.
+	 *
+	 * @since 6.16.2
+	 *
+	 * @return bool
+	 */
+	public function should_unserialize_value() {
+		return $this->array_allowed;
 	}
 
 	/**

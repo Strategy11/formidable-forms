@@ -84,8 +84,6 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 /* Left and right labels */
 <?php
 
-$frm_settings = FrmAppHelper::get_settings();
-
 if ( '' === $field_height || 'auto' === $field_height ) {
 	foreach ( array( 'left', 'right', 'inline' ) as $alignit ) {
 		?>
@@ -153,18 +151,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
-.<?php echo esc_html( $style_class ); ?> input::-webkit-input-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-webkit-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
-.<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	opacity: 1;
-}
-.<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
-<?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
@@ -180,7 +166,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
-.<?php echo esc_html( $style_class ); ?> textarea:focus,
+.<?php echo esc_html( $style_class ); ?> .form-field textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=password],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=email],

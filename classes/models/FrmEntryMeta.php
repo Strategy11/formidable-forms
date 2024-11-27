@@ -403,7 +403,7 @@ class FrmEntryMeta {
 	 * Returns true if the where clause refers to a field table column that is not form_id. It also updates
 	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
 	 *
-	 * @since x.x
+	 * @since 6.16.1
 	 * @param array|string $where
 	 * @return bool
 	 */

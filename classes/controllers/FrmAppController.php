@@ -543,7 +543,6 @@ class FrmAppController {
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
-		remove_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
@@ -888,6 +887,7 @@ class FrmAppController {
 	public static function admin_enqueue_scripts() {
 		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
+		FrmUsageController::load_scripts();
 	}
 
 	/**
@@ -1363,8 +1363,20 @@ class FrmAppController {
 	 * @return bool
 	 */
 	private static function in_our_pages() {
-		global $current_screen;
-		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+		global $current_screen, $pagenow;
+		if ( FrmAppHelper::is_formidable_admin() ) {
+			return true;
+		}
+
+		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
+			return true;
+		}
+
+		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

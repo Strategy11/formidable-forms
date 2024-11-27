@@ -959,7 +959,6 @@ a.frm_save_draft{
 }
 
 .with_frm_style :invalid,
-.with_frm_style :-moz-submit-invalid,
 .with_frm_style :-moz-ui-invalid{
 	box-shadow:none;
 }

@@ -136,8 +136,8 @@ class FrmHooksController {
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );
-			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
+
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
 		// Forms Controller.
@@ -289,6 +289,9 @@ class FrmHooksController {
 		// Submit with AJAX.
 		// Trigger before process_entry.
 		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 );
+
+		// Track the flows usage data.
+		add_action( 'wp_ajax_frm_track_flows', 'FrmUsageController::ajax_track_flows' );
 
 		// Applications.
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
