@@ -3,20 +3,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="form_show_entry_page" class="frm_single_entry_page">
+<div id="form_show_entry_page" class="frm_wrap frm_single_entry_page">
 	<div>
-		<div class="frm_wrap">
-			<?php
-			FrmAppHelper::get_admin_header(
-				array(
-					'label'      => __( 'View Entry', 'formidable' ),
-					'form'       => $form,
-					'hide_title' => true,
-					'close'      => '?page=formidable-entries&form=' . $form->id,
-				)
-			);
-			?>
-		</div>
+		<?php
+		FrmAppHelper::get_admin_header(
+			array(
+				'label'      => __( 'View Entry', 'formidable' ),
+				'form'       => $form,
+				'hide_title' => true,
+				'close'      => '?page=formidable-entries&form=' . $form->id,
+			)
+		);
+		?>
 
 		<div class="columns-2">
 
@@ -90,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 
-		<div class="frm_wrap frm-right-panel">
+		<div class="frm-right-panel">
 			<?php
 			do_action( 'frm_show_entry_sidebar', $entry );
 			FrmEntriesController::entry_sidebar( $entry );
