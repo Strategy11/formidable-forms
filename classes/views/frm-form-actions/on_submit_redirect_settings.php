@@ -8,6 +8,10 @@
  * @var array $args See {@see FrmOnSubmitHelper::show_redirect_settings()}.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $id_attr = $args['action_control']->get_field_id( 'success_url' );
 ?>
 <div class="frm_form_field frm_has_shortcodes">

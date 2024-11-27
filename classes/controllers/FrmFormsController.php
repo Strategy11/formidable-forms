@@ -2789,10 +2789,10 @@ class FrmFormsController {
 				ob_start();
 				self::show_lone_success_message( $args );
 				$response_data['content'] .= ob_get_clean();
-			}// end if
+			}//end if
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
-		}// end if
+		}//end if
 
 		return $response_data;
 	}
