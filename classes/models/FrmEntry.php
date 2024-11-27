@@ -170,7 +170,6 @@ class FrmEntry {
 			'id'
 		);
 
-		// Extend the check to a month when unique ID is detected.
 		return (bool) $unique_id_match;
 	}
 
