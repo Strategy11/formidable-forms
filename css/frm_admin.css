@@ -481,8 +481,9 @@ td.column-title .frm_actions_dropdown {
 
 .frm-gradient,
 .frm-upgrade-bar {
-	background: linear-gradient(to right, #1961D5, #E8ABEF);
+	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%) !important;
 	color: #fff;
+	border: 0 !important;
 }
 
 .frm-upgrade-bar {
