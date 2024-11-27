@@ -1319,6 +1319,29 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Sets focus on a the first subfield of a combo field that has an error.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the focus was set on a combo field.
+	 */
+	function maybeFocusOnComboSubField( element ) {
+		if ( 'FIELDSET' !== element.nodeName ) {
+			return false;
+		}
+		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
+			return false;
+		}
+		const comboSubfield = element.querySelector( '[aria-invalid="true"]' );
+		if ( comboSubfield ) {
+			focusInput( comboSubfield );
+			return true;
+		}
+		return false;
+	}
+
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
@@ -1336,6 +1359,10 @@ function frmFrontFormJS() {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
+				break;
+			}
+
+			if ( maybeFocusOnComboSubField( element ) ) {
 				break;
 			}
 

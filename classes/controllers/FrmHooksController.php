@@ -136,8 +136,8 @@ class FrmHooksController {
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );
-			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
+
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
 		// Forms Controller.

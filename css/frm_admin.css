@@ -14,7 +14,6 @@
 	--grey-100: #F2F4F7;
 	--grey-50: #F9FAFB;
 	--grey-25: #FCFCFD;
-	--darkest-grey: var(--grey-900); /* Deprecated */
 	--dark-grey: var(--grey-700); /* Deprecated */
 	--medium-grey: rgba(40, 47, 54, .65);
 	--grey: var(--grey-500); /* Deprecated */
@@ -5910,21 +5909,6 @@ a.frm_add_logic_link.frm_hidden {
 	margin-right: 5px;
 }
 
-.frm_right_addon {
-	position: relative;
-}
-
-.frm_right_addon .frm_remove_field {
-	position: absolute;
-	padding: 5px 10px;
-	right: 10px;
-	bottom: 0;
-}
-
-.frm_right_addon input {
-	padding-right: var(--gap-lg);
-}
-
 .frm_icon_font {
 	color: #A0A0A0;
 	color: var(--grey);
@@ -7254,10 +7238,6 @@ select[name="m"] {
 .frm-grid td, .frm-grid th {
 	padding: 5px;
 	border: 1px solid black;
-}
-
-.pro_feature {
-	text-decoration: line-through;
 }
 
 /* View page */

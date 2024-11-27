@@ -2110,7 +2110,7 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function convert_field_object_to_flat_array( $field ) {
-		$field_options = $field->field_options;
+		$field_options = is_array( $field->field_options ) ? $field->field_options : array();
 		$field_array   = get_object_vars( $field );
 		unset( $field_array['field_options'] );
 
