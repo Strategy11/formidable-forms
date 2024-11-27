@@ -105,9 +105,9 @@ class FrmOnSubmitHelper {
 				$id_attr,
 				$args['action_control']->get_field_name( 'redirect_delay' ),
 				array(
-					'div_class' => 'with_frm_style frm_toggle',
-					'checked'   => $redirect_delay,
-					'echo'      => true,
+					'div_class'  => 'with_frm_style frm_toggle',
+					'checked'    => $redirect_delay,
+					'echo'       => true,
 					'input_html' => array(
 						'data-toggleclass' => 'frm_redirect_delay_settings',
 					),
@@ -339,9 +339,9 @@ class FrmOnSubmitHelper {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
-				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
-				$form_options['redirect_delay']  = ! empty( $action->post_content['redirect_delay'] );
+				$form_options[ $opt . 'url' ]        = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options['open_in_new_tab']     = ! empty( $action->post_content['open_in_new_tab'] );
+				$form_options['redirect_delay']      = ! empty( $action->post_content['redirect_delay'] );
 				$form_options['redirect_delay_time'] = $action->post_content['redirect_delay_time'];
 				$form_options['redirect_delay_msg']  = $action->post_content['redirect_delay_msg'];
 				break;

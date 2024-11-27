@@ -2792,7 +2792,7 @@ class FrmFormsController {
 			}
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
-		}
+		}// end if
 
 		return $response_data;
 	}
