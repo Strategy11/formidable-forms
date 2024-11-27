@@ -166,7 +166,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
-.<?php echo esc_html( $style_class ); ?> textarea:focus,
+.<?php echo esc_html( $style_class ); ?> .form-field textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=password],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=email],
