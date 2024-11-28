@@ -14,7 +14,7 @@ class test_FrmMisc extends FrmUnitTest {
 		$this->assertTrue( isset( $frm_vars['load_css'] ) );
 		$this->assertTrue( isset( $frm_vars['pro_is_authorized'] ) );
 
-		$this->assertNotEmpty( has_action( 'plugins_loaded', 'FrmAppController::load_lang' ) );
+		$this->assertNotEmpty( has_action( 'init', 'FrmAppController::load_lang' ) );
 	}
 
 	/**
