@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldsHelper {
 
+	/**
+	 * The context is memoized for re-use as the context is checked for each field.
+	 *
+	 * @var bool|null
+	 */
+	private static $context_is_safe_to_load_field_options_from_request_data;
+
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
 		if ( strpos( $type, '|' ) ) {
@@ -103,6 +110,11 @@ class FrmFieldsHelper {
 	 * Prepare field while creating a new entry
 	 *
 	 * @since 3.0
+	 *
+	 * @param array    $field_array
+	 * @param stdClass $field
+	 * @param array    $args
+	 * @return void
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
 		self::fill_default_field_opts( $field, $field_array );
@@ -114,8 +126,19 @@ class FrmFieldsHelper {
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
 		if ( $args['action'] === 'edit' ) {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param int|string $entry_id
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
 		} else {
+			/**
+			 * @param array      $field_array
+			 * @param stdClass   $field
+			 * @param array      $args
+			 */
 			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 		}
 	}
@@ -140,9 +163,9 @@ class FrmFieldsHelper {
 	 * @param array  $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$check_post = self::context_is_safe_to_load_field_options_from_request_data();
+		$defaults   = self::get_default_field_options_from_field( $field, $values );
 
-		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
 			$defaults['required_indicator'] = '';
 			$defaults['original_type']      = $field->type;
@@ -154,9 +177,56 @@ class FrmFieldsHelper {
 			if ( $check_post ) {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
 			}
-
-			unset( $opt, $default );
 		}
+	}
+
+	/**
+	 * The fill_default_field_opts method is called when loading a field.
+	 * This is used to preserve the $_POST data after updating settings for a field.
+	 * To prevent this from happening when creating an entry, we need to check the context.
+	 *
+	 * @return bool
+	 */
+	private static function context_is_safe_to_load_field_options_from_request_data() {
+		if ( isset( self::$context_is_safe_to_load_field_options_from_request_data ) ) {
+			return self::$context_is_safe_to_load_field_options_from_request_data;
+		}
+
+		$function = function () {
+			if ( ! FrmAppHelper::is_admin_page() ) {
+				return false;
+			}
+
+			if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				return false;
+			}
+
+			if ( ! current_user_can( 'frm_edit_forms' ) ) {
+				return false;
+			}
+
+			$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+			if ( 'frm_forms_preview' === $action ) {
+				// Never trigger when previewing.
+				return false;
+			}
+
+			// Confirm an allowed action is being used, and that the correct nonce is being used.
+			if ( 'update' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
+			}
+
+			$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
+			if ( 'update_settings' === $action ) {
+				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+				return wp_verify_nonce( $nonce, 'process_form_nonce' );
+			}
+		};
+
+		self::$context_is_safe_to_load_field_options_from_request_data = $function();
+
+		return self::$context_is_safe_to_load_field_options_from_request_data;
 	}
 
 	/**
@@ -222,6 +292,8 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * When loading settings for a field, check the $_POST data and possibly use that instead of the DB value.
+	 *
 	 * @since 3.0
 	 *
 	 * @param string $setting
@@ -233,8 +305,12 @@ class FrmFieldsHelper {
 		}
 
 		if ( strpos( $setting, 'html' ) !== false ) {
-			// Strip slashes from HTML but not regex or script tags.
 			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+
+			// Conditionally strip script tags if the user sending $_POST data is not allowed to use unfiltered HTML.
+			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
+				$value = FrmAppHelper::kses( $value, 'all' );
+			}
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
@@ -413,7 +489,7 @@ class FrmFieldsHelper {
 		if ( is_array( $filtered_substrings ) ) {
 			$substrings = $filtered_substrings;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_error_substrings_to_replace_with_field_name filter.', '6.8.3' );
 		}
 
 		return $substrings;
@@ -830,6 +906,8 @@ class FrmFieldsHelper {
 			'siteurl',
 			'sitename',
 			'admin_email',
+			'default-email',
+			'default-from-email',
 			'post[-|_]id',
 			'created[-|_]at',
 			'updated[-|_]at',
@@ -925,10 +1003,15 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array  $atts  Includes entry object.
-	 * @param string $value
+	 * @param array       $atts  Includes entry object.
+	 * @param string|null $value
+	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
+		if ( is_null( $value ) ) {
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 		if ( $should_sanitize ) {
@@ -952,7 +1035,7 @@ class FrmFieldsHelper {
 			'ip'  => $atts['entry']->ip,
 		);
 
-		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get' );
+		$dynamic_default = array( 'admin_email', 'siteurl', 'frmurl', 'sitename', 'get', 'default-email', 'default-from-email' );
 
 		if ( isset( $shortcode_values[ $atts['tag'] ] ) ) {
 			$replace_with = $shortcode_values[ $atts['tag'] ];
@@ -1013,7 +1096,7 @@ class FrmFieldsHelper {
 			$string_value = $replace_with;
 			if ( is_array( $replace_with ) ) {
 				$sep          = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$string_value = implode( $sep, $replace_with );
+				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
 			if ( empty( $string_value ) && $string_value != '0' ) {
@@ -1040,6 +1123,14 @@ class FrmFieldsHelper {
 			case 'admin_email':
 				$new_value = get_option( 'admin_email' );
 				break;
+			case 'default-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->default_email ) && is_email( $frm_settings->default_email ) ? $frm_settings->default_email : get_option( 'admin_email' );
+				break;
+			case 'default-from-email':
+				$frm_settings = FrmAppHelper::get_settings();
+				$new_value    = ! empty( $frm_settings->from_email ) && is_email( $frm_settings->from_email ) ? $frm_settings->from_email : get_option( 'admin_email' );
+				break;
 			case 'siteurl':
 				$new_value = FrmAppHelper::site_url();
 				break;
@@ -1051,7 +1142,7 @@ class FrmFieldsHelper {
 				break;
 			case 'get':
 				$new_value = self::process_get_shortcode( $atts, $return_array );
-		}
+		}//end switch
 
 		return $new_value;
 	}
@@ -1511,6 +1602,11 @@ class FrmFieldsHelper {
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
 				if ( is_string( $v ) ) {
+					if ( 'custom_html' === $k ) {
+						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+						unset( $k, $v );
+						continue;
+					}
 					$val[ $k ] = str_replace( $replace, $replace_with, $v );
 					unset( $k, $v );
 				}
@@ -1520,6 +1616,31 @@ class FrmFieldsHelper {
 		}
 
 		return $val;
+	}
+
+	/**
+	 * Removes exception strings from replacement arrays and replaces the rest in the provided value string.
+	 *
+	 * @since 6.14
+	 *
+	 * @param array  $replace      Values to be replaced.
+	 * @param array  $replace_with Replacement values.
+	 * @param array  $exceptions   Array of strings to skip.
+	 * @param string $value        Value to be updated.
+	 *
+	 * @return string
+	 */
+	private static function switch_ids_except_strings( $replace, $replace_with, $exceptions, $value ) {
+		foreach ( $exceptions as $exception ) {
+			$index = array_search( $exception, $replace, true );
+			if ( false === $index ) {
+				continue;
+			}
+			unset( $replace[ $index ] );
+			unset( $replace_with[ $index ] );
+		}
+		$value = str_replace( $replace, $replace_with, $value );
+		return $value;
 	}
 
 	/**
@@ -1989,7 +2110,7 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function convert_field_object_to_flat_array( $field ) {
-		$field_options = $field->field_options;
+		$field_options = is_array( $field->field_options ) ? $field->field_options : array();
 		$field_array   = get_object_vars( $field );
 		unset( $field_array['field_options'] );
 

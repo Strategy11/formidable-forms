@@ -422,6 +422,9 @@ abstract class FrmFormMigrator {
 	 * @param int   $form_id
 	 */
 	protected function save_action( $action, $form, $form_id ) {
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
 		unset( $action['type'] );
 		$new_action = $action_control->prepare_new( $form_id );

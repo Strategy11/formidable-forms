@@ -108,11 +108,16 @@ class FrmEntryMeta {
 		$value = apply_filters( 'frm_prepare_data_before_db', $value, $atts['field_id'], $atts['entry_id'], array( 'field' => $atts['field'] ) );
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param array      $values Either indexed by field ID or field key.
+	 * @return void
+	 */
 	public static function update_entry_metas( $entry_id, $values ) {
 		global $wpdb;
 
-		$prev_values = FrmDb::get_col(
-			$wpdb->prefix . 'frm_item_metas',
+		$previous_field_ids = FrmDb::get_col(
+			'frm_item_metas',
 			array(
 				'item_id'    => $entry_id,
 				'field_id !' => 0,
@@ -120,19 +125,28 @@ class FrmEntryMeta {
 			'field_id'
 		);
 
-		foreach ( $values as $field_id => $meta_value ) {
-			$field = false;
-			if ( ! empty( $field_id ) ) {
-				$field = FrmField::getOne( $field_id );
+		$values_indexed_by_field_id = array();
+		foreach ( $values as $field_id_or_key => $meta_value ) {
+			$field_id = $field_id_or_key;
+			$field    = null;
+
+			if ( $field_id_or_key ) {
+				$field = FrmField::getOne( $field_id_or_key );
+
+				if ( is_object( $field ) ) {
+					$field_id = $field->id;
+				}
 			}
+
+			$values_indexed_by_field_id[ $field_id ] = $meta_value;
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
-			if ( $prev_values && in_array( $field_id, $prev_values ) ) {
+			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
 				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
-					// remove blank fields
-					unset( $values[ $field_id ] );
+					// Remove blank fields.
+					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
 					// if value exists, then update it
 					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
@@ -143,20 +157,20 @@ class FrmEntryMeta {
 			}
 		}//end foreach
 
-		if ( empty( $prev_values ) ) {
+		if ( empty( $previous_field_ids ) ) {
 			return;
 		}
 
-		$prev_values = array_diff( $prev_values, array_keys( $values ) );
+		$field_ids_to_remove = array_diff( $previous_field_ids, array_keys( $values_indexed_by_field_id ) );
 
-		if ( empty( $prev_values ) ) {
+		if ( ! $field_ids_to_remove ) {
 			return;
 		}
 
 		// prepare the query
 		$where = array(
 			'item_id'  => $entry_id,
-			'field_id' => $prev_values,
+			'field_id' => $field_ids_to_remove,
 		);
 		FrmDb::get_where_clause_and_values( $where );
 
@@ -215,6 +229,11 @@ class FrmEntryMeta {
 		return self::get_entry_meta_by_field( $entry->id, $field_id );
 	}
 
+	/**
+	 * @param int|object|string $entry_id
+	 * @param int|string        $field_id This function supports field keys as field id.
+	 * @return mixed
+	 */
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
 		global $wpdb;
 
@@ -236,9 +255,11 @@ class FrmEntryMeta {
 		$get_table = $wpdb->prefix . 'frm_item_metas';
 		$query     = array( 'item_id' => $entry_id );
 		if ( is_numeric( $field_id ) ) {
+			// Query by field ID.
 			$query['field_id'] = $field_id;
 		} else {
-			$get_table            .= ' it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+			// Query by field key.
+			$get_table            .= ' it JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 			$query['fi.field_key'] = $field_id;
 		}
 
@@ -379,6 +400,35 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * Returns true if the where clause refers to a field table column that is not form_id. It also updates
+	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
+	 *
+	 * @since 6.16.1
+	 * @param array|string $where
+	 * @return bool
+	 */
+	private static function should_join_fields_table( &$where ) {
+		if ( is_string( $where ) ) {
+			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
+				return true;
+			}
+			$where = str_ireplace( 'fi.form_id', 'e.form_id', $where );
+			return false;
+		}
+		$where_fields = array_keys( $where );
+		foreach ( $where_fields as $where_field ) {
+			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
+				return true;
+			}
+		}
+		if ( isset( $where['fi.form_id'] ) ) {
+			$where['e.form_id'] = $where['fi.form_id'];
+			unset( $where['fi.form_id'] );
+		}
+		return false;
+	}
+
+	/**
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
@@ -404,8 +454,15 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
+		$should_join_fields_table__where    = self::should_join_fields_table( $where );
+		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
+			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+		}
+
+		$query[] = $from;
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
 		if ( is_array( $where ) ) {
 			if ( ! $args['is_draft'] ) {

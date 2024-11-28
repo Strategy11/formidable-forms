@@ -293,6 +293,10 @@ class FrmEntriesHelper {
 
 		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
 
+		if ( is_string( $field->field_options ) ) {
+			$field->field_options = array();
+		}
+
 		if ( ! isset( $field->field_options['post_field'] ) ) {
 			$field->field_options['post_field'] = '';
 		}

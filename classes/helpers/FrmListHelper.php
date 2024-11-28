@@ -38,7 +38,8 @@ class FrmListHelper {
 	 * The current screen
 	 *
 	 * @since 2.0.18
-	 * @var object
+	 *
+	 * @var \WP_Screen
 	 */
 	protected $screen;
 

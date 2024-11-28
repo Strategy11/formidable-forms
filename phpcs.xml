@@ -36,7 +36,8 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="formidable"/>
+				<element value="formidable" />
+				<element value="default" />
 			</property>
 		</properties>
 	</rule>
@@ -207,6 +208,7 @@
 		<exclude-pattern>models/fields/FrmFieldType.php</exclude-pattern>
 		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
 		<exclude-pattern>tests/phpunit/entries/test_FrmShowEntryShortcode.php</exclude-pattern>
+		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->
@@ -229,6 +231,7 @@
 		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
 		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
 		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPressVIPMinimum">

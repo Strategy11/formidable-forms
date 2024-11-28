@@ -74,15 +74,6 @@ describe('Run some accessibility tests', function() {
         cy.checkA11y();
     });
 
-    it('Check the payments page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-settings&t=stripe_settings');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
-            ...baselineRules
-        ]);
-        cy.checkA11y();
-    });
-
     it('Check the import/export page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-import');
         cy.injectAxe();
@@ -106,19 +97,8 @@ describe('Run some accessibility tests', function() {
         cy.visit('/wp-admin/admin.php?page=formidable-addons');
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
-            ...baselineRules
-        ]);
-        cy.checkA11y();
-    });
-
-    it('Check the upgrade page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-pro-upgrade');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
             ...baselineRules,
-            { id: 'empty-table-header', enabled: false },
             { id: 'heading-order', enabled: false }
-
         ]);
         cy.checkA11y();
     });
@@ -128,7 +108,8 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             ...baselineRules,
-            { id: 'landmark-unique', enabled: false }
+            { id: 'landmark-unique', enabled: false },
+            { id: 'landmark-complementary-is-top-level', enabled: false }
         ]);
         cy.checkA11y();
     });

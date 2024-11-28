@@ -4,11 +4,15 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { showElements, hideElements, show, hide } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { VIEW_SLUGS, getAppState } from '../shared';
-import { show, hide, showElements, hideElements } from '../utils';
+import { VIEW_SLUGS, getState } from '../shared';
 
 /**
  * Display the search-empty state.
@@ -16,7 +20,7 @@ import { show, hide, showElements, hideElements } from '../utils';
  * @return {void}
  */
 export function showSearchEmptyState() {
-	const { notEmptySearchText } = getAppState();
+	const { notEmptySearchText } = getState();
 	const { pageTitle, emptyState, emptyStateButton, applicationTemplates } = getElements();
 
 	// Toggle visibility and remove attributes based on search status
@@ -111,7 +115,7 @@ export function showAvailableTemplatesEmptyState() {
 
 	// Update text content
 	const { emptyStateTitle, emptyStateText } = getElements();
-	const { extraTemplatesCount } = getAppState();
+	const { extraTemplatesCount } = getState();
 	emptyStateTitle.textContent = __( 'No Templates Available', 'formidable' );
 	emptyStateText.textContent = sprintf(
 		__( 'Upgrade to PRO for %s+ options or explore Free Templates.', 'formidable' ),

@@ -63,7 +63,7 @@ class FrmFormsHelper {
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
-					<?php echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
+					<?php echo esc_html( '' === $form->name ? self::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -127,7 +127,7 @@ class FrmFormsHelper {
 		}
 
 		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name           = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
+		$name           = '' === $name ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		if ( count( $forms ) < 2 ) {
@@ -183,7 +183,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name;
+					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -1108,6 +1108,10 @@ BEFORE_HTML;
 		return $actions;
 	}
 
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link( $data ) {
 		$form_id = self::get_form_id_from_data( $data );
 
@@ -1120,17 +1124,32 @@ BEFORE_HTML;
 		return $link;
 	}
 
+	/**
+	 * Returns a text used when no title is set.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @return string
+	 */
+	public static function get_no_title_text() {
+		return __( '(no title)', 'formidable' );
+	}
+
+	/**
+	 * @param int|object|string $data
+	 * @return string
+	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
-			return __( '(no title)', 'formidable' );
+			return self::get_no_title_text();
 		}
 		return FrmAppHelper::truncate( $name, 40 );
 	}
 
 	/**
-	 * @param mixed $data
-	 * @return int
+	 * @param int|object|string $data
+	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
 		if ( is_object( $data ) ) {
@@ -1349,7 +1368,7 @@ BEFORE_HTML;
 		$atts     = array_merge( $defaults, $atts );
 
 		// Filter out ignored categories.
-		$ignore     = self::ignore_template_categories();
+		$ignore     = self::get_license_types();
 		$categories = array_diff( $categories, $ignore );
 
 		// Define icons mapping.
@@ -1406,17 +1425,6 @@ BEFORE_HTML;
 		echo '>';
 			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
-	}
-
-	/**
-	 * Retrieves the list of template categories to ignore.
-	 *
-	 * @since 4.03.01
-	 *
-	 * @return string[] Array of categories to ignore.
-	 */
-	public static function ignore_template_categories() {
-		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
@@ -1503,7 +1511,7 @@ BEFORE_HTML;
 
 		?>
 		<p class="frm_plan_required">
-			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
 			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
 				<?php echo esc_html( $requires ); ?>
 			</a>
@@ -1522,22 +1530,62 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$plans = array( 'free', 'Basic', 'Personal', 'Plus', 'Creator', 'Business', 'Elite' );
+		$plans = self::get_license_types();
 
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
-					// Show the current package name.
-					$category = 'Plus';
-				}
+				$category = self::convert_legacy_package_names( $category );
 
 				return $category;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Converts legacy package names to the current standard package name.
+	 *
+	 * @since 6.15
+	 * @param string $package_name
+	 * @return string The updated package name.
+	 */
+	public static function convert_legacy_package_names( $package_name ) {
+		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
+			$package_name = 'Plus';
+		}
+
+		return $package_name;
+	}
+
+	/**
+	 * Get the license types.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public static function get_license_types( $args = array() ) {
+		$defaults = array(
+			'include_all' => true,
+			'case_lower'  => false,
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		$license_types = array( 'Basic', 'Plus', 'Business', 'Elite' );
+
+		if ( $args['include_all'] ) {
+			$license_types = array_merge( array( 'free', 'Personal', 'Creator' ), $license_types );
+		}
+
+		if ( $args['case_lower'] ) {
+			$license_types = array_map( 'strtolower', $license_types );
+		}
+
+		return $license_types;
 	}
 
 	/**
@@ -1782,6 +1830,25 @@ BEFORE_HTML;
 		} else {
 			esc_html_e( 'Update', 'formidable' );
 		}
+	}
+
+	/**
+	 * Strip characters similar to the WordPress sanitize_html_class function, but allow for [ and ].
+	 * This allows shortcodes inside of the layout classes setting.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $classname
+	 * @return string
+	 */
+	public static function sanitize_layout_class( $classname ) {
+		// Strip out any percent-encoded characters.
+		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classname );
+
+		// Limit to A-Z, a-z, 0-9, '_', '-', '[', ']'.
+		$sanitized = preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
+
+		return $sanitized;
 	}
 
 	/**

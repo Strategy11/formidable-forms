@@ -2,11 +2,19 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Do not deprecate if the Pro version still use these hooks.
+$should_deprecate_hook = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '6.16.3' ) >= 0;
 ?>
-<input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
 <table class="form-table">
-	<?php do_action( 'frm_add_form_style_tab_options', $values ); ?>
+	<?php
+	if ( $should_deprecate_hook ) {
+		do_action_deprecated( 'frm_add_form_style_tab_options', array( $values ), '6.16.3' );
+	} else {
+		do_action( 'frm_add_form_style_tab_options', $values );
+	}
+	?>
 	<tr>
 		<td colspan="2">
 			<h3><?php esc_html_e( 'Buttons', 'formidable' ); ?></h3>
@@ -19,5 +27,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</td>
 	</tr>
-	<?php do_action( 'frm_add_form_button_options', $values ); ?>
+	<?php
+	if ( $should_deprecate_hook ) {
+		do_action_deprecated( 'frm_add_form_button_options', array( $values ), '6.16.3' );
+	} else {
+		do_action( 'frm_add_form_button_options', $values );
+	}
+	?>
 </table>

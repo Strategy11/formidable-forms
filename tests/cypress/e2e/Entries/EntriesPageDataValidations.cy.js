@@ -9,7 +9,7 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-        cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+        cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
         cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
         cy.get("#frm_new_form_name_input").type("Test Form");
         cy.get("#frm-save-form-name-button").should("contain", "Save").click();
@@ -86,7 +86,7 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Create a blank form");
         cy.contains(".frm_nav_bar .button-primary", "Add New").click();
-        cy.get(".frm-form-templates-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
+        cy.get(".frm-list-grid-layout #frm-form-templates-create-form").should("contain", "Create a blank form").click();
         cy.get("#frm_submit_side_top", { timeout: 5000 }).should("contain", "Save").click();
         cy.get("#frm_new_form_name_input").type("Test Form");
         cy.get("#frm-save-form-name-button").should("contain", "Save").click();
@@ -158,7 +158,7 @@ describe("Entries submitted from a form", () => {
         cy.get(':nth-child(2) > h3').should("contain", "Entry Details");
         cy.get('#timestamp')
             .invoke('text')
-            .should('match', /Submitted: [A-Za-z]{3} \d{1,2}, \d{4} @ \d{1,2}:\d{2}/);
+            .should('match', /Submitted: [A-Za-z]{3} \d{1,2}, \d{4} at \d{1,2}:\d{2} (am|pm)/);
         cy.get(':nth-child(2) > .inside > :nth-child(2)').should("contain", "Entry ID:");
         cy.log('Extract and trim the value after "Entry Key:')
         cy.get(':nth-child(2) > .inside > :nth-child(3)')

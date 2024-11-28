@@ -36,6 +36,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
 		if ( is_object( $field ) ) {

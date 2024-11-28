@@ -169,7 +169,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		$has_field = false;
 		?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
-			<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
+			<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 			<?php
 			foreach ( $form_atts['form_fields'] as $field ) {
 				$type_is_allowed = empty( $field_atts['allowed_fields'] ) || in_array( $field->type, (array) $field_atts['allowed_fields'], true );
@@ -182,11 +182,29 @@ class FrmTransLiteAction extends FrmFormAction {
 				$key_exists = array_key_exists( $field_atts['name'], $form_atts['form_action']->post_content );
 				?>
 				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
-					<?php echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) ); ?>
+					<?php
+					echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) );
+
+					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
+						switch ( $field_atts['name'] ) {
+							case 'billing_first_name':
+								echo ' (';
+								esc_html_e( 'First', 'formidable' );
+								echo ')';
+								break;
+
+							case 'billing_last_name':
+								echo ' (';
+								esc_html_e( 'Last', 'formidable' );
+								echo ')';
+								break;
+						}
+					}
+					?>
 				</option>
 				<?php
 				unset( $field );
-			}
+			}//end foreach
 
 			if ( ! $has_field && ! empty( $field_atts['allowed_fields'] ) ) {
 				$readable_fields = str_replace( '_', ' ', implode( ', ', (array) $field_atts['allowed_fields'] ) );
@@ -205,6 +223,9 @@ class FrmTransLiteAction extends FrmFormAction {
 	}
 
 	public static function get_single_action_type( $action_id, $type = '' ) {
+		/**
+		 * @var FrmFormAction
+		 */
 		$action_control = FrmFormActionsController::get_form_actions( 'payment' );
 		return $action_control->get_single_action( $action_id );
 	}

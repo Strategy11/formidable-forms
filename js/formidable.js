@@ -1,4 +1,4 @@
-/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField */
+/* exported frmRecaptcha, frmAfterRecaptcha */
 /* eslint-disable prefer-const */
 
 function frmFrontFormJS() {
@@ -30,7 +30,13 @@ function frmFrontFormJS() {
 		el.dispatchEvent( event );
 	}
 
-	/* Get the ID of the field that changed*/
+	/**
+	 * Get the ID of the field that changed.
+	 *
+	 * @param {HTMLElement|jQuery} field
+	 * @param {boolean}            fullID
+	 * @return {string|number} Field ID.
+	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
 			isRepeating = false,
@@ -150,7 +156,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {Object} $form
+	 * @param {jQuery} $form
 	 */
 	function enableSaveDraft( $form ) {
 		if ( ! $form.length ) {
@@ -162,24 +168,39 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Validate form with JS.
+	 *
+	 * @param {HTMLElement|jQuery} object
+	 * @return {Array} Errors.
+	 */
 	function validateForm( object ) {
-		let errors, r, rl, n, nl, fields, field, requiredFields;
+		let errors, n, nl, fields, field;
 
 		errors = [];
 
-		// Make sure required text field is filled in
-		requiredFields = jQuery( object ).find(
-			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
-		).filter( ':not(.frm_optional)' );
-		if ( requiredFields.length ) {
-			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
-					// skip rich text field buttons.
-					continue;
+		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
+
+		// Required field validation.
+		vanillaJsObject?.querySelectorAll( '.frm_required_field' ).forEach(
+			requiredField => {
+				const isVisible = requiredField.offsetParent !== null;
+				if ( ! isVisible ) {
+					return;
 				}
-				errors = checkRequiredField( requiredFields[r], errors );
+
+				requiredField.querySelectorAll( 'input, select, textarea' ).forEach(
+					requiredInput => {
+						if ( hasClass( requiredInput, 'frm_optional' ) || hasClass( requiredInput, 'ed_button' ) ) {
+							// skip rich text field buttons.
+							return;
+						}
+
+						errors = checkRequiredField( requiredInput, errors );
+					}
+				);
 			}
-		}
+		);
 
 		fields = jQuery( object ).find( 'input,select,textarea' );
 		if ( fields.length ) {
@@ -190,15 +211,25 @@ function frmFrontFormJS() {
 						// A number field will return an empty string when it is invalid.
 						checkValidity( field, errors );
 					}
-					continue;
+
+					const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
+					if ( ! isConfirmationField ) {
+						// Allow a blank confirmation field to still call validateFieldValue.
+						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
+						continue;
+					}
 				}
 
-				validateFieldValue( field, errors );
+				validateFieldValue( field, errors, true );
 				checkValidity( field, errors );
 			}
 		}
 
-		errors = validateRecaptcha( object, errors );
+		// Invisible captchas are processed after validation.
+		// We only want to validate a visible captcha on submit.
+		if ( ! hasInvisibleRecaptcha( object ) ) {
+			errors = validateRecaptcha( object, errors );
+		}
 
 		return errors;
 	}
@@ -239,6 +270,9 @@ function frmFrontFormJS() {
 		return element.classList && element.classList.contains( targetClass );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
@@ -248,6 +282,9 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 */
 	function maybeAddHttpToUrl( field ) {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
@@ -266,7 +303,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( errors.length < 1 ) {
-			validateFieldValue( field, errors );
+			validateFieldValue( field, errors, false );
 		}
 
 		removeFieldError( $fieldCont );
@@ -277,27 +314,45 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function validateFieldValue( field, errors ) {
+	/**
+	 * Validates a field value.
+	 *
+	 * @since 6.15 Added `onSubmit` parameter.
+	 *
+	 * @param {HTMLElement} field    Field input.
+	 * @param {Object}      errors   Errors data.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 */
+	function validateFieldValue( field, errors, onSubmit ) {
 		if ( field.type === 'hidden' ) {
 			// don't validate
 		} else if ( field.type === 'number' ) {
 			checkNumberField( field, errors );
 		} else if ( field.type === 'email' ) {
-			checkEmailField( field, errors );
+			checkEmailField( field, errors, onSubmit );
 		} else if ( field.type === 'password' ) {
-			checkPasswordField( field, errors );
+			checkPasswordField( field, errors, onSubmit );
 		} else if ( field.type === 'url' ) {
 			checkUrlField( field, errors );
 		} else if ( field.pattern !== null ) {
 			checkPatternField( field, errors );
 		}
 
+		/**
+		 * @since 6.15 Added `onSubmit` to the data.
+		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
 			field: field,
-			errors: errors
+			errors: errors,
+			onSubmit: onSubmit
 		});
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {Array} Errors
+	 */
 	function checkRequiredField( field, errors ) {
 		let checkGroup, tempVal, i, placeholder,
 			val = '',
@@ -352,6 +407,12 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			}
 
+			// Make sure fieldID is a string.
+			// fieldID may be a number which doesn't include a .replace function.
+			if ( 'function' !== typeof fieldID.replace ) {
+				fieldID = fieldID.toString();
+			}
+
 			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
@@ -380,19 +441,35 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the input is a typed signature input.
+	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
 		return 'string' === typeof name && '[typed]' === name.substr( -7 );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the field is a SSA appointment field.
+	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @return {boolean} True if the field is inline datepicker field.
+	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
+	/**
+	 * @param {string|number} fileID
+	 * @return {string} File input value.
+	 */
 	function getFileVals( fileID ) {
 		let val = '',
 			fileFields = jQuery( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
@@ -405,6 +482,11 @@ function frmFrontFormJS() {
 		return val;
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkUrlField( field, errors ) {
 		let fieldID,
 			url = field.value;
@@ -417,7 +499,39 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function checkEmailField( field, errors ) {
+	/**
+	 * Checks if the confirm field should be checked.
+	 *
+	 * @since 6.15
+	 *
+	 * @param {HTMLElement} field    Field input.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 * @return {boolean} True if we should confirm the field.
+	 */
+	function shouldCheckConfirmField( field, onSubmit ) {
+		if ( onSubmit ) {
+			// Always check on submitting.
+			return true;
+		}
+
+		if ( 0 === field.id.indexOf( 'field_conf_' ) ) {
+			// Always check if it's the confirm field.
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check the email field for errors.
+	 *
+	 * @since 6.15 Added `onSubmit` parameter.
+	 *
+	 * @param {HTMLElement} field    Field input.
+	 * @param {Object}      errors   Errors data.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 */
+	function checkEmailField( field, errors, onSubmit ) {
 		const fieldID = getFieldId( field, true ),
 			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
@@ -426,13 +540,31 @@ function frmFrontFormJS() {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
-		confirmField( field, errors );
+		if ( shouldCheckConfirmField( field, onSubmit ) ) {
+			confirmField( field, errors );
+		}
 	}
 
-	function checkPasswordField( field, errors ) {
-		confirmField( field, errors );
+	/**
+	 * Check the password field for errors.
+	 *
+	 * @since 6.15 Added `onSubmit` parameter.
+	 *
+	 * @param {HTMLElement} field    Field input.
+	 * @param {Object}      errors   Errors data.
+	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
+	 */
+	function checkPasswordField( field, errors, onSubmit ) {
+		if ( shouldCheckConfirmField( field, onSubmit ) ) {
+			confirmField( field, errors );
+		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function confirmField( field, errors ) {
 		let value, confirmValue, firstField,
 			fieldID = getFieldId( field, true ),
@@ -456,6 +588,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkNumberField( field, errors ) {
 		let fieldID,
 			number = field.value;
@@ -468,6 +605,11 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} field
+	 * @param {Array}       errors
+	 * @return {void}
+	 */
 	function checkPatternField( field, errors ) {
 		let fieldID,
 			text = field.value,
@@ -527,6 +669,10 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * @param {HTMLElement|jQuery} object
+	 * @return {boolean} True if there is an invisible recaptcha.
+	 */
 	function hasInvisibleRecaptcha( object ) {
 		let recaptcha, recaptchaID, alreadyChecked;
 
@@ -545,6 +691,9 @@ function frmFrontFormJS() {
 		return false;
 	}
 
+	/**
+	 * @param {jQuery} invisibleRecaptcha
+	 */
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
 		const recaptchaID = invisibleRecaptcha.data( 'rid' );
 		grecaptcha.reset( recaptchaID );
@@ -552,26 +701,30 @@ function frmFrontFormJS() {
 	}
 
 	function validateRecaptcha( form, errors ) {
-		let recaptchaID, response, fieldContainer, fieldID,
-			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
-		if ( $recaptcha.length ) {
-			recaptchaID = $recaptcha.data( 'rid' );
+		let response;
 
-			try {
-				response = grecaptcha.getResponse( recaptchaID );
-			} catch ( e ) {
-				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
-					return errors;
-				}
-				response = '';
-			}
-
-			if ( response.length === 0 ) {
-				fieldContainer = $recaptcha.closest( '.frm_form_field' );
-				fieldID = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
-				errors[ fieldID ] = '';
-			}
+		const $recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
+		if ( ! $recaptcha.length ) {
+			return errors;
 		}
+
+		const recaptchaID = $recaptcha.data( 'rid' );
+
+		try {
+			response = grecaptcha.getResponse( recaptchaID );
+		} catch ( e ) {
+			if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
+				return errors;
+			}
+			response = '';
+		}
+
+		if ( response.length === 0 ) {
+			const fieldContainer = $recaptcha.closest( '.frm_form_field' );
+			const fieldID        = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
+			errors[ fieldID ] = '';
+		}
+
 		return errors;
 	}
 
@@ -622,10 +775,14 @@ function frmFrontFormJS() {
 	/**
 	 * Check if JS validation should happen.
 	 *
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
 	 */
 	function shouldJSValidate( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		let validate = hasClass( object, 'frm_js_validate' );
 		if ( validate && typeof frmProForm !== 'undefined' && ( frmProForm.savingDraft( object ) || frmProForm.goingToPreviousPage( object ) ) ) {
 			validate = false;
@@ -634,6 +791,11 @@ function frmFrontFormJS() {
 		return validate;
 	}
 
+	/**
+	 * @param {HTMLElement}      object
+	 * @param {string|undefined} action
+	 * @return {void}
+	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
 
@@ -990,7 +1152,10 @@ function frmFrontFormJS() {
 		const input        = $fieldCont.find( 'input, select, textarea' );
 		let describedBy    = input.attr( 'aria-describedby' );
 
-		$fieldCont.get( 0 ).classList.remove( 'frm_blank_field', 'has-error' );
+		const fieldContainer = $fieldCont.get( 0 );
+		if ( fieldContainer && fieldContainer.classList ) {
+			fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		}
 
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
@@ -1009,10 +1174,14 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement} object Form object.
+	 * @param {HTMLElement|Object} object Form object.
 	 * @return {void}
 	 */
 	function scrollToFirstField( object ) {
+		if ( 'function' === typeof object.get ) {
+			// Get the HTMLElement from a jQuery object.
+			object = object.get( 0 );
+		}
 		const field = object.querySelector( '.frm_blank_field' );
 		if ( field ) {
 			frmFrontForm.scrollMsg( jQuery( field ), object, true );
@@ -1150,6 +1319,29 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Sets focus on a the first subfield of a combo field that has an error.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the focus was set on a combo field.
+	 */
+	function maybeFocusOnComboSubField( element ) {
+		if ( 'FIELDSET' !== element.nodeName ) {
+			return false;
+		}
+		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
+			return false;
+		}
+		const comboSubfield = element.querySelector( '[aria-invalid="true"]' );
+		if ( comboSubfield ) {
+			focusInput( comboSubfield );
+			return true;
+		}
+		return false;
+	}
+
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
@@ -1166,7 +1358,11 @@ function frmFrontFormJS() {
 		do {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
-				element.focus();
+				focusInput( element );
+				break;
+			}
+
+			if ( maybeFocusOnComboSubField( element ) ) {
 				break;
 			}
 
@@ -1190,6 +1386,22 @@ function frmFrontFormJS() {
 				}
 			}
 		} while ( element.previousSibling );
+	}
+
+	/**
+	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @return {void}
+	 */
+	function focusInput( input ) {
+		if ( input.offsetParent !== null ) {
+			input.focus();
+		} else {
+			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
+		}
 	}
 
 	/**
@@ -1499,6 +1711,11 @@ function frmFrontFormJS() {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
+		/**
+		 * @param {Event}       e
+		 * @param {HTMLElement} object The form object that is being submitted.
+		 * @return {void}
+		 */
 		submitFormManual: function( e, object ) {
 			let isPro, errors,
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
@@ -1521,18 +1738,19 @@ function frmFrontFormJS() {
 				return;
 			}
 
+			errors = frmFrontForm.validateFormSubmit( object );
+			if ( Object.keys( errors ).length !== 0 ) {
+				return;
+			}
+
 			if ( invisibleRecaptcha.length ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
 
-				errors = frmFrontForm.validateFormSubmit( object );
+				showSubmitLoading( jQuery( object ) );
 
-				if ( Object.keys( errors ).length === 0 ) {
-					showSubmitLoading( jQuery( object ) );
-
-					frmFrontForm.submitFormNow( object, classList );
-				}
+				frmFrontForm.submitFormNow( object, classList );
 			}
 		},
 
@@ -1564,6 +1782,11 @@ function frmFrontFormJS() {
 			}
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 *
+		 * @return {Array} List of errors.
+		 */
 		validateFormSubmit: function( object ) {
 			if ( typeof tinyMCE !== 'undefined' && jQuery( object ).find( '.wp-editor-wrap' ).length ) {
 				tinyMCE.triggerSave();
@@ -1582,6 +1805,10 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {Array} List of errors.
+		 */
 		getAjaxFormErrors: function( object ) {
 			let customErrors, key;
 
@@ -1596,9 +1823,18 @@ function frmFrontFormJS() {
 				}
 			}
 
+			triggerCustomEvent( document, 'frm_get_ajax_form_errors', {
+				formEl: object,
+				errors: jsErrors
+			});
+
 			return jsErrors;
 		},
 
+		/**
+		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
+		 * @return {void}
+		 */
 		addAjaxFormErrors: function( object ) {
 			let key, $fieldCont;
 			removeAllErrors();
@@ -1742,7 +1978,25 @@ function frmCaptcha( captchaSelector ) {
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl       = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
-		frmFrontForm.renderCaptcha( captchas[c], captchaSelector );
+		const closestForm   = captchas[c].closest( 'form' );
+		const formIsVisible = closestForm && closestForm.offsetParent !== null;
+		const captcha       = captchas[c];
+		if ( ! formIsVisible ) {
+			// If the form is not visible, try again later in 400ms.
+			// This fixes issues where the form fades visible on page load.
+			// Or whne the form is inside of a modal.
+			const interval = setInterval(
+				function() {
+					if ( closestForm && closestForm.offsetParent !== null ) {
+						frmFrontForm.renderCaptcha( captcha, captchaSelector );
+						clearInterval( interval );
+					}
+				},
+				400
+			);
+			continue;
+		}
+		frmFrontForm.renderCaptcha( captcha, captchaSelector );
 	}
 }
 

@@ -514,9 +514,12 @@ class FrmForm {
 			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = $default === '' ? $field->{$col} : $default;
-
+			$default           = $default === '' ? $field->{$col} : $default;
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+		}
+
+		if ( $field->type === 'submit' && isset( $new_field['field_order'] ) && (int) $new_field['field_order'] === FrmSubmitHelper::DEFAULT_ORDER ) {
+			$new_field['field_order'] = $field->field_order;
 		}
 
 		// Don't save the template option.
@@ -601,6 +604,10 @@ class FrmForm {
 			return false;
 		}
 
+		if ( $form->status === 'trash' ) {
+			return false;
+		}
+
 		$options               = $form->options;
 		$options['trash_time'] = time();
 
@@ -659,6 +666,9 @@ class FrmForm {
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
 		if ( $query_results ) {
 			// Delete all form actions linked to this form
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( 'email' );
 			$action_control->destroy( $id, 'all' );
 

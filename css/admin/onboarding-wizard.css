@@ -15,6 +15,7 @@ html.wp-toolbar {
 
 #frm-onboarding-wizard-page {
 	position: relative;
+	background-color: var(--grey-50);
 	overflow: hidden;
 }
 
@@ -22,27 +23,10 @@ html.wp-toolbar {
 	box-sizing: border-box;
 }
 
-#frm-onboarding-bg {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	opacity: 0;
-	z-index: 1;
-}
-
-#frm-onboarding-bg img {
-	min-height: 80%;
-	max-height: 1200px;
-}
-
 #frm-onboarding-container {
 	position: relative;
 	min-height: 100vh;
+	padding: var(--gap-xl);
 	opacity: 0;
 	z-index: 2;
 }
@@ -50,7 +34,7 @@ html.wp-toolbar {
 #frm-onboarding-return-dashboard {
 	color: var(--grey-400);
 	font-weight: 500;
-	margin-top: var(--gap-xl);
+	margin-top: var(--gap-lg);
 }
 
 #frm-onboarding-return-dashboard:hover {
@@ -61,29 +45,91 @@ html.wp-toolbar {
 	display: none;
 }
 
+#frm-onboarding-wizard-page .frm-onboarding-logo {
+	width: 60px;
+	height: auto;
+}
+
+#frm-onboarding-wizard-page .frm-dropdown-menu {
+	position: static !important;
+	transform: none !important;
+	border: 0;
+	box-shadow: none;
+	width: 100%;
+	max-height: unset;
+}
+
+.dropdown.show .frm-dropdown-toggle .frmsvg {
+	transform: rotate(180deg);
+}
+
 /* NOTE: The changes below were implemented to align with the distinct tooltip style observed in the "Install Formidable Add-ons" step */
 .tooltip-inner {
 	max-width: 295px;
-	background-color: #545F6E;
+	background-color: #545f6e;
 	padding: var(--gap-xs) var(--gap-sm);
 	border-radius: var(--small-radius);
 }
 
 .bs-tooltip-top .arrow::before {
-	border-top-color: #545F6E;
+	border-top-color: #545f6e;
 }
 
-/**
- * Welcome Step Styles
- *
- * Provides styles for when the Onboarding Wizard page is displayed Welcome step.
- */
-#frm-onboarding-welcome-step {
-	max-width: 445px;
+.bs-tooltip-bottom .arrow::before {
+	border-bottom-color: #545f6e;
 }
 
-.frm-onboarding-logo {
-	max-width: 185px;
+/* Rootline */
+.frm-rootline {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: calc(3 * var(--gap-xl));
+	padding: 0;
+	margin: 0 0  var(--gap-lg);
+}
+
+.frm-rootline::before {
+	content: '';
+	position: absolute;
+	width: calc(100% - 32px);
+	border: 1px solid var(--grey-300);
+	z-index: 1;
+}
+
+.frm-rootline-item {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 16px;
+	height: 16px;
+	background-color: var(--grey-50);
+	border: 2px solid var(--grey-300);
+	outline: 4px solid var(--grey-50);
+	border-radius: 100%;
+	padding: 0;
+	margin: 0;
+	z-index: 2;
+}
+
+.frm-rootline-item.frm-completed-step {
+	background-color: var(--grey-500);
+	border-color: var(--grey-500);
+}
+
+.frm-rootline-item.frm-current {
+	background-color: #fff;
+	border-color: var(--primary-500);
+}
+
+.frm-rootline-item .frmsvg {
+	color: #fff;
+}
+
+.frm-rootline-item:not(.frm-completed-step) .frmsvg {
+	display: none;
 }
 
 /**
@@ -103,3 +149,4 @@ html.wp-toolbar {
 .frm-cta-green .frm-banner-text a {
 	text-decoration: underline;
 }
+

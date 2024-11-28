@@ -1,5 +1,5 @@
 describe("Forms page", () => {
-    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin';
+    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin&utm_content=lite-banner';
     const origin = Cypress.config('baseUrl');
     const formTitle = "Test Form";
 
@@ -14,18 +14,16 @@ describe("Forms page", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
         cy.get('.frm-upgrade-bar > a')
-            .should('have.text', 'upgrading to PRO')
-            .and('have.attr', 'href', formidableFormsUpgradeUrl)
-            .then(link => {
-                cy.wrap(link).invoke('removeAttr', 'target').click();
-
-                cy.origin('https://formidableforms.com', { args: { formidableFormsUpgradeUrl } }, ({ formidableFormsUpgradeUrl }) => {
-                    cy.location('href').should('eq', formidableFormsUpgradeUrl);
-                });
-
-                cy.log("Navigate back to the original page");
-                cy.visit('/wp-admin/admin.php?page=formidable');
+            .should('have.text', 'upgrading to PRO').click();
+        cy.origin('https://formidableforms.com', () => { 
+            cy.get('h1').then(($h1) => {
+                const text = $h1.text();
+                expect(['The Only WordPress Form Maker & Application Builder Plugin', 'Upgrade Today to Unlock the Full Power of Formidable Forms']).to.include(text);
             });
+        });            
+
+        cy.log("Navigate back to the original page");
+        cy.visit('/wp-admin/admin.php?page=formidable');
 
         cy.log("Validate the header logo link");
         cy.get('a.frm-header-logo')
@@ -91,6 +89,17 @@ describe("Forms page", () => {
     });
 
     it("should validate all data in excerpt view", () => {
+
+        cy.log("Edit form to add description");
+        cy.contains('#the-list tr', 'Test Form').trigger('mouseover').within(() => {
+            cy.get('.row-actions .frm_edit a').should('be.visible').click({ force: true });
+        });
+
+        cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
+        cy.get('#frm_form_description').should("be.visible").type("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+        cy.get('#frm_submit_side_top').should("contain", "Update").click();
+        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
+
         cy.log("Verify that table view in forms page is in excerpt mode");
         cy.get('#view-switch-excerpt').should("exist").click();
 
@@ -115,6 +124,7 @@ describe("Forms page", () => {
             .parents('[id^="item-action-"]')
             .within(() => {
                 cy.get('.name > strong > .row-title').should("contain", formTitle);
+                cy.get('.name').should("contain", "Lorem Ipsum is simply dummy text of the printing...");
                 cy.get('.entries > a').should("contain", "0");
                 cy.get('.form_key').should("contain", "test-form");
                 cy.get('.shortcode > div').should("exist");

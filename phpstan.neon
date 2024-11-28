@@ -4,8 +4,6 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- stubs.php
-	scanFiles:
-		- deprecated/FrmDeprecated.php
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -16,6 +14,7 @@ parameters:
 		- */vendor/*
 		- */fonts/*
 		- */deprecated/*
+		- */rector.php
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
@@ -25,23 +24,18 @@ parameters:
 		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
-		- '#Call to an undefined method object::#'
-		- '#Call to (function is_callable|protected method)+#'
+		- '#Call to protected method+#'
 		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
 		- '#Function (apply_filters)+ invoked with#'
-		- '#Function (w3tc_flush_all|wp_cache_clean_cache|WP_Optimize)+ not found.#'
-		- '#Possibly invalid array key type#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
-		- '#has (an unused parameter|invalid type)+#'
 		- '#is always (false|true)+.#'
 		- '#might not be defined.#'
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
-		- '#get_mailer\(\) expects#'
 		- '#only iterables are supported#'
 		- '#results in an error.#'
 		- '#should return#'
@@ -49,20 +43,52 @@ parameters:
 		- '#has no return type specified#'
 		- '#with no type specified#'
 		- '#in isset\(\) does not exist.#'
-		- '#has no type specified.#'
-		-
-			message: '#has invalid return type#'
-			path: classes/controllers/FrmSMTPController.php
 		- '#is unused.#'
 		- '#is never read, only written#'
 		- '#in empty\(\) is not falsy.#'
-		- '#Cannot access an offset on mixed.#'
 		- '#always exists and is not falsy.#'
-		- '#has an unused use#'
-		- '#Cannot use array destructuring on#'
-		- '#of method FrmFieldName::\_\_construct#'
-		- '#callback of function spl_autoload_register expects#'
-		- '#Call to an undefined method FrmFieldType::get\_file\_id#'
+		- '#has no type specified.#'
+		-
+			message: '#has an unused parameter#'
+			paths:
+				- classes/models/FrmFieldOption.php
+				- classes/models/FrmInbox.php
+				- classes/models/FrmSolution.php
+				- stubs.php
+		-
+			message: '#has invalid type#'
+			path: stubs.php
+		-
+			message: '#Possibly invalid array key type#'
+			paths:
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/helpers/FrmFormsListHelper.php
+		-
+			message: '#get_mailer\(\) expects#'
+			path: classes/controllers/FrmSMTPController.php
+		-
+			message: '#has invalid return type#'
+			path: classes/controllers/FrmSMTPController.php
+		-
+			message: '#has an unused use#'
+			path: classes/views/styles/manage.php
+		-
+			message: '#Cannot access an offset on mixed.#'
+			paths:
+				- classes/helpers/FrmFormMigratorsHelper.php
+				- classes/models/FrmEntryMeta.php
+		-
+			message: '#of method FrmFieldName::\_\_construct#'
+			path: classes/models/fields/FrmFieldName.php
+		-
+			message: '#callback of function spl_autoload_register expects#'
+			path: formidable.php
+		-
+			message: '#Call to an undefined method FrmFieldType::get\_file\_id#'
+			path: classes/helpers/FrmXMLHelper.php
+		-
+			message: '#Cannot use array destructuring on#'
+			path: classes/helpers/FrmStylesHelper.php
 		-
 			message: '#should be contravariant with#'
 			paths:
@@ -81,3 +107,17 @@ parameters:
 			paths:
 				- classes/helpers/FrmCSVExportHelper.php
 				- classes/models/FrmStyle.php
+		-
+			message: '#Call to an undefined method FrmFieldType::get_export_headings#'
+			path: classes/helpers/FrmCSVExportHelper.php
+		-
+			message: '#Call to an undefined method object::(get\_pagenum|prepare\_items|get_pagination\_arg)#'
+			paths:
+				- classes/controllers/FrmEntriesController.php
+				- classes/controllers/FrmFormsController.php
+		-
+			message: '#Call to an undefined method object::prepare_items#'
+			path: classes/helpers/FrmDashboardHelper.php
+		-
+			message: '#Access to protected property FrmFieldType::\$field#'
+			path: classes/controllers/FrmFieldsController.php

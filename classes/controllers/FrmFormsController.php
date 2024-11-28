@@ -114,6 +114,9 @@ class FrmFormsController {
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 		if ( $create_email ) {
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( 'email' );
 			$action_control->create( $form->id );
 		}
@@ -140,6 +143,9 @@ class FrmFormsController {
 		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
 
 		if ( $create ) {
+			/**
+			 * @var FrmFormAction
+			 */
 			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
 			$action_control->create( $form->id );
 		}
@@ -164,7 +170,7 @@ class FrmFormsController {
 			array(
 				'type'          => FrmSubmitHelper::FIELD_TYPE,
 				'name'          => __( 'Submit', 'formidable' ),
-				'field_order'   => 9999,
+				'field_order'   => FrmSubmitHelper::DEFAULT_ORDER,
 				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
@@ -760,6 +766,10 @@ class FrmFormsController {
 			}
 		}
 
+		if ( ! $count ) {
+			return '';
+		}
+
 		$current_page = FrmAppHelper::get_simple_request(
 			array(
 				'param' => 'form_type',
@@ -1209,8 +1219,7 @@ class FrmFormsController {
 
 		self::maybe_update_form_builder_message( $message );
 
-		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
-		$has_fields    = ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+		$has_fields = ! empty( $values['fields'] ) && ! FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
@@ -1403,6 +1412,10 @@ class FrmFormsController {
 				'icon'     => 'frm_icon_font frm_code_icon',
 			),
 		);
+
+		if ( ! has_action( 'frm_add_form_style_tab_options' ) && ! has_action( 'frm_add_form_button_options' ) ) {
+			unset( $sections['buttons'] );
+		}
 
 		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
 			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
@@ -1969,16 +1982,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
-	}
-
-	/**
 	 * Add education about views.
 	 *
 	 * @since 4.07
@@ -2085,7 +2088,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
+					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
@@ -3266,12 +3269,15 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 6.7
+	 * Education for premium features.
 	 *
-	 * @return bool
+	 * @since 4.05
+	 * @deprecated x.x
+	 *
+	 * @return void
 	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, '6.7' );
-		return FrmAddonsController::is_license_expired();
+	public static function add_form_style_tab_options() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

@@ -6,10 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
+$is_loaded_via_ajax = isset( $is_loaded_via_ajax ) ? $is_loaded_via_ajax : false;
+FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
+
 $important = empty( $important_style ) ? '' : ' !important';
 
-$minus_icons = FrmStylesHelper::minus_icons();
-$arrow_icons = FrmStylesHelper::arrow_icons();
+$minus_icons   = FrmStylesHelper::minus_icons();
+$arrow_icons   = FrmStylesHelper::arrow_icons();
+$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .<?php echo esc_html( $style_class ); ?>{
@@ -79,8 +84,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 /* Left and right labels */
 <?php
 
-$frm_settings = FrmAppHelper::get_settings();
-
 if ( '' === $field_height || 'auto' === $field_height ) {
 	foreach ( array( 'left', 'right', 'inline' ) as $alignit ) {
 		?>
@@ -148,18 +151,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
 	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
 }
-.<?php echo esc_html( $style_class ); ?> input::-webkit-input-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-webkit-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
-.<?php echo esc_html( $style_class ); ?> input::-moz-placeholder,
-.<?php echo esc_html( $style_class ); ?> textarea::-moz-placeholder{
-	opacity: 1;
-}
-.<?php echo esc_html( $style_class ); ?> input:-ms-input-placeholder,
-<?php echo esc_html( $style_class ); ?> textarea:-ms-input-placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
-}
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
 .<?php echo esc_html( $style_class ); ?> input.frm_default,
@@ -175,7 +166,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
 .<?php echo esc_html( $style_class ); ?> select:focus,
-.<?php echo esc_html( $style_class ); ?> textarea:focus,
+.<?php echo esc_html( $style_class ); ?> .form-field textarea:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=text],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=password],
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field input[type=email],
@@ -364,7 +355,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
-	border-width:<?php echo esc_html( $border_width_error . $important ); ?>;
+	border-width:var(--border-width-error) <?php echo esc_html( $important ); ?>;
 	border-style:<?php echo esc_html( $border_style_error . $important ); ?>;
 }
 
@@ -379,7 +370,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
-	color:<?php echo esc_html( $border_color_error . $important ); ?>;
+	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{

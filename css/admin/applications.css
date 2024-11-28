@@ -40,7 +40,7 @@
 }
 
 .frm-application-card {
-	grid-column: span 3/span 3; /* treat as frm3 */
+	grid-column: span 4/span 4; /* treat as frm4 */
 	flex-direction: column;
 	gap: 0;
 }
@@ -67,6 +67,7 @@
 	margin: 0;
 	font-size: var(--text-sm) !important;
 	font-weight: 500;
+	min-height: 28px;
 }
 
 .frm-application-card h3 .frmsvg {
@@ -98,11 +99,22 @@
 	align-self: center;
 }
 
+.frm-application-card .frm-new-pill {
+	min-height: 20px;
+	font-size: var(--text-xs);
+	align-items: center;
+}
+
+.frm-application-card:hover .frm-new-pill{
+	display: none;
+}
+
 /* Use template anchor */
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
-	position: absolute;
-	right: 10px;
-	bottom: 0;
+	display: none;
+}
+#frm_application_templates_grid .frm-application-card:hover .frm-button-secondary {
+	display: inline-block;
 }
 
 /* Card description */
@@ -173,6 +185,10 @@
 	overflow-y: auto;
 }
 
+#frm_view_application_modal .postbox {
+	max-height: 800px !important;
+}
+
 .frm-application-modal-label {
 	opacity: 0.65;
 	margin-bottom: 5px;
@@ -229,13 +245,17 @@
 	margin-top: var(--gap-md);
 }
 
-@media only screen and (max-width: 1200px) {
-	.frm-application-card {
-		grid-column: span 4/span 4; /* treat as frm4 */
-	}
+.frm-application-modal-label ~ .frm-application-modal-label {
+	margin-top: var(--gap-md);
 }
 
-@media only screen and (max-width: 800px) {
+ul.frm-application-item-list {
+	margin-top: 0;
+	list-style: disc;
+	list-style-position: inside;
+}
+
+@media only screen and (max-width: 1200px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
 	}
