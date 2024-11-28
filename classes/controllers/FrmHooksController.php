@@ -59,8 +59,10 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		// Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
+		add_action( 'init', 'FrmAppController::load_lang', 0 );
+
 		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
-		add_action( 'init', 'FrmAppController::load_lang', 0 ); // Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
 		add_filter( 'widget_text', 'do_shortcode' );
 
 		// Entries controller.
