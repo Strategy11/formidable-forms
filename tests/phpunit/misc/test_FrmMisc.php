@@ -7,7 +7,6 @@ class test_FrmMisc extends FrmUnitTest {
 
 	/**
 	 * @covers ::load_formidable_forms
-	 * @group mike
 	 */
 	public function test_load_formidable_forms() {
 		global $frm_vars;
