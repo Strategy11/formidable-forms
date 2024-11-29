@@ -5836,7 +5836,9 @@ p.frm_reply_to_container {
 }
 
 .frm_email_row .frm_remove_field .frm_close_icon {
+	position: relative;
 	fill: var(--grey-500);
+	vertical-align: middle;
 }
 
 .frm_logic_field_opts {

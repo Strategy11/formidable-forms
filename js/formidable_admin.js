@@ -8572,7 +8572,7 @@ function frmAdminBuildJS() {
 			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
 				if ( closeSvg[u].closest( '.frm_remove_field' ) ) {
 					// Don't change the icon for the email fields remove button.
-					break;
+					continue;
 				}
 				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
 			}
