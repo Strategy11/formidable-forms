@@ -1088,6 +1088,9 @@ DEFAULT_HTML;
 	 */
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
+		if ( is_null( $value ) ) {
+			return '';
+		}
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
