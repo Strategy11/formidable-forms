@@ -6560,7 +6560,6 @@ li.selected .divider_section_only:before {
 	position: relative;
 }
 
-.edit_field_type_divider:after,
 .frm-page-break:before,
 .frm-page-break:after {
 	content: '';
@@ -6578,13 +6577,23 @@ li.selected .divider_section_only:before {
 }
 
 .edit_field_type_divider .frmsvg {
-	padding: 8px;
+    padding: 2px;
     position: absolute;
-    left: -18px;
+    left: -12px;
     fill: var(--primary-700);
     color: #fff;
     background-color: var(--primary-700);
     border-radius: 50%;
+}
+
+.edit_field_type_divider .start_divider .frmsvg {
+	height: 8px;
+	width: 8px;
+	padding: 0;
+	bottom: -4px;
+	left: -24.5px;
+	color: var(--primary-700);
+    background-color: #fff;
 }
 
 .edit_field_type_divider:after {

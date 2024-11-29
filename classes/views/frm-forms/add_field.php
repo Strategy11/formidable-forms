@@ -100,6 +100,7 @@ if ( 'divider' === $field['type'] ) {
 </div>
 <ul class="start_divider frm_sorting frm_grid_container">
 	<?php
+	FrmAppHelper::icon_by_class( 'frmfont frm-circle' );
 } elseif ( 'end_divider' === $field['type'] ) {
 	?>
 </ul>
