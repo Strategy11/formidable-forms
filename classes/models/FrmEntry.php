@@ -134,7 +134,7 @@ class FrmEntry {
 	 * @since x.x
 	 *
 	 * @param string $created_at
-	 * @return false|int
+	 * @return bool
 	 */
 	private static function maybe_check_for_unique_id_match( $created_at ) {
 		if ( ! self::should_check_for_unique_id_match() ) {
