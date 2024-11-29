@@ -51,6 +51,10 @@ class FrmEntry {
 			return false;
 		}
 
+		if ( self::maybe_check_for_unique_id_match( $new_values['created_at'] ) ) {
+			return true;
+		}
+
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) );
 
@@ -80,6 +84,9 @@ class FrmEntry {
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 			foreach ( $metas as $meta ) {
+				if ( 0 === (int) $meta->field_id ) {
+					continue;
+				}
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
@@ -121,6 +128,56 @@ class FrmEntry {
 		$frm_vars['checking_duplicates'] = false;
 
 		return $is_duplicate;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $created_at
+	 * @return bool
+	 */
+	private static function maybe_check_for_unique_id_match( $created_at ) {
+		if ( ! self::should_check_for_unique_id_match() ) {
+			return false;
+		}
+
+		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
+		if ( ! $unique_id ) {
+			// Only continue if a unique ID was generated on form submit.
+			return false;
+		}
+
+		$timestamp = strtotime( $created_at );
+		if ( false === $timestamp ) {
+			$timestamp = time();
+		}
+
+		$unique_id_match = FrmDb::get_var(
+			'frm_item_metas',
+			array(
+				'field_id'     => 0,
+				'meta_value'   => serialize( compact( 'unique_id' ) ),
+				'created_at >' => gmdate( 'Y-m-d H:i:s', $timestamp - MONTH_IN_SECONDS ),
+			),
+			'id'
+		);
+
+		return (bool) $unique_id_match;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function should_check_for_unique_id_match() {
+		/**
+		 * Allow users to opt out of the DB query, in case it causes performance issues.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_extend
+		 */
+		$should_check = apply_filters( 'frm_check_for_unique_id_match', true );
+		return (bool) $should_check;
 	}
 
 	/**

@@ -1621,6 +1621,17 @@ function frmFrontFormJS() {
 		window.hcaptcha = null;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return {string} Unique key, used for duplicate checks.
+	 */
+	function getUniqueKey() {
+		return Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
+			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
+			.join( '' );
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1766,6 +1777,13 @@ function frmFrontFormJS() {
 				antispamInput.value = object.getAttribute( 'data-token' );
 				object.appendChild( antispamInput );
 			}
+
+			// Add a unique ID, used for duplicate checks.
+			const uniqueIDInput = document.createElement( 'input' );
+			uniqueIDInput.type  = 'hidden';
+			uniqueIDInput.name  = 'unique_id';
+			uniqueIDInput.value = getUniqueKey();
+			object.appendChild( uniqueIDInput );
 
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
