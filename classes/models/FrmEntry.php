@@ -53,7 +53,7 @@ class FrmEntry {
 	 * @param string $unique_id
 	 * @return void
 	 */
-	public static function flag_new_unique_key( $unique_id ) {
+	private static function flag_new_unique_key( $unique_id ) {
 		if ( ! isset( self::$unique_id_match_checks[ $unique_id ] ) ) {
 			self::$unique_id_match_checks[ $unique_id ] = false;
 		}
