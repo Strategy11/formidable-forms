@@ -6595,6 +6595,16 @@ li.selected .divider_section_only:before {
 	color: var(--primary-700);
     background-color: #fff;
 }
+.edit_field_type_divider.selected .frmsvg,
+.edit_field_type_divider:hover .frmsvg {
+	background: var(--primary-500);
+}
+
+.edit_field_type_divider.selected .start_divider .frmsvg,
+.edit_field_type_divider:hover .start_divider .frmsvg {
+	background-color: #fff;
+	color: var(--primary-500);
+}
 
 .frm-page-break:before,
 .frm-page-break:after {
@@ -6619,17 +6629,6 @@ li.selected .divider_section_only:before {
 .frm_sorting li.edit_field_type_divider:hover,
 .frm_sorting li.edit_field_type_divider.selected {
 	border-left-color: var(--primary-500);
-}
-
-.edit_field_type_divider.selected:before,
-.edit_field_type_divider:hover:before {
-	border-color: var(--primary-500);
-	background: var(--primary-500);
-}
-
-.edit_field_type_divider.selected:after,
-.edit_field_type_divider:hover:after {
-	border-color: var(--primary-500);
 }
 
 .frm-section-collapsed:after {
