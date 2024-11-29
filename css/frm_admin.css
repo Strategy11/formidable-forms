@@ -6560,7 +6560,6 @@ li.selected .divider_section_only:before {
 	position: relative;
 }
 
-.edit_field_type_divider:before,
 .edit_field_type_divider:after,
 .frm-page-break:before,
 .frm-page-break:after {
@@ -6573,22 +6572,19 @@ li.selected .divider_section_only:before {
 	-webkit-font-smoothing: antialiased;
 }
 
-.edit_field_type_divider:before {
-	font-family: 's11-fp';
-	content: '\f1dc';
-	width: 20px;
-	height: 20px;
-	left: -11px;
-	top: 0;
-	background: var(--primary-700);
-	text-align: center;
-	color: #fff;
-	font-size: 13px;
-}
-
 .repeat_section.edit_field_type_divider:before {
 	font-family: 's11-fp';
 	content: '\f363';
+}
+
+.edit_field_type_divider .frmsvg {
+	padding: 8px;
+    position: absolute;
+    left: -18px;
+    fill: var(--primary-700);
+    color: #fff;
+    background-color: var(--primary-700);
+    border-radius: 50%;
 }
 
 .edit_field_type_divider:after {
