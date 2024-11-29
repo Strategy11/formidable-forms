@@ -134,18 +134,10 @@ class FrmEntry {
 	 * @since x.x
 	 *
 	 * @param string $created_at
-	 * @return int
+	 * @return false|int
 	 */
 	private static function maybe_check_for_unique_id_match( $created_at ) {
-		/**
-		 * Allow users to opt out of the DB query, in case it causes performance issues.
-		 *
-		 * @since x.x
-		 *
-		 * @param bool $should_extend
-		 */
-		$should_check = apply_filters( 'frm_check_for_unique_id_match', true );
-		if ( ! $should_check ) {
+		if ( ! self::should_check_for_unique_id_match() ) {
 			return false;
 		}
 
@@ -171,6 +163,21 @@ class FrmEntry {
 		);
 
 		return (bool) $unique_id_match;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function should_check_for_unique_id_match() {
+		/**
+		 * Allow users to opt out of the DB query, in case it causes performance issues.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_extend
+		 */
+		$should_check = apply_filters( 'frm_check_for_unique_id_match', true );
+		return (bool) $should_check;
 	}
 
 	/**

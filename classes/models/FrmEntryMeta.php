@@ -125,8 +125,10 @@ class FrmEntryMeta {
 			'field_id'
 		);
 
+		// This unique ID is inserted with JS on form submit.
+		// It is used to check for duplicate entries.
 		$unique_id = FrmAppHelper::get_post_param( 'unique_id', '', 'sanitize_key' );
-		if ( $unique_id ) {
+		if ( $unique_id && FrmEntry::should_check_for_unique_id_match() ) {
 			self::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
 		}
 
