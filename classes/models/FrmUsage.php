@@ -206,9 +206,12 @@ class FrmUsage {
 			'menu',
 			'mu_menu',
 			'no_ips',
+			'custom_header_ip',
 			'btsp_css',
 			'btsp_errors',
 			'admin_bar',
+			'summary_emails',
+			'active_captcha',
 		);
 
 		foreach ( $pass_settings as $setting ) {
