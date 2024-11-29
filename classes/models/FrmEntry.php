@@ -197,7 +197,7 @@ class FrmEntry {
 	/**
 	 * @since x.x
 	 */
-	public static function should_check_for_unique_id_match() {
+	private static function should_check_for_unique_id_match() {
 		/**
 		 * Allow users to opt out of the DB query, in case it causes performance issues.
 		 *
@@ -996,7 +996,7 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function maybe_add_unique_id_meta( $values, $entry_id ) {
-		if ( ! empty( $values['parent_form_id'] ) || empty( $values['unique_id'] ) || ! FrmEntry::should_check_for_unique_id_match() ) {
+		if ( ! empty( $values['parent_form_id'] ) || empty( $values['unique_id'] ) || ! self::should_check_for_unique_id_match() ) {
 			return;
 		}
 
