@@ -7,6 +7,8 @@ class FrmEntry {
 
 	/**
 	 * @since x.x
+	 *
+	 * @var array
 	 */
 	private static $unique_id_match_checks = array();
 
