@@ -6596,14 +6596,6 @@ li.selected .divider_section_only:before {
     background-color: #fff;
 }
 
-.edit_field_type_divider:after {
-	width: 5px;
-	height: 5px;
-	left: -4px;
-	bottom: -4px;
-	transition: all 0.4s ease-out;
-}
-
 .frm-page-break:before,
 .frm-page-break:after {
 	width: 8px;
