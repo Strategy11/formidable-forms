@@ -1627,9 +1627,11 @@ function frmFrontFormJS() {
 	 * @return {string} Unique key, used for duplicate checks.
 	 */
 	function getUniqueKey() {
-		return Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
+		const uniqueKey = Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
 			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
 			.join( '' );
+		const timestamp = Date.now().toString( 16 );
+		return uniqueKey + '-' + timestamp;
 	}
 
 	return {
