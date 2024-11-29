@@ -6123,7 +6123,7 @@ span.howto {
 	text-align: start;
 }
 
-.frm_form_action_settings .frm_email_row .frm_remove_field svg {
+.frm_form_action_settings .frm_email_row .frm_tooltip_icon {
 	position: relative;
 	bottom: 2px;
 }

@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>>
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
-		<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_cancel1_icon frm_svg14' ); ?></a>
+		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'cc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['cc'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'cc', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" />
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>>
 		<?php esc_html_e( 'BCC', 'formidable' ); ?>
-		<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_cancel1_icon frm_svg14' ); ?></a>
+		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'bcc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['bcc'] ); ?>" class="frm_not_email_to large-text <?php FrmAppHelper::maybe_add_tooltip( 'bcc', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" />
