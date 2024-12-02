@@ -1868,10 +1868,7 @@ function frmFrontFormJS() {
 			checkForErrorsAndMaybeSetFocus();
 		},
 
-		checkFormErrors: function( object, action ) {
-			getFormErrors( object, action );
-		},
-
+		checkFormErrors: getFormErrors,
 		checkRequiredField,
 		showSubmitLoading,
 		removeSubmitLoading,
