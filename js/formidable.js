@@ -88,7 +88,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( jQuery( 'input[name="item_meta[' + fieldId + '][form]"]' ).length ) {
+		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
 
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[2].replace( '[', '' );
