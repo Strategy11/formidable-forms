@@ -792,16 +792,12 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement}      object
-	 * @param {string|undefined} action
+	 * @param {HTMLElement} object
+	 * @param {string}      action
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
-
-		if ( typeof action === 'undefined' ) {
-			jQuery( object ).find( 'input[name="frm_action"]' ).val();
-		}
 
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
