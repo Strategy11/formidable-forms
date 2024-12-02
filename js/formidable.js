@@ -1962,11 +1962,21 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 */
 		invisible: function( classes ) {
+			// TODO: Deprecate this.
+			console.warn( 'DEPRECATED: function frmFrontForm.invisible in vx.x' );
 			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 */
 		visible: function( classes ) {
+			// TODO: Deprecate this.
+			console.warn( 'DEPRECATED: function frmFrontForm.visible in vx.x' );
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 
