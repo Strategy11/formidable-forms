@@ -29,6 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 
+	<?php
+	/**
+	 * Fires after the form description field.
+	 *
+	 * @since x.x
+	 */
+	do_action( 'frm_settings_after_form_description' );
+	?>
 	<p class="frm8 frm_form_field">
 		<label for="show_title" class="frm_inline_block">
 			<input type="checkbox" name="options[show_title]" id="show_title" value="1" <?php checked( $values['show_title'], 1 ); ?> />
