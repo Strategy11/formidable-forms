@@ -8995,16 +8995,6 @@ Responsive Design
 	}
 }
 
-/* Firefox */
-@-moz-document url-prefix() {
-	.frm-white-body .tablenav select,
-	.frm-white-body .tablenav input[type="text"],
-	.wp-admin .frm_wrap .tablenav select,
-	.frm_wrap .tablenav input[type="text"] {
-		padding-top: 5px;
-	}
-}
-
 /* PRINT */
 @media print {
 	a, .misc-pub-section a {
