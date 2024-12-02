@@ -1207,7 +1207,7 @@ function frmFrontFormJS() {
 		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
-	function removeSubmitLoading( $object, enable, processesRunning ) {
+	function removeSubmitLoading( _, enable, processesRunning ) {
 		let loadingForm;
 
 		if ( processesRunning > 0 ) {
@@ -1672,9 +1672,7 @@ function frmFrontFormJS() {
 			);
 		},
 
-		getFieldId: function( field, fullID ) {
-			return getFieldId( field, fullID );
-		},
+		getFieldId,
 
 		renderCaptcha: function( captcha, captchaSelector ) {
 			let formID, captchaID,
@@ -1870,21 +1868,10 @@ function frmFrontFormJS() {
 			checkForErrorsAndMaybeSetFocus();
 		},
 
-		checkFormErrors: function( object, action ) {
-			getFormErrors( object, action );
-		},
-
-		checkRequiredField: function( field, errors ) {
-			return checkRequiredField( field, errors );
-		},
-
-		showSubmitLoading: function( $object ) {
-			showSubmitLoading( $object );
-		},
-
-		removeSubmitLoading: function( $object, enable, processesRunning ) {
-			removeSubmitLoading( $object, enable, processesRunning );
-		},
+		checkFormErrors: getFormErrors,
+		checkRequiredField,
+		showSubmitLoading,
+		removeSubmitLoading,
 
 		scrollToID: function( id ) {
 			const object = jQuery( document.getElementById( id ) );
