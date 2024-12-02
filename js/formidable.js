@@ -276,7 +276,8 @@ function frmFrontFormJS() {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
-		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
+		const form = field.closest( 'form' );
+		if ( form && hasClass( form, 'frm_js_validate' ) ) {
 			validateField( field );
 		}
 	}
