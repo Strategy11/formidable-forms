@@ -1654,17 +1654,12 @@ class FrmFormsController {
 			''           => '',
 			'siteurl'    => __( 'Site URL', 'formidable' ),
 			'sitename'   => __( 'Site Name', 'formidable' ),
+			'form_name'  => __( 'Form Name', 'formidable' ),
 		);
 
+		$entry_shortcodes = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
-		}
-
-		if ( $settings_tab ) {
-			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
-			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
-			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
-			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
 		/**

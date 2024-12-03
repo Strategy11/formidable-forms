@@ -241,6 +241,7 @@ function frmAdminBuildJS() {
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -8446,7 +8447,102 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
+			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Returns true if a shortcode could be shown in the search result.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function checkContextualShortcode( item ) {
+		if ( frmAdminJs.contextualShortcodes.length === 0 ) {
+			return true;
+		}
+		return ! isContextualShortcode( item ) || canShowContextualShortcode( item );
+	}
+
+	/**
+	 * Returns true if a shortcode is contextual to fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function isContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function canShowContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
+		const input   = document.getElementById( inputId );
+		const contextualShortcodes = frmAdminJs.contextualShortcodes;
+		if ( contextualShortcodes.address.includes( shortcode ) ) {
+			return input.matches( contextualShortcodes.addressSelector );
+		}
+		return input.matches( contextualShortcodes.bodySelector );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
+	function showOrHideContextualShortcodes( input ) {
+		[ 'address', 'body' ].forEach( type => {
+			toggleContextualShortcodes( input, type );
+		});
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input
+	 * @param {string}      type
+	 *
+	 * @returns {Void}
+	 */
+	function toggleContextualShortcodes( input, type ) {
+		let selector, contextualShortcodes;
+		selector             = frmAdminJs.contextualShortcodes[ type + 'Selector' ];
+		contextualShortcodes = frmAdminJs.contextualShortcodes[ type ];
+		let shouldShowShortcodes = input.matches( selector );
+		for ( let shortcode of contextualShortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			shortcodeLi?.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
+		}
+	}
+
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since x.x
+	 *
+	 * @returns {Array}
+	 */
+	function getContextualShortcodes() {
+		let contextualShortcodes = document.getElementById( 'frm_adv_info' )?.dataset.contextualShortcodes;
+		if ( ! contextualShortcodes) {
+			return [];
+		}
+		contextualShortcodes = JSON.parse( contextualShortcodes );
+		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
+		contextualShortcodes.bodySelector    = '[id^=email_message_]';
+		return contextualShortcodes;
 	}
 
 	function fieldUpdated() {
@@ -9454,12 +9550,12 @@ function frmAdminBuildJS() {
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.add( 'frm-search-result' );
