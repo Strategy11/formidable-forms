@@ -4,7 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>">
-<?php if ( $field['type'] === 'divider' ) {
+<?php
+if ( $field['type'] === 'divider' ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm-form-title-style frm-divider-icon' );
 	?>
 <div class="divider_section_only">
