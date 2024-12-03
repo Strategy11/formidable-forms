@@ -9,7 +9,6 @@ class FrmSettings {
 	public $menu;
 	public $mu_menu;
 	public $fade_form;
-	public $old_css;
 	public $admin_bar;
 
 	public $success_msg;
@@ -134,7 +133,6 @@ class FrmSettings {
 			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
 			'mu_menu'                   => 0,
 			'fade_form'                 => false,
-			'old_css'                   => false,
 			'admin_bar'                 => false,
 
 			're_multi'                  => 1,
