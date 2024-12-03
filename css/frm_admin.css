@@ -6577,12 +6577,12 @@ li.selected .divider_section_only:before {
 }
 
 .edit_field_type_divider .frm-divider-icon.frmsvg {
-    padding: 2px;
-    position: absolute;
-    left: -12px;
-    color: #fff;
-    background-color: var(--primary-700);
-    border-radius: 50%;
+	padding: 2px;
+	position: absolute;
+	left: -12px;
+	color: #fff;
+	background-color: var(--primary-700);
+	border-radius: 50%;
 }
 
 .edit_field_type_divider .start_divider .frm-divider-icon.frmsvg {
@@ -6592,7 +6592,7 @@ li.selected .divider_section_only:before {
 	bottom: -4px;
 	left: -24.5px;
 	color: var(--primary-700);
-    background-color: #fff;
+	background-color: #fff;
 }
 
 .edit_field_type_divider.selected .frm-divider-icon.frmsvg,
