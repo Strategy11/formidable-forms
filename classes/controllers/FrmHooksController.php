@@ -59,8 +59,10 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		// Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
+		add_action( 'init', 'FrmAppController::load_lang', 0 );
+
 		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
-		add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
 		add_filter( 'widget_text', 'do_shortcode' );
 
 		// Entries controller.
@@ -136,8 +138,8 @@ class FrmHooksController {
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );
-			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
+
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
 		// Forms Controller.
