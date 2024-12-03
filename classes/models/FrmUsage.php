@@ -197,9 +197,7 @@ class FrmUsage {
 		);
 		$pass_settings = array(
 			'load_style',
-			'use_html',
 			'fade_form',
-			'jquery_css',
 			're_type',
 			're_lang',
 			're_multi',
@@ -375,7 +373,7 @@ class FrmUsage {
 	private function form_field_count( $form_id ) {
 		global $wpdb;
 
-		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
+		$join = $wpdb->prefix . 'frm_fields fi JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
 			'or'             => 1,
