@@ -71,7 +71,7 @@ class FrmApplicationsController {
 	 *
 	 * @return void|array
 	 */
-	public static function get_applications_data( $is_ajax_request = false ) {
+	public static function get_applications_data( $is_ajax_request = true ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 		if ( $is_ajax_request ) {
 			check_ajax_referer( 'frm_ajax', 'nonce' );
