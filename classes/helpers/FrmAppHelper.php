@@ -9,7 +9,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 101;
+	public static $db_version = 102;
 
 	/**
 	 * Deprecated.

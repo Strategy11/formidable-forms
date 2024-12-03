@@ -7,7 +7,6 @@ function frmFrontFormJS() {
 	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
-	let action = '';
 	let jsErrors = [];
 
 	/**
@@ -88,7 +87,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( jQuery( 'input[name="item_meta[' + fieldId + '][form]"]' ).length ) {
+		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
 
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[2].replace( '[', '' );
@@ -277,7 +276,8 @@ function frmFrontFormJS() {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
-		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
+		const form = field.closest( 'form' );
+		if ( form && hasClass( form, 'frm_js_validate' ) ) {
 			validateField( field );
 		}
 	}
@@ -792,16 +792,12 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement}      object
-	 * @param {string|undefined} action
+	 * @param {HTMLElement} object
+	 * @param {string}      action
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
-
-		if ( typeof action === 'undefined' ) {
-			jQuery( object ).find( 'input[name="frm_action"]' ).val();
-		}
 
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
@@ -1211,7 +1207,7 @@ function frmFrontFormJS() {
 		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
-	function removeSubmitLoading( $object, enable, processesRunning ) {
+	function removeSubmitLoading( _, enable, processesRunning ) {
 		let loadingForm;
 
 		if ( processesRunning > 0 ) {
@@ -1621,6 +1617,19 @@ function frmFrontFormJS() {
 		window.hcaptcha = null;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return {string} Unique key, used for duplicate checks.
+	 */
+	function getUniqueKey() {
+		const uniqueKey = Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
+			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
+			.join( '' );
+		const timestamp = Date.now().toString( 16 );
+		return uniqueKey + '-' + timestamp;
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1663,9 +1672,7 @@ function frmFrontFormJS() {
 			);
 		},
 
-		getFieldId: function( field, fullID ) {
-			return getFieldId( field, fullID );
-		},
+		getFieldId,
 
 		renderCaptcha: function( captcha, captchaSelector ) {
 			let formID, captchaID,
@@ -1767,12 +1774,19 @@ function frmFrontFormJS() {
 				object.appendChild( antispamInput );
 			}
 
+			// Add a unique ID, used for duplicate checks.
+			const uniqueIDInput = document.createElement( 'input' );
+			uniqueIDInput.type  = 'hidden';
+			uniqueIDInput.name  = 'unique_id';
+			uniqueIDInput.value = getUniqueKey();
+			object.appendChild( uniqueIDInput );
+
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;
 				}).length;
 				if ( hasFileFields < 1 ) {
-					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+					const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
 				} else {
 					object.submit();
@@ -1814,7 +1828,7 @@ function frmFrontFormJS() {
 
 			jsErrors = validateForm( object );
 			if ( typeof frmThemeOverride_jsErrors === 'function' ) { // eslint-disable-line camelcase
-				action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+				const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 				customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys( customErrors ).length  ) {
 					for ( key in customErrors ) {
@@ -1854,21 +1868,10 @@ function frmFrontFormJS() {
 			checkForErrorsAndMaybeSetFocus();
 		},
 
-		checkFormErrors: function( object, action ) {
-			getFormErrors( object, action );
-		},
-
-		checkRequiredField: function( field, errors ) {
-			return checkRequiredField( field, errors );
-		},
-
-		showSubmitLoading: function( $object ) {
-			showSubmitLoading( $object );
-		},
-
-		removeSubmitLoading: function( $object, enable, processesRunning ) {
-			removeSubmitLoading( $object, enable, processesRunning );
-		},
+		checkFormErrors: getFormErrors,
+		checkRequiredField,
+		showSubmitLoading,
+		removeSubmitLoading,
 
 		scrollToID: function( id ) {
 			const object = jQuery( document.getElementById( id ) );
@@ -1946,11 +1949,25 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		invisible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.invisible in vx.x' );
 			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		visible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.visible in vx.x' );
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 
