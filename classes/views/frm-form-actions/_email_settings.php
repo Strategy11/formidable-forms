@@ -66,6 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'reply_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['reply_to'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>" />
+	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="reply_to"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
 </p>
 
 <p class="frm_has_shortcodes frm_email_row">

@@ -5830,7 +5830,8 @@ p.frm_reply_to_container {
 }
 
 .frm_cc_row.frm_email_row .frm-with-right-icon,
-.frm_bcc_row.frm_email_row .frm-with-right-icon {
+.frm_bcc_row.frm_email_row .frm-with-right-icon,
+.frm_reply_to_row.frm_email_row .frm-with-right-icon {
 	width: calc(100% - 20px);
 	display: inline-block;
 }
