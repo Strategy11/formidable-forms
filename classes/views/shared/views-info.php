@@ -140,7 +140,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm-views-review__desc">
-						<?php esc_html_e( 'Based on 87 reviews on Capterra', 'formidable' ); ?>
+						<?php esc_html_e( 'Based on 87 reviews on G2', 'formidable' ); ?>
 					</div>
 				</div><!-- End .frm-views-review -->
 			</div>
