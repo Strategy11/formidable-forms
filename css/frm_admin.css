@@ -6560,8 +6560,6 @@ li.selected .divider_section_only:before {
 	position: relative;
 }
 
-.edit_field_type_divider:before,
-.edit_field_type_divider:after,
 .frm-page-break:before,
 .frm-page-break:after {
 	content: '';
@@ -6573,30 +6571,39 @@ li.selected .divider_section_only:before {
 	-webkit-font-smoothing: antialiased;
 }
 
-.edit_field_type_divider:before {
-	font-family: 's11-fp';
-	content: '\f1dc';
-	width: 20px;
-	height: 20px;
-	left: -11px;
-	top: 0;
-	background: var(--primary-700);
-	text-align: center;
-	color: #fff;
-	font-size: 13px;
-}
-
 .repeat_section.edit_field_type_divider:before {
 	font-family: 's11-fp';
 	content: '\f363';
 }
 
-.edit_field_type_divider:after {
-	width: 5px;
-	height: 5px;
-	left: -4px;
+.edit_field_type_divider .frm-divider-icon.frmsvg {
+	padding: 2px;
+	position: absolute;
+	left: -12px;
+	color: #fff;
+	background-color: var(--primary-700);
+	border-radius: 50%;
+}
+
+.edit_field_type_divider .start_divider .frm-divider-icon.frmsvg {
+	height: 8px;
+	width: 8px;
+	padding: 0;
 	bottom: -4px;
-	transition: all 0.4s ease-out;
+	left: -24.5px;
+	color: var(--primary-700);
+	background-color: #fff;
+}
+
+.edit_field_type_divider.selected .frm-divider-icon.frmsvg,
+.edit_field_type_divider:hover .frm-divider-icon.frmsvg {
+	background: var(--primary-500);
+}
+
+.edit_field_type_divider.selected .start_divider .frm-divider-icon.frmsvg,
+.edit_field_type_divider:hover .start_divider .frm-divider-icon.frmsvg {
+	background-color: #fff;
+	color: var(--primary-500);
 }
 
 .frm-page-break:before,
@@ -6622,17 +6629,6 @@ li.selected .divider_section_only:before {
 .frm_sorting li.edit_field_type_divider:hover,
 .frm_sorting li.edit_field_type_divider.selected {
 	border-left-color: var(--primary-500);
-}
-
-.edit_field_type_divider.selected:before,
-.edit_field_type_divider:hover:before {
-	border-color: var(--primary-500);
-	background: var(--primary-500);
-}
-
-.edit_field_type_divider.selected:after,
-.edit_field_type_divider:hover:after {
-	border-color: var(--primary-500);
 }
 
 .frm-section-collapsed:after {
