@@ -8,7 +8,6 @@ class FrmSettings {
 	public $option_name = 'frm_options';
 	public $menu;
 	public $mu_menu;
-	public $accordion_js;
 	public $fade_form;
 	public $old_css;
 	public $admin_bar;
@@ -134,7 +133,6 @@ class FrmSettings {
 		return array(
 			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
 			'mu_menu'                   => 0,
-			'accordion_js'              => false,
 			'fade_form'                 => false,
 			'old_css'                   => false,
 			'admin_bar'                 => false,
@@ -402,7 +400,7 @@ class FrmSettings {
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
