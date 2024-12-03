@@ -103,18 +103,6 @@ describe('Run some accessibility tests', function() {
         cy.checkA11y();
     });
 
-    it('Check the upgrade page is accessible', () => {
-        cy.visit('/wp-admin/admin.php?page=formidable-pro-upgrade');
-        cy.injectAxe();
-        configureAxeWithIgnoredRuleset([
-            ...baselineRules,
-            { id: 'empty-table-header', enabled: false },
-            { id: 'heading-order', enabled: false }
-
-        ]);
-        cy.checkA11y();
-    });
-
     it('Check the SMTP page is accessible', () => {
         cy.visit('/wp-admin/admin.php?page=formidable-smtp');
         cy.injectAxe();

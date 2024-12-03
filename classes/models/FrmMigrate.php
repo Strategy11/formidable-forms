@@ -48,8 +48,12 @@ class FrmMigrate {
 
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
+
+				if ( false === get_option( 'frm_first_activation' ) ) {
+					update_option( 'frm_first_activation', time(), false );
+				}
 			}
-		}
+		}//end if
 
 		do_action( 'frm_after_install' );
 
@@ -166,6 +170,7 @@ class FrmMigrate {
 	 * These indexes help optimize database queries for entries.
 	 *
 	 * @since 6.6
+	 * @since x.x idx_form_id_is_draft was also added to frm_items.
 	 *
 	 * @return void
 	 */
@@ -184,6 +189,13 @@ class FrmMigrate {
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_field_id_item_id ON `{$wpdb->prefix}frm_item_metas` (field_id, item_id)" );
+		}
+
+		$table_name = "{$wpdb->prefix}frm_items";
+		$index_name = 'idx_form_id_is_draft';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_form_id_is_draft ON `{$wpdb->prefix}frm_items` (form_id, is_draft)" );
 		}
 	}
 

@@ -445,9 +445,19 @@ class FrmStylesHelper {
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
-				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * Remove anything that isn't used as a CSS variable name.
+	 *
+	 * @param string $var_name
+	 * @return string
+	 */
+	private static function clean_var_name( $var_name ) {
+		return preg_replace( '/[^a-zA-Z0-9_-]/', '', $var_name );
 	}
 
 	/**
@@ -610,7 +620,7 @@ class FrmStylesHelper {
 	 * @return float
 	 */
 	private static function get_base_font_size_scale( $key, $value, $defaults ) {
-		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) || 0 === (int) $value ) {
 			return 1;
 		}
 
@@ -880,6 +890,24 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get wrapper classname for style editor sections.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $section_type
+	 *
+	 * @return string The style editor wrapper classname.
+	 */
+	public static function style_editor_get_wrapper_classname( $section_type ) {
+		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$classname         = 'frm-style-editor-form';
+		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
+		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
+
+		return $classname;
+	}
+
+	/**
 	 * Retrieve the background image URL of the submit button.
 	 * It may be either a full URL string (used in versions prior to 6.14) or a numeric attachment ID (introduced in version 6.14).
 	 *
@@ -915,14 +943,5 @@ class FrmStylesHelper {
 		return is_callable( 'FrmProAppHelper::use_chosen_js' )
 			? FrmProAppHelper::use_chosen_js()
 			: true;
-	}
-
-	/**
-	 * @since 5.5.1
-	 * @deprecated 6.10
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		_deprecated_function( __METHOD__, '6.10' );
 	}
 }

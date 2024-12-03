@@ -18,7 +18,7 @@ class FrmUsage {
 			return;
 		}
 
-		$ep = 'aHR0cHM6Ly91c2FnZS5mb3JtaWRhYmxlZm9ybXMuY29tL2FwcC9zbmFwc2hvdAo=';
+		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
@@ -31,7 +31,14 @@ class FrmUsage {
 				'Content-Length' => strlen( $body ),
 			),
 			'body'    => $body,
+			// Without this, Debug Log catches the `http_request_failed` error.
+			'timeout' => 45,
 		);
+
+		// Remove time limit to execute this function.
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
 
 		wp_remote_request( base64_decode( $ep ), $post );
 	}
@@ -88,10 +95,72 @@ class FrmUsage {
 			'fields'            => $this->fields(),
 			'actions'           => $this->actions(),
 
-			'onboarding-wizard' => FrmOnboardingWizardController::get_usage_data(),
+			'onboarding-wizard' => $this->onboarding_wizard(),
+			'flows'             => FrmUsageController::get_flows_data(),
+			'payments'          => $this->payments(),
+			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
+	}
+
+	/**
+	 * Gets onboarding wizard data.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @return array
+	 */
+	private function onboarding_wizard() {
+		$data         = FrmOnboardingWizardController::get_usage_data();
+		$skipped_keys = array(
+			'default_email',
+			'is_subscribed',
+			'allows_tracking',
+			'summary_emails',
+			'installed_addons',
+		);
+
+		foreach ( $skipped_keys as $skipped_key ) {
+			unset( $data[ $skipped_key ] );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Gets payments data.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @param string $table Database table name.
+	 * @return array
+	 */
+	private function payments( $table = 'frm_payments' ) {
+		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
+		if ( ! in_array( $table, $allowed_tables, true ) ) {
+			return array();
+		}
+
+		global $wpdb;
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT amount, status, paysys, created_at FROM %1$s',
+				$wpdb->prefix . $table
+			)
+		);
+
+		$payments = array();
+		foreach ( $rows as $row ) {
+			$payments[] = array(
+				'amount'     => (float) $row->amount,
+				'status'     => $row->status,
+				'gateway'    => $row->paysys,
+				'created_at' => $row->created_at,
+			);
+		}
+
+		return $payments;
 	}
 
 	/**
@@ -128,18 +197,19 @@ class FrmUsage {
 		);
 		$pass_settings = array(
 			'load_style',
-			'use_html',
 			'fade_form',
-			'jquery_css',
 			're_type',
 			're_lang',
 			're_multi',
 			'menu',
 			'mu_menu',
 			'no_ips',
+			'custom_header_ip',
 			'btsp_css',
 			'btsp_errors',
 			'admin_bar',
+			'summary_emails',
+			'active_captcha',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -255,6 +325,7 @@ class FrmUsage {
 			'submit_conditions',
 		);
 
+		$style = new FrmStyle();
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
 				'form_id'           => $form->id,
@@ -269,12 +340,27 @@ class FrmUsage {
 
 			foreach ( $settings as $setting ) {
 				if ( isset( $form->options[ $setting ] ) ) {
-					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					if ( 'custom_style' === $setting ) {
+						$style->id = $form->options[ $setting ];
+
+						if ( ! $style->id ) {
+							$style_name = 0;
+						} elseif ( 1 === intval( $style->id ) ) {
+							$style_name = 'formidable-style';
+						} else {
+							$style_post = $style->get_one();
+							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+						}
+
+						$new_form[ $setting ] = $style_name;
+					} else {
+						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					}
 				}
 			}
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
-		}
+		}//end foreach
 
 		// If the array uses numeric keys, reset them.
 		return $forms;
@@ -287,7 +373,7 @@ class FrmUsage {
 	private function form_field_count( $form_id ) {
 		global $wpdb;
 
-		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
+		$join = $wpdb->prefix . 'frm_fields fi JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
 			'or'             => 1,
@@ -363,8 +449,7 @@ class FrmUsage {
 	 * @return bool
 	 */
 	private function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return FrmUsageController::tracking_allowed();
 	}
 
 	/**

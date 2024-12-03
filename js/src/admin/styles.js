@@ -107,7 +107,7 @@ class frmStyleOptions {
 	initStyleClassCopyToClipboard( successMessage ) {
 		const copyLabel = document.querySelector( '.frm-copy-text' );
 		copyLabel.addEventListener( 'click', ( event ) => {
-			const className = event.target.innerText;
+			const className = event.currentTarget.innerText;
 			navigator.clipboard.writeText( className ).then( () => {
 				this.success( successMessage );
 			});

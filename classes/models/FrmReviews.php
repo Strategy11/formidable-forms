@@ -111,7 +111,7 @@ class FrmReviews {
 
 		$title = sprintf(
 			/* translators: %s: User name, %2$d: number of entries */
-			esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ),
+			esc_html__( 'Congratulations %1$s! You have collected %2$d form submissions.', 'formidable' ),
 			esc_html( $name ),
 			absint( $entries )
 		);

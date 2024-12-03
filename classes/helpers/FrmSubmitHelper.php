@@ -23,6 +23,13 @@ class FrmSubmitHelper {
 	const FIELD_TYPE = 'submit';
 
 	/**
+	 * Default order for submit field.
+	 *
+	 * @var int
+	 */
+	const DEFAULT_ORDER = 9999;
+
+	/**
 	 * Gets submit field object.
 	 *
 	 * @param int $form_id Form ID.
