@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'bcc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['bcc'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" />
-	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
+	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
 </p>
 
 <p class="frm_reply_to_container">
