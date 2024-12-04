@@ -103,30 +103,27 @@
 		const placeholder = div({
 			id: 'frm_custom_applications_placeholder',
 			className: 'frm_placeholder_block',
-			children: [
-				tag( 'hr', { className: 'frm-gradient' } ),
-				div({
-					className: 'frm_grid_container',
-					children: [
-						div({
-							className: 'frm10 frm_clearfix',
-							children: [
-								img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
-								tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
-								div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
-							]
-						}),
-						div({
-							className: 'frm2',
-							child: a({
-								className: 'button button-primary frm-button-primary',
-								text: __( 'Upgrade to Pro', 'formidable' ),
-								href: frmApplicationsVars.proUpgradeUrl
-							})
+			child: div({
+				className: 'frm_grid_container',
+				children: [
+					div({
+						className: 'frm10 frm_clearfix',
+						children: [
+							img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
+							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
+							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
+						]
+					}),
+					div({
+						className: 'frm2',
+						child: a({
+							className: 'button button-primary frm-button-primary',
+							text: __( 'Upgrade to Pro', 'formidable' ),
+							href: frmApplicationsVars.proUpgradeUrl
 						})
-					]
-				})
-			]
+					})
+				]
+			})
 		});
 		customTemplatesNav.parentNode.insertBefore( placeholder, customTemplatesNav.nextElementSibling );
 	}

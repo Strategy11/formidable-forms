@@ -240,7 +240,10 @@
 	padding: 11px 8px;
 }
 
-#frm_custom_applications_placeholder > hr {
+#frm_custom_applications_placeholder:before {
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%);
 	height: 4px;
 	margin: auto;
 	position: absolute;
