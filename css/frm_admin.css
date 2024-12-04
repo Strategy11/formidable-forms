@@ -5825,6 +5825,19 @@ p.frm_reply_to_container {
 	vertical-align: bottom;
 }
 
+.frm_cc_row.frm_email_row .frm-with-right-icon,
+.frm_bcc_row.frm_email_row .frm-with-right-icon,
+.frm_reply_to_row.frm_email_row .frm-with-right-icon {
+	width: calc(100% - 20px);
+	display: inline-block;
+}
+
+.frm_email_row .frm_remove_field .frm_close_icon {
+	position: relative;
+	fill: var(--grey-500);
+	vertical-align: middle;
+}
+
 .frm_logic_field_opts {
 	max-width: 35%;
 }
@@ -6094,7 +6107,7 @@ span.howto {
 	text-align: start;
 }
 
-.frm_form_action_settings .frm_email_row .frm_remove_field svg {
+.frm_form_action_settings .frm_email_row .frm_tooltip_icon {
 	position: relative;
 	bottom: 2px;
 }
