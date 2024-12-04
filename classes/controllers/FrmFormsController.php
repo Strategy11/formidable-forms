@@ -1065,7 +1065,7 @@ class FrmFormsController {
 	/**
 	 * Adds addon required data to the template array.
 	 *
-	 * @since 5.2.1
+	 * @since x.x
 	 *
 	 * @param array[] $templates Templates list.
 	 */
@@ -1093,28 +1093,6 @@ class FrmFormsController {
 			}
 			unset( $template );
 		}
-	}
-
-	/**
-	 * Gets addon install strings to use for upgrade overlay.
-	 *
-	 * @since 5.2.1
-	 *
-	 * @return array[]
-	 */
-	public static function get_addon_install_strings() {
-		return array(
-			'quiz_maker' => array(
-				'slug'            => 'quiz_maker',
-				'overlay_heading' => __( 'Install Quizzes form action', 'formidable' ),
-				'content_heading' => __( 'Quizzes action is not installed', 'formidable' ),
-				'content_desc'    => __( 'In order to set weights to answers, create different outcomes, randomize questions and options, install Quizzes form action', 'formidable' ),
-				'install_button'  => __( 'Install and activate it now', 'formidable' ),
-				'install_url'     => 'https://formidableforms.com', // TODO: change this.
-				'cancel_button'   => __( 'Install it later on the Form Actions page', 'formidable' ),
-				'image'           => FrmAppHelper::plugin_url() . '/images/quizzes.png',
-			),
-		);
 	}
 
 	/**

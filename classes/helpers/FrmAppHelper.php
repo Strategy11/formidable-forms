@@ -3123,7 +3123,7 @@ class FrmAppHelper {
 				'saved'              => '', // Deprecated in 6.0.
 				// translators: %1$s: HTML open tag, %2$s: HTML end tag.
 				'holdShiftMsg'       => esc_html__( 'You can hold %1$sShift%2$s on your keyboard to select multiple fields', 'formidable' ),
-				'addonInstall'       => FrmFormsController::get_addon_install_strings(),
+				'addonInstall'       => self::get_addon_install_strings(),
 			);
 			/**
 			 * @param array $admin_script_strings
@@ -3135,6 +3135,28 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	/**
+	 * Gets addon install strings to use for upgrade overlay.
+	 *
+	 * @since x.x
+	 *
+	 * @return array[]
+	 */
+	private static function get_addon_install_strings() {
+		return array(
+			'quiz_maker' => array(
+				'slug'            => 'quiz_maker',
+				'overlay_heading' => __( 'Install Quizzes form action', 'formidable' ),
+				'content_heading' => __( 'Quizzes action is not installed', 'formidable' ),
+				'content_desc'    => __( 'In order to set weights to answers, create different outcomes, randomize questions and options, install Quizzes form action', 'formidable' ),
+				'install_button'  => __( 'Install and activate it now', 'formidable' ),
+				'install_url'     => 'https://formidableforms.com', // TODO: change this.
+				'cancel_button'   => __( 'Install it later on the Form Actions page', 'formidable' ),
+				'image'           => FrmAppHelper::plugin_url() . '/images/quizzes.png',
+			),
+		);
 	}
 
 	/**
