@@ -481,7 +481,7 @@ td.column-title .frm_actions_dropdown {
 
 .frm-gradient,
 .frm-upgrade-bar {
-	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%) !important;
+	background: linear-gradient(90deg, #1961D5, #E8ABEF) !important;
 	color: #fff !important;
 	border: 0 !important;
 }
@@ -2286,6 +2286,7 @@ form .frm_blank_field label {
 
 .frm_error_style,
 .frm_warning_style,
+.frm_note_style2,
 .frm_note_style,
 .frm_message,
 #post-body-content .frm_updated_message,
@@ -2297,6 +2298,12 @@ div.frm_updated_message {
 	font-size: var(--text-sm);
 	margin: var(--gap-sm) 0;
 	text-align: left;
+}
+
+.frm_note_style2 {
+	background: linear-gradient(90deg, #e9effa, #fcf6fe) padding-box,
+				linear-gradient(90deg, #1961D5, #E8ABEF) border-box;
+	border: 1px solid transparent;
 }
 
 #frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {

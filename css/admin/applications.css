@@ -128,12 +128,14 @@
 	margin-top: var(--gap-xs);
 }
 
-#frm_view_application_modal .frm_warning_style {
-	border: none aliceblue;
-	margin-top: 0;
-	padding: 20px;
-	border-radius: 0;
+#frm_view_application_modal .frm_note_style2 {
+	margin-right: var(--gap-md);
+	margin-left: var(--gap-md);
+	padding: 10px;
+	border-radius: 8px;
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 #frm_view_application_modal .frm_warning_style span {
@@ -156,7 +158,7 @@
 }
 
 .frm-application-modal-details {
-	padding: 25px 30px;
+	padding: 25px var(--gap-md);
 }
 
 .frm-admin-page-applications .ui-widget-overlay {
@@ -173,7 +175,7 @@
 
 #frm_view_application_modal .frm-application-image-wrapper {
 	background-color: #F6F7FB;
-	padding: 20px 30px 15px;
+	padding: 20px var(--gap-md) 15px;
 }
 
 #frm_view_application_modal img {

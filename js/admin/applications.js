@@ -424,13 +424,14 @@
 		if ( data.upgradeUrl ) {
 			children.push(
 				div({
-					className: 'frm_warning_style',
+					className: 'frm_note_style2',
 					children: [
 						span(
 							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
 							sprintf( __( 'Access to this application requires the %s plan.', 'formidable' ), data.requires )
 						),
 						a({
+							className: 'frm-gradient frm-button-primary frm-button-sm',
 							text: getUpgradeNowText(),
 							href: data.upgradeUrl
 						})
