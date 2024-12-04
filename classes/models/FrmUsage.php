@@ -206,7 +206,7 @@ class FrmUsage {
 			'no_ips',
 			'custom_header_ip',
 			'btsp_css',
-			'btsp_errors',
+			'btsp_version',
 			'admin_bar',
 			'summary_emails',
 			'active_captcha',
