@@ -482,7 +482,7 @@ td.column-title .frm_actions_dropdown {
 .frm-gradient,
 .frm-upgrade-bar {
 	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%) !important;
-	color: #fff;
+	color: #fff !important;
 	border: 0 !important;
 }
 
@@ -9521,6 +9521,7 @@ Responsive Design
 	position: relative;
 	width: calc(100% - 30px);
 	box-sizing: border-box;
+	font-size: 14px;
 }
 
 .frm_pro_tip .frmsvg,
@@ -9535,6 +9536,22 @@ Responsive Design
 
 .frm-tip-cta {
 	color: var(--orange);
+}
+
+.frm-gradient .frm-tip-cta {
+	color: currentColor;
+	font-weight: 700;
+}
+
+.frm-tip-badge {
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #1E63D5;
+	background-color: #fff;
+	line-height: 1;
+	border-radius: 4px;
+	padding: 3px 4px;
 }
 
 .frm-light-tip .frm_pro_tip {
