@@ -41,22 +41,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * Check if the current time is within a sale date range.
-	 * Our sales are based on Eastern Time, so we use New York's timezone.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $from The beginning of the date range. Y-m-d format is expected.
-	 * @param string $to   The end of the date range. Y-m-d format is expected.
-	 * @return bool
-	 */
-	private static function within_sale_date_range( $from, $to ) {
-		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
-		$today = $date->format( 'Y-m-d' );
-		return $today >= $from && $today <= $to;
-	}
-
-	/**
 	 * @since 3.0
 	 */
 	public static function add_admin_class( $classes ) {
