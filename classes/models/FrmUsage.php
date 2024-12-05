@@ -101,6 +101,10 @@ class FrmUsage {
 			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
+		if ( method_exists( 'FrmProAddonsController', 'get_readable_license_type' ) ) {
+			$snap['active_license'] = FrmProAddonsController::get_readable_license_type();
+		}
+
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
