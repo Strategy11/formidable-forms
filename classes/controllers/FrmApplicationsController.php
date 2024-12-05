@@ -69,7 +69,7 @@ class FrmApplicationsController {
 	/**
 	 * Get information about applications via AJAX action.
 	 *
-	 * @return void|array
+	 * @return array|void
 	 */
 	public static function get_applications_data( $is_ajax_request = true ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
