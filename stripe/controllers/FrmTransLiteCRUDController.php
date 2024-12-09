@@ -35,6 +35,19 @@ class FrmTransLiteCRUDController {
 		}
 
 		FrmAppHelper::include_svg();
+
+		if ( ! $payment ) {
+			$trans_type = $table_name === 'subscriptions' ? __( 'Subscription', 'formidable' ) : __( 'Payment', 'formidable' );
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => sprintf( __( 'You can\'t view the %s', 'formidable' ), $trans_type ),
+					'body'       => sprintf( __( 'You are trying to view a %s that does not exist', 'formidable' ), $trans_type ),
+					'cancel_url' => sprintf( admin_url( 'admin.php?page=formidable-payments&trans_type=%s' ), $table_name ),
+				)
+			);
+			return;
+		}
+
 		include FrmTransLiteAppHelper::plugin_path() . '/views/' . $table_name . '/show.php';
 	}
 
