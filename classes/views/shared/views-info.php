@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm6">
 				<div class="frm-views-learn-more">
 					<h3><?php esc_html_e( 'Learn more', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Bring entries to the fron-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
+					<p><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
 					<a href="https://formidableforms.com/features/display-form-data-views/" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
 				</div>
 			</div>
