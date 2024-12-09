@@ -146,6 +146,10 @@ class FrmUsage {
 			return array();
 		}
 
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return array();
+		}
+
 		global $wpdb;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
