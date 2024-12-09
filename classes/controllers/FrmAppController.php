@@ -1202,6 +1202,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function show_error_modal( $error_args ) {
+		add_filter( 'frm_show_footer_links', '__return_false' );
+
 		$defaults = array(
 			'title'            => '',
 			'body'             => '',
