@@ -216,6 +216,9 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|string $field_type
+	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
 		if ( is_array( $field_type ) ) {
@@ -229,6 +232,9 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|string $field_type
+	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
 		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
