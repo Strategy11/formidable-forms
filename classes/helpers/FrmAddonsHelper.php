@@ -261,4 +261,23 @@ class FrmAddonsHelper {
 	public static function get_plan() {
 		return self::$plan_required;
 	}
+
+	public static function show_five_star_rating( $color = 'black' ) {
+		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
+		?>
+		<span style="color: <?php echo esc_attr( $color ); ?>;">
+			<?php
+			for ( $i = 0; $i < 5; $i++ ) {
+				echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			?>
+		</span>
+		<?php
+	}
+
+	public static function guarantee_icon() {
+		?>
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
+		<?php
+	}
 }
