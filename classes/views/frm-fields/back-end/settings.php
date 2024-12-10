@@ -106,6 +106,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
+
+		if ( $display['format'] ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-type.php';
+
+			FrmFieldsController::show_format_option( $field, true );
+		}
 		?>
 
 		<?php if ( $display['css'] ) { ?>
@@ -259,13 +265,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
-		<?php
-		if ( $display['format'] ) {
-			FrmFieldsController::show_format_option( $field );
-		}
-
-		do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) );
-		?>
+		<?php do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) ); ?>
 
 		<?php if ( $display['required'] ) { ?>
 			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
