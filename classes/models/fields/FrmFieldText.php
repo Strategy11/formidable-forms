@@ -55,7 +55,7 @@ class FrmFieldText extends FrmFieldType {
 	 *
 	 * @return void
 	 */
-	public function print_format_number_option() {
+	public function print_format_number_option( $field ) {
 		?>
 		<option
 			value=""

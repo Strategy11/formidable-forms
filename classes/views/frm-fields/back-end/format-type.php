@@ -30,7 +30,7 @@ $format   = FrmField::get_option( $field, 'format' );
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
 
-		<?php FrmFieldFactory::get_field_type( $field['type'] )->print_format_number_option(); ?>
+		<?php FrmFieldFactory::get_field_type( $field['type'] )->print_format_number_option( $field ); ?>
 
 		<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'number' !== $format, true ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>

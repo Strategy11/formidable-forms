@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<div class="frm-hide-empty frm-inline-flex frm-gap-sm frm-flex-wrap frm-items-center frm-my-sm">
+		<div class="frm-hide-empty frm-inline-flex frm-gap-sm frm-flex-wrap frm-items-center frm-my-xs">
 			<?php if ( $display['required'] ) { ?>
 				<div class="frm_form_field">
 					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
