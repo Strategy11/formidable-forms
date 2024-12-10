@@ -68,7 +68,7 @@ class FrmUsageController {
 	/**
 	 * Checks if tracking is allowed.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return bool
 	 */

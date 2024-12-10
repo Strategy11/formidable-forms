@@ -170,7 +170,7 @@ class FrmMigrate {
 	 * These indexes help optimize database queries for entries.
 	 *
 	 * @since 6.6
-	 * @since x.x idx_form_id_is_draft was also added to frm_items.
+	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
 	 *
 	 * @return void
 	 */
