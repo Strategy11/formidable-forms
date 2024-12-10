@@ -8378,7 +8378,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Handles 'change' event on the document.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 * 
 	 * @param {Event} event
 	 * @returns {Void}
@@ -8390,7 +8390,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Shows 'Save and Reload' modal if the target field's type is changed.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} target
 	 * @returns {Void}
@@ -8412,7 +8412,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Shows 'Save and Reload' modal with the given message.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {string} message
 	 * @returns {Void}
@@ -8537,7 +8537,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if a shortcode could be shown in the search result.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
 	 * @returns {Boolean}
@@ -8552,7 +8552,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if a shortcode is contextual to fields.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
 	 * @returns {Boolean}
@@ -8563,7 +8563,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
 	 * @returns {Boolean}
@@ -8580,7 +8580,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
 	 * @returns {Void}
@@ -8592,7 +8592,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
 	 * @param {string}      type
@@ -8613,7 +8613,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns shortcodes that are contextual to the current input field.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @returns {Array}
 	 */

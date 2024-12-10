@@ -374,7 +374,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.16.3 =
 * New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
 * New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
-* New: New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
+* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
 * Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
 * Fix: An unsupported operand types: array + string fatal error has been fixed.
 * Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.

@@ -3267,12 +3267,12 @@ class FrmFormsController {
 	 * Education for premium features.
 	 *
 	 * @since 4.05
-	 * @deprecated x.x
+	 * @deprecated 6.16.3
 	 *
 	 * @return void
 	 */
 	public static function add_form_style_tab_options() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.16.3' );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

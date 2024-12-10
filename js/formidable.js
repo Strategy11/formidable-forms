@@ -1318,7 +1318,7 @@ function frmFrontFormJS() {
 	/**
 	 * Sets focus on a the first subfield of a combo field that has an error.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} element
 	 * @return {boolean} True if the focus was set on a combo field.
@@ -1387,7 +1387,7 @@ function frmFrontFormJS() {
 	/**
 	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
 	 * @return {void}
@@ -1618,7 +1618,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return {string} Unique key, used for duplicate checks.
 	 */
@@ -1956,7 +1956,7 @@ function frmFrontFormJS() {
 		 * @return {void}
 		 */
 		invisible: function( classes ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.invisible in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.invisible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
@@ -1967,7 +1967,7 @@ function frmFrontFormJS() {
 		 * @return {void}
 		 */
 		visible: function( classes ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.visible in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.visible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 

@@ -998,7 +998,7 @@ DEFAULT_HTML;
 	/**
 	 * Set the aria-invalid attribute for field.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array $shortcode_atts
 	 * @param array $args
