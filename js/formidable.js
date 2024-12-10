@@ -1941,6 +1941,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )
