@@ -468,15 +468,17 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
+	 * @param array $field Field array.
+	 * @param bool  $is_hidden Whether the format option should be hidden.
 	 * @return void
 	 */
-	public static function show_format_option( $field ) {
-		$attributes          = array();
-		$attributes['class'] = 'frm-has-modal';
+	public static function show_format_option( $field, $is_hidden = false ) {
+		$attributes          = array(
+			'class' => 'frm-has-modal',
+			'id'    => 'phone' === $field['type'] ? 'frm-phone-field-custom-format-' . $field['id'] : 'frm-field-format-custom-' . $field['id'],
+		);
 
-		if ( 'phone' === $field['type'] ) {
-			$attributes['id']     = 'frm-phone-field-custom-format-' . $field['id'];
+		if ( $is_hidden ) {
 			$attributes['class'] .= ' frm_hidden';
 		}
 
