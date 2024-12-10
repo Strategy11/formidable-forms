@@ -47,4 +47,24 @@ class FrmFieldText extends FrmFieldType {
 
 		return $errors;
 	}
+
+	/**
+	 * Print the format number option for a field.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function print_format_number_option() {
+		?>
+		<option
+			value=""
+			class="frm_show_upgrade frm_noallow"
+			data-upgrade="<?php esc_attr_e( 'Format number field', 'formidable' ); ?>"
+			data-medium="format-number-field"
+		>
+			<?php esc_html_e( 'Number', 'formidable' ); ?>
+		</option>
+		<?php
+	}
 }
