@@ -26,6 +26,7 @@ class FrmFieldTextarea extends FrmFieldType {
 		return array(
 			'size'           => true,
 			'clear_on_focus' => true,
+			'format'         => true,
 		);
 	}
 
@@ -96,5 +97,25 @@ class FrmFieldTextarea extends FrmFieldType {
 			$rows . $input_html . '>' .
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
+	}
+
+	/**
+	 * Print the format number option for a field.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function print_format_number_option( $field ) {
+		?>
+		<option
+			value=""
+			class="frm_show_upgrade frm_noallow"
+			data-upgrade="<?php esc_attr_e( 'Format number field', 'formidable' ); ?>"
+			data-medium="format-number-field"
+		>
+			<?php esc_html_e( 'Number', 'formidable' ); ?>
+		</option>
+		<?php
 	}
 }

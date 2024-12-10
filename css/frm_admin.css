@@ -313,6 +313,11 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	grid-column: span 6 / span 6;
 }
 
+.frm_form_field.frm12_followed + p,
+.frm_form_field.frm12_followed + div {
+	grid-column: span 12 / span 12 !important;
+}
+
 .frm_form_field.frm-phone-type + p > label,
 .frm_form_field.frm-phone-type + div > label {
 	opacity: 0; /* Hide the label for the format input in the phone field. */
@@ -1719,6 +1724,11 @@ input.frm_insert_in_template {
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;
+}
+
+.frm-my-xs {
+	margin-top: var(--gap-xs) !important;
+	margin-bottom: var(--gap-xs) !important;
 }
 
 #wpbody-content .frm-my-sm {
