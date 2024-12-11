@@ -327,11 +327,11 @@
 	flex: 0 0 55%;
 }
 
-.frm_wrap .frm-dashboard-container .frm-pro-features-list h2 {
-	font-size: 24px;
-	font-weight: 600;
+.frm-pro-features-list h2 {
+	font-size: 24px !important;
+	font-weight: 600 !important;
 	max-width: 382px;
-	margin-bottom: var(--gap-md);
+	margin-bottom: var(--gap-md) !important;
 }
 
 .frm-pro-features-list ul {

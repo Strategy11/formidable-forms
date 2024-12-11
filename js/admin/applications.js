@@ -117,7 +117,7 @@
 					div({
 						className: 'frm2',
 						child: a({
-							className: 'button button-primary frm-button-primary',
+							className: 'button button-primary frm-gradient',
 							text: __( 'Upgrade to Pro', 'formidable' ),
 							href: frmApplicationsVars.proUpgradeUrl
 						})

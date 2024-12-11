@@ -11,6 +11,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+if ( false === strpos( $attributes['class'], 'frm-gradient' ) ) {
+	$button_class = 'frm-button-primary';
+} else {
+	$button_class = 'frm-button-secondary';
+}
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
 	<?php
@@ -32,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 	</div>
 
-	<a href="<?php echo esc_url( $args['link_url'] ); ?>" target="<?php echo esc_attr( $args['target'] ); ?>" class="frm-cta-link button button-primary frm-button-primary">
+	<a href="<?php echo esc_url( $args['link_url'] ); ?>" target="<?php echo esc_attr( $args['target'] ); ?>" class="frm-cta-link button button-primary <?php echo esc_attr( $button_class ); ?>">
 		<?php echo esc_html( $args['link_text'] ); ?>
 	</a>
 </div>
