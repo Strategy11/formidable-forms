@@ -8558,7 +8558,11 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function isContextualShortcode( item ) {
-		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const shortcodeAnchor = item.querySelector( 'a' );
+		if ( ! shortcode ) {
+			return false;
+		}
+		const shortcode = shortcodeAnchor.dataset.code;
 		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
 	}
 
