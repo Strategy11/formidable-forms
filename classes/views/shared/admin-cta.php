@@ -13,7 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
-	<div>
+	<?php
+	if ( ! empty( $args['icon'] ) ) {
+		?>
+		<div class="frm-cta-icon">
+			<?php FrmAppHelper::icon_by_class( $args['icon'] ); ?>
+		</div>
+		<?php
+	}
+	?>
+	<div class="frm-cta-content">
 		<h4>
 			<?php echo FrmAppHelper::kses( $args['title'], array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</h4>

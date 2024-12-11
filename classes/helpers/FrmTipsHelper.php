@@ -57,8 +57,8 @@ class FrmTipsHelper {
 
 		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<span class="frm_pro_tip">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
+		<span class="frm_pro_tip frm-gradient">
+			<span class="frm-tip-badge"><?php esc_html_e( 'PRO TIP', 'formidable' ); ?></span>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
 				<span class="frm-tip-info">
