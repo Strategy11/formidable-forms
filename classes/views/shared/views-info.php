@@ -108,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="frm6">
 				<div class="frm-video-wrapper">
-					<iframe width="843" height="200" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					<iframe width="843" height="200" src="https://www.youtube.com/embed/gdUt8vJ33LE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 				</div>
 			</div>
 		</div>

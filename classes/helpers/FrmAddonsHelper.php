@@ -53,6 +53,8 @@ class FrmAddonsHelper {
 	private static function show_expired_cta() {
 		FrmTipsHelper::show_admin_cta(
 			array(
+				'class'       => 'frm-gradient',
+				'icon'        => 'frmfont frm_speaker_icon',
 				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
 				'description' => esc_html__( 'Renew your subscription today and access our library of add-ons to supercharge your forms.', 'formidable' ),
 				'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
@@ -71,6 +73,8 @@ class FrmAddonsHelper {
 	private static function show_lite_cta() {
 		FrmTipsHelper::show_admin_cta(
 			array(
+				'class'       => 'frm-gradient',
+				'icon'        => 'frmfont frm_speaker_icon',
 				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
 				'description' => esc_html__( 'Upgrade to Pro and access our library of add-ons to supercharge your forms.', 'formidable' ),
 				'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),

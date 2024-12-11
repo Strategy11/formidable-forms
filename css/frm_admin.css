@@ -481,7 +481,7 @@ td.column-title .frm_actions_dropdown {
 
 .frm-gradient,
 .frm-upgrade-bar {
-	background: linear-gradient(90deg, #1961D5, #E8ABEF) !important;
+	background: linear-gradient(90deg, #388CF3, #1961D5, #8C7FD8) !important;
 	color: #fff !important;
 	border: 0 !important;
 }
@@ -9491,26 +9491,26 @@ Responsive Design
 	border-right: 1px solid currentColor;
 }
 
-#frm-form-templates-page #frm-upgrade-banner {
+#frm-upgrade-banner {
 	gap: 0;
 }
 
-#frm-form-templates-page #frm-upgrade-banner .frm-cta-icon + .frm-cta-content {
+#frm-upgrade-banner .frm-cta-icon + .frm-cta-content {
 	margin-right: auto;
 	padding-left: 15px;
 }
 
-#frm-form-templates-page #frm-upgrade-banner.frm-gradient h4,
-#frm-form-templates-page #frm-upgrade-banner.frm-gradient p {
+#frm-upgrade-banner.frm-gradient h4,
+#frm-upgrade-banner.frm-gradient p {
 	color: currentColor;
 }
 
-#frm-form-templates-page #frm-upgrade-banner.frm-gradient h4 {
+#frm-upgrade-banner.frm-gradient h4 {
 	font-size: 16px;
 	font-weight: 600;
 }
 
-#frm-form-templates-page #frm-upgrade-banner.frm-gradient p {
+#frm-upgrade-banner.frm-gradient p {
 	font-size: 14px;
 }
 
