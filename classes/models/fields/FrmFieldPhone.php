@@ -47,7 +47,7 @@ class FrmFieldPhone extends FrmFieldType {
 		$field = $args['field'];
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/phone/phone-type.php';
-		FrmFieldsController::show_format_option( $field );
+		FrmFieldsController::show_format_option( $field, true );
 
 		parent::show_primary_options( $args );
 	}
