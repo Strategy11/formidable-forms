@@ -14,7 +14,19 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @return void
 	 */
 	protected function set_endpoint() {
-		$this->endpoint = 'https://www.google.com/recaptcha/api/siteverify';
+		$domain = 'https://www.google.com';
+
+		/**
+		 * @since x.x
+		 *
+		 * @param string $domain
+		 */
+		$filtered_domain = apply_filters( 'frm_recaptcha_verify_domain', $domain );
+		if ( is_string( $filtered_domain ) ) {
+			$domain = $filtered_domain;
+		}
+
+		$this->endpoint = $domain . '/recaptcha/api/siteverify';
 	}
 
 	/**
