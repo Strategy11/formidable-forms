@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntry {
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @var array
 	 */
@@ -50,7 +50,7 @@ class FrmEntry {
 	 * Flag the memoized unique id check after a new entry is created.
 	 * This prevents possibly DB requests and helps avoid issues when creating repeater entries.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param string $unique_id
 	 * @return void
@@ -153,7 +153,7 @@ class FrmEntry {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array  $values     POST request data.
 	 * @param string $created_at The timestamp of the entry we are checking for.
@@ -197,13 +197,13 @@ class FrmEntry {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 */
 	private static function should_check_for_unique_id_match() {
 		/**
 		 * Allow users to opt out of the DB query, in case it causes performance issues.
 		 *
-		 * @since x.x
+		 * @since 6.16.3
 		 *
 		 * @param bool $should_extend
 		 */
@@ -991,7 +991,7 @@ class FrmEntry {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array $values
 	 * @param int   $entry_id

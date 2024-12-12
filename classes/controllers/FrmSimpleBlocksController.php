@@ -200,6 +200,11 @@ class FrmSimpleBlocksController {
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
 
+		// Still pass false for title and description options if nothing is set,
+		// so a default doesn't overwrite the block option.
+		$params['title']       = ! empty( $params['title'] );
+		$params['description'] = ! empty( $params['description'] );
+
 		$form .= FrmFormsController::get_form_shortcode( $params );
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
 	}
