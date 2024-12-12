@@ -30,10 +30,34 @@ $format   = FrmField::get_option( $field, 'format' );
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
 
-		<?php FrmFieldFactory::get_field_type( $field['type'] )->print_format_number_option( $field ); ?>
+		<?php
+		$number_option = '
+			<option value="" class="frm_show_upgrade frm_noallow" data-upgrade="' . esc_attr__( 'Format number field', 'formidable' ) . '" data-medium="format-number-field">
+				' . esc_html__( 'Number', 'formidable' ) . '
+			</option>';
+
+		/**
+		 * Filter the number option HTML for the format dropdown.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $number_option The HTML for the number option.
+		 * @param array  $field         The field array.
+		 */
+		echo apply_filters( 'frm_print_format_number_option', $number_option, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
 
 		<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'number' !== $format, true ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
 	</select>
 </p>
+
+<?php
+/**
+ * Fires after the format type template is rendered.
+ *
+ * @since x.x
+ */
+do_action( 'frm_after_format_type_template' );
+?>
