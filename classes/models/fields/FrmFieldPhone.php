@@ -62,11 +62,10 @@ class FrmFieldPhone extends FrmFieldType {
 	protected function print_international_option() {
 		?>
 		<option
-			value="international"
+			value=""
 			class="frm_show_upgrade frm_noallow"
 			data-upgrade="<?php esc_attr_e( 'International phone field', 'formidable' ); ?>"
 			data-medium="international-phone-field"
-			<?php selected( FrmField::get_option( $this->field, 'format' ), 'international' ); ?>
 		>
 			<?php esc_html_e( 'International', 'formidable' ); ?>
 		</option>
