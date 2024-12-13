@@ -5435,11 +5435,15 @@ function frmAdminBuildJS() {
 	 * @param {Event} event The event object from the phone type selection.
 	 * @return {void}
 	 */
-	function maybeUpdatePhoneFormatInput( event ) {
-		const phoneType = event.target;
-		if ( 'custom' === phoneType.value ) {
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'international' === formatInput.value ) {
+	function maybeUpdateFormatInput( event ) {
+		const formatElement = event.target;
+		const type = formatElement.value
+
+		if ( 'custom' === type ) {
+			const fieldId = formatElement.dataset.fieldId;
+			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
+
+			if ( 'international' === formatInput.value || 'number' === formatInput.value ) {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
@@ -8445,7 +8449,7 @@ function frmAdminBuildJS() {
 			onClickPreventDefault( continueButton, () => {
 				saveAndReloadFormBuilder();
 			} );
-	
+
 			const cancelButton = frmDom.modal.footerButton({
 				text: __( 'Cancel', 'formidable' ),
 				buttonType: 'cancel'
@@ -10694,7 +10698,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
-			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
+			frmDom.util.documentOn( 'change', 'select.frm_format_type_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
