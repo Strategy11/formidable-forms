@@ -112,7 +112,7 @@ class FrmFormsController {
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
-		if (  ! is_object( $form ) ) {
+		if ( ! is_object( $form ) ) {
 			return;
 		}
 
