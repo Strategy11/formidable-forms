@@ -12,10 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field_id = $field['id'];
-$format   = FrmField::get_option( $field, 'format' );
+$field_id        = $field['id'];
+$field_type      = $field['type'];
+$is_number_field = 'number' === $field_type;
+$format          = FrmField::get_option( $field, 'format' );
 ?>
-<p class="frm6 frm6_followed frm_form_field frm-format-type">
+<p class="frm6 frm_form_field frm-format-type">
 	<label for="format_type_<?php echo esc_attr( $field_id ); ?>">
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
@@ -31,9 +33,9 @@ $format   = FrmField::get_option( $field, 'format' );
 		</option>
 
 		<?php
-		$number_option = '
+		$number_option       = '
 			<option value="" class="frm_show_upgrade frm_noallow" data-upgrade="' . esc_attr__( 'Format number field', 'formidable' ) . '" data-medium="format-number-field">
-				' . esc_html__( 'Number', 'formidable' ) . '
+				' . ( ! $is_number_field ? esc_html__( 'Number', 'formidable' ) : esc_html__( 'Custom', 'formidable' ) ) . '
 			</option>';
 
 		/**
@@ -41,15 +43,19 @@ $format   = FrmField::get_option( $field, 'format' );
 		 *
 		 * @since x.x
 		 *
-		 * @param string $number_option The HTML for the number option.
-		 * @param array  $field         The field array.
+		 * @param string $number_option   The HTML for the number option.
+		 * @param array  $field           The field array.
+		 * @param string $is_number_field Indicates whether the field is a number field ('true' or 'false').
+		 * @return string Filtered HTML for the number option.
 		 */
-		echo apply_filters( 'frm_print_format_number_option', $number_option, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'frm_print_format_number_option', $number_option, $field, $is_number_field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 
-		<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'number' !== $format, true ); ?>>
-			<?php esc_html_e( 'Custom', 'formidable' ); ?>
-		</option>
+		<?php if ( 'text' === $field_type ) { ?>
+			<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'number' !== $format, true ); ?>>
+				<?php esc_html_e( 'Custom', 'formidable' ); ?>
+			</option>
+		<?php } ?>
 	</select>
 </p>
 
@@ -58,6 +64,8 @@ $format   = FrmField::get_option( $field, 'format' );
  * Fires after the format type template is rendered.
  *
  * @since x.x
+ *
+ * @param array $field The field array.
  */
-do_action( 'frm_after_format_type_template' );
+do_action( 'frm_after_format_type_template', $field );
 ?>
