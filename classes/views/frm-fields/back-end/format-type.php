@@ -33,9 +33,10 @@ $format          = FrmField::get_option( $field, 'format' );
 		</option>
 
 		<?php
-		$number_option       = '
+		$number_option_text = in_array( $field_type, array( 'number', 'range' ) ) ? esc_html__( 'Custom', 'formidable' ) : esc_html__( 'Number', 'formidable' );
+		$number_option      = '
 			<option value="" class="frm_show_upgrade frm_noallow" data-upgrade="' . esc_attr__( 'Format number field', 'formidable' ) . '" data-medium="format-number-field">
-				' . ( ! $is_number_field ? esc_html__( 'Number', 'formidable' ) : esc_html__( 'Custom', 'formidable' ) ) . '
+				' . $number_option_text . '
 			</option>';
 
 		/**
@@ -43,12 +44,12 @@ $format          = FrmField::get_option( $field, 'format' );
 		 *
 		 * @since x.x
 		 *
-		 * @param string $number_option   The HTML for the number option.
-		 * @param array  $field           The field array.
-		 * @param string $is_number_field Indicates whether the field is a number field ('true' or 'false').
-		 * @return string Filtered HTML for the number option.
+		 * @param string $number_option      The HTML for the number option.
+		 * @param string $number_option_text The text for the number option.
+		 * @param array  $field              The field array.
+		 * @return string The filtered HTML for the number option.
 		 */
-		echo apply_filters( 'frm_print_format_number_option', $number_option, $field, $is_number_field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'frm_print_format_number_option', $number_option, $number_option_text, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 
 		<?php if ( 'text' === $field_type ) { ?>

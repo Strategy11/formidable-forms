@@ -5424,15 +5424,11 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Update the phone format input based on the selected phone type.
-	 *
-	 * This function is triggered when a phone type is selected.
-	 * If the selected type is 'custom' and the current format is 'international',
-	 * the format input value is cleared to allow for custom input.
+	 * Update the format input based on the selected format type.
 	 *
 	 * @since 6.9
 	 *
-	 * @param {Event} event The event object from the phone type selection.
+	 * @param {Event} event The event object from the format type selection.
 	 * @return {void}
 	 */
 	function maybeUpdateFormatInput( event ) {
@@ -6693,12 +6689,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Updates the format input based on the selected phone type from dropdowns during the form save process.
-	 *
-	 * Triggered within the preFormSave function, this function iterates through all phone type dropdown elements
-	 * and adjusts the format input value accordingly. Specifically, if the phone type is 'custom' but the format input
-	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
-	 * before the form is saved.
+	 * Updates the format input based on the selected format type from dropdowns during the form save process.
 	 *
 	 * @since 6.9
 	 *
@@ -6707,37 +6698,17 @@ function frmAdminBuildJS() {
 	 */
 	function adjustFormatInputBeforeSave( submitButton ) {
 		const formatTypes = document.querySelectorAll( '.frm_format_type_dropdown, .frm_phone_type_dropdown' );
+		const valueMap = {
+			none: '',
+			international: 'international',
+			number: 'number'
+		};
+
 		formatTypes.forEach( formatType => {
 			const value = formatType.value;
-			if ( ! [ 'none', 'international', 'number' ].includes( value ) ) {
-				return;
-			}
-
-			const fieldId = formatType.dataset.fieldId;
-			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
-
-			const currencyEl = document.querySelector(`input[name="field_options[is_currency_${fieldId}]"]`);
-			const customFormatEl = document.querySelector(`input[name="field_options[custom_currency_${fieldId}]"]`);
-
-			switch ( value ) {
-				case 'none':
-				case 'international':
-					formatInput.setAttribute('value', value === 'none' ? '' : 'international');
-
-					// Uncheck the "Custom Format" and "Currency" checkboxes.
-					if ( currencyEl && customFormatEl ) {
-						const changeEvent = new Event('change', { bubbles: true });
-
-						currencyEl.checked = false;
-						currencyEl.dispatchEvent(changeEvent);
-						customFormatEl.checked = false;
-						customFormatEl.dispatchEvent(changeEvent);
-					}
-					break;
-
-				case 'number':
-					formatInput.setAttribute( 'value', currencyEl.checked || customFormatEl.checked ? 'number' : '' );
-					break;
+			if ( value in valueMap ) {
+				const formatInput = document.getElementById( `frm-field-format-custom-${formatType.dataset.fieldId}` ).querySelector( '.frm_format_opt' );
+				formatInput.setAttribute( 'value', valueMap[value] );
 			}
 		});
 	}
