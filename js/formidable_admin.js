@@ -6706,19 +6706,38 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function adjustFormatInputBeforeSave( submitButton ) {
-		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
-		phoneTypes.forEach( phoneType => {
-			const value = phoneType.value;
-			if ( ! [ 'none', 'international' ].includes( value ) ) {
+		const formatTypes = document.querySelectorAll( '.frm_format_type_dropdown, .frm_phone_type_dropdown' );
+		formatTypes.forEach( formatType => {
+			const value = formatType.value;
+			if ( ! [ 'none', 'international', 'number' ].includes( value ) ) {
 				return;
 			}
 
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'none' === value ) {
-				formatInput.setAttribute( 'value', '' );
-			}
-			if ( 'international' === value ) {
-				formatInput.setAttribute( 'value', 'international' );
+			const fieldId = formatType.dataset.fieldId;
+			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
+
+			const currencyEl = document.querySelector(`input[name="field_options[is_currency_${fieldId}]"]`);
+			const customFormatEl = document.querySelector(`input[name="field_options[custom_currency_${fieldId}]"]`);
+
+			switch ( value ) {
+				case 'none':
+				case 'international':
+					formatInput.setAttribute('value', value === 'none' ? '' : 'international');
+
+					// Uncheck the "Custom Format" and "Currency" checkboxes.
+					if ( currencyEl && customFormatEl ) {
+						const changeEvent = new Event('change', { bubbles: true });
+
+						currencyEl.checked = false;
+						currencyEl.dispatchEvent(changeEvent);
+						customFormatEl.checked = false;
+						customFormatEl.dispatchEvent(changeEvent);
+					}
+					break;
+
+				case 'number':
+					formatInput.setAttribute( 'value', currencyEl.checked || customFormatEl.checked ? 'number' : '' );
+					break;
 			}
 		});
 	}
@@ -8383,7 +8402,7 @@ function frmAdminBuildJS() {
 	 * Handles 'change' event on the document.
 	 *
 	 * @since 6.16.3
-	 * 
+	 *
 	 * @param {Event} event
 	 * @returns {Void}
 	 */
