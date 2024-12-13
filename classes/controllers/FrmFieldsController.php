@@ -475,7 +475,7 @@ class FrmFieldsController {
 	public static function show_format_option( $field, $is_hidden = false ) {
 		$attributes          = array(
 			'class' => 'frm-has-modal',
-			'id'    => 'phone' === $field['type'] ? 'frm-phone-field-custom-format-' . $field['id'] : 'frm-field-format-custom-' . $field['id'],
+			'id'    => 'frm-field-format-custom-' . $field['id'],
 		);
 
 		if ( $is_hidden ) {
