@@ -108,9 +108,14 @@ class FrmFormsController {
 	 * @since 2.02.11
 	 *
 	 * @param int|object $form
+	 * @return void
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if (  ! is_object( $form ) ) {
+			return;
+		}
+
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 		if ( $create_email ) {
@@ -128,9 +133,13 @@ class FrmFormsController {
 	 * @since 6.0.0
 	 *
 	 * @param int|object $form Form object or ID.
+	 * @return void
 	 */
 	private static function create_default_on_submit_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		/**
 		 * Enable or disable the default On Submit action.
@@ -157,9 +166,13 @@ class FrmFormsController {
 	 * @since 6.9
 	 *
 	 * @param int|object $form Form ID or object.
+	 * @return void
 	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		if ( FrmSubmitHelper::get_submit_field( $form->id ) ) {
 			// Do not create submit button field if it exists.
